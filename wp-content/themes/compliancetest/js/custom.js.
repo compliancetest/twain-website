@@ -1,0 +1,126 @@
+jQuery(document).ready(function() {
+		jQuery('#activate_menu').live('click', function() {
+				if (jQuery('#menu').is(':hidden')) {
+					jQuery('#menu').slideDown(200);
+				} else {
+					jQuery('#menu').slideUp(200);
+					jQuery('.sub-menu').hide();
+				}
+				
+				return false;
+			});
+		
+		var menuHovered = false;
+		jQuery('#header-menu').hover(function() {
+				menuHovered = true;
+				setTimeout(function() {
+						if (menuHovered) {
+							jQuery('#menu').slideDown(200);
+						}
+					}, 1500);
+			}, function() {
+				menuHovered = false;
+				setTimeout(function() {
+						if (!menuHovered) {
+							jQuery('#menu').slideUp(200);
+						}
+					}, 1500);
+			});
+		
+		var submenuHovered = false;
+		jQuery('#menu li').hover(function() {
+				jQuery(this).addClass('menu_item_hovered');
+				submenuHovered = true;
+				setTimeout(function() {
+						if (submenuHovered) {
+							jQuery('#menu li ul').not(jQuery('#menu .menu_item_hovered ul')).slideUp(200, function() {
+									jQuery('#menu .menu_item_hovered ul').not(jQuery('#menu li ul li ul')).slideDown(200);
+								});
+						}
+					}, 200);
+			}, function() {
+				jQuery(this).removeClass('menu_item_hovered');
+				submenuHovered = false;
+				setTimeout(function() {
+						if (!submenuHovered) {
+							jQuery('#menu li ul').slideUp(200);
+						}
+					}, 750);
+			});
+		
+		var secondSubmenuHovered = false;
+		jQuery('#menu li ul li').hover(function() {
+				jQuery(this).children('ul').slideDown(200);
+			}, function() {
+				jQuery(this).children('ul').slideUp(200);
+			});
+		
+		jQuery('.to_top').click(function() {
+				jQuery('html, body').animate({'scrollTop': 0}, 500);
+			});
+		
+		jQuery('.tailored_overlay').hover(function() {
+				jQuery(this).animate({'opacity': .9}, 200);
+			}, function() {
+				jQuery(this).animate({'opacity': 1}, 200);
+			});
+		
+		if (window.PIE && jQuery.browser.msie) {
+			jQuery('#products_list li a img, .button_gray, .button_green, .tailored_overlay, .product_price, #tailored_list li img, .pp_thumb_container img').each(function() {
+				PIE.attach(this);
+			});
+		}
+		
+		jQuery('.wpss_add_to_cart, .wpss_add_subscription_to_cart').parent().parent().hover(function() {
+				jQuery(this).find('.wpss_add_to_cart, .wpss_add_subscription_to_cart').css({'-webkit-transform': 'rotate(363deg)',
+						'-moz-transform': 'rotate(363deg)',
+						'-o-transform': 'rotate(363deg)',
+						'-ms-transform': 'rotate(363deg)'
+					});
+			}, function() {
+				jQuery(this).find('.wpss_add_to_cart, .wpss_add_subscription_to_cart').css({'-webkit-transform': 'rotate(0deg)',
+						'-moz-transform': 'rotate(0deg)',
+						'-o-transform': 'rotate(0deg)',
+						'-ms-transform': 'rotate(0deg)'
+					});
+			});
+			
+		//animate box shadow
+		jQuery('input[type="text"]').focus( function() {
+			jQuery(this).stop().animate({boxShadow: '0 0 15px #B7B7B7'});
+		});
+		jQuery('input[type="text"]').blur( function() {
+			jQuery(this).stop().animate({boxShadow: '0 1px 1px #fff'});
+		});
+		
+		
+		jQuery('.wpss_right').click(function() {
+				var element = this;
+				
+				jQuery(this).children('.message').text('100% complete');
+				
+				jQuery(this).siblings('.product_informations tab_content').hide();
+				jQuery(this).siblings('.product_informations first_tab_content').show();
+				
+				jQuery('.wpss_right').not(jQuery(element)).animate({marginTop: '59px'});
+				jQuery('.product_informations').not(jQuery(element).siblings('.product_informations')).slideUp(300, function() {
+						jQuery(element).siblings('.product_informations').slideDown(300);
+						jQuery(element).animate({marginTop: '215px'});
+					});
+			});
+		
+		jQuery('.tab_title').click(function() {
+				var element = this;
+				
+				var margin = '215px';
+				if (jQuery(this).hasClass('second_tab_title')) {
+					margin = '280px';
+				} else if (jQuery(this).hasClass('third_tab_title')) {
+					margin = '345px';
+				}
+				jQuery(this).parent().siblings('.wpss_right').animate({marginTop: margin});
+				jQuery(element).siblings('.tab_content').not(jQuery(element).next('.tab_content')).slideUp(300, function() {
+						jQuery(element).next('.tab_content').slideDown(300);
+					});
+			});
+	});

@@ -1,0 +1,653 @@
+<?php
+
+/*********************************************** PROMOTION FUNCTIONS ****************************************************************/
+
+define('THE_FUNCTION', TEMPLATEPATH . '/functions');
+
+//require_once(THE_FUNCTION . '/adminer/adminer.php'); NOt WORKING YET 
+//require_once(THE_FUNCTION . '/sidebars.php');
+//require_once(THE_FUNCTION . '/breadcrumb-trail.php');
+//require_once(THE_FUNCTION . '/content_elements.php');
+//require_once(THE_FUNCTION . '/portfolio.php');
+//require_once(THE_FUNCTION . '/cutom_meta_boxes.php');
+//require_once(THE_FUNCTION . '/sidebar/per-page-sidebars.php');
+//require_once(THE_FUNCTION . '/pager.php');
+//require_once(THE_FUNCTION . '/widgets/social-widget/social-widget.php');
+//require_once(THE_FUNCTION . '/widgets/sidebar-login/sidebar-login.php');
+//require_once(THE_FUNCTION . '/widgets/recent-posts-widget.php');
+//require_once(THE_FUNCTION . '/widgets/twitter.php');
+//require_once(THE_FUNCTION . '/recent-posts-slider/recent-posts-slider.php');
+//require_once(THE_FUNCTION . '/easy-fancybox/easy-fancybox.php');
+
+//CONTACT FORM 7 - ads simple contact form to posts and pages NOT WORKING YET
+//require_once(THE_FUNCTION . '/contact-form-7/wp-contact-form-7.php');
+
+//GRUNION CONTACT FORM - ads simple contact form to posts and pages NOT WORKING YET
+//require_once(THE_FUNCTION . '/contact-form/grunion-contact-form.php');
+
+//SHORTCODES URLIMATE - allows for unlimited shortcodes
+//require_once(THE_FUNCTION . '/shortcodes-ultimate/shortcodes-ultimate.php');
+
+//require_once(THE_FUNCTION . '/moover/moover.php');
+
+//require_once(THE_FUNCTION . '/mobile_detect.php');
+
+//MORE FIELDS - allows for extra custom fields in the edit dashboard
+require_once(THE_FUNCTION . '/more-fields/more-fields.php');
+
+//MORE TYPES - allows extra custom post types
+require_once(THE_FUNCTION . '/more-types/more-types.php');
+
+//MORE TYPES - allows extra custom post types
+require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
+
+//DYNAMIC CUSTOM POST TYPES
+//require_once(THE_FUNCTION . '/dinamic_custom_post_types.php');
+
+//require_once(THE_FUNCTION . '/advanced-code-editor/advanced-code-editor.php');
+/* 
+ * Loads the Options Panel
+ *
+ * If you're loading from a child theme use stylesheet_directory
+ * instead of template_directory
+ */
+ 
+if ( !function_exists( 'optionsframework_init' ) ) {
+	define( 'OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/inc/' );
+	require_once dirname( __FILE__ ) . '/inc/options-framework.php';
+}
+
+
+/*********************************************** PROMOTION ENQUEUE SCRIPTS *********************************************************/
+
+
+/*********************************************************************** MISC **********************************************************************/
+function get_options($section)
+{
+	return get_option($section.'_options');
+}
+
+function get_custom_field($field)
+{
+	return get_post_meta(get_the_ID(), $field, true);
+}
+
+function template_location($echo = true)
+{
+	if ($echo) {
+		bloginfo('template_directory');
+	} else {
+		return get_bloginfo('template_directory');
+	}
+}
+
+function get_the_excerpt_by_id($post_id)
+{
+	$excerpt = '';
+	$my_query = new WP_Query('p='.$post_id.'&post_type=products');
+	if ($my_query->have_posts()) {
+		$my_query->the_post();
+		$excerpt = get_the_excerpt();
+	}
+	wp_reset_postdata();
+	return $excerpt;
+}
+
+
+/******************************************************************* SIDEBARS *****************************************************************/
+
+add_action( 'widgets_init', 'initialize_widgets' );
+
+function initialize_widgets() {
+	register_sidebar(array(
+		'name'					=> 'Sidebar',
+		'id' 						=> 'sidebar',
+		'description'   => __( 'Located in default page template and posts.'),
+		'before_widget' => '<div id="%2$s" class="sidebar_widget">',
+		'after_widget' => '</div>',
+		'before_title' => '<h2>',
+		'after_title' => '</h2>'
+	));
+}	
+
+/****************************************************************** HEADER & FOOTER ****************************************************************/
+
+add_action('wp_head', 'add_header_scripts');
+
+function add_header_scripts()
+{
+	wp_deregister_script('jquery');
+	
+	wp_enqueue_script('jquery_min', template_location(false).'/js/jquery-1.7.2.min.js');
+	if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+		wp_enqueue_script('pie', template_location(false).'/js/PIE.js', array('jquery_min'));
+		$actions_depends = array('jquery_min', 'pie');
+	} else {
+		$actions_depends = array('jquery_min');
+	}
+	wp_enqueue_script('actions', template_location(false).'/js/custom.js', $actions_depends);
+	//wp_enqueue_style('fonts', 'http://fonts.googleapis.com/css?family=Lobster|Arvo');
+}
+
+/******************************************************************* MENUS SUPPORT******************************************************************/
+if (function_exists('wp_nav_menu')) {
+	if (function_exists('add_theme_support')) {
+		add_theme_support('nav-menus');
+		add_action('init', 'register_my_menus');
+		function register_my_menus() 
+		{
+			register_nav_menus(array(
+							'header-menu' => __('Header Menu'),
+							'footer-menu' => __('Footer Menu'),
+							'footer-menu2' => __('Useful Links')
+					));
+		}
+	}
+}
+
+function headermenu() { ?>
+	<ul id="menu">
+		<li class="header-menu-item"><a href="#">Home Page</a></li>
+		<li class="header-menu-item"><a href="#">About Us</a></li>
+		<li class="header-menu-item"><a href="#">New Offers</a></li>
+		<li class="header-menu-item"><a href="#">My Account</a></li>
+		<li class="header-menu-item"><a href="#">Lorem Ipsum</a></li>
+	</ul>
+<?php }
+
+function footermenu() { ?>
+	<ul id="menu-footer-menu">
+		<li><a href="#">About Us</a> | </li>
+		<li><a href="#">Main Menu</a> | </li>
+		<li><a href="#">New Products</a> | </li>
+		<li><a href="#">Our Services</a> | </li>
+		<li><a href="#">Contact Us</a></li> 
+	</ul>
+<?php }
+
+class headermenu_walker extends Walker_Nav_Menu
+{
+	function start_el(&$output, $item, $depth, $args)
+	{
+		$attributes  = ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
+		$attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
+        
+        $output .= '<li class="header-menu-item"><a'. $attributes .'>';
+        $output .= apply_filters( 'the_title', $item->title, $item->ID );
+        $output .= '</a></li>';
+    }
+}
+
+class footer_walker extends Walker_Nav_Menu
+{
+    public $count;
+    public $running_count;
+    function __construct()
+    {
+        $this->count = 0;
+        $this->running_count = 0;
+    }
+    function start_el(&$output, $item, $depth, $args)
+    {
+        $attributes  = ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
+        $attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
+        
+        $output .= '<li><a'. $attributes .'>';
+        $output .= apply_filters( 'the_title', $item->title, $item->ID );
+        $output .= '</a>';
+    }
+    function end_el(&$output, $item, $depth)
+    {
+        $this->running_count++;
+        if($this->count > $this->running_count) {
+            $output .= "</li>";
+        } else {
+        	$output .= "</li>";
+        }
+    }
+    function walk( $elements, $max_depth, $r )
+    {
+        $this->count = count($elements);
+        return parent::walk( $elements, $max_depth, $r );
+    }
+}
+
+/******************************************************************* Thumbnail support******************************************************************/
+
+add_theme_support('post-thumbnails');
+set_post_thumbnail_size( 300, 150, true );
+add_image_size( 'post-thumb', 300, 150, true );
+
+/********************************************************************* Search form *********************************************************************/
+
+add_filter( 'get_search_form', 'my_search_form' );
+
+function my_search_form( $form ) {
+    $form = '<form role="search" method="get" id="searchform" action="' . home_url( '/' ) . '" >
+			    <div>
+				    <label class="search_label" for="s">' . __('Search for:') . '</label>
+				    <input type="text" value="' . get_search_query() . '" name="s" id="s" />
+				    <input type="submit" id="searchsubmit" value="'. esc_attr__('Search') .'" />
+			    </div>
+		    </form>';
+
+    return $form;
+}
+
+/*********************************************************************** Widgets ***********************************************************************/
+
+add_action('widgets_init', 'Register_Widgets');
+function Register_Widgets()
+{
+	register_widget('SampleWidget');
+}
+
+class SampleWidget extends WP_Widget {
+	
+	function SampleWidget()
+	{
+		$widget_ops = array('classname' => 'widget_SampleWidget', 'description' => 'Display SampleWidget');
+		$control_ops = array('id_base' => 'SampleWidget_widget');
+		$this->WP_Widget('services_widget', 'SampleWidget', $widget_ops, $control_ops);
+	}
+	
+	function widget($args, $instance)
+	{
+		extract($args);
+		
+		$services[0]['title'] = $instance['first_SampleWidget_title'];
+		$services[0]['img'] = $instance['first_SampleWidget_img'];
+		$services[0]['text'] = $instance['first_SampleWidget_text'];
+		
+		$services[1]['title'] = $instance['second_SampleWidget_title'];
+		$services[1]['img'] = $instance['second_SampleWidget_img'];
+		$services[1]['text'] = $instance['second_SampleWidget_text'];
+		
+		$services[2]['title'] = $instance['third_SampleWidget_title'];
+		$services[2]['img'] = $instance['third_SampleWidget_img'];
+		$services[2]['text'] = $instance['third_SampleWidget_text'];
+		
+		echo $before_widget;
+		?>
+		<!-- BEGIN WIDGET -->
+		<ul id="SampleWidget_list">
+			<?php $count = 0;
+			foreach ($SampleWidget as $sw) {
+				$count++;
+				if ($count % 3 == 0) {
+					$class = ' class="last"';
+				} else {
+					$class = '';
+				} ?>
+				<li<?php echo $class; ?>>
+					<h2><?php echo $sw['title']; ?></h2>
+					<img src="<?php echo $sw['img']; ?>" alt="" />
+					<p><?php echo $sw['text']; ?></p>
+				</li>
+			<?php } ?>
+		</ul>
+		<!-- END WIDGET -->
+		<?php echo $after_widget;
+	}
+	
+	function update($new_instance, $old_instance)
+	{
+		$instance = $old_instance;
+		
+		$instance['first_SampleWidget_title'] = $new_instance['first_SampleWidget_title'];
+		$instance['first_SampleWidget_img'] = $new_instance['first_SampleWidget_img'];
+		$instance['first_SampleWidget_text'] = $new_instance['first_SampleWidget_text'];
+		
+		$instance['second_SampleWidget_title'] = $new_instance['second_SampleWidget_title'];
+		$instance['second_SampleWidget_img'] = $new_instance['second_SampleWidget_img'];
+		$instance['second_SampleWidget_text'] = $new_instance['second_SampleWidget_text'];
+		
+		$instance['third_SampleWidget_title'] = $new_instance['third_SampleWidget_title'];
+		$instance['third_SampleWidget_img'] = $new_instance['third_SampleWidget_img'];
+		$instance['third_SampleWidget_text'] = $new_instance['third_SampleWidget_text'];
+		
+		return $instance;
+	}
+
+	function form($instance)
+	{
+		$defaults = array(
+				'first_SampleWidget_title' => '',
+				'first_SampleWidget_img' => '',
+				'first_SampleWidget_text' => '',
+				'second_SampleWidget_title' => '',
+				'second_SampleWidget_img' => '',
+				'second_SampleWidget_text' => '',
+				'third_SampleWidget_title' => '',
+				'third_SampleWidget_img' => '',
+				'third_SampleWidget_text' => ''
+			);
+		$instance = wp_parse_args((array) $instance, $defaults); ?>
+		<p>
+			<label for="<?php echo $this->get_field_id('first_SampleWidget_title'); ?>">First SampleWidget title: </label>
+			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('first_SampleWidget_title'); ?>" name="<?php echo $this->get_field_name('first_SampleWidget_title'); ?>" value="<?php echo $instance['first_SampleWidget_title']; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('first_SampleWidget_img'); ?>">First SampleWidget image: </label>
+			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('first_SampleWidget_img'); ?>" name="<?php echo $this->get_field_name('first_SampleWidget_img'); ?>" value="<?php echo $instance['first_SampleWidget_img']; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('first_SampleWidget_text'); ?>">First SampleWidget text: </label>
+			<textarea class="widefat"  rows="16" cols="20" style="width: 216px;" id="<?php echo $this->get_field_id('first_SampleWidget_text'); ?>" name="<?php echo $this->get_field_name('first_SampleWidget_text'); ?>"><?php echo $instance['first_SampleWidget_text']; ?></textarea>
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('second_SampleWidget_title'); ?>">Second SampleWidget title: </label>
+			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('second_SampleWidget_title'); ?>" name="<?php echo $this->get_field_name('second_SampleWidget_title'); ?>" value="<?php echo $instance['second_SampleWidget_title']; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('second_SampleWidget_img'); ?>">Second SampleWidget image: </label>
+			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('second_SampleWidget_img'); ?>" name="<?php echo $this->get_field_name('second_SampleWidget_img'); ?>" value="<?php echo $instance['second_SampleWidget_img']; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('second_SampleWidget_text'); ?>">Second SampleWidget text: </label>
+			<textarea class="widefat"  rows="16" cols="20" style="width: 216px;" id="<?php echo $this->get_field_id('second_SampleWidget_text'); ?>" name="<?php echo $this->get_field_name('second_service_text'); ?>"><?php echo $instance['second_SampleWidget_text']; ?></textarea>
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id('third_SampleWidget_title'); ?>">Third SampleWidget title: </label>
+			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('third_SampleWidget_title'); ?>" name="<?php echo $this->get_field_name('third_SampleWidget_title'); ?>" value="<?php echo $instance['third_SampleWidget_title']; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('third_SampleWidget_img'); ?>">Third SampleWidget image: </label>
+			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('third_SampleWidget_img'); ?>" name="<?php echo $this->get_field_name('third_SampleWidget_img'); ?>" value="<?php echo $instance['third_SampleWidget_img']; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('third_SampleWidget_text'); ?>">Third SampleWidget text: </label>
+			<textarea class="widefat"  rows="16" cols="20" style="width: 216px;" id="<?php echo $this->get_field_id('third_SampleWidget_text'); ?>" name="<?php echo $this->get_field_name('third_SampleWidget_text'); ?>"><?php echo $instance['third_SampleWidget_text']; ?></textarea>
+		</p>
+	<?php }
+} 
+
+function login_with_email_address($username) {
+	$user = get_user_by_email($username);
+	if(!empty($user->user_login))
+		$username = $user->user_login;
+	return $username;
+}
+add_action('wp_authenticate','login_with_email_address');
+
+/* Metaboxes from Products / Services */
+/* Metabox CERTIFICATION - Choose Test Suites */
+
+function add_test_suites_metabox(){
+	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
+    add_meta_box("test_suites_metabox", "Select Certifications (Test Suites) ", 'show_test_suites', "product-service", "normal", "high");
+    add_meta_box("related_products_metabox", "Select Related Products / Services ", 'show_related_products', "product-service", "normal", "high");
+}
+
+add_action('admin_menu', 'add_test_suites_metabox');
+
+function show_test_suites(){
+	global $post;
+	$post_backup = $post;
+	$current_test_suite = explode(',', get_post_meta($post->ID, 'test_suites', true));
+	
+	echo '<input type="hidden" name="custom_test_suites" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	$loop = new WP_Query( array( 'post_type' => 'test-suite', 'posts_per_page' => -1) );
+	
+	while ( $loop->have_posts() ) : $loop->the_post();
+		 ?>
+		 
+		 <input type="checkbox" name="test_suites[]" <?php if (in_array(get_the_ID(), $current_test_suite)) { echo 'checked="checked"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+		
+		<?php
+	endwhile;
+	//wp_reset_postdata(); 
+	$post = $post_backup;
+}
+
+
+function show_related_products(){
+	global $post;
+	$post_backup = $post;
+	$current_product = explode(',', get_post_meta($post->ID, 'related_products', true));
+	
+	echo '<input type="hidden" name="custom_relprod" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	$loop = new WP_Query( array( 'post_type' => 'product-service', 'posts_per_page' => -1, 'post__not_in' =>array($post->ID)) );
+	
+	while ( $loop->have_posts() ) : $loop->the_post();
+		 ?>
+		 
+		 <input type="checkbox" name="related_products[]" <?php if (in_array(get_the_ID(), $current_product)) { echo 'checked="checked"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+		
+		<?php
+	endwhile;
+	//wp_reset_postdata();	 
+	$post = $post_backup;
+}
+
+add_action('save_post', 'save_test_suites');
+
+function save_test_suites($post_id) {
+	//die('<pre>'.print_r($_POST, true).'</pre>');
+    // verify nonce
+    if (!isset($_POST['custom_test_suites']) || !wp_verify_nonce($_POST['custom_test_suites'], basename(__FILE__))) {
+        return $post_id;
+    }
+    // check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return $post_id;
+    }
+    // check permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        return $post_id;
+    }
+      
+    $test_suites = '';
+    if (count($_POST['test_suites'])) {
+		$test_suites = implode(',', $_POST['test_suites']);
+	}
+	
+	update_post_meta($post_id, 'test_suites', $test_suites);
+	
+    $related_products = '';
+    if (count($_POST['related_products'])) {
+		$related_products = implode(',', $_POST['related_products']);
+	}
+		
+	update_post_meta($post_id, 'related_products', $related_products);
+} 
+
+
+
+
+/* Metaboxes Test Suite Page */
+/* Metabox Choose Test Cases*/
+
+function add_custom_metaboxes(){
+	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
+    add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
+}
+
+add_action('admin_menu', 'add_custom_metaboxes');
+
+function show_test_cases(){
+	global $post;
+	$post_backup = $post;
+	$current_test_cases = explode(',', get_post_meta($post->ID, 'test_cases', true));
+	
+	echo '<input type="hidden" name="custom_test_cases" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
+	
+	while ( $loop->have_posts() ) : $loop->the_post();
+		 ?>
+		 <input type="checkbox" name="test_cases[]" <?php if (in_array(get_the_ID(), $current_test_cases)) { echo 'checked="checked"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+		
+		<?php
+	endwhile;
+	$post = $post_backup;
+}
+
+add_action('save_post', 'save_test_case_post');
+
+function save_test_case_post($post_id) {
+	// verify nonce
+	if (!isset($_POST['custom_test_cases']) || !wp_verify_nonce($_POST['custom_test_cases'], basename(__FILE__))) {
+	return $post_id;
+}
+
+    // check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return $post_id;
+    }
+ 
+	// check permissions
+     if (!current_user_can('edit_post', $post_id)) {
+      return $post_id;
+    }
+    
+    $test_cases = '';
+    if (count($_POST['test_cases'])) {
+		$test_cases = implode(',', $_POST['test_cases']);
+	}
+	// print_r($_POST['test_cases']);
+	update_post_meta($post_id, 'test_cases', $test_cases);
+}
+
+
+/*Metabox Choose Related Suites */
+
+function add_custom_meta_box() {  
+    add_meta_box(  
+        'custom_meta_box', // $id  
+        'Related Suites 2', // $title   
+        'show_custom_meta_box', // $callback  
+        'test-suite', // $page  
+        'normal', // $context  
+        'high'); // $priority  
+}  
+add_action('add_meta_boxes', 'add_custom_meta_box');  
+
+	// Fields for Related Suites 
+	$prefix = 'custom_';  
+	$custom_meta_fields = array(  
+
+    array(  
+    'label' => 'Related Suite',  
+    //'desc' => '',  
+    'id'    =>  $prefix.'post_id',  
+    'type' => 'post_list',  
+    'post_type' => 'test-suite'
+	),  
+    array(  
+        'label'=> 'Description',  
+        'desc'  => 'Add a description for this Suite',  
+        'id'    => $prefix.'text',  
+        'type'  => 'text'  
+    ),  
+    
+	);  
+
+function show_custom_meta_box() {  
+	global $custom_meta_fields, $post;  
+
+	// Use nonce for verification  
+	echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';  
+      
+    // Begin the field table and loop  
+    echo '<div id="rel_suite"><div class="another_element">'; 
+    foreach ($custom_meta_fields as $field) {  
+        // get value of this field if it exists for this post  
+        $meta = get_post_meta($post->ID, $field['id'], true);  
+                switch($field['type']) {  
+                    // select  
+					case 'post_list':  
+					$items = get_posts( array (  
+						'post_type' => $field['post_type'],  
+						'posts_per_page' => -1  ,
+						'post__not_in' =>array($post->ID)
+					));  
+					echo '<div class="elem">';
+					echo '<label for="'.$field['id'].'"><b>'.$field['label'].'</b></label> <br /> 
+						  <select name="'.$field['id'].'"> 
+						  <option value="">Choose Test Suite</option>'; // Select One  
+						  foreach($items as $item) {  
+							  echo '<option value="'.$item->ID.'"',$meta == $item->ID ? ' selected="selected"' : '','>'.$item->post_title.'</option>';  
+						  } // end foreach  
+						echo '</select><br /><span class="description">'.$field['desc'].'</span></div>';  
+					break;  
+					   
+					// text  
+					case 'text':  
+						echo '<div class="elem"><label for="'.$field['id'].'"><b>'.$field['label'].'</b></label> <br />
+							  <input type="text" name="'.$field['id'].'" value="'.$meta.'" size="30" class="mf_text" /> 
+							  <br /><span class="description">'.$field['desc'].'</span></div><br />';
+					break;  
+                } //end switch   
+    } // end foreach  
+    echo '</div></div>'; // end div  
+    print_r($_POST['custom_text']);
+    ?>
+    
+    <div class="copy-correct">
+		
+    </div>
+    
+    <a class="add_new button right">Add new</a>
+
+    <div class="clear"></div>
+    
+    <style type="text/css">
+		
+		.right { float:right; }
+		.clear { clear: both; }		
+    </style>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        
+		jQuery(".add_new").click(function(data) {
+			 jQuery('.copy-correct').append(jQuery('#rel_suite .another_element').clone().children('a').end());
+			 jQuery('.copy-correct input, .copy-correct select').val('');
+
+			
+		});
+	});
+    </script>
+    
+    <?
+}  
+
+function save_custom_meta($post_id) {  
+    global $custom_meta_fields;  
+      
+    // verify nonce  
+    if (!wp_verify_nonce($_POST['custom_meta_box_nonce'], basename(__FILE__)))   
+        return $post_id;  
+    // check autosave  
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)  
+        return $post_id;  
+    // check permissions  
+    if ('page' == $_POST['post_type']) {  
+        if (!current_user_can('edit_page', $post_id))  
+            return $post_id;  
+        } elseif (!current_user_can('edit_post', $post_id)) {  
+            return $post_id;  
+    }  
+
+    // loop through fields and save the data 
+    
+
+     
+    foreach ($custom_meta_fields as $field) {
+		 
+        $old = get_post_meta($post_id, $field['id'], true); 
+        	
+        $new = $_POST[$field['id']];  
+        if ($new && ($new != $old)) { 
+            update_post_meta($post_id, $field['id'], $new);  
+        } elseif ('' == $new && $old) {  
+            delete_post_meta($post_id, $field['id'], $old);  
+        }  
+    } // end foreach  
+}  
+add_action('save_post', 'save_custom_meta');    
+
+?>
+

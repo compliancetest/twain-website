@@ -1,0 +1,127 @@
+/*
+ * jQuery mOover v.1.4 CSS Part
+ 
+ * http://www.idangero.us/sliders/moover/
+ *
+ * Copyright 2012, Vladimir Kharlampidi
+ * The iDangero.us
+ * http://www.idangero.us
+ 
+ * Licensed under the iDangero.us Limited Regular License (RL Limited)
+ * Licensing Terms: http://www.idangero.us/index.php?content=article&id=21
+ 
+ * Released on: January 11, 2011
+ */
+@charset "UTF-8";
+
+.moover {
+	position:relative;
+}
+.moover .moover-slide {
+	position:absolute;
+	left:0;
+	top:0;
+	display:none;
+	overflow:hidden;
+	z-index:100;
+}
+.moover .moover-active-slide {
+	display:block;
+	z-index:90	
+}
+.moover .moover-slide .moover-text, .moover .moover-text > p, .moover .moover-TW, .moover .moover-slide > img {
+	-moz-transition-property:all;
+	-webkit-transition-property:all;
+	-ms-transition-property:all;
+	-o-transition-property:all;
+	transition-property:all;
+}
+.moover .moover-slide .moover-text, .moover .moover-slide > img {
+	position:absolute;
+	z-index:5;
+	max-width:none;
+	min-width:none;
+}
+.moover .moover-slide p {
+	margin:0;
+	text-align:center
+}
+.moover .moover-text {
+	margin:0;
+	padding:0;
+}
+.moover .moover-TW {
+	display:inline-block;
+}
+.moover .moover-absolute p {
+	position:absolute;
+}
+.moover-slide {
+	width:100%;
+	height:100%;	
+}
+/* Preloader */
+
+.moover-pagination {
+	position:absolute;
+	bottom:12px;
+	left:30px;
+	z-index:110;
+}
+.moover-switch {
+	display:block;
+	float:left;
+	width:8px;
+	height:8px;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+	/*box-shadow:1px 1px 2px #666 inset; */
+	margin:0 8px 0 0;
+	background:#c4c2c2;
+}
+
+.moover-switch-active {
+	background:#464646; 
+}
+
+.control {
+	position:absolute;	
+	bottom:11px;
+	left:12px;
+	z-index:111;
+}
+
+
+a.slider_play {
+	height:10px;
+	width:10px;
+	background:url('../images/admin/play_pause.png') left top no-repeat;
+	float:left;
+}
+
+a.slider_pause {
+	height:10px;
+	width:10px;
+	background:url('../images/admin/play_pause.png') right top no-repeat;
+	float:left;
+}
+
+.psb_inactive{display:none;}
+
+.moover-loading .slider_loader{
+	width:16px; 
+	height:16px; 
+	position:absolute; 
+	top:49%; 
+	left:50%; 
+	padding:5px 7px; 
+	background-color:#fff;
+	display:inline;
+	background-image:url(moover-preloader.gif) !important;
+	background-repeat:no-repeat !important;
+	background-position:center center !important;	
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.07); -moz-box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.07); -webkit-box-shadow: 00px 0px 4px 1px rgba(0,0,0,0.07);
+}
+
+.slider_loader{display:none;}

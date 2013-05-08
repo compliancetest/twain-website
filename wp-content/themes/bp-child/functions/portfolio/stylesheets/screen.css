@@ -1,0 +1,20 @@
+
+/*****Custom Classes*****/
+.clearing { clear: both; }
+.last { margin-bottom: 0; }
+.screenReader { left: -9999px; position: absolute; top: -9999px; }
+
+ul#filter { float: left;  list-style: none; margin-left: 0; width: 100%; }
+ul#filter li { 
+	border-right: 1px solid #dedede;
+	float: left;
+	line-height: 16px;
+	margin-right: 10px;
+	padding-right: 10px;
+	
+}
+ul#filter li:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+ul#filter a {font-size:10px; color: #999; text-decoration: none; text-transform: uppercase; font-weight:bold; }
+ul#filter li.current a, ul#filter a:hover { text-decoration: underline; }
+ul#filter li.current a { color: #333; font-weight: bold; }
+

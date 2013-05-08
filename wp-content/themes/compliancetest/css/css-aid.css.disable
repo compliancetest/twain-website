@@ -1,0 +1,253 @@
+/*************** BGINE CSS AID ******************/
+/*************** BROWSER RESET ******************/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent;}
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after,
+q:before, q:after { content: ''; content: none; }
+/* remember to define focus styles! */
+:focus { outline: 0; }
+/* remember to highlight inserts somehow! padding: 9px 17px 9px 17px; */
+ins { text-decoration: none; }
+del { text-decoration: line-through; }
+/* tables still need 'cellspacing="0"' in the markup */
+table { border-collapse: collapse; }
+*, * focus {
+	outline: none;
+	margin: 0;
+	padding: 0;
+}
+textarea { overflow: auto; }
+textarea, input[type=text] { font-family: Arial, Helvetica, sans-serif; font-size: 12px;}
+::selection { background: #C9D7DF; color: #2A5B79; }
+
+
+
+/*************** STRUCTURAL ELEMENTS ******************/
+
+html, body {
+	height: 100%;
+	width: 100%;
+}
+
+body { 
+	margin: 0;
+	padding: 0;
+	font-family: Arial,Tahoma,Helevetica,sans-serif;
+	font-size: 13px;
+	line-height: 19px; 
+}
+*:focus {
+	outline: none;
+} 
+
+
+/**************** TYPOGRAPHY ************************/
+
+h1 {
+	font-size: 25px;
+	font-weight: bold;
+	line-height: 35px;
+	margin: 0 0 13px 0;
+}
+
+h2 {
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 20px;
+	margin: 0 0 13px 0;
+}
+
+h3 {
+	font-size: 17px;
+	font-weight: bold;
+	line-height: 17px;
+	margin: 7px 0;
+}
+
+h4 {
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 15px;
+	margin: 0 0 3px 0;
+}
+
+h5 {
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 12px;
+	margin: 0 0 7px 0;
+}
+
+blockquote {
+	font-family: 'Times New Roman';
+	font-style: italic;
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: 30px;
+	font-weight: normal;
+	text-shadow: 0 1px 1px #ffffff;
+}
+
+hr { 
+	border-top: 1px solid #a59d88;
+}
+
+p { 
+	margin: 0 0 7px 0;
+	font-size: 13px;
+	line-height: 19px;
+}
+
+pre {
+	background: rgba(255,255,255,0.5);
+	font-size: 16px;
+	padding: 10px 5px;
+	margin: 0;
+	word-wrap: break-word;
+}
+
+a {
+	color: #09a5cb;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #e32026;
+}
+
+/*************** COLORS ****************************/
+
+.blue {
+	color: #0d76a2 !important;
+}
+
+.red {
+	color: #d21617 !important;
+}
+
+.gray {
+	color: #242424 !important;
+}
+
+.white {
+	color: #fff !important;
+}
+
+/*******************IMAGES***************************/
+
+img {
+	border: none;
+}
+
+.alignleft {
+	float: left;
+	margin: 0 30px 20px 0;
+}
+
+.alignright {
+	float: right;
+	margin: 0 0 20px 30px;
+}
+
+.aligncenter {
+	display: block;
+	width: auto;
+	margin: 0 auto;
+}
+
+
+/*************** REQUIRED ELEMENTS ******************/
+
+.clear {
+	clear: both;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.last {
+	margin-right: 0 !important;
+}
+
+.half {
+	width: 50%;
+}
+
+.third {
+	width: 32.5%;
+}
+
+.nopaddingtop {
+	padding-top: 0px !important;
+}
+
+.nopaddingbottom {
+	padding-bottom: 0px !important;
+}
+
+.nopaddingleft {
+	padding-left: 0px !important;
+}
+
+.nopaddingright {
+	padding-right: 0px !important;
+}
+
+.nomargintop {
+	margin-top: 0px !important;
+}
+
+.nomarginleft {
+	margin-left: 0px !important;
+}
+
+.nomarginright {
+	margin-right: 0px !important;
+}
+
+.nomarginbottom {
+	margin-bottom: 0px !important;
+}
+
+.space10 {
+	height: 10px !important;
+	display: block !important;
+}
+
+.space20 {
+	height: 20px !important;
+	display: block !important;
+}
+
+.space30 {
+	height: 30px !important;
+	display: block !important;
+}
+
+.space40 {
+	height: 40px !important;
+	display: block !important;
+}
+
+.space50 {
+	height: 50px !important;
+	display: block !important;
+}
+
+/*************** BEGINE CSS AID ******************/

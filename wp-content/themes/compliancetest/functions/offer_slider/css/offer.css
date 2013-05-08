@@ -1,0 +1,8 @@
+#slider_offer {width:960px; margin:0 auto;  height: 357px; overflow: hidden; position:relative;}
+#mover{ width: 2880px; position: relative; }
+.slide_offer { padding: 40px 40px; width: 960px; float: left; position: relative; }
+.slide_offer h1{font-size: 40px; letter-spacing: -1px; margin-top:40px; }
+.slide_offer p {color: #999; font-size: 12px; line-height: 22px; width: 300px; }
+.slide_offer img	 { position: absolute; margin-top:13px; top:10px; left: 450px; max-width:410px; max-height:300px; padding:5px; border: 1px solid #ddd !important; background:#fff; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;}
+#slider-stopper	{width:16px; height:16px; position: absolute; right: 30px; top:20px; background:url('../images/offer_slider_buttons.png') no-repeat; font-size: 10px; text-transform: uppercase; z-index: 1000; text-indent:-9999px;}
+.play_off{background-position: -16px 0px !important;}
