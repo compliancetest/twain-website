@@ -921,9 +921,9 @@ function show_test_cases(){
 		<div class="elem-tc"> <div class="elem-tc">
 		<select name="test_cases[]">
 			<option value="">Select Test Cases</option>
-			<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
+			<?php //while ( $loop->have_posts() ) : $loop->the_post(); ?>
 				 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
-			<?php endwhile; ?>
+			<?php // endwhile; ?>
 		</select>
 		<div class="button remove_tc left">Remove Test Case</div>
 		<br clear="all" />
