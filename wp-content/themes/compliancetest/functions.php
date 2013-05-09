@@ -937,7 +937,7 @@ function show_test_cases(){
 			<?php
 			while ( $loop->have_posts() ) : $loop->the_post();
 				 ?>
-				 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+				 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
 				<?php
 			endwhile;
 			?>
