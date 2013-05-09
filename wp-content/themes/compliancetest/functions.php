@@ -865,7 +865,7 @@ function save_test_execution($post_id) {
 function add_custom_metaboxes(){
 	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
 	/* Metabox Choose Test Cases*/
-    add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
+   // add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
     /* Metabox Declare Initiating Message*/
     add_meta_box("initiating_message_metabox", "Initiating Messages", 'show_initiating_message', "test-suite", "normal", "high");
     /* Metabox Declare Roles*/
