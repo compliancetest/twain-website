@@ -187,15 +187,27 @@ do_action( 'bp_before_group_header' );
 								</div>
 								<div class="grid_body noborder">
 								<?php
-								$testsuites_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$group_id}");
-								$testsuites = $testsuites_result->ts_ids;
-								$current_test_suites = explode(',', $testsuites);
-								$args = array( 'post_type' => 'test-suite', 'posts_per_page' => 10, 'post__in' =>$current_test_suites);
+								$current_test_suites = array();
+								$testsuites_result = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$group_id}");
+								foreach ($testsuites_result as $ts){
+									array_push($current_test_suites, $ts->ts_ids);
+								}
+								$args = array( 'post_type' => 'test-suite', 'posts_per_page' => -1, 'post__in' =>$current_test_suites);
 								$loop = new WP_Query( $args );
+								$roles_select = array();
 								while ( $loop->have_posts() ) : $loop->the_post();
 									$status = get_post_meta( get_the_ID(),'ts_status',true );
 									$date_field=get_post_meta($post->ID, 'ts_issue_date', true); 
 									$date_formated = date("M Y", strtotime($date_field)); // 2012
+									$roles_ts = get_post_meta($post->ID, 'tester_role_ts', true); 
+									$roles = explode(',',$roles_ts); 
+									//print_r($roles);
+									foreach ($roles as $role){
+										if (!in_array($role,$roles_select)){
+											array_push($roles_select,$role);
+											}
+										}
+									
 									echo '<div class="grid_row grid_row_border">
 											<div class="grid_cell width50P">
 												<a href="'.get_permalink().'" class="blue_txt"><h5>'.get_the_title().'</h5></a>
@@ -223,50 +235,152 @@ do_action( 'bp_before_group_header' );
 										<div class="clear"></div>';
 										echo '</div>';
 								endwhile;
+								//print_r($roles_select);
 								?>					
-									
+								
 								</div>
 							</div>
 						</div>
 						<div class="column fifth right expendables">
 							
-							<div class="expandable open">
-								<h6 class="exp_title open">Issuer</h6>
-								<div class="exp_content" style="display: block; ">
-									<label for="gov_au" class="blue_txt"><input type="checkbox" name="gov_au" id="gov_au"> Gov-AU (33)</label>
-										<div class="clear"></div>
-									<label for="gov_uk" class="blue_txt"><input type="checkbox" name="gov_uk" id="gov_uk"> Gov-UK (20)</label>
-										<div class="clear"></div>
-									<label for="iso" class="blue_txt"><input type="checkbox" name="iso" id="iso"> ISO (34)</label>
-										<div class="clear"></div>
-									<label for="oasis" class="blue_txt"><input type="checkbox" name="oasis" id="oasis"> OASIS (25)</label>
-										<div class="clear"></div>
-								</div>
-							</div>
+					<?php 
+						$issuers_all= array();
+						$issuers_nb = array();
+						$issuers = array();
+						
+						$types_all = array();							
+						$types_nb = array();
+						$types = array();
+						
+						$dates_y_all = array();
+						$dates_y_nb = array();
+						$dates_y = array();
+						
+						
+						$statuses_all = array();
+						$statuses_nb = array();
+						$statuses = array();
+						
+						$loop = new WP_Query( array( 'post_type' => 'test-suite', 'posts_per_page' => -1, 'post__in' => $current_test_suites) );
+						while ( $loop->have_posts() ) : $loop->the_post();
+							$issuer = get_post_meta($post->ID, 'ts_issuer', true);
+							array_push($issuers_all,$issuer); 
+							if (!in_array($issuer, $issuers)) {
+								array_push($issuers,$issuer); 
+							}
 							
-							<div class="expandable open">
-								<h6 class="exp_title open">Year of Issue</h6>
-								<div class="exp_content" style="display: block; ">
-									<label for="yoi_2013" class="blue_txt"><input type="checkbox" name="yoi_2013" id="yoi_2013"> 2013 (5)</label>
-										<div class="clear"></div>
-									<label for="yoi_2012" class="blue_txt"><input type="checkbox" name="yoi_2012" id="yoi_2012"> 2012 (152)</label>
-										<div class="clear"></div>
-									<label for="yoi_2011" class="blue_txt"><input type="checkbox" name="yoi_2011" id="yoi_2011"> 2011 (16)</label>
-										<div class="clear"></div>
-								</div>
-							</div>
+							$term_list = wp_get_post_terms($post->ID, 'test_suite_type', array("fields" => "all"));
+							$type = $term_list[0]->name;
+							array_push($types_all,$type);
+							if (!in_array($type, $types)) {
+								array_push($types,$type); 
+							}
 							
-							<div class="expandable open">
-								<h6 class="exp_title open">Status</h6>
-								<div class="exp_content" style="display: block; ">
-									<label for="status_current" class="blue_txt"><input type="checkbox" name="status_current" id="status_current"> Current (38)</label>
-										<div class="clear"></div>
-									<label for="status_deprecated" class="blue_txt"><input type="checkbox" name="status_deprecated" id="status_deprecated"> Deprecated (14)</label>
-										<div class="clear"></div>
-									<label for="status_obsolete" class="blue_txt"><input type="checkbox" name="status_obsolete" id="status_obsolete"> Obsolete (12)</label>
-										<div class="clear"></div>
-								</div>
-							</div>
+							$date_field=get_post_meta($post->ID, 'ts_issue_date', true); 
+							$date_y = date("Y", strtotime($date_field)); // 2012
+							array_push($dates_y_all,$date_y);
+							if (!in_array($date_y, $dates_y)) {
+								array_push($dates_y,$date_y); 
+							}	
+							
+							$status = get_post_meta($post->ID, 'ts_status', true);
+							array_push($statuses_all,$status);
+							if (!in_array($status, $statuses)) {
+								array_push($statuses,$status); 
+							}
+							endwhile;
+						
+							foreach (array_count_values($issuers_all) as $value){
+									array_push($issuers_nb, $value);
+							}
+							
+							foreach (array_count_values($types_all) as $value){
+									array_push($types_nb, $value);
+							}
+							
+							foreach (array_count_values($dates_y_all) as $value){
+									array_push($dates_y_nb, $value);
+							}
+							
+							foreach (array_count_values($statuses_all) as $value){
+									array_push($statuses_nb, $value);
+							}
+		
+						?>
+
+				<form action="" method="post" id="form_filter">
+				<div class="expandable">
+					<h6 class="exp_title">Type</h6>
+					<div class="exp_content">
+					<?php
+						foreach ($types as $key => $type_name){
+								foreach($types_nb as $key2 => $type_matches){
+									if ($key == $key2)	{
+										//echo $val.' - '.$issue_matches.'<br />';
+										$input_name =  str_replace(' ','_',$type_name); 
+										echo '<label for="'.$input_name.'" class="blue_txt"><input type="checkbox" name="type_name[]"'.(in_array($input_name, $_POST['type_name']) ? ' checked="checked"' : '').' value="'.$input_name.'" id="'.$input_name.'" class="input_filter"> '
+										.$type_name. ' ('.$type_matches.')</label><div class="clear"></div>';
+									}
+								}
+							}
+					?>
+					</div>
+				</div>
+				
+				<div class="expandable">
+					<h6 class="exp_title">Issuer</h6>
+					<div class="exp_content">
+					<?php
+						foreach ($issuers as $key => $issue_name){
+								foreach($issuers_nb as $key2 => $issue_matches){
+									if ($key == $key2)	{
+										//echo $val.' - '.$issue_matches.'<br />';
+										$input_name =  str_replace(' ','_',$issue_name); 
+										echo '<label for="'.$input_name.'" class="blue_txt"><input type="checkbox" name="issue_name[]"'.(in_array($input_name, $_POST['issue_name']) ? ' checked="checked"' : '').' value="'.$input_name.'" id="'.$input_name.'" class="input_filter"> '
+										.$issue_name. ' ('.$issue_matches.')</label><div class="clear"></div>';
+									}
+								}
+							}
+					?>
+					</div>
+				</div>
+				
+				<div class="expandable">
+					<h6 class="exp_title">Year of Issue</h6>
+					<div class="exp_content">
+					<?php
+						foreach ($dates_y as $key => $date_name){
+								foreach($dates_y_nb as $key2 => $date_matches){
+									if ($key == $key2)	{
+										//echo $val.' - '.$issue_matches.'<br />';
+										$input_name =  str_replace(' ','_',$date_name); 
+										echo '<label for="'.$input_name.'" class="blue_txt"><input type="checkbox" name="date_name[]"'.(in_array($input_name, $_POST['date_name']) ? ' checked="checked"' : '').' value="'.$input_name.'" id="'.$input_name.'" class="input_filter"> '
+										.$date_name. ' ('.$date_matches.')</label><div class="clear"></div>';
+									}
+								}
+							}
+					?>
+					</div>
+				</div>
+				
+				<div class="expandable">
+					<h6 class="exp_title">Status</h6>
+					<div class="exp_content">
+						<?php
+						foreach ($statuses as $key => $status_name){
+								foreach($statuses_nb as $key2 => $status_matches){
+									if ($key == $key2)	{
+										//echo $val.' - '.$issue_matches.'<br />';
+										$input_name =  str_replace(' ','_',$status_name); 
+										echo '<label for="'.$status_name.'" class="blue_txt"><input type="checkbox" name="status_name[]"'.(in_array($input_name, $_POST['status_name']) ? ' checked="checked"' : '').' value="'.$input_name.'" id="'.$input_name.'" class="input_filter"> '
+										.$status_name. ' ('.$status_matches.')</label><div class="clear"></div>';
+									}
+								}
+							}
+						?>
+					</div>
+				</div>
+				</form>
 				
 						</div>
 						<div class="clear"></div>
@@ -559,6 +673,74 @@ do_action( 'bp_before_group_header' );
 </div>
 
 	<div class="space45"></div>
+<?php
+	session_start();
+    $terms_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_terms WHERE group_id={$group_id}");
+    $_SESSION['terms'] = nl2br($terms_result->content);
+	
+	$license_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_license WHERE group_id={$group_id}");
+    $_SESSION['license'] = nl2br($license_result->license);
+
+
+?>
 
 <?php get_sidebar( 'buddypress' ); ?>
 <?php get_footer( 'buddypress' ); ?>
+
+<div id="mask_community">
+	<div id="community-wrap">
+		<div id="community_registration" class="radius6">
+			<p class="headline nomarginbottom">Community Registration</p>
+				<form method="post" action="" id="join-community-id">
+					<div id="community_content">
+						
+							<p>You need to join the community od interest in order to view Test Cases and Participate in the Forum</p>
+							<div class="grey-border-bottom"></div>
+							<div class="grid_cell width100P left">
+										<span class="left padding5-10-5-0">Your Role: </span>
+										<div class="styled_select left">
+											<select name="role" id="role_id">
+												 <option value="">Select a role</option>
+												<?php 
+												foreach($roles_select as $role_select){
+													echo '<option value="'.$role_select.'">'.$role_select.'</option>';
+													}
+												?>
+											</select>
+										</div>
+										<div class="clear"></div>
+							</div>
+							<div class="grid_cell width100P left">
+								<input type="checkbox" name="agree_terms" value="agree" id="agree_terms_id"> I agree with <a href="http://nego-solutions.com/dev-clients/compliance/terms-conditions/" class="normal">Terms & Conditions</a>
+								<div class="clear"></div>
+								<div class="space5"></div>
+								<input type="checkbox" name="agree_license" value="agree_license" id="agree_license_id"> I agree with <a href="http://nego-solutions.com/dev-clients/compliance/license-agreement/" class="normal">License Agreement</a>
+								<div class="clear"></div>
+								<div class="space5"></div>
+								<div class="err_request"></div>
+							</div>
+							<div class="clear"></div>	
+					</div>
+					<div class="grid_row test_cases noradiusbottom">
+						<div class="register">
+							<input type="submit" id="join-community" value="Register" name="role_submit"/>
+						</div>
+						<div class="cancel"><a href="#" id="close-popup-community2">Cancel</a></div>
+						<div class="clear"></div>
+					</div>
+				</form>	
+					
+			
+		<div id="close-popup-community" class="close_btn"></div>
+		</div>
+	
+		</div> <!--end community_registration-->
+	</div>	
+</div>
+
+<?php 
+if (isset($_POST['role'])){
+	
+	}
+
+?>

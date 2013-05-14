@@ -113,6 +113,7 @@
 		<div id="close-popup" class="close_btn"></div>
 		</div>
 	</div>
+		
 	<div id="wrapper">
 
 <!-- ****************** HEADER ***************** -->

@@ -243,15 +243,12 @@ input[type="search_button"], input[type="submit"], input[type="reset"], input[ty
 	}
 
 .button_medium {
-	padding: 12px 20px;
+	padding: 12px 18px;
 	display: block;
 	text-align: center;
 	font-size: 16px;
 	font-weight: bold;
 }
-
-
-
 
 textarea {
 	min-height: 130px;
@@ -1075,6 +1072,10 @@ tr {
 	display: none;
 	left: 0px; 
 	top: 0px;
+}
+
+#mask_community{
+	/*display:block;*/
 }
 
 #popup-wrap, #community-wrap, #payment-wrap{

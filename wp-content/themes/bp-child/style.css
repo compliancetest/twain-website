@@ -476,11 +476,15 @@ label {
 	margin-bottom: 20px;
 }
 
+.expandable .open {
+background: url(images/expandable_arrow_o.png) left center no-repeat !important;
+}
+
 	.expandable .exp_title {
 		font-weight: bold;
 		color: #666;
 		margin-bottom: 10px;
-		background: url(images/expandable_arrow_o.png) left center no-repeat;
+		background: url(images/expandable_arrow_c.png) left center no-repeat;
 		padding: 0 0 7px 12px;
 		cursor: pointer;
 		border-bottom: 1px solid #A0A0A0;
@@ -2168,6 +2172,8 @@ color : #8C1916;
 background: none;
 }
 
+
+
 #avatar-crop-submit{
 padding: 0px 10px;
 height: 24px;
@@ -2985,6 +2991,13 @@ background-image: url(images/white_gloss.png);
 	margin: 8px 0px 0px 16px;
 }
 
+.err_request{
+	color: #8c1916;
+	display: none;
+	font-size: 12px;
+	margin: 8px 0px 0px 0px;
+}
+
 .err_new_suite{
 	color: #8c1916;
 	display: none;
@@ -3078,10 +3091,10 @@ background-image: url(images/white_gloss.png);
 	margin-right: 2px;
 }
 
-.register a{
+.register input[type="submit"]{
 	background: url(images/register.png) top left no-repeat;
 	width: 85px;
-	height: 19px;
+	height: 25px;
 	color: white;
 	display: block;
 	text-transform: uppercase;
@@ -3090,8 +3103,9 @@ background-image: url(images/white_gloss.png);
 	text-align: right;
 	font-weight: normal;
 	font-size: 11px;
-	padding: 5px 8px 0px 0px;
+	padding: 4px 9px 8px 32px;
 	font-family: Open Sans, Arial, sans serif;
+	border: 0px;
 }
 
 .sbr{
@@ -3569,6 +3583,10 @@ display:block !important;
 .tab-content2 p a{
 	font-weight:normal;
 	text-decoration: underline;
+}
+
+#join-community{
+	cursor: pointer;
 }
 
 .blue_button a{

@@ -420,7 +420,7 @@ function show_test_suites(){
 	while ( $loop->have_posts() ) : $loop->the_post();
 		 ?>
 		 
-		 <input type="checkbox" name="test_suites[]" <?php if (in_array(get_the_ID(), $current_test_suite)) { echo 'checked="checked"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+		 <input type="checkbox" name="test_suites[]" <?php if (in_array(get_the_ID(), $current_test_suite)) { echo 'checked="checked"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
 		
 		<?php
 	endwhile;
@@ -440,7 +440,7 @@ function show_related_products(){
 	while ( $loop->have_posts() ) : $loop->the_post();
 		 ?>
 		 
-		 <input type="checkbox" name="related_products[]" <?php if (in_array(get_the_ID(), $current_product)) { echo 'checked="checked"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+		 <input type="checkbox" name="related_products[]" <?php if (in_array(get_the_ID(), $current_product)) { echo 'checked="checked"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
 		
 		<?php
 	endwhile;
@@ -532,7 +532,7 @@ function show_choose_roles(){
 				<option value="">Choose Tester Role</option>
 			<?php	
 			foreach($testers as $tester){ ?>
-				<option value="<?php echo $tester;?>" <?php if ($tester == $selected_tester) { echo 'selected="selected"'; }; ?> ><?php echo $tester ; ?></option>
+				<option value="<?php echo $tester;?>" <?php if ($tester == $selected_tester) { echo 'selected="selected"'; } ?> ><?php echo $tester ; ?></option>
 			<?php 
 			}
 			?>
@@ -543,7 +543,7 @@ function show_choose_roles(){
 				<option>Choose Harness Role</option>
 			<?php	
 			foreach($harnesses as $harness){ ?>
-				<option value="<?php echo $harness;?>" <?php if ($harness == $selected_harness) { echo 'selected="selected"'; }; ?> ><?php echo $harness ; ?></option>
+				<option value="<?php echo $harness;?>" <?php if ($harness == $selected_harness) { echo 'selected="selected"'; } ?> ><?php echo $harness ; ?></option>
 			<?php 
 			}
 			?>
@@ -555,7 +555,7 @@ function show_choose_roles(){
 				<option>Choose Initiator</option>
 			<?php	
 			foreach($initiators as $initiator){ ?>
-				<option value="<?php echo $initiator;?>" <?php if ($initiator == $selected_initiator) { echo 'selected="selected"'; }; ?> ><?php echo $initiator ; ?></option>
+				<option value="<?php echo $initiator;?>" <?php if ($initiator == $selected_initiator) { echo 'selected="selected"'; } ?> ><?php echo $initiator ; ?></option>
 			<?php 
 			}
 			?>
@@ -592,7 +592,7 @@ function show_choose_initiating_message(){
 				<option>Choose Initating Message</option>
 			<?php	
 			foreach($messages as $key => $message){ ?>
-				<option value="<?php echo $message;?>" <?php if ($message == $selected) { echo 'selected="selected"'; }; ?> ><?php echo $message ; ?></option>
+				<option value="<?php echo $message;?>" <?php if ($message == $selected) { echo 'selected="selected"'; } ?> ><?php echo $message ; ?></option>
 			<?php 
 			}
 			?>
@@ -864,14 +864,34 @@ function save_test_execution($post_id) {
 function add_custom_metaboxes(){
 	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
 	/* Metabox Choose Test Cases*/
-    //add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
+    add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
     /* Metabox Declare Initiating Message*/
     add_meta_box("initiating_message_metabox", "Initiating Messages", 'show_initiating_message', "test-suite", "normal", "high");
     /* Metabox Declare Roles*/
     add_meta_box("roles_ts_metabox", "Roles", 'show_roles_ts', "test-suite", "normal", "high");
+    // Metabox Associate Communities
+    add_meta_box("community_metabox", "Choose Community", 'show_community', "test-suite", "normal", "high");
 }
-
 add_action('admin_menu', 'add_custom_metaboxes');
+
+function show_community(){
+	global $wpdb;
+	$groups_result = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "bp_groups");
+	$group_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE ts_ids={$_GET['post']}");
+	$group_id = $group_result->group_id;
+	echo '<select name="group">';
+	echo '<option value="">Choose Community</option>';
+	foreach ( $groups_result as $group ) 
+	{
+		if ($group_id == $group->id) {
+			$selected = 'selected="selected"';
+			}
+			else $selected ='';
+		echo '<option value="'.$group->id.'" '.$selected.' >'.$group->name.'</option>';
+	}
+	echo '</select>';
+	echo '<input type="hidden" value="'.$_GET['post'].'" name="postid"/>';
+}
 
 function show_roles_ts(){
 	global $post;
@@ -916,47 +936,69 @@ function show_test_cases(){
 	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 	
 	
-	foreach($current_test_cases as $key => $test_cases){?>
-	<div class="elem-tc"> <div class="elem-tc">
-		<select name="test_cases[]">
-			<option value="">Select Test Cases</option>
-			<?php
-			while ( $loop->have_posts() ) : $loop->the_post();
-				 ?>
-				 
-				 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+	foreach($current_test_cases as $test_cases) {
+		?>
+		<div class="elem-tc"> 
+			<div class="elem-tc">
+			<select name="test_cases[]">
+				<option value="">Select Test Cases</option>
 				<?php
-			endwhile;
-			?>
-		</select>
-		<div class="button remove_tc left">Remove Test Case</div>
-		<br clear="all" />
-	</div> </div>	
-	<?php} 
+				while ( $loop->have_posts() ) : $loop->the_post();
+					 ?>
+					 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
+					<?php
+				endwhile;
+				?>
+			</select>
+			<div class="button remove_tc left">Remove Test Case</div>
+			<br clear="all" />
+			</div> 
+		</div>
+	<?php } 
 	
-	if (empty($current_test_cases)){?>
-		<select name="test_cases[]">
+	if (empty($current_test_cases)) { ?>
+			<select name="test_cases[]">
 				<option value="">Choose Related Suite</option>
 				<?php
 				while ( $loop->have_posts() ) : $loop->the_post();
 					 ?>
-					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
 					<?php
 				endwhile;
 				?>
-		</select>
-		<br  clear="all" />
-	<?php}
-
+			</select>
+			<br  clear="all" />
+		 <?php
+		 }
 	$post = $post_backup;
-} 
-
+	?>
+	<div class="copy-correct-tc">	
+    </div>
+    
+    <a class="add_new_tc button right">Add Test Case</a>
+    
+    <div class="clear"></div>
+    
+    <script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery(".add_new_tc").click(function(data) {
+			jQuery('.copy-correct-tc').append(jQuery('.elem-tc').html());
+			//jQuery('.copy-correct input, .copy-correct select').val('');
+		});
+		jQuery(".remove_tc").live('click', function() {
+			jQuery(this).parents('.elem-tc').remove();
+		});
+	});
+    </script>	
+	<?php
+}
 
 
 add_action('save_post', 'save_test_case_post');
 
 function save_test_case_post($post_id) {
 	// verify nonce
+	//global $postid;
 	if (!isset($_POST['custom_test_cases']) || !wp_verify_nonce($_POST['custom_test_cases'], basename(__FILE__))) {
 	return $post_id;
 	}
@@ -975,18 +1017,47 @@ function save_test_case_post($post_id) {
     
     $test_cases = $_POST['test_cases']; 
 	update_post_meta($post_id, 'test_cases', $test_cases);
-
 	
 	$tester_roles = $_POST['tester_role_ts'];
 	update_post_meta($post_id, 'tester_role_ts', $tester_roles);
 	
 	$harness_roles = $_POST['harness_role_ts'];
 	update_post_meta($post_id, 'harness_role_ts', $harness_roles);
-	
 	$initiators = $_POST['initiator_ts'];
 	update_post_meta($post_id, 'initiator_ts', $initiators);
+	
+	if ( (isset($_POST['group'])) && (($_POST['test_suites']) != '') ){
+		global $wpdb;
+		$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$_POST['group']} AND ts_ids={$_POST['postid']}");
+		$ts_id = $ts_result->ts_ids;
+		print $ts_id .'<br />';
+		if ($ts_id != $_POST['postid']) {
+			$wpdb->query(
+					"UPDATE " . $wpdb->prefix . "bp_groups_testsuites
+					SET group_id = {$_POST['group']}
+					WHERE ts_ids = {$_POST['postid']}"
+			);
+		}
+		
+	}
+	else {
+		global $wpdb;
+		die($_POST['group']);
+			$wpdb->insert(
+					$wpdb->prefix.'bp_groups_license', 
+						array( 
+							'group_id' => $_POST['group'], 
+							'ts_ids' => $_POST['postid']
+						), 
+						array( 
+							'%d', 
+							'%d'
+						) 
+					);
+		
+	}
+	
 }
-
 
 /*Metabox Choose Related Suites */
 function add_ts_metaboxes(){
@@ -1020,7 +1091,7 @@ function show_ts(){
 						while ( $loop->have_posts() ) : $loop->the_post();
 							 ?>
 							 
-							 <option <?php if (get_the_ID() == $post_sel) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+							 <option <?php if (get_the_ID() == $post_sel) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
 							<?php
 						endwhile;
 						?>
@@ -1046,7 +1117,7 @@ function show_ts(){
 						<?php
 						while ( $loop->have_posts() ) : $loop->the_post();
 							 ?>
-							 <option <?php // if (get_the_ID() == $post_sel) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+							 <option <?php // if (get_the_ID() == $post_sel) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
 							<?php
 						endwhile;
 						?>
