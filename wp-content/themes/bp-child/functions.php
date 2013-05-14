@@ -936,7 +936,7 @@ function show_test_cases(){
 	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 	
 	
-	foreach($current_test_cases as $test_cases) { ?>
+	foreach($current_test_cases as $test_cases){ ?>
 		<div class="elem-tc"> 
 			<div class="elem-tc">
 			<select name="test_cases[]">
@@ -950,7 +950,7 @@ function show_test_cases(){
 			</div> 
 		</div>
 <?php } 
-	if (empty($current_test_cases)) { ?>
+	if (empty($current_test_cases)){ ?>
 			<select name="test_cases[]">
 				<option value="">Choose Related Suite</option>
 				<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
@@ -979,8 +979,7 @@ function show_test_cases(){
 		});
 	});
     </script>	
-	<?php
-}
+	<?php }
 
 add_action('save_post', 'save_test_case_post');
 
