@@ -611,8 +611,8 @@ function show_test_execution(){
 	$post_backup = $post;
 	$test_url = get_post_meta($post->ID, 'test_url', true);
 	$protocol_binding2 = get_post_meta($post->ID, 'protocol_binding2', true);
-	$current_property_name_exec= get_post_meta($post->ID, 'property_name_exec', true);;
-	$current_property_value_exec= get_post_meta($post->ID, 'property_value_exec', true);;
+	$current_property_name_exec= get_post_meta($post->ID, 'property_name_exec', true);
+	$current_property_value_exec= get_post_meta($post->ID, 'property_value_exec', true);
 	echo '<input type="hidden" name="custom_test_execution" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 	<label for="test_url"><b>Test endpoint URL:</b></label> <br />
@@ -680,8 +680,8 @@ function show_test_execution(){
 function show_test_data(){
 	global $post;
 	$post_backup = $post;
-	$current_property_name_data= get_post_meta($post->ID, 'property_name_data', true);;
-	$current_property_value_data= get_post_meta($post->ID, 'property_value_data', true);;
+	$current_property_name_data= get_post_meta($post->ID, 'property_name_data', true);
+	$current_property_value_data= get_post_meta($post->ID, 'property_value_data', true);
 	echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 				
@@ -744,8 +744,8 @@ function show_test_data(){
 function show_test_steps2(){
 	global $post;
 	$post_backup = $post;
-	$current_step_action= get_post_meta($post->ID, 'step_action', true);;
-	$current_step_expected= get_post_meta($post->ID, 'step_expected', true);;
+	$current_step_action= get_post_meta($post->ID, 'step_action', true);
+	$current_step_expected= get_post_meta($post->ID, 'step_expected', true);
 	echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 				
@@ -936,40 +936,29 @@ function show_test_cases(){
 	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 	
 	
-	foreach($current_test_cases as $test_cases) {
-		?>
+	foreach($current_test_cases as $test_cases) { ?>
 		<div class="elem-tc"> 
 			<div class="elem-tc">
 			<select name="test_cases[]">
 				<option value="">Select Test Cases</option>
-				<?php
-				while ( $loop->have_posts() ) : $loop->the_post();
-					 ?>
-					 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
-					<?php
-				endwhile;
-				?>
+				<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
+					 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"> <?php the_title(); ?> </option>
+				<?php endwhile;	?>
 			</select>
 			<div class="button remove_tc left">Remove Test Case</div>
 			<br clear="all" />
 			</div> 
 		</div>
-	<?php } 
-	
+<?php } 
 	if (empty($current_test_cases)) { ?>
 			<select name="test_cases[]">
 				<option value="">Choose Related Suite</option>
-				<?php
-				while ( $loop->have_posts() ) : $loop->the_post();
-					 ?>
+				<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
 					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
-					<?php
-				endwhile;
-				?>
+					<?php endwhile;	?>
 			</select>
-			<br  clear="all" />
-		 <?php
-		 }
+			<br clear="all" />
+	<?php }
 	$post = $post_backup;
 	?>
 	<div class="copy-correct-tc">	
@@ -992,7 +981,6 @@ function show_test_cases(){
     </script>	
 	<?php
 }
-
 
 add_action('save_post', 'save_test_case_post');
 
