@@ -355,3 +355,4 @@ if (isset ($_GET['user_activation'])){
  ?>
 <?php do_action( 'bp_before_container' ); ?>
 		<div id="container">
+<?php if ( get_option('permalink_structure') ) { echo 'permalinks enabled'; } else { echo 'not';}?>
