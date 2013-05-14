@@ -936,50 +936,40 @@ function show_test_cases(){
 	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 	
 	
-	foreach($current_test_cases as $test_cases){ ?>
-		<div class="elem-tc"> 
-			<div class="elem-tc">
-			<select name="test_cases[]">
-				<option value="">Select Test Cases</option>
-				<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
-					 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"> <?php the_title(); ?> </option>
-				<?php endwhile;	?>
-			</select>
-			<div class="button remove_tc left">Remove Test Case</div>
-			<br clear="all" />
-			</div> 
-		</div>
-<?php } 
-	if (empty($current_test_cases)){ ?>
-			<select name="test_cases[]">
+	foreach($current_test_cases as $key => $test_cases){?>
+	<div class="elem-tc"> <div class="elem-tc">
+		<select name="test_cases[]">
+			<option value="">Select Test Cases</option>
+			<?php
+			while ( $loop->have_posts() ) : $loop->the_post();
+				 ?>
+				 
+				 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+				<?php
+			endwhile;
+			?>
+		</select>
+		<div class="button remove_tc left">Remove Test Case</div>
+		<br clear="all" />
+	</div> </div>	
+	<?php} 
+	
+	if (empty($current_test_cases)){?>
+		<select name="test_cases[]">
 				<option value="">Choose Related Suite</option>
-				<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
-					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
-					<?php endwhile;	?>
-			</select>
-			<br clear="all" />
-	<?php }
+				<?php
+				while ( $loop->have_posts() ) : $loop->the_post();
+					 ?>
+					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+					<?php
+				endwhile;
+				?>
+		</select>
+		<br  clear="all" />
+	<?php}
+
 	$post = $post_backup;
-	?>
-	<div class="copy-correct-tc">	
-    </div>
-    
-    <a class="add_new_tc button right">Add Test Case</a>
-    
-    <div class="clear"></div>
-    
-    <script type="text/javascript">
-	jQuery(document).ready(function() {
-		jQuery(".add_new_tc").click(function(data) {
-			jQuery('.copy-correct-tc').append(jQuery('.elem-tc').html());
-			//jQuery('.copy-correct input, .copy-correct select').val('');
-		});
-		jQuery(".remove_tc").live('click', function() {
-			jQuery(this).parents('.elem-tc').remove();
-		});
-	});
-    </script>	
-	<?php }
+} 
 
 add_action('save_post', 'save_test_case_post');
 
