@@ -52,11 +52,11 @@
 								'label_password' => __( '' ),
 								'label_remember' => __( 'Remember Me' ),
 								'label_log_in' => __( 'LOGIN' ),
-								'id_username' => 'your_email',
-								'id_password' => 'email',
+								'id_username' => 'user_login2',
+								'id_password' => 'user_pass2',
 								'id_remember' => 'rememberme',
 								'id_submit' => 'wp-submit',
-								'remember' => true,
+								'remember' => false,
 								'value_remember' => false ); 
 						wp_login_form($args); ?>
 						<a href="wp-login.php?action=lostpassword" id="recover_pass">Password recovery</a>
