@@ -368,4 +368,4 @@ if (isset ($_GET['user_activation'])){
  ?>
 <?php do_action( 'bp_before_container' ); ?>
 		<div id="container">
-  
+
