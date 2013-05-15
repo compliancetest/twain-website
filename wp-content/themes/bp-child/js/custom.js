@@ -29,7 +29,7 @@ $(document).ready(function() {
 		$('#mask').css({'height' : docH , 'width' : windowW}).fadeIn('fast');		
 		$('#popup-wrap').fadeIn('fast').css({
 														'margin-top': topOffset, 
-														'max-width':  '650px' 
+														'max-width':  '805px' 
 														});
 	 });
 	 
@@ -330,11 +330,6 @@ $(document).ready(function() {
 		return allow_submit;
 	});
 	
-	
-	
-	
-	
-	
 	/* Search */
 	
 	jQuery('#s').focus(function() {
@@ -429,9 +424,16 @@ $(document).ready(function() {
 														'margin-top': topOffset, 
 														'max-width':  '650px' 
 														});
-		//alert('aaaaa');
 		return false;
 	
+	});
+	
+	jQuery("#user_login").focus(function () {
+		jQuery(".simple_tooltip_pop").fadeOut(1000);
+	});
+	
+	jQuery("#user_pass").focus(function () {
+		jQuery(".simple_tooltip_pop").fadeOut(1000);
 	});
 
 });
