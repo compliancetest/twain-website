@@ -1,6 +1,6 @@
 <?php
 /*
- * Template Name: Full page
+ * Template Name: Password Recovery
  */
 get_header();
 ?>
