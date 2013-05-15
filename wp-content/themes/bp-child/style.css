@@ -692,6 +692,33 @@ background: url(images/expandable_arrow_o.png) left center no-repeat !important;
 	border: 1px solid black;
 	font-size: 10px;
 }
+
+.simple_tooltip_pop {
+background: rgba(0, 0, 0, 0.7);
+color: white;
+position: absolute;
+display: none;
+width: 190px;
+top: 73px;
+left: -88px;
+text-align: center;
+margin-left: 89px;
+padding: 3px;
+border: 1px solid black;
+font-size: 10px;
+z-index: 995;
+}
+
+.simple_tooltip_pop span {
+width: 17px;
+height: 6px;
+background: url(images/tooltip_pop.png) center center no-repeat;
+position: absolute;
+left: 50%;
+margin-left: -8px;
+bottom: 21px;
+}
+
 .quick_actions li:hover .simple_tooltip {
 	display: block;
 }
