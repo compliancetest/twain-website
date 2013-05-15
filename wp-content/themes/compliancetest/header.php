@@ -1,41 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html <?php language_attributes(); ?>>
-<head>
-<meta charset="<?php bloginfo( 'charset' ); ?>" />
-<title><?php
-	/*
-	 * Print the <title> tag based on what is being viewed.
-	 */
-	global $page, $paged;
 
-	wp_title( '|', true, 'right' );
+<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+	<head profile="http://gmpg.org/xfn/11">
+		<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
+		<?php if ( current_theme_supports( 'bp-default-responsive' ) ) : ?><meta name="viewport" content="width=device-width, initial-scale=1.0" /><?php endif; ?>
+		<title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
+		<?php do_action( 'bp_head' ) ?>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
+		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
+		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
 
-	// Add the blog name.
-	bloginfo( 'name' );
+		<?php wp_head(); ?>
+	</head>
 
-	// Add the blog description for the home/front page.
-	$site_description = get_bloginfo( 'description', 'display' );
-	if ( $site_description && ( is_home() || is_front_page() ) )
-		echo " | $site_description";
-
-	// Add a page number if necessary:
-	if ( $paged >= 2 || $page >= 2 )
-		echo ' | ' . sprintf( 'Page %s', max( $paged, $page ) );
-
-	?></title>
-
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="<?php // template_location(); ?>/css/css-aid.css" />
-	<link rel="stylesheet" type="text/css" href="<?php template_location(); ?>/style.css" />
-	
-	<?php wp_head(); ?>
-	
-</head>
-<body>
+	<body <?php body_class(); ?> id="bp-default">
+		<?php do_action( 'bp_before_header' ); ?>
 		<div id="mask">
 		<div id="popup-wrap">
 			<div id="registration" class="radius6">
@@ -44,7 +26,8 @@
 					<div class="existing_user">
 						<div class="ex_user">Existing User</div>
 						<?php
-							$args = array(
+								
+						$args = array(
 								'echo' => true,
 								'redirect' => get_bloginfo('url'), 
 								'form_id' => 'logform',
@@ -111,7 +94,7 @@
 								
 								<div class="field">
 									<label for="captcha_reg">Stop Spam!</label> <br />
-									<img src="<?php bloginfo("template_directory"); ?>/images/captcha.php" class="left"/>
+									<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
 									<input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
 								</div>
 								<div class="field top23">		
@@ -131,13 +114,14 @@
 		<div id="close-popup" class="close_btn"></div>
 		</div>
 	</div>
+		
 	<div id="wrapper">
 
 <!-- ****************** HEADER ***************** -->
 		<div id="header-wrapper">
 			<div class="header column">
 				<a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
-				
+
 
 
 
@@ -163,10 +147,19 @@
 								</div>
 								<div class="clear"></div>
 								<div id="top_loged_actions">
+									<?php
+									if(is_home() ) {
+										$logout_redirect = get_bloginfo('url');
+										}
+										else{
+										$logout_redirect = get_permalink();
+											}
+									?>
 									<ul>
-										<li><a href="#">Dashboard</a></li>
+										<li><a href="<?php echo home_url();?>/my-suites/">Dashboard</a></li>
 										<li><a href="#">Settings</a></li>
-										<li><a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a></li>
+										
+										<li><a href="<?php echo wp_logout_url( $logout_redirect ); ?>">Logout</a></li>
 									</ul>
 									<div class="clear"></div>
 								</div>
@@ -188,7 +181,7 @@
 								'id_username' => 'user_login',
 								'id_password' => 'user_pass',
 								'id_remember' => 'rememberme',
-								'id_submit' => 'wp-submit',
+								'id_submit' => 'wp-submit2',
 								'remember' => false,
 								'value_remember' => false ); 
 						?>
@@ -196,22 +189,34 @@
 						<?php 
 						wp_login_form($args); 
 						?>
+						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
+						<?php
+						if(isset($_GET['login'])){
+							 ?>
+							 
+							<script type="text/javascript">
+							jQuery('.simple_tooltip_pop').show('slow');
+							</script>
+							
+							<?php
+							}
+						?>
 						<div id="or" class="left">
-							<img src="<?php template_location(); ?>/images/or.png" />
+							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
 						</div>
 						<div id="registration_button"><a class="popup">SIGNUP</a></div>
 						<?php
 						}
 				 ?>
 				 </div>
-				
 				<div class="clear"></div>
 			</div>		
 		</div>
 		
 		<div class="clear"></div>
-		
-		<div id="menu-wrapper">
+
+
+			<div id="menu-wrapper">
 			<div id="cssmenu">
 			<?php
 					wp_nav_menu( array(
@@ -227,6 +232,11 @@
 			</div>
 		</div>	
 
+			<?php do_action( 'bp_header' ); ?>
+
+		</div><!-- #header -->
+
+		<?php do_action( 'bp_after_header'); ?>
 		
 <!-- **************** END HEADER *************** -->
 <div id="content-pattern">
@@ -342,10 +352,18 @@
 			</div>
 		</div>
 <?php 
+
 if (isset ($_GET['user_activation'])){
+	$current_date = date("Y-m-d h:i:s");
 	$activation = $_GET['user_activation'];
+	$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_activation_key ='$activation' ");
+	echo $user->ID;
 	$wpdb->query("UPDATE $wpdb->users SET user_status = 0 WHERE user_activation_key ='$activation' ");
+	$wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id) 	
+				  VALUES({$user->ID},'xprofile','new_member',' <a href=\"http://nego-solutions.com/dev-clients/compliance/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','http://nego-solutions.com/dev-clients/compliance/members/{$user->user_login}/','{$current_date}','0')");
 	}
 	
 	
  ?>
+<?php do_action( 'bp_before_container' ); ?>
+		<div id="container">
