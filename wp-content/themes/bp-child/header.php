@@ -27,7 +27,7 @@
 					<div class="existing_user">
 						<div class="ex_user">Existing User</div>
 						<?php
-							$args = array(
+						$args = array(
 								'echo' => true,
 								'redirect' => get_bloginfo('url'), 
 								'form_id' => 'logform',
@@ -35,12 +35,12 @@
 								'label_password' => __( '' ),
 								'label_remember' => __( 'Remember Me' ),
 								'label_log_in' => __( 'LOGIN' ),
-								'id_username' => 'your_email',
-								'id_password' => 'email',
+								'id_username' => 'user_login',
+								'id_password' => 'user_pass',
 								'id_remember' => 'rememberme',
 								'id_submit' => 'wp-submit',
-								'remember' => true,
-								'value_remember' => false ); 
+								'remember' => false,
+								'value_remember' => false );  
 						wp_login_form($args); ?>
 						<a href="wp-login.php?action=lostpassword" id="recover_pass">Password recovery</a>
 					
@@ -120,15 +120,10 @@
 		<div id="header-wrapper">
 			<div class="header column">
 				<a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
-				
-
-
-
 				 <?php 	
 				 
 				 if ( is_user_logged_in() ) { 
-						?>
-						
+						?>	
 						<div class="column fifth right no-marginbottom" id="top_logged_wrap">
 							<?php 
 								global $current_user;
@@ -187,6 +182,18 @@
 						<div class="column right nopadding nomarginbottom" id="top_acces_wrap">					
 						<?php 
 						wp_login_form($args); 
+						?>
+						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
+						<?php
+						if(isset($_GET['login'])){
+							 ?>
+							 
+							<script type="text/javascript">
+							jQuery('.simple_tooltip_pop').show('slow');
+							</script>
+							
+							<?php
+							}
 						?>
 						<div id="or" class="left">
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
