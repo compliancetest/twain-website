@@ -58,6 +58,7 @@
 								'id_submit' => 'wp-submit',
 								'remember' => false,
 								'value_remember' => false ); 
+								
 						wp_login_form($args); ?>
 						<a href="wp-login.php?action=lostpassword" id="recover_pass">Password recovery</a>
 					
