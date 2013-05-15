@@ -18,7 +18,6 @@
 
 	<body <?php body_class(); ?> id="bp-default">
 		<?php do_action( 'bp_before_header' ); ?>
-		<?php echo 'test'; ?>
 		<div id="mask">
 		<div id="popup-wrap">
 			<div id="registration" class="radius6">
