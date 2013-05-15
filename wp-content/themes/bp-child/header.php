@@ -14,11 +14,11 @@
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
 
 		<?php wp_head(); ?>
-
 	</head>
 
 	<body <?php body_class(); ?> id="bp-default">
 		<?php do_action( 'bp_before_header' ); ?>
+		<?php echo 'test'; ?>
 		<div id="mask">
 		<div id="popup-wrap">
 			<div id="registration" class="radius6">
@@ -27,6 +27,7 @@
 					<div class="existing_user">
 						<div class="ex_user">Existing User</div>
 						<?php
+								
 						$args = array(
 								'echo' => true,
 								'redirect' => get_bloginfo('url'), 
@@ -35,12 +36,13 @@
 								'label_password' => __( '' ),
 								'label_remember' => __( 'Remember Me' ),
 								'label_log_in' => __( 'LOGIN' ),
-								'id_username' => 'user_login',
-								'id_password' => 'user_pass',
+								'id_username' => 'user_login2',
+								'id_password' => 'user_pass2',
 								'id_remember' => 'rememberme',
 								'id_submit' => 'wp-submit',
 								'remember' => false,
-								'value_remember' => false );  
+								'value_remember' => false ); 
+								
 						wp_login_form($args); ?>
 						<a href="wp-login.php?action=lostpassword" id="recover_pass">Password recovery</a>
 					
@@ -120,10 +122,15 @@
 		<div id="header-wrapper">
 			<div class="header column">
 				<a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+
+
+
+
 				 <?php 	
 				 
 				 if ( is_user_logged_in() ) { 
-						?>	
+						?>
+						
 						<div class="column fifth right no-marginbottom" id="top_logged_wrap">
 							<?php 
 								global $current_user;
@@ -175,7 +182,7 @@
 								'id_username' => 'user_login',
 								'id_password' => 'user_pass',
 								'id_remember' => 'rememberme',
-								'id_submit' => 'wp-submit',
+								'id_submit' => 'wp-submit2',
 								'remember' => false,
 								'value_remember' => false ); 
 						?>
@@ -203,7 +210,6 @@
 						}
 				 ?>
 				 </div>
-				
 				<div class="clear"></div>
 			</div>		
 		</div>
@@ -362,4 +368,3 @@ if (isset ($_GET['user_activation'])){
  ?>
 <?php do_action( 'bp_before_container' ); ?>
 		<div id="container">
-
