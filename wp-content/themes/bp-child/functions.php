@@ -861,18 +861,18 @@ function save_test_execution($post_id) {
 
 /* Metaboxes Test Suite Page */
 
-function add_custom_metaboxes(){
+//function add_custom_metaboxes(){
 	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
 	/* Metabox Choose Test Cases*/
-    add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
+   // add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
     /* Metabox Declare Initiating Message*/
-    add_meta_box("initiating_message_metabox", "Initiating Messages", 'show_initiating_message', "test-suite", "normal", "high");
+ //   add_meta_box("initiating_message_metabox", "Initiating Messages", 'show_initiating_message', "test-suite", "normal", "high");
     /* Metabox Declare Roles*/
-    add_meta_box("roles_ts_metabox", "Roles", 'show_roles_ts', "test-suite", "normal", "high");
+  //  add_meta_box("roles_ts_metabox", "Roles", 'show_roles_ts', "test-suite", "normal", "high");
     // Metabox Associate Communities
-    add_meta_box("community_metabox", "Choose Community", 'show_community', "test-suite", "normal", "high");
-}
-add_action('admin_menu', 'add_custom_metaboxes');
+  //  add_meta_box("community_metabox", "Choose Community", 'show_community', "test-suite", "normal", "high");
+//}
+//add_action('admin_menu', 'add_custom_metaboxes');
 
 function show_community(){
 	global $wpdb;
