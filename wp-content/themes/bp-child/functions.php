@@ -944,7 +944,7 @@ function show_test_cases(){
 			while ( $loop->have_posts() ) : $loop->the_post();
 				 ?>
 				 
-				 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
+				 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
 				<?php
 			endwhile;
 			?>
