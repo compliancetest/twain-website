@@ -1871,7 +1871,7 @@ a.logout_button{
 
 #or {
 	position: absolute;
-	top: 14px;
+	top: 9px;
 	left: 282px;
 }
 
@@ -1890,7 +1890,7 @@ a.logout_button{
 	padding: 17px 10px 4px 10px;
 	color: white;
 	position: absolute;
-	top: -50px;
+	top: -64px;
 	left: 301px;
 	font-family: 'Open Sans', Arial, sans-serif;
 	cursor: pointer;
@@ -3979,3 +3979,5 @@ display:block !important;
 	float:left;
 	background: #ffffff;
 }
+
+
