@@ -952,7 +952,7 @@ function show_test_cases(){
 		<div class="button remove_tc left">Remove Test Case</div>
 		<br clear="all" />
 	</div> </div>	
-	<?php} 
+	<?php } 
 	
 	if (empty($current_test_cases)){?>
 		<select name="test_cases[]">
@@ -966,7 +966,7 @@ function show_test_cases(){
 				?>
 		</select>
 		<br  clear="all" />
-	<?php}
+	<?php }
 
 	$post = $post_backup;
 } 
