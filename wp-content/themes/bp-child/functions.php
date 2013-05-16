@@ -912,7 +912,7 @@ function show_roles_ts(){
 	<label for="harness_role_ts"><b>Initiators:</b></label> <br />
 	<textarea name="initiator_ts" id="initiator_ts_id" rows="3" cols="100"><?php echo $current_intiator; ?></textarea>
 	<br /><span class="description">Initiators (comma separated)</span> 
-	<br />1111
+	<br />
 	<?php	
 	$post = $post_backup;
 }
