@@ -14,6 +14,9 @@
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
 
 		<?php wp_head(); ?>
+		<script>
+			
+		</script>
 	</head>
 
 	<body <?php body_class(); ?> id="bp-default">
@@ -43,7 +46,7 @@
 								'value_remember' => false ); 
 								
 						wp_login_form($args); ?>
-						<a href="wp-login.php?action=lostpassword" id="recover_pass">Password recovery</a>
+						<a href="http://www.test.compliancetest.net/pasword-recovery/" id="recover_pass">Password recovery</a>
 					
 					</div>
 				</div>
@@ -186,9 +189,11 @@
 								'value_remember' => false ); 
 						?>
 						<div class="column right nopadding nomarginbottom" id="top_acces_wrap">					
+						
 						<?php 
 						wp_login_form($args); 
 						?>
+						<a href="http://www.test.compliancetest.net/pasword-recovery/" id="pass_recovery">Password Recovery</a>
 						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
 						<?php
 						if(isset($_GET['login'])){
@@ -367,4 +372,3 @@ if (isset ($_GET['user_activation'])){
  ?>
 <?php do_action( 'bp_before_container' ); ?>
 		<div id="container">
- 
