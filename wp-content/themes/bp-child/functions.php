@@ -870,7 +870,7 @@ function add_custom_metaboxes(){
     /* Metabox Declare Roles*/
     //add_meta_box("roles_ts_metabox", "Roles", 'show_roles_ts', "test-suite", "normal", "high");
     // Metabox Associate Communities
-   // add_meta_box("community_metabox", "Choose Community", 'show_community', "test-suite", "normal", "high");
+   // add_meta_box("community_metabox", "Choose Community", 'show_community', "test-suite", "normal", "high"); 
 }
 add_action('admin_menu', 'add_custom_metaboxes');
 
