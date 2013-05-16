@@ -952,7 +952,7 @@ function show_test_cases(){
 		<div class="button remove_tc left">Remove Test Case</div>
 		<br clear="all" />
 	</div> </div>	
-	<?php} 
+	<?php } 
 	
 	if (empty($current_test_cases)){?>
 		<select name="test_cases[]">
@@ -966,7 +966,7 @@ function show_test_cases(){
 				?>
 		</select>
 		<br  clear="all" />
-	<?php}
+	<?php }
 
 	$post = $post_backup;
 } 
@@ -1004,6 +1004,7 @@ function save_test_case_post($post_id) {
 	update_post_meta($post_id, 'initiator_ts', $initiators);
 	
 	if ( (isset($_POST['group'])) && (($_POST['test_suites']) != '') ){
+		die($_POST['group']);
 		global $wpdb;
 		$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$_POST['group']} AND ts_ids={$_POST['postid']}");
 		$ts_id = $ts_result->ts_ids;
