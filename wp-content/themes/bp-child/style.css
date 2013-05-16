@@ -175,7 +175,7 @@ a:hover {
 }	
 
 #top_access {
-	margin-top: 15px;
+	margin-top: 10px;
 }	
 
 #top_logged_wrap {
@@ -336,6 +336,44 @@ input[type="button"]:hover {
 				font-size: 14px;
 				height: 51px;
 			}
+
+.wp-user-form input[type="submit"]{
+	float: left;
+	background: url(images/blue_login.jpg) top center repeat-x;
+	border-radius: 5px;
+	border: 1px solid #3577ad;
+	box-shadow: inset 0px 2px 1px -1px #7cbdf4;
+	text-shadow: 0px -1px 0px #1d5c91;
+    -moz-text-shadow: 0px -1px 0px #1d5c91;
+    -webkit-text-shadow: 0px -1px 0px #1d5c91;
+    -o-text-shadow: 0px -1px 0px #1d5c91;
+    padding: 0px 10px;
+	height: 28px;
+	font-size: 12px;
+}
+
+.wp-user-form input[type="submit"]:hover{
+	background-image: url(images/white_gloss.png);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	-moz-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	-webkit-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	-o-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	background-color: #2C85D1;
+	text-shadow: 0px -1px 0px #1D5C91;
+	-moz-text-shadow: 0px -1px 0px #1d5c91;
+	-webkit-text-shadow: 0px -1px 0px #1d5c91;
+	-o-text-shadow: 0px -1px 0px #1d5c91;
+}
+
+.wp-user-form input[type="text"]{
+background: #fff;
+padding: 4px 15px;
+border-radius: 3px;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-o-border-radius: 3px;
+width: 28%;
+}
 
 #inputs {
 	width: 200px;
@@ -1729,14 +1767,18 @@ display:block;
 #top_acces_wrap {
 	width: 381px;
 	position: relative;
-}
-
-#top_access {
-	margin-top: 15px;
-}
+} 
 
 #top_access p{
 	margin: 0px;
+}
+
+#pass_recovery{
+top: 2px;
+margin-left: 1px;
+text-decoration: underline;
+color: #2C80E8;
+font-size: 12px;
 }
 
 #top_access input[type="text"] {
@@ -3937,5 +3979,3 @@ display:block !important;
 	float:left;
 	background: #ffffff;
 }
-
-
