@@ -866,7 +866,7 @@ function add_custom_metaboxes(){
 	/* Metabox Choose Test Cases*/
     add_meta_box("test_cases_metabox", "Select Test Cases ", 'show_test_cases', "test-suite", "normal", "high");
     /* Metabox Declare Initiating Message*/
-    //add_meta_box("initiating_message_metabox", "Initiating Messages", 'show_initiating_message', "test-suite", "normal", "high");
+    add_meta_box("initiating_message_metabox", "Initiating Messages", 'show_initiating_message', "test-suite", "normal", "high");
     /* Metabox Declare Roles*/
     add_meta_box("roles_ts_metabox", "Roles", 'show_roles_ts', "test-suite", "normal", "high");
     // Metabox Associate Communities
@@ -916,7 +916,17 @@ function show_roles_ts(){
 	$post = $post_backup;
 }
 
-
+function show_initiating_message(){
+	global $post;
+	$post_backup = $post;
+	$current_initiating_messages = get_post_meta($post->ID, 'init_message', true);
+	//echo '<input type="hidden" name="custom_initiating_message" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	?>
+	<textarea name="init_message" id="initiating_message_id" rows="4" cols="100"><?php echo $current_initiating_messages;?></textarea>
+	<br /><span class="description">Type Initiating Messages (comma separated)</span>
+<?
+	$post = $post_backup;	
+}
 
 function show_test_cases(){
 	global $post;
