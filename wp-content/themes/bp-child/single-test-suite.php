@@ -258,7 +258,7 @@ get_header();
 									$tc_outcome_type = get_post_meta($tc ,'outcome_type', true); 
 									$tc_message_count = get_post_meta($tc ,'message_count', true); 
 									$bulk = get_post_meta($tc ,'bulk', true); 
-									$initiating_message = get_post_meta($tc ,'initiating_message', true); 
+									$initiating_message = get_post_meta($tc ,'choose_init_messages', true); 
 									$test_intent_description = get_post_meta($tc ,'test_intent_description', true); 
 									$perma = get_permalink( $tc );
 									
