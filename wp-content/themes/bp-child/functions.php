@@ -414,7 +414,7 @@ function show_test_suites(){
 	$post_backup = $post;
 	$current_test_suite = explode(',', get_post_meta($post->ID, 'test_suites', true));
 	
-	//echo '<input type="hidden" name="custom_test_suites" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_test_suites" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	$loop = new WP_Query( array( 'post_type' => 'test-suite', 'posts_per_page' => -1) );
 	
 	while ( $loop->have_posts() ) : $loop->the_post();
@@ -434,7 +434,7 @@ function show_related_products(){
 	$post_backup = $post;
 	$current_product = explode(',', get_post_meta($post->ID, 'related_products', true));
 	
-	//echo '<input type="hidden" name="custom_relprod" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_relprod" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	$loop = new WP_Query( array( 'post_type' => 'product-service', 'posts_per_page' => -1, 'post__not_in' =>array($post->ID)) );
 	
 	while ( $loop->have_posts() ) : $loop->the_post();
@@ -454,7 +454,7 @@ function save_test_suites($post_id) {
 	//die('<pre>'.print_r($_POST, true).'</pre>');
     // verify nonce
     if (!isset($_POST['custom_test_suites']) || !wp_verify_nonce($_POST['custom_test_suites'], basename(__FILE__))) {
-        //return $post_id;
+        return $post_id;
     }
     // check autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -613,7 +613,7 @@ function show_test_execution(){
 	$protocol_binding2 = get_post_meta($post->ID, 'protocol_binding2', true);
 	$current_property_name_exec= get_post_meta($post->ID, 'property_name_exec', true);
 	$current_property_value_exec= get_post_meta($post->ID, 'property_value_exec', true);
-	//echo '<input type="hidden" name="custom_test_execution" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_test_execution" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 	<label for="test_url"><b>Test endpoint URL:</b></label> <br />
 	<input type="text" name="test_url" value="<?php echo $test_url; ?>" size="30" class="mf_text"/> 
@@ -682,7 +682,7 @@ function show_test_data(){
 	$post_backup = $post;
 	$current_property_name_data= get_post_meta($post->ID, 'property_name_data', true);
 	$current_property_value_data= get_post_meta($post->ID, 'property_value_data', true);
-	//echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 				
 	<?php
@@ -746,7 +746,7 @@ function show_test_steps2(){
 	$post_backup = $post;
 	$current_step_action= get_post_meta($post->ID, 'step_action', true);
 	$current_step_expected= get_post_meta($post->ID, 'step_expected', true);
-	//echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 				
 	<?php
@@ -811,7 +811,7 @@ add_action('save_post', 'save_test_execution');
 function save_test_execution($post_id) {
 	// verify nonce
 	if (!isset($_POST['custom_test_execution']) || !wp_verify_nonce($_POST['custom_test_execution'], basename(__FILE__))) {
-	//return $post_id;
+	return $post_id;
 }
 
     // check autosave
@@ -878,6 +878,7 @@ function show_community(){
 	global $wpdb;
 	$groups_result = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "bp_groups");
 	$group_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE ts_ids={$_GET['post']}");
+	//echo $group_result;
 	$group_id = $group_result->group_id;
 	echo '<select name="group">';
 	echo '<option value="">Choose Community</option>';
@@ -899,21 +900,20 @@ function show_roles_ts(){
 	$current_tester_role = get_post_meta($post->ID, 'tester_role_ts', true);
 	$current_harness_role = get_post_meta($post->ID, 'harness_role_ts', true);
 	$current_intiator = get_post_meta($post->ID, 'initiator_ts', true);
-	//echo '<input type="hidden" name="custom_roles" value="', wp_create_nonce(basename(__FILE__)), '" />';
-	?>
+	echo '<input type="hidden" name="custom_roles" value="', wp_create_nonce(basename(__FILE__)), '" />';?>
 	<label for="tester_role_ts_id"><b>Tester Roles:</b></label> <br />
-	<textarea name="tester_role_ts" id="tester_role_ts_id" rows="3" cols="100"><?php echo $current_tester_role; ?></textarea>
+	<textarea name="tester_role_ts" id="tester_role_ts_id" rows="3" cols="100"><?php echo $current_tester_role;?></textarea>
 	<br /><span class="description">Tester Roles (comma separated)</span> 
 	<br />
 	<label for="harness_role_ts"><b>Harness Roles:</b></label> <br />
-	<textarea name="harness_role_ts" id="harness_role_ts_id" rows="3" cols="100"><?php echo $current_harness_role; ?></textarea>
+	<textarea name="harness_role_ts" id="harness_role_ts_id" rows="3" cols="100"><?php echo $current_harness_role;?></textarea>
 	<br /><span class="description">Harness Roles (comma separated)</span> 
 	<br />
 	<label for="harness_role_ts"><b>Initiators:</b></label> <br />
-	<textarea name="initiator_ts" id="initiator_ts_id" rows="3" cols="100"><?php echo $current_intiator; ?></textarea>
+	<textarea name="initiator_ts" id="initiator_ts_id" rows="3" cols="100"><?php echo $current_intiator;?></textarea>
 	<br /><span class="description">Initiators (comma separated)</span> 
 	<br />
-	<?php	
+	<?	
 	$post = $post_backup;
 }
 
@@ -921,11 +921,10 @@ function show_initiating_message(){
 	global $post;
 	$post_backup = $post;
 	$current_initiating_messages = get_post_meta($post->ID, 'init_message', true);
-	//echo '<input type="hidden" name="custom_initiating_message" value="', wp_create_nonce(basename(__FILE__)), '" />';
-	?>
+	echo '<input type="hidden" name="custom_initiating_message" value="', wp_create_nonce(basename(__FILE__)), '" />';?>
 	<textarea name="init_message" id="initiating_message_id" rows="4" cols="100"><?php echo $current_initiating_messages;?></textarea>
 	<br /><span class="description">Type Initiating Messages (comma separated)</span>
-<?php
+<?
 	$post = $post_backup;	
 }
 
@@ -970,7 +969,7 @@ function show_test_cases(){
 		<br  clear="all" />
 	<?php }
 
-	$post = $post_backup;	
+	$post = $post_backup;
 } 
 
 add_action('save_post', 'save_test_case_post');
@@ -979,7 +978,7 @@ function save_test_case_post($post_id) {
 	// verify nonce
 	//global $postid;
 	if (!isset($_POST['custom_test_cases']) || !wp_verify_nonce($_POST['custom_test_cases'], basename(__FILE__))) {
-	//return $post_id;
+	return $post_id;
 	}
 
     // check autosave
@@ -1005,25 +1004,34 @@ function save_test_case_post($post_id) {
 	$initiators = $_POST['initiator_ts'];
 	update_post_meta($post_id, 'initiator_ts', $initiators);
 	
-	if ( (isset($_POST['group'])) && (($_POST['test_suites']) != '') ){
+	if ( (isset($_POST['group'])) && (($_POST['group']) != '') ){
+		//die($_POST['group']);
 		global $wpdb;
-		$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$_POST['group']} AND ts_ids={$_POST['postid']}");
-		$ts_id = $ts_result->ts_ids;
-		print $ts_id .'<br />';
-		if ($ts_id != $_POST['postid']) {
-			$wpdb->query(
-					"UPDATE " . $wpdb->prefix . "bp_groups_testsuites
-					SET group_id = {$_POST['group']}
-					WHERE ts_ids = {$_POST['postid']}"
-			);
-		}
-		
-	}
-	else {
-		global $wpdb;
-		die($_POST['group']);
-			$wpdb->insert(
-					$wpdb->prefix.'bp_groups_license', 
+		//die($_POST['postid']);
+		$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE ts_ids={$_POST['postid']} AND ts_ids={$_POST['postid']}");
+		if($ts_result){
+			$ts_id = $ts_result->ts_ids;
+			$current_group_id = $ts_result -> group_id;
+			print $ts_id .'<br />';
+			if ($current_group_id != $_POST['group']) {
+				$wpdb->update(
+						$wpdb->prefix.'bp_groups_testsuites',
+						array( 
+							'group_id' => $_POST['group']	// int
+						), 
+						array( 'ts_ids' => $_POST['postid'] ), 
+						array( 
+							'%d'	// value1
+						), 
+						array( '%d' ) 
+						 
+					);
+				}
+			}
+			else {
+				global $wpdb;
+				$wpdb->insert(
+					$wpdb->prefix.'bp_groups_testsuites', 
 						array( 
 							'group_id' => $_POST['group'], 
 							'ts_ids' => $_POST['postid']
@@ -1033,6 +1041,13 @@ function save_test_case_post($post_id) {
 							'%d'
 						) 
 					);
+				}
+		
+		
+		
+	}
+	else {
+    // Not set yet	
 		
 	}
 	
@@ -1053,7 +1068,7 @@ function show_ts(){
 	$current_desc = get_post_meta($post->ID, 'ts_desc', true);
 	//print_r ($current_ts);
 	
-	//echo '<input type="hidden" name="custom_ts" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_ts" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	$loop = new WP_Query( array( 'post_type' => 'test-suite', 'posts_per_page' => -1, 'post__not_in' =>array($post->ID) ) );
 	?>
 	<div id="rel_suite"> 
@@ -1145,7 +1160,7 @@ add_action('save_post', 'save_ts');
 function save_ts($post_id) {
 	// verify nonce
 	if (!isset($_POST['custom_ts']) || !wp_verify_nonce($_POST['custom_ts'], basename(__FILE__))) {
-	//return $post_id;
+	return $post_id;
 }
 
     // check autosave
@@ -1186,7 +1201,7 @@ function show_spec_doc(){
 	
 	//$meta = get_post_meta($post->ID, $field['id'], true);  
 	
-	//echo '<input type="hidden" name="custom_doc" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_doc" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 	<div id="suites2">
 		<div class="elements2">
@@ -1292,7 +1307,7 @@ add_action('save_post', 'save_spec_docs');
 function save_spec_docs($post_id) {
 	// verify nonce
 	if (!isset($_POST['custom_doc']) || !wp_verify_nonce($_POST['custom_doc'], basename(__FILE__))) {
-	//return $post_id;
+	return $post_id;
 }
 
     // check autosave
@@ -1331,7 +1346,7 @@ function show_conf_levels(){
 	$current_lvl_code = get_post_meta($post->ID, 'lvl_code', true);
 	$current_lvl_desc= get_post_meta($post->ID, 'lvl_desc', true);
 		
-	//echo '<input type="hidden" name="custom_lvl" value="', wp_create_nonce(basename(__FILE__)), '" />';
+	echo '<input type="hidden" name="custom_lvl" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	?>
 	<div id="suites3">
 		<div class="elements3">
@@ -1407,7 +1422,7 @@ add_action('save_post', 'save_conf_level');
 function save_conf_level($post_id) {
 	// verify nonce
 	if (!isset($_POST['custom_lvl']) || !wp_verify_nonce($_POST['custom_lvl'], basename(__FILE__))) {
-	//return $post_id;
+	return $post_id;
 	}
 
     // check autosave
