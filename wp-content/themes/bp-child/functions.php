@@ -969,8 +969,27 @@ function show_test_cases(){
 		</select>
 		<br  clear="all" />
 	<?php }
-
-	$post = $post_backup;	
+	$post = $post_backup;
+	?>
+	<div class="copy-correct-tc">	
+    </div>
+    
+    <a class="add_new_tc button right">Add Test Case</a>
+    
+    <div class="clear"></div>
+    
+    <script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery(".add_new_tc").click(function(data) {
+			jQuery('.copy-correct-tc').append(jQuery('.elem-tc').html());
+			//jQuery('.copy-correct input, .copy-correct select').val('');
+		});
+		jQuery(".remove_tc").live('click', function() {
+			jQuery(this).parents('.elem-tc').remove();
+		});
+	});
+    </script>	
+	<?php
 } 
 
 add_action('save_post', 'save_test_case_post');
