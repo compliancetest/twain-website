@@ -979,7 +979,7 @@ function save_test_case_post($post_id) {
 	// verify nonce
 	//global $postid;
 	if (!isset($_POST['custom_test_cases']) || !wp_verify_nonce($_POST['custom_test_cases'], basename(__FILE__))) {
-	//return $post_id;
+	return $post_id;
 	}
 
     // check autosave
@@ -1005,25 +1005,34 @@ function save_test_case_post($post_id) {
 	$initiators = $_POST['initiator_ts'];
 	update_post_meta($post_id, 'initiator_ts', $initiators);
 	
-	if ( (isset($_POST['group'])) && (($_POST['test_suites']) != '') ){
+	if ( (isset($_POST['group'])) && (($_POST['group']) != '') ){
+		//die($_POST['group']);
 		global $wpdb;
-		$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$_POST['group']} AND ts_ids={$_POST['postid']}");
-		$ts_id = $ts_result->ts_ids;
-		print $ts_id .'<br />';
-		if ($ts_id != $_POST['postid']) {
-			$wpdb->query(
-					"UPDATE " . $wpdb->prefix . "bp_groups_testsuites
-					SET group_id = {$_POST['group']}
-					WHERE ts_ids = {$_POST['postid']}"
-			);
-		}
-		
-	}
-	else {
-		global $wpdb;
-		die($_POST['group']);
-			$wpdb->insert(
-					$wpdb->prefix.'bp_groups_license', 
+		//die($_POST['postid']);
+		$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE ts_ids={$_POST['postid']} AND ts_ids={$_POST['postid']}");
+		if($ts_result){
+			$ts_id = $ts_result->ts_ids;
+			$current_group_id = $ts_result -> group_id;
+			print $ts_id .'<br />';
+			if ($current_group_id != $_POST['group']) {
+				$wpdb->update(
+						$wpdb->prefix.'bp_groups_testsuites',
+						array( 
+							'group_id' => $_POST['group']	// int
+						), 
+						array( 'ts_ids' => $_POST['postid'] ), 
+						array( 
+							'%d'	// value1
+						), 
+						array( '%d' ) 
+						 
+					);
+				}
+			}
+			else {
+				global $wpdb;
+				$wpdb->insert(
+					$wpdb->prefix.'bp_groups_testsuites', 
 						array( 
 							'group_id' => $_POST['group'], 
 							'ts_ids' => $_POST['postid']
@@ -1033,6 +1042,13 @@ function save_test_case_post($post_id) {
 							'%d'
 						) 
 					);
+				}
+		
+		
+		
+	}
+	else {
+    // Not set yet	
 		
 	}
 	
