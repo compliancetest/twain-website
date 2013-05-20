@@ -48,7 +48,7 @@
 								'value_remember' => false ); 
 								
 						wp_login_form($args); ?>
-						<a href="http://www.test.compliancetest.net/pasword-recovery/" id="recover_pass">Password recovery</a>
+						<a href="http://www.test.compliancetest.net/password-recovery/" id="recover_pass">Password recovery</a>
 					
 					</div>
 				</div>
@@ -195,7 +195,7 @@
 						<?php 
 						wp_login_form($args); 
 						?>
-						<a href="http://www.test.compliancetest.net/pasword-recovery/" id="pass_recovery">Password Recovery</a>
+						<a href="http://www.test.compliancetest.net/password-recovery/" id="pass_recovery">Password Recovery</a>
 						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
 						<?php
 						if(isset($_GET['login'])){
