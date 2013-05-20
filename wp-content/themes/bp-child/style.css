@@ -3074,6 +3074,10 @@ background-image: url(images/white_gloss.png);
 	margin: 8px 0px 0px 16px;
 }
 
+.error_recovery {
+color: #8c1916;
+} 
+
 .user_reg{
 	width: 408px;
 }
