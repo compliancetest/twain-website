@@ -136,6 +136,11 @@ sub {
 
 }
 
+.err_red{
+    color: #8C1916 !important;
+}
+
+
 input[type="button"], input[type="button"]:hover, 
 input[type="search_button"], input[type="search_button"]:hover, 
 input[type="submit"], input[type="submit"]:hover {
@@ -2349,6 +2354,10 @@ background-image: url(images/white_gloss.png);
 	margin: 8px 0px 0px 16px;
 }
 
+.error_recovery{
+	color: #8c1916;
+}
+
 /* **************** CONTENT ELEMENTS *********************** */
 
 .content700 {
@@ -3067,16 +3076,20 @@ background-image: url(images/white_gloss.png);
 	margin: 8px 0px 0px 0px;
 }
 
+.err_search{
+	display: none;
+	color: #8c1916;
+	font-size: 12px;
+	margin: 8px 239px 0px 0px;
+	text-align: right;
+}
+
 .err_new_suite{
 	color: #8c1916;
 	display: none;
 	font-size: 12px;
 	margin: 8px 0px 0px 16px;
 }
-
-.error_recovery {
-color: #8c1916;
-} 
 
 .user_reg{
 	width: 408px;
@@ -3686,7 +3699,7 @@ display:block !important;
 	font-weight: bold;
 }
 
-.blue_button a: hover{
+.blue_button a:hover{
 	background: #2690EB;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3577AD', endColorstr='#2690eb');
 	background: -webkit-gradient(linear, left top, left bottom, from(#3577AD), to(#2690eb));

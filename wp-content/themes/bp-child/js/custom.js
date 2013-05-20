@@ -188,6 +188,16 @@ $(document).ready(function() {
 	$("#user_pass").attr("onfocus", "if (this.value == 'Password') this.value = '';");
 	$("#user_pass").attr("value", "Password");
 	
+	
+	/* User & Email: */
+	$("#user_login2").attr("onblur", "if (this.value == '') this.value = 'E-mail or User';");
+	$("#user_login2").attr("onfocus", "if (this.value == 'E-mail or User') this.value = '';");
+	$("#user_login2").attr("value", "E-mail or User");
+	/* Pass */
+	$("#user_pass2").attr("onblur", "if (this.value == '') this.value = 'Password';");
+	$("#user_pass2").attr("onfocus", "if (this.value == 'Password') this.value = '';");
+	$("#user_pass2").attr("value", "Password");
+	
 	/* Menu Level - 2 */
 	
 	jQuery('.has_dd_1 , .what_is').hover(function() {
@@ -346,7 +356,6 @@ $(document).ready(function() {
 	 jQuery('body').click(function(){
 		$('.search_select ul ul').fadeOut().removeClass('block');	
 	});
-
 	
 	jQuery('.search_select ul ul li a').click(function(data) {
 		var sel_id=jQuery(this).attr('id');
@@ -356,6 +365,50 @@ $(document).ready(function() {
 		var sel_name=jQuery(this).text();
 		jQuery('.current_chosen').replaceWith('<a id="'+sel_id+'" class="current_chosen">'+sel_name+'</a>');
 	});
+	
+    //search validate
+	jQuery('.search_select, #searchform').on('click submit', function(event) {
+        var eventType = event.type;
+        var search_value =  jQuery("#hidden_value").val();
+        var thisElem = jQuery(this);
+        
+        switch(eventType){
+            case'submit':
+                jQuery('#choose_one').removeClass('err_red');
+                
+                if(search_value == ''){
+                    //alert('submit');
+                    jQuery('.err_search').fadeIn();
+                    jQuery('#choose_one').addClass('err_red');
+                    return false;
+                }
+                
+                break;
+                
+            case'click':
+                if(thisElem.hasClass('search_select')){
+                    jQuery('.err_search').fadeOut();
+                    jQuery('#choose_one').removeClass('err_red');
+                    
+                    jQuery('.search_select ul.block li').on('click', function(){
+                        search_value =  jQuery("#hidden_value").val();
+                        
+                        if(search_value == ''){
+                            //alert(search_value);
+                            jQuery('.err_search').fadeIn();
+                            jQuery('#choose_one').addClass('err_red');
+                            
+                            return false;
+                        }
+                    });
+                    
+                    
+                }
+                
+                break;
+        }
+        
+    });
 
 	// Dashboard Add New Test Suite 
 	
