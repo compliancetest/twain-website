@@ -80,7 +80,6 @@ get_header();
 				<div class="clear"></div>
 				<div class="space30"></div>
 			</form>
-			11
 
 		</div><!--end column-->
 		
