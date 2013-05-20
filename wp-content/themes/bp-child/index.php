@@ -1,7 +1,7 @@
 <?php
 get_header();
 ?>
-
+<?php // echo get_theme_root(); ?>
 		<div class="content">
 			<div class="space50"></div>
 			<div id="search-wrapper">
@@ -33,8 +33,7 @@ get_header();
 					<div class="clear"></div>
 				</div><!-- end search_bar  -->
 				<div class="space7"></div>
-			</div><!-- END search-wrapper-->
-            <p class="err_search">Choose a category first!</p>
+			</div> <!-- END search-wrapper-->
 			<div class="space50"></div>
 			
 			<div id="register">

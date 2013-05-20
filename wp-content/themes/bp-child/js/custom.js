@@ -367,19 +367,24 @@ $(document).ready(function() {
 	});
 	
     //search validate
+    
+    jQuery("#hidden_value").val('');
+    
 	jQuery('.search_select, #searchform').on('click submit', function(event) {
         var eventType = event.type;
         var search_value =  jQuery("#hidden_value").val();
+        var search_text =  jQuery("#choose_one").text();
+        
         var thisElem = jQuery(this);
         
         switch(eventType){
             case'submit':
-                jQuery('#choose_one').removeClass('err_red');
+                jQuery('#choose_one').removeClass('err_red').text('Tests / Products');
                 
                 if(search_value == ''){
                     //alert('submit');
-                    jQuery('.err_search').fadeIn();
-                    jQuery('#choose_one').addClass('err_red');
+                    //jQuery('.err_search').fadeIn();
+                    jQuery('#choose_one').addClass('err_red').text('Choose a category!');
                     return false;
                 }
                 
@@ -387,16 +392,16 @@ $(document).ready(function() {
                 
             case'click':
                 if(thisElem.hasClass('search_select')){
-                    jQuery('.err_search').fadeOut();
-                    jQuery('#choose_one').removeClass('err_red');
+                    //jQuery('.err_search').fadeOut();
+                    //jQuery('#choose_one').removeClass('err_red');
                     
                     jQuery('.search_select ul.block li').on('click', function(){
                         search_value =  jQuery("#hidden_value").val();
                         
                         if(search_value == ''){
                             //alert(search_value);
-                            jQuery('.err_search').fadeIn();
-                            jQuery('#choose_one').addClass('err_red');
+                            //jQuery('.err_search').fadeIn();
+                            jQuery('#choose_one').addClass('err_red').text('Choose a category!');
                             
                             return false;
                         }
