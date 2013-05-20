@@ -59,11 +59,12 @@ get_header();
 
 				//create email message
 				add_filter( 'wp_mail_content_type', 'set_html_content_type' ); 
-				$message = __('Someone has asked to reset the password for the following site and username.') . "\r\n\r\n";
+				$message = __('Someone has asked to reset the password for the following site and username.');
+				$message .= "<br />";
 				$message .= get_option('siteurl') . "\r\n\r\n";
-				$message .= " \n";
+				$message .= "<br />";
 				$message .= sprintf(__('Username: %s'), $user_login) . "\r\n\r\n";
-				$message .= " \n";
+				$message .= "<br />";
 				$message .= __('To reset your password visit the following address, otherwise just ignore this email and nothing will happen.') . "\r\n\r\n";
 				$message .= network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . "&redirect_to=".urlencode(get_option('siteurl'))."\r\n";
 				//send email meassage
