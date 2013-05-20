@@ -9,15 +9,22 @@ get_header();
 	<div class="content container">
 		
 		<div class="column">
+			<?php if (have_posts()) while (have_posts()) : the_post(); ?>
+			<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+			
+			<?php endwhile; ?>
+			<div class="space20"></div>
 			<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="wp-user-form">
 				<div class="username">
-					<label for="user_login" class="hide"><b><?php _e('Username or Email'); ?>: </b></label>
+					<b><?php _e('Username or Email'); ?>: </b><br />
+					<div class="space5"></div>
 					<input type="text" name="user_login" value="" size="20" id="user_login" tabindex="1001" />
 				</div>
+				<div class="space10"></div>
 				<div class="login_fields">
 					<?php do_action('login_form', 'resetpass'); ?>
 					<input type="submit" name="user-submit" value="<?php _e('Reset my password'); ?>" class="user-submit" tabindex="1002" />
-
+					<div class="clear"></div>
 			<?php if (isset($_POST['reset_pass'])){
 			global $wpdb;
 			$username = trim($_POST['user_login']);
@@ -48,6 +55,7 @@ get_header();
 				}
 
 				//create email message
+				add_filter( 'wp_mail_content_type', 'set_html_content_type' ); 
 				$message = __('Someone has asked to reset the password for the following site and username.') . "\r\n\r\n";
 				$message .= get_option('siteurl') . "\r\n\r\n";
 				$message .= sprintf(__('Username: %s'), $user_login) . "\r\n\r\n";
@@ -64,11 +72,15 @@ get_header();
 			}else{
 				echo '<p>'.__('A message will be sent to your email address.').'</p>'; 
 			}
+			
 			}?> 
 					<input type="hidden" name="reset_pass" value="1" />
 					<input type="hidden" name="user-cookie" value="1" />
 				</div>
+				<div class="clear"></div>
+				<div class="space30"></div>
 			</form>
+			11
 
 		</div><!--end column-->
 		
