@@ -33,8 +33,8 @@ get_header();
 					<div class="clear"></div>
 				</div><!-- end search_bar  -->
 				<div class="space7"></div>
-				
-			</div> <!-- END search-wrapper-->
+			</div><!-- END search-wrapper-->
+            <p class="err_search">Choose a category first!</p>
 			<div class="space50"></div>
 			
 			<div id="register">
