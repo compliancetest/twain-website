@@ -136,6 +136,9 @@ sub {
 
 }
 
+body, html{min-height: 100%;}
+
+
 .err_red{
     color: #8C1916 !important;
 }
@@ -3028,7 +3031,7 @@ background-image: url(images/white_gloss.png);
 }
 
 
-#reg input[type="submit"]{
+#reg input[type="submit"], #reg_user{
 	background: #7f1513; /* for non-css3 browsers */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cb2d25', endColorstr='#7f1513'); /* for IE */
 	background: -webkit-gradient(linear, left top, left bottom, from(#cb2d25), to(#7f1513)); /* for webkit browsers */
@@ -3040,15 +3043,19 @@ background-image: url(images/white_gloss.png);
 	-moz-border-radius: 4px;
 	-o-border-radius: 4px;
 	color:#fff;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
 	text-shadow: 0px -1px 0px #0B2133;
 	width: 255px !important;
 	height: 35px;
-	line-height: 15px;
+	line-height: 35px;
 	font-size: 16px;
+    font-family: 'Open Sans',Arial,sans-serif;
 	margin: 13px 74px;
 }
 
-#reg input[type="submit"]:hover{
+#reg input[type="submit"]:hover, #reg_user:hover{
 	background: #7f1513; /* for non-css3 browsers */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7f1513', endColorstr='#cb2d25'); /* for IE */
 	background: -webkit-gradient(linear, left top, left bottom, from(#7f1513), to(#cb2d25)); /* for webkit browsers */
@@ -3060,6 +3067,27 @@ background-image: url(images/white_gloss.png);
 #reg input[type="checkbox"]{
 	top: 2px;
 	margin-right: 5px;
+}
+
+.loader{
+    display: none;
+    margin: 0 auto;
+    width: 20px;
+    height: 20px;
+    background: url(http://nego-solutions.com/dev-clients/compliance/wp-admin/images/wpspin_light.gif) no-repeat left top;
+}
+
+#wrap_forms{
+    
+}
+
+.reg_message{
+    display: none;
+    font-size: 16px;
+    line-height: 22px;
+    color: green;
+    padding: 0 30px 30px;
+    text-align: center;
 }
 
 .err{
@@ -3274,6 +3302,23 @@ min-height: 70px;
     font-size: 13px;
     color: #666666;
 }
+
+/* **************** MY DASHBOARD - MY PROFILE ELEMENTS *********************** */
+
+.gray_message_box {
+	padding: 10px;
+	background: #f9f9f9;
+	border: 1px solid #d7d7d7;
+}
+
+	.gray_message_box .indicator {
+		width: 6px;
+		height: 10px;
+		background: url(images/gray_msg_box_indicator.png) left top no-repeat;
+		position: absolute;
+		left: -6px;
+		top: 10px;
+	}
 
 #file_ts {
     display:none;

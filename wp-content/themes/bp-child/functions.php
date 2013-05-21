@@ -1463,7 +1463,7 @@ function save_conf_level($post_id) {
 }
 
 
-
+//user registration
 if  (isset($_POST['form_set'])){
 	add_action('template_redirect', 'create_new_user');
 }
@@ -1473,6 +1473,7 @@ function set_html_content_type()
 	return 'text/html';
 }
 
+//check captcha
 if (isset($_GET['check_captcha'])) {
 	if (!isset($_SESSION)) {
 		session_start();
@@ -1485,8 +1486,7 @@ if (isset($_GET['check_captcha'])) {
 	exit();
 }
 
-
-
+//create new user account
 function create_new_user(){
 	global $wpdb;
 	$user_id = wp_create_user( $_POST['user_login'], $_POST['user_pass'], $_POST['user_email'] );  
@@ -1536,7 +1536,7 @@ if  (isset($_POST['wp-submit'])){
 
 function redirect(){
 	wp_redirect(get_bloginfo('home_url'));
-	}
+}
 
 function inactive_users_login(){
 	$username = $_POST['log'];

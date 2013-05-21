@@ -294,6 +294,12 @@ function optionsframework_options() {
 		'name' => __('Logo Image', 'options_framework_theme'),
 		'id' => 'logo',
 		'type' => 'upload');
+    
+    
+	$options[] = array(
+		'name' => __('Success user register message', 'options_framework_theme'),
+		'id' => 'reg_msg',
+		'type' => 'textarea');
 		
 	$options[] = array(
 		'name' => __('Menu Settings', 'options_framework_theme'),

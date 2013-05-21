@@ -8,11 +8,10 @@
 		<?php do_action( 'bp_head' ) ?>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
 		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery.form.js"></script>
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
 
 		<?php wp_head(); ?>
@@ -26,95 +25,99 @@
 		<div id="mask">
 		<div id="popup-wrap">
 			<div id="registration" class="radius6">
-				<p class="headline bottom30">User Registration</p>
-				<div class="user_border radius6 left" id="log">
-					<div class="existing_user">
-						<div class="ex_user">Existing User</div>
-						<?php
-								
-						$args = array(
-								'echo' => true,
-								'redirect' => get_bloginfo('url'), 
-								'form_id' => 'logform',
-								'label_username' => __( '' ),
-								'label_password' => __( '' ),
-								'label_remember' => __( 'Remember Me' ),
-								'label_log_in' => __( 'LOGIN' ),
-								'id_username' => 'user_login2',
-								'id_password' => 'user_pass2',
-								'id_remember' => 'rememberme',
-								'id_submit' => 'wp-submit',
-								'remember' => false,
-								'value_remember' => false ); 
-								
-						wp_login_form($args); ?>
-						<a href="http://www.test.compliancetest.net/password-recovery/" id="recover_pass">Password recovery</a>
-					
-					</div>
-				</div>
-						
-					<div class="user_border user_border2 radius6 right" id="reg">
-					<div class="existing_user">
-						<div class="reg_user">Register New User</div>
-							<form id="formreg" action="" method="post">
-								<div class="field">
-									<label for="first_name_id">First Name</label>
-									<input type="text" class="" title="" name="first_name" id="first_name_id">
-								</div>
-								<div class="field">
-									<label for="last_name_id">Last Name</label>
-									<input type="text" class="" title="" name="last_name" id="last_name_id">
-								</div>
-								<div class="clear"></div>
-								
-								<div class="field">
-									<label for="email_id">Email</label>
-									<input type="email" class="" title="" name="user_email" id="email_id">
-								</div>
-								<div class="field">
-									<label for="user_login_id">Username</label>
-									<input type="text" class="" title="" name="user_login" id="user_login_id">
-								</div>
-								<div class="clear"></div>
-								
-								<div class="field">
-									<label for="organisation_id">Organisation</label>
-									<input type="text" class="" title="" name="organisation" id="organisation_id">
-								</div>
-								<div class="field">
-									<label for="contact_phone_id">Contact Phone Number</label>
-									<input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
-								</div>
-								<div class="clear"></div>     
-								
-								<div class="field">
-									<label for="user_pass">Password</label>
-									<input type="password" class="" title="" name="user_pass" id="user_pass_id">
-								</div>
-								<div class="field">
-									<label for="user_pass_confirm_id">Confirm Password</label>
-									<input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
-								</div>
-								<div class="clear"></div>   
-								
-								<div class="field">
-									<label for="captcha_reg">Stop Spam!</label> <br />
-									<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
-									<input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
-								</div>
-								<div class="field top23">		
-									<input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="http://nego-solutions.com/dev-clients/compliance/?page_id=779">Terms & Conditions.</a></label>
-								</div>
-								<div class="clear"></div>
-								                 
-								<input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
-								<div class="err"> </div>
-								<input type="hidden" name="form_set" value="testing"/>
-								<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>
-							</form>
-					</div>
-				</div>
-				<div class="clear"></div>
+                <p class="headline bottom30">User Registration</p>
+                <div id="wrap_forms">
+                    <div class="user_border radius6 left" id="log">
+                        <div class="existing_user">
+                            <div class="ex_user">Existing User</div>
+                            <?php
+
+                            $args = array(
+                                    'echo' => true,
+                                    'redirect' => get_bloginfo('url'), 
+                                    'form_id' => 'logform',
+                                    'label_username' => __( '' ),
+                                    'label_password' => __( '' ),
+                                    'label_remember' => __( 'Remember Me' ),
+                                    'label_log_in' => __( 'LOGIN' ),
+                                    'id_username' => 'user_login2',
+                                    'id_password' => 'user_pass2',
+                                    'id_remember' => 'rememberme',
+                                    'id_submit' => 'wp-submit',
+                                    'remember' => false,
+                                    'value_remember' => false ); 
+
+                            wp_login_form($args); ?>
+                            <a href="http://nego-solutions.com/dev-clients/compliance/pasword-recovery/" id="recover_pass">Password recovery</a>
+
+                        </div>
+                    </div>
+
+                        <div class="user_border user_border2 radius6 right" id="reg">
+                        <div class="existing_user">
+                            <div class="reg_user">Register New User</div>
+                                <form id="formreg" action="" method="post">
+                                    <div class="field">
+                                        <label for="first_name_id">First Name</label>
+                                        <input type="text" class="" title="" name="first_name" id="first_name_id">
+                                    </div>
+                                    <div class="field">
+                                        <label for="last_name_id">Last Name</label>
+                                        <input type="text" class="" title="" name="last_name" id="last_name_id">
+                                    </div>
+                                    <div class="clear"></div>
+
+                                    <div class="field">
+                                        <label for="email_id">Email</label>
+                                        <input type="email" class="" title="" name="user_email" id="email_id">
+                                    </div>
+                                    <div class="field">
+                                        <label for="user_login_id">Username</label>
+                                        <input type="text" class="" title="" name="user_login" id="user_login_id">
+                                    </div>
+                                    <div class="clear"></div>
+
+                                    <div class="field">
+                                        <label for="organisation_id">Organisation</label>
+                                        <input type="text" class="" title="" name="organisation" id="organisation_id">
+                                    </div>
+                                    <div class="field">
+                                        <label for="contact_phone_id">Contact Phone Number</label>
+                                        <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
+                                    </div>
+                                    <div class="clear"></div>     
+
+                                    <div class="field">
+                                        <label for="user_pass">Password</label>
+                                        <input type="password" class="" title="" name="user_pass" id="user_pass_id">
+                                    </div>
+                                    <div class="field">
+                                        <label for="user_pass_confirm_id">Confirm Password</label>
+                                        <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
+                                    </div>
+                                    <div class="clear"></div>   
+
+                                    <div class="field">
+                                        <label for="captcha_reg">Stop Spam!</label> <br />
+                                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
+                                        <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
+                                    </div>
+                                    <div class="field top23">		
+                                        <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="http://nego-solutions.com/dev-clients/compliance/?page_id=779">Terms & Conditions.</a></label>
+                                    </div>
+                                    <div class="clear"></div>
+
+                                    <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
+                                    <div class="err"> </div>
+                                    <input type="hidden" name="form_set" value="testing"/>
+                                    <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
+                                    <div id="reg_user">Register Me</div><div class="loader"></div>
+                                </form>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
 			</div><!--END registration-->
 		<div id="close-popup" class="close_btn"></div>
 		</div>
@@ -161,7 +164,7 @@
 											}
 									?>
 									<ul>
-										<li><a href="<?php echo home_url();?>/my-suites/">Dashboard</a></li>
+										<li><a href="<?php echo home_url();?>/my-profile/">Dashboard</a></li>
 										<li><a href="#">Settings</a></li>
 										
 										<li><a href="<?php echo wp_logout_url( $logout_redirect ); ?>">Logout</a></li>
@@ -194,8 +197,8 @@
 						
 						<?php 
 						wp_login_form($args); 
-						?> 
-						<a href="http://www.test.compliancetest.net/password-recovery/" id="pass_recovery">Password Recovery</a>
+						?>
+						<a href="http://nego-solutions.com/dev-clients/compliance/pasword-recovery/" id="pass_recovery">Password Recovery</a>
 						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
 						<?php
 						if(isset($_GET['login'])){

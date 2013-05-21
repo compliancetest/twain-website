@@ -3,10 +3,11 @@ $(document).ready(function() {
 	///////////////////////////////////////////////////////
 	//DOCUMENT METRICS
 	///////////////////////////////////////////////////////
-	
+    
 	 var docH = $(document).height();
 	 var windowH = $(window).height();
 	 var windowW = $(window).width();
+
 	 
 	///////////////////////////////////////////////////////
 	//CONTENT POPUPS
@@ -130,10 +131,10 @@ $(document).ready(function() {
 	// EXPANDABLE GRID
 	///////////////////////////////////////////////////////
 	
-	/*$('.exp_title').click(function(){
+	$('.expandable').click(function(){
 		$(this).toggleClass('open');
 		$(this).parent().parent().next().slideToggle('fast');
-	});*/
+	});
 	
 	///////////////////////////////////////////////////////
 	// TABS
@@ -277,8 +278,13 @@ $(document).ready(function() {
 				errors = true;
 			}
 		});
+        
+        jQuery('input').keyup(function(){
+            jQuery('.err').fadeOut();
+        });
 		
-	jQuery('#reg_user').click(function(){
+    //register form validation    
+	jQuery('#reg_user').on('click', function(){
 		var firstname = jQuery("#first_name_id").val();
 		var lastname =	jQuery("#last_name_id").val();
 		var email = jQuery("#email_id").val();
@@ -289,39 +295,71 @@ $(document).ready(function() {
 		var user_pass_confirm = jQuery("#user_pass_confirm_id").val();
 		var captcha_reg = jQuery("#captcha_reg").val();
 		var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-		var errors = false;
+		var errors = true;
+        
+        
 		if(firstname && lastname && email && user && organisation && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
-			
+            
 			if (user_pass != user_pass_confirm){
 				jQuery('.err').text('Passwords don\'t match! ');
 				jQuery('.err').show('slow');
-				errors = true;
-				}
-			else if(!emailReg.test(email)){  
+				errors = false;
+			}
+			if(!emailReg.test(email)){  
 				jQuery('.err').text('Please enter a valid e-mail address!');
 				jQuery('.err').show('slow');
-				errors = true;
-				}
-			else if (!jQuery('#acc_tc_id').is(':checked')) {
+				errors = false;
+			}
+			
+            if (!jQuery('#acc_tc_id').is(':checked')) {
 				jQuery('.err').text('You must agree to our Terms & Conditions first!');
 				jQuery('.err').show('slow');
-				errors = true;
-				}	
-			else errors = false;
-				if (!errors){
-				return true;
-				
-				}
-		}
-		
-		else {
+				errors = false;
+			}
+            
+            if(errors){
+
+                $.ajax({
+                    url: '?check_captcha=1',
+                    type: "POST",
+                    async: false,
+                    data: {captcha: $('#captcha_reg').val(), check_captcha: 1},
+                    success: function(data) {
+                        if (data == 'success') {
+                            
+                            jQuery('.loader').fadeIn();
+                            
+                            var options = {
+                                url:'', 
+                                success: function() { 
+                                    //alert('Thanks for your comment!'); 
+                                    jQuery('#wrap_forms').hide();
+                                    jQuery('.reg_message').fadeIn();
+                                } 
+                            };
+                            $('#formreg').ajaxSubmit(options);
+                            
+                        } else {
+                            jQuery('.err').text('Captcha not correct!');
+                            jQuery('.err').show('slow');
+                        }
+                    }
+                });
+                
+            }else{
+                //alert('error');
+            }
+                 
+		}else{
 			jQuery('.err').text('Please fill in all fields!');
 			jQuery('.err').show('slow');
 			return false;
-			}
-		});	
+		}
+        
+        
+    });	
 		
-	$('#formreg').submit(function() { //alert('test');
+	/*$('#formreg').submit(function(){
 		var allow_submit = false;
 		$.ajax({
 			url: '?check_captcha=1',
@@ -337,8 +375,16 @@ $(document).ready(function() {
 				}
 			}
 		});
-		return allow_submit;
-	});
+        
+        if(allow_submit){
+            $('#formreg').ajaxForm();
+        }else{
+            
+            return false;
+        }
+        
+		//return allow_submit;
+	});*/
 	
 	/* Search */
 	
