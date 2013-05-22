@@ -1520,46 +1520,47 @@ function create_new_user(){
 	remove_filter( 'wp_mail_content_type', 'set_html_content_type' );  
 }
 
-/*Login With Email address */
-function login_with_email_address($username) {
-	$user = get_user_by_email($username);
-	if(!empty($user->user_login))
-		$username = $user->user_login;
-	return $username;
-}
-add_action('wp_authenticate','login_with_email_address');
-
-/*Inactive users*/
-if  (isset($_POST['wp-submit'])){
-	add_action('wp_authenticate','inactive_users_login');
-}
 
 function redirect(){
 	wp_redirect(get_bloginfo('home_url'));
 }
 
-function inactive_users_login(){
-	$username = $_POST['log'];
-	$user2 = get_user_by('login', $username);
-	$user_status = $user2->user_status;
-	$redirect = wp_logout_url( home_url() );
-	
-	if($user_status > 0){
-		//die($redirect);
-	/*	function wp_logout() {
-			//wp_clear_auth_cookie();
-			//do_action('wp_logout');
-			do_action('redirect');
-			//die(get_bloginfo('home_url'));
-			
-			//exit;
-		}*/
-		// return wp_logout;
-		 wp_logout();
-		 wp_redirect( 'http://nego-solutions.com/dev-clients/compliance/' ); 
-		 exit;
-	}
+/*Inactive users*/
+if(isset($_POST['user_log'])){
+ 
+        $get_user = get_user_by('email', $_POST['log']);
+        
+        if(!empty($get_user->user_login)){
+            $username = $get_user->user_login;
+            $user = get_user_by('login', $username);
+            $user_status = $user->user_status;
+            $redirect = wp_logout_url( home_url() );
 
+            if($user_status > 0){
+                die('active');
+                 //wp_logout();
+                 //wp_redirect( 'http://nego-solutions.com/dev-clients/compliance/' ); 
+                 exit();
+            }else{
+                die('inactive');
+            }
+            
+        }else{
+            die('wrong');
+        }
+    
+        
+        
+     /*Login With Email address 
+    function login_with_email_address($username) {
+        $user = get_user_by_email($username);
+        if(!empty($user->user_login))
+            $username = $user->user_login;
+        return $username;
+    }
+    add_action('wp_authenticate','login_with_email_address');  */ 
+        
+    //add_action('wp_authenticate','inactive_users_login');
 }
 
 /* Frontend Add new Test Suite */

@@ -285,9 +285,20 @@ a:hover {
 	background-position: 1px 0px;
 }
 
-#login input[type="submit"] {
+#login input[type="submit"], #wp-submit{
 	float: left;
 	background: url(images/blue_login.jpg) top center repeat-x;
+    color: #fff;
+    text-align: center;
+    line-height: 34px;
+    height: 34px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-family: 'Open Sans',Arial,sans-serif;
 	border-radius: 5px;
 	border: 1px solid #3577ad;
 	box-shadow: inset 0px 2px 1px -1px #7cbdf4;
@@ -297,7 +308,7 @@ a:hover {
     -o-text-shadow: 0px -1px 0px #1d5c91;
 }
 
-#login input[type="submit"]:hover {
+#login input[type="submit"]:hover, #wp-submit:hover{
 		background-image: url(images/white_gloss.png);
 		text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
 		-moz-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
@@ -2836,7 +2847,7 @@ background-image: url(images/white_gloss.png);
 
 #logform{
 	width:255px;
-	margin: 32px auto;
+	margin: 32px auto 10px;
 	font-size: 12px;
 }
 
@@ -2923,9 +2934,11 @@ background-image: url(images/white_gloss.png);
 	text-decoration: underline;
 	color: #2C80E8;
 	font-size: 12px;
-	position: absolute;
-	top: 181px;
-	left: 163px;
+    float: right;
+    padding-right: 15px;
+	/*position: absolute;
+	top: 184px;
+	left: 163px;*/
 }
 
 .login-remember{
@@ -3069,8 +3082,9 @@ background-image: url(images/white_gloss.png);
 	margin-right: 5px;
 }
 
-.loader{
+.loader, .loader2{
     display: none;
+    clear: both;
     margin: 0 auto;
     width: 20px;
     height: 20px;
@@ -3089,6 +3103,16 @@ background-image: url(images/white_gloss.png);
     padding: 0 30px 30px;
     text-align: center;
 }
+    .log_msg{
+        color: #BE0000;
+    }
+    
+    .wr_log_msg{
+        clear: both;
+        padding: 10px 0 0;
+        font-size: 11px;
+        line-height: 12px;
+    }
 
 .err{
 	color: #8c1916;

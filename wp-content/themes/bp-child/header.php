@@ -15,9 +15,6 @@
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
 
 		<?php wp_head(); ?>
-		<script>
-			
-		</script>
 	</head>
 
 	<body <?php body_class(); ?> id="bp-default">
@@ -48,76 +45,76 @@
                                     'value_remember' => false ); 
 
                             wp_login_form($args); ?>
-                            <a href="http://nego-solutions.com/dev-clients/compliance/pasword-recovery/" id="recover_pass">Password recovery</a>
-
+                            <a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="recover_pass">Password recovery</a>
                         </div>
                     </div>
 
-                        <div class="user_border user_border2 radius6 right" id="reg">
+                    <div class="user_border user_border2 radius6 right" id="reg">
                         <div class="existing_user">
                             <div class="reg_user">Register New User</div>
-                                <form id="formreg" action="" method="post">
-                                    <div class="field">
-                                        <label for="first_name_id">First Name</label>
-                                        <input type="text" class="" title="" name="first_name" id="first_name_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="last_name_id">Last Name</label>
-                                        <input type="text" class="" title="" name="last_name" id="last_name_id">
-                                    </div>
-                                    <div class="clear"></div>
+                            <form id="formreg" action="" method="post">
+                                <div class="field">
+                                    <label for="first_name_id">First Name</label>
+                                    <input type="text" class="" title="" name="first_name" id="first_name_id">
+                                </div>
+                                <div class="field">
+                                    <label for="last_name_id">Last Name</label>
+                                    <input type="text" class="" title="" name="last_name" id="last_name_id">
+                                </div>
+                                <div class="clear"></div>
 
-                                    <div class="field">
-                                        <label for="email_id">Email</label>
-                                        <input type="email" class="" title="" name="user_email" id="email_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="user_login_id">Username</label>
-                                        <input type="text" class="" title="" name="user_login" id="user_login_id">
-                                    </div>
-                                    <div class="clear"></div>
+                                <div class="field">
+                                    <label for="email_id">Email</label>
+                                    <input type="email" class="" title="" name="user_email" id="email_id">
+                                </div>
+                                <div class="field">
+                                    <label for="user_login_id">Username</label>
+                                    <input type="text" class="" title="" name="user_login" id="user_login_id">
+                                </div>
+                                <div class="clear"></div>
 
-                                    <div class="field">
-                                        <label for="organisation_id">Organisation</label>
-                                        <input type="text" class="" title="" name="organisation" id="organisation_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="contact_phone_id">Contact Phone Number</label>
-                                        <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
-                                    </div>
-                                    <div class="clear"></div>     
+                                <div class="field">
+                                    <label for="organisation_id">Organisation</label>
+                                    <input type="text" class="" title="" name="organisation" id="organisation_id">
+                                </div>
+                                <div class="field">
+                                    <label for="contact_phone_id">Contact Phone Number</label>
+                                    <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
+                                </div>
+                                <div class="clear"></div>     
 
-                                    <div class="field">
-                                        <label for="user_pass">Password</label>
-                                        <input type="password" class="" title="" name="user_pass" id="user_pass_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="user_pass_confirm_id">Confirm Password</label>
-                                        <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
-                                    </div>
-                                    <div class="clear"></div>   
+                                <div class="field">
+                                    <label for="user_pass">Password</label>
+                                    <input type="password" class="" title="" name="user_pass" id="user_pass_id">
+                                </div>
+                                <div class="field">
+                                    <label for="user_pass_confirm_id">Confirm Password</label>
+                                    <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
+                                </div>
+                                <div class="clear"></div>   
 
-                                    <div class="field">
-                                        <label for="captcha_reg">Stop Spam!</label> <br />
-                                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
-                                        <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
-                                    </div>
-                                    <div class="field top23">		
-                                        <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="http://nego-solutions.com/dev-clients/compliance/?page_id=779">Terms & Conditions.</a></label>
-                                    </div>
-                                    <div class="clear"></div>
+                                <div class="field">
+                                    <label for="captcha_reg">Stop Spam!</label> <br />
+                                    <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
+                                    <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
+                                </div>
+                                <div class="field top23">		
+                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="<?php echo get_bloginfo('url');?>/terms-conditions">Terms & Conditions.</a></label>
+                                </div>
+                                <div class="clear"></div>
 
-                                    <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
-                                    <div class="err"> </div>
-                                    <input type="hidden" name="form_set" value="testing"/>
-                                    <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
-                                    <div id="reg_user">Register Me</div><div class="loader"></div>
-                                </form>
+                                <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
+                                <div class="err"> </div>
+                                <input type="hidden" name="form_set" value="testing"/>
+                                <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
+                                <div id="reg_user">Register Me</div><div class="loader"></div>
+                            </form>
                         </div>
                     </div>
                     <div class="clear"></div>
                 </div>
                 <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
+                <div class="reg_message log_msg"><?php echo of_get_option('log_msg');?></div>
 			</div><!--END registration-->
 		<div id="close-popup" class="close_btn"></div>
 		</div>
@@ -129,15 +126,9 @@
 		<div id="header-wrapper">
 			<div class="header column">
 				<a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
-
-
-
-
 				 <?php 	
-				 
 				 if ( is_user_logged_in() ) { 
 						?>
-						
 						<div class="column fifth right no-marginbottom" id="top_logged_wrap">
 							<?php 
 								global $current_user;
@@ -147,21 +138,16 @@
 								<?php echo get_avatar($current_user->user_email, 28);  ?>
 								<div class="right toright">
 									Welcome
-									<h5 class="dark_gray_txt">
-										<?php 
-											print $current_user->user_firstname .' '.$current_user->user_lastname; 
-										?>
-										</h5>
+									<h5 class="dark_gray_txt"><?php echo $current_user->user_firstname .' '.$current_user->user_lastname;?></h5>
 								</div>
 								<div class="clear"></div>
 								<div id="top_loged_actions">
 									<?php
 									if(is_home() ) {
-										$logout_redirect = get_bloginfo('url');
-										}
-										else{
-										$logout_redirect = get_permalink();
-											}
+                                        $logout_redirect = get_bloginfo('url');
+                                    }else{
+                                        $logout_redirect = get_permalink();
+                                    }
 									?>
 									<ul>
 										<li><a href="<?php echo home_url();?>/my-profile/">Dashboard</a></li>
@@ -193,17 +179,16 @@
 								'remember' => false,
 								'value_remember' => false ); 
 						?>
-						<div class="column right nopadding nomarginbottom" id="top_acces_wrap">					
+                    <div class="column right nopadding nomarginbottom" id="top_acces_wrap">					
 						
 						<?php 
 						wp_login_form($args); 
 						?>
-						<a href="http://nego-solutions.com/dev-clients/compliance/pasword-recovery/" id="pass_recovery">Password Recovery</a>
+						<a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="pass_recovery">Password Recovery</a>
 						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
 						<?php
 						if(isset($_GET['login'])){
 							 ?>
-							 
 							<script type="text/javascript">
 							jQuery('.simple_tooltip_pop').show('slow');
 							</script>
@@ -215,29 +200,27 @@
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
 						</div>
 						<div id="registration_button"><a class="popup">SIGNUP</a></div>
-						<?php
-						}
-				 ?>
-				 </div>
+                        
+                    </div>
+                    <?php
+                    }
+                    ?>
 				<div class="clear"></div>
 			</div>		
 		</div>
 		
 		<div class="clear"></div>
-
-
-			<div id="menu-wrapper">
+        <div id="menu-wrapper">
 			<div id="cssmenu">
 			<?php
-					wp_nav_menu( array(
-							'theme_location' => 'header-menu',
-							'container' =>false,
-							'echo' => true,
-							'depth' => 0,
-							'fallback_cb'=>'headermenu',
-							'menu_id' => ''
-						)
-					);
+                wp_nav_menu( array(
+                    'theme_location' => 'header-menu',
+                    'container' =>false,
+                    'echo' => true,
+                    'depth' => 0,
+                    'fallback_cb'=>'headermenu',
+                    'menu_id' => ''
+                ));
 				?>
 			</div>
 		</div>	
@@ -268,11 +251,11 @@
 					  </li>
 					  
 					  <li class="last left width350">
-								<img src="<?php echo of_get_option('implementers_icon'); ?>" class="left">
-								<h3><?php echo of_get_option('implementers_t'); ?></h3>
-								 <p><?php echo of_get_option('implementers_d'); ?></p>
-							
-								<a href="<?php echo of_get_option('what_link'); ?>" class="right linkto">Find out How it works</a>
+                        <img src="<?php echo of_get_option('implementers_icon'); ?>" class="left">
+                        <h3><?php echo of_get_option('implementers_t'); ?></h3>
+                         <p><?php echo of_get_option('implementers_d'); ?></p>
+
+                        <a href="<?php echo of_get_option('what_link'); ?>" class="right linkto">Find out How it works</a>
 					  </li>
 					  <div class="clear"></div>
 					</ul>
@@ -280,36 +263,36 @@
 				
 				<div class="why_compliance normal_dd">
 					<ul>
-							<li class="left width280">
-								<img src="<?php echo of_get_option('community_icon'); ?>" class="left">
-								<h3><?php echo of_get_option('community_t'); ?></h3>
-								<p><?php echo of_get_option('community_d'); ?></p>
-							</li>
-							<li class="left width280">
-								<img src="<?php echo of_get_option('support_icon'); ?>" class="left">
-								<h3><?php echo of_get_option('support_t'); ?></h3>
-								<p><?php echo of_get_option('support_d'); ?></p>
-							</li>
-							<li class="last left width280">
-								<img src="<?php echo of_get_option('confidence_icon'); ?>" class="left">
-								<h3><?php echo of_get_option('confidence_t'); ?></h3>
-								<p><?php echo of_get_option('confidence_d'); ?></p>
-							
-							<a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">Find out more reasons</a>
-							</li>
-							<div class="clear"></div>
-							<li class="last left width280">
-								<img src="<?php echo of_get_option('visibility_icon'); ?>" class="left">
-								<h3><?php echo of_get_option('visibility_t'); ?></h3>
-								<p><?php echo of_get_option('visibility_d'); ?></p>
-							</li>	
-							<li class="last left width280">
-								<img src="<?php echo of_get_option('cost_icon'); ?>" class="left">
-								<h3><?php echo of_get_option('cost_t'); ?></h3>
-								<p><?php echo of_get_option('cost_d'); ?></p>
-							</li>	
-							<div class="clear"></div>
-						</ul>
+                        <li class="left width280">
+                            <img src="<?php echo of_get_option('community_icon'); ?>" class="left">
+                            <h3><?php echo of_get_option('community_t'); ?></h3>
+                            <p><?php echo of_get_option('community_d'); ?></p>
+                        </li>
+                        <li class="left width280">
+                            <img src="<?php echo of_get_option('support_icon'); ?>" class="left">
+                            <h3><?php echo of_get_option('support_t'); ?></h3>
+                            <p><?php echo of_get_option('support_d'); ?></p>
+                        </li>
+                        <li class="last left width280">
+                            <img src="<?php echo of_get_option('confidence_icon'); ?>" class="left">
+                            <h3><?php echo of_get_option('confidence_t'); ?></h3>
+                            <p><?php echo of_get_option('confidence_d'); ?></p>
+
+                        <a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">Find out more reasons</a>
+                        </li>
+                        <div class="clear"></div>
+                        <li class="last left width280">
+                            <img src="<?php echo of_get_option('visibility_icon'); ?>" class="left">
+                            <h3><?php echo of_get_option('visibility_t'); ?></h3>
+                            <p><?php echo of_get_option('visibility_d'); ?></p>
+                        </li>	
+                        <li class="last left width280">
+                            <img src="<?php echo of_get_option('cost_icon'); ?>" class="left">
+                            <h3><?php echo of_get_option('cost_t'); ?></h3>
+                            <p><?php echo of_get_option('cost_d'); ?></p>
+                        </li>	
+                        <div class="clear"></div>
+                    </ul>
 				</div><!-- end why DIV-->
 				
 				<div class="compliancetest_serv normal_dd">
@@ -367,10 +350,10 @@ if (isset ($_GET['user_activation'])){
 	$current_date = date("Y-m-d h:i:s");
 	$activation = $_GET['user_activation'];
 	$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_activation_key ='$activation' ");
-	echo $user->ID;
+	//echo $user->ID;
 	$wpdb->query("UPDATE $wpdb->users SET user_status = 0 WHERE user_activation_key ='$activation' ");
 	$wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id) 	
-				  VALUES({$user->ID},'xprofile','new_member',' <a href=\"http://nego-solutions.com/dev-clients/compliance/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','http://nego-solutions.com/dev-clients/compliance/members/{$user->user_login}/','{$current_date}','0')");
+				  VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/members/{$user->user_login}/','{$current_date}','0')");
 	}
 	
 	

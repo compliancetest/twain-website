@@ -330,7 +330,7 @@ $(document).ready(function() {
                             jQuery('.loader').fadeIn();
                             
                             var options = {
-                                url:'', 
+                                url:'',
                                 success: function() { 
                                     //alert('Thanks for your comment!'); 
                                     jQuery('#wrap_forms').hide();
@@ -386,8 +386,37 @@ $(document).ready(function() {
 		//return allow_submit;
 	});*/
 	
+    
+    //replace login button
+    jQuery('#logform .login-submit').remove();
+    jQuery('#logform .login-password').after('<div id="wp-submit">Login</div><div class="loader2"></div>');
+    jQuery('#logform .login-password').after('<div class="reg_message log_msg wr_log_msg">Wrong email or password, please try again!</div>');
+    
+    jQuery('#wp-submit').on('click', function(){
+        jQuery('.loader2').fadeIn();
+        
+        var options = {
+            url:'', 
+            data: {user_log: 1},
+            success: function(data) {
+                if(data == 'active'){
+                    
+                }else if(data == 'inactive'){
+                    jQuery('#wrap_forms, .loader2').hide();
+                    jQuery('.log_msg').fadeIn();
+                    
+                }else if(data == 'wrong'){
+                    jQuery('.loader2').hide();
+                    jQuery('.wr_log_msg').fadeIn();
+                }
+            } 
+        };
+        $('#logform').ajaxSubmit(options);
+
+    });
+    
+    
 	/* Search */
-	
 	jQuery('#s').focus(function() {
 		jQuery('#s').removeClass('inactive_s');
 		jQuery('#s').addClass('active_s');
