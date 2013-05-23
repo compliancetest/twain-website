@@ -879,7 +879,7 @@ if(isset($_POST['testsuite_id_harness'])){
 //Initiator Role
 if(isset($_POST['testsuite_id_initiator'])){
 	//Initiator Role
-	$get_initiator_roles = get_post_meta($_POST['testsuite_id_initiator'], 'harness_role_ts', true);
+	$get_initiator_roles = get_post_meta($_POST['testsuite_id_initiator'], 'initiator_ts_id', true);
 	$initiator_roles = explode(',',$get_initiator_roles);
 	if($_POST['checkElem_initiator']==0){
 		echo '0##';
