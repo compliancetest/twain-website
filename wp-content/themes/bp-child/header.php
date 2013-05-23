@@ -185,17 +185,8 @@
 						wp_login_form($args); 
 						?>
 						<a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="pass_recovery">Password Recovery</a>
-						<span class="simple_tooltip_pop radius6"><span></span>Wrong username or password!</span>
-						<?php
-						if(isset($_GET['login'])){
-							 ?>
-							<script type="text/javascript">
-							jQuery('.simple_tooltip_pop').show('slow');
-							</script>
-							
-							<?php
-							}
-						?>
+						<span class="simple_tooltip_pop log_err1 radius6"><span></span>Wrong username or password, please try again!</span>
+						<span class="simple_tooltip_pop log_err2 radius6"><span></span><?php echo of_get_option('log_msg');?></span>
 						<div id="or" class="left">
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
 						</div>

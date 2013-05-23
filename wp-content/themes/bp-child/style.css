@@ -773,7 +773,8 @@ background: url(images/tooltip_pop.png) center center no-repeat;
 position: absolute;
 left: 50%;
 margin-left: -8px;
-bottom: 21px;
+/*bottom: 21px;*/
+top: -7px;
 }
 
 .quick_actions li:hover .simple_tooltip {

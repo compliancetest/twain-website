@@ -390,7 +390,7 @@ $(document).ready(function() {
     //replace login button
     jQuery('#logform .login-submit').remove();
     jQuery('#logform .login-password').after('<div id="wp-submit">Login</div><div class="loader2"></div>');
-    jQuery('#logform .login-password').after('<div class="reg_message log_msg wr_log_msg">Wrong email or password, please try again!</div>');
+    jQuery('#logform .login-password').after('<div class="reg_message log_msg wr_log_msg">Wrong username or password, please try again!</div>');
     
     jQuery('#wp-submit').on('click', function(){
         jQuery('.loader2').fadeIn();
@@ -400,7 +400,7 @@ $(document).ready(function() {
             data: {user_log: 1},
             success: function(data) {
                 if(data == 'active'){
-                    
+                    jQuery('#logform').submit();
                 }else if(data == 'inactive'){
                     jQuery('#wrap_forms, .loader2').hide();
                     jQuery('.log_msg').fadeIn();
@@ -413,6 +413,29 @@ $(document).ready(function() {
         };
         $('#logform').ajaxSubmit(options);
 
+    });
+    
+    jQuery('#wp-submit2').on('click', function(){
+        
+        var options = {
+            url:'', 
+            data: {user_log: 1},
+            success: function(data) {
+                if(data == 'active'){
+                    jQuery('#top_access').submit();
+                }else if(data == 'inactive'){
+                    jQuery('.log_err2').fadeIn();
+                    
+                }else if(data == 'wrong'){
+                    jQuery('.log_err1').fadeIn();
+                }
+            } 
+        };
+        
+        $('#top_access').ajaxSubmit(options);
+        
+        //do not submit the form
+        return false;
     });
     
     

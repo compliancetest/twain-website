@@ -1463,17 +1463,9 @@ function save_conf_level($post_id) {
 }
 
 
-//user registration
-if  (isset($_POST['form_set'])){
-	add_action('template_redirect', 'create_new_user');
-}
-
-function set_html_content_type()
-{
-	return 'text/html';
-}
-
-//check captcha
+/*--------------------------------------------------
+Check captcha
+--------------------------------------------------*/
 if (isset($_GET['check_captcha'])) {
 	if (!isset($_SESSION)) {
 		session_start();
@@ -1486,7 +1478,15 @@ if (isset($_GET['check_captcha'])) {
 	exit();
 }
 
-//create new user account
+
+/*--------------------------------------------------
+Create new user account
+--------------------------------------------------*/
+function set_html_content_type()
+{
+	return 'text/html';
+}
+
 function create_new_user(){
 	global $wpdb;
 	$user_id = wp_create_user( $_POST['user_login'], $_POST['user_pass'], $_POST['user_email'] );  
@@ -1520,47 +1520,57 @@ function create_new_user(){
 	remove_filter( 'wp_mail_content_type', 'set_html_content_type' );  
 }
 
-
-function redirect(){
-	wp_redirect(get_bloginfo('home_url'));
+if  (isset($_POST['form_set'])){
+	add_action('template_redirect', 'create_new_user');
 }
 
-/*Inactive users*/
-if(isset($_POST['user_log'])){
- 
-        $get_user = get_user_by('email', $_POST['log']);
-        
-        if(!empty($get_user->user_login)){
-            $username = $get_user->user_login;
-            $user = get_user_by('login', $username);
-            $user_status = $user->user_status;
-            $redirect = wp_logout_url( home_url() );
 
-            if($user_status > 0){
-                die('active');
-                 //wp_logout();
-                 //wp_redirect( 'http://nego-solutions.com/dev-clients/compliance/' ); 
-                 exit();
-            }else{
-                die('inactive');
-            }
-            
-        }else{
-            die('wrong');
-        }
+
+/*--------------------------------------------------
+Login With Email address 
+--------------------------------------------------*/
+function login_with_email_address($username) {
+    $user = get_user_by_email($username);
+    if(!empty($user->user_login))
+        $username = $user->user_login;
+    return $username;
+}
+add_action('wp_authenticate','login_with_email_address');
+
+
+
+/*--------------------------------------------------
+PROGRESS LOGIN
+--------------------------------------------------*/
+if(isset($_POST['user_log'])){
     
-        
-        
-     /*Login With Email address 
-    function login_with_email_address($username) {
-        $user = get_user_by_email($username);
-        if(!empty($user->user_login))
-            $username = $user->user_login;
-        return $username;
+    $parsUsername = $_POST['log'];
+    $parsPassword = $_POST['pwd'];
+    
+    //check the username type (email/user)
+    if(filter_var($parsUsername, FILTER_VALIDATE_EMAIL)){
+        $get_user = get_user_by('email', $parsUsername);
+    }else{
+        $get_user = get_user_by('login', $parsUsername);
     }
-    add_action('wp_authenticate','login_with_email_address');  */ 
+    
+    //check if user and pass are correct
+    if ( $get_user && wp_check_password( $parsPassword, $get_user->data->user_pass, $get_user->ID) ){
+
+        $user_status = $get_user->user_status;
         
-    //add_action('wp_authenticate','inactive_users_login');
+        //check user status (active/inactive)
+        if($user_status > 0){
+            die('inactive'); 
+             exit();
+        }else{
+            echo'active';
+            exit();
+        }
+
+    }else{
+        die('wrong');
+    }
 }
 
 /* Frontend Add new Test Suite */
