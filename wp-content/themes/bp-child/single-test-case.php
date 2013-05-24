@@ -60,7 +60,7 @@ get_header();
 							<p>Outcome Type: <span><?php meta ('outcome_type'); ?></span></p>
 						</div>
 						<div class="grid_cell width15P left">
-							<p>Message Count: <span><?php meta ('message_count'); ?></span></p>
+							<p>Test Pattern: <span><?php meta ('message_count'); ?></span></p>
 						</div>
 						<div class="grid_cell width15P left">	
 							<p>Bulk: <span><?php meta ('bulk'); ?></span></p>
