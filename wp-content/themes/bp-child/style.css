@@ -1058,7 +1058,7 @@ font-family: 'Open Sans', Arial, sans-serif;
 font-size: 13px;
 text-shadow: 0px 1px 0px #20436b;
 padding-left: 20px; } 
-#cssmenu > ul > li:first-child > a{border-radius:5px 0 0 5px;} 
+/*#cssmenu > ul > li:first-child > a{border-radius:5px 0 0 5px;} */
 #cssmenu > ul > li > a:after{ content:''; position:absolute; border-right:1px solid; top:-1px; bottom:-1px; right:-2px; z-index:99; } 
 #cssmenu ul li.has-sub:hover > a:after{top:0; bottom:0;} 
 /*
@@ -2908,6 +2908,8 @@ background-image: url(images/white_gloss.png);
 	-moz-border-radius: 4px;
 	-o-border-radius: 4px;
 	color:#fff;
+    padding: 0px;
+    cursor: pointer;
 	text-shadow: 0px -1px 0px #0B2133;
 	width: 255px !important;
 	height: 35px;
@@ -3266,7 +3268,7 @@ background-image: url(images/white_gloss.png);
 	font-family:Arial;
 }
 
-#my_profile input[type="text"]{
+#my_profile input[type="text"], #my_profile input[type="password"]{
 background: #fff;
 padding: 4px 15px;
 border-radius: 3px;
@@ -4067,4 +4069,9 @@ display:block !important;
 	background: #ffffff;
 }
 
-
+.profile_btn.button.green_bcg.white_txt{
+    display: none;
+    clear: both;
+    float: left;
+    margin: 5px 0;
+}

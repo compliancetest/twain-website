@@ -1914,6 +1914,7 @@ function save_conf_level($post_id) {
 }
 
 
+
 /*--------------------------------------------------
 Check captcha
 --------------------------------------------------*/
@@ -1997,9 +1998,10 @@ if(isset($_POST['user_log'])){
     
     $parsUsername = $_POST['log'];
     $parsPassword = $_POST['pwd'];
+    $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
     
     //check the username type (email/user)
-    if(filter_var($parsUsername, FILTER_VALIDATE_EMAIL)){
+    if(preg_match($email_regex, $parsUsername)){
         $get_user = get_user_by('email', $parsUsername);
     }else{
         $get_user = get_user_by('login', $parsUsername);
@@ -2022,7 +2024,124 @@ if(isset($_POST['user_log'])){
     }else{
         die('wrong');
     }
+    
 }
+
+
+//redirect to user profile after login
+function custom_login_redirect( $redirect_to, $request, $user ){
+    return home_url().'/my-profile';
+}
+add_filter( 'login_redirect', 'custom_login_redirect', 10, 3 );
+
+/*--------------------------------------------------
+My Details updates
+--------------------------------------------------*/
+if($_POST['my_details_edit']){
+    
+    $user_id = $_POST['user_id'];
+    $uname = explode(' ', $_POST['uname']);
+    $user_email = email_exists( $_POST['email']);
+    $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
+    $newPass = $_POST['new_pass'];
+    $confPass = $_POST['conf_pass'];
+    $errors = 'no_errors';
+    
+    //update user name
+    if($_POST['uname'] && $_POST['uname']!=''){
+        update_user_meta($user_id, 'first_name', $uname[1]);
+        update_user_meta($user_id, 'last_name', $uname[0]);
+    }
+    
+    //update user email
+    if(isset($_POST['email']) && preg_match($email_regex, $_POST['email'])){
+        if($user_email==false){
+            wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr( $_POST['email'])));
+
+        }else if($user_email!=$user_id){
+           $errors = 'This email address already exists!';
+        }
+    }else{
+        $errors = 'This email address is not valid!';
+    }
+    
+    //update user passwords
+    if(isset($confPass) && $confPass!=''){
+    
+        if($newPass == $confPass){
+            $user_pass = get_userdata($_POST['user_id']);
+            
+            wp_update_user( array ('ID' => $user_id, 'user_pass' => $confPass) ) ;
+
+        }else{
+            $errors = 'The passwords do no match!';
+        }
+    }
+ 
+    echo $errors;
+    
+    //die('success');
+    exit();
+}
+
+
+/*--------------------------------------------------
+My Payment Method updates
+--------------------------------------------------*/
+
+//check card number
+function check_cc($cc, $extra_check = false){
+    $cards = array(
+        "visa" => "(4\d{12}(?:\d{3})?)",
+        "amex" => "(3[47]\d{13})",
+        "jcb" => "(35[2-8][89]\d\d\d{10})",
+        "maestro" => "((?:5020|5038|6304|6579|6761)\d{12}(?:\d\d)?)",
+        "solo" => "((?:6334|6767)\d{12}(?:\d\d)?\d?)",
+        "mastercard" => "(5[1-5]\d{14})",
+        "switch" => "(?:(?:(?:4903|4905|4911|4936|6333|6759)\d{12})|(?:(?:564182|633110)\d{10})(\d\d)?\d?)",
+    );
+    $names = array("Visa", "American Express", "JCB", "Maestro", "Solo", "Mastercard", "Switch");
+    $matches = array();
+    $pattern = "#^(?:".implode("|", $cards).")$#";
+    $result = preg_match($pattern, str_replace(" ", "", $cc), $matches);
+    if($extra_check && $result > 0){
+        $result = (validatecard($cc))?1:0;
+    }
+    return ($result>0)?$names[sizeof($matches)-2]:false;
+}
+
+
+if(isset($_POST['my_payment_edit'])){
+    
+    $user_id = $_POST['user_id'];
+    $card_number = $_POST['card_number'];
+    $name_on_card = $_POST['name_on_card'];
+    $card_expiry = $_POST['card_expiry'];
+    $card_cvc = $_POST['card_cvc'];
+    
+    $errors = 'no_errors';
+    
+    //$check = check_cc($card_number, true);
+    
+    
+    if($card_number!=''){
+        update_user_meta( $user_id, 'card_number', $card_number);
+    }
+    if($name_on_card!=''){
+        update_user_meta( $user_id, 'name_on_card', $name_on_card);
+    }
+    if($card_expiry!=''){
+        update_user_meta( $user_id, 'card_expiry', $card_expiry);
+    }
+    if($card_cvc!=''){
+        update_user_meta( $user_id, 'card_cvc', $card_cvc);
+    }
+    
+    echo $errors;
+    
+    exit();
+}
+
 
 /* Frontend Add new Test Suite */
 function insert_attachment($file_handler,$post_id,$setthumb=false) {

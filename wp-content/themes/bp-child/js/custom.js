@@ -283,7 +283,11 @@ $(document).ready(function() {
             jQuery('.err').fadeOut();
         });
 		
-    //register form validation    
+        
+        
+    /*---------------------------------------------
+    register form validation 
+    ---------------------------------------------*/
 	jQuery('#reg_user').on('click', function(){
 		var firstname = jQuery("#first_name_id").val();
 		var lastname =	jQuery("#last_name_id").val();
@@ -357,39 +361,17 @@ $(document).ready(function() {
 		}
         
         
-    });	
-		
-	/*$('#formreg').submit(function(){
-		var allow_submit = false;
-		$.ajax({
-			url: '?check_captcha=1',
-			type: "POST",
-			async: false,
-			data: {captcha: $('#captcha_reg').val(), check_captcha: 1},
-			success: function(data) {
-				if (data == 'success') {
-					allow_submit = true;
-				} else {
-					jQuery('.err').text('Captcha not correct!');
-					jQuery('.err').show('slow');
-				}
-			}
-		});
-        
-        if(allow_submit){
-            $('#formreg').ajaxForm();
-        }else{
-            
-            return false;
-        }
-        
-		//return allow_submit;
-	});*/
+    });
 	
     
+    
+    /*----------------------------------------------------
+     progress login from popup
+     ----------------------------------------------------*/
     //replace login button
-    jQuery('#logform .login-submit').remove();
-    jQuery('#logform .login-password').after('<div id="wp-submit">Login</div><div class="loader2"></div>');
+    //jQuery('#logform .login-submit').remove();
+    //jQuery('#logform .login-password').after('<div id="wp-submit">Login</div><div class="loader2"></div>');
+    jQuery('#logform .login-submit').after('<div class="loader2"></div>');
     jQuery('#logform .login-password').after('<div class="reg_message log_msg wr_log_msg">Wrong username or password, please try again!</div>');
     
     jQuery('#wp-submit').on('click', function(){
@@ -412,9 +394,16 @@ $(document).ready(function() {
             } 
         };
         $('#logform').ajaxSubmit(options);
+        
+        //do not submit the form
+        return false;
 
     });
     
+    
+    /*----------------------------------------------------
+     progress login from top form
+     ----------------------------------------------------*/
     jQuery('#wp-submit2').on('click', function(){
         
         var options = {
@@ -464,8 +453,11 @@ $(document).ready(function() {
 		jQuery('.current_chosen').replaceWith('<a id="'+sel_id+'" class="current_chosen">'+sel_name+'</a>');
 	});
 	
-    //search validate
     
+    
+    /*---------------------------------------------
+    search validate
+    ---------------------------------------------*/
     jQuery("#hidden_value").val('');
     
 	jQuery('.search_select, #searchform').on('click submit', function(event) {
@@ -486,7 +478,7 @@ $(document).ready(function() {
                     return false;
                 }
                 
-                break;
+            break;
                 
             case'click':
                 if(thisElem.hasClass('search_select')){
@@ -504,14 +496,13 @@ $(document).ready(function() {
                             return false;
                         }
                     });
-                    
-                    
                 }
-                
-                break;
+            break;
         }
         
     });
+
+
 
 	// Dashboard Add New Test Suite 
 	
@@ -588,8 +579,53 @@ $(document).ready(function() {
 		jQuery(".simple_tooltip_pop").fadeOut(1000);
 	});
 	
-	jQuery("#user_pass").focus(function () {
+	jQuery("#user_pass").focus(function(){
 		jQuery(".simple_tooltip_pop").fadeOut(1000);
 	});
+    
+    
+    
+    /*---------------------------------------------
+    my profile edits
+    ---------------------------------------------*/
+   jQuery('.edit_btn').on('click', function(){
+        var thisParentId = '#'+jQuery(this).parents('.default_grid').attr('id');
+        
+        jQuery(thisParentId+' .profile_btn').fadeIn();
+        
+        //transform all divs in inputs
+        jQuery(thisParentId+' .grid_cell.in_input').each(function(){
+           var thisTextVal = jQuery(this).text(); 
+           var thisNameVal = jQuery(this).attr('name'); 
+           
+           if(jQuery(this).hasClass('input_pass')){
+                jQuery(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
+           }else{
+                jQuery(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
+           }
+        });
+        
+    });
+    
+    //save my details updates
+    jQuery(document).on('click', '.profile_btn', function(){
+        
+        var getThisForm = '#'+jQuery(this).parents('.default_grid').attr('id');
+        jQuery('.errors_msg').hide();
+        
+        var options = {
+            url:'',
+            //data: {profile_edits: 1},
+            success: function(data){
+               if(data=='no_errors'){
+                    location.reload(); 
+               }else{
+                   jQuery(getThisForm+' .errors_msg').text(data).fadeIn();
+               }
+            } 
+        };
+        $(getThisForm+' form').ajaxSubmit(options);
+    });
+    //asdadsad sadsad sa
 
 });
