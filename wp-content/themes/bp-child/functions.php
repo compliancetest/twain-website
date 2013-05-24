@@ -506,7 +506,7 @@ function select_test_suites(){
 	foreach($current_test_suites as $key => $test_suites){?>
 	<div class="elem-ts"> <div class="elem-ts">
 		<select name="test_suites[]" class="testsuite_values">
-			<option value="">Select Test Cases</option>
+			<option value="">Select Test Suties</option>
 			<?php
 			while ( $loop->have_posts() ) : $loop->the_post();
 				 ?>
