@@ -481,6 +481,7 @@ function save_test_suites($post_id) {
 } 
 
 
+
 /*Metabox Test Case Page */
 function add_test_execution_metaboxes(){
 	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
@@ -555,7 +556,9 @@ function select_test_suites(){
 			//Select Test Suite, Show Roles & Initiating Message
 			
 			if (jQuery(".testsuite_values").val() ==''){
-				jQuery("#choose_roles_metabox .inside").html('First choose a test suite');
+				jQuery("#choose_roles_metabox .inside #tester_role").html('<b>Tester Role</b><br />First choose a test suite');
+				jQuery("#choose_roles_metabox .inside #harness_role").html('<b>Harness Role</b><br />First choose a test suite');
+				jQuery("#choose_roles_metabox .inside #initiator_role").html('<b>Initiator</b><br />First choose a test suite');
 				jQuery("#choose_initiating_message_metabox .inside").html('First choose a test suite');
 				jQuery("#choose_level_metabox .inside").html('First choose a test suite');
 			}
@@ -838,7 +841,7 @@ if(isset($_POST['testsuite_id_tester'])){
 		foreach($test_roles as $test_role){
 			echo '<option value="'.$test_role.'" class="'.$_POST['testsuite_id_tester'].'">'.$test_role.'</option>';
 			}
-		echo '</select> </div> <br />';
+		echo '</select> </div>';
 		exit();
 	}
 	else{
@@ -1044,6 +1047,7 @@ function show_choose_roles(){
 		}	
 	}
 	echo '</select> </div> <br />';
+	
 	//Harness Role
 	echo '<div id="harness_role"><label for="choose_harness_role"><b>Harness Role</b></label><br />';
 	echo '<select name="choose_harness_role">';
@@ -1351,7 +1355,6 @@ function save_test_execution($post_id) {
 	$initiator = $_POST['choose_initiator'];
 	update_post_meta($post_id, 'choose_initiator',$initiator);
 } 
-
 /* Metaboxes Test Suite Page */
 
 function add_custom_metaboxes(){
