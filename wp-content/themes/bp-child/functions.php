@@ -1702,7 +1702,7 @@ function show_spec_doc(){
 					<input type="text" name="doc_desc[]" value="<?php echo $doc_desc; ?>" size="30" class="mf_text"/> 
 					
 					<br />
-					<div class="button remove_doc left">Remove Document</div>
+					<div class="button remove_doc left">Remove</div>
 					<br /> <br />
 				</div> </div> 
 				
@@ -1735,7 +1735,7 @@ function show_spec_doc(){
 					<input type="text" name="doc_desc[]" size="30" class="mf_text"/> 
 					<br clear="all" />
 					
-					<div class="button remove_doc left">Remove Document</div>
+					<div class="button remove_doc left">Remove</div>
 					<br /> <br />
 				</div> 
 				 <?php
@@ -1747,7 +1747,7 @@ function show_spec_doc(){
     </div>
     
     </div>
-    <a class="add_new_doc button right">Add Another Document</a>
+    <a class="add_new_doc button right">Add</a>
 
     <div class="clear"></div>
     
@@ -1835,7 +1835,7 @@ function show_conf_levels(){
 					
 					<br clear="all" />
 					
-					<div class="button remove_lvl left">Remove Conformance Description</div>
+					<div class="button remove_lvl left">Remove</div>
 					<br /> <br />
 				</div> </div>
 				
@@ -1854,7 +1854,7 @@ function show_conf_levels(){
 					<input type="text" name="lvl_desc[]" size="30" class="mf_text"/> 
 					<br clear="all" />
 					
-					<div class="button remove_lvl left">Remove Conformance Description</div>
+					<div class="button remove_lvl left">Remove</div>
 					<br /> <br />
 				</div> </div>
 				 <?php
@@ -1867,7 +1867,7 @@ function show_conf_levels(){
 	</div>
     
     </div>
-    <a class="add_new_lvl button right">Add related Suite</a>
+    <a class="add_new_lvl button right">Add</a>
 
     <div class="clear"></div>
 
