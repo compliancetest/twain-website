@@ -1428,65 +1428,20 @@ function show_initiating_message(){
 function show_test_cases(){
 	global $post;
 	$post_backup = $post;
-	$current_test_cases = get_post_meta($post->ID, 'test_cases', true);
-	
-	echo '<input type="hidden" name="custom_test_cases" value="', wp_create_nonce(basename(__FILE__)), '" />';
 	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
-	
-	
-	foreach($current_test_cases as $key => $test_cases){?>
-	<div class="elem-tc"> <div class="elem-tc">
-		<select name="test_cases[]">
-			<option value="">Select Test Cases</option>
-			<?php
-			while ( $loop->have_posts() ) : $loop->the_post();
-				 ?>
-				 
-				 <option <?php if (get_the_ID() == $test_cases) { echo 'selected="selected"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
-				<?php
-			endwhile;
-			?>
-		</select>
-		<div class="button remove_tc left">Remove Test Case</div>
-		<br clear="all" />
-	</div> </div>	
-	<?php } 
-	
-	if (empty($current_test_cases)){?>
-		<select name="test_cases[]">
-				<option value="">Choose Related Suite</option>
-				<?php
-				while ( $loop->have_posts() ) : $loop->the_post();
-					 ?>
-					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
-					<?php
-				endwhile;
-				?>
-		</select>
-		<br  clear="all" />
-	<?php }
-	$post = $post_backup;
-	?>
-	<div class="copy-correct-tc">	
-    </div>
-    
-    <a class="add_new_tc button right">Add Test Case</a>
-    
-    <div class="clear"></div>
-    
-    <script type="text/javascript">
-	jQuery(document).ready(function() {
-		jQuery(".add_new_tc").click(function(data) {
-			jQuery('.copy-correct-tc').append(jQuery('.elem-tc').html());
-			//jQuery('.copy-correct input, .copy-correct select').val('');
-		});
-		jQuery(".remove_tc").live('click', function() {
-			jQuery(this).parents('.elem-tc').remove();
-		});
-	});
-    </script>	
-	<?php
-} 
+	while ( $loop->have_posts() ) : $loop->the_post();
+		$id = get_the_ID();
+		$test_cases_assoc = get_post_meta($id, 'test_suites', true);
+		foreach($test_cases_assoc as $test_case_assoc){
+			if ($test_case_assoc == $_GET['post']){
+				echo '<a href="'.get_permalink().'" target="_blank">'.get_the_title().'</a>';
+				//echo $test_case_assoc;
+				echo '<br />';
+			}
+		}
+	endwhile;
+
+}
 
 add_action('save_post', 'save_test_case_post');
 
