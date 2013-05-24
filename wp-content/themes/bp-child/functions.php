@@ -506,7 +506,7 @@ function select_test_suites(){
 	foreach($current_test_suites as $key => $test_suites){?>
 	<div class="elem-ts"> <div class="elem-ts">
 		<select name="test_suites[]" class="testsuite_values">
-			<option value="">Select Test Suties</option>
+			<option value="">Select Test Suites</option>
 			<?php
 			while ( $loop->have_posts() ) : $loop->the_post();
 				 ?>
@@ -604,10 +604,10 @@ function select_test_suites(){
 						});
 						
 						if(getData_tester[0] == 0){
-							jQuery("#choose_roles_metabox .inside").html(getData_tester[1]);
+							jQuery("#choose_roles_metabox .inside #tester_role").html(getData_tester[1]);
 						}
 						else if(getData_tester[0] == 1){
-							jQuery("#choose_roles_metabox .inside #checktester").append(getData_tester[1]);
+							jQuery("#choose_roles_metabox .inside #tester_role #checktester").append(getData_tester[1]);
 							//Remove Duplicates
 							var usedNames_tester = {};
 							jQuery("#checktester option").each(function () {
@@ -652,10 +652,10 @@ function select_test_suites(){
 						});
 
 						if(getData_harness[0] == 0){
-							jQuery("#choose_roles_metabox .inside").append(getData_harness[1]);
+							jQuery("#choose_roles_metabox .inside #harness_role").html(getData_harness[1]);
 						}
 						else if(getData_harness[0] == 1){
-							jQuery("#choose_roles_metabox .inside #checkharness").append(getData_harness[1]);
+							jQuery("#choose_roles_metabox .inside #harness_role #checkharness").append(getData_harness[1]);
 							//Remove Duplicates
 							var usedNames_harness = {};
 							jQuery("#checkharness option").each(function () {
@@ -700,10 +700,10 @@ function select_test_suites(){
 						});
 
 						if(getData_initiator[0] == 0){
-							jQuery("#choose_roles_metabox .inside").append(getData_initiator[1]);
+							jQuery("#choose_roles_metabox .inside #initiator_role").html(getData_initiator[1]);
 						}
 						else if(getData_initiator[0] == 1){
-							jQuery("#choose_roles_metabox .inside #checkinitiator").append(getData_initiator[1]);
+							jQuery("#choose_roles_metabox .inside #initiator_role #checkinitiator").append(getData_initiator[1]);
 							//Remove Duplicates
 							var usedNames_initiator = {};
 							jQuery("#checkinitiator option").each(function () {
@@ -831,14 +831,14 @@ if(isset($_POST['testsuite_id_tester'])){
 	if($_POST['checkElem_tester']==0){
 		echo '0##';
 		//Tester Roles - Select
-		echo '<label for="choose_tester_role"><b>Tester Role</b></label><br />';
+		echo '<div id="tester_role"><label for="choose_tester_role"><b>Tester Role</b></label><br />';
 		echo '<select name="choose_tester_role" id="checktester">';
 		echo '<option value="">Choose Tester Role</option> ';
 		
 		foreach($test_roles as $test_role){
 			echo '<option value="'.$test_role.'" class="'.$_POST['testsuite_id_tester'].'">'.$test_role.'</option>';
 			}
-		echo '</select>';
+		echo '</select> </div> <br />';
 		exit();
 	}
 	else{
@@ -857,14 +857,14 @@ if(isset($_POST['testsuite_id_harness'])){
 	if($_POST['checkElem_harness']==0){
 		echo '0##';
 		//Harness Roles - Select
-		echo '<br /><label for="choose_harness_role"><b>Harness Role</b></label><br />';
+		echo '<div id="harness_role"><label for="choose_harness_role"><b>Harness Role</b></label><br />';
 		echo '<select name="choose_harness_role" id="checkharness">';
 		echo '<option value="">Choose Harness Role</option> ';
 		
 		foreach($harness_roles as $harness_role){
 			echo '<option value="'.$harness_role.'" class="'.$_POST['testsuite_id_harness'].'">'.$harness_role.'</option>';
 			}
-		echo '</select>';
+		echo '</select> </div> ';
 		exit();
 	}
 	else{
@@ -884,14 +884,14 @@ if(isset($_POST['testsuite_id_initiator'])){
 	if($_POST['checkElem_initiator']==0){
 		echo '0##';
 		//Initiator Roles - Select
-		echo '<br /><label for="choose_initiator"><b>Initiator</b></label><br />';
+		echo '<div id="initiator_role"><label for="choose_initiator"><b>Initiator</b></label><br />';
 		echo '<select name="choose_initiator" id="checkinitiator">';
 		echo '<option value="">Choose Initiator</option> ';
 		
 		foreach($initiator_roles as $initiator_role){
 			echo '<option value="'.$initiator_role.'" class="'.$_POST['testsuite_id_initiator'].'">'.$initiator_role.'</option>';
 			}
-		echo '</select>';
+		echo '</select> </div> <br />';
 		exit();
 	}
 	else{
@@ -1024,7 +1024,7 @@ function show_choose_roles(){
 	
 	//Roles Test Suite Associated
 	//Tester Role
-	echo '<label for="choose_tester_role"><b>Choose Tester Role</b></label><br />';
+	echo '<div id="tester_role"><label for="choose_tester_role"><b>Tester Role</b></label><br />';
 	echo '<select name="choose_tester_role" id="checktester">';
 	echo '<option value="">Choose Tester Role</option>';
 	foreach ($current_test_suite as $test_suite){
@@ -1043,9 +1043,9 @@ function show_choose_roles(){
 			}
 		}	
 	}
-	echo '</select> <br />';
+	echo '</select> </div> <br />';
 	//Harness Role
-	echo '<label for="choose_harness_role"><b>Choose Harness Role</b></label><br />';
+	echo '<div id="harness_role"><label for="choose_harness_role"><b>Harness Role</b></label><br />';
 	echo '<select name="choose_harness_role">';
 	echo '<option value="">Choose Harness Role</option>';
 	foreach ($current_test_suite as $test_suite){
@@ -1064,10 +1064,10 @@ function show_choose_roles(){
 			}
 		}	
 	}
-	echo '</select> <br />';
+	echo '</select> </div> <br />';
 	
 	//Initiator
-	echo '<label for="choose_initiator"><b>Choose Harness Role</b></label><br />';
+	echo '<div id="initiator_role"><label for="choose_initiator"><b>Initiator</b></label><br />';
 	echo '<select name="choose_initiator">';
 	echo '<option value="">Choose Initiator</option>';
 	foreach ($current_test_suite as $test_suite){
@@ -1086,7 +1086,7 @@ function show_choose_roles(){
 			}
 		}	
 	}
-	echo '</select> <br />';
+	echo '</select> </div>';
 	
 	$post = $post_backup;
 }
@@ -1350,8 +1350,6 @@ function save_test_execution($post_id) {
 	update_post_meta($post_id, 'choose_harness_role',$harness_role);
 	$initiator = $_POST['choose_initiator'];
 	update_post_meta($post_id, 'choose_initiator',$initiator);
-	
-	
 } 
 
 /* Metaboxes Test Suite Page */
