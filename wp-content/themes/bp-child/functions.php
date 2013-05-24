@@ -516,7 +516,7 @@ function select_test_suites(){
 			endwhile;
 			?>
 		</select>
-		<div class="button remove_ts left">Remove Test Suite</div>
+		<!--<div class="button remove_ts left">Remove Test Suite</div>-->
 	</div> </div>	
 	<?php } 
 	
