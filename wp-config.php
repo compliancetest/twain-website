@@ -82,7 +82,7 @@ define('WPLANG', '');
  * in their development environments.
  */
 
-define('WP_DEBUG', true);
+define('WP_DEBUG', false);
 
 
 define( 'BP_DOCS_SLUG', 'wiki' );
