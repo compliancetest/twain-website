@@ -533,7 +533,7 @@ function select_test_suites(){
 				?>
 		</select>
 		</div></div>
-		<br  clear="all" />
+		
 		 <?php
 		 }
 		$post = $post_backup;
