@@ -33,13 +33,15 @@ class more_types_object extends more_plugins_object_sputnik_8 {
 		foreach ($pages as $name => $page) {
 			if (array_key_exists('boxes', $page)) {
 				foreach((array) $page['boxes'] as $box_key) {
-					$box = $box_data[$box_key];
-					// add_meta_box($box['id'], $box['label'], $box['callback'], $name, 'normal');
-					$bp = (array_key_exists('position', (array) $box)) ? $box['position'] : '';
-					$position = ($bp == 'left') ? 'normal' : 'advanced';
-					// foreach ($box['post_types'] as $pt) {
-						add_meta_box(sanitize_title($box['id']), $box['title'], $box['callback'], $name, $position);
-					//}
+				    if(isset($box_data[$box_key])){
+						$box = $box_data[$box_key];
+						// add_meta_box($box['id'], $box['label'], $box['callback'], $name, 'normal');
+						$bp = (array_key_exists('position', (array) $box)) ? $box['position'] : '';
+						$position = ($bp == 'left') ? 'normal' : 'advanced';
+						// foreach ($box['post_types'] as $pt) {
+							add_meta_box(sanitize_title($box['id']), $box['title'], $box['callback'], $name, $position);
+						//}
+					}
 				}
 			}
 		}
