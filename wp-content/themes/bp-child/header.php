@@ -271,7 +271,8 @@
                             <h3><?php echo of_get_option('confidence_t'); ?></h3>
                             <p><?php echo of_get_option('confidence_d'); ?></p>
 
-                        <a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">Find out more reasons</a>
+                        <!-- RPV <a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">More Information</a> -->
+						<a href="<?php echo $_SERVER['SERVER_NAME']."/why-compliancetest/" ?>" class="right linkto" style="margin-bottom: -34px;">More Information</a>
                         </li>
                         <div class="clear"></div>
                         <li class="last left width280">
