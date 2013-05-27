@@ -2110,6 +2110,11 @@ margin: 15px auto;
 /* BuddyPress Docs & Wiki
  * */
  
+#toggle-table-settings {
+padding: 0px 14px;
+width: 96%;
+}
+ 
 #doc-edit-submit{
 	height: 27px;
 	padding: 0px 10px;
