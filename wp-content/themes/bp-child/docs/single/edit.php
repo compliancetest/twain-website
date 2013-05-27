@@ -17,8 +17,8 @@
 
 	<?php do_action( 'template_notices' ) ?>
 
-	<div class="doc-content">
-
+	<div class="doc-content white_bcg">
+	<div class="column padding20">
 	<div id="idle-warning" style="display:none">
 		<p><?php _e( 'You have been idle for <span id="idle-warning-time"></span>', 'bp-docs' ) ?></p>
 	</div>
@@ -150,7 +150,7 @@
 		<div style="clear: both"> </div>
 	    </div>
 	</form>
-
+	</div>
 	</div><!-- .doc-content -->
 
 	<?php bp_docs_inline_toggle_js() ?>
