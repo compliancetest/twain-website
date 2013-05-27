@@ -1,7 +1,7 @@
 		<div id="footer-wrapper">
 			<div class="footer">
 				<div id="menu-footer">
-					<h5>MENU</h5>
+					<h5>Company Information</h5>
 					<?php
 					wp_nav_menu( array(
 							'theme_location' => 'footer-menu',
