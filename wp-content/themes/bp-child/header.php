@@ -247,7 +247,7 @@
                          <p><?php echo of_get_option('implementers_d'); ?></p>
 
                         <!-- RPV <a href="<?php echo of_get_option('what_link'); ?>" class="right linkto">More Information</a> -->
-						<a href="<?php echo $_SERVER['SERVER_NAME']."what-is-compliance-test/" ?>" class="right linkto">More Information</a>
+						<a href="<?php echo $_SERVER['SERVER_NAME']."/what-is-compliance-test/" ?>" class="right linkto">More Information</a>
 						
 					  </li>
 					  <div class="clear"></div>
