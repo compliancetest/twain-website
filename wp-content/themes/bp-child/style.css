@@ -2110,6 +2110,55 @@ margin: 15px auto;
 /* BuddyPress Docs & Wiki
  * */
  
+#doc-edit-submit{
+	height: 27px;
+	padding: 0px 10px;
+}
+
+#cancel_wiki{
+	height: 27px;
+	padding: 5px 10px;
+	margin-left: 10px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-o-border-radius: 3px;
+}
+
+.plus{
+	font-size: 1.3em;
+	font-weight: normal;
+	display: block;
+	float: left;
+	width: 31px;
+	float: left !important;
+	margin: 9px 6px 2px 14px;
+	height: 31px;
+}
+ 
+.doc-content-wrapper label{
+	display: block;
+	clear: both;
+	font-weight: bold;
+	font-size: 13px;
+	line-height: 27px;
+	text-shadow: none;
+	padding-top: 9px;
+}
+
+.doc-meta, #doc-meta, .docs #comments {
+	border-top: 0px !important;
+	padding-top:0px !important;
+}
+ 
+form.standard-form input[type="text"]#doc-title {
+width: 100% !important;
+} 
+ 
+div.doc-content {
+padding: 0px !important;
+} 
+ 
 .doc-content-wrapper input[type="text"] {
 width: 100%;
 border-radius: 6px;
@@ -2310,7 +2359,23 @@ color : #8C1916;
 background: none;
 }
 
+/* toggle
+ * */
+.doc-meta-box textarea{
+	background: #fff;
+	padding: 4px 15px;
+	border-radius: 3px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-o-border-radius: 3px;
+	min-height: 70px;
+}
 
+table {
+	width: 100%;
+	text-align: left;
+	margin: 10px auto;
+}
 
 #avatar-crop-submit{
 padding: 0px 10px;

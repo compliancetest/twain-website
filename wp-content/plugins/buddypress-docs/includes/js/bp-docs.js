@@ -29,10 +29,10 @@ jQuery(document).ready(function($){
 			// Swap the +/- in the link
 			var c = $(pom).html();
 
-			if ( c == '+' ) {
-				var mop = '-';
+			if ( c == '<img src="http://www.test.compliancetest.net/wp-content/themes/bp-child/images/grid_expandable_c.png" width="5px" class="plus">' ) {
+				var mop = '<img src="http://www.test.compliancetest.net/wp-content/themes/bp-child/images/grid_expandable_o.png" width="12px" class="minus">';
 			} else {
-				var mop = '+';
+				var mop = '<img src="http://www.test.compliancetest.net/wp-content/themes/bp-child/images/grid_expandable_c.png" width="5px" class="plus">';
 			}
 
 			$(pom).html(mop);
