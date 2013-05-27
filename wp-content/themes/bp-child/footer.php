@@ -15,7 +15,7 @@
 					?>
 				</div>
 				<div id="useful-links">
-					<h5>USEFUL LINKS</h5>
+					<h5>Site Information</h5>
 					<?php
 					wp_nav_menu( array(
 							'theme_location' => 'footer-menu2',
