@@ -22,7 +22,7 @@
 	<?php /* Quirk: We only need this if not running theme compat */ ?>
 
 	<div class="tab-content-docs white_bcg">
-		<div class="column padding20-10">
+		<div class="column padding20">
 			<?php bp_docs_the_content() ?>
 			<div class="clear"></div>
 		</div>	
