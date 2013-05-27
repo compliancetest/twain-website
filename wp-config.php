@@ -85,7 +85,7 @@ define('WPLANG', '');
 define('WP_DEBUG', false);
 
 
-define( 'BP_DOCS_SLUG', 'wiki' );
+//define( 'BP_DOCS_SLUG', 'wiki' );
 
 /* That's all, stop editing! Happy blogging. */
 
