@@ -180,7 +180,7 @@ a:hover {
 /* **************** FORM ELEMENTS *********************** */
 
 .small_input{
-    width: 20% !important;
+    width: 15% !important;
 }
 
 #top_acces_wrap {
@@ -2138,6 +2138,21 @@ display:none !important;
 display:none;
 }
 
+div#subnav.item-list-tabs.no-ajax h2{
+display:none;
+}
+
+div.doc-content{
+border:0px !important;
+}
+
+#buddypress h2{
+	color: #666666 !important;
+	font-weight: bold;
+	font-size: 20px;
+	margin-left: 20px;
+	padding-top: 20px;
+}
 
 #whats-new-form{
 /*display:none;*/

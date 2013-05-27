@@ -114,12 +114,12 @@ if(is_user_logged_in()){
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Expiry</b></div>
-                                <div name="card_expiry" class="grid_cell in_input"><?php echo get_user_meta($current_user->ID, 'card_expiry', true);?></div>
+                                <div name="card_expiry" class="grid_cell in_input small_input"><?php echo get_user_meta($current_user->ID, 'card_expiry', true);?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>CVC</b></div>
-                                <div name="card_cvc" class="grid_cell in_input"><?php echo get_user_meta($current_user->ID, 'card_cvc', true);?></div>
+                                <div name="card_cvc" class="grid_cell in_input small_input"><?php echo get_user_meta($current_user->ID, 'card_cvc', true);?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">

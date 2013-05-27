@@ -12,14 +12,18 @@ get_header();
 <div class="content container">
 	
 	
-<?php if (have_posts()) while (have_posts()) : the_post(); ?>
+<?php if (have_posts()) while (have_posts()) : the_post();
+if ((get_the_title()) == 'Create a Doc'){
+	
+	
+	}
+	else{
+	?>
 <div id="issuer_title_block">
 <div class="column four_fifths left">
-	<div id="item-header-avatar">
-		
+	<div id="item-header-avatar">	
 		<a href="http://nego-solutions.com/dev-clients/compliance/groups/standard-business-reporting-153144141/" title="Standard Business Reporting">
-			<?php
-	
+		<?php
 		if ( bp_is_active( 'groups' ) ) {
 		$doc_group_ids = bp_docs_get_associated_group_id( get_the_ID(), false, true );
 		$doc_groups = array();
@@ -64,27 +68,26 @@ get_header();
 	<h3 class="dark_gray_txt"><?php the_title(); ?></h3>
 	<p>
 <?php
-		echo $html;
-		$settings = bp_docs_get_doc_settings();
-		foreach ( $settings as $l => $v ) {
-		if ( 'anyone' == $v || $public_settings[ $l ] == $v ) {
+	echo $html;
+	$settings = bp_docs_get_doc_settings();
+	foreach ( $settings as $l => $v ) {
+	if ( 'anyone' == $v || $public_settings[ $l ] == $v ) {
 
-			$anyone_count++;
+		$anyone_count++;
 
-		} else if ( in_array( $v, array( 'admins-mods', 'creator', 'no-one', 'friends', 'group-members' ) ) ) {
+	} else if ( in_array( $v, array( 'admins-mods', 'creator', 'no-one', 'friends', 'group-members' ) ) ) {
 
-			if ( 'group-members' == $v ) {
-				if ( ! isset( $group_status ) ) {
-					$group_status = 'foo'; // todo
-				}
-
-				if ( 'public' != $group_status ) {
-					$private_count++;
-				}
-			} else {
-				$private_count++;
+		if ( 'group-members' == $v ) {
+			if ( ! isset( $group_status ) ) {
+				$group_status = 'foo'; // todo
 			}
 
+			if ( 'public' != $group_status ) {
+				$private_count++;
+			}
+		} else {
+			$private_count++;
+		}
 		}
 	}
 
@@ -106,14 +109,13 @@ get_header();
 		}
 					?>
 	</p>
+	
 </div>
-<div class="column fifth right">
-																
-</div>
+
 										
 			<div class="clear"></div>
 			</div> <!--end issuer_title_block-->
-			<h2><a href="<?php the_permalink(); ?>"></a></h2>
+			<?php } ?>
 				
 				<div class="content_inner">
 					<?php if (has_post_thumbnail()) {

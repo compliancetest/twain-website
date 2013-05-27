@@ -587,10 +587,16 @@ $(document).ready(function() {
     
     /*---------------------------------------------
     my profile edits
-    ---------------------------------------------*/
-   jQuery('.edit_btn').on('click', function(){
+    ---------------------------------------------*/      
+   //transform divs in inputs at click on edit button
+   jQuery(document).on('click', '.edit_btn', function(){
+       
         var thisParentId = '#'+jQuery(this).parents('.default_grid').attr('id');
+        var findInputs = jQuery(thisParentId+' .grid_row input:visible').size();
         
+        
+        if( findInputs == 0){
+
         jQuery(thisParentId+' .profile_btn').fadeIn();
         
         //transform all divs in inputs
@@ -600,10 +606,31 @@ $(document).ready(function() {
            
            if(jQuery(this).hasClass('input_pass')){
                 jQuery(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
+           }else if(jQuery(this).hasClass('small_input')){
+                jQuery(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
            }else{
-                jQuery(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
+               jQuery(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
            }
         });
+        
+        
+        }else{
+            jQuery(thisParentId+' .profile_btn').hide();
+            
+            //transform all inputs in divs
+            jQuery(thisParentId+' .grid_row input:visible').each(function(){
+               var thisTextVal = jQuery(this).val(); 
+               var thisNameVal = jQuery(this).attr('name'); 
+
+               if(jQuery(this).hasClass('input_pass')){
+                    jQuery(this).replaceWith('<div class="class="grid_cell in_input input_pass"" name="'+thisNameVal+'">'+thisTextVal+'</div>');
+               }else if(jQuery(this).hasClass('small_input')){
+                   jQuery(this).replaceWith('<div class="grid_cell in_input small_input" name="'+thisNameVal+'">'+thisTextVal+'</div>');
+               }else{
+                    jQuery(this).replaceWith('<div class="grid_cell in_input" name="'+thisNameVal+'">'+thisTextVal+'</div>');
+               }
+            });
+        }
         
     });
     
@@ -626,6 +653,5 @@ $(document).ready(function() {
         };
         $(getThisForm+' form').ajaxSubmit(options);
     });
-    //asdadsad sadsad sa
 
 });
