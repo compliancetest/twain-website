@@ -541,7 +541,7 @@ function select_test_suites(){
 		<div class="copy-correct-ts">	
 		</div>
 		
-		<a class="add_new_ts button right">Add Test Suite</a>
+		<a class="add_new_ts button right">Add</a>
 		
 		<div class="clear"></div>
 		
@@ -1150,7 +1150,7 @@ function show_test_execution(){
 	<div class="copy-correct-te">	
     </div>
     
-    <a class="add_new_te button right">Add New</a>
+    <a class="add_new_te button right">Add</a>
     
     <div class="clear"></div>
 
@@ -1213,7 +1213,7 @@ function show_test_data(){
 	<div class="copy-correct-td">	
     </div>
     
-    <a class="add_new_td button right">Add New</a>
+    <a class="add_new_td button right">Add</a>
     
     <div class="clear"></div>
 
@@ -1277,7 +1277,7 @@ function show_test_steps2(){
 	<div class="copy-correct-step">	
     </div>
     
-    <a class="add_new_step button right">Add New</a>
+    <a class="add_new_step button right">Add</a>
     
     <div class="clear"></div>
 
@@ -1561,7 +1561,7 @@ function show_ts(){
 						endwhile;
 						?>
 					</select>
-					<div class="button remove left">Remove Test Suite</div>
+					<div class="button remove left">Remove</div>
 					<br clear="all" />
 					
 					<label for="ts_desc"><b>Description</b></label> <br />
@@ -1587,7 +1587,7 @@ function show_ts(){
 						endwhile;
 						?>
 					</select>
-					<div class="button remove left">Remove Test Suite</div>
+					<div class="button remove left">Remove</div>
 
 				<br clear="all" />
 					<label for="ts_desc"><b>Description</b></label> <br />
@@ -1605,7 +1605,7 @@ function show_ts(){
 		
     </div>
     
-    <a class="add_new button right">Add related Suite</a>
+    <a class="add_new button right">Add</a>
 
     <div class="clear"></div>
     
