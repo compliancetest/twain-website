@@ -3717,6 +3717,12 @@ min-height: 70px;
 display:block !important;
 }
 
+.doc-content{
+	box-shadow: 0 0 3px #999;
+	-moz-box-shadow: 0 0 3px #999;
+	-webkit-box-shadow: 0 0 3px #999;
+	-o-box-shadow: 0 0 3px #999;
+}
 
 .tab-content:first-child {
 	display: block;
