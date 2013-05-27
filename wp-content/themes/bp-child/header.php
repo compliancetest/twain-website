@@ -272,7 +272,7 @@
                             <p><?php echo of_get_option('confidence_d'); ?></p>
 
                         <!-- RPV <a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">More Information</a> -->
-						<a href="<?php echo $_SERVER['SERVER_NAME']."/why-compliancetest/" ?>" class="right linkto" style="margin-bottom: -34px;">More Information</a>
+						<a href="<?php echo "http://".$_SERVER['SERVER_NAME']."/why-compliancetest/" ?>" class="right linkto" style="margin-bottom: -34px;">More Information</a>
                         </li>
                         <div class="clear"></div>
                         <li class="last left width280">
