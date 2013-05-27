@@ -178,6 +178,11 @@ a:hover {
 }
 
 /* **************** FORM ELEMENTS *********************** */
+
+.small_input{
+    width: 20% !important;
+}
+
 #top_acces_wrap {
 	width: 381px;
 }	
@@ -2095,15 +2100,44 @@ margin: 15px auto;
 .item-list-tabs ul li a{
 	font-weight: bold;
 	line-height: 16px;
+	margin: 20px;
 }
 
 .item-avatar img{
 	border:1px solid #c5c5c5;
 }
 
-#subnav{
-/*display:none;*/
+/* BuddyPress Docs & Wiki
+ * */
+ 
+.doc-content-wrapper input[type="text"] {
+width: 100%;
+border-radius: 6px;
+background: #fff;
+padding: 6px 15px;
 }
+
+div.doc-permissions {
+	float: right;
+	width: 35%;
+	background: #eee !important;
+	border: none !important;
+	border-radius: 0px !important;
+	padding: 4px;
+}
+
+#doc-group-summary {
+border: none !important;
+}
+
+#buddypress #bp-docs-all-docs li{
+display:none !important;
+}
+
+#buddypress div.doc-permissions {
+display:none;
+}
+
 
 #whats-new-form{
 /*display:none;*/
@@ -3270,6 +3304,7 @@ background-image: url(images/white_gloss.png);
 
 #my_profile input[type="text"], #my_profile input[type="password"]{
 background: #fff;
+width: 75%;
 padding: 4px 15px;
 border-radius: 3px;
 -webkit-border-radius: 4px;
