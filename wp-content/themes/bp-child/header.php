@@ -294,23 +294,25 @@
 							<li class="left width205">
 								<h3><?php echo of_get_option('testsuites_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('testsuites_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo of_get_option('testsuites_linkto'); ?>" class="read_more">Read More</a></p>
+								<!-- RPV <p class="nomarginleft"><a href="<?php echo of_get_option('testsuites_linkto'); ?>" class="read_more">Read More</a></p> -->
+								<?php $linkone = "/compliancetest-services/";?>
+								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('testsuites_linkto'); ?>" class="read_more">More Information</a></p>
 								<div class="clear"></div>
 								
 								<h3><?php echo of_get_option('collaboration_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('collaboration_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo of_get_option('collaboration_linkto'); ?>" class="read_more">Read More</a></p>		
+								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('collaboration_linkto'); ?>" class="read_more">More Information</a></p>		
 							</li>
 							<li class="left width300">
 								<h3><?php echo of_get_option('productrep_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('productrep_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo of_get_option('productrep_linkto'); ?>" class="read_more">Read More</a></p>		
+								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('productrep_linkto'); ?>" class="read_more">More Information</a></p>		
 							</li>
 							
 							<li class="last left width350">
 								<h3><?php echo of_get_option('testharness_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('testharness_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo of_get_option('testharness_linkto'); ?>" class="read_more">Read More</a></p>		
+								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('testharness_linkto'); ?>" class="read_more">More Information</a></p>		
 							</li>
 							<div class="clear"></div>
 						</ul>		
