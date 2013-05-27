@@ -80,8 +80,7 @@
 
 						<div class="toggle-content">
 							<table class="toggle-table" id="toggle-table-settings">
-								<tr><td><?php bp_docs_doc_settings_markup() ?></td>
-								</tr>
+								<?php bp_docs_doc_settings_markup() ?>
 							</table>
 						</div>
 					</div>
