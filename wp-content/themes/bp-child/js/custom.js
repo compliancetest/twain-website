@@ -131,7 +131,7 @@ $(document).ready(function() {
 	// EXPANDABLE GRID
 	///////////////////////////////////////////////////////
 	
-	$('.expandable').click(function(){
+	$('form[name="add_new_ts"] .expandable').click(function(){
 		$(this).toggleClass('open');
 		$(this).parent().parent().next().slideToggle('fast');
 	});
@@ -339,6 +339,10 @@ $(document).ready(function() {
                                     //alert('Thanks for your comment!'); 
                                     jQuery('#wrap_forms').hide();
                                     jQuery('.reg_message').fadeIn();
+                                    
+                                    setTimeout(function(){
+                                        location.reload();
+                                    },2000);
                                 } 
                             };
                             $('#formreg').ajaxSubmit(options);
@@ -363,7 +367,21 @@ $(document).ready(function() {
         
     });
 	
-    
+    //resend email verification
+    jQuery('#resend_email_verification').on('click', function(){
+        
+        var getThis = jQuery(this);
+        
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: {resend_email_verification: 1, uemail: jQuery('input[name="uemail"]').val(), uname: jQuery('input[name="uname"]').val()},
+            success: function(data){
+                //alert(data);
+                getThis.parent().parent().html('Email successfully sent! Please check your email address to verify your email');
+            }
+        });
+    });
     
     /*----------------------------------------------------
      progress login from popup
@@ -385,7 +403,7 @@ $(document).ready(function() {
                     jQuery('#logform').submit();
                 }else if(data == 'inactive'){
                     jQuery('#wrap_forms, .loader2').hide();
-                    jQuery('.log_msg').fadeIn();
+                    //jQuery('.log_msg').fadeIn();
                     
                 }else if(data == 'wrong'){
                     jQuery('.loader2').hide();
@@ -593,8 +611,7 @@ $(document).ready(function() {
        
         var thisParentId = '#'+jQuery(this).parents('.default_grid').attr('id');
         var findInputs = jQuery(thisParentId+' .grid_row input:visible').size();
-        
-        
+
         if( findInputs == 0){
 
         jQuery(thisParentId+' .profile_btn').fadeIn();
@@ -606,8 +623,15 @@ $(document).ready(function() {
            
            if(jQuery(this).hasClass('input_pass')){
                 jQuery(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
+                
            }else if(jQuery(this).hasClass('small_input')){
                 jQuery(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
+           
+           }else if(jQuery(this).hasClass('card_no')){
+               var getthisTextVal = jQuery('input[name="card_no"]').val();
+               
+               jQuery(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+getthisTextVal+'"/>');
+           
            }else{
                jQuery(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
            }
@@ -615,21 +639,26 @@ $(document).ready(function() {
         
         
         }else{
-            jQuery(thisParentId+' .profile_btn').hide();
-            
-            //transform all inputs in divs
-            jQuery(thisParentId+' .grid_row input:visible').each(function(){
-               var thisTextVal = jQuery(this).val(); 
-               var thisNameVal = jQuery(this).attr('name'); 
+           
+           var countEmptyInputs = $(thisParentId+' .grid_row input:visible').filter(function(){return !$(this).val();}).length;
+           //alert(countEmptyInputs);
+           
+           if(countEmptyInputs == 0){
+                jQuery(thisParentId+' .profile_btn').hide();
+                //transform all inputs in divs
+                jQuery(thisParentId+' .grid_row input:visible').each(function(){
+                    var thisTextVal = jQuery(this).val(); 
+                    var thisNameVal = jQuery(this).attr('name');
 
-               if(jQuery(this).hasClass('input_pass')){
-                    jQuery(this).replaceWith('<div class="class="grid_cell in_input input_pass"" name="'+thisNameVal+'">'+thisTextVal+'</div>');
-               }else if(jQuery(this).hasClass('small_input')){
-                   jQuery(this).replaceWith('<div class="grid_cell in_input small_input" name="'+thisNameVal+'">'+thisTextVal+'</div>');
-               }else{
-                    jQuery(this).replaceWith('<div class="grid_cell in_input" name="'+thisNameVal+'">'+thisTextVal+'</div>');
-               }
-            });
+                    if(jQuery(this).hasClass('input_pass')){
+                         jQuery(this).replaceWith('<div class="class="grid_cell in_input input_pass"" name="'+thisNameVal+'">'+thisTextVal+'</div>');
+                    }else if(jQuery(this).hasClass('small_input')){
+                        jQuery(this).replaceWith('<div class="grid_cell in_input small_input" name="'+thisNameVal+'">'+thisTextVal+'</div>');
+                    }else{
+                         jQuery(this).replaceWith('<div class="grid_cell in_input" name="'+thisNameVal+'">'+thisTextVal+'</div>');
+                    }
+                });
+           }
         }
         
     });
