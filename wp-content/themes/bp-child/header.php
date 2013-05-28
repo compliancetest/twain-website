@@ -15,7 +15,9 @@
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery.form.js"></script>
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
-
+<script type="text/javascript">
+var HOMEURL = "<?php echo get_home_url(); ?>";
+</script>
 		<?php wp_head(); ?>
 	</head>
 

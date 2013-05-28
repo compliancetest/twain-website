@@ -2252,15 +2252,15 @@ function process_add_recipe()
 process_add_recipe();
 
 add_action('admin_head','print_vars');
-add_action('registered_post_type','print_vars');
+/*add_action('registered_post_type','print_vars');
 function print_vars(){
-	?>
-	<script type="text/javascript">
-	var HOMEURL = "<?php echo get_home_url(); ?>";
-	</script>
-	<?php
+?>
+<script type="text/javascript">
+var HOMEURL = "<?php echo get_home_url(); ?>";
+</script>
+<?php
 }
-
+*/
 function remove_file($id){
 	global $wpdb;
 	$result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}bp_groups_downloads WHERE id={$id}");
@@ -2302,5 +2302,3 @@ function my_front_end_login_fail( $username ) {
       exit;
    }
 }
-?>
-
