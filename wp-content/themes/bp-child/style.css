@@ -4277,7 +4277,7 @@ display:block !important;
 	background:#fff;
 	-webkit-border-radius: 3px;    
     border-radius: 3px;
-    width:290px;
+    width:294px;
     padding:8px 7px;
     margin:0 0 8px 3px;
 }
@@ -4288,10 +4288,10 @@ display:block !important;
 	background:#fff;
 	-webkit-border-radius: 3px;    
     border-radius: 3px;
-    width:620px;
+    width:632px;
     height:112px;
     min-height:112px;
-    margin:0 0 8px 2px;  
+    margin:0 0 0 3px;  
     padding:8px 7px;      
 }
 
