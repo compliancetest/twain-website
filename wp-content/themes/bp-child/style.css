@@ -4269,7 +4269,8 @@ display:block !important;
 
 .contact_form span {
 	color:#d02f27;
-	vertical-align: top;	
+	vertical-align:top;
+	font-size:11px;	
 }
 
 .contact_form input[type="text"] {
@@ -4293,6 +4294,11 @@ display:block !important;
     min-height:112px;
     margin:0 0 0 3px;  
     padding:8px 7px;      
+}
+
+.contact_form input[type="text"]:focus,
+.contact_form textarea:focus {
+	border:1px solid #9a9a9a;
 }
 
 .contact_form input[type="submit"]{
