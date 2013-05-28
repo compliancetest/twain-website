@@ -187,6 +187,33 @@ do_action( 'bp_before_group_header' );
 								</div>
 								<div class="grid_body noborder">
 								<?php
+								//Types
+						$occ_types = array();
+						foreach($_POST['type_name'] as $vall){
+							$checked =  str_replace('_',' ',$vall); 
+							array_push($occ_types,$checked);
+							}
+						
+						//Issuers
+						$occ_issuers = array();
+						foreach($_POST['issue_name'] as $vall){
+							$checked =  str_replace('_',' ',$vall); 
+							array_push($occ_issuers,$checked);
+							}
+						
+						//Date
+						$occ_dates = array();
+						foreach($_POST['date_name'] as $vall){
+							$checked =  str_replace('_',' ',$vall); 
+							array_push($occ_dates,$checked);
+							}
+						
+						//Status
+						$occ_statuses = array();
+						foreach($_POST['status_name'] as $vall){
+							$checked =  str_replace('_',' ',$vall); 
+							array_push($occ_statuses,$checked);
+							}
 								$current_test_suites = array();
 								$testsuites_result = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$group_id}");
 								foreach ($testsuites_result as $ts){
@@ -196,47 +223,157 @@ do_action( 'bp_before_group_header' );
 								$loop = new WP_Query( $args );
 								$roles_select = array();
 								while ( $loop->have_posts() ) : $loop->the_post();
-									$status = get_post_meta( get_the_ID(),'ts_status',true );
-									$date_field=get_post_meta($post->ID, 'ts_issue_date', true); 
-									$date_formated = date("M Y", strtotime($date_field)); // 2012
-									$roles_ts = get_post_meta($post->ID, 'tester_role_ts', true); 
-									$roles = explode(',',$roles_ts); 
-									//print_r($roles);
-									foreach ($roles as $role){
-										if (!in_array($role,$roles_select)){
-											array_push($roles_select,$role);
-											}
-										}
-									
-									echo '<div class="grid_row grid_row_border">
-											<div class="grid_cell width50P">
-												<a href="'.get_permalink().'" class="blue_txt"><h5>'.get_the_title().'</h5></a>
-											</div>
-											<div class="grid_cell width20P">'.$date_formated.'</div>';	
-									
-									if($status == 'Active') {
-									?>
-									<div class="grid_cell width15P"><a class="button green_bcg white_txt button_small radius3">ACTIVE</a></div>
-									<?php } else if($status == 'On Hold') { ?>
-									<div class="grid_cell width15P"><a class="button orange_bcg white_txt button_small radius3">ON HOLD</a></div>
-									<?php }	
+									$ts_issuer = get_post_meta($post->ID, 'ts_issuer', true);
+							$test_type = wp_get_post_terms($post->ID, 'test_suite_type', array("fields" => "all"));
+							$test_suite_type = $test_type[0]->name;
+							$date_filter=get_post_meta($post->ID, 'ts_issue_date', true); 
+							$date_prt2 = date("Y", strtotime($date_filter)); // format Nov 2012
+							$ts_status = get_post_meta($post->ID, 'ts_status', true);
+							
+							if (!empty($occ_types)) { 
+								//issuers
+								if (!empty($occ_issuers)){
+									//dates
+									if(!empty($occ_dates)){
+										//statuses
+										if(!empty($occ_statuses)){
+											$test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($ts_issuer,$occ_issuers)) && (in_array($date_prt2,$occ_dates)) && (in_array($ts_status,$occ_statuses)) );
+										} // status not set
+										else $test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($ts_issuer,$occ_issuers)) && (in_array($date_prt2,$occ_dates)) );
+									}
+									//dates NOT set
 									else {
+										//date NOT set ; status set
+										if(!empty($occ_statuses)){
+											$test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($ts_issuer,$occ_issuers)) && (in_array($ts_status,$occ_statuses)) );
+										} //date & status NOT set
+										else $test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($ts_issuer,$occ_issuers)) );
+									}
+								}
+								//issuers NOT set
+								else {
+									if(!empty($occ_dates)){
+										//date set										
+										if(!empty($occ_statuses)){
+											// issuers NOT set ; dates, statuses set
+											$test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($date_prt2,$occ_dates)) && (in_array($ts_status,$occ_statuses)) );
+											}
+										else{
+											//issuers , statuses NOT set
+											$test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($date_prt2,$occ_dates)) );
+											}	
+										}
+										else {
+											//date NOT set
+											if(!empty($occ_statuses)){
+											// issuers,dates  NOT set ; statuses set
+											$test_search = ( (in_array($test_suite_type,$occ_types)) && (in_array($ts_status,$occ_statuses)) );
+											}
+											else{
+												//issuers, date, statuses NOT set
+												$test_search =  (in_array($test_suite_type,$occ_types));
+												}	
+											}
+								}
+							}
+							else {
+								//type NOT set
+								if(!empty($occ_issuers)){
+									//issuers set
+									if(!empty($occ_dates)){
+										//issuers, dates set
+										if(!empty ($occ_statuses)){
+											//issuers, dates, status set
+											$test_search = ( (in_array($ts_issuer,$occ_issuers)) && (in_array($date_prt2,$occ_dates)) && (in_array($ts_status,$occ_statuses)) );
+											}
+											else{
+												// status not set
+												$test_search = ( (in_array($ts_issuer,$occ_issuers)) && (in_array($date_prt2,$occ_dates)) );
+												}
+										}
+										//date not set
+										else {
+											if(!empty ($occ_statuses)){
+											//date not set
+											$test_search = ( (in_array($ts_issuer,$occ_issuers)) && (in_array($ts_status,$occ_statuses)) );
+											}
+											else{
+												// type,date, status not set
+												$test_search =  (in_array($ts_issuer,$occ_issuers));
+												}
+											}	
+									}
+									else {
+										//type , issuers NOT set
+									if(!empty($occ_dates)){
+										//issuers, dates set
+										if(!empty ($occ_statuses)){
+											// dates, status set
+											$test_search = (  (in_array($date_prt2,$occ_dates)) && (in_array($ts_status,$occ_statuses)) );
+											}
+											else{
+												// status not set
+												$test_search = (in_array($date_prt2,$occ_dates)) ;
+												}
+										}
+										//type, issuer, date not set
+										else {
+											if(!empty ($occ_statuses)){
+											//date not set
+											$test_search = (in_array($ts_status,$occ_statuses));
+											}
+											else{
+												// type,issuer, date, status not set
+												$test_search =  true;
+												}
+											}
+										
+										}
+								}
+							if($test_search){
+								
+							?>
+						
+							<div class="grid_row grid_row_border">
+								<div class="grid_cell width50P">
+									<a href="<?php the_permalink(); ?>" class="blue_txt"><h5><?php the_title(); ?></h5></a>
+									<?php the_excerpt(); ?>
+								</div>
+								<div class="grid_cell width20P">
+									<?php
+									$date_prt=get_post_meta($post->ID, 'ts_issue_date', true); 
+									echo date("M Y", strtotime($date_prt)); // format Nov 2012
+									 ?>
+								</div>
+								<?php
+									if(get_post_meta($post->ID, 'ts_status', true) == 'Active') {
+								?>
+									<div class="grid_cell width15P"><a class="button green_bcg white_txt button_small radius3">ACTIVE</a></div>
+								<?php } 
+								else if(get_post_meta($post->ID, 'ts_status', true) == 'On Hold') {?>
+									<div class="grid_cell width15P"><a class="button orange_bcg white_txt button_small radius3">ON HOLD</a></div>
+								<?php }
+								else {
 										echo '<div class="grid_cell width15P">undefined</div>';
 										}
-									//echo '<div class="grid_cell width15P"><a class="button green_bcg white_txt button_small radius3">'.$status.'</a></div>';		
-									echo '<div class="grid_cell width15P">
+								 
+								echo '<div class="grid_cell width15P">
 											<div class="quick_actions radius3 alignright">
 												<ul>
 													<li><a href="#"><img src="'.get_bloginfo('stylesheet_directory').'/images/qa_doc_icon.png"><span class="simple_tooltip radius6">View Documents<span></span></span></a></li>
 													<li><a href="#"><img src="'.get_bloginfo('stylesheet_directory').'/images/qa_msg_icon.png"><span class="simple_tooltip radius6">View Messages<span></span></span></a></li>
 												</ul>
 											</div>
-										</div>
-										<div class="clear"></div>';
-										echo '</div>';
-								endwhile;
-								//print_r($roles_select);
-								?>					
+										</div>'; ?>
+								
+								
+								<div class="clear"></div>
+							</div>
+						
+						<?php  
+							} 
+						endwhile; ?>
+									
 								
 								</div>
 							</div>
@@ -652,6 +789,8 @@ do_action( 'bp_before_group_header' );
 											}
 										}
 										}
+										
+										
 									?>
 								</div>
 							</div>
