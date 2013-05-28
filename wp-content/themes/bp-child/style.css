@@ -4234,8 +4234,12 @@ display:block !important;
 	border-bottom:1px solid #d02f27;
 }
 
+.contact_us strong {
+	color:#2d2d2d;
+}
+
 .contact_us p {
-	margin:5px 0;
+	margin:10px 0;
 }
 
 .contact_us .phone {
