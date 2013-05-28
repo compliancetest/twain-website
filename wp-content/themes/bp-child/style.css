@@ -2115,19 +2115,38 @@ padding: 0px 14px;
 width: 96%;
 }
  
+
 #doc-edit-submit{
 	height: 27px;
 	padding: 0px 10px;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-moz-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-webkit-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-o-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	font-size: 12px;
 }
 
 #cancel_wiki{
 	height: 27px;
-	padding: 5px 10px;
+	padding: 6px 10px;
 	margin-left: 10px;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	-o-border-radius: 3px;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-moz-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-webkit-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-o-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	font-size: 12px;
+}
+
+a.delete-doc-button{
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-moz-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-webkit-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	-o-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+	font-size: 12px;
 }
 
 .plus{
