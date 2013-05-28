@@ -33,19 +33,19 @@ define('THE_FUNCTION', TEMPLATEPATH . '/functions');
 //require_once(THE_FUNCTION . '/mobile_detect.php');
 
 //MORE FIELDS - allows for extra custom fields in the edit dashboard
-require_once(THE_FUNCTION . '/more-fields/more-fields.php');
+//require_once(THE_FUNCTION . '/more-fields/more-fields.php');
 
 //MORE TYPES - allows extra custom post types
-require_once(THE_FUNCTION . '/more-types/more-types.php');
+//require_once(THE_FUNCTION . '/more-types/more-types.php');
 
 //MORE TYPES - allows extra custom post types
-require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
+//require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
 
 //CUSTOM POST TEMPLATE
-require_once(THE_FUNCTION . '/custom-post-template/custom-post-templates.php');
+//require_once(THE_FUNCTION . '/custom-post-template/custom-post-templates.php');
 
 //Recently updated pages and posts
-require_once(THE_FUNCTION . '/recently-updated-pages-and-posts/recently_updated.php');
+//require_once(THE_FUNCTION . '/recently-updated-pages-and-posts/recently_updated.php');
 
 //Buddypress
 //require_once(THE_FUNCTION . '/buddypress/bp-loader.php');
