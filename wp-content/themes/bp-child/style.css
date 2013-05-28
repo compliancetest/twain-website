@@ -4223,14 +4223,19 @@ display:block !important;
 
 .contact_us .contact_column {
 	padding:0;
-	width:50%;
+	width:471px;
 	float:left;
 }
 
 .contact_us h1 {
 	font-size:16px;
-	padding-bottom:8px;
+	color:#d02f27;
+	font-weight:bold;
 	border-bottom:1px solid #d02f27;
+}
+
+.contact_us p {
+	margin:5px 0;
 }
 
 .contact_us .phone {
