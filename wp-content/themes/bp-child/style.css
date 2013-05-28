@@ -177,6 +177,19 @@ a:hover {
 	color: #2C6DBD;
 }
 
+
+.warning{
+    background: #FFEEA8;
+    padding: 10px;
+    margin: 0 0 20px;
+    border: 1px solid #F7DC6F;
+    color: #A88700;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
 /* **************** FORM ELEMENTS *********************** */
 
 .small_input{
@@ -236,7 +249,7 @@ a:hover {
 			border-right: 1px solid #fff;
 			padding: 5px;
 			text-align: center;
-			width: 27%
+			width: 43%
 		}
 		
 			#top_logged_wrap ul li:first-child {
@@ -2110,12 +2123,6 @@ margin: 15px auto;
 /* BuddyPress Docs & Wiki
  * */
  
-#toggle-table-settings {
-padding: 0px 14px;
-width: 96%;
-}
- 
-
 #doc-edit-submit{
 	height: 27px;
 	padding: 0px 10px;
@@ -4219,75 +4226,4 @@ display:block !important;
     clear: both;
     float: left;
     margin: 5px 0;
-}
-
-.contact_us .contact_column {
-	padding:0;
-	width:471px;
-	float:left;
-}
-
-.contact_us h1 {
-	font-size:16px;
-	color:#d02f27;
-	font-weight:bold;
-	border-bottom:1px solid #d02f27;
-}
-
-.contact_us strong {
-	color:#2d2d2d;
-}
-
-.contact_us p {
-	margin:10px 0;
-}
-
-.contact_us .phone {
-	color:#555;
-	font-size:16px;
-	font-weight:bold;
-}
-
-.contact_form span {
-	color:#d02f27;
-	vertical-align: top;	
-}
-
-.contact_form input[type="text"] {
-	border:1px solid #c4c4c4;
-	background:#fff;
-	-webkit-border-radius: 3px;    
-    border-radius: 3px;
-    width:284px;
-    padding:8px 7px;
-    margin:0 0 8px 3px;
-}
-
-.contact_form textarea {
-	resize:none;
-	border:1px solid #c4c4c4;
-	background:#fff;
-	-webkit-border-radius: 3px;    
-    border-radius: 3px;
-    width:616px;
-    height:78px;
-    margin:0 0 8px 2px;  
-    padding:8px 7px;      
-}
-
-.contact_form input[type="submit"]{
-	border:none;
-	width:89px !important;
-	font-weight:200 !important;
-	float:right;
-	padding:1px 0 0 28px;
-	height:24px;
-	text-align:center;
-	color:#fff;
-	font-size:12px;
-	background: url('images/contact_submit.png') 0 0 no-repeat;	
-}
-
-.contact_form input[type="submit"]:hover {
-	opacity:.8;
 }
