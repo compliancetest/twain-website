@@ -1446,13 +1446,7 @@ function show_test_cases(){
 add_action('save_post', 'save_test_case_post');
 
 function save_test_case_post($post_id) {
-	// verify nonce
-	//global $postid;
-	if (!isset($_POST['custom_test_cases']) || !wp_verify_nonce($_POST['custom_test_cases'], basename(__FILE__))) {
-	return $post_id;
-	}
-
-    // check autosave
+	// check autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return $post_id;
     }
@@ -1474,7 +1468,7 @@ function save_test_case_post($post_id) {
 	update_post_meta($post_id, 'harness_role_ts', $harness_roles);
 	$initiators = $_POST['initiator_ts'];
 	update_post_meta($post_id, 'initiator_ts', $initiators);
-	
+
 	if ( (isset($_POST['group'])) && (($_POST['group']) != '') ){
 		//die($_POST['group']);
 		global $wpdb;
@@ -1486,13 +1480,13 @@ function save_test_case_post($post_id) {
 			print $ts_id .'<br />';
 			if ($current_group_id != $_POST['group']) {
 				$wpdb->update(
-						$wpdb->prefix.'bp_groups_testsuites',
+						$wpdb->prefix.'bp_groups_testsuites', //table
 						array( 
-							'group_id' => $_POST['group']	// int
+							'group_id' => $_POST['group']	// data
 						), 
-						array( 'ts_ids' => $_POST['postid'] ), 
+						array( 'ts_ids' => $_POST['postid'] ), //where
 						array( 
-							'%d'	// value1
+							'%d'	// format
 						), 
 						array( '%d' ) 
 						 
@@ -1502,13 +1496,13 @@ function save_test_case_post($post_id) {
 			else {
 				global $wpdb;
 				$wpdb->insert(
-					$wpdb->prefix.'bp_groups_testsuites', 
-						array( 
-							'group_id' => $_POST['group'], 
+					$wpdb->prefix.'bp_groups_testsuites', //table
+						array(
+							'group_id' => $_POST['group'], //data
 							'ts_ids' => $_POST['postid']
 						), 
 						array( 
-							'%d', 
+							'%d', //format
 							'%d'
 						) 
 					);
@@ -1521,7 +1515,6 @@ function save_test_case_post($post_id) {
     // Not set yet	
 		
 	}
-	
 }
 
 /*Metabox Choose Related Suites */
