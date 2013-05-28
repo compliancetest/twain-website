@@ -904,7 +904,7 @@ function show_initiating_message(){
 	echo '<input type="hidden" name="custom_initiating_message" value="', wp_create_nonce(basename(__FILE__)), '" />';?>
 	<textarea name="init_message" id="initiating_message_id" rows="4" cols="100"><?php echo $current_initiating_messages;?></textarea>
 	<br /><span class="description">Type Initiating Messages (comma separated)</span>
-<?
+<?php
 	$post = $post_backup;	
 }
 
