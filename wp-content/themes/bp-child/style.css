@@ -4220,3 +4220,21 @@ display:block !important;
     float: left;
     margin: 5px 0;
 }
+
+.contact_us .column {
+	padding:0;
+	width:50%;
+	float:left;
+}
+
+.contact_us h1 {
+	font-size:16px;
+	padding-bottom:8px;
+	border-bottom:1px solid #d02f27;
+}
+
+.contact_us .phone {
+	color:#555;
+	font-size:16px;
+	font-weight:bold;
+}
