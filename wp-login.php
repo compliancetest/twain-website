@@ -94,9 +94,10 @@ function login_header($title = 'Log In', $message = '', $wp_error = '') {
 	$classes = apply_filters( 'login_body_class', $classes, $action );
 	?>
 	</head>
-	<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+	<!--<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 	<div id="login">
 		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+	-->
 	<?php
 
 	unset( $login_header_url, $login_header_title );
