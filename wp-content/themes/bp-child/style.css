@@ -4249,7 +4249,8 @@ display:block !important;
 }
 
 .contact_form span {
-	color:#d02f27
+	color:#d02f27;
+	vertical-align: top;	
 }
 
 .contact_form input[type="text"] {
@@ -4257,9 +4258,9 @@ display:block !important;
 	background:#fff;
 	-webkit-border-radius: 3px;    
     border-radius: 3px;
-    width:298px;
-    padding:5px;
-    margin:0 0 8px 2px;
+    width:284px;
+    padding:8px 7px;
+    margin:0 0 8px 3px;
 }
 
 .contact_form textarea {
@@ -4268,14 +4269,18 @@ display:block !important;
 	background:#fff;
 	-webkit-border-radius: 3px;    
     border-radius: 3px;
-    width:630px;
-    margin:0 0 8px 2px;    
+    width:616px;
+    height:78px;
+    margin:0 0 8px 2px;  
+    padding:8px 7px;      
 }
 
 .contact_form input[type="submit"]{
 	border:none;
-	width:45px;
-	padding:0 0 0 44px;
+	width:89px !important;
+	font-weight:200 !important;
+	float:right;
+	padding:1px 0 0 28px;
 	height:24px;
 	text-align:center;
 	color:#fff;
