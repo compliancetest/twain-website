@@ -53,13 +53,12 @@ function login_header($title = 'Log In', $message = '', $wp_error = '') {
 
 	if ( $shake_error_codes && $wp_error->get_error_code() && in_array( $wp_error->get_error_code(), $shake_error_codes ) )
 		add_action( 'login_head', 'wp_shake_js', 12 );
-get_header();
+
 	?><!DOCTYPE html>
-	<!--<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+	<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 	<head>
 	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 	<title><?php bloginfo('name'); ?> &rsaquo; <?php echo $title; ?></title>
-	-->
 	<?php
 
 	wp_admin_css( 'wp-admin', true );
@@ -94,12 +93,10 @@ get_header();
 		$classes[] = 'rtl';
 	$classes = apply_filters( 'login_body_class', $classes, $action );
 	?>
-	<!--
 	</head>
 	<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 	<div id="login">
 		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
-	-->
 	<?php
 
 	unset( $login_header_url, $login_header_title );
@@ -747,4 +744,3 @@ if(typeof wpOnload=='function')wpOnload();
 login_footer();
 break;
 } // end action switch
-get_footer();
