@@ -4227,7 +4227,18 @@ display:block !important;
     float: left;
     margin: 5px 0;
 }
+/*
 <<<<<<< .mine
+
+=======
+>>>>>>> .r198
+*/
+
+
+
+
+
+/* dont touch this */
 
 .contact_us .contact_column {
 	padding:0;
@@ -4300,5 +4311,3 @@ display:block !important;
 .contact_form input[type="submit"]:hover {
 	opacity:.8;
 }
-=======
->>>>>>> .r198
