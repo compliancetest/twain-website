@@ -483,7 +483,7 @@ case 'rp' :
 	wp_enqueue_script('user-profile');
 
 	login_header(__('Reset Password'), '<p class="message reset-pass">' . __('Enter your new password below.') . '</p>', $errors );
-get_header();
+
 ?>
 <form name="resetpassform" id="resetpassform" action="<?php echo esc_url( site_url( 'wp-login.php?action=resetpass&key=' . urlencode( $_GET['key'] ) . '&login=' . urlencode( $_GET['login'] ), 'login_post' ) ); ?>" method="post">
 	<input type="hidden" id="user_login" value="<?php echo esc_attr( $_GET['login'] ); ?>" autocomplete="off" />
@@ -513,7 +513,6 @@ get_header();
 
 <?php
 login_footer('user_pass');
-get_footer();
 break;
 
 case 'register' :
