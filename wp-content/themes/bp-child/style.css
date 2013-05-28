@@ -4247,3 +4247,33 @@ display:block !important;
 	font-size:16px;
 	font-weight:bold;
 }
+
+.contact_form span {
+	color:#d02f27
+}
+
+.contact_form input[type="text"],
+.contact_form textarea {
+	border:1px solid #c4c4c4;
+	background:#fff;
+	-webkit-border-radius: 3px;    
+    border-radius: 3px;
+}
+
+.contact_form textarea {
+	resize:none;
+}
+
+.contact_form input[type="submit"]{
+	border:none;
+	width:89px;
+	height:24px;
+	text-align:center;
+	color:#fff;
+	font-size:12px;
+	background: url('images/contact_submit.png') 0 0 no-repeat;	
+}
+
+.contact_form input[type="submit"]:hover {
+	opacity:.8;
+}
