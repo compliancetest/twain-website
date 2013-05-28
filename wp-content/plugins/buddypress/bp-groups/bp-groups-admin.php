@@ -124,8 +124,7 @@ function bp_groups_admin_load() {
 		add_meta_box( 'bp_group_add_members', _x( 'Add New Members', 'group admin edit screen', 'buddypress' ), 'bp_groups_admin_edit_metabox_add_new_members', get_current_screen()->id, 'normal', 'core' );
 		add_meta_box( 'bp_group_members', _x( 'Manage Members', 'group admin edit screen', 'buddypress' ), 'bp_groups_admin_edit_metabox_members', get_current_screen()->id, 'normal', 'core' );
 		add_meta_box( 'bp_group_attachments', 'Manage Attachments', 'bp_groups_admin_edit_metabox_attachments', get_current_screen()->id, 'normal', 'core' );
-		add_meta_box( 'bp_group_terms', 'Terms & Conditions', 'bp_groups_admin_edit_terms', get_current_screen()->id, 'normal', 'core' );
-		add_meta_box( 'bp_group_test_suites', 'Test Suite Associated', 'bp_groups_admin_test_suites', get_current_screen()->id, 'normal', 'core' );
+		add_meta_box( 'bp_group_terms', 'Terms & Conditions / License Agreement', 'bp_groups_admin_edit_terms', get_current_screen()->id, 'normal', 'core' );
 
 		do_action( 'bp_groups_admin_meta_boxes' );
 
@@ -409,22 +408,18 @@ function bp_groups_admin_load() {
 				} 	
 		}
 		
-		
-	    //Process Test Suites Associated
-	    //die(print_r($_POST['test_suites']));
-	    if ( ! empty( $_POST['test_suites'] )) {
-			//$testsuites=$_POST['test_suites'];
-			$testsuites = implode(',', $_POST['test_suites']);
-			$testsuites_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$_GET['gid']}");
-			$testsuites_db = $testsuites_result->ts_ids;
-			
-			if (empty($testsuites_db)){
-			//	die('set');
+		//License Agreement
+		if ( ! empty( $_POST['license_ag'] ) ) {
+			$license= $_POST['license_ag'];
+		    // die($terms);
+			$license_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_license WHERE group_id={$_GET['gid']}");
+			$license_db = $license_result->license;
+			if (empty($license_db)){
 				$wpdb->insert( 
-						$wpdb->prefix.'bp_groups_testsuites', 
+						$wpdb->prefix.'bp_groups_license', 
 						array( 
 							'group_id' => $group_id, 
-							'ts_ids' => $testsuites
+							'license' => $license
 						), 
 						array( 
 							'%d', 
@@ -433,11 +428,10 @@ function bp_groups_admin_load() {
 					);
 				}
 			else{
-			//	die('not set');
 				$wpdb->update(
-					$wpdb->prefix.'bp_groups_testsuites',
+					$wpdb->prefix.'bp_groups_license',
 					array( 
-						'ts_ids' => $testsuites	// string
+						'license' => $license	// string
 					), 
 					array( 'group_id' => $_GET['gid'] ), 
 					array( 
@@ -826,33 +820,17 @@ function bp_groups_admin_edit_terms( $item ){
 	global $wpdb;
 	$terms = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_terms WHERE group_id={$_GET['gid']}");
 	$terms_conditions = $terms->content;
+	$license = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_license WHERE group_id={$_GET['gid']}");
+	$license_agreement = $license->license;
+	echo $license_agreement;
 	?>
-	
+	<p><b>Terms & conditions</b></p>
 	<textarea name="terms_co" id="terms_co_id" rows="10" cols="100"><?php echo $terms_conditions; ?></textarea>	
+	
+	<p><b>License Agreement</b></p>
+	<textarea name="license_ag" id="license_ag_id" rows="10" cols="100"><?php echo $license_agreement; ?></textarea>	
 	<?php 
 }
-
-//Test Suites Associated
-function bp_groups_admin_test_suites( $item ){
-	global $post, $wpdb;
-	$post_backup = $post;
-	$testsuites_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$_GET['gid']}");
-	$testsuites = $testsuites_result->ts_ids;
-	//echo $testsuites;
-	$current_test_suites = explode(',', $testsuites);
-	//print_r($current_test_suites);
-	$loop = new WP_Query( array( 'post_type' => 'test-suite', 'posts_per_page' => -1) );
-	$label_id=0;
-	while ( $loop->have_posts() ) : $loop->the_post();
-		 ?>
-		 <input type="checkbox" name="test_suites[]" id="label<?php echo $label_id;?>" <?php if (in_array(get_the_ID(), $current_test_suites)) { echo 'checked="checked"'; }; ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-top: 4px;"><label for="label<?php echo $label_id;?>"><?php the_title(); ?></label><br />
-		<?php
-		++$label_id;
-	endwhile;
-	//wp_reset_postdata(); 
-	$post = $post_backup;
-}
-
 
 function bp_groups_admin_edit_metabox_attachments( $item ){
 	global $wpdb;
