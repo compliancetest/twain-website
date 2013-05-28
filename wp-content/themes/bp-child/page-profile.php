@@ -220,7 +220,7 @@ if(is_user_logged_in()){
 						<div class="grid_row">
 							<div class="grid_cell width60P"><h5>My Organization Members</h5></div>
                             <?php if($user_status != 3){?>
-                                <div class="grid_cell grid_button grid_button_right"><a class="edit_btn" href="javascript: void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_plus_icon_w.png" /><span class="simple_tooltip radius6">Add User<span></span></span></a></div>
+                                <div class="grid_cell grid_button grid_button_right"><a class="popup add_user_btn" href="javascript: void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_plus_icon_w.png" /><span class="simple_tooltip radius6">Add User<span></span></span></a></div>
                             <?php }?>
                             <div class="clear"></div>
 						</div>

@@ -23,6 +23,23 @@
 		<?php do_action( 'bp_before_header' ); ?>
 		<div id="mask">
 		<div id="popup-wrap">
+            <div id="dinamic_pop" class="dinamic_pop radius6">
+                <p class="headline bottom30">Add New User</p>
+                <div class="pop_add_user">
+                    <div class="wrap_wline">
+                        <label for="user_org_email">User E-mail</label> <input type="email" id="user_org_email" name="user_org_email"/></p> 
+                    </div>
+                    <div>
+                        <label for="user_org_role">Role</label>
+                        <select>
+                            <option value="">Admin</option>
+                            <option value="">Tester</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            
 			<div id="registration" class="radius6">
                 <p class="headline bottom30">User Registration</p>
                 <div id="wrap_forms">
@@ -93,7 +110,7 @@
                                     <label for="user_pass_confirm_id">Confirm Password</label>
                                     <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
                                 </div>
-                                <div class="clear"></div>   
+                                <div class="clear"></div>  
 
                                 <div class="field">
                                     <label for="captcha_reg">Stop Spam!</label> <br />
@@ -190,7 +207,7 @@
 						<div id="or" class="left">
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
 						</div>
-						<div id="registration_button"><a class="popup">SIGNUP</a></div>
+						<div id="registration_button"><a class="popup register">SIGNUP</a></div>
                         
                     </div>
                     <?php

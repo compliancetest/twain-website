@@ -612,7 +612,7 @@ $(document).ready(function() {
         var thisParentId = '#'+jQuery(this).parents('.default_grid').attr('id');
         var findInputs = jQuery(thisParentId+' .grid_row input:visible').size();
 
-        if( findInputs == 0){
+        //if( findInputs == 0){
 
         jQuery(thisParentId+' .profile_btn').fadeIn();
         
@@ -638,7 +638,7 @@ $(document).ready(function() {
         });
         
         
-        }else{
+        /*}else{
            
            var countEmptyInputs = $(thisParentId+' .grid_row input:visible').filter(function(){return !$(this).val();}).length;
            //alert(countEmptyInputs);
@@ -659,7 +659,7 @@ $(document).ready(function() {
                     }
                 });
            }
-        }
+        }*/
         
     });
     
@@ -681,6 +681,16 @@ $(document).ready(function() {
             } 
         };
         $(getThisForm+' form').ajaxSubmit(options);
+    });
+    
+    jQuery(document).on('click', '.add_user_btn', function(){
+        jQuery('#dinamic_pop').show();
+        jQuery('#registration').hide();
+    });
+    
+    jQuery(document).on('click', '.register', function(){
+        jQuery('#dinamic_pop').hide();
+        jQuery('#registration').show();
     });
 
 });
