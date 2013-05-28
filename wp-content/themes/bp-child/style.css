@@ -4252,21 +4252,30 @@ display:block !important;
 	color:#d02f27
 }
 
-.contact_form input[type="text"],
-.contact_form textarea {
+.contact_form input[type="text"] {
 	border:1px solid #c4c4c4;
 	background:#fff;
 	-webkit-border-radius: 3px;    
     border-radius: 3px;
+    width:298px;
+    padding:5px;
+    margin:0 0 8px 2px;
 }
 
 .contact_form textarea {
 	resize:none;
+	border:1px solid #c4c4c4;
+	background:#fff;
+	-webkit-border-radius: 3px;    
+    border-radius: 3px;
+    width:630px;
+    margin:0 0 8px 2px;    
 }
 
 .contact_form input[type="submit"]{
 	border:none;
-	width:89px;
+	width:45px;
+	padding:0 0 0 44px;
 	height:24px;
 	text-align:center;
 	color:#fff;
