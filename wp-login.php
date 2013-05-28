@@ -742,6 +742,7 @@ if(typeof wpOnload=='function')wpOnload();
 
 <?php
 //login_footer();
-get_footer();
+
 break;
 } // end action switch
+get_footer();
