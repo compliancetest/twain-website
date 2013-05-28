@@ -1938,41 +1938,66 @@ function set_html_content_type()
 	return 'text/html';
 }
 
-function create_new_user(){
-	global $wpdb;
-	$user_id = wp_create_user( $_POST['user_login'], $_POST['user_pass'], $_POST['user_email'] );  
-	//die(print_r($user_id)); 
-	wp_update_user( array ('ID' => $user_id, 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'])) ;
-	$activation_key =  md5($_POST['user_email']);
-	$wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=1 WHERE ID ='$user_id' ");
-
-	update_user_meta ($user_id, 'organisation', $_POST['organisation']);
-	update_user_meta ($user_id, 'contact_phone', $_POST['contact_phone']);
-	
-	//$headers[] = 'From: Nego Office <office@nego-solutions.com>';
+function send_email_verification($email, $username, $password){
+    //$headers[] = 'From: Nego Office <office@nego-solutions.com>';
 	//$headers[] = 'Cc: John Q Codex <jqc@wordpress.org>';
 	//$headers[] = 'Cc: iluvwp@wordpress.org'; // note you can just use a simple email address
 
-	$to = $_POST['user_email'];
+	$to = $email;
 	$subject = 'ComplianceTest Confirmation Email';
-	$message = 'Username: ';
-	$message .= $_POST['user_login'];
-	$message .= '<br />';
-	$message .= 'Password: ';
-	$message .= $_POST['user_pass'];
+    
+    if($username !='' && $password!= ''){
+        $message = 'Username: ';
+        $message .= $username;
+        $message .= '<br />';
+        $message .= 'Password: ';
+        $message .= $password;
+    }
 	$message .= '<br />To activate you account click the link below <br />';
 	$message .= $_SERVER['SERVER_NAME'];
 	$message .= $_SERVER['REQUEST_URI'];
 	$message .='?user_activation=';
-	$message .= md5($_POST['user_email']);
+	$message .= md5($email);
 
 	add_filter( 'wp_mail_content_type', 'set_html_content_type' );
-	wp_mail( $to, $subject, $message, $headers );
-	remove_filter( 'wp_mail_content_type', 'set_html_content_type' );  
+	return wp_mail( $to, $subject, $message, $headers );
+	remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
+}
+
+
+
+function create_new_user(){
+	global $wpdb;
+    
+	$user_id = wp_create_user( $_POST['user_login'], $_POST['user_pass'], $_POST['user_email'] );  
+	//die(print_r($user_id)); 
+    
+	wp_update_user( array ('ID' => $user_id, 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'])) ;
+	
+    $activation_key =  md5($_POST['user_email']);
+	$wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
+
+	update_user_meta ($user_id, 'organisation', $_POST['organisation']);
+	update_user_meta ($user_id, 'contact_phone', $_POST['contact_phone']);
+	
+    send_email_verification($_POST['user_email'], $_POST['user_login'], $_POST['user_pass']);
+    
+    //auto login user
+    wp_set_auth_cookie($user_id);
 }
 
 if  (isset($_POST['form_set'])){
 	add_action('template_redirect', 'create_new_user');
+}
+
+if($_POST['resend_email_verification']){
+    
+    global $current_user;
+    
+    send_email_verification($_POST['uemail'], '', '');
+    //echo $_POST['uemail'].'=>'.$_POST['uname'];
+    echo 'success';
+    exit();
 }
 
 
@@ -1997,9 +2022,10 @@ if(isset($_POST['user_log'])){
     
     $parsUsername = $_POST['log'];
     $parsPassword = $_POST['pwd'];
+    $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
     
     //check the username type (email/user)
-    if(filter_var($parsUsername, FILTER_VALIDATE_EMAIL)){
+    if(preg_match($email_regex, $parsUsername)){
         $get_user = get_user_by('email', $parsUsername);
     }else{
         $get_user = get_user_by('login', $parsUsername);
@@ -2008,7 +2034,7 @@ if(isset($_POST['user_log'])){
     //check if user and pass are correct
     if ( $get_user && wp_check_password( $parsPassword, $get_user->data->user_pass, $get_user->ID) ){
 
-        $user_status = $get_user->user_status;
+        /*$user_status = $get_user->user_status;
         
         //check user status (active/inactive)
         if($user_status > 0){
@@ -2017,11 +2043,14 @@ if(isset($_POST['user_log'])){
         }else{
             echo'active';
             exit();
-        }
+        }*/
+         echo'active';
+         exit();
 
     }else{
         die('wrong');
     }
+    
 }
 
 
@@ -2087,6 +2116,7 @@ My Payment Method updates
 --------------------------------------------------*/
 
 //check card number
+
 function check_cc($cc, $extra_check = false){
     $cards = array(
         "visa" => "(4\d{12}(?:\d{3})?)",
@@ -2102,7 +2132,7 @@ function check_cc($cc, $extra_check = false){
     $pattern = "#^(?:".implode("|", $cards).")$#";
     $result = preg_match($pattern, str_replace(" ", "", $cc), $matches);
     if($extra_check && $result > 0){
-        $result = (validatecard($cc))?1:0;
+        //$result = (validatecard($cc))?1:0;
     }
     return ($result>0)?$names[sizeof($matches)-2]:false;
 }
@@ -2118,12 +2148,16 @@ if(isset($_POST['my_payment_edit'])){
     
     $errors = 'no_errors';
     
-    //$check = check_cc($card_number, true);
+    $check = check_cc($card_number);//4533345657653245
     
     
-    if($card_number!=''){
+    if($check && $card_number!=''){
         update_user_meta( $user_id, 'card_number', $card_number);
+    }else{
+        $errors = 'Credit card invalid. Please make sure that you entered a valid card number';
     }
+    
+    
     if($name_on_card!=''){
         update_user_meta( $user_id, 'name_on_card', $name_on_card);
     }

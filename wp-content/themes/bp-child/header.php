@@ -7,17 +7,13 @@
 		<title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
 		<?php do_action( 'bp_head' ) ?>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
 		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery.form.js"></script>
 		<script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
-<script type="text/javascript">
-var HOMEURL = "<?php echo get_home_url(); ?>";
-</script>
+
 		<?php wp_head(); ?>
 	</head>
 
@@ -118,7 +114,7 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
                     <div class="clear"></div>
                 </div>
                 <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
-                <div class="reg_message log_msg"><?php echo of_get_option('log_msg');?></div>
+                <div class="reg_message log_msg"><?php //echo of_get_option('log_msg');?></div>
 			</div><!--END registration-->
 		<div id="close-popup" class="close_btn"></div>
 		</div>
@@ -155,8 +151,6 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
 									?>
 									<ul>
 										<li><a href="<?php echo home_url();?>/my-profile/">Dashboard</a></li>
-										<li><a href="#">Settings</a></li>
-										
 										<li><a href="<?php echo wp_logout_url( $logout_redirect ); ?>">Logout</a></li>
 									</ul>
 									<div class="clear"></div>
@@ -250,9 +244,7 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
                         <h3><?php echo of_get_option('implementers_t'); ?></h3>
                          <p><?php echo of_get_option('implementers_d'); ?></p>
 
-                        <!-- RPV <a href="<?php echo of_get_option('what_link'); ?>" class="right linkto">More Information</a> -->
-						<a href="/what-is-compliance-test/" class="right linkto">More Information</a>
-						
+                        <a href="<?php echo of_get_option('what_link'); ?>" class="right linkto">Find out How it works</a>
 					  </li>
 					  <div class="clear"></div>
 					</ul>
@@ -275,8 +267,7 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
                             <h3><?php echo of_get_option('confidence_t'); ?></h3>
                             <p><?php echo of_get_option('confidence_d'); ?></p>
 
-                        <!-- RPV <a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">More Information</a> -->
-						<a href="/why-compliancetest/" class="right linkto" style="margin-bottom: -34px;">More Information</a>
+                        <a href="<?php echo of_get_option('why_link'); ?>" class="right linkto" style="margin-bottom: -34px;">Find out more reasons</a>
                         </li>
                         <div class="clear"></div>
                         <li class="last left width280">
@@ -298,25 +289,23 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
 							<li class="left width205">
 								<h3><?php echo of_get_option('testsuites_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('testsuites_d'); ?></p>
-								<!-- RPV <p class="nomarginleft"><a href="<?php echo of_get_option('testsuites_linkto'); ?>" class="read_more">Read More</a></p> -->
-								<?php $linkone = "/compliancetest-services/";?>
-								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('testsuites_linkto'); ?>" class="read_more">More Information</a></p>
+								<p class="nomarginleft"><a href="<?php echo of_get_option('testsuites_linkto'); ?>" class="read_more">Read More</a></p>
 								<div class="clear"></div>
 								
 								<h3><?php echo of_get_option('collaboration_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('collaboration_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('collaboration_linkto'); ?>" class="read_more">More Information</a></p>		
+								<p class="nomarginleft"><a href="<?php echo of_get_option('collaboration_linkto'); ?>" class="read_more">Read More</a></p>		
 							</li>
 							<li class="left width300">
 								<h3><?php echo of_get_option('productrep_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('productrep_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('productrep_linkto'); ?>" class="read_more">More Information</a></p>		
+								<p class="nomarginleft"><a href="<?php echo of_get_option('productrep_linkto'); ?>" class="read_more">Read More</a></p>		
 							</li>
 							
 							<li class="last left width350">
 								<h3><?php echo of_get_option('testharness_t'); ?></h3>
 								<p class="nomarginleft"><?php echo of_get_option('testharness_d'); ?></p>
-								<p class="nomarginleft"><a href="<?php echo $linkone;//of_get_option('testharness_linkto'); ?>" class="read_more">More Information</a></p>		
+								<p class="nomarginleft"><a href="<?php echo of_get_option('testharness_linkto'); ?>" class="read_more">Read More</a></p>		
 							</li>
 							<div class="clear"></div>
 						</ul>		
@@ -346,15 +335,17 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
 		</div>
 <?php 
 
-if (isset ($_GET['user_activation'])){
-	$current_date = date("Y-m-d h:i:s");
-	$activation = $_GET['user_activation'];
-	$user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_activation_key ='$activation' ");
-	//echo $user->ID;
-	$wpdb->query("UPDATE $wpdb->users SET user_status = 0 WHERE user_activation_key ='$activation' ");
-	$wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id) 	
-				  VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/members/{$user->user_login}/','{$current_date}','0')");
-	}
+    if (isset ($_GET['user_activation'])){
+        $current_date = date("Y-m-d h:i:s");
+        $activation = $_GET['user_activation'];
+        $user = $wpdb->get_row("SELECT * FROM $wpdb->users WHERE user_activation_key ='$activation' ");
+        //echo $user->ID;
+        $wpdb->query("UPDATE $wpdb->users SET user_status = 0 WHERE user_activation_key ='$activation' ");
+        $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id) 	
+                      VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/members/{$user->user_login}/','{$current_date}','0')");
+    //redirect
+        wp_redirect(home_url().'/my-profile');      
+    }
 	
 	
  ?>
