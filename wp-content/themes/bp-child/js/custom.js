@@ -334,7 +334,7 @@ $(document).ready(function() {
                             jQuery('.loader').fadeIn();
                             
                             var options = {
-                                url:'',
+                                url: window.location.href,
                                 success: function() { 
                                     //alert('Thanks for your comment!'); 
                                     jQuery('#wrap_forms').hide();
@@ -373,7 +373,7 @@ $(document).ready(function() {
         var getThis = jQuery(this);
         
         $.ajax({
-            url: '',
+            url: window.location.href,
             type: 'POST',
             data: {resend_email_verification: 1, uemail: jQuery('input[name="uemail"]').val(), uname: jQuery('input[name="uname"]').val()},
             success: function(data){
@@ -396,7 +396,7 @@ $(document).ready(function() {
         jQuery('.loader2').fadeIn();
         
         var options = {
-            url:'', 
+            url:window.location.href, 
             data: {user_log: 1},
             success: function(data) {
                 if(data == 'active'){
@@ -425,7 +425,7 @@ $(document).ready(function() {
     jQuery('#wp-submit2').on('click', function(){
         
         var options = {
-            url:'', 
+            url:window.location.href, 
             data: {user_log: 1},
             success: function(data) {
                 if(data == 'active'){
@@ -670,7 +670,7 @@ $(document).ready(function() {
         jQuery('.errors_msg').hide();
         
         var options = {
-            url:'',
+            url:window.location.href,
             //data: {profile_edits: 1},
             success: function(data){
                if(data=='no_errors'){
