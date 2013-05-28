@@ -822,7 +822,6 @@ function bp_groups_admin_edit_terms( $item ){
 	$terms_conditions = $terms->content;
 	$license = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_license WHERE group_id={$_GET['gid']}");
 	$license_agreement = $license->license;
-	echo $license_agreement;
 	?>
 	<p><b>Terms & conditions</b></p>
 	<textarea name="terms_co" id="terms_co_id" rows="10" cols="100"><?php echo $terms_conditions; ?></textarea>	
