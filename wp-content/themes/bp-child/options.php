@@ -445,11 +445,6 @@ function optionsframework_options() {
 		'id' => 'confidence_d',
 		'type' => 'textarea');		
 		
-	$options[] = array(
-		'desc' => __('Find out more reasons - Link To'),
-		'id' => 'why_link',
-		'type' => 'text');		
-		
 	/* ComplianceTest SERVICES */
     $options[] = array(
         'name' => __('ComplianceTest SERVICES', 'options_framework_theme'),
