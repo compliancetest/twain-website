@@ -1432,17 +1432,30 @@ function show_test_cases(){
 	while ( $loop->have_posts() ) : $loop->the_post();
 		$id = get_the_ID();
 		$test_cases_assoc = get_post_meta($id, 'test_suites', true);
-		foreach($test_cases_assoc as $test_case_assoc){
+		foreach($test_cases_assoc as  $test_case_assoc){
 			if ($test_case_assoc == $_GET['post']){
 				echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
 				echo ' - ';
 				echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
-				echo '<a href="" style="margin-right: 10px;">Hide</a>';
-				echo '<a href="">Delete</a>';
+				echo '<a id="hide_testcase" class="'.$id.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Hide</a>';
+				echo '<a id="delete_testcase" class="'.$id.'" style="cursor:pointer; text-decoration: underline;">Delete</a>';
 				echo '<br />';
 			}
 		}
 	endwhile;
+	?>
+	<!-- Script Hide / Delete Test Case
+	-->
+	<script type="text/javascript">
+	jQuery(document).ready(function() { 
+		jQuery(document).on('click', '#hide_testcase', function(){
+		var id = jQuery(this).attr('class');
+		alert(id);
+		});
+	});
+	</script>
+	
+	<?php
 	$post = $post_backup;
 
 }
@@ -2151,6 +2164,7 @@ function check_exp_date($month, $year) {
     }
 }
 
+
 //save my payment method
 if(isset($_POST['my_payment_edit'])){
     
@@ -2175,10 +2189,18 @@ if(isset($_POST['my_payment_edit'])){
     if($name_on_card!=''){
         update_user_meta( $user_id, 'name_on_card', $name_on_card);
     }
-    if($card_expiry!='' && check_exp_date($card_expiry[0], $card_expiry[1])){
-        update_user_meta( $user_id, 'card_expiry', $_POST['card_expiry']);
+    
+    if($_POST['card_expiry']==''){
+        $errors = 'Please specify your card expiry date!';
     }else{
-        $errors = 'Your card has expired or your expiry date is incorrect!';
+        if($card_expiry[0] > 12){
+            $errors = 'Your expiry date is incorrect!';
+
+        }else if(check_exp_date($card_expiry[0], $card_expiry[1])){
+            update_user_meta( $user_id, 'card_expiry', $_POST['card_expiry']); 
+        }else{
+            $errors = 'Your card has expired or your expiry date is incorrect!';
+        }
     }
     
     

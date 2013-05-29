@@ -625,8 +625,11 @@ $(document).ready(function() {
                 jQuery(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
                 
            }else if(jQuery(this).hasClass('small_input')){
-                jQuery(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
-           
+                if(jQuery(this).attr('name')=='card_expiry'){
+                    jQuery(this).replaceWith('<input type="text" placeholder="M / Y" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
+                }else{
+                    jQuery(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>'); 
+                }
            }else if(jQuery(this).hasClass('card_no')){
                var getthisTextVal = jQuery('input[name="card_no"]').val();
                
