@@ -310,9 +310,13 @@ function optionsframework_options() {
 		'name' => __('Menu Settings', 'options_framework_theme'),
 		'type' => 'heading');
 	
-	/*What Is ComplianceTest? */
-	$options[] = array(
-		'name' => __('WHAT IS ComplianceTest?', 'options_framework_theme'),
+	/*What Is ComplianceTest? */    
+    $options[] = array(
+        'name' => __('WHAT IS ComplianceTest?', 'options_framework_theme'),
+        'desc' => __('More Information - Link'),
+        'id' => 'what_is_compliancetest_more_link',
+        'type' => 'text');
+	$options[] = array(		
 		'desc' => __('WHAT IS ComplianceTest? - Item Title'),
 		'id' => 'what_t',
 		'type' => 'text');	
@@ -356,20 +360,20 @@ function optionsframework_options() {
 		'desc' => __('Implementers - Item Description'),
 		'id' => 'implementers_d',
 		'type' => 'textarea');			
-		
-	$options[] = array(
-		'desc' => __('Find out How it works - Link To'),
-		'id' => 'what_link',
-		'type' => 'text');	
-		
+	
 		
 	/*WHY ComplianceTest? */
+    
 	$options[] = array(
-		'name' => __('WHY ComplianceTest?', 'options_framework_theme'),
+        'name' => __('WHY ComplianceTest?', 'options_framework_theme'),
+        'desc' => __('More Information - Link'),
+        'id' => 'why_compliancetest_more_link',
+        'type' => 'text');
+    $options[] = array(		
 		'desc' => __('Community - Item Title'),
 		'id' => 'community_t',
-		'type' => 'text');	
-
+		'type' => 'text');	    
+    
 	$options[] = array(
 		'desc' => __('Community - Item Icon'),
 		'id' => 'community_icon',
@@ -447,51 +451,54 @@ function optionsframework_options() {
 		'type' => 'text');		
 		
 	/* ComplianceTest SERVICES */
-	$options[] = array(
-		'name' => __('ComplianceTest SERVICES', 'options_framework_theme'),
+    $options[] = array(
+        'name' => __('ComplianceTest SERVICES', 'options_framework_theme'),
+        'desc' => __('More Information - Link'),
+        'id' => 'compliancetest_service_more_link',
+        'type' => 'text');
+	$options[] = array(		
 		'desc' => __('Test Suites - Item Title'),
 		'id' => 'testsuites_t',
 		'type' => 'text');	
-
+    $options[] = array(
+        'desc' => __('Test Suites - Item Icon'),
+        'id' => 'testsuites_icon',
+        'type' => 'upload');        
 	$options[] = array(
 		'desc' => __('Test Suites - Item Description'),
 		'id' => 'testsuites_d',
 		'type' => 'textarea');		
-		
-	$options[] = array(
-		'desc' => __('Test Suites - Link To'),
-		'id' => 'testsuites_linkto',
-		'type' => 'text');		
 	
+    
 	$options[] = array(
 		'desc' => __('Collaboration - Item Title'),
 		'id' => 'collaboration_t',
 		'type' => 'text');	
-	
+	$options[] = array(
+        'desc' => __('Collaboration - Icon'),
+        'id' => 'collaboration_icon',
+        'type' => 'upload');        
 	$options[] = array(
 		'desc' => __('Collaboration - Item Description'),
 		'id' => 'collaboration_d',
 		'type' => 'textarea');	
 		
-	$options[] = array(
-		'desc' => __('Collaboration - Link To'),
-		'id' => 'collaboration_linkto',
-		'type' => 'text');		
+	
 		
 	$options[] = array(
 		'desc' => __('Product Repository - Item Title'),
 		'id' => 'productrep_t',
 		'type' => 'text');		
-
+    $options[] = array(
+        'desc' => __('Product Repository - Icon'),
+        'id' => 'productrep_icon',
+        'type' => 'upload');    
 	$options[] = array(
 		'desc' => __('Product Repository - Item Description'),
 		'id' => 'productrep_d',
 		'type' => 'textarea');		
 		
-	$options[] = array(
-		'desc' => __('Product Repository - Link To'),
-		'id' => 'productrep_linkto',
-		'type' => 'text');	
+	
 		
 	$options[] = array(
 		'desc' => __('Test Harness - Item Title'),
@@ -499,9 +506,9 @@ function optionsframework_options() {
 		'type' => 'text');		
 		
 	$options[] = array(
-		'desc' => __('Test Harness - Link To'),
-		'id' => 'testharness_linkto',
-		'type' => 'text');	
+		'desc' => __('Test Harness - Icon'),
+		'id' => 'testharness_icon',
+		'type' => 'upload');	
 		
 	$options[] = array(
 		'desc' => __('Test Harness - Item Description'),
@@ -514,42 +521,50 @@ function optionsframework_options() {
 		'desc' => __('How it works - Item Title'),
 		'id' => 'how_t',
 		'type' => 'text');		
-		
+	$options[] = array(
+        'desc' => __('How it works - Icon'),
+        'id' => 'how_icon',
+        'type' => 'upload');        
 	$options[] = array(
 		'desc' => __('How it works - Description'),
 		'id' => 'how_desc',
-		'type' => 'text');	
-		
+		'type' => 'textarea');
 	$options[] = array(
 		'desc' => __('How it works - Link To'),
 		'id' => 'how_linkto',
 		'type' => 'text');		
 
+    
 	$options[] = array(
 		'desc' => __('FAQ - Item Title'),
 		'id' => 'faq_t',
 		'type' => 'text');		
-		
+	$options[] = array(
+        'desc' => __('FAQ - Icon'),
+        'id' => 'faq_icon',
+        'type' => 'upload');    
 	$options[] = array(
 		'desc' => __('FAQ - Description'),
 		'id' => 'faq_desc',
-		'type' => 'text');	
-		
+		'type' => 'textarea');
 	$options[] = array(
 		'desc' => __('FAQ - Link To'),
 		'id' => 'faq_linkto',
-		'type' => 'text');	
-		
+		'type' => 'text');
+        
+        
 	$options[] = array(
 		'desc' => __('Documentation - Item Title'),
 		'id' => 'documentation_t',
 		'type' => 'text');		
-		
+	$options[] = array(
+        'desc' => __('Documentation - Icon'),
+        'id' => 'documentation_icon',
+        'type' => 'upload');	
 	$options[] = array(
 		'desc' => __('Documentation - Description'),
 		'id' => 'documentation_desc',
-		'type' => 'text');			
-		
+		'type' => 'textarea');
 	$options[] = array(
 		'desc' => __('Documentation - Link To'),
 		'id' => 'documentation_linkto',
@@ -559,11 +574,14 @@ function optionsframework_options() {
 		'desc' => __('Forum - Item Title'),
 		'id' => 'forum_t',
 		'type' => 'text');		
-		
+	$options[] = array(
+        'desc' => __('Forum - Icon'),
+        'id' => 'forum_icon',
+        'type' => 'upload');    	
 	$options[] = array(
 		'desc' => __('Forum - Description'),
 		'id' => 'forum_desc',
-		'type' => 'text');	
+		'type' => 'textarea');	
 		
 	$options[] = array(
 		'desc' => __('Forum - Link To'),
@@ -595,8 +613,50 @@ function optionsframework_options() {
 		'desc' => __('RIGHT Box Register Link Content'),
 		'id' => 'rregister_box_link_content',
 		'type' => 'text');	
-		
-	$options[] = array(
+	
+    $options[] = array(
+        'name' => __('Community Boxes', 'options_framework_theme'),
+        'desc' => __('1. Box Title'),
+        'id' => 'box_title1',
+        'type' => 'text');    
+    $options[] = array(
+        'desc' => __('1. Box Image'),
+        'id' => 'box_image1',
+        'type' => 'upload');
+    $options[] = array(
+        'desc' => __('1. Box Content Title'),
+        'id' => 'box_content_title1',
+        'type' => 'text');
+    $options[] = array(
+        'desc' => __('1. Box Link To.'),
+        'id' => 'box_linkto1',
+        'type' => 'text');    
+    $options[] = array(
+        'desc' => __('1. Box Content'),
+        'id' => 'box_content1',
+        'type' => 'textarea');
+    $options[] = array(
+        'desc' => __('2. Box Title'),
+        'id' => 'box_title2',
+        'type' => 'text');    
+    $options[] = array(
+        'desc' => __('2. Box Image'),
+        'id' => 'box_image2',
+        'type' => 'upload');
+    $options[] = array(
+        'desc' => __('2. Box Content Title'),
+        'id' => 'box_content_title2',
+        'type' => 'text');
+    $options[] = array(
+        'desc' => __('2. Box Link To.'),
+        'id' => 'box_linkto2',
+        'type' => 'text');  
+    $options[] = array(
+        'desc' => __('2. Box Content'),
+        'id' => 'box_content2',
+        'type' => 'textarea');
+    
+	/*$options[] = array(
 		'name' => __('Three boxes', 'options_framework_theme'),
 		'desc' => __('1. Box Image'),
 		'id' => 'box_image1',
@@ -704,6 +764,7 @@ function optionsframework_options() {
 		'type' => 'text');		
 		
 	/* */
+    /*
 	$options[] = array(
 		'desc' => __('3. Box Item 1.'),
 		'id' => '3box_item1',
@@ -733,37 +794,16 @@ function optionsframework_options() {
 		'desc' => __('3. Box Item 3 - Link To.'),
 		'id' => '3box_item3_linkto',
 		'type' => 'text');			
-		
+		*/
 			
 	$options[] = array(
 		'name' => __('Footer Settings', 'options_framework_theme'),
 		'type' => 'heading');
 		
 	$options[] = array(
-		'name' => __('Partners Logos', 'options_framework_theme'),
-		'desc' => __('1. Partner logo'),
-		'id' => 'plogo1',
-		'type' => 'upload');		
-		
-	$options[] = array(
-		'desc' => __('2. Partner logo'),
-		'id' => 'plogo2',
-		'type' => 'upload');		
-		
-	$options[] = array(
-		'desc' => __('3. Partner logo'),
-		'id' => 'plogo3',
-		'type' => 'upload');	
-		
-	$options[] = array(
-		'desc' => __('4. Partner logo'),
-		'id' => 'plogo4',
-		'type' => 'upload');	
-		
-	$options[] = array(
-		'desc' => __('5. Partner logo'),
-		'id' => 'plogo5',
-		'type' => 'upload');
+		'desc' => __('Twitter Username'),
+		'id' => 'twitter_username',
+		'type' => 'text');		
 		
 	$options[] = array(
 		'desc' => __('Copyright text'),

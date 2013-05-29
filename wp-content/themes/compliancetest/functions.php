@@ -1491,6 +1491,3 @@ function inactive_users_login(){
 	}
 
 }
-
-?>
-

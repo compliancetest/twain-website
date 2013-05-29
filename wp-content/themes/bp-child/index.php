@@ -3,12 +3,12 @@ get_header();
 ?>
 <?php // echo get_theme_root(); ?>
 		<div class="content">
-			<div class="space50"></div>
-			<div id="search-wrapper">
+			<div class="space30"></div>
+            <h3 class="sub-title">Search for Test Suites or Certified Products</h3>
+			<div id="search-wrapper">				
+<!--				<div class="space7"></div>-->
 				
-				<div class="space7"></div>
-				
-				<div id="search_bar">
+				<div id="search_bar">                    
 				  <form  role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>"  class="nomargintop">
 					<input id="s" name="s" value=" " type="text" autocomplete="off" class="inactive_s">
 					<div class="search_select_div">
@@ -32,10 +32,14 @@ get_header();
 
 					<div class="clear"></div>
 				</div><!-- end search_bar  -->
-				<div class="space7"></div>
+<!--				<div class="space7"></div>-->
 			</div> <!-- END search-wrapper-->
-			<div class="space50"></div>
-			
+			<div class="space30"></div>
+			<h3 class="sub-title">
+                Create a Test Suite or List Your Product
+                <br />
+                <small>Registered users only</small>
+            </h3>            
 			<div id="register">
 				<div id="left_side" >	
 					<div class="blue_box">
@@ -62,37 +66,34 @@ get_header();
 				</div><!-- end right_side-->
 			</div><!-- end register -->
 			<div class="clear"></div>
-			<div class="space80"></div>
-		
+			<div class="space60"></div>
+		<h3 class="sub-title">Browse and Join Any Compliance Community</h3>
 		<div class="boxes">
-			<div class="box1">
+			<div class="box" id="box1">
 				<img src="<?php echo of_get_option('box_image1')?>" class="aligncenter">
-				<a href="<?php echo of_get_option('box_1_linkto') ;?>"><h3><?php echo of_get_option('box_title1')?></h3></a>
-				<a href="<?php echo of_get_option('1box_item1_linkto');?>"><h4><?php echo of_get_option('1box_item1');?></h4></a>
-				<a href="<?php echo of_get_option('1box_item2_linkto');?>"><h4><?php echo of_get_option('1box_item2');?></h4></a>
-				<a href="<?php echo of_get_option('1box_item3_linkto');?>"><h4><?php echo of_get_option('1box_item3');?></h4></a>
+                <h3><?php echo of_get_option('box_title1') ;?></h3>
+                <p>
+                    <b><?php echo of_get_option('box_content_title1') ;?></b><br />
+                    <?php echo of_get_option('box_content1') ;?>
+                </p>
+				<a href="<?php echo of_get_option('box_linkto1') ;?>">Find out more</a>
 			</div><!--end box1-->
 			
-			<div class="box2">
-				<img src="<?php echo of_get_option('box_image2')?>" class="aligncenter">
-				<a href="<?php echo of_get_option('box_2_linkto') ;?>"><h3><?php echo of_get_option('box_title2')?></h3></a>
-				<a href="<?php echo of_get_option('2box_item1_linkto');?>"><h4><?php echo of_get_option('2box_item1');?></h4></a>
-				<a href="<?php echo of_get_option('2box_item2_linkto');?>"><h4><?php echo of_get_option('2box_item2');?></h4></a>
-				<a href="<?php echo of_get_option('2box_item3_linkto');?>"><h4><?php echo of_get_option('2box_item3');?></h4></a>
-			</div><!--end box2-->
+			<div class="box" id="box2">
+                <img src="<?php echo of_get_option('box_image2')?>" class="aligncenter">
+                <h3><?php echo of_get_option('box_title2') ;?></h3>
+                <p>
+                    <b><?php echo of_get_option('box_content_title2') ;?></b><br />
+                    <?php echo of_get_option('box_content2') ;?>
+                </p>
+                <a href="<?php echo of_get_option('box_linkto2') ;?>">Find out more</a>
+            </div><!--end box2-->
 			
-			<div class="box3">
-				<img src="<?php echo of_get_option('box_image3')?>" class="aligncenter">
-				<a href="<?php echo of_get_option('box_3_linkto') ;?>"><h3><?php echo of_get_option('box_title3')?></h3></a>
-				<a href="<?php echo of_get_option('3box_item1_linkto');?>"><h4><?php echo of_get_option('3box_item1');?></h4></a>
-				<a href="<?php echo of_get_option('3box_item2_linkto');?>"><h4><?php echo of_get_option('3box_item2');?></h4></a>
-				<a href="<?php echo of_get_option('3box_item3_linkto');?>"><h4><?php echo of_get_option('3box_item3');?></h4></a>
-			</div><!--end box3-->
 			<div class="clear"></div>
 		</div><!--end boxes-->
 			
 		<div class="space40"></div>	
-		<?php get_sidebar('homepage'); ?>
+		<?php // get_sidebar('homepage'); ?>
 		<div class="space40"></div>	
 		</div>
 	</div>
