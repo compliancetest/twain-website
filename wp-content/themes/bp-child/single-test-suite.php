@@ -35,7 +35,7 @@ get_header();
 							<div class="grid_cell width100P left">
 								<p>Version: <span><?php echo get_post_meta(get_the_ID(), 'ts_version', true); ?></span>
 								Issue Date: <span><?php echo get_post_meta(get_the_ID(), 'ts_issue_date', true); ?></span>
-								Issuer: <span class="blue_txt"><?php echo get_post_meta(get_the_ID(), 'ts_issuer', true); ?></span>
+								Issuer: <a href="<?php echo $group_url; ?>"><span class="blue_txt"><?php echo get_post_meta(get_the_ID(), 'ts_issuer', true); ?></span></a>
 								Status: <span class="green_txt"><?php echo get_post_meta(get_the_ID(), 'ts_status', true); ?></span> 
 								Revision: <span><?php echo get_post_meta(get_the_ID(), 'ts_revision_description', true); ?></span> 
 								</p>
@@ -172,7 +172,7 @@ get_header();
 								<div class="blue_button "><a href="#" class="view_compliant">View Compliant Products</a></div>
 							</div>
 							<div class="grid_cell width50P">
-								<div id="three_boxes_sv"><a class="payment_popup" href="<?php echo $group_url; ?>" target="_blank">
+								<div id="three_boxes_sv"><a class="payment_popup" target="_blank">
 									<div id="box_1_red" class="left">
 									</div>
 									
