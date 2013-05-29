@@ -301,10 +301,10 @@ function optionsframework_options() {
 		'id' => 'reg_msg',
 		'type' => 'textarea');
     
-	$options[] = array(
+	/*$options[] = array(
 		'name' => __('Inactive user login message', 'options_framework_theme'),
 		'id' => 'log_msg',
-		'type' => 'textarea');
+		'type' => 'textarea');*/
 		
 	$options[] = array(
 		'name' => __('Menu Settings', 'options_framework_theme'),

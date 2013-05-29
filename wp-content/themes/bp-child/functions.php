@@ -1434,10 +1434,10 @@ function show_test_cases(){
 		$test_cases_assoc = get_post_meta($id, 'test_suites', true);
 		foreach($test_cases_assoc as $test_case_assoc){
 			if ($test_case_assoc == $_GET['post']){
-				echo '<a href="'.get_permalink().'" target="_blank">'.get_the_title().'</a>';
+				echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
 				echo ' - ';
-				echo '<a href="">Edit</a>';
-				echo '<a href="">Hide</a>';
+				echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
+				echo '<a href="" style="margin-right: 10px;">Hide</a>';
 				echo '<a href="">Delete</a>';
 				echo '<br />';
 			}
@@ -2207,7 +2207,7 @@ if(isset($_POST['my_organisation_edit'])){
     
     $errors = 'no_errors';
     
-    update_user_meta($user_id, 'organisation', $user_organisation);
+    update_user_meta($user_id, 'user_organisation', $user_organisation);
     update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
     update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
     update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);
