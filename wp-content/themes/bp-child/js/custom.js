@@ -619,13 +619,13 @@ $(document).ready(function() {
         //transform all divs in inputs
         jQuery(thisParentId+' .grid_cell.in_input').each(function(){
            var thisTextVal = jQuery(this).text(); 
-           var thisNameVal = jQuery(this).attr('name'); 
+           var thisNameVal = jQuery(this).attr('data-name'); 
            
            if(jQuery(this).hasClass('input_pass')){
                 jQuery(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
                 
            }else if(jQuery(this).hasClass('small_input')){
-                if(jQuery(this).attr('name')=='card_expiry'){
+                if(jQuery(this).attr('data-name')=='card_expiry'){
                     jQuery(this).replaceWith('<input type="text" placeholder="M / Y" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
                 }else{
                     jQuery(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>'); 

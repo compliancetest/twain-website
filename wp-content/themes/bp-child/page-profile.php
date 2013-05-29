@@ -75,22 +75,22 @@ if(is_user_logged_in()){
                         <form action="#" method="post">
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Name</b></div>
-                                <div name="uname" class="grid_cell in_input"><?php echo $lname.' '.$fname;?></div>
+                                <div data-name="uname" class="grid_cell in_input"><?php echo $lname.' '.$fname;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Email</b></div>
-                                <div name="email" class="grid_cell in_input"><?php echo $uemail;?></div>
+                                <div data-name="email" class="grid_cell in_input"><?php echo $uemail;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Password</b></div>
-                                <div name="new_pass" class="grid_cell in_input input_pass">*********</div>
+                                <div data-name="new_pass" class="grid_cell in_input input_pass">*********</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Confirm Password</b></div>
-                                <div name="conf_pass" class="grid_cell in_input input_pass">*********</div>
+                                <div data-name="conf_pass" class="grid_cell in_input input_pass">*********</div>
                                 <div class="clear"></div>
                                 <input type="hidden" name="my_details_edit" value="1" />
                             </div>
@@ -129,22 +129,22 @@ if(is_user_logged_in()){
                         <form action="#" method="post">
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Card Number</b></div>
-                                <div name="card_number" class="grid_cell in_input card_no"><?php echo $card_number;?></div>
+                                <div data-name="card_number" class="grid_cell in_input card_no"><?php echo $card_number;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Name on Card</b></div>
-                                <div name="name_on_card" class="grid_cell in_input"><?php echo $name_on_card;?></div>
+                                <div data-name="name_on_card" class="grid_cell in_input"><?php echo $name_on_card;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Expiry</b></div>
-                                <div name="card_expiry" class="grid_cell in_input small_input card_expiry"><?php echo $card_expiry;?></div>
+                                <div data-name="card_expiry" class="grid_cell in_input small_input card_expiry"><?php echo $card_expiry;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>CVC</b></div>
-                                <div name="card_cvc" class="grid_cell in_input small_input"><?php echo $card_cvc;?></div>
+                                <div data-name="card_cvc" class="grid_cell in_input small_input"><?php echo $card_cvc;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
@@ -186,22 +186,22 @@ if(is_user_logged_in()){
                         <form action="#" method="post">
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Name</b></div>
-                                <div name="user_organisation" class="grid_cell in_input width70P"><?php echo $user_org;?></div>
+                                <div data-name="user_organisation" class="grid_cell in_input width70P"><?php echo $user_org;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Website</b></div>
-                                <div name="user_organisation_web" class="grid_cell in_input"><?php echo $user_org_web;?></div>
+                                <div data-name="user_organisation_web" class="grid_cell in_input"><?php echo $user_org_web;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>Description</b></div>
-                                <div name="user_organisation_desc" class="grid_cell in_input"><?php echo $user_org_desc;?></div>
+                                <div data-name="user_organisation_desc" class="grid_cell in_input"><?php echo $user_org_desc;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="grid_cell width20P"><b>ABN</b></div>
-                                <div name="user_organisation_abn" class="grid_cell in_input"><?php echo $user_org_abn;?></div>
+                                <div data-name="user_organisation_abn" class="grid_cell in_input"><?php echo $user_org_abn;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
