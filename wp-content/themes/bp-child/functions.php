@@ -1435,11 +1435,15 @@ function show_test_cases(){
 		foreach($test_cases_assoc as $test_case_assoc){
 			if ($test_case_assoc == $_GET['post']){
 				echo '<a href="'.get_permalink().'" target="_blank">'.get_the_title().'</a>';
-				//echo $test_case_assoc;
+				echo ' - ';
+				echo '<a href="">Edit</a>';
+				echo '<a href="">Hide</a>';
+				echo '<a href="">Delete</a>';
 				echo '<br />';
 			}
 		}
 	endwhile;
+	$post = $post_backup;
 
 }
 
@@ -1970,7 +1974,7 @@ function create_new_user(){
     $activation_key =  md5($_POST['user_email']);
 	$wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
 
-	update_user_meta ($user_id, 'organisation', $_POST['organisation']);
+	update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
 	update_user_meta ($user_id, 'contact_phone', $_POST['contact_phone']);
 	
     send_email_verification($_POST['user_email'], $_POST['user_login'], $_POST['user_pass']);
@@ -2053,10 +2057,12 @@ function custom_login_redirect( $redirect_to, $request, $user ){
 }
 add_filter( 'login_redirect', 'custom_login_redirect', 10, 3 );
 
+
+
 /*--------------------------------------------------
 My Details updates
 --------------------------------------------------*/
-if(isset($_POST['my_details_edit']) && $_POST['my_details_edit']){
+if(isset($_POST['my_details_edit'])){
     
     $user_id = $_POST['user_id'];
     $uname = explode(' ', $_POST['uname']);
@@ -2107,9 +2113,7 @@ if(isset($_POST['my_details_edit']) && $_POST['my_details_edit']){
 /*--------------------------------------------------
 My Payment Method updates
 --------------------------------------------------*/
-
 //check card number
-
 function check_cc($cc, $extra_check = false){
     $cards = array(
         "visa" => "(4\d{12}(?:\d{3})?)",
@@ -2130,13 +2134,30 @@ function check_cc($cc, $extra_check = false){
     return ($result>0)?$names[sizeof($matches)-2]:false;
 }
 
+//check the expiry card date
+function check_exp_date($month, $year) {
+    
+    /* Get timestamp of midnight on day after expiration month. */
+    $exp_ts = mktime(0, 0, 0, $month + 1, 1, $year);
 
+    $cur_ts = time();
+    /* Don't validate for dates more than 10 years in future. */
+    $max_ts = $cur_ts + (10 * 365 * 24 * 60 * 60);
+
+    if ($exp_ts > $cur_ts && $exp_ts < $max_ts) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//save my payment method
 if(isset($_POST['my_payment_edit'])){
     
     $user_id = $_POST['user_id'];
-    $card_number = $_POST['card_number'];
+    $card_number = str_replace(' ', '', $_POST['card_number']);
     $name_on_card = $_POST['name_on_card'];
-    $card_expiry = $_POST['card_expiry'];
+    $card_expiry = explode('/', $_POST['card_expiry']);
     $card_cvc = $_POST['card_cvc'];
     
     $errors = 'no_errors';
@@ -2154,12 +2175,42 @@ if(isset($_POST['my_payment_edit'])){
     if($name_on_card!=''){
         update_user_meta( $user_id, 'name_on_card', $name_on_card);
     }
-    if($card_expiry!=''){
-        update_user_meta( $user_id, 'card_expiry', $card_expiry);
+    if($card_expiry!='' && check_exp_date($card_expiry[0], $card_expiry[1])){
+        update_user_meta( $user_id, 'card_expiry', $_POST['card_expiry']);
+    }else{
+        $errors = 'Your card has expired or your expiry date is incorrect!';
     }
-    if($card_cvc!=''){
+    
+    
+    if($card_cvc!='' && (strlen($card_cvc)==3 || strlen($card_cvc)==4)){
         update_user_meta( $user_id, 'card_cvc', $card_cvc);
+    }else{
+        $errors = 'Your CVC code is incorrect';
     }
+    
+    echo $errors;
+    
+    exit();
+}
+
+
+/*--------------------------------------------------
+My Organisation updates
+--------------------------------------------------*/
+if(isset($_POST['my_organisation_edit'])){
+    
+    $user_id = $_POST['user_id'];
+    $user_organisation = $_POST['user_organisation'];
+    $user_organisation_web = $_POST['user_organisation_web'];
+    $user_organisation_desc = $_POST['user_organisation_desc'];
+    $user_organisation_abn = $_POST['user_organisation_abn'];
+    
+    $errors = 'no_errors';
+    
+    update_user_meta($user_id, 'organisation', $user_organisation);
+    update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
+    update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
+    update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);
     
     echo $errors;
     

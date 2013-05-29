@@ -131,7 +131,7 @@ $(document).ready(function() {
 	// EXPANDABLE GRID
 	///////////////////////////////////////////////////////
 	
-	$('form[name="add_new_ts"] .expandable').click(function(){
+	$('#my_profile .expandable').click(function(){
 		$(this).toggleClass('open');
 		$(this).parent().parent().next().slideToggle('fast');
 	});
@@ -670,8 +670,8 @@ $(document).ready(function() {
         jQuery('.errors_msg').hide();
         
         var options = {
-            url:window.location.href,
-            //data: {profile_edits: 1},
+            url: window.location.href,
+            data: {user_id: jQuery('input[name="user_id"]').val()},
             success: function(data){
                if(data=='no_errors'){
                     location.reload(); 
@@ -683,6 +683,8 @@ $(document).ready(function() {
         $(getThisForm+' form').ajaxSubmit(options);
     });
     
+    
+    //change popups according to what button is pressed
     jQuery(document).on('click', '.add_user_btn', function(){
         jQuery('#dinamic_pop').show();
         jQuery('#registration').hide();
