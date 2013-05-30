@@ -2404,3 +2404,7 @@ function my_front_end_login_fail( $username ) {
       exit;
    }
 }
+
+// Login page fix
+add_action( 'login_head', 'get_header' );
+
