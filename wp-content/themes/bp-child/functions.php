@@ -2407,4 +2407,5 @@ function my_front_end_login_fail( $username ) {
 
 // Login page fix
 add_action( 'login_head', 'get_header' );
-
+add_action( 'login_footer', 'get_footer' );
+add_filter( 'login_headerurl', create_function('', 'return false;') );
