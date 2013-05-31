@@ -2406,10 +2406,20 @@ function my_front_end_login_fail( $username ) {
 }
 
 // Login page fix
-/*
-add_action( 'login_head', 'get_header' );
-add_action( 'login_footer', 'get_footer' );
-add_filter( 'login_headerurl', create_function('', 'return false;') );
-add_filter( 'login_headertitle', create_function('', 'return false;') );
-add_filter( 'login_body_class', create_function('', 'return "content container";') );
-*/
+function my_check_password_reset_key($key, $login) {
+    global $wpdb;
+
+    $key = preg_replace('/[^a-z0-9]/i', '', $key);
+
+    if ( empty( $key ) || !is_string( $key ) )
+	return new WP_Error('invalid_key', __('Invalid key'));
+    if ( empty($login) || !is_string($login) )
+	return new WP_Error('invalid_key', __('Invalid key'));
+
+    $user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE user_activation_key = %s AND user_login = %s", $key, $login));
+
+    if ( empty( $user ) )
+	return new WP_Error('invalid_key', __('Invalid key'));
+
+    return $user;
+}
