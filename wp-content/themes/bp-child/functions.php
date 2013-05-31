@@ -526,9 +526,15 @@ function select_test_suites(){
 				<option value="">Choose Related Suite</option>
 				<?php
 				while ( $loop->have_posts() ) : $loop->the_post();
+					if (isset($_GET['set_ts'])){ 
+						?>
+						<option value="<?php the_ID(); ?>" <?php if(get_the_ID()==$_GET['set_ts']) {echo 'selected="selected"';} ?> > <?php the_title(); ?></option>
+						<?php 
+						}
+						else{
 					 ?>
-					 <option value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> </option>
-					<?php
+					 <option value="<?php the_ID(); ?>"><?php the_title(); ?> </option>
+					<?php }
 				endwhile;
 				?>
 		</select>
