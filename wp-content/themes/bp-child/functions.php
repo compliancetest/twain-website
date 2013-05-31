@@ -1450,7 +1450,7 @@ function show_test_cases(){
 	}
 
 	echo '<div class="clear"></div>';	
-	echo '<a class="add_new_testcase button right" href="post-new.php?post_type=test-case&set_ts='.$post->ID.'" target="_blank">Add</a>';
+	echo '<a class="add_new_testcase button right" href="post-new.php?post_type=test-case&set_ts='.$_GET['post'].'" target="_blank">Add</a>';
 	?>
 	<div class="clear"></div>
 	<!-- Script Hide / Delete Test Case
