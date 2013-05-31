@@ -1429,36 +1429,89 @@ function show_test_cases(){
 	global $post;
 	$post_backup = $post;
 	$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
+	$found = false;
 	while ( $loop->have_posts() ) : $loop->the_post();
 		$id = get_the_ID();
 		$test_cases_assoc = get_post_meta($id, 'test_suites', true);
-		foreach($test_cases_assoc as  $test_case_assoc){
-			if ($test_case_assoc == $_GET['post']){
-				echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
-				echo ' - ';
-				echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
-				echo '<a id="hide_testcase" class="'.$id.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Hide</a>';
-				echo '<a id="delete_testcase" class="'.$id.'" style="cursor:pointer; text-decoration: underline;">Delete</a>';
-				echo '<br />';
-			}
+		//var_dump($test_cases_assoc);
+		if (in_array($_GET['post'], $test_cases_assoc)){
+			$found = true;
+			echo '<div class="the_test_case">';
+			echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
+			echo ' - ';
+			echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
+			echo '<a class="action_testcase" data-action="hide_testcase" data-id="'.$id.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Hide</a>';
+			echo '<a class="action_testcase" data-action="delete_testcase" data-id="'.$id.'" style="cursor:pointer; text-decoration: underline;">Delete</a>';
+			echo '</div>';
 		}
 	endwhile;
+	if (!$found){
+		echo 'No test cases associated';
+	}
+
+	echo '<div class="clear"></div>';	
+	echo '<a class="add_new_testcase button right" href="post-new.php?post_type=test-case&set_ts='.$post->ID.'" target="_blank">Add</a>';
 	?>
+	<div class="clear"></div>
 	<!-- Script Hide / Delete Test Case
 	-->
 	<script type="text/javascript">
-	jQuery(document).ready(function() { 
-		jQuery(document).on('click', '#hide_testcase', function(){
-		var id = jQuery(this).attr('class');
-		alert(id);
+	jQuery(document).ready(function() {
+		jQuery(document).on('click', '.action_testcase', function(){
+			var the_id = jQuery(this).attr('data-id');
+			var the_action = jQuery(this).attr('data-action');
+			var get_parent = jQuery(this);
+			
+			var field_tc = {
+				testcase_id : the_id,
+				action : the_action
+				};
+			
+			jQuery.ajax({
+				url: window.location.href,
+				data: field_tc,
+				type:'POST',
+				success: function(data){
+					get_parent.parent().remove();
+				},
+				error: function(data){
+				}
+			});	
 		});
 	});
 	</script>
 	
 	<?php
 	$post = $post_backup;
-
 }
+
+function testcase_actions(){
+	if(isset($_POST['testcase_id'])){
+		if ($_POST['action'] == 'hide_testcase'){
+			//Hide Test Case
+			$test_case = array();
+			$the_test_cases = get_post_meta($_POST['testcase_id'], 'test_suites', true);
+			foreach ($the_test_cases as $the_test_case){
+				if ($_GET['post'] != $the_test_case){
+					array_push($test_case, $the_test_case);
+					} 
+				}
+			update_post_meta($_POST['testcase_id'], 'test_suites', $test_case);
+			
+			
+		}
+		
+		else if ($_POST['action'] == 'delete_testcase'){
+			//Delete Test Case
+			wp_delete_post($_POST['testcase_id'], true );
+			
+		}
+		exit();
+		
+	}
+}
+
+add_action('admin_init', 'testcase_actions');
 
 add_action('save_post', 'save_test_case_post');
 
@@ -1666,97 +1719,64 @@ function save_ts($post_id) {
 /*Metabox Specification Documents */
 function add_spec_doc_metaboxes(){
 	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
-    add_meta_box("specdoc_metabox", "Specification Documents", 'show_spec_doc', "test-suite", "normal", "high");
+   add_meta_box("specdoc_metabox", "Specification Documents", 'show_spec_doc', "test-suite", "normal", "high");
 }
 
 add_action('admin_menu', 'add_spec_doc_metaboxes');
 
 function show_spec_doc(){
-	global $post;
+	global $post, $wpdb;
 	$post_backup = $post;
-	$current_doc_name = get_post_meta($post->ID, 'doc_name', true);
-	$current_doc_loc= get_post_meta($post->ID, 'doc_loc', true);
-	$current_doc_desc= get_post_meta($post->ID, 'doc_desc', true);
-	$current_doc_type = get_post_meta($post->ID, 'doc_type', true);
-	//echo $current_ts;
+	$myrows = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id={$_GET['post']}");
+	foreach($myrows as $row){
+		$doc_name = $row->doc_name;
+		$doc_desc = $row->doc_desc;
+		$doc_loc = $row->doc_loc_url;
+		$doc_file_name = $row->doc_file_name;
+		echo '<div class="elem2"> <div class="elem2">
+				<input type="hidden" name="doc_id[]" value="'.$row->id.'"/>
+				<label for="doc_name"><b>Document Name: </b></label> <br />
+				<input type="text" name="doc_name[]" value="'.$doc_name.'" size="30" class="mf_text"/> 
+				<br clear="all" />
+				<label for="doc_desc"><b>Document Description: </b></label> <br />
+				<input type="text" name="doc_desc[]" value="'.$doc_desc.'" size="30" class="mf_text"/>
+				<br clear="all" /> <br clear="all" />	
+				<label for="doc_loc"><b>Document Location: </b></label> <br />
+				<input type="text" name="doc_loc[]" value="'.$doc_loc.'" size="30" class="mf_text"/> 					
+				<br clear="all" />
+				OR<br />
+				<label for="doc_upload"><b>Upload a Document: </b></label> 
+				<br />'.$doc_file_name.'<br clear="all" /> ';
+				echo '<div class="button remove_doc left" data-id="'.$row->id.'">Remove</div> </div></div>';
+		}
 	
-	//$meta = get_post_meta($post->ID, $field['id'], true);  
-	
-	//echo '<input type="hidden" name="custom_doc" value="', wp_create_nonce(basename(__FILE__)), '" />';
-	?>
-	<div id="suites2">
-		<div class="elements2">
-			
-		<?php
-		foreach($current_doc_name as $key => $doc_name){
-		  foreach ($current_doc_loc as $key2 => $doc_loc){
-		    foreach ($current_doc_desc as $key3 => $doc_desc){
-			  foreach ($current_doc_type as $key4 => $doc_type){
-			    if (($key == $key2) && ($key == $key3) && ($key == $key4)){ ?>
-				<div class="elem2"> <div class="elem2">
-					<select name="doc_type[]">
-						<option value="0">Choose Document Type</option>
-						<option value="implementation_guide" <?php if($doc_type == 'implementation_guide') {echo "selected='selected'"; } ; ?>>Implementation Guide</option>
-						<option value="taxonomy" <?php if($doc_type == 'taxonomy') {echo "selected='selected'"; } ; ?>>Taxonomy</option>
-						<option value="error" <?php if($doc_type == 'error') {echo "selected='selected'"; } ; ?>>Error Messages</option>
-					</select> <br />
-					<label for="doc_name"><b>Document Name: </b></label> <br />
-					<input type="text" name="doc_name[]" value="<?php echo $doc_name; ?>" size="30" class="mf_text"/> 
-
-					<br clear="all" />
-					<label for="doc_loc"><b>Document Location: </b></label> <br />
-					<input type="text" name="doc_loc[]" value="<?php echo $doc_loc; ?>" size="30" class="mf_text"/> 
-					
-					<br clear="all" />
-					<label for="doc_desc"><b>Document Description: </b></label> <br />
-					<input type="text" name="doc_desc[]" value="<?php echo $doc_desc; ?>" size="30" class="mf_text"/> 
-					
-					<br />
-					<div class="button remove_doc left">Remove</div>
-					<br /> <br />
-				</div> </div> 
-				
-				<?php }
-					}
-				  }
-			 }
-			 		 	
-		 }
-
-			 if (empty($current_doc_name)){
-				 ?>
-				 <div class="elem2">
-					 <select name="doc_type[]">
-						<option value="0">Choose Document Type</option>
-						<option value="implementation_guide">Implementation Guide</option>
-						<option value="taxonomy">Taxonomy</option>
-						<option value="error">Error Messages</option>
-					</select> <br />
-					
+	if(empty($myrows)){
+		echo '<div class="elem2">
+					<input type="hidden" name="doc_id[]" value="0" />
 					<label for="doc_name"><b>Document Name: </b></label> <br />
 					<input type="text" name="doc_name[]" size="30" class="mf_text"/> 
 					<br clear="all" />
 					
-					<label for="doc_loc"><b>Document Location:</b></label> <br />
-					<input type="text" name="doc_loc[]" size="30" class="mf_text"/> 
-					<br clear="all" />
-					
-					<label for="doc_loc"><b>Document Description:</b></label> <br />
+					<label for="doc_desc"><b>Document Description:</b></label> <br />
 					<input type="text" name="doc_desc[]" size="30" class="mf_text"/> 
 					<br clear="all" />
-					
+					<label for="doc_loc"><em>Provide a </em><b>Document Location URL:</b></label> <br />
+					<input type="text" name="doc_loc[]" size="30" class="mf_text"/> 
+					<br clear="all" />
+					<label for="doc_upload"><em>OR </em><b>Upload a Document: </b></label> <br />
+					<input type="file" name="attachment_doc[]">
+					<br clear="all" />
 					<div class="button remove_doc left">Remove</div>
-					<br /> <br />
-				</div> 
-				 <?php
-				 }
-		 ?>
-	</div>
+					<br clear="all" />
+				</div>';
+		}	
+	?>
+	<input type="hidden" name="testsuiteid" value="<?php echo $post->ID;?>">
 
 	<div class="copy-correct-docs">
     </div>
     
-    </div>
+
     <a class="add_new_doc button right">Add</a>
 
     <div class="clear"></div>
@@ -1768,14 +1788,24 @@ function show_spec_doc(){
     </style>
 
     <script type="text/javascript">
-    jQuery(document).ready(function() {		
+    jQuery(document).ready(function() {
 		jQuery('.add_new_doc').click(function(data) {
-			jQuery('.copy-correct-docs').append(jQuery('.elem2').html());
+			jQuery('.copy-correct-docs').html('<input type="hidden" name="doc_id[]" value="0" /> <label for="doc_name"><b>Document Name: </b></label> <br /><input type="text" name="doc_name[]" size="30" class="mf_text"/> <br clear="all" /><label for="doc_desc"><b>Document Description:</b></label> <br /> <input type="text" name="doc_desc[]" size="30" class="mf_text"/> <br clear="all" /> <label for="doc_loc"><em>Provide a </em><b>Document Location URL:</b></label> <br />	<input type="text" name="doc_loc[]" size="30" class="mf_text"/> <br clear="all" /> <label for="doc_upload"><em>OR </em><b>Upload a Document: </b></label> <br /> <input type="file" name="attachment_doc[]"> <br clear="all" /> <div class="button remove_doc left">Remove</div> <br clear="all" />');
 		});
 		
-		jQuery('.remove_doc').live('click', function() {
-			jQuery(this).parents('.elem2').remove();
+		jQuery('.remove_doc').live('click', function(data) {
+			/*
+			jQuery(this).parents('.elem2').remove();*/
+			var doc_id = jQuery(this).attr('data-id');
+			alert(doc_id);
+			var elem = this;
+			jQuery.post(HOMEURL + '?doc_id=' + doc_id + '&action=deletedoc',
+				{}, function(data){
+					jQuery(elem).parents('.elem2').remove();
+			});
+			
 		});
+		jQuery('form#post').attr('enctype','multipart/form-data');
 	});
     </script>	
 	
@@ -1786,11 +1816,13 @@ function show_spec_doc(){
 add_action('save_post', 'save_spec_docs');
 
 function save_spec_docs($post_id) {
-	// verify nonce
-	if (!isset($_POST['custom_doc']) || !wp_verify_nonce($_POST['custom_doc'], basename(__FILE__))) {
-	//return $post_id;
-}
-
+	static $visited = false;
+	if ($visited) {
+		return;
+	} else {
+		$visited = true;
+	}
+	global $wpdb;
     // check autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return $post_id;
@@ -1800,18 +1832,109 @@ function save_spec_docs($post_id) {
      if (!current_user_can('edit_post', $post_id)) {
       return $post_id;
     }
-    
-    $doc_type = $_POST['doc_type'];
-    $doc_name = $_POST['doc_name'] ;
-    $doc_loc = $_POST['doc_loc'];
-    $doc_desc = $_POST['doc_desc'];
-    
-	update_post_meta($post_id, 'doc_type', $doc_type);
-	update_post_meta($post_id, 'doc_name', $doc_name);
-	update_post_meta($post_id, 'doc_loc', $doc_loc);
-	update_post_meta($post_id, 'doc_desc', $doc_desc);
-}
 
+	$ts_id = $_POST['testsuiteid'];
+    $docs_name = $_POST['doc_name'];
+    $docs_desc = $_POST['doc_desc'];
+    $docs_loc = $_POST['doc_loc'];
+    $docs_file = $_FILES['attachment_doc'];
+    $docs_id = $_POST['doc_id'];
+    
+    //echo '<pre>'.print_r($docs_file, true).'</pre>';die();
+    foreach ($docs_name as $key => $doc_name) {
+		$doc_desc = $docs_desc[$key];
+		$doc_loc = $docs_loc[$key];
+		$doc_desc = $docs_desc[$key];
+		$doc_id = $docs_id[$key];
+		$dest = '';
+		if (!$doc_loc) {
+			//Process attachments
+			$doc_file = array(
+				'name' => $docs_file['name'][$key],
+				'tmp_name' => $docs_file['tmp_name'][$key],
+				'error' => $docs_file['error'][$key],
+				'size' => $docs_file['size'][$key],
+				'type' => $docs_file['type'][$key],
+			);
+			if ($doc_file['error'] != 0) {
+				continue;
+			}
+			$uploads = wp_upload_dir();
+			$uploads_dir = $uploads['basedir'].DIRECTORY_SEPARATOR.'docs_attachments';
+			$url_dir = $uploads['baseurl'].DIRECTORY_SEPARATOR.'docs_attachments'.DIRECTORY_SEPARATOR;
+			if(!file_exists($uploads_dir)){
+				mkdir($uploads_dir);
+			}
+			if (file_exists($uploads_dir.DIRECTORY_SEPARATOR.$doc_file['name'])) {
+				$i = 1;
+				while (file_exists($uploads_dir.DIRECTORY_SEPARATOR.$i.'-'.$doc_file['name'])) {
+					$i++;
+				}
+				$dest = $uploads_dir.DIRECTORY_SEPARATOR.$i.'-'.$doc_file['name'];
+				$url = $url_dir.$i.'-'.$doc_file['name'];
+			} else {
+				$dest = $uploads_dir.DIRECTORY_SEPARATOR.$doc_file['name'];
+				$url = $url_dir.$doc_file['name'];
+			}
+			move_uploaded_file($doc_file['tmp_name'], $dest);
+			$doc_loc = $url;
+		}
+		if($doc_id == 0){
+			echo $doc_id.' ';
+			//INSERT
+			$wpdb->insert(
+				$wpdb->prefix.'ts_options_documents', 
+				array( 
+					'ts_id' => $ts_id,
+					'doc_name' => $doc_name,
+					'doc_desc' => $doc_desc,
+					'doc_loc_url' => $doc_loc,
+					'doc_file_name'=> $doc_file['name'],
+					'doc_file_path' => $dest
+					
+				), 
+				array( 
+					'%d',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s'
+				)
+			);
+		}
+		else {
+			echo $doc_id.' ';
+		//UPDATE
+			$wpdb->update(
+				$wpdb->prefix.'ts_options_documents', 
+				array( 
+					'ts_id' => $ts_id,
+					'doc_name' => $doc_name,
+					'doc_desc' => $doc_desc,
+					'doc_loc_url' => $doc_loc,
+					'doc_file_name'=> $doc_file['name'],
+					'doc_file_path' => $dest
+				), 
+				array( 
+					'id' => $doc_id 
+				),
+				array(
+					'%d',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s'				
+				) , 
+				 
+				array( 
+					'%d'	// value2
+				)
+			);
+		}
+	}
+}
 
 /*Metabox Conformance Levels */
 function add_conf_levels_metaboxes(){
