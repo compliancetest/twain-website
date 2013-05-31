@@ -117,7 +117,8 @@ get_header();
 				$message .= sprintf(__('Username: %s'), $user_login) . "\r\n\r\n";
 				$message .= "<br />";
 				$message .= __('To reset your password visit the following address, otherwise just ignore this email and nothing will happen.') . "\r\n\r\n";
-				$message .= network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . "&redirect_to=".urlencode(get_option('siteurl'))."\r\n";
+				//$message .= network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . "&redirect_to=".urlencode(get_option('siteurl'))."\r\n";
+				$message .= network_site_url("password-recovery/?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . "\r\n";
 				//send email meassage
 				if (FALSE == wp_mail($user_email, sprintf(__('[%s] Password Reset'), get_option('blogname')), $message))
 				$error[1] = '<p class="error_recovery">' . __('The e-mail could not be sent.') . "<br />\n" . __('Possible reason: your host may have disabled the mail() function...') . '</p>';
