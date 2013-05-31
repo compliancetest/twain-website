@@ -2477,13 +2477,12 @@ process_add_recipe();
 add_action('admin_head','print_vars');
 add_action('registered_post_type','print_vars');
 function print_vars(){
-/*
 ?>
 <script type="text/javascript">
 var HOMEURL = "<?php echo get_home_url(); ?>";
 </script>
 <?php
-*/
+
 }
 
 function remove_file($id){
@@ -2498,6 +2497,22 @@ if((isset($_GET['action'])) && ($_GET['action'] == 'deletefile') ){
 }
 function ajax_remove_file() {
 	remove_file($_GET['file_id']);
+	exit();
+}
+
+//Remove Docs
+function remove_doc($id_doc){
+	global $wpdb;
+	$result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}ts_options_documents WHERE id={$id_doc}");
+	unlink($result->doc_file_path);
+	$wpdb->query("DELETE FROM {$wpdb->prefix}ts_options_documents WHERE id={$id_doc}");
+}
+
+if((isset($_GET['action'])) && ($_GET['action'] == 'deletedoc') ){
+	add_action('template_redirect','ajax_remove_doc');
+}
+function ajax_remove_doc() {
+	remove_doc($_GET['doc_id']);
 	exit();
 }
 
