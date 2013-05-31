@@ -963,7 +963,12 @@ if (isset($_POST['testsuite_id3'])){
 function show_choose_initiating_message(){
 	global $post;
 	$post_backup = $post;
-	$current_test_suite = get_post_meta($post->ID, 'test_suites', true);
+	if (isset($_GET['set_ts'])){
+		$current_test_suite[0] = $_GET['set_ts'];
+	}
+	else{
+		$current_test_suite = get_post_meta($post->ID, 'test_suites', true);
+	}
 	$current_init_message = get_post_meta($post->ID, 'choose_init_messages', true);
 	
 	$all_init_messages = array();
@@ -992,7 +997,12 @@ function show_choose_initiating_message(){
 function show_conformance_level(){
 	global $post;
 	$post_backup = $post;
-	$current_test_suite = get_post_meta($post->ID, 'test_suites', true);
+	if (isset($_GET['set_ts'])){
+		$current_test_suite[0] = $_GET['set_ts'];
+	}
+	else{
+		$current_test_suite = get_post_meta($post->ID, 'test_suites', true);
+	}
 	$current_conformance_level = get_post_meta($post->ID, 'conformance_level', true);
 	$all_conf_level = array();
 	echo '<select name="conformance_level" id="checkconflvl">';
@@ -1020,7 +1030,12 @@ function show_conformance_level(){
 function show_choose_roles(){
 	global $post;
 	$post_backup = $post;
-	$current_test_suite = get_post_meta($post->ID, 'test_suites', true);
+	if (isset($_GET['set_ts'])){
+		$current_test_suite[0] = $_GET['set_ts'];
+	}
+	else{
+		$current_test_suite = get_post_meta($post->ID, 'test_suites', true);
+	}
 	
 	//Current Roles Selected
 	$current_tester_role = get_post_meta($post->ID, 'choose_tester_role', true);
