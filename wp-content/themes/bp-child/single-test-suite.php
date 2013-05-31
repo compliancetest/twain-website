@@ -113,32 +113,26 @@ get_header();
 								<div class="tab-content white_bcg" id="tabs_sv2" style="display: none; ">
 									<div class="column">
 										<?php 
-											$doc_type_array = get_post_meta(get_the_ID(), 'doc_type', true); 
+										$the_post_id= get_the_ID();
+										$myrows = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id={$the_post_id}");
+										foreach($myrows as $row){
+											$doc_name = $row->doc_name;
+											$doc_desc = $row->doc_desc;
+											$doc_loc = $row->doc_loc_url;
+											$doc_file_name = $row->doc_file_name;
+											$doc_file_url = $row->doc_loc_url;
+											echo '<div class="grid_cell width100P">';
+											echo '<a href="'.$doc_loc.'" target="_blank" class="underline blue_txt file">';
+											echo $doc_name;
+											echo '</a><p class="paddingleft20">'.$doc_desc.'</p>';
+											echo '</div><div class="clear"></div>';
+										}
+											//$doc_type_array = get_post_meta(get_the_ID(), 'doc_type', true); 
 											$doc_name_array = get_post_meta(get_the_ID(), 'doc_name', true); 
 											$doc_loc_array = get_post_meta(get_the_ID(), 'doc_loc', true); 
 											$doc_desc_array = get_post_meta(get_the_ID(), 'doc_desc', true); 
-											
-											foreach($doc_type_array as $key => $doc_type){
-												foreach ($doc_name_array as $key2 => $doc_name){
-													foreach($doc_loc_array as $key3 => $doc_loc){
-														foreach ($doc_desc_array as $key4 => $doc_desc){
-															if(($key == $key2) && ($key == $key3) && ($key == $key4) && ($doc_type != '') ){
-															 ?>
-															<div class="grid_cell width20P bold top3"> 
-																<?php echo ucwords(str_replace("_"," ",$doc_type)).':'; ?>
-															</div>
-															<div class="grid_cell width80P">
-																<a href="<?php echo $doc_loc ;?></php>" target="_blank" class="underline blue_txt file"><?php echo $doc_name; ?></a>
-																<p class="paddingleft20"><?php echo $doc_desc; ?></p>
-															</div>
-															<div class="clear"></div>
-												  <?php }
-													}
-													}
-												}
-											}
 										?>
-										</div>
+									</div>
 								</div> <!--end tab 2-->
 								
 								<div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
