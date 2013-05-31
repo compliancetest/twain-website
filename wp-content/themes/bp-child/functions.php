@@ -1754,6 +1754,7 @@ function show_spec_doc(){
 		$doc_desc = $row->doc_desc;
 		$doc_loc = $row->doc_loc_url;
 		$doc_file_name = $row->doc_file_name;
+		$doc_file_url = $row->doc_loc_url;
 		echo '<div class="elem2"> <div class="elem2">
 				<input type="hidden" name="doc_id[]" value="'.$row->id.'"/>
 				<label for="doc_name"><b>Document Name: </b></label> <br />
@@ -1767,7 +1768,7 @@ function show_spec_doc(){
 				<br clear="all" />
 				OR<br />
 				<label for="doc_upload"><b>Upload a Document: </b></label> 
-				<br />'.$doc_file_name.'<br clear="all" /> ';
+				<br /><a href="'.$doc_file_url.'" target="_blank">'.$doc_file_name.'</a><br clear="all" /> ';
 				echo '<div class="button remove_doc left" data-id="'.$row->id.'">Remove</div> </div></div>';
 		}
 	
@@ -1818,7 +1819,6 @@ function show_spec_doc(){
 			/*
 			jQuery(this).parents('.elem2').remove();*/
 			var doc_id = jQuery(this).attr('data-id');
-			alert(doc_id);
 			var elem = this;
 			jQuery.post(HOMEURL + '?doc_id=' + doc_id + '&action=deletedoc',
 				{}, function(data){
