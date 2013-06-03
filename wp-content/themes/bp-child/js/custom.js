@@ -200,42 +200,46 @@ $(document).ready(function() {
 	$("#user_pass2").attr("value", "Password");
 	
 	/* Menu Level - 2 */
-	
-	jQuery('.has_dd_1 , .what_is').hover(function() {
-				jQuery('.submenu').addClass('block');
-				jQuery('.what_is').addClass('block');
-				//alert ('1111');
-			}, function() {
-					jQuery('.what_is').removeClass('block');
-					jQuery('.submenu').removeClass('block');
-					});
-
-	jQuery('.has_dd_2 , .why_compliance').hover(function() {
-				jQuery('.submenu').addClass('block');
-				jQuery('.why_compliance').addClass('block');
-				//alert ('1111');
-			}, function() {
-					jQuery('.why_compliance').removeClass('block');
-					jQuery('.submenu').removeClass('block');
-					});
-					
-	jQuery('.has_dd_3 , .compliancetest_serv').hover(function() {
-				jQuery('.submenu').addClass('block');
-				jQuery('.compliancetest_serv').addClass('block');
-				//alert ('1111');
-			}, function() {
-					jQuery('.compliancetest_serv').removeClass('block');
-					jQuery('.submenu').removeClass('block');
-					});		
-							
-	jQuery('.has_dd_4 , .help_faq').hover(function() {
-				jQuery('.submenu').addClass('block');
-				jQuery('.help_faq').addClass('block');
-				//alert ('1111');
-			}, function() {
-					jQuery('.help_faq').removeClass('block');
-					jQuery('.submenu').removeClass('block');
-					});						
+	jQuery('.has_dd_1').click(function(e){
+        $('.normal_dd:not(.what_is)').removeClass('block');
+        $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
+        $('.what_is').toggleClass('block');
+        $('.has_dd_1 > a').toggleClass('hover');
+        e.stopPropagation();
+        return false;
+        
+    });
+    jQuery('.has_dd_2').click(function(e){
+        $('.normal_dd:not(.why_compliance)').removeClass('block');
+        $('#menu-header_menu .menu-item:not(.has_dd_2) a').removeClass('hover');
+        $('.why_compliance').toggleClass('block');        
+        $('.has_dd_2 > a').toggleClass('hover');        
+        e.stopPropagation();
+        return false;
+        
+    });
+    jQuery('.has_dd_3').click(function(e){
+        $('.normal_dd:not(.compliancetest_serv)').removeClass('block');
+        $('#menu-header_menu .menu-item:not(.has_dd_3) a').removeClass('hover');
+        $('.compliancetest_serv').toggleClass('block');
+        $('.has_dd_3 > a').toggleClass('hover');
+        e.stopPropagation();
+        return false;
+        
+    });
+    jQuery('.has_dd_4').click(function(e){
+        $('.normal_dd:not(.help_faq)').removeClass('block');
+        $('#menu-header_menu .menu-item:not(.has_dd_4) a').removeClass('hover');        
+        $('.help_faq').toggleClass('block');
+        $('.has_dd_4 > a').toggleClass('hover');
+        e.stopPropagation();
+        return false;
+        
+    });
+    jQuery('body').click(function(){
+        $('.normal_dd').removeClass('block');
+        $('#menu-header_menu .menu-item a').removeClass('hover');        
+    })
 					
 	/* Certifications Sorf By */				
 	jQuery('.sort_status').change(function() {

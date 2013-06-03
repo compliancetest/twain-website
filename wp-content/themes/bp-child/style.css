@@ -960,6 +960,7 @@ top: -7px;
 
 #wrapper {
 	width: 100%;
+    min-width: 1000px;
 	background: white;
 	font-family: Arial;
 }
@@ -994,6 +995,7 @@ top: -7px;
 
 #content-pattern {
 	width: 100%;
+    min-width: 1000px;
 	margin-bottom: 0px;
 	background: url(images/pattern.png) top center repeat;
 }
@@ -1064,7 +1066,7 @@ top: -7px;
 
 }
 
-#cssmenu a:hover, #cssmenu a:active {
+#cssmenu a:hover, #cssmenu a.hover, #cssmenu a:active, #cssmenu a.active {
 	color: #fff;
 	text-shadow: none;
 	box-shadow: 0 0 10px #133d68 inset !important;
