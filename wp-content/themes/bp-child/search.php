@@ -23,7 +23,7 @@ global $post;
 				</form>
 			</div>
 			<div class="column three_quorters right nopaddingleft">
-				<h5 class="search_test_suite_results"><?php if (have_posts()) { ?>Showing 1- 10 of <b>150</b> Results for "<b><?php echo get_search_query(); ?></b>"<?php } else { ?>Nothing found...<?php } ?></h5>
+				<h5 class="search_test_suite_results"><?php if (have_posts()) { ?>Showing 1- 10 of <b><?php echo $wp_query->found_posts; ?></b> Results for "<b><?php echo get_search_query(); ?></b>"<?php } else { ?>Nothing found...<?php } ?></h5>
 			</div>
 			<div class="clear"></div>
 			
