@@ -451,7 +451,7 @@ $(document).ready(function() {
     
     
 	/* Search */
-	jQuery('#s').focus(function() {
+	jQuery('#search_bar #s').focus(function() {
 		jQuery('#s').removeClass('inactive_s');
 		jQuery('#s').addClass('active_s');
 	});
