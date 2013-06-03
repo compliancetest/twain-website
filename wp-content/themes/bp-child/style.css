@@ -2672,6 +2672,10 @@ background-image: url(images/white_gloss.png);
 	background-image: none;
 }
 
+.test_suits_research {
+	background-image: none !important;
+}
+
 #search_test_suite_submit {
 	background: url(images/search_test_suite_btn.png) left top no-repeat;
 	width: 18px !important;
