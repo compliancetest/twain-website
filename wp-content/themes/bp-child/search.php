@@ -13,7 +13,11 @@ global $post;
 
 	<div class="space25"></div>
 	<div class="content container" id="search">
+	<?php
+	if ($_GET['post_type']=='test-suite') { 
+		// Template Test Suite - Search Results : Goes here
 		
+	?>	
 		<div id="search_title_block">
 			
 			<div class="column quorter left">
@@ -43,11 +47,7 @@ global $post;
 			
 		</div> <!-- end search_title_block -->
 		
-	<?php
-	if ($_GET['post_type']=='test-suite') { 
-		// Template Test Suite - Search Results : Goes here
-		
-	?>
+	
 		<div id="search_result_block">
 			<div class="column sixth left"> 
 					<?php 
