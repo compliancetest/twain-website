@@ -19,6 +19,20 @@ global $post;
 			<div class="column quorter left">
 				<form role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>">
 					<input type="search" name="s" id="s" class="radius6 test_suits_research" value="<?php echo $_GET['s']; ?>" placeholder="Search Term" />
+					<div class="search_select_div" style="display:none;">
+							<div class="search_select">
+								<ul>
+									<li><a id="test-suite" class="current_chosen">Test Suites</a>
+										<ul class="">
+											<li><a id="test-suite">Test Suites</a></li>
+											<li><a id="product-service">Products</a></li>
+										</ul>
+									</li>	
+								</ul>
+							</div>
+							<input type="hidden" name="post_type" value="test-suite" id="hidden_value">
+					</div>
+					
 					<input type="submit" id="search_test_suite_submit" value="" />
 				</form>
 			</div>

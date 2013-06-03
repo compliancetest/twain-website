@@ -480,7 +480,7 @@ $(document).ready(function() {
     /*---------------------------------------------
     search validate
     ---------------------------------------------*/
-    jQuery("#hidden_value").val('');
+    //jQuery("#hidden_value").val('');
     
 	jQuery('.search_select, #searchform').on('click submit', function(event) {
         var eventType = event.type;
