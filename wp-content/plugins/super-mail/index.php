@@ -5,11 +5,9 @@ Plugin URI: http://www.b.org
 Description: edit mail  list
 Author: invader Zim
 */
-/*if (isset($_POST['si_contact_submitted'])){
-    if (empty($_POST['si_contact_name1'])){exit;}
-    if (empty($_POST['si_contact_email'])){exit;}
-    if (empty($_POST['si_contact_message'])){exit;}
-}*/
+if (isset($_POST['si_contact_submitted'])){
+    require_once('../../../wp-blog-header.php');
+}
 class spm_class{
     public $current_plugin_url;
     public $table_name;
