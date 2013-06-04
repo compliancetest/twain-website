@@ -191,6 +191,10 @@ get_header();
 		</div> 
 		
 		<!-- Test Cases -->
+		<div class="grid_row searchfilters">
+		
+		</div>
+		<div class="clear"></div>
 		<div class="grid_row test_cases">
 							
 							<div class="grid_head blue_grid special_grid_big">
