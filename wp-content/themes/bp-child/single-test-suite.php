@@ -234,8 +234,36 @@ get_header();
 								</div>
 							</div>
 							
-							<div class="grids">
+				<div class="grids">
+							<?php /*global $wpdb;
+							$thepostid = get_the_ID();
+							$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key='test_suites' AND meta_value LIKE '%{$thepostid}%'");
+							foreach($results as $res){
+								echo $res->;
+								}*/
 							
+							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
+							$found = false;
+							while ( $loop->have_posts() ) : $loop->the_post();
+								$id = get_the_ID();
+								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
+								//die(print_r($test_cases_assoc));
+								//var_dump($test_cases_assoc);
+								if (in_array($id, $test_cases_assoc)){
+									$found = true;
+									echo '<div class="the_test_case">';
+									echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
+									echo ' - ';
+									echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
+									echo '<a class="action_testcase" data-action="hide_testcase" data-id="'.$id.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Hide</a>';
+									echo '<a class="action_testcase" data-action="delete_testcase" data-id="'.$id.'" style="cursor:pointer; text-decoration: underline;">Delete</a>';
+									echo '</div>';
+								}
+							endwhile;
+							if (!$found){
+								echo 'No test cases associated';
+							}
+							?>
 							<?php 
 								/* Get Test Cases Associated */
 								
@@ -290,9 +318,7 @@ get_header();
 								}
 							?>	
 						
-							</div>
-						
-				</div>
+							</div></div>
 		
 		
 		
