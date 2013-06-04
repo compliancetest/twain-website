@@ -148,15 +148,18 @@ add_action('wp_head', 'add_header_scripts');
 
 function add_header_scripts()
 {
-	wp_deregister_script('jquery');
+	//wp_deregister_script('jquery');
 	
-	//wp_enqueue_script('jquery_min', locate_template().'/js/jquery-1.7.2.min.js');
+	//wp_enqueue_script('jquery_min', get_stylesheet_directory_uri().'/js/jquery-1.7.2.min.js');
+    
+    $actions_depends = array('jquery');
 	if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-		wp_enqueue_script('pie', template_location(false).'/js/PIE.js', array('jquery_min'));
-		$actions_depends = array('jquery_min', 'pie');
-	} else {
-		$actions_depends = array('jquery_min');
+		wp_enqueue_script('pie', get_stylesheet_directory_uri().'/js/PIE.js', $actions_depends);
+		$actions_depends[] = 'pie';
 	}
+
+    wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
+    wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);
 	//wp_enqueue_script('actions', template_location(false).'/js/custom.js', $actions_depends);
 	//wp_enqueue_style('fonts', 'http://fonts.googleapis.com/css?family=Lobster|Arvo');
 }

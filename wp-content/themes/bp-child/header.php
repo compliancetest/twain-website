@@ -10,9 +10,7 @@
         <link href='//fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
         <link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
-        <script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/jquery.form.js"></script>
-        <script type="text/javascript" src="<?php echo bloginfo('stylesheet_directory'); ?>/js/custom.js"></script>
+
 <script type="text/javascript">
 var HOMEURL = "<?php echo get_home_url(); ?>";
 </script>
