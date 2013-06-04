@@ -250,6 +250,7 @@ get_header();
 								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
 								//print_r($test_cases_assoc);
 								var_dump($test_cases_assoc);
+								echo '<br />';
 								if (in_array($id, $test_cases_assoc)){
 									$found = true;
 									echo '<div class="the_test_case">';
