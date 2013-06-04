@@ -5,13 +5,14 @@ Plugin URI: http://www.b.org
 Description: edit mail  list
 Author: invader Zim
 */
-if (isset($_POST['si_contact_submitted'])){
-    require_once('../../../wp-blog-header.php');
-}
+
 class spm_class{
     public $current_plugin_url;
     public $table_name;
     public function __construct(){
+        if (isset($_POST['si_contact_submitted'])){
+    require_once('../../../wp-blog-header.php');
+}
         global $table_name,$wpdb;
         $table_name = $wpdb->prefix;
         $table_name .= 'spm_emails_list';
@@ -42,7 +43,7 @@ class spm_class{
             return $wpdb->get_results("SELECT email_subject FROM $table_name");
         }
     }
-    private function create_table($table_name){
+    private function super_mail_create_table($table_name){
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         $sql = "CREATE TABLE $table_name (
             email_address VARCHAR(63535),
@@ -53,7 +54,7 @@ class spm_class{
     public function super_mail_form_add_emails(){
         global $wpdb, $table_name;
         if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name){
-            $this->create_table($table_name);
+            $this->super_mail_create_table($table_name);
         }
         if (isset($_POST['emails_form_submitted'])){
 
@@ -66,7 +67,7 @@ class spm_class{
                 $wpdb->query($sql_delete_all_rows);
             } else {
                 if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name){
-                    $this->create_table($table_name);
+                    $this->super_mail_create_table($table_name);
                 } else {
                     $wpdb->query($sql_delete_all_rows);
                     $wpdb->insert($table_name,$all);
