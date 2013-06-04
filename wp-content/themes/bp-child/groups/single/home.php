@@ -214,7 +214,7 @@ do_action( 'bp_before_group_header' );
 							$checked =  str_replace('_',' ',$vall); 
 							array_push($occ_statuses,$checked);
 							}
-								$current_test_suites = array();
+								$current_test_suites = array('');
 								$testsuites_result = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE group_id={$group_id}");
 								foreach ($testsuites_result as $ts){
 									array_push($current_test_suites, $ts->ts_ids);
