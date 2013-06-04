@@ -589,12 +589,16 @@ do_action( 'bp_before_group_header' );
 									<?php bp_docs_paginate_links() ?>
 								</div>
 							</div>
+							<?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
+										<p class="no-docs"><?php printf( __( '<a href="%s">Create new WIKI</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
+							<?php else : ?>
+								<p class="no-docs"></p>
 						<!--end grid-->	
 						
 						<?php else: ?>
 
 								<?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
-										<p class="no-docs"><?php printf( __( 'There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
+										<p class="no-docs"><?php printf( __( 'There are no Wiki for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
 							<?php else : ?>
 								<p class="no-docs"><?php _e( 'There are no docs for this view.', 'bp-docs' ) ?></p>
 								<?php endif ?>
