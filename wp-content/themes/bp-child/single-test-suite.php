@@ -267,10 +267,10 @@ get_header();
 									echo '<div class="grid_row white_bcg tocenter testcase_line ">';
 									/*echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';*/
 									
-									if ( is_user_logged_in() ) { 
-										echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.$get_the_title().'</a></div>';
+									if ( is_user_logged_in() ) {
+										echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
 										}
-										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.$tc_id.'</div>';
+										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
 									echo '<div class="clear"></div>';
 									echo '</div>';
 									
