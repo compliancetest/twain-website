@@ -2144,7 +2144,7 @@ if  (isset($_POST['form_set'])){
 	add_action('template_redirect', 'create_new_user');
 }
 
-if($_POST['resend_email_verification']){
+if (isset($_POST['resend_email_verification'])){
     
     global $current_user;
     
