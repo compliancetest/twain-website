@@ -282,7 +282,9 @@ get_header();
 							}
 							?>				
 					</div>
-					<div class="the_filters">
+					
+		</div>
+		<div class="the_filters">
 						<div class="grid_row">
 							<div class="grid_cell width45P">
 										<h5 class="blue_txt">Test Cases</h5>
@@ -309,9 +311,7 @@ get_header();
 							<div class="clear"></div>
 							<div id="double_border"></div>
 						</div>
-					</div>
-		</div>
-		
+	</div>
 		
 		
 	</div> <!--end content container-->
