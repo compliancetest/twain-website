@@ -192,30 +192,7 @@ get_header();
 		
 		<!-- Test Cases -->
 		<div class="grid_row test_cases">
-							<div class="grid_cell width45P">
-								<h5 class="blue_txt">Test Cases</h5>
-							</div>
-							<div class="grid_cell width55P right selecteds">
-								<span class="left padding5-10">Filter By: </span>
-								<div class="styled_select left">
-									<select>
-									  <option value="select_tester">Tester Role</option>
-									  <option value="1">Transferring Fund</option>
-									  <option value="2">Type 2</option>
-									</select>
-								</div>
-								<div class="styled_select left">
-									<select name="test">
-									  <option value="select_level">Conformance Level</option>
-									  <option value="1">B</option>
-									  <option value="2">A</option>
-									  <option value="3">AA</option>
-									</select>
-								</div>
-								<div class="clear"></div>
-							</div>
-							<div class="clear"></div>
-							<div id="double_border"></div>
+							
 							<div class="grid_head blue_grid special_grid_big">
 								<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
 									<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
@@ -303,7 +280,35 @@ get_header();
 							if (!$found){
 								echo 'No test cases associated';
 							}
-							?>					
+							?>				
+					</div>
+					<div class="the_filters">
+						<div class="grid_row">
+							<div class="grid_cell width45P">
+										<h5 class="blue_txt">Test Cases</h5>
+							</div>
+							<div class="grid_cell width55P right selecteds">
+								<span class="left padding5-10">Filter By: </span>
+								<div class="styled_select left">
+									<select>
+									  <option value="select_tester">Tester Role</option>
+									  <option value="1">Transferring Fund</option>
+									  <option value="2">Type 2</option>
+									</select>
+								</div>
+								<div class="styled_select left">
+									<select name="test">
+									  <option value="select_level">Conformance Level</option>
+									  <option value="1">B</option>
+									  <option value="2">A</option>
+									  <option value="3">AA</option>
+									</select>
+								</div>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+							<div id="double_border"></div>
+						</div>
 					</div>
 		</div>
 		
