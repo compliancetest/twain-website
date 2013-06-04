@@ -41,7 +41,7 @@ jQuery(document).ready(function(){
                 return
             }
         }
-        jQuery.post('http://www.test.compliancetest.net/wp-content/plugins/super-mail/f.php',jQuery(this).serialize(), function(data, textStatus){
+        jQuery.post('http://www.test.compliancetest.net/wp-content/plugins/super-mail/index.php',jQuery(this).serialize(), function(data, textStatus){
             alert(data+"\n"+textStatus)
             switch(data){
                 case 'code':
