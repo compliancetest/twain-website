@@ -236,7 +236,7 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('body').click(function(){
+    jQuery('body').bind('click', function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
     })
