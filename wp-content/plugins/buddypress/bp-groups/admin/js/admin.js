@@ -1,3 +1,4 @@
+$ = jQuery;
 $(document).ready( function() {
 	function add_member_to_list( e, ui ) {
 		console.log(ui);
