@@ -577,7 +577,9 @@ do_action( 'bp_before_group_header' );
 								<?php do_action( 'bp_docs_loop_additional_td' ) ?>
 								
 								
-							<?php endwhile ?>
+							<?php endwhile 
+							if ( bp_docs_current_user_can( 'create' ) ) : ?>
+										<p class="no-docs"><?php printf( __( 'There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
 						
 					
 							<div id="bp-docs-pagination">
