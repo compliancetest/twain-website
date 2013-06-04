@@ -295,7 +295,7 @@ get_header();
 									<select>
 									  <option value="">Tester Role</option>
 									  <?php 
-									  foreach($all_tester_roles as => $single_tester){
+									  foreach($all_tester_roles as $single_tester){
 										  $option_val_tester =  str_replace(' ','_',$single_tester); 
 										  echo '<option value="'.$option_val_tester.'">'.$single_tester.'</option>';
 									  }
@@ -306,7 +306,7 @@ get_header();
 									<select name="test">
 									  <option value="">Conformance Level</option>
 									  <?php 
-									  foreach($all_conf_lvl as => $single_conf_lvl){
+									  foreach($all_conf_lvl as $single_conf_lvl){
 										  $option_val_lvl =  str_replace(' ','_',$single_conf_lvl); 
 										  echo '<option value="'.$option_val_lvl.'">'.$single_conf_lvl.'</option>';
 									  }
