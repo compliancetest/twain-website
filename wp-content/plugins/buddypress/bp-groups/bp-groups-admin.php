@@ -166,7 +166,7 @@ function bp_groups_admin_load() {
 	}
 
 	// Enqueue CSS and JavaScript
-	wp_enqueue_script( 'bp_groups_admin_js', BP_PLUGIN_URL . "bp-groups/admin/js/admin.{$min}js", array( 'jquery', 'wp-ajax-response', 'jquery-ui-autocomplete' ), bp_get_version(), true );
+	wp_enqueue_script( 'bp_groups_admin_js', BP_PLUGIN_URL . "bp-groups/admin/js/admin.js", array( 'jquery', 'wp-ajax-response', 'jquery-ui-autocomplete' ), bp_get_version(), true );
 	wp_enqueue_style( 'bp_groups_admin_css', BP_PLUGIN_URL . "bp-groups/admin/css/admin.{$min}css", array(), bp_get_version() );
 
 	wp_localize_script( 'bp_groups_admin_js', 'BP_Group_Admin', array(
