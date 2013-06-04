@@ -246,9 +246,10 @@ get_header();
 							$found = false;
 							while ( $loop->have_posts() ) : $loop->the_post();
 								$id = get_the_ID();
+								echo $id.'<br />';
 								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
-								//die(print_r($test_cases_assoc));
-								//var_dump($test_cases_assoc);
+								//print_r($test_cases_assoc);
+								var_dump($test_cases_assoc);
 								if (in_array($id, $test_cases_assoc)){
 									$found = true;
 									echo '<div class="the_test_case">';
