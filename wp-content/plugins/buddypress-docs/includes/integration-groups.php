@@ -783,7 +783,7 @@ class BP_Docs_Groups_Integration {
 
 		<tr>
 			<td class="label">
-				<label for="bp-admin[bp-docs-tab-name]"><?php _e( 'BuddyPress Docs group tab name:', 'bp-docs' ) ?></label>
+				<label for="bp-admin[bp-docs-tab-name]"><?php _e( 'BuddyPress Wiki group tab name:', 'bp-docs' ) ?></label>
 			</td>
 
 			<td>
@@ -1022,12 +1022,12 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 
 		?>
 
-		<h2><?php _e( 'BuddyPress Docs', 'bp-docs' ) ?></h2>
+		<h2><?php _e( 'BuddyPress Wiki', 'bp-docs' ) ?></h2>
 
-		<p><?php _e( 'BuddyPress Docs is a powerful tool for collaboration with members of your group. A cross between document editor and wiki, BuddyPress Docs allows you to co-author and co-edit documents with your fellow group members, which you can then sort and tag in a way that helps your group to get work done.', 'bp-docs' ) ?></p>
+		<p><?php _e( 'BuddyPress Wiki is a powerful tool for collaboration with members of your Community. A cross between document editor and wiki, BuddyPress Wiki you to co-author and co-edit documents with your fellow group members, which you can then sort and tag in a way that helps your group to get work done.', 'bp-docs' ) ?></p>
 
 		<p>
-			 <label for="bp-docs[group-enable]"> <input type="checkbox" name="bp-docs[group-enable]" id="bp-docs-group-enable" value="1" <?php checked( $group_enable, true ) ?> /> <?php _e( 'Enable BuddyPress Docs for this group', 'bp-docs' ) ?></label>
+			 <label for="bp-docs[group-enable]"> <input type="checkbox" name="bp-docs[group-enable]" id="bp-docs-group-enable" value="1" <?php checked( $group_enable, true ) ?> /> <?php _e( 'Enable BuddyPress Wiki for this group', 'bp-docs' ) ?></label>
 		</p>
 
 		<div id="group-doc-options" <?php if ( !$group_enable ) : ?>class="hidden"<?php endif ?>>
@@ -1035,14 +1035,14 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 
 
 						<div class="left">
-							<label for="bp-docs[can-create-admins]" class="min_role"><?php _e( 'Minimum role to create new Docs:', 'bp-docs' ) ?></label>
+							<label for="bp-docs[can-create-admins]" class="min_role"><?php _e( 'Minimum role to create new Wiki:', 'bp-docs' ) ?></label>
 						</div>
 						
 						<div class="styled_select_dashboard left">		
 							<select name="bp-docs[can-create]">
-								<option value="admin" <?php selected( $can_create, 'admin' ) ?> /><?php _e( 'Group admin', 'bp-docs' ) ?></option>
-								<option value="mod" <?php selected( $can_create, 'mod' ) ?> /><?php _e( 'Group moderator', 'bp-docs' ) ?></option>
-								<option value="member" <?php selected( $can_create, 'member' ) ?> /><?php _e( 'Group member', 'bp-docs' ) ?></option>
+								<option value="admin" <?php selected( $can_create, 'admin' ) ?> /><?php _e( 'Community admin', 'bp-docs' ) ?></option>
+								<option value="mod" <?php selected( $can_create, 'mod' ) ?> /><?php _e( 'Community moderator', 'bp-docs' ) ?></option>
+								<option value="member" <?php selected( $can_create, 'member' ) ?> /><?php _e( 'Community member', 'bp-docs' ) ?></option>
 							</select>
 						</div>
 						<div class="clear"></div>
