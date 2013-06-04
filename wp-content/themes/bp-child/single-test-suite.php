@@ -226,7 +226,7 @@ get_header();
 									<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
 									<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
 									<div class="grid_cell nopaddingtop width10P toleft tocenter">Outcome<br/>Type</div>
-									<div class="grid_cell nopaddingtop width5P toleft tocenter">Message<br/>Count</div>
+									<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 									<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
 									<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
 									<div class="grid_cell nopaddingtop width15P toleft single_line">Test Intent Description</div>
@@ -254,14 +254,14 @@ get_header();
 									$tc_id = get_post_meta($id ,'test_case_id', true); 
 									$tc_version = get_post_meta($id ,'version', true); 
 									$tc_published = get_post_meta($id ,'published', true); 
-									$tc_tester_role = get_post_meta($id ,'tester_role', true); 
-									$tc_harness_role = get_post_meta($id ,'harness_role', true); 
-									$tc_initiator = get_post_meta($id ,'initiator', true); 
+									$tc_tester_role = get_post_meta($id ,'choose_tester_role', true); 
+									$tc_harness_role = get_post_meta($id ,'choose_harness_role', true); 
+									$tc_initiator = get_post_meta($id ,'choose_initiator', true); 
 									$tc_conformance_level = get_post_meta($id ,'conformance_level', true); 
 									$tc_outcome_type = get_post_meta($id ,'outcome_type', true); 
 									$tc_message_count = get_post_meta($id ,'message_count', true); 
 									$bulk = get_post_meta($id ,'bulk', true); 
-									$initiating_message = get_post_meta($id ,'initiating_message', true); 
+									$initiating_message = get_post_meta($id ,'choose_init_messages', true); 
 									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
 									$found = true;
 									echo '<div class="grid_row white_bcg tocenter testcase_line ">';
@@ -322,27 +322,6 @@ get_header();
 									$test_intent_description = get_post_meta($tc ,'test_intent_description', true); 
 									$perma = get_permalink( $tc );
 									
-									//print_r($tc_id);
-									
-									if ( is_user_logged_in() ) { 
-										echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.$tc_id.'</a></div>';
-										}
-										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.$tc_id.'</div>';
-									 
-									echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
-										<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
-							       <div class="clear"></div>
-								</div>
-								<div class="clear"></div>';
 								}
 							?>	
 						
