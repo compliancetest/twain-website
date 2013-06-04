@@ -200,7 +200,11 @@ $(document).ready(function() {
 	$("#user_pass2").attr("value", "Password");
 	
 	/* Menu Level - 2 */
-	jQuery('.has_dd_1').click(function(e){
+    var mEvent = 'click';
+    if(isMobile())
+        mEvent = 'touchstart';
+        
+	jQuery('.has_dd_1').on(mEvent, function(e){
         $('.normal_dd:not(.what_is)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
         $('.what_is').toggleClass('block');
@@ -209,7 +213,7 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('.has_dd_2').click(function(e){
+    jQuery('.has_dd_2').on(mEvent, function(e){
         $('.normal_dd:not(.why_compliance)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_2) a').removeClass('hover');
         $('.why_compliance').toggleClass('block');        
@@ -218,7 +222,7 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('.has_dd_3').click(function(e){
+    jQuery('.has_dd_3').on(mEvent, function(e){
         $('.normal_dd:not(.compliancetest_serv)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_3) a').removeClass('hover');
         $('.compliancetest_serv').toggleClass('block');
@@ -227,7 +231,7 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('.has_dd_4').click(function(e){
+    jQuery('.has_dd_4').on(mEvent, function(e){
         $('.normal_dd:not(.help_faq)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_4) a').removeClass('hover');        
         $('.help_faq').toggleClass('block');
@@ -236,51 +240,9 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('body').on('click', function(e){
+    jQuery('body').on(mEvent, function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
-    })
-    //For iPad
-    jQuery('.has_dd_1').touchstart(function(e){
-        $('.normal_dd:not(.what_is)').removeClass('block');
-        $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
-        $('.what_is').toggleClass('block');
-        $('.has_dd_1 > a').toggleClass('hover');
-        e.stopPropagation();
-        return false;
-        
-    });
-    jQuery('.has_dd_2').touchstart(function(e){
-        $('.normal_dd:not(.why_compliance)').removeClass('block');
-        $('#menu-header_menu .menu-item:not(.has_dd_2) a').removeClass('hover');
-        $('.why_compliance').toggleClass('block');        
-        $('.has_dd_2 > a').toggleClass('hover');        
-        e.stopPropagation();
-        return false;
-        
-    });
-    jQuery('.has_dd_3').touchstart(function(e){
-        $('.normal_dd:not(.compliancetest_serv)').removeClass('block');
-        $('#menu-header_menu .menu-item:not(.has_dd_3) a').removeClass('hover');
-        $('.compliancetest_serv').toggleClass('block');
-        $('.has_dd_3 > a').toggleClass('hover');
-        e.stopPropagation();
-        return false;
-        
-    });
-    jQuery('.has_dd_4').touchstart(function(e){
-        $('.normal_dd:not(.help_faq)').removeClass('block');
-        $('#menu-header_menu .menu-item:not(.has_dd_4) a').removeClass('hover');        
-        $('.help_faq').toggleClass('block');
-        $('.has_dd_4 > a').toggleClass('hover');
-        e.stopPropagation();
-        return false;
-        
-    });
-    jQuery('body').on('touchstart', function(e){
-        $('.normal_dd').removeClass('block');
-        $('#menu-header_menu .menu-item a').removeClass('hover');        
-        
     })
 					
 	/* Certifications Sorf By */				
@@ -745,3 +707,12 @@ $(document).ready(function() {
     });
 
 });
+
+function isMobile()
+{
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|ZuneWP7/i.test(navigator.userAgent) ) {
+        return true;
+    }else{
+        return false;
+    }
+}

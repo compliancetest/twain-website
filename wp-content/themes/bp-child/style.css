@@ -1066,7 +1066,7 @@ top: -7px;
 
 }
 
-#cssmenu a:hover, #cssmenu a.hover, #cssmenu a:active, #cssmenu a.active {
+#cssmenu a:hover, #cssmenu a:active, #cssmenu a.active, #cssmenu a.hover {
 	color: #fff;
 	text-shadow: none;
 	box-shadow: 0 0 10px #133d68 inset !important;
