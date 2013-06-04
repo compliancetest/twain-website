@@ -1081,6 +1081,7 @@ function bp_groups_admin_autocomplete_handler() {
 			/* translators: 1: user_login, 2: user_email */
 			'label' => sprintf( __( '%1$s (%2$s)' ), $user->user_login, $user->user_email ),
 			'value' => $user->user_login,
+			'id' => $user->ID
 		);
 	}
 

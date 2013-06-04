@@ -2,7 +2,7 @@ $ = jQuery;
 $(document).ready( function() {
 	function add_member_to_list( e, ui ) {
 		console.log(ui);
-		var remove_id = 'bp-groups-remove-new-member-' + ui.item.value;
+		var remove_id = 'bp-groups-remove-new-member-' + ui.item.id;
 		$('#bp-groups-new-members-list').append('<li><a href="#" class="bp-groups-remove-new-member" id="' + remove_id + '">x</a> ' + ui.item.label + '</li>');
 		$('#' + remove_id).bind('click', function(e) { remove_member_from_list(e); return false; });
 
