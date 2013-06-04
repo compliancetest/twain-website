@@ -577,12 +577,8 @@ do_action( 'bp_before_group_header' );
 								<?php do_action( 'bp_docs_loop_additional_td' ) ?>
 								
 								
-							<?php endwhile 
-							if ( bp_docs_current_user_can( 'create' ) ) : ?>
-										<p class="no-docs"><?php printf( __( '<a href="%s">Create a new wiki</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
-							<?php else : ?>
-								<p></p>
-								<?php endif ?>
+							<?php endwhile ?>
+						
 					
 							<div id="bp-docs-pagination">
 								<div id="bp-docs-pagination-count">
@@ -598,7 +594,7 @@ do_action( 'bp_before_group_header' );
 						<?php else: ?>
 
 								<?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
-										<p class="no-docs"><?php printf( __( 'There are no wiki for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
+										<p class="no-docs"><?php printf( __( 'There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
 							<?php else : ?>
 								<p class="no-docs"><?php _e( 'There are no docs for this view.', 'bp-docs' ) ?></p>
 								<?php endif ?>
