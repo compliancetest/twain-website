@@ -243,7 +243,6 @@ get_header();
 							
 								}*/
 							$thepostid = get_the_ID();
-							echo $thepostid;
 							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 							$found = false;
 							while ( $loop->have_posts() ) : $loop->the_post();
