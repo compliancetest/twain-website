@@ -239,12 +239,13 @@ get_header();
 							/*global $wpdb;
 							$thepostid = get_the_ID();
 							$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key='test_suites' AND meta_value LIKE '%{$thepostid}%'");
-							foreach($results as $res){
-							
+							foreach($results as $res){			
 								}*/
 							$thepostid = get_the_ID();
 							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 							$found = false;
+							$all_tester_roles = array();
+							$all_conf_lvl = array();
 							while ( $loop->have_posts() ) : $loop->the_post();
 								$id = get_the_ID();
 								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
@@ -254,9 +255,19 @@ get_header();
 									$tc_version = get_post_meta($id ,'version', true); 
 									$tc_published = get_post_meta($id ,'published', true); 
 									$tc_tester_role = get_post_meta($id ,'choose_tester_role', true); 
+									/* Push all Tester Roles for filter
+									 * */
+									if (!in_array($tc_tester_role,$all_tester_roles)){
+										array_push($all_tester_roles, $tc_tester_role);
+									}
 									$tc_harness_role = get_post_meta($id ,'choose_harness_role', true); 
 									$tc_initiator = get_post_meta($id ,'choose_initiator', true); 
-									$tc_conformance_level = get_post_meta($id ,'conformance_level', true); 
+									$tc_conformance_level = get_post_meta($id ,'conformance_level', true);
+									/* Push all Conformance Levels for filter
+									* */
+									if (!in_array($tc_conformance_level,$all_conf_lvl)){
+										array_push($all_conf_lvl, $tc_conformance_level);
+									}
 									$tc_outcome_type = get_post_meta($id ,'outcome_type', true); 
 									$tc_message_count = get_post_meta($id ,'message_count', true); 
 									$bulk = get_post_meta($id ,'bulk', true); 
@@ -287,6 +298,8 @@ get_header();
 									
 								}
 							endwhile;
+							print_r($all_tester_roles);
+							print_r($all_conf_lvl);
 							if (!$found){
 								echo 'No test cases associated';
 							}
