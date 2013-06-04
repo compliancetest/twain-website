@@ -242,7 +242,6 @@ $(document).ready(function() {
     })
     //For iPad
     jQuery('body').on('touchstart', function(e){
-        alert(0);
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
     })
