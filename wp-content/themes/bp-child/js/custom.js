@@ -240,7 +240,7 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('body').on(mEvent, function(e){
+    jQuery('html').on(mEvent, function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
     })
