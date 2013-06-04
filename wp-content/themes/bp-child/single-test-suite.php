@@ -241,17 +241,18 @@ get_header();
 							foreach($results as $res){
 								echo $res->;
 								}*/
-							
+							$thepostid = get_the_ID();
+							echo $thepostid;
 							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 							$found = false;
 							while ( $loop->have_posts() ) : $loop->the_post();
 								$id = get_the_ID();
 								echo $id.'<br />';
 								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
-								//print_r($test_cases_assoc);
+								print_r($test_cases_assoc);
 								var_dump($test_cases_assoc);
 								echo '<br />';
-								if (in_array($id, $test_cases_assoc)){
+								if (in_array($thepostid, $test_cases_assoc)){
 									$found = true;
 									echo '<div class="the_test_case">';
 									echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
