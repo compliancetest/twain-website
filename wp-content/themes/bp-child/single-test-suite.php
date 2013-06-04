@@ -235,11 +235,12 @@ get_header();
 							</div>
 							
 				<div class="grids">
-							<?php /*global $wpdb;
+							<?php 
+							/*global $wpdb;
 							$thepostid = get_the_ID();
 							$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key='test_suites' AND meta_value LIKE '%{$thepostid}%'");
 							foreach($results as $res){
-								echo $res->;
+							
 								}*/
 							$thepostid = get_the_ID();
 							echo $thepostid;
@@ -249,14 +250,30 @@ get_header();
 								$id = get_the_ID();
 								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
 								if (in_array($thepostid, $test_cases_assoc)){
+									$perma = get_permalink( $id );
+									$tc_id = get_post_meta($id ,'test_case_id', true); 
+									$tc_version = get_post_meta($id ,'version', true); 
+									$tc_published = get_post_meta($id ,'published', true); 
+									$tc_tester_role = get_post_meta($id ,'tester_role', true); 
+									$tc_harness_role = get_post_meta($id ,'harness_role', true); 
+									$tc_initiator = get_post_meta($id ,'initiator', true); 
+									$tc_conformance_level = get_post_meta($id ,'conformance_level', true); 
+									$tc_outcome_type = get_post_meta($id ,'outcome_type', true); 
+									$tc_message_count = get_post_meta($id ,'message_count', true); 
+									$bulk = get_post_meta($id ,'bulk', true); 
+									$initiating_message = get_post_meta($id ,'initiating_message', true); 
+									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
 									$found = true;
-									echo '<div class="the_test_case">';
-									echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
-									echo ' - ';
-									echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
-									echo '<a class="action_testcase" data-action="hide_testcase" data-id="'.$id.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Hide</a>';
-									echo '<a class="action_testcase" data-action="delete_testcase" data-id="'.$id.'" style="cursor:pointer; text-decoration: underline;">Delete</a>';
+									echo '<div class="grid_row white_bcg tocenter testcase_line ">';
+									/*echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';*/
+									
+									if ( is_user_logged_in() ) { 
+										echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.$get_the_title().'</a></div>';
+										}
+										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.$tc_id.'</div>';
+									echo '<div class="clear"></div>';
 									echo '</div>';
+									
 								}
 							endwhile;
 							if (!$found){
