@@ -203,7 +203,7 @@ $(document).ready(function() {
     var mEvent = 'click';
     if(isMobile())
         mEvent = 'touchstart';
-        
+                
 	jQuery('.has_dd_1').on(mEvent, function(e){
         $('.normal_dd:not(.what_is)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
