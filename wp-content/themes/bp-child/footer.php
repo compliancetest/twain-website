@@ -30,11 +30,11 @@
 				</div>
 				<div id="footer-twitters">
 					<h5>Follow us on Twitter</h5>
-                    <a href="https://twitter.com/<?php echo of_get_option('twitter_username')?>" class="twitter-follow-button" data-show-count="false">Follow @twitter</a>
+                    <!--<a href="https://twitter.com/<?php echo of_get_option('twitter_username')?>" class="twitter-follow-button" data-show-count="false">Follow @twitter</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>                       
                     <ul id="twitter_update_list"></ul>                    
                     <script src="http://twitter.com/javascripts/blogger.js" type="text/javascript"></script>
-                    <script src="https://api.twitter.com/1/statuses/user_timeline/<?php echo of_get_option('twitter_username')?>.json?callback=twitterCallback2&count=3" type="text/javascript"></script>
+                    <script src="https://api.twitter.com/1/statuses/user_timeline/<?php echo of_get_option('twitter_username')?>.json?callback=twitterCallback2&count=3" type="text/javascript"></script>-->
 					<div class="clear"></div>
 				</div>
                 <div class="clear"></div>
