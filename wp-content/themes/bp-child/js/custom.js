@@ -236,7 +236,12 @@ $(document).ready(function() {
         return false;
         
     });
-    jQuery('html').bind('click', function(e){
+    jQuery('body').on('click', function(e){
+        $('.normal_dd').removeClass('block');
+        $('#menu-header_menu .menu-item a').removeClass('hover');        
+    })
+    //For iPad
+    jQuery('body').on('touchstart', function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
     })
