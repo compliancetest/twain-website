@@ -244,6 +244,7 @@ $(document).ready(function() {
     jQuery('body').on('touchstart', function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
+        
     })
 					
 	/* Certifications Sorf By */				
