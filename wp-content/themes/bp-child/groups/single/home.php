@@ -590,7 +590,7 @@ do_action( 'bp_before_group_header' );
 								</div>
 							</div>
 							<?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
-										<p class="no-docs"><?php printf( __( '<a href="%s">Create new WIKI</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
+										<p class="no-docs"><?php printf( __( '<a href="%s">Create new WIKI</a>', 'bp-docs' ), bp_docs_get_create_link() ) ?>
 							<?php else : ?>
 								<p class="no-docs"></p>
 								<?php endif; ?>
