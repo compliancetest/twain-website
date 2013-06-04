@@ -290,41 +290,9 @@ get_header();
 							if (!$found){
 								echo 'No test cases associated';
 							}
-							?>
-							<?php 
-								/* Get Test Cases Associated */
-								
-								$tc_ids = get_post_custom_values ('test_cases') ; 
-								$tc_ass = get_post_meta(get_the_ID(), 'test_cases', true); 
-								//print_r($tc_ass);
-								//print_r(get_post_meta (get_the_ID(), 'test_cases', true)); 
-								$tc_assoc = array();
-								$tc_assoc = explode(',', $tc_ids[0]);
-								//print_r($tc_assoc);
-								foreach ($tc_ass as $key => $tc){
-									if ($key==(count($tc_ass)-1)) $class_grid = 'last_grid_cell';
-									else $class_grid = '';
-									echo '<div class="grid_row white_bcg tocenter testcase_line '.$class_grid.'">';
-									$post_id = get_post($tc); 
-									
-									$tc_id = get_post_meta($tc ,'test_case_id', true); 
-									$tc_version = get_post_meta($tc ,'version', true); 
-									$tc_published = get_post_meta($tc ,'published', true); 
-									$tc_tester_role = get_post_meta($tc ,'tester_role', true); 
-									$tc_harness_role = get_post_meta($tc ,'harness_role', true); 
-									$tc_initiator = get_post_meta($tc ,'initiator', true); 
-									$tc_conformance_level = get_post_meta($tc ,'conformance_level', true); 
-									$tc_outcome_type = get_post_meta($tc ,'outcome_type', true); 
-									$tc_message_count = get_post_meta($tc ,'message_count', true); 
-									$bulk = get_post_meta($tc ,'bulk', true); 
-									$initiating_message = get_post_meta($tc ,'initiating_message', true); 
-									$test_intent_description = get_post_meta($tc ,'test_intent_description', true); 
-									$perma = get_permalink( $tc );
-									
-								}
-							?>	
-						
-							</div></div>
+							?>					
+					</div>
+		</div>
 		
 		
 		
