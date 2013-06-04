@@ -279,8 +279,8 @@ get_header();
 									
 								}
 							endwhile;
-							print_r($all_tester_roles);
-							print_r($all_conf_lvl);
+						//	print_r($all_tester_roles);
+						//	print_r($all_conf_lvl);
 							if (!$found){
 								echo 'No test cases associated';
 							}
@@ -288,7 +288,7 @@ get_header();
 					</div>
 					
 		</div>
-		<div class="the_filters">
+		<div class="the_filters" style="display:none;">
 						<div class="grid_row">
 							<div class="grid_cell width45P">
 										<h5 class="blue_txt">Test Cases</h5>
