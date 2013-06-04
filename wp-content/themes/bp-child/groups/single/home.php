@@ -593,6 +593,7 @@ do_action( 'bp_before_group_header' );
 										<p class="no-docs"><?php printf( __( '<a href="%s">Create new WIKI</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
 							<?php else : ?>
 								<p class="no-docs"></p>
+								<?php endif; ?>
 						<!--end grid-->	
 						
 						<?php else: ?>
