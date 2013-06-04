@@ -271,7 +271,19 @@ get_header();
 										echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
 										}
 										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
-									echo '<div class="clear"></div>';
+										
+									echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
+										<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
+										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
+										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
+										<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
+										<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
+										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
+										<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
+										<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
+										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
+										<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
+							        <div class="clear"></div>';
 									echo '</div>';
 									
 								}
