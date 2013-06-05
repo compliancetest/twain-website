@@ -296,39 +296,38 @@ get_header();
 		</div>
 		
 		<div id="the_filters">
-						<div class="grid_row">
-							<div class="grid_cell width45P">
-										<h5 class="blue_txt">Test Cases</h5>
-							</div>
-							<div class="grid_cell width55P right selecteds">
-								<span class="left padding5-10">Filter By: </span>
-								<div class="styled_select left">
-									<select>
-									  <option value="">Tester Role</option>
-									  <?php 
-									  foreach($all_tester_roles as $single_tester){
-										  $option_val_tester =  str_replace(' ','_',$single_tester); 
-										  echo '<option value="'.$option_val_tester.'">'.$single_tester.'</option>';
-									  }
-									  ?>
-									</select>
-								</div>
-								<div class="styled_select left">
-									<select name="test">
-									  <option value="">Conformance Level</option>
-									  <?php 
-									  foreach($all_conf_lvl as $single_conf_lvl){
-										  $option_val_lvl =  str_replace(' ','_',$single_conf_lvl); 
-										  echo '<option value="'.$option_val_lvl.'">'.$single_conf_lvl.'</option>';
-									  }
-									  ?>
-									</select>
-								</div>
-								<div class="clear"></div>
-							</div>
-							<div class="clear"></div>
-							<div id="double_border"></div>
-						</div>
+			<div class="grid_cell width45P">
+						<h5 class="blue_txt">Test Cases</h5>
+			</div>
+			<div class="grid_cell width55P right selecteds">
+				<span class="left padding5-10">Filter By: </span>
+				<div class="styled_select left">
+					<select>
+					  <option value="">Tester Role</option>
+					  <?php 
+					  foreach($all_tester_roles as $single_tester){
+						  $option_val_tester =  str_replace(' ','_',$single_tester); 
+						  echo '<option value="'.$option_val_tester.'">'.$single_tester.'</option>';
+					  }
+					  ?>
+					</select>
+				</div>
+				<div class="styled_select left">
+					<select name="test">
+					  <option value="">Conformance Level</option>
+					  <?php 
+					  foreach($all_conf_lvl as $single_conf_lvl){
+						  $option_val_lvl =  str_replace(' ','_',$single_conf_lvl); 
+						  echo '<option value="'.$option_val_lvl.'">'.$single_conf_lvl.'</option>';
+					  }
+					  ?>
+					</select>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+			<div id="double_border"></div>
+						
 	</div>
 		
 			
