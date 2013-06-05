@@ -14,6 +14,7 @@ class spm_class{
         // if script called from outside of Wordpress
         define( 'SHORTINIT', true );
         require_once('../../../wp-load.php');
+        //
         /*define('WP_USE_THEMES', false);
         require_once('../../../wp-load.php');*/
         /*define( 'BLOCK_LOAD', true );
