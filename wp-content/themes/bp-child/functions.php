@@ -4,33 +4,6 @@
 
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 
-//require_once(THE_FUNCTION . '/adminer/adminer.php'); NOt WORKING YET 
-//require_once(THE_FUNCTION . '/sidebars.php');
-//require_once(THE_FUNCTION . '/breadcrumb-trail.php');
-//require_once(THE_FUNCTION . '/content_elements.php');
-//require_once(THE_FUNCTION . '/portfolio.php');
-//require_once(THE_FUNCTION . '/cutom_meta_boxes.php');
-//require_once(THE_FUNCTION . '/sidebar/per-page-sidebars.php');
-//require_once(THE_FUNCTION . '/pager.php');
-//require_once(THE_FUNCTION . '/widgets/social-widget/social-widget.php');
-//require_once(THE_FUNCTION . '/widgets/sidebar-login/sidebar-login.php');
-//require_once(THE_FUNCTION . '/widgets/recent-posts-widget.php');
-//require_once(THE_FUNCTION . '/widgets/twitter.php');
-//require_once(THE_FUNCTION . '/recent-posts-slider/recent-posts-slider.php');
-//require_once(THE_FUNCTION . '/easy-fancybox/easy-fancybox.php');
-
-//CONTACT FORM 7 - ads simple contact form to posts and pages NOT WORKING YET
-//require_once(THE_FUNCTION . '/contact-form-7/wp-contact-form-7.php');
-
-//GRUNION CONTACT FORM - ads simple contact form to posts and pages NOT WORKING YET
-//require_once(THE_FUNCTION . '/contact-form/grunion-contact-form.php');
-
-//SHORTCODES URLIMATE - allows for unlimited shortcodes
-//require_once(THE_FUNCTION . '/shortcodes-ultimate/shortcodes-ultimate.php');
-
-//require_once(THE_FUNCTION . '/moover/moover.php');
-
-//require_once(THE_FUNCTION . '/mobile_detect.php');
 
 //MORE FIELDS - allows for extra custom fields in the edit dashboard
 require_once(THE_FUNCTION . '/more-fields/more-fields.php');
@@ -41,19 +14,6 @@ require_once(THE_FUNCTION . '/more-types/more-types.php');
 //MORE TYPES - allows extra custom post types
 require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
 
-//CUSTOM POST TEMPLATE
-//require_once(THE_FUNCTION . '/custom-post-template/custom-post-templates.php');
-
-//Recently updated pages and posts
-require_once(THE_FUNCTION . '/recently-updated-pages-and-posts/recently_updated.php');
-
-// wordpress-popular-posts
-// require_once(THE_FUNCTION . '/wordpress-popular-posts/wordpress-popular-posts.php');
-
-//DYNAMIC CUSTOM POST TYPES
-//require_once(THE_FUNCTION . '/dinamic_custom_post_types.php');
-
-//require_once(THE_FUNCTION . '/advanced-code-editor/advanced-code-editor.php');
 
 //Process Actions related user such as login, register
 require_once(THE_FUNCTION . '/user/user.php');
