@@ -1,6 +1,7 @@
 jQuery(document).ready(function(){
     jQuery('#si_contact_form1').submit(function(event){
         event.preventDefault()
+        alert('asdas')
         var emailValid = true, emailNotEmpty = true, nameNotEmpty = true, messageNotEmpty = true, captchaCode = true
         var errorStyle = "border:1px solid red"
         if (jQuery('#si_contact_name1').val().length <= 0){
@@ -47,9 +48,11 @@ jQuery(document).ready(function(){
                 case 'code':
                     var captchaCodeStyle = jQuery('#si_contact_captcha_code1').attr('style')
                     jQuery('#si_contact_captcha_code1').attr('style',captchaCodeStyle + errorStyle)
+                    jQuery('#si_image_ctf1').attr('src','http://www.test.compliancetest.net/wp-content/plugins/super-mail/captcha/securimage_show.php?ctf_form_num=1&sid='
+                        + Math.random());
                     jQuery('#si_contact_captcha_code1').focus()
                     break
-                case 'success':
+                default:
                     //clear all input fields
                     jQuery('#si_contact_name1').val() = ''
                     jQuery('#si_contact_email1').val() = ''
