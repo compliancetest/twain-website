@@ -380,7 +380,9 @@ get_header();
 						  if($_POST['testsuites_tester'] == $option_val_tester){
 							  $selected_tester = 'selected="selected"';
 							  }
-							  else $selected_tester = '';
+							  else {
+								  $selected_tester = '';
+							  }
 						  echo '<option '.$selected_tester.' value="'.$option_val_tester.'" >'.$single_tester.'</option>';
 					  }
 					  ?>
@@ -390,9 +392,16 @@ get_header();
 					<select name="testsuites_lvl" class="change_ts">
 					  <option value="">Conformance Level</option>
 					  <?php 
+					  $selected_lvl ='';
 					  foreach($all_conf_lvl as $single_conf_lvl){
 						  $option_val_lvl =  str_replace(' ','_',$single_conf_lvl); 
-						  echo '<option value="'.$option_val_lvl.'">'.$single_conf_lvl.'</option>';
+						  if($_POST['testsuites_lvl'] == $option_val_lvl){
+							  $selected_lvl = 'selected="selected"';
+							  }
+							  else {
+								  $selected_lvl = '';
+							  }
+						  echo '<option '.$selected_lvl.' value="'.$option_val_lvl.'">'.$single_conf_lvl.'</option>';
 					  }
 					  ?>
 					</select>
