@@ -42,7 +42,6 @@ jQuery(document).ready(function(){
             }
         }
         jQuery.post('http://www.test.compliancetest.net/wp-content/plugins/super-mail/index.php',jQuery(this).serialize(), function(data, textStatus){
-            alert(data+"\n"+textStatus)
             switch(data){
                 case 'code':
                     var captchaCodeStyle = jQuery('#si_contact_captcha_code1').attr('style')
