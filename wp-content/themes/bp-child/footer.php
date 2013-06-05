@@ -43,9 +43,12 @@
 				<div class="space25"></div>
 			</div>
 		</div>
-<!-- **************** FOOTER *************** -->
+        <!-- **************** FOOTER *************** -->
 	</div>
-	
+	<?php 
+        //Show Register And Login Popup
+        do_action('cp_login_register_box') 
+    ?>
 	<?php wp_footer(); ?>
 
 </body>

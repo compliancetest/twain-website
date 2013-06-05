@@ -92,7 +92,7 @@ if(is_user_logged_in()){
                                 <div class="grid_cell width20P"><b>Confirm Password</b></div>
                                 <div data-name="conf_pass" class="grid_cell in_input input_pass">*********</div>
                                 <div class="clear"></div>
-                                <input type="hidden" name="my_details_edit" value="1" />
+                                <input type="hidden" value="my_details_edit" name="cp-action" />
                             </div>
                             <div class="grid_row">
                                 <div class="err_red errors_msg"></div>

@@ -59,5 +59,3 @@ if (is_admin()) {
 	include('more-fields-settings-object.php');
 	$more_fields_settings = new more_fields_admin($settings);
 }
-
-?>

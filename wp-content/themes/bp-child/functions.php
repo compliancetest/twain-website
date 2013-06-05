@@ -54,6 +54,11 @@ require_once(THE_FUNCTION . '/recently-updated-pages-and-posts/recently_updated.
 //require_once(THE_FUNCTION . '/dinamic_custom_post_types.php');
 
 //require_once(THE_FUNCTION . '/advanced-code-editor/advanced-code-editor.php');
+
+//Process Actions related user such as login, register
+require_once(THE_FUNCTION . '/user/user.php');
+
+
 /* 
  * Loads the Options Panel
  *
@@ -160,6 +165,7 @@ function add_header_scripts()
 
     wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
     wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);
+    
 	//wp_enqueue_script('actions', template_location(false).'/js/custom.js', $actions_depends);
 	//wp_enqueue_style('fonts', 'http://fonts.googleapis.com/css?family=Lobster|Arvo');
 }
@@ -2070,206 +2076,6 @@ function save_conf_level($post_id) {
 	update_post_meta($post_id, 'lvl_desc', $lvl_desc);
 }
 
-
-/*--------------------------------------------------
-Check captcha
---------------------------------------------------*/
-if (isset($_GET['check_captcha'])) {
-	if (!isset($_SESSION)) {
-		session_start();
-	}
-	if ($_POST['captcha'] == $_SESSION['captcha']) {
-		echo 'success';
-	} else {
-		echo 'error';
-	}
-	exit();
-}
-
-
-/*--------------------------------------------------
-Create new user account
---------------------------------------------------*/
-function set_html_content_type()
-{
-	return 'text/html';
-}
-
-function send_email_verification($email, $username, $password){
-    //$headers[] = 'From: Nego Office <office@nego-solutions.com>';
-	//$headers[] = 'Cc: John Q Codex <jqc@wordpress.org>';
-	//$headers[] = 'Cc: iluvwp@wordpress.org'; // note you can just use a simple email address
-
-	$to = $email;
-	$subject = 'ComplianceTest Confirmation Email';
-    
-    if($username !='' && $password!= ''){
-        $message = 'Username: ';
-        $message .= $username;
-        $message .= '<br />';
-        $message .= 'Password: ';
-        $message .= $password;
-    }
-	$message .= '<br />To activate you account click the link below <br />';
-	$message .= $_SERVER['SERVER_NAME'];
-	$message .= $_SERVER['REQUEST_URI'];
-	$message .='?user_activation=';
-	$message .= md5($email);
-
-	add_filter( 'wp_mail_content_type', 'set_html_content_type' );
-	return wp_mail( $to, $subject, $message, $headers );
-	remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
-}
-
-
-
-function create_new_user(){
-	global $wpdb;
-    
-	$user_id = wp_create_user( $_POST['user_login'], $_POST['user_pass'], $_POST['user_email'] );  
-	//die(print_r($user_id)); 
-    
-	wp_update_user( array ('ID' => $user_id, 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'])) ;
-	
-    $activation_key =  md5($_POST['user_email']);
-	$wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
-
-	update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
-	update_user_meta ($user_id, 'contact_phone', $_POST['contact_phone']);
-	
-    send_email_verification($_POST['user_email'], $_POST['user_login'], $_POST['user_pass']);
-    
-    //auto login user
-    wp_set_auth_cookie($user_id);
-}
-
-if  (isset($_POST['form_set'])){
-	add_action('template_redirect', 'create_new_user');
-}
-
-if (isset($_POST['resend_email_verification'])){
-    
-    global $current_user;
-    
-    send_email_verification($_POST['uemail'], '', '');
-    //echo $_POST['uemail'].'=>'.$_POST['uname'];
-    echo 'success';
-    exit();
-}
-
-
-
-/*--------------------------------------------------
-Login With Email address 
---------------------------------------------------*/
-function login_with_email_address($username) {
-    $user = get_user_by_email($username);
-    if(!empty($user->user_login))
-        $username = $user->user_login;
-    return $username;
-}
-add_action('wp_authenticate','login_with_email_address');
-
-
-
-/*--------------------------------------------------
-PROGRESS LOGIN
---------------------------------------------------*/
-if(isset($_POST['user_log'])){
-    
-    $parsUsername = $_POST['log'];
-    $parsPassword = $_POST['pwd'];
-    $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
-    
-    //check the username type (email/user)
-    if(preg_match($email_regex, $parsUsername)){
-        $get_user = get_user_by('email', $parsUsername);
-    }else{
-        $get_user = get_user_by('login', $parsUsername);
-    }
-    
-    //check if user and pass are correct
-    if ( $get_user && wp_check_password( $parsPassword, $get_user->data->user_pass, $get_user->ID) ){
-
-        /*$user_status = $get_user->user_status;
-        
-        //check user status (active/inactive)
-        if($user_status > 0){
-            die('inactive'); 
-             exit();
-        }else{
-            echo'active';
-            exit();
-        }*/
-         echo'active';
-         exit();
-
-    }else{
-        die('wrong');
-    }
-    
-}
-
-
-//redirect to user profile after login
-function custom_login_redirect( $redirect_to, $request, $user ){
-    return home_url().'/my-profile';
-}
-add_filter( 'login_redirect', 'custom_login_redirect', 10, 3 );
-
-
-
-/*--------------------------------------------------
-My Details updates
---------------------------------------------------*/
-if(isset($_POST['my_details_edit'])){
-    
-    $user_id = $_POST['user_id'];
-    $uname = explode(' ', $_POST['uname']);
-    $user_email = email_exists( $_POST['email']);
-    $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
-    $newPass = $_POST['new_pass'];
-    $confPass = $_POST['conf_pass'];
-    $errors = 'no_errors';
-    
-    //update user name
-    if($_POST['uname'] && $_POST['uname']!=''){
-        update_user_meta($user_id, 'first_name', $uname[1]);
-        update_user_meta($user_id, 'last_name', $uname[0]);
-    }
-    
-    //update user email
-    if(isset($_POST['email']) && preg_match($email_regex, $_POST['email'])){
-        if($user_email==false){
-            wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr( $_POST['email'])));
-
-        }else if($user_email!=$user_id){
-           $errors = 'This email address already exists!';
-        }
-    }else{
-        $errors = 'This email address is not valid!';
-    }
-    
-    //update user passwords
-    if(isset($confPass) && $confPass!=''){
-    
-        if($newPass == $confPass){
-            $user_pass = get_userdata($_POST['user_id']);
-            
-            wp_update_user( array ('ID' => $user_id, 'user_pass' => $confPass) ) ;
-
-        }else{
-            $errors = 'The passwords do no match!';
-        }
-    }
- 
-    echo $errors;
-    
-    //die('success');
-    exit();
-}
-
-
 /*--------------------------------------------------
 My Payment Method updates
 --------------------------------------------------*/
@@ -2554,17 +2360,6 @@ function edit_admin_menus() {
 }  
 add_action( 'admin_menu', 'edit_admin_menus' );  
 
-add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
-
-function my_front_end_login_fail( $username ) {
-//	die('111');
-   $referrer = $_SERVER['HTTP_REFERER'];  // where did the post submission come from?
-   // if there's a valid referrer, and it's not the default log-in screen
-   if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
-      wp_redirect( $referrer . '?login=failed' );  // let's append some information (login=failed) to the URL for the theme to use
-      exit;
-   }
-}
 
 // Login page fix
 function my_check_password_reset_key($key, $login) {

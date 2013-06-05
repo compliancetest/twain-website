@@ -3407,7 +3407,7 @@ p.copyright{
     margin: 0 auto;
     width: 20px;
     height: 20px;
-    background: url(http://nego-solutions.com/dev-clients/compliance/wp-admin/images/wpspin_light.gif) no-repeat left top;
+    background: url(/wp-admin/images/wpspin_light.gif) no-repeat left top;
 }
 
 #wrap_forms{
