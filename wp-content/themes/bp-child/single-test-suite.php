@@ -342,7 +342,7 @@ get_header();
 jQuery(document).ready(function($) {
 	// Append Select Filter from Test-Suite Page
 	alert('11111');
-	jQuery('.append_filter').html($('.the_filters'));
+	jQuery('#append_filter').html($('#the_filters'));
 });
 </script>
 <?php
