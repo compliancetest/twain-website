@@ -14,7 +14,6 @@ class spm_class{
         // if script called from outside of Wordpress
         define( 'SHORTINIT', true );
         require_once('../../../wp-load.php');
-        $this->send_emails();
         /*define('WP_USE_THEMES', false);
         require_once('../../../wp-load.php');*/
         /*define( 'BLOCK_LOAD', true );
@@ -53,8 +52,8 @@ class spm_class{
         }
     }
     private function super_mail_create_table($table_name){
-        #require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        require_once('../../../wp-admin/includes/upgrade.php' );
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        //require_once('../../../wp-admin/includes/upgrade.php' );
         $sql = "CREATE TABLE $table_name (
             email_address VARCHAR(63535),
             email_subject VARCHAR(200)
@@ -87,6 +86,7 @@ class spm_class{
         }
     }
     public function super_mail_form_show(){
+        //$this->send_emails();
         $result = $this->super_mail_form_get_emails();
         $subject = $this->super_mail_form_get_subject();
         if ($result){
@@ -94,7 +94,7 @@ class spm_class{
                 <form method='post' action=''>
                 <fieldset>
                 <legend><h3>E-mail To:</h3> </legend>
-                <p>Specify comma separated list of e-mails addresses</p>
+                <p>Specify comma separated list of e-mail addresses</p>
                 <textarea cols='70' rows='6' name='emails_list'>".$result[0]->email_address."</textarea><br/>
                 <input type='hidden' name='emails_form_submitted' value='1'/>
                 <label>E-mail subject: <input type='text' value='".$subject[0]->email_subject."' name='email_subject'/></label>
@@ -108,7 +108,7 @@ class spm_class{
                 <form method="post" action="">
                 <fieldset>
                 <legend><h3>E-mail To:</h3> </legend>
-                <p>Specify comma separated list of e-mails addresses</p>
+                <p>Specify comma separated list of e-mail addresses</p>
                 <textarea cols="70" rows="6" name="emails_list"></textarea><br/>
                 <input type="hidden" name="emails_form_submitted" value="1"/>
                 <label>E-mail subject: <input type="text" name="email_subject"/></label>
@@ -120,6 +120,25 @@ class spm_class{
         }
     }
     public function send_emails(){
+                 /*   $to = $this->super_mail_form_get_emails();
+            $to = $to[0]->email_address;
+            if (strpos($to, ',') !== false){
+                // e-mail addressess expecting to be 
+                $to = array_filter(array_map('trim',explode(',', $to)));
+            } else {
+                $to = (array) $to;
+            }
+            $subject = $this->super_mail_form_get_subject();
+            $subject = $subject[0]->email_subject;
+            print_r($to);
+            echo 'subject: '.$subject;*/
+           /* if (function_exists('wp_mail')) {
+                echo "E";
+            } else {
+                echo "No";
+            }*/
+            
+            /*if(wp_mail($to, $subject, $si_contact_message, $headers)){echo 'yes';};*/
         #echo 'aj';exit;
         /*$to = $this->super_mail_form_get_emails();
         $subject = $this->super_mail_form_get_subject();
@@ -144,14 +163,15 @@ class spm_class{
                 // return to JS script
                 echo 'code';exit;
             }
-            //get email addressess from db
-            //function returns a string with comma separated e-mail addressess
+            // get email addressess from db
+            // function returns a string with comma separated e-mail addressess
             $to = $this->super_mail_form_get_emails();
             $to = $to[0]->email_address;
             if (strpos($to, ',') !== false){
-                // e-mail addressess expecting to be 
+                // e-mail addressess expecting to be comma separated string
                 $to = array_filter(array_map('trim',explode(',', $to)));
             } else {
+                // there is only one item without comma in in it just convert to array
                 $to = (array) $to;
             }
             $subject = $this->super_mail_form_get_subject();
@@ -160,11 +180,11 @@ class spm_class{
             $headers[] = 'From: '.$_POST['si_contact_email'];
             if (!empty($si_contact_ex_field1)){
                 if (wp_mail($to, $subject, $si_contact_message.'  Phone number:'.$si_contact_ex_field1, $headers)){
-                    echo 'success';exit;
+                    exit;
                 }
             } else {
                 if (wp_mail($to, $subject, $si_contact_message, $headers)){
-                    echo 'success';exit;
+                    exit;
                 }
             }
         }
