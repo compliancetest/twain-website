@@ -377,7 +377,7 @@ get_header();
 					  $selected_tester ='';
 					  foreach($all_tester_roles as $single_tester){
 						  $option_val_tester =  str_replace(' ','_',$single_tester); 
-						  if($_POST['testsuites_tester'] == $testsuites_tester){
+						  if($_POST['testsuites_tester'] == $option_val_tester){
 							  $selected_tester = 'selected="selected"';
 							  }
 							  else $selected_tester = '';
