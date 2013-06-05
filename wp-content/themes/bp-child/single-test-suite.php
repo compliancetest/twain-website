@@ -277,28 +277,60 @@ get_header();
 									$initiating_message = get_post_meta($id ,'choose_init_messages', true); 
 									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
 									$found = true;
+									$the_line .='';
+									$the_line .='<div class="grid_row white_bcg tocenter testcase_line ">';
+									if ( is_user_logged_in() ) {
+											$the_line .= '<div class="grid_cell nopaddingtop width10P toleft" ><a href="';
+											$the_line .= $perma;
+											$the_line .='">';
+											$the_line .= get_the_title();
+											$the_line .='</a></div>';
+											}
+										else {
+											$the_line .= '<div class="grid_cell nopaddingtop width10P toleft" >';
+											$the_line .= get_the_title();
+											$the_line .='</div>';
+										}
+									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
+									$the_line .= $tc_version;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter ">';
+									$the_line .= $tc_published;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
+									$the_line .= $tc_tester_role;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
+									$the_line .= $tc_harness_role;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
+									$the_line .= $tc_initiator;
+									$the_line .='</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter">';
+									$the_line .= $tc_conformance_level;
+									$the_line .='</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
+									$the_line .= $tc_outcome_type;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter">';
+									$the_line .= $tc_message_count;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
+									$the_line .= $bulk;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
+									$the_line .= $initiating_message;
+									$the_line .= '</div>';
+									$the_line .= '<div class="grid_cell nopaddingtop width15P toleft ">';
+									$the_line .= $test_intent_description;
+									$the_line .= '</div>';
+							        $the_line .= '<div class="clear"></div>';
+									$the_line .= '</div>';
+											
 									//Filter Tester is set
 									if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
 									if ($occ_tester == $tc_tester_role){
-										echo '<div class="grid_row white_bcg tocenter testcase_line ">';
-										if ( is_user_logged_in() ) {
-											echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
-											}
-										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
-											
-										echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
-											<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
-										<div class="clear"></div>';
-										echo '</div>';
+										echo $the_line;
 										}
 										
 									}
@@ -306,50 +338,12 @@ get_header();
 									else 
 									if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
 										if ($occ_lvl == $tc_conformance_level){
-										echo '<div class="grid_row white_bcg tocenter testcase_line ">';
-										if ( is_user_logged_in() ) {
-											echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
-											}
-										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
-											
-										echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
-											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
-											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
-											<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
-										<div class="clear"></div>';
-										echo '</div>';
+											echo $the_line;
 										}
 									}
 									//Show all
 									else {
-									echo '<div class="grid_row white_bcg tocenter testcase_line ">';
-									/*echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';*/
-									
-									if ( is_user_logged_in() ) {
-										echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
-										}
-										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
-										
-									echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
-										<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
-										<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
-										<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
-							        <div class="clear"></div>';
-									echo '</div>';
+									echo $the_line;
 								}
 									
 								}
@@ -430,6 +424,7 @@ jQuery(document).ready(function($) {
 	/* Submit the form
 	*/
 	jQuery('.change_ts').change(function(){
+
 		jQuery('#filter_ts').submit();
 	});	
 });
