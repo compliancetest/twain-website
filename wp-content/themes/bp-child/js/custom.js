@@ -525,7 +525,7 @@ jQuery(document).ready(function($) {
     
     /* Append Select Filter from Test-Suite Page
 	* */
-	jQuery('.append_filter').append(jQuery('.the_filters').html());
+	jQuery('.append_filter').append($('.the_filters').html());
 
 });
 
