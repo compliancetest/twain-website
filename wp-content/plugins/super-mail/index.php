@@ -8,11 +8,19 @@ Author: invader Zim
 
 class spm_class{
     public $current_plugin_url;
-    public $table_name;
+    public $table_name; 
     public function __construct(){
-        if (isset($_POST['si_contact_submitted'])){
-    require_once('../../../wp-blog-header.php');
-}
+    if (isset($_POST['si_contact_submitted'])){
+        define( 'SHORTINIT', true );
+        require_once('../../../wp-load.php');
+        $this->send_emails();
+        /*define('WP_USE_THEMES', false);
+        require_once('../../../wp-load.php');*/
+        /*define( 'BLOCK_LOAD', true );
+        require_once( '../../..//wp-config.php' );
+        require_once('../../../wp-includes/wp-db.php' );
+        $wpdb = new wpdb( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);*/
+    }
         global $table_name,$wpdb;
         $table_name = $wpdb->prefix;
         $table_name .= 'spm_emails_list';
@@ -29,7 +37,7 @@ class spm_class{
         global $wpdb;
         global $table_name;
         if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name){
-            wp_die();
+            exit;
         } else {
             return $wpdb->get_results("SELECT email_address FROM $table_name");
         }
@@ -38,13 +46,14 @@ class spm_class{
         global $wpdb;
         global $table_name;
         if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name){
-            wp_die();
+            exit;
         } else {
             return $wpdb->get_results("SELECT email_subject FROM $table_name");
         }
     }
     private function super_mail_create_table($table_name){
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        #require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        require_once('../../../wp-admin/includes/upgrade.php' );
         $sql = "CREATE TABLE $table_name (
             email_address VARCHAR(63535),
             email_subject VARCHAR(200)
@@ -77,7 +86,6 @@ class spm_class{
         }
     }
     public function super_mail_form_show(){
-        $this->send_emails();
         $result = $this->super_mail_form_get_emails();
         $subject = $this->super_mail_form_get_subject();
         if ($result){
@@ -110,8 +118,8 @@ class spm_class{
             echo $empty_form;
         }
     }
-    public static function send_emails(){
-        echo 'aj';exit;
+    public function send_emails(){
+        #echo 'aj';exit;
         /*$to = $this->super_mail_form_get_emails();
         $subject = $this->super_mail_form_get_subject();
         $to = $to[0]->email_address;$subject = $subject[0]->email_subject;
@@ -124,10 +132,15 @@ class spm_class{
             if (empty($_POST['si_contact_email'])){exit;}
             if (empty($_POST['si_contact_message'])){exit;}
 
+            $si_contact_name1 = trim($_POST['si_contact_name1']);
+            $si_contact_email = trim($_POST['si_contact_email']);
+            $si_contact_message = trim($_POST['si_contact_message']);
+            $si_contact_ex_field1 = trim($_POST['si_contact_ex_field1']);
+
             require_once 'captcha/securimage.php';
             $image = new Securimage();
             if ($image->check($_POST['si_contact_captcha_code']) !== true) {
-                return 'code';
+                echo 'code';exit;
             }
             //get email addressess from db
             //function returns a string with comma separated e-mail addressess
@@ -142,13 +155,13 @@ class spm_class{
             $subject = $subject[0]->email_subject;
 
             $headers[] = 'From: '.$_POST['si_contact_email'];
-            if (!empty($_POST['si_contact_ex_field1'])){
-                if (wp_mail($to, $subject, $_POST['si_contact_message'].'  Phone number:'.$_POST['si_contact_ex_field1'], $headers)){
-                    return 'success';
+            if (!empty($si_contact_ex_field1])){
+                if (wp_mail($to, $subject, $si_contact_message.'  Phone number:'.$si_contact_ex_field1, $headers)){
+                    echo 'success';exit;
                 }
             } else {
-                if (wp_mail($to, $subject, $_POST['si_contact_message'], $headers)){
-                    return 'success';
+                if (wp_mail($to, $subject, $si_contact_message, $headers)){
+                    echo 'success';exit;
                 }
             }
         }
@@ -161,6 +174,3 @@ class spm_class{
 
 }
 new spm_class;
-if (isset($_POST['si_contact_submitted'])){
-    spm_class::send_emails();
-}
