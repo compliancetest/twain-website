@@ -381,7 +381,7 @@ get_header();
 							  $selected_tester = 'selected="selected"';
 							  }
 							  else $selected_tester = '';
-						  echo '<option value="'.$option_val_tester.'" '.$selected_tester.'>'.$single_tester.'</option>';
+						  echo '<option '.$selected_tester.' value="'.$option_val_tester.'" >'.$single_tester.'</option>';
 					  }
 					  ?>
 					</select>
