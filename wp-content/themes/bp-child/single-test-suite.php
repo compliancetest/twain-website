@@ -374,9 +374,14 @@ get_header();
 					<select name="testsuites_tester" class="change_ts">
 					  <option value="">Tester Role</option>
 					  <?php 
+					  $selected_tester ='';
 					  foreach($all_tester_roles as $single_tester){
-						  $option_val_tester =  str_replace(' ','_',$single_tester); 
-						  echo '<option value="'.$option_val_tester.'">'.$single_tester.'</option>';
+						  $testsuites_tester =  str_replace(' ','_',$single_tester); 
+						  if($_POST['testsuites_tester'] == $testsuites_tester){
+							  $selected_tester = 'selected="selected"';
+							  }
+							  else $selected_tester = '';
+						  echo '<option value="'.$option_val_tester.'" '.$selected_tester.'>'.$single_tester.'</option>';
 					  }
 					  ?>
 					</select>
