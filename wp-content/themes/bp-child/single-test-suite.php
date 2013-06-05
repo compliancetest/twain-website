@@ -342,6 +342,11 @@ get_header();
 									//Filter Level is set
 									else 
 									if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
+										if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
+												if (($occ_tester == $tc_tester_role) && ($occ_lvl == $tc_conformance_level)){
+												echo $the_line;
+											}
+										}
 										if ($occ_lvl == $tc_conformance_level){
 											echo $the_line;
 										}
