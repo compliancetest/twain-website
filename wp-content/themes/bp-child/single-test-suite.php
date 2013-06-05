@@ -240,8 +240,8 @@ get_header();
 								$occ_lvl = str_replace('_',' ',$_POST['testsuites_lvl']); 
 							}
 							
-							echo 'Tester: '.$occ_tester.'<br />';
-							echo 'LVL: '.$occ_lvl.'<br />';
+							/*echo 'Tester: '.$occ_tester.'<br />';
+							echo 'LVL: '.$occ_lvl.'<br />';*/
 							
 							$thepostid = get_the_ID();
 							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
@@ -252,30 +252,34 @@ get_header();
 								$id = get_the_ID();
 								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
 								if (in_array($thepostid, $test_cases_assoc)){
-									$perma = get_permalink( $id );
-									$tc_id = get_post_meta($id ,'test_case_id', true); 
-									$tc_version = get_post_meta($id ,'version', true); 
-									$tc_published = get_post_meta($id ,'published', true); 
 									$tc_tester_role = get_post_meta($id ,'choose_tester_role', true); 
 									/* Push all Tester Roles for filter
 									 * */
 									if (!in_array($tc_tester_role,$all_tester_roles)){
 										array_push($all_tester_roles, $tc_tester_role);
 									}
-									$tc_harness_role = get_post_meta($id ,'choose_harness_role', true); 
-									$tc_initiator = get_post_meta($id ,'choose_initiator', true); 
 									$tc_conformance_level = get_post_meta($id ,'conformance_level', true);
 									/* Push all Conformance Levels for filter
 									* */
 									if (!in_array($tc_conformance_level,$all_conf_lvl)){
 										array_push($all_conf_lvl, $tc_conformance_level);
 									}
+									
+									$perma = get_permalink( $id );
+									$tc_id = get_post_meta($id ,'test_case_id', true); 
+									$tc_version = get_post_meta($id ,'version', true); 
+									$tc_published = get_post_meta($id ,'published', true); 
+									$tc_harness_role = get_post_meta($id ,'choose_harness_role', true); 
+									$tc_initiator = get_post_meta($id ,'choose_initiator', true); 
 									$tc_outcome_type = get_post_meta($id ,'outcome_type', true); 
 									$tc_message_count = get_post_meta($id ,'message_count', true); 
 									$bulk = get_post_meta($id ,'bulk', true); 
 									$initiating_message = get_post_meta($id ,'choose_init_messages', true); 
 									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
 									$found = true;
+									if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
+									echo '11111';
+									}
 									echo '<div class="grid_row white_bcg tocenter testcase_line ">';
 									/*echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';*/
 									
@@ -299,9 +303,8 @@ get_header();
 									echo '</div>';
 									
 								}
+								//End Test Case line
 							endwhile;
-						//	print_r($all_tester_roles);
-						//	print_r($all_conf_lvl);
 							if (!$found){
 								echo 'No test cases associated';
 							}
