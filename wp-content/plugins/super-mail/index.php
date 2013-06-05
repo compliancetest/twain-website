@@ -11,6 +11,7 @@ class spm_class{
     public $table_name; 
     public function __construct(){
     if (isset($_POST['si_contact_submitted'])){
+        // if script called from outside of Wordpress
         define( 'SHORTINIT', true );
         require_once('../../../wp-load.php');
         $this->send_emails();
@@ -140,6 +141,7 @@ class spm_class{
             require_once 'captcha/securimage.php';
             $image = new Securimage();
             if ($image->check($_POST['si_contact_captcha_code']) !== true) {
+                // return to JS script
                 echo 'code';exit;
             }
             //get email addressess from db
@@ -147,15 +149,16 @@ class spm_class{
             $to = $this->super_mail_form_get_emails();
             $to = $to[0]->email_address;
             if (strpos($to, ',') !== false){
+                // e-mail addressess expecting to be 
                 $to = array_filter(array_map('trim',explode(',', $to)));
             } else {
                 $to = (array) $to;
             }
             $subject = $this->super_mail_form_get_subject();
-            $subject = $subject[0]->email_subject;
+            print_r($subject);exit;
 
             $headers[] = 'From: '.$_POST['si_contact_email'];
-            if (!empty($si_contact_ex_field1])){
+            if (!empty($si_contact_ex_field1)){
                 if (wp_mail($to, $subject, $si_contact_message.'  Phone number:'.$si_contact_ex_field1, $headers)){
                     echo 'success';exit;
                 }
