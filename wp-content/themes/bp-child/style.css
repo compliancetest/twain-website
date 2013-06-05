@@ -2228,8 +2228,9 @@ bottom: -6px;
 }
 
 #append_filter{
-display:block;
-height:60px;
+	display:block;
+	height:75px;
+	marign-top:-5px;
 }
 
 
