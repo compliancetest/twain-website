@@ -228,6 +228,21 @@ get_header();
 							$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key='test_suites' AND meta_value LIKE '%{$thepostid}%'");
 							foreach($results as $res){			
 								}*/
+							
+							//Check Filter's post
+							$occ_tester = '';
+							if(isset($_POST['testsuites_tester'])){
+								$occ_tester = str_replace('_',' ',$_POST['testsuites_tester']); 
+							}
+							
+							$occ_lvl = '';
+							if(isset($_POST['testsuites_lvl'])){
+								$occ_lvl = str_replace('_',' ',$_POST['testsuites_lvl']); 
+							}
+							
+							echo 'Tester: '.$occ_tester.'<br />';
+							echo 'LVL: '.$occ_lvl.'<br />';
+							
 							$thepostid = get_the_ID();
 							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
 							$found = false;
