@@ -430,7 +430,6 @@ jQuery(document).ready(function($) {
 	/* Submit the form
 	*/
 	jQuery('.change_ts').change(function(){
-		alert('change');
 		jQuery('#filter_ts').submit();
 	});	
 });
