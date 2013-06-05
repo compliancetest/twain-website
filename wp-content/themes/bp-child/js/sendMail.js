@@ -1,7 +1,6 @@
 jQuery(document).ready(function(){
     jQuery('#si_contact_form1').submit(function(event){
         event.preventDefault()
-        alert('asdas')
         var emailValid = true, emailNotEmpty = true, nameNotEmpty = true, messageNotEmpty = true, captchaCode = true
         var errorStyle = "border:1px solid red"
         if (jQuery('#si_contact_name1').val().length <= 0){
