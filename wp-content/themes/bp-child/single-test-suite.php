@@ -293,6 +293,8 @@ get_header();
 					</div>
 					
 		</div>
+		<div class="append_filter"> 1
+		</div>
 		<div class="the_filters">
 						<div class="grid_row">
 							<div class="grid_cell width45P">
@@ -329,8 +331,7 @@ get_header();
 						</div>
 	</div>
 		
-		<div class="append_filter"> 1
-				</div>	
+			
 	</div> <!--end content container-->
 	
 </div>
