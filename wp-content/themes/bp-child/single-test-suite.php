@@ -288,7 +288,7 @@ get_header();
 					</div>
 					
 		</div>
-		<div class="the_filters" style="display:none;">
+		<div class="the_filters">
 						<div class="grid_row">
 							<div class="grid_cell width45P">
 										<h5 class="blue_txt">Test Cases</h5>
