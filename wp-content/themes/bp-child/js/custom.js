@@ -345,7 +345,9 @@ jQuery(document).ready(function($) {
         
     });
 
-
+	// Append Select Filter from Test-Suite Page
+	
+	jQuery('.append_filter').append($('.the_filters').html());
 
 	// Dashboard Add New Test Suite 
 	
@@ -522,10 +524,6 @@ jQuery(document).ready(function($) {
         jQuery('#dinamic_pop').hide();
         jQuery('#registration').show();
     });
-    
-    /* Append Select Filter from Test-Suite Page
-	* */
-	jQuery('.append_filter').append($('.the_filters').html());
 
 });
 
