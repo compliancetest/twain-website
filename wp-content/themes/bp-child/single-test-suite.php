@@ -340,7 +340,7 @@ get_header();
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	// Append Select Filter from Test-Suite Page
-	
+	alert('11111');
 	jQuery('.append_filter').append($('.the_filters').html());
 });
 </script>
