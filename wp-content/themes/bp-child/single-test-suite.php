@@ -198,7 +198,6 @@ get_header();
 		<div class="grid_row test_cases">
 				<div id="append_filter"> 1
 				</div>
-				
 				<div class="grid_head blue_grid special_grid_big">
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
 						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
@@ -343,7 +342,7 @@ get_header();
 jQuery(document).ready(function($) {
 	// Append Select Filter from Test-Suite Page
 	alert('11111');
-	jQuery('.append_filter').append($('.the_filters').html());
+	jQuery('.append_filter').prependTo($('.the_filters').html());
 });
 </script>
 <?php
