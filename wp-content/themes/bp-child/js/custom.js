@@ -522,6 +522,10 @@ jQuery(document).ready(function($) {
         jQuery('#dinamic_pop').hide();
         jQuery('#registration').show();
     });
+    
+    /* Append Select Filter from Test-Suite Page
+	* */
+	jQuery('.append_filter').append(jQuery('.the_filters').html());
 
 });
 
