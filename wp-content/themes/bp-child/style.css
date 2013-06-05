@@ -3603,8 +3603,8 @@ p.copyright{
 
 #my_profile input[type="text"], #my_profile input[type="password"]{
 background: #fff;
-width: 75%;
-padding: 4px 15px;
+width: 68%;
+padding: 4px 8px;
 border-radius: 3px;
 -webkit-border-radius: 4px;
 -moz-border-radius: 4px;
@@ -3638,6 +3638,7 @@ min-height: 70px;
 #my_profile .grid_row .errors_msg{
     float: left;
     margin: 10px 0 0 10px;
+    max-width: 85%;
 }
 
 .styled_select_dashboard {

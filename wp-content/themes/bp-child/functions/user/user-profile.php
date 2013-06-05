@@ -74,3 +74,97 @@ function cp_user_detail_edit()
     
     exit();
 }
+
+//Save User Payment Information
+function cp_user_payment_edit()
+{
+    global $wpdb, $current_user;   
+    
+    //Goto Homepage
+    if(!is_user_logged_in())
+        wp_redirect('/');
+    
+    $user_id = $current_user->ID;
+    
+    $card_number = str_replace(' ', '', $_POST['card_number']);
+    $name_on_card = trim($_POST['name_on_card']);
+    $card_expiry = trim($_POST['card_expiry']);
+    $card_cvc = trim($_POST['card_cvc']);
+    
+    $errors = 'no_errors';
+    
+    $check = check_cc($card_number);//4533345657653245
+    
+    //Card Number
+    if($card_number != '')
+    {
+        if(!check_cc($card_number))
+        {
+            echo 'Credit card number is not valid!';
+            exit;
+        }else{ //Update Card Number
+            update_user_meta( $user_id, 'card_number', $card_number);
+        }
+    }
+    
+    //Card Name
+    if($name_on_card != '')
+    {
+        update_user_meta( $user_id, 'name_on_card', $name_on_card);
+    }
+    
+    if(!$card_expiry){
+        echo 'Please specify your card expiry date!';
+        exit;
+    }else{
+        $card_expiry = explode('/', $card_expiry);
+        if($card_expiry[0] > 12){
+            echo 'Your expiry date is incorrect!';
+            exit;
+        }else if(check_exp_date($card_expiry[0], $card_expiry[1])){
+            update_user_meta( $user_id, 'card_expiry', $card_expiry); 
+        }else{
+            echo 'Your card has expired or your expiry date is incorrect!';
+            exit;
+        }
+    }
+    
+    
+    if($card_cvc!='' && (strlen($card_cvc)==3 || strlen($card_cvc)==4)){
+        update_user_meta( $user_id, 'card_cvc', $card_cvc);
+    }else{
+        echo 'Your CVC code is incorrect';
+        exit;
+    }
+    
+    echo 'success';
+    
+    exit();
+}
+
+//Save User Organisation 
+function cp_user_organisation_edit()
+{
+    global $wpdb, $current_user;   
+    
+    //Goto Homepage
+    if(!is_user_logged_in())
+        wp_redirect('/');
+    
+    $user_id = $current_user->ID;
+    
+    $user_organisation = $_POST['user_organisation'];
+    $user_organisation_web = $_POST['user_organisation_web'];
+    $user_organisation_desc = $_POST['user_organisation_desc'];
+    $user_organisation_abn = $_POST['user_organisation_abn'];
+    
+    update_user_meta($user_id, 'user_organisation', $user_organisation);
+    update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
+    update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
+    update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);
+    
+    echo 'success';
+    
+    exit();
+
+}

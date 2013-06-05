@@ -178,10 +178,16 @@
             
             //transform all divs in inputs
             $(thisParentId+' .grid_cell.in_input').each(function(){
-               var thisTextVal = $(this).text(); 
+               var thisTextVal = $(this).attr('data-value'); 
                var thisNameVal = $(this).attr('data-name'); 
+               if($(this).attr('data-placeholder'))
+                   var thisPlaceholderValue = $(this).attr('data-placeholder');
+               else
+                   var thisPlaceholderValue = '';
                
-               if($(this).hasClass('input_pass')){
+               $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+               
+               /*if($(this).hasClass('input_pass')){
                     $(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
                     
                }else if($(this).hasClass('small_input')){
@@ -197,7 +203,7 @@
                
                }else{
                    $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
-               }
+               }*/
             });        
             
         });

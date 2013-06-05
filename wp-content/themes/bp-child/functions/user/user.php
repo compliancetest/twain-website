@@ -29,6 +29,12 @@ function compliancetest_user_actions()
         case 'my_details_edit':
             cp_user_detail_edit();
             break;
+        case 'my_payment_edit':
+            cp_user_payment_edit();
+            break;
+        case 'my_organisation_edit':
+            cp_user_organisation_edit();
+            break;
         
     }
 }

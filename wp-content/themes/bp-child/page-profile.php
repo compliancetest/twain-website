@@ -13,18 +13,25 @@ if(is_user_logged_in()){
     $lname = $userInfo['last_name'][0];
     $uemail = $current_user->user_email;
     
-    $get_card_number = get_user_meta($current_user->ID, 'card_number', true)==''? '-': get_user_meta($current_user->ID, 'card_number', true);
-    $card_number = str_pad(substr($get_card_number, -4), strlen($get_card_number), '*', STR_PAD_LEFT);
-    $card_number = implode(" ", str_split($card_number, 4))." ";
+    $card_number = get_user_meta($current_user->ID, 'card_number', true);
     
-    $name_on_card = get_user_meta($current_user->ID, 'name_on_card', true)==''? '-': get_user_meta($current_user->ID, 'name_on_card', true);
-    $card_expiry = get_user_meta($current_user->ID, 'card_expiry', true)==''? '-': get_user_meta($current_user->ID, 'card_expiry', true);
-    $card_cvc = get_user_meta($current_user->ID, 'card_cvc', true)==''? '-' : get_user_meta($current_user->ID, 'card_cvc', true);
+    if($card_number)
+    {
+        $card_number_string = chunk_split($card_number, 4);
+    }else{
+        $card_number_string = '-';
+    }
+    
+    
+    
+    $name_on_card = get_user_meta($current_user->ID, 'name_on_card', true);
+    $card_expiry = get_user_meta($current_user->ID, 'card_expiry', true);
+    $card_cvc = get_user_meta($current_user->ID, 'card_cvc', true);
     
     $user_org = get_user_meta($current_user->ID, 'user_organisation', true);
-    $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true)=='' ? '-' : get_user_meta($current_user->ID, 'user_organisation_web', true);
-    $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true)=='' ? '-' : get_user_meta($current_user->ID, 'user_organisation_desc', true);
-    $user_org_abn = get_user_meta($current_user->ID, 'user_organisation_abn', true)=='' ? '-' : get_user_meta($current_user->ID, 'user_organisation_abn', true);
+    $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
+    $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
+    $user_org_abn = get_user_meta($current_user->ID, 'user_organisation_abn', true);
     
     
     $user = get_userdata( $current_user->ID );
@@ -77,23 +84,23 @@ get_header();
 					<div class="grid_body">
                         <form action="#" method="post">
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Name</b></div>
-                                <div data-name="uname" class="grid_cell in_input"><?php echo $lname.' '.$fname;?></div>
+                                <div class="grid_cell width30P"><b>Name</b></div>
+                                <div data-name="uname" data-value="<?php echo $lname.' '.$fname;?>" class="grid_cell in_input"><?php echo $lname.' '.$fname;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Email</b></div>
-                                <div data-name="email" class="grid_cell in_input"><?php echo $uemail;?></div>
+                                <div class="grid_cell width30P"><b>Email</b></div>
+                                <div data-name="email" data-value="<?php echo $uemail;?>" class="grid_cell in_input"><?php echo $uemail;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Password</b></div>
-                                <div data-name="new_pass" class="grid_cell in_input input_pass">*********</div>
+                                <div class="grid_cell width30P"><b>Password</b></div>
+                                <div data-name="new_pass" data-value="" class="grid_cell in_input input_pass">*********</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Confirm Password</b></div>
-                                <div data-name="conf_pass" class="grid_cell in_input input_pass">*********</div>
+                                <div class="grid_cell width30P"><b>Confirm Password</b></div>
+                                <div data-name="conf_pass" data-value="" class="grid_cell in_input input_pass">*********</div>
                                 <div class="clear"></div>
                                 <input type="hidden" value="my_details_edit" name="cp-action" />
                             </div>
@@ -132,32 +139,30 @@ get_header();
 					<div class="grid_body">
                         <form action="#" method="post">
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Card Number</b></div>
-                                <div data-name="card_number" class="grid_cell in_input card_no"><?php echo $card_number;?></div>
+                                <div class="grid_cell width30P"><b>Card Number</b></div>
+                                <div data-name="card_number" data-value="<?php echo $card_number;?>" class="grid_cell in_input card_no"><?php echo !$card_number_string ? '-' : $card_number_string;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Name on Card</b></div>
-                                <div data-name="name_on_card" class="grid_cell in_input"><?php echo $name_on_card;?></div>
+                                <div class="grid_cell width30P"><b>Name on Card</b></div>
+                                <div data-name="name_on_card" data-value="<?php echo $name_on_card;?>" class="grid_cell in_input"><?php echo !$name_on_card ? '-' : $name_on_card;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Expiry</b></div>
-                                <div data-name="card_expiry" class="grid_cell in_input small_input card_expiry"><?php echo $card_expiry;?></div>
+                                <div class="grid_cell width30P"><b>Expiry</b></div>
+                                <div data-name="card_expiry" data-value="<?php echo $card_expiry;?>" data-placeholder="M / Y" class="grid_cell in_input small_input card_expiry"><?php echo !$card_expiry ? '-' : $card_expiry;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>CVC</b></div>
-                                <div data-name="card_cvc" class="grid_cell in_input small_input"><?php echo $card_cvc;?></div>
+                                <div class="grid_cell width30P"><b>CVC</b></div>
+                                <div data-name="card_cvc" data-value="<?php echo $card_cvc;?>" class="grid_cell in_input small_input"><?php echo !$card_cvc ? '-' : $card_cvc;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="err_red errors_msg"></div>
+                            <div class="grid_row">                                
                                 <a class="profile_btn button green_bcg white_txt button_small radius3">Save</a>
+                                <div class="err_red errors_msg"></div>
                                 <div class="clear"></div>
-                                <input type="hidden" name="my_payment_edit" value="1" />
-                                <input type="hidden" name="uemail" value="<?php echo $uemail;?>"/>
-                                <input type="hidden" name="uname" value="<?php echo $current_user->user_login;?>"/>
+                                <input type="hidden" name="cp-action" value="my_payment_edit" />
                                 <input type="hidden" name="card_no" value="<?php echo $get_card_number;?>"/>
                             </div>
                         </form>
@@ -189,29 +194,29 @@ get_header();
 					<div class="grid_body">
                         <form action="#" method="post">
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Name</b></div>
-                                <div data-name="user_organisation" class="grid_cell in_input width70P"><?php echo $user_org;?></div>
+                                <div class="grid_cell width30P"><b>Name</b></div>
+                                <div data-name="user_organisation" data-value="<?php echo $user_org;?>" class="grid_cell in_input width70P"><?php echo !$user_org ? '-' : $user_org;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Website</b></div>
-                                <div data-name="user_organisation_web" class="grid_cell in_input"><?php echo $user_org_web;?></div>
+                                <div class="grid_cell width30P"><b>Website</b></div>
+                                <div data-name="user_organisation_web" data-value="<?php echo $user_org_web;?>" class="grid_cell in_input"><?php echo !$user_org_web ? '-' : $user_org_web;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>Description</b></div>
-                                <div data-name="user_organisation_desc" class="grid_cell in_input"><?php echo $user_org_desc;?></div>
+                                <div class="grid_cell width30P"><b>Description</b></div>
+                                <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>" class="grid_cell in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
-                                <div class="grid_cell width20P"><b>ABN</b></div>
-                                <div data-name="user_organisation_abn" class="grid_cell in_input"><?php echo $user_org_abn;?></div>
+                                <div class="grid_cell width30P"><b>ABN</b></div>
+                                <div data-name="user_organisation_abn" data-value="<?php echo $user_org_abn;?>" class="grid_cell in_input"><?php echo !$user_org_abn ? '-' : $user_org_abn;?></div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid_row">
                                 <div class="err_red errors_msg"></div>
                                 <a class="profile_btn button green_bcg white_txt button_small radius3">Save</a>
-                                <input type="hidden" name="my_organisation_edit" value="1" />
+                                <input type="hidden" name="cp-action" value="my_organisation_edit" />
                                 <div class="clear"></div>
                             </div>
 						</form>
