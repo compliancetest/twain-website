@@ -341,12 +341,14 @@ get_header();
 </div>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	// Append Select Filter from Test-Suite Page
-	alert('11111');
+	/* Append Select Filter from Test-Suite Page
+	*/
 	jQuery('#append_filter').append(jQuery('#the_filters').html());
 	jQuery('#the_filters').remove();
+	/* Submit the form
+	*/
 	jQuery('.change_ts').change(function(){
-		alert('11111');
+		alert('change');
 		jQuery('#filter_ts').submit();
 	});	
 });
