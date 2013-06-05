@@ -155,7 +155,7 @@ class spm_class{
                 $to = (array) $to;
             }
             $subject = $this->super_mail_form_get_subject();
-            print_r($subject);exit;
+            $subject = $subject[0]->email_subject;
 
             $headers[] = 'From: '.$_POST['si_contact_email'];
             if (!empty($si_contact_ex_field1)){
