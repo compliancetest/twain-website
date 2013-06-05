@@ -8,7 +8,6 @@ Template Name Posts: Test Suite
 get_header();
 ?>
 	<?php
-
 	$ts_id = get_the_ID();
 	$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE ts_ids={$ts_id}");
 	$current_group_id = $ts_result -> group_id;
@@ -17,6 +16,7 @@ get_header();
 	$group = groups_get_group( array( 'group_id' => $current_group_id ) );
 	$group_url = home_url( $bp->groups->slug . '/' . $group -> slug );
 	?>
+	
 	<div class="space25"></div>
 	<div class="content container">
 		<div class="infos">
@@ -197,25 +197,32 @@ get_header();
 		<div class="clear"></div>
 		<div class="grid_row test_cases">
 							
-							<div class="grid_head blue_grid special_grid_big">
-								<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
-									<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
-									<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>
-									<div class="grid_cell nopaddingtop width10P toleft tocenter single_line">Published</div>
-									<div class="grid_cell nopaddingtop width10P toleft tocenter">Tester<br/>Role</div>
-									<div class="grid_cell nopaddingtop width10P toleft tocenter">Harness<br/>Role(s)</div>
-									<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
-									<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
-									<div class="grid_cell nopaddingtop width10P toleft tocenter">Outcome<br/>Type</div>
-									<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
-									<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
-									<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
-									<div class="grid_cell nopaddingtop width15P toleft single_line">Test Intent Description</div>
-									<div class="clear"></div>	
-								</div>
-							</div>
+				<div class="grid_head blue_grid special_grid_big">
+					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
+						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>
+						<div class="grid_cell nopaddingtop width10P toleft tocenter single_line">Published</div>
+						<div class="grid_cell nopaddingtop width10P toleft tocenter">Tester<br/>Role</div>
+						<div class="grid_cell nopaddingtop width10P toleft tocenter">Harness<br/>Role(s)</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
+						<div class="grid_cell nopaddingtop width10P toleft tocenter">Outcome<br/>Type</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
+						<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
+						<div class="grid_cell nopaddingtop width15P toleft single_line">Test Intent Description</div>
+						<div class="clear"></div>	
+					</div>
+				</div>
+				
+				
+				<div class="clear"></div>
 							
 				<div class="grids">
+							<!-- Append Select Filters
+							-->
+							<div class="append_filter">
+							</div>
 							<?php 
 							/*global $wpdb;
 							$thepostid = get_the_ID();
