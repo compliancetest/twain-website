@@ -196,8 +196,7 @@ get_header();
 		</div>
 		<div class="clear"></div>
 		<div class="grid_row test_cases">
-				<div class="append_filter"> 1
-				</div>			
+						
 				<div class="grid_head blue_grid special_grid_big">
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
 						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
@@ -330,7 +329,8 @@ get_header();
 						</div>
 	</div>
 		
-		
+		<div class="append_filter"> 1
+				</div>	
 	</div> <!--end content container-->
 	
 </div>
