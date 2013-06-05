@@ -24,7 +24,7 @@ get_header();
 					<?php if (has_post_thumbnail()) {
 						the_post_thumbnail('post-thumb', array('class' => 'sbr'));
 					} ?>
-				</div>
+				</div> 
 				<div class="grid_cell width90P">
 					<h3 class="dark_gray_txt bold"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>	
 					<a href="<?php echo get_permalink( $post->ID ); ?>" class="bold blue_txt nodecoration"><?php echo get_permalink( $post->ID ); ?> <?php  // or echo meta ('ts_identifier') ;?></a>
