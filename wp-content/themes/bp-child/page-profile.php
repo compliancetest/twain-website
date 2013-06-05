@@ -2,7 +2,7 @@
 /*
  * Template Name: My Profile
  */
-get_header();
+
 
 if(is_user_logged_in()){
     global $current_user;
@@ -42,7 +42,9 @@ if(is_user_logged_in()){
     
 }else{
     wp_redirect(home_url());
+    exit;
 }
+get_header();
 ?>
 
 <div class="space25"></div>
@@ -71,6 +73,7 @@ if(is_user_logged_in()){
                             <div class="clear"></div>
 						</div>
 					</div>
+                    <?php if($user_status != 3){?>
 					<div class="grid_body">
                         <form action="#" method="post">
                             <div class="grid_row">
@@ -94,13 +97,14 @@ if(is_user_logged_in()){
                                 <div class="clear"></div>
                                 <input type="hidden" value="my_details_edit" name="cp-action" />
                             </div>
-                            <div class="grid_row">
-                                <div class="err_red errors_msg"></div>
+                            <div class="grid_row">                                
                                 <a class="profile_btn button green_bcg white_txt button_small radius3">Save</a>
+                                <div class="err_red errors_msg"></div>
                                 <div class="clear"></div>
                             </div>
 						</form>
 					</div>
+                    <?php } ?>
 				</div>
 			</div>
 			<div class="column right two_fifths nopaddingtop nopaddingright nopaddingbottom">
@@ -287,11 +291,11 @@ if(is_user_logged_in()){
 </div>
 <div class="clear"></div>
 <script type="text/javascript">
-	var wrapper = $('<div/>').css({height:0,width:0,'overflow':'hidden'});
+	var wrapper = jQuery('<div/>').css({height:0,width:0,'overflow':'hidden'});
 	var fileInput = jQuery(':file').wrap(wrapper);
 
 	fileInput.change(function(){
-		$this = $(this);
+		$this = jQuery(this);
 		jQuery('#file_ts').text("File attached");
 	})
 	 

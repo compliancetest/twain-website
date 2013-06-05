@@ -5,56 +5,72 @@
 
 function cp_user_detail_edit()
 {
-    global $wpdb;
-    
-    
+    global $wpdb, $current_user;
+        
     if(!is_user_logged_in())
     {
         //Goto Homepage
         wp_redirect('/');
     }
     
-    $user_id = $_POST['user_id'];
-    $uname = explode(' ', $_POST['uname']);
-    $user_email = email_exists( $_POST['email']);
+    $user_id = $current_user->ID;
+    
+    $uname = trim($_POST['uname']);
+    $email = trim($_POST['email']);
+    if(!$uname && !$email)
+    {
+        echo 'Name and Email should not be empty';
+        exit;
+    }
+    if(!$uname){
+        echo 'Please enter your name';
+        exit;
+    }
+    if(!$email){
+        echo 'Please enter your email address.';
+        exit;
+    }
+    
+    //Update User Name
+    $uname = explode(' ', $uname);
+    update_user_meta($user_id, 'first_name', $uname[1]);
+    update_user_meta($user_id, 'last_name', $uname[0]);
+    
     $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
+    if(!preg_match($email_regex, $email))
+    {
+        echo 'Please enter a valid email address';
+        exit;
+    }
+    
+    //Check Email Duplication
+    $query = $wpdb->prepare("SELECT ID FROM " . $wpdb->users . " WHERE user_email=%s AND ID != %d", $email, $user_id);
+    $uID = $wpdb->get_var($query);
+    if($uID)
+    {
+        echo 'This email address already exists!';
+        exit;
+    }
+    
+    //Update Email
+    wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr($email)));
+    
+    //Update Password
     $newPass = $_POST['new_pass'];
     $confPass = $_POST['conf_pass'];
-    $errors = 'no_errors';
-    
-    //update user name
-    if($_POST['uname'] && $_POST['uname']!=''){
-        update_user_meta($user_id, 'first_name', $uname[1]);
-        update_user_meta($user_id, 'last_name', $uname[0]);
-    }
-    
-    //update user email
-    if(isset($_POST['email']) && preg_match($email_regex, $_POST['email'])){
-        if($user_email==false){
-            wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr( $_POST['email'])));
-
-        }else if($user_email!=$user_id){
-           $errors = 'This email address already exists!';
-        }
-    }else{
-        $errors = 'This email address is not valid!';
-    }
-    
-    //update user passwords
-    if(isset($confPass) && $confPass!=''){
-    
-        if($newPass == $confPass){
-            $user_pass = get_userdata($_POST['user_id']);
-            
-            wp_update_user( array ('ID' => $user_id, 'user_pass' => $confPass) ) ;
-
+    if($newPass || $confPass)
+    {
+        if($newPass != $confPass)
+        {
+            echo 'The passwords do no match!';
+            exit;
         }else{
-            $errors = 'The passwords do no match!';
+            //update password
+            wp_update_user( array ('ID' => $user_id, 'user_pass' => $confPass) ) ;
         }
     }
- 
-    echo $errors;
     
-    //die('success');
+    echo 'success';
+    
     exit();
 }

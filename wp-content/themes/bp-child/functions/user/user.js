@@ -4,6 +4,13 @@
         //Add Placeholder
         $("#user_login, #user_login2").attr("placeholder", "E-mail or User");
         $("#user_pass, #user_pass2").attr("placeholder", "********");
+        $("#user_login").focus(function () {
+            $(".simple_tooltip_pop").fadeOut('fast');
+        });
+        
+        $("#user_pass").focus(function(){
+            $(".simple_tooltip_pop").fadeOut('fast');
+        });
         
         //Header Login Form
         $('#top_access').on('submit', function(){                        
@@ -159,5 +166,63 @@
                 }
             });
         });
+        
+       //transform divs in inputs at click on edit button
+       $(document).on('click', '.edit_btn', function(){           
+            var thisParentId = '#'+$(this).parents('.default_grid').attr('id');
+            var findInputs = $(thisParentId+' .grid_row input:visible').size();
+
+            //if( findInputs == 0){
+
+            $(thisParentId+' .profile_btn').fadeIn();
+            
+            //transform all divs in inputs
+            $(thisParentId+' .grid_cell.in_input').each(function(){
+               var thisTextVal = $(this).text(); 
+               var thisNameVal = $(this).attr('data-name'); 
+               
+               if($(this).hasClass('input_pass')){
+                    $(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
+                    
+               }else if($(this).hasClass('small_input')){
+                    if($(this).attr('data-name')=='card_expiry'){
+                        $(this).replaceWith('<input type="text" placeholder="M / Y" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
+                    }else{
+                        $(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>'); 
+                    }
+               }else if($(this).hasClass('card_no')){
+                   var getthisTextVal = $('input[name="card_no"]').val();
+                   
+                   $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+getthisTextVal+'"/>');
+               
+               }else{
+                   $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
+               }
+            });        
+            
+        });
+        
+        //save my details updates
+        $(document).on('click', '.profile_btn', function(){
+            
+            var form = $(this).parents('form');            
+            form.find('.errors_msg').hide();
+            
+            $.ajax({
+                url: '/my-profile',
+                data: form.serialize(),
+                type: 'POST',
+                success: function(rsp)
+                {
+                    if(rsp == 'success')
+                    {
+                        document.location.reload(); 
+                    }else{
+                        form.find('.errors_msg').html(rsp).fadeIn('fast');                        
+                    }
+                }
+            })
+        });
+        
     })    
 })(jQuery);

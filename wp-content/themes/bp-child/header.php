@@ -43,8 +43,8 @@
                                 <div class="clear"></div>
                                 <div id="top_loged_actions">
                                     <?php
-                                    if(is_home() ) {
-                                        $logout_redirect = get_bloginfo('url');
+                                    if(is_home() || is_page('my-profile') ) {
+                                        $logout_redirect = get_bloginfo('siteurl');
                                     }else{
                                         $logout_redirect = get_permalink();
                                     }
