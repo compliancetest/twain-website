@@ -299,10 +299,11 @@ get_header();
 			<div class="grid_cell width45P">
 						<h5 class="blue_txt">Test Cases</h5>
 			</div>
+			<form id="filter_ts" method="post" action="">
 			<div class="grid_cell width55P right selecteds">
 				<span class="left padding5-10">Filter By: </span>
 				<div class="styled_select left">
-					<select>
+					<select name="testsuites_tester" class="change_ts">
 					  <option value="">Tester Role</option>
 					  <?php 
 					  foreach($all_tester_roles as $single_tester){
@@ -313,7 +314,7 @@ get_header();
 					</select>
 				</div>
 				<div class="styled_select left">
-					<select name="test">
+					<select name="testsuites_lvl" class="change_ts">
 					  <option value="">Conformance Level</option>
 					  <?php 
 					  foreach($all_conf_lvl as $single_conf_lvl){
@@ -325,6 +326,7 @@ get_header();
 				</div>
 				<div class="clear"></div>
 			</div>
+			</form>
 			<div class="clear"></div>
 			<div id="double_border"></div>
 						
