@@ -345,6 +345,10 @@ jQuery(document).ready(function($) {
 	alert('11111');
 	jQuery('#append_filter').append(jQuery('#the_filters').html());
 	jQuery('#the_filters').remove();
+	jQuery('.change_ts').change(function(){
+		alert('11111');
+		jQuery('#filter_ts').submit();
+	});	
 });
 </script>
 <?php

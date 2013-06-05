@@ -257,11 +257,6 @@ jQuery(document).ready(function($) {
 		jQuery('#form_filter2').submit();
 		});	
 	
-	jQuery('.change_ts').change(function(){
-		alert('11111');
-		jQuery('#filter_ts').submit();
-		});	
-	
 	jQuery('#save_attachment').click(function(){
 		var files = jQuery('#attachment_group_id').val();
 		if(!files){
