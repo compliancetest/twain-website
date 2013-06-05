@@ -279,7 +279,7 @@ get_header();
 									$found = true;
 									//Filter Tester is set
 									if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
-									if ($_POST['testsuites_tester'] == $tc_tester_role){
+									if ($occ_tester == $tc_tester_role){
 										echo '<div class="grid_row white_bcg tocenter testcase_line ">';
 										if ( is_user_logged_in() ) {
 											echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
@@ -300,11 +300,12 @@ get_header();
 										<div class="clear"></div>';
 										echo '</div>';
 										}
+										else { die($tc_tester_role); }
 									}
 									//Filter Level is set
 									else 
 									if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
-										if ($_POST['testsuites_lvl'] == $tc_conformance_level){
+										if ($occ_lvl == $tc_conformance_level){
 										echo '<div class="grid_row white_bcg tocenter testcase_line ">';
 										if ( is_user_logged_in() ) {
 											echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
