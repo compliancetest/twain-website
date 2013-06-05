@@ -277,9 +277,57 @@ get_header();
 									$initiating_message = get_post_meta($id ,'choose_init_messages', true); 
 									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
 									$found = true;
+									//Filter Tester is set
 									if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
-									echo '11111';
+									if ($_POST['testsuites_tester'] == $tc_tester_role){
+										echo '<div class="grid_row white_bcg tocenter testcase_line ">';
+										if ( is_user_logged_in() ) {
+											echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
+											}
+										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
+											
+										echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
+											<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
+										<div class="clear"></div>';
+										echo '</div>';
+										}
 									}
+									//Filter Level is set
+									else 
+									if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
+										if ($_POST['testsuites_lvl'] == $tc_conformance_level){
+										echo '<div class="grid_row white_bcg tocenter testcase_line ">';
+										if ( is_user_logged_in() ) {
+											echo '<div class="grid_cell nopaddingtop width10P toleft" ><a href="'. $perma.'">'.get_the_title().'</a></div>';
+											}
+										else echo '<div class="grid_cell nopaddingtop width10P toleft" >'.get_the_title().'</div>';
+											
+										echo '<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_version.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter ">'.$tc_published.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_tester_role.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_harness_role.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$tc_initiator.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_conformance_level.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$tc_outcome_type.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter">'.$tc_message_count.'</div>
+											<div class="grid_cell nopaddingtop width5P toleft tocenter ">'.$bulk.'</div>
+											<div class="grid_cell nopaddingtop width10P toleft tocenter">'.$initiating_message.'</div>
+											<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
+										<div class="clear"></div>';
+										echo '</div>';
+										}
+									}
+									//Show all
+									else {
 									echo '<div class="grid_row white_bcg tocenter testcase_line ">';
 									/*echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';*/
 									
@@ -301,6 +349,7 @@ get_header();
 										<div class="grid_cell nopaddingtop width15P toleft ">'.$test_intent_description.'</div>
 							        <div class="clear"></div>';
 									echo '</div>';
+								}
 									
 								}
 								//End Test Case line
