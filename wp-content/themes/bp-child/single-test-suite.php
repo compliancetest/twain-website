@@ -337,6 +337,13 @@ get_header();
 <div class="space45"></div>
 <div class="clear"></div>
 </div>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	// Append Select Filter from Test-Suite Page
+	
+	jQuery('.append_filter').append($('.the_filters').html());
+});
+</script>
 <?php
 get_footer();
 ?>
