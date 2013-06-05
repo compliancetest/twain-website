@@ -3635,6 +3635,11 @@ border-radius: 3px;
 min-height: 70px;
 }
 
+#my_profile .grid_row .errors_msg{
+    float: left;
+    margin: 10px 0 0 10px;
+}
+
 .styled_select_dashboard {
 	background: url("images/styled_select.png") no-repeat scroll right center #FFFFFF;
     border: 1px solid #CCCCCC;
