@@ -331,7 +331,8 @@ get_header();
 									if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
 										if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
 											if (($occ_tester == $tc_tester_role) && ($occ_lvl == $tc_conformance_level)){
-											echo $the_line;
+												echo $the_line;
+											}
 										}
 										else if ($occ_tester == $tc_tester_role){
 											echo $the_line;
