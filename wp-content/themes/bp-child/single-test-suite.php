@@ -300,7 +300,7 @@ get_header();
 										<div class="clear"></div>';
 										echo '</div>';
 										}
-										else { die($tc_tester_role); }
+										
 									}
 									//Filter Level is set
 									else 
