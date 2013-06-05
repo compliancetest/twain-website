@@ -277,7 +277,7 @@ get_header();
 									$initiating_message = get_post_meta($id ,'choose_init_messages', true); 
 									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
 									$found = true;
-									$the_line .='';
+									$the_line ='';
 									$the_line .='<div class="grid_row white_bcg tocenter testcase_line ">';
 									if ( is_user_logged_in() ) {
 											$the_line .= '<div class="grid_cell nopaddingtop width10P toleft" ><a href="';
