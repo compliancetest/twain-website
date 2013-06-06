@@ -286,7 +286,7 @@ if(!is_user_logged_in())
                     <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
                     <div class="reg_message log_msg" id="popup-login-msg"><?php //echo of_get_option('log_msg');?></div>
                 </div><!--END registration-->
-          
+				<div id="close-popup" class="close_btn"></div>
 				<!--<div class="terms_container" class="radius6">
 					<p class="headline bottom30">Terms & Conditions</p>
 
@@ -322,7 +322,7 @@ if(!is_user_logged_in())
 					</div>
 				</div>	
           
-            <div id="close-popup" class="close_btn"></div>
+            
             </div>
         </div>
         <?php
