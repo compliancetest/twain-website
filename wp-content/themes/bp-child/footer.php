@@ -77,7 +77,12 @@ jQuery(document).ready(function() {
 		jQuery('#scrollbar1').css('display', 'none');
 		jQuery('#acc_tc_id').removeAttr('checked','checked');
 		jQuery('#registration').css('display', 'block');
-	});	
+	});
+	
+	jQuery('#close_terms').click(function(){
+		jQuery('#scrollbar1').css('display', 'none');
+		jQuery('#registration').css('display', 'block');
+	});
 	
 	
 	
