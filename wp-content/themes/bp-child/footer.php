@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
 		jQuery('#scrollbar1').css('display', 'block');
 		setTimeout(function(){
 			jQuery('#scrollbar1').tinyscrollbar();
-		},200);
+		},100);
 	});	
 	
 	/*Accept*/
