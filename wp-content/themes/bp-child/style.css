@@ -2105,18 +2105,32 @@ a.logout_button{
 
 #accept_terms{
 	background: url(images/contact_submit.png);
-	width: 89px;
-	height:24px;
+	width: 68px;
+	height: 24px;
 	color: #fff;
-	font-size:12px;
+	font-size: 12px;
+	padding-left: 21px;
+	display: block;
+	text-align: center;
+	line-height: 23px;
+	float: left;
+	margin-left: 20px;
+	cursor: pointer;
 }
 
 #reject_terms{
 	background: url(images/cancel.png);
-	width: 74px;
-	height:24px;
+	width: 66px;
+	height: 24px;
 	color: #fff;
-	font-size:12px;
+	font-size: 12px;
+	padding-right: 8px;
+	display: block;
+	text-align: right;
+	line-height: 23px;
+	float: left;
+	margin-left: 20px;
+	cursor: pointer;
 }
 
 
