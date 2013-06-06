@@ -2103,6 +2103,22 @@ a.logout_button{
 	margin: 0 0 10px 0;
 }
 
+#accept_terms{
+	background: url(images/contact_submit.png);
+	width: 89px;
+	height:24px;
+	color: #fff;
+	font-size:12px;
+}
+
+#reject_terms{
+	background: url(images/cancel.png);
+	width: 74px;
+	height:24px;
+	color: #fff;
+	font-size:12px;
+}
+
 
 /* Scroll */
 

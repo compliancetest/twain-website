@@ -75,6 +75,7 @@ jQuery(document).ready(function() {
 	/*Reject*/
 	jQuery('#reject_terms').click(function(){
 		jQuery('#scrollbar1').css('display', 'none');
+		jQuery('#acc_tc_id').removeAttr('checked','checked');
 		jQuery('#registration').css('display', 'block');
 	});	
 	
