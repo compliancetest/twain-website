@@ -50,6 +50,14 @@
         do_action('cp_login_register_box') 
     ?>
 	<?php wp_footer(); ?>
+	
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	jQuery('#terms_co').click(function(){
+		alert('test');	
+	});	
+});
+</script>
 
 </body>
 </html>
