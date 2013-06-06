@@ -60,7 +60,9 @@ jQuery(document).ready(function() {
 	jQuery('#terms_co').click(function(){
 		jQuery('#registration').css('display', 'none');
 		jQuery('#scrollbar1').css('display', 'block');
-		jQuery('#scrollbar1').tinyscrollbar();
+		setTimeout(function(){
+			jQuery('#scrollbar1').tinyscrollbar();
+		},2000);
 	});	
 	
 	/*Accept*/
