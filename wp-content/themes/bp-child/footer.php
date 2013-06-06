@@ -52,6 +52,7 @@
 	<?php wp_footer(); ?>
 	
 <!-- Tiny scrollbar-->	
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
 	
 <script type="text/javascript">
@@ -61,6 +62,9 @@ jQuery(document).ready(function() {
 	jQuery('#terms_co').click(function(){
 		alert('test');	
 	});	
+	
+	/*Accept*/
+	
 });
 </script>
 
