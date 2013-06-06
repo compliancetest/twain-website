@@ -51,19 +51,12 @@
     ?>
 	<?php wp_footer(); ?>
 	
-<!-- styles needed by jScrollPane -->
-<link type="text/css" href="<?php bloginfo('stylesheet_directory'); ?>/css/jquery.jscrollpane.css" rel="stylesheet" media="all" />
-
-<!-- the mousewheel plugin - optional to provide mousewheel support -->
-<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.mousewheel.js"></script>
-
-<!-- the jScrollPane script -->
-<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.jscrollpane.min.js"></script>	
-
-<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/mwheelIntent.js"></script>	
+<!-- Tiny scrollbar-->	
+<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
+	
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	jQuery('.terms_content').jScrollPane();
+	$('#scrollbar1').tinyscrollbar();
 	
 	jQuery('#terms_co').click(function(){
 		alert('test');	
