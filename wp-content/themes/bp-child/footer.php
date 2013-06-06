@@ -68,13 +68,14 @@ jQuery(document).ready(function() {
 	/*Accept*/
 	jQuery('#accept_terms').click(function(){
 		jQuery('#scrollbar1').css('display', 'none');
+		jQuery('#acc_tc_id').attr('checked','checked');
 		jQuery('#registration').css('display', 'block');
 	});	
 	
 	/*Reject*/
 	jQuery('#reject_terms').click(function(){
-		jQuery('#registration').css('display', 'none');
-		jQuery('#scrollbar1').css('display', 'block');
+		jQuery('#scrollbar1').css('display', 'none');
+		jQuery('#registration').css('display', 'block');
 	});	
 	
 	
