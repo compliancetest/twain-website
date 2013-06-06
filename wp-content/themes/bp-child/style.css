@@ -2116,6 +2116,11 @@ a.logout_button{
 	float: left;
 	margin-left: 20px;
 	cursor: pointer;
+	text-shadow: 0px -1px 1px #696968;
+}
+
+#accept_terms:hover{
+
 }
 
 #reject_terms{
@@ -2131,6 +2136,7 @@ a.logout_button{
 	float: left;
 	margin-left: 20px;
 	cursor: pointer;
+	text-shadow: 0px -1px 1px #696968;
 }
 
 
