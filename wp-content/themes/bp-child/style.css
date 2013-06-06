@@ -4619,7 +4619,7 @@ display:block !important;
     height: 32px !important;
 }
 
-div.wpcf7-validation-errors,  div.wpcf7-mail-sent-ng {
+div.wpcf7-validation-errors,  div.wpcf7-mail-sent-ng, div.wpcf7-spam-blocked {
     border: none !important;
     color: #D02F27;
 }
@@ -4630,4 +4630,9 @@ span.wpcf7-not-valid-tip {
     padding: 0px !important;
     width: auto !important;
     top: 0 !important;
+}
+
+div.wpcf7-mail-sent-ok {
+    border: none !important;
+    color: #2c80e8 !important;
 }
