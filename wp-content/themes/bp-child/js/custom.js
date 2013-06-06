@@ -139,7 +139,7 @@ jQuery(document).ready(function($) {
 	// Terms And Conditions Pop-Up
 	
 	$('#terms_co').click(function(){
-		alert('1111');
+		alert('test');
 		
 	});
 		
