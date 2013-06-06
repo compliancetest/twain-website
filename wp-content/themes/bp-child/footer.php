@@ -56,11 +56,11 @@
 	
 <script type="text/javascript">
 jQuery(document).ready(function() {
-	jQuery('#scrollbar1').tinyscrollbar();
 	
 	jQuery('#terms_co').click(function(){
 		jQuery('#registration').css('display', 'none');
 		jQuery('#scrollbar1').css('display', 'block');
+		jQuery('#scrollbar1').tinyscrollbar();
 	});	
 	
 	/*Accept*/
