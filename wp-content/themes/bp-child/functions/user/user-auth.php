@@ -296,7 +296,7 @@ if(!is_user_logged_in())
 					
 				</div> -->
 				<div id="scrollbar1" class="terms_container" class="radius6">
-					<p class="headline bottom30">Terms & Conditions</p>
+					<p class="headline bottom30">Terms & Conditions<span id="close_terms"></span></p>
 					<div class="scrollbar">
 						<div class="track">
 							<div class="thumb">
