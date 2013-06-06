@@ -4564,7 +4564,9 @@ display:block !important;
 	font-size:11px;	
 }
 
-.contact_form input[type="text"] {
+.contact_form input[type="text"],
+              input[type="tel"],
+              input[type="email"] {
 	border:1px solid #c4c4c4;
 	background:#fff;
 	-webkit-border-radius: 3px;    
@@ -4607,4 +4609,25 @@ display:block !important;
 
 .contact_form input[type="submit"]:hover {
 	opacity:.8;
+}
+
+.contact_form .captcha_input {
+    width: 120px !important;
+}
+
+.contact_form .captcha_img {
+    height: 32px !important;
+}
+
+div.wpcf7-validation-errors,  div.wpcf7-mail-sent-ng {
+    border: none !important;
+    color: #D02F27;
+}
+
+span.wpcf7-not-valid-tip {
+    border: none !important;    
+    font-size: 11px !important;
+    padding: 0px !important;
+    width: auto !important;
+    top: 0 !important;
 }
