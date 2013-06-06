@@ -292,7 +292,8 @@ if(!is_user_logged_in())
 					<?php 
 					$page_id = 1061;
 					$page_data = get_page( $page_id );
-					echo $page_data->post_content;
+				//	echo $page_data->post_content;
+					echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
 					?>
 				</div>
           
