@@ -288,11 +288,12 @@ if(!is_user_logged_in())
                 </div><!--END registration-->
           
 				<div id="terms_content" class="radius6">
-				<?php 
-				$page_id = 1061;
-				$page_data = get_page( $page_id );
-				echo $page_data->post_content;
-				?>
+					<p class="headline bottom30">Terms & Conditions</p>
+					<?php 
+					$page_id = 1061;
+					$page_data = get_page( $page_id );
+					echo $page_data->post_content;
+					?>
 				</div>
           
             <div id="close-popup" class="close_btn"></div>
