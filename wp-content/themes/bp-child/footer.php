@@ -56,7 +56,7 @@
 	
 <script type="text/javascript">
 jQuery(document).ready(function() {
-	$('#scrollbar1').tinyscrollbar();
+	jQuery('#scrollbar1').tinyscrollbar();
 	
 	jQuery('#terms_co').click(function(){
 		alert('test');	
