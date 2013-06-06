@@ -2076,6 +2076,11 @@ a.logout_button{
 	top: 15px !important;
 }
 
+#terms_co{
+	text-decoration: underline;
+	color: #2C80E8;
+}
+
 /* **************** BP ELEMENTS **************************** */
 .dir-form input[type="text"], 
 .dir-form input[type="email"], 
