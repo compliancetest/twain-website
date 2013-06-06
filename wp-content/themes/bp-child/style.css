@@ -2083,13 +2083,18 @@ a.logout_button{
 	color: #2C80E8;
 }
 
-#terms_content{
+#terms_container{
 	display:none;
 }
 
-#terms_content p{
+#terms_container p{
 	margin: 0 0 10px 0;
 	padding: 0px 20px;
+}
+
+.terms_content{
+	height:450px;
+	averflow:auto;
 }
 
 .content_inner p{
