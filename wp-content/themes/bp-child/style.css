@@ -2084,7 +2084,7 @@ a.logout_button{
 }
 
 #terms_container{
-	display:none;
+	/*display:none;*/
 	width:805px;
 	height:500px;
 }
