@@ -136,10 +136,12 @@ jQuery(document).ready(function($) {
 		$(this).parent().parent().next().slideToggle('fast');
 	});
 	
-	// Terms And Conditions Pop-0p
+	// Terms And Conditions Pop-Up
+	
 	$('#terms_co').click(function(){
 		alert('1111');
-		});
+		
+	});
 		
 	///////////////////////////////////////////////////////
 	// TABS
