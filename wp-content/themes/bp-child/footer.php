@@ -52,23 +52,22 @@
 	<?php wp_footer(); ?>
 	
 <!-- styles needed by jScrollPane -->
-<link type="text/css" href="<?php bloginfo('stylesheet_url'); ?>/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+<link type="text/css" href="<?php bloginfo('stylesheet_directory'); ?>/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
 
 <!-- latest jQuery direct from google's CDN -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
 </script>
 
 <!-- the mousewheel plugin - optional to provide mousewheel support -->
-<script type="text/javascript" src="<?php bloginfo('stylesheet_url'); ?>/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.mousewheel.js"></script>
 
 <!-- the jScrollPane script -->
-<script type="text/javascript" src="<?php bloginfo('stylesheet_url'); ?>/js/jquery.jscrollpane.min.js"></script>	
+<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.jscrollpane.min.js"></script>	
 
-<script type="text/javascript" src="<?php bloginfo('stylesheet_url'); ?>/js/mwheelIntent.js"></script>	
+<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/mwheelIntent.js"></script>	
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	jQuery(function()
-	{
+	jQuery(function(){
 		jQuery('.terms_content').jScrollPane();
 	});
 	jQuery('#terms_co').click(function(){
