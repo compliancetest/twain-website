@@ -269,7 +269,7 @@ if(!is_user_logged_in())
                                         <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
                                     </div>
                                     <div class="field top23">        
-                                        <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="<?php echo get_bloginfo('url');?>/terms-conditions">Terms & Conditions.</a></label>
+                                        <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="<?php echo get_bloginfo('url');?>/terms-conditions">Terms & Conditions..</a></label>
                                     </div>
                                     <div class="clear"></div>
 
