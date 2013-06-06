@@ -317,7 +317,7 @@ if(!is_user_logged_in())
 							<a id="accept_terms">Accept</a>
 							<a id="reject_terms">Reject</a>
 							<div class="clear"></div>
-							<div class="space10"></div>
+							<div class="space20"></div>
 						</div>
 					</div>
 				</div>	
