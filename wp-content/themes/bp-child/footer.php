@@ -59,10 +59,23 @@ jQuery(document).ready(function() {
 	jQuery('#scrollbar1').tinyscrollbar();
 	
 	jQuery('#terms_co').click(function(){
-		alert('test');	
+		jQuery('#registration').css('display', 'none');
+		jQuery('#scrollbar1').css('display', 'block');
 	});	
 	
 	/*Accept*/
+	jQuery('#accept_terms').click(function(){
+		jQuery('#scrollbar1').css('display', 'none');
+		jQuery('#registration').css('display', 'block');
+	});	
+	
+	/*Reject*/
+	jQuery('#reject_terms').click(function(){
+		jQuery('#registration').css('display', 'none');
+		jQuery('#scrollbar1').css('display', 'block');
+	});	
+	
+	
 	
 });
 </script>
