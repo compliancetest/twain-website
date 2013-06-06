@@ -286,6 +286,15 @@ if(!is_user_logged_in())
                     <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
                     <div class="reg_message log_msg" id="popup-login-msg"><?php //echo of_get_option('log_msg');?></div>
                 </div><!--END registration-->
+          
+				<div id="terms_content" class="radius6">
+				<?php 
+				$page_id = 1061;
+				$page_data = get_page( $page_id );
+				echo $page_data->post_content;
+				?>
+				</div>
+          
             <div id="close-popup" class="close_btn"></div>
             </div>
         </div>

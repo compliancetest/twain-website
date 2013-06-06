@@ -2081,6 +2081,10 @@ a.logout_button{
 	color: #2C80E8;
 }
 
+#terms_content{
+	display:none;
+}
+
 /* **************** BP ELEMENTS **************************** */
 .dir-form input[type="text"], 
 .dir-form input[type="email"], 
