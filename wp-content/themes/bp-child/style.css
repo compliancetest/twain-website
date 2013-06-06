@@ -2095,6 +2095,7 @@ a.logout_button{
 
 .terms_content{
 	height:450px;
+	width: 800px;
 	overflow:auto;
 }
 
