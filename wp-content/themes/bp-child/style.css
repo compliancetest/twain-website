@@ -2091,6 +2091,10 @@ a.logout_button{
 	padding: 0px 20px;
 }
 
+.content_inner p{
+margin: 0 0 10px 0;
+}
+
 /* **************** BP ELEMENTS **************************** */
 .dir-form input[type="text"], 
 .dir-form input[type="email"], 
