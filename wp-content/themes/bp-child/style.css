@@ -2085,6 +2085,7 @@ a.logout_button{
 
 #terms_container{
 	display:none;
+	height:450px;
 }
 
 #terms_container p{
