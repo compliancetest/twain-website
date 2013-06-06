@@ -2083,6 +2083,10 @@ a.logout_button{
 	color: #2C80E8;
 }
 
+#terms_co:hover{
+text-shadow: none;
+}
+
 .terms_container{
 	display:none;
 }
