@@ -296,6 +296,9 @@ if(!is_user_logged_in())
 					//	echo $page_data->post_content;
 						echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
 						?>
+						<div class="clear"></div>
+						<a id="accept_terms">Accept</a>
+						<a id="reject_terms">Reject</a>
 					</div>
 				</div>
           
