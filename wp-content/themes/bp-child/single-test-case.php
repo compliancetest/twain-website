@@ -8,7 +8,6 @@ Template Name Posts: Test Case
 get_header();
 ?>
 
-	<div class="space25"></div>
 	<div class="content container">
 		<div class="infos">
 				<h3 class="dark_gray_txt normal">Test case ID: <span class="dark_blue_txt bold"><?php echo meta ('test_case_id') ; ?></span></h3>
@@ -183,11 +182,7 @@ get_header();
 		<div class="clear"></div>
 		<div class="space15"></div>
 	</div> <!--end content container-->
-	
-</div>
-<div class="space45"></div>
-<div class="clear"></div>
-</div>
+
 <?php
 get_footer();
 ?>

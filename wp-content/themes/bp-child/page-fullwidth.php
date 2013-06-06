@@ -5,8 +5,7 @@
 get_header();
 ?>
 
-	<div class="space25"></div>
-	<div class="content container">
+	<div class="content container"><!-- Start Content Container-->
 		
 		<div class="column">
 
@@ -26,13 +25,8 @@ get_header();
 		
 		<div class="clear"></div>
 
-	</div> <!--end content container-->
-	
-</div>
-<div class="space45"></div>
-<div class="clear"></div>
-</div>
-<div class="clear"></div>
+	</div> <!--End content container-->	
+
 <?php
 get_footer();
 ?>

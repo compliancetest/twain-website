@@ -2,8 +2,8 @@
 get_header();
 ?>
 
-<div id="content-wrapper">
-	<div class="container">
+
+	<div class="content container">
 		<div class="content700">
 			<?php if (have_posts()) while (have_posts()) : the_post(); ?>
 				<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
@@ -20,8 +20,8 @@ get_header();
 		</div>
 		<?php get_sidebar(); ?>
 	</div>
-</div>
-<div class="clear"></div>
+
+
 <?php
 get_footer();
 ?>

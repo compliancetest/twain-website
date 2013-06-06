@@ -3,7 +3,6 @@ get_header();
 ?>
 <?php // echo get_theme_root(); ?>
 		<div class="content">
-			<div class="space30"></div>
             <h3 class="sub-title">Search for Test Suites or Certified Products</h3>
 			<div id="search-wrapper">				
 <!--				<div class="space7"></div>-->
@@ -96,10 +95,7 @@ get_header();
 		<?php // get_sidebar('homepage'); ?>
 		<div class="space40"></div>	
 		</div>
-	</div>
-</div>
-<div class="clear"></div>
-
+	
 <?php
 get_footer();
 ?>

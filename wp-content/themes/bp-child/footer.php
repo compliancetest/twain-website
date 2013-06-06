@@ -1,4 +1,10 @@
-		<div id="footer-wrapper">
+		        </div><!-- End Container -->
+            <div class="space45"></div>
+            <div class="clear"></div>
+            </div><!-- End Content-Wrapper -->
+        </div><!-- End Content-Pattern -->
+
+        <div id="footer-wrapper">
 			<div class="footer">
 				<div id="footer-company-info">
 					<h5>Company Information</h5>
@@ -44,7 +50,7 @@
 			</div>
 		</div>
         <!-- **************** FOOTER *************** -->
-	</div>
+	</div><!-- End Wrapper -->
 	<?php 
         //Show Register And Login Popup
         do_action('cp_login_register_box') 

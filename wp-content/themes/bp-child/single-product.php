@@ -8,7 +8,6 @@ Template Name Posts: Product / Service
 get_header();
 ?>
 
-	<div class="space25"></div>
 	<div class="content container">
 <div class="grid  dark_gray_txt">
 					<div class="grid_head column">
@@ -191,9 +190,7 @@ get_header();
 	</div> <!--end content container-->
 	
 </div>
-<div class="space45"></div>
-<div class="clear"></div>
-</div>
+
 <?php
 get_footer();
 ?>

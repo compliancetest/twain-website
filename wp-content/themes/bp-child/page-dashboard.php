@@ -5,7 +5,6 @@
 get_header();
 ?>
 
-<div class="space25"></div>
 <div class="content" id="my_profile">
 	<div class="space25"></div>
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
@@ -422,11 +421,7 @@ get_header();
 	<div class="clear space25"></div>
 			
 </div> <!--end content-->
-</div>
-<div class="space45"></div>
-<div class="clear"></div>
-</div>
-<div class="clear"></div>
+
 <script type="text/javascript">
 	var wrapper = $('<div/>').css({height:0,width:0,'overflow':'hidden'});
 	var fileInput = jQuery(':file').wrap(wrapper);

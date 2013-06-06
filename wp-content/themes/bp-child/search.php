@@ -11,7 +11,6 @@ global $post;
 
 <!-- **************** CONTENT *************** -->
 
-	<div class="space25"></div>
 	<div class="content container" id="search">
 	<?php
 	if ($_GET['post_type']=='test-suite') { 
@@ -799,11 +798,7 @@ global $post;
 	<?php } ?>
 	
 	</div><!-- end content -->
-	<div class="space45"></div>
-	
-</div><!-- end content-wrapper -->
-</div><!-- end content-pattern -->
-<div class="clear"></div>
+
 <!-- **************** END CONTENT *************** -->
 
 <div class="clear"></div>

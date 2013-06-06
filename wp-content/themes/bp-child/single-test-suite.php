@@ -17,7 +17,7 @@ get_header();
 	$group_url = home_url( $bp->groups->slug . '/' . $group -> slug );
 	?>
 	
-	<div class="space25"></div>
+
 	<div class="content container">
 		<div class="infos">
 				<div class="grid_cell width10P">
@@ -420,11 +420,7 @@ get_header();
 		
 			
 	</div> <!--end content container-->
-	
-</div>
-<div class="space45"></div>
-<div class="clear"></div>
-</div>
+
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	/* Append Select Filter from Test-Suite Page

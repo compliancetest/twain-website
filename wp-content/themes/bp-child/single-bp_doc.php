@@ -8,7 +8,6 @@ Template Name Posts: Documents
 get_header();
 ?>
 
-<div class="space25"></div>
 <div class="content container">
 	
 	
@@ -131,12 +130,7 @@ if ((get_the_title()) == 'Create a Doc'){
 		<div class="clear"></div>
 
 	</div> <!--end content container-->
-	
-</div>
-<div class="space45"></div>
-<div class="clear"></div>
-</div>
-<div class="clear"></div>
+
 <?php
 get_footer();
 ?>
