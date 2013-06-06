@@ -69,7 +69,7 @@
 jQuery(document).ready(function($) {
 	jQuery(function()
 	{
-		jQuery('.scroll-pane').jScrollPane();
+		jQuery('.terms_content').jScrollPane();
 	});
 	jQuery('#terms_co').click(function(){
 		alert('test');	
