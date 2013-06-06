@@ -289,17 +289,19 @@ if(!is_user_logged_in())
           
 				<div id="terms_container" class="radius6">
 					<p class="headline bottom30">Terms & Conditions</p>
-					<div class="terms_content">
-						<?php 
-						$page_id = 1061;
-						$page_data = get_page( $page_id );
-					//	echo $page_data->post_content;
-						echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
-						?>
-						<div class="clear"></div>
-						<a id="accept_terms">Accept</a>
-						<a id="reject_terms">Reject</a>
-					</div>
+					<div id="termsandco">
+						<div class="terms_content">
+							<?php 
+							$page_id = 1061;
+							$page_data = get_page( $page_id );
+						//	echo $page_data->post_content;
+							echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
+							?>
+							<div class="clear"></div>
+							<a id="accept_terms">Accept</a>
+							<a id="reject_terms">Reject</a>
+						</div>
+					</div>	
 				</div>
           
             <div id="close-popup" class="close_btn"></div>

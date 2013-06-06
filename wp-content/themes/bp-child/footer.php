@@ -63,7 +63,7 @@
 <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/mwheelIntent.js"></script>	
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	jQuery('.terms_content').jScrollPane();
+	jQuery('#termsandco').jScrollPane();
 	
 	jQuery('#terms_co').click(function(){
 		alert('test');	
