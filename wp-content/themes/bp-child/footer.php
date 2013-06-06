@@ -55,7 +55,7 @@
 <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
 	
 <script type="text/javascript">
-jQuery(document).ready(function($) {
+jQuery(document).ready(function() {
 	$('#scrollbar1').tinyscrollbar();
 	
 	jQuery('#terms_co').click(function(){
