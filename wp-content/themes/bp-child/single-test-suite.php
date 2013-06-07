@@ -328,7 +328,22 @@ get_header();
 									$the_line .= $test_intent_description;
 									$the_line .= '</div>';
 									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
-									$the_line .= 'actions';
+									$the_line .= '<div class="quick_actions radius3 alignright">
+										<ul>
+										 <li>
+											<a href="">
+												<img src="https://www.test.compliancetest.net/wp-content/themes/bp-child/images/view_doc.png" class="top3">
+												<span class="simple_tooltip radius6">Edit<span></span></span>
+											</a>
+										 </li>
+										 <li>
+											<a href="https://www.test.compliancetest.net/wiki/wiki-1/edit" class="bold">
+												<img src="https://www.test.compliancetest.net/wp-content/themes/bp-child/images/edit_doc.png" class="top1">
+												<span class="simple_tooltip radius6">Delete<span></span></span>
+											</a>
+										 </li>											
+										</ul>
+										</div>';
 									$the_line .= '</div>';
 							        $the_line .= '<div class="clear"></div>';
 									$the_line .= '</div>';
