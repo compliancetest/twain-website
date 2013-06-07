@@ -4363,6 +4363,13 @@ display:block !important;
     margin-right: -17px;
 }
 
+
+.no_bcg{
+	background: none !important;
+	border: 0px !important;
+	margin: 0px !important;
+}
+
 .styled_select {
     background: url("../images/styled_select.png") no-repeat scroll right center #FFFFFF;
     border: 1px solid #CCCCCC;
