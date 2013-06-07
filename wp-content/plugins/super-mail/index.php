@@ -148,15 +148,14 @@ class spm_class{
         wp_mail($to, $subject, 'fuck');
         exit;*/
         if (isset($_POST['si_contact_submitted'])){
-
-            if (empty($_POST['si_contact_name1'])){exit;}
-            if (empty($_POST['si_contact_email'])){exit;}
-            if (empty($_POST['si_contact_message'])){exit;}
-
             $si_contact_name1 = trim($_POST['si_contact_name1']);
             $si_contact_email = trim($_POST['si_contact_email']);
             $si_contact_message = trim($_POST['si_contact_message']);
             $si_contact_ex_field1 = trim($_POST['si_contact_ex_field1']);
+
+            if (empty($si_contact_name1)){exit;}
+            if (empty($si_contact_email)){exit;}
+            if (empty($si_contact_message)){exit;}
 
             require_once 'captcha/securimage.php';
             $image = new Securimage();
@@ -177,16 +176,13 @@ class spm_class{
             }
             $subject = $this->super_mail_form_get_subject();
             $subject = $subject[0]->email_subject;
-
+            $headers = array();
             $headers[] = 'From: '.$_POST['si_contact_email'];
             if (!empty($si_contact_ex_field1)){
-                if (wp_mail($to, $subject, $si_contact_message.'  Phone number:'.$si_contact_ex_field1, $headers)){
-                    exit;
+                wp_mail($to, $subject, $si_contact_message.'  Phone number:'.$si_contact_ex_field1, $headers);
                 }
             } else {
-                if (wp_mail($to, $subject, $si_contact_message, $headers)){
-                    exit;
-                }
+                wp_mail($to, $subject, $si_contact_message, $headers);
             }
         }
     }
