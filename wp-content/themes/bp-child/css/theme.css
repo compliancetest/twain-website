@@ -3646,9 +3646,8 @@ p.copyright{
 	text-decoration: none !important;
 }
 
-.issuer_homepage {
-
-	
+.issuer_homepage a{
+	margin-top: 0px!important;
 }
 
 #community_content{
