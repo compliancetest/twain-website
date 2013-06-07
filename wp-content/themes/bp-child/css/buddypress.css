@@ -1,0 +1,30 @@
+.group-button{
+    position: absolute;
+    white-space: nowrap;
+}
+.item-list-tabs ul.tabs li a{
+    margin: 0;
+}
+#item-actions{
+    margin: 0;
+}
+
+#item-body{    
+    margin: 0;
+    padding: 0;
+    color: #666 !important;
+}
+
+.item-list-tabs ul li a{
+    font-weight: bold;
+    line-height: 16px;
+    margin: 20px;
+}
+
+.item-avatar img{
+    border:1px solid #c5c5c5;
+}
+.container p{
+    margin-bottom: 15px;
+    line-height: 1.2em;        
+}

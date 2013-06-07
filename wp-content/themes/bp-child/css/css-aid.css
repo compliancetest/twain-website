@@ -47,7 +47,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: Arial,Tahoma,Helevetica,sans-serif;
-	font-size: 13px;
+	font-size: 12px;
 	line-height: 14px; 
 	text-shadow: black 0px 1px 0px;
 	-moz-text-shadow: black 0px 1px 0px;
@@ -210,13 +210,13 @@ input[type="search_button"], input[type="submit"], input[type="reset"], input[ty
 	-o-box-sizing:border-box;
 }
 
-	input[type="search_button"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, .button:hover {
-		background-image: url(../images/white_gloss.png);
-		text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-		-moz-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-		-webkit-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-		-o-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-	}
+input[type="search_button"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, .button:hover {
+	background-image: url(../images/white_gloss.png);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	-moz-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	-webkit-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+	-o-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+}
 	
 .button {
 	text-decoration: none !important;
@@ -236,13 +236,13 @@ input[type="search_button"], input[type="submit"], input[type="reset"], input[ty
 	-o-text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
 }
 
-	.button_small span.sign {
-		font-weight: bold;
-		border-right: 1px solid rgba(255,255,255,0.2);
-		float: left;
-		width: 20px;
-		margin-left: -10px;
-	}
+.button_small span.sign {
+	font-weight: bold;
+	border-right: 1px solid rgba(255,255,255,0.2);
+	float: left;
+	width: 20px;
+	margin-left: -10px;
+}
 
 .button_medium {
 	padding: 12px 18px;
@@ -251,7 +251,17 @@ input[type="search_button"], input[type="submit"], input[type="reset"], input[ty
 	font-size: 16px;
 	font-weight: bold;
 }
-
+.button_red{
+    background: #aa221e;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cc2e27), to(#981716));
+    background: -webkit-linear-gradient(top, #cc2e27, #981716);
+    background: -moz-linear-gradient(top, #cc2e27, #981716);
+    background: -ms-linear-gradient(top, #cc2e27, #981716);
+    background: -o-linear-gradient(top, #cc2e27, #981716);
+}
+.button_red:hover{
+    background-color: #cc2e26;   
+}
 textarea {
 	min-height: 130px;
 }
@@ -932,9 +942,9 @@ img {
 		width: 75% !important;
 	}
 
-.fifth {
-	width: 20% !important;
-}
+    .fifth {
+	    width: 20% !important;
+    }
 
 	.four_fifths {
 		width: 80%;
