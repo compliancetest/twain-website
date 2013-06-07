@@ -93,7 +93,7 @@ jQuery(document).ready(function() {
 	
 	
     if (window.PIE) {
-        $('.blue_button a').each(function() {
+        jQuery('.blue_button a').each(function() {
             PIE.attach(this);
         });
     }
