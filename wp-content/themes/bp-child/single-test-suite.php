@@ -370,11 +370,11 @@ get_header();
 		</div>
 		
 		<div id="the_filters">
-			<div class="grid_cell width45P">
+			<div class="grid_cell width35P">
 						<h5 class="blue_txt">Test Cases</h5>
 			</div>
 			<form id="filter_ts" method="post" action="">
-			<div class="grid_cell width55P right selecteds">
+			<div class="grid_cell width65P right selecteds">
 				<span class="left padding5-10">Filter By: </span>
 				<div class="styled_select left">
 					<select name="testsuites_tester" class="change_ts">
@@ -412,6 +412,7 @@ get_header();
 					  ?>
 					</select>
 				</div>
+				<a href="" class="new_test_case left">New Test Case</a>
 				<div class="clear"></div>
 			</div>
 			</form>

@@ -3630,6 +3630,7 @@ p.copyright{
 }
 
 .new_test_case{
+	display:block;
 	background: url(../images/add_new_test_suite.png) no-repeat;
 	width: 115px;
 	height: 24px;
