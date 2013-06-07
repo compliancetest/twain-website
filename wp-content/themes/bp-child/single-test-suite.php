@@ -27,8 +27,8 @@ get_header();
 				</div> 
 				<div class="grid_cell width90P">
 					<div class="dark_gray_txt bold width90P left">
-						<h3 class="dark_gray_txt bold left"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>
-						<a href="#" class="edit_ts right">EDIT</a>
+						<h3 class="dark_gray_txt bold left lineheight22px"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>
+						<a href="#" class="edit_ts left">EDIT</a>
 						<div class="clear"></div>
 					</div>	
 					<div class="width90P left">Issuer Homepage</div>

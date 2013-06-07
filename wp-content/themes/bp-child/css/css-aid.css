@@ -98,7 +98,9 @@ h6 {
 	line-height: 12px;
 }
 
-
+.lineheight22px{
+	line-height:22px !important;
+}
 
 blockquote {
 	font-family: "Times New Roman",Georgia,Serif;
