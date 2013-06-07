@@ -3616,6 +3616,16 @@ p.copyright{
     padding: 5px 10px !important;
 }
 
+.edit_ts{
+	background: url(images/edit.jpg) top lleft no-repeat;
+	width: 64px;
+	height:21px;
+	display:block;
+	color:#fff;
+	text-transform: uppercase;
+	
+}
+
 #community_content{
     width: 85%;
     margin: 20px auto;

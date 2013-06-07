@@ -26,7 +26,9 @@ get_header();
 					} ?>
 				</div> 
 				<div class="grid_cell width90P">
-					<h3 class="dark_gray_txt bold"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>	
+					<h3 class="dark_gray_txt bold width90P left"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>	
+					<a href="#" class="edit_ts right width10P">EDIT</a>
+					<div class="clear"></div>
 					<a href="<?php echo get_permalink( $post->ID ); ?>" class="bold blue_txt nodecoration"><?php echo get_permalink( $post->ID ); ?> <?php  // or echo meta ('ts_identifier') ;?></a>
 					<div class="space15"></div>
 					
