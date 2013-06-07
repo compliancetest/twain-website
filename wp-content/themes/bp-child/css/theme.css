@@ -4514,6 +4514,10 @@ display:block !important;
     margin-left: 5%;
 }
 
+.left2{
+	margin-left:2px;
+}
+
 .prod_serv_details{
     border:1px solid #cfcfcf;
     padding: 5px 4px;

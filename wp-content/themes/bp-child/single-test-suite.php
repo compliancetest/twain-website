@@ -332,13 +332,13 @@ get_header();
 										<ul>
 										 <li>
 											<a href="">
-												<img src="'.get_stylesheet_directory_uri().'/images/edit_tc.png" class="top3">
+												<img src="'.get_stylesheet_directory_uri().'/images/edit_tc.png">
 												<span class="simple_tooltip radius6">Edit<span></span></span>
 											</a>
 										 </li>
 										 <li>
 											<a href="">
-												<img src="'.get_stylesheet_directory_uri().'/images/delete_tc.png" class="top1">
+												<img src="'.get_stylesheet_directory_uri().'/images/delete_tc.png" class="left2">
 												<span class="simple_tooltip radius6">Delete<span></span></span>
 											</a>
 										 </li>
