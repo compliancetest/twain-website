@@ -2771,6 +2771,9 @@ background-image: url(../images/white_gloss.png);
 
 .test_suits_research {
     background-image: none !important;
+    font-style: italic;
+	font-family: 'Open Sans', Arial, sans-serif;
+	color:#aaaaaa;
 }
 
 #search_test_suite_submit {
