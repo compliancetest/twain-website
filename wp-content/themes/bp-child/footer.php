@@ -59,6 +59,7 @@
 	
 <!-- Tiny scrollbar-->	
 <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
+<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/PIE.js"></script>
 	
 <script type="text/javascript">
 jQuery(document).ready(function() {
@@ -91,7 +92,11 @@ jQuery(document).ready(function() {
 	});
 	
 	
-	
+    if (window.PIE) {
+        $('.blue_button a').each(function() {
+            PIE.attach(this);
+        });
+    }
 });
 </script>
 
