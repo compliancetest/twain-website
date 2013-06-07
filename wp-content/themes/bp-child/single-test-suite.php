@@ -269,7 +269,7 @@ get_header();
 									
 									$perma = get_permalink( $id );
 									$tc_id = get_post_meta($id ,'test_case_id', true); 
-									$tc_version = get_post_meta($id ,'version', true); 
+									//$tc_version = get_post_meta($id ,'version', true); 
 									$tc_published = get_post_meta($id ,'published', true); 
 									$tc_harness_role = get_post_meta($id ,'choose_harness_role', true); 
 									$tc_initiator = get_post_meta($id ,'choose_initiator', true); 
@@ -293,9 +293,9 @@ get_header();
 											$the_line .= get_the_title();
 											$the_line .='</div>';
 										}
-									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
+									/*$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
 									$the_line .= $tc_version;
-									$the_line .= '</div>';
+									$the_line .= '</div>';*/
 									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter ">';
 									$the_line .= $tc_published;
 									$the_line .= '</div>';
