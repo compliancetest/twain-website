@@ -3629,6 +3629,19 @@ p.copyright{
 	padding-top: 3px;	
 }
 
+.new_test_case{
+	background: url(../images/add_new_test_suite.png) no-repeat;
+	width: 115px;
+	height: 24px;
+	border: 0;
+	font-size: 12px;
+	font-family: arial;
+	text-shadow: 0px -1px 0px #2A7811;
+	font-weight: normal;
+	padding: 0px 8px 0px 29px;
+	text-align: right;
+}
+
 #community_content{
     width: 85%;
     margin: 20px auto;
