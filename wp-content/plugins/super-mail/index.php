@@ -185,7 +185,7 @@ class spm_class{
                 wp_mail($to, $subject, $si_contact_message, $headers);
             }
         }
-    }
+    
     public function plugin_add_settings_link_super_mail($links){
         $settings_link = '<a href="'.admin_url('admin.php?page=super_mail').'">Settings</a>';
         $links[] = $settings_link;
