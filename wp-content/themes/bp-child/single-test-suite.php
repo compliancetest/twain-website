@@ -332,13 +332,13 @@ get_header();
 										<ul>
 										 <li>
 											<a href="">
-												<img src="https://www.test.compliancetest.net/wp-content/themes/bp-child/images/view_doc.png" class="top3">
+												<img src="'.get_stylesheet_directory_uri().'/images/edit_tc.png" class="top3">
 												<span class="simple_tooltip radius6">Edit<span></span></span>
 											</a>
 										 </li>
 										 <li>
-											<a href="https://www.test.compliancetest.net/wiki/wiki-1/edit" class="bold">
-												<img src="https://www.test.compliancetest.net/wp-content/themes/bp-child/images/edit_doc.png" class="top1">
+											<a href="">
+												<img src="'.get_stylesheet_directory_uri().'/images/delete_tc.png" class="top1">
 												<span class="simple_tooltip radius6">Delete<span></span></span>
 											</a>
 										 </li>											
