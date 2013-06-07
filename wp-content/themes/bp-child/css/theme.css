@@ -3629,15 +3629,15 @@ p.copyright{
 }
 
 .issuer_homepage{
-	/*margin-top: 0px !important;
+	margin-top: 0px !important;
 	padding: 4px 9px;
 	font-size: 12px;
-	text-align: center;*/
+	text-align: center;
 }
 
 #community_content{
     width: 85%;
-    margin: 20px auto;
+    margin: 20px auto; 
     font-size: 12px !important;
 }
 
@@ -3645,6 +3645,7 @@ p.copyright{
     top: 3px;
     margin-right: 5px;
 }
+
 
 #community_content p{
     margin: 20px 0px !important;
