@@ -328,7 +328,7 @@ get_header();
 									$the_line .= $test_intent_description;
 									$the_line .= '</div>';
 									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
-									$the_line .= '<div class="quick_actions radius3 alignright">
+									$the_line .= '<div class="quick_actions radius3 alignright no_bcg">
 										<ul>
 										 <li>
 											<a href="">
