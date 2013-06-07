@@ -374,7 +374,7 @@ get_header();
 						<h5 class="blue_txt">Test Cases</h5>
 			</div>
 			<form id="filter_ts" method="post" action="">
-			<div class="grid_cell width65P right selecteds">
+			<div class="grid_cell width55P right selecteds">
 				<span class="left padding5-10">Filter By: </span>
 				<div class="styled_select left">
 					<select name="testsuites_tester" class="change_ts">
