@@ -3628,6 +3628,7 @@ p.copyright{
 	padding-right: 10px;
 	padding-top: 3px;	
 	margin-left:15px;
+	font-weight: normal !important;
 }
 
 .new_test_case{

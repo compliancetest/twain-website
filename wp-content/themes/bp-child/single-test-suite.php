@@ -31,7 +31,7 @@ get_header();
 						<a href="#" class="edit_ts left">EDIT</a>
 						<div class="clear"></div>
 					</div>	
-					<div class="width15P left blue_button"><a href="<?php echo $group_url; ?>" class="issuer_homepage">Issuer Homepage</a></div>
+					<div class="width15P left blue_button"><a href="<?php echo $group_url; ?>" class="issuer_homepage">Issuer Home Page</a></div>
 					<div class="clear"></div>
 					<a href="<?php echo get_permalink( $post->ID ); ?>" class="bold blue_txt nodecoration"><?php echo get_permalink( $post->ID ); ?> <?php  // or echo meta ('ts_identifier') ;?></a>
 					<div class="space15"></div>
