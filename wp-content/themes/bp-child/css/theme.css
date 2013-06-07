@@ -4199,10 +4199,10 @@ display:block !important;
 
 .blue_button a{
     background: #2690EB;
-    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad');
     background: -webkit-gradient(linear, left top, left bottom, from(#2690EB), to(#3577AD));
     background: -moz-linear-gradient(top, #2690EB, #3577AD);
-    background: -o-linear-gradient(top, #2690EB, #3577AD);*/
+    background: -o-linear-gradient(top, #2690EB, #3577AD);
     border: 1px solid #3577AD;
     border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -4213,22 +4213,23 @@ display:block !important;
     margin-top: 20px;
     margin-bottom: 8px;
     display:block;
-   /* box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
+    box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
     -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
     -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-    -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;*/
+    -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
     text-decoration: none;
     font-weight: bold;
-    behavior: url(js/PIE.htc);
+    behavior: url(/js/PIE.htc); 
+    
 }
 
 .blue_button a:hover{
     background: #2690EB;
-   /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3577AD', endColorstr='#2690eb');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3577AD', endColorstr='#2690eb');
     background: -webkit-gradient(linear, left top, left bottom, from(#3577AD), to(#2690eb));
     background: -moz-linear-gradient(top, #3577AD, #2690eb);
     background: -o-linear-gradient(top, #3577AD, #3577AD);
-    border: 1px solid #2690eb;*/s
+    border: 1px solid #2690eb;
 }
 
 .view_compliant{
