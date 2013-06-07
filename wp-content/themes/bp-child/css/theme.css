@@ -3617,7 +3617,7 @@ p.copyright{
 }
 
 .edit_ts{
-	background: url(images/edit.jpg) top lleft no-repeat;
+	background: url(../images/edit.jpg) top left no-repeat !important;
 	width: 64px;
 	height:21px;
 	display:block;
