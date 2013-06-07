@@ -3621,7 +3621,8 @@ p.copyright{
 	width: 64px;
 	height:21px;
 	display:block;
-	color:#fff;
+	color:#fffi !important;
+	text-decoration: none;
 	text-transform: uppercase;
 	
 }
