@@ -3618,13 +3618,15 @@ p.copyright{
 
 .edit_ts{
 	background: url(../images/edit.jpg) top left no-repeat !important;
-	width: 64px;
-	height:21px;
-	display:block;
-	color:#fffi !important;
-	text-decoration: none;
+	width: 54px;
+	height: 19px;
+	display: block;
+	color: #fff !important;
 	text-transform: uppercase;
-	
+	text-align: right;
+	text-decoration: none !important;
+	padding-right: 10px;
+	padding-top: 3px;	
 }
 
 #community_content{
