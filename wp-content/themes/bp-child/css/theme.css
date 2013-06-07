@@ -4372,6 +4372,7 @@ display:block !important;
 
 .no_bcg li{
 	background: none !important;
+	padding:0px !important;
 }
 
 .styled_select {

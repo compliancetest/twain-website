@@ -341,7 +341,8 @@ get_header();
 												<img src="'.get_stylesheet_directory_uri().'/images/delete_tc.png" class="top1">
 												<span class="simple_tooltip radius6">Delete<span></span></span>
 											</a>
-										 </li>											
+										 </li>
+										 <div class="clear"></div>										
 										</ul>
 										</div>';
 									$the_line .= '</div>';
