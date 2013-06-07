@@ -4370,6 +4370,10 @@ display:block !important;
 	margin: 0px !important;
 }
 
+.no_bcg li{
+	background: none !important;
+}
+
 .styled_select {
     background: url("../images/styled_select.png") no-repeat scroll right center #FFFFFF;
     border: 1px solid #CCCCCC;
