@@ -4238,6 +4238,7 @@ display:block !important;
     -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
     text-decoration: none;
     font-weight: bold;
+    behavior: url(../js/PIE.htc);
 }
 
 .blue_button a:hover{
