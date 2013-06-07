@@ -214,7 +214,7 @@ get_header();
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
 						<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
 						<div class="grid_cell nopaddingtop width15P toleft single_line">Test Intent Description</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Actions</div>
+						<div class="grid_cell nopaddingtop width5P toleft single_line">Actions</div>
 						<div class="clear"></div>	
 					</div>
 				</div>
