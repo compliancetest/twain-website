@@ -1968,26 +1968,6 @@ font-size: 12px;
     -o-box-shadow: 0px 0px 5px #C1C1C1;
 }
 
-#top_access input::-webkit-input-placeholder{
-	color:#aaa !important;
-	font-style: italic !important;
-}
-
-#top_access input:-moz-placeholder{
-	color:#aaa !important;
-	font-style: italic !important;
-}
-
-#top_access input::-moz-placeholder{
-	color:#aaa !important;
-	font-style: italic !important;
-}
-
-#top_access input:-ms-input-placeholder{
-	color:#aaa !important;
-	font-style: italic !important;
-}
-
 #top_access input[type="password"] {
     font-size: 12px;
     color: #AAA;
@@ -2010,6 +1990,28 @@ font-size: 12px;
     -webkit-box-shadow: 0px 1px 3px #c1c1c1;
     -moz-box-shadow: 0px 1px 3px #c1c1c1;
     -o-box-shadow: 0px 1px 3px #c1c1c1;
+}
+/*Placeholders
+ * */
+
+#top_access input::-webkit-input-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
+}
+
+#top_access input:-moz-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
+}
+
+#top_access input::-moz-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
+}
+
+#top_access input:-ms-input-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
 }
 
 #top_access input[type="submit"] ,  a.logout_button {
