@@ -26,9 +26,6 @@ require_once(THE_FUNCTION . '/test-suites.php');
 //Test Case Function
 require_once(THE_FUNCTION . '/test-cases.php');
 
-/*HTML pie
- * */
-require_once(THE_FUNCTION . '/wp-pie/wp-pie.php');
  
 /* 
  * Loads the Options Panel
