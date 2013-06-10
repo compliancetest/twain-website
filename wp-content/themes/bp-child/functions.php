@@ -26,6 +26,10 @@ require_once(THE_FUNCTION . '/test-suites.php');
 //Test Case Function
 require_once(THE_FUNCTION . '/test-cases.php');
 
+/*HTML pie
+ * */
+require_once(THE_FUNCTION . '/wp-pie/wp-pie.php');
+ 
 /* 
  * Loads the Options Panel
  *
@@ -845,21 +849,3 @@ function my_check_password_reset_key($key, $login) {
 
     return $user;
 }
-
-/* HTML PIE
-* */
-add_filter( 'wp_head' , 'mh_ie_lt_9_hack' );
-function mh_ie_lt_9_hack() { ?>
-<!-- child theme hack for versions of IE 8 or less -->
-<!--[if lt IE 9]>
-<style type="text/css" media="screen">
-.blue_button a {
-        behavior: url("<?php echo get_stylesheet_directory_uri() . '/js/PIE.htc'; ?>");
-        position: relative;
-        zoom: 1;
-}
-</style>
-<![endif]-->
-<!-- /child theme hack for versions of IE 8 or less -->
-<?php }
-?>
