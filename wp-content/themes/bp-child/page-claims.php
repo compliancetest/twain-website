@@ -12,6 +12,13 @@ get_header();
 	</div>
 		
 	<div class="column four_fifths right container">
+        <div class="default_grid">
+		    <div class="grid_cell nopaddingleft">
+                <a href="<?php echo esc_url( get_permalink( get_page_by_title( 'Create / Edit Product or Service' ) ) ); ?>" class="button button_small normal green_bcg white_txt right radius6"><span class="sign">+</span> Add new Product or Service</a>
+		    </div>
+	    </div>
+        <div class="clear space25"></div>
+
         <div class="grid default_grid">
             <div class="grid_head blue_head">
                 <div class="grid_row">
@@ -86,7 +93,7 @@ get_header();
 
             </div>
 
-            <a href="#" class="button button_small normal green_bcg white_txt right radius6 noradiustop"><span class="sign">+</span> New Compliance Claim</a>
+            <a href="#" class="button button_small normal green_bcg white_txt right radius6 noradiustop nomargintop"><span class="sign">+</span> New Compliance Claim</a>
             <div class="clear"></div>
             </div>
 
