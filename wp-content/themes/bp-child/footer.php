@@ -91,8 +91,6 @@ jQuery(document).ready(function() {
 		jQuery('#registration').css('display', 'block');
 	});
 	
-	
-	
    /* if (window.PIE) {
         jQuery('.blue_button a').each(function() {
             PIE.attach(this);

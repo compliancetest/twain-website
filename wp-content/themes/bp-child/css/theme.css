@@ -4247,6 +4247,7 @@ display:block !important;
     cursor: pointer;
 }
 
+
 .blue_button a{
     background: #2690EB;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad');
@@ -4270,7 +4271,6 @@ display:block !important;
     text-decoration: none;
     font-weight: bold;
     behavior: url(/wp-content/themes/bp-child/js/PIE.htc); 
-    
     height: 14px;
     
 }
