@@ -105,6 +105,9 @@ jQuery(function() {
         jQuery('#three_boxes_sv a').each(function() {
             PIE.attach(this);
         });
+         jQuery('.radius15').each(function() {
+            PIE.attach(this);
+        });
     }
     
 });
