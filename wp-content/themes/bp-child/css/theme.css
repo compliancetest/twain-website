@@ -1945,27 +1945,6 @@ color: #2C80E8;
 font-size: 12px;
 }
 
-#top_access::-webkit-input-placeholder{
-	color:#aaa;
-	font-style: italic;
-}
-
-#top_access:-moz-placeholder{
-	color:#aaa;
-	font-style: italic;
-}
-
-#top_access::-moz-placeholder{
-	color:#aaa;
-	font-style: italic;
-}
-
-#top_access:-ms-input-placeholder{
-	color:#aaa;
-	font-style: italic;
-}
-
-
 #top_access input[type="text"] {
     font-size: 12px;
     color: #666;
@@ -1987,6 +1966,26 @@ font-size: 12px;
     -webkit-box-shadow: 0px 0px 5px #C1C1C1;
     -moz-box-shadow: 0px 0px 5px #C1C1C1;
     -o-box-shadow: 0px 0px 5px #C1C1C1;
+}
+
+#top_access::-webkit-input-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
+}
+
+#top_access:-moz-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
+}
+
+#top_access::-moz-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
+}
+
+#top_access:-ms-input-placeholder{
+	color:#aaa !important;
+	font-style: italic !important;
 }
 
 #top_access input[type="password"] {
