@@ -4271,6 +4271,7 @@ display:block !important;
     text-decoration: none;
     font-weight: bold;
     height: 14px;
+	position: relative;
 }
 
 .blue_button a:hover{
