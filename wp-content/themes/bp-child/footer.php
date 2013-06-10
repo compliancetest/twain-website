@@ -99,7 +99,7 @@ jQuery(document).ready(function() {
 });
 jQuery(function() {
     if (window.PIE) {
-        jQuery('issuer_homepage').each(function() {
+        jQuery('.issuer_homepage').each(function() {
             PIE.attach(this);
         });
         jQuery('#three_boxes_sv a').each(function() {
