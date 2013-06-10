@@ -5,10 +5,10 @@
 global $groups_template;
 $group = $groups_template->group;
 //Getting Test Suites
-$testsuites = get_posts( 
-    array(
+$args = array(
         'post_type' => 'test-suite', 
         'posts_per_page' => -1,
+        'tax_query' => array('relation' => 'and'),
         'meta_query' => array(
             array(
                 'key' => 'community_id',
@@ -16,8 +16,33 @@ $testsuites = get_posts(
                 'compare' => '='
             )
         )
-    ) 
-);
+    );
+
+//Getting Filter Params
+$filterType = getFilterParam('type');
+$filterIssuer = getFilterParam('issuer');
+$filterYear = getFilterParam('year');
+$filterStatus = getFilterParam('status');
+
+foreach($filterType as $f)
+{
+    $args['tax_query'][] = array('taxonomy' => 'test_suite_type', 'field' => 'slug', 'terms' => $f);
+}
+foreach($filterIssuer as $v)
+{
+    $args['meta_query'][] = array('key' => 'ts_issuer', 'value' => $v, 'compare' => '=');
+}
+foreach($filterYear as $v)
+{
+    $args['meta_query'][] = array('key' => 'ts_issue_date', 'value' => $v . "-", 'compare' => 'LIKE');
+}
+foreach($filterStatus as $v)
+{
+    $args['meta_query'][] = array('key' => 'ts_status', 'value' => $v, 'compare' => '=');
+}
+
+$testsuites = get_posts( $args );
+
 ?>
 <div id="testsuites-container" class="tab-content white_bcg">
     <?php if(count($testsuites) > 0) {?> 
@@ -92,13 +117,16 @@ $testsuites = get_posts(
         </div>
     </div>
     <div class="column fifth right expendables">
+        <form name="form_filter" id="form_filter" action="<?php echo bp_get_group_permalink() ?>" method="get">
         <div class="expandable">
             <h6 class="exp_title">Type</h6>
             <div class="exp_content">
             <?php
                 foreach ($tsTypes as $k => $v){
             ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="type_name[]" value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
+                <label for="<?php echo $k?>" class="blue_txt">
+                    <input type="checkbox" name="type[]" value="<?php echo $k?>" id="<?php echo $k?>" <?php echo in_array($k, $filterType) ? 'checked="checked"' : '' ?> class="input_filter"> <?php echo $k?> (<?php echo $v?>)
+                </label>
                 <div class="clear"></div>
             <?php
                 }
@@ -111,7 +139,7 @@ $testsuites = get_posts(
             <?php
                 foreach ($tsIssuers as $k => $v){
             ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="issue_name[]" value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
+                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="issuer[]" <?php echo in_array($k, $filterIssuer) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
                 <div class="clear"></div>
             <?php
                 }
@@ -124,7 +152,7 @@ $testsuites = get_posts(
             <?php
                 foreach ($tsIssueYears as $k => $v){
             ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="issue_year[]" value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
+                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="year[]" <?php echo in_array($k, $filterYear) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
                 <div class="clear"></div>
             <?php
                 }
@@ -137,14 +165,14 @@ $testsuites = get_posts(
             <?php
                 foreach ($tsStatuses as $k => $v){
             ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="status[]" value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
+                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="status[]" <?php echo in_array($k, $filterStatus) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
                 <div class="clear"></div>
             <?php
                 }
             ?>
             </div>
         </div>
-        
+        </form>
     </div>
     <div class="clear"></div>
     <?php }else{ ?>

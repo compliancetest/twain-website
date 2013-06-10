@@ -485,3 +485,15 @@ function save_test_suite_on_admin($post_id)
     update_post_meta($post_id, 'lvl_desc', $lvl_desc);
 
 }
+
+//Get get params for search filter
+function getFilterParam($name)
+{
+    $param = array();
+    if(isset($_GET[$name]))
+        $param = $_GET[$name];
+    if(!is_array($param))
+        $param = array($param);
+        
+    return $param;
+}

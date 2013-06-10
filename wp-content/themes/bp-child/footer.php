@@ -59,7 +59,7 @@
 	
 <!-- Tiny scrollbar-->	
 <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
-<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/PIE.js"></script>
+<!--IF[ie]><script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/PIE.js"></script><![endif]-->
 	
 <script type="text/javascript">
 jQuery(document).ready(function() {
