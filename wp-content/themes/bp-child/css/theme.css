@@ -3674,7 +3674,6 @@ p.copyright{
 .issuer_homepage{
 margin-top: 0px !important;
 /*padding: 4px 9px;*/
-
 font-size: 12px;
 text-align: center;
 background: #2690EB;
@@ -3682,6 +3681,8 @@ border-radius: 5px;
 color: #fff !important;
 line-height:12px;
 /*position: relative;*/
+
+
 }
 
 #community_content{
