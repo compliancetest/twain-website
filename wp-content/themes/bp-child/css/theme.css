@@ -4476,7 +4476,7 @@ padding: 14px 15px 8px 9px;
 border-left: 1px solid #e2e2e2;
 position: absolute;
 pointer-events: none;
-background: url(select.png) center no-repeat#f2f2f2;
+background: url(../images/select.png) center no-repeat#f2f2f2;
 border-radius: 0px 2px 2px 0px;
 }
 
