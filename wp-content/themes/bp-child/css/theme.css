@@ -4411,7 +4411,7 @@ display:block !important;
 	padding:0px !important;
 }
 
-/*.styled_select {
+.styled_select {
     background: url("../images/styled_select.png") no-repeat scroll right center #FFFFFF;
     border: 1px solid #CCCCCC;
     border-radius: 5px 5px 5px 5px;
@@ -4437,8 +4437,8 @@ display:block !important;
     width: 160px;
     font-size: 11px;
     color: #2c80e8;
-}*/
-
+}
+/*
 .styled_select select {
     padding:3px;
     margin: 0;
@@ -4458,12 +4458,12 @@ display:block !important;
 	color: #2c80e8;
 	border: 1px solid #CCCCCC;
 }
-
+*/
 /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     .styled_select select {/*padding-right:18px*/}
 }
-
+/*
 .styled_select label {position:relative}
 
 .styled_select label:after {
@@ -4490,7 +4490,7 @@ background: #f8f8f8;
 position: absolute;
 display: block;
 border-right: 1px solid #cccccc;
-}
+}*/
 
 .test_cases{
     background: #f0f0f0 !important;
