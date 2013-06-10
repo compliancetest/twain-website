@@ -400,7 +400,7 @@ get_header();
 			<form id="filter_ts" method="post" action="">
 			<div class="grid_cell width55P right selecteds">
 				<span class="left padding5-10">Filter By: </span>
-				<div class="styled_select left">
+				<div class="styled_select width25P left">
 					<label>
 					<select name="testsuites_tester" class="change_ts">
 					  <option value="">Tester Role</option>
@@ -420,7 +420,7 @@ get_header();
 					</select>
 					</label>
 				</div>
-				<div class="styled_select left">
+				<div class="styled_select left width30P left5">
 					<label>
 					<select name="testsuites_lvl" class="change_ts">
 					  <option value="">Conformance Level</option>
