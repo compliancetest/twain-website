@@ -1968,22 +1968,22 @@ font-size: 12px;
     -o-box-shadow: 0px 0px 5px #C1C1C1;
 }
 
-#top_access::-webkit-input-placeholder{
+#top_access input::-webkit-input-placeholder{
 	color:#aaa !important;
 	font-style: italic !important;
 }
 
-#top_access:-moz-placeholder{
+#top_access input:-moz-placeholder{
 	color:#aaa !important;
 	font-style: italic !important;
 }
 
-#top_access::-moz-placeholder{
+#top_access input::-moz-placeholder{
 	color:#aaa !important;
 	font-style: italic !important;
 }
 
-#top_access:-ms-input-placeholder{
+#top_access input:-ms-input-placeholder{
 	color:#aaa !important;
 	font-style: italic !important;
 }
