@@ -27,7 +27,7 @@ get_header();
 									<p><span class="normal">Product: </span><?php echo the_title(); ?></p>
 								</div>
 								<div class="width20P grid_cell nopadding">
-									<div class="edit_suite"><a href="#">EDIT</a></div>
+									<div class="edit_suite"><a href="<?php echo esc_url( get_permalink( get_page_by_title( 'Create / Edit Product or Service' ) ) ) . '?product_id=' .$post->ID; ?>">EDIT</a></div>
 								</div>
 								<div class="clear"></div>
 								<div class="grey-border-bottom"></div>
