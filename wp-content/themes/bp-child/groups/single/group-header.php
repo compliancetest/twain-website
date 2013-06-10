@@ -3,31 +3,31 @@
 do_action( 'bp_before_group_header' );
 
 ?>
+<div id="issuer_title_block">
+    <div class="column four_fifths left">
+        <div id="item-header-avatar">
+	        <a href="<?php bp_group_permalink(); ?>" title="<?php bp_group_name(); ?>">
 
-<div id="item-actions">
+		        <?php bp_group_avatar(); ?>
 
-	<?php if ( bp_group_is_visible() ) : ?>
+	        </a>
+        </div><!-- #item-header-avatar -->
 
-		<h3><?php _e( 'Group Admins', 'buddypress' ); ?></h3>
+        <div id="item-header-content">
+	        <h3 class="dark_gray_txt"><?php bp_group_name(); ?></h3>	        
+	        <?php do_action( 'bp_before_group_header_meta' ); ?>
+            <?php bp_group_description(); ?>	        
+        </div><!-- #item-header-content -->
+    </div>
+    <div class="column fifth right">
+        <div id="item-buttons">
 
-		<?php bp_group_list_admins();
+            <?php do_action( 'bp_group_header_actions' ); ?>
 
-		do_action( 'bp_after_group_menu_admins' );
-
-		if ( bp_group_has_moderators() ) :
-			do_action( 'bp_before_group_menu_mods' ); ?>
-
-			<h3><?php _e( 'Group Mods' , 'buddypress' ); ?></h3>
-
-			<?php bp_group_list_mods();
-
-			do_action( 'bp_after_group_menu_mods' );
-
-		endif;
-
-	endif; ?>
-
-</div><!-- #item-actions -->
+        </div><!-- #item-buttons -->
+    </div>
+    <div class="clear"></div>
+</div>
 
 <?php
 do_action( 'bp_after_group_header' );

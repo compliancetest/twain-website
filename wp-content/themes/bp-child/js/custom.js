@@ -147,13 +147,15 @@ jQuery(document).ready(function($) {
 	// TABS
 	///////////////////////////////////////////////////////
 		 
-	$('.tabs a').click(function(){
+	$('.tabs:not(.no-ajax) a').click(function(){
 		switch_tabs($(this));
 		$(this).parent().addClass('active');
 		$(this).parent().siblings().removeClass('active');
+        return false;
 	});
  
-	switch_tabs($('.defaulttab'));
+    if($('.defaulttab').size() > 0)
+	    switch_tabs($('.defaulttab'));
 	 
 	function switch_tabs(obj)
 	{
@@ -405,24 +407,6 @@ jQuery(document).ready(function($) {
 				}
 				else return true;
 
-	});
-
-	jQuery('.request-membership').on('click', function() {
-		 var Element = $(this);
-		 //var imgSrc = ($(this).find('.popup-content').attr('src').split('src=')[1]).split('&')[0];
-		 var imgSrc = (Element.attr('src'));
-		 var imgHeight = Element.height();
-		 var imgWidth = Element.width();
-		 var leftOffset = -Number(Number(windowW /1.5) / 2);
-		 var topOffset = Number($(window).scrollTop()) + Number(windowH * 0.15);
-		 
-		jQuery('#mask_community').css({'height' : docH , 'width' : windowW}).fadeIn('fast');		
-		jQuery('#community-wrap').fadeIn('fast').css({
-														'margin-top': topOffset, 
-														'max-width':  '650px' 
-														});
-		return false;
-	
 	});
     
     //change popups according to what button is pressed

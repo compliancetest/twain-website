@@ -8,21 +8,15 @@
  */
 
 get_header( 'buddypress' ); ?>
-	<div class="space25"></div>
-	<div class="content container">
-		<div class="column">
-			<div class="content_inner">
+
+	<div id="content">
+		<div class="padder">
 		
 		<?php do_action( 'bp_before_create_group_content_template' ); ?>
 
 		<form action="<?php bp_group_creation_form_action(); ?>" method="post" id="create-group-form" class="standard-form" enctype="multipart/form-data">
-			<h2><?php _e( 'Create a Community', 'buddypress' ); ?> &nbsp;	
-			</h2>
-			<div class="space5"></div>
-			<a class="button group_create" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ); ?>">
-					<?php _e( 'Community Directory', 'buddypress' ); ?>
-			</a>
-			<div class="space10"></div>
+			<h3><?php _e( 'Create a Group', 'buddypress' ); ?> &nbsp;<a class="button" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ); ?>"><?php _e( 'Groups Directory', 'buddypress' ); ?></a></h3>
+
 			<?php do_action( 'bp_before_create_group' ); ?>
 
 			<div class="item-list-tabs no-ajax" id="group-create-tabs" role="navigation">
@@ -42,11 +36,11 @@ get_header( 'buddypress' ); ?>
 
 					<?php do_action( 'bp_before_group_details_creation_step' ); ?>
 
-					<label for="group-name"><?php _e( 'Community Name (required)', 'buddypress' ); ?></label> <br />
-					<input type="text" name="group-name" id="group-name" aria-required="true" value="<?php bp_new_group_name(); ?>" /><br />
-					<br />
-					<label for="group-desc"><?php _e( 'Community Description (required)', 'buddypress' ); ?></label><br />
-					<textarea name="group-desc" id="group-desc" aria-required="true"><?php bp_new_group_description(); ?></textarea><br />
+					<label for="group-name"><?php _e( 'Group Name (required)', 'buddypress' ); ?></label>
+					<input type="text" name="group-name" id="group-name" aria-required="true" value="<?php bp_new_group_name(); ?>" />
+
+					<label for="group-desc"><?php _e( 'Group Description (required)', 'buddypress' ); ?></label>
+					<textarea name="group-desc" id="group-desc" aria-required="true"><?php bp_new_group_description(); ?></textarea>
 
 					<?php
 					do_action( 'bp_after_group_details_creation_step' );
@@ -65,68 +59,68 @@ get_header( 'buddypress' ); ?>
 
 					<div class="radio">
 						<label><input type="radio" name="group-status" value="public"<?php if ( 'public' == bp_get_new_group_status() || !bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e( 'This is a public Community', 'buddypress' ); ?></strong>
+							<strong><?php _e( 'This is a public group', 'buddypress' ); ?></strong>
 							<ul>
-								<li><?php _e( 'Any site member can join this Community.', 'buddypress' ); ?></li>
-								<li><?php _e( 'This group will be listed in the Community directory and in search results.', 'buddypress' ); ?></li>
-								<li><?php _e( 'Community content and activity will be visible to any site member.', 'buddypress' ); ?></li>
+								<li><?php _e( 'Any site member can join this group.', 'buddypress' ); ?></li>
+								<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
+								<li><?php _e( 'Group content and activity will be visible to any site member.', 'buddypress' ); ?></li>
 							</ul>
 						</label>
 
 						<label><input type="radio" name="group-status" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e( 'This is a private Community', 'buddypress' ); ?></strong>
+							<strong><?php _e( 'This is a private group', 'buddypress' ); ?></strong>
 							<ul>
-								<li><?php _e( 'Only users who request membership and are accepted can join the Community.', 'buddypress' ); ?></li>
-								<li><?php _e( 'This group will be listed in the Community directory and in search results.', 'buddypress' ); ?></li>
-								<li><?php _e( 'Community content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
+								<li><?php _e( 'Only users who request membership and are accepted can join the group.', 'buddypress' ); ?></li>
+								<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
+								<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
 							</ul>
 						</label>
 
 						<label><input type="radio" name="group-status" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> />
-							<strong><?php _e('This is a hidden Community', 'buddypress'); ?></strong>
+							<strong><?php _e('This is a hidden group', 'buddypress'); ?></strong>
 							<ul>
-								<li><?php _e( 'Only users who are invited can join the Community.', 'buddypress' ); ?></li>
-								<li><?php _e( 'This group will not be listed in the Community directory or search results.', 'buddypress' ); ?></li>
-								<li><?php _e( 'Community content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
+								<li><?php _e( 'Only users who are invited can join the group.', 'buddypress' ); ?></li>
+								<li><?php _e( 'This group will not be listed in the groups directory or search results.', 'buddypress' ); ?></li>
+								<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
 							</ul>
 						</label>
 					</div>
 
-					<h4><?php _e( 'Community Invitations', 'buddypress' ); ?></h4>
+					<h4><?php _e( 'Group Invitations', 'buddypress' ); ?></h4>
 
 					<p><?php _e( 'Which members of this group are allowed to invite others?', 'buddypress' ); ?></p>
 
 					<div class="radio">
 						<label>
 							<input type="radio" name="group-invite-status" value="members"<?php bp_group_show_invite_status_setting( 'members' ); ?> />
-							<strong><?php _e( 'All Community members', 'buddypress' ); ?></strong>
+							<strong><?php _e( 'All group members', 'buddypress' ); ?></strong>
 						</label>
 
 						<label>
 							<input type="radio" name="group-invite-status" value="mods"<?php bp_group_show_invite_status_setting( 'mods' ); ?> />
-							<strong><?php _e( 'Community admins and mods only', 'buddypress' ); ?></strong>
+							<strong><?php _e( 'Group admins and mods only', 'buddypress' ); ?></strong>
 						</label>
 
 						<label>
 							<input type="radio" name="group-invite-status" value="admins"<?php bp_group_show_invite_status_setting( 'admins' ); ?> />
-							<strong><?php _e( 'Community admins only', 'buddypress' ); ?></strong>
+							<strong><?php _e( 'Group admins only', 'buddypress' ); ?></strong>
 						</label>
 					</div>
 
 					<?php if ( bp_is_active( 'forums' ) ) : ?>
 
-						<h4><?php _e( 'Community Forums', 'buddypress' ); ?></h4>
+						<h4><?php _e( 'Group Forums', 'buddypress' ); ?></h4>
 
 						<?php if ( bp_forums_is_installed_correctly() ) : ?>
 
-							<p><?php _e( 'Should this Community have a forum?', 'buddypress' ); ?></p>
+							<p><?php _e( 'Should this group have a forum?', 'buddypress' ); ?></p>
 
 							<div class="checkbox">
 								<label><input type="checkbox" name="group-show-forum" id="group-show-forum" value="1"<?php checked( bp_get_new_group_enable_forum(), true, true ); ?> /> <?php _e( 'Enable discussion forum', 'buddypress' ); ?></label>
 							</div>
 						<?php elseif ( is_super_admin() ) : ?>
 
-							<p><?php printf( __( '<strong>Attention Site Admin:</strong> Community forums require the <a href="%s">correct setup and configuration</a> of a bbPress installation.', 'buddypress' ), bp_core_do_network_admin() ? network_admin_url( 'settings.php?page=bb-forums-setup' ) :  admin_url( 'admin.php?page=bb-forums-setup' ) ); ?></p>
+							<p><?php printf( __( '<strong>Attention Site Admin:</strong> Group forums require the <a href="%s">correct setup and configuration</a> of a bbPress installation.', 'buddypress' ), bp_core_do_network_admin() ? network_admin_url( 'settings.php?page=bb-forums-setup' ) :  admin_url( 'admin.php?page=bb-forums-setup' ) ); ?></p>
 
 						<?php endif; ?>
 
@@ -152,11 +146,11 @@ get_header( 'buddypress' ); ?>
 						</div><!-- .left-menu -->
 
 						<div class="main-column">
-							<p><?php _e( "Upload an image to use as an avatar for this Community. The image will be shown on the main Community page, and in search results.", 'buddypress' ); ?></p>
+							<p><?php _e( "Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results.", 'buddypress' ); ?></p>
 
 							<p>
 								<input type="file" name="file" id="file" />
-								<input type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ); ?>" class="btn button button_small normal green_bcg white_txt radius3 "/>
+								<input type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ); ?>" />
 								<input type="hidden" name="action" id="action" value="bp_avatar_upload" />
 							</p>
 
@@ -175,7 +169,7 @@ get_header( 'buddypress' ); ?>
 							<img src="<?php bp_avatar_to_crop(); ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e( 'Avatar preview', 'buddypress' ); ?>" />
 						</div>
 
-						<input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e( 'Crop Image', 'buddypress' ); ?>" class="btn button button_small normal green_bcg white_txt radius3"/>
+						<input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e( 'Crop Image', 'buddypress' ); ?>" />
 
 						<input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src(); ?>" />
 						<input type="hidden" name="upload" id="upload" />
@@ -249,7 +243,7 @@ get_header( 'buddypress' ); ?>
 					<?php else : ?>
 
 						<div id="message" class="info">
-							<p><?php _e( 'Once you have built up friend connections you will be able to invite others to your Community.', 'buddypress' ); ?></p>
+							<p><?php _e( 'Once you have built up friend connections you will be able to invite others to your group.', 'buddypress' ); ?></p>
 						</div>
 
 					<?php endif; ?>
@@ -278,21 +272,21 @@ get_header( 'buddypress' ); ?>
 						<?php /* Next Button */ ?>
 						<?php if ( !bp_is_last_group_creation_step() && !bp_is_first_group_creation_step() ) : ?>
 
-							<input type="submit" value="<?php _e( 'Next Step', 'buddypress' ); ?>" id="group-creation-next" name="save" class="button button_small normal green_bcg white_txt radius3 left"/>
+							<input type="submit" value="<?php _e( 'Next Step', 'buddypress' ); ?>" id="group-creation-next" name="save" />
 
 						<?php endif;?>
 
 						<?php /* Create Button */ ?>
 						<?php if ( bp_is_first_group_creation_step() ) : ?>
 
-							<input type="submit" value="<?php _e( 'Create Community and Continue', 'buddypress' ); ?>" id="group-creation-create" name="save" class="button button_small normal green_bcg white_txt radius3 left"/>
+							<input type="submit" value="<?php _e( 'Create Group and Continue', 'buddypress' ); ?>" id="group-creation-create" name="save" />
 
 						<?php endif; ?>
 
 						<?php /* Finish Button */ ?>
 						<?php if ( bp_is_last_group_creation_step() ) : ?>
 
-							<input type="submit" value="<?php _e( 'Finish', 'buddypress' ); ?>" id="group-creation-finish" name="save" class="button button_small normal green_bcg white_txt radius3 left"/>
+							<input type="submit" value="<?php _e( 'Finish', 'buddypress' ); ?>" id="group-creation-finish" name="save" />
 
 						<?php endif; ?>
 					</div>
@@ -313,12 +307,9 @@ get_header( 'buddypress' ); ?>
 		</form>
 		
 		<?php do_action( 'bp_after_create_group_content_template' ); ?>
-			</div>
-			<div class="clear"></div>
-			
-		</div><!-- .column -->
+
+		</div><!-- .padder -->
 	</div><!-- #content -->
-	<div class="space45"></div>
 
 <?php get_sidebar( 'buddypress' ); ?>
 <?php get_footer( 'buddypress' ); ?>

@@ -19,9 +19,9 @@
     <body <?php body_class(); ?> id="bp-default">
         <?php do_action( 'bp_before_header' ); ?>
         
-       
+        
     <div id="wrapper">
-	
+
         <!-- ****************** HEADER ***************** -->
         <div id="header-wrapper"><!-- Start Header-Wrapper -->
             <div class="header column">
