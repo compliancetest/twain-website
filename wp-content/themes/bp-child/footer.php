@@ -102,7 +102,11 @@ jQuery(function() {
         jQuery('.blue_button a').each(function() {
             PIE.attach(this);
         });
+        jQuery('#three_boxes_sv a').each(function() {
+            PIE.attach(this);
+        });
     }
+    
 });
 </script>
 
