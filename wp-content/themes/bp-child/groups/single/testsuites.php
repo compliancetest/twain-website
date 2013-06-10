@@ -53,7 +53,7 @@ $testsuites = get_posts( $args );
                     <div class="grid_cell nopaddingtop width50P">Name</div>
                     <div class="grid_cell nopaddingtop width20P tocenter">Date</div>
                     <div class="grid_cell nopaddingtop width15P tocenter">Status</div>
-                    <div class="grid_cell nopaddingtop width15P"></div>
+                    <div class="grid_cell nopaddingtop width15P tocenter">Products</div>
                     <div class="clear"></div>
                 </div>
             </div>
@@ -87,13 +87,8 @@ $testsuites = get_posts( $args );
                         echo '<span class="status_btn status_btn_on_hold">ON HOLD</span>';
                     ?>
                 </div>
-                <div class="grid_cell width15P">
-                    <div class="quick_actions radius3 alignright">
-                        <ul>
-                            <li><a href="#"><img src="http://www.test.compliancetest.net/wp-content/themes/bp-child/images/qa_doc_icon.png"><span class="simple_tooltip radius6">View Documents<span></span></span></a></li>
-                            <li><a href="#"><img src="http://www.test.compliancetest.net/wp-content/themes/bp-child/images/qa_msg_icon.png"><span class="simple_tooltip radius6">View Messages<span></span></span></a></li>
-                        </ul>
-                    </div>
+                <div class="grid_cell width15P tocenter">
+                    <a href="#" class="white_grey_btn view_products_btn"><b></b>VIEW</a>
                 </div>              
                 <div class="clear"></div>
             </div>
