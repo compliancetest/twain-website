@@ -1995,22 +1995,22 @@ font-size: 12px;
  * */
 
 #top_access input::-webkit-input-placeholder{
-	color:#aaa !important;
+	color:red !important;
 	font-style: italic !important;
 }
 
 #top_access input:-moz-placeholder{
-	color:#aaa !important;
+	color:red !important;
 	font-style: italic !important;
 }
 
 #top_access input::-moz-placeholder{
-	color:#aaa !important;
+	color:red !important;
 	font-style: italic !important;
 }
 
 #top_access input:-ms-input-placeholder{
-	color:#aaa !important;
+	color:red !important;
 	font-style: italic !important;
 }
 
