@@ -92,11 +92,11 @@ jQuery(document).ready(function() {
 	});
 	
 	
-    if (window.PIE) {
+   /* if (window.PIE) {
         jQuery('.blue_button a').each(function() {
             PIE.attach(this);
         });
-    }
+    }*/
 });
 </script>
 
