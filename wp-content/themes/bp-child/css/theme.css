@@ -3858,6 +3858,10 @@ min-height: 70px;
     margin-right:10px !important;
 }
 
+.right13{
+	margin-right:13px !important;
+}
+
 .left10{
     margin-left:10px !important;
 }
@@ -3865,6 +3869,8 @@ min-height: 70px;
 .left15{
     margin-left:15px !important;
 }
+
+
 
 .width625P{
     width:62.5%;
