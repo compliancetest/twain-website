@@ -91,24 +91,12 @@ jQuery(document).ready(function() {
 		jQuery('#registration').css('display', 'block');
 	});
 	
-   /* if (window.PIE) {
-        jQuery('.blue_button a').each(function() {
-            PIE.attach(this);
-        });
-    }*/
-});
-jQuery(function() {
     if (window.PIE) {
         jQuery('.issuer_homepage').each(function() {
             PIE.attach(this);
         });
-        jQuery('#three_boxes_sv a').each(function() {
-            PIE.attach(this);
-        });
-         jQuery('.radius15').each(function() {
-            PIE.attach(this);
-        });
     }
+    
     
 });
 </script>
