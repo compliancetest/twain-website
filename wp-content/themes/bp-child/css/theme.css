@@ -3677,9 +3677,9 @@ p.copyright{
 	padding: 4px 9px;
 	font-size: 12px;
 	text-align: center;
-	background-image: url('../images/blue_x.png');
+	background-image: url('../images/blue.png');
 	background-repeat: repeat-x ;
-	background-color: ##2690EB !important;
+	background-color: #2690EB !important;
 	border-radius: 5px;
 	color: #fff !important;
 	line-height:12px;
@@ -3698,9 +3698,9 @@ p.copyright{
 }
 
 .issuer_homepage:hover{
-	background-image: url('../images/blue_x_hover.png');
+	background-image: url('../images/blue.png');
 	background-repeat: repeat-x ;
-	background-color: ##2690EB !important;
+	background-color: #2690EB !important;
 }
 
 #community_content{
