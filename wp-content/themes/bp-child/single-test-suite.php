@@ -171,7 +171,9 @@ get_header();
 							<!--end tabs-->
 							
 							<div class="grid_cell width50P">
-								<div class="blue_button "><a href="#" class="view_compliant">View Compliant Products</a></div>
+								<div class="">
+									<a href="#" class="issuer_homepage view_compliant">View Compliant Products</a>
+								</div>
 							</div>
 							<div class="grid_cell width50P">
 								<div id="three_boxes_sv"><a class="payment_popup" target="_blank">
