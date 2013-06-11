@@ -3678,7 +3678,8 @@ p.copyright{
 	font-size: 12px;
 	text-align: center;
 	background: #2690EB;
-	/*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad');*/
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad');
+	 -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#2690eb',EndColorStr='#3577ad')";
 	background: -webkit-gradient(linear, left top, left bottom, from(#2690EB), to(#3577AD));
 	background: -moz-linear-gradient(top, #2690EB, #3577AD);
 	background: -o-linear-gradient(top, #2690EB, #3577AD);
