@@ -99,7 +99,7 @@ jQuery(document).ready(function() {
         jQuery('.radius15').each(function() {
             PIE.attach(this);
         });
-        jQuery('.blue_button a').each(function() {
+        jQuery('.view_compliant').each(function() {
             PIE.attach(this);
         });
     }
