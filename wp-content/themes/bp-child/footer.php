@@ -95,6 +95,9 @@ jQuery(document).ready(function() {
         jQuery('.issuer_homepage').each(function() {
             PIE.attach(this);
         });
+        jQuery('.radius15').each(function() {
+            PIE.attach(this);
+        });
     }
     
     
