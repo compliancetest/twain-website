@@ -104,11 +104,13 @@ get_header();
 							<div class="grid_cell width30P right selecteds_single">
 								<span class="left padding5-10">Filter By: </span>
 								<div class="styled_select left">
+									<label>
 									<select name="sort_status" class="sort_status">
 									  <option value="select_status">Status</option>
 									  <option value="active" <?php if($_GET['sort_status']=='active'){ echo 'selected="selected"';} ?> >Active</option>
 									  <option value="on_hold" <?php if($_GET['sort_status']=='on_hold'){ echo 'selected="selected"';} ?> >On Hold</option>
 									</select>
+									</label>
 								</div>
 								<div class="clear"></div>
 							</div>
