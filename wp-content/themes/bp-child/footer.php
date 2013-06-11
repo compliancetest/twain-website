@@ -92,14 +92,17 @@ jQuery(document).ready(function() {
 	});
 	
     if (window.PIE) {
+		/* Test Suite Page */
         jQuery('.issuer_homepage').each(function() {
             PIE.attach(this);
         });
         jQuery('.radius15').each(function() {
             PIE.attach(this);
         });
+        jQuery('.blue_button a').each(function() {
+            PIE.attach(this);
+        });
     }
-    
     
 });
 </script>
