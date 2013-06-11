@@ -24,7 +24,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             //Check if the current user is member of the group or not
             if(bp_group_is_member())
             {
-                
+                locate_template( array( 'groups/single/forum.php'        ), true );
             }else{
                 ?><p>You need to join the community to see the forum</p><?php
             }
@@ -34,5 +34,5 @@ if ( class_exists( 'BP_Group_Extension' ) )
         }
     }
     
-    bp_register_group_extension('CP_Forum_Group_Extension');
+//    bp_register_group_extension('CP_Forum_Group_Extension');
 }

@@ -25,7 +25,8 @@ require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/test-suites.php');
 //Test Case Function
 require_once(THE_FUNCTION . '/test-cases.php');
-
+//Products And Services
+require_once(THE_FUNCTION . '/products-and-services.php');
  
 /* 
  * Loads the Options Panel
@@ -373,100 +374,6 @@ class SampleWidget extends WP_Widget {
 		</p>
 	<?php }
 } 
-
-
-/* Metaboxes from Products / Services */
-/* Metabox CERTIFICATION - Choose Test Suites */
-
-function add_test_suites_metabox(){
-	// add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );
-    add_meta_box("test_suites_metabox", "Select Certifications (Test Suites) ", 'show_test_suites', "product-service", "normal", "high");
-    add_meta_box("related_products_metabox", "Select Related Products / Services ", 'show_related_products', "product-service", "normal", "high");
-}
-
-add_action('admin_menu', 'add_test_suites_metabox');
-
-function show_test_suites(){
-	global $post;
-	$post_backup = $post;
-	$current_test_suite = explode(',', get_post_meta($post->ID, 'test_suites', true));
-	
-	//echo '<input type="hidden" name="custom_test_suites" value="', wp_create_nonce(basename(__FILE__)), '" />';
-	$loop = new WP_Query( array( 'post_type' => 'test-suite', 'posts_per_page' => -1) );
-	
-	while ( $loop->have_posts() ) : $loop->the_post();
-		 ?>
-		 
-		 <input type="checkbox" name="test_suites[]" <?php if (in_array(get_the_ID(), $current_test_suite)) { echo 'checked="checked"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
-		
-		<?php
-	endwhile;
-	//wp_reset_postdata(); 
-	$post = $post_backup;
-}
-
-
-function show_related_products(){
-	global $post;
-	$post_backup = $post;
-	$current_product = explode(',', get_post_meta($post->ID, 'related_products', true));
-	
-	//echo '<input type="hidden" name="custom_relprod" value="', wp_create_nonce(basename(__FILE__)), '" />';
-	$loop = new WP_Query( array( 'post_type' => 'product-service', 'posts_per_page' => -1, 'post__not_in' =>array($post->ID)) );
-	
-	while ( $loop->have_posts() ) : $loop->the_post();
-		 ?>
-		 
-		 <input type="checkbox" name="related_products[]" <?php if (in_array(get_the_ID(), $current_product)) { echo 'checked="checked"'; } ?> value="<?php the_ID(); ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php the_title(); ?> <br />
-		
-		<?php
-	endwhile;
-	//wp_reset_postdata();	 
-	$post = $post_backup;
-}
-
-add_action('save_post', 'save_test_suites');
-
-function save_test_suites($post_id) {
-	//die('<pre>'.print_r($_POST, true).'</pre>');
-    // verify nonce
-    if (!isset($_POST['custom_test_suites']) || !wp_verify_nonce($_POST['custom_test_suites'], basename(__FILE__))) {
-        //return $post_id;
-    }
-    // check autosave
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return $post_id;
-    }
-    // check permissions
-    if (!current_user_can('edit_post', $post_id)) {
-        return $post_id;
-    }
-    
-    //Check Post Type
-    if($post->post_type != 'product-service')
-    {
-        return $post_id;
-    }
-    
-    $test_suites = '';
-    if (count($_POST['test_suites'])) {
-		$test_suites = implode(',', $_POST['test_suites']);
-	}
-	
-	update_post_meta($post_id, 'test_suites', $test_suites);
-	
-    $related_products = '';
-    if (count($_POST['related_products'])) {
-		$related_products = implode(',', $_POST['related_products']);
-	}
-		
-	update_post_meta($post_id, 'related_products', $related_products);
-} 
-
-
-
-/*Metabox Test Case Page */
-
 
 	
 //Create New Test Case 
