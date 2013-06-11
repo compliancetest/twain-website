@@ -3677,7 +3677,7 @@ margin-top: 0px !important;
 padding: 4px 9px;
 font-size: 12px;
 text-align: center;
-background: url(../images/blue_x.png) repeat-x !important;
+background: url('../images/blue_x.png') repeat-x red !important;
 border-radius: 5px;
 color: #fff !important;
 line-height:12px;
@@ -3692,6 +3692,7 @@ box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 text-decoration: none !important;
 font-weight: bold;
+border: 1px solid #3577AD;
 }
 
 #community_content{
