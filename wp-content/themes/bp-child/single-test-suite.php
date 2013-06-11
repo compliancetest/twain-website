@@ -31,7 +31,7 @@ get_header();
 						<a href="#" class="edit_ts left">EDIT</a>
 						<div class="clear"></div>
 					</div>
-					<div class="width20P right">
+					<div class="width15P right">
 						<a href="<?php echo $group_url; ?>" class="issuer_homepage">Issuer Home Page</a>
 					</div>
 					<div class="clear"></div>
