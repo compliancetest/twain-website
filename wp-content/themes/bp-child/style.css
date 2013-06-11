@@ -9,7 +9,7 @@ Template: bp-default
 Tags: buddypress, two-column, grey, dark
 */
 
-/*@import url("css/css-aid.css");*/
+@import url("css/css-aid.css");
 @import url("css/theme.css");
 @import url("css/buddypress.css");
 
