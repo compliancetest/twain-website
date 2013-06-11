@@ -103,7 +103,7 @@ get_header();
 							</div>
 							<div class="grid_cell width30P right selecteds_single">
 								<span class="left padding5-10">Filter By: </span>
-								<div class="styled_select left">
+								<div class="styled_select left width40P">
 									<label>
 									<select name="sort_status" class="sort_status">
 									  <option value="select_status">Status</option>
