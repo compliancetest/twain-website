@@ -4320,9 +4320,9 @@ display:block !important;
 #three_boxes_sv a{
     display: block;
     background: #ce2d25; /* for non-css3 browsers */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ce2d25', endColorstr='#801514'); /* for IE */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ce2d25', endColorstr='#801514'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#ce2d25), to(#801514)); /* for webkit browsers */
-    background: -moz-linear-gradient(top,  #ce2d25,  #801514); /* for firefox 3.6+ */
+    background: -moz-linear-gradient(top,  #ce2d25,  #801514); /* for firefox 3.6+ */*/
     width: 255px;
     border-radius: 7px;
     padding: 7px 5px;
