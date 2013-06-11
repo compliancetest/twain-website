@@ -19,7 +19,7 @@ require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
 require_once(THE_FUNCTION . '/user/user.php');
 
 //Buddypress Custome Functions
-require_once(THE_FUNCTION . '/buddypress/template.php');
+require_once(THE_FUNCTION . '/buddypress/customize.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 //Test Suites Functions
 require_once(THE_FUNCTION . '/test-suites.php');
