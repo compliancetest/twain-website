@@ -4309,7 +4309,7 @@ display:block !important;
 }
 
 .view_compliant{
-border:1px solid red;
+border:1px solid red !important;
    /* width: 196px;
     font-size: 13px;
     height: 16px;
