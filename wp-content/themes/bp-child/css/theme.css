@@ -4319,20 +4319,19 @@ display:block !important;
 
 #three_boxes_sv a{
     display: block;
- 
-	
-    width: 255px;
+	width: 255px;
     border-radius: 7px;
     padding: 7px 5px;
-    
     height: 37px;
     margin: 12px auto;
     float: right;
     cursor: pointer;
     background-image: url('../images/red.png');
-	background-repeat: repeat-x ;
+	background-repeat: repeat-x;
 	
 	border: 1px solid #7b1413;
+	display: block;
+	position: absolute;
 }
 
 #box_1_red {
