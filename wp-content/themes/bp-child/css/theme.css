@@ -189,6 +189,7 @@ a:hover {
 
 #top_access {
     margin-top: 10px;
+    position: relative;
 }    
 
 #top_logged_wrap {
@@ -2027,7 +2028,7 @@ font-size: 12px;
     font-family: 'Open Sans', Arial, sans-serif;
     height: 51px;
     position: absolute;
-    top: -51px;
+    top: 0px;
     left: 212px;
 }
 
@@ -2076,8 +2077,8 @@ a.logout_button{
     padding: 17px 10px 4px 10px;
     color: white;
     position: absolute;
-    top: -64px;
-    left: 301px;
+	top: 11px;
+	left: 308px;
     font-family: 'Open Sans', Arial, sans-serif;
     cursor: pointer;
 }
