@@ -8,9 +8,7 @@
         <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>                
         <link href='//fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
-        <!--[if IE 8]>
-		 <link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/css/ie8.css" type="text/css" media="screen" />
-		<![endif]-->
+        
         <link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
 
         <script type="text/javascript">
