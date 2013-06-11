@@ -3684,13 +3684,13 @@ line-height:12px;
 display: block;
 position:absolute;
 color: white;
-text-shadow: 0px -1px 0px #0B2133;
+text-shadow: 0px -1px 0px #0B2133 !important;
 display: block;
 box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-text-decoration: none;
+text-decoration: none !important;
 font-weight: bold;
 }
 
