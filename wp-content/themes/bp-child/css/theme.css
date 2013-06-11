@@ -3679,10 +3679,10 @@ text-align: center;
 background: #2690EB;
 border-radius: 5px;
 color: #fff !important;
-/*line-height:12px;*/
+line-height:12px;
 position: relative;
 display: block;
-behavior: url(js/PIE.htc);
+
 }
 
 #community_content{
