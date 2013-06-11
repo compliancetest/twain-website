@@ -102,6 +102,9 @@ jQuery(document).ready(function() {
         jQuery('.view_compliant').each(function() {
             PIE.attach(this);
         });
+         jQuery('.payment_popup').each(function() {
+            PIE.attach(this);
+        });
     }
     
 });
