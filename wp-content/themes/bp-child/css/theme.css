@@ -3679,7 +3679,6 @@ p.copyright{
 	text-align: center;
 	background-image: url('../images/blue.png');
 	background-repeat: repeat-x ;
-	background-color: #2690EB !important;
 	border-radius: 5px;
 	color: #fff !important;
 	line-height:12px;
@@ -3700,7 +3699,8 @@ p.copyright{
 .issuer_homepage:hover{
 	background-image: url('../images/blue.png');
 	background-repeat: repeat-x ;
-	background-color: #2690EB !important;
+	background-position: 0px 21px;
+
 }
 
 #community_content{
