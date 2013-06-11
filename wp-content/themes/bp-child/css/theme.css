@@ -3672,7 +3672,7 @@ p.copyright{
 	text-decoration: none !important;
 }
 
-.issuer_homepage{
+.issuer_homepage a{
 margin-top: 0px !important;
 padding: 4px 9px;
 font-size: 12px;
@@ -3685,8 +3685,6 @@ display: block;
 position:absolute;
 color: white;
 text-shadow: 0px -1px 0px #0B2133;
-margin-top: 20px;
-margin-bottom: 8px;
 display: block;
 box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
