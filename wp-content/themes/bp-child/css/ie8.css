@@ -3,7 +3,6 @@
 	padding: 6px 9px;
 	font-size: 12px;
 	text-align: center;
-	background: #2690EB;
 	border: 1px solid #3577AD;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -21,4 +20,5 @@
 	-o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
 	text-decoration: none !important;
 	font-weight: bold !important;
+	background: #2690EB !important;
 }
