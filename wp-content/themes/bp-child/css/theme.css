@@ -3678,12 +3678,18 @@ p.copyright{
 	font-size: 12px;
 	text-align: center;
 	
-	background: url(../images/blue_x.png) repeat-x !important;
+	/*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad');
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2690eb', endColorstr='#3577ad',GradientType=0 );
+	 -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#2690eb',EndColorStr='#3577ad')";
+	background: -webkit-gradient(linear, left top, left bottom, from(#2690EB), to(#3577AD));
+	background: -moz-linear-gradient(top, #2690EB, #3577AD);
+	background: -o-linear-gradient(top, #2690EB, #3577AD);*/
+	background: #2690EB;
 	border: 1px solid #3577AD;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
+	-opera-border-radius: 5px;
 	color: #fff !important;
 	line-height: 12px;
 	display: block;
