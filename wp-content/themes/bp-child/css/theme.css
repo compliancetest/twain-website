@@ -4309,12 +4309,11 @@ display:block !important;
 }
 
 .view_compliant{
-border:1px solid red !important;
-   /* width: 196px;
+    width: 196px;
     font-size: 13px;
     height: 16px;
     padding: 7px 3px 5px 7px;
-    line-height: 13px;*/
+    line-height: 13px;
 }
 
 #three_boxes_sv a{
