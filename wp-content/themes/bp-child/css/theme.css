@@ -3699,7 +3699,7 @@ p.copyright{
 .issuer_homepage:hover{
 	background-image: url('../images/blue.png');
 	background-repeat: repeat-x ;
-	background-position: 0px 21px;
+	background-position: 0px -21px;
 
 }
 
