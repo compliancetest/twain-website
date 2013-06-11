@@ -1,0 +1,24 @@
+.issuer_homepage{
+	margin-top: 0px !important;
+	padding: 6px 9px;
+	font-size: 12px;
+	text-align: center;
+	background: #2690EB ;
+	border: 1px solid #3577AD;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-opera-border-radius: 5px;
+	color: #fff !important;
+	line-height: 12px;
+	display: block;
+	color: white !important;
+	text-shadow: 0px -1px 0px #0B2133 !important;
+	display: block;
+	box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
+	-webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
+	-moz-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
+	-o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
+	text-decoration: none !important;
+	font-weight: bold !important;
+}
