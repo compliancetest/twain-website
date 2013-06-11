@@ -32,9 +32,7 @@ get_header();
 						<div class="clear"></div>
 					</div>
 					<div class="width20P left">
-						<div class="issuer_homepage">
-							<a href="<?php echo $group_url; ?>">Issuer Home Page</a>
-						</div>
+						<a href="<?php echo $group_url; ?>" class="issuer_homepage">Issuer Home Page</a>
 					</div>
 					<div class="clear"></div>
 					<a href="<?php echo get_permalink( $post->ID ); ?>" class="bold blue_txt nodecoration"><?php echo get_permalink( $post->ID ); ?> <?php  // or echo meta ('ts_identifier') ;?></a>
