@@ -3702,7 +3702,12 @@ p.copyright{
 }
 
 .issuer_homepage:hover{
-
+	/*background: #2690EB;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3577AD', endColorstr='#2690eb');
+	background: -webkit-gradient(linear, left top, left bottom, from(#3577AD), to(#2690eb));
+	background: -moz-linear-gradient(top, #3577AD, #2690eb);
+	background: -o-linear-gradient(top, #3577AD, #3577AD);
+	border: 1px solid #2690eb;*/
 }
 
 #community_content{
