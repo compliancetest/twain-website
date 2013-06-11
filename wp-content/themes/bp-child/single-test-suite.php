@@ -201,9 +201,7 @@ get_header();
 		</div> 
 		
 		<!-- Test Cases -->
-		<div class="grid_row searchfilters">
 		
-		</div>
 		<div class="clear"></div>
 		<div class="grid_row test_cases">
 				<div id="append_filter">
