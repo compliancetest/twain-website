@@ -41,13 +41,13 @@
                                 
                             }else{ //Show Tabs
                         ?>
-                            <div id="wiki-container" class="tab-content column white_bcg"></div>
-                            <div id="forum-container" class="tab-content column white_bcg">
+                            <div id="wiki-container" class="tab-content column white_bcg" style="display: none;"></div>
+                            <div id="forum-container" class="tab-content column white_bcg" style="display: none;">
                                 <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
                                 <p>You need to join the community to participate in the forum section.</p>
                                 <?php } ?>                            
                             </div>
-                            <div id="downloads-container" class="tab-content column white_bcg">
+                            <div id="downloads-container" class="tab-content column white_bcg" style="display: none;">
                                 <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
                                 <p>You need to join the community to participate in the download section.</p>
                                 <?php } ?>                            
@@ -63,59 +63,81 @@
                 </div>
             </div>
 			<?php do_action( 'bp_after_group_home_content' ); ?>
-
+            <?php
+            if(is_user_logged_in() && !bp_group_is_member()){
+                 global $groups_template;
+                    
+            ?>
+            <div id="community-wrap" style="display: none;" class="popup-box">
+                <div id="community_registration" class="radius6">
+                    <p class="headline nomarginbottom">Community Registration</p>
+                        <form method="post" action="<?php echo wp_nonce_url( bp_get_group_permalink( ) . 'request-membership', 'groups_request_membership' )?>" id="join-community-form" data-group-id="<?php echo $groups_template->group->id?>">
+                            <div id="community_content">
+                                
+                                    <p>You need to join the community of interest in order to view Test Cases and Participate in the Forum</p>
+                                    <div class="grey-border-bottom"></div>
+                                    <div class="grid_cell width100P left">
+                                        <input type="checkbox" name="agree_terms" value="agree" id="agree_community_terms"> I agree with <a href="javascript: void(0);" class="normal" id="show-community-terms">Terms & Conditions</a>
+                                        <div class="clear"></div>
+                                        <div class="space5"></div>
+                                        <input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license"> I agree with <a href="javascript: void(0);" id="show-community-license" class="normal">License Agreement</a>
+                                        <div class="clear"></div>
+                                        <div class="space5"></div>
+                                        <div class="err_request"></div>
+                                    </div>
+                                    <div class="clear"></div>    
+                            </div>
+                            <div class="grid_row test_cases noradiusbottom">
+                                <div class="register">
+                                    <input type="submit" id="join-community" value="Register" name="role_submit"/>
+                                </div>
+                                <div class="cancel"><a href="#" id="close-popup-community2">Cancel</a></div>
+                                <div class="clear"></div>
+                            </div>
+                        </form>    
+                            
+                    
+                    <a id="close-popup-community" class="close_btn"></a>
+                </div>            
+            </div>
+            <div id="community-terms-box" style="display: none" class="popup-box">
+                <div class="popup-box-header radius6 noradiusbottom">Terms and Conditions</div>
+                <div class="popup-box-content">
+                    <p>
+                    <?php 
+                        $terms = groups_get_groupmeta($groups_template->group->id, 'terms_and_conditions');
+                        echo $terms;
+                    ?>
+                    </p>
+                </div>
+                <div class="popup-box-footer radius6 noradiustop">                        
+                    <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>
+                    <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">AGREE</span></a>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="popup-box"  id="community-license-box" style="display: none;">
+                <div class="popup-box-header radius6 noradiusbottom">License Agreements</div>
+                <div class="popup-box-content">
+                    <p>
+                    <?php 
+                        $license = groups_get_groupmeta($groups_template->group->id, 'license_agreements');
+                        echo $license;
+                    ?>
+                    </p>
+                </div>
+                <div class="popup-box-footer radius6 noradiustop">                        
+                    <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                    <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Agree</span></a>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <?php } ?>
 			<?php endwhile; endif; ?>
 
 		</div><!-- .padder -->
 	</div><!-- #content -->
-<div id="mask_community">
-    <div id="community-wrap">
-        <div id="community_registration" class="radius6">
-            <p class="headline nomarginbottom">Community Registration</p>
-                <form method="post" action="" id="join-community-id">
-                    <div id="community_content">
-                        
-                            <p>You need to join the community od interest in order to view Test Cases and Participate in the Forum</p>
-                            <div class="grey-border-bottom"></div>
-                            <div class="grid_cell width100P left">
-                                        <span class="left padding5-10-5-0">Your Role: </span>
-                                        <div class="styled_select left">
-                                            <select name="role" id="role_id">
-                                                 <option value="">Select a role</option>
-                                                <?php 
-                                                foreach($roles_select as $role_select){
-                                                    echo '<option value="'.$role_select.'">'.$role_select.'</option>';
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="clear"></div>
-                            </div>
-                            <div class="grid_cell width100P left">
-                                <input type="checkbox" name="agree_terms" value="agree" id="agree_terms_id"> I agree with <a href="http://nego-solutions.com/dev-clients/compliance/terms-conditions/" class="normal">Terms & Conditions</a>
-                                <div class="clear"></div>
-                                <div class="space5"></div>
-                                <input type="checkbox" name="agree_license" value="agree_license" id="agree_license_id"> I agree with <a href="http://nego-solutions.com/dev-clients/compliance/license-agreement/" class="normal">License Agreement</a>
-                                <div class="clear"></div>
-                                <div class="space5"></div>
-                                <div class="err_request"></div>
-                            </div>
-                            <div class="clear"></div>    
-                    </div>
-                    <div class="grid_row test_cases noradiusbottom">
-                        <div class="register">
-                            <input type="submit" id="join-community" value="Register" name="role_submit"/>
-                        </div>
-                        <div class="cancel"><a href="#" id="close-popup-community2">Cancel</a></div>
-                        <div class="clear"></div>
-                    </div>
-                </form>    
-                    
-            
-        <div id="close-popup-community" class="close_btn"></div>
-        </div>
     
-        </div> <!--end community_registration-->
-    </div>    
+      
     <?php get_footer( 'buddypress' ); ?>
 

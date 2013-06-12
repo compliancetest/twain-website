@@ -42,7 +42,7 @@ foreach($filterStatus as $v)
 }
 
 $testsuites = get_posts( $args );
-
+$roles = array();
 ?>
 <div id="testsuites-container" class="tab-content white_bcg">
     <?php if(count($testsuites) > 0) {?> 
@@ -105,7 +105,7 @@ $testsuites = get_posts( $args );
                     $tsYear = date('Y', strtotime($issueDate));
                     $tsIssueYears[$tsYear] = isset($tsIssueYears[$tsYear]) ? $tsIssueYears[$tsYear] + 1 : 1;
                     
-                    $tsStatuses[$issueStatus] = isset($tsStatuses[$issueStatus]) ? $tsStatuses[$issueStatus] + 1 : 1;
+                    $tsStatuses[$issueStatus] = isset($tsStatuses[$issueStatus]) ? $tsStatuses[$issueStatus] + 1 : 1;                    
                 }
             ?>
             </div>

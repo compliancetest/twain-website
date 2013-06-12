@@ -20,7 +20,7 @@ require_once(THE_FUNCTION . '/user/user.php');
 
 //Buddypress Custome Functions
 require_once(THE_FUNCTION . '/buddypress/customize.php');
-require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
+require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
 //Test Suites Functions
 require_once(THE_FUNCTION . '/test-suites.php');
 //Test Case Function
@@ -134,6 +134,8 @@ function add_header_scripts()
 
     wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
     wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);
+    wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends);
+    wp_enqueue_script('cp-lightbox', get_stylesheet_directory_uri().'/js/jquery.custompopup.js', $actions_depends);
     
 	//wp_enqueue_script('actions', template_location(false).'/js/custom.js', $actions_depends);
 	//wp_enqueue_style('fonts', 'http://fonts.googleapis.com/css?family=Lobster|Arvo');

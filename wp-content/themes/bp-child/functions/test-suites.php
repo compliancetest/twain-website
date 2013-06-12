@@ -345,15 +345,15 @@ function test_suite_roles_metabox_html(){
     //echo '<input type="hidden" name="custom_roles" value="', wp_create_nonce(basename(__FILE__)), '" />';
     ?>
     <label for="tester_role_ts_id"><b>Tester Roles:</b></label> <br />
-    <textarea name="tester_role_ts" id="tester_role_ts_id" rows="3" cols="100"><?php echo $current_tester_role; ?></textarea>
+    <input type="text" name="tester_role_ts" id="tester_role_ts_id" value="<?php echo $current_tester_role?>" class="mf_text" />
     <br /><span class="description">Tester Roles (comma separated)</span> 
     <br />
     <label for="harness_role_ts_id"><b>Harness Roles:</b></label> <br />
-    <textarea name="harness_role_ts" id="harness_role_ts_id" rows="3" cols="100"><?php echo $current_harness_role; ?></textarea>
+    <input type="text" name="harness_role_ts" id="harness_role_ts_id" value="<?php echo $current_harness_role; ?>" class="mf_text" />
     <br /><span class="description">Harness Roles (comma separated)</span> 
     <br />
     <label for="initiator_ts_id"><b>Initiators:</b></label> <br />
-    <textarea name="initiator_ts" id="initiator_ts_id" rows="3" cols="100"><?php echo $current_intiator; ?></textarea>
+    <input type="text" name="initiator_ts" id="initiator_ts_id" value="<?php echo $current_intiator; ?>" class="mf_text" />
     <br /><span class="description">Initiators (comma separated)</span> 
     <br />
     <?php    

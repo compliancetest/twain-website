@@ -77,13 +77,21 @@
     background: -moz-linear-gradient(top, #f9761f, #f36e15);
     background: -ms-linear-gradient(top, #f9761f, #f36e15);
     background: -o-linear-gradient(top, #f9761f, #f36e15);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9761f', endColorstr='#f36e15',GradientType=0 ); /* IE6-8 */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9761f', endColorstr='#f36e15',GradientType=0 ); 
+}
+#issuer_title_block {
+    box-shadow: 0 0 50px #EDEDED inset;
+    -moz-box-shadow: 0 0 50px #EDEDED inset;
+    -webkit-box-shadow: 0 0 50px #EDEDED inset;
+    -o-box-shadow: 0 0 50px #EDEDED inset;
+    border-bottom: 1px solid #E1E1E1;
 }
 
-.group-button{
-    position: absolute;
-    white-space: nowrap;
+#issuer_title_block #item-buttons a.group-button{
+    float: right;
+    margin: 20px 20px 0 0;
 }
+
 .item-list-tabs ul.tabs li a{
     margin: 0;
 }
@@ -116,9 +124,20 @@
     margin-right: 5px;
 }
 
-.tabs li.active a  #icon_downloads {
+.tabs li.active a  #icon_admin {
     background: url(../images/sproket_icon_w.png) 2px 3px no-repeat;
 }
 .grid_cell h5{
     margin-bottom: 5px;
+}
+
+
+#community-terms-box,
+#community-license-box{
+    width: 500px;
+}
+
+/*** Forums ***/
+.tabs_wrap #bbpress-forums > h3{
+    display: none;
 }

@@ -1,10 +1,9 @@
 <?php
 /*
- * Template Name: License Agreement
+ * Template Name: Community Terms Popup
  */
 get_header();
 ?>
-
 	<div class="content container">
 		
 		<div class="column">
@@ -21,12 +20,20 @@ get_header();
 					}
 					?>
 				</div>
-			<?php endwhile; ?>
+			<?php endwhile;
+			session_start();
+			if(isset($_SESSION['terms'])) {
+				$value = $_SESSION['terms'];
+			} else {
+				$value = '';
+			}
+			print $value; 
+			?>
 		</div><!--end column-->
 		<div class="clear"></div>
 
 	</div> <!--end content container-->
-
+	
 <?php
 get_footer();
 ?>
