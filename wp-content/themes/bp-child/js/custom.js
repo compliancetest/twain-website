@@ -417,7 +417,7 @@ jQuery(document).ready(function($) {
     
     jQuery(document).on('click', '.register', function(){
         jQuery('#dinamic_pop').hide();
-        jQuery('#registration').show();
+        jQuery('#registration-popup').cplightbox();
         return false;
     });
 

@@ -3182,7 +3182,7 @@ p.copyright{
     padding:0px;
 }
 
-#registration{
+#registration-popup{
     width:805px;    
 }    
 
@@ -3222,14 +3222,14 @@ p.copyright{
     -moz-border-radius: 6px 6px 0px 0px !important;
     -o-border-radius: 6px 6px 0px 0px !important;
     width: 285px;
-    margin-left: 32px;
+    margin-left: 10px;
     margin-bottom: 30px;
 }
 
 .user_border2{
     width: 410px;
     margin-left: 0px;
-    margin-right: 32px;
+    margin-right: 10px;
 }
 
 .existing_user{
@@ -3512,12 +3512,7 @@ p.copyright{
     width: 20px;
     height: 20px;
     background: url(/wp-admin/../images/wpspin_light.gif) no-repeat left top;
-}
-
-#wrap_forms{
-    
-}
-
+}  
 .dinamic_pop{
     display: none;
 }
@@ -3626,37 +3621,6 @@ p.copyright{
 
 .infos .grid_row {
     padding: 5px 10px !important;
-}
-
-.edit_ts{
-	background: url(../images/edit.jpg) top left no-repeat !important;
-	width: 54px;
-	height: 19px;
-	display: block;
-	color: #fff !important;
-	text-transform: uppercase;
-	text-align: right;
-	text-decoration: none !important;
-	padding-right: 10px;
-	padding-top: 3px;	
-	margin-left:15px;
-	font-weight: normal !important;
-}
-
-.new_test_case{
-	display: block;
-	background: url(../images/add_new_test_suite.png) no-repeat;
-	width: 111px;
-	height: 24px;
-	border: 0;
-	font-size: 12px;
-	font-family: arial;
-	text-shadow: 0px -1px 0px #2A7811;
-	font-weight: normal;
-	padding: 5px 8px 0px 0px;
-	text-align: right;
-	color: #fff !important;
-	text-decoration: none !important;
 }
 
 .issuer_homepage{
@@ -4473,29 +4437,27 @@ margin-left: 44%;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
     border-radius:4px;
-    background: #fff;
     color:#888;
     border:none;
     outline:none;
     display: inline-block;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    appearance:none;
+    -webkit-appearance:none;    
+    -moz-appearance:none;    
+    appearance:none;    
     cursor:pointer;
     font-size: 11px;
 	color: #2c80e8;
 	border: 1px solid #CCCCCC;
+    background:#fff url(../images/select-bg.png) right center no-repeat;
 }
 
-/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    .styled_select select {/*padding-right:18px*/}
-}
 
-.styled_select label {position:relative}
+.styled_select label {
+/*    position:relative*/
+}
 
 .styled_select label:after {
-content: '';
+/*content: '';
 font: 11px "Consolas", monospace;
 color: #aaa;
 right: 1px;
@@ -4505,19 +4467,19 @@ border-left: 1px solid #e2e2e2;
 position: absolute;
 pointer-events: none;
 background: url(../images/select.png) center no-repeat#f2f2f2;
-border-radius: 0px 2px 2px 0px;
+border-radius: 0px 2px 2px 0px;*/
 }
 
 .styled_select label:before {
-content: '';
-right: 6px;
-top: -1px;
-width: 20px;
-height: 20px;
-background: #f8f8f8;
-position: absolute;
-display: block;
-border-right: 1px solid #cccccc;
+/*    content: '';
+    right: 6px;
+    top: -1px;
+    width: 20px;
+    height: 20px;
+    background: #f8f8f8;
+    position: absolute;
+    display: block;
+    border-right: 1px solid #cccccc;      */
 }
 
 .test_cases{
@@ -4838,7 +4800,7 @@ span.button_sign {
     display: block;
     height: 22px;
     line-height: 22px;
-    padding: 0 7px;
+    padding: 0 7px 0 5px;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -4852,14 +4814,18 @@ span.button_sign {
     background-repeat: no-repeat;
     width: 20px;    
     height: 100%;
+    margin: 0;
 }
 .action-btn span.t{    
     float: left;
-    padding-left: 7px;
+    padding:0 0 0 5px;
+    margin: 0;
     text-shadow: 0 -1px 0 #777778; /**For Old Browser **/
     text-shadow: 0 -1px 0 rgba(0,0,0, 0.35);
 }
-.process-btn{
+.process-btn,
+.add-new-btn,
+.edit-btn{
     border-color: #369817;
     background: #39a517;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3eb618), to(#369817));
@@ -4875,8 +4841,20 @@ span.button_sign {
 .process-btn span.p{
     background-position: 0 -43px;
 }
-.process-btn:hover{
+.process-btn:hover,
+.edit-btn:hover,
+.add-new-btn:hover{
     background: #3eb518;
+}
+.edit-btn span.p{
+    background-position: 0 -90px;
+}
+.edit-btn span.t{
+    padding-left: 3px;
+}
+
+.add-new-btn span.p{
+    background-position: 0 -128px;
 }
 .cancel-btn{
     border-color: #9f9f9f;
@@ -4896,6 +4874,9 @@ span.button_sign {
 }
 .cancel-btn:hover{
     background: #c1c1c2;
+}
+.default-btn{
+    padding: 0 12px !important;
 }
 /*** Common Popup Boxes Style ***/
 .popup-box{

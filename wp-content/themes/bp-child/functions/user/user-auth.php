@@ -173,157 +173,155 @@ if(!is_user_logged_in())
     {    
         ob_start();
         ?>
-        <div id="mask">
-            <div id="popup-wrap">
-                <div id="dinamic_pop" class="dinamic_pop radius6">
-                    <p class="headline bottom30">Add New User</p>
-                    <div class="pop_add_user">
-                        <div class="wrap_wline">
-                            <label for="user_org_email">User E-mail</label> <input type="email" id="user_org_email" name="user_org_email"/></p> 
-                        </div>
-                        <div>
-                            <label for="user_org_role">Role</label>
-                            <select>
-                                <option value="">Admin</option>
-                                <option value="">Tester</option>
-                            </select>
+        <div id="registration-popup" class="popup-box" style="display: none;">
+            <div id="dinamic_pop" class="dinamic_pop radius6">
+                <p class="headline bottom30">Add New User</p>
+                <div class="pop_add_user">
+                    <div class="wrap_wline">
+                        <label for="user_org_email">User E-mail</label> <input type="email" id="user_org_email" name="user_org_email"/></p> 
+                    </div>
+                    <div>
+                        <label for="user_org_role">Role</label>
+                        <select>
+                            <option value="">Admin</option>
+                            <option value="">Tester</option>
+                        </select>
+                    </div>
+                </div>
+            </div>                
+            
+            <div id="registration">
+                <div class="popup-box-header radius6 noradiusbottom">User Registration</div>
+                <div id="wrap_forms" class="popup-box-content radius6 noradiustop">
+                    <div class="user_border radius6 left" id="log">
+                        <div class="existing_user">
+                            <div class="ex_user">Existing User</div>
+                            <?php
+
+                            $args = array(
+                                    'echo' => true,
+                                    'redirect' => get_bloginfo('url'), 
+                                    'form_id' => 'logform',
+                                    'label_username' => __( '' ),
+                                    'label_password' => __( '' ),
+                                    'label_remember' => __( 'Remember Me' ),
+                                    'label_log_in' => __( 'LOGIN' ),
+                                    'id_username' => 'user_login2',
+                                    'id_password' => 'user_pass2',
+                                    'id_remember' => 'rememberme',
+                                    'id_submit' => 'wp-submit',
+                                    'remember' => false,
+                                    'value_remember' => false ); 
+
+                            wp_login_form($args); ?>
+                            <a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="recover_pass">Password recovery</a>
                         </div>
                     </div>
-                </div>                
-                
-                <div id="registration" class="radius6">
-                    <p class="headline bottom30">User Registration</p>
-                    <div id="wrap_forms">
-                        <div class="user_border radius6 left" id="log">
-                            <div class="existing_user">
-                                <div class="ex_user">Existing User</div>
-                                <?php
 
-                                $args = array(
-                                        'echo' => true,
-                                        'redirect' => get_bloginfo('url'), 
-                                        'form_id' => 'logform',
-                                        'label_username' => __( '' ),
-                                        'label_password' => __( '' ),
-                                        'label_remember' => __( 'Remember Me' ),
-                                        'label_log_in' => __( 'LOGIN' ),
-                                        'id_username' => 'user_login2',
-                                        'id_password' => 'user_pass2',
-                                        'id_remember' => 'rememberme',
-                                        'id_submit' => 'wp-submit',
-                                        'remember' => false,
-                                        'value_remember' => false ); 
+                    <div class="user_border user_border2 radius6 right" id="reg">
+                        <div class="existing_user">
+                            <div class="reg_user">Register New User</div>
+                            <form id="formreg" action="" method="post">
+                                <div class="field">
+                                    <label for="first_name_id">First Name</label>
+                                    <input type="text" class="" title="" name="first_name" id="first_name_id">
+                                </div>
+                                <div class="field">
+                                    <label for="last_name_id">Last Name</label>
+                                    <input type="text" class="" title="" name="last_name" id="last_name_id">
+                                </div>
+                                <div class="clear"></div>
 
-                                wp_login_form($args); ?>
-                                <a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="recover_pass">Password recovery</a>
-                            </div>
+                                <div class="field">
+                                    <label for="email_id">Email</label>
+                                    <input type="email" class="" title="" name="user_email" id="email_id">
+                                </div>
+                                <div class="field">
+                                    <label for="user_login_id">Username</label>
+                                    <input type="text" class="" title="" name="user_login" id="user_login_id">
+                                </div>
+                                <div class="clear"></div>
+
+                                <div class="field">
+                                    <label for="organisation_id">Organisation</label>
+                                    <input type="text" class="" title="" name="organisation" id="organisation_id">
+                                </div>
+                                <div class="field">
+                                    <label for="contact_phone_id">Contact Phone Number</label>
+                                    <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
+                                </div>
+                                <div class="clear"></div>     
+
+                                <div class="field">
+                                    <label for="user_pass">Password</label>
+                                    <input type="password" class="" title="" name="user_pass" id="user_pass_id">
+                                </div>
+                                <div class="field">
+                                    <label for="user_pass_confirm_id">Confirm Password</label>
+                                    <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
+                                </div>
+                                <div class="clear"></div>   
+
+                                <div class="field">
+                                    <label for="captcha_reg">Stop Spam!</label> <br />
+                                    <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
+                                    <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
+                                </div>
+                                <div class="field top23">        
+                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a id="terms_co">Terms & Conditions.</a></label>
+                                </div>
+                                <div class="clear"></div>
+
+                                <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
+                                <div class="err"> </div>
+                                <input type="hidden" name="cp-action" value="register"/>
+                                <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
+                                <div id="reg_user">Register Me</div><div class="loader"></div>
+                            </form>
                         </div>
-
-                        <div class="user_border user_border2 radius6 right" id="reg">
-                            <div class="existing_user">
-                                <div class="reg_user">Register New User</div>
-                                <form id="formreg" action="" method="post">
-                                    <div class="field">
-                                        <label for="first_name_id">First Name</label>
-                                        <input type="text" class="" title="" name="first_name" id="first_name_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="last_name_id">Last Name</label>
-                                        <input type="text" class="" title="" name="last_name" id="last_name_id">
-                                    </div>
-                                    <div class="clear"></div>
-
-                                    <div class="field">
-                                        <label for="email_id">Email</label>
-                                        <input type="email" class="" title="" name="user_email" id="email_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="user_login_id">Username</label>
-                                        <input type="text" class="" title="" name="user_login" id="user_login_id">
-                                    </div>
-                                    <div class="clear"></div>
-
-                                    <div class="field">
-                                        <label for="organisation_id">Organisation</label>
-                                        <input type="text" class="" title="" name="organisation" id="organisation_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="contact_phone_id">Contact Phone Number</label>
-                                        <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
-                                    </div>
-                                    <div class="clear"></div>     
-
-                                    <div class="field">
-                                        <label for="user_pass">Password</label>
-                                        <input type="password" class="" title="" name="user_pass" id="user_pass_id">
-                                    </div>
-                                    <div class="field">
-                                        <label for="user_pass_confirm_id">Confirm Password</label>
-                                        <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
-                                    </div>
-                                    <div class="clear"></div>   
-
-                                    <div class="field">
-                                        <label for="captcha_reg">Stop Spam!</label> <br />
-                                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
-                                        <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
-                                    </div>
-                                    <div class="field top23">        
-                                        <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a id="terms_co">Terms & Conditions.</a></label>
-                                    </div>
-                                    <div class="clear"></div>
-
-                                    <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
-                                    <div class="err"> </div>
-                                    <input type="hidden" name="cp-action" value="register"/>
-                                    <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
-                                    <div id="reg_user">Register Me</div><div class="loader"></div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
                     </div>
-                    <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
-                    <div class="reg_message log_msg" id="popup-login-msg"><?php //echo of_get_option('log_msg');?></div>
-                </div><!--END registration-->
-				<div id="close-popup" class="close_btn"></div>
-				<!--<div class="terms_container" class="radius6">
-					<p class="headline bottom30">Terms & Conditions</p>
+                    <div class="clear"></div>
+                </div>
+                <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
+                <div class="reg_message log_msg" id="popup-login-msg"><?php //echo of_get_option('log_msg');?></div>
+            </div><!--END registration-->
+			<div id="close-popup" class="close_btn"></div>
+			<!--<div class="terms_container" class="radius6">
+				<p class="headline bottom30">Terms & Conditions</p>
 
-					<div class="terms_content">
+				<div class="terms_content">
 
-					</div>
-					
-				</div> -->
-				<div id="scrollbar1" class="terms_container" class="radius6">
-					<p class="headline bottom30">Terms & Conditions<span id="close_terms"></span></p>
-					<div class="scrollbar">
-						<div class="track">
-							<div class="thumb">
-								<div class="end">
-								</div>
+				</div>
+				
+			</div> -->
+			<div id="scrollbar1" class="terms_container" class="radius6">
+				<p class="headline bottom30">Terms & Conditions<span id="close_terms"></span></p>
+				<div class="scrollbar">
+					<div class="track">
+						<div class="thumb">
+							<div class="end">
 							</div>
 						</div>
 					</div>
-					<div class="viewport">
-						 <div class="overview">
-						 <?php 
-							$page_id = 1061;
-							$page_data = get_page( $page_id );
-							echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
-							?>
-							<div class="clear"></div>
-							<div class="space10"></div>
-							<a id="accept_terms">Accept</a>
-							<a id="reject_terms">Reject</a>
-							<div class="clear"></div>
-							<div class="space20"></div>
-						</div>
+				</div>
+				<div class="viewport">
+					 <div class="overview">
+					 <?php 
+						$page_id = 1061;
+						$page_data = get_page( $page_id );
+						echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
+						?>
+						<div class="clear"></div>
+						<div class="space10"></div>
+						<a id="accept_terms">Accept</a>
+						<a id="reject_terms">Reject</a>
+						<div class="clear"></div>
+						<div class="space20"></div>
 					</div>
-				</div>	
+				</div>
+			</div>	
           
             
-            </div>
         </div>
         <?php
         $content = ob_get_contents();

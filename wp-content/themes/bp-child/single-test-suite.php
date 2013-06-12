@@ -28,7 +28,7 @@ get_header();
 				<div class="grid_cell width90P">
 					<div class="dark_gray_txt bold width80P left">
 						<h3 class="dark_gray_txt bold left lineheight22px"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>
-						<a href="#" class="edit_ts left">EDIT</a>
+						<a href="#" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
 						<div class="clear"></div>
 					</div>
 					<div class="width15P right">
@@ -442,7 +442,7 @@ get_header();
 					</select>
 					</label>
 				</div>
-				<a href="" class="new_test_case left">New Test Case</a>
+				<a href="" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
 				<div class="clear"></div>
 			</div>
 			</form>

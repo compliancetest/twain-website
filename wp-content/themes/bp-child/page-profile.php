@@ -104,7 +104,7 @@ get_header();
                                 <input type="hidden" value="my_details_edit" name="cp-action" />
                             </div>
                             <div class="grid_row">                                
-                                <a class="profile_btn button green_bcg white_txt button_small radius3">Save</a>
+                                <a class="action-btn process-btn default-btn">Save</a>
                                 <div class="err_red errors_msg"></div>
                                 <div class="clear"></div>
                             </div>
