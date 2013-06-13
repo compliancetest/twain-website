@@ -12,6 +12,7 @@ function compliancetest_user_actions()
 {
     if ( ! current_user_can( 'manage_options' ) ) {
         show_admin_bar( false );
+        remove_action('wp_head', '_admin_bar_bump_cb');
     }
     $cpAction = isset($_REQUEST['cp-action']) ? $_REQUEST['cp-action'] : null;
     
