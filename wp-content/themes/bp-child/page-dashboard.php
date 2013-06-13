@@ -161,7 +161,7 @@ get_header();
 						<div class="test_cases_associated"><div class="test_cases_associated">
 							<div class="grid_row light_gray_bcg noborderbottom">
 								<div class="grid_cell width30P left15">
-									<div class="styled_select_dashboard left">
+									<div class="styled_select left">
 										<select name="test_cases[]" class="req_field">
 										  <option value="">Select Test Cases</option>
 										  <?php
@@ -212,7 +212,7 @@ get_header();
 							<div class="grid_row light_gray_bcg noborderbottom">
 								<div class="grid_cell width30P left15 right10">
 									<b>Related Suite</b> <br>
-									<div class="styled_select_dashboard left">
+									<div class="styled_select left">
 										<select name="ts[]" class="req_field">
 											<option value="">Choose Related Suite</option>
 											<?php
@@ -336,7 +336,7 @@ get_header();
 								<div class="grid_cell width60P left15 right10">
 									<div class="grid_cell width55P">
 										<b>Specification Type</b> <br>
-										<div class="styled_select_dashboard left">
+										<div class="styled_select left">
 											<select name="doc_type[]" class="req_field">
 											  <option value="">Choose one</option>
 											  <option value="1">Type 1</option>

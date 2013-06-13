@@ -67,7 +67,16 @@
                     });
                     
                 }else{
-                    
+                    //Getting HTML By Ajax
+                    if($overlay.find('.loading').length < 1)
+                        $overlay.append('<div class="loading"></div>');
+                    $.ajax({
+                        url: opts.link,
+                        success: function(rsp){
+                            $overlay.find('.loading').remove();
+                            $overlay.append(rsp);
+                        }
+                    })
                 }    
             }
             
@@ -107,6 +116,7 @@
     }
     $.fn.cplightbox.defaults = {
         isAjax: false,
+        link: '',
         closeWhenClickOveraly: true,
         onLoad: function() {},
         onClose: function() {},

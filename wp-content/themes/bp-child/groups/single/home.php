@@ -131,8 +131,7 @@
 			<?php endwhile; endif; ?>
 
 		</div><!-- .padder -->
-	</div><!-- #content -->
-    
+	</div><!-- #content -->          
       
     <?php get_footer( 'buddypress' ); ?>
 

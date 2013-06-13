@@ -65,7 +65,7 @@ get_header( 'buddypress' ); ?>
 
 						<label for="groups-order-by"><?php _e( 'Order By:', 'buddypress' ); ?></label>
 						<div class="clear"></div>
-						<div class="styled_select_dashboard left">
+						<div class=" left">
 							<select id="groups-order-by">
 								<option value="active"><?php _e( 'Last Active', 'buddypress' ); ?></option>
 								<option value="popular"><?php _e( 'Most Members', 'buddypress' ); ?></option>

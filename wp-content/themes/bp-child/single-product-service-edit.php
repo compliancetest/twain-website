@@ -124,7 +124,7 @@ Template Name: Product / Service Edit
                         <?php } ?>
                     </div>
                     <div class="grid_cell width50P"><b>Relationship</b><br/>
-                        <div class="styled_select_dashboard left">
+                        <div class="styled_select left">
                             <select class="req_field" name="product_relationship">
                                 <option value="">Version of ...</option>
                             </select>

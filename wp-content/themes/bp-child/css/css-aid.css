@@ -1075,7 +1075,7 @@ tr {
 }
 
 /*POP-UPS */
-#mask, #mask_community, #mask_payment, .mask-wrapper{
+.mask-wrapper{
 	position: absolute;
 	background: url(../images/fancybox_overlay.png) top left repeat;
 	background-size: cover;
@@ -1085,10 +1085,17 @@ tr {
 	left: 0px; 
 	top: 0px;    
 }
-
-#mask_community{
-	/*display:block;*/
+.mask-wrapper .loading{
+    background: url(../images/loading.gif) no-repeat center center;
+    width: 100%;
+    height: 100%;
 }
+.mask-wrapper .loading1{
+    background: url(../images/loading1.gif) no-repeat center center;
+    width: 100%;
+    height: 100%;
+}                                        
+
 
 #popup-wrap, #community-wrap, #payment-wrap{
 	background: rgba(0,0,0,0.5);
