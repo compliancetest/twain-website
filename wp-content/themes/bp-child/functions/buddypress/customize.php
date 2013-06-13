@@ -49,10 +49,15 @@ function cp_bp_get_group_join_button_filter($button)
             $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
             $button['link_text'] = "Join Community";
             $button['link_title'] = "Join Community";
-        }else{
+        }else if($button['id'] == 'leave_group'){
             $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
+            $button['link_text'] = "Leave Community";
+            $button['link_title'] = "Leave Community";
+        }else if($button['id'] == 'membership_requested'){
+            $button['link_class'] .= " button button_medium status_btn_on_hold white_txt radius6";    
             $button['link_text'] = "Request Sent";
             $button['link_title'] = "Request Sent";
+            $button['link_href'] = "#";
         }
     }else{
         $button['link_class'] .= " popup button button_medium button_red white_txt register radius6";    

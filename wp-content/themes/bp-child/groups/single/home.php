@@ -68,37 +68,32 @@
                  global $groups_template;
                     
             ?>
-            <div id="community-wrap" style="display: none;" class="popup-box">
-                <div id="community_registration" class="radius6">
-                    <p class="headline nomarginbottom">Community Registration</p>
-                        <form method="post" action="<?php echo wp_nonce_url( bp_get_group_permalink( ) . 'request-membership', 'groups_request_membership' )?>" id="join-community-form" data-group-id="<?php echo $groups_template->group->id?>">
-                            <div id="community_content">
-                                
-                                    <p>You need to join the community of interest in order to view Test Cases and Participate in the Forum</p>
-                                    <div class="grey-border-bottom"></div>
-                                    <div class="grid_cell width100P left">
-                                        <input type="checkbox" name="agree_terms" value="agree" id="agree_community_terms"> I agree with <a href="javascript: void(0);" class="normal" id="show-community-terms">Terms & Conditions</a>
-                                        <div class="clear"></div>
-                                        <div class="space5"></div>
-                                        <input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license"> I agree with <a href="javascript: void(0);" id="show-community-license" class="normal">License Agreement</a>
-                                        <div class="clear"></div>
-                                        <div class="space5"></div>
-                                        <div class="err_request"></div>
-                                    </div>
-                                    <div class="clear"></div>    
-                            </div>
-                            <div class="grid_row test_cases noradiusbottom">
-                                <div class="register">
-                                    <input type="submit" id="join-community" value="Register" name="role_submit"/>
-                                </div>
-                                <div class="cancel"><a href="#" id="close-popup-community2">Cancel</a></div>
-                                <div class="clear"></div>
-                            </div>
-                        </form>    
-                            
-                    
-                    <a id="close-popup-community" class="close_btn"></a>
-                </div>            
+            <div id="community_registration" style="display: none;" class="popup-box">                
+                <div class="popup-box-header radius6 noradiusbottom">Community Registration</div>
+                <div class="popup-box-content">
+                    <form method="post" action="<?php echo wp_nonce_url( bp_get_group_permalink( ) . 'request-membership', 'groups_request_membership' )?>" id="join-community-form" data-group-id="<?php echo $groups_template->group->id?>">
+                        <div class="grey-border-bottom">
+                            <p>You need to join the community of interest in order to view Test Cases and Participate in the Forum</p>
+                        </div>
+                        <div class="top10">
+                            <input type="checkbox" name="agree_terms" value="agree" id="agree_community_terms"> I agree with <a href="javascript: void(0);" class="normal" id="show-community-terms">Terms & Conditions</a>
+                            <div class="clear"></div>
+                            <div class="space5"></div>
+                            <input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license"> I agree with <a href="javascript: void(0);" id="show-community-license" class="normal">License Agreement</a>
+                            <div class="clear"></div>
+                            <div class="space5"></div>
+                            <div class="err_request"></div>
+                        </div>
+                        <div class="clear"></div>    
+                        <div class="message" style="display: none;">Please aggree the Terms & Conditions and License Agreement.</div>
+                    </form>    
+                </div>
+                <div class="popup-box-footer radius6 noradiustop">                                        
+                <a href="javascript: void(0)" class="action-btn process-btn"><span class="p"></span><span class="t">REGISTER</span></a>
+                    <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
+                    <div class="clear"></div>
+                </div>
+                <a id="close-popup-community" class="close_btn"></a>                
             </div>
             <div id="community-terms-box" style="display: none" class="popup-box">
                 <div class="popup-box-header radius6 noradiusbottom">Terms and Conditions</div>

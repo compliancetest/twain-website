@@ -32,6 +32,23 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             <?php
         }
+        function admin_screen( $group_id ) {
+            ?>
+ 
+            <p>The HTML for my admin panel.</p>
+ 
+            <?php
+        }
+        
+        function getFiles($group_id)
+        {
+            global $wpdb;
+            
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE group_id=%d", $group_id);
+            $rows = $wpdb->get_results($query);
+            
+            return $rows;
+        }
     }
     
     bp_register_group_extension('CP_Downloads_Group_Extension');

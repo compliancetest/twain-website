@@ -79,6 +79,16 @@
     background: -o-linear-gradient(top, #f9761f, #f36e15);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9761f', endColorstr='#f36e15',GradientType=0 ); 
 }
+.status_btn_on_hold:hover{
+    border-color: #e96208;    
+    background: #f36e15;    
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9761f), to(#f36e15));
+    background: -webkit-linear-gradient(top, #f9761f, #f36e15);
+    background: -moz-linear-gradient(top, #f9761f, #f36e15);
+    background: -ms-linear-gradient(top, #f9761f, #f36e15);
+    background: -o-linear-gradient(top, #f9761f, #f36e15);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9761f', endColorstr='#f36e15',GradientType=0 ); 
+}
 #issuer_title_block {
     box-shadow: 0 0 50px #EDEDED inset;
     -moz-box-shadow: 0 0 50px #EDEDED inset;

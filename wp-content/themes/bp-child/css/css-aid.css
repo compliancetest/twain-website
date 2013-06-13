@@ -115,7 +115,7 @@ blockquote {
 
 p { 
 	color: #666666;
-	margin: 0 0 30px 0;
+	margin: 0 0 10px 0;
 }
 
 ul.general_li, ol.general_li {
@@ -1021,13 +1021,13 @@ tr {
 /***************EROR AND MESSAGES*****************/
 
 .message {
-	padding: 10px 10px 10px 60px;
-	margin: 30px 0;
-	border: 2px solid rgba(0, 0, 0, 0.6);
-	box-shadow: 0 0 30px rgba(255, 255, 255, 0.3) inset, 0 1px 1px #2F3E45;
+	padding: 10px 10px 10px 10px;
+	margin: 5px 0;
+	border: 1px solid rgba(0, 0, 0, 0.6);
+	/*box-shadow: 0 0 30px rgba(255, 255, 255, 0.3) inset, 0 1px 1px #2F3E45;
 	-moz-box-shadow: 0 0 30px rgba(255, 255, 255, 0.3) inset, 0 1px 1px #2F3E45;
 	-webkit-box-shadow: 0 0 30px rgba(255, 255, 255, 0.3) inset, 0 1px 1px #2F3E45;
-	-o-box-shadow: 0 0 30px rgba(255, 255, 255, 0.3) inset, 0 1px 1px #2F3E45;
+	-o-box-shadow: 0 0 30px rgba(255, 255, 255, 0.3) inset, 0 1px 1px #2F3E45;*/
 }
 
 	.message:hover {
@@ -1041,7 +1041,7 @@ tr {
 	background: rgba(255, 34, 0, 0.3) url(../images/error_icon.png) 10px center no-repeat;
 }
 
-.succes {
+.success {
 	background: rgba(95, 208, 10, 0.3) url(../images/succes_icon.png) 10px center no-repeat;
 }
 
