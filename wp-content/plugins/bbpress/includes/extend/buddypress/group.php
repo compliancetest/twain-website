@@ -721,7 +721,7 @@ class BBP_Forums_Group_Extension extends BP_Group_Extension {
 
 		// Set the global forum ID
 		$bbp->current_forum_id = $forum_id;
-
+        
 		// Assume forum query
 		bbp_set_query_name( 'bbp_single_forum' ); ?>
 

@@ -706,20 +706,6 @@ var HOMEURL = "<?php echo get_home_url(); ?>";
 <?php 
 }
 
-function remove_file($id){
-	global $wpdb;
-	$result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}bp_groups_downloads WHERE id={$id}");
-	unlink($result->location);
-	$wpdb->query("DELETE FROM {$wpdb->prefix}bp_groups_downloads WHERE id={$id}");
-}
-
-if((isset($_GET['action'])) && ($_GET['action'] == 'deletefile') ){
-	add_action('template_redirect','ajax_remove_file');
-}
-function ajax_remove_file() {
-	remove_file($_GET['file_id']);
-	exit();
-}
 
 //Renaming Buddypress Documents to "WIKI"
 
@@ -755,3 +741,23 @@ function my_check_password_reset_key($key, $login) {
 
     return $user;
 }
+
+//Add htaccess file to prevent direct access
+function addHTAccessProtection($dir)
+{
+    $fp = fopen($dir . '/.htaccess', 'w');
+    fwrite($fp, 'Order Deny,Allow' . PHP_EOL . 'Deny from all');
+    fclose($fp);
+}
+
+//Format Bytes
+function formatBytes($bytes, $precision = 2) { 
+    $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
+
+    $bytes = max($bytes, 0); 
+    $pow = ($bytes ? log($bytes) : 0) / log(1024); 
+    
+    $idx = min(floor($pow), count($units) - 1); 
+    
+    return round(pow(1024, $pow - floor($pow)), $precision) . ' ' . $units[$idx]; 
+} 

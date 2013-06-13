@@ -10,6 +10,9 @@ add_action('init', 'compliancetest_user_actions');
 //Process User Login, Register Action
 function compliancetest_user_actions()
 {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        show_admin_bar( false );
+    }
     $cpAction = isset($_REQUEST['cp-action']) ? $_REQUEST['cp-action'] : null;
     
     switch($cpAction)

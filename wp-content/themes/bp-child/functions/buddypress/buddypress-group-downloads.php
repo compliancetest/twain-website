@@ -10,7 +10,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             $this->nav_item_position = 31;            
         }
         
-        function create_screen() {
+        function edit_screen() {
             if(!bp_is_group_creation_step($this->slug))
             {
                 return false;
@@ -49,7 +49,162 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             return $rows;
         }
+        
+        /**
+        * Save File
+        * 
+        * @param mixed $group_id
+        */
+        function saveFiles($group_id)
+        {
+            global $wpdb;
+            
+            $uploadDir = wp_upload_dir();
+            
+            $baseDir = $uploadDir['basedir'] . "/downloads";
+            if(!is_dir($baseDir)){
+                mkdir($baseDir, 0777);
+                //Create a htaccess to preven direct access
+                addHTAccessProtection($baseDir);
+            }
+            $baseDir = $baseDir . "/" . $group_id;
+            if(!is_dir($baseDir))
+                mkdir($baseDir, 0777);
+            
+            //Upload Files
+            $fileNames = $_POST['file_name'];
+            $fileDescs = $_POST['file_description'];
+            $files = $_FILES['file'];
+            
+            for($i=0; $i < count($files['name']); $i++)
+            {
+               $file = array(
+                    'name' => $files['name'][$i],
+                    'tmp_name' => $files['tmp_name'][$i],
+                    'error' => $files['error'][$i],
+                    'size' => $files['size'][$i],
+                    'type' => $files['type'][$i],
+               ); 
+               
+               if ($file['error'] == UPLOAD_ERR_OK) {
+                   //Upload File
+                   //check file exists or not
+                   $fileName = $file['name'];
+                   while(file_exists($baseDir . '/' . $fileName))
+                   {
+                       $fileName = rand(0, 9999) . $file['name'];
+                   }
+                   if(move_uploaded_file($file['tmp_name'], $baseDir . '/' . $fileName))
+                   {
+                       //Save data
+                       $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
+                            array('group_id'=>$group_id, 
+                                  'name' => !$fileNames[$i] ? $fileName : $fileNames[$i],
+                                  'description' => $fileDescs[$i], 
+                                  'size' => $file['size'], 
+                                  'location' => $baseDir . '/' . $fileName)
+                        );
+                   }
+               }
+            }
+        }
+        
+        /**
+        * Download File
+        * 
+        * @param mixed $file_id
+        */
+        function downloadFile($group_id, $file_id)
+        {
+            global $wpdb;
+            
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);
+            $row = $wpdb->get_row($query);
+            if($row)
+            {
+                $info = pathinfo($row->location);
+                $info1 = pathinfo($row->name);
+                //Add Extension
+                if(!isset($info1['extension']) || !$info1['extension'])
+                    $row->name .= "." . $info['extension'];
+                
+                header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+                header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+                header("Cache-Control: no-cache, must-revalidate");
+                header("Pragma: no-cache");
+                header("Content-Type: Application/octet-stream");
+                header("Content-disposition: attachment; filename=" . $row->name);
+
+                $fp = fopen($row->location, 'r');
+                while (!feof($fp))
+                {
+                    echo fread($fp, 65536); 
+                    flush();
+                }  
+                fclose($fp); 
+                exit;
+            }else{
+                $group = groups_get_current_group();
+                wp_redirect(bp_get_group_permalink($group) . $obj->slug);
+                exit;
+            }
+        }
+        
+        function deleteFile($group_id, $file_id)
+        {
+            global $wpdb;
+            
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);
+            $row = $wpdb->get_row($query);
+            if($row)
+            {
+                if(file_exists($row->location))
+                    unlink($row->location);
+                $wpdb->delete($wpdb->prefix . 'bp_groups_downloads', array('id' => $row->id));
+                return true;
+            }else{
+                return 'File not found!';
+            }
+        }
+        
+        
     }
     
     bp_register_group_extension('CP_Downloads_Group_Extension');
+    
+    add_action("init", 'manageGroupDownloadsAction');
+    function manageGroupDownloadsAction()
+    {
+        $group = groups_get_current_group();
+        
+        if(is_user_logged_in() && bp_group_is_member($group))
+        {
+            $obj = new CP_Downloads_Group_Extension();
+            if(bp_is_current_action($obj->slug))
+            {
+                if(wp_verify_nonce($_POST['_wpnonce'], 'groups_downloads_save')) //Save Files
+                {
+                    $obj->saveFiles($group->id);
+                    //Redirect
+                    wp_redirect(bp_get_group_permalink($group) . $obj->slug);
+                    exit;    
+                }
+                if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_download')) //Download Files
+                {
+                    $obj->downloadFile($group->id, $_REQUEST['id']);
+                    exit;    
+                }
+                if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_delete')) //Download Files
+                {
+                    $result = $obj->deleteFile($group->id, $_REQUEST['id']);
+                    if($result === true)
+                        echo 'success';
+                    else
+                        echo $result;
+                    exit;    
+                }
+            }    
+        }
+        
+    }
 }

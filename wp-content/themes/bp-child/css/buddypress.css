@@ -151,3 +151,7 @@
 .tabs_wrap #bbpress-forums > h3{
     display: none;
 }
+/**** Downloads ****/
+#save-download{
+    float: right;
+}
