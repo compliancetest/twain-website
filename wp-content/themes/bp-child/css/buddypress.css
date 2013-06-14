@@ -155,3 +155,14 @@
 #save-download{
     float: right;
 }
+#uploaded-files .grid_row{
+    position: relative;
+}
+#uploaded-files .grid_row .loading{
+    background: url(../images/loader1.gif) no-repeat center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}

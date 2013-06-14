@@ -50,6 +50,16 @@ if ( class_exists( 'BP_Group_Extension' ) )
             return $rows;
         }
         
+        function getFile($group_id, $file_id)
+        {
+            global $wpdb;
+            
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);
+            $row = $wpdb->get_row($query);
+            
+            return $row;
+        }
+        
         /**
         * Save File
         * 
@@ -74,6 +84,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             //Upload Files
             $fileNames = $_POST['file_name'];
             $fileDescs = $_POST['file_description'];
+            $fileLicenses = $_POST['file_license'];
             $files = $_FILES['file'];
             
             for($i=0; $i < count($files['name']); $i++)
@@ -101,7 +112,9 @@ if ( class_exists( 'BP_Group_Extension' ) )
                             array('group_id'=>$group_id, 
                                   'name' => !$fileNames[$i] ? $fileName : $fileNames[$i],
                                   'description' => $fileDescs[$i], 
+                                  'license' => $fileLicenses[$i], 
                                   'size' => $file['size'], 
+                                  'created_date' => date('Y-m-d H:i:s'), 
                                   'location' => $baseDir . '/' . $fileName)
                         );
                    }
@@ -120,6 +133,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);
             $row = $wpdb->get_row($query);
+            
             if($row)
             {
                 $info = pathinfo($row->location);
@@ -184,25 +198,91 @@ if ( class_exists( 'BP_Group_Extension' ) )
             {
                 if(wp_verify_nonce($_POST['_wpnonce'], 'groups_downloads_save')) //Save Files
                 {
-                    $obj->saveFiles($group->id);
+                    if(bp_group_is_admin())
+                    {
+                        $obj->saveFiles($group->id);
+                    }
                     //Redirect
                     wp_redirect(bp_get_group_permalink($group) . $obj->slug);
                     exit;    
                 }
                 if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_download')) //Download Files
                 {
-                    $obj->downloadFile($group->id, $_REQUEST['id']);
+                    //Get File
+                    $file = $obj->getFile($group->id, $_REQUEST['id']);
+                    if($file)
+                    {
+                        if($file->license && !isset($_POST['agree_license']))
+                        {
+                            //Goto File Detail Page                            
+                            wp_redirect(bp_get_group_permalink($group) . $obj->slug . "?id=" . $file->id);
+                        }else{
+                            //Download File
+                            $obj->downloadFile($group->id, $_REQUEST['id']);        
+                        }
+                        
+                    }
                     exit;    
                 }
                 if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_delete')) //Download Files
                 {
-                    $result = $obj->deleteFile($group->id, $_REQUEST['id']);
-                    if($result === true)
-                        echo 'success';
-                    else
-                        echo $result;
+                    if(bp_group_is_admin())
+                    {
+                        $result = $obj->deleteFile($group->id, $_REQUEST['id']);
+                        if($result === true)
+                            echo 'success';
+                        else
+                            echo $result;
+                    }else{
+                        echo "Permission Denied!";
+                    }
                     exit;    
                 }
+                
+                if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_get_file')) //Edit File
+                {
+                    if(bp_group_is_admin())
+                    {
+                        $file = $obj->getFile($group->id, $_REQUEST['id']);
+                        if($file)
+                        {
+                            json_encode(array('name' => $file->name, 'id' => $file->id, 'description' => $file->description, 'license' => $file->license));
+                            ob_start();
+                            ?>
+                            <form id="fileEditForm<?php echo $file->id?>" action="" onsubmit="return saveFile()" style="display: none;">
+                                <div class="grid_cell width30P">
+                                    <label>File Name:</label>
+                                    <input type="text" name="file_name" value="<?php echo $file->name?>" />
+                                </div>
+                                <div class="grid_cell width60P left10">
+                                    <label>Description:</label>
+                                    <input type="text" name="file_desc" value="<?php echo $file->description?>" />
+                                </div>
+                                <div class="clear"></div>
+                                <div class="grid_cell width100P">
+                                    <label>License Agreement: </label>
+                                    <textarea cols="20" rows="5" name="file_license"><?php echo $file->license?></textarea>
+                                </div>
+                                <div class="clear"></div>
+                                <button class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></button>
+                                <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                                <div class="clear"></div>
+                                <?php wp_nonce_field('groups_downlaods_save_file') ?>
+                                <input type="hidden" name="group_id" value="<?php echo $group->id?>" />
+                            </form>
+                            <?php
+                            $html = ob_get_contents();
+                            ob_end_clean();
+                            echo $html;
+                        }else{
+                            echo '<div class="message error" style="display: none">Invalid Request!</div>';
+                        }
+                    }else{
+                        echo '<div class="message error" style="display: none">Permission Denied!</div>';
+                    }
+                    exit;    
+                }
+                
             }    
         }
         

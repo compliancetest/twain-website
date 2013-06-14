@@ -21,7 +21,7 @@ get_header();
 					?>
 				</div>
 			<?php endwhile;
-			session_start();
+			
 			if(isset($_SESSION['terms'])) {
 				$value = $_SESSION['terms'];
 			} else {

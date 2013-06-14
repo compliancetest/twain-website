@@ -1,6 +1,17 @@
 <?php
+//Define Site Constants
+if(!defined('MESSAGE_KEY'))
+    define('MESSAGE_KEY', 'cp_messages');
 
-/*********************************************** PROMOTION FUNCTIONS ****************************************************************/
+
+
+//Session Start
+add_action('init', 'cp_session_start');
+function cp_session_start()
+{
+    if(!session_id())
+        session_start();
+}
 
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 
@@ -760,4 +771,33 @@ function formatBytes($bytes, $precision = 2) {
     $idx = min(floor($pow), count($units) - 1); 
     
     return round(pow(1024, $pow - floor($pow)), $precision) . ' ' . $units[$idx]; 
-} 
+}
+
+/**
+* Add message to session
+* 
+* @param String $message
+* @param String $type: success, error, warning, notice
+*/
+function addMessage($message, $type = 'success')
+{
+    if(!isset($_SESSION[MESSAGE_KEY]))
+        $_SESSION[MESSAGE_KEY] = array();
+    
+    $_SESSION[MESSAGE_KEY][] = array('message' => $message, 'type' => $type);
+    
+}
+
+function flushMessages($class = '')
+{
+    if(isset($_SESSION[MESSAGE_KEY]))
+    {
+        echo '<div class="messages ' . $class . '">';
+        foreach($_SESSION[MESSAGE_KEY] as $row)
+        {
+            echo '<div class="message ' . $row['type'] . '">' . $row['message'] . "</div>";
+        }
+        echo '</div>';
+    }
+}
+
