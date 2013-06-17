@@ -1,6 +1,5 @@
 <?php get_header( 'buddypress' ); ?>
 
-	<div class="space25"></div>
     <div id="content" class="content container">
 		<div class="padder">
 

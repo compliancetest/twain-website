@@ -1,3 +1,28 @@
+<?php
+    /**
+    * Groups Admin Page
+    */
+?>
+<div id="admin-container" class="tab-content white_bcg column">
+    <!-- Group Details Tab -->
+    <div class="grid-box" id="group_details_box">
+        <div class="grid-box-header">
+            <h5>Details</h5>
+        </div>
+        <div class="grid-box-body">
+            this is body
+        </div>
+        <div class="grid-box-footer">
+            <br />
+            <br />
+            <br />
+            this is footer
+            <br />
+            <br />
+            <br />
+        </div>
+    </div>
+</div>
 <div class="item-list-tabs no-ajax" id="subnav" role="navigation">
 	<ul>
 		<?php bp_group_admin_tabs(); ?>

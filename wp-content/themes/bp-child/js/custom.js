@@ -420,6 +420,16 @@ jQuery(document).ready(function($) {
         jQuery('#registration-popup').cplightbox();
         return false;
     });
+    
+    //Append loading div to grid boxes
+    jQuery('.grid-box .btn-row').append('<div class="loading"><div><b>SAVING YOUR DATA</b><span>Please wait...</span></div></div>');
+    
+    //Datepicker
+    jQuery('input.datepicker').datepicker({
+        showOn: "both",
+        buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
+        buttonImageOnly: true
+    })
 
 });
 
@@ -430,4 +440,41 @@ function isMobile()
     }else{
         return false;
     }
+}
+
+function showGridBoxLoadingWrapper(obj)
+{
+    if(typeof obj == 'string')
+        jQuery('#' + obj).find('.loading').show();
+    else
+        jQuery(obj).find('.loading').show();
+}
+function hideGridBoxLoadingWrapper(obj)
+{
+    if(typeof obj == 'string')
+        jQuery('#' + obj).find('.loading').hide();
+    else
+        jQuery(obj).find('.loading').hide();
+}
+
+function showGridBoxResultMessage(obj, message, type)
+{
+    if(typeof obj == 'string')
+        obj = jQuery(obj);
+    
+    if(jQuery(obj).find('.btn-row .message').length > 0)
+        jQuery(obj).find('.btn-row .message').remove();
+    jQuery(obj).find('.btn-row').prepend('<div class="message ' + type + '">' + message + '</div>');
+    jQuery(obj).find('.btn-row').find('.message').fadeIn('fast');
+}
+function hideGridBoxResultMessage(obj)
+{
+    if(typeof obj == 'string')
+        obj = jQuery(obj);
+    
+    if(jQuery(obj).find('.btn-row .message').length > 0)
+        jQuery(obj).find('.btn-row .message').fadeOut('fast', function(){
+            jQuery(this).remove();
+        });
+    
 }

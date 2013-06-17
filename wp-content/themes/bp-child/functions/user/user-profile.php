@@ -117,11 +117,11 @@ function cp_user_payment_edit()
         echo 'Please specify your card expiry date!';
         exit;
     }else{
-        $card_expiry = explode('/', $card_expiry);
-        if($card_expiry[0] > 12){
+        $card_expiry_arr = explode('/', $card_expiry);
+        if($card_expiry_arr[0] > 12){
             echo 'Your expiry date is incorrect!';
             exit;
-        }else if(check_exp_date($card_expiry[0], $card_expiry[1])){
+        }else if(check_exp_date($card_expiry_arr[0], $card_expiry_arr[1])){
             update_user_meta( $user_id, 'card_expiry', $card_expiry); 
         }else{
             echo 'Your card has expired or your expiry date is incorrect!';

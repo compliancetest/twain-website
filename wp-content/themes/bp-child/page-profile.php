@@ -58,108 +58,100 @@ get_header();
 	<div class="space25"></div>
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
 		<?php get_sidebar('dashboard'); ?>
-	</div>
-		
-	<div class="column four_fifths right container">
+	</div>		
+	<div class="four_fifths right container">
+        <div class="column">
           <?php if($user_status == 3){?>
-                <div class="warning">Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="javascript: void(0);">link verification</a>)</span></div>
+                <div class="inner-warning">Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="javascript: void(0);">link verification</a>)</span></div>
             <?php }?>
                 
             <input type="hidden" name="user_id" value="<?php echo $current_user->ID;?>"/>
             
-			<div class="column left three_fifths nopadding">
-				<div class="default_grid" id="my_details">
-					<div class="grid_head blue_head">
-						<div class="grid_row">
-							<div class="grid_cell width60P"><h5>My Details</h5></div>
-							<div class="grid_cell">Role: <?php echo $urole;?></div>
-                            <?php if($user_status != 3){?>
-                                <div class="grid_cell grid_button grid_button_right"><a class="edit_btn" href="javascript: void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_w.png" /><span class="simple_tooltip radius6">Edit Section<span></span></span></a></div>
-                            <?php }?>
-                            <div class="clear"></div>
-						</div>
-					</div>
+			<div class="left three_fifths">
+                <div class="grid-box" id="my_details">
+                    <div class="grid-box-header">
+                        <h5 class="left">My Details</h5>
+                        <?php if($user_status != 3){?>
+                            <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                        <?php }?>
+                        <span class="header-text right">Role: <?php echo $urole;?></span>
+                        <div class="clear"></div>
+                    </div>
                     <?php if($user_status != 3){?>
-					<div class="grid_body">
+                    <div class="grid-box-body">
                         <form action="#" method="post">
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Name</b></div>
-                                <div data-name="uname" data-value="<?php echo $lname.' '.$fname;?>" class="grid_cell in_input"><?php echo $lname.' '.$fname;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Name</label></div>
+                                <div data-name="uname" data-value="<?php echo $lname.' '.$fname;?>" class="grid-cell in_input"><?php echo $lname.' '.$fname;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Email</b></div>
-                                <div data-name="email" data-value="<?php echo $uemail;?>" class="grid_cell in_input"><?php echo $uemail;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Email</label></div>
+                                <div data-name="email" data-value="<?php echo $uemail;?>" class="grid-cell in_input"><?php echo $uemail;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Password</b></div>
-                                <div data-name="new_pass" data-value="" class="grid_cell in_input input_pass">*********</div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Password</label></div>
+                                <div data-name="new_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Confirm Password</b></div>
-                                <div data-name="conf_pass" data-value="" class="grid_cell in_input input_pass">*********</div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Confirm Password</label></div>
+                                <div data-name="conf_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
                                 <div class="clear"></div>
                                 <input type="hidden" value="my_details_edit" name="cp-action" />
                             </div>
-                            <div class="grid_row">                                
-                                <a class="action-btn process-btn default-btn">Save</a>
-                                <div class="err_red errors_msg"></div>
+                            <div class="grid-row btn-row">                                
+                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>                                
                                 <div class="clear"></div>
                             </div>
-						</form>
-					</div>
+                        </form>
+                    </div>
                     <?php } ?>
-				</div>
+                </div>				
 			</div>
-			<div class="column right two_fifths nopaddingtop nopaddingright nopaddingbottom">
+			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
 					<?php echo get_post_meta($post->ID, 'my_details_text', true);?>
 				</div>
 			</div>
-			<div class="clear"></div>
-			
-			<div class="space25"></div>
-			
+			<div class="clear"></div>			
+			<div class="space25"></div>			
 			<div class="column left three_fifths nopadding">
-				<div class="default_grid" id="my_payment">
-					<div class="grid_head blue_head">
-						<div class="grid_row">
-							<div class="grid_cell width60P"><h5>My Payment Method</h5></div>
-                            <?php if($user_status != 3){?>
-                                <div class="grid_cell grid_button grid_button_right"><a class="edit_btn" href="javascript: void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_w.png" /><span class="simple_tooltip radius6">Edit Section<span></span></span></a></div>
-                                <div class="grid_cell grid_button grid_button_right"><a href="javascript: void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_magnifier_icon_w.png" /><span class="simple_tooltip radius6">View Statement<span></span></span></a></div>
-                            <?php }?>
-                            <div class="clear"></div>
-						</div>
+				<div class="grid-box" id="my_payment">
+					<div class="grid-box-header">
+						<h5 class="left">My Payment Method</h5>
+                        <?php if($user_status != 3){?>                            
+                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-edit right">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-view-stats right">View<span class="simple_tooltip radius6">View Statement<span></span></span></a>
+                        <?php }?>
+                        <div class="clear"></div>
 					</div>
-					<div class="grid_body">
+					<div class="grid-box-body">
                         <form action="#" method="post">
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Card Number</b></div>
-                                <div data-name="card_number" data-value="<?php echo $card_number;?>" class="grid_cell in_input card_no"><?php echo !$card_number_string ? '-' : $card_number_string;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Card Number</label></div>
+                                <div data-name="card_number" data-value="<?php echo $card_number;?>" class="grid-cell in_input card_no"><?php echo !$card_number_string ? '-' : $card_number_string;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Name on Card</b></div>
-                                <div data-name="name_on_card" data-value="<?php echo $name_on_card;?>" class="grid_cell in_input"><?php echo !$name_on_card ? '-' : $name_on_card;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Name on Card</label></div>
+                                <div data-name="name_on_card" data-value="<?php echo $name_on_card;?>" class="grid-cell in_input"><?php echo !$name_on_card ? '-' : $name_on_card;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Expiry</b></div>
-                                <div data-name="card_expiry" data-value="<?php echo $card_expiry;?>" data-placeholder="M / Y" class="grid_cell in_input small_input card_expiry"><?php echo !$card_expiry ? '-' : $card_expiry;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Expiry</label></div>
+                                <div data-name="card_expiry" data-value="<?php echo $card_expiry;?>" data-placeholder="M / Y" class="grid-cell in_input small_input card_expiry"><?php echo !$card_expiry ? '-' : $card_expiry;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>CVC</b></div>
-                                <div data-name="card_cvc" data-value="<?php echo $card_cvc;?>" class="grid_cell in_input small_input"><?php echo !$card_cvc ? '-' : $card_cvc;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>CVC</label></div>
+                                <div data-name="card_cvc" data-value="<?php echo $card_cvc;?>" class="grid-cell in_input small_input"><?php echo !$card_cvc ? '-' : $card_cvc;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">                                
-                                <a class="profile_btn button green_bcg white_txt button_small radius3">Save</a>
-                                <div class="err_red errors_msg"></div>
+                            <div class="grid-row btn-row">                                
+                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
                                 <div class="clear"></div>
                                 <input type="hidden" name="cp-action" value="my_payment_edit" />
                                 <input type="hidden" name="card_no" value="<?php echo $get_card_number;?>"/>
@@ -168,7 +160,7 @@ get_header();
 					</div>
 				</div>
 			</div>
-			<div class="column right two_fifths nopaddingtop nopaddingright nopaddingbottom">
+			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
 					<?php echo get_post_meta($post->ID, 'my_payment_method', true);?>
@@ -179,42 +171,39 @@ get_header();
 			<div class="space25"></div>
 			
 			<div class="column left three_fifths nopadding">
-				<div class="default_grid" id="my_org">
-					<div class="grid_head blue_head">
-						<div class="grid_row">
-							<div class="grid_cell width60P"><h5>My Organisation</h5></div>
-							<div class="grid_cell">Role: Issuer</div>
-                            <?php if($user_status != 3){?>
-                                <div class="grid_cell grid_button grid_button_right"><a class="edit_btn" href="javascript:void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_w.png" /><span class="simple_tooltip radius6">Edit Section<span></span></span></a></div>
-                            <?php }?>
-                            <div class="clear"></div>
-						</div>
+				<div class="grid-box" id="my_org">
+					<div class="grid-box-header">
+						<h5 class="left">My Organisation</h5>
+						<?php if($user_status != 3){?>
+                            <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                        <?php }?>
+                        <span class="header-text right">Role: <?php echo $urole;?></span>
+                        <div class="clear"></div>
 					</div>
-					<div class="grid_body">
+					<div class="grid-box-body">
                         <form action="#" method="post">
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Name</b></div>
-                                <div data-name="user_organisation" data-value="<?php echo $user_org;?>" class="grid_cell in_input width70P"><?php echo !$user_org ? '-' : $user_org;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Name</label></div>
+                                <div data-name="user_organisation" data-value="<?php echo $user_org;?>" class="grid-cell in_input width70P"><?php echo !$user_org ? '-' : $user_org;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Website</b></div>
-                                <div data-name="user_organisation_web" data-value="<?php echo $user_org_web;?>" class="grid_cell in_input"><?php echo !$user_org_web ? '-' : $user_org_web;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Website</label></div>
+                                <div data-name="user_organisation_web" data-value="<?php echo $user_org_web;?>" class="grid-cell in_input"><?php echo !$user_org_web ? '-' : $user_org_web;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>Description</b></div>
-                                <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>" class="grid_cell in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Description</label></div>
+                                <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>" class="grid-cell in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="grid_cell width30P"><b>ABN</b></div>
-                                <div data-name="user_organisation_abn" data-value="<?php echo $user_org_abn;?>" class="grid_cell in_input"><?php echo !$user_org_abn ? '-' : $user_org_abn;?></div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>ABN</label></div>
+                                <div data-name="user_organisation_abn" data-value="<?php echo $user_org_abn;?>" class="grid-cell in_input"><?php echo !$user_org_abn ? '-' : $user_org_abn;?></div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid_row">
-                                <div class="err_red errors_msg"></div>
-                                <a class="profile_btn button green_bcg white_txt button_small radius3">Save</a>
+                            <div class="grid-row btn-row">
+                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
                                 <input type="hidden" name="cp-action" value="my_organisation_edit" />
                                 <div class="clear"></div>
                             </div>
@@ -223,7 +212,7 @@ get_header();
 				</div>
 			</div>
 			
-			<div class="column right two_fifths nopaddingtop nopaddingright nopaddingbottom">
+			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
 					<?php echo get_post_meta($post->ID, 'my_organization', true);?>
@@ -233,76 +222,38 @@ get_header();
 			
 			<div class="space25"></div>
 			
-			<div class="column left three_fifths nopadding">
-				<div class="default_grid" id="my_org_mem" style="display: none;"><!--this is temporary hidden--->
-					<div class="grid_head blue_head">
-						<div class="grid_row">
-							<div class="grid_cell width60P"><h5>My Organisation Members</h5></div>
-                            <?php if($user_status != 3){?>
-                                <div class="grid_cell grid_button grid_button_right"><a class="popup add_user_btn" href="javascript: void(0);"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_plus_icon_w.png" /><span class="simple_tooltip radius6">Add User<span></span></span></a></div>
-                            <?php }?>
-                            <div class="clear"></div>
-						</div>
-					</div>
-					<div class="grid_body">
-						<div class="grid_row">
-							<div class="grid_cell width60P"><b>Fred Smith</b></div>
-							<div class="grid_cell width15P">Tester</div>
-							<div class="grid_cell width15P green_txt"><b>Active</b></div>
-							<div class="grid_cell grid_button grid_button_right"><a href="#"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_g.png" /><span class="simple_tooltip radius6">Edit User<span></span></span></a></div>
-							<div class="clear"></div>
-						</div>
-						<div class="grid_row">
-							<div class="grid_cell width60P"><b>Marie Boyle</b></div>
-							<div class="grid_cell width15P">Tester</div>
-							<div class="grid_cell width15P green_txt"><b>Active</b></div>
-							<div class="grid_cell grid_button grid_button_right"><a href="#"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_g.png" /><span class="simple_tooltip radius6">Edit User<span></span></span></a></div>
-							<div class="clear"></div>
-						</div>
-						<div class="grid_row">
-							<div class="grid_cell width60P"><b>John Doe</b></div>
-							<div class="grid_cell width15P">Admin</div>
-							<div class="grid_cell width15P red_txt"><b>Suspended</b></div>
-							<div class="grid_cell grid_button grid_button_right"><a href="#"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_g.png" /><span class="simple_tooltip radius6">Edit User<span></span></span></a></div>
-							<div class="clear"></div>
-						</div>
-						<div class="grid_row">
-							<div class="grid_cell width60P"><b>Will Smith</b></div>
-							<div class="grid_cell width15P">Tester</div>
-							<div class="grid_cell width15P green_txt"><b>Active</b></div>
-							<div class="grid_cell grid_button grid_button_right"><a href="#"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_g.png" /><span class="simple_tooltip radius6">Edit User<span></span></span></a></div>
+			<div class="column left three_fifths nopadding" style="display: none;">
+				<div class="grid-box">
+					<div class="grid-box-header">
+                        <h5 class="left">My Organisation Members</h5>
+                        <?php if($user_status != 3){?>
+                            <a class="gbh-btn gbh-btn-add right" href="javascript: void(0);">Add<span class="simple_tooltip radius6">Add User<span></span></span></a>
+                        <?php }?>
+                        <div class="clear"></div>
+                    </div>
+					<div class="grid-box-body">
+						<div class="grid-row grid-action-row">
+							<div class="grid-cell width55P"><label>Fred Smith</label></div>
+							<div class="grid-cell width20P">Tester</div>
+							<div class="grid-cell width15P status-active">Active</div>
+							<div class="grid-cell width10P grid-action-cell"><a href="#" class="gbh-btn gbh-btn-edit-grey">Edit</a></div>
 							<div class="clear"></div>
 						</div>
 					</div>
 				</div>
-			</div>
-			
-			<div class="column right two_fifths nopaddingtop nopaddingright nopaddingbottom" style="display: none;"><!--this is temporary hidden--->
+			</div>			
+			<div class="right two_fifths"  style="display: none;"><!--this is temporary hidden--->
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
 					<?php echo get_post_meta($post->ID, 'my_organization_members', true);?>
 				</div>
 			</div>
-			<div class="clear"></div>
-			
+			<div class="clear"></div>			
 		</div>
 		<div class="clear"></div>
-			
+	</div>
+    <div class="clear"></div>
 </div> <!--end content-->
-
-<script type="text/javascript">
-	var wrapper = jQuery('<div/>').css({height:0,width:0,'overflow':'hidden'});
-	var fileInput = jQuery(':file').wrap(wrapper);
-
-	fileInput.change(function(){
-		$this = jQuery(this);
-		jQuery('#file_ts').text("File attached");
-	})
-	 
-	jQuery('#file_ts').click(function(){
-		fileInput.click();
-	}).show(); 
-</script>
 <?php
 get_footer();
 ?>

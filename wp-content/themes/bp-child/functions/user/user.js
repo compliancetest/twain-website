@@ -168,16 +168,16 @@
         });
         
        //transform divs in inputs at click on edit button
-       $(document).on('click', '.edit_btn', function(){           
-            var thisParentId = '#'+$(this).parents('.default_grid').attr('id');
-            var findInputs = $(thisParentId+' .grid_row input:visible').size();
+       $(document).on('click', '.gbh-btn-edit', function(){           
+            var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
+            var findInputs = $(thisParentId+' .grid-row input:visible').size();
 
             //if( findInputs == 0){
 
-            $(thisParentId+' .profile_btn').fadeIn();
+            $(thisParentId+' .btn-row').fadeIn();
             
             //transform all divs in inputs
-            $(thisParentId+' .grid_cell.in_input').each(function(){
+            $(thisParentId+' .grid-cell.in_input').each(function(){
                var thisTextVal = $(this).attr('data-value'); 
                var thisNameVal = $(this).attr('data-name'); 
                if($(this).attr('data-placeholder'))
@@ -185,50 +185,52 @@
                else
                    var thisPlaceholderValue = '';
                
-               $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+               if($(this).attr('data-type'))
+                   var dataType = $(this).attr('data-type');
+               else
+                   var dataType = 'text';
                
-               /*if($(this).hasClass('input_pass')){
-                    $(this).replaceWith('<input type="password" name="'+thisNameVal+'" value=""/>');
-                    
-               }else if($(this).hasClass('small_input')){
-                    if($(this).attr('data-name')=='card_expiry'){
-                        $(this).replaceWith('<input type="text" placeholder="M / Y" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
-                    }else{
-                        $(this).replaceWith('<input type="text" class="small_input" name="'+thisNameVal+'" value="'+thisTextVal+'"/>'); 
-                    }
-               }else if($(this).hasClass('card_no')){
-                   var getthisTextVal = $('input[name="card_no"]').val();
-                   
-                   $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+getthisTextVal+'"/>');
-               
-               }else{
-                   $(this).replaceWith('<input type="text" name="'+thisNameVal+'" value="'+thisTextVal+'"/>');
-               }*/
+               $(this).replaceWith('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+
             });        
             
         });
         
         //save my details updates
-        $(document).on('click', '.profile_btn', function(){
+        $('#my_profile').on('click', '.process-btn', function(){
             
             var form = $(this).parents('form');            
             form.find('.errors_msg').hide();
-            
+            showGridBoxLoadingWrapper(form);
+            hideGridBoxResultMessage(form);
             $.ajax({
                 url: '/my-profile',
                 data: form.serialize(),
                 type: 'POST',
                 success: function(rsp)
                 {
+                    hideGridBoxLoadingWrapper(form);
                     if(rsp == 'success')
                     {
+                        showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
                         document.location.reload(); 
                     }else{
-                        form.find('.errors_msg').html(rsp).fadeIn('fast');                        
+                        showGridBoxResultMessage(form, rsp, 'error');
                     }
                 }
             })
         });
         
+        //Products Page
+        $('#my_products').find('.grid-box-expandable').each(function(){            
+            var table = $(this);
+            table.find('.gbh-btn-expandable').click(function(){          
+                if(table.hasClass('grid-box-closed'))      
+                    table.removeClass('grid-box-closed').addClass('grid-box-opened');
+                else
+                    table.removeClass('grid-box-opened').addClass('grid-box-closed');
+                table.find('.grid-box-body').animate({'height': 'toggle'});
+            })
+        })
     })    
 })(jQuery);

@@ -143,6 +143,7 @@ function add_header_scripts()
 		$actions_depends[] = 'pie';
 	}
 
+    wp_enqueue_script('jquery_ui', get_stylesheet_directory_uri().'/js/jquery-ui-1.10.3.custom.js', $actions_depends);
     wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
     wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);
     wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends);
@@ -792,7 +793,7 @@ function flushMessages($class = '')
 {
     if(isset($_SESSION[MESSAGE_KEY]))
     {
-        echo '<div class="messages ' . $class . '">';
+        echo '<div id="messages-wrapper"  class="' . $class . '">';
         foreach($_SESSION[MESSAGE_KEY] as $row)
         {
             echo '<div class="message ' . $row['type'] . '">' . $row['message'] . "</div>";
@@ -801,3 +802,5 @@ function flushMessages($class = '')
     }
 }
 
+//Show Result Messages
+add_action('bp_before_container', 'flushMessages');
