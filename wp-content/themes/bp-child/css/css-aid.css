@@ -1106,6 +1106,7 @@ tr {
     width: 100%;
     height: 100%;
     text-align: center;
+    display: none;    
 }
 .loading b{
     display: block;
@@ -1127,6 +1128,7 @@ tr {
 /*************** Tab Boxes ********/
 .grid-box{
     position: relative;
+    overflow: hidden;
 }
 .grid-box .loading{
     background: #a8c2d7;
@@ -1269,13 +1271,41 @@ tr {
     background: #d1d1d1 url(../images/btn-sprites.png) no-repeat 8px -488px !important;    
     float: right;
 }
-
-
+/*** Grid Field Row***/
+.grid-box-body .field-row{
+    padding-bottom: 12px;
+}
+.grid-box-body .field-row label{
+    display: block;
+    font-weight: 600;
+    line-height: 18px;
+}
+.grid-box-body .field-row .input{
+    width: 100%;
+}
+.grid-box-body .field-row .textarea{
+    width: 100%;
+    resize: vertical;
+}
+.grid-box-body .field-row .radio-holder{
+    display: block;
+    margin:5px 0;
+}
+.grid-box-body .field-row .radio-holder label{
+    display: inline;
+    margin-right: 10px;
+}
 .grid-box-footer{
     margin-top: -1px;
     background: #f0f0f0;
     box-shadow: 0 12px 10px -10px #cbcbcb inset;
     box-shadow: 0 12px 10px -10px rgba(0, 0, 0, 0.2) inset;
+}
+.grid-box-footer .btn-row{
+    padding: 15px;
+}
+.grid-box-footer .btn-row .action-btn{
+    float: right;
 }
 /*** Table ***/
 .table-box .grid-box-body{

@@ -39,5 +39,5 @@ do_action( 'bp_before_group_header' );
 
 <?php
 do_action( 'bp_after_group_header' );
-do_action( 'template_notices' );
+//do_action( 'template_notices' );
 ?>

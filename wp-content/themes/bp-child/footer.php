@@ -60,56 +60,6 @@
 <!-- Tiny scrollbar-->	
 <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
 <!--IF[ie]><script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/PIE.js"></script><![endif]-->
-	
-<script type="text/javascript">
-jQuery(document).ready(function() {
-	
-	jQuery('#terms_co').click(function(){
-		jQuery('#registration').css('display', 'none');
-		jQuery('#scrollbar1').css('display', 'block');
-		setTimeout(function(){
-			jQuery('#scrollbar1').tinyscrollbar();
-		},100);
-	});	
-	
-	/*Accept*/
-	jQuery('#accept_terms').click(function(){
-		jQuery('#scrollbar1').css('display', 'none');
-		jQuery('#acc_tc_id').attr('checked','checked');
-		jQuery('#registration').css('display', 'block');
-	});	
-	
-	/*Reject*/
-	jQuery('#reject_terms').click(function(){
-		jQuery('#scrollbar1').css('display', 'none');
-		jQuery('#acc_tc_id').removeAttr('checked','checked');
-		jQuery('#registration').css('display', 'block');
-	});
-	
-	jQuery('#close_terms').click(function(){
-		jQuery('#scrollbar1').css('display', 'none');
-		jQuery('#registration').css('display', 'block');
-	});
-	
-    if (window.PIE) {
-		/* Test Suite Page */
-        jQuery('.issuer_homepage').each(function() {
-            PIE.attach(this);
-        });
-        jQuery('.radius15').each(function() {
-            PIE.attach(this);
-        });
-        jQuery('.view_compliant').each(function() {
-            PIE.attach(this);
-        });
-         jQuery('.payment_popup').each(function() {
-            PIE.attach(this);
-        });
-        
-    }
-    
-});
-</script>
 
 </body>
 </html>

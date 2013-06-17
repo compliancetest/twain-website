@@ -3,7 +3,8 @@
 if(!defined('MESSAGE_KEY'))
     define('MESSAGE_KEY', 'cp_messages');
 
-
+if(!defined('CHILD_TEMPLATE_DIRECTORY'))
+    define('CHILD_TEMPLATE_DIRECTORY', dirname( get_bloginfo('stylesheet_url')) );
 
 //Session Start
 add_action('init', 'cp_session_start');
@@ -132,11 +133,7 @@ function initialize_widgets() {
 add_action('wp_head', 'add_header_scripts');
 
 function add_header_scripts()
-{
-	//wp_deregister_script('jquery');
-	
-	//wp_enqueue_script('jquery_min', get_stylesheet_directory_uri().'/js/jquery-1.7.2.min.js');
-    
+{   
     $actions_depends = array('jquery');
 	if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
 		wp_enqueue_script('pie', get_stylesheet_directory_uri().'/js/PIE.js', $actions_depends);
@@ -145,12 +142,16 @@ function add_header_scripts()
 
     wp_enqueue_script('jquery_ui', get_stylesheet_directory_uri().'/js/jquery-ui-1.10.3.custom.js', $actions_depends);
     wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
-    wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);
-    wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends);
     wp_enqueue_script('cp-lightbox', get_stylesheet_directory_uri().'/js/jquery.custompopup.js', $actions_depends);
+    wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);        
+    wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends, '1.0', true);
+    if(bp_is_groups_component()){        
+        wp_enqueue_script('groups-download', get_stylesheet_directory_uri().'/groups/js/groups-downloads.js', $actions_depends, '1.0', true);
+    }
+    if(bp_is_item_admin()){
+        wp_enqueue_script('groups-admin', get_stylesheet_directory_uri().'/groups/js/groups-admin.js', $actions_depends, '1.0', true);
+    }
     
-	//wp_enqueue_script('actions', template_location(false).'/js/custom.js', $actions_depends);
-	//wp_enqueue_style('fonts', 'http://fonts.googleapis.com/css?family=Lobster|Arvo');
 }
 
 /******************************************************************* MENUS SUPPORT******************************************************************/
@@ -799,6 +800,7 @@ function flushMessages($class = '')
             echo '<div class="message ' . $row['type'] . '">' . $row['message'] . "</div>";
         }
         echo '</div>';
+        unset($_SESSION[MESSAGE_KEY]);
     }
 }
 

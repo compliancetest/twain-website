@@ -37,7 +37,7 @@
     </li>
     <?php if(bp_group_is_admin()) { ?>
     <li class="<?php echo (bp_current_action() == 'admin') ? 'active' : ''?>">
-        <a href="<?php echo bp_get_group_permalink()?>admin" rel="admin-container" class="<?php echo (bp_current_action() == 'admin') ? 'selected' : ''?>">
+        <a href="<?php echo bp_get_group_permalink()?>admin" rel="group_admin_page" class="<?php echo (bp_current_action() == 'admin') ? 'selected' : ''?>">
             <span class="left icon" id="icon_admin"></span>
             <span class="right text">ADMIN</span>
             <span class="tabactive"></span>

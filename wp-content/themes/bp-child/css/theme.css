@@ -4711,7 +4711,8 @@ span.button_sign {
 .add-new-btn span.p{
     background-position: 0 -128px;
 }
-.cancel-btn{
+.cancel-btn,
+.delete-btn{
     border-color: #9f9f9f;
     background: #b1b1b1;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c2c2c2), to(#9f9f9f));
@@ -4727,6 +4728,10 @@ span.button_sign {
 .cancel-btn span.p{
     background-position: 0 1px;
 }
+.delete-btn span.p{
+    background-position: 0 1px;
+}
+.delete-btn:hover,
 .cancel-btn:hover{
     background: #c1c1c2;
 }
@@ -4830,25 +4835,23 @@ span.button_sign {
 #my_profile .grid-box .btn-row{
     display: none;
 }
-#my_profile .grid-box .btn-row .loading{
-    display: none;
-}
-#my_profile .grid-box .message{
+
+.grid-box .message{
     padding: 4px 5px 4px 20px !important;
     margin: 5px 0 !important;    
     font-size: 12px;
     background-position: 3px center !important;
 }
-#my_profile .grid-box .error{
+.grid-box .error{
     background-image: url(../images/error-icon12.png);    
 }
-#my_profile .grid-box .success{
+.grid-box .success{
     background-image: url(../images/success-icon12.png);    
 }
-#my_profile .grid-box .warning{
+.grid-box .warning{
     background-image: url(../images/warning-icon12.png);    
 }
-#my_profile .grid-box .notice{
+.grid-box .notice{
     background-image: url(../images/notice-icon12.png);    
 }
 
@@ -5022,6 +5025,39 @@ min-height: 70px;
     left: 5px;
 }
 
+
+/*** Group Admin Section ***/
+#group_admin_page .grid-box .loading{
+    top: 31px;    
+}
+#group_details_box,
+#group_remove_box,
+#group_avatar_box{
+    width: 438px;
+}
+#group_privacy_box,
+#group_invitations_box{
+    width: 438px;    
+}
+
+#group_avatar_box .current_avatar img{
+    border: solid 1px #959595;
+    box-shadow: 0 0 10px 1px #999;
+    -moz-box-shadow: 0 0 10px 1px #999;
+    -webkit-box-shadow: 0 0 10px 1px #999;
+    -o-box-shadow: 0 0 10px 1px #999;    
+    width: 98px;
+    height: 98px;
+}
+#group_avatar_box #avatar-crop-pane{
+    float: left;
+}
+#group_avatar_box .grid-crop-body .action-btn{
+    margin: 125px 10px 0 30px;
+}
+#group_settings_box ul li{
+    padding-left: 17px;
+}
 /*** Calendar Style ***/
 .ui-datepicker{
     border:solid 1px #ccc;

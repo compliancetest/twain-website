@@ -2,7 +2,6 @@
 /**
 * Customize Buddy Press
 */
-
 //Add Terms and License Metabox on the Group Admin page
 add_action('bp_groups_admin_meta_boxes', 'add_terms_and_license_metabox_to_group');
 function add_terms_and_license_metabox_to_group()
@@ -68,3 +67,104 @@ function cp_bp_get_group_join_button_filter($button)
     return $button;
 }
 
+/********************************* Group Admin Sections ********************************************/
+//Group Name And Description
+add_action( 'init', 'groups_screen_group_admin_edit_details_by_ajax' );
+function groups_screen_group_admin_edit_details_by_ajax()
+{    
+    
+    if ( 'edit-details' != bp_get_group_current_admin_tab() )
+        return false;
+    
+    if ( bp_is_item_admin() ) {
+
+        $bp = buddypress();
+
+        // If the edit form has been submitted, save the edited details
+        if ( isset( $_POST['group-name'] ) ) {
+            // Check the nonce
+            if ( !check_admin_referer( 'groups_edit_group_details_by_ajax' ) )
+                return false;
+                
+            $result = groups_edit_base_group_details( $_POST['group-id'], $_POST['group-name'], $_POST['group-desc'], (int) $_POST['group-notify-members'] );
+            if ( !$result ) {
+                $message =  __( 'There was an error updating group details, please try again.', 'buddypress' );
+            } else {
+                $message =  __( 'Group details were successfully updated.', 'buddypress' );
+            }
+            
+            echo json_encode(array('result' => $result ? 'success' : 'error', 'message' => $message));
+            
+            do_action( 'groups_group_details_edited', $bp->groups->current_group->id );            
+            exit;
+        }
+        
+    }
+    
+}
+
+//Group Privacy Settings
+//Group Name And Description
+add_action( 'init', 'groups_edit_group_settings_by_ajax' );
+function groups_edit_group_settings_by_ajax()
+{   
+    if ( 'group-settings' != bp_get_group_current_admin_tab() )
+        return false;
+    
+    if ( bp_is_item_admin() ) {
+
+        $bp = buddypress();
+        // If the edit form has been submitted, save the edited details
+        if ( isset( $_POST['group-status'] ) || $_POST['group-invite-status']) {
+            // Check the nonce
+            if ( !check_admin_referer( 'groups_edit_group_settings_by_ajax' ) )
+                return false;
+            
+            // Checked against a whitelist for security
+            $allowed_status = apply_filters( 'groups_allowed_status', array( 'public', 'private', 'hidden' ) );
+            $status         = ( in_array( $_POST['group-status'], (array) $allowed_status ) ) ? $_POST['group-status'] : 'public';
+
+            // Checked against a whitelist for security
+            $allowed_invite_status = apply_filters( 'groups_allowed_invite_status', array( 'members', 'mods', 'admins' ) );
+            $invite_status           = in_array( $_POST['group-invite-status'], (array) $allowed_invite_status ) ? $_POST['group-invite-status'] : 'members';
+            
+            $result = groups_edit_group_settings( $_POST['group-id'], $enable_forum, $status, $invite_status );
+            
+            if (!$result) {
+                $message = __( 'There was an error updating group settings, please try again.', 'buddypress' );
+            } else {
+                $message = __( 'Group settings were successfully updated.', 'buddypress' );
+            }
+
+            do_action( 'groups_group_settings_edited', $bp->groups->current_group->id );
+            
+            echo json_encode(array('result' => $result ? 'success' : 'error', 'message' => $message));
+            
+            exit;
+        }
+        
+    }
+    
+}
+
+
+//Change Group Avatar Upload Messages
+add_filter('bp_core_avatar_original_max_width', 'bp_core_avatar_original_max_width_for_cp');
+function bp_core_avatar_original_max_width_for_cp()
+{
+    return 395;
+}
+
+add_action('groups_screen_group_admin_avatar', "groups_avatar_action_messages");
+function groups_avatar_action_messages()
+{
+    global $bp;
+    
+    if(isset($bp->template_message) && $bp->template_message)
+    {
+        addMessage($bp->template_message, $bp->template_message_type == 'error' ? 'error' : 'success');
+        //Remove Cookie
+        @setcookie('bp-message',      null, time() + 60 * 60 * 24, COOKIEPATH);
+        @setcookie('bp-message-type', null,    time() + 60 * 60 * 24, COOKIEPATH);
+    }
+}
