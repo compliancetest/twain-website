@@ -124,6 +124,8 @@ function groups_edit_group_settings_by_ajax()
             $allowed_status = apply_filters( 'groups_allowed_status', array( 'public', 'private', 'hidden' ) );
             $status         = ( in_array( $_POST['group-status'], (array) $allowed_status ) ) ? $_POST['group-status'] : 'public';
 
+            $enable_forum = 1;
+            
             // Checked against a whitelist for security
             $allowed_invite_status = apply_filters( 'groups_allowed_invite_status', array( 'members', 'mods', 'admins' ) );
             $invite_status           = in_array( $_POST['group-invite-status'], (array) $allowed_invite_status ) ? $_POST['group-invite-status'] : 'members';
@@ -292,5 +294,22 @@ function cp_groups_screen_group_admin_manage_members()
             }
         }
         
+    }
+}
+
+//Automatically Enable Group Forum
+add_action('init', 'cp_auto_enable_group_forum');
+function cp_auto_enable_group_forum()
+{
+    global $wpdb;
+    
+    if(bp_is_group())
+    {
+        $group = groups_get_current_group();
+        $query = 'UPDATE ' . $wpdb->prefix . 'bp_groups SET enable_forum=1 WHERE id=' . $group->id;
+        $wpdb->query($query);
+        $group->enable_forum = 1;
+        
+        return true;                
     }
 }
