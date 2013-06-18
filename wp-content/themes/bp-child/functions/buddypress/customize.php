@@ -155,8 +155,12 @@ function bp_core_avatar_original_max_width_for_cp()
     return 395;
 }
 
-add_action('groups_screen_group_admin_avatar', "groups_avatar_action_messages");
-function groups_avatar_action_messages()
+//Hook Buddypress action messages
+add_action('groups_screen_group_admin_avatar', "hook_buddypress_action_messages");
+add_action('groups_unbanned_member', "hook_buddypress_action_messages");
+add_action('groups_demoted_member', "hook_buddypress_action_messages");
+add_action('groups_group_request_managed', "hook_buddypress_action_messages");
+function hook_buddypress_action_messages()
 {
     global $bp;
     
@@ -166,5 +170,127 @@ function groups_avatar_action_messages()
         //Remove Cookie
         @setcookie('bp-message',      null, time() + 60 * 60 * 24, COOKIEPATH);
         @setcookie('bp-message-type', null,    time() + 60 * 60 * 24, COOKIEPATH);
+    }
+}
+
+//Manage Group Members
+add_action('init', 'cp_groups_screen_group_admin_manage_members');
+function cp_groups_screen_group_admin_manage_members()
+{
+    if ( 'manage-members' != bp_get_group_current_admin_tab() )
+        return false;
+    
+    if ( bp_is_item_admin() ) {
+                
+        $bp = buddypress();
+        // If the edit form has been submitted, save the edited details
+        if ( isset( $_POST['action'] ) && in_array($_POST['action'], array('ban', 'promote_to_mod', 'promote_to_admin', 'remove_from_group')) && isset( $_POST['id'] )) {
+            // Check the nonce
+            if ( !check_admin_referer( 'groups_manage_group_members' ) )
+                return false;
+                
+            $userIDs = $_POST['id'];
+            if(!$userIDs)
+                return false;
+            if(!is_array($userIDs))
+                $userIDs = array($userIDs);
+            //Ban
+            if($_POST['action'] == 'ban')
+            {
+                $success = array();
+                $failure = array();
+                foreach($userIDs as $userID)
+                {
+                    if ( !groups_ban_member( $userID, $bp->groups->current_group->id ) )
+                        $failure[] = cp_get_user_fullname($userID);
+                        
+                    else
+                        $success[] = cp_get_user_fullname($userID);                    
+
+                    do_action( 'groups_banned_member', $userID, $bp->groups->current_group->id );
+                }
+                //Set Error Message
+                if(count($success) > 0)
+                    addMessage('The user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . ' banned successfully.');
+                if(count($failure) > 0)
+                    addMessage('There was an error when banning the user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success), 'error');                
+                
+                bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin' );
+                
+            }
+            
+            //Promote to Mod
+            if($_POST['action'] == 'promote_to_mod')
+            {
+                $success = array();
+                $failure = array();
+                foreach($userIDs as $userID)
+                {
+                    if ( !groups_promote_member( $userID, $bp->groups->current_group->id, 'mod' ) )
+                        $failure[] = cp_get_user_fullname($userID);
+                        
+                    else
+                        $success[] = cp_get_user_fullname($userID);                    
+
+                    do_action( 'groups_banned_member', $userID, $bp->groups->current_group->id );
+                }
+                //Set Error Message
+                if(count($success) > 0)
+                    addMessage('The user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . ' promoted successfully.');
+                if(count($failure) > 0)
+                    addMessage('There was an error when promoting the user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success), 'error');                
+                
+                bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin' );
+            }
+            //Promote to Admin
+            if($_POST['action'] == 'promote_to_admin')
+            {
+                $success = array();
+                $failure = array();
+                foreach($userIDs as $userID)
+                {
+                    if ( !groups_promote_member( $userID, $bp->groups->current_group->id, 'admin' ) )
+                        $failure[] = cp_get_user_fullname($userID);
+                        
+                    else
+                        $success[] = cp_get_user_fullname($userID);                    
+
+                    do_action( 'groups_banned_member', $userID, $bp->groups->current_group->id );
+                }
+                //Set Error Message
+                if(count($success) > 0)
+                    addMessage('The user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . ' promoted successfully.');
+                if(count($failure) > 0)
+                    addMessage('There was an error when promoting the user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success), 'error');                
+                
+                bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin' );
+            }
+            
+            //Remove From Group
+            if($_POST['action'] == 'remove_from_group')
+            {
+                $success = array();
+                $failure = array();
+                foreach($userIDs as $userID)
+                {
+                    if ( !groups_remove_member( $userID, $bp->groups->current_group->id ) )
+                        $failure[] = cp_get_user_fullname($userID);
+                        
+                    else
+                        $success[] = cp_get_user_fullname($userID);                    
+
+                    do_action( 'groups_banned_member', $userID, $bp->groups->current_group->id );
+                }
+                //Set Error Message
+                if(count($success) > 0)
+                    addMessage('The user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . ' removed successfully.');
+                if(count($failure) > 0)
+                    addMessage('There was an error removing the user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . " from the group", 'error');                
+                
+                bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin' );
+                
+            }
+        }
+        
     }
 }

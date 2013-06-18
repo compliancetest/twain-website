@@ -168,3 +168,12 @@ function cp_user_organisation_edit()
     exit();
 
 }
+
+//Get User Full Name
+function cp_get_user_fullname($user_id)
+{
+    $fname = get_user_meta($user_id, 'first_name', true);
+    $lname = get_user_meta($user_id, 'last_name', true);
+    
+    return $fname . " " . $lname;
+}

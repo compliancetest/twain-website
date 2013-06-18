@@ -4768,6 +4768,12 @@ span.button_sign {
 .view-log-btn:hover{ 
     background: #c3c3c5;
 }
+.small-action-btn{
+    font-size: 10px;
+    height: 16px;
+    line-height: 16px;
+    font-weight: bold;
+}
 /*** Common Popup Boxes Style ***/
 .popup-box{
     margin: 0 auto;
@@ -4836,22 +4842,27 @@ span.button_sign {
     display: none;
 }
 
-.grid-box .message{
+.grid-box .message,
+.popup-box .message{
     padding: 4px 5px 4px 20px !important;
     margin: 5px 0 !important;    
     font-size: 12px;
     background-position: 3px center !important;
 }
-.grid-box .error{
+.grid-box .error,
+.popup-box .error{
     background-image: url(../images/error-icon12.png);    
 }
-.grid-box .success{
+.grid-box .success,
+.popup-box .success{
     background-image: url(../images/success-icon12.png);    
 }
-.grid-box .warning{
+.grid-box .warning,
+.popup-box .warning{
     background-image: url(../images/warning-icon12.png);    
 }
-.grid-box .notice{
+.grid-box .notice,
+.popup-box .notice{
     background-image: url(../images/notice-icon12.png);    
 }
 
@@ -5027,19 +5038,20 @@ min-height: 70px;
 
 
 /*** Group Admin Section ***/
+#group_admin_page .grid-box-body{
+    background: #fff;
+}
 #group_admin_page .grid-box .loading{
     top: 31px;    
 }
 #group_details_box,
 #group_remove_box,
-#group_avatar_box{
-    width: 438px;
-}
+#group_avatar_box,
 #group_privacy_box,
+#group_members_box,
 #group_invitations_box{
     width: 438px;    
 }
-
 #group_avatar_box .current_avatar img{
     border: solid 1px #959595;
     box-shadow: 0 0 10px 1px #999;
@@ -5057,6 +5069,115 @@ min-height: 70px;
 }
 #group_settings_box ul li{
     padding-left: 17px;
+}
+
+.member-list li{
+    border-bottom: solid 1px #959595;
+    padding: 12px 0;
+}
+.member-list li .avatar{
+    width: 28px;
+    height: 28px;
+    float: left;
+    border: solid 1px #959595; 
+    margin-right: 10px;
+}
+.member-list li .member-info{
+    float: left;
+    width: 180px;
+}
+.member-list li .m-name{
+    font-size: 12px;
+    color: #127dbb;
+}
+.member-list li .m-email{
+    font-size: 10px;
+    display: block;
+    margin-top: -4px;
+    color: #127dbb;
+}
+.member-list li .activity{
+    font-size: 10px;
+    font-style: italic;
+    display: block;
+    margin-top: -1px;
+}
+
+.member-list li .action{
+    float: right;
+}
+.member-list li .action .cancel-btn{
+    margin-left: 10px;
+}
+
+#group_admin_page #group_members_body{
+    background: #f9f9f9;
+    border-top-color: #eaeaea;
+}
+
+#group_members_body .nav{
+    border: solid 1px #a9a9a9;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    float: left;
+    margin-left: 8px;
+}
+#group_members_body .nav li{
+    float: left;    
+    background: url(../images/gm-nav-bg.png) no-repeat right center;
+    padding-right: 1px;     
+}
+#group_members_body .nav li.last-li{
+    padding: 0;
+    background: none;
+}
+#group_members_body .nav a{
+    display: block;
+    font-size: 11px;
+    color: #5f6670;
+    padding: 5px 10px;
+    text-shadow: 0 -1px 1px #fff;    
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e9ebed), to(#d8d8d8));
+    background: -webkit-linear-gradient(top, #e9ebed, #d8d8d8);
+    background: -moz-linear-gradient(top, #e9ebed, #d8d8d8);
+    background: -ms-linear-gradient(top, #e9ebed, #d8d8d8);
+    background: -o-linear-gradient(top, #e9ebed, #d8d8d8);
+}
+#group_members_body .nav a:hover,
+#group_members_body .nav a.selected{
+    background: #127dbb;
+    color: #fff;
+    text-shadow: 0 -1px 1px #0d5783;
+}
+#group_members_body .field-row{
+    padding: 0 20px;
+}
+#group_members_body .member-list li{
+    width: 50%;
+    float: left;
+    overflow: hidden;
+    border-bottom: none;
+    padding-top: 0;
+}
+#group_members_body .member-list li .chk{
+    float: left;
+    margin: 8px 0 0;
+}
+#group_members_body .member-list li .avatar{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#group_members_body .member-list li .member-info{
+    width: 140px;
+}
+#group_members_body p{
+    margin: 0;
+    padding: 10px 0;
+}
+#group_members_body .small-action-btn{
+    margin-top: 3px;
 }
 /*** Calendar Style ***/
 .ui-datepicker{

@@ -139,10 +139,172 @@
     <div class="right">
         <!-- Memebers -->
         <div class="grid-box" id="group_members_box">
-            <form name="group-privacy-form" id="group-privacy-form" action="<?php bp_group_admin_form_action('group-settings')?>" method="post" enctype="multipart/form-data" role="main">
-            </form>
+            <div class="grid-box-header">
+                <h5>Members</h5>
+            </div>
+            
+            <div class="grid-box-body">
+                <div class="column nopaddingbottom">
+                    <form name="group-requests-form" id="group-requests-form" action="<?php bp_group_admin_form_action('membership-requests')?>" method="post" enctype="multipart/form-data" role="main">
+                    <?php if(bp_group_has_membership_requests()){ ?>
+                    <p class="nomarginbottom">The following persons wants to join the Group:</p>
+                    <div class="field-row">
+                        <ul id="request-list" class="member-list">
+                            <?php while ( bp_group_membership_requests() ) : bp_group_the_membership_request(); ?>
+                                <?php
+                                    global $requests_template;    
+                                    $rEmail = bp_core_get_user_email($requests_template->request->user_id);
+                                    $rName = cp_get_user_fullname($requests_template->request->user_id);
+//                                    bp_group_request_user_link();
+                                ?>
+                                <li>
+                                    <?php bp_group_request_user_avatar_thumb(); ?>
+                                    <span class="member-info">
+                                        <span class="m-name"><?php echo $rName?></span><br />
+                                        <span class="m-email"><?php echo $rEmail?></span>
+                                        <span class="activity"><?php bp_group_request_time_since_requested(); ?></span>
+                                    </span>
+                                    <?php do_action( 'bp_group_membership_requests_admin_item' ); ?>
+                                    <span class="action">
+                                        <a href="<?php echo bp_get_group_request_accept_link()?>" class="action-btn process-btn no-submit"><span class="p"></span><span class="t">ACCEPT</span></a>
+                                        <a href="<?php echo bp_get_group_request_reject_link()?>" class="action-btn cancel-btn"><span class="p"></span><span class="t">REJECT</span></a>
+                                        <?php do_action( 'bp_group_membership_requests_admin_item_action' ); ?>
+                                    </span>
+                                    <div class="clear"></div>
+                                </li>
+
+                            <?php endwhile; ?>
+                        </ul>
+                    </div>
+                    <?php }else{ ?>
+                        <p><?php _e( 'There are no pending membership requests.', 'buddypress' ); ?></p>
+                    <?php } ?>
+                    </form>                    
+                </div>
+            </div>
+            <div class="grid-box-body" id="group_members_body">
+            <form name="group-members-form" id="group-members-form" action="<?php bp_group_admin_form_action('manage-members')?>" method="post" enctype="multipart/form-data" role="main">
+                <div class="space20"></div>
+                <div class="nav">
+                    <ul>
+                        <li><a href="#" data-action="ban">Kick &amp; Ban</a></li>
+                        <li><a href="#" data-action="promote_to_mod">Promote to Mod</a></li>
+                        <li><a href="#" data-action="promote_to_admin">Promote to Admin</a></li>
+                        <li class="last-li"><a href="#" data-action="remove_from_group">Remove from Group</a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+                <!-- Administrators -->
+                <?php if(bp_has_members( '&include='. bp_group_admin_ids())){?>        
+                <div class="field-row">
+                    <p><b>Administrator</b></p>
+                    <ul id="admins-list" class="member-list">                    
+                        <?php while ( bp_members() ) : bp_the_member(); ?>
+                        <?php
+                            global $members_template;
+                            $tName = cp_get_user_fullname($members_template->member->ID);
+                            $tEmail = bp_get_member_user_email();
+                        ?>
+                        <li>
+                            <input type="checkbox" name="id[]" value="<?php echo $members_template->member->ID?>" class="chk" />
+                            <?php echo bp_core_fetch_avatar( array( 'item_id' => bp_get_member_user_id(), 'type' => 'thumb', 'width' => 28, 'height' => 28, 'alt' => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_member_name() ) ) ); ?>
+                            <span class="member-info">
+                                <span class="m-name"><?php echo $tName ?></span>
+                                <span class="m-email"><?php echo $tEmail?></span>
+                                <span class="clear"></span>
+                                <?php if(count( bp_group_admin_ids( false, 'array' ) ) > 1){?>
+                                <a class="action-btn process-btn small-action-btn no-submit" href="<?php bp_group_member_demote_link( bp_get_member_user_id() ); ?>"><?php _e( 'Demote to Member', 'buddypress' ); ?></a>
+                                <?php } ?>
+                            </span>
+                            <div class="clear"></div>
+                        </li>
+                        <?php endwhile; ?>                
+                    </ul>   
+                    <div class="clear"></div>             
+                </div>
+                <?php } ?>
+                
+                <!-- Moderators -->
+            <?php if(bp_group_has_moderators()){ ?>
+                <?php if(bp_has_members( '&include='. bp_group_mod_ids())){?>        
+                <div class="field-row">
+                    <p><b>Moderators</b></p>
+                    <ul id="mods-list" class="member-list">                    
+                        <?php while ( bp_members() ) : bp_the_member(); ?>
+                        <?php
+                            global $members_template;
+                            $tName = cp_get_user_fullname($members_template->member->ID);                            
+                            $tEmail = bp_get_member_user_email();
+                        ?>
+                        <li>
+                            <input type="checkbox" name="id[]" value="<?php echo $members_template->member->ID?>" class="chk" />
+                            <?php echo bp_core_fetch_avatar( array( 'item_id' => bp_get_member_user_id(), 'type' => 'thumb', 'width' => 28, 'height' => 28, 'alt' => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_member_name() ) ) ); ?>
+                            <span class="member-info">
+                                <span class="m-name"><?php echo $tName ?></span>
+                                <span class="m-email"><?php echo $tEmail?></span>
+                                <span class="clear"></span>
+                                <a class="action-btn small-action-btn process-btn no-submit" href="<?php bp_group_member_demote_link( bp_get_member_user_id() ); ?>"><?php _e( 'Demote to Member', 'buddypress' ); ?></a>
+                            </span>
+                            <div class="clear"></div>
+                        </li>
+                        <?php endwhile; ?>                
+                    </ul>
+                    <div class="clear"></div>                
+                </div>
+                <?php } ?>
+            <?php } ?>
+                <!-- Members -->
+              <?php if(bp_group_has_members('per_page=15&exclude_banned=false')){ ?>                
+                <div class="field-row">
+                    <p><b>Members</b></p>
+                    <?php if(bp_group_member_needs_pagination()){ ?>
+                    <div class="pagination no-ajax">
+                        <div id="member-count" class="pag-count">
+                            <?php bp_group_member_pagination_count(); ?>
+                        </div>
+                        <div id="member-admin-pagination" class="pagination-links">
+                            <?php bp_group_member_admin_pagination(); ?>
+                        </div>
+                    </div>
+                    <?php } ?>       
+                    <ul id="members-list" class="member-list">
+                    <?php while ( bp_group_members() ) : bp_group_the_member(); ?>
+                        <?php
+                            global $members_template;                            
+                            $tName = cp_get_user_fullname($members_template->member->user_id);
+                            $tEmail = $members_template->member->user_email;                        
+                        ?>
+                        <li>
+                            <input type="checkbox" name="id[]" value="<?php echo $members_template->member->user_id?>" class="chk" />
+                            <?php bp_group_member_avatar_mini(28, 28); ?>                        
+                            <span class="member-info">
+                                <span class="m-name"><?php echo $tName ?></span> 
+                                <?php if ( bp_get_group_member_is_banned() ) _e( ' <font color="#ce1515"><i>(banned)</i></font>', 'buddypress'); ?><br />
+                                <span class="m-email"><?php echo $tEmail?></span>
+                                <span class="clear"></span>
+                                <?php if( bp_get_group_member_is_banned()){ ?>
+                                    <a href="<?php bp_group_member_unban_link(); ?>" class="action-btn small-action-btn process-btn no-submit" title="<?php _e( 'Unban this member', 'buddypress' ); ?>">Unban</a>
+                                <?php }?>                                
+                            </span>                        
+                        </li>
+                    <?php endwhile; ?>
+                    </ul>         
+                    <div class="clear"></div>
+                </div>
+              <?php }else{ ?>
+                <div class="field-row">
+                    <p><b>Members</b></p>
+                    <?php _e( 'This group has no members.', 'buddypress' ); ?>
+                </div>
+              <?php } ?>
+              <div class="space15"></div>
+              <?php wp_nonce_field( 'groups_manage_group_members' ); ?> 
+              <input type="hidden" id="action" name="action" value="" />
+              </form>
+            </div>
         </div>
-        
+        <div class="space20"></div>
         <!-- Group Privacy -->
         <div class="grid-box" id="group_privacy_box">
             <form name="group-privacy-form" id="group-privacy-form" action="<?php bp_group_admin_form_action('group-settings')?>" method="post" enctype="multipart/form-data" role="main">

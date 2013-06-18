@@ -1,5 +1,7 @@
 (function($){
     $('#group_admin_page .process-btn').click(function(){
+        if($(this).hasClass('no-submit'))
+            return true;
         $(this).parents('form').submit();
         return false;
     })
@@ -61,6 +63,21 @@
             }
         })
         
+        return false;
+    })
+    
+    //Manage Members Page
+    $('#group-members-form').submit(function(){
+        if($('#group-members-form #action').val() == '')    
+            return false;
+        
+        //Checked inputs
+        if($('#group-members-form .chk:checked').length < 1)    
+            return false;
+    })
+    $('#group-members-form .nav a').click(function(){
+        $('#group-members-form #action').val($(this).attr('data-action'));
+        $('#group-members-form').submit();
         return false;
     })
 })(jQuery)

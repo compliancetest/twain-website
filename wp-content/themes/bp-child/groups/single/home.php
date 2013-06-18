@@ -83,14 +83,14 @@
                             <div class="space5"></div>
                             <div class="err_request"></div>
                         </div>
-                        <div class="clear"></div>    
-                        <div class="message" style="display: none;">Please aggree the Terms & Conditions and License Agreement.</div>
+                        <div class="clear"></div>                            
                     </form>    
                 </div>
-                <div class="popup-box-footer radius6 noradiustop">                                        
-                <a href="javascript: void(0)" class="action-btn process-btn"><span class="p"></span><span class="t">REGISTER</span></a>
+                <div class="popup-box-footer radius6 noradiustop">                                                        
+                    <a href="javascript: void(0)" class="action-btn process-btn"><span class="p"></span><span class="t">REGISTER</span></a>
                     <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
                     <div class="clear"></div>
+                    <div class="message" style="display: none;">Please aggree the Terms & Conditions and License Agreement.</div>
                 </div>
                 <a id="close-popup-community" class="close_btn"></a>                
             </div>

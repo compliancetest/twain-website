@@ -12,10 +12,10 @@
         var form = $('#join-community-form');
         if(!form.find('#agree_community_terms').prop('checked') || !form.find('#agree_community_license').prop('checked'))
         {
-            $('#join-community-form .message').html('You must agree the community Terms & Conditions and License Agreement.').addClass('error').fadeIn('fast');
+            $('#community_registration .message').html('You must agree the community Terms & Conditions and License Agreement.').addClass('error').fadeIn('fast');
             return false;
         }
-        $('#join-community-form .message').hide();
+        $('#community_registration .message').hide();
         gid = form.attr('data-group-id');
         
         var nonce = form.attr('action');
@@ -32,12 +32,15 @@
             function(response){            
                 if(response == 'Error joining group' || response == 'Error requesting membership')
                 {
-                    $('#join-community-form .message').html(response).addClass('error').fadeIn('fast');
+                    $('#community_registration .message').html(response).addClass('error').fadeIn('fast');
                 }else{
                     $('#community_registration .close_btn').click();            
                     //Change the Request Membership Button
                     $('#item-buttons a.request-membership').unbind('click').attr('href', '#').attr('class', 'group-button pending membership-requested button button_medium status_btn_on_hold white_txt radius6').html('Request Sent');
-                    alert('Your request has been sent successfully!');
+                    $('#community_registration .message').html('Your request has been sent successfully!').removeClass('error').addClass('success').fadeIn('fast');
+                    setTimeout(function(){
+                        $('#community_registration .close_btn').click();    
+                    }, 5000);
                 }
             }
         );
