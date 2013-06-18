@@ -430,6 +430,11 @@ jQuery(document).ready(function($) {
         buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
         buttonImageOnly: true
     })
+    
+    jQuery('a.submit-btn').click(function(){
+        jQuery(this).parents('form').submit();
+        return false;
+    })
 
 });
 

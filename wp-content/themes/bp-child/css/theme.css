@@ -134,10 +134,10 @@ body, html{min-height: 100%;}
 input[type="button"], input[type="button"]:hover, 
 input[type="search_button"], input[type="search_button"]:hover, 
 input[type="submit"], input[type="submit"]:hover {
-padding: 10px;
+/*padding: 10px;
 color: white;
 font-family: 'Open Sans', Arial, sans-serif;
-font-weight: 700;
+font-weight: 700;*/
 }
 
 .padding0-10{
@@ -239,7 +239,7 @@ a:hover {
             font-weight: normal;
             font-size: 11px;
         }
-
+/*
 #inputs input[type="text"] {
     font-size: 12px;
     color: #aaaaaa;
@@ -313,10 +313,10 @@ a:hover {
         -moz-text-shadow: 0px -1px 0px #1d5c91;
         -webkit-text-shadow: 0px -1px 0px #1d5c91;
         -o-text-shadow: 0px -1px 0px #1d5c91;
-}
+}*/
 
 input[type="button"] {
-    float: left;
+    /*float: left;
     background: url(../images/red_singup.jpg) top center repeat-x;
     border-radius: 5px;
     border: 1px solid #7b1413;
@@ -324,11 +324,11 @@ input[type="button"] {
     text-shadow: 0px -1px 0px #1d5c91;
     -moz-text-shadow: 0px -1px 0px #7b1413;
     -webkit-text-shadow: 0px -1px 0px #7b1413;
-    -o-text-shadow: 0px -1px 0px #7b1413;
+    -o-text-shadow: 0px -1px 0px #7b1413;*/
 }
 
 input[type="button"]:hover {
-        background-image: url(../images/white_gloss.png);
+        /*background-image: url(../images/white_gloss.png);
         text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
         -moz-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
         -webkit-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
@@ -337,18 +337,18 @@ input[type="button"]:hover {
         text-shadow: 0px -1px 0px #1d5c91;
         -moz-text-shadow: 0px -1px 0px #7b1413;
         -webkit-text-shadow: 0px -1px 0px #7b1413;
-        -o-text-shadow: 0px -1px 0px #7b1413;
+        -o-text-shadow: 0px -1px 0px #7b1413;*/
 
 }
 
-            input[type="button"], input[type="search_button"], input[type="search_button"]:hover, input[type="button"]:hover, input[type="submit"], input[type="submit"]:hover {
-                padding: 10px;
-                color: #ffffff;
-                font-family: 'Open Sans', Arial, sans-serif;
-                font-weight: 700;
-                font-size: 14px;
-                height: 51px;
-            }
+input[type="button"], input[type="search_button"], input[type="search_button"]:hover, input[type="button"]:hover, input[type="submit"], input[type="submit"]:hover {
+/*    padding: 10px;*/
+/*    color: #ffffff;*/
+    /*font-family: 'Open Sans', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    height: 51px;*/
+}
 
 .wp-user-form input[type="submit"]{
     float: left;
@@ -2012,6 +2012,7 @@ font-size: 12px;
     height: 51px;
     position: absolute;
     top: 0px;
+    color: #fff;
     left: 212px;
 }
 
@@ -5181,9 +5182,181 @@ min-height: 70px;
 }
 /*** Calendar Style ***/
 .ui-datepicker{
-    border:solid 1px #ccc;
+    font-family: 'Open Sans',Arial,Tahoma,Helevetica,sans-serif;
+    border:solid 1px #cbcbcb;
     background: #fff;
-    border-radius: 3px 3px 0 0 !important;    
-    -moz-border-radius: 3px 3px 0 0 !important;    
-    -webkit-border-radius: 3px 3px 0 0 !important;    
+    border-radius: 3px !important;    
+    -moz-border-radius: 3px !important;    
+    -webkit-border-radius: 3px !important;    
+    padding: 3px;
+    width: 214px;
+}
+.ui-datepicker .ui-datepicker-header{
+    background: #2c80e8;
+    border: solid 1px #1b66c3;
+    border-radius: 3px !important;    
+    -moz-border-radius: 3px !important;    
+    -webkit-border-radius: 3px !important;    
+    padding: 3px 0;
+    color: #fff;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    margin-bottom: 3px;
+}
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next{
+    height: 16px;
+    width: 11px;
+    background: url(../images/prev-next-icon.png) no-repeat 0 0;
+    top: 6px;
+    cursor: pointer;
+}
+.ui-datepicker .ui-datepicker-prev{
+    left: 5px;
+}
+.ui-datepicker .ui-datepicker-next{
+    background-position: 0 -63px;
+    right: 5px;
+}
+.ui-datepicker .ui-state-hover{
+    border: none;
+    
+}
+.ui-datepicker-calendar thead{
+    border:solid 1px #cbcbcb;
+    border-radius: 3px !important;    
+    -moz-border-radius: 3px !important;    
+    -webkit-border-radius: 3px !important;
+}
+.ui-datepicker-calendar th{
+    background: #f2f2f2;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#e5e5e5));
+    background: -webkit-linear-gradient(top, #ffffff, #e5e5e5);
+    background: -moz-linear-gradient(top, #ffffff, #e5e5e5);
+    background: -ms-linear-gradient(top, #ffffff, #e5e5e5);
+    background: -o-linear-gradient(top, #ffffff, #e5e5e5);
+    font-size: 11px;
+    color: #2a2a2a;
+    font-family: 'Open Sans',Arial,Tahoma,Helevetica,sans-serif;
+}
+.ui-datepicker-calendar th.ui-datepicker-week-end{
+    color: #d10707;
+}
+.ui-datepicker tr{
+    border: none;
+}
+.ui-datepicker tr:nth-child(even){
+    background: transparent;
+}
+.ui-datepicker .ui-state-default{
+    background: #70abf4;
+    border: solid 1px #2c80e8;
+    text-align: center;
+    color: #2a2a2a;
+    height: 18px;
+    line-height: 18px;
+    
+}
+
+/*** Forum ***/
+.bbp-search-form{
+    float: right;
+    margin-top: 5px;
+}
+.bbp-search-form label{
+    display: block;
+    float: left;
+    border: solid 1px #d8d8d8;
+    padding: 9px 0 9px 9px;
+    height: 17px;
+    font-style: italic;
+    line-height: 17px;
+}
+.bbp-search-form label input{
+    width: 85px;
+    padding: 0 1px;
+    box-shadow: none !important;
+    border: none;
+}
+.bbp-search-form .button{
+    border: none;
+    width: 38px !important;
+    height: 36px;
+    background: url(../images/search-btn-bg.png) no-repeat !important;
+    text-indent: -999px;
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    
+}
+#bbpress-forums div.bbp-template-notice.info{
+    float: left;
+    width: 650px;
+    padding: 0 9px;
+    clear: none;
+}
+#bbpress-forums .bbp-pagination{
+    font-weight: bold;
+}
+#bbpress-forums ul.bbp-lead-topic, 
+#bbpress-forums ul.bbp-topics, 
+#bbpress-forums ul.bbp-forums, 
+#bbpress-forums ul.bbp-replies, 
+#bbpress-forums ul.bbp-search-results{
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+.topic-title-row,
+.topic-tags-row,    
+.topic-types-row{    
+    float: left;
+    margin: 0 20px 0 0;
+}
+.bbp-topic-form,
+.bbp-reply-form{
+    padding: 0;
+    margin: 0;
+}
+.bbp-form-inner{
+    padding: 15px;
+    border-top: solid 1px #d8d8d8;
+    background: #f8f8f8;
+}
+#bbpress-forums fieldset.bbp-form .field-row{
+    float: left;
+    margin-right: 20px;
+}
+#bbpress-forums fieldset.bbp-form .field-row label{
+    display: block;
+    padding-bottom: 5px
+}
+#bbp_topic_title{
+    width: 298px;    
+}
+#bbp_topic_tags{
+    width: 196px;    
+}
+#bbpress-forums fieldset.bbp-form .field-row select{
+    height: 26px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: solid 1px #cbcbcb;
+}
+div#bbpress-forums fieldset.bbp-form legend{
+    font-size: 13px;
+    background: url(../images/plus-icon15.png) no-repeat left center;
+    padding-left: 20px;
+    color: #2c80e8;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#bbpress-forums .bbp-body div.odd, #bbpress-forums .bbp-body ul.odd{
+    background: #fff;
+    
+}
+body #bbpress-forums fieldset.bbp-form{
+    border: none;
+    padding: 0;
 }

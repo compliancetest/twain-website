@@ -9,7 +9,7 @@
 
 ?>
 
-<div id="bbpress-forums" class="tab-content white_bcg column">
+<div id="bbpress-forums" class="tab-content white_bcg padding10">
 
 <?php if(bbp_is_search()){ ?>
     <?php bbp_set_query_name( 'bbp_search' ); ?>
@@ -53,7 +53,7 @@
 	<?php else : ?>
 
 		<?php bbp_single_forum_description(); ?>
-
+        <div class="clear"></div>
 		<?php if ( bbp_has_forums() ) : ?>
 
 			<?php bbp_get_template_part( 'loop', 'forums' ); ?>
