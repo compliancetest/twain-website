@@ -1217,7 +1217,6 @@ function bbp_query_post_parent__in( $where, $object = '' ) {
 		$ids    = implode( ',', array_map( 'absint', $object->query_vars['post_parent__not_in'] ) );
 		$where .= " AND $wpdb->posts.post_parent NOT IN ($ids)";
 	}
-
 	// Return possibly modified $where
 	return $where;
 }

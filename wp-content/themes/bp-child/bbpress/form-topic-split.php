@@ -90,12 +90,13 @@
 							</div>
 						</fieldset>
 
-						<div class="bbp-template-notice error">
-							<p><?php _e( '<strong>WARNING:</strong> This process cannot be undone.', 'bbpress' ); ?></p>
+						<div class="message notice">
+							<?php _e( '<strong>WARNING:</strong> This process cannot be undone.', 'bbpress' ); ?>
 						</div>
 
 						<div class="bbp-submit-wrapper">
-							<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_merge_topic_submit" name="bbp_merge_topic_submit" class="button submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
+							<input type="hidden" id="bbp_merge_topic_submit" name="bbp_merge_topic_submit" value="Submit" />
+                            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SUBMIT</span></a>
 						</div>
 					</div>
 

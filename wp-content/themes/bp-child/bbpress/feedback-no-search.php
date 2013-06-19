@@ -8,7 +8,6 @@
  */
 
 ?>
-
 <div class="bbp-template-notice">
-	<p><?php _e( 'Oh bother! No search results were found here!', 'bbpress' ); ?></p>
+	<p>Oh bother! No search results were found here! <a href="<?php bp_group_permalink()?>forum"><b>Back to Forum Page</b></a></p>
 </div>

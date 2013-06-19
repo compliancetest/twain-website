@@ -32,6 +32,7 @@ require_once(THE_FUNCTION . '/user/user.php');
 
 //Buddypress Custome Functions
 require_once(THE_FUNCTION . '/buddypress/customize.php');
+require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
 //Test Suites Functions
 require_once(THE_FUNCTION . '/test-suites.php');

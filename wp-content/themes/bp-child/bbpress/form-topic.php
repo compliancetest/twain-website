@@ -34,7 +34,7 @@
 			<?php do_action( 'bbp_theme_before_topic_form' ); ?>
             
             <fieldset class="bbp-form">
-                <legend>
+                <legend <?php echo !bbp_is_topic_edit() ? 'class="new-topic"' : '' ?>>
 			        <?php
 				        if ( bbp_is_topic_edit() )
 					        printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );

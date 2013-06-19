@@ -134,12 +134,19 @@ function bbp_has_topics( $args = '' ) {
 		$default['term']     = bbp_get_topic_tag_slug();
 		$default['taxonomy'] = bbp_get_topic_tag_tax_id();
 	}
-
-	/** Setup *****************************************************************/
+    
+    /** Setup *****************************************************************/
 
 	// Parse arguments against default values
 	$r = bbp_parse_args( $args, $default, 'has_topics' );
 
+    /*** For Buddypress group by eric ***/
+    $userGroupForumIDs = getCurrentUserGroupForumIDs();
+    
+    if($userGroupForumIDs)
+        $r['post_parent__in'] = $userGroupForumIDs;
+    
+    
 	// Get bbPress
 	$bbp = bbpress();
 

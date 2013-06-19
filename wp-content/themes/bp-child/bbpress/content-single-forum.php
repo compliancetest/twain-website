@@ -9,7 +9,7 @@
 
 ?>
 
-<div id="bbpress-forums" class="tab-content white_bcg padding10">
+<div id="bbpress-forums" class="tab-content white_bcg padding10 forum-homepage">
 
 <?php if(bbp_is_search()){ ?>
     <?php bbp_set_query_name( 'bbp_search' ); ?>
