@@ -25,7 +25,7 @@ do_action( 'bp_before_group_header' );
                 if(!is_user_logged_in())
                 {                       
             ?>
-            <div class="generic-button group-button private"><a href="<?php bp_group_permalink()?>" title="Join Community" class="group-button register popup button button_medium button_red white_txt radius6">Join Community</a></div>
+            <div class="generic-button group-button private"><a href="#registration-popup" title="Join Community" class="group-button register popup button button_medium button_red white_txt radius6" rel="custom-popup" cp-type="inline">Join Community</a></div>
             <?php
                 }else{
                     do_action( 'bp_group_header_actions' );     

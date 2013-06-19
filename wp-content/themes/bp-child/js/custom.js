@@ -415,11 +415,8 @@ jQuery(document).ready(function($) {
         jQuery('#registration').hide();
     });
     
-    jQuery(document).on('click', '.register', function(){
-        jQuery('#dinamic_pop').hide();
-        jQuery('#registration-popup').cplightbox();
-        return false;
-    });
+    //Custom Popup Box
+    jQuery("a[rel='custom-popup']").cplightbox();
     
     //Append loading div to grid boxes
     jQuery('.grid-box .btn-row').append('<div class="loading"><div><b>SAVING YOUR DATA</b><span>Please wait...</span></div></div>');

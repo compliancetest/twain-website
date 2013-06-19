@@ -1,5 +1,5 @@
 <?php
-
+ 
 add_filter('bbp_has_search_results', 'group_search_filter', 2, 10);
 
 function group_search_filter($have_posts, $query)

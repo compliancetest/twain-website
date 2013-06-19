@@ -748,6 +748,9 @@ background: url(../images/expandable_arrow_o.png) left center no-repeat !importa
     padding: 3px;
     border: 1px solid black;
     font-size: 11px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 .simple_tooltip_pop {
@@ -877,7 +880,7 @@ border-bottom: 0px !important;
 }
 
 .grid_head .grid_cell {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 13px;
 }
 
@@ -4643,194 +4646,6 @@ span.button_sign {
     margin: 0 5px 0 0;
 }
 
-/*** Create Common Button Styles ***/
-.action-btn{
-    border-style: solid;
-    border-width: 1px;
-    color: #fff !important;
-    font-family: 'Open Sans', Arial;
-    font-size: 11px;    
-    display: block;
-    height: 22px;
-    line-height: 22px;
-    padding: 0 7px 0 5px;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    text-decoration: none !important;
-    float: left;
-}
-.action-btn span.p{
-    display: block;
-    float: left;
-    background-image: url(../images/btn-sprites.png);
-    background-repeat: no-repeat;
-    width: 20px;    
-    height: 100%;
-    margin: 0;
-}
-.action-btn span.t{    
-    float: left;
-    padding:0 0 0 5px;
-    margin: 0;
-    text-shadow: 0 -1px 0 #777778; /**For Old Browser **/
-    text-shadow: 0 -1px 0 rgba(0,0,0, 0.35);
-}
-.process-btn,
-.add-new-btn,
-.certify-btn,
-.edit-btn{
-    border-color: #369817;
-    background: #39a517;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3eb618), to(#369817));
-    background: -webkit-linear-gradient(top, #3eb618, #369817);
-    background: -moz-linear-gradient(top, #3eb618, #369817);
-    background: -ms-linear-gradient(top, #3eb618, #369817);
-    background: -o-linear-gradient(top, #3eb618, #369817);
-/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#268fe8', endColorstr='#369817',GradientType=0 );     */
-    box-shadow: 0 1px 0 0 #95d780 inset;
-    -moz-box-shadow: 0 1px 0 0 #95d780 inset;
-    -webkit-box-shadow: 0 1px 0 0 #95d780 inset;
-}
-.certify-btn span.p,
-.process-btn span.p{
-    background-position: 0 -43px;
-}
-.process-btn:hover,
-.edit-btn:hover,
-.certify-btn:hover,
-.add-new-btn:hover{
-    background: #3eb518;
-}
-.edit-btn span.p{
-    background-position: 0 -90px;
-}
-.edit-btn span.t{
-    padding-left: 3px;
-}
-
-.add-new-btn span.p{
-    background-position: 0 -128px;
-}
-.cancel-btn,
-.delete-btn{
-    border-color: #9f9f9f;
-    background: #b1b1b1;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c2c2c2), to(#9f9f9f));
-    background: -webkit-linear-gradient(top, #c2c2c2, #9f9f9f);
-    background: -moz-linear-gradient(top, #c2c2c2, #9f9f9f);
-    background: -ms-linear-gradient(top, #c2c2c2, #9f9f9f);
-    background: -o-linear-gradient(top, #c2c2c2, #9f9f9f);
-/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#9f9f9f',GradientType=0 );     */
-    box-shadow: 0 1px 0 0 #dfdfdf inset;
-    -moz-box-shadow: 0 1px 0 0 #dfdfdf inset;
-    -webkit-box-shadow: 0 1px 0 0 #dfdfdf inset;
-}
-.cancel-btn span.p{
-    background-position: 0 1px;
-}
-.delete-btn span.p{
-    background-position: 0 1px;
-}
-.delete-btn:hover,
-.cancel-btn:hover{
-    background: #c1c1c2;
-}
-.default-btn{
-    padding: 0 12px !important;
-}
-.certify-grey-btn,        
-.view-log-btn{        
-    border-color: #a9a9a9;
-    background: #caced2;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d3d9e1), to(#c1c2c2));
-    background: -webkit-linear-gradient(top, #d3d9e1, #c1c2c2);
-    background: -moz-linear-gradient(top, #d3d9e1, #c1c2c2);
-    background: -ms-linear-gradient(top, #d3d9e1, #c1c2c2);
-    background: -o-linear-gradient(top, #d3d9e1, #c1c2c2);
-/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d3d9e1', endColorstr='#c1c2c2',GradientType=0 );     */
-    box-shadow: 0 1px 0 0 #e7ebef inset;
-    -moz-box-shadow: 0 1px 0 0 #e7ebef inset;
-    -webkit-box-shadow: 0 1px 0 0 #e7ebef inset;    
-}
-.certify-grey-btn span.t,
-.view-log-btn span.t{
-    color: #5f6670;
-    text-shadow: 0 -1px 1px #ebedef;
-}
-.view-log-btn span.p{
-    background-position: 0 -369px;
-}
-.certify-grey-btn span.p{
-    background-position: 0 -409px;
-}
-
-.certify-grey-btn:hover,
-.view-log-btn:hover{ 
-    background: #c3c3c5;
-}
-.small-action-btn{
-    font-size: 10px;
-    height: 16px;
-    line-height: 16px;
-    font-weight: bold;
-}
-/*** Common Popup Boxes Style ***/
-.popup-box{
-    margin: 0 auto;
-    padding: 0;    
-    position: relative;
-}
-.popup-box-header{
-    margin: 0;
-    font-size: 18px;
-    font-family: 'Open Sans', 'Arial', sans-serif;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 0 -1px 1px #0B2133; /**For Old Browser **/
-    text-shadow: 0 -1px 1px rgba(0,0,0, 0.75);
-    border-color: #e96208;    
-    background: #2f80c5;    
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#268fe8), to(#3576ad));
-    background: -webkit-linear-gradient(top, #268fe8, #3576ad);
-    background: -moz-linear-gradient(top, #268fe8, #3576ad);
-    background: -ms-linear-gradient(top, #268fe8, #3576ad);
-    background: -o-linear-gradient(top, #268fe8, #3576ad);
-/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#268fe8', endColorstr='#3576ad',GradientType=0 );     */
-    height: 45px;
-    line-height: 45px;
-    
-    padding: 0 20px;
-}
-.popup-box-content{
-    padding: 20px;    
-    background: #fff;
-    box-shadow: 0 3px 5px -1px #D3d3d3 inset;
-    -webkit-box-shadow: 0 3px 5px -1px #D3d3d3 inset;
-    -moz-box-shadow: 0 3px 5px -1px #D3d3d3 inset;
-    -o-box-shadow: 0 3px 5px -1px #D3d3d3 inset;
-}
-.popup-box-footer{
-    background: #f0f0f0 !important;
-    padding: 15px;
-    box-shadow: 0 13px 7px -10px #CBCBCB inset;
-    -webkit-box-shadow: 0 13px 7px -10px #CBCBCB inset;
-    -moz-box-shadow: 0 13px 7px -10px #CBCBCB inset;
-    -o-box-shadow: 0 13px 7px -10px #CBCBCB inset;
-}
-.popup-close-btn{
-    background: url(../images/close.png) center left no-repeat;
-    width: 22px;
-    height:22px;
-    position: absolute;
-    top: 11px;
-    right: 16px;
-    cursor: pointer;    
-}
-.popup-box .action-btn{
-    float: right;
-    margin-left: 13px;
-}
 
 /* My Profile Page*/
 #my_profile .grid-box{
@@ -5179,83 +4994,6 @@ min-height: 70px;
 }
 #group_members_body .small-action-btn{
     margin-top: 3px;
-}
-/*** Calendar Style ***/
-.ui-datepicker{
-    font-family: 'Open Sans',Arial,Tahoma,Helevetica,sans-serif;
-    border:solid 1px #cbcbcb;
-    background: #fff;
-    border-radius: 3px !important;    
-    -moz-border-radius: 3px !important;    
-    -webkit-border-radius: 3px !important;    
-    padding: 3px;
-    width: 214px;
-}
-.ui-datepicker .ui-datepicker-header{
-    background: #2c80e8;
-    border: solid 1px #1b66c3;
-    border-radius: 3px !important;    
-    -moz-border-radius: 3px !important;    
-    -webkit-border-radius: 3px !important;    
-    padding: 3px 0;
-    color: #fff;
-    font-size: 12px;
-    height: 22px;
-    line-height: 22px;
-    margin-bottom: 3px;
-}
-.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next{
-    height: 16px;
-    width: 11px;
-    background: url(../images/prev-next-icon.png) no-repeat 0 0;
-    top: 6px;
-    cursor: pointer;
-}
-.ui-datepicker .ui-datepicker-prev{
-    left: 5px;
-}
-.ui-datepicker .ui-datepicker-next{
-    background-position: 0 -63px;
-    right: 5px;
-}
-.ui-datepicker .ui-state-hover{
-    border: none;
-    
-}
-.ui-datepicker-calendar thead{
-    border:solid 1px #cbcbcb;
-    border-radius: 3px !important;    
-    -moz-border-radius: 3px !important;    
-    -webkit-border-radius: 3px !important;
-}
-.ui-datepicker-calendar th{
-    background: #f2f2f2;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#e5e5e5));
-    background: -webkit-linear-gradient(top, #ffffff, #e5e5e5);
-    background: -moz-linear-gradient(top, #ffffff, #e5e5e5);
-    background: -ms-linear-gradient(top, #ffffff, #e5e5e5);
-    background: -o-linear-gradient(top, #ffffff, #e5e5e5);
-    font-size: 11px;
-    color: #2a2a2a;
-    font-family: 'Open Sans',Arial,Tahoma,Helevetica,sans-serif;
-}
-.ui-datepicker-calendar th.ui-datepicker-week-end{
-    color: #d10707;
-}
-.ui-datepicker tr{
-    border: none;
-}
-.ui-datepicker tr:nth-child(even){
-    background: transparent;
-}
-.ui-datepicker .ui-state-default{
-    background: #70abf4;
-    border: solid 1px #2c80e8;
-    text-align: center;
-    color: #2a2a2a;
-    height: 18px;
-    line-height: 18px;
-    
 }
 
 /*** Forum ***/

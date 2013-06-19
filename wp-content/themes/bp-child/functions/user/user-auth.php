@@ -159,7 +159,7 @@ if(!is_user_logged_in())
             <div id="or" class="left">
                 <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
             </div>
-            <div id="registration_button"><a class="popup register">SIGNUP</a></div>            
+            <div id="registration_button"><a class="popup register" rel="custom-popup" cp-type="inline" href="#registration-popup">SIGNUP</a></div>            
         </div>
         <?php
         $html = ob_get_contents();

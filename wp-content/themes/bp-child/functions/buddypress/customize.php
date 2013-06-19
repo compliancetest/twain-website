@@ -47,7 +47,7 @@ function cp_bp_get_group_join_button_filter($button)
         if($button['id'] == 'request_membership'){        
             $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
             $button['link_text'] = "Join Community";
-            $button['link_title'] = "Join Community";
+            $button['link_title'] = "Join Community";            
         }else if($button['id'] == 'leave_group'){
             $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
             $button['link_text'] = "Leave Community";
@@ -59,9 +59,12 @@ function cp_bp_get_group_join_button_filter($button)
             $button['link_href'] = "#";
         }
     }else{
+        
         $button['link_class'] .= " popup button button_medium button_red white_txt register radius6";    
         $button['link_text'] = "Join Community";
         $button['link_title'] = "Join Community";
+        $button['link_rel'] = "custom-popup";
+        
     }
     
     return $button;

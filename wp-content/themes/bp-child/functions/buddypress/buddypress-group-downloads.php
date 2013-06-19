@@ -181,6 +181,32 @@ if ( class_exists( 'BP_Group_Extension' ) )
             }
         }
         
+        function updateFile($group_id, $file_id)
+        {
+            global $wpdb;
+            
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);
+            $row = $wpdb->get_row($query);
+            if($row)
+            {
+                $data = array();
+                if(isset($_POST['file_name']) && $_POST['file_name'] != '')
+                    $data['name'] = $_POST['file_name'];
+                else{
+                    $data['name'] = basename($row->location);
+                }
+                $data['description'] = $_POST['file_desc'];
+                $data['license'] = $_POST['file_license'];
+                
+                $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
+                addMessage('File Information updated successfully!');
+                return true;
+            }else{
+                addMessage('Invalid Request!', 'error');
+                return 'File not found!';
+            }
+        }
+        
         
     }
     
@@ -201,6 +227,17 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     if(bp_group_is_admin())
                     {
                         $obj->saveFiles($group->id);
+                        addMessage('File(s) was uploaded successfully!');
+                    }
+                    //Redirect
+                    wp_redirect(bp_get_group_permalink($group) . $obj->slug);
+                    exit;    
+                }
+                if(wp_verify_nonce($_POST['_wpnonce'], 'groups_downloads_update')) //Save Files
+                {
+                    if(bp_group_is_admin())
+                    {
+                        $obj->updateFile($group->id, $_POST['file_id']);
                     }
                     //Redirect
                     wp_redirect(bp_get_group_permalink($group) . $obj->slug);
@@ -212,8 +249,9 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     $file = $obj->getFile($group->id, $_REQUEST['id']);
                     if($file)
                     {
-                        if($file->license && !isset($_POST['agree_license']))
+                        if($file->license && !isset($_SESSION['agree_license'][$file->id]))
                         {
+                            addMessage('Please read License Agreement of the file and agree with it to download the file.', 'error');
                             //Goto File Detail Page                            
                             wp_redirect(bp_get_group_permalink($group) . $obj->slug . "?id=" . $file->id);
                         }else{
@@ -224,18 +262,82 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     }
                     exit;    
                 }
+                if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_agree_license')) //Download Files
+                {                    
+                    //Get File
+                    $file = $obj->getFile($group->id, $_POST['file_id']);
+                    if(!$file)
+                    {
+                        echo 'error';
+                    }else{
+                        if(!isset($_SESSION['agree_license']))
+                            $_SESSION['agree_license'] = array();
+                        $_SESSION['agree_license'][$file->id] = true;
+                        echo bp_get_group_permalink($group) . $obj->slug . "?_wpnonce=" . wp_create_nonce('groups_downloads_download') . "&id=" . $file->id;
+                    }
+                    exit;    
+                }
+                if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_show_license')) //Download Files
+                {
+                    //Get File
+                    $file = $obj->getFile($group->id, $_REQUEST['id']);
+                    ?>
+                    <!-- License Popup Box -->
+                    <div id="agree-file-license" class="popup-box" style="display: none;">                
+                        <div class="popup-box-header radius6 noradiusbottom">License Agreement</div>
+                        <div class="popup-box-content">
+                            <form method="post" action="<?php echo bp_get_group_permalink($group) . 'downloads'?>" id="agree-file-license-form">                        
+                                <?php
+                                    if(!$file)
+                                    {
+                                ?>
+                                <div class="message error">Invalid Request!</div>
+                                <?php
+                                    }else if(!$file->license){
+                                ?>
+                                <p>This file doesn't have a License Agreement.</p>
+                                <?php
+                                    }else{
+                                ?>
+                                    <p><?php echo $file->license?></p>
+                                    <label><input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license" <?php echo isset($_SESSION['agree_license'][$file->id]) ? 'checked="checked"' : ''?> autocomplete="off" /> I agree with the License Agreement</label>                
+                                <?php
+                                    }
+                                ?>   
+                                <?php
+                                    wp_nonce_field('groups_downloads_agree_license');                                  
+                                ?>                             
+                                <input type="hidden" name="file_id" value="<?php echo $file->id?>" />
+                                <input type="hidden" name="group_id" value="<?php echo $group->id?>" />
+                                <div class="clear"></div>                            
+                            </form>    
+                        </div>
+                        <div class="popup-box-footer radius6 noradiustop">                                                        
+                            <a href="javascript: void(0)" class="action-btn process-btn"><span class="p"></span><span class="t">DOWNLOAD</span></a>
+                            <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
+                            <div class="clear"></div>
+                            <div class="message error" style="display: none;">Please aggree the License Agreement.</div>
+                        </div>
+                        <div class="loading"></div>
+                        <a id="close-popup-community" class="close_btn"></a>                
+                    </div>
+                    <?php
+                    exit;    
+                }
+                
                 if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_delete')) //Download Files
                 {
                     if(bp_group_is_admin())
                     {
                         $result = $obj->deleteFile($group->id, $_REQUEST['id']);
                         if($result === true)
-                            echo 'success';
+                            addMessage('The file was deleted successfully!');
                         else
-                            echo $result;
+                            addMessage($result, 'error');
                     }else{
-                        echo "Permission Denied!";
+                        addMessage('Permission Denied!', error);
                     }
+                    wp_redirect(bp_get_group_permalink($group) . $obj->slug);
                     exit;    
                 }
                 
@@ -249,27 +351,33 @@ if ( class_exists( 'BP_Group_Extension' ) )
                             json_encode(array('name' => $file->name, 'id' => $file->id, 'description' => $file->description, 'license' => $file->license));
                             ob_start();
                             ?>
-                            <form id="fileEditForm<?php echo $file->id?>" action="" onsubmit="return saveFile()" style="display: none;">
-                                <div class="grid_cell width30P">
-                                    <label>File Name:</label>
-                                    <input type="text" name="file_name" value="<?php echo $file->name?>" />
-                                </div>
-                                <div class="grid_cell width60P left10">
-                                    <label>Description:</label>
-                                    <input type="text" name="file_desc" value="<?php echo $file->description?>" />
-                                </div>
-                                <div class="clear"></div>
-                                <div class="grid_cell width100P">
-                                    <label>License Agreement: </label>
-                                    <textarea cols="20" rows="5" name="file_license"><?php echo $file->license?></textarea>
-                                </div>
-                                <div class="clear"></div>
-                                <button class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></button>
-                                <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                                <div class="clear"></div>
-                                <?php wp_nonce_field('groups_downlaods_save_file') ?>
-                                <input type="hidden" name="group_id" value="<?php echo $group->id?>" />
-                            </form>
+                            <div class="grid-list-row grid-file-edit-row" id="fileEditRow<?php echo $file->id?>" style="display: none;">
+                                <form id="fileEditForm<?php echo $file->id?>" class="file-edit-form" action="" method="post" onsubmit="return saveFile()">
+                                    <div class="grid-list-cell width50P">
+                                        <label>File Name:</label>
+                                        <input type="text" class="text" name="file_name" value="<?php echo $file->name?>" />
+                                    </div>
+                                    <div class="grid-list-cell width50P">
+                                        <label>Description:</label>
+                                        <input type="text" class="text" name="file_desc" value="<?php echo $file->description?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="grid-list-cell width100P">
+                                        <label>License<br />Agreement: </label>
+                                        <textarea cols="20" rows="5" class="textarea" name="file_license"><?php echo $file->license?></textarea>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="grid-list-cell grid-btn-cell">                                        
+                                        <a href="#" class="action-btn cancel-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="t">Cancel</span></a>
+                                        <a href="javascript: void(0)" onclick="document.getElementById('fileEditForm<?php echo $file->id?>').submit();" class="action-btn process-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="t">SAVE</span></a>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <?php wp_nonce_field('groups_downloads_update') ?>
+                                    <input type="hidden" name="group_id" value="<?php echo $group->id?>" />
+                                    <input type="hidden" name="file_id" value="<?php echo $file->id?>" />
+                                </form>
+                                <div class="loading"></div>
+                            </div>
                             <?php
                             $html = ob_get_contents();
                             ob_end_clean();

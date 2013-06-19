@@ -7,126 +7,115 @@ global $groups_template;
 $downloads = new CP_Downloads_Group_Extension();
 
 ?>
-<div id="downloads-container" class="tab-content white_bcg column">
-    <?php if(isset($_GET['id'])){ ?>
-    <!-- File Detail Page -->
-    <h2>Download Attachment</h2>
-        <?php    
-            $fileId = isset($_GET['id']) ? $_GET['id'] : null;
-            $file = $downloads->getFile(bp_get_group_id(), $fileId);
-            if($file)
+<div id="downloads-container" class="tab-content white_bcg padding10">    
+    <!-- Files List Page -->
+    <div id="uploaded-files">
+<!--          <form name="fileListForm" action="" method="post">-->
+        <div class="grid-list">
+            <div class="grid-list-row grid-list-header">
+                <div class="grid-list-cell width40P">File Name</div>
+                <div class="grid-list-cell width15P tocenter">Size</div>
+                <div class="grid-list-cell grid-list-cell-line2 tocenter width15P">License<br />Agreement</div>
+                <div class="grid-list-cell width20P tocenter">Created</div>
+                <div class="clear"></div>
+            </div>                          
+            <?php                    
+                $files = $downloads->getFiles(bp_get_group_id());
+                foreach($files as $file)
+                {
+            ?>
+            <div class="grid-list-row" id="fileRow<?php echo $file->id?>">
+                <div class="grid-list-cell width40P">
+                    <?php 
+                        if($file->license){
+                    ?>                    
+                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_show_license')?>&id=<?php echo $file->id?>" class="download-link" rel="has-license"><?php echo $file->name?></a><br />
+                    <?php }else{ ?>
+                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_download')?>&id=<?php echo $file->id?>" class="download-link"><?php echo $file->name?></a><br />
+                    <?php } ?>
+                    <?php echo $file->description?>
+                </div>
+                <div class="grid-list-cell width15P tocenter">
+                    <?php echo formatBytes($file->size); ?>
+                </div>
+                <div class="grid-list-cell grid-list-cell-line2 tocenter width15P">
+                    <?php
+                        if($file->license){
+                    ?>
+                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_show_license')?>&id=<?php echo $file->id?>" class="license-link has-license download-link" rel="has-license">License<br />Agreement<span class="simple_tooltip"><span></span>To download this file<br />you have to read &<br />agree Licence Agreement</span></a>
+                    <?php                                
+                        }else{
+                    ?>
+                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_download')?>&id=<?php echo $file->id?>" class="license-link download-link">License<br />Agreement</a>
+                    <?php
+                        }
+                    ?>
+                </div>
+                <div class="grid-list-cell width20P tocenter"><?php echo date('M d, Y', strtotime($file->created_date)) ?></div>
+                <div class="grid-list-cell width10P">
+                    <?php if(bp_group_is_admin) { ?>
+                        <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_get_file')?>&id=<?php echo $file->id?>" class="action-btn blue-edit-btn icon-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Edit</span></a>
+                        <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_delete')?>&id=<?php echo $file->id?>" class="action-btn delete-btn icon-btn no-submit" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Delete</span></a>
+                    <?php } ?>                        
+                </div>
+                <div class="clear"></div>
+            </div>                                
+        <?php
+            }
+            if(!$files)
             {
         ?>
-        <div id="file-detail">
-            <form name="downloadform" id="downloadform" action="<?php bp_group_permalink()?><?php echo $downloads->slug ?>" method="post">
-                <div class="grid_cell width20P"><label>File Name</label></div>
-                <div class="grid_cell width70P left10">
-                    <?php echo $file->name?> (<?php echo formatBytes($file->size)?>)<br />
-                    <?php echo $file->description ?>
-                </div>                    
+            <div class="grid-list-row">
+                <div class="grid-list-cell tocenter width100P">
+                    No file uploaded yet
+                </div>
                 <div class="clear"></div>
-                
-                <?php if($file->license){ ?>
-                <div class="grid_cell width100P"><label>License Agreement</label></div>
-                <div class="grid_cell width100P">
-                    <p class="file-license"><?php echo $file->license?></p>                        
-                </div>                    
-                <div class="grid_cell width100P">
-                    <input type="checkbox" name="agree_license" id="agree_license" value="1" />
-                    I agree with this License Agreement.
-                </div>                    
-                
-                    <div class="clear"></div>
-                <div class="message notice">Please agree the license agreement to download this file.</div>
-                <?php } ?>                
-                
-                <button class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></button>
-                <div class="clear"></div>
-                <input type="hidden" name="id" value="<?php echo $file->id?>" />
-                <?php wp_nonce_field('groups_downloads_download') ?>
-            </form>
-        </div>
-        <?php   
-            }else{
-        ?>
-        <div class="message error">Sorry, we can't find the file that you requested.</div>
-        <?php      
+            </div>
+        <?php
             }
         ?>
-    <?php }else{ ?>
-        <!-- Files List Page -->
-        <h2>Files</h2>
-    
-        <div id="uploaded-files">
-            <div class="grid_row grid_head grey-border-bottom">
-                <div class="grid_cell width60P">Name</div>
-                <div class="grid_cell width30P left15">Size</div>
-                <div class="grid_cell width5P left15">Action</div>
+            <div class="grid-list-footer grid-list-row">                    
+                <div class="grid-list-cell width100P">
+                    <a href="#" id="add-new-download" class="large-plus-link">Upload New File(s)</a>
+                </div>
                 <div class="clear"></div>
             </div>
-            <?php
-                    
-                    $files = $downloads->getFiles(bp_get_group_id());
-                    foreach($files as $file)
-                    {
-            ?>
-                <div class="grid_row grey-border-bottom">                    
-                    <div class="grid_cell width60P">
-                        <?php echo $file->name?><br />
-                        <?php echo $file->description?>
+         </div> 
+<!--          </form>-->
+    </div>
+    <?php if(bp_group_is_admin()) {?> 
+    <div id="new-downloads" style="display: none;">
+        <form name="newfileform" id="newfileform" action="" enctype="multipart/form-data" method="post">
+            <h3>Upload New File(s)</h3>
+            <div class="grid-list">
+                <div class="grid-list-row">
+                    <div class="grid-list-cell width35P">
+                        <input type="file" name="file[]" class="input-file" />
+                        <a href="#" class="action-btn delete-btn" id="cancel-download"><span class="p"></span><span class="t">Remove</span></a>    
                     </div>
-                    <div class="grid_cell width15P">
-                        <?php
-                            echo formatBytes($file->size);
-                        ?>
-                    </div>
-                    <div class="grid_cell width15P">
-                        <?php if(bp_group_is_admin()) {?> 
-                        <a href="<?php bp_group_permalink()?><?php echo $downloads->slug ?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_get_file') ?>&id=<?php echo $file->id?>" class="edit-btn">Edit</a>
-                        <a href="<?php bp_group_permalink()?><?php echo $downloads->slug ?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_delete') ?>&id=<?php echo $file->id?>" class="delete-btn">Delete</a>
-                        <?php } ?>
-                        <a href="<?php bp_group_permalink()?><?php echo $downloads->slug ?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_download') ?>&id=<?php echo $file->id?>" class="download-btn">Download</a>
+                    <div class="grid-list-cell left15 grid-field-cell">
+                        <label>File Name:</label>
+                        <input type="text" class="input" name="file_name[]" /><br clear="all">
+                        <label>Description:</label>
+                        <input type="text" class="input" name="file_description[]" class="text" /><br clear="all">
+                        <label>File License Agreement:</label>
+                        <textarea cols="20" rows="5" name="file_license[]" class="text"></textarea>                            
                     </div>
                     <div class="clear"></div>
                 </div>
-            <?php
-                }
-            ?>
-        </div>
-        <?php if(bp_group_is_admin()) {?> 
-        <form name="newfileform" id="newfileform" action="" enctype="multipart/form-data" method="post">
-            <h3>Upload New File(s)</h3>
-            <div class="grid_row grid_head grey-border-bottom">
-                <div class="grid_cell width20P">Information</div>
-                <div class="grid_cell width20P">File</div>
-                <div class="grid_cell width10P"></div>
-                <div class="clear"></div>
-            </div>        
-            <div class="grid_row grey-border-bottom">        
-                <div class="grid_cell width60P">
-                    <label>Name(optional)</label><br />
-                    <input type="text" class="input" name="file_name[]" />
-                    <label>Description(optional)</label><br />
-                    <input type="text" class="input" name="file_description[]" class="text" />            
-                    <label>License Agreement</label><br />
-                    <textarea cols="20" rows="5" name="file_license[]" class="text"></textarea>
+                <div class="grid-list-footer grid-list-row">                                        
+                    <a href="#" id="add-more-file" class="large-plus-link small-plus-link">Add New File</a>
+                    <a href="#" class="action-btn cancel-btn" id="cancel-download"><span class="p"></span><span class="t">Cancel</span></a>
+                    <a href="#" class="action-btn upload-btn" id="save-download"><span class="p"></span><span class="t">Upload &amp; Save</span></a>
+                    <div class="clear"></div>
+                    <div class="message" style="display: none;"></div>
+                    
                 </div>
-                <div class="grid_cell width25P"><input type="file" name="file[]" /></div>
-                <div class="grid_cell width10P"><a href="#" class="delete-file">Delete</a></div>
-                <div class="clear"></div>
-            </div>
-            <div class="grid_row grey-border-bottom">        
-                <div class="gird_cell width100P">                
-                    <a href="#" class="action-btn process-btn" id="save-download"><span class="p"></span><span class="t">Upload and Save</span></a>
-                    <a href="#" class="action-btn add-new-btn" id="add-new-download"><span class="p"></span><span class="t">Add New File</span></a>
-                </div>
-                <div class="clear"></div>
-                <div class="message" style="display: none;"></div>
-            </div>
+            </div>                
             <?php             
                 wp_nonce_field('groups_downloads_save'); 
             ?>
         </form>
-        <?php } ?>
-    <?php } ?>    
+    </div>        
+    <?php } ?>     
 </div>

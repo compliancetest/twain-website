@@ -1,30 +1,43 @@
 (function($){
   $(document).ready(function(){
-
-    /************************************************ Downloads **********************************************************/
-    $('#add-new-download').click(function(){
-        $(this).parents('.grid_row').before('<div class="grid_row grey-border-bottom">' +         
-            '<div class="grid_cell width60P">' +
-                '<b>Name(optional)</b><br />' +
-                '<input type="text" class="input" name="file_name[]" />' +
-                '<b>Description(optional)</b><br />' +
-                '<input type="text" class="input" name="file_description[]" class="text" />' + 
-                '<b>License Agreement</b><br />' + 
-                '<textarea cols="20" rows="5" name="file_license[]" class="text"></textarea>' + 
-            '</div>' +
-            '<div class="grid_cell width25P"><input type="file" name="file[]" /></div>' +
-            '<div class="grid_cell width10P"><a href="#" class="delete-file">Delete</a></div>' +
-            '<div class="clear"></div>' +
-        '</div>');
-        return false;
-    })
-    
-      $('#newfileform').on('click', '.delete-file', function(){
-          $(this).parents('.grid_row').fadeOut('fast', function(){
-              $(this).remove();
-          });
+      $('#add-new-download').click(function(){
+          $('#new-downloads').fadeIn('fast');
+          $('#uploaded-files .grid-list-footer').hide();
           return false;
       })
+      $('#add-more-file').click(function(){
+          var newRow = $('#new-downloads .grid-list-row:eq(0)').clone(true);
+          newRow.find('input[type="text"], textarea').val('');
+          newRow.hide();
+          $('#new-downloads .grid-list-footer').before(newRow);
+          newRow.fadeIn('fast');
+          return false;
+      })
+      $('#new-downloads .delete-btn').click(function(){
+          if($('#new-downloads .grid-list-row').length == 2)
+          {
+              $('#new-downloads .grid-list-row').find('input[type="text"], textarea').val('');
+              $('#new-downloads').hide();
+              $('#uploaded-files .grid-list-footer').fadeIn('fast');
+              $('#new-downloads .message').hide();
+          }else{
+              $(this).parents('.grid-list-row').fadeOut('fast', function(){
+                  $(this).remove();
+              })
+          }
+          return false;
+      })
+      $('#new-downloads .cancel-btn').click(function(){
+          $('#new-downloads .grid-list-row:not(.grid-list-footer)').each(function(idx){
+              if(idx > 0)
+                $(this).remove();
+          })
+          $('#new-downloads .grid-list-row').find('input[type="text"], textarea').val('');
+          $('#new-downloads').hide();
+          $('#uploaded-files .grid-list-footer').fadeIn('fast');
+          $('#new-downloads .message').hide();
+      })
+      
       $('#newfileform').submit(function(){
           //Check jif there is a selected file or not
           var form = $(this);
@@ -51,59 +64,88 @@
         $('#newfileform').submit();    
         return false;
       })
-      
-      $('#uploaded-files .delete-btn').click(function(){
-          var link = $(this);
-          $.ajax({
-              type: 'get',
-              url: link.attr('href'),
-              success: function(rsp)
-              {
-                  if(rsp == 'success')
+
+      $('.download-link[rel="has-license"]').cplightbox({
+          type: 'ajax',
+          removeBoxAfterClose: true,
+          onLoad: function(){
+              $('#agree-file-license .cancel-btn').click(function(){
+                  $('#agree-file-license .close_btn').click();
+                  return false;
+              });
+              $('#agree-file-license .process-btn').click(function(){
+                  $('#agree-file-license form').submit();
+                  return false;
+              });
+              $('#agree-file-license form').submit(function(){
+                  form = $(this);
+                  $('#agree-file-license .message').hide();
+                  if($(form).find('#agree_community_license').length > 0 && $(form).find('#agree_community_license:checked').length < 1)
                   {
-                      link.parents('.grid_row').fadeOut('fast', function(){
-                          $(this).remove();
-                      });
-                  }else{
-                      $('#newfileform').find('.message').html(rsp).addClass('error').fadeIn();
+                      $('#agree-file-license .message').html('Please aggree the License Agreement.').fadeIn();
+                      return false;
                   }
-              }
-          });
-          return false;
-      })
-      
-      //Download File
-      $('#downloadform').submit(function(){
-          if($(this).find('#agree_license').length > 0 && !$(this).find('#agree_license').prop('checked'))
-          {
-              return false;
+                  
+                  $.ajax({
+                      url: $(form).attr('action'),
+                      type: 'post',
+                      data: $(form).serialize(),
+                      success: function(rsp)
+                      {
+                          if(rsp == 'error')
+                          {
+                              $('#agree-file-license .message').html('Invalid Request!').fadeIn();
+                          }else{
+                              $('#agree-file-license .close_btn').click();
+                              document.location.href = rsp;
+                          }
+                      }
+                  })
+                  return false;
+              })
           }
       })
+
       
       //Show Edit File Form
-      $('#uploaded-files .edit-btn').click(function(){
+      $('#uploaded-files .blue-edit-btn').click(function(){
           var link = $(this);
-          var rowObj = link.parents('.grid_row');
-          if(rowObj.find('form').length < 1)
+          var fID = link.attr('data-id');
+          var rowObj = $('#fileRow' + fID);
+          rowObj.find('.message').remove();
+          if($('#fileEditRow' + fID).length < 1)
           {
               rowObj.append('<div class="loading"></div>');
-              rowObj.find('.message').remove();
+              rowObj.find('.loading').show();              
               $.ajax({
                   url: link.attr('href'),
                   type: 'get',
                   dataType: 'html',
                   success: function(rsp){
                       rowObj.find('.loading').remove();
-                      rowObj.append(rsp);
-                      if(rowObj.find('.message').length > 0){
-                          rowObj.find('.message').fadeIn('fast');
+                      if($(rsp).find('form').length > 0){
+                          rowObj.after(rsp);
+                          $('#fileRow' + fID).hide();
+                          $('#fileEditRow' + fID).fadeIn('fast');
                       }else{
-                          rowObj.children(':not(form)').hide();
-                          rowObj.find('form').fadeIn('fast');  
+                          rowObj.append(rsp);
+                          rowObj.find('.message').fadeIn('fast');
+                          
                       }
                   }
               })
+
+          }else{
+              $('#fileRow' + fID).hide();
+              $('#fileEditRow' + fID).fadeIn('fast');
           }
+          return false;
+      })
+      
+      $('#uploaded-files').on('click', '.cancel-btn', function(){
+          var fID = $(this).attr('data-id');
+          $('#fileEditRow' + fID).hide();
+          $('#fileRow' + fID).fadeIn('fast');
           return false;
       })
   })

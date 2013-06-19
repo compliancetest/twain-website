@@ -1,11 +1,9 @@
 (function($){
   $(document).ready(function(){
     //Join to Community
-    $('#item-buttons a.request-membership').on('click', function() {        
-        //Show Join Community Popup Box
-        $('#community_registration').cplightbox();        
-        return false;
-    } );
+    $('#item-buttons a.request-membership').cplightbox({
+        href: '#community_registration'
+    });
     
     //Join Community
     $('#community_registration .process-btn').on('click', function(){
@@ -50,33 +48,24 @@
     $('#community_registration .cancel-btn').click(function(){
         $('#community_registration .close_btn').click();
     })
-    
-    //Show Community Terms and License Boxes
-    $('#show-community-terms').click(function(){
-        $('#community-terms-box').cplightbox({closeWhenClickOveraly: false});
-        return false;
-    })
-    $('#show-community-license').click(function(){
-        $('#community-license-box').cplightbox({closeWhenClickOveraly: false});
-        return false;
-    })
+ 
     $('#community-terms-box .process-btn').click(function(){
         $('#join-community-form #agree_community_terms').prop('checked', true);
-        $('#community_registration').cplightbox(); 
+        $('#item-buttons a.request-membership').click(); 
         return false;
     })
     $('#community-terms-box .cancel-btn').click(function(){
-        $('#community_registration').cplightbox(); 
+        $('#item-buttons a.request-membership').click(); 
         return false;
     })
     
     $('#community-license-box .process-btn').click(function(){
         $('#join-community-form #agree_community_license').prop('checked', true);
-        $('#community_registration').cplightbox(); 
+        $('#item-buttons a.request-membership').click(); 
         return false;
     })
     $('#community-license-box .cancel-btn').click(function(){
-        $('#community_registration').cplightbox(); 
+        $('#item-buttons a.request-membership').click(); 
         return false;
     })
   })
