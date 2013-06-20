@@ -1,32 +1,24 @@
 <?php 
+/**
+* Template Name: Default Page
+* It doesn't include title and side bar. It just showes the page content.
+*/
 get_header();
 ?>
 
-	<div class="content container">
-		<!--page header-->
-		
-		<!--end page header-->
-			<?php if (have_posts()) while (have_posts()) : the_post(); ?>
-			<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-				<?php if ( in_category( 'docs' )) {
-					echo 'doocs';
-					}
-					
-				?>
-				<div class="content_inner">
-					<?php if (has_post_thumbnail()) {
-						echo '<a href="'.get_permalink().'">';
-						the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));
-						echo '</a>';
-					}
-					the_content(); ?>
-				</div>
-			<?php endwhile; ?>
-		
-		<div class="clear"></div>
-
-	</div> <!--end content container-->
+<div class="content container">		
+	<?php if (have_posts()) while (have_posts()) : the_post(); ?>
+    <div class="content_inner">
+		<?php if (has_post_thumbnail()) {
+			echo '<a href="'.get_permalink().'">';
+			the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));
+			echo '</a>';
+		}
+		the_content(); ?>
+	</div>
+	<?php endwhile; ?>	
+	<div class="clear"></div>
+</div> <!--End Content Container-->
 
 <?php
 get_footer();
-?>
