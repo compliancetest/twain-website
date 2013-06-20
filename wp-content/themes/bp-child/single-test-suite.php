@@ -2,9 +2,7 @@
 /*
 Template Name Posts: Test Suite
 */
-?>
-
-<?php
+  
 get_header();
 ?>
 	<?php

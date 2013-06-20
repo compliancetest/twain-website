@@ -36,7 +36,7 @@ get_header();
 										
 					<div class="grid_row white_bcg noborderbottom">
 						<div class="grid_cell width10P left size13 bold dark_blue_txt">Roles:</div>
-						<div class="grid_cell width30P left">
+						<div class="grid_cell width30P left"> 
 							<p>Tester Role: <span><?php meta ('choose_tester_role'); ?></span></p>
 						</div>
 						<div class="grid_cell width30P left">

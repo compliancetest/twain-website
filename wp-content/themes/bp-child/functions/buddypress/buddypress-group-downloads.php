@@ -2,6 +2,7 @@
 if ( class_exists( 'BP_Group_Extension' ) )
 {
     class CP_Downloads_Group_Extension extends BP_Group_Extension {
+        var $enable_create_step = false;
         function __construct() {
             $this->name = 'Buddypress Group Downloads';
             $this->slug = 'downloads';

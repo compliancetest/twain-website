@@ -40,7 +40,9 @@
                                 
                             }else{ //Show Tabs
                         ?>
-                            <div id="wiki-container" class="tab-content column white_bcg" style="display: none;"></div>
+                            <div id="wiki-container" class="tab-content column white_bcg" style="display: none;">
+                                <?php include( bp_docs_locate_template( 'docs-loop.php' ) ) ?>
+                            </div>
                             <div id="forum-container" class="tab-content column white_bcg" style="display: none;">
                                 <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
                                 <p>You need to join the community to participate in the forum section.</p>

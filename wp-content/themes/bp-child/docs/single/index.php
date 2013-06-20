@@ -19,16 +19,16 @@
 		<?php bp_docs_inline_toggle_js() ?>
 	<?php endif ?>
 
-	<?php /* Quirk: We only need this if not running theme compat */ ?>
-
-	<div class="tab-content-docs white_bcg">
-		<div class="column padding20">
-			<?php bp_docs_the_content() ?>
-			<div class="clear"></div>
-		</div>	
+	<div class="doc-content">
+		<?php bp_docs_the_content() ?>
 	</div>
-</div>
-</div>
+
+	<?php if ( bp_docs_doc_has_attachments() ) : ?>
+		<div class="doc-attachments">
+			<h3><?php _e( 'Attachments', 'bp-docs' ) ?></h3>
+			<?php include ( bp_docs_locate_template( 'single/attachments.php' ) ) ?>
+		</div>
+	<?php endif ?>
 
 	<div class="doc-meta">
 		<?php do_action( 'bp_docs_single_doc_meta' ) ?>

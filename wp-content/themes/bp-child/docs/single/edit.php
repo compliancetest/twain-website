@@ -17,8 +17,8 @@
 
 	<?php do_action( 'template_notices' ) ?>
 
-	<div class="doc-content white_bcg">
-	<div class="column padding20">
+	<div class="doc-content">
+
 	<div id="idle-warning" style="display:none">
 		<p><?php _e( 'You have been idle for <span id="idle-warning-time"></span>', 'bp-docs' ) ?></p>
 	</div>
@@ -58,6 +58,13 @@
 			</div>
 		</div>
 
+		<?php if ( apply_filters( 'bp_docs_enable_attachments', true ) ) : ?>
+			<div id="doc-attachments">
+				<label for="insert-media-button"><?php _e( 'Attachments', 'bp-docs' ) ?></label>
+				<?php include ( bp_docs_locate_template( 'single/attachments.php' ) ) ?>
+			</div>
+		<?php endif ?>
+
 		<div id="doc-meta">
 			<?php if ( bp_is_active( 'groups' ) && bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_associated_group', true ) ) : ?>
 				<div id="doc-associated-group" class="doc-meta-box">
@@ -73,7 +80,7 @@
 				</div>
 			<?php endif ?>
 
-			<?php if ( bp_is_active( 'groups' ) && bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_access_settings', true ) ) : ?>
+			<?php if ( bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_access_settings', true ) ) : ?>
 				<div id="doc-settings" class="doc-meta-box">
 					<div class="toggleable">
 						<p class="toggle-switch" id="settings-toggle"><?php _e( 'Access', 'bp-docs' ) ?></p>
@@ -139,11 +146,10 @@
 
 			<?php $doc_id = bp_docs_is_existing_doc() ? get_the_ID() : 0 ?>
 			<input type="hidden" id="doc_id" name="doc_id" value="<?php echo $doc_id ?>" />
-			<input type="submit" name="doc-edit-submit" id="doc-edit-submit" value="<?php _e( 'Save', 'bp-docs' ) ?>" class="button button_small normal green_bcg white_txt radius3 left"> 
-			<a href="<?php bp_docs_cancel_edit_link() ?>" class="action safe button gray_bcg dark_gray_txt" id="cancel_wiki"><?php _e( 'Cancel', 'bp-docs' ); ?></a>
+			<input type="submit" name="doc-edit-submit" id="doc-edit-submit" value="<?php _e( 'Save', 'bp-docs' ) ?>"> <a href="<?php bp_docs_cancel_edit_link() ?>" class="action safe"><?php _e( 'Cancel', 'bp-docs' ); ?></a>
 
 			<?php if ( bp_docs_is_existing_doc() ) : ?>
-				<?php if ( bp_docs_current_user_can( 'manage' ) ) : ?><a class="delete-doc-button confirm button button_small red_bcg white_txt radius3 right" href="<?php bp_docs_delete_doc_link() ?>"><?php _e( 'Delete', 'bp-docs' ) ?></a><?php endif ?>
+				<?php if ( bp_docs_current_user_can( 'manage' ) ) : ?><a class="delete-doc-button confirm" href="<?php bp_docs_delete_doc_link() ?>"><?php _e( 'Delete', 'bp-docs' ) ?></a><?php endif ?>
 			<?php endif ?>
 		</div>
 
@@ -151,7 +157,7 @@
 		<div style="clear: both"> </div>
 	    </div>
 	</form>
-	</div>
+
 	</div><!-- .doc-content -->
 
 	<?php bp_docs_inline_toggle_js() ?>

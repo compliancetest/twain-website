@@ -8,7 +8,7 @@ if(!defined('CHILD_TEMPLATE_DIRECTORY'))
 
 //Session Start
 add_action('init', 'cp_session_start');
-function cp_session_start()
+function cp_session_start() 
 {
     if(!session_id())
         session_start();
