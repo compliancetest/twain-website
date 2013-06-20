@@ -499,7 +499,7 @@ function bp_docs_get_access_options( $settings_field, $doc_id = 0, $group_id = 0
 
 	// Other integration pieces can mod the options with this filter
 	$options = apply_filters( 'bp_docs_get_access_options', $options, $settings_field, $doc_id, $group_id );
-
+print_r($options);
 	// Options are sorted by the numeric key
 	ksort( $options );
 
