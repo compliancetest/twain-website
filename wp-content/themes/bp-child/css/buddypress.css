@@ -89,7 +89,8 @@
     background: -o-linear-gradient(top, #f9761f, #f36e15);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9761f', endColorstr='#f36e15',GradientType=0 ); 
 }
-#issuer_title_block {
+#issuer_title_block,
+.page-title-block{
     box-shadow: 0 0 50px #EDEDED inset;
     -moz-box-shadow: 0 0 50px #EDEDED inset;
     -webkit-box-shadow: 0 0 50px #EDEDED inset;

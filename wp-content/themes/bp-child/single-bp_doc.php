@@ -18,7 +18,7 @@ if ((get_the_title()) == 'Create a Doc'){
 	}
 	else{
 	?>
-<div id="issuer_title_block">
+<div id="issuer_title_block" class="page-title-block">
 <div class="column four_fifths left">
 	<div id="item-header-avatar">	
 		<a href="http://nego-solutions.com/dev-clients/compliance/groups/standard-business-reporting-153144141/" title="Standard Business Reporting">

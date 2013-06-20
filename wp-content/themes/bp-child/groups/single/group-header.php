@@ -3,7 +3,7 @@
 do_action( 'bp_before_group_header' );
 
 ?>
-<div id="issuer_title_block">
+<div id="issuer_title_block" class="page-title-block">
     <div class="column four_fifths left">
         <div id="item-header-avatar">
 	        <a href="<?php bp_group_permalink(); ?>" title="<?php bp_group_name(); ?>">
