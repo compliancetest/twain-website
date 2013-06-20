@@ -34,6 +34,7 @@ require_once(THE_FUNCTION . '/user/user.php');
 require_once(THE_FUNCTION . '/buddypress/customize.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
+require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 //Test Suites Functions
 require_once(THE_FUNCTION . '/test-suites.php');
 //Test Case Function
@@ -151,6 +152,12 @@ function add_header_scripts()
     }
     if(bp_is_item_admin()){
         wp_enqueue_script('groups-admin', get_stylesheet_directory_uri().'/groups/js/groups-admin.js', $actions_depends, '1.0', true);
+    }
+    
+    //Add Buddypress Docs StyleSheet
+    if(!bp_docs_is_docs_component() && bp_is_group())
+    {
+        wp_enqueue_style( 'bp-docs-css', plugins_url() . '/' . BP_DOCS_PLUGIN_SLUG . '/includes/' . 'css/screen.css' );
     }
     
 }

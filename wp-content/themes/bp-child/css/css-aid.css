@@ -262,6 +262,7 @@ select{
 	font-weight: bold;
 }
 .button_red{
+    color: #fff;
     background: #aa221e;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cc2e27), to(#981716));
     background: -webkit-linear-gradient(top, #cc2e27, #981716);
@@ -991,19 +992,50 @@ img {
 table {
 	width: 100%;
 	text-align: left;
-	margin: 30px auto;
+	margin: 10px auto;    
+    border-collapse: collapse;
+}
+thead th{
+    padding: 0;
+    margin: 0;
+    background:#1f7ac7 url(../images/blue_dotted_bcg.png) !important;
+    box-shadow: 0 1px 1px rgba(255,255,255,0.4) inset;
+    -moz-box-shadow: 0 1px 1px rgba(255,255,255,0.4) inset;
+    -webkit-box-shadow: 0 1px 1px rgba(255,255,255,0.4) inset;
+    -o-box-shadow: 0 1px 1px rgba(255,255,255,0.4) inset;    
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 10px;
+    border: 1px solid #1d76c0;
+/*    border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+    -o-border-radius: 3px 3px 0 0;*/
 }
 
-th, td {
-	padding: 5px 10px;
+td,
+tbody th {
+	padding: 7px 10px;
+    line-height: 15px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #747474;
+    background: #f7f6f6;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FCFCFC), to(#F2F2F2));
+    background: -webkit-linear-gradient(top, #FCFCFC, #F2F2F2);
+    background: -moz-linear-gradient(top, #FCFCFC, #F2F2F2);
+    background: -ms-linear-gradient(top, #FCFCFC, #F2F2F2);
+    background: -o-linear-gradient(top, #FCFCFC, #F2F2F2);
+    border-top: solid 1px #b7b7b7;
+    border-bottom: solid 1px #b7b7b7;
 }
+tbody{
+    border-left: solid 1px #b7b7b7;
+    border-right: solid 1px #b7b7b7;
+}
+tfoot td {
 
-th, tfoot td {
-	font-weight: bold;
-	background: rgba(0, 0, 0, 0.4);
-	border-top: 1px solid #313B44;
-	border-bottom: 1px solid #313B44;
-	font-family: "Arvo", Courier, Arial, sans-serif;
 }
 
 td {
@@ -1050,22 +1082,26 @@ tr {
     margin-top: 8px;
 }
 .error {
-    background: #e52727 url(../images/error-icon.png) 8px center no-repeat;
+    background: #e52727 url(../images/error-icon.png) 8px 7px no-repeat;
     border-color: #b61313;
 }
 .warning {
-    background: #e67070 url(../images/warning-icon.png) 8px center no-repeat;
+    background: #e67070 url(../images/warning-icon.png) 8px 7px no-repeat;
     border-color: #d96666;
 }
 .success {
-    background: #3db118 url(../images/success-icon.png) 8px center no-repeat;
+    background: #3db118 url(../images/success-icon.png) 8px 7px no-repeat;
     border-color: #37a215;
 }
 .notice {
-	background: #f7941d url(../images/notice-icon.png) 8px center no-repeat;
+	background: #f7941d url(../images/notice-icon.png) 8px 7px no-repeat;
     border-color: #e38413;
 }
-
+.message  a{
+    text-decoration: underline;
+    font-weight: 600;
+    color: #fff !important;
+}
 .inner-warning{
     background: #FFEEA8;
     padding: 10px;
@@ -1483,7 +1519,7 @@ tr {
     background-position: 0 -128px;
 }
 .cancel-btn,
-.delete-btn{
+.delete-grey-btn{
     border-color: #9f9f9f;
     background: #b1b1b1;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c2c2c2), to(#9f9f9f));
@@ -1499,14 +1535,14 @@ tr {
 .cancel-btn span.p{
     background-position: 0 1px;
 }
-.delete-btn span.p{
+.delete-grey-btn span.p{
     background-position: 0 1px;
 }
-.delete-btn:hover,
+.delete-grey-btn:hover,
 .cancel-btn:hover{
     background: #c1c1c2;
 }
-.default-btn{
+.delete-grey-btn{
     padding: 0 12px !important;
 }
 .certify-grey-btn,        
@@ -1610,6 +1646,7 @@ tr {
     height: 16px;
     line-height: 16px;
 }
+
 /*** Common Popup Boxes Style ***/
 .popup-box{
     margin: 0 auto;

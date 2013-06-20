@@ -40,7 +40,7 @@
                                 
                             }else{ //Show Tabs
                         ?>
-                            <div id="wiki-container" class="tab-content column white_bcg" style="display: none;">
+                            <div id="wiki-container" class="" style="display: none;">
                                 <?php include( bp_docs_locate_template( 'docs-loop.php' ) ) ?>
                             </div>
                             <div id="forum-container" class="tab-content column white_bcg" style="display: none;">

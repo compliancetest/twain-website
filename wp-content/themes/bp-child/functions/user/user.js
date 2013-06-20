@@ -221,16 +221,5 @@
             })
         });
         
-        //Products Page
-        $('#my_products').find('.grid-box-expandable').each(function(){            
-            var table = $(this);
-            table.find('.gbh-btn-expandable').click(function(){          
-                if(table.hasClass('grid-box-closed'))      
-                    table.removeClass('grid-box-closed').addClass('grid-box-opened');
-                else
-                    table.removeClass('grid-box-opened').addClass('grid-box-closed');
-                table.find('.grid-box-body').animate({'height': 'toggle'});
-            })
-        })
     })    
 })(jQuery);

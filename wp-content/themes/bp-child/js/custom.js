@@ -159,7 +159,7 @@ jQuery(document).ready(function($) {
 	 
 	function switch_tabs(obj)
 	{
-		$('.tab-content').hide();
+		$('#item-body > div').hide();
 		$('.tabs a').removeClass("selected");
 		var id = obj.attr("rel");
 	 
@@ -431,6 +431,17 @@ jQuery(document).ready(function($) {
     jQuery('a.submit-btn').click(function(){
         jQuery(this).parents('form').submit();
         return false;
+    })
+    
+    $('body').find('.grid-box-expandable').each(function(){            
+        var table = $(this);
+        table.find('.gbh-btn-expandable').click(function(){          
+            if(table.hasClass('grid-box-closed'))      
+                table.removeClass('grid-box-closed').addClass('grid-box-opened');
+            else
+                table.removeClass('grid-box-opened').addClass('grid-box-closed');
+            table.find('.grid-box-body').animate({'height': 'toggle'});
+        })
     })
 
 });

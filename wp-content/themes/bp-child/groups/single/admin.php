@@ -62,7 +62,7 @@
                                 <?php if(bp_get_group_has_avatar()){ ?>
                                 <?php echo bp_get_group_avatar(array('width' => 98, 'height' => 98))?>
                                 <div class="space10"></div>
-                                <a href="<?php echo bp_get_group_avatar_delete_link()?>" class="action-btn delete-btn"><span class="p"></span><span class="t">DELETE</span></a>
+                                <a href="<?php echo bp_get_group_avatar_delete_link()?>" class="action-btn delete-grey-btn"><span class="p"></span><span class="t">DELETE</span></a>
                                 <?php }else{ ?>
                                 <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/default-group-avatar.png" title="Default Avatar" />                                
                                 <?php } ?>
@@ -125,7 +125,7 @@
                         <?php do_action( 'bp_after_group_delete_admin' ); ?>
                         <div class="btn-row">
                             <input type="hidden" value="<?php _e( 'Delete Group', 'buddypress' ); ?>" id="delete-group-button" name="delete-group-button" />
-                            <a href="#" class="action-btn delete-btn"><span class="p"></span><span class="t">DELETE GROUP</span></a>                    
+                            <a href="#" class="action-btn delete-grey-btn"><span class="p"></span><span class="t">DELETE GROUP</span></a>                    
                             <div class="clear"></div>
                         </div>                        
                     </div>
