@@ -474,7 +474,12 @@ textarea {
 .green_bcg {
 	background-color: #55c01f !important;
 }
-
+.noshadow{
+    box-shadow: none !important;    
+    -moz-box-shadow: none !important;    
+    -webkit-box-shadow: none !important;    
+    -o-box-shadow: none !important;    
+}
 
 /*******************IMAGES***************************/
 
@@ -1779,4 +1784,51 @@ tr {
     height: 18px;
     line-height: 18px;
     
+}
+.pagination-wrapper{
+    padding: 30px 0;
+    text-align: center;
+}
+.pagination{
+    margin: 0 auto;
+    display: inline-block;
+    background: #f2f2f2;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#e5e5e5));
+    background: -webkit-linear-gradient(top, #ffffff, #e5e5e5);
+    background: -moz-linear-gradient(top, #ffffff, #e5e5e5);
+    background: -ms-linear-gradient(top, #ffffff, #e5e5e5);
+    background: -o-linear-gradient(top, #ffffff, #e5e5e5);
+    border: solid 1px #d8d8d8;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    
+}
+.pagination .page-numbers{
+    width: 26px;
+    display: inline-block;
+    height: 23px;
+    line-height: 23px;
+    border-right: solid 1px #dcdcdc;
+    font-size: 13px;
+    font-weight: 600;
+    float: left;
+}
+.pagination .page-numbers:hover{
+    background-color: #e9e9e9;
+}
+.pagination .current{
+    color: #18529b !important;
+    background: #fff !important;
+    box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
+}
+
+.pagination .prev{
+    background: url(../images/btn-sprites.png) no-repeat 8px -647px;
+    text-indent: -9999px;
+}
+.pagination .next{
+    background: url(../images/btn-sprites.png) no-repeat 8px -695px;
+    text-indent: -9999px;
+    border-right: none;
 }

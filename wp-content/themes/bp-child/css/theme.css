@@ -533,30 +533,35 @@ width: 28%;
 }
 
 .expandable .open {
-background: url(../images/expandable_arrow_o.png) left center no-repeat !important;
+    background: url(../images/expandable_arrow_o.png) left 3px no-repeat !important;
 }
 
     .expandable .exp_title {
         font-weight: bold;
         color: #666;
         margin-bottom: 10px;
-        background: url(../images/expandable_arrow_c.png) left center no-repeat;
+        background: url(../images/expandable_arrow_c.png) left 2px no-repeat;
         padding: 0 0 7px 12px;
         cursor: pointer;
         border-bottom: 1px solid #A0A0A0;
-        background-position: 0px 5px;
     }
     
         .expandable .close {
-            background: url(../images/expandable_arrow_c.png) left center no-repeat;
+            background: url(../images/expandable_arrow_c.png) left 2px no-repeat;
         }
 
         .exp_content {
             display: block;
+            
         }
         
         .exp_content input[type="checkbox"]{
-        top:3px;
+            top: 2px;
+            position: relative;
+        }
+        .exp_content label{
+            display: block;
+            line-height: 20px;
         }
 
 /* ************** GRID ELEMENTS ***************** */
@@ -943,7 +948,6 @@ border-bottom: 0px !important;
     width: 100%;
     min-width: 1000px;
     background: white;
-    font-family: Arial;
 }
 
 #menu-wrapper {
@@ -2589,45 +2593,6 @@ background-image: url(../images/white_gloss.png);
     float: left;
 }
 
-/* **************** SEARCH PAGE ELEMENTS *********************** */
-
-#search_test_suite, .test_suits_research {
-    border: 2px #d8d8d8 solid;
-    font-style: italic;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-size: 14px;
-    background-image: none;
-}
-
-.test_suits_research {
-    background-image: none !important;
-    font-style: italic;
-	font-family: 'Open Sans', Arial, sans-serif;
-	color:#aaaaaa;
-}
-
-#search_test_suite_submit {
-    background: url(../images/search_test_suite_btn.png) left top no-repeat;
-    width: 18px !important;
-    height: 18px;
-    position: absolute;
-    right: 10px;
-    top: 13px;
-    cursor: pointer;
-    border: 0;
-    box-shadow: none;
-}
-
-.search_test_suite_results {
-    margin: 15px 0;
-    font-weight: normal;
-    font-size: 1.3em;
-    line-height: 12px;
-}
-
-#search_title_block {
-    border-bottom: 1px solid #e7e7e7;
-}
 
 /* **************** FOOTER ELEMENTS *********************** */
 
@@ -4959,5 +4924,65 @@ body #bbpress-forums fieldset.bbp-form{
     padding: 0;
 }
 body #bbpress-forums{
+    margin-bottom: 0;
+}
+
+/*** Search Form ***/
+.searchform{
+    position: relative;
+    background: #fff;
+    float: left;
+}
+.searchform .keyword{
+    border: solid 2px #D8D8D8; 
+    border-radius:8px;
+    -moz-border-radius:8px;
+    -radius-border-radius:8px;
+    padding: 10px 35px 10px 10px;    
+    width: 255px;    
+
+}
+.searchform .search-button {
+    border: solid 1px red;
+    width: 35px !important;
+    height: 40px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    border: 0;
+    background: url(../images/magnifier_icon_b.png) no-repeat center center !important;
+    display: block;
+    box-shadow: none;
+    padding: 0;
+}
+#clear-search-filter-btn{
+    float: right;
+    margin-top: 12px;
+}
+.container p.search_result_label{
+    font-size: 18px;
+    color: #1f5aa4;
+    float: left;
+    line-height: 40px;
+    padding: 0 20px;
+    margin: 0;
+}
+
+.search_result_block .grid_head_border{
+    border-bottom: none;
+    padding: 0 15px 3px 15px;
+}
+.search_result_block .grid_body{
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;    
+}
+.search_result_block .grid_body .grid_row{
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.search_result_block .expandable .exp_title{
+    border-bottom: none;
     margin-bottom: 0;
 }

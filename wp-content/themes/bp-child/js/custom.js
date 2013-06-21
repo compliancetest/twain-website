@@ -298,7 +298,7 @@ jQuery(document).ready(function($) {
 	
 	jQuery('.search_select ul ul li a').click(function(data) {
 		var sel_id=jQuery(this).attr('id');
-		/*alert(sel_id);*/
+		
 		jQuery('#hidden_value').attr('value', sel_id);
 		
 		var sel_name=jQuery(this).text();
@@ -312,46 +312,24 @@ jQuery(document).ready(function($) {
     ---------------------------------------------*/
     //jQuery("#hidden_value").val('');
     
-	jQuery('.search_select, #searchform').on('click submit', function(event) {
+	jQuery('#searchform').on('submit', function(event) {
         var eventType = event.type;
         var search_value =  jQuery("#hidden_value").val();
         var search_text =  jQuery("#choose_one").text();
         
-        var thisElem = jQuery(this);
-        
-        switch(eventType){
-            case'submit':
-                jQuery('#choose_one').removeClass('err_red').text('Tests / Products');
-                
-                if(search_value == ''){
-                    //alert('submit');
-                    //jQuery('.err_search').fadeIn();
-                    jQuery('#choose_one').addClass('err_red').text('Choose a category!');
-                    return false;
-                }
-                
-            break;
-                
-            case'click':
-                if(thisElem.hasClass('search_select')){
-                    //jQuery('.err_search').fadeOut();
-                    //jQuery('#choose_one').removeClass('err_red');
-                    
-                    jQuery('.search_select ul.block li').on('click', function(){
-                        search_value =  jQuery("#hidden_value").val();
-                        
-                        if(search_value == ''){
-                            //alert(search_value);
-                            //jQuery('.err_search').fadeIn();
-                            jQuery('#choose_one').addClass('err_red').text('Choose a category!');
-                            
-                            return false;
-                        }
-                    });
-                }
-            break;
+        if(search_value == ''){
+            jQuery('#choose_one').addClass('err_red').text('Choose a category!');
+            return false;
         }
         
+        if(search_value == 'test-suite')
+        {
+            jQuery(this).attr('action', '/test-suites');
+        }else if(search_value == 'product-service'){
+            jQuery(this).attr('action', '/products-and-services');
+        }
+        
+        return true;
     });
 
 	

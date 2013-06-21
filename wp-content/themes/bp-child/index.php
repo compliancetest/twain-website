@@ -8,8 +8,8 @@ get_header();
 <!--				<div class="space7"></div>-->
 				
 				<div id="search_bar">                    
-				  <form  role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>"  class="nomargintop">
-					<input id="s" name="s" value=" " type="text" autocomplete="off" class="inactive_s">
+				  <form  role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>/search"  class="nomargintop">
+					<input id="q" name="q" value="" type="text" autocomplete="off" class="inactive_s">
 					<div class="search_select_div">
 						<div class="search_select">
 							<ul>
@@ -21,7 +21,7 @@ get_header();
 								</li>	
 							</ul>
 						</div>
-						<input type="hidden" name="post_type" value="" id="hidden_value"/>
+						<input type="hidden" value="" id="hidden_value"/>
 					</div>
 
 				   
