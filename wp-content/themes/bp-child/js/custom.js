@@ -319,7 +319,7 @@ jQuery(document).ready(function($) {
         
         if(search_value == ''){
             jQuery('#choose_one').addClass('err_red').text('Choose a category!');
-            return false;
+            return false; 
         }
         
         if(search_value == 'test-suite')
