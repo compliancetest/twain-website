@@ -5,6 +5,7 @@
 
 //MetaBoxes For Test Cases
 add_action('admin_init', 'add_test_cases_metaboxes');
+
 function add_test_cases_metaboxes(){    
     
     add_meta_box("select_test_suites_metabox", "Select Test Suite", 'test_case_test_suites_metabox_html', "test-case", "normal", "high");
@@ -14,6 +15,54 @@ function add_test_cases_metaboxes(){
     add_meta_box("choose_initiating_message_metabox", "Choose Initiating Message", 'test_case_choose_initiating_message_metabox_html','test-case',"normal","high");
     add_meta_box("choose_roles_metabox", "Choose Roles", 'test_case_choose_roles_metabox_html','test-case',"normal","high");
     add_meta_box("choose_level_metabox", "Choose Conformance Level", 'test_case_conformance_level_metabox_html','test-case',"normal","high");
+}
+
+add_action('admin_init', 'do_test_case_ajax_action');
+function do_test_case_ajax_action()
+{
+    if(!is_admin())     //If not admin, return;
+        return;
+        
+    if(isset($_POST['suite_id']) && isset($_POST['post_id']))    
+    {
+        $postID = $_POST['post_id'];
+        //Check _wpnounce
+        if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_roles'))
+        {   
+            $suiteRoles = getTestSuiteRoles($_POST['suite_id']);
+            echo '<option value="">Choose Tester Role</option>';
+            foreach($suiteRoles as $role){            
+                echo '<option value="'. $role['name']. '"  class="'.$test_suite.'">'.$role['name'].'</option>';                        
+            }    
+            exit;
+        }else if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_init_messages')){   
+            $metas_result = get_post_meta($_POST['suite_id'], 'init_message', true);
+            echo '<option value="">Choose Initiating Message</option>';
+            $metas_array = explode(',', $metas_result);
+            if($metas_result)
+            {
+                foreach($metas_array as $ts_init_message){
+                    echo '<option value="'.$ts_init_message.'">'.$ts_init_message.'</option>';             
+                }
+            }
+            
+            exit;
+        }else if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_conf_level')){   
+            $metas_result = get_post_meta($_POST['suite_id'], 'lvl_code', true);
+            echo '<option value="">Choose Conformance Level</option>';
+            
+            if($metas_result)
+            {
+                foreach($metas_result as $v){
+                    echo '<option value="'.$v.'">'.$v.'</option>';             
+                }
+            }
+            
+            exit;
+        }
+        
+        
+    }
 }
 
 //Get selected test suites of the test case
@@ -87,7 +136,7 @@ function test_case_test_suites_metabox_html(){
                 jQuery("#choose_level_metabox .inside").html('First choose a test suite');
             }
             
-            var checkElem_tester = jQuery('#checktester').size() > 0 ? 1 : 0;
+            var checkElem_tester = jQuery('#choose_tester_role').size() > 0 ? 1 : 0;
             var checkElem_harness = jQuery('#checkharness').size() > 0 ? 1 : 0;
             var checkElem_initiator = jQuery('#checkinitiator').size() > 0 ? 1 : 0;
             var checkElem2 = jQuery('#checkinitmsg').size() > 0 ? 1 : 0;
@@ -95,7 +144,7 @@ function test_case_test_suites_metabox_html(){
             
             jQuery(document).on('change', '.testsuite_values', function(){
                 
-                checkElem_tester = jQuery('#checktester').size() > 0 ? 1 : 0;
+                checkElem_tester = jQuery('#choose_tester_role').size() > 0 ? 1 : 0;
                 checkElem_harness = jQuery('#checkharness').size() > 0 ? 1 : 0;
                 checkElem_initiator = jQuery('#checkinitiator').size() > 0 ? 1 : 0;
                 checkElem2 = jQuery('#checkinitmsg').size() > 0 ? 1 : 0;
@@ -105,8 +154,9 @@ function test_case_test_suites_metabox_html(){
                 
                 //Tester Role
                 var fields = {
-                        testsuite_id_tester: testsuite_val,
-                        checkElem_tester: checkElem_tester,
+                        suite_id: testsuite_val,                        
+                        post_id: '<?php echo $post->ID?>',
+                        '_wpnonce': '<?php echo wp_create_nonce('get_suite_roles')?>'
                     }
                 
                 jQuery.ajax({
@@ -114,228 +164,36 @@ function test_case_test_suites_metabox_html(){
                     data: fields,
                     type:'POST',
                     success: function(data){
-                        var getData_tester = data.split('##');
-                        var get_ts_val_tester = [];
-                        jQuery('select.testsuite_values option:selected').each(function(i) {
-                            get_ts_val_tester[i]=jQuery(this).val();
-                        });
                         
-                        //Remove additional options
-                        jQuery('#checktester option').each(function() {
-                            var get_init_mess_class_tester = jQuery(this).attr('class');
-                            var get_init_mess_val_tester = jQuery(this).val();
-                            
-                            if(jQuery.inArray(get_init_mess_class_tester,get_ts_val_tester) == -1){
-                                jQuery(this).remove();
-                            }    
-                        });
+                        jQuery('#choose_tester_role').find('option').remove();
+                        jQuery('#choose_tester_role').append(data);
                         
-                        if(getData_tester[0] == 0){
-                            jQuery("#choose_roles_metabox .inside #tester_role").html(getData_tester[1]);
-                        }
-                        else if(getData_tester[0] == 1){
-                            jQuery("#choose_roles_metabox .inside #tester_role #checktester").append(getData_tester[1]);
-                            //Remove Duplicates
-                            var usedNames_tester = {};
-                            jQuery("#checktester option").each(function () {
-                                if(usedNames_tester[this.text]) {
-                                    jQuery(this).remove();
-                                } else {
-                                    usedNames_tester[this.text] = this.value;
-                                }
-                            });
-                        }
-                            
+                        jQuery('#choose_harness_role').find('option').remove();
+                        jQuery('#choose_harness_role').append(data);
+                        
+                        jQuery('#choose_initiator').find('option').remove();
+                        jQuery('#choose_initiator').append(data);
+                        
+                        
                     },
                     error: function(data){
                     }
                 });
                 
-                //Harness Role
-                var fields_harness = {
-                        testsuite_id_harness: testsuite_val,
-                        checkElem_harness: checkElem_harness,
-                    }
-                
-                jQuery.ajax({
-                    url: '',
-                    data: fields_harness,
-                    type:'POST',
-                    success: function(data){
-                        var getData_harness = data.split('##');
-                        var get_ts_val_harness = [];
-                        jQuery('select.testsuite_values option:selected').each(function(i) {
-                            get_ts_val_harness[i]=jQuery(this).val();
-                        });
-                        
-                        //Remove additional options
-                        jQuery('#checkharness option').each(function() {
-                            var get_init_mess_class_harness = jQuery(this).attr('class');
-                            var get_init_mess_val_harness = jQuery(this).val();
-                            
-                            if(jQuery.inArray(get_init_mess_class_harness,get_ts_val_harness) == -1){
-                                jQuery(this).remove();
-                            }    
-                        });
-
-                        if(getData_harness[0] == 0){
-                            jQuery("#choose_roles_metabox .inside #harness_role").html(getData_harness[1]);
-                        }
-                        else if(getData_harness[0] == 1){
-                            jQuery("#choose_roles_metabox .inside #harness_role #checkharness").append(getData_harness[1]);
-                            //Remove Duplicates
-                            var usedNames_harness = {};
-                            jQuery("#checkharness option").each(function () {
-                                if(usedNames_harness[this.text]) {
-                                    jQuery(this).remove();
-                                } else {
-                                    usedNames_harness[this.text] = this.value;
-                                }
-                            });
-                        }
-                            
-                    },
-                    error: function(data){
-                    }
-                });
-                
-                //Initiator
-                var fields_initiator = {
-                        testsuite_id_initiator: testsuite_val,
-                        checkElem_initiator: checkElem_initiator,
-                    }
-                
-                jQuery.ajax({
-                    url: '',
-                    data: fields_initiator,
-                    type:'POST',
-                    success: function(data){
-                        var getData_initiator = data.split('##');
-                        var get_ts_val_initiator = [];
-                        jQuery('select.testsuite_values option:selected').each(function(i) {
-                            get_ts_val_initiator[i]=jQuery(this).val();
-                        });
-                        
-                        //Remove additional options
-                        jQuery('#checkinitiator option').each(function() {
-                            var get_init_mess_class_initiator = jQuery(this).attr('class');
-                            var get_init_mess_val_initiator = jQuery(this).val();
-                            
-                            if(jQuery.inArray(get_init_mess_class_initiator,get_ts_val_initiator) == -1){
-                                jQuery(this).remove();
-                            }    
-                        });
-
-                        if(getData_initiator[0] == 0){
-                            jQuery("#choose_roles_metabox .inside #initiator_role").html(getData_initiator[1]);
-                        }
-                        else if(getData_initiator[0] == 1){
-                            jQuery("#choose_roles_metabox .inside #initiator_role #checkinitiator").append(getData_initiator[1]);
-                            //Remove Duplicates
-                            var usedNames_initiator = {};
-                            jQuery("#checkinitiator option").each(function () {
-                                if(usedNames_initiator[this.text]) {
-                                    jQuery(this).remove();
-                                } else {
-                                    usedNames_initiator[this.text] = this.value;
-                                }
-                            });
-                        }
-                            
-                    },
-                    error: function(data){
-                    }
-                });
-                
-                
-                // Initiating Message
-                var fields2 = {
-                    testsuite_id2 : testsuite_val,
-                    checkElem2: checkElem2
-                    }
-                jQuery.ajax({
-                    url: '',
-                    data: fields2,
-                    type:'POST',
-                    success: function(data){
-                        var getData2 = data.split('##');
-                        var get_ts_val2 = [];
-                        jQuery('select.testsuite_values option:selected').each(function(i) {
-                            get_ts_val2[i]=jQuery(this).val();
-                        });
-                        
-                        //Remove additional options
-                        jQuery('#checkinitmsg option').each(function() {
-                            var get_init_mess_class2 = jQuery(this).attr('class');
-                            var get_init_mess_val2 = jQuery(this).val();
-                            
-                            if(jQuery.inArray(get_init_mess_class2,get_ts_val2) == -1){
-                                jQuery(this).remove();
-                            }    
-                        });
-                        
-                        if(getData2[0] == 0){
-                            jQuery("#choose_initiating_message_metabox .inside").html(getData2[1]);
-                        }
-                        else if(getData2[0] == 1){
-                            jQuery("#choose_initiating_message_metabox .inside #checkinitmsg").append(getData2[1]);
-                            //Remove Duplicates
-                            var usedNames2 = {};
-                            jQuery("#checkinitmsg option").each(function () {
-                                if(usedNames2[this.text]) {
-                                    jQuery(this).remove();
-                                } else {
-                                    usedNames2[this.text] = this.value;
-                                }
-                            });
-                        }
-                    },
-                    
-                    error: function(data){
-                    }
-                });
                 
                 //Level Code
                 var fields3 = {
-                        testsuite_id3 : testsuite_val,
-                        checkElem3: checkElem3
+                        suite_id: testsuite_val,                        
+                        post_id: '<?php echo $post->ID?>',
+                        '_wpnonce': '<?php echo wp_create_nonce('get_suite_conf_level')?>'
                     }
                 jQuery.ajax({
                     url: '',
                     data: fields3,
                     type:'POST',
                     success: function(data){
-                        var getData3 = data.split('##');
-                        var get_ts_val3 = [];
-                        jQuery('select.testsuite_values option:selected').each(function(i) {
-                            get_ts_val3[i]=jQuery(this).val();
-                        });
-                        
-                        //Remove additional options
-                        jQuery('#checkconflvl option').each(function() {
-                            var get_init_mess_class3 = jQuery(this).attr('class');
-                            var get_init_mess_val3 = jQuery(this).val();
-                            
-                            if(jQuery.inArray(get_init_mess_class3,get_ts_val3) == -1){
-                                jQuery(this).remove();
-                            }
-                            
-                        });
-                        
-                        if(getData3[0] == 0){
-                            jQuery("#choose_level_metabox .inside").html(getData3[1]);
-                        }else if(getData3[0] == 1){
-                            jQuery("#choose_level_metabox .inside #checkconflvl").append(getData3[1]);
-                            //Remove Duplicates
-                            var usedNames3 = {};
-                            jQuery("#checkconflvl option").each(function () {
-                                if(usedNames3[this.text]) {
-                                    jQuery(this).remove();
-                                } else {
-                                    usedNames3[this.text] = this.value;
-                                }
-                            });
-                        }    
+                        jQuery('#checkconflvl').find('option').remove();
+                        jQuery('#checkconflvl').append(data);
                     },
                     
                     error: function(data){
@@ -418,78 +276,52 @@ function test_case_choose_roles_metabox_html(){
     //Current Roles Selected
     $current_tester_role = get_post_meta($post->ID, 'choose_tester_role', true);
     $current_harness_role = get_post_meta($post->ID, 'choose_harness_role', true);
-    $current_initiator = get_post_meta($post->ID, 'choose_initiator', true);
-    
-    $all_tester_roles = array();
-    $all_harness_roles = array();
-    $all_initiators = array();
     
     //Roles Test Suite Associated
     //Tester Role
     echo '<div id="tester_role"><label for="choose_tester_role"><b>Tester Role</b></label><br />';
-    echo '<select name="choose_tester_role" id="checktester">';
+    echo '<select name="choose_tester_role" id="choose_tester_role">';
     echo '<option value="">Choose Tester Role</option>';
     foreach ($current_test_suite as $test_suite){
-        $get_metas_tester_role = get_post_meta($test_suite, 'tester_role_ts', true);
-        $tester_roles = explode(',', $get_metas_tester_role);
-        foreach($tester_roles as $tester_role){
-            if(!in_array($tester_role,$all_tester_roles)){
-                if($tester_role == $current_tester_role){
-                    $selected_tester_role = 'selected = "selected"';
-                }
-                else {
-                    $selected_tester_role = '';
-                }
-            echo '<option value="'.$tester_role.'" '.$selected_tester_role.' class="'.$test_suite.'">'.$tester_role.'</option>';
-            array_push($all_tester_roles,$tester_role);
+        $suiteRoles = getTestSuiteRoles($test_suite);
+        
+        foreach($suiteRoles as $role){            
+            if($role['name'] == $current_tester_role){
+                $selected_tester_role = 'selected = "selected"';
             }
+            else {
+                $selected_tester_role = '';
+            }
+            echo '<option value="'.$role['name'].'" '.$selected_tester_role.' class="'.$test_suite.'">'.$role['name'].'</option>';                        
         }    
     }
     echo '</select> </div> <br />';
     
     //Harness Role
     echo '<div id="harness_role"><label for="choose_harness_role"><b>Harness Role</b></label><br />';
-    echo '<select name="choose_harness_role">';
+    echo '<select name="choose_harness_role" id="choose_harness_role">';
     echo '<option value="">Choose Harness Role</option>';
     foreach ($current_test_suite as $test_suite){
-        $get_metas_harness_role = get_post_meta($test_suite, 'harness_role_ts', true);
-        $harness_roles = explode(',', $get_metas_harness_role);
-        foreach($harness_roles as $harness_role){
-            if(!in_array($harness_role,$all_harness_roles)){
-                if($harness_role == $current_harness_role){
-                    $selected_harness_role = 'selected = "selected"';
-                }
-                else {
-                    $selected_harness_role = '';
-                }
-            echo '<option value="'.$harness_role.'" '.$selected_harness_role.' class="'.$test_suite.'">'.$harness_role.'</option>';
-            array_push($all_harness_roles,$harness_role);
+        $suiteRoles = getTestSuiteRoles($test_suite);
+        
+        foreach($suiteRoles as $role){            
+            if($role['name'] == $current_harness_role){
+                $selected_tester_role = 'selected = "selected"';
             }
-        }    
+            else {
+                $selected_tester_role = '';
+            }
+            echo '<option value="'.$role['name'].'" '.$selected_tester_role.' class="'.$test_suite.'">'.$role['name'].'</option>';                        
+        }   
     }
     echo '</select> </div> <br />';
     
+    $current_initiator = get_post_meta($post->ID, 'choose_initiator', true);
     //Initiator
     echo '<div id="initiator_role"><label for="choose_initiator"><b>Initiator</b></label><br />';
-    echo '<select name="choose_initiator">';
-    echo '<option value="">Choose Initiator</option>';
-    foreach ($current_test_suite as $test_suite){
-        $get_metas_initiators = get_post_meta($test_suite, 'initiator_ts', true);
-        $initiators = explode(',', $get_metas_initiators);
-        foreach($initiators as $initiator){
-            if(!in_array($initiator,$all_initiators)){
-                if($initiator == $current_initiator){
-                    $selected_initiator = 'selected = "selected"';
-                }
-                else {
-                    $selected_initiator = '';
-                }
-            echo '<option value="'.$initiator.'" '.$selected_initiator.' class="'.$test_suite.'">'.$initiator.'</option>';
-            array_push($all_initiators,$initiator);
-            }
-        }    
-    }
-    echo '</select> </div>';
+    echo '<label><input type="radio" value="tester" name="choose_initiator" ' . ($current_initiator == 'tester' ? 'checked="checked"' : '') . ' /> Tester</label>';
+    echo '<label style="margin-left: 5px;"><input type="radio" value="harness" '  . ($current_initiator == 'harness' ? 'checked="checked"' : '') .  ' name="choose_initiator" /> Harness</label>';
+    echo '</div>';
     
     $post = $post_backup;
 }

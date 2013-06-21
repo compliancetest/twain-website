@@ -339,25 +339,47 @@ function test_suite_initiating_message_metabox_html(){
 function test_suite_roles_metabox_html(){
     global $post;
     
-    $current_tester_role = get_post_meta($post->ID, 'tester_role_ts', true);
-    $current_harness_role = get_post_meta($post->ID, 'harness_role_ts', true);
-    $current_intiator = get_post_meta($post->ID, 'initiator_ts', true);
-    //echo '<input type="hidden" name="custom_roles" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    ?>
-    <label for="tester_role_ts_id"><b>Tester Roles:</b></label> <br />
-    <input type="text" name="tester_role_ts" id="tester_role_ts_id" value="<?php echo $current_tester_role?>" class="mf_text" />
-    <br /><span class="description">Tester Roles (comma separated)</span> 
-    <br />
-    <label for="harness_role_ts_id"><b>Harness Roles:</b></label> <br />
-    <input type="text" name="harness_role_ts" id="harness_role_ts_id" value="<?php echo $current_harness_role; ?>" class="mf_text" />
-    <br /><span class="description">Harness Roles (comma separated)</span> 
-    <br />
-    <label for="initiator_ts_id"><b>Initiators:</b></label> <br />
-    <input type="text" name="initiator_ts" id="initiator_ts_id" value="<?php echo $current_intiator; ?>" class="mf_text" />
-    <br /><span class="description">Initiators (comma separated)</span> 
-    <br />
-    <?php    
+    $roles = getTestSuiteRoles($post->ID);
     
+?>
+    <table id="roles-list" <?php if(count($roles) == 0) {?>style="display: none"<?php } ?>>
+        <thead>
+            <tr>
+                <th>Role Name</th>
+                <th>Role Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($roles as $row){ ?>
+            <tr>            
+                <td><input type="text" name="role_names[]" value="<?php echo $row['name']?>" size="50" autocomplete="off" /></td>            
+                <td><input type="text" name="role_descs[]" value="<?php echo $row['desc']?>" size="80" autocomplete="off" /></td>            
+                <td><a href="#" class="remove-role">Remove</a></td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <input type="button" id="add-role" class="button" value="Add Role" />
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            jQuery('#add-role').click(function(){
+                jQuery('#roles-list tbody').append('<tr>' +         
+                    '<td><input type="text" name="role_names[]" value="" size="50" /></td>' +
+                    '<td><input type="text" name="role_descs[]" value="" size="80" /></td>' +
+                    '<td><a href="#" class="remove-role">Remove</a></td>' +
+                '</tr>');
+                jQuery('#roles-list').show();
+            })
+            jQuery('#roles-list').on('click', '.remove-role', function(){
+                jQuery(this).parents('tr').remove();
+                if(jQuery('#roles-list tbody').find('tr').length == 0)
+                    jQuery('#roles-list').hide();
+                return false;
+            })
+        })
+    </script>
+    <?php
 }
 
 
@@ -405,14 +427,29 @@ function save_test_suite_on_admin($post_id)
     update_post_meta($post_id, 'init_message', $init_message);
     
     //Save Roles
-    $tester_roles = $_POST['tester_role_ts'];
-    update_post_meta($post_id, 'tester_role_ts', $tester_roles);
     
-    $harness_roles = $_POST['harness_role_ts'];
-    update_post_meta($post_id, 'harness_role_ts', $harness_roles);
+    $roleNames = array();
+    $roleDescs = array();
+    delete_post_meta($post_id, 'role_names');
+    delete_post_meta($post_id, 'role_descs');
     
-    $initiators = $_POST['initiator_ts'];
-    update_post_meta($post_id, 'initiator_ts', $initiators);
+    if(isset($_POST['role_names']))
+    {
+        foreach($_POST['role_names'] as $i=>$rname)
+        {
+            if(trim($rname) != '')
+            {
+                $roleNames[] = $rname;
+                $roleDescs[] = $_POST['role_descs'][$i];
+            }
+        }
+        
+        if(count($roleNames) > 0)
+        {
+            add_post_meta($post_id, 'role_names', ';' . implode(';', $roleNames) . ';', true);
+            add_post_meta($post_id, 'role_descs', ';' . implode(';', $roleDescs) . ';', true);
+        }
+    }
     
     //Save Related Test Suites
     $ts = $_POST['ts'] ;
@@ -496,4 +533,33 @@ function getFilterParam($name)
         $param = array($param);
         
     return $param;
+}
+
+/**
+* Getting Test Suite Roles and Descs
+* 
+* @param mixed $suite_id
+*/
+function getTestSuiteRoles($suite_id)
+{
+    $roleNames = get_post_meta($suite_id, 'role_names', true);
+    $roleDescs = get_post_meta($suite_id, 'role_descs', true);
+    $roles = array();
+    if(!$roleNames)
+    {
+        return $roles;
+    }else{        
+        $arrName = split(';', $roleNames);
+        $arrDescs = split(';', $roleDescs);
+        
+        foreach($arrName as $i=>$n)
+        {
+            if(!$arrName[$i])
+                continue;
+            
+            $roles[] = array('name' => $arrName[$i], 'desc' => $arrDescs[$i]);
+        }
+    }
+    
+    return $roles;
 }
