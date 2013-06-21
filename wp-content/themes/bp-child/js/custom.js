@@ -325,7 +325,6 @@ jQuery(document).ready(function($) {
         if(search_value == 'test-suite')
         {
             jQuery(this).attr('action', '/test-suites');
-            alert(0);
         }else if(search_value == 'product-service'){
             jQuery(this).attr('action', '/products-and-services');
         }
