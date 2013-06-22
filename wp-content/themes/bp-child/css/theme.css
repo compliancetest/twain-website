@@ -1696,16 +1696,17 @@ display:block;
         font-family: 'Open Sans', Arial, sans-serif;
         text-shadow: 1px 1px 0px black;
         font-weight: bold;
+        margin-bottom: 15px;
 }
     
-            .blue_box_button {
-                left: 70px;
-                position: absolute;
-                width: 385px;
+    .blue_box_button {
+        left: 70px;
+        position: absolute;
+        width: 385px;
 /*                width: 334px;*/
-                top: 84px;
-            
-            }
+        top: 84px;
+    
+    }
             
         .blue_box_button a {
             display: block;
@@ -2994,7 +2995,9 @@ p.copyright{
 #community_registration{
     width: 305px;
 }
-
+#site-terms-box{
+    width: 900px;
+}
 #payment{
     width: 400px;
 }

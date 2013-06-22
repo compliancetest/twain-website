@@ -27,9 +27,7 @@
                 
                 if($overlay.css('display') == 'none')
                     $overlay.show();
-                
                 setOverlaySize();
-                
                 switch(opts.type)
                 {
                     case 'ajax':
@@ -51,11 +49,13 @@
                                 {
                                     $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
                                         opts.box.fadeIn('fast', function(){
-                                            opts.onLoad();        
+                                            setOverlaySize();
+                                            opts.onLoad();                                                    
                                         });
                                     })
                                 }else{
                                     opts.box.fadeIn('fast', function(){
+                                        setOverlaySize();
                                         opts.onLoad();        
                                     });
                                 }
@@ -75,11 +75,13 @@
                         {
                             $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
                                 opts.box.fadeIn('fast', function(){
+                                    setOverlaySize();
                                     opts.onLoad();        
                                 });
                             })
                         }else{
                             opts.box.fadeIn('fast', function(){
+                                setOverlaySize();
                                 opts.onLoad();        
                             });
                         }

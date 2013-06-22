@@ -1,6 +1,15 @@
 //Manage User Login And Registration
 (function($){
     $(document).ready(function(){
+        //Terms and Conditions
+        $('#agree_terms').cplightbox({});
+        $('#site-terms-box .cancel-btn').cplightbox({});
+        $('#site-terms-box .process-btn').cplightbox({
+            onLoad: function(){
+                $('#acc_tc_id').prop('checked', true);
+            }
+        });
+        
         //Add Placeholder
         $("#user_login, #user_login2").attr("placeholder", "E-mail or User");
         $("#user_pass, #user_pass2").attr("placeholder", "********");
@@ -48,15 +57,14 @@
         
         $('#logform').on('submit', function(){                        
             var form = $(this);
-            
+            var msgObj = $('#registration-popup #log .message');
             if(form.find('#user_login2').val() == '' || form.find('#user_pass2').val() == '')
             {
-                $('#popup-login-msg').html('Please fill in all fields.');
-                $('#popup-login-msg').fadeIn('fast');
+                msgObj.removeClass('success').addClass('error').html('Please fill in all fields.').fadeIn('fast');
                 return false;
             }
-            $('#popup-login-msg').hide();
-            $('.loader2').show();
+            msgObj.hide();
+            $('.loading').show();
             $.ajax({
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
@@ -68,11 +76,10 @@
                         document.location.href = "/my-profile";
                     }else{ //Error                    
                         //Show Error Message
-                        $('#popup-login-msg').html('<span></span>Wrong username or password, please try again!');
-                        $('#popup-login-msg').fadeIn('fast');
-                        
+                        msgObj.removeClass('success').addClass('error').html('Wrong username or password, please try again!').fadeIn('fast');
+
                     }  
-                    $('.loader2').hide();
+                    $('.loading').hide();
                 }
             })
             
@@ -94,48 +101,45 @@
             var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             var noError = true;
             
-            
+            var msgObj = $('#registration-popup #reg .message');
             if(firstname && lastname && email && user && organisation && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
                 
                 if (user_pass != user_pass_confirm){
-                    $('.err').text('Passwords don\'t match! ');
-                    $('.err').show('slow');
+                    msgObj.removeClass('success').addClass('error').html('Passwords don\'t match!').fadeIn('fast');
+                    return false;
                     noError = false;
                 }
                 if(!emailReg.test(email)){  
-                    $('.err').text('Please enter a valid e-mail address!');
-                    $('.err').show('slow');
+                    msgObj.removeClass('success').addClass('error').html('Please enter a valid e-mail address!').fadeIn('fast');
                     noError = false;
+                    return false;
                 }
                 
                 if (!$('#acc_tc_id').is(':checked')) {
-                    $('.err').text('You must agree to our Terms & Conditions first!');
-                    $('.err').show('slow');
+                    msgObj.removeClass('success').addClass('error').html('You must agree to our Terms & Conditions first!').fadeIn('fast');
+                    return false;
                     noError = false;
                 }
                 
                 if(noError){
                     //Send Ajax
-                    $('.loader').show();
-                    $('.error').hide();
+                    $('.loading').show();
+                    msgObj.hide();
                     $.ajax({
                         url: '/',
                         type: "POST",
                         data: form.serialize(),
                         success: function(data) {
-                            $('.loader').hide();
+                            $('.loading').hide();
                             if (data == 'success') {                                
-                                $('#wrap_forms').hide();
-                                $('.reg_message').fadeIn();                                
+                                msgObj.removeClass('error').addClass('success').html('Thanks for your registration. An email with the verification link sent to your email address. Please verify your email address using it.').fadeIn('fast');                             
                                 setTimeout(function(){
                                     location.reload();
-                                },2000);                                
+                                },4000);                                
                             } else if(data == 'captcha_error') {
-                                $('.err').text('Captcha not correct!');
-                                $('.err').show('slow');
+                                msgObj.removeClass('success').addClass('error').html('Captcha not correct!').fadeIn('fast');
                             } else {
-                                $('.err').text(data);
-                                $('.err').show('slow');
+                                msgObj.removeClass('success').addClass('error').html(data).fadeIn('fast');
                             }
                         }
                     });
@@ -143,8 +147,7 @@
                 }
                      
             }else{
-                $('.err').text('Please fill in all fields!');
-                $('.err').show('slow');
+                msgObj.removeClass('success').addClass('error').html('Please fill in all fields!').fadeIn('fast');
                 return false;
             }
             

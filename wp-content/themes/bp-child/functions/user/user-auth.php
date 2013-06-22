@@ -174,7 +174,7 @@ if(!is_user_logged_in())
         ob_start();
         ?>
         <div id="registration-popup" class="popup-box" style="display: none;">
-            <div id="dinamic_pop" class="dinamic_pop radius6">
+<!--            <div id="dinamic_pop" class="dinamic_pop radius6">
                 <p class="headline bottom30">Add New User</p>
                 <div class="pop_add_user">
                     <div class="wrap_wline">
@@ -188,7 +188,7 @@ if(!is_user_logged_in())
                         </select>
                     </div>
                 </div>
-            </div>                
+            </div>                -->
             
             <div id="registration">
                 <div class="popup-box-header radius6 noradiusbottom">User Registration</div>
@@ -215,12 +215,15 @@ if(!is_user_logged_in())
 
                             wp_login_form($args); ?>
                             <a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="recover_pass">Password recovery</a>
+                            <div class="clear"></div>
+                            <div class="space10"></div>
+                            <div class="message" style="display: none;"></div>
                         </div>
                     </div>
 
                     <div class="user_border user_border2 radius6 right" id="reg">
                         <div class="existing_user">
-                            <div class="reg_user">Register New User</div>
+                            <div class="reg_user">Register New User</div>                                                         
                             <form id="formreg" action="" method="post">
                                 <div class="field">
                                     <label for="first_name_id">First Name</label>
@@ -268,62 +271,44 @@ if(!is_user_logged_in())
                                     <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
                                 </div>
                                 <div class="field top23">        
-                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a id="terms_co">Terms & Conditions.</a></label>
+                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms & Conditions.</a></label>
                                 </div>
                                 <div class="clear"></div>
 
-                                <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>
-                                <div class="err"> </div>
+                                <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>                                
                                 <input type="hidden" name="cp-action" value="register"/>
                                 <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
-                                <div id="reg_user">Register Me</div><div class="loader"></div>
+                                <div id="reg_user">Register Me</div>
+                                <div class="space10"></div>
+                                <div class="message" style="display: none"></div>
+                                <div class="loading"></div>
                             </form>
                         </div>
                     </div>
-                    <div class="clear"></div>
+                    <div class="clear"></div>                                                                                               
                 </div>
-                <div class="reg_message"><?php echo of_get_option('reg_msg');?></div>
-                <div class="reg_message log_msg" id="popup-login-msg"><?php //echo of_get_option('log_msg');?></div>
-            </div><!--END registration-->
-			<div id="close-popup" class="close_btn"></div>
-			<!--<div class="terms_container" class="radius6">
-				<p class="headline bottom30">Terms & Conditions</p>
-
-				<div class="terms_content">
-
-				</div>
-				
-			</div> -->
-			<div id="scrollbar1" class="terms_container" class="radius6">
-				<p class="headline bottom30">Terms & Conditions<span id="close_terms"></span></p>
-				<div class="scrollbar">
-					<div class="track">
-						<div class="thumb">
-							<div class="end">
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="viewport">
-					 <div class="overview">
-					 <?php 
-						$page_id = 1061;
-						$page_data = get_page( $page_id );
-						echo apply_filters('the_content', $page_data->post_content); // echo the content and retain WordPress 
-						?>
-						<div class="clear"></div>
-						<div class="space10"></div>
-						<a id="accept_terms">Accept</a>
-						<a id="reject_terms">Reject</a>
-						<div class="clear"></div>
-						<div class="space20"></div>
-					</div>
-				</div>
-			</div>	
-          
-            
-        </div>
-        <?php
+                
+            </div><!--END registration-->                                                     
+			<div id="close-popup" class="close_btn"></div>			
+        </div>                                      
+        <div id="site-terms-box" style="display: none" class="popup-box">
+            <div class="popup-box-header radius6 noradiusbottom">Terms and Conditions</div>
+            <div class="popup-box-content">
+                <p>
+                <?php 
+                    //Getting Terms & Conditions
+                    $terms = get_page_by_path('terms-conditions');
+                    echo apply_filters('the_content', $terms->post_content);
+                ?>
+                </p>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">                        
+                <a href="#registration-popup" data-type="inline" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>
+                <a href="#registration-popup" data-type="inline" class="action-btn process-btn"><span class="p"></span><span class="t">AGREE</span></a>
+                <div class="clear"></div>
+            </div>
+        </div>    
+        <?php                                    
         $content = ob_get_contents();
         ob_end_clean();
         
