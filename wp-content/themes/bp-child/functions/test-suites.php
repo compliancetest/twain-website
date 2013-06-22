@@ -21,6 +21,23 @@ function add_metaboxes_for_test_suites()
     add_meta_box("specdoc_metabox", "Specification Documents", 'test_suites_spec_doc_metabox_html', "test-suite", "normal", "high");
     //Add Conformance Level
     add_meta_box("conf_levels_metabox", "Conformance Levels", 'test_suites_conformance_level_metabox_html', "test-suite", "normal", "high");
+    //Add Subscription Price
+    add_meta_box("subscription_price_metabox", "Subscription Price", 'subscription_price_metabox_html', "test-suite", "side", "core");
+    
+}
+
+function subscription_price_metabox_html()
+{
+    global $post;
+    
+    $monthly_price = get_post_meta($post->ID, 'monthly_subscription_price', true);
+    
+    ?>
+    <div>
+        <label><b>Monthly Subscription Price:</b></label>
+        <input type="text" name="monthly_subscription_price" value="<?php echo $monthly_price?>" />
+    </div>
+    <?php
 }
 
 //Add Conformance Level
@@ -151,7 +168,7 @@ function test_suites_spec_doc_metabox_html(){
     <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery('.add_new_doc').click(function(data) {
-            jQuery('.copy-correct-docs').html('<div class="elem2"><input type="hidden" name="doc_id[]" value="0" /> <label for="doc_name"><b>Document Name: </b></label> <br /><input type="text" autocomplete="off" name="doc_name[]" size="30" class="mf_text"/> <br clear="all" /><label for="doc_desc"><b>Document Description:</b></label> <br /> <input type="text" autocomplete="off" name="doc_desc[]" size="30" class="mf_text"/> <br clear="all" /> <label for="doc_loc"><em>Provide a </em><b>Document Location URL:</b></label> <br />    <input type="text" autocomplete="off" name="doc_loc[]" size="30" class="mf_text"/> <br clear="all" /> <label for="doc_upload"><em>OR </em><b>Upload a Document: </b></label> <br /> <input type="file" name="attachment_doc[]"> <br clear="all" /> <a href="javascript: void(0)" class="button remove_doc left">Remove</a> <br clear="all" /></div>');
+            jQuery('.copy-correct-docs').append('<div class="elem2"><input type="hidden" name="doc_id[]" value="0" /> <label for="doc_name"><b>Document Name: </b></label> <br /><input type="text" autocomplete="off" name="doc_name[]" size="30" class="mf_text"/> <br clear="all" /><label for="doc_desc"><b>Document Description:</b></label> <br /> <input type="text" autocomplete="off" name="doc_desc[]" size="30" class="mf_text"/> <br clear="all" /> <label for="doc_loc"><em>Provide a </em><b>Document Location URL:</b></label> <br />    <input type="text" autocomplete="off" name="doc_loc[]" size="30" class="mf_text"/> <br clear="all" /> <label for="doc_upload"><em>OR </em><b>Upload a Document: </b></label> <br /> <input type="file" name="attachment_doc[]"> <br clear="all" /> <a href="javascript: void(0)" class="button remove_doc left">Remove</a> <br clear="all" /></div>');
         });
         
         jQuery('.remove_doc').live('click', function() {
@@ -520,7 +537,9 @@ function save_test_suite_on_admin($post_id)
     
     update_post_meta($post_id, 'lvl_code', $lvl_code);
     update_post_meta($post_id, 'lvl_desc', $lvl_desc);
-
+    
+    //Subscription Price
+    update_post_meta($post_id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
 }
 
 //Get get params for search filter

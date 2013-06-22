@@ -421,7 +421,18 @@ jQuery(document).ready(function($) {
             table.find('.grid-box-body').animate({'height': 'toggle'});
         })
     })
-
+    
+    //Tab
+    jQuery('.tabs-contr .tab-nav a').click(function(){
+        if($(this).parent().hasClass('active'))
+            return false;
+        var rid = jQuery(this).attr('rel');
+        jQuery('.tabs-contr > .tab-content:visible').hide();
+        jQuery('.tabs-contr .tab-nav .active').removeClass('active');
+        $(this).parent().addClass('active');
+        $('#' + rid).show();
+        return false;
+    })
 });
 
 function isMobile()

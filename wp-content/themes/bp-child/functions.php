@@ -16,6 +16,8 @@ function cp_session_start()
 
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 
+//Include change role names
+require_once(THE_FUNCTION . '/role-customize.php');
 
 //MORE FIELDS - allows for extra custom fields in the edit dashboard
 require_once(THE_FUNCTION . '/more-fields/more-fields.php');

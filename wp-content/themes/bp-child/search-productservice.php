@@ -169,6 +169,7 @@ $testsuites = $get_posts->get_posts();
                             }
                         ?>
                     </div>
+                    <div class="space30"></div>
                     <div class="pagination-wrapper">
                         <div class="pagination">
                             <?php                                 
@@ -191,6 +192,7 @@ $testsuites = $get_posts->get_posts();
                             ?>
                         </div>                        
                     </div>
+                    <div class="space30"></div>
                 </div>
             </div>
         </div>

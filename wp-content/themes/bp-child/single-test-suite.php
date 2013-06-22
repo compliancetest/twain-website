@@ -3,17 +3,19 @@
 Template Name Posts: Test Suite
 */
   
-get_header();
-?>
-	<?php
-	$ts_id = get_the_ID();
-	$ts_result = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "bp_groups_testsuites WHERE ts_ids={$ts_id}");
-	$current_group_id = $ts_result -> group_id;
+  get_header();
+
+	$suiteID = get_the_ID();
+	
+	$current_group_id = get_post_meta($suiteID, 'community_id', true);
 	
 	global $bp;
 	$group = groups_get_group( array( 'group_id' => $current_group_id ) );
 	$group_url = home_url( $bp->groups->slug . '/' . $group -> slug );
-	?>
+    
+    //Check Permission
+    
+?>
 	
 
 	<div class="content container">
@@ -25,26 +27,22 @@ get_header();
 				</div> 
 				<div class="grid_cell width90P">
 					<div class="dark_gray_txt bold width80P left">
-						<h3 class="dark_gray_txt bold left lineheight22px"><?php the_title(); ?> <?php // or echo meta ('ts_name'); ?></h3>
+						<h2 class="left"><?php the_title(); ?></h2>
 						<a href="#" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
 						<div class="clear"></div>
 					</div>
 					<div class="width15P right">
-						<a href="<?php echo $group_url; ?>" class="issuer_homepage">Issuer Home Page</a>
+						<a href="<?php echo $group_url; ?>" class="action-btn blue-edit-btn"><span class="t">Issuer Home Page</span></a>
 					</div>
 					<div class="clear"></div>
-					<a href="<?php echo get_permalink( $post->ID ); ?>" class="bold blue_txt nodecoration"><?php echo get_permalink( $post->ID ); ?> <?php  // or echo meta ('ts_identifier') ;?></a>
-					<div class="space15"></div>
-					
 					<div class="grids noradiusbottom">
 						<div class="grid_row white_bcg noborderbottom">
 							<div class="grid_cell width100P left">
-								<p>Version: <span><?php echo get_post_meta(get_the_ID(), 'ts_version', true); ?></span>
+								Version: <span><?php echo get_post_meta(get_the_ID(), 'ts_version', true); ?></span>
 								Issue Date: <span><?php echo get_post_meta(get_the_ID(), 'ts_issue_date', true); ?></span>
 								Issuer: <a href="<?php echo $group_url; ?>"><span class="blue_txt"><?php echo get_post_meta(get_the_ID(), 'ts_issuer', true); ?></span></a>
 								Status: <span class="green_txt"><?php echo get_post_meta(get_the_ID(), 'ts_status', true); ?></span> 
-								Revision: <span><?php echo get_post_meta(get_the_ID(), 'ts_revision_description', true); ?></span> 
-								</p>
+								Revision: <span><?php echo get_post_meta(get_the_ID(), 'ts_revision_description', true); ?></span> 								
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -52,7 +50,7 @@ get_header();
 					<div class="space15"></div>
 					
 					<div class="grids noborder nobackground">
-					<p class="size13"><?php echo get_post_meta(get_the_ID(), 'ts_description', true); ?> </p>
+					<p class="nomarginbottom"><?php echo get_post_meta(get_the_ID(), 'ts_description', true); ?> </p>
 					</div>
 				</div>
 				
@@ -63,147 +61,160 @@ get_header();
 		
 		
 		<div class="column nopaddingbottom">
-							<!-- tabs -->
-							<div class="tabs_wrap lighter_gray_bcg">
-								<ul class="tabs_sv">
-									<li class="active">
-										<a href="javascript: void(0)" rel="tabs_sv1" class="defaulttab selected">
-											<span class="left icon" id="icon_test_suites"></span>
-											<span class="right text">Related Compliance Suites</span>
-											<span class="clear"></span>
-										</a>
-									</li>
-									<li class="">
-										<a href="javascript: void(0)" rel="tabs_sv2" class="">
-											<span class="left icon" id="icon_wiki"></span>
-											<span class="right text">Specification Documents &amp; Materials</span>
-											<span class="clear"></span>
-										</a>
-									</li>
-									<li class="">
-										<a href="javascript: void(0)" rel="tabs_sv3" class="">
-											<span class="left icon" id="icon_wiki"></span>
-											<span class="right text">Comformance Levels</span>
-											<span class="clear"></span>
-										</a>
-									</li>
-								</ul>
-								
-								<div class="clear"></div>
-								
-								<div class="tab-content white_bcg" id="tabs_sv1" style="display: block; ">
-									<div class="column">										
-										<div class="grid_cell width10P bold top3">Related To: </div>
+		    <!-- tabs -->
+			<div class="tabs-contr">
+				<ul class="tab-nav">
+					<li class="active">
+						<a href="javascript: void(0)" rel="tabs_sv1">Related Compliance Suites</a>
+					</li>
+					<li class="">
+						<a href="javascript: void(0)" rel="tabs_sv2">Specification Documents &amp; Materials</a>
+					</li>
+					<li class="">
+						<a href="javascript: void(0)" rel="tabs_sv3">Comformance Levels</a>
+					</li>
+				</ul>
+				
+				<div class="clear"></div>
+				
+				<div class="tab-content white_bcg" id="tabs_sv1" style="display: block; ">
+					<div class="column">										
+						<div class="grid_cell width10P bold top3">Related To: </div>
+						<div class="grid_cell width90P">
+						<?php 
+						
+							$relatedSuites = get_post_meta(get_the_ID(), 'ts', true) ; 
+							$relatedSuitesDesc = get_post_meta(get_the_ID(), 'ts_desc', true);
+                            
+							foreach($relatedSuites as $i => $sid){
+						?>
+                        <div>
+                            <a href="<?php echo get_permalink($sid)?>"><?php echo get_the_title($sid)?></a><br />
+                            <?php echo $relatedSuitesDesc[$i]?>
+                            <div class="space7"></div>
+                        </div>
+                        <?php
+							} 
+                        ?>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div> <!--end tab 1-->
+				
+				<div class="tab-content white_bcg" id="tabs_sv2" style="display: none; ">
+					<div class="column">
+						<?php 
+						$the_post_id= get_the_ID();
+						$myrows = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id={$the_post_id}");
+						foreach($myrows as $row){
+							$doc_name = $row->doc_name;
+							$doc_desc = $row->doc_desc;
+							$doc_loc = $row->doc_loc_url;
+							$doc_file_name = $row->doc_file_name;
+							$doc_file_url = $row->doc_loc_url;
+							echo '<div class="grid_cell width100P">';
+							echo '<a href="'.$doc_loc.'" target="_blank" class="underline blue_txt file">';
+							echo $doc_name;
+							echo '</a><div class="paddingleft20">'.$doc_desc.'</div>';
+							echo '</div><div class="clear"></div>';
+						}
+							//$doc_type_array = get_post_meta(get_the_ID(), 'doc_type', true); 
+							$doc_name_array = get_post_meta(get_the_ID(), 'doc_name', true); 
+							$doc_loc_array = get_post_meta(get_the_ID(), 'doc_loc', true); 
+							$doc_desc_array = get_post_meta(get_the_ID(), 'doc_desc', true); 
+						?>
+					</div>
+				</div> <!--end tab 2-->
+				
+				<div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
+					<div class="column padding15-20">
+						
+						<?php
+						$lvl_code_array = get_post_meta(get_the_ID(), 'lvl_code', true); 
+						$lvl_desc_array = get_post_meta(get_the_ID(), 'lvl_desc', true); 
+						
+						foreach($lvl_code_array as $key => $lvl_code){
+							foreach ($lvl_desc_array as $key2 => $lvl_desc){
+										if( $key == $key2 ){ ?>
+										<div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $lvl_code; ?></div>
 										<div class="grid_cell width90P">
-										<?php 
-										
-											$ts_sel_array = get_post_meta(get_the_ID(), 'ts', true) ; 
-											$ts_desc_array = get_post_meta(get_the_ID(), 'ts_desc', true);
-											foreach($ts_sel_array as $key => $ts_sel){
-												foreach ($ts_desc_array as $key2 => $ts_desc){
-													if($key == $key2) {
-														echo '<p class="underline blue_txt">';
-														echo get_the_title($ts_sel);
-														echo '</p>';
-														echo $ts_desc;
-														echo '<div class="space7"></div>';
-														}
-													}
-											} ?>
+											<?php echo $lvl_desc; ?>
 										</div>
-										<div class="clear"></div>
-									</div>
-									<div class="clear"></div>
-								</div> <!--end tab 1-->
-								
-								<div class="tab-content white_bcg" id="tabs_sv2" style="display: none; ">
-									<div class="column">
-										<?php 
-										$the_post_id= get_the_ID();
-										$myrows = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id={$the_post_id}");
-										foreach($myrows as $row){
-											$doc_name = $row->doc_name;
-											$doc_desc = $row->doc_desc;
-											$doc_loc = $row->doc_loc_url;
-											$doc_file_name = $row->doc_file_name;
-											$doc_file_url = $row->doc_loc_url;
-											echo '<div class="grid_cell width100P">';
-											echo '<a href="'.$doc_loc.'" target="_blank" class="underline blue_txt file">';
-											echo $doc_name;
-											echo '</a><p class="paddingleft20">'.$doc_desc.'</p>';
-											echo '</div><div class="clear"></div>';
-										}
-											//$doc_type_array = get_post_meta(get_the_ID(), 'doc_type', true); 
-											$doc_name_array = get_post_meta(get_the_ID(), 'doc_name', true); 
-											$doc_loc_array = get_post_meta(get_the_ID(), 'doc_loc', true); 
-											$doc_desc_array = get_post_meta(get_the_ID(), 'doc_desc', true); 
-										?>
-									</div>
-								</div> <!--end tab 2-->
-								
-								<div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
-									<div class="column padding15-20">
-										
-										<?php
-										$lvl_code_array = get_post_meta(get_the_ID(), 'lvl_code', true); 
-										$lvl_desc_array = get_post_meta(get_the_ID(), 'lvl_desc', true); 
-										
-										foreach($lvl_code_array as $key => $lvl_code){
-											foreach ($lvl_desc_array as $key2 => $lvl_desc){
-														if( $key == $key2 ){ ?>
-														<div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $lvl_code; ?></div>
-														<div class="grid_cell width90P">
-															<p><?php echo $lvl_desc; ?></p>
-														</div>
-														<div class="clear"></div> 
-														<div class="grey-border-bottom <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'displaynone';} ?>"></div>																	
-												<?php	}
-													}
-												}
-										?>
-									</div>
-									<div class="clear"></div>
-								</div><!--end tab 3-->
-								
-							</div>
-							<!--end tabs-->
-							
-							<div class="grid_cell width50P">
-								<div class="">
-									<a href="#" class="issuer_homepage view_compliant">View Compliant Products</a>
-								</div>
-							</div>
-							<div class="grid_cell width50P">
-								<div id="three_boxes_sv"><a class="payment_popup" target="_blank">
-									<div id="box_1_red" class="left">
-									</div>
-									
-									<div id="box_2_blue" class="column third left">
-										<h4>$200</h4>
-										<p>per mounth</p>
-									<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/blue_box_left.png" id="box_shadow_blue_left">
-									<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/blue_box_right.png" id="box_shadow_blue_right">
-									</div>
-									
-									<div id="box_3_red" class="left">
-										<p class="subscribe">SUBSCRIBE</p>
-										<p>to Test Hardness</p>
-										
-									</div>
-									<div class="right-triangle right"></div>
-									<div class="clear"></div>
-									</a>
-								</div>
-							</div>
-							<div class="clear"></div>
-		</div> 
+										<div class="clear"></div> 
+										<div class="grey-border-bottom <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'displaynone';} ?>"></div>																	
+								<?php	}
+									}
+								}
+						?>
+					</div>
+					<div class="clear"></div>
+				</div><!--end tab 3-->
+				
+			</div>
+			<!--end tabs-->
+            <div class="space15"></div>
+            <?php $price = get_post_meta(get_the_ID(), 'monthly_subscription_price', true) ?>
+			<a href="javascript: void(0)" class="suite-subscript-link">
+                <span class="price-b">
+                    <span class="l"></span>
+                    <span class="m"><b>$<?php echo $price?></b><br />per month</span>
+                    <span class="r"></span>
+                </span>
+                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+            </a>
+            <div class="clear"></div>
+            <div class="space20"></div>
+		</div>
+			<div class="clear"></div>
 		
 		<!-- Test Cases -->
-		
+		<?php
+            $testerRoles = getTestSuiteRoles($suiteID);
+            $confLevels = get_post_meta($suiteID, 'lvl_code', true);
+            $selectedRole = isset($_GET['tester_role']) ? $_GET['tester_role'] : '';
+            $selectedConfLevel = isset($_GET['conformance']) ? $_GET['conformance'] : '';
+        ?>
 		<div class="clear"></div>
 		<div class="grid_row test_cases">
-				<div id="append_filter">
-				</div>
+			<div id="append_filter">
+                <div class="grid_cell width35P">
+                    <h5 class="blue_txt">Test Cases</h5>
+                </div>
+                <form id="filter_ts" method="get" action="<?php echo get_the_guid()?>">                                        
+                    <div class="grid_cell width55P right selecteds">
+                        <span class="left padding5-10">Filter By: </span>
+                        <div class="styled_select left width25P right13">
+                            <label>
+                            <select name="tester_role" class="change_ts">
+                              <option value="">- Tester Role -</option>
+                              <?php 
+                              foreach($testerRoles as $r){                                  
+                                  echo '<option ' . ($r['name'] == $selectedRole ? 'selected="selected"' : '') . ' value="'.$r['name'].'" >'.$r['name'].'</option>';
+                              }
+                              ?>
+                            </select>
+                            </label>
+                        </div>
+                        <div class="styled_select left width30P right13">
+                            <label>
+                            <select name="conformance" class="change_ts">
+                              <option value="">Conformance Level</option>
+                              <?php 
+                              foreach($confLevels as $r){
+                                  echo '<option ' . ($r == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r.'" >'.$r.'</option>';
+                              }
+                              ?>
+                            </select>
+                            </label>
+                        </div>
+                        <a href="" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
+                        <div class="clear"></div>
+                    </div>
+                </form>
+                <div class="clear"></div>
+                <div id="double_border"></div>
+			</div>
 				<div class="grid_head blue_grid special_grid_big">
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
 						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
@@ -227,239 +238,113 @@ get_header();
 				<div class="clear"></div>
 							
 				<div class="grids">
-							<!-- Append Select Filters
-							-->
-							<?php 
-							/*global $wpdb;
-							$thepostid = get_the_ID();
-							$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key='test_suites' AND meta_value LIKE '%{$thepostid}%'");
-							foreach($results as $res){			
-								}*/
-							
-							//Check Filter's post
-							$occ_tester = '';
-							if(isset($_POST['testsuites_tester'])){
-								$occ_tester = str_replace('_',' ',$_POST['testsuites_tester']); 
-							}
-							
-							$occ_lvl = '';
-							if(isset($_POST['testsuites_lvl'])){
-								$occ_lvl = str_replace('_',' ',$_POST['testsuites_lvl']); 
-							}
-							
-							/*echo 'Tester: '.$occ_tester.'<br />';
-							echo 'LVL: '.$occ_lvl.'<br />';*/
-							
-							$thepostid = get_the_ID();
-							$loop = new WP_Query( array( 'post_type' => 'test-case', 'posts_per_page' => -1) );
-							$found = false;
-							$all_tester_roles = array();
-							$all_conf_lvl = array();
-							while ( $loop->have_posts() ) : $loop->the_post();
-								$id = get_the_ID();
-								$test_cases_assoc = get_post_meta($id, 'test_suites', true);
-								if (in_array($thepostid, $test_cases_assoc)){
-									$tc_tester_role = get_post_meta($id ,'choose_tester_role', true); 
-									/* Push all Tester Roles for filter
-									 * */
-									if (!in_array($tc_tester_role,$all_tester_roles)){
-										array_push($all_tester_roles, $tc_tester_role);
-									}
-									$tc_conformance_level = get_post_meta($id ,'conformance_level', true);
-									/* Push all Conformance Levels for filter
-									* */
-									if (!in_array($tc_conformance_level,$all_conf_lvl)){
-										array_push($all_conf_lvl, $tc_conformance_level);
-									}
-									
-									$perma = get_permalink( $id );
-									$tc_id = get_post_meta($id ,'test_case_id', true); 
-									//$tc_version = get_post_meta($id ,'version', true); 
-									$tc_published = get_post_meta($id ,'published', true); 
-									$tc_harness_role = get_post_meta($id ,'choose_harness_role', true); 
-									$tc_initiator = get_post_meta($id ,'choose_initiator', true); 
-									$tc_outcome_type = get_post_meta($id ,'outcome_type', true); 
-									$tc_message_count = get_post_meta($id ,'message_count', true); 
-									$bulk = get_post_meta($id ,'bulk', true); 
-									$initiating_message = get_post_meta($id ,'choose_init_messages', true); 
-									$test_intent_description = get_post_meta($id ,'test_intent_description', true); 
-									$found = true;
-									$the_line ='';
-									$the_line .='<div class="grid_row white_bcg tocenter testcase_line ">';
-									if ( is_user_logged_in() ) {
-											$the_line .= '<div class="grid_cell nopaddingtop width10P toleft" ><a href="';
-											$the_line .= $perma;
-											$the_line .='">';
-											$the_line .= get_the_title();
-											$the_line .='</a></div>';
-											}
-										else {
-											$the_line .= '<div class="grid_cell nopaddingtop width10P toleft" >';
-											$the_line .= get_the_title();
-											$the_line .='</div>';
-										}
-									/*$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
-									$the_line .= $tc_version;
-									$the_line .= '</div>';*/
-									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter ">';
-									$the_line .= $tc_published;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
-									$the_line .= $tc_tester_role;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
-									$the_line .= $tc_harness_role;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
-									$the_line .= $tc_initiator;
-									$the_line .='</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter">';
-									$the_line .= $tc_conformance_level;
-									$the_line .='</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
-									$the_line .= $tc_outcome_type;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter">';
-									$the_line .= $tc_message_count;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
-									$the_line .= $bulk;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width10P toleft tocenter">';
-									$the_line .= $initiating_message;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width15P toleft ">';
-									$the_line .= $test_intent_description;
-									$the_line .= '</div>';
-									$the_line .= '<div class="grid_cell nopaddingtop width5P toleft tocenter ">';
-									$the_line .= '<div class="quick_actions radius3 alignright no_bcg">
-										<ul>
-										 <li>
-											<a href="#">
-												<img src="'.get_stylesheet_directory_uri().'/images/edit_tc.png">
-												<span class="simple_tooltip radius6">Edit<span></span></span>
-											</a>
-										 </li>
-										 <li>
-											<a href="#">
-												<img src="'.get_stylesheet_directory_uri().'/images/delete_tc.png" class="left2">
-												<span class="simple_tooltip radius6">Delete<span></span></span>
-											</a>
-										 </li>
-										 <div class="clear"></div>										
-										</ul>
-										</div>';
-									$the_line .= '</div>';
-							        $the_line .= '<div class="clear"></div>';
-									$the_line .= '</div>';
-											
-									//Filter Tester is set
-									if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
-										if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
-											if (($occ_tester == $tc_tester_role) && ($occ_lvl == $tc_conformance_level)){
-												echo $the_line;
-											}
-										}
-										else if ($occ_tester == $tc_tester_role){
-											echo $the_line;
-										}
-										
-									}
-									//Filter Level is set
-									else 
-									if(isset($_POST['testsuites_lvl']) && (!empty($_POST['testsuites_lvl']))){
-										if(isset($_POST['testsuites_tester']) && (!empty($_POST['testsuites_tester']))){
-												if (($occ_tester == $tc_tester_role) && ($occ_lvl == $tc_conformance_level)){
-												echo $the_line;
-											}
-										}
-										if ($occ_lvl == $tc_conformance_level){
-											echo $the_line;
-										}
-									}
-									//Show all
-									else {
-									echo $the_line;
-								}
-									
-								}
-								//End Test Case line
-							endwhile;
-							if (!$found){
-								echo 'No test cases associated';
-							}
-							?>				
-					</div>
-					
+				<?php 
+                    $posts_per_page = 10;
+                    $page = get_query_var('page') ? get_query_var('page') : 1;
+				    //Getting Test Cases
+                    $args = $args = array(
+                            'post_type' => 'test-case',         
+                            'posts_per_page' => $posts_per_page,
+                            'paged' => $page,
+                            'tax_query' => array('relation' => 'and')
+                    );
+                    $params = array();
+                    //Add Test Suite ID
+                    $args['meta_query'][] = array('key' => 'test_suites', 'value' => "|" . $suiteID . "|", 'compare' => 'LIKE');
+                    
+                    if($selectedRole){
+                        $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');
+                        $params[] = 'tester_role=' . $selectedRole;
+                    }
+                    
+                    if($selectedConfLevel){
+                        $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $selectedRole, 'compare' => '=');
+                        $params[] = 'conformance=' . $selectedConfLevel;
+                    }
+                    
+                    $get_query = new WP_Query($args);
+                    $testCases = $get_query->get_posts();
+                    
+                    foreach($testCases as $row)
+                    {
+                        ?>
+                        <div class="grid_row white_bcg tocenter testcase_line ">
+                            <div class="grid_cell nopaddingtop width10P toleft ">
+                                <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
+                                <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P toleft tocenter ">
+                                <?php echo get_post_meta($row->ID ,'published', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                                <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                                <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter ">
+                                <?php echo get_post_meta($row->ID ,'choose_initiator', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter">
+                                <?php echo get_post_meta($row->ID ,'conformance_level', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                                <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter">
+                                <?php echo get_post_meta($row->ID ,'message_count', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter ">
+                                <?php echo get_post_meta($row->ID ,'bulk', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                                <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width15P toleft ">
+                                <?php echo get_post_meta($row->ID ,'test_intent_description', true)?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter ">
+                                <a href="#" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
+                                <a href="#" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
+                                <div class="clear"></div>                                                                        
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                <?php                        
+                    }
+				?>				
+			</div>            
+            <div class="space10"></div>
+			<div class="pagination-wrapper">
+                <div class="pagination">
+                    <?php                                 
+                        $args = array(
+                            'base'         => get_permalink() . '%_%',
+                            'format'       => '&page=%#%',
+                            'total'        => $get_query->max_num_pages,
+                            'current'      => $page,
+                            'show_all'     => False,
+                            'end_size'     => 5,
+                            'mid_size'     => 5,
+                            'prev_next'    => True,
+                            'prev_text'    => __('« Previous'),
+                            'next_text'    => __('Next »'),
+                            'type'         => 'plain',
+                            'add_args'     => false,
+                            'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)
+                        ); 
+                        echo paginate_links($args);
+                    ?>
+                </div>         
+            </div>
+            <div class="space15"></div>
 		</div>
-		
-		<div id="the_filters">
-			<div class="grid_cell width35P">
-						<h5 class="blue_txt">Test Cases</h5>
-			</div>
-			<form id="filter_ts" method="post" action="">
-			<div class="grid_cell width55P right selecteds">
-				<span class="left padding5-10">Filter By: </span>
-				<div class="styled_select left width25P right13">
-					<label>
-					<select name="testsuites_tester" class="change_ts">
-					  <option value="">Tester Role</option>
-					  <?php 
-					  $selected_tester ='';
-					  foreach($all_tester_roles as $single_tester){
-						  $option_val_tester =  str_replace(' ','_',$single_tester); 
-						  if($_POST['testsuites_tester'] == $option_val_tester){
-							  $selected_tester = 'selected="selected"';
-							  }
-							  else {
-								  $selected_tester = '';
-							  }
-						  echo '<option '.$selected_tester.' value="'.$option_val_tester.'" >'.$single_tester.'</option>';
-					  }
-					  ?>
-					</select>
-					</label>
-				</div>
-				<div class="styled_select left width30P right13">
-					<label>
-					<select name="testsuites_lvl" class="change_ts">
-					  <option value="">Conformance Level</option>
-					  <?php 
-					  $selected_lvl ='';
-					  foreach($all_conf_lvl as $single_conf_lvl){
-						  $option_val_lvl =  str_replace(' ','_',$single_conf_lvl); 
-						  if($_POST['testsuites_lvl'] == $option_val_lvl){
-							  $selected_lvl = 'selected="selected"';
-							  }
-							  else {
-								  $selected_lvl = '';
-							  }
-						  echo '<option '.$selected_lvl.' value="'.$option_val_lvl.'">'.$single_conf_lvl.'</option>';
-					  }
-					  ?>
-					</select>
-					</label>
-				</div>
-				<a href="" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
-				<div class="clear"></div>
-			</div>
-			</form>
-			<div class="clear"></div>
-			<div id="double_border"></div>
-						
-	</div>
 		
 			
 	</div> <!--end content container-->
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	/* Append Select Filter from Test-Suite Page
-	*/
-	jQuery('#append_filter').append(jQuery('#the_filters').html());
-	jQuery('#the_filters').remove();
-	/* Submit the form
-	*/
 	jQuery('.change_ts').change(function(){
 
 		jQuery('#filter_ts').submit();

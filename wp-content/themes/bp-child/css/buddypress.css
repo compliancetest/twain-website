@@ -139,7 +139,7 @@
 }
 .container p{
     margin-bottom: 12px;
-    line-height: 1.2em;        
+    line-height: 16px;        
 }
 .tabs li a  #icon_admin {
     background: url(../images/sproket_icon_g.png) 2px 3px no-repeat;

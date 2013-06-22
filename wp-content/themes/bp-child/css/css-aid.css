@@ -61,10 +61,8 @@ body {
 /**************** TYPOGRAPHY ************************/
 
 h1, h2, h3, h4, h5, h6 {
-	margin: 0 0 13px 0;
+	margin: 0 0 8px 0;
 	font-weight: bold;
-	font-family: 'Arvo', Courier, Arial, sans-serif;
-	color:#2c80e8;
 	text-shadow: 3px 3px 0 black, 3px 3px 1px #98A7AD;
 	-moz-text-shadow: 3px 3px 0 #000, 3px 3px 1px #98A7AD;
 	-webkit-text-shadow: 3px 3px 0 #000, 3px 3px 1px #98A7AD;
@@ -1621,6 +1619,10 @@ tr {
 .blue-edit-btn span.p{
     background-position: 0 -614px;
 }
+.blue-delete-btn span.p{
+    background-position: 2px -574px;
+}
+
 .icon-btn span.p{
     width: 12px;
 }
@@ -1786,7 +1788,7 @@ tr {
     
 }
 .pagination-wrapper{
-    padding: 30px 0;
+    padding: 0;
     text-align: center;
 }
 .pagination{
