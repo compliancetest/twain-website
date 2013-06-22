@@ -316,3 +316,17 @@ function cp_auto_enable_group_forum()
         return true;                
     }
 }
+
+//Customize Template
+add_filter('template_include', 'cp_template_customize', 10, 1);
+function cp_template_customize($template)
+{
+    global $post;
+    
+    if((is_page() || is_single()) && get_post_type() == 'bp_doc') //If wiki page
+    {
+        $template = get_query_template( 'page', 'page-noheader.php' );
+    }
+    
+    return $template;
+}

@@ -191,7 +191,6 @@ input[type="submit"], input[type="reset"], input[type="button"], textarea, .butt
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 	-o-box-sizing:border-box;
-    background: #fff;
     padding: 4px 8px;
     border-radius: 3px;
     -webkit-border-radius: 4px;
@@ -1153,6 +1152,7 @@ tr {
     text-align: center;
     display: none;    
 }
+
 .loading b{
     display: block;
     font-size: 18px;

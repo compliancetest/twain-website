@@ -7,8 +7,10 @@
  * @subpackage bp-default
  */
 
-get_header( 'buddypress' ); ?>
+get_header( 'buddypress' ); 
 
+?>
+<div class="content container">
 	<?php do_action( 'bp_before_directory_groups_page' ); ?>
 
 	<div id="content">
@@ -17,67 +19,68 @@ get_header( 'buddypress' ); ?>
 		<?php do_action( 'bp_before_directory_groups' ); ?>
 
 		<form action="" method="post" id="groups-directory-form" class="dir-form">
-
-			<h3><?php _e( 'Groups Directory', 'buddypress' ); ?><?php if ( is_user_logged_in() && bp_user_can_create_groups() ) : ?> &nbsp;<a class="button" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create' ); ?>"><?php _e( 'Create a Group', 'buddypress' ); ?></a><?php endif; ?></h3>
-
+            <div class="page-title-block column">
+			    <h2 class="nomarginbottom left"><?php _e( 'Groups Directory', 'buddypress' ); ?></h2>
+                <?php if ( is_user_logged_in() && bp_user_can_create_groups() ) : ?> <a class="action-btn add-new-btn left15" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create' ); ?>"><?php _e( 'Create a Group', 'buddypress' ); ?></a><?php endif; ?>
+                <div id="group-dir-search" class="dir-search right" role="search">
+                    <?php bp_directory_groups_search_form(); ?>
+                </div><!-- #group-dir-search -->
+                <div class="clear"></div>
+            </div>
 			<?php do_action( 'bp_before_directory_groups_content' ); ?>
+            <div class="column">
+            <div class="tabs_wrap radius6 light_gray_bcg system-section">
+			    <?php do_action( 'template_notices' ); ?>
+                
+			    <div class="item-list-tabs left" role="navigation">
+				    <ul>
+					    <li class="selected" id="groups-all"><a href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ); ?>"><?php printf( __( 'All Groups <span>%s</span>', 'buddypress' ), bp_get_total_group_count() ); ?></a><div class="loading"></div></li>
 
-			<div id="group-dir-search" class="dir-search" role="search">
+					    <?php if ( is_user_logged_in() && bp_get_total_group_count_for_user( bp_loggedin_user_id() ) ) : ?>
 
-				<?php bp_directory_groups_search_form(); ?>
+						    <li id="groups-personal"><a href="<?php echo trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/my-groups' ); ?>"><?php printf( __( 'My Groups <span>%s</span>', 'buddypress' ), bp_get_total_group_count_for_user( bp_loggedin_user_id() ) ); ?></a><div class="loading"></div></li>
 
-			</div><!-- #group-dir-search -->
+					    <?php endif; ?>
 
-			<?php do_action( 'template_notices' ); ?>
+					    <?php do_action( 'bp_groups_directory_group_filter' ); ?>
 
-			<div class="item-list-tabs" role="navigation">
-				<ul>
-					<li class="selected" id="groups-all"><a href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ); ?>"><?php printf( __( 'All Groups <span>%s</span>', 'buddypress' ), bp_get_total_group_count() ); ?></a></li>
+				    </ul>
+			    </div><!-- .item-list-tabs -->
 
-					<?php if ( is_user_logged_in() && bp_get_total_group_count_for_user( bp_loggedin_user_id() ) ) : ?>
+			    <div class="item-order-tabs right" id="subnav" role="navigation">
+				    <ul>
 
-						<li id="groups-personal"><a href="<?php echo trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/my-groups' ); ?>"><?php printf( __( 'My Groups <span>%s</span>', 'buddypress' ), bp_get_total_group_count_for_user( bp_loggedin_user_id() ) ); ?></a></li>
+					    <?php do_action( 'bp_groups_directory_group_types' ); ?>
 
-					<?php endif; ?>
+					    <li id="groups-order-select" class="last filter">
 
-					<?php do_action( 'bp_groups_directory_group_filter' ); ?>
+						    <label for="groups-order-by"><?php _e( 'Order By:', 'buddypress' ); ?></label>
+						    <select id="groups-order-by">
+							    <option value="active"><?php _e( 'Last Active', 'buddypress' ); ?></option>
+							    <option value="popular"><?php _e( 'Most Members', 'buddypress' ); ?></option>
+							    <option value="newest"><?php _e( 'Newly Created', 'buddypress' ); ?></option>
+							    <option value="alphabetical"><?php _e( 'Alphabetical', 'buddypress' ); ?></option>
 
-				</ul>
-			</div><!-- .item-list-tabs -->
+							    <?php do_action( 'bp_groups_directory_order_options' ); ?>
 
-			<div class="item-list-tabs" id="subnav" role="navigation">
-				<ul>
+						    </select>
+					    </li>
+				    </ul>
+			    </div>
+                <div class="clear"></div>
+			    <div id="groups-dir-list" class="groups dir-list tab-content white_bcg padding10">
 
-					<?php do_action( 'bp_groups_directory_group_types' ); ?>
+				    <?php locate_template( array( 'groups/groups-loop.php' ), true ); ?>
 
-					<li id="groups-order-select" class="last filter">
+			    </div><!-- #groups-dir-list -->
 
-						<label for="groups-order-by"><?php _e( 'Order By:', 'buddypress' ); ?></label>
-						<select id="groups-order-by">
-							<option value="active"><?php _e( 'Last Active', 'buddypress' ); ?></option>
-							<option value="popular"><?php _e( 'Most Members', 'buddypress' ); ?></option>
-							<option value="newest"><?php _e( 'Newly Created', 'buddypress' ); ?></option>
-							<option value="alphabetical"><?php _e( 'Alphabetical', 'buddypress' ); ?></option>
+			    <?php do_action( 'bp_directory_groups_content' ); ?>
 
-							<?php do_action( 'bp_groups_directory_order_options' ); ?>
+			    <?php wp_nonce_field( 'directory_groups', '_wpnonce-groups-filter' ); ?>
 
-						</select>
-					</li>
-				</ul>
-			</div>
-
-			<div id="groups-dir-list" class="groups dir-list">
-
-				<?php locate_template( array( 'groups/groups-loop.php' ), true ); ?>
-
-			</div><!-- #groups-dir-list -->
-
-			<?php do_action( 'bp_directory_groups_content' ); ?>
-
-			<?php wp_nonce_field( 'directory_groups', '_wpnonce-groups-filter' ); ?>
-
-			<?php do_action( 'bp_after_directory_groups_content' ); ?>
-
+			    <?php do_action( 'bp_after_directory_groups_content' ); ?>
+            </div>
+            </div>
 		</form><!-- #groups-directory-form -->
 
 		<?php do_action( 'bp_after_directory_groups' ); ?>
@@ -86,7 +89,6 @@ get_header( 'buddypress' ); ?>
 	</div><!-- #content -->
 
 	<?php do_action( 'bp_after_directory_groups_page' ); ?>
-
-<?php get_sidebar( 'buddypress' ); ?>
+</div>
 <?php get_footer( 'buddypress' ); ?>
 
