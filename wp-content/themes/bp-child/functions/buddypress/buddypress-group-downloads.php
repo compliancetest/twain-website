@@ -33,13 +33,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             <?php
         }
-        function admin_screen( $group_id ) {
-            ?>
- 
-            <p>The HTML for my admin panel.</p>
- 
-            <?php
-        }
+        
         
         function getFiles($group_id)
         {

@@ -43,7 +43,6 @@ $customCapabilities = array(
                             'delete_other_product_service',
                             'edit_product_service',
                             'delete_product_service',
-                            'read_product_service'                            
                             ),
     //Community Administrator
     'author'        => array(
@@ -51,27 +50,31 @@ $customCapabilities = array(
                             'delete_group',
                             
                             'create_suite',
+                            'edit_other_suite',
+                            'delete_other_suite',
                             'edit_suite',
                             'delete_suite',
                             
                             'create_case',
+                            'edit_other_case',
+                            'delete_other_case',
                             'edit_case',
                             'delete_case',
                             'read_case',
                             
                             'create_product_service',
+                            'edit_other_product_service',
+                            'delete_other_product_service',
                             'edit_product_service',
-                            'delete_product_service',
-                            'read_product_service'                            
+                            'delete_product_service'
                             ),
     //Customer
     'contributor'        => array(
                             'read_case',                            
                             'create_product_service',
                             'edit_product_service',
-                            'delete_product_service',
-                            'read_product_service'                            
-                            ),
+                            'delete_product_service'
+                            )
     
     
     

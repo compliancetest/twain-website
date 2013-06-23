@@ -80,7 +80,14 @@ function _get_current_test_suites($test_case_id)
     if(!$current_test_suites)
         $current_test_suites = array(isset($_GET['set_ts']) ? $_GET['set_ts'] : 0);
     
-    return $current_test_suites;
+    $ids = array();
+    foreach($current_test_suites as $id)
+    {
+        if($id == '')
+            continue;
+        $ids[] = $id;
+    }
+    return $ids;
 }
 
 function test_case_test_suites_metabox_html(){
