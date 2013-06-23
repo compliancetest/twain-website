@@ -7,6 +7,7 @@ add_action('bp_groups_admin_meta_boxes', 'add_terms_and_license_metabox_to_group
 function add_terms_and_license_metabox_to_group()
 {
     add_meta_box( 'bp_group_terms_and_license', _x( 'Terms and Conditions, License Agreement', 'group admin edit screen', 'buddypress' ), 'bp_groups_admin_edit_metabox_terms_and_license', get_current_screen()->id, 'normal', 'core' );    
+    exit;
 }
 function bp_groups_admin_edit_metabox_terms_and_license($item)
 {
