@@ -26,14 +26,22 @@ if(is_user_logged_in()){
 }
 get_header();
 ?>
-
 <div class="content" id="my_products">
     <div class="space25"></div>
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>
-        
+    
     <div class="four_fifths right container">
+        <div class="column">
+            <h2>My Products</h2>
+            <div class="space10"></div>
+            <div class="message notice">This function is under construction</div>
+        </div>
+        <div class="space100"></div>
+    </div>
+    
+    <div class="four_fifths right container" style="display: none;"> <!--Temporary -->
         <div class="column">
            <a href="<?php echo esc_url( get_permalink( get_page_by_title( 'Create / Edit Product or Service' ) ) ); ?>" class="action-btn process-btn">
             <span class="p"></span><span class="t">Add new Product or Service</span>

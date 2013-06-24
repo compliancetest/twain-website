@@ -10,8 +10,15 @@ get_header();
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
 		<?php get_sidebar('dashboard'); ?>
 	</div>
-		
 	<div class="four_fifths right container">
+        <div class="column">
+            <h2>Test Suite Coverage</h2>
+            <div class="space10"></div>
+            <div class="message notice">This function is under construction</div>
+        </div>
+        <div class="space100"></div>
+    </div>
+	<div class="four_fifths right container" style="display: none;">
         <div class="column">
            <div class="grid-box table-box">
                <div class="grid-box-header">

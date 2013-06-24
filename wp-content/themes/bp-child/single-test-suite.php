@@ -20,19 +20,21 @@ Template Name Posts: Test Suite
 
 	<div class="content container">
 		<div class="infos">
-				<div class="grid_cell width10P">
-					<?php if (has_post_thumbnail()) {
-						the_post_thumbnail('post-thumb', array('class' => 'sbr'));
-					} ?>
+                <?php if (has_post_thumbnail()) { ?>
+				<div class="grid_cell width10P">					
+						<?php echo the_post_thumbnail('post-thumb', array('class' => 'sbr')); ?>					
 				</div> 
-				<div class="grid_cell width90P">
+                <?php } ?>
+				<div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
 					<div class="dark_gray_txt bold width80P left">
 						<h2 class="left"><?php the_title(); ?></h2>
-						<a href="#" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
+                        <?php if(is_admin() || is_super_admin()){ ?>
+						<a href="/wp-admin/post.php?post=<?php echo get_the_ID()?>&action=edit" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
+                        <?php } ?>
 						<div class="clear"></div>
 					</div>
 					<div class="width15P right">
-						<a href="<?php echo $group_url; ?>" class="action-btn blue-edit-btn"><span class="t">Issuer Home Page</span></a>
+						<a href="<?php echo $group_url; ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Issuer Home Page</span></a>
 					</div>
 					<div class="clear"></div>
 					<div class="grids noradiusbottom">
@@ -71,8 +73,13 @@ Template Name Posts: Test Suite
 						<a href="javascript: void(0)" rel="tabs_sv2">Specification Documents &amp; Materials</a>
 					</li>
 					<li class="">
-						<a href="javascript: void(0)" rel="tabs_sv3">Comformance Levels</a>
+                        <a href="javascript: void(0)" rel="tabs_sv3">Comformance Levels</a>
+                    </li>
+                    
+                    <li class="">
+						<a href="javascript: void(0)" rel="tabs_sv4">Test Suite Roles</a>
 					</li>
+                    
 				</ul>
 				
 				<div class="clear"></div>
@@ -128,29 +135,53 @@ Template Name Posts: Test Suite
 				</div> <!--end tab 2-->
 				
 				<div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
+                    <div class="column padding15-20">
+                        
+                        <?php
+                        $lvl_code_array = get_post_meta(get_the_ID(), 'lvl_code', true); 
+                        $lvl_desc_array = get_post_meta(get_the_ID(), 'lvl_desc', true); 
+                        
+                        foreach($lvl_code_array as $key => $lvl_code){
+                            foreach ($lvl_desc_array as $key2 => $lvl_desc){
+                                        if( $key == $key2 ){ ?>
+                                        <div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $lvl_code; ?></div>
+                                        <div class="grid_cell width90P">
+                                            <?php echo $lvl_desc; ?>
+                                        </div>
+                                        <div class="clear"></div> 
+                                        <div class="grey-border-bottom <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'displaynone';} ?>"></div>                                                                    
+                                <?php    }
+                                    }
+                                }
+                        ?>
+                    </div>
+                    <div class="clear"></div>
+                </div><!--end tab 3-->
+                
+                <div class="tab-content white_bcg" id="tabs_sv4" style="display: none; ">
 					<div class="column padding15-20">
 						
 						<?php
-						$lvl_code_array = get_post_meta(get_the_ID(), 'lvl_code', true); 
-						$lvl_desc_array = get_post_meta(get_the_ID(), 'lvl_desc', true); 
+						$roles = getTestSuiteRoles(get_the_ID());
 						
-						foreach($lvl_code_array as $key => $lvl_code){
-							foreach ($lvl_desc_array as $key2 => $lvl_desc){
-										if( $key == $key2 ){ ?>
-										<div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $lvl_code; ?></div>
-										<div class="grid_cell width90P">
-											<?php echo $lvl_desc; ?>
+						foreach($roles as $idx=>$row){
+							
+					        ?>		
+										<div class="grid_cell width25P bold blue_txt size26px top5 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
+										<div class="grid_cell width70P">
+											<?php echo $row['desc']; ?>
 										</div>
 										<div class="clear"></div> 
-										<div class="grey-border-bottom <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'displaynone';} ?>"></div>																	
-								<?php	}
-									}
-								}
+										<div class="grey-border-bottom <?php if ($idx == ((count($roles)) -1 )) { echo 'displaynone';} ?>"></div>																	
+						    <?php
+							
+							}
 						?>
 					</div>
 					<div class="clear"></div>
 				</div><!--end tab 3-->
 				
+                
 			</div>
 			<!--end tabs-->
             <div class="space15"></div>
@@ -208,7 +239,9 @@ Template Name Posts: Test Suite
                             </select>
                             </label>
                         </div>
-                        <a href="" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
+                        <?php if(is_admin() || is_super_admin()){ ?>
+                        <a href="/wp-admin/post-new.php?post_type=test-case" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
+                        <?php } ?>
                         <div class="clear"></div>
                     </div>
                 </form>
@@ -304,8 +337,10 @@ Template Name Posts: Test Suite
                                 <?php echo get_post_meta($row->ID ,'test_intent_description', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                <a href="#" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
-                                <a href="#" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
+                                <?php if(is_admin() || is_super_admin()){ ?>
+                                <a href="/wp-admin/post.php?post=<?php echo $row->ID?>&action=edit" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
+                                <a href="/wp-admin/post.php?post=<?php echo $row->ID?>&action=trash&_wpnonce=<?php echo wp_create_nonce('trash-post_' . $row->ID)?>" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
+                                <?php } ?>
                                 <div class="clear"></div>                                                                        
                             </div>
                             <div class="clear"></div>

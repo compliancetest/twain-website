@@ -32,8 +32,15 @@ get_header();
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>
-        
     <div class="four_fifths right container">
+        <div class="column">
+            <h2>My Transaction Log</h2>
+            <div class="space10"></div>
+            <div class="message notice">This function is under construction</div>
+        </div>
+        <div class="space100"></div>
+    </div>
+    <div class="four_fifths right container" style="display: none;">
         <div class="filter-box column">
             <div class="left"><label>Filter By:</label></div>
             <div class="left">
