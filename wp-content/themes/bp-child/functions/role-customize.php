@@ -45,7 +45,7 @@ $customCapabilities = array(
                             'delete_product_service',
                             ),
     //Community Administrator
-    'author'        => array(
+/*    'author'        => array(
                             'edit_group',
                             'delete_group',
                             
@@ -67,7 +67,7 @@ $customCapabilities = array(
                             'delete_other_product_service',
                             'edit_product_service',
                             'delete_product_service'
-                            ),
+                            ),*/
     //Customer
     'contributor'        => array(
                             'read_case',                            
@@ -89,12 +89,16 @@ function customize_role_name()
         $wp_roles = new WP_Roles();
     
     //Change administrator to System Administrator
-    $wp_roles->roles['administrator']['name'] = 'System Administrator';
-    $wp_roles->role_names['administrator'] = 'System Administrator'; 
+//    $wp_roles->roles['administrator']['name'] = 'System Administrator';
+//    $wp_roles->role_names['administrator'] = 'System Administrator'; 
+    $wp_roles->roles['administrator']['name'] = 'Administrator';
+    $wp_roles->role_names['administrator'] = 'Administrator'; 
     
     //Change Author to Community Administrator
-    $wp_roles->roles['author']['name'] = 'Community Administrator';
-    $wp_roles->role_names['author'] = 'Community Administrator'; 
+//    $wp_roles->roles['author']['name'] = 'Community Administrator';
+//    $wp_roles->role_names['author'] = 'Community Administrator'; 
+    $wp_roles->roles['author']['name'] = 'Author';
+    $wp_roles->role_names['author'] = 'Author'; 
     
     //Change Contributor to Customer
     $wp_roles->roles['contributor']['name'] = 'Customer';
@@ -113,7 +117,7 @@ function add_custom_capabilities()
 {
     global $customCapabilities;
     
-    $roles = array('administrator', 'author', 'contributor');
+    $roles = array('administrator', /*'author', */'contributor');
     foreach($roles as $r)
     {
         $role = get_role($r);

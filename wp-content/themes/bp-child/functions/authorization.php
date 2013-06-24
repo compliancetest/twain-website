@@ -11,6 +11,7 @@ function checkCurrentUserCapability()
     {
         if(current_user_can('create_group'))
             return true;
+        addMessage('You are not allowed to see the page.', 'error');
         wp_redirect(get_site_url());
         exit;
     }
@@ -37,6 +38,7 @@ function checkCurrentUserCapability()
                 $redirect = get_permalink($suiteID[0]);
             }        
         }
+        addMessage('You must join the community to view Test Case details.', 'notice');
         wp_redirect($redirect);
         
         exit;
@@ -44,21 +46,13 @@ function checkCurrentUserCapability()
 }
 add_action('template_redirect', 'checkCurrentUserCapability', 0);
 
-function isSuiteEditable($suiteID, $userID = null)
+function can_edit_suite($suiteID)
 {    
-    if($userID == null)
+    if(current_user_can('edit_other_suite') || current_user_can('edit_suite'))
     {
-        $userID = get_current_user_id();       
+        return true;
     }
     
-    if(!$userID)
-        return false;
-    
-    
-    
-    $current_group_id = get_post_meta($suiteID, 'community_id', true);
-    $group = groups_get_group( array( 'group_id' => $current_group_id ) );
-    
-    //Check if the user is 
+    return false;
 }
 

@@ -3645,9 +3645,9 @@ p.copyright{
         margin-bottom: 10px;
 }
 
-.grid_cell p{
-    margin: 0 0 0px 0;
-    font-family: 'Open Sans', Arial, sans-serif;
+.container .grid_cell p{
+    margin: 0;
+
 }
 
 .lighter_gray_bcg{

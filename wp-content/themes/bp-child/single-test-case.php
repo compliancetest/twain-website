@@ -2,15 +2,19 @@
 /*
 Template Name Posts: Test Case
 */
-?>
 
-<?php
 get_header();
 ?>
 
 	<div class="content container">
 		<div class="infos">
-				<h3 class="dark_gray_txt normal">Test case ID: <span class="dark_blue_txt bold"><?php echo meta ('test_case_id') ; ?></span></h3>
+				<h3 class="dark_gray_txt normal left">Test case ID: <span class="dark_blue_txt bold"><?php echo meta ('test_case_id') ; ?></span></h3>
+                <?php
+                    //Get Test Suite
+                    $suites = _get_current_test_suites(get_the_ID());                    
+                ?>
+                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($suites[0])?>"><?php echo get_the_title($suites[0]) ?></a></span>
+                <div class="clear"></div>
 				<p class="dark_gray_txt"><?php echo meta ('test_intent_description') ; ?></p>
 				<div class="grids noradiusbottom">
 					<div class="grid_row white_bcg noborderbottom">

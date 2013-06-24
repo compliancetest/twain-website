@@ -127,7 +127,7 @@ function bp_groups_admin_load() {
 		// Enqueue javascripts
 		wp_enqueue_script( 'postbox' );
 		wp_enqueue_script( 'dashboard' );
-		wp_enqueue_script( 'comment' );
+//		wp_enqueue_script( 'comment' );
 
 	// Index screen
 	} else {

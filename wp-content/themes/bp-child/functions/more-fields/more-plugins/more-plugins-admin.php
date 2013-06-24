@@ -1010,10 +1010,9 @@ if (!defined($more_common)) {
 		function get_roles() {
 			global $wp_roles;	
 			$user_levels = array();
-			foreach($wp_roles->roles as $role) { 
-				$name = str_replace('|User role', '', $role['name']);
-				$value = sanitize_title($name); 
-				if ($value) $user_levels[$value] = $name;
+            
+			foreach($wp_roles->roles as $key=>$role) { 				 
+				$user_levels[$key] = $role['name'];
 			}
 			return $user_levels;
 		}

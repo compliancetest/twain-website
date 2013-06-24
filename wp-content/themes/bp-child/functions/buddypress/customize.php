@@ -238,7 +238,7 @@ function cp_groups_screen_group_admin_manage_members()
                     else
                         $success[] = cp_get_user_fullname($userID);                    
 
-                    do_action( 'groups_banned_member', $userID, $bp->groups->current_group->id );
+                    do_action( 'groups_promoted_member', $userID, $bp->groups->current_group->id );
                 }
                 //Set Error Message
                 if(count($success) > 0)
@@ -261,7 +261,7 @@ function cp_groups_screen_group_admin_manage_members()
                     else
                         $success[] = cp_get_user_fullname($userID);                    
 
-                    do_action( 'groups_banned_member', $userID, $bp->groups->current_group->id );
+                    do_action( 'groups_promoted_member', $userID, $bp->groups->current_group->id );
                 }
                 //Set Error Message
                 if(count($success) > 0)
