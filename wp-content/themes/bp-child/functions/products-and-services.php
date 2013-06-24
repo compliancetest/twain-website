@@ -63,6 +63,31 @@ function _get_current_related_products($pid)
     return $rows;
 }
 
+function _get_certified_test_suites($pid)
+{
+    $rows = get_post_meta($pid, 'test_suites', true);
+    
+    if(is_array($rows))
+        $rows = $rows[0];
+    if(!$rows)
+        $rows = null;
+    else
+        $rows = explode('|', $rows);
+    
+    if(!$rows)
+        $rows = array(0);
+    
+    $result = array();
+    foreach($rows as $row)
+    {
+        if($row == '' || $row === null)
+            continue;
+        $result[] = $row;
+    }
+        
+    return $result;
+}
+
 //Save Product and service on admin
 add_action('save_post', 'save_product_and_service_on_admin');
 

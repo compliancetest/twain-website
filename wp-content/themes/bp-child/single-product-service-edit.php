@@ -2,6 +2,7 @@
 /*
 Template Name: Product / Service Edit
 */
+exit();
 ?>
 
 <?php
