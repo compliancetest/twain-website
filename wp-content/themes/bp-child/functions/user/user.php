@@ -38,7 +38,7 @@ function compliancetest_user_actions()
             break;
         case 'my_organisation_edit':
             cp_user_organisation_edit();
-            break;
+            break;        
         
     }
 }
@@ -56,4 +56,22 @@ function add_user_script()
     $actions_depends[] = 'custom_scripts';
     
     wp_enqueue_script('user-auth', get_stylesheet_directory_uri() . '/functions/user/user.js', $actions_depends);
+}
+
+
+//Get Groups that the user is a admin of
+function getUserAdminGroups($user_id)
+{
+    $groups = groups_get_groups( array('user_id' => $user_id) );
+    
+    $result = array();
+    foreach($groups['groups'] as $g)
+    {
+        if(groups_is_user_admin($user_id, $g->id))
+        {            
+            $result[] = $g;
+        }
+    }
+    
+    return $result;
 }

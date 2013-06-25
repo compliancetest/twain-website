@@ -2753,6 +2753,7 @@ p.copyright{
     margin-bottom: 30px;
 }
 
+    .sidebar_widget ul li.current-page-ancestor a,
     .sidebar_widget h3, .sidebar_widget ul li.current-menu-item a  {
         color: #fff;
         padding: 10px;
@@ -2768,6 +2769,7 @@ p.copyright{
         background-position: 95% 10px;
     }
     
+    .sidebar_widget ul li.current-page-ancestor  ,
     .sidebar_widget h3, .sidebar_widget ul li.current-menu-item  {
         background: url(../images/sidebar_title.png) left top no-repeat;
         margin-bottom: -10px;
@@ -2828,6 +2830,7 @@ p.copyright{
                     color: #2c80e8;
                 }
                 
+                    .sidebar_widget ul li.current-page-ancestor a:hover,
                     .sidebar_widget ul li.current-menu-item a:hover {
                         background-color: transparent;
                         color: #fff;
@@ -2841,12 +2844,14 @@ p.copyright{
                 .sidebar_widget ul li.my_profile a {
                     background-position: 96% 11px;
                 }
+                .sidebar_widget ul .my_profile.current-page-ancestor a ,
                 .sidebar_widget ul .my_profile.current-menu-item a {
                     background-position: 96% -208px;
                 }
                 .sidebar_widget ul li.my_products a {
                     background-position: 96% -29px;
                 }
+                .sidebar_widget ul .my_products.current-page-ancestor a ,
                 .sidebar_widget ul .my_products.current-menu-item a {
                     background-position: 96% -248px;
                 }
@@ -2854,6 +2859,7 @@ p.copyright{
                 .sidebar_widget ul li.my_suites a {
                     background-position: 96% -70px;
                 }
+                .sidebar_widget ul .my_suites.current-page-ancestor a ,
                 .sidebar_widget ul .my_suites.current-menu-item a {
                     background-position: 96% -290px;
                 }
@@ -2861,6 +2867,7 @@ p.copyright{
                 .sidebar_widget ul li.my_transaction_log a {
                     background-position: 96% -121px;
                 }
+                .sidebar_widget ul .my_transaction_log.current-page-ancestor a ,
                 .sidebar_widget ul .my_transaction_log.current-menu-item a {
                     background-position: 96% -330px;
                 }
@@ -2868,6 +2875,7 @@ p.copyright{
                 .sidebar_widget ul li.my_messages a {
                     background-position: 96% -173px;
                 }
+                .sidebar_widget ul .my_messages.current-page-ancestor a ,
                 .sidebar_widget ul .my_messages.current-menu-item a {
                     background-position: 96% -173px;
                 }
@@ -3992,7 +4000,7 @@ display:block !important;
 	padding:0px !important;
 }
 
-.styled_select select {
+.styled_select select, .select {
     padding:3px 3px 3px 3px;
     margin: 0;
     -webkit-border-radius:4px;
@@ -4983,4 +4991,63 @@ a.suite-subscript-link:hover{
 .tabs-contr .tab-nav li.active a span.text {
     color: #666666;
 }
-    
+/*** Test Suite Edit Page ***/
+#edit_test_suite_wrapper .input{
+    width: 200px;
+}    
+#edit_test_suite_wrapper .medium-input{
+    width: 430px;
+}    
+
+#edit_test_suite_wrapper .select{
+    width: 200px;
+    font-size: 12px;
+    color: #666;
+}    
+#edit_test_suite_wrapper .textarea{
+    width: 430px;
+    min-height: 75px;
+    resize: vertical;
+}    
+
+#edit_test_suite_wrapper .field-row .grid-cell:first-child{
+    padding-left: 0;
+}
+#edit_test_suite_wrapper .field-row .grid-cell{
+    padding-left: 30px;
+    padding-right: 0;
+}
+
+#edit_test_suite_wrapper .grid-box-body .field-row:last-child{
+    padding-bottom: 0;    
+}
+#conf-level-box .field-row,
+#related-suites-box .field-row,
+#specs-box .field-row,
+#roles-box .field-row{
+    border-bottom: solid 1px #e3e3e3;
+    margin-bottom: 10px;
+}
+#edit_test_suite_wrapper .field-row .radio-cell{
+    width: 200px;
+}
+#test-cases-box .field-row .grid-cell{
+    width: 220px;
+    padding: 2px 3px !important;
+    border: solid 1px #cbcbcb;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+#test-cases-box .field-row .add-new-btn{
+    margin-top: 5px;
+}
+#test-cases-box a.test-case-link{
+    float: left;
+    line-height: 25px;
+}
+#test-cases-box .blue-delete-btn{
+    float: right;
+}

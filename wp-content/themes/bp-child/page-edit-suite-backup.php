@@ -1,6 +1,6 @@
 <?php
 /*
- * Template Name: My Suites
+ 
  */
 get_header();
 ?>

@@ -225,6 +225,14 @@ select{
     -webkit-border-radius: 3px;
     border: solid 1px #cbcbcb;
 }
+.input-error{
+    border: 1px solid #dd0000;
+    border: 1px solid rgba(255, 0, 0, .2);
+    box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
+    -moz-box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
+    -webkit-box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
+    -o-box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
+}
 .button {
 	text-decoration: none !important;
 }
@@ -1293,7 +1301,7 @@ tr {
 .grid-box-body .grid-row label{
     color: #6e747c;
 }
-.grid-box-body .grid-row .grid-cell{
+.grid-box-body .grid-cell{
     float: left;
     
 }
@@ -1325,6 +1333,11 @@ tr {
     font-weight: 600;
     line-height: 18px;
 }
+.grid-box-body .field-row label.light-desc{
+    font-weight: normal;
+    line-height: 18px;
+}
+
 .grid-box-body .field-row .input{
     width: 100%;
 }
@@ -1600,7 +1613,8 @@ tr {
     width: 12px;
 }
 
-.blue-edit-btn{
+.blue-edit-btn,
+.blue-delete-btn{
     border-color: #3577ad;
     background: #2d83cd;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));
@@ -1613,7 +1627,8 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #7cbcf4 inset;
     -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
 }
-.blue-edit-btn:hover{
+.blue-edit-btn:hover,
+.blue-delete-btn:hover{
     background: #288ce2;
 }
 .blue-edit-btn span.p{
@@ -1786,6 +1801,9 @@ tr {
     height: 18px;
     line-height: 18px;
     
+}
+.ui-datepicker td{
+    background: transparent;
 }
 .pagination-wrapper{
     padding: 0;

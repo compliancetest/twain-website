@@ -7,6 +7,8 @@ Template Name Posts: Test Suite
 
 	$suiteID = get_the_ID();
 	
+    $suite = new TestSuite($suiteID);
+    
 	$current_group_id = get_post_meta($suiteID, 'community_id', true);
 	
 	global $bp;
@@ -28,8 +30,8 @@ Template Name Posts: Test Suite
 				<div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
 					<div class="dark_gray_txt bold width80P left">
 						<h2 class="left"><?php the_title(); ?></h2>
-                        <?php if(is_admin() || is_super_admin()){ ?>
-						<a href="/wp-admin/post.php?post=<?php echo get_the_ID()?>&action=edit" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
+                        <?php if(can_edit_suite($suite->id)){ ?>
+						<a href="/edit-test-suite?id=<?php echo get_the_ID()?>" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
                         <?php } ?>
 						<div class="clear"></div>
 					</div>

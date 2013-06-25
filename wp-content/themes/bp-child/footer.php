@@ -41,8 +41,8 @@
                     <ul id="twitter_update_list"></ul>                    
                     <script src="http://twitter.com/javascripts/blogger.js" type="text/javascript"></script>
                     <script src="https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=<?php echo of_get_option('twitter_username')?>&count=3" type="text/javascript"></script>-->
-                    <a class="twitter-timeline" href="https://twitter.com/<?php echo of_get_option('twitter_username')?>" data-widget-id="348686715474558976" height="150">Tweets by @<?php echo of_get_option('twitter_username')?></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    <!--<a class="twitter-timeline" href="https://twitter.com/<?php echo of_get_option('twitter_username')?>" data-widget-id="348686715474558976" height="150">Tweets by @<?php echo of_get_option('twitter_username')?></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>-->
 
 					<div class="clear"></div>
 				</div>

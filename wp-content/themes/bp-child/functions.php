@@ -33,13 +33,17 @@ require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
 //Process Actions related user such as login, register
 require_once(THE_FUNCTION . '/user/user.php');
 
+//Test Suites Functions
+require_once(THE_FUNCTION . '/test-suite/testsuite.class.php');
+require_once(THE_FUNCTION . '/test-suite/add-meta-boxes.php');
+require_once(THE_FUNCTION . '/test-suite/controller.php');
+
 //Buddypress Custome Functions
 require_once(THE_FUNCTION . '/buddypress/customize.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
-//Test Suites Functions
-require_once(THE_FUNCTION . '/test-suites.php');
+
 //Test Case Function
 require_once(THE_FUNCTION . '/test-cases.php');
 //Products And Services
@@ -254,288 +258,6 @@ class footer_walker extends Walker_Nav_Menu
 add_theme_support('post-thumbnails');
 set_post_thumbnail_size( 300, 150, true );
 add_image_size( 'post-thumb', 300, 150, true );
-
-/********************************************************************* Search form *********************************************************************/
-
-add_filter( 'get_search_form', 'my_search_form' );
-
-function my_search_form( $form ) {
-    $form = '<form role="search" method="get" id="searchform" action="' . home_url( '/' ) . '" >
-			    <div>
-				    <label class="search_label" for="s">' . __('Search for:') . '</label>
-				    <input type="text" value="' . get_search_query() . '" name="s" id="s" />
-				    <input type="submit" id="searchsubmit" value="'. esc_attr__('Search') .'" />
-			    </div>
-		    </form>';
-
-    return $form;
-}
-
-/*********************************************************************** Widgets ***********************************************************************/
-
-add_action('widgets_init', 'Register_Widgets');
-function Register_Widgets()
-{
-	register_widget('SampleWidget');
-}
-
-class SampleWidget extends WP_Widget {
-	
-	function SampleWidget()
-	{
-		$widget_ops = array('classname' => 'widget_SampleWidget', 'description' => 'Display SampleWidget');
-		$control_ops = array('id_base' => 'SampleWidget_widget');
-		$this->WP_Widget('services_widget', 'SampleWidget', $widget_ops, $control_ops);
-	}
-	
-	function widget($args, $instance)
-	{
-		extract($args);
-		
-		$services[0]['title'] = $instance['first_SampleWidget_title'];
-		$services[0]['img'] = $instance['first_SampleWidget_img'];
-		$services[0]['text'] = $instance['first_SampleWidget_text'];
-		
-		$services[1]['title'] = $instance['second_SampleWidget_title'];
-		$services[1]['img'] = $instance['second_SampleWidget_img'];
-		$services[1]['text'] = $instance['second_SampleWidget_text'];
-		
-		$services[2]['title'] = $instance['third_SampleWidget_title'];
-		$services[2]['img'] = $instance['third_SampleWidget_img'];
-		$services[2]['text'] = $instance['third_SampleWidget_text'];
-		
-		echo $before_widget;
-		?>
-		<!-- BEGIN WIDGET -->
-		<ul id="SampleWidget_list">
-			<?php $count = 0;
-			foreach ($SampleWidget as $sw) {
-				$count++;
-				if ($count % 3 == 0) {
-					$class = ' class="last"';
-				} else {
-					$class = '';
-				} ?>
-				<li<?php echo $class; ?>>
-					<h2><?php echo $sw['title']; ?></h2>
-					<img src="<?php echo $sw['img']; ?>" alt="" />
-					<p><?php echo $sw['text']; ?></p>
-				</li>
-			<?php } ?>
-		</ul>
-		<!-- END WIDGET -->
-		<?php echo $after_widget;
-	}
-	
-	function update($new_instance, $old_instance)
-	{
-		$instance = $old_instance;
-		
-		$instance['first_SampleWidget_title'] = $new_instance['first_SampleWidget_title'];
-		$instance['first_SampleWidget_img'] = $new_instance['first_SampleWidget_img'];
-		$instance['first_SampleWidget_text'] = $new_instance['first_SampleWidget_text'];
-		
-		$instance['second_SampleWidget_title'] = $new_instance['second_SampleWidget_title'];
-		$instance['second_SampleWidget_img'] = $new_instance['second_SampleWidget_img'];
-		$instance['second_SampleWidget_text'] = $new_instance['second_SampleWidget_text'];
-		
-		$instance['third_SampleWidget_title'] = $new_instance['third_SampleWidget_title'];
-		$instance['third_SampleWidget_img'] = $new_instance['third_SampleWidget_img'];
-		$instance['third_SampleWidget_text'] = $new_instance['third_SampleWidget_text'];
-		
-		return $instance;
-	}
-
-	function form($instance)
-	{
-		$defaults = array(
-				'first_SampleWidget_title' => '',
-				'first_SampleWidget_img' => '',
-				'first_SampleWidget_text' => '',
-				'second_SampleWidget_title' => '',
-				'second_SampleWidget_img' => '',
-				'second_SampleWidget_text' => '',
-				'third_SampleWidget_title' => '',
-				'third_SampleWidget_img' => '',
-				'third_SampleWidget_text' => ''
-			);
-		$instance = wp_parse_args((array) $instance, $defaults); ?>
-		<p>
-			<label for="<?php echo $this->get_field_id('first_SampleWidget_title'); ?>">First SampleWidget title: </label>
-			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('first_SampleWidget_title'); ?>" name="<?php echo $this->get_field_name('first_SampleWidget_title'); ?>" value="<?php echo $instance['first_SampleWidget_title']; ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('first_SampleWidget_img'); ?>">First SampleWidget image: </label>
-			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('first_SampleWidget_img'); ?>" name="<?php echo $this->get_field_name('first_SampleWidget_img'); ?>" value="<?php echo $instance['first_SampleWidget_img']; ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('first_SampleWidget_text'); ?>">First SampleWidget text: </label>
-			<textarea class="widefat"  rows="16" cols="20" style="width: 216px;" id="<?php echo $this->get_field_id('first_SampleWidget_text'); ?>" name="<?php echo $this->get_field_name('first_SampleWidget_text'); ?>"><?php echo $instance['first_SampleWidget_text']; ?></textarea>
-		</p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id('second_SampleWidget_title'); ?>">Second SampleWidget title: </label>
-			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('second_SampleWidget_title'); ?>" name="<?php echo $this->get_field_name('second_SampleWidget_title'); ?>" value="<?php echo $instance['second_SampleWidget_title']; ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('second_SampleWidget_img'); ?>">Second SampleWidget image: </label>
-			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('second_SampleWidget_img'); ?>" name="<?php echo $this->get_field_name('second_SampleWidget_img'); ?>" value="<?php echo $instance['second_SampleWidget_img']; ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('second_SampleWidget_text'); ?>">Second SampleWidget text: </label>
-			<textarea class="widefat"  rows="16" cols="20" style="width: 216px;" id="<?php echo $this->get_field_id('second_SampleWidget_text'); ?>" name="<?php echo $this->get_field_name('second_service_text'); ?>"><?php echo $instance['second_SampleWidget_text']; ?></textarea>
-		</p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id('third_SampleWidget_title'); ?>">Third SampleWidget title: </label>
-			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('third_SampleWidget_title'); ?>" name="<?php echo $this->get_field_name('third_SampleWidget_title'); ?>" value="<?php echo $instance['third_SampleWidget_title']; ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('third_SampleWidget_img'); ?>">Third SampleWidget image: </label>
-			<input class="widefat" style="width: 216px;" id="<?php echo $this->get_field_id('third_SampleWidget_img'); ?>" name="<?php echo $this->get_field_name('third_SampleWidget_img'); ?>" value="<?php echo $instance['third_SampleWidget_img']; ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('third_SampleWidget_text'); ?>">Third SampleWidget text: </label>
-			<textarea class="widefat"  rows="16" cols="20" style="width: 216px;" id="<?php echo $this->get_field_id('third_SampleWidget_text'); ?>" name="<?php echo $this->get_field_name('third_SampleWidget_text'); ?>"><?php echo $instance['third_SampleWidget_text']; ?></textarea>
-		</p>
-	<?php }
-} 
-
-	
-//Create New Test Case 
-
-//Tester Roles
-if(isset($_POST['testsuite_id_tester'])){
-	//Terster Role
-	$get_tester_roles = get_post_meta($_POST['testsuite_id_tester'], 'tester_role_ts', true);
-	$test_roles = explode(',',$get_tester_roles);
-	if($_POST['checkElem_tester']==0){
-		echo '0##';
-		//Tester Roles - Select
-		echo '<div id="tester_role"><label for="choose_tester_role"><b>Tester Role</b></label><br />';
-		echo '<select name="choose_tester_role" id="checktester">';
-		echo '<option value="">Choose Tester Role</option> ';
-		
-		foreach($test_roles as $test_role){
-			echo '<option value="'.$test_role.'" class="'.$_POST['testsuite_id_tester'].'">'.$test_role.'</option>';
-			}
-		echo '</select> </div>';
-		exit();
-	}
-	else{
-		echo '1##';
-		foreach($test_roles as $test_role){
-			echo '<option value="'.$test_role.'" class="'.$_POST['testsuite_id_tester'].'">'.$test_role.'</option>';
-			}
-		exit();	
-		}
-}
-//Harness Role
-if(isset($_POST['testsuite_id_harness'])){
-	//Harness Role
-	$get_harness_roles = get_post_meta($_POST['testsuite_id_harness'], 'harness_role_ts', true);
-	$harness_roles = explode(',',$get_harness_roles);
-	if($_POST['checkElem_harness']==0){
-		echo '0##';
-		//Harness Roles - Select
-		echo '<div id="harness_role"><label for="choose_harness_role"><b>Harness Role</b></label><br />';
-		echo '<select name="choose_harness_role" id="checkharness">';
-		echo '<option value="">Choose Harness Role</option> ';
-		
-		foreach($harness_roles as $harness_role){
-			echo '<option value="'.$harness_role.'" class="'.$_POST['testsuite_id_harness'].'">'.$harness_role.'</option>';
-			}
-		echo '</select> </div> ';
-		exit();
-	}
-	else{
-		echo '1##';
-		foreach($harness_roles as $harness_role){
-			echo '<option value="'.$harness_role.'" class="'.$_POST['testsuite_id_harness'].'">'.$harness_role.'</option>';
-			}
-		exit();	
-		}
-}
-
-//Initiator Role
-if(isset($_POST['testsuite_id_initiator'])){
-	//Initiator Role
-	$get_initiator_roles = get_post_meta($_POST['testsuite_id_initiator'], 'initiator_ts', true);
-	$initiator_roles = explode(',',$get_initiator_roles);
-	if($_POST['checkElem_initiator']==0){
-		echo '0##';
-		//Initiator Roles - Select
-		echo '<div id="initiator_role"><label for="choose_initiator"><b>Initiator</b></label><br />';
-		echo '<select name="choose_initiator" id="checkinitiator">';
-		echo '<option value="">Choose Initiator</option> ';
-		
-		foreach($initiator_roles as $initiator_role){
-			echo '<option value="'.$initiator_role.'" class="'.$_POST['testsuite_id_initiator'].'">'.$initiator_role.'</option>';
-			}
-		echo '</select> </div> <br />';
-		exit();
-	}
-	else{
-		echo '1##';
-		foreach($initiator_roles as $initiator_role){
-			echo '<option value="'.$initiator_role.'" class="'.$_POST['testsuite_id_initiator'].'">'.$initiator_role.'</option>';
-			}
-		exit();	
-		}
-}
-
-if (isset($_POST['testsuite_id2'])){
-	//Initiating Message
-	$get_initiating_message = get_post_meta($_POST['testsuite_id2'], 'init_message', true);
-	$initiating_messages = explode(',',$get_initiating_message);
-	//Initiating Message - Select
-	if($_POST['checkElem2']==0){
-		echo '0##';
-		echo '<label for="choose_init_messages"><b>Initiating Message</b></label><br />';
-		echo '<select name="choose_init_messages" id="checkinitmsg">';
-		echo '<option value="">Choose Initiating Message</option>';
-		foreach($initiating_messages as $initiating_message){
-			echo '<option value="'.$initiating_message.'" class="'.$_POST['testsuite_id2'].'">'.$initiating_message.'</option>';
-			}
-		echo '</select>';
-		exit();
-	}else{
-		echo '1##';
-		foreach($initiating_messages as $initiating_message){
-			echo '<option value="'.$initiating_message.'" class="'.$_POST['testsuite_id2'].'">'.$initiating_message.'</option>';
-			}
-		exit();
-	}
-}
-	
-if (isset($_POST['testsuite_id3'])){
-
-	//Initiating Message
-	$get_lvl_codes = get_post_meta($_POST['testsuite_id3'], 'lvl_code', true);
-	
-	if($_POST['checkElem3']==0){
-		echo '0##';
-		
-		echo '<select name="conformance_level" id="checkconflvl">';
-		echo '<option value="">Choose Level Code</option> ';
-		foreach($get_lvl_codes as $get_lvl_code){
-			echo '<option value="'.$get_lvl_code.'" class="'.$_POST['testsuite_id3'].'">'.$get_lvl_code.'</option>';
-			}
-		echo '</select>';
-		exit();
-	}else{
-			echo '1##';
-			foreach($get_lvl_codes as $get_lvl_code){
-				echo '<option value="'.$get_lvl_code.'" class="'.$_POST['testsuite_id3'].'">'.$get_lvl_code.'</option>';
-			}
-			exit();
-		}
-}	
-
-
-
-
-
 
 
 function testcase_actions(){
@@ -817,3 +539,16 @@ function flushMessages($class = '')
 
 //Show Result Messages
 add_action('bp_before_container', 'flushMessages');
+
+
+//Get get params for search filter
+function getFilterParam($name)
+{
+    $param = array();
+    if(isset($_GET[$name]))
+        $param = $_GET[$name];
+    if(!is_array($param))
+        $param = array($param);
+        
+    return $param;
+}

@@ -1,0 +1,190 @@
+<?php
+/***
+* Test Suite Class
+*/
+
+class TestSuite
+{
+    var $id = null;
+    //Test Suite Information
+    var $name = '';
+    var $identifier = '';
+    var $issueDate = '';
+    var $issuer = '';
+    var $status = 'Active';
+    var $revisionDescription = '';
+    var $version = '';
+    var $description = '';
+    
+    var $initiatingMessage = '';
+    
+    var $conformanceLevel = array();
+    
+    var $testCases = array();
+    
+    var $relatedSuites = array();
+    
+    var $roles = array();
+    
+    var $specDocuments = array();
+    
+    var $monthlySubscriptionPrice = 0;
+    
+    var $excerpt = array();
+    
+    var $community_id = null;
+    
+    
+    public function __construct($id = null)
+    {        
+        if($id !== null)   
+            $this->id = $id;        
+    }
+    
+    public function load($id = null)
+    {
+        if($id !== null)   
+            $this->id = $id;
+        
+        if(!$this->id)
+            return;
+        //Load Informations
+        $this->community_id = $this->loadSingleValue('community_id');
+        $this->name = $this->loadSingleValue('ts_name');
+        $this->identifier = $this->loadSingleValue('ts_identifier');
+        $this->issueDate = $this->loadSingleValue('ts_issue_date');
+        $this->issuer = $this->loadSingleValue('ts_issuer');
+        $this->status = $this->loadSingleValue('ts_status');
+        $this->revisionDescription = $this->loadSingleValue('ts_revision_description');
+        $this->description = $this->loadSingleValue('ts_description');
+        $this->version = $this->loadSingleValue('ts_version');
+        $this->initiatingMessage = $this->loadSingleValue('init_message');
+        $this->monthlySubscriptionPrice = $this->loadSingleValue('monthly_subscription_price');
+        
+        $this->loadConformanceLevel();
+        $this->loadTestCases();
+        $this->loadRelatedSuites();
+        $this->loadRoles();
+        $this->loadSpecDocuments();
+        
+        $p = get_post($this->id);
+        
+        $this->excerpt = $p->post_excerpt;
+    }
+    
+    public function loadSpecDocuments()
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare( "SELECT * FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id=%d ORDER BY id", $this->id);    
+        $this->specDocuments = $wpdb->get_results($query);
+    }
+    
+    public function loadRoles()
+    {
+        $roleNames = get_post_meta($this->id, 'role_names', true);
+        $roleDescs = get_post_meta($this->id, 'role_descs', true);
+        $roles = array();
+        if(!$roleNames)
+        {
+            return $roles;
+        }else{        
+            $arrName = explode('|', $roleNames);
+            $arrDescs = explode('|', $roleDescs);
+            
+            foreach($arrName as $i=>$n)
+            {
+                if(!$arrName[$i])
+                    continue;
+                
+                $roles[] = array('name' => $arrName[$i], 'desc' => $arrDescs[$i]);
+            }
+        }
+        $this->roles = $roles;    
+        return $roles;
+    }
+    
+    public function loadRelatedSuites()
+    {
+        $suiteIDs = get_post_meta($this->id, 'ts', true);
+        $suiteDescs = get_post_meta($this->id, 'ts_desc', true);
+        $result = array();
+        foreach($suiteIDs as $i=>$sid)
+        {
+            $result[] = array('id' => $sid, 'desc' => $suiteDescs[$i]);
+        }
+        
+        $this->relatedSuites = $result;
+        
+        return $result;
+    }
+    
+    public function loadTestCases()
+    {        
+        $args = $args = array(
+                'post_type' => 'test-case',         
+                'posts_per_page' => -1,
+                'meta_query' => array(
+                                    array('key' => 'test_suites', 
+                                          'value' => "|" . $this->id . "|", 
+                                          'compare' => 'LIKE')
+                                )
+        );
+        
+        $case_query = new WP_Query($args);
+        $this->testCases = $case_query->get_posts();
+        
+        return $this->testCases;
+    }
+    
+    public function loadConformanceLevel()
+    {
+        $lvl_code = get_post_meta($this->id, 'lvl_code', true);
+        $lvl_desc = get_post_meta($this->id, 'lvl_desc', true);
+        $result = array();
+        foreach($lvl_code as $i=>$code)
+        {
+            $result[] = array('code' => $code, 'desc' => $lvl_desc[$i]);
+        }
+        
+        $this->conformanceLevel = $result;
+        
+        return $result;
+    }
+    
+    public function loadSingleValue($key)
+    {
+        return get_post_meta($this->id, $key, true);
+    }
+    
+    /**
+    * Getting the Test Suites that are belonged to same community
+    * 
+    */
+    public function getBrotherSuites($community_id = null)
+    {
+        //Getting Community ID
+        if($community_id !== null)
+            $this->community_id = $community_id;                        
+        
+        if(!$this->community_id)
+                return array();        
+                
+        $args = array(
+            'post_type' => 'test-suite', 
+            'posts_per_page' => -1,
+            'post__not_in' => array($this->id),
+            'meta_query' => array(
+                array(
+                    'key' => 'community_id',
+                    'value' => $this->community_id,
+                    'compare' => '='
+                )
+            )
+        );
+        
+        $testsuites = get_posts( $args );
+        
+        return $testsuites;
+    }
+}

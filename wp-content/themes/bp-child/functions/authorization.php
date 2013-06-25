@@ -46,9 +46,20 @@ function checkCurrentUserCapability()
 }
 add_action('template_redirect', 'checkCurrentUserCapability', 0);
 
-function can_edit_suite($suiteID)
+function can_edit_suite($suiteID, $user_id = null)
 {    
-    if(current_user_can('edit_other_suite') || current_user_can('edit_suite'))
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    //Check if the user is a system admin
+    if(user_can($user_id, 'edit_other_suite') || user_can($user_id, 'edit_suite'))
+    {
+        return true;
+    }
+    
+    //Check if the user is the admin of the Community
+    $comunity_id = get_post_meta($suiteID, 'community_id', true);
+    if(groups_is_user_admin($user_id, $comunity_id))
     {
         return true;
     }
@@ -56,3 +67,40 @@ function can_edit_suite($suiteID)
     return false;
 }
 
+function can_create_suite($user_id = null)
+{
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    //Check if the user is a system admin
+    if(user_can($user_id, 'create_suite'))
+    {
+        return true;
+    }
+    
+    //Check if the user is an admin of a Community    
+    
+    if(bp_is_group_admin($user_id))
+    {
+        return true;
+    }
+    
+}
+
+function bp_is_group_admin($user_id)
+{
+    global $wpdb;
+    
+    $groups = groups_get_user_groups($user_id);
+    if(!$groups || !$groups['groups'])
+        return false;
+    
+    foreach($groups['groups'] as $group_id)
+    {
+        if(groups_is_user_admin($user_id, $group_id))
+        {
+            return true;
+        }
+    }
+    return false;
+}

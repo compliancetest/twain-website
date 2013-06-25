@@ -28,7 +28,6 @@ get_header();
 				   
 					<input type="submit" id="searchsubmit" value="SEARCH">
 					</form>
-					<?php // echo get_search_form( $echo ); ?>
 
 					<div class="clear"></div>
 				</div><!-- end search_bar  -->

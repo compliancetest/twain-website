@@ -1,7 +1,8 @@
 <?php
 /**
-* Functions related Test Suites
+* Add Custom Metaboxes to Test Suite Post Type
 */
+
 
 //Add Metaboxes
 add_action('admin_init', 'add_metaboxes_for_test_suites');
@@ -399,7 +400,6 @@ function test_suite_roles_metabox_html(){
     <?php
 }
 
-
 //Save Test Cases
 add_action('save_post', 'save_test_suite_on_admin');
 function save_test_suite_on_admin($post_id)
@@ -463,8 +463,8 @@ function save_test_suite_on_admin($post_id)
         
         if(count($roleNames) > 0)
         {
-            add_post_meta($post_id, 'role_names', ';' . implode(';', $roleNames) . ';', true);
-            add_post_meta($post_id, 'role_descs', ';' . implode(';', $roleDescs) . ';', true);
+            add_post_meta($post_id, 'role_names', '|' . implode('|', $roleNames) . '|', true);
+            add_post_meta($post_id, 'role_descs', '|' . implode('|', $roleDescs) . '|', true);
         }
     }
     
@@ -542,23 +542,6 @@ function save_test_suite_on_admin($post_id)
     update_post_meta($post_id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
 }
 
-//Get get params for search filter
-function getFilterParam($name)
-{
-    $param = array();
-    if(isset($_GET[$name]))
-        $param = $_GET[$name];
-    if(!is_array($param))
-        $param = array($param);
-        
-    return $param;
-}
-
-/**
-* Getting Test Suite Roles and Descs
-* 
-* @param mixed $suite_id
-*/
 function getTestSuiteRoles($suite_id)
 {
     $roleNames = get_post_meta($suite_id, 'role_names', true);
@@ -568,8 +551,8 @@ function getTestSuiteRoles($suite_id)
     {
         return $roles;
     }else{        
-        $arrName = split(';', $roleNames);
-        $arrDescs = split(';', $roleDescs);
+        $arrName = explode('|', $roleNames);
+        $arrDescs = explode('|', $roleDescs);
         
         foreach($arrName as $i=>$n)
         {
