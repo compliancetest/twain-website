@@ -33,10 +33,10 @@ if(!$suite->community_id)
         <?php }else{ ?>
         <h2>Edit Test Suite: <?php echo $suite->name?></h2>
         <?php } ?>        
-        <div class="grid-box grid-box-expandable grid-box-opened">
+        <div class="grid-box grid-box-expandable grid-box-opened" id="community-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Choose Community</b></h5>
+               <h5 class="left">Choose Community</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -58,7 +58,7 @@ if(!$suite->community_id)
         <div class="grid-box grid-box-expandable grid-box-opened" id="suite-info-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Test Suite Information</b></h5>
+               <h5 class="left">Test Suite Information</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -113,7 +113,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Initiating Message</b></h5>
+               <h5 class="left">Initiating Message</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -134,7 +134,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Subscription Price</b></h5>
+               <h5 class="left">Subscription Price</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -155,7 +155,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="conf-level-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Conformance Level</b></h5>
+               <h5 class="left">Conformance Level</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -209,7 +209,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="test-cases-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Test Cases</b></h5>
+               <h5 class="left">Test Cases</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -239,7 +239,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="related-suites-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Related Test Suites</b></h5>
+               <h5 class="left">Related Test Suites</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -313,7 +313,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="roles-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Roles</b></h5>
+               <h5 class="left">Roles</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -366,7 +366,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="specs-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Specification Documents</b></h5>
+               <h5 class="left">Specification Documents</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -424,7 +424,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="excerpt-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left"><b>Excerpt</b></h5>
+               <h5 class="left">Excerpt</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -465,6 +465,8 @@ if(!$suite->community_id)
 
 <script type="text/javascript">
     jQuery(document).ready(function(){
+        //Add Loading Div
+        jQuery('#edit_test_suite_wrapper .grid-box-body').append('<div class="loading1"></div>');
         jQuery('#add-conformance-level').click(function(){
             jQuery('#conf-level-box .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' +
@@ -560,6 +562,7 @@ if(!$suite->community_id)
         
         //Update Related Test Suites 
         jQuery('#community_id').change(function(){
+            jQuery('#community-box .loading1, #related-suites-box .loading1').show();
             jQuery.ajax({
                 url: '<?php echo get_site_url()?>',
                 data: {
@@ -568,6 +571,9 @@ if(!$suite->community_id)
                     '_wpnonce': '<?php echo wp_create_nonce('get-brother-suites')?>'
                 },
                 type: 'POST',
+                complete: function(){
+                    jQuery('#community-box .loading1, #related-suites-box .loading1').hide();    
+                },
                 success: function(rsp)
                 {
                     jQuery('#related-suites-box select').replaceWith(rsp);

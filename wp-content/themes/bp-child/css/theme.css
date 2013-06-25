@@ -4992,44 +4992,57 @@ a.suite-subscript-link:hover{
     color: #666666;
 }
 /*** Test Suite Edit Page ***/
+#edit_test_case_wrapper .input,
 #edit_test_suite_wrapper .input{
     width: 200px;
 }    
-#edit_test_suite_wrapper .medium-input{
-    width: 430px;
-}    
-
+#edit_test_case_wrapper .select,
 #edit_test_suite_wrapper .select{
     width: 200px;
     font-size: 12px;
     color: #666;
 }    
+#edit_test_case_wrapper .medium-input,
+#edit_test_suite_wrapper .medium-input{
+    width: 430px;
+}    
+
+#edit_test_case_wrapper .textarea,
 #edit_test_suite_wrapper .textarea{
     width: 430px;
     min-height: 75px;
     resize: vertical;
 }    
 
+#edit_test_case_wrapper .field-row .grid-cell:first-child,
 #edit_test_suite_wrapper .field-row .grid-cell:first-child{
     padding-left: 0;
 }
+#edit_test_case_wrapper .field-row .grid-cell,
 #edit_test_suite_wrapper .field-row .grid-cell{
     padding-left: 30px;
     padding-right: 0;
 }
 
+#edit_test_case_wrapper .grid-box-body .field-row:last-child,
 #edit_test_suite_wrapper .grid-box-body .field-row:last-child{
     padding-bottom: 0;    
 }
+#edit_test_case_wrapper .field-row .radio-cell,
+#edit_test_suite_wrapper .field-row .radio-cell{
+    width: 200px;
+}
+#edit_test_case_wrapper .field-row .radio-cell label,
+#edit_test_suite_wrapper .field-row .radio-cell label{
+    margin-bottom: 5px;
+}
+
 #conf-level-box .field-row,
 #related-suites-box .field-row,
 #specs-box .field-row,
 #roles-box .field-row{
     border-bottom: solid 1px #e3e3e3;
     margin-bottom: 10px;
-}
-#edit_test_suite_wrapper .field-row .radio-cell{
-    width: 200px;
 }
 #test-cases-box .field-row .grid-cell{
     width: 220px;
@@ -5050,4 +5063,9 @@ a.suite-subscript-link:hover{
 }
 #test-cases-box .blue-delete-btn{
     float: right;
+}
+#suites-box .select,
+#choose-init-msg-box .select{
+    min-width: 200px;
+    width: auto !important;
 }

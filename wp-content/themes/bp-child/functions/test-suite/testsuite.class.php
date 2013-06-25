@@ -30,7 +30,7 @@ class TestSuite
     
     var $monthlySubscriptionPrice = 0;
     
-    var $excerpt = array();
+    var $excerpt = '';
     
     var $community_id = null;
     
