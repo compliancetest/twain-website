@@ -19,11 +19,11 @@ h1 {
 
 h2 {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 h3 {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 18px;
 }
 
@@ -33,7 +33,7 @@ h4 {
 
 h5 {
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 h6 {
@@ -5071,4 +5071,68 @@ a.suite-subscript-link:hover{
 #choose-init-msg-box .select{
     min-width: 200px;
     width: auto !important;
+}
+/**
+* Contact Us Page
+*/
+.contact-info-block{
+    width: 470px;
+}
+.contact-info-block h3{
+    color: #d02f27;
+    border-bottom: solid 1px #d02f27;
+    line-height: 28px;
+}
+.container .contact-info-block img{
+    margin: 10px 0;
+}
+.container .contact-info-block address,
+.container .contact-info-block p{
+    font-size: 14px;
+    margin-bottom: 0;
+    line-height: 20px;
+    font-style: normal;
+}
+.contact-info-block p.company-name{
+    color: #111;
+}
+.container .contact-info-block p b{
+    font-weight: 600;
+}
+#contact-form-wrapper{
+    padding: 25px 0 20px;
+}
+#contact-form-wrapper .asterisk{
+    position: absolute;
+    color: #d83636;
+    left: 0;
+}
+#contact-form-wrapper .left .row{
+    padding: 0 0 8px 10px;
+    position: relative;
+}
+#contact-form-wrapper .left .wpcf7-form-control-wrap{
+    float: none;
+}
+#contact-form-wrapper .left .wpcf7-form-control-wrap .input{
+    width: 300px;
+    margin: 0;
+}
+#contact-form-wrapper .left .wpcf7-form-control-wrap .textarea{
+    width: 625px;
+    height: 90px;
+    min-height: 90px;
+}
+#contact-form-wrapper span.captcha-contact{
+    float: left;
+}
+#contact-form-wrapper img.wpcf7-captchac{
+    border: solid 1px #cbcbcb;    
+    margin: 0 0 0 10px;
+    float: left;
+}
+#contact-form-wrapper .left .wpcf7-form-control-wrap input.wpcf7-captchar{
+    border: solid 1px #cbcbcb;    
+    margin: 0 0 0 10px;
+    width: 90px;
 }

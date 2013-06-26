@@ -6,6 +6,10 @@ if(!defined('MESSAGE_KEY'))
 if(!defined('CHILD_TEMPLATE_DIRECTORY'))
     define('CHILD_TEMPLATE_DIRECTORY', dirname( get_bloginfo('stylesheet_url')) );
 
+if(!defined('GOOGLE_API_KEY'))
+    define('GOOGLE_API_KEY', 'AIzaSyBwGPBjQXOTbPlzPGIFF7QHwX6VdH4mufE' );
+
+    
 //Session Start
 add_action('init', 'cp_session_start');
 function cp_session_start() 
@@ -50,6 +54,7 @@ require_once(THE_FUNCTION . '/test-case/add-meta-boxes.php');
 require_once(THE_FUNCTION . '/test-case/controller.php');
 //Products And Services
 require_once(THE_FUNCTION . '/products-and-services.php');
+
  
 /* 
  * Loads the Options Panel

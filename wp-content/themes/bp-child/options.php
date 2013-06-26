@@ -458,146 +458,6 @@ function optionsframework_options() {
         'desc' => __('2. Box Content'),
         'id' => 'box_content2',
         'type' => 'textarea');
-    
-	/*$options[] = array(
-		'name' => __('Three boxes', 'options_framework_theme'),
-		'desc' => __('1. Box Image'),
-		'id' => 'box_image1',
-		'type' => 'upload');	
-		
-	$options[] = array(
-		'desc' => __('1. Box Title'),
-		'id' => 'box_title1',
-		'type' => 'text');
-		
-	$options[] = array(
-		'desc' => __('1. Box - Link to'),
-		'id' => 'box_1_linkto',
-		'type' => 'text');	
-	
-	$options[] = array(
-		'desc' => __('1. Box Item 1.'),
-		'id' => '1box_item1',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('1. Box Item 1 - Link To.'),
-		'id' => '1box_item1_linkto',
-		'type' => 'text');
-		
-	$options[] = array(
-		'desc' => __('1. Box Item 2.'),
-		'id' => '1box_item2',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('1. Box Item 2 - Link To.'),
-		'id' => '1box_item2_linkto',
-		'type' => 'text');		
-		
-	$options[] = array(
-		'desc' => __('1. Box Item 3.'),
-		'id' => '1box_item3',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('1. Box Item 3 - Link To.'),
-		'id' => '1box_item3_linkto',
-		'type' => 'text');		
-	
-			
-	$options[] = array(
-		'desc' => __('2. Box Image'),
-		'id' => 'box_image2',
-		'type' => 'upload');	
-		
-	$options[] = array(
-		'desc' => __('2. Box Title'),
-		'id' => 'box_title2',
-		'type' => 'text');
-		
-	$options[] = array(
-		'desc' => __('2. Box - Link to'),
-		'id' => 'box_2_linkto',
-		'type' => 'text');	
-		
-		$options[] = array(
-		'desc' => __('2. Box Item 1.'),
-		'id' => '2box_item1',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('2. Box Item 1 - Link To.'),
-		'id' => '2box_item1_linkto',
-		'type' => 'text');
-		
-	$options[] = array(
-		'desc' => __('2. Box Item 2.'),
-		'id' => '2box_item2',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('2. Box Item 2 - Link To.'),
-		'id' => '2box_item2_linkto',
-		'type' => 'text');		
-		
-	$options[] = array(
-		'desc' => __('2. Box Item 3.'),
-		'id' => '2box_item3',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('2. Box Item 3 - Link To.'),
-		'id' => '2box_item3_linkto',
-		'type' => 'text');		
-		
-	$options[] = array(
-		'desc' => __('3. Box Image'),
-		'id' => 'box_image3',
-		'type' => 'upload');	
-	
-	$options[] = array(
-		'desc' => __('3. Box Title'),
-		'id' => 'box_title3',
-		'type' => 'text');	
-		
-	$options[] = array(
-		'desc' => __('3. Box - Link to'),
-		'id' => 'box_3_linkto',
-		'type' => 'text');		
-		
-	/* */
-    /*
-	$options[] = array(
-		'desc' => __('3. Box Item 1.'),
-		'id' => '3box_item1',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('3. Box Item 1 - Link To.'),
-		'id' => '3box_item1_linkto',
-		'type' => 'text');
-		
-	$options[] = array(
-		'desc' => __('3. Box Item 2.'),
-		'id' => '3box_item2',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('3. Box Item 2 - Link To.'),
-		'id' => '3box_item2_linkto',
-		'type' => 'text');		
-		
-	$options[] = array(
-		'desc' => __('3. Box Item 3.'),
-		'id' => '3box_item3',
-		'type' => 'text');
-	
-	$options[] = array(
-		'desc' => __('3. Box Item 3 - Link To.'),
-		'id' => '3box_item3_linkto',
-		'type' => 'text');			
-		*/
 			
 	$options[] = array(
 		'name' => __('Footer Settings', 'options_framework_theme'),
@@ -613,6 +473,45 @@ function optionsframework_options() {
 		'id' => 'copyright',
 		'type' => 'text');			
 
+    $options[] = array(
+        'name'  => __('Contact Us Page'),
+        'type'  =>  'heading'
+    );
+    
+    $options[] = array(
+        'name'  => 'Information in United States',
+        'id'    =>  'us_company_name',
+        'desc'  =>  'Company Name',
+        'type'  =>  'text'
+    );
+    $options[] = array(
+        'id'    =>  'us_company_address',
+        'desc'  =>  'Company Address',
+        'type'  =>  'textarea'
+    );
+    $options[] = array(
+        'id'    =>  'us_company_phone',
+        'desc'  =>  'Phone Number',
+        'type'  =>  'text'
+    );
+    $options[] = array(
+        'name'  => 'Information in Australia',
+        'id'    =>  'au_company_name',
+        'desc'  =>  'Company Name',
+        'type'  =>  'text'
+    );
+    $options[] = array(
+        'id'    =>  'au_company_address',
+        'desc'  =>  'Company Address',
+        'type'  =>  'textarea'
+    );
+    $options[] = array(
+        'id'    =>  'au_company_phone',
+        'desc'  =>  'Phone Number',
+        'type'  =>  'text'
+    );
+    
+    
 	return $options;
 }
 
