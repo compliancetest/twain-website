@@ -1696,7 +1696,7 @@ display:block;
         font-family: 'Open Sans', Arial, sans-serif;
         text-shadow: 1px 1px 0px black;
         font-weight: bold;
-        margin-bottom: 15px;
+        margin-bottom: 13px;
 }
     
     .blue_box_button {
@@ -5037,6 +5037,9 @@ a.suite-subscript-link:hover{
     margin-bottom: 5px;
 }
 
+#test-data-box .field-row,
+#test-execution-box .field-row,
+#test-step-box .field-row,
 #conf-level-box .field-row,
 #related-suites-box .field-row,
 #specs-box .field-row,

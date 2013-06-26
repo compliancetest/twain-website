@@ -61,13 +61,23 @@ get_header();
 	</div>		
 	<div class="four_fifths right container">
         <div class="column">
+        <?php
+            if(can_create_group()){
+        ?>
+        <div class="space10"></div>
+        <a href="/groups/create/" class="action-btn add-new-btn"><span class="p"></span><span class="t">Create Community</span></a>
+        <div class="clear"></div>
+        <div class="space10"></div>
+        <?php
+            }                    
+        ?>
           <?php if($user_status == 3){?>
                 <div class="inner-warning">Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="javascript: void(0);">link verification</a>)</span></div>
             <?php }?>
                 
             <input type="hidden" name="user_id" value="<?php echo $current_user->ID;?>"/>
             
-			<div class="left three_fifths">
+			<div class="left three_fifths">                
                 <div class="grid-box" id="my_details">
                     <div class="grid-box-header">
                         <h5 class="left">My Details</h5>
@@ -254,6 +264,7 @@ get_header();
 	</div>
     <div class="clear"></div>
 </div> <!--end content-->
+
 <?php
 get_footer();
 ?>

@@ -169,7 +169,7 @@ get_header();
            </div>
         </div>   
         <div class="space25"></div>
-        <div class="grid-box grid-box-expandable grid-box-opened" id="test-dadta-box">
+        <div class="grid-box grid-box-expandable grid-box-opened" id="test-data-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                <h5 class="left">Test Data</h5>
@@ -238,7 +238,7 @@ get_header();
                    </div>           
                    <div class="btn-row">
                        <div class="grid-cell">
-                           <a href="#" class="action-btn add-new-btn" id="add-test-data"><span class="p"></span><span class="t">New Property</span></a>                       
+                           <a href="#" class="action-btn add-new-btn" id="add-test-exec-data"><span class="p"></span><span class="t">New Property</span></a>                       
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -301,7 +301,7 @@ get_header();
                    </div>               
                    <div class="btn-row">
                        <div class="grid-cell">
-                           <a href="#" class="action-btn add-new-btn" id="add-test-data"><span class="p"></span><span class="t">New Test Step</span></a>                       
+                           <a href="#" class="action-btn add-new-btn" id="add-test-step"><span class="p"></span><span class="t">New Test Step</span></a>                       
                        </div>
                        <div class="clear"></div>
                    </div>      
@@ -313,5 +313,74 @@ get_header();
     </div>
     <div class="clear space25"></div>
 </div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+    //Add Loading Div
+    jQuery('#edit_test_case_wrapper .grid-box-body').append('<div class="loading1"></div>');
+    //Delete
+    jQuery('#test-data-box, #test-execution-box, #test-step-box').on('click', '.blue-delete-btn', function(){
+        jQuery(this).parents('.field-row').fadeOut('fast', function(){
+            jQuery(this).remove();                
+        })
+        return false;
+    })    
+    
+    jQuery('#add-test-data').click(function(){
+        jQuery('#test-data-box .btn-row').before('<div class="field-row">' + 
+                       '<div class="grid-cell">' + 
+                           '<label>Property Name:</label>' +
+                           '<input type="text" name="property_name_data[]" value="" class="input" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>Property Value:</label>' +
+                           '<input type="text" name="property_value_data[]" value="" class="input medium-input" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>&nbsp;</label>' +
+                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                       '</div>' +
+                       '<div class="clear"></div>' +
+                   '</div>');
+        return false;
+    })
+    jQuery('#add-test-exec-data').click(function(){
+        jQuery('#test-execution-box .btn-row').before('<div class="field-row">' + 
+                       '<div class="grid-cell">' + 
+                           '<label>Property Name:</label>' +
+                           '<input type="text" name="property_name_exec[]" value="" class="input" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>Property Value:</label>' +
+                           '<input type="text" name="property_value_exec[]" value="" class="input medium-input" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>&nbsp;</label>' +
+                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                       '</div>' +
+                       '<div class="clear"></div>' +
+                   '</div>');
+        return false;
+    })
+    jQuery('#add-test-step').click(function(){
+        jQuery('#test-step-box .btn-row').before('<div class="field-row">' + 
+                       '<div class="grid-cell">' + 
+                           '<label>Action:</label>' +
+                           '<input type="text" name="step_action[]" value="" class="input" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>Expected Result:</label>' +
+                           '<input type="text" name="step_expected[]" value="" class="input medium-input" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>&nbsp;</label>' +
+                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                       '</div>' +
+                       '<div class="clear"></div>' +
+                   '</div>');
+        return false;
+    })
+    
+});
+</script>
 <?php
 get_footer();

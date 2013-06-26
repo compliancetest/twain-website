@@ -148,3 +148,20 @@ function can_create_test_case($user_id = null)
     }
     
 }
+
+function can_create_group($user_id = null)
+{
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    //Check if the user is a system admin
+    if(user_can($user_id, 'create_group'))
+    {
+        return true;
+    }
+    
+    if(is_admin() || is_super_admin())
+        return true;
+    
+    return false;
+}
