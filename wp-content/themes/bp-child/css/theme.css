@@ -4264,62 +4264,6 @@ display:block !important;
 }
 
 
-/* contact form 7 plugin additional styles*/
-
-.contact_form .captcha_input {
-    width: 120px !important;
-}
-
-.contact_form .captcha_img {
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    margin-top: 5px;
-}
-
-.contact_form input[type="text"],
-.contact_form input[type="email"],
-.contact_form input[type="tel"],
-.contact_form textarea {
-    font-size: 12px;
-    color: #AAA;
-    font-style: italic;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-weight: 400;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    border: 1px solid #C8C8C8;
-    box-shadow: none;
-    background: white;
-    padding: 5px 10px;
-    margin-top: 5px;
-}
-
-.contact_form input[type="email"]:focus,
-.contact_form input[type="tel"]:focus {
-    border:1px solid #9a9a9a;
-}
-
-div.wpcf7-validation-errors,  div.wpcf7-mail-sent-ng, div.wpcf7-spam-blocked {
-    border: none !important;
-    color: #D02F27;
-}
-
-span.wpcf7-not-valid-tip {
-    border: none !important;    
-    font-size: 11px !important;
-    padding: 0px !important;
-    width: auto !important;
-    top: 0 !important;
-}
-
-div.wpcf7-mail-sent-ok {
-    border: none !important;
-    color: #2c80e8 !important;
-}
 /* end of contact form 7 plugin additional styles*/
 
 /*sign button*/
@@ -5135,4 +5079,13 @@ a.suite-subscript-link:hover{
     border: solid 1px #cbcbcb;    
     margin: 0 0 0 10px;
     width: 90px;
+}
+
+#contact-form-wrapper span.wpcf7-not-valid-tip {
+    border: none ;    
+    font-size: 11px ;
+    padding: 0px ;
+    width: auto;
+    top: 0;
+    background: transparent;
 }
