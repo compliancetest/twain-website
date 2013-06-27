@@ -339,8 +339,8 @@ Template Name Posts: Test Suite
                                 <?php echo get_post_meta($row->ID ,'test_intent_description', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                <?php if(is_admin() || is_super_admin()){ ?>
-                                <a href="/wp-admin/post.php?post=<?php echo $row->ID?>&action=edit" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
+                                <?php if(can_edit_test_case($row->ID)){ ?>
+                                <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
                                 <a href="/wp-admin/post.php?post=<?php echo $row->ID?>&action=trash&_wpnonce=<?php echo wp_create_nonce('trash-post_' . $row->ID)?>" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
                                 <?php } ?>
                                 <div class="clear"></div>                                                                        

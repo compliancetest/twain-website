@@ -13,12 +13,15 @@ function bp_groups_admin_edit_metabox_terms_and_license($item)
 {
     $terms = groups_get_groupmeta($item->id, 'terms_and_conditions');
     $license = groups_get_groupmeta($item->id, 'license_agreements');
+    $obligation = groups_get_groupmeta($item->id, 'obligation_for_claim');
     ?>
     <h4>Terms And Conditions</h4>
     <p><textarea cols="30" rows="5" name="terms_and_conditions" style="width: 100%;" id="terms_and_conditions"><?php echo $terms?></textarea></p>
     <br />
     <h4>License Agreements</h4>
     <p><textarea cols="30" rows="5" name="license_agreements" style="width: 100%;" id="license_agreements"><?php echo $license?></textarea></p>
+    <h4>Member Obligations For claim</h4>
+    <p><textarea cols="30" rows="5" name="obligation_for_claim" style="width: 100%;" id="obligation_for_claim"><?php echo $obligation?></textarea></p>
     
     <?php
 }
@@ -35,6 +38,11 @@ function save_group_terms_and_license($group_id)
     {
         groups_update_groupmeta($group_id, 'license_agreements', $_POST['license_agreements']);
     }
+    if(isset($_POST['obligation_for_claim']))
+    {
+        groups_update_groupmeta($group_id, 'obligation_for_claim', $_POST['obligation_for_claim']);
+    }
+    
     
 }
 
@@ -100,6 +108,7 @@ function groups_screen_group_admin_edit_details_by_ajax()
             echo json_encode(array('result' => $result ? 'success' : 'error', 'message' => $message));
             
             do_action( 'groups_group_details_edited', $bp->groups->current_group->id );            
+            do_action( 'bp_group_admin_edit_after', $bp->groups->current_group->id );            
             exit;
         }
         

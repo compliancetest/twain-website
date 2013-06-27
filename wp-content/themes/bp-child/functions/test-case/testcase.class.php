@@ -57,7 +57,7 @@ class TestCase
             return;
             
         $this->name = get_the_title($this->id);
-        $this->testSuite = $this->loadSingleValue('test_suites');
+        $this->testSuite = $this->loadSingleValue('test_suite');
         $this->conformanceLevel = $this->loadSingleValue('conformance_level');
         $this->testerRole = $this->loadSingleValue('choose_tester_role');
         $this->harnessRole = $this->loadSingleValue('choose_harness_role');
@@ -138,4 +138,36 @@ class TestCase
         return get_post_meta($this->id, $key, true);
     }
     
+    
+    public function getAvailableTestSuites()
+    {
+                
+        $groups = getUserAdminGroups(get_current_user_id());
+        if(!$groups)
+            return array();
+        
+        $args = array(
+            'post_type' => 'test-suite', 
+            'posts_per_page' => -1,
+            'post__not_in' => array($this->id),
+            'meta_query' => array(
+                'relation' => 'or'
+                
+            )
+        );
+        
+        foreach($groups as $group)
+        {
+            $args['meta_quer'][] = array(
+                    'key' => 'community_id',
+                    'value' => $group->id,
+                    'compare' => '='
+            );
+        }
+        
+        
+        $testsuites = get_posts( $args );
+        
+        return $testsuites;
+    }
 }

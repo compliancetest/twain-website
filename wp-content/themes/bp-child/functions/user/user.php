@@ -75,3 +75,33 @@ function getUserAdminGroups($user_id)
     
     return $result;
 }
+
+//Get User Test Suites
+function getUserTestSuites($user_id = null)
+{
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    //Getting User Groups
+    $groups = groups_get_groups( array('user_id' => $user_id) );
+    
+    $args = array(
+        'post_type' => 'test-suite', 
+        'posts_per_page' => -1,
+        'meta_query' => array(
+            'relation' => 'OR'            
+        )
+    );
+    foreach($groups as $group)
+    {
+        $args['meta_query'][] = array(
+                'key' => 'community_id',
+                'value' => $group->id,
+                'compare' => '='
+            );
+    }
+    
+    $testsuites = get_posts( $args );
+        
+    return $testsuites;
+}

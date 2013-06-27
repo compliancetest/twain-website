@@ -43,6 +43,10 @@ $customCapabilities = array(
                             'delete_other_product_service',
                             'edit_product_service',
                             'delete_product_service',
+                            
+                            'execute_test_case_against_esb',
+                            'manage_test_dashbaord',
+                            'make_compliance_claim'
                             ),
     //Community Administrator
 /*    'author'        => array(

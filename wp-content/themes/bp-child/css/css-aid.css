@@ -1238,6 +1238,9 @@ tr {
     line-height: 16px;
     padding: 6px 10px;
 }
+.grid-box-header h5 a{
+    color: #fff;
+}
 .grid-box-header .header-text{
     color: #fff;
     font-size: 12px;

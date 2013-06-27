@@ -24,6 +24,22 @@
                             <div class="clear"></div>
                         </div>
                         <div class="field-row">
+                            <label>Terms and Conditions</label>
+                            <span class="input-holder"><textarea name="terms_and_conditions" id="terms_and_conditions" aria-required="true" class="textarea"><?php echo groups_get_groupmeta(bp_get_group_id(), 'terms_and_conditions'); ?></textarea></span>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <label>License Agreements</label>
+                            <span class="input-holder"><textarea name="license_agreements" id="license_agreements" aria-required="true" class="textarea"><?php echo groups_get_groupmeta(bp_get_group_id(), 'license_agreements'); ?></textarea></span>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <label>Obligation to Claim</label>
+                            <span class="input-holder"><textarea name="obligation_for_claim" id="obligation_for_claim" aria-required="true" class="textarea"><?php echo groups_get_groupmeta(bp_get_group_id(), 'obligation_for_claim'); ?></textarea></span>
+                            <div class="clear"></div>
+                        </div>
+                        
+                        <div class="field-row">
                             <label><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
                             <span class="radio-holder">
                                 <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'YES', 'buddypress' ); ?></label>

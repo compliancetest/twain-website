@@ -10,10 +10,17 @@ get_header();
 		<div class="infos">
 				<h3 class="dark_gray_txt normal left">Test case ID: <span class="dark_blue_txt bold"><?php echo meta ('test_case_id') ; ?></span></h3>
                 <?php
-                    //Get Test Suite
-                    $suites = _get_current_test_suites(get_the_ID());                    
+                    if(can_edit_test_case(get_the_ID())){ 
                 ?>
-                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($suites[0])?>"><?php echo get_the_title($suites[0]) ?></a></span>
+                <a href="/edit-test-case?id=<?php echo get_the_ID()?>" class="action-btn edit-btn left10"><span class="p"></span><span class="t">Edit</span></a>
+                <?php
+                    }
+                ?>
+                <?php
+                    //Get Test Suite
+                    $suite = get_post_meta(get_the_ID(), 'test_suite', true);
+                ?>
+                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($suite)?>"><?php echo get_the_title($suite) ?></a></span>
                 <div class="clear"></div>
 				<p class="dark_gray_txt"><?php echo meta ('test_intent_description') ; ?></p>
 				<div class="grids noradiusbottom">

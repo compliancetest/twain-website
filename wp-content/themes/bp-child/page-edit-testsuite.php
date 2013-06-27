@@ -444,8 +444,8 @@ if(!$suite->community_id)
            </div>
        </div>
        <div class="grid-box">
-           <div class="grid-box-footer">
-               <div class="btn-row">
+           <div class="grid-box-footer nobackground noshadow">
+               <div class="btn-row nopaddingright">
                    <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span class="t">SAVE TEST SUITE</span></a>
                    <a href="/test-suite-coverage" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                    <div class="clear"></div>
@@ -591,6 +591,7 @@ if(!$suite->community_id)
             }
             jQuery('#brother-suites').remove();
         })
+                
     })
 </script>
 <?php

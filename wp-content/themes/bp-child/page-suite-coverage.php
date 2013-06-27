@@ -3,8 +3,11 @@
  * Template Name: Test Suite Coverage
  */
 get_header();
-?>
 
+//Getting The Suites that belonged to the Community 
+$mysuites = getUserTestSuites();
+
+?>
 <div class="content" id="test_suite_coverage">
 	<div class="space25"></div>
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
@@ -12,57 +15,14 @@ get_header();
 	</div>
 	<div class="four_fifths right container">
         <div class="column">
-            <h2>Test Suite Coverage</h2>
-            <div class="space10"></div>
-            <div class="message notice">This function is under construction</div>
-        </div>
-        <div class="space100"></div>
-    </div>
-	<div class="four_fifths right container" style="display: none;">
-        <div class="column">
+            <?php if(can_create_suite()){ ?>
+            <a href="/add-new-test-suite" class="action-btn add-new-btn"><span class="p"></span><span class="t">Add New Test Suite</span></a>
+            <div class="clear space15"></div>
+            <?php } ?>
+           <?php foreach($mysuites as $suite){ ?>
            <div class="grid-box table-box">
                <div class="grid-box-header">
-                   <h5><b>SuperStream MCS v1.1</b></h5>                   
-                   <div class="clear"></div>
-               </div>
-               <div class="grid-box-body">
-                   <div class="thead tr">
-                       <div class="td td-product">Product</div>
-                       <div class="td td-conflevel">Conf Level</div>
-                       <div class="td td-coverage">Coverage</div>
-                       <div class="td td-action">Action</div>
-                       <div class="clear"></div>
-                   </div>
-                   <div class="tbody">
-                       <div class="tr">
-                           <div class="td td-product">Product</div>
-                           <div class="td td-conflevel">Conf Level</div>
-                           <div class="td td-coverage">
-                               <div class="coverage-progress"><span class="bar0"></span></div>    
-                           </div>
-                           <div class="td td-action">
-                              <a href="#" class="action-btn view-log-btn"><span class="p"></span><span class="t">View Log</span></a>
-                              <a href="#" class="action-btn certify-btn"><span class="p"></span><span class="t">Certify</span></a>
-                           </div>
-                           <div class="clear"></div>
-                       </div>
-                       <div class="tr">
-                           <div class="td td-product">Product</div>
-                           <div class="td td-conflevel">Conf Level</div>
-                           <div class="td td-coverage">Coverage</div>
-                           <div class="td td-action">
-                              <a href="#" class="action-btn view-log-btn"><span class="p"></span><span class="t">View Log</span></a>
-                              <a href="#" class="action-btn certify-grey-btn"><span class="p"></span><span class="t">Certify</span></a>
-                           </div>
-                           <div class="clear"></div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-           <div class="space20"></div>   
-           <div class="grid-box table-box">
-               <div class="grid-box-header">
-                   <h5><b>SuperStream MCS v1.1</b></h5>                   
+                   <h5><a href="<?php echo get_permalink($suite->ID)?>"><b><?php echo get_the_title($suite)?></b></a></h5>                   
                    <div class="clear"></div>
                </div>
                <div class="grid-box-body">
@@ -81,6 +41,8 @@ get_header();
                    </div>
                </div>
            </div>           
+           <div class="space20"></div>   
+           <?php } ?>
         </div>           
     </div>
 	<div class="clear"></div>

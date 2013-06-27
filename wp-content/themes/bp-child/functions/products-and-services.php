@@ -14,14 +14,14 @@ function products_and_services_test_suites_metabox_html(){
     global $post;
     
     //Get Current Test Suites
-    $current_test_suites = _get_current_test_suites($post->ID);
+    $current_test_suite = _get_current_test_suite($post->ID);
     
     $testsuites = get_posts( array( 'post_type' => 'test-suite', 'posts_per_page' => -1) );
     
     foreach($testsuites as $row){
     ?>
          
-         <input type="checkbox" name="test_suites[]" <?php if (in_array($row->ID, $current_test_suites)) { echo 'checked="checked"'; } ?> value="<?php echo $row->ID; ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php echo $row->post_title; ?> <br />
+         <input type="checkbox" name="test_suites[]" <?php if ($row->ID == $current_test_suite) { echo 'checked="checked"'; } ?> value="<?php echo $row->ID; ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php echo $row->post_title; ?> <br />
         
     <?php
     }    
