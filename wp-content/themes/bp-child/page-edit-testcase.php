@@ -34,13 +34,13 @@ get_header();
 
 
 ?>
-<div class="content" id="edit_test_case_wrapper">
+<div class="content edit-item-wrapper" id="edit_test_case_wrapper">
     <div class="space25"></div>
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>        
     <div class="column four_fifths right container"> 
-      <form name="suiteForm" id="suiteForm" action="" method="post" enctype="multipart/form-data">
+      <form name="caseForm" id="caseForm" action="" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
         <h2>Add New Test Case</h2>
         <?php }else{ ?>

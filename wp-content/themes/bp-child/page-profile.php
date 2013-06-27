@@ -64,7 +64,6 @@ get_header();
         <?php
             if(can_create_group()){
         ?>
-        <div class="space10"></div>
         <a href="/groups/create/" class="action-btn add-new-btn"><span class="p"></span><span class="t">Create Community</span></a>
         <div class="clear"></div>
         <div class="space10"></div>

@@ -187,3 +187,46 @@ function can_make_compliance_claim($user_id = null)
     
     return false;
 }
+
+function can_create_product_and_service($user_id = null)
+{
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    //Check if the user is a system admin
+    if(user_can($user_id, 'create_product_service'))
+    {
+        return true;
+    }
+    
+    if(bp_is_group_admin($user_id) || is_customer($user_id))
+    {
+        return true;
+    }
+    
+    return false;
+}
+
+function can_edit_product_and_service($product_service_id, $user_id = null)
+{
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    //Check if the user is a system admin
+    if(user_can($user_id, 'edit_other_product_service'))
+    {
+        return true;
+    }
+    
+    if(bp_is_group_admin($user_id))
+    {
+        return true;
+    }
+    
+    if(is_customer($user_id) && get_post_author_id($product_service_id) == $user_id)
+    {
+        return true;
+    }
+    
+    return false;
+}

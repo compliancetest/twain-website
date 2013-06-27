@@ -4936,48 +4936,39 @@ a.suite-subscript-link:hover{
     color: #666666;
 }
 /*** Test Suite Edit Page ***/
-#edit_test_case_wrapper .input,
-#edit_test_suite_wrapper .input{
+.grid-box-body .field-row .input{
     width: 200px;
 }    
-#edit_test_case_wrapper .select,
-#edit_test_suite_wrapper .select{
+.grid-box-body .field-row .select{
     width: 200px;
     font-size: 12px;
     color: #666;
 }    
-#edit_test_case_wrapper .medium-input,
-#edit_test_suite_wrapper .medium-input{
+.grid-box-body .field-row .medium-input{
     width: 430px;
 }    
 
-#edit_test_case_wrapper .textarea,
-#edit_test_suite_wrapper .textarea{
+.grid-box-body .field-row .textarea{
     width: 430px;
     min-height: 75px;
     resize: vertical;
 }    
 
-#edit_test_case_wrapper .field-row .grid-cell:first-child,
-#edit_test_suite_wrapper .field-row .grid-cell:first-child{
+.edit-item-wrapper .field-row .grid-cell:first-child{
     padding-left: 0;
 }
-#edit_test_case_wrapper .field-row .grid-cell,
-#edit_test_suite_wrapper .field-row .grid-cell{
+.edit-item-wrapper .field-row .grid-cell{
     padding-left: 30px;
     padding-right: 0;
 }
 
-#edit_test_case_wrapper .grid-box-body .field-row:last-child,
-#edit_test_suite_wrapper .grid-box-body .field-row:last-child{
+.edit-item-wrapper .grid-box-body .field-row:last-child{
     padding-bottom: 0;    
 }
-#edit_test_case_wrapper .field-row .radio-cell,
-#edit_test_suite_wrapper .field-row .radio-cell{
+.edit-item-wrapper .field-row .radio-cell{
     width: 200px;
 }
-#edit_test_case_wrapper .field-row .radio-cell label,
-#edit_test_suite_wrapper .field-row .radio-cell label{
+.edit-item-wrapper .field-row .radio-cell label{
     margin-bottom: 5px;
 }
 
@@ -5021,6 +5012,30 @@ a.suite-subscript-link:hover{
     min-width: 200px;
     width: auto !important;
 }
+#community-box{
+    width: 48%;
+    float: left;
+}
+#suite-type-box{
+    width: 48%;
+    float: right;
+}
+
+/*** Product & Service Page ***/
+#ps-info-box #ps-type-cell{
+    width: 260px !important;
+}
+#ps-info-box .grid-cell input.datepicker{
+    width: 182px;
+}
+.edit-item-wrapper .checkbox-cell label{
+    line-height: 25px;
+}
+.edit-item-wrapper .checkbox-cell label input{
+    position: relative;
+    top: 2px;
+}
+
 /**
 * Contact Us Page
 */

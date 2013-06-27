@@ -21,7 +21,7 @@ $groups = getUserAdminGroups(get_current_user_id());
 if(!$suite->community_id)
     $suite->community_id = $groups[0]->id;
 ?>
-<div class="content" id="edit_test_suite_wrapper">
+<div class="content edit-item-wrapper" id="edit_test_suite_wrapper">
     <div class="space25"></div>
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
@@ -54,6 +54,26 @@ if(!$suite->community_id)
                </div>
            </div>
         </div>
+        <div class="grid-box grid-box-expandable grid-box-opened" id="suite-type-box">
+           <div class="grid-box-header">
+               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+               <h5 class="left">Test Suite Types</h5>
+               <div class="clear"></div>
+           </div>
+           <div class="grid-box-body">
+               <div class="column">
+                   <div class="field-row">
+                       <div class="grid-cell checkbox-cell">
+                           <label><input type="checkbox" name="test_suite_type[]" value="" /> Test Suite Type</label>
+                           <label><input type="checkbox" name="test_suite_type[]" value="" /> Test Suite Type</label>
+                           <label><input type="checkbox" name="test_suite_type[]" value="" /> Test Suite Type</label>
+                       </div>
+                       <div class="clear"></div>
+                   </div>
+               </div>
+           </div>
+        </div>
+        <div class="clear"></div>
         <div class="space25"></div>
         <div class="grid-box grid-box-expandable grid-box-opened" id="suite-info-box">
            <div class="grid-box-header">
@@ -591,7 +611,8 @@ if(!$suite->community_id)
             }
             jQuery('#brother-suites').remove();
         })
-                
+        
+        jQuery('#community-box .grid-box-body, #suite-type-box .grid-box-body').height(Math.max(jQuery('#community-box .grid-box-body').height(), jQuery('#suite-type-box .grid-box-body').height()));
     })
 </script>
 <?php
