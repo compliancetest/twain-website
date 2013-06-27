@@ -140,7 +140,47 @@ get_header();
     <div class="clear"></div>
             
 </div> <!--end content-->
-
+<div class="popup-box" id="make-claim-box" style="display: none;">
+    <form name="makeClaimForm" id="makeClaimForm" action="">
+        <div class="popup-box-header radius6 noradiusbottom">Compliance Claim Form</div>
+        <div class="popup-box-content grid-box-body">    
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Suite</label>
+                    <select class="select" name="suite_id" id="suite_id">
+                        <option>Select a Suite</option>
+                    </select>
+                </div>
+                <div class="grid-cell left15">
+                    <label>Level</label>
+                    <select class="select" name="level" id="level">
+                        <option>Select a Level</option>
+                    </select>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Role</label>
+                    <select class="select" name="role" id="role">
+                        <option>Select a Role</option>
+                    </select>
+                </div>
+                <div class="grid-cell left15">
+                    <label>&nbsp;</label>
+                    <input type="checkbox" name="agree_obligation" id="agree_obligation" value="1" /> I agree to the <a href="#">Obligation</a>.
+                </div>
+                <div class="clear"></div>
+            </div>            
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                        
+            <a href="#registration-popup" data-type="inline" class="action-btn cancel-btn" onclick="jQuery('#under-construction .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>                
+        <div class="loading" style="display: none;"></div>
+    </form>
+</div>
 <?php
 get_footer();
 ?>

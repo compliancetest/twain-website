@@ -1508,6 +1508,7 @@ tr {
 }
 .upload-btn,
 .process-btn,
+.continue-btn,
 .add-new-btn,
 .certify-btn,
 .edit-btn{
@@ -1531,6 +1532,7 @@ tr {
 .upload-btn:hover,
 .edit-btn:hover,
 .certify-btn:hover,
+.continue-btn:hover,
 .add-new-btn:hover{
     background: #3eb518;
 }
@@ -1546,6 +1548,10 @@ tr {
 .add-new-btn span.p{
     background-position: 0 -128px;
 }
+.continue-btn span.p{
+    background-position: 2px -748px;
+}
+
 .cancel-btn,
 .delete-grey-btn{
     border-color: #9f9f9f;

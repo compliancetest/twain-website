@@ -379,6 +379,75 @@ Template Name Posts: Test Suite
 		
 			
 	</div> <!--end content container-->
+<div class="popup-box" id="subscribe-box" style="display: none;">
+    <form name="paymentForm" id="paymentForm" action="">
+        <div class="popup-box-header radius6 noradiusbottom">Payment Method</div>        
+            <div class="popup-box-content grid-box-body">    
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Name on Card</label>
+                        <input type="text" name="card_name" id="card_name" value="" class="input" />
+                        <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />
+                    </div>                
+                    <div class="clear"></div>
+                </div>
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Card Number</label>
+                        <input type="text" name="card_name" id="card_name" value="" class="input" />
+                    </div>                
+                    <div class="clear"></div>
+                </div>
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Expiry Date</label>
+                        <select name="exp_day" id="exp_day" class="select">
+                            <option>Day</option>
+                            
+                        </select>
+                        <select name="exp_month" id="exp_month" class="select">
+                            <option>Month</option>                        
+                        </select>                    
+                    </div>                
+                    <div class="clear"></div>
+                </div>            
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label class="left">CCV</label>
+                        <input type="text" name="ccv" id="ccv" placeholder="***" value="" class="input" />
+                    </div>                
+                    <div class="clear"></div>
+                </div>
+                <div class="field-row notice-txt">
+                    This is Photoshop's version  of Lorem Ipsum. Proin gravida bhavel velit auctor aliquet. Aenean sollicitudin, lorem quis nefertimauctor, nisi elit consequat ipsum.
+                    <br />
+                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/card-icon.png" />
+                </div>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">                        
+                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Submit</span></a>
+                <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Close</span></a>            
+                <div class="clear"></div>
+            </div>
+        <a class="close_btn"></a>                
+        <div class="loading" style=""></div>
+    </form>
+</div>
+
+<div class="popup-box" id="payment-success-box" style="display: none;">
+    <form name="paymentForm" id="paymentForm" action="">
+        <div class="popup-box-header radius6 noradiusbottom">Success</div>        
+            <div class="popup-box-content grid-box-body">    
+                <p>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. </p>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">                        
+                <a href="#" class="action-btn continue-btn"><span class="p"></span><span class="t">Continue</span></a>
+                <div class="clear"></div>
+            </div>
+        <a class="close_btn"></a>                
+        <div class="loading" style=""></div>
+    </form>
+</div>
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {

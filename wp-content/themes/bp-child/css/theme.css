@@ -5136,3 +5136,54 @@ a.suite-subscript-link:hover{
     background: #3db118 url(../images/success-icon.png) 8px 7px no-repeat;
     border-color: #37a215;
 }
+.popup-box .grid-box-body{
+    border: none;
+}
+#make-claim-box{
+    width: 500px;
+}
+#subscribe-box{
+    width: 400px;
+}
+#subscribe-box .field-row{
+    position: relative;
+}
+#subscribe-box .field-row label{
+    width: 100px;
+    line-height: 25px;    
+    float: left;
+    padding-right: 15px;
+}
+#subscribe-box .field-row .valid-icon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+#subscribe-box .field-row .input{
+    width: 220px;
+    float: left;
+}
+#subscribe-box .field-row #ccv{
+    width: 50px;
+}
+#subscribe-box .field-row .select{
+    float: left;
+    width: 105px;
+    margin-right: 10px;
+}
+#subscribe-box .notice-txt{
+    font-size: 11px;
+    color: #6e747c;
+    font-style: italic;
+    padding: 5px 15px 0 20px;
+    border-top: solid 1px #cbcbcb;
+    background: url(../images/lock-icon.png) no-repeat left 8px;
+}
+#subscribe-box .notice-txt img{
+    margin-top: 10px;
+}
+#payment-success-box{
+    width: 400px;
+}
+
