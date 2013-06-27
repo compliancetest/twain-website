@@ -285,7 +285,7 @@ Template Name Posts: Test Suite
                     );
                     $params = array();
                     //Add Test Suite ID
-                    $args['meta_query'][] = array('key' => 'test_suites', 'value' => "|" . $suiteID . "|", 'compare' => 'LIKE');
+                    $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
                     
                     if($selectedRole){
                         $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');

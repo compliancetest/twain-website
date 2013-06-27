@@ -34,6 +34,7 @@ class TestSuite
     
     var $community_id = null;
     
+    var $type = array();
     
     public function __construct($id = null)
     {        
@@ -66,10 +67,26 @@ class TestSuite
         $this->loadRelatedSuites();
         $this->loadRoles();
         $this->loadSpecDocuments();
+        $this->loadTypes();
         
         $p = get_post($this->id);
         
         $this->excerpt = $p->post_excerpt;
+    }
+    
+    public function loadTypes()
+    {
+        
+        $suiteTypes = wp_get_post_terms($this->id, 'test_suite_type', array('hide_empty' => false));
+        $result = array();
+        foreach($suiteTypes as $row)
+        {
+            $result[$row->term_id] = $row->name;
+        }
+        
+        $this->type = $result;
+        
+        return $result;
     }
     
     public function loadSpecDocuments()
@@ -121,7 +138,7 @@ class TestSuite
     
     public function loadTestCases()
     {        
-        $args = $args = array(
+        $args = array(
                 'post_type' => 'test-case',         
                 'posts_per_page' => -1,
                 'meta_query' => array(
@@ -186,5 +203,13 @@ class TestSuite
         $testsuites = get_posts( $args );
         
         return $testsuites;
+    }
+    
+    
+    public function getAllTestSuiteTypes()
+    {
+        $types = get_terms('test_suite_type', array('hide_empty' => false));
+        
+        return $types;
     }
 }

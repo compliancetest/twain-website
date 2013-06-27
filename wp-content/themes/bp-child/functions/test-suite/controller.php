@@ -3,7 +3,7 @@
 * Process Actions
 */
 
-add_action('init', 'process_testsuite_actions');
+add_action('init', 'process_testsuite_actions', 100);
 function process_testsuite_actions()
 {
     $action = isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : null;
@@ -82,6 +82,10 @@ function saveSuite()
             return;
         }
     }
+    //Save Types
+    $suiteTypes = isset($_POST['test_suite_type']) ? $_POST['test_suite_type'] : array();
+    
+    $r = wp_set_post_terms($id, $suiteTypes, 'test_suite_type');
     
     //Update Post Metas
     update_post_meta($id, 'ts_name', $_POST['ts_name']);

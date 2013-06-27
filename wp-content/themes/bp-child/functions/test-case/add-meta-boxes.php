@@ -287,6 +287,8 @@ function test_case_test_execution_metabox_html(){
     <br />    <br />
                 
     <?php
+    if(!$current_property_name_exec)
+        $current_property_name_exec = array();
     foreach($current_property_name_exec as $key => $property_name_exec){
         foreach($current_property_value_exec as $key2 => $property_value_exec){
             if( $key == $key2){ ?>
@@ -347,9 +349,8 @@ function test_case_test_data_metabox_html(){
     $current_property_name_data= get_post_meta($post->ID, 'property_name_data', true);
     $current_property_value_data= get_post_meta($post->ID, 'property_value_data', true);
     echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    ?>
-                
-    <?php
+    if(!$current_property_name_data)
+        $current_property_name_data = array();
     foreach($current_property_name_data as $key => $property_name_data){
         foreach($current_property_value_data as $key2 => $property_value_data){
             if( $key == $key2){ ?>
@@ -410,9 +411,10 @@ function test_case_test_step2_metabox_html(){
     $current_step_action= get_post_meta($post->ID, 'step_action', true);
     $current_step_expected= get_post_meta($post->ID, 'step_expected', true);
     echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
-    ?>
-                
-    <?php
+    
+    if(!$current_step_action)
+        $current_step_action = array();
+    
     foreach($current_step_action as $key => $step_action){
         foreach($current_step_expected as $key2 => $step_expected){
             if( $key == $key2){ ?>

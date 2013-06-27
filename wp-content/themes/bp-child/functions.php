@@ -50,10 +50,18 @@ require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');
+require_once(THE_FUNCTION . '/test-case/controller.php');
+require_once(THE_FUNCTION . '/test-case/add-meta-boxes.php');
+
+//Product & Service
+require_once(THE_FUNCTION . '/test-case/testcase.class.php');
 require_once(THE_FUNCTION . '/test-case/add-meta-boxes.php');
 require_once(THE_FUNCTION . '/test-case/controller.php');
+
 //Products And Services
-require_once(THE_FUNCTION . '/products-and-services.php');
+require_once(THE_FUNCTION . '/product-and-service/add-meta-boxes.php');
+require_once(THE_FUNCTION . '/product-and-service/class.productandservice.php');
+require_once(THE_FUNCTION . '/product-and-service/controller.php');
 
  
 /* 

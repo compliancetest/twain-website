@@ -64,9 +64,12 @@ if(!$suite->community_id)
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell checkbox-cell">
-                           <label><input type="checkbox" name="test_suite_type[]" value="" /> Test Suite Type</label>
-                           <label><input type="checkbox" name="test_suite_type[]" value="" /> Test Suite Type</label>
-                           <label><input type="checkbox" name="test_suite_type[]" value="" /> Test Suite Type</label>
+                           <?php 
+                           $suiteTypes = $suite->getAllTestSuiteTypes();
+                           
+                           foreach($suiteTypes as $row) { ?>
+                           <label><input type="checkbox" name="test_suite_type[]" value="<?php echo $row->term_id?>" <?php echo isset($suite->type[$row->term_id]) ? 'checked="checked"' : '' ?>> <?php echo $row->name?></label>
+                           <?php } ?>
                        </div>
                        <div class="clear"></div>
                    </div>

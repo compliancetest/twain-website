@@ -4,31 +4,22 @@
 */
 
 
-//$psID = isset($_GET['id']) ? $_GET['id'] : null;
+$psID = isset($_GET['id']) ? $_GET['id'] : null;
 
-//if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null && !can_create_product_and_service()) )
-//{
-//    wp_redirect("/");
-//    exit;
-//}
+if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null && !can_create_product_and_service()) )
+{
+    wp_redirect("/");
+    exit;
+}
 
-//$isNew = true;
+$isNew = true;
 
-//$case = new TestCase($psID);
-//$case->load();
-//if(!$case->id)
-//    $isNew = true;
-//else
-//    $isNew = false;
-
-
-//$testsuites = $case->getAvailableTestSuites();
-
-//if($isNew && count($testsuites) > 0)
-//    $case->testSuite = $testsuites[0]->ID;
-
-//$suite = new TestSuite($case->testSuite);
-//$suite->load();
+$product = new ProductAndService($psID);
+$product ->load();
+if(!$product ->id)
+    $isNew = true;
+else
+    $isNew = false;
 
 get_header();
 
@@ -43,7 +34,7 @@ get_header();
         <?php if($isNew){ ?>
         <h2>Add New Product and Service</h2>
         <?php }else{ ?>
-        <h2>Edit Product and Service: <?php  ?></h2>
+        <h2>Edit Product and Service: <?php $product->name ?></h2>
         <?php } ?> 
         <div class="grid-box grid-box-expandable grid-box-opened" id="ps-info-box">
            <div class="grid-box-header">
@@ -56,18 +47,18 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Name</label>                    
-                           <input type="text" class="input" name="product_name" id="product_name" value="" />
+                           <input type="text" class="input" name="product_name" id="product_name" value="<?php echo $product->name?>" />
                        </div>                       
                        <div class="grid-cell">
                            <label>Date</label>                    
-                           <input type="text" class="input datepicker" name="product_date" id="product_date" value="" />
+                           <input type="text" class="input datepicker" name="product_date" id="product_date" value="<?php echo $product->date?>" />
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
                            <label>Type</label>                    
-                           <input type="radio" name="product_type" id="product_type_software" value="Software" /> Software
-                           <input type="radio" name="product_type" id="product_type_product" value="Product" /> Product
-                           <input type="radio" name="product_type" id="product_type_process" value="Process" /> Process
-                           <input type="radio" name="product_type" id="product_type_service" value="Service" /> Service
+                           <input type="radio" name="product_type" id="product_type_software" value="Software" <?php echo $product->type == 'Software' ? 'checked="checked"' : ''?> /> Software
+                           <input type="radio" name="product_type" id="product_type_product" value="Product" <?php echo $product->type == 'Product' ? 'checked="checked"' : ''?> /> Product
+                           <input type="radio" name="product_type" id="product_type_process" value="Process" <?php echo $product->type == 'Process' ? 'checked="checked"' : ''?> /> Process
+                           <input type="radio" name="product_type" id="product_type_service" value="Service" <?php echo $product->type == 'Service' ? 'checked="checked"' : ''?> /> Service
                            
                        </div>
                        <div class="clear"></div>
@@ -75,23 +66,23 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Owner</label>                    
-                           <input type="text" class="input" name="product_owner" id="product_owner" value="" />
+                           <input type="text" class="input" name="product_owner" id="product_owner" value="<?php echo $product->owner?>" />
                        </div>                       
                        <div class="grid-cell">
                            <label>Access URL</label>                    
-                           <input type="text" class="input" name="product_url" id="product_url" value="" />
+                           <input type="text" class="input" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" />
                        </div>
                        <div class="grid-cell radio-cell">
                            <label>Status</label>                    
-                           <input type="radio" name="product_status" id="product_staus_active" value="Active" /> Active
-                           <input type="radio" name="product_status" id="product_staus_on_hold" value="On Hold" /> On Hold                           
+                           <input type="radio" name="product_status" id="product_staus_active" value="Active" <?php echo $product->status == 'Active' ? 'checked="checked"' : ''?> /> Active
+                           <input type="radio" name="product_status" id="product_staus_on_hold" value="On Hold"  <?php echo $product->status == 'On Hold' ? 'checked="checked"' : ''?> /> On Hold                           
                        </div>
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
                        <div class="grid-cell">
                             <label>Description</label>
-                            <textarea cols="" rows="" class="textarea" name="product_description"></textarea>
+                            <textarea cols="" rows="" class="textarea" name="product_description"><?php echo $product->descrition?></textarea>
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -109,9 +100,10 @@ get_header();
                <div class="column">                   
                    <div class="field-row">
                        <div class="grid-cell checkbox-cell">
-                            <label><input type="checkbox" name="related_products[]" value="" /> Related Product</label>
-                            <label><input type="checkbox" name="related_products[]" value="" /> Related Product</label>
-                            <label><input type="checkbox" name="related_products[]" value="" /> Related Product</label>
+                       <?php $availableProducts = $product->getAvailableProducts(); ?>
+                       <?php foreach($availableProducts as $row){ ?>
+                            <label><input type="checkbox" name="related_products[]" value="<?php echo $row->ID?>"  <?php echo in_array($row->ID, $product->relatedProducts) ? 'checked="checked"' : ''?> /> <?php echo get_the_title($row)?></label>
+                       <?php } ?>
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -129,11 +121,10 @@ get_header();
                <div class="column">                   
                    <div class="field-row">
                        <div class="grid-cell checkbox-cell">
-                            <label><input type="checkbox" name="test_suites[]" value="" /> Test Suites</label>
-                            <label><input type="checkbox" name="test_suites[]" value="" /> Test Suites</label>
-                            <label><input type="checkbox" name="test_suites[]" value="" /> Test Suites</label>
-                            <label><input type="checkbox" name="test_suites[]" value="" /> Test Suites</label>
-                            <label><input type="checkbox" name="test_suites[]" value="" /> Test Suites</label>
+                       <?php $availableSuites = getUserTestSuites(); ?>
+                       <?php foreach($availableSuites as $row){ ?>
+                            <label><input type="checkbox" name="test_suites[]" value="<?php echo $row->ID?>"  <?php echo in_array($row->ID, $product->certifications) ? 'checked="checked"' : ''?> /> <?php echo get_the_title($row)?></label>
+                       <?php } ?>   
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -149,6 +140,11 @@ get_header();
                </div>
            </div>
        </div>
+       <input type="hidden" name="id" value="<?php echo $product->id?>" />
+       <input type="hidden" name="action" value="cp-suite-save" />
+       <?php
+           wp_nonce_field('save-product-service');
+       ?>
       </form>
     </div>
     <div class="clear"></div>
