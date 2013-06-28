@@ -15,7 +15,7 @@ function get_object_taxonomies($object_type) {
 }
 
 function get_taxonomy( $taxonomy ) {
-	global $wp_taxonomy_object;
+	global $wp_taxonomy_object;    
 	return $wp_taxonomy_object->get_taxonomy( $taxonomy );
 }
 
