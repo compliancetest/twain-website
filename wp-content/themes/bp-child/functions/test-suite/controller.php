@@ -12,8 +12,28 @@ function process_testsuite_actions()
         getBrotherSuites();
     }else if(wp_verify_nonce($action, 'save-suite')){
         saveSuite();        
+    }else if(wp_verify_nonce($action, 'hide_testcase')){        
+        if(!can_edit_suite($_POST['suite_id']))
+        {
+            echo 'Permission Denied!';
+        }else{
+            delete_post_meta($_POST['case_id'], 'test_suite');
+            echo 'success';
+        }
+        exit;
+    }else if(wp_verify_nonce($action, 'trash_testcase')){
+        if(!can_edit_suite($_POST['suite_id']))
+        {
+            echo 'Permission Denied!';
+        }else{
+            wp_trash_post($_POST['case_id']);
+            echo 'success';
+        }
+        exit;
     }
+    
 }
+
 
 function getBrotherSuites()
 {

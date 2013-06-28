@@ -272,34 +272,30 @@ function test_suite_community_metabox_html(){
 function test_suite_test_cases_metabox_html(){
     global $post, $wpdb;
     
-    $post_backup = $post;
-    
-    $testcases = new WP_Query( array( 
+    $get_cases = new WP_Query( array( 
         'post_type' => 'test-case', 
         'posts_per_page' => -1, 
         'meta_query' => array(
             array(
-                'key' => 'test_suites', 
-                'value' => '|' . $post->ID . '|', 
-                'compare' => 'LIKE'
+                'key' => 'test_suite', 
+                'value' => $post->ID, 
+                'compare' => '='
                 )
             )
         ) 
     );
-    
-    if($testcases->have_posts())
+    $testcases = $get_cases->get_posts();
+    if(count($testcases) > 0)
     {
-        while ( $testcases->have_posts() ) : $testcases->the_post();
-            $id = get_the_ID();
-            $test_cases_assoc = get_post_meta($id, 'test_suites', true);                    
+        foreach($testcases as $case):            
                 echo '<div class="the_test_case">';
-                echo '<a href="'.get_permalink().'" target="_blank"><b>'.get_the_title().'</b></a>';
+                echo '<a href="'.get_permalink($case->ID).'" target="_blank"><b>'.get_the_title($case).'</b></a>';
                 echo ' - ';
-                echo '<a href="post.php?post='.$id.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
-                echo '<a class="action_testcase" data-action="hide_testcase" data-id="'.$id.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Hide</a>';
-                echo '<a class="action_testcase" data-action="delete_testcase" data-id="'.$id.'" style="cursor:pointer; text-decoration: underline;">Delete</a>';
+                echo '<a href="post.php?post='.$case->ID.'&action=edit" target="_blank" style="margin-right: 10px;">Edit</a>';
+                echo '<a class="action_testcase" data-action="' . wp_create_nonce('hide_testcase') . '" data-id="'.$case->ID.'" style="margin-right: 10px; cursor:pointer; text-decoration: underline;">Remove from this suite</a>';
+                echo '<a class="action_testcase" data-action="' . wp_create_nonce('trash_testcase') . '" data-id="'.$case->ID.'" style="cursor:pointer; text-decoration: underline;">Move to trash</a>';
                 echo '</div>';    
-        endwhile;    
+        endforeach;
     }else{
         echo 'No test cases associated';
     }
@@ -318,8 +314,9 @@ function test_suite_test_cases_metabox_html(){
             var get_parent = jQuery(this);
             
             var field_tc = {
-                testcase_id : the_id,
-                action : the_action
+                suite_id : '<?php echo $post->ID?>',
+                case_id : the_id,
+                '_wpnonce' : the_action
                 };
             
             jQuery.ajax({
@@ -337,7 +334,6 @@ function test_suite_test_cases_metabox_html(){
     </script>
     
     <?php
-    $post = $post_backup;
 }
 
 //Initiating Message

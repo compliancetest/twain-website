@@ -10,9 +10,6 @@
         
         <link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
 
-        <script type="text/javascript">
-        var HOMEURL = "<?php echo get_home_url(); ?>";
-        </script>
         <?php wp_head(); ?>
     </head>
 
@@ -77,7 +74,6 @@
                     'container' =>false,
                     'echo' => true,
                     'depth' => 0,
-                    'fallback_cb'=>'headermenu',
                     'menu_id' => ''
                 ));
                 ?>

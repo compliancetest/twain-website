@@ -46,6 +46,23 @@ function save_group_terms_and_license($group_id)
     
 }
 
+function flushMessages($class = '')
+{
+    if(isset($_SESSION[MESSAGE_KEY]))
+    {
+        echo '<div id="messages-wrapper"  class="' . $class . '">';
+        foreach($_SESSION[MESSAGE_KEY] as $row)
+        {
+            echo '<div class="message ' . $row['type'] . '">' . $row['message'] . "</div>";
+        }
+        echo '</div>';
+        unset($_SESSION[MESSAGE_KEY]);
+    }
+}
+
+//Show Result Messages
+add_action('bp_before_container', 'flushMessages');
+
 //Customize Join Group Button
 add_filter('bp_get_group_join_button', 'cp_bp_get_group_join_button_filter');
 

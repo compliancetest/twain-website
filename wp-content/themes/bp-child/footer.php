@@ -15,7 +15,6 @@
 							    'container' =>false,
 							    'echo' => true,
 							    'depth' => 0,
-							    'fallback_cb'=>'footermenu',
 							    'walker' => new footer_walker()
 						    )
 					    );
@@ -29,7 +28,6 @@
 							    'container' =>false,
 							    'echo' => true,
 							    'depth' => 0,
-							    'fallback_cb'=>'footermenu',
 							    'walker' => new footer_walker()
 						    )
 					    );
@@ -65,10 +63,5 @@
         do_action('cp_login_register_box') 
     ?>
 	<?php wp_footer(); ?>
-	
-<!-- Tiny scrollbar-->	
-<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.tinyscrollbar.min.js"></script>	
-<!--IF[ie]><script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/PIE.js"></script><![endif]-->
-
 </body>
 </html>
