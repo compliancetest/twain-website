@@ -9,9 +9,15 @@
             var opts = $.extend({}, $.fn.cplightbox.defaults, options),
             $overlay = null,
             $self = $(this);
+            opts.self = $self;
             opts.href = opts.href == '' ? $self.attr('href') : opts.href;
             if($self.attr('cp-type'))
                 opts.type = $self.attr('cp-type');
+            if($self.attr('cp-removeBoxAfterClose'))
+                opts.removeBoxAfterClose = $self.attr('cp-removeBoxAfterClose');
+            if($self.attr('cp-closeWhenClickOveraly'))
+                opts.removeBoxAfterClose = $self.attr('cp-closeWhenClickOveraly');
+            
             
             $self.click(function(){                
                 if($('.mask-wrapper').length < 1)
@@ -34,7 +40,7 @@
                         //Getting HTML By Ajax
                         if($overlay.find('.loading').length < 1)
                             $overlay.append('<div class="loading"></div>');
-                        
+                        $overlay.find('.loading').show();
                         $.ajax({
                             url: opts.href,
                             type: 'get',
@@ -47,7 +53,8 @@
                                 initPopupEvents();
                                 if($overlay.find('.popup-box:visible').length > 0)
                                 {
-                                    $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
+                                    $overlay.find('.popup-box:visible').fadeOut('fast', function(){     
+                                        opts.onClose();               
                                         opts.box.fadeIn('fast', function(){
                                             setOverlaySize();
                                             opts.onLoad();                                                    
@@ -74,6 +81,7 @@
                         if($overlay.find('.popup-box:visible').length > 0)
                         {
                             $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
+                                opts.onClose();
                                 opts.box.fadeIn('fast', function(){
                                     setOverlaySize();
                                     opts.onLoad();        
@@ -119,7 +127,7 @@
             
             function initPopupEvents()
             {
-                opts.box.find('.close_btn').click(function(){
+                opts.box.find('.close_btn, .close-popup-btn').click(function(){
                     opts.box.fadeOut('fast', function(){
                         opts.onClose();
                         $overlay.hide();

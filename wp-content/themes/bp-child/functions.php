@@ -63,6 +63,10 @@ require_once(THE_FUNCTION . '/product-and-service/add-meta-boxes.php');
 require_once(THE_FUNCTION . '/product-and-service/class.productandservice.php');
 require_once(THE_FUNCTION . '/product-and-service/controller.php');
 
+//Compliance Claim
+require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');
+require_once(THE_FUNCTION . '/compliance-claim/controller.php');
+
  
 /* 
  * Loads the Options Panel
@@ -566,4 +570,14 @@ function getFilterParam($name)
         $param = array($param);
         
     return $param;
+}
+
+
+function formatDate($date)
+{
+    if(is_numeric($date))
+        $date = date('m/d/Y', $date);
+    else
+        $date = date('m/d/Y', strtotime($date));
+    return $date;
 }

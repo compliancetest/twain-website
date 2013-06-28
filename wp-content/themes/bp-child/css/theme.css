@@ -4345,16 +4345,20 @@ min-height: 70px;
 }
 /*** My Products Page **/
 #my_products .td-issuer{
-    width: 170px;
+    width: 110px;
 }
 #my_products .td-suite{
-    width: 89px;
+    width: 109px;
+}
+#my_products .td-level{
+    width: 60px;
+/*    text-align: center;*/
 }
 #my_products .td-role{
-    width: 103px;
+    width: 73px;
 }
 #my_products .td-status{
-    width: 89px;
+    width: 68px;
 }
 #my_products .td-date{
     width: 75px;
@@ -4366,11 +4370,22 @@ min-height: 70px;
     width: 40px;
     text-align: center;
 }
+
 .status-certified{
     color: #4aa31e;
 }
 .status-testing{
     color: #e33f3f;
+}
+#my_products .add-claim-btn{
+    float: right;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    -webkit-top-left-radius: 0;
+    -webkit-top-right-radius: 0;
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    margin-top: -1px;
 }
 /*** Test Suite Coverage ***/
 #test_suite_coverage .td-product{
@@ -5140,7 +5155,7 @@ a.suite-subscript-link:hover{
     border: none;
 }
 #make-claim-box{
-    width: 500px;
+    width: 460px;
 }
 #subscribe-box{
     width: 400px;

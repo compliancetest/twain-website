@@ -34,7 +34,7 @@ $product->load();
 					        </div>
 					        <div class="width20P grid_cell nopadding">
                             <?php if(can_edit_product_and_service(get_the_ID())){ ?>
-                                <div class="edit_suite"><a href="/edit-product-and-serivce?id=<?php  echo $product->id; ?>">EDIT</a></div>						        
+                                <div class="edit_suite"><a href="/edit-product-and-service?id=<?php  echo $product->id; ?>">EDIT</a></div>						        
                             <?php } ?>
 					        </div>
 					        <div class="clear"></div>

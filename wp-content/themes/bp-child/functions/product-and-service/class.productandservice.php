@@ -96,4 +96,9 @@ class ProductAndService
         
         return $rows;
     }
+    
+    public function getCommunityID()
+    {
+        return $this->loadSingleValue('community_id');
+    }
 }

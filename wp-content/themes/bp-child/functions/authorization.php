@@ -171,7 +171,7 @@ function can_create_group($user_id = null)
     return false;
 }
 
-function can_make_compliance_claim($user_id = null)
+function can_make_compliance_claim($product_id, $user_id = null)
 {
     if($user_id == null)
         $user_id = get_current_user_id();
@@ -182,8 +182,14 @@ function can_make_compliance_claim($user_id = null)
         return true;
     }
     
-    if(is_admin() || is_super_admin() || is_customer($user_id))
+    if(is_admin() || is_super_admin())
         return true;
+    
+    if(is_customer())
+    {
+        //Check if the product belong to the community that the customer subscribed.
+        return false; //For Now
+    }
     
     return false;
 }

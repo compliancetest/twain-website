@@ -92,16 +92,52 @@ function getUserTestSuites($user_id = null)
             'relation' => 'OR'            
         )
     );
-    foreach($groups as $group)
+    if(!is_admin() && !is_super_admin())
     {
-        $args['meta_query'][] = array(
-                'key' => 'community_id',
-                'value' => $group->id,
-                'compare' => '='
-            );
+        foreach($groups as $group)
+        {
+            $args['meta_query'][] = array(
+                    'key' => 'community_id',
+                    'value' => $group->id,
+                    'compare' => '='
+                );
+        }
     }
-    
     $testsuites = get_posts( $args );
         
     return $testsuites;
+}
+
+function getUserProductsAndServices($user_id = null)
+{
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    $args = array(
+        'post_type' => 'product-service', 
+        'posts_per_page' => -1,
+        'meta_query' => array(
+            'relation' => 'OR'            
+        )
+    );
+    
+    
+    //Getting User Groups
+    $groups = groups_get_groups( array('user_id' => $user_id) );
+    
+    if(!is_admin() && !is_super_admin())
+    {
+        foreach($groups as $group)
+        {
+            $args['meta_query'][] = array(
+                    'key' => 'community_id',
+                    'value' => $group->id,
+                    'compare' => '='
+                );
+        }
+    }
+    
+    $results = get_posts($args);
+    
+    return $results;
 }
