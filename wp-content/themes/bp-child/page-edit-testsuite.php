@@ -241,11 +241,11 @@ if(!$suite->community_id)
                        <?php foreach($suite->testCases as $row){ ?>
                        <div class="grid-cell">                           
                            <a href="<?php echo get_permalink($row->ID)?>" class="test-case-link"><?php echo get_the_title($row->ID)?></a>
-                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           <a href="#" class="action-btn blue-delete-btn icon-btn" data-id="<?php echo $row->ID?>" data-action="<?php echo wp_create_nonce('hide_testcase')?>"><span class="p"></span></a>
                        </div>
                        <?php } ?>  
                        
-                       <a href="#" target="_blank" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>                       
+                       <a href="/add-new-test-case?suite_id=<?php echo $suite->id?>" target="_blank" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>                       
                        
                        <div class="clear"></div>
                    </div>                                      
@@ -577,9 +577,36 @@ if(!$suite->community_id)
             return false;
         })
         jQuery('#test-cases-box .blue-delete-btn').click(function(){
-            jQuery(this).parents('.grid-cell').fadeOut('fast', function(){
-                jQuery(this).remove();                
-            })
+            var the_id = jQuery(this).attr('data-id');
+            var the_action = jQuery(this).attr('data-action');
+            var get_parent = jQuery(this);
+            var link = jQuery(this);
+            var field_tc = {
+                suite_id : '<?php echo $suite->id?>',
+                case_id : the_id,
+                '_wpnonce' : the_action
+                };
+            jQuery('#test-cases-box .loading1').show();    
+            jQuery('#test-cases-box .message').remove();    
+            jQuery.ajax({
+                url: window.location.href,
+                data: field_tc,
+                type:'POST',
+                success: function(data){
+                    if(data == 'success'){
+                        link.parents('.grid-cell').fadeOut('fast', function(){
+                            link.remove();                
+                        })    
+                    }else{
+                        jQuery('#test-case-box .column').append('<div class="message error">' + data + '</div>');
+                    }
+                    jQuery('#test-cases-box .loading1').hide();                    
+                },
+                error: function(data){
+                    jQuery('#test-cases-box .loading1').hide();
+                }
+            });               
+            
             return false;
         })
         

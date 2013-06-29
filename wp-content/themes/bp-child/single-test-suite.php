@@ -8,18 +8,15 @@ Template Name Posts: Test Suite
 	$suiteID = get_the_ID();
 	
     $suite = new TestSuite($suiteID);
+    $suite->load();
     
 	$current_group_id = get_post_meta($suiteID, 'community_id', true);
 	
 	global $bp;
-	$group = groups_get_group( array( 'group_id' => $current_group_id ) );
-	$group_url = home_url( $bp->groups->slug . '/' . $group -> slug );
     
-    //Check Permission
+	$group = groups_get_group( array( 'group_id' => $current_group_id ) );
     
 ?>
-	
-
 	<div class="content container">
 		<div class="infos">
                 <?php if (has_post_thumbnail()) { ?>
@@ -36,25 +33,24 @@ Template Name Posts: Test Suite
 						<div class="clear"></div>
 					</div>
 					<div class="width15P right">
-						<a href="<?php echo $group_url; ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Issuer Home Page</span></a>
+						<a href="<?php echo bp_get_group_permalink($group); ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Issuer Home Page</span></a>
 					</div>
 					<div class="clear"></div>
 					<div class="grids noradiusbottom">
 						<div class="grid_row white_bcg noborderbottom">
 							<div class="grid_cell width100P left">
-								Version: <span><?php echo get_post_meta(get_the_ID(), 'ts_version', true); ?></span>
-								Issue Date: <span><?php echo get_post_meta(get_the_ID(), 'ts_issue_date', true); ?></span>
-								Issuer: <a href="<?php echo $group_url; ?>"><span class="blue_txt"><?php echo get_post_meta(get_the_ID(), 'ts_issuer', true); ?></span></a>
-								Status: <span class="green_txt"><?php echo get_post_meta(get_the_ID(), 'ts_status', true); ?></span> 
-								Revision: <span><?php echo get_post_meta(get_the_ID(), 'ts_revision_description', true); ?></span> 								
+								Version: <span><?php echo $suite->version; ?></span>
+								Issue Date: <span><?php echo formatDate($suite->issueDate); ?></span>
+								Issuer: <a href="<?php echo bp_get_group_permalink($group);; ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
+								Status: <span class="green_txt"><?php echo $suite->status; ?></span> 
+								Revision: <span><?php echo $suite->revisionDescription; ?></span> 								
 							</div>
 							<div class="clear"></div>
 						</div>
 					</div>
-					<div class="space15"></div>
-					
+					<div class="space15"></div>					
 					<div class="grids noborder nobackground">
-					<p class="nomarginbottom"><?php echo get_post_meta(get_the_ID(), 'ts_description', true); ?> </p>
+					<p class="nomarginbottom"><?php echo $suite->description ?> </p>
 					</div>
 				</div>
 				
@@ -90,16 +86,12 @@ Template Name Posts: Test Suite
 					<div class="column">										
 						<div class="grid_cell width10P bold top3">Related To: </div>
 						<div class="grid_cell width90P">
-						<?php 
-						
-							$relatedSuites = get_post_meta(get_the_ID(), 'ts', true) ; 
-							$relatedSuitesDesc = get_post_meta(get_the_ID(), 'ts_desc', true);
-                            
-							foreach($relatedSuites as $i => $sid){
+						<?php 						
+							foreach($suite->relatedSuites as $row){
 						?>
                         <div>
-                            <a href="<?php echo get_permalink($sid)?>"><?php echo get_the_title($sid)?></a><br />
-                            <?php echo $relatedSuitesDesc[$i]?>
+                            <a href="<?php echo get_permalink($row['id'])?>"><?php echo get_the_title($row['id'])?></a><br />
+                            <?php echo $row['desc']?>
                             <div class="space7"></div>
                         </div>
                         <?php
@@ -113,25 +105,21 @@ Template Name Posts: Test Suite
 				
 				<div class="tab-content white_bcg" id="tabs_sv2" style="display: none; ">
 					<div class="column">
-						<?php 
-						$the_post_id= get_the_ID();
-						$myrows = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id={$the_post_id}");
-						foreach($myrows as $row){
-							$doc_name = $row->doc_name;
-							$doc_desc = $row->doc_desc;
-							$doc_loc = $row->doc_loc_url;
-							$doc_file_name = $row->doc_file_name;
-							$doc_file_url = $row->doc_loc_url;
-							echo '<div class="grid_cell width100P">';
-							echo '<a href="'.$doc_loc.'" target="_blank" class="underline blue_txt file">';
-							echo $doc_name;
-							echo '</a><div class="paddingleft20">'.$doc_desc.'</div>';
-							echo '</div><div class="clear"></div>';
-						}
-							//$doc_type_array = get_post_meta(get_the_ID(), 'doc_type', true); 
-							$doc_name_array = get_post_meta(get_the_ID(), 'doc_name', true); 
-							$doc_loc_array = get_post_meta(get_the_ID(), 'doc_loc', true); 
-							$doc_desc_array = get_post_meta(get_the_ID(), 'doc_desc', true); 
+						<?php 						    
+						    foreach($suite->specDocuments as $row){
+							    $doc_name = $row->doc_name;
+							    $doc_desc = $row->doc_desc;
+							    $doc_loc = $row->doc_loc_url;
+							    $doc_file_name = $row->doc_file_name;
+							    $doc_file_url = $row->doc_loc_url;
+                            ?>
+                            <div class="grid_cell width100P">
+                                <a href="<?php echo $row->doc_loc_url?>" target="_blank" class="underline blue_txt file"><?php echo $row->doc_name?></a>
+                                <div class="paddingleft20"><?php echo $row->doc_desc?></div>                                
+                            </div>
+                            <div class="clear"></div>
+                            <?php
+						    }
 						?>
 					</div>
 				</div> <!--end tab 2-->
@@ -139,22 +127,17 @@ Template Name Posts: Test Suite
 				<div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
                     <div class="column padding15-20">
                         
-                        <?php
-                        $lvl_code_array = get_post_meta(get_the_ID(), 'lvl_code', true); 
-                        $lvl_desc_array = get_post_meta(get_the_ID(), 'lvl_desc', true); 
-                        
-                        foreach($lvl_code_array as $key => $lvl_code){
-                            foreach ($lvl_desc_array as $key2 => $lvl_desc){
-                                        if( $key == $key2 ){ ?>
-                                        <div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $lvl_code; ?></div>
-                                        <div class="grid_cell width90P">
-                                            <?php echo $lvl_desc; ?>
-                                        </div>
-                                        <div class="clear"></div> 
-                                        <div class="grey-border-bottom <?php if ($key == ((count($lvl_code_array)) -1 )) { echo 'displaynone';} ?>"></div>                                                                    
-                                <?php    }
-                                    }
-                                }
+                        <?php    
+                        foreach($suite->conformanceLevel as $i => $row){
+                        ?>
+                            <div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
+                            <div class="grid_cell width90P">
+                                <?php echo $row['desc']; ?>
+                            </div>
+                            <div class="clear"></div> 
+                            <div class="grey-border-bottom <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'displaynone';} ?>"></div>                                                                    
+                        <?php                                        
+                        }
                         ?>
                     </div>
                     <div class="clear"></div>
@@ -164,9 +147,7 @@ Template Name Posts: Test Suite
 					<div class="column padding15-20">
 						
 						<?php
-						$roles = getTestSuiteRoles(get_the_ID());
-						
-						foreach($roles as $idx=>$row){
+						    foreach($suite->roles as $idx=>$row){
 							
 					        ?>		
 										<div class="grid_cell width25P bold blue_txt size26px top5 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
@@ -187,11 +168,10 @@ Template Name Posts: Test Suite
 			</div>
 			<!--end tabs-->
             <div class="space15"></div>
-            <?php $price = get_post_meta(get_the_ID(), 'monthly_subscription_price', true) ?>
 			<a href="javascript: void(0)" class="suite-subscript-link">
                 <span class="price-b">
                     <span class="l"></span>
-                    <span class="m"><b>$<?php echo $price?></b><br />per month</span>
+                    <span class="m"><b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month</span>
                     <span class="r"></span>
                 </span>
                 <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
@@ -203,8 +183,6 @@ Template Name Posts: Test Suite
 		
 		<!-- Test Cases -->
 		<?php
-            $testerRoles = getTestSuiteRoles($suiteID);
-            $confLevels = get_post_meta($suiteID, 'lvl_code', true);
             $selectedRole = isset($_GET['tester_role']) ? $_GET['tester_role'] : '';
             $selectedConfLevel = isset($_GET['conformance']) ? $_GET['conformance'] : '';
         ?>
@@ -222,7 +200,7 @@ Template Name Posts: Test Suite
                             <select name="tester_role" class="change_ts">
                               <option value="">- Tester Role -</option>
                               <?php 
-                              foreach($testerRoles as $r){                                  
+                              foreach($suite->roles as $r){                                  
                                   echo '<option ' . ($r['name'] == $selectedRole ? 'selected="selected"' : '') . ' value="'.$r['name'].'" >'.$r['name'].'</option>';
                               }
                               ?>
@@ -234,8 +212,8 @@ Template Name Posts: Test Suite
                             <select name="conformance" class="change_ts">
                               <option value="">Conformance Level</option>
                               <?php 
-                              foreach($confLevels as $r){
-                                  echo '<option ' . ($r == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r.'" >'.$r.'</option>';
+                              foreach($suite->conformanceLevel as $r){
+                                  echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r['code'].'" >'.$r['code'].'</option>';
                               }
                               ?>
                             </select>
@@ -293,7 +271,7 @@ Template Name Posts: Test Suite
                     }
                     
                     if($selectedConfLevel){
-                        $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $selectedRole, 'compare' => '=');
+                        $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $selectedConfLevel, 'compare' => '=');
                         $params[] = 'conformance=' . $selectedConfLevel;
                     }
                     

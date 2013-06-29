@@ -98,7 +98,7 @@ $product->load();
 					
 			<div class="grid_row test_cases">
 					<div class="grid_cell width45P">
-						<h5 class="blue_txt">Certifications</h5>
+						<h5 class="blue_txt">Compliance Claims</h5>
 					</div>
 					<div class="grid_cell width30P right selecteds_single">
 						<!--<span class="left padding5-10">Filter By: </span>
@@ -117,32 +117,33 @@ $product->load();
 					<div id="double_border"></div>
 					<div class="grid_head">
 						<div class="grid_row nopaddingbottom nopaddingtop tocenter">
-							<div class="grid_cell nopaddingtop width30P toleft">Test Suite</div>
-							<div class="grid_cell nopaddingtop width15P">Role</div>
-							<div class="grid_cell nopaddingtop width15P">Level</div>
+                            <div class="grid_cell nopaddingtop width20P toleft">Issuer</div>
+							<div class="grid_cell nopaddingtop width30P toleft">Suite</div>
+							<div class="grid_cell nopaddingtop width10P">Role</div>
+							<div class="grid_cell nopaddingtop width10P">Level</div>
 							<div class="grid_cell nopaddingtop width10P">Status</div>
-							<div class="grid_cell nopaddingtop width25P toleft left5P">Date</div>
-								<div class="clear"></div>
+							<div class="grid_cell nopaddingtop width15P toleft left5P">Date</div>
+							<div class="clear"></div>
 						</div>
 					</div>
 					<div class="grids">
 					<?php                     
 						/* Get Test Suites */
-						foreach ($product->certifications as $key => $ts){
-							$status_ts = get_post_meta($ts ,'ts_status', true); 
-									if ($key==(count($product->certifications)-1)) $class_grid = 'last_grid_cell';
-									else $class_grid = '';
-									echo '<div class="grid_row white_bcg tocenter '.$class_grid.'">';
-									$permalink_ts = get_permalink( $ts ); 
-									$title_ts = get_the_title( $ts );
-									$date_ts = get_post_meta($ts ,'ts_issue_date', true); 
-									
-									echo '<div class="grid_cell width30P toleft" ><a href="'. $permalink_ts.'" class="normal">'.$title_ts.'</a></div>
-									<div class="grid_cell nopaddingtop width15P"> </div>
-									<div class="grid_cell nopaddingtop width15P"> </div>';
-									
-									?>                                    
-									<div class="grid_cell width10P">
+						/*foreach ($product->certifications as $key => $ts){
+                            $status_ts = get_post_meta($ts ,'ts_status', true); 
+                                    if ($key==(count($product->certifications)-1)) $class_grid = 'last_grid_cell';
+                                    else $class_grid = '';
+                                    echo '<div class="grid_row white_bcg tocenter '.$class_grid.'">';
+                                    $permalink_ts = get_permalink( $ts ); 
+                                    $title_ts = get_the_title( $ts );
+                                    $date_ts = get_post_meta($ts ,'ts_issue_date', true); 
+                                    
+                                    echo '<div class="grid_cell width30P toleft" ><a href="'. $permalink_ts.'" class="normal">'.$title_ts.'</a></div>
+                                    <div class="grid_cell nopaddingtop width15P"> </div>
+                                    <div class="grid_cell nopaddingtop width15P"> </div>';
+                                    
+                                    ?>                                    
+                                    <div class="grid_cell width10P">
                                         <?php                             
                                             if($status_ts == 'Active')
                                                 echo '<span class="status_btn status_btn_active">ACTIVE</span>';
@@ -150,11 +151,29 @@ $product->load();
                                                 echo '<span class="status_btn status_btn_on_hold">ON HOLD</span>';
                                             ?>
                                     </div>
-									<?php 
-									echo '<div class="grid_cell nopaddingtop width25P toleft left5P">'.$date_ts.'</div>';
-									echo '<div class="clear"></div></div>';
+                                    <?php 
+                                    echo '<div class="grid_cell nopaddingtop width25P toleft left5P">'.$date_ts.'</div>';
+                                    echo '<div class="clear"></div></div>';
+                            
+                        }*/
+                        $claims = getClaimsByProductId($product->id);
+                        
+                        foreach($claims as $claim){
+                            $group = groups_get_group(array('group_id' => get_post_meta($claim->suite_id, 'community_id', true)));
+					?>
+                            <div class="grid_row white_bcg tocenter">
+                                <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $claim->issuer?></a></div>
+                                <div class="grid_cell nopaddingtop width30P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
+                                <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>
+                                <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>
+                                <div class="grid_cell nopaddingtop width10P"> - </div>
+                                <div class="grid_cell nopaddingtop width15P toleft left5P"><?php echo formatDate($claim->last_updated)?></div>    
+                                <div class="clear"></div>
+                            </div>
+                    <?php
 							
 						}
+                        
 					 ?>		
 				</div>
 				<div class="space15"></div>

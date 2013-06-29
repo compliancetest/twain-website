@@ -142,9 +142,9 @@ class TestSuite
                 'post_type' => 'test-case',         
                 'posts_per_page' => -1,
                 'meta_query' => array(
-                                    array('key' => 'test_suites', 
-                                          'value' => "|" . $this->id . "|", 
-                                          'compare' => 'LIKE')
+                                    array('key' => 'test_suite', 
+                                          'value' => $this->id, 
+                                          'compare' => '=')
                                 )
         );
         

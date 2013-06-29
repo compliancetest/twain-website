@@ -24,7 +24,19 @@ else
 
 $testsuites = $case->getAvailableTestSuites();
 
-if($isNew && count($testsuites) > 0)
+if(isset($_GET['suite_id']))
+{
+    foreach($testsuites as $r)
+    {
+        if($r->ID == $_GET['suite_id'])
+        {
+            $case->testSuite = $r->ID;
+            break;
+        }
+    }
+}
+
+if(!$case->testSuite && $isNew && count($testsuites) > 0)
     $case->testSuite = $testsuites[0]->ID;
 
 $suite = new TestSuite($case->testSuite);

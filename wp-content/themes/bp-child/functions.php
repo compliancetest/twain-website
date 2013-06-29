@@ -301,7 +301,6 @@ function edit_admin_menus() {
 }  
 add_action( 'admin_menu', 'edit_admin_menus' );  
 
-
 // Login page fix
 function my_check_password_reset_key($key, $login) {
     global $wpdb;
