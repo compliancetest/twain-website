@@ -104,7 +104,10 @@
     float: left;
     margin-right: 30PX;
 }
-
+.page-title-content{
+    float: left;
+    width: 640px;
+}
 .page-title-avatar img{
     width:86px;
     height:86px;
