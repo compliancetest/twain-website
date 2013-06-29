@@ -353,6 +353,8 @@ function cp_template_customize($template)
     if((is_page() || is_single()) && get_post_type() == 'bp_doc') //If wiki page
     {
         $template = get_query_template( 'page', 'page-noheader.php' );
+    }else if(bp_docs_is_doc_create() || bp_docs_is_existing_doc()){
+        $template = get_query_template( 'page', 'page-noheader.php' );
     }
     
     return $template;
