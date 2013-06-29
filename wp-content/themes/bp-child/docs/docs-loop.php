@@ -94,7 +94,7 @@
              <?php endwhile ?>
              <div class="grid-list-footer grid-list-row">                    
                 <div class="grid-list-cell width100P">
-                    <div id="bp-docs-pagination">
+                    <div id="bp-docs-pagination" class="width80P left">
                         <div id="bp-docs-pagination-count">
                             <?php printf( __( 'Viewing %1$s-%2$s of %3$s docs', 'bp-docs' ), bp_docs_get_current_docs_start(), bp_docs_get_current_docs_end(), bp_docs_get_total_docs_num() ) ?>
                         </div>
@@ -103,6 +103,12 @@
                             <?php bp_docs_paginate_links() ?>
                         </div>
                     </div>
+                    <div class="right width15P">
+                        <?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
+                        <a href="<?php echo bp_docs_get_create_link()?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">Create New Wiki</span></a>
+                        <?php endif; ?>
+                    </div>
+                    <div class="clear"></div>
                 </div>
                 <div class="clear"></div>
             </div>        
