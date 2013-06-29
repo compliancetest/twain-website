@@ -20,6 +20,11 @@ function compliancetest_login()
     {
        echo $user->get_error_message(); 
     }else{
+        if($user->user_status == 3)
+        {
+            addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="javascript: void(0);">link verification</a>).', 'notice');
+            wp_logout();    
+        }        
         echo 'success';
     }        
     exit();
@@ -54,7 +59,8 @@ function compliancetest_create_new_user(){
         send_email_verification($_POST['user_email'], $_POST['user_login'], $_POST['user_pass']);
         
         //auto login user
-        wp_set_auth_cookie($user_id);    
+//        wp_set_auth_cookie($user_id);    
+        addMessage('Please verify your email address to use your account.', 'notice');
         echo 'success';
     }
     exit;
