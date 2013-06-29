@@ -598,3 +598,7 @@ ul.single-line li {
     margin: 0;
     padding: 0 0 5px;
 }
+
+#group_details_box .grid-box-body .field-row .textarea{
+    width: 100%;
+}
