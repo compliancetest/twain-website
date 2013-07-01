@@ -92,9 +92,10 @@ function getUserTestSuites($user_id = null)
             'relation' => 'OR'            
         )
     );
+    
     if(!is_admin() && !is_super_admin())
-    {
-        foreach($groups as $group)
+    {        
+        foreach($groups['groups'] as $group)
         {
             $args['meta_query'][] = array(
                     'key' => 'community_id',
@@ -103,8 +104,9 @@ function getUserTestSuites($user_id = null)
                 );
         }
     }
+    
     $testsuites = get_posts( $args );
-        
+    
     return $testsuites;
 }
 
@@ -127,7 +129,7 @@ function getUserProductsAndServices($user_id = null)
     
     if(!is_admin() && !is_super_admin())
     {
-        foreach($groups as $group)
+        foreach($groups['groups'] as $group)
         {
             $args['meta_query'][] = array(
                     'key' => 'community_id',

@@ -8,6 +8,11 @@ $psID = isset($_GET['id']) ? $_GET['id'] : null;
 
 if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null && !can_create_product_and_service()) )
 {
+    if(!$psID)
+        addMessage('Sorry, you are not allowed to create a Product / Service. Only community admin can create new one.', 'error');
+    else
+        addMessage('Sorry, you are not allowed to edit the Product / Service', 'error');
+        
     wp_redirect("/");
     exit;
 }

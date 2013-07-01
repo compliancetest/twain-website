@@ -44,7 +44,11 @@ get_header();
 					<div class="blue_box">
 						<h2><?php echo of_get_option('lregister_box_content'); ?></h2>
 						<div class="blue_box_button">	
-							<a href="#under-construction" rel="custom-popup" data-type="inline"><?php echo of_get_option('lregister_box_link_content'); ?></a>
+                            <?php if(is_user_logged_in()){ ?>
+                            <a href="/add-new-product-and-service" rel="custom-popup" data-type="inline"><?php echo of_get_option('lregister_box_link_content'); ?></a>
+                            <?php }else{ ?>
+							<a href="#require-registration" rel="custom-popup" data-type="inline"><?php echo of_get_option('lregister_box_link_content'); ?></a>
+                            <?php } ?>
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_left.png" id="shadow_blue_box_button_left" />
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_right.png" id="shadow_blue_box_button_right" />
 						</div><!-- end blue_box_button -->
@@ -56,7 +60,11 @@ get_header();
 					<div class="blue_box">
 						<h2><?php echo of_get_option('rregister_box_content'); ?></h2>
 						<div class="blue_box_button">	
-							<a href="#under-construction" rel="custom-popup" data-type="inline"><?php echo of_get_option('rregister_box_link_content'); ?></a>
+                            <?php if(is_user_logged_in()){ ?>
+							<a href="/add-new-test-suite"><?php echo of_get_option('rregister_box_link_content'); ?></a>
+                            <?php }else{ ?>
+                            <a href="#require-registration" rel="custom-popup" data-type="inline"><?php echo of_get_option('rregister_box_link_content'); ?></a>
+                            <?php } ?>
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_left.png" id="shadow_blue_box_button_left" />
 							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_right.png" id="shadow_blue_box_button_right" />
 						</div><!-- end blue_box_button -->
@@ -94,29 +102,7 @@ get_header();
 		<div class="space40"></div>	
 		<?php // get_sidebar('homepage'); ?>
 		<div class="space40"></div>	
-		</div>
-	<div id="under-construction" style="display: none; width: 350px" class="popup-box">
-        <?php if(is_user_logged_in()){ ?>
-        <div class="popup-box-header radius6 noradiusbottom">Notice!</div>
-        <div class="popup-box-content">
-            <p>
-                This feature is under development.
-            </p>
-        </div>
-        <?php }else{ ?>
-        <div class="popup-box-header radius6 noradiusbottom">Notice</div>
-        <div class="popup-box-content">
-            <p>
-                You must be a registered user to perform this action.
-            </p>
-        </div>
-        <?php } ?>        
-        <div class="popup-box-footer radius6 noradiustop">                        
-            <a href="#registration-popup" data-type="inline" class="action-btn cancel-btn" onclick="jQuery('#under-construction .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
-            <div class="clear"></div>
-        </div>
-        <a class="close_btn"></a>                
-    </div> 
+		</div>	    
 <?php
 get_footer();
 ?>

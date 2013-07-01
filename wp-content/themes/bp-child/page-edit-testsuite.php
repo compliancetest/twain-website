@@ -7,6 +7,10 @@ $suiteID = isset($_GET['id']) ? $_GET['id'] : null;
 
 if( ($suiteID != null && !can_edit_suite($suiteID)) || ($suiteID == null && !can_create_suite()) )
 {
+    if(!$suiteID)
+        addMessage('Sorry, you are not allowed to create a Test Suite. Only community admin can create new one.', 'error');
+    else
+        addMessage('Sorry, you are not allowed to edit the Test Suite', 'error');
     wp_redirect("/");
     exit;
 }

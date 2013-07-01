@@ -63,5 +63,32 @@
         do_action('cp_login_register_box') 
     ?>
 	<?php wp_footer(); ?>
+    <div id="require-registration" style="display: none; width: 350px" class="popup-box">        
+        <div class="popup-box-header radius6 noradiusbottom">Notice</div>
+        <div class="popup-box-content">
+            <p>
+                You must be a registered user to perform this action.
+            </p>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                        
+            <a href="#" class="action-btn cancel-btn" onclick="jQuery('#under-construction .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
+            <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="action-btn continue-btn"><span class="p"></span><span class="t">Continue</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>                
+    </div> 
+    <div id="under-construction" style="display: none; width: 350px" class="popup-box">        
+        <div class="popup-box-header radius6 noradiusbottom">Notice!</div>
+        <div class="popup-box-content">
+            <p>
+                This feature is under development.
+            </p>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                        
+            <a href="#registration-popup" data-type="inline" class="action-btn cancel-btn" onclick="jQuery('#under-construction .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>                
+    </div> 
 </body>
 </html>

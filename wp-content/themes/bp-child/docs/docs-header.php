@@ -16,7 +16,11 @@
         <?php if ( !bp_is_user() ) : ?>
             <?php bp_docs_create_button() ?>
         <?php endif ?>
+        <div class="clear"></div>
+        <div class="space15"></div>
+        
         </div><!-- #item-buttons -->
+        
     </div>
     <div class="clear"></div>
 </div>
