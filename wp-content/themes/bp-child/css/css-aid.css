@@ -1190,7 +1190,7 @@ tr {
 /*************** Tab Boxes ********/
 .grid-box{
     position: relative;
-    overflow: hidden;
+/*    overflow: hidden;*/
 }
 .grid-box .loading{
     background: #a8c2d7;

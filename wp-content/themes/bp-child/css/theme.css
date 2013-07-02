@@ -5202,3 +5202,7 @@ a.suite-subscript-link:hover{
     width: 400px;
 }
 
+.has-tooltip:hover .simple_tooltip{
+    display: block !important;
+    text-indent: 0 !important;
+}

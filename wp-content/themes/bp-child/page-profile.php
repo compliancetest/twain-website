@@ -13,21 +13,6 @@ if(is_user_logged_in()){
     $lname = $userInfo['last_name'][0];
     $uemail = $current_user->user_email;
     
-    $card_number = get_user_meta($current_user->ID, 'card_number', true);
-    
-    if($card_number)
-    {
-        $card_number_string = chunk_split($card_number, 4);
-    }else{
-        $card_number_string = '-';
-    }
-    
-    
-    
-    $name_on_card = get_user_meta($current_user->ID, 'name_on_card', true);
-    $card_expiry = get_user_meta($current_user->ID, 'card_expiry', true);
-    $card_cvc = get_user_meta($current_user->ID, 'card_cvc', true);
-    
     $user_org = get_user_meta($current_user->ID, 'user_organisation', true);
     $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
     $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
@@ -127,45 +112,68 @@ get_header();
 			</div>
 			<div class="clear"></div>			
 			<div class="space25"></div>			
+            <?php
+                $cards = getUserCreditCards();
+            ?>
 			<div class="column left three_fifths nopadding">
 				<div class="grid-box" id="my_payment">
 					<div class="grid-box-header">
 						<h5 class="left">My Payment Method</h5>
                         <?php if($user_status != 3){?>                            
-                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-edit right">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
-                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-view-stats right">View<span class="simple_tooltip radius6">View Statement<span></span></span></a>
+                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-edit right has-tooltip">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-view-stats has-tooltip right">View<span class="simple_tooltip radius6">View Statement<span></span></span></a>
                         <?php }?>
                         <div class="clear"></div>
 					</div>
 					<div class="grid-box-body">
+                      <?php if(!$cards){ ?>
+                        <?php
+                            $card_number = get_user_meta($current_user->ID, 'card_number', true);
+    
+                            if($card_number)
+                            {
+                                $card_number_string = chunk_split($card_number, 4);
+                            }else{
+                                $card_number_string = '-';
+                            }
+                            
+                            
+                            
+                            $name_on_card = get_user_meta($current_user->ID, 'name_on_card', true);
+                            $card_expiry = get_user_meta($current_user->ID, 'card_expiry', true);
+                            $card_cvc = get_user_meta($current_user->ID, 'card_cvc', true);
+                        ?>
                         <form action="#" method="post">
                             <div class="grid-row">
                                 <div class="grid-cell width30P"><label>Card Number</label></div>
-                                <div data-name="card_number" data-value="<?php echo $card_number;?>" class="grid-cell in_input card_no"><?php echo !$card_number_string ? '-' : $card_number_string;?></div>
+                                <div data-name="card_number" data-value="" class="grid-cell in_input card_no">-</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid-row">
                                 <div class="grid-cell width30P"><label>Name on Card</label></div>
-                                <div data-name="name_on_card" data-value="<?php echo $name_on_card;?>" class="grid-cell in_input"><?php echo !$name_on_card ? '-' : $name_on_card;?></div>
+                                <div data-name="name_on_card" data-value="" class="grid-cell in_input">-</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid-row">
                                 <div class="grid-cell width30P"><label>Expiry</label></div>
-                                <div data-name="card_expiry" data-value="<?php echo $card_expiry;?>" data-placeholder="M / Y" class="grid-cell in_input small_input card_expiry"><?php echo !$card_expiry ? '-' : $card_expiry;?></div>
+                                <div data-name="card_expiry" data-value="" data-placeholder="M / Y" class="grid-cell in_input small_input card_expiry">-</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid-row">
                                 <div class="grid-cell width30P"><label>CVC</label></div>
-                                <div data-name="card_cvc" data-value="<?php echo $card_cvc;?>" class="grid-cell in_input small_input"><?php echo !$card_cvc ? '-' : $card_cvc;?></div>
+                                <div data-name="card_cvc" data-value="" class="grid-cell in_input small_input">-</div>
                                 <div class="clear"></div>
                             </div>
                             <div class="grid-row btn-row">                                
                                 <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
                                 <div class="clear"></div>
                                 <input type="hidden" name="cp-action" value="my_payment_edit" />
-                                <input type="hidden" name="card_no" value="<?php echo $get_card_number;?>"/>
                             </div>
                         </form>
+                      <?php }else{ ?>
+                        <?php foreach($cards as $card){ ?>
+                        <?php } ?>
+                      <?php } ?>
 					</div>
 				</div>
 			</div>

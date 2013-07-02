@@ -43,6 +43,32 @@ function compliancetest_user_actions()
     }
 }
 
+function getUserCreditCards($user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d", $user_id);
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function getUserCardById($card_id, $user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d and id=%d", $user_id, $card_id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;
+}
+
 //Add Js File
 add_action('wp_head', 'add_user_script');
 function add_user_script()
