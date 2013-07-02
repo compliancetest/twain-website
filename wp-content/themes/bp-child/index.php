@@ -10,7 +10,7 @@ get_header();
 				
 				<div id="search_bar">                    
 				  <form  role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>/search"  class="nomargintop">
-					<input id="q" name="q" value="" type="text" autocomplete="off" class="inactive_s">
+					<input id="q" name="q" value="" type="text" placeholder="Search for..." autocomplete="off" class="inactive_s">
 					<div class="search_select_div">
 						<div class="search_select">
 							<ul>

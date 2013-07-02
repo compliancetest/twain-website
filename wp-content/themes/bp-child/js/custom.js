@@ -433,6 +433,15 @@ jQuery(document).ready(function($) {
         $('#' + rid).show();
         return false;
     })
+    
+    //Focus Tooltip
+    jQuery('.has-focus-tooltip input[type="text"]').focus(function(){
+        jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeIn('fast');
+    })
+    jQuery('.has-focus-tooltip input[type="text"]').blur(function(){
+        jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');
+    })
+    
 });
 
 function isMobile()

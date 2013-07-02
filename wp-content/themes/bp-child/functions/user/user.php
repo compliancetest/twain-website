@@ -144,26 +144,9 @@ function getUserProductsAndServices($user_id = null)
     $args = array(
         'post_type' => 'product-service', 
         'posts_per_page' => -1,
-        'meta_query' => array(
-            'relation' => 'OR'            
-        )
+        'author' => $user_id
     );
     
-    
-    //Getting User Groups
-    $groups = groups_get_groups( array('user_id' => $user_id) );
-    
-    if(!is_admin() && !is_super_admin())
-    {
-        foreach($groups['groups'] as $group)
-        {
-            $args['meta_query'][] = array(
-                    'key' => 'community_id',
-                    'value' => $group->id,
-                    'compare' => '='
-                );
-        }
-    }
     
     $results = get_posts($args);
     

@@ -3,7 +3,7 @@
 * Products & Service Section
 */
 function add_products_and_services_metaboxes(){
-    add_meta_box("test_suites_metabox", "Select Certifications (Test Suites) ", 'products_and_services_test_suites_metabox_html', "product-service", "normal", "high");
+//    add_meta_box("test_suites_metabox", "Select Certifications (Test Suites) ", 'products_and_services_test_suites_metabox_html', "product-service", "normal", "high");
     add_meta_box("related_products_metabox", "Select Related Products / Services ", 'products_and_services_related_products_metabox_html', "product-service", "normal", "high");
 }
 
@@ -77,22 +77,22 @@ function save_product_and_service_on_admin($post_id) {
     $groupID = array();
     
     //Save Test Suites
-    $test_suite = isset($_POST['test_suites']) ? $_POST['test_suites'] : array();
-    delete_post_meta($post_id, 'test_suites');
-    foreach($test_suite as $ts){
-        add_post_meta($post_id, 'test_suites', $ts);
-        $groupID[] = get_post_meta($ts, 'community_id', true);
-    }
-    $groupID = array_unique($groupID);
+    //$test_suite = isset($_POST['test_suites']) ? $_POST['test_suites'] : array();
+//    delete_post_meta($post_id, 'test_suites');
+//    foreach($test_suite as $ts){
+//        add_post_meta($post_id, 'test_suites', $ts);
+//        $groupID[] = get_post_meta($ts, 'community_id', true);
+//    }
+//    $groupID = array_unique($groupID);
     //Update Product&Service Community IDs
-    delete_post_meta($post_id, 'community_id');
-    foreach($groupID as $gid)
-    {
-        if(!$gid)
-            continue;
-        
-        add_post_meta($post_id, 'community_id', $gid);
-    }
+    //delete_post_meta($post_id, 'community_id');
+//    foreach($groupID as $gid)
+//    {
+//        if(!$gid)
+//            continue;
+//        
+//        add_post_meta($post_id, 'community_id', $gid);
+//    }
     
     //Save Related Products
     $related_products = isset($_POST['related_products']) ? $_POST['related_products'] : null;

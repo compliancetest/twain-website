@@ -152,7 +152,7 @@ function test_case_test_suites_metabox_html(){
 
 function test_case_choose_initiating_message_metabox_html(){
     global $post;
-    $post_backup = $post;
+    
     
     $current_test_suite = _get_current_test_suite($post->ID);
     
@@ -178,7 +178,7 @@ function test_case_choose_initiating_message_metabox_html(){
         }    
 //    }
     echo '</select>';
-    $post = $post_backup;
+    
 }
 
 function test_case_conformance_level_metabox_html(){

@@ -1464,11 +1464,11 @@ padding-left: 20px;}
 }
 
 #search_bar input[type="text"] {
-    font-size: 21px;
-    color: #c9c9c9;
-    font-style: italic;
+    font-size: 22px;
+    color: #666;
+    font-style: normal;    
     font-family: 'Open Sans', Arial, sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 6px 0px 0px 6px;
     border:none;
     height: 51px;
@@ -1479,7 +1479,24 @@ padding-left: 20px;}
     padding-left: 80px;
      float:left;
 }
+#search_bar input[type="text"]::-webkit-input-placeholder {
+    font-style: italic;    
+    color: #c9c9c9;
+}
+#search_bar input[type="text"]::-moz-placeholder{
+    font-style: italic;    
+    color: #c9c9c9;
+}
+#search_bar input[type="text"]:-moz-placeholder{
+    font-style: italic;    
+    color: #c9c9c9;
+}
+#search_bar input[type="text"]:-ms-input-placeholder{
+    font-style: italic;    
+    color: #c9c9c9;
+}
 
+ 
 .inactive_s{
     background: white url(../images/search_for.png) center left no-repeat !important;
 }
@@ -5205,4 +5222,38 @@ a.suite-subscript-link:hover{
 .has-tooltip:hover .simple_tooltip{
     display: block !important;
     text-indent: 0 !important;
+}
+/*** Edit Product/Service Page ***/
+#ps-related-box .field-row{
+    border-bottom: solid 1px #cbcbcb;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+#ps-related-box .field-row .select{
+    width: auto;
+}
+.custom-combobox{
+    border: solid 1px #cbcbcb;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    display: block;
+    float: left;
+}
+.custom-combobox-input{
+    border: none;
+    float: left;
+    font-size: 12px;
+}
+.custom-combobox-toggle{
+    width: 25px;
+    height: 24px;
+    background: url(../images/select-bg.png) no-repeat center center;
+    border: none;
+    float: left;
+}
+.grid-box-body .field-row select.combobox,
+.grid-box-body .field-row .custom-combobox-input{
+    width: auto;
+    min-width: 200px;
 }

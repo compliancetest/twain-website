@@ -320,6 +320,7 @@ class more_fields_admin extends more_plugins_admin_object_sputnik_8 {
 			}
 
 			$field['vals'] = $values;
+            
 			// Get the closed boxes
 			//$post_type = sanitize_title($this->get_type());
 			//$hidden = (array) get_user_option("meta-box-hidden_${post_type}", 0, false );
@@ -378,7 +379,8 @@ class more_fields_admin extends more_plugins_admin_object_sputnik_8 {
 	function field_type_render ($html, $field, $position, $value_raw = '', $html_selected = '') {
 		global $post;
 
-		$value_stored = (get_post_meta($post->ID, $field['key'], true));
+		$value_stored = get_post_meta($post->ID, $field['key'], true);
+        echo $value_stored . "<br />";
 		if (!$value_raw) $value_raw = $value_stored;
 		$value = (strstr($value_raw, '*') && ($html_selected)) ? substr($value_raw, 1) : $value_raw;
 

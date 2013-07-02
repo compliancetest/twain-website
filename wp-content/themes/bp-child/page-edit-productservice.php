@@ -28,6 +28,8 @@ else
 
 get_header();
 
+$myProducts = getUserProductsAndServices();
+
 ?>
 <div class="content edit-item-wrapper" id="edit_product_service_wrapper">
     <div class="space25"></div>
@@ -50,43 +52,39 @@ get_header();
            <div class="grid-box-body">
                <div class="column">
                    <div class="field-row">
-                       <div class="grid-cell">
-                           <label>Name</label>                    
-                           <input type="text" class="input" name="product_name" id="product_name" value="<?php echo $product->name?>" />
+                       <div class="grid-cell has-focus-tooltip">
+                           <label>Name:</label>         
+                           <span class="has-tooltip">
+                               <input type="text" class="input" name="product_name" id="product_name" value="<?php echo $product->name?>" />
+                               <span class="focus-tooltip"><span></span>Some Explanatory Text Goes right here. For each focus click on the  input area the explanatory text will pop-up like this one!</span>
+                           </span>
                        </div>                       
                        <div class="grid-cell">
-                           <label>Date</label>                    
-                           <input type="text" class="input datepicker" name="product_date" id="product_date" value="<?php echo $product->date?>" />
+                           <label>Release Date:</label>                    
+                           <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo $product->release_date?>" />
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
-                           <label>Type</label>                    
-                           <input type="radio" name="product_type" id="product_type_software" value="Software" <?php echo $product->type == 'Software' ? 'checked="checked"' : ''?> /> Software
-                           <input type="radio" name="product_type" id="product_type_product" value="Product" <?php echo $product->type == 'Product' ? 'checked="checked"' : ''?> /> Product
-                           <input type="radio" name="product_type" id="product_type_process" value="Process" <?php echo $product->type == 'Process' ? 'checked="checked"' : ''?> /> Process
-                           <input type="radio" name="product_type" id="product_type_service" value="Service" <?php echo $product->type == 'Service' ? 'checked="checked"' : ''?> /> Service
+                           <label>Type:</label>                    
+                           <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
+                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Web Service
                            
                        </div>
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label>Owner</label>                    
-                           <input type="text" class="input" name="product_owner" id="product_owner" value="<?php echo $product->owner?>" />
-                       </div>                       
+                           <label>Version:</label>                    
+                           <input type="text" class="input" name="product_version" id="product_version" value="<?php echo $product->version?>" />
+                       </div>                   
                        <div class="grid-cell">
-                           <label>Access URL</label>                    
-                           <input type="text" class="input" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" />
-                       </div>
-                       <div class="grid-cell radio-cell">
-                           <label>Status</label>                    
-                           <input type="radio" name="product_status" id="product_staus_active" value="Active" <?php echo $product->status == 'Active' ? 'checked="checked"' : ''?> /> Active
-                           <input type="radio" name="product_status" id="product_staus_on_hold" value="On Hold"  <?php echo $product->status == 'On Hold' ? 'checked="checked"' : ''?> /> On Hold                           
-                       </div>
+                           <label>Access URL:</label>                    
+                           <input type="text" class="input medium-input" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" />
+                       </div>      
                        <div class="clear"></div>
-                   </div>
+                   </div>          
                    <div class="field-row">
                        <div class="grid-cell">
-                            <label>Description</label>
+                            <label>Description:</label>
                             <textarea cols="" rows="" class="textarea" name="product_description"><?php echo $product->descrition?></textarea>
                        </div>
                        <div class="clear"></div>
@@ -102,40 +100,65 @@ get_header();
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
+             <form id="related-product-form" action="">
                <div class="column">                   
+                 <?php if($myProducts){ ?>
                    <div class="field-row">
-                       <div class="grid-cell checkbox-cell">
-                       <?php $availableProducts = $product->getAvailableProducts(); ?>
-                       <?php foreach($availableProducts as $row){ ?>
-                            <label><input type="checkbox" name="related_products[]" value="<?php echo $row->ID?>"  <?php echo in_array($row->ID, $product->relatedProducts) ? 'checked="checked"' : ''?> /> <?php echo get_the_title($row)?></label>
-                       <?php } ?>
+                       <div class="grid-cell radio-cell width55P">
+                           <label>Related Product: </label>
+                           <a href="#">Product1</a>
+                       </div>
+                       <div class="grid-cell width30P">
+                           <label>Relation Ship: </label>
+                           <select class="select">
+                               <option value="Depends On">Depends On</option>
+                               <option value="Newer Version Of">Newer Version Of</option>
+                           </select>
+                       </div>
+                       <div class="grid-cell right">
+                           <label>&nbsp;</label>
+                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
                        </div>
                        <div class="clear"></div>
                    </div>
-               </div>
-           </div>
-        </div>
-        <div class="space20"></div>
-        <div class="grid-box grid-box-expandable grid-box-opened" id="ps-certifications-box">
-           <div class="grid-box-header">
-               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Select Certifications(Test Suites)</h5>
-               <div class="clear"></div>
-           </div>
-           <div class="grid-box-body">
-               <div class="column">                   
-                   <div class="field-row">
-                       <div class="grid-cell checkbox-cell">
-                       <?php $availableSuites = getUserTestSuites(); ?>
-                       <?php foreach($availableSuites as $row){ ?>
-                            <label><input type="checkbox" name="test_suites[]" value="<?php echo $row->ID?>"  <?php echo in_array($row->ID, $product->certifications) ? 'checked="checked"' : ''?> /> <?php echo get_the_title($row)?></label>
-                       <?php } ?>   
+                   <div class="field-row new-row">
+                       <div class="grid-cell width55P">
+                           <label>Related Product: </label>
+                           <select class="combobox select" name="related-product[]">
+                               <option value=""></option>
+                               <?php foreach($myProducts as $p){ ?>
+                               <option value="<?php echo $p->ID?>"><?php echo get_post_meta($p->ID, 'product_name', true)?></option>
+                               <?php } ?>
+                           </select>
+                       </div>
+                       <div class="grid-cell width30P">
+                           <label>Relation Ship: </label>
+                           <select class="select" name="related-product-relation[]">
+                               <option value="Depends On">Depends On</option>
+                               <option value="Newer Version Of">Newer Version Of</option>
+                           </select>
+                       </div>
+                       <div class="grid-cell right">
+                           <label>&nbsp;</label>
+                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
                        </div>
                        <div class="clear"></div>
                    </div>
+                   <div class="btn-row">
+                       <a href="#" class="action-btn add-new-btn" id="add-related-product"><span class="p"></span><span class="t">Add Related Product</span></a>
+                       <div class="clear"></div>
+                   </div>
+                 <?php }else{ ?>
+                   <div class="field-row">
+                       <div class="grid-cell width100P">
+                           No Product/Service Found!
+                       </div>
+                   </div>
+                 <?php }   ?>
                </div>
+             </form>  
            </div>
-        </div>    
+        </div>                
         <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">
                <div class="btn-row nopaddingright">
@@ -154,6 +177,54 @@ get_header();
     </div>
     <div class="clear"></div>
 </div>
+<script type="text/javascript">
+var myProducts = new Array();
+<?php foreach($myProducts as $p){ ?>
+myProducts.push({id: '<?php echo $p->ID?>', label: '<?php echo get_post_meta($p->ID, 'product_name', true)?>'});
+<?php } ?>
+jQuery(document).ready(function(){
+    jQuery('#add-related-product').click(function(){
+        jQuery('#ps-related-box .btn-row').before('<div class="field-row new-row">' + 
+                       '<div class="grid-cell width55P">' +
+                           '<label>Related Product: </label>' +
+                           '<select class="combobox select" name="related-product[]">' +
+                               '<option value=""></option>' +
+                               <?php foreach($myProducts as $p){ ?>
+                               '<option value="<?php echo $p->ID?>"><?php echo get_post_meta($p->ID, 'product_name', true)?></option>' +
+                               <?php } ?>
+                           '</select>' + 
+                       '</div>' + 
+                       '<div class="grid-cell width30P">' +
+                           '<label>Relation Ship: </label>' +
+                           '<select class="select" name="related-product-relation[]">' +
+                               '<option value="Depends On">Depends On</option>' +
+                               '<option value="Newer Version Of">Newer Version Of</option>' +
+                           '</select>' +
+                       '</div>' +
+                       '<div class="grid-cell right">' +
+                           '<label>&nbsp;</label>' +
+                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                       '</div>' +
+                       '<div class="clear"></div>' +
+                   '</div>');
+        jQuery('#ps-related-box .combobox:last').combobox();
+        return false;
+    });
+    jQuery('#ps-related-box').on('click', '.blue-delete-btn', function(){
+        if(jQuery(this).parents('.field-row').hasClass('new-row'))
+        {
+            jQuery(this).parents('.field-row').fadeOut('fast', function(){
+                jQuery(this).remove();                
+            })
+        }
+        
+        return false;
+    })
+
+    jQuery('#ps-related-box .combobox').combobox();
+})
+
+</script>
 <?php
 
 get_footer();

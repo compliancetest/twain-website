@@ -104,6 +104,7 @@ get_header();
                    echo groups_get_groupmeta($pCommunityID, 'obligation_for_claim') 
                ?>   
            </div>
+           <div class="clear"></div>
            <div class="space20"></div>
            <?php } ?>
         </div>           
