@@ -22,10 +22,10 @@ define('DB_NAME', 'compliancetestfront');
 define('DB_USER', 'dbadmin');
 
 /** MySQL database password */
-define('DB_HOST', 'compliancetest.cvno0ugmoa4w.ap-southeast-2.rds.amazonaws.com');
+define('DB_PASSWORD', 'W26pgueXAbMv7PdoJlTz');
 
 /** MySQL hostname */
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'compliancetest.cvno0ugmoa4w.ap-southeast-2.rds.amazonaws.com');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
