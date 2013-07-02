@@ -4099,7 +4099,7 @@ display:block !important;
 }    
     
 .noborderbottom{
-    border-bottom: 0px;
+    border-bottom: 0 !important;
 }    
 
 .noborder{

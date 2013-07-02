@@ -12,6 +12,8 @@ function process_product_service_actions()
 
 function saveProductService()
 {
+    global $wpdb;
+    
     $id = $_POST['id'];
     if(!$id)
         $isNew = true;
@@ -42,38 +44,26 @@ function saveProductService()
     }
     
     update_post_meta($id, 'product_name', $_POST['product_name']);
-    update_post_meta($id, 'product_date', date('Y-m-d', strtotime($_POST['product_date'])));
+    update_post_meta($id, 'product_release_date', date('Y-m-d', strtotime($_POST['product_release_date'])));
     update_post_meta($id, 'product_type', $_POST['product_type']);
-    update_post_meta($id, 'product_owner', $_POST['product_owner']);
+    update_post_meta($id, 'product_version', $_POST['product_version']);
     update_post_meta($id, 'product_url', $_POST['product_url']);
-    update_post_meta($id, 'product_status', $_POST['product_status']);
     update_post_meta($id, 'product_description', $_POST['product_description']);
     
-    //Getting Community IDs
-    $groupID = array();
-    
-    //Save Test Suites
-    $test_suite = isset($_POST['test_suites']) ? $_POST['test_suites'] : array();
-    delete_post_meta($id, 'test_suites');
-    foreach($test_suite as $ts){
-        add_post_meta($id, 'test_suites', $ts);
-        $groupID[] = get_post_meta($ts, 'community_id', true);
-    }
-    $groupID = array_unique($groupID);
-    //Update Product&Service Community IDs
-    delete_post_meta($id, 'community_id');
-    foreach($groupID as $gid)
-    {
-        if(!$gid)
-            continue;
-        add_post_meta($id, 'community_id', $gid);
-    }
     //Save Related Products
-    $related_products = isset($_POST['related_products']) ? $_POST['related_products'] : array();
+    $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
+    $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();
     
-    delete_post_meta($id, 'related_products');    
-    foreach($related_products as $rp)
-        add_post_meta($id, 'related_products', $rp);
+    //remove old entries
+    $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "products_relationships WHERE product_id=%d", $id);
+    $wpdb->query($query);
+    
+    foreach($related_products as $i => $p)
+    {
+        if(!$p)
+            continue;
+        $wpdb->insert($wpdb->prefix . "products_relationships", array('product_id' => $id, 'related_product_id' => $p, 'relationship' => $related_products_relations[$i]));
+    }
         
     addMessage('Product / Service was saved successfully');
     wp_redirect(get_permalink($id));

@@ -6,21 +6,17 @@ class ProductAndService
     
     var $name = '';
     
-    var $date = '';
+    var $release_date = '';
     
     var $type = '';
     
-    var $owner = '';
+    var $version = '';
     
     var $accessURL = '';
-    
-    var $status = 'Active';
     
     var $descrition = '';
     
     var $relatedProducts = array();
-    
-    var $certifications = array();
     
     public function loadSingleValue($key)
     {
@@ -42,31 +38,26 @@ class ProductAndService
             return;
         
         $this->name = $this->loadSingleValue('product_name');
-        $this->date = $this->loadSingleValue('product_date');
+        $this->release_date = $this->loadSingleValue('product_release_date');
         $this->type = $this->loadSingleValue('product_type');
-        $this->owner = $this->loadSingleValue('product_owner');
+        $this->version = $this->loadSingleValue('product_version');
         $this->accessURL = $this->loadSingleValue('product_url');
-        $this->status = $this->loadSingleValue('product_status');
         $this->descrition = $this->loadSingleValue('product_description');
         
         $this->loadRelatedProducts();
-        
-        $this->loadCertifications();
-        
     }
     
     public function loadRelatedProducts()
     {
-        $this->relatedProducts = get_post_meta($this->id, 'related_products');
+        global $wpdb;
+        
+        $query = $wpdb->prepare("SELECT pr.*, pm.meta_value as product_name FROM " . $wpdb->prefix . "products_relationships as pr " .
+                                "LEFT JOIN " . $wpdb->postmeta . " AS pm ON pm.post_id=pr.related_product_id and pm.meta_key='product_name' WHERE pr.product_id=%d", $this->id);
+        $rows = $wpdb->get_results($query);
+        
+        $this->relatedProducts = $rows;
         
         return $this->relatedProducts;
-    }
-    
-    public function loadCertifications()
-    {        
-        $this->certifications = get_post_meta($this->id, 'test_suites');
-        
-        return $this->certifications;
     }
     
     public function getAvailableProducts()

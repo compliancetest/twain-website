@@ -28,7 +28,7 @@ else
 
 get_header();
 
-$myProducts = getUserProductsAndServices();
+$myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
 
 ?>
 <div class="content edit-item-wrapper" id="edit_product_service_wrapper">
@@ -37,7 +37,7 @@ $myProducts = getUserProductsAndServices();
         <?php get_sidebar('dashboard'); ?>
     </div>        
     <div class="column four_fifths right container"> 
-      <form name="suiteForm" id="suiteForm" action="" method="post" enctype="multipart/form-data">
+      <form name="psForm" id="psForm" action="" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
         <h2>Add New Product and Service</h2>
         <?php }else{ ?>
@@ -66,7 +66,7 @@ $myProducts = getUserProductsAndServices();
                        <div class="grid-cell radio-cell" id="ps-type-cell">
                            <label>Type:</label>                    
                            <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
-                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Web Service
+                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Web Service' ? 'checked="checked"' : ''?> /> Web Service
                            
                        </div>
                        <div class="clear"></div>
@@ -100,19 +100,24 @@ $myProducts = getUserProductsAndServices();
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
-             <form id="related-product-form" action="">
                <div class="column">                   
                  <?php if($myProducts){ ?>
+                   <?php foreach($product->relatedProducts as $row){ ?>
                    <div class="field-row">
                        <div class="grid-cell radio-cell width55P">
                            <label>Related Product: </label>
-                           <a href="#">Product1</a>
+                           <select class="combobox select" name="related-product[]">
+                               <option value=""></option>
+                               <?php foreach($myProducts as $p){ ?>
+                               <option value="<?php echo $p->ID?>" <?php echo $p->ID == $row->related_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true)?></option>
+                               <?php } ?>
+                           </select>
                        </div>
                        <div class="grid-cell width30P">
                            <label>Relation Ship: </label>
-                           <select class="select">
-                               <option value="Depends On">Depends On</option>
-                               <option value="Newer Version Of">Newer Version Of</option>
+                           <select class="select" name="related-product-relation[]">
+                               <option value="Depends On" <?php echo $row->relationship == 'Depends On' ? 'selected="selected"' : '' ?>>Depends On</option>
+                               <option value="Newer Version Of" <?php echo $row->relationship == 'Newer Version Of' ? 'selected="selected"' : '' ?>>Newer Version Of</option>
                            </select>
                        </div>
                        <div class="grid-cell right">
@@ -121,6 +126,8 @@ $myProducts = getUserProductsAndServices();
                        </div>
                        <div class="clear"></div>
                    </div>
+                   <?php } ?>
+                   <?php if($isNew){ ?>
                    <div class="field-row new-row">
                        <div class="grid-cell width55P">
                            <label>Related Product: </label>
@@ -144,19 +151,19 @@ $myProducts = getUserProductsAndServices();
                        </div>
                        <div class="clear"></div>
                    </div>
+                   <?php } ?>
                    <div class="btn-row">
                        <a href="#" class="action-btn add-new-btn" id="add-related-product"><span class="p"></span><span class="t">Add Related Product</span></a>
                        <div class="clear"></div>
                    </div>
                  <?php }else{ ?>
-                   <div class="field-row">
+                   <div class="field-row noborderbottom">
                        <div class="grid-cell width100P">
                            No Product/Service Found!
                        </div>
                    </div>
                  <?php }   ?>
                </div>
-             </form>  
            </div>
         </div>                
         <div class="grid-box">
@@ -169,7 +176,6 @@ $myProducts = getUserProductsAndServices();
            </div>
        </div>
        <input type="hidden" name="id" value="<?php echo $product->id?>" />
-       <input type="hidden" name="action" value="cp-suite-save" />
        <?php
            wp_nonce_field('save-product-service');
        ?>
@@ -178,10 +184,6 @@ $myProducts = getUserProductsAndServices();
     <div class="clear"></div>
 </div>
 <script type="text/javascript">
-var myProducts = new Array();
-<?php foreach($myProducts as $p){ ?>
-myProducts.push({id: '<?php echo $p->ID?>', label: '<?php echo get_post_meta($p->ID, 'product_name', true)?>'});
-<?php } ?>
 jQuery(document).ready(function(){
     jQuery('#add-related-product').click(function(){
         jQuery('#ps-related-box .btn-row').before('<div class="field-row new-row">' + 
@@ -211,17 +213,27 @@ jQuery(document).ready(function(){
         return false;
     });
     jQuery('#ps-related-box').on('click', '.blue-delete-btn', function(){
-        if(jQuery(this).parents('.field-row').hasClass('new-row'))
-        {
+        //if(jQuery(this).parents('.field-row').hasClass('new-row'))
+//        {
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
             })
-        }
+//        }
         
         return false;
     })
 
     jQuery('#ps-related-box .combobox').combobox();
+    
+    jQuery('#psForm').submit(function(){
+        if(jQuery('#psForm #product_name').val() == '')    
+        {
+            jQuery('#ps-info-box').find('.message').remove();
+            jQuery('#ps-info-box .column').prepend('<div class="message error">Product/Service name should not be empty!</div>');
+            jQuery('#product_name').focus();
+            return false;
+        }
+    });
 })
 
 </script>

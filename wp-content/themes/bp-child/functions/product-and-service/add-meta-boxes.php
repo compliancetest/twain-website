@@ -10,39 +10,84 @@ function add_products_and_services_metaboxes(){
 add_action('admin_init', 'add_products_and_services_metaboxes');
 
 
-function products_and_services_test_suites_metabox_html(){
-    global $post;
-    
-    //Get Current Test Suites
-    $current_test_suite = _get_certified_test_suites($post->ID);
-    
-    $testsuites = get_posts( array( 'post_type' => 'test-suite', 'posts_per_page' => -1) );
-    
-    foreach($testsuites as $row){
-    ?>
-         
-         <input type="checkbox" name="test_suites[]" <?php if (in_array($row->ID , $current_test_suite)) { echo 'checked="checked"'; } ?> value="<?php echo $row->ID; ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php echo $row->post_title; ?> <br />
-        
-    <?php
-    }    
-    
-}
-
-
 function products_and_services_related_products_metabox_html(){
     global $post;
     
-    $current_products = _get_current_related_products($post->ID);
+    $myProducts = getUserProductsAndServices(null, array($post->ID));
+    $product = new ProductAndService($post->ID);
+    $product->loadRelatedProducts();
     
-    $products = get_posts( array( 'post_type' => 'product-service', 'posts_per_page' => -1, 'post__not_in' =>array($post->ID)) );
-    
-    foreach($products as $row){
-         ?>
-         
-         <input type="checkbox" name="related_products[]" <?php if (in_array($row->ID, $current_products)) { echo 'checked="checked"'; } ?> value="<?php echo $row->ID; ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php echo $row->post_title; ?> <br />
-        
-        <?php
-    }
+    ?>
+    <?php if($myProducts){ ?>
+    <table id="related-products-table">
+        <thead>
+            <tr>
+                <th>Related Product</th>
+                <th>Relationship</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($product->relatedProducts as $row){ ?>
+            <tr>
+                <td>
+                    <select class="select" name="related-product[]">
+                       <option value=""></option>
+                       <?php foreach($myProducts as $p){ ?>
+                       <option value="<?php echo $p->ID?>" <?php echo $p->ID == $row->related_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true)?></option>
+                       <?php } ?>
+                   </select>
+                </td>
+                <td>
+                    <select class="select" name="related-product-relation[]">
+                       <option value="Depends On" <?php echo $row->relationship == 'Depends On' ? 'selected="selected"' : '' ?>>Depends On</option>
+                       <option value="Newer Version Of" <?php echo $row->relationship == 'Newer Version Of' ? 'selected="selected"' : '' ?>>Newer Version Of</option>
+                   </select>
+                </td>
+                <td>
+                    <a href="#" class="remove-btn">Remove</a>
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <a href="#" class="button" id="add-related-product">Add Related Product</a>
+    <?php }else{ ?>
+    <p>No Product/Service Found!</p>
+    <?php } ?>
+ 
+   <script type="text/javascript">
+   jQuery(document).ready(function(){
+       jQuery('#add-related-product').click(function(){
+            jQuery('#related-products-table tbody').append('<tr>' + 
+                '<td>' +
+                    '<select class="select" name="related-product[]">' +
+                       '<option value=""></option>' +
+                       <?php foreach($myProducts as $p){ ?>
+                       '<option value="<?php echo $p->ID?>"><?php echo get_post_meta($p->ID, 'product_name', true)?></option>' +
+                       <?php } ?>
+                   '</select>' +
+                '</td>' +
+                '<td>' +
+                    '<select class="select" name="related-product-relation[]">' +
+                       '<option value="Depends On">Depends On</option>' +
+                       '<option value="Newer Version Of">Newer Version Of</option>' +
+                   '</select>' +
+                '</td>' +
+                '<td>' +
+                    '<a href="#" class="remove-btn">Remove</a>' +
+                '</td>' +
+            '</tr>');
+            return false;
+        });
+        jQuery("#related-products-table").on('click', '.remove-btn', function(){
+            jQuery(this).parents('tr').remove();
+            return false;
+        })
+   })
+       
+   </script>
+    <?php
     
 }
 
@@ -51,7 +96,7 @@ function products_and_services_related_products_metabox_html(){
 add_action('save_post', 'save_product_and_service_on_admin');
 
 function save_product_and_service_on_admin($post_id) {
-    global $post;
+    global $post, $wpdb;
     
     // check autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -73,32 +118,20 @@ function save_product_and_service_on_admin($post_id) {
         return $post_id;
     }
     
-    //Getting Community IDs
-    $groupID = array();
-    
-    //Save Test Suites
-    //$test_suite = isset($_POST['test_suites']) ? $_POST['test_suites'] : array();
-//    delete_post_meta($post_id, 'test_suites');
-//    foreach($test_suite as $ts){
-//        add_post_meta($post_id, 'test_suites', $ts);
-//        $groupID[] = get_post_meta($ts, 'community_id', true);
-//    }
-//    $groupID = array_unique($groupID);
-    //Update Product&Service Community IDs
-    //delete_post_meta($post_id, 'community_id');
-//    foreach($groupID as $gid)
-//    {
-//        if(!$gid)
-//            continue;
-//        
-//        add_post_meta($post_id, 'community_id', $gid);
-//    }
-    
     //Save Related Products
-    $related_products = isset($_POST['related_products']) ? $_POST['related_products'] : null;
-    delete_post_meta($post_id, 'related_products');    
-    foreach($related_products as $rp)
-        add_post_meta($post_id, 'related_products', $rp);
+    $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
+    $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();
+    
+    //remove old entries
+    $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "products_relationships WHERE product_id=%d", $post_id);
+    $wpdb->query($query);
+    
+    foreach($related_products as $i => $p)
+    {
+        if(!$p)
+            continue;
+        $wpdb->insert($wpdb->prefix . "products_relationships", array('product_id' => $post_id, 'related_product_id' => $p, 'relationship' => $related_products_relations[$i]));
+    }    
     
 } 
 

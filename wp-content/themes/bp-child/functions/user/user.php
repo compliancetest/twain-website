@@ -136,7 +136,7 @@ function getUserTestSuites($user_id = null)
     return $testsuites;
 }
 
-function getUserProductsAndServices($user_id = null)
+function getUserProductsAndServices($user_id = null, $exclusive = array())
 {
     if($user_id == null)
         $user_id = get_current_user_id();
@@ -148,7 +148,20 @@ function getUserProductsAndServices($user_id = null)
     );
     
     
-    $results = get_posts($args);
+    $rows = get_posts($args);
+    $results = array();
+    
+    if(!$exclusive)
+    {        
+        $results = $rows;
+    }else{
+        foreach($rows as $row)
+        {
+            if(in_array($row->ID, $exclusive))
+                continue;
+            $results[] = $row;
+        }    
+    }
     
     return $results;
 }
