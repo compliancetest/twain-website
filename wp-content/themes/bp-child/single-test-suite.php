@@ -314,7 +314,13 @@ Template Name Posts: Test Suite
                                 <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width15P toleft ">
-                                <?php echo get_post_meta($row->ID ,'test_intent_description', true)?>
+                            <?php 
+                                $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
+                                if(strlen($intentDesc) > 150)
+                                    echo substr($intentDesc, 0, 150) . "...";
+                                else
+                                    echo $intentDesc;
+                            ?>
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter ">
                                 <?php if(can_edit_test_case($row->ID)){ ?>
