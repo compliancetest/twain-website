@@ -380,7 +380,7 @@ class more_fields_admin extends more_plugins_admin_object_sputnik_8 {
 		global $post;
 
 		$value_stored = get_post_meta($post->ID, $field['key'], true);
-        echo $value_stored . "<br />";
+        
 		if (!$value_raw) $value_raw = $value_stored;
 		$value = (strstr($value_raw, '*') && ($html_selected)) ? substr($value_raw, 1) : $value_raw;
 
