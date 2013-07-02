@@ -180,7 +180,7 @@ function test_suites_spec_doc_metabox_html(){
     </script>    
     
     <?php
-    $post = $post_backup;
+    
 }
 
 //Related Test Suites Metabox
@@ -339,14 +339,14 @@ function test_suite_test_cases_metabox_html(){
 //Initiating Message
 function test_suite_initiating_message_metabox_html(){
     global $post;
-    $post_backup = $post;
+    
     $current_initiating_messages = get_post_meta($post->ID, 'init_message', true);
     //echo '<input type="hidden" name="custom_initiating_message" value="', wp_create_nonce(basename(__FILE__)), '" />';
     ?>
     <textarea name="init_message" id="initiating_message_id" rows="4" cols="100"><?php echo $current_initiating_messages;?></textarea>
     <br /><span class="description">Type Initiating Messages (comma separated)</span>
 <?php
-    $post = $post_backup;    
+    
 }
 
 //Roles Metabox
