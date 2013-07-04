@@ -1436,6 +1436,7 @@ tr {
 .grid-box .td a{
     text-decoration: underline;
 }
+
 .grid-box-closed .grid-box-body{
 /*    display: none;*/
 }

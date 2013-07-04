@@ -131,27 +131,35 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             if($row)
             {
-                $info = pathinfo($row->location);
-                $info1 = pathinfo($row->name);
-                //Add Extension
-                if(!isset($info1['extension']) || !$info1['extension'])
-                    $row->name .= "." . $info['extension'];
-                
-                header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
-                header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
-                header("Cache-Control: no-cache, must-revalidate");
-                header("Pragma: no-cache");
-                header("Content-Type: Application/octet-stream");
-                header("Content-disposition: attachment; filename=" . $row->name);
-
-                $fp = fopen($row->location, 'r');
-                while (!feof($fp))
+                if(file_exists($row->location))
                 {
-                    echo fread($fp, 65536); 
-                    flush();
-                }  
-                fclose($fp); 
-                exit;
+                    $info = pathinfo($row->location);
+                    $info1 = pathinfo($row->name);
+                    //Add Extension
+                    if(!isset($info1['extension']) || !$info1['extension'])
+                        $row->name .= "." . $info['extension'];
+                    
+                    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+                    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+                    header("Cache-Control: no-cache, must-revalidate");
+                    header("Pragma: no-cache");
+                    header("Content-Type: Application/octet-stream");
+                    header("Content-disposition: attachment; filename=" . $row->name);
+                    
+                    $fp = fopen($row->location, 'r');
+                    while (!feof($fp))
+                    {
+                        echo fread($fp, 65536); 
+                        flush();
+                    }  
+                    fclose($fp); 
+                    exit;
+                }else{
+                    addMessage('File not found!', 'error');
+                    $group = groups_get_current_group();
+                    wp_redirect(bp_get_group_permalink($group) . $obj->slug);    
+                    exit;
+                }
             }else{
                 $group = groups_get_current_group();
                 wp_redirect(bp_get_group_permalink($group) . $obj->slug);

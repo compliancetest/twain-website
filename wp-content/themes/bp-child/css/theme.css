@@ -4418,6 +4418,21 @@ min-height: 70px;
     -moz-border-radius-topright: 0;
     margin-top: -1px;
 }
+#product-popup-box{
+    width: 700px;
+}
+#product-popup-box .popup-box-content{
+    padding: 0;
+    border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+}
+#product-popup-box .popup-box-content .test_cases{
+    border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+}
+
 /*** Test Suite Coverage ***/
 #test_suite_coverage .td-product{
     width: 202px;

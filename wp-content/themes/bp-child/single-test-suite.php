@@ -336,7 +336,14 @@ Template Name Posts: Test Suite
                 <?php                        
                     }
 				?>				
-			</div>            
+                <?php
+                    if(!$testCases){
+                        ?>
+                        <div class="tocenter padding10">No Data Found.</div>
+                        <?php
+                    }
+                ?>
+			    </div>            
             <div class="space10"></div>
 			<div class="pagination-wrapper">
                 <div class="pagination">

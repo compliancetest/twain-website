@@ -45,7 +45,7 @@ get_header();
            <div class="grid-box grid-box-expandable table-box grid-box-opened">
                <div class="grid-box-header">
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>"><b><?php echo get_the_title($product)?></b></a></h5>
+                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product)?></b></a></h5>
                    <?php if(can_edit_product_and_service($product->ID)){ ?>
                    <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
                    <?php } ?>
@@ -128,7 +128,6 @@ get_header();
         <a class="close_btn"></a>                
     </div>        
 </div> <!--end content-->
-
 <script type="text/javascript">
 (function($){
     $(document).ready(function(){
@@ -215,6 +214,15 @@ get_header();
             }
             form.submit();
         }
+        
+        //Custom popup for test case boxes
+        $('.view-product').each(function(){
+            $(this).cplightbox({
+                href: $(this).attr('href') + '&is_ajax=true',
+                removeBoxAfterClose: true,
+                type: 'ajax'                
+            })
+        })
     })
 })(jQuery)
     

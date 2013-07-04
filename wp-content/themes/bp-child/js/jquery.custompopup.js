@@ -11,13 +11,30 @@
             $self = $(this);
             opts.self = $self;
             opts.href = opts.href == '' ? $self.attr('href') : opts.href;
+            
+            opts.template = $('<div class="popup-box" id="product-popup-box" style="display: none">' + 
+                            '<div class="popup-box-header radius6 noradiusbottom"></div>' + 
+                            '<div class="popup-box-content"></div>' +    
+                            '<a class="close_btn"></a>' + 
+                            '</div>');
+                            
             if($self.attr('cp-type'))
                 opts.type = $self.attr('cp-type');
             if($self.attr('cp-removeBoxAfterClose'))
                 opts.removeBoxAfterClose = $self.attr('cp-removeBoxAfterClose');
             if($self.attr('cp-closeWhenClickOveraly'))
                 opts.removeBoxAfterClose = $self.attr('cp-closeWhenClickOveraly');
+            if($self.attr('cp-showTemplate'))
+                opts.showTemplate = $self.attr('cp-showTemplate');
+            if($self.attr('cp-headerTitle'))
+                opts.headerTitle = $self.attr('cp-headerTitle');        
+            if($self.attr('cp-width'))
+                opts.width = $self.attr('cp-width');        
             
+            if(opts.width)    
+                opts.template.width(opts.width);
+            if(opts.headerTitle)    
+                opts.template.find('.popup-box-header').html(opts.headerTitle);            
             
             $self.click(function(){                
                 if($('.mask-wrapper').length < 1)
@@ -47,7 +64,14 @@
                             dataType: 'html',
                             success: function(rsp){
                                 $overlay.find('.loading').remove();                                                      
-                                $overlay.append(rsp);
+                                
+                                if(opts.showTemplate)
+                                {                                    
+                                    opts.template.find('.popup-box-content').append(rsp);
+                                    $overlay.append(opts.template);
+                                }else{
+                                    $overlay.append(rsp);    
+                                }                                
                                 opts.box = $overlay.find('.popup-box:last');
                                 setSelfPosition();
                                 initPopupEvents();
@@ -71,9 +95,9 @@
                         })
                         break;
                     case 'inline': //Show Inline Object
-                    default:            
-                        opts.box = $(opts.href);
-                        opts.box.hide();
+                    default:                                    
+                        opts.box = $(opts.href);    
+                        opts.box.hide();                        
                         $overlay.append(opts.box);                        
                         setSelfPosition();
                         initPopupEvents();
@@ -172,6 +196,8 @@
         box: null,
         removeBoxAfterClose: false,
         closeWhenClickOveraly: true,
+        showTemplate: false,
+        headerTitle: '',
         onLoad: function() {},
         onClose: function() {},
         additionalClass: ''
