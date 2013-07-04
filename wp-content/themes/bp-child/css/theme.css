@@ -4390,10 +4390,18 @@ min-height: 70px;
     width: 46px;
 }
 #my_products .td-action{
-    width: 40px;
+    width: 70px;
     text-align: center;
+    padding-left: 0;
+    padding-right: 0;
 }
-
+#my_products .td-action a.action-btn{
+    margin-left: 7px;
+}
+#my_products .tbody .td-action{
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
 .status-certified{
     color: #4aa31e;
 }
@@ -5262,4 +5270,17 @@ a.suite-subscript-link:hover{
 .grid-box-body .field-row .custom-combobox-input{
     width: auto;
     min-width: 200px;
+}
+
+#testcases-list .grid_action_cell{
+    position: relative;
+}
+#testcases-list .grid_action_cell .action-btn{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#testcases-list .grid_action_cell .blue-delete-btn{
+    position: absolute;
+    left: 28px;
 }

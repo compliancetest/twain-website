@@ -95,13 +95,49 @@ function _get_current_test_suite($test_case_id)
 add_action('init', 'process_testcase_actions');
 function process_testcase_actions()
 {
-    $action = isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : null;
+    $action = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : null;
     if(wp_verify_nonce($action, 'get-suite-info-for-case'))
     {        
         getTestSuiteInfoForCase();
     }else if(wp_verify_nonce($action, 'save-case')){
         saveCase();        
+    }else if(wp_verify_nonce($action, 'delete-case')){
+        deleteCase();        
     }
+}
+
+function deleteCase()
+{
+    $id = $_REQUEST['id'];
+    
+    $post = get_post($id);
+    
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
+    
+    if(!$post || $post->post_type != 'test-case')
+    {
+        addMessage('Invalid Request!', 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    if(!can_delete_test_case($id))
+    {
+        addMessage('Permission Denied!', 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    if(!wp_trash_post($id))
+    {
+        addMessage("There was an error while deleting the test case.", "error");
+        wp_redirect($return);
+        exit;
+    }
+    
+    addMessage("The test case was deleted.");
+    wp_redirect($return);
+    exit;
 }
 
 function getTestSuiteInfoForCase()

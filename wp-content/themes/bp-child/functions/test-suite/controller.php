@@ -30,10 +30,49 @@ function process_testsuite_actions()
             echo 'success';
         }
         exit;
+    }else if(wp_verify_nonce($action, 'delete-suite')){
+        
     }
+    
     
 }
 
+function deleteTestSuite()
+{
+    return;
+    
+    $id = $_REQUEST['id'];
+    
+    $post = get_post($id);
+    
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
+    
+    //Check if it is test suite
+    if(!$post || $post->post_type != 'test-suite')
+    {
+        addMessage("Invalid Request!", 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    if(!can_delete_suite($id))
+    {
+        addMessage("Permission Denied!", 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    if(!wp_trash_post($id))
+    {
+        addMessage("There was an error while deleting the suite", 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    addMessage("The test suite was deleted");
+    wp_redirect($return);
+    exit;
+}
 
 function getBrotherSuites()
 {

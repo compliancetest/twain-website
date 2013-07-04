@@ -3,9 +3,11 @@
 add_action('init', 'process_product_service_actions');
 function process_product_service_actions()
 {
-    $action = isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : null;
+    $action = isset($_REQUEST['_psnonce']) ? $_REQUEST['_psnonce'] : null;
     if(wp_verify_nonce($action, 'save-product-service')){
         saveProductService();        
+    }else if(wp_verify_nonce($action, 'delete-product')){
+        deleteProductService();    
     }
 }
 
@@ -42,6 +44,9 @@ function saveProductService()
             return;
         }
     }
+        
+    //Update Permalink    
+//    wp_update_post(array('ID' => $id, 'guid' => get_site_url() . "?post_type=product-service&p=" . $id ));
     
     update_post_meta($id, 'product_name', $_POST['product_name']);
     update_post_meta($id, 'product_release_date', date('Y-m-d', strtotime($_POST['product_release_date'])));
@@ -67,5 +72,45 @@ function saveProductService()
         
     addMessage('Product / Service was saved successfully');
     wp_redirect(get_permalink($id));
+    exit;
+}
+
+function deleteProductService()
+{
+    global $wpdb;
+            
+    $id = $_REQUEST['id'];
+    
+    $product = get_post($id );
+    
+    if(!$product)
+    {
+        addMessage('Invalid Request!', 'error');
+        return;
+    }
+    
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
+    
+    if(!can_delete_product_and_service($product->ID))
+    {
+        addMessage('Permission Denied!', 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    //Check if the product has cliams or not
+    $query = $wpdb->prepare("SELECT count(1) FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d", $id);
+    $count = $wpdb->get_var($query);
+    if($count > 0)
+    {
+        addMessage("You can't delete the product/service, because it includes claims.", "error");
+        wp_redirect($return);
+        exit;
+    }
+    
+    //Delete Product/Service
+    wp_trash_post($id);
+    addMessage("The product/service was deleted!");
+    wp_redirect($return);
     exit;
 }

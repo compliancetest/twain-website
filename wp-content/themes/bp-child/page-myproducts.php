@@ -30,7 +30,6 @@ $products = getUserProductsAndServices();
 get_header();
 ?>
 <div class="content" id="my_products">
-    <div class="space25"></div>
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>
@@ -48,11 +47,14 @@ get_header();
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                    <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>"><b><?php echo get_the_title($product)?></b></a></h5>
                    <?php if(can_edit_product_and_service($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                   <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
+                   <?php } ?>
+                   <?php if(can_delete_product_and_service($product->ID)){ ?>
+                   <a class="gbh-btn gbh-btn-delete right" href="<?php get_permalink()?>?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode(get_permalink()) ?>" onclick="return confirm('Are you sure that you want to delete this product?')">Edit<span class="simple_tooltip radius6">Delete<span></span></span></a>
                    <?php } ?>
                    <div class="clear"></div>
                </div>
-               <div class="grid-box-body" style="display: ;">
+               <div class="grid-box-body">
                    <div class="thead tr">
                        <div class="td td-issuer">Issuer</div>
                        <div class="td td-suite">Suite</div>
@@ -86,7 +88,8 @@ get_header();
                                <div class="td td-date"><?php echo formatDate($claim->last_updated)?></div>
                                <div class="td td-audit"><?php //echo $claim->audit?> - </div>
                                <div class="td td-action">
-                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn blue-edit-btn icon-btn add-claim-btn"><span class="p"></span></a>
+                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn blue-edit-btn icon-btn edit-claim-btn"><span class="p"></span></a>
+                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
                                </div>
                                <div class="clear"></div>
                            </div>
@@ -96,7 +99,9 @@ get_header();
                    ?>  
                    </div>
                </div>
+               <?php if(can_make_compliance_claim($product->ID)){ ?>
                <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn process-btn add-claim-btn"><span class="p"></span><span class="t">New Compliance Claim</span></a>
+               <?php } ?>
            </div>
            <div id="obligation<?php echo $product->ID?>" style="display: none;">
                <?php 
@@ -130,18 +135,20 @@ get_header();
         $('#my_products .grid-box-body .tbody').each(function(){
             $(this).find('.tr').each(function(){
                 var h = Math.max(
-                    $(this).find('.td:eq(0)').height(),
-                    $(this).find('.td:eq(1)').height(),
-                    $(this).find('.td:eq(2)').height(),
-                    $(this).find('.td:eq(3)').height(),
-                    $(this).find('.td:eq(4)').height(),
-                    $(this).find('.td:eq(5)').height(),
-                    $(this).find('.td:eq(6)').height()
+                    $(this).find('.td:eq(0)').outerHeight(),
+                    $(this).find('.td:eq(1)').outerHeight(),
+                    $(this).find('.td:eq(2)').outerHeight(),
+                    $(this).find('.td:eq(3)').outerHeight(),
+                    $(this).find('.td:eq(4)').outerHeight(),
+                    $(this).find('.td:eq(5)').outerHeight(),
+                    $(this).find('.td:eq(6)').outerHeight()
                 );
-                $(this).find('.td').height(h);
+                $(this).find('.td:lt(7)').height(h - 16);
+                $(this).find('.td:eq(7)').height(h - 6);
             })
         });
-        $('.add-claim-btn').cplightbox({
+        
+        $('.add-claim-btn, .edit-claim-btn').cplightbox({
             onLoad: function(){
                 $('#obligation-box .popup-box-content').html($('#obligation' + this.self.attr('data-product-id')).html());
                 $('#show-opligation-box').cplightbox({closeWhenClickOveraly: 0});

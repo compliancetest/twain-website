@@ -40,7 +40,6 @@ get_header();
 ?>
 
 <div class="content" id="my_profile">
-	<div class="space25"></div>
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
 		<?php get_sidebar('dashboard'); ?>
 	</div>		

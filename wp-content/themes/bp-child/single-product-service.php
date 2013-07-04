@@ -22,10 +22,8 @@ $product->load();
 		        <div class="column nopaddingtop">
 			        <div class="nopadding">
                     <?php if (has_post_thumbnail()) { ?>
-				        <div class="grid_cell width10P">
-					        
-					        <?php echo	the_post_thumbnail('post-thumb', array('class' => 'prod_serv_details')); ?>
-					        
+				        <div class="grid_cell width10P">					        
+					        <?php echo	the_post_thumbnail('post-thumb', array('class' => 'prod_serv_details')); ?>					        
 				        </div>
                         <?php } ?>
 				        <div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
@@ -33,9 +31,12 @@ $product->load();
 						        <p><span class="normal">Product: </span><?php echo $product->name; ?></p>
 					        </div>
 					        <div class="width20P grid_cell nopadding">
+                            <?php if(can_delete_product_and_service(get_the_ID())){ ?>
+                                <a href="<?php get_permalink()?>?id=<?php echo $product->id?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode("/my-products") ?>" class="action-btn delete-btn right left10"><span class="p"></span><span class="t">DELETE</span></a>
+                            <?php } ?>                            
                             <?php if(can_edit_product_and_service(get_the_ID())){ ?>
-                                <div class="edit_suite"><a href="/edit-product-and-service?id=<?php  echo $product->id; ?>">EDIT</a></div>						        
-                            <?php } ?>
+                                <a href="/edit-product-and-service?id=<?php echo $product->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">EDIT</span></a>
+                            <?php } ?>                            
 					        </div>
 					        <div class="clear"></div>
 					        <div class="grey-border-bottom"></div>

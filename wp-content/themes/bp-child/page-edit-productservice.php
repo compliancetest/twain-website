@@ -177,7 +177,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
        </div>
        <input type="hidden" name="id" value="<?php echo $product->id?>" />
        <?php
-           wp_nonce_field('save-product-service');
+           wp_nonce_field('save-product-service', '_psnonce');
        ?>
       </form>
     </div>

@@ -15,7 +15,40 @@ function process_claim_actions()
         getTestSuiteInfoForClaim();
     }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'make-claim')){
         makeClaim();
+    }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'delete-claim')){
+        deleteClaim();
     }
+}
+
+function deleteClaim()
+{
+    global $wpdb;
+    
+    $productID = $_POST['product_id'];
+    $claimID = isset($_POST['id']) ? $_POST['id'] : null;
+    
+    $user_id = get_current_user_id();
+    
+    $claim = new ComplianceClaim($claimID);
+    $claim->load();
+    
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
+    
+    if(!can_delete_compliance_claim($claimID, $claimID))
+    {
+        addMessage('Permission Denied!', 'error');
+        wp_redirect($return);
+        exit;
+    }
+    
+    if(!$wpdb->delete($wpdb->prefix . "compliance_claims", array('id' => $claimID)))
+    {
+        addMessage($wpdb->last_error, 'error');
+    }else{
+        addMessage("The claim was deleted.");
+    }
+    wp_redirect($return);
+    exit;
 }
 
 function makeClaim()
@@ -31,9 +64,7 @@ function makeClaim()
     $claim->load();
     
     $is_allowed = false;
-    if(is_super_admin() || is_admin())
-        $is_allowed = true;
-    else if(!$claimID && can_make_compliance_claim($productID))
+    if(!$claimID && can_make_compliance_claim($productID))
         $is_allowed = true;
     else if($claimID && $claim->creator_id == $user_id)
         $is_allowed = true;
@@ -88,9 +119,7 @@ function editClaim()
     $claim->load();
     
     $is_allowed = false;
-    if(is_super_admin() || is_admin())
-        $is_allowed = true;
-    else if(!$claimID && can_make_compliance_claim($productID))
+    if(!$claimID && can_make_compliance_claim($productID))
         $is_allowed = true;
     else if($claimID && $claim->creator_id == $user_id)
         $is_allowed = true;
@@ -116,6 +145,7 @@ function editClaim()
     
     $product = new ProductAndService($productID);
     $product->load();
+    $suites = getUserTestSuites();
     
     $suite = new TestSuite($claim->suite_id);
     $levels = $suite->loadConformanceLevel();
@@ -130,8 +160,8 @@ function editClaim()
                         <label>Suite</label>
                         <select class="select" name="suite_id" id="suite_id">                            
                             <option value="">Select a Suite</option>
-                            <?php foreach($product->certifications as $s){ ?>
-                            <option value="<?php echo $s?>" <?php echo $claim->suite_id == $s ? 'selected="selected"' : ''?>><?php echo get_the_title($s)?></option>
+                            <?php foreach($suites as $s){ ?>
+                            <option value="<?php echo $s->ID?>" <?php echo $claim->suite_id == $s->ID ? 'selected="selected"' : ''?>><?php echo get_the_title($s->ID)?></option>
                             <?php } ?>
                         </select>
                     </div>

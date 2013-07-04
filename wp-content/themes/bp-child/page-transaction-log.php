@@ -28,7 +28,6 @@ get_header();
 ?>
 
 <div class="content" id="my_transaction_log">
-    <div class="space25"></div>
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>

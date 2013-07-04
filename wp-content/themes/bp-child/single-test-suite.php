@@ -250,7 +250,7 @@ Template Name Posts: Test Suite
 				
 				<div class="clear"></div>
 							
-				<div class="grids">
+				<div class="grids" id="testcases-list">
 				<?php 
                     $posts_per_page = 10;
                     $page = get_query_var('page') ? get_query_var('page') : 1;
@@ -313,7 +313,7 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width10P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width15P toleft ">
+                            <div class="grid_cell nopaddingtop width15P toleft">
                             <?php 
                                 $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
                                 if(strlen($intentDesc) > 150)
@@ -322,10 +322,12 @@ Template Name Posts: Test Suite
                                     echo $intentDesc;
                             ?>
                             </div>
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter ">
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter grid_action_cell">
                                 <?php if(can_edit_test_case($row->ID)){ ?>
                                 <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
-                                <a href="/wp-admin/post.php?post=<?php echo $row->ID?>&action=trash&_wpnonce=<?php echo wp_create_nonce('trash-post_' . $row->ID)?>" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
+                                <?php } ?>
+                                <?php if(can_delete_test_case($row->ID)){ ?>
+                                <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
                                 <?php } ?>
                                 <div class="clear"></div>                                                                        
                             </div>

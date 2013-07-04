@@ -9,7 +9,6 @@ $mysuites = getUserTestSuites();
 
 ?>
 <div class="content" id="test_suite_coverage">
-	<div class="space25"></div>
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
 		<?php get_sidebar('dashboard'); ?>
 	</div>
@@ -22,7 +21,13 @@ $mysuites = getUserTestSuites();
            <?php foreach($mysuites as $suite){ ?>
            <div class="grid-box table-box">
                <div class="grid-box-header">
-                   <h5><a href="<?php echo get_permalink($suite->ID)?>"><b><?php echo get_the_title($suite)?></b></a></h5>                   
+                   <h5 class="left"><a href="<?php echo get_permalink($suite->ID)?>"><b><?php echo get_the_title($suite)?></b></a></h5>                   
+                   <?php if(can_edit_suite($product->ID)){ ?>
+                   <a class="gbh-btn gbh-btn-edit right" href="/edit-test-suite?id=<?php echo $suite->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
+                   <?php } ?>
+                   <?php /*if(can_edit_suite($product->ID)){ ?>
+                   <a class="gbh-btn gbh-btn-delete right" href="<?php get_permalink()?>?id=<?php echo $suite->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-suite') ?>&return=<?php echo base64_encode(get_permalink()) ?>" onclick="return confirm('Are you sure that you want to delete this Test Suite?')">Edit<span class="simple_tooltip radius6">Delete<span></span></span></a>
+                   <?php }*/ ?>
                    <div class="clear"></div>
                </div>
                <div class="grid-box-body">
