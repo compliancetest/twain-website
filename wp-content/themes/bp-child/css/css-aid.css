@@ -1271,7 +1271,9 @@ tr {
 .grid-box .gbh-btn-add{
     background: url(../images/btn-sprites.png) no-repeat 9px -448px;
 }
-
+.grid-box .gbh-btn-delete{
+    background: url(../images/btn-sprites.png) no-repeat 8px -798px;
+}
 .grid-box-header .gbh-btn-expandable{    
     border-right: solid 1px #145489;
     border-left: none;
@@ -1322,7 +1324,7 @@ tr {
 }
 .grid-box-body .grid-action-row .grid-cell{
     padding-top: 7px;
-    padding-bottom: 7px;
+    padding-bottom: 6px;
 }
 .grid-box-body .grid-action-row .grid-action-cell{
     padding: 0;
@@ -1334,6 +1336,11 @@ tr {
 }
 .grid-box-body .gbh-btn-edit-grey{
     background: #d1d1d1 url(../images/btn-sprites.png) no-repeat 8px -488px !important;    
+    float: right;
+}
+
+.grid-box-body .gbh-btn-delete-grey{
+    background: #d1d1d1 url(../images/btn-sprites.png) no-repeat 8px -848px !important;    
     float: right;
 }
 /*** Grid Field Row***/

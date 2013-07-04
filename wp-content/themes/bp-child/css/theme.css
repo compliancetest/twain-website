@@ -4360,6 +4360,12 @@ border-radius: 3px;
 -o-border-radius: 3px;
 min-height: 70px;
 }
+.grid-box-editing .grid-box-body .grid-row label{
+    line-height: 24px;
+}
+#my_profile .grid-box #edit-card-form .btn-row{
+    display: block;
+}
 /*** My Products Page **/
 #my_products .td-issuer{
     width: 110px;

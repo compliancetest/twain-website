@@ -75,6 +75,30 @@ function cp_user_detail_edit()
     exit();
 }
 
+//Delete Payment Information
+function cp_delete_payment_method()
+{
+    global $wpdb, $current_user;   
+    
+    //Goto Homepage
+    if(!is_user_logged_in())
+        die("Permission Denied!");
+    
+    $user_id = get_current_user_id();
+    $id = $_REQUEST['id'];
+    
+    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix ."users_cards WHERE user_id=%d and id=%d", $user_id, $id);
+    $id = $wpdb->get_var($query);
+    if(!$id)
+    {
+        echo ("Invalid Request");
+        exit;
+    }
+    
+    $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_cards WHERE id=" . $id);
+    echo "success";
+    exit;
+}
 //Save User Payment Information
 function cp_user_payment_edit()
 {
@@ -82,7 +106,7 @@ function cp_user_payment_edit()
     
     //Goto Homepage
     if(!is_user_logged_in())
-        wp_redirect('/');
+        die("Permission Denied!");
     
     $user_id = $current_user->ID;
     
@@ -90,27 +114,28 @@ function cp_user_payment_edit()
     $name_on_card = trim($_POST['name_on_card']);
     $card_expiry = trim($_POST['card_expiry']);
     $card_cvc = trim($_POST['card_cvc']);
+    $id = trim($_POST['id']);
+    
+    if($id)
+    {
+        $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d and id=%d", $user_id, $id);
+        $id = $wpdb->get_var($query);
+        if(!$id)
+            die("Invalid Request!");
+    }
     
     $errors = 'no_errors';
     
     $check = check_cc($card_number);//4533345657653245
     
     //Card Number
-    if($card_number != '')
+    if($card_number == '')
     {
-        if(!check_cc($card_number))
-        {
-            echo 'Credit card number is not valid!';
-            exit;
-        }else{ //Update Card Number
-            update_user_meta( $user_id, 'card_number', $card_number);
-        }
-    }
-    
-    //Card Name
-    if($name_on_card != '')
-    {
-        update_user_meta( $user_id, 'name_on_card', $name_on_card);
+        echo 'Credit card number is empty!';
+        exit;
+    }else if(!check_cc($card_number)){
+        echo 'Credit card number is not valid!';
+        exit;
     }
     
     if(!$card_expiry){
@@ -121,19 +146,41 @@ function cp_user_payment_edit()
         if($card_expiry_arr[0] > 12){
             echo 'Your expiry date is incorrect!';
             exit;
-        }else if(check_exp_date($card_expiry_arr[0], $card_expiry_arr[1])){
-            update_user_meta( $user_id, 'card_expiry', $card_expiry); 
-        }else{
+        }else if(!check_exp_date($card_expiry_arr[0], $card_expiry_arr[1])){
             echo 'Your card has expired or your expiry date is incorrect!';
             exit;
         }
     }
     
     
-    if($card_cvc!='' && (strlen($card_cvc)==3 || strlen($card_cvc)==4)){
-        update_user_meta( $user_id, 'card_cvc', $card_cvc);
-    }else{
+    if( !($card_cvc!='' && (strlen($card_cvc)==3 || strlen($card_cvc)==4)) ){        
         echo 'Your CVC code is incorrect';
+        exit;
+    }
+    
+    if(!$id)
+    {
+        //Add New Payment Method
+        $id = $wpdb->insert($wpdb->prefix . "users_cards", array(
+            'user_id' => $user_id,
+            'card_number' => $card_number,
+            'name' => $name_on_card,
+            'expiry' => $card_expiry_arr[0] . "/" . $card_expiry_arr[1],
+            'cvc' => $card_cvc
+        ));        
+    }else{
+        //Update
+        $id = $wpdb->update($wpdb->prefix . "users_cards", array(
+            'user_id' => $user_id,
+            'card_number' => $card_number,
+            'name' => $name_on_card,
+            'expiry' => $card_expiry_arr[0] . "/" . $card_expiry_arr[1],
+            'cvc' => $card_cvc
+        ), array('id' => $id));
+    }
+    if(!$id)
+    {
+        echo $wpdb->last_error;
         exit;
     }
     

@@ -15,31 +15,23 @@ function compliancetest_user_actions()
         remove_action('wp_head', '_admin_bar_bump_cb');
     }
     $cpAction = isset($_REQUEST['cp-action']) ? $_REQUEST['cp-action'] : null;
-    
-    switch($cpAction)
+    if($cpAction == 'login')
     {
-        case 'login':
-            compliancetest_login();
-            break;
-        case 'register':
-            compliancetest_create_new_user();
-            break;
-        case 'resend_email_verification':
-            resend_email_verification();
-            break;
-        case 'user_activation':
-            cp_activate_user();
-            break;
-        case 'my_details_edit':
-            cp_user_detail_edit();
-            break;
-        case 'my_payment_edit':
-            cp_user_payment_edit();
-            break;
-        case 'my_organisation_edit':
-            cp_user_organisation_edit();
-            break;        
-        
+        compliancetest_login();
+    }else if($cpAction == 'register'){
+        compliancetest_create_new_user();
+    }else if($cpAction == 'resend_email_verification'){
+        resend_email_verification();
+    }else if($cpAction == 'user_activation'){
+        cp_activate_user();
+    }else if(wp_verify_nonce($cpAction,'my_details_edit')){
+        cp_user_detail_edit();
+    }else if(wp_verify_nonce($cpAction ,'save_payment_method')){
+        cp_user_payment_edit();
+    }else if(wp_verify_nonce($cpAction ,'my_organisation_edit')){
+        cp_user_organisation_edit();
+    }else if(wp_verify_nonce($cpAction ,'delete_payment_method')){
+        cp_delete_payment_method();
     }
 }
 

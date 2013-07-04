@@ -93,7 +93,7 @@ get_header();
                                 <div class="grid-cell width30P"><label>Confirm Password</label></div>
                                 <div data-name="conf_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
                                 <div class="clear"></div>
-                                <input type="hidden" value="my_details_edit" name="cp-action" />
+                                <?php wp_nonce_field('my_details_edit', 'cp-action'); ?>
                             </div>
                             <div class="grid-row btn-row">                                
                                 <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>                                
@@ -120,60 +120,77 @@ get_header();
 					<div class="grid-box-header">
 						<h5 class="left">My Payment Method</h5>
                         <?php if($user_status != 3){?>                            
-                            <a href="javascript: void(0);" class="gbh-btn gbh-btn-edit right has-tooltip">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                            <a class="gbh-btn gbh-btn-add right" id="add-payment-method" href="javascript: void(0);">Add<span class="simple_tooltip radius6">Add Payment Method<span></span></span></a>
                             <a href="javascript: void(0);" class="gbh-btn gbh-btn-view-stats has-tooltip right">View<span class="simple_tooltip radius6">View Statement<span></span></span></a>
                         <?php }?>
                         <div class="clear"></div>
 					</div>
 					<div class="grid-box-body">
-                      <?php if(!$cards){ ?>
-                        <?php
-                            $card_number = get_user_meta($current_user->ID, 'card_number', true);
-    
-                            if($card_number)
-                            {
-                                $card_number_string = chunk_split($card_number, 4);
-                            }else{
-                                $card_number_string = '-';
-                            }
-                            
-                            
-                            
-                            $name_on_card = get_user_meta($current_user->ID, 'name_on_card', true);
-                            $card_expiry = get_user_meta($current_user->ID, 'card_expiry', true);
-                            $card_cvc = get_user_meta($current_user->ID, 'card_cvc', true);
-                        ?>
-                        <form action="#" method="post">
+                        <div id="cards-list">
+                          <?php if(!$cards){ ?>
                             <div class="grid-row">
-                                <div class="grid-cell width30P"><label>Card Number</label></div>
-                                <div data-name="card_number" data-value="" class="grid-cell in_input card_no">-</div>
+                                <div class="grid-cell width100P">No Payment Method Found! Please add new one.</div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid-row">
-                                <div class="grid-cell width30P"><label>Name on Card</label></div>
-                                <div data-name="name_on_card" data-value="" class="grid-cell in_input">-</div>
+                          <?php }else{ ?>
+                            <?php foreach($cards as $card){ ?>
+                            <div class="grid-row grid-action-row">
+                                <div class="grid-cell width25P">
+                                    <?php echo $card->name?>
+                                    <input type="hidden" id="cname" value="<?php echo $card->name?>" />
+                                </div>
+                                <div class="grid-cell width35P">
+                                    <?php echo chunk_split($card->card_number, 4)?>
+                                    <input type="hidden" id="cnumber" value="<?php echo $card->card_number?>" />
+                                </div>
+                                <div class="grid-cell width10P">
+                                    <?php echo $card->expiry?>
+                                    <input type="hidden" id="cexpiry" value="<?php echo $card->expiry?>" />
+                                </div>
+                                <div class="grid-cell width10P">
+                                    <?php echo $card->cvc?>
+                                    <input type="hidden" id="ccvc" value="<?php echo $card->cvc?>" />
+                                </div>
+                                <div class="grid-cell grid-action-cell width20P">
+                                    <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete_payment_method')?>&id=<?php echo $card->id ?>" class="delete-payment-method gbh-btn gbh-btn-delete-grey has-tooltip" data-id="<?php echo $card->id?>">Delete<span class="simple_tooltip radius6">Delete Card<span></span></span></a>
+                                    <a href="#" class="edit-payment-method gbh-btn gbh-btn-edit-grey has-tooltip" data-id="<?php echo $card->id?>">Edit<span class="simple_tooltip radius6">Edit Card<span></span></span></a>
+                                </div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="grid-row">
-                                <div class="grid-cell width30P"><label>Expiry</label></div>
-                                <div data-name="card_expiry" data-value="" data-placeholder="M / Y" class="grid-cell in_input small_input card_expiry">-</div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="grid-row">
-                                <div class="grid-cell width30P"><label>CVC</label></div>
-                                <div data-name="card_cvc" data-value="" class="grid-cell in_input small_input">-</div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="grid-row btn-row">                                
-                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
-                                <div class="clear"></div>
-                                <input type="hidden" name="cp-action" value="my_payment_edit" />
-                            </div>
-                        </form>
-                      <?php }else{ ?>
-                        <?php foreach($cards as $card){ ?>
-                        <?php } ?>
-                      <?php } ?>
+                            <?php } ?>
+                          <?php } ?>
+                        </div>
+                        <div id="edit-card-form" style="display: none;">
+                            <form action="#" method="post">
+                                <div class="grid-row">
+                                    <div class="grid-cell width30P"><label>Card Number</label></div>
+                                    <input type="text" name="card_number" id="card_number" value="" class="input" autocomplete="off" /> 
+                                    <div class="clear"></div> 
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-cell width30P"><label>Name on Card</label></div>
+                                    <input type="text" name="name_on_card" id="name_on_card" value="" class="input" autocomplete="off" />
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-cell width30P"><label>Expiry</label></div>
+                                    <input type="text" name="card_expiry" id="card_expiry" value="" class="input small_input" placeholder="M / Y" autocomplete="off" /> 
+                                    <div class="clear"></div> 
+                                </div>
+                                <div class="grid-row"> 
+                                    <div class="grid-cell width30P"><label>CVC</label></div> 
+                                    <input type="text" name="card_cvc" id="card_cvc" value="" class="input small_input" autocomplete="off" /> 
+                                    <div class="clear"></div> 
+                                </div> 
+                                <div class="grid-row btn-row">
+                                    <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
+                                    <a href="#" class="action-btn cancel-btn left15"><span class="p"></span><span class="t">Cancel</span></a>
+                                    <div class="clear"></div>
+                                </div>
+                                <?php wp_nonce_field('save_payment_method', 'cp-action'); ?>
+                                <input type="hidden" name="id" id="id" value="" />
+                            </form>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -221,7 +238,7 @@ get_header();
                             </div>
                             <div class="grid-row btn-row">
                                 <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
-                                <input type="hidden" name="cp-action" value="my_organisation_edit" />
+                                <?php wp_nonce_field('my_organisation_edit', 'cp-action'); ?>
                                 <div class="clear"></div>
                             </div>
 						</form>

@@ -178,7 +178,7 @@
             //if( findInputs == 0){
 
             $(thisParentId+' .btn-row').fadeIn();
-            
+             $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
             $(thisParentId+' .grid-cell.in_input').each(function(){
                var thisTextVal = $(this).attr('data-value'); 
@@ -224,5 +224,68 @@
             })
         });
         
+        //Add Payment Method
+        $('#add-payment-method').click(function(){
+            $('#cards-list').hide();
+            $('#edit-card-form').fadeIn('fast');
+            $('#edit-card-form #id').val('');
+            $('#edit-card-form input[type="text"]').val('');
+            $('#my_payment').addClass('grid-box-editing');
+            return false;
+        });
+        $('#cards-list .edit-payment-method').click(function(){
+            var pRow = $(this).parents('.grid-row');
+            var form = $('#edit-card-form');
+            form.find('#card_number').val(pRow.find('#cnumber').val());
+            form.find('#name_on_card').val(pRow.find('#cname').val());
+            form.find('#card_expiry').val(pRow.find('#cexpiry').val());
+            form.find('#card_cvc').val(pRow.find('#ccvc').val());
+            form.find('#id').val($(this).attr('data-id'));
+            $('#cards-list').hide();
+            $('#edit-card-form').fadeIn('fast');            
+            $('#my_payment').addClass('grid-box-editing');
+            return false;
+        });
+        $('#cards-list .delete-payment-method').click(function(){
+            var link = $(this);
+            var pRow = $(this).parents('.grid-row');
+            pRow.append('<div class="loading1"></div>');
+            pRow.find('.loading1').show();
+            $.ajax({
+                url: link.attr('href'),
+                type: 'get',
+                success: function(rsp){
+                    pRow.find('.loading1').remove();
+                    if(rsp == 'success')
+                    {
+                        pRow.fadeOut('fast', function(){
+                            pRow.remove();
+                            if($('#cards-list .grid-row').length == 0)
+                            {
+                                $('#cards-list').append('<div class="grid-row">' + 
+                                        '<div class="grid-cell width100P">No Payment Method Found! Please add new one.</div>' + 
+                                        '<div class="clear"></div>' +
+                                    '</div>');
+                            }
+                        })
+                    }else{
+                        $('#cards-list').append('<div class="message error">' + rsp + "</div>");
+                        setTimeout(function(){
+                            $('#cards-list .message').fadeOut('fast', function(){
+                                $('#cards-list .message').remove();    
+                            })
+                        }, 2000);
+                    }
+                }
+            })            
+            return false;
+        });
+        
+        $('#edit-card-form .cancel-btn').click(function(){
+            $('#my_payment').removeClass('grid-box-editing');
+            $('#edit-card-form').hide();
+            $('#cards-list').fadeIn('fast');                        
+            return false;
+        })
     })    
 })(jQuery);
