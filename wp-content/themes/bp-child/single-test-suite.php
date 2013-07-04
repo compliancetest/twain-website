@@ -168,7 +168,7 @@ Template Name Posts: Test Suite
 			</div>
 			<!--end tabs-->
             <div class="space15"></div>
-			<a href="javascript: void(0)" class="suite-subscript-link">
+			<a href="#under-construction" rel="custom-popup" cp-type="inline" class="suite-subscript-link">
                 <span class="price-b">
                     <span class="l"></span>
                     <span class="m"><b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month</span>
