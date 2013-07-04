@@ -93,7 +93,7 @@ $product->load();
 					
 			<div class="grid_row test_cases">
 					<div class="grid_cell width45P">
-						<h5 class="blue_txt">Compliance Claims</h5>
+						<h5 class="blue_txt">Certifications</h5>
 					</div>
 					<div class="grid_cell width30P right selecteds_single">
 						<!--<span class="left padding5-10">Filter By: </span>
