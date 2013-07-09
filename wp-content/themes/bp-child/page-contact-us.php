@@ -12,7 +12,7 @@ get_header();
             <div class="page-title-block column">
                 <h2 class="nomarginbottom"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
             </div>        
-            <div class="content_inner column">
+            <div class="column">
                 <?php
                     the_content(); 
                     

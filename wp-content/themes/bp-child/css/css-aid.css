@@ -1894,13 +1894,13 @@ tr {
     padding: 10px;
     line-height: 1.2em;
     position: absolute;
-    right: -102%;
+    left: 103%;
     top: 50%;
     display: block;
     background: #f4f4f4;
     border: solid 1px #ebebeb;
     z-index: 10;
-    max-width: 170px;
+    width: 170px;    
     display: none;
 }
 .focus-tooltip span{

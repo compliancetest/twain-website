@@ -54,31 +54,31 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">
                            <label>Name:</label>         
-                           <span class="has-tooltip">
-                               <input type="text" class="input" name="product_name" id="product_name" value="<?php echo $product->name?>" />
-                               <span class="focus-tooltip"><span></span>Some Explanatory Text Goes right here. For each focus click on the  input area the explanatory text will pop-up like this one!</span>
-                           </span>
+                           <input type="text" class="input" name="product_name" id="product_name" value="<?php echo $product->name?>" />
+                           <span class="focus-tooltip"><span></span>Enter your product or service name as it is known in the marketplace.</span>
                        </div>                       
-                       <div class="grid-cell">
-                           <label>Release Date:</label>                    
+                       <div class="grid-cell has-focus-tooltip">
+                           <label>Release Date:</label>  
                            <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo $product->release_date?>" />
+                           <span class="focus-tooltip"><span></span>Enter the date that this version of your product or service was released to the market.</span>
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
-                           <label>Type:</label>                    
+                           <label>Type:</label>                                               
                            <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
-                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Web Service' ? 'checked="checked"' : ''?> /> Web Service
-                           
+                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Web Service' ? 'checked="checked"' : ''?> /> Web Service                                                          
                        </div>
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
-                       <div class="grid-cell">
+                       <div class="grid-cell has-focus-tooltip">                           
                            <label>Version:</label>                    
                            <input type="text" class="input" name="product_version" id="product_version" value="<?php echo $product->version?>" />
+                           <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
                        </div>                   
-                       <div class="grid-cell">
-                           <label>Access URL:</label>                    
+                       <div class="grid-cell has-focus-tooltip">
+                           <label>Access URL:</label>     
                            <input type="text" class="input medium-input" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" />
+                           <span class="focus-tooltip"><span></span>Provide a link to the page on your website that describes this product or service.</span>
                        </div>      
                        <div class="clear"></div>
                    </div>          
@@ -86,6 +86,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        <div class="grid-cell">
                             <label>Description:</label>
                             <textarea cols="" rows="" class="textarea" name="product_description"><?php echo $product->descrition?></textarea>
+                            <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
                        </div>
                        <div class="clear"></div>
                    </div>
