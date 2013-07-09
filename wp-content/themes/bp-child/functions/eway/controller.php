@@ -220,7 +220,7 @@ function process_eway_payment()
     
 }
 
-
+add_action('init', 'unsubscribe_purchase');
 function unsubscribe_purchase()
 {
     global $wpdb;
@@ -240,7 +240,7 @@ function unsubscribe_purchase()
         
         $pId = $_REQUEST['id'];
         
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . 'users_purchases WHERE user_id=%d AND id=%d', $user->ID, $pId);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . 'users_purchases WHERE user_id=%d AND id=%d AND `status`="Active"', $user->ID, $pId);
         $purchase = $wpdb->get_row($query);
         if(!$purchase)
         {
@@ -249,10 +249,44 @@ function unsubscribe_purchase()
             exit;
         }
         
-        //Change status to canceled 
-        $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));
         
         //Delete Customer Account on the backend using SOAP
+        $webserviceURL = get_eway_rebill_webservice_url();
+        $customerID = get_eway_customer_id();
+        $userName = get_eway_user_name();
+        $userPWD = get_eway_user_pwd();
         
+        require_once(THE_FUNCTION . '/soap/nusoap.php');
+        //Delete Rebill Event
+        $client = new nusoap_client($webserviceURL, false);
+        if ($err) {
+            echo 'Constructor error: ' . $err . '';
+            exit();
+        }
+        //First Create Direct Payment
+        
+        $client->namespaces['man'] = 'http://www.eway.com.au/gateway/rebill/manageRebill';
+        $headers = "<man:eWAYHeader><man:eWAYCustomerID>" . $customerID . "</man:eWAYCustomerID><man:Username>" . $userName . "</man:Username><man:Password>" . $userPWD . "</man:Password></man:eWAYHeader>";        
+        $client->setHeaders($headers);
+        
+        //Create Rebill Customer
+        $requestbody = array(        
+            'man:RebillCustomerID' => $purchase->rebill_customer_id,
+            'man:RebillID' => $purchase->rebill_id,
+        );
+        
+        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/DeleteRebillEvent';
+        $result = $client->call('man:DeleteRebillEvent', $requestbody, '', $soapaction);
+        if(!$result || $result['Result'] == 'Fail')
+        {
+            addMessage($result['ErrorSeverity'] . ": " . $result['ErrorDetails'], 'error');
+        }else{            
+            addMessage('Your subscription has been cancelled.');
+            //Change status to canceled 
+            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
+        }
+        
+        wp_redirect($return);
+        exit;
     }    
 }

@@ -153,13 +153,14 @@ function cp_user_payment_edit()
     if(!$id)
     {
         //Add New Payment Method
-        $id = $wpdb->insert($wpdb->prefix . "users_cards", array(
+        $wpdb->insert($wpdb->prefix . "users_cards", array(
             'user_id' => $user_id,
             'card_number' => $card_number,
             'name' => $name_on_card,
             'expiry' => $card_expiry_arr[0] . "/" . $card_expiry_arr[1],
             'cvc' => $card_cvc
         ));        
+        $id = $wpdb->insert_id;
     }else{
         //Update
         $id = $wpdb->update($wpdb->prefix . "users_cards", array(
