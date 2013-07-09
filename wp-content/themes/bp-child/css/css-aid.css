@@ -1913,3 +1913,55 @@ tr {
     top: -1px;
     z-index: 20;
 }
+
+/** For Static Content Pages ***/
+.content_inner{
+    line-height: 1.3em;
+}
+
+.content_inner ol{
+    padding: 0 8px;
+    margin: 8px 20px;
+}
+.content_inner li{
+    margin-bottom: 8px;
+}
+.content_inner ul{
+    padding: 0 8px;
+    margin: 8px 0;
+}
+.content_inner ul li{
+    padding: 0 10px;
+    background: url(../images/footer_li.png) left 5px no-repeat
+}
+
+.content_inner h2{
+    margin: 8px 0;
+}
+.content_inner h3{
+    margin: 10px 0 8px 0;
+}
+.content_inner table {
+    border: 1px solid #CCC; 
+    font-size: 12px;
+}
+.content_inner table td{
+    padding: 4px;
+    margin: 3px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+    font-weight: normal;
+    background: #fefefe;
+    color: #2a2a2a;
+}
+.content_inner table th{
+    border: solid 1px #1b66c3;
+    padding: 7px 5px;
+    font-weight: bold;
+    vertical-align: top;
+    background: #2c80e8;
+    color: #fff;
+}
+.content_inner table tr:nth-child(odd) td{
+    background: #f9f9f9;
+}
