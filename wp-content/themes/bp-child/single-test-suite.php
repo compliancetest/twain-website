@@ -530,7 +530,7 @@ jQuery(document).ready(function($) {
                         }
                     });
                 }
-            },
+            }, 
             error: function(err){
                 jQuery('#subscribe-box .loading').hide();
                 jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">' + err.responseText + '</div>');
