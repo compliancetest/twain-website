@@ -14,6 +14,8 @@ class ProductAndService
     
     var $accessURL = '';
     
+    var $owner = '';
+    
     var $descrition = '';
     
     var $relatedProducts = array();
@@ -40,6 +42,7 @@ class ProductAndService
         $this->name = $this->loadSingleValue('product_name');
         $this->release_date = $this->loadSingleValue('product_release_date');
         $this->type = $this->loadSingleValue('product_type');
+        $this->owner = $this->loadSingleValue('product_owner');
         $this->version = $this->loadSingleValue('product_version');
         $this->accessURL = $this->loadSingleValue('product_url');
         $this->descrition = $this->loadSingleValue('product_description');

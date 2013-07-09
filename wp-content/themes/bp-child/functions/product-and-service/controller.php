@@ -54,6 +54,7 @@ function saveProductService()
     update_post_meta($id, 'product_version', $_POST['product_version']);
     update_post_meta($id, 'product_url', $_POST['product_url']);
     update_post_meta($id, 'product_description', $_POST['product_description']);
+    update_post_meta($id, 'product_owner', $_POST['product_owner']);
     
     //Save Related Products
     $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();

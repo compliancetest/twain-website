@@ -83,6 +83,8 @@ foreach($allSuites as $row)
     $caseTypes[$productType] = isset($caseTypes[$productType]) ? $caseTypes[$productType] + 1 : 1;
     
     $issuer = get_post_meta($row->ID, 'product_owner', true);
+    if(!$issuer)
+        $issuer = get_user_meta($row->post_author, 'user_organisation', ture);
     $caseOwners[$issuer] = isset($caseOwners[$issuer]) ? $caseOwners[$issuer] + 1 : 1;
     
     $tsYear = date('Y', strtotime($issueDate));
@@ -133,6 +135,8 @@ $testsuites = $get_posts->get_posts();
                         <?php
                             foreach($testsuites as $row){
                                 $owner = get_post_meta($row->ID, 'product_owner', true);
+                                if(!$owner)
+                                    $owner = get_user_meta($row->post_author, 'user_organisation', ture);
                                 $productType = get_post_meta($row->ID, 'product_type', true);
                                 $productDate = get_post_meta($row->ID, 'product_date', true);
                                 $productStatus = get_post_meta($row->ID, 'product_status', true);

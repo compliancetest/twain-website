@@ -59,12 +59,12 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        </div>                       
                        <div class="grid-cell has-focus-tooltip">
                            <label>Release Date:</label>  
-                           <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo $product->release_date?>" />
-                           <span class="focus-tooltip"><span></span>Enter the date that this version of your product or service was released to the market.</span>
+                           <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? date('m/d/Y') : $product->release_date?>" />
+                           <span class="focus-tooltip" style="left: 110%"><span></span>Enter the date that this version of your product or service was released to the market.</span>
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
                            <label>Type:</label>                                               
-                           <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
+                           <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo !$product->type || $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
                            <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Web Service' ? 'checked="checked"' : ''?> /> Web Service                                                          
                        </div>
                        <div class="clear"></div>
@@ -83,7 +83,12 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        <div class="clear"></div>
                    </div>          
                    <div class="field-row">
-                       <div class="grid-cell">
+                       <div class="grid-cell has-focus-tooltip">                           
+                           <label>Product Owner:</label>                    
+                           <input type="text" class="input" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
+                           <span class="focus-tooltip"><span></span>Enter the owner of your product or service. It is the same with your organisation name in default.</span>
+                       </div> 
+                       <div class="grid-cell has-focus-tooltip">
                             <label>Description:</label>
                             <textarea cols="" rows="" class="textarea" name="product_description"><?php echo $product->descrition?></textarea>
                             <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>

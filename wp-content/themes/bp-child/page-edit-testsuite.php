@@ -113,8 +113,10 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell radio-cell">
                            <label for="ts_identifier">Status: </label>
-                           <input type="radio" name="ts_status" id="ts_status_active" value="Active" <?php echo $suite->status == 'Active' ? 'checked="checked"' : ''?> /> Active
-                           <input type="radio" name="ts_status" id="ts_status_on_hold" value="On Hold" <?php echo $suite->status == 'On Hold' ? 'checked="checked"' : ''?> /> On Hold
+                           <input type="radio" name="ts_status" id="ts_status_draft" value="Draft" <?php echo $suite->status == 'Draft' ? 'checked="checked"' : ''?> /> Draft
+                           <input type="radio" name="ts_status" id="ts_status_active" value="Active" <?php echo $suite->status == 'Active' ? 'checked="checked"' : ''?> style="margin-left: 60px" /> Active<br />
+                           <input type="radio" name="ts_status" id="ts_status_deprecated" value="Deprecated" <?php echo $suite->status == 'Deprecated' ? 'checked="checked"' : ''?> /> Deprecated
+                           <input type="radio" name="ts_status" id="ts_status_obsolete" value="Obsolete" <?php echo $suite->status == 'Obsolete' ? 'checked="checked"' : ''?> style="margin-left: 23px" /> Obsolete
                        </div>
                        <div class="grid-cell">
                            <label for="ts_issue_date">Revision Description: </label>
