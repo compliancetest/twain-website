@@ -1966,3 +1966,9 @@ tr {
 .content_inner table tr:nth-child(odd) td{
     background: #f9f9f9;
 }
+.content_inner .page-title-block{
+    border-top: solid 1px #E1E1E1;
+}
+.content_inner .page-title-block h2{
+    margin: 0;
+}
