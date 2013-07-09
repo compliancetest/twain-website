@@ -45,7 +45,7 @@ get_header();
 						<h2><?php echo of_get_option('lregister_box_content'); ?></h2>
 						<div class="blue_box_button">	
                             <?php if(is_user_logged_in()){ ?>
-                            <a href="/add-new-product-and-service" rel="custom-popup" data-type="inline"><?php echo of_get_option('lregister_box_link_content'); ?></a>
+                            <a href="/add-new-product-and-service"><?php echo of_get_option('lregister_box_link_content'); ?></a>
                             <?php }else{ ?>
 							<a href="#require-registration" rel="custom-popup" data-type="inline"><?php echo of_get_option('lregister_box_link_content'); ?></a>
                             <?php } ?>
