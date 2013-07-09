@@ -247,7 +247,12 @@ function can_make_compliance_claim($product_id, $user_id = null)
 {
     if($user_id == null)
         $user_id = get_current_user_id();
-        
+    
+    if(is_user_logged_in())
+        return true;
+    else
+        return false;
+    
     //Check if the user is a system admin
     if(user_can($user_id, 'make_compliance_claim'))
     {
@@ -257,10 +262,10 @@ function can_make_compliance_claim($product_id, $user_id = null)
     if(is_admin() || is_super_admin())
         return true;
     
-    if(is_customer($user_id))
+    if(is_customer())
     {
         //Check if the product belong to the community that the customer subscribed.
-        return false; //For Now
+        return true; //For Now
     }
     
     return false;
