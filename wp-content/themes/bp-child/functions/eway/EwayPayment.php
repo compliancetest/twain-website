@@ -276,7 +276,7 @@ class EwayPayment {
             xml_parser_set_option ($this->parser, XML_OPTION_CASE_FOLDING, FALSE);
             
             // Define Callback functions for XML Parsing
-            xml_set_object($this->parser, &$this);
+            xml_set_object($this->parser, $this);
             xml_set_element_handler ($this->parser, "epXmlElementStart", "epXmlElementEnd");
             xml_set_character_data_handler ($this->parser, "epXmlData");
             
