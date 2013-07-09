@@ -35,7 +35,7 @@ function create_eway_settings_page()
                 <label><input type="radio" name="eway_payment_mode" id="eway_payment_mode_sandbox" value="sandbox" <?php echo get_option('eway_payment_mode') != 'live' ? 'checked="checked"' : ''?> /> Test
             </label>
         </p>
-        <h3>Customer Settings</h3>
+        <h3>Live Mode Settings</h3>
         <table cellpadding="5">
             <tr>
                 <td><label><b>Customer ID:</b></label></td>
