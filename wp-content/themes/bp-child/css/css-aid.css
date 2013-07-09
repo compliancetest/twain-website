@@ -1192,6 +1192,8 @@ tr {
     position: relative;
 /*    overflow: hidden;*/
 }
+
+.loading-with-text,
 .grid-box .loading{
     background: #a8c2d7;
     background: rgba(168, 194, 215, 0.6);
@@ -1202,6 +1204,8 @@ tr {
 .grid-box .loading b{
     
 }
+
+.loading-with-text div,
 .grid-box .loading div{
     position: absolute;
     left: 0;
@@ -1212,6 +1216,7 @@ tr {
     height: 50px;
     width: 100%;
 }
+
 .grid-box-header{
     padding: 0;
     margin: 0;

@@ -168,7 +168,16 @@ Template Name Posts: Test Suite
 			</div>
 			<!--end tabs-->
             <div class="space15"></div>
-			<a href="#under-construction" rel="custom-popup" cp-type="inline" class="suite-subscript-link">
+            <?php if(is_customer($suite->id)){ ?>
+            <?php
+                $subscription = getUserPurchase($suite->id);
+            ?>
+            <div class="message success">
+                You have already purchased a subscription to this test suite.
+                If you want to unsubscribe it, please click <a onclick="return confirm('Are you sure that you want to unsubscribe it')" href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>"><i>here</i></a>.
+            </div>
+            <?php }else{ ?>            
+			<a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
                 <span class="price-b">
                     <span class="l"></span>
                     <span class="m"><b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month</span>
@@ -176,6 +185,7 @@ Template Name Posts: Test Suite
                 </span>
                 <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
             </a>
+            <?php } ?>
             <div class="clear"></div>
             <div class="space20"></div>
 		</div>
@@ -193,9 +203,9 @@ Template Name Posts: Test Suite
                     <h5 class="blue_txt">Test Cases</h5>
                 </div>
                 <form id="filter_ts" method="get" action="<?php echo get_the_guid()?>">                                        
-                    <div class="grid_cell width55P right selecteds">
+                    <div class="grid_cell right selecteds">
                         <span class="left padding5-10">Filter By: </span>
-                        <div class="styled_select left width25P right13">
+                        <div class="styled_select left right13">
                             <label>
                             <select name="tester_role" class="change_ts">
                               <option value="">- Tester Role -</option>
@@ -207,7 +217,7 @@ Template Name Posts: Test Suite
                             </select>
                             </label>
                         </div>
-                        <div class="styled_select left width30P right13">
+                        <div class="styled_select left" style="margin-right: 30px">
                             <label>
                             <select name="conformance" class="change_ts">
                               <option value="">Conformance Level</option>
@@ -372,14 +382,38 @@ Template Name Posts: Test Suite
 		
 			
 	</div> <!--end content container-->
+<?php
+    $userCards = getUserCreditCards();    
+?>
 <div class="popup-box" id="subscribe-box" style="display: none;">
     <form name="paymentForm" id="paymentForm" action="">
-        <div class="popup-box-header radius6 noradiusbottom">Payment Method</div>        
+        <div class="popup-box-header radius6 noradiusbottom">Purchase Subscription</div>        
             <div class="popup-box-content grid-box-body">    
+                <div class="field-row">
+                    <h5>Confirm Existing Payment Method or Add New Card Details</h5>
+                    <span class="focus-tooltip"><span></span>You are about to purchase a monthly Subscription to: <a href="<?php echo get_permalink()?>"><?php echo $suite->name?></a> for $<?php echo $suite->monthlySubscriptionPrice?> per month (you can cancel anytime)</span>
+                </div>
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Existing Card</label>
+                        <select name="card_id" id="card_id" class="select">
+                            <option value="">Select a Card</option>
+                            <?php foreach($userCards as $row){ ?>
+                            <option value="<?php echo $row->id?>">
+                                <?php echo ucfirst(check_cc($row->card_number)); ?>
+                                <?php echo chunk_split(encrypt_card_number($row->card_number), 4)?>,
+                                <?php echo $row->name?>
+                            </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="add-new-border"><span>or add new</span></div>
                 <div class="field-row">
                     <div class="grid-cell">
                         <label>Name on Card</label>
-                        <input type="text" name="card_name" id="card_name" value="" class="input" />
+                        <input type="text" name="name_on_card" id="name_on_card" value="" class="input" />
                         <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />
                     </div>                
                     <div class="clear"></div>
@@ -387,27 +421,41 @@ Template Name Posts: Test Suite
                 <div class="field-row">
                     <div class="grid-cell">
                         <label>Card Number</label>
-                        <input type="text" name="card_name" id="card_name" value="" class="input" />
+                        <input type="text" name="card_number" id="card_number" value="" class="input" />
                     </div>                
                     <div class="clear"></div>
                 </div>
                 <div class="field-row">
                     <div class="grid-cell">
                         <label>Expiry Date</label>
-                        <select name="exp_day" id="exp_day" class="select">
-                            <option>Day</option>
-                            
-                        </select>
                         <select name="exp_month" id="exp_month" class="select">
-                            <option>Month</option>                        
+                            <option value="">Month</option>
+                            <option value="1">Jan</option>
+                            <option value="2">Feb</option>
+                            <option value="3">Mar</option>
+                            <option value="4">Apr</option>
+                            <option value="5">May</option>
+                            <option value="6">Jun</option>
+                            <option value="7">Jul</option>
+                            <option value="8">Aug</option>
+                            <option value="9">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                        </select>
+                        <select name="exp_year" id="exp_year" class="select">
+                            <option value="">Year</option>                        
+                            <?php for($i=0; $i < 20; $i++){ ?>
+                            <option value="<?php echo $i + date("Y")?>"><?php echo $i + date("Y")?></option>
+                            <?php } ?>
                         </select>                    
                     </div>                
                     <div class="clear"></div>
                 </div>            
                 <div class="field-row">
                     <div class="grid-cell">
-                        <label class="left">CCV</label>
-                        <input type="text" name="ccv" id="ccv" placeholder="***" value="" class="input" />
+                        <label class="left">CVC</label>
+                        <input type="text" name="card_cvc" id="card_cvc" placeholder="****" value="" class="input" />
                     </div>                
                     <div class="clear"></div>
                 </div>
@@ -415,39 +463,78 @@ Template Name Posts: Test Suite
                     This is Photoshop's version  of Lorem Ipsum. Proin gravida bhavel velit auctor aliquet. Aenean sollicitudin, lorem quis nefertimauctor, nisi elit consequat ipsum.
                     <br />
                     <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/card-icon.png" />
-                </div>
+                </div>                
             </div>
-            <div class="popup-box-footer radius6 noradiustop">                        
-                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Submit</span></a>
-                <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Close</span></a>            
+            <div class="popup-box-footer radius6 noradiustop">
+                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Submit</span></a>
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
                 <div class="clear"></div>
             </div>
-        <a class="close_btn"></a>                
-        <div class="loading" style=""></div>
+        <a class="close_btn"></a>                        
+        <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
+        <input type="hidden" name="suite_id" value="<?php echo $suite->id?>" />
+        <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('direct_payment')?>" />
     </form>
 </div>
-
 <div class="popup-box" id="payment-success-box" style="display: none;">
-    <form name="paymentForm" id="paymentForm" action="">
-        <div class="popup-box-header radius6 noradiusbottom">Success</div>        
-            <div class="popup-box-content grid-box-body">    
-                <p>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. </p>
-            </div>
-            <div class="popup-box-footer radius6 noradiustop">                        
-                <a href="#" class="action-btn continue-btn"><span class="p"></span><span class="t">Continue</span></a>
-                <div class="clear"></div>
-            </div>
-        <a class="close_btn"></a>                
-        <div class="loading" style=""></div>
-    </form>
+    <div class="popup-box-header radius6 noradiusbottom">Success!</div>        
+        <div class="popup-box-content grid-box-body">    
+            <p>Thank you for purchasing a subscription to <?php echo $suite->name?>. <br />You payment has been successfully processed.  Please refer to your dashboard page for test harness access credentials and further configuration.</p>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                        
+            <a href="/my-profile" class="action-btn continue-btn"><span class="p"></span><span class="t">Goto My Dashbaord</span></a>
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+            
+            <div class="clear"></div>
+        </div>
+    <a class="close_btn"></a>
+</div>
+<div class="popup-box" id="has-subscribe-box" style="display: none; width: 300px;">
+    <div class="popup-box-header radius6 noradiusbottom">You are a Customer.</div>        
+        <div class="popup-box-content grid-box-body">    
+            <p>You already purchased a subscription for this test suite.</p>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                        
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+            <div class="clear"></div>
+        </div>
+    <a class="close_btn"></a>
 </div>
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	jQuery('.change_ts').change(function(){
-
 		jQuery('#filter_ts').submit();
 	});	
+    
+    jQuery('#subscribe-box form input[type=text]').keypress(function(){
+        jQuery('#subscribe-box #card_id').val('');
+    })
+    
+    jQuery('#paymentForm').submit(function(){
+        jQuery('#subscribe-box .loading').show();
+        jQuery('#subscribe-box .message').remove();
+        jQuery.ajax({
+            url: '/',
+            type: 'post',
+            data: jQuery(this).serialize(),
+            success: function(rsp){
+                jQuery('#subscribe-box .loading').hide();
+                if(rsp != 'success')    
+                {
+                    jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">' + rsp + '</div>');
+                }else{                    
+                    jQuery('#payment-success-box').showPopupBox({
+                        onClose: function(){
+                            document.location.reload();
+                        }
+                    });
+                }
+            }
+            
+        })
+        return false;
+    })
 });
 </script>
 <?php

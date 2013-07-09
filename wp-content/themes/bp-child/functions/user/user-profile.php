@@ -105,8 +105,9 @@ function cp_user_payment_edit()
     global $wpdb, $current_user;   
     
     //Goto Homepage
-    if(!is_user_logged_in())
-        die("Permission Denied!");
+    if(!is_user_logged_in()){
+        return "Permission Denied!";
+    }
     
     $user_id = $current_user->ID;
     
@@ -120,42 +121,33 @@ function cp_user_payment_edit()
     {
         $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d and id=%d", $user_id, $id);
         $id = $wpdb->get_var($query);
-        if(!$id)
-            die("Invalid Request!");
+        if(!$id){
+            return "Invalid Request!";
+        }
     }
-    
-    $errors = 'no_errors';
-    
-    $check = check_cc($card_number);//4533345657653245
     
     //Card Number
     if($card_number == '')
     {
-        echo 'Credit card number is empty!';
-        exit;
+        return 'Credit card number is empty!';
     }else if(!check_cc($card_number)){
-        echo 'Credit card number is not valid!';
-        exit;
+        return 'Credit card number is not valid!';
     }
     
     if(!$card_expiry){
-        echo 'Please specify your card expiry date!';
-        exit;
+        return 'Please specify your card expiry date!';        
     }else{
         $card_expiry_arr = explode('/', $card_expiry);
         if($card_expiry_arr[0] > 12){
-            echo 'Your expiry date is incorrect!';
-            exit;
+            return 'Your expiry date is incorrect!';
         }else if(!check_exp_date($card_expiry_arr[0], $card_expiry_arr[1])){
-            echo 'Your card has expired or your expiry date is incorrect!';
-            exit;
+            return 'Your card has expired or your expiry date is incorrect!';
         }
     }
     
     
     if( !($card_cvc!='' && (strlen($card_cvc)==3 || strlen($card_cvc)==4)) ){        
-        echo 'Your CVC code is incorrect';
-        exit;
+        return 'Your CVC code is incorrect';
     }
     
     if(!$id)
@@ -178,15 +170,12 @@ function cp_user_payment_edit()
             'cvc' => $card_cvc
         ), array('id' => $id));
     }
-    if(!$id)
+    if($id === false)
     {
-        echo $wpdb->last_error;
-        exit;
+        return $wpdb->last_error;
     }
     
-    echo 'success';
-    
-    exit();
+    return $id;    
 }
 
 //Save User Organisation 

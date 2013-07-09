@@ -27,7 +27,12 @@ function compliancetest_user_actions()
     }else if(wp_verify_nonce($cpAction,'my_details_edit')){
         cp_user_detail_edit();
     }else if(wp_verify_nonce($cpAction ,'save_payment_method')){
-        cp_user_payment_edit();
+        $result = cp_user_payment_edit();        
+        if($result === true || is_int($result))
+            echo "success";
+        else
+            echo $result;
+        exit;
     }else if(wp_verify_nonce($cpAction ,'my_organisation_edit')){
         cp_user_organisation_edit();
     }else if(wp_verify_nonce($cpAction ,'delete_payment_method')){
@@ -156,4 +161,23 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
     }
     
     return $results;
+}
+
+
+function getUserPurchase($suite_id = null, $status='Active', $user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    if($suite_id == null){
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`=%s AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id, $status);
+        $result = $wpdb->get_results($query);
+    }else{
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d AND `status`=%s AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id, $suite_id, $status);
+        $result = $wpdb->get_row($query);
+    }    
+    
+    return $result;
 }

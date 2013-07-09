@@ -67,6 +67,10 @@ require_once(THE_FUNCTION . '/product-and-service/controller.php');
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');
 require_once(THE_FUNCTION . '/compliance-claim/controller.php');
 
+//eWay Payment
+require_once(THE_FUNCTION . '/eway/settings.php');
+require_once(THE_FUNCTION . '/eway/controller.php');
+
  
 /* 
  * Loads the Options Panel
@@ -376,4 +380,12 @@ function formatDate($date)
     else
         $date = date('m/d/Y', strtotime($date));
     return $date;
+}
+
+
+function encrypt_card_number($num)
+{
+    $enum = substr($num, 0, 4) . 'XXXXXXXX' . substr($num, 12);
+    
+    return $enum;
 }

@@ -5204,7 +5204,36 @@ a.suite-subscript-link:hover{
     width: 460px;
 }
 #subscribe-box{
-    width: 400px;
+    width: 600px;
+}
+#subscribe-box .focus-tooltip{
+    top: 52px;
+    left: 368px;
+    display: block !important;
+}
+#subscribe-box h5{
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: solid 1px #cbcbcb;
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+    line-height: 1.2em;
+    width: 100%;
+}
+#subscribe-box .add-new-border{
+    background: url(../images/double_border.png) left 7px repeat-x;
+    width: 365px;
+    text-align: center;
+    padding-bottom: 10px;
+}
+#subscribe-box .add-new-border span{
+    display: block;
+    margin: 0 auto;
+    color: #2a2a2a;
+    font-weight: 600px;
+    background: #fff;
+    width: 70px;
+    text-align: center;
 }
 #subscribe-box .field-row{
     position: relative;
@@ -5214,6 +5243,7 @@ a.suite-subscript-link:hover{
     line-height: 25px;    
     float: left;
     padding-right: 15px;
+    color: #2a2a2a;
 }
 #subscribe-box .field-row .valid-icon{
     position: absolute;
@@ -5225,10 +5255,14 @@ a.suite-subscript-link:hover{
     width: 220px;
     float: left;
 }
-#subscribe-box .field-row #ccv{
+#subscribe-box .field-row #card_cvc{
     width: 50px;
 }
-#subscribe-box .field-row .select{
+#subscribe-box .field-row #card_id{
+    width: 240px;
+}
+#subscribe-box .field-row #exp_year,
+#subscribe-box .field-row #exp_month{
     float: left;
     width: 105px;
     margin-right: 10px;
@@ -5244,10 +5278,21 @@ a.suite-subscript-link:hover{
 #subscribe-box .notice-txt img{
     margin-top: 10px;
 }
+#subscribe-box .loading-with-text{
+    background: #a8c2d7 !important;
+    background: rgba(168, 194, 215, 0.6) !important;
+    z-index: 1000;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
 #payment-success-box{
     width: 400px;
 }
-
+#payment-success-box .popup-box-content p{
+    font-size: 14px;
+    line-height: 1.5em;
+}
 .has-tooltip:hover .simple_tooltip{
     display: block !important;
     text-indent: 0 !important;

@@ -65,8 +65,28 @@ function bp_is_group_admin($user_id)
     return false;
 }
 
-function is_customer($user_id)
+function is_customer($suite_id = null, $user_id = null)
 {
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    if(is_admin() || is_super_admin())
+    {
+        return ture;
+    }
+    
+    if($suite_id == null)
+        $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d and `status`='Active' AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id);
+    else
+        $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d and `status`='Active' AND suite_id=%d AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id, $suite_id);
+    
+    $c = $wpdb->get_var($query);
+    
+    if($c > 0)
+        return true;
+    
     return false;
 }
 
