@@ -230,6 +230,12 @@ jQuery(document).ready(function($) {
         return false;
         
     });
+    if(isMobile())
+    {
+        jQuery('.has_dd_1, .has_dd_2, .has_dd_3, has_dd_4').on('touchend', function(e){
+           e.stopPropagation(); 
+        });
+    }
     jQuery('html').on(mEvent1, function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
