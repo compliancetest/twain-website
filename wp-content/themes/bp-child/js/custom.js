@@ -188,9 +188,11 @@ jQuery(document).ready(function($) {
 	}
 	
 	/* Menu Level - 2 */
-    var mEvent = 'click';
-    if(isMobile())
+    var mEvent = mEvent1 = 'click';
+    if(isMobile()){
         mEvent = 'touchstart';
+        mEvent1 = 'touchend';
+    }
                 
 	jQuery('.has_dd_1').on(mEvent, function(e){
         $('.normal_dd:not(.what_is)').removeClass('block');
@@ -228,7 +230,7 @@ jQuery(document).ready(function($) {
         return false;
         
     });
-    jQuery('document').on(mEvent, function(e){
+    jQuery('html').on(mEvent1, function(e){
         $('.normal_dd').removeClass('block');
         $('#menu-header_menu .menu-item a').removeClass('hover');        
     })
