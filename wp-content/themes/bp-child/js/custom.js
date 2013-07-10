@@ -231,7 +231,7 @@ jQuery(document).ready(function($) {
     });
     if(isMobile())
     {
-        jQuery('.what_is, .why_compliance, .compliancetest_serv, .help_faq').on('touchend', function(e){
+        jQuery('.has_dd_1, .has_dd_2, .has_dd_3, .has_dd_4, .what_is, .why_compliance, .compliancetest_serv, .help_faq').on('touchend', function(e){
            e.stopImmediatePropagation(); 
            return false;
         });
