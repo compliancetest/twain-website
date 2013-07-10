@@ -389,3 +389,11 @@ function encrypt_card_number($num)
     
     return $enum;
 }
+
+function convert_css_name($string)
+{
+    $string = strtolower($string);
+    $string = str_replace(" ", "-", $string);
+    
+    return $string;
+}
