@@ -233,7 +233,8 @@ jQuery(document).ready(function($) {
     if(isMobile())
     {
         jQuery('.has_dd_1, .has_dd_2, .has_dd_3, has_dd_4').on('touchend', function(e){
-           e.stopPropagation(); 
+           e.stopImmediatePropagation(); 
+           return false;
         });
     }
     jQuery('html').on(mEvent1, function(e){
