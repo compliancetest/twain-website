@@ -188,10 +188,9 @@ jQuery(document).ready(function($) {
 	}
 	
 	/* Menu Level - 2 */
-    var mEvent = mEvent1 = 'click';
+    var mEvent = 'click';
     if(isMobile()){
         mEvent = 'touchstart';
-        mEvent1 = 'touchend';
     }
                 
 	jQuery('.has_dd_1').on(mEvent, function(e){
@@ -199,7 +198,7 @@ jQuery(document).ready(function($) {
         $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
         $('.what_is').toggleClass('block');
         $('.has_dd_1 a').toggleClass('hover');
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
         
     });
@@ -208,7 +207,7 @@ jQuery(document).ready(function($) {
         $('#menu-header_menu .menu-item:not(.has_dd_2) a').removeClass('hover');
         $('.why_compliance').toggleClass('block');        
         $('.has_dd_2 a').toggleClass('hover');        
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
         
     });
@@ -217,7 +216,7 @@ jQuery(document).ready(function($) {
         $('#menu-header_menu .menu-item:not(.has_dd_3) a').removeClass('hover');
         $('.compliancetest_serv').toggleClass('block');
         $('.has_dd_3 a').toggleClass('hover');
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
         
     });
@@ -226,21 +225,27 @@ jQuery(document).ready(function($) {
         $('#menu-header_menu .menu-item:not(.has_dd_4) a').removeClass('hover');        
         $('.help_faq').toggleClass('block');
         $('.has_dd_4 a').toggleClass('hover');
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
         
     });
     if(isMobile())
     {
-        jQuery('.has_dd_1, .has_dd_2, .has_dd_3, has_dd_4').on('touchend', function(e){
+        jQuery('.what_is, .why_compliance, .compliancetest_serv, .help_faq').on('touchend', function(e){
            e.stopImmediatePropagation(); 
            return false;
         });
+        jQuery('html').on('touchend', function(e){
+            $('.normal_dd').removeClass('block');
+            $('#menu-header_menu .menu-item a').removeClass('hover');        
+        })
+    }else{
+        jQuery('html').on('click', function(e){
+            $('.normal_dd').removeClass('block');
+            $('#menu-header_menu .menu-item a').removeClass('hover');        
+        })
     }
-    jQuery('html').on(mEvent1, function(e){
-        $('.normal_dd').removeClass('block');
-        $('#menu-header_menu .menu-item a').removeClass('hover');        
-    })
+    
 					
 	/* Certifications Sorf By */				
 	jQuery('.sort_status').change(function() {
