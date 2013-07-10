@@ -39,7 +39,7 @@
                     if(rsp == 'success') //Login Success
                     {
                         //Goto Profile Page
-                        document.location.href = "/my-profile";
+                        document.location.href = form.find('input[name="redirect_to"]').val();
                     }else{ //Error                    
                         //Show Error Message
                         $('#header_login_error_msg').html('<span></span>Wrong username or password, please try again!');
@@ -73,7 +73,7 @@
                     if(rsp == 'success') //Login Success
                     {
                         //Goto Profile Page
-                        document.location.href = "/my-profile";
+                        document.location.href = form.find('input[name="redirect_to"]').val();
                     }else{ //Error                    
                         //Show Error Message
                         msgObj.removeClass('success').addClass('error').html('Wrong username or password, please try again!').fadeIn('fast');

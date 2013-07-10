@@ -67,6 +67,9 @@ require_once(THE_FUNCTION . '/product-and-service/controller.php');
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');
 require_once(THE_FUNCTION . '/compliance-claim/controller.php');
 
+//Manage Login URLs
+require_once(THE_FUNCTION . '/login-redirect.php');
+
 //eWay Payment
 require_once(THE_FUNCTION . '/eway/settings.php');
 require_once(THE_FUNCTION . '/eway/controller.php');

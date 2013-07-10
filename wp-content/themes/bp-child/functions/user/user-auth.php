@@ -142,7 +142,7 @@ if(!is_user_logged_in())
         ob_start();
         $args = array(
                 'echo' => true,
-                'redirect' => get_bloginfo('url'), 
+                'redirect' => isset($_GET['redirect_to']) ? urldecode($_GET['redirect_to']) : "/my-profile", 
                 'form_id' => 'top_access',
                 'label_username' => __( '' ),
                 'label_password' => __( '' ),
@@ -206,7 +206,7 @@ if(!is_user_logged_in())
 
                             $args = array(
                                     'echo' => true,
-                                    'redirect' => get_bloginfo('url'), 
+                                    'redirect' => isset($_GET['redirect_to']) ? urldecode($_GET['redirect_to']) : '/my-profile', 
                                     'form_id' => 'logform',
                                     'label_username' => __( '' ),
                                     'label_password' => __( '' ),
