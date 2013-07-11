@@ -84,7 +84,7 @@ get_header();
                                <div class="td td-suite"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
                                <div class="td td-level"><?php echo $claim->conformance_level?></div>
                                <div class="td td-role"><?php echo $claim->role?></div>
-                               <div class="td td-status"> - </div>
+                               <div class="td td-status status-<?php echo convert_css_name($claim->status) ?>"><?php echo $claim->status?></div>
                                <div class="td td-date"><?php echo formatDate($claim->last_updated)?></div>
                                <div class="td td-audit"><?php //echo $claim->audit?> - </div>
                                <div class="td td-action">

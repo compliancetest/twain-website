@@ -158,11 +158,17 @@ class TestSuite
     {
         $lvl_code = get_post_meta($this->id, 'lvl_code', true);
         $lvl_desc = get_post_meta($this->id, 'lvl_desc', true);
+        
         $result = array();
-        foreach($lvl_code as $i=>$code)
+        
+        if($lvl_code)
         {
-            $result[] = array('code' => $code, 'desc' => $lvl_desc[$i]);
+            foreach($lvl_code as $i=>$code)
+            {
+                $result[] = array('code' => $code, 'desc' => $lvl_desc[$i]);
+            }    
         }
+        
         
         $this->conformanceLevel = $result;
         

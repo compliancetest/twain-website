@@ -106,6 +106,17 @@ function get_eway_rebill_webservice_url()
     
 }
 
+function get_eway_token_webservice_url()
+{
+    if(get_option('eway_payment_mode') == 'live')
+    {
+        return 'https://www.ewaygateway.com/gateway/ManagedPaymentService/managedCreditCardPayment.asmx';
+    }else{
+        return 'https://www.eway.com.au/gateway/ManagedPaymentService/test/managedCreditCardPayment.asmx';        
+    }
+    
+}
+
 
 
 function get_eway_customer_id()

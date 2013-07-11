@@ -58,6 +58,7 @@
                         //Getting HTML By Ajax
                         if($overlay.find('.loading').length < 1)
                             $overlay.append('<div class="loading"></div>');
+                        loadImagePosition();
                         $overlay.find('.loading').show();
                         $.ajax({
                             url: opts.href,
@@ -148,6 +149,14 @@
                 }else if(selfHeight > 0){
                     opts.box.css('top', (wHeight - selfHeight) / 2); //Keep Vertical Align Middle
                 }
+            }
+            
+            function loadImagePosition()
+            {
+                var selfHeight = 24;
+                var wHeight = $(window).height();
+                $overlay.find('.loading').css('background-position', 'center ' + (wHeight - selfHeight) / 2 + 'px'); //Keep Vertical Align Middle
+                
             }
             
             function initPopupEvents()

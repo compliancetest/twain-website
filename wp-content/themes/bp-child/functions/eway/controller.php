@@ -5,8 +5,7 @@ function process_eway_payment()
 {
     global $wpdb;
     
-    $paymentURL = get_eway_payment_url();
-    $webserviceURL = get_eway_rebill_webservice_url();
+    $webserviceURL = get_eway_token_webservice_url();
     $customerID = get_eway_customer_id();
     $userName = get_eway_user_name();
     $userPWD = get_eway_user_pwd();
@@ -44,7 +43,7 @@ function process_eway_payment()
         {
             $_POST['card_expiry'] = $_POST['exp_month'] . "/" . $_POST['exp_year'];
             $_POST['id'] = '';
-            $card_id = cp_user_payment_edit();
+            $card_id = cp_user_payment_save();
             if(!is_int($card_id))
             {
                 //Card Error
@@ -55,110 +54,49 @@ function process_eway_payment()
             $card = getUserCardById($card_id);
         }
         
-        require_once(dirname(__FILE__) . "/EwayPayment.php");
-        
-        $payment = new EwayPayment($customerID, $paymentURL);
-        
-        $payment->setCustomerFirstname(get_user_meta($user->ID, 'first_name', true)); 
-        $payment->setCustomerLastname(get_user_meta($user->ID, 'last_name', true));
-        $payment->setCustomerEmail($user->user_email);
-        //$payment->setCustomerAddress();
-//        $payment->setCustomerPostcode();
-//        $payment->setCustomerInvoiceDescription();
-//        $payment->setCustomerInvoiceRef();
-//        $payment->setTrxnNumber();
-        $payment->setCardHoldersName($card->name);
-        $payment->setCardNumber($card->card_number);
-        list($month, $year) = explode("/", $card->expiry);
-        $payment->setCardExpiryMonth(trim($month));
-        $payment->setCardExpiryYear(trim($year));
-        $payment->setTotalAmount($suite->monthlySubscriptionPrice * 100);
-        $payment->setCVN($card->cvc);
-        if( $payment->doPayment() == EWAY_TRANSACTION_OK ) {
-            update_user_meta($user->ID,'suite_auth_code' . $suite->id, $payment->getAuthCode());
-            echo 'success';
-        } else {
-            echo "Error occurred (".$payment->getError()."): " . $payment->getErrorMessage();
+        if(!$card)
+        {
+            echo "There was an error while processing your purchase.";
+            exit;        
         }
         
         //Create Recurring Payment
         require_once(THE_FUNCTION . '/soap/nusoap.php');
         
         $client = new nusoap_client($webserviceURL, false);
+        $err = $client->getError();
         if ($err) {
-            echo 'Constructor error: ' . $err . '';
-            exit();
+            return 'Soap Construction Error: ' . $err;
         }
-        //First Create Direct Payment
         
-        $client->namespaces['man'] = 'http://www.eway.com.au/gateway/rebill/manageRebill';
-        $headers = "<man:eWAYHeader><man:eWAYCustomerID>" . $customerID . "</man:eWAYCustomerID><man:Username>" . $userName . "</man:Username><man:Password>" . $userPWD . "</man:Password></man:eWAYHeader>";        
-        $client->setHeaders($headers);
+        $client->namespaces['man'] = 'https://www.eway.com.au/gateway/managedpayment';
+        $headers = "<man:eWAYHeader><man:eWAYCustomerID>" . $customerID . "</man:eWAYCustomerID><man:Username>" . $userName . "</man:Username><man:Password>" . $userPWD . "</man:Password></man:eWAYHeader>";
+        $client->setHeaders($headers);    
         
-        //Check if this user has Rebill Customer ID or not
-        $rebillCustomerID = get_user_meta($user->ID, 'rebill_customer_id', true);
-        if(!$rebillCustomerID)
-        {
-            //Create Rebill Customer
-            $requestbody = array(        
-                'man:customerTitle' => 'Dear',
-                'man:customerFirstName' => get_user_meta($user->ID, 'first_name', true),
-                'man:customerLastName' => get_user_meta($user->ID, 'last_name', true),
-                'man:customerRef' => 'CP' . $user->ID,
-                'man:customerAddress' => '',
-                'man:customerSuburb' => '',
-                'man:customerState' => '',
-                'man:customerCompany' => '',
-                'man:customerPostCode' => '',
-                'man:customerCountry' => '',
-                'man:customerEmail' => $user->user_email,
-                'man:customerFax' => '',
-                'man:customerPhone1' => '',
-                'man:customerPhone2' => '',
-                'man:customerJobDesc' => '',
-                'man:customerComments' => '',
-                'man:customerURL' => ''
-            );
-            $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/CreateRebillCustomer';
-            $result = $client->call('man:CreateRebillCustomer', $requestbody, '', $soapaction);
-            if($result['Result'] == 'Fail')
-            {
-                echo $result['ErrorSeverity'] . ": " . $result['ErrorDetails'];
-                exit;
-            }else{
-                $rebillCustomerID = $result['RebillCustomerID'];
-                update_user_meta($user->ID, 'rebill_customer_id', $rebillCustomerID);
-            }
-        }
-        $end_date = date("m/d/Y" ,strtotime($month . "/" . date('d') . "/" . $year));
-        
-        //Create Recurring Payment Event
         $requestbody = array(
-            'man:RebillCustomerID' => $rebillCustomerID,
-            'man:RebillInvRef' => '',
-            'man:RebillInvDes' => '',
-            'man:RebillCCName' => $card->name,
-            'man:RebillCCNumber' => $card->card_number,
-            'man:RebillCCExpMonth' => $month,
-            'man:RebillCCExpYear' => $year,
-            'man:RebillInitAmt' => 0,
-            'man:RebillInitDate' => date('m/d/Y'),
-            'man:RebillRecurAmt' => $suite->monthlySubscriptionPrice * 100,
-            'man:RebillStartDate' => date('m/d/Y'),
-            'man:RebillInterval' => 1,
-            'man:RebillIntervalType' => 3,
-            'man:RebillEndDate' => $end_date //Card Expiry Date
+            'man:managedCustomerID' => $card->customer_id,
+            'man:amount' => $suite->monthlySubscriptionPrice * 100,
+            'man:cvn' => $card->cvn,
+            //'man:invoiceReference' => '',
+//            'man:invoiceDescription' => ''
         );
-        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/CreateRebillEvent';
-        $result = $client->call('man:CreateRebillEvent', $requestbody, '', $soapaction);
-        if($result['Result'] == 'Fail')
+        $soapaction = 'https://www.eway.com.au/gateway/managedpayment/ProcessPayment';
+        $result = $client->call('man:ProcessPayment', $requestbody, '', $soapaction);
+        
+        if($result['ewayTrxnStatus'] == 'False')
         {
-            echo $result['ErrorSeverity'] . ": " . $result['ErrorDetails'];
+            echo $result['ewayTrxnError'];
             exit;
-        }else{
-            $rebillCustomerID = $result['RebillCustomerID'];
-            $rebillID = $result['RebillID'];
-            
+        }else{            
+            //Save Transaction
+            $wpdb->insert($wpdb->prefix . 'users_transactions', array(
+                "user_id" => $user->ID,
+                "suite_id" => $suite->id,
+                "trxn_number" => $result['ewayTrxnNumber'],
+                "amount" => $suite->monthlySubscriptionPrice * 100,
+                "auth_code" => $result['ewayAuthCode'],
+                "created_date" => date("Y-m-d H:i:s")
+            ));
             //Create MSH Datas 
             $msh = array('mode' => 'PUSH', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => wp_generate_password(15, true));
             
@@ -166,15 +104,14 @@ function process_eway_payment()
             $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
                 'user_id' => $user->ID,
                 'suite_id' => $suite->id,
-                'rebill_customer_id' => $rebillCustomerID,
-                'rebill_id' => $rebillID,
+                'customer_id' => $card->customer_id,
                 'esb_username' => $msh['username'],
                 'msh_p_mode' => $msh['mode'],
                 'msh_url' => $msh['url'],
                 'msh_username' => $msh['username'],
                 'msh_password' => $msh['password'],
                 'status' => 'Active',
-                'expiry_date' => date("Y-m-d", strtotime($end_date)),
+                'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                 'created_date' => date('Y-m-d H:i:s')
             ));
             //Make this customer a member of the group
@@ -211,7 +148,7 @@ function process_eway_payment()
             {
                 echo 'Your payment successfully sent! But there was an error while storing your purchase.';
             }else{
-                echo $success;    
+                echo 'success';    
             }
             
         }
@@ -250,41 +187,10 @@ function unsubscribe_purchase()
         }
         
         
-        //Delete Customer Account on the backend using SOAP
-        $webserviceURL = get_eway_rebill_webservice_url();
-        $customerID = get_eway_customer_id();
-        $userName = get_eway_user_name();
-        $userPWD = get_eway_user_pwd();
+        addMessage('Your subscription has been cancelled.');
+        //Change status to canceled 
+        $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
         
-        require_once(THE_FUNCTION . '/soap/nusoap.php');
-        //Delete Rebill Event
-        $client = new nusoap_client($webserviceURL, false);
-        if ($err) {
-            echo 'Constructor error: ' . $err . '';
-            exit();
-        }
-        //First Create Direct Payment
-        
-        $client->namespaces['man'] = 'http://www.eway.com.au/gateway/rebill/manageRebill';
-        $headers = "<man:eWAYHeader><man:eWAYCustomerID>" . $customerID . "</man:eWAYCustomerID><man:Username>" . $userName . "</man:Username><man:Password>" . $userPWD . "</man:Password></man:eWAYHeader>";        
-        $client->setHeaders($headers);
-        
-        //Create Rebill Customer
-        $requestbody = array(        
-            'man:RebillCustomerID' => $purchase->rebill_customer_id,
-            'man:RebillID' => $purchase->rebill_id,
-        );
-        
-        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/DeleteRebillEvent';
-        $result = $client->call('man:DeleteRebillEvent', $requestbody, '', $soapaction);
-        if(!$result || $result['Result'] == 'Fail')
-        {
-            addMessage($result['ErrorSeverity'] . ": " . $result['ErrorDetails'], 'error');
-        }else{            
-            addMessage('Your subscription has been cancelled.');
-            //Change status to canceled 
-            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
-        }
         
         wp_redirect($return);
         exit;

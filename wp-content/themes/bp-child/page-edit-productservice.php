@@ -37,7 +37,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
         <?php get_sidebar('dashboard'); ?>
     </div>        
     <div class="column four_fifths right container"> 
-      <form name="psForm" id="psForm" action="" method="post" enctype="multipart/form-data">
+      <form name="psForm" id="psForm" action="" class="validation-form" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
         <h2>Add New Product and Service</h2>
         <?php }else{ ?>
@@ -54,12 +54,12 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">
                            <label>Name:</label>         
-                           <input type="text" class="input" name="product_name" id="product_name" value="<?php echo $product->name?>" />
-                           <span class="focus-tooltip"><span></span>Enter your product or service name as it is known in the marketplace.</span>
+                           <input type="text" class="input required" name="product_name" id="product_name" value="<?php echo $product->name?>" />
+                           <span class="focus-tooltip"><span></span>Enter your product or service name as it is known in the marketplace.</span>                           
                        </div>                       
                        <div class="grid-cell has-focus-tooltip">
                            <label>Release Date:</label>  
-                           <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? date('m/d/Y') : $product->release_date?>" />
+                           <input type="text" class="input datepicker required" name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? date('m/d/Y') : $product->release_date?>" />
                            <span class="focus-tooltip" style="left: 110%"><span></span>Enter the date that this version of your product or service was released to the market.</span>
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
@@ -85,7 +85,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">                           
                            <label>Product Owner:</label>                    
-                           <input type="text" class="input" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
+                           <input type="text" class="input required" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
                            <span class="focus-tooltip"><span></span>Enter the owner of your product or service. It is the same with your organisation name in default.</span>
                        </div> 
                        <div class="grid-cell has-focus-tooltip">
@@ -231,14 +231,21 @@ jQuery(document).ready(function(){
 
     jQuery('#ps-related-box .combobox').combobox();
     
+    jQuery(".validation-form .required").each(function(){
+        jQuery(this).parent().append('<span class="msg-required" style="display: none">This field is required.</span>');
+    })
+    
     jQuery('#psForm').submit(function(){
-        if(jQuery('#psForm #product_name').val() == '')    
-        {
-            jQuery('#ps-info-box').find('.message').remove();
-            jQuery('#ps-info-box .column').prepend('<div class="message error">Product/Service name should not be empty!</div>');
-            jQuery('#product_name').focus();
-            return false;
-        }
+        var isValid = true;
+        var errorMsg = '';
+        jQuery(this).find('.required').each(function(){
+            if(jQuery(this).val() == ''){
+                isValid = false;
+                jQuery(this).addClass('input-error');
+            }
+        })
+        return isValid;
+        
     });
 })
 

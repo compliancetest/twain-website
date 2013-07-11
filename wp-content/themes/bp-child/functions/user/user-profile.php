@@ -99,8 +99,46 @@ function cp_delete_payment_method()
     echo "success";
     exit;
 }
-//Save User Payment Information
+
+//Edit User Payment Info
 function cp_user_payment_edit()
+{
+    global $wpdb, $current_user;   
+    
+    //Goto Homepage
+    if(!is_user_logged_in()){
+        echo "Permission Denied!";
+        exit;
+    }
+    
+    get_currentuserinfo();
+    
+    $user_id = $current_user->ID;
+    
+    $id = $_REQUEST['id'];
+    $card = getUserCardById($id, $user_id);
+    
+    if(!$card)
+    {
+        echo "Invalid Request!";
+        exit;
+    }
+    
+    $result = getCustomerCardDetailById($card->customer_id);
+    if(!$result || isset($result['faultstring'])) 
+    {
+        echo "There was an error while getting the information from eWay.";
+        exit;
+    }
+    
+    $result['CCCvn'] = $card->cvn;
+    
+    echo json_encode($result);
+    exit;
+}
+
+//Save User Payment Information
+function cp_user_payment_save()
 {
     global $wpdb, $current_user;   
     
@@ -109,12 +147,15 @@ function cp_user_payment_edit()
         return "Permission Denied!";
     }
     
+    get_currentuserinfo();
+    
     $user_id = $current_user->ID;
     
     $card_number = str_replace(' ', '', $_POST['card_number']);
     $name_on_card = trim($_POST['name_on_card']);
     $card_expiry = trim($_POST['card_expiry']);
     $card_cvc = trim($_POST['card_cvc']);
+    
     $id = trim($_POST['id']);
     
     if($id)
@@ -130,7 +171,7 @@ function cp_user_payment_edit()
     if($card_number == '')
     {
         return 'Credit card number is empty!';
-    }else if(!check_cc($card_number)){
+    }else if(strpos($card_number, 'XXXXXX') === false && !check_cc($card_number)){
         return 'Credit card number is not valid!';
     }
     
@@ -150,32 +191,112 @@ function cp_user_payment_edit()
         return 'Your CVC code is incorrect';
     }
     
-    if(!$id)
-    {
-        //Add New Payment Method
-        $wpdb->insert($wpdb->prefix . "users_cards", array(
-            'user_id' => $user_id,
-            'card_number' => $card_number,
-            'name' => $name_on_card,
-            'expiry' => $card_expiry_arr[0] . "/" . $card_expiry_arr[1],
-            'cvc' => $card_cvc
-        ));        
-        $id = $wpdb->insert_id;
-    }else{
-        //Update
-        $id = $wpdb->update($wpdb->prefix . "users_cards", array(
-            'user_id' => $user_id,
-            'card_number' => $card_number,
-            'name' => $name_on_card,
-            'expiry' => $card_expiry_arr[0] . "/" . $card_expiry_arr[1],
-            'cvc' => $card_cvc
-        ), array('id' => $id));
-    }
-    if($id === false)
-    {
-        return $wpdb->last_error;
+    $tokenWebserviceURL = get_eway_token_webservice_url();
+    $customerID = get_eway_customer_id();
+    $userName = get_eway_user_name();
+    $userPWD = get_eway_user_pwd();
+    
+    //Create or Update Customer Information
+    require_once(THE_FUNCTION . '/soap/nusoap.php');    
+    
+    $client = new nusoap_client($tokenWebserviceURL, false);
+    $err = $client->getError();
+    if ($err) {
+        return 'Soap Construction Error: ' . $err;
     }
     
+    $client->namespaces['man'] = 'https://www.eway.com.au/gateway/managedpayment';
+    $headers = "<man:eWAYHeader><man:eWAYCustomerID>" . $customerID . "</man:eWAYCustomerID><man:Username>" . $userName . "</man:Username><man:Password>" . $userPWD . "</man:Password></man:eWAYHeader>";
+    $client->setHeaders($headers);    
+    
+    //Create Rebill Customer
+    if(!$id)
+    {
+        $requestbody = array(
+            'man:Title' => 'Dr.',
+            'man:FirstName' => get_user_meta($user->ID, 'first_name', true),
+            'man:LastName' => get_user_meta($user->ID, 'last_name', true),
+            'man:Address' => '',
+            'man:Suburb' => '',
+            'man:State' => '',
+            'man:Company' => '',
+            'man:PostCode' => '',
+            'man:Country' => 'au',
+            'man:Email' => $user->user_email,
+            'man:Fax' => '',
+            'man:Phone' => '',
+            'man:Mobile' => '',
+            'man:CustomerRef' => '',
+            'man:JobDesc' => '',
+            'man:Comments' => '',
+            'man:URL' => '',
+            'man:CCNumber' => $card_number,
+            'man:CCNameOnCard' => $name_on_card,
+            'man:CCExpiryMonth' => $card_expiry_arr[0],
+            'man:CCExpiryYear' => $card_expiry_arr[1]
+        );
+        $soapaction = 'https://www.eway.com.au/gateway/managedpayment/CreateCustomer';
+        $result = $client->call('man:CreateCustomer', $requestbody, '', $soapaction);
+        if(is_array($result))
+        {
+            return $result['faultstring'];
+        }else if(!$result){ 
+            return 'There was an error while saving your payment information.';
+        }else{
+            //Success            
+            $query_result = $wpdb->insert($wpdb->prefix . "users_cards", array(
+                'user_id' => $user_id,
+                'card_number' => encrypt_card_number($card_number),
+                'customer_id' => $result,
+                'name' => $name_on_card,
+                'cvn' => $card_cvc,
+                'created_date' => date('Y-m-d H:i:s')
+            ));        
+            if(!$query_result)
+                $id = $wpdb->last_error;
+            else
+                $id = $wpdb->insert_id;            
+        }
+    }else{
+        //Getting Card
+        $card = getUserCardById($id);
+        
+        $requestbody = array(
+            'man:managedCustomerID' => $card->customer_id,
+            'man:Title' => "Dr.",
+            'man:FirstName' => get_user_meta($user->ID, 'first_name', true),
+            'man:LastName' => get_user_meta($user->ID, 'last_name', true),
+            'man:Address' => '',
+            'man:Suburb' => '',
+            'man:State' => '',
+            'man:Company' => '',
+            'man:PostCode' => '',
+            'man:Country' => 'au',
+            'man:Email' => $user->user_email,
+            'man:Fax' => '',
+            'man:Phone' => '',
+            'man:Mobile' => '',
+            'man:CustomerRef' => '',
+            'man:JobDesc' => '',
+            'man:Comments' => '',
+            'man:URL' => '',
+            'man:CCNumber' => $card_number,
+            'man:CCNameOnCard' => $name_on_card,
+            'man:CCExpiryMonth' => $card_expiry_arr[0],
+            'man:CCExpiryYear' => $card_expiry_arr[1]
+        );
+        $soapaction = 'https://www.eway.com.au/gateway/managedpayment/UpdateCustomer';
+        $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
+        if($result == 'true')
+        {
+            $wpdb->update($wpdb->prefix . "users_cards", array('cvn' => $card_cvc, 'name' => $name_on_card), array('id' => $card->id));
+            echo 'success';
+        }else{
+            echo $result['faultstring'];
+        }
+        exit;
+    }
+        
     return $id;    
 }
 

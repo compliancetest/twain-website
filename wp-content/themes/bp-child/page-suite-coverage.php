@@ -22,7 +22,7 @@ $mysuites = getUserTestSuites();
            <div class="grid-box table-box">
                <div class="grid-box-header">
                    <h5 class="left"><a href="<?php echo get_permalink($suite->ID)?>"><b><?php echo get_the_title($suite)?></b></a></h5>                   
-                   <?php if(can_edit_suite($product->ID)){ ?>
+                   <?php if(can_edit_suite($suite->ID)){ ?>
                    <a class="gbh-btn gbh-btn-edit right" href="/edit-test-suite?id=<?php echo $suite->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
                    <?php } ?>
                    <?php /*if(can_edit_suite($product->ID)){ ?>
@@ -30,6 +30,9 @@ $mysuites = getUserTestSuites();
                    <?php }*/ ?>
                    <div class="clear"></div>
                </div>
+               <?php
+                   $claims = getClaimsBySuiteId($suite->ID);
+               ?>
                <div class="grid-box-body">
                    <div class="thead tr">
                        <div class="td td-product">Product</div>
@@ -39,10 +42,25 @@ $mysuites = getUserTestSuites();
                        <div class="clear"></div>
                    </div>
                    <div class="tbody">
+                   <?php if(!$claims) { ?>
                        <div class="tr">
                            <div class="td td-full">No test transactions recorded yet</div>
                            <div class="clear"></div>
                        </div>
+                   <?php }else{ ?>
+                       <?php foreach($claims as $crow){ ?>
+                       <div class="tr">
+                           <div class="td td-product"><?php echo $crow->product_name ?></div>
+                           <div class="td td-conflevel"><?php echo $crow->conformance_level ?></div>
+                           <div class="td td-coverage">Coverage</div>
+                           <div class="td td-action">
+                              <a href="/my-transaction-log" class="action-btn view-log-btn"><span class="p"></span><span class="t">View Log</span></a>
+                              <a href="#" class="action-btn certify-grey-btn"><span class="p"></span><span class="t">Certify</span></a>
+                           </div>
+                           <div class="clear"></div>
+                       </div>
+                       <?php } ?>
+                   <?php } ?>
                    </div>
                </div>
            </div>           

@@ -225,13 +225,12 @@ select{
     -webkit-border-radius: 3px;
     border: solid 1px #cbcbcb;
 }
-.input-error{
-    border: 1px solid #dd0000;
-    border: 1px solid rgba(255, 0, 0, .2);
-    box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
-    -moz-box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
-    -webkit-box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
-    -o-box-shadow: 0 1px 1px rgba(255, 0, 0, .5) inset;
+input.input-error{
+    border: 1px solid #B61313;
+    box-shadow: 0 0 3px rgba(255, 0, 0, .5);
+    -moz-box-shadow: 0 0 3px rgba(255, 0, 0, .5);
+    -webkit-box-shadow: 0 0 3px rgba(255, 0, 0, .5);
+    -o-box-shadow: 0 0 3px rgba(255, 0, 0, .5);
 }
 .button {
 	text-decoration: none !important;
@@ -1479,12 +1478,23 @@ tr {
 .grid-list-footer:hover{
     background: #f8f8f8;
 }
+/*** Status Color ***/
 .status-active{
     color: #47a518 !important;
 }
 .status-suspended{
     color: #d9231f !important;
 }
+.status-certified{
+    color: #4aa31e !important;
+}
+.status-testing{
+    color: #e33f3f !important;
+}
+.status-unverified{
+    color: #666 !important;
+}
+
 
 /*** Create Common Button Styles ***/
 .action-btn{
@@ -1971,4 +1981,13 @@ tr {
 }
 .content_inner .page-title-block h2{
     margin: 0;
+}
+
+.validation-form .field-row .grid-cell{
+    position: relative;
+}
+.validation-form .field-row .grid-cell .msg-required{
+    position: absolute;
+    color: #dd0000;
+    font-style: italic;
 }

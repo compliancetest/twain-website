@@ -234,16 +234,37 @@
             return false;
         });
         $('#cards-list .edit-payment-method').click(function(){
+            var link = $(this);
             var pRow = $(this).parents('.grid-row');
-            var form = $('#edit-card-form');
-            form.find('#card_number').val(pRow.find('#cnumber').val());
-            form.find('#name_on_card').val(pRow.find('#cname').val());
-            form.find('#card_expiry').val(pRow.find('#cexpiry').val());
-            form.find('#card_cvc').val(pRow.find('#ccvc').val());
-            form.find('#id').val($(this).attr('data-id'));
-            $('#cards-list').hide();
-            $('#edit-card-form').fadeIn('fast');            
-            $('#my_payment').addClass('grid-box-editing');
+            pRow.append('<div class="loading1"></div>');
+            pRow.find('.loading1').show();
+            $.ajax({
+                url: link.attr('href'),
+                type: 'get',
+                dataType: 'json',
+                success: function(rsp){                    
+                    pRow.find('.loading1').remove();
+                    var form = $('#edit-card-form');
+                    form.find('#card_number').val(rsp.CCNumber);
+                    form.find('#name_on_card').val(rsp.CCName);
+                    form.find('#card_expiry').val(rsp.CCExpiryMonth + "/" + rsp.CCExpiryYear);
+                    form.find('#card_cvc').val(rsp.CCCvn);
+                    form.find('#id').val(link.attr('data-id'));                    
+                    form.find('.cnumber-desc').show();                    
+                    $('#cards-list').hide();
+                    $('#edit-card-form').fadeIn('fast');            
+                    $('#my_payment').addClass('grid-box-editing');                
+                },
+                error: function(rsp){
+                    pRow.find('.loading1').remove();
+                    $('#cards-list').append('<div class="message error">' + rsp.responseText + "</div>");
+                    setTimeout(function(){
+                        $('#cards-list .message').fadeOut('fast', function(){
+                            $('#cards-list .message').remove();    
+                        })
+                    }, 2000);
+                }
+            })            
             return false;
         });
         $('#cards-list .delete-payment-method').click(function(){
@@ -284,6 +305,7 @@
         $('#edit-card-form .cancel-btn').click(function(){
             $('#my_payment').removeClass('grid-box-editing');
             $('#edit-card-form').hide();
+            form.find('.cnumber-desc').hide();                    
             $('#cards-list').fadeIn('fast');                        
             return false;
         })

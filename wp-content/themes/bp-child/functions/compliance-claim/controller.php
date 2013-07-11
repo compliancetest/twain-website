@@ -84,7 +84,7 @@ function makeClaim()
             'suite_id'    =>  $_POST['suite_id'],
             'conformance_level'    =>  $_POST['level'],
             'role'    =>  $_POST['role'],
-            'status'    =>  '-',
+            'status'    =>  'Unverified',
             'created_date'    =>  date('Y-m-d H:i:s'),
             'last_updated'    =>  date('Y-m-d H:i:s'),
             'audit'    =>  ''
@@ -291,3 +291,14 @@ function getClaimsByProductId($product_id)
     
     return $rows;
 }
+
+function getClaimsBySuiteId($suite_id)
+{
+    global $wpdb;
+        
+    $query = $wpdb->prepare("SELECT c.*, pm.meta_value as `product_name` FROM " . TABLE_CLAIM . " AS c LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=c.product_id AND pm.meta_key='product_name'  WHERE suite_id=%d", $suite_id);
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+

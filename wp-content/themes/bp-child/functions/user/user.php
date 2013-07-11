@@ -10,10 +10,13 @@ add_action('init', 'compliancetest_user_actions');
 //Process User Login, Register Action
 function compliancetest_user_actions()
 {
+    global $wpdb;
+    
     if ( ! current_user_can( 'manage_options' ) ) {
         show_admin_bar( false );
         remove_action('wp_head', '_admin_bar_bump_cb');
     }
+    
     $cpAction = isset($_REQUEST['cp-action']) ? $_REQUEST['cp-action'] : null;
     if($cpAction == 'login')
     {
@@ -26,8 +29,10 @@ function compliancetest_user_actions()
         cp_activate_user();
     }else if(wp_verify_nonce($cpAction,'my_details_edit')){
         cp_user_detail_edit();
+    }else if(wp_verify_nonce($cpAction,'edit_payment_method')){
+        cp_user_payment_edit();
     }else if(wp_verify_nonce($cpAction ,'save_payment_method')){
-        $result = cp_user_payment_edit();        
+        $result = cp_user_payment_save();        
         if($result === true || is_int($result))
             echo "success";
         else
@@ -64,6 +69,37 @@ function getUserCardById($card_id, $user_id = null)
     $row = $wpdb->get_row($query);
     
     return $row;
+}
+
+function getCustomerCardDetailById($customer_id)
+{
+    global $wpdb;
+    
+    $tokenWebserviceURL = get_eway_token_webservice_url();
+    $customerID = get_eway_customer_id();
+    $userName = get_eway_user_name();
+    $userPWD = get_eway_user_pwd();
+    
+    //Create or Update Customer Information
+    require_once(THE_FUNCTION . '/soap/nusoap.php');    
+    
+    $client = new nusoap_client($tokenWebserviceURL, false);
+    $err = $client->getError();
+    if ($err) {
+        return 'Soap Construction Error: ' . $err;
+    }
+    
+    $client->namespaces['man'] = 'https://www.eway.com.au/gateway/managedpayment';
+    $headers = "<man:eWAYHeader><man:eWAYCustomerID>" . $customerID . "</man:eWAYCustomerID><man:Username>" . $userName . "</man:Username><man:Password>" . $userPWD . "</man:Password></man:eWAYHeader>";
+    $client->setHeaders($headers);    
+    
+    $requestbody = array(
+        'man:managedCustomerID' => $customer_id
+    );
+    $soapaction = 'https://www.eway.com.au/gateway/managedpayment/QueryCustomer';
+    $result = $client->call('man:QueryCustomer', $requestbody, '', $soapaction);
+    
+    return $result;
 }
 
 //Add Js File

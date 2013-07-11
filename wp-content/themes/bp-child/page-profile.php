@@ -106,7 +106,7 @@ get_header();
 			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
-					<?php echo get_post_meta($post->ID, 'my_details_text', true);?>
+					<?php echo get_post_meta($post->ID, 'my_details_desc', true);?>
 				</div>
 			</div>
 			<div class="clear"></div>			
@@ -140,7 +140,7 @@ get_header();
                                 </div>
                                 <div class="grid-cell width35P">
                                     <?php echo chunk_split($card->card_number, 4)?>
-                                    <input type="hidden" id="cnumber" value="<?php echo $card->card_number?>" />
+                                    <input type="hidden" id="cnumber" value="<?php echo $card->card_number?>" />                                    
                                 </div>
                                 <div class="grid-cell width10P">
                                     <?php echo $card->expiry?>
@@ -152,7 +152,7 @@ get_header();
                                 </div>
                                 <div class="grid-cell grid-action-cell width20P">
                                     <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete_payment_method')?>&id=<?php echo $card->id ?>" class="delete-payment-method gbh-btn gbh-btn-delete-grey has-tooltip" data-id="<?php echo $card->id?>">Delete<span class="simple_tooltip radius6">Delete Card<span></span></span></a>
-                                    <a href="#" class="edit-payment-method gbh-btn gbh-btn-edit-grey has-tooltip" data-id="<?php echo $card->id?>">Edit<span class="simple_tooltip radius6">Edit Card<span></span></span></a>
+                                    <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('edit_payment_method')?>&id=<?php echo $card->id ?>" class="edit-payment-method gbh-btn gbh-btn-edit-grey has-tooltip" data-id="<?php echo $card->id?>">Edit<span class="simple_tooltip radius6">Edit Card<span></span></span></a>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -164,11 +164,12 @@ get_header();
                                 <div class="grid-row">
                                     <div class="grid-cell width30P"><label>Card Number</label></div>
                                     <input type="text" name="card_number" id="card_number" value="" class="input" autocomplete="off" /> 
+                                    <small class="cnumber-desc"><i>(Don't change this if you want keep original number)</i></small>
                                     <div class="clear"></div> 
                                 </div>
                                 <div class="grid-row">
                                     <div class="grid-cell width30P"><label>Name on Card</label></div>
-                                    <input type="text" name="name_on_card" id="name_on_card" value="" class="input" autocomplete="off" />
+                                    <input type="text" name="name_on_card" id="name_on_card" value="" class="input" autocomplete="off" />                                    
                                     <div class="clear"></div>
                                 </div>
                                 <div class="grid-row">
@@ -196,7 +197,7 @@ get_header();
 			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
-					<?php echo get_post_meta($post->ID, 'my_payment_method', true);?>
+					<?php echo get_post_meta($post->ID, 'my_payment_method_desc', true);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -248,7 +249,7 @@ get_header();
 			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
-					<?php echo get_post_meta($post->ID, 'my_organization', true);?>
+					<?php echo get_post_meta($post->ID, 'my_organisation_desc', true);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -278,7 +279,7 @@ get_header();
 			<div class="right two_fifths"  style="display: none;"><!--this is temporary hidden--->
 				<div class="gray_message_box radius9 light_gray_txt">
 					<div class="indicator"></div>
-					<?php echo get_post_meta($post->ID, 'my_organization_members', true);?>
+					<?php echo get_post_meta($post->ID, 'my_organization_members_desc', true);?>
 				</div>
 			</div>
 			<div class="clear"></div>			

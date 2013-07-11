@@ -5344,3 +5344,8 @@ a.suite-subscript-link:hover{
     position: absolute;
     left: 28px;
 }
+.cnumber-desc{
+    float: right;
+    margin-right: 40px;
+    display: none;
+}
