@@ -335,3 +335,31 @@ function cp_get_user_fullname($user_id)
     
     return $fname . " " . $lname;
 }
+
+function cp_save_customer_harness_detail()
+{
+    global $wpdb;
+    
+    $id = $_POST['id'];
+    $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE id=%d AND user_id=%d", $id, $user_id);
+    $data = $wpdb->get_row($query);
+    
+    if(!$data)
+    {
+        return 'Invalid Request!';
+    }
+    if($_POST['msh_p_mode'] == 'POP')
+        $wpdb->update($wpdb->prefix . "users_purchases", 
+                array('msh_p_mode' => $_POST['msh_p_mode']),
+                array('id' => $data->id)
+        );
+    else
+        $wpdb->update($wpdb->prefix . "users_purchases", 
+            array('msh_p_mode' => $_POST['msh_p_mode'], 'msh_url' => $_POST['msh_url'], 'msh_password' => $_POST['msh_password'], 'msh_username' => $_POST['msh_username']),
+            array('id' => $data->id)
+        );
+    
+    return "success";
+}

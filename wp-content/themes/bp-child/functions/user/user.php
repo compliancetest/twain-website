@@ -42,8 +42,30 @@ function compliancetest_user_actions()
         cp_user_organisation_edit();
     }else if(wp_verify_nonce($cpAction ,'delete_payment_method')){
         cp_delete_payment_method();
+    }else if(wp_verify_nonce($cpAction ,'leave-group')){
+        $gID = $_REQUEST['group_id'];
+        if ( groups_is_user_member( bp_loggedin_user_id(), $gID ) ) {
+
+            // Stop sole admins from abandoning their group
+            $group_admins = groups_get_group_admins( $gID );
+             if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() )
+                echo  __( 'This community must have at least one admin', 'buddypress' );
+            elseif ( !groups_leave_group( $gID ) )
+                echo __( 'There was an error leaving the community.', 'buddypress' );
+            else
+                echo 'success';
+        }else{
+            echo 'Invalid Request!';
+        }
+        exit;
+    }else if(wp_verify_nonce($cpAction, 'save-harness')){
+        $result = cp_save_customer_harness_detail();       
+        echo $result;
+        exit;
     }
 }
+
+
 
 function getUserCreditCards($user_id = null)
 {
@@ -216,4 +238,28 @@ function getUserPurchase($suite_id = null, $status='Active', $user_id = null)
     }    
     
     return $result;
+}
+
+function getGroupMemberDetail($group_id, $member_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_members WHERE group_id=%d AND user_id=%d", $group_id, $member_id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;
+}
+
+function getUserSubscriptions($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND status='Active'", $user_id);
+    $result = $wpdb->get_results($query);
+    
+    return $result;
+    
 }

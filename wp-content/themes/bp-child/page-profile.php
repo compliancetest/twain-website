@@ -200,10 +200,145 @@ get_header();
 					<?php echo get_post_meta($post->ID, 'my_payment_method_desc', true);?>
 				</div>
 			</div>
-			<div class="clear"></div>
+			<div class="clear"></div>            
+            <div class="space25"></div>
+            
+            <div class="column left three_fifths nopadding">
+                <div class="grid-box table-box" id="my_community_memberships">
+                    <div class="grid-box-header">
+                        <h5>My Community Memberships</h5>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="grid-box-body">
+                        <div class="thead tr">
+                           <div class="td td-name">Name</div>
+                           <div class="td td-since">Since</div>
+                           <div class="td td-role">Role</div>
+                           <div class="td td-action">Action</div>
+                           <div class="clear"></div>
+                       </div>
+                       <div class="tbody">
+                       <?php
+                           $groups =  groups_get_user_groups($current_user->ID);
+                           if($groups['total'] < 1)
+                           {
+                       ?>
+                           <div class="tr">
+                               <div class="td td-full">There is no community that you joined.</div>
+                               <div class="clear"></div>
+                           </div> 
+                       <?php
+                           }else{
+                               foreach($groups['groups'] as $gID)
+                               {
+                                   $group = groups_get_group(array('group_id'=>$gID));
+                                   $member = getGroupMemberDetail($gID, $current_user->ID);
+                                   
+                       ?>
+                            <div class="tr">
+                                <div class="td td-name">
+                                    <a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a>
+                                </div>
+                                <div class="td td-since"><?php echo formatDate($member->date_modified); ?></div>
+                                <div class="td td-role">
+                                    <?php
+                                        if($member->is_admin)
+                                            echo '<span class="group-admin">Admin</span>';
+                                        else if($member->is_mod)
+                                            echo '<span class="group-moderator">Moderator</span>';
+                                        else 
+                                            echo '<span class="group-member">Member</span>';
+                                    ?>
+                                </div>
+                                <div class="td td-action">
+                                    <a href="?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="leave-community-link">Remove</a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                       <?php
+                               }
+                           }
+                       ?>
+                       <div class="loading1"></div>
+                       </div>
+                       
+                    </div>                    
+                </div>
+            </div>
+            <div class="right two_fifths">
+                <div class="gray_message_box radius9 light_gray_txt">
+                    <div class="indicator"></div>
+                    <?php echo get_post_meta($post->ID, 'my_community_memberships_desc', true);?>
+                </div>
+            </div>
+            <div class="clear"></div>            
+            <div class="space25"></div>            
+            
+            <div class="column left three_fifths nopadding">
+                <div class="grid-box table-box" id="my_subscriptions">
+                    <div class="grid-box-header">
+                        <h5>My Test Suite Subscriptions</h5>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="grid-box-body">
+                        <div class="thead tr">
+                           <div class="td td-suite">Test Suite</div>
+                           <div class="td td-fee">Fee</div>
+                           <div class="td td-action">Action</div>
+                           <div class="clear"></div>
+                       </div>
+                       <div class="tbody">
+                       <?php
+                           $subscriptions =  getUserSubscriptions();
+                           if(count($subscriptions) < 1)
+                           {
+                       ?>
+                           <div class="tr">
+                               <div class="td td-full">No subscription recorded yet.</div>
+                               <div class="clear"></div>
+                           </div> 
+                       <?php
+                           }else{
+                               foreach($subscriptions as $row)
+                               {
+                                   
+                       ?>
+                            <div class="tr">
+                                <div class="td td-suite">
+                                    <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo get_post_meta($row->suite_id, 'ts_name',  true) ?></a>
+                                </div>
+                                <div class="td td-fee">$<?php echo get_post_meta($row->suite_id, 'monthly_subscription_price', true); ?>/m</div>
+                                <div class="td td-action">
+                                    <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="harness-detail-link" data-id="<?php echo $row->id?>">Harness Detail</a>
+                                    | 
+                                    <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="unsubscribe-link">Unsubscribe</a>
+                                </div>
+                                <input type="hidden" id="msh_p_mode<?php echo $row->id?>" value="<?php echo $row->msh_p_mode?>" />
+                                <input type="hidden" id="msh_url<?php echo $row->id?>" value="<?php echo $row->msh_url?>" />
+                                <input type="hidden" id="msh_username<?php echo $row->id?>" value="<?php echo $row->msh_username?>" />
+                                <input type="hidden" id="msh_password<?php echo $row->id?>" value="<?php echo $row->msh_password?>" />
+                                <div class="clear"></div>
+                            </div>
+                       <?php
+                               }
+                           }
+                       ?>
+                       <div class="loading1"></div>
+                       </div>
+                       
+                    </div>                    
+                </div>
+            </div>
+            <div class="right two_fifths">
+                <div class="gray_message_box radius9 light_gray_txt">
+                    <div class="indicator"></div>
+                    <?php echo get_post_meta($post->ID, 'my_subscriptions_desc', true);?>
+                </div>
+            </div>
+            <div class="clear"></div>			
+			<div class="space25"></div>            
 			
-			<div class="space25"></div>
-			
+            
 			<div class="column left three_fifths nopadding">
 				<div class="grid-box" id="my_org">
 					<div class="grid-box-header">
@@ -288,7 +423,59 @@ get_header();
 	</div>
     <div class="clear"></div>
 </div> <!--end content-->
-
+<div class="popup-box" id="harness-detail-box" style="display: none; width: 370px;">
+    <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>        
+    <form name="harness-form" id="harness-form" action="">
+        <div class="popup-box-content grid-box-body">    
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>P Mode:</label>
+                    <select name="msh_p_mode" id="msh_p_mode" class="select">
+                        <option value="PUSH">PUSH</option>
+                        <option value="POP">POP</option>
+                    </select>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>EndPoint URL:</label>
+                    <input class="input" type="text" name="msh_url" id="msh_url" value="" />
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Username:</label>
+                    <input class="input" type="text" name="msh_username" id="msh_username" value="" />
+                </div>
+                <div class="clear"></div>
+            </div>            
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Password:</label>
+                    <input class="input" type="text" name="msh_password" id="msh_password" value="" />
+                </div>
+                <div class="clear"></div>
+            </div>                        
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                                    
+            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+            <div class="clear"></div>
+        </div>
+        <div class="loading"></div>
+        <a class="close_btn"></a>
+        <input type="hidden" name="id" id="harness-id" value="" />
+        <?php wp_nonce_field('save-harness', 'cp-action'); ?>
+    </form>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+    fixTdHeight(jQuery('#my_community_memberships'));
+    fixTdHeight(jQuery('#my_subscriptions'));
+})
+</script>
 <?php
 get_footer();
 ?>

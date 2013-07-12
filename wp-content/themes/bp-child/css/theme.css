@@ -4366,6 +4366,34 @@ min-height: 70px;
 #my_profile .grid-box #edit-card-form .btn-row{
     display: block;
 }
+
+#my_community_memberships .td-name{
+    width: 181px;
+}
+#my_community_memberships .td-since{
+    width: 65px;
+}
+#my_community_memberships .td-role{
+    width: 70px;
+}
+#my_community_memberships .td-action{
+    width: 55px;
+}
+#my_subscriptions .td-suite{
+    width: 168px;
+}
+#my_subscriptions .td-fee{
+    width: 65px;
+}
+#my_subscriptions .td-action{
+    width: 159px;
+}
+#harness-detail-box .field-row label{
+    float: left;
+    width: 120px;
+    line-height: 28px;
+}
+
 /*** My Products Page **/
 #my_products .td-issuer{
     width: 110px;

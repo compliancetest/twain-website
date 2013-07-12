@@ -86,7 +86,7 @@ get_header();
             </div>            
             <div class="clear"></div>
         </div> 
-        <div class="grid-box table-box">
+    <div class="grid-box table-box">
        <div class="grid-box-header">
            <h5><b>SuperStream MCS v1.1</b></h5>                   
            <div class="clear"></div>

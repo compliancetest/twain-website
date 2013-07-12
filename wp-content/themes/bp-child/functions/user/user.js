@@ -309,5 +309,109 @@
             $('#cards-list').fadeIn('fast');                        
             return false;
         })
+        
+        //Remove Membership
+        $('#my_community_memberships .leave-community-link').click(function(){
+            $('#my_community_memberships .message').remove();
+            if(confirm('Are you sure that you want to remove this membership?'))
+            {
+                var link = $(this);                        
+                $('#my_community_memberships .loading1').show();
+                $.ajax({
+                    url: link.attr('href'),
+                    type: 'get',                    
+                    success: function(rsp){
+                        $('#my_community_memberships .loading1').hide();
+                        if(rsp == 'success')
+                        {
+                            link.parents('.tr').fadeOut('fast', function(){
+                                $(this).remove();
+                                if($('#my_community_memberships .tbody .tr').size() < 1)
+                                    $('#my_community_memberships .tbody').append('<div class="tr">' + 
+                                                   '<div class="td td-full">There is no community that you joined.</div>' +
+                                                   '<div class="clear"></div>' + 
+                                               '</div>');
+                            })
+                        }else{
+                            $('#my_community_memberships').append('<div class="message error">' + rsp + '</div>');
+                        }
+                    },
+                    error: function(err){
+                        $('#my_community_memberships .loading1').hide();
+                        $('#my_community_memberships').append('<div class="message error">' + err.responseText + '</div>');
+                    }
+                })
+            }
+            return false;
+        })
+        
+        $("#my_subscriptions .harness-detail-link").each(function(){
+            var id = $(this).attr('data-id');
+            $(this).cplightbox({
+                type: 'inline',
+                href: '#harness-detail-box',
+                onLoad: function(){                    
+                    $('#harness-detail-box #msh_p_mode').val($('#msh_p_mode' + id).val());
+                    $('#harness-detail-box #msh_url').val($('#msh_url' + id).val());
+                    $('#harness-detail-box #msh_username').val($('#msh_username' + id).val());
+                    $('#harness-detail-box #msh_password').val($('#msh_password' + id).val());
+                    $('#harness-detail-box #harness-id').val(id);
+                    if($('#msh_p_mode' + id).val() == 'POP')
+                    {
+                        $('#harness-detail-box #msh_url').prop('disabled', 'disabled');
+                        $('#harness-detail-box #msh_username').prop('disabled', 'disabled');
+                        $('#harness-detail-box #msh_password').prop('disabled', 'disabled');
+                    }else{
+                        $('#harness-detail-box #msh_url').removeAttr('disabled');
+                        $('#harness-detail-box #msh_username').removeAttr('disabled');
+                        $('#harness-detail-box #msh_password').removeAttr('disabled');
+                    }
+                }
+            })
+        })
+        
+        $('#harness-form #msh_p_mode').change(function(){
+            if($(this).val() == 'POP')
+            {
+                $('#harness-detail-box #msh_url').prop('disabled', 'disabled');
+                $('#harness-detail-box #msh_username').prop('disabled', 'disabled');
+                $('#harness-detail-box #msh_password').prop('disabled', 'disabled');
+            }else{
+                $('#harness-detail-box #msh_url').removeAttr('disabled');
+                $('#harness-detail-box #msh_username').removeAttr('disabled');
+                $('#harness-detail-box #msh_password').removeAttr('disabled');
+            }
+        })
+        $('#harness-form').submit(function(){
+            $('#harness-detail-box .loading').show();
+            $('#harness-detail-box .message').remove();
+            $.ajax({
+                url: '/',
+                data: $('#harness-form').serialize(),
+                type: 'post',
+                success: function(rsp){
+                    $('#harness-detail-box .loading').hide();
+                    if(rsp == 'success')
+                    {
+                        $('#harness-detail-box .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');
+                        var id = $('#harness-form #harness-id').val();
+                        $('#msh_p_mode' + id).val($('#harness-detail-box #msh_p_mode').val());
+                        if($('#harness-detail-box #msh_p_mode').val() == 'PUSH')
+                        {
+                            $('#msh_url' + id).val($('#harness-detail-box #msh_url').val());
+                            $('#msh_username' + id).val($('#harness-detail-box #msh_username').val());
+                            $('#msh_password' + id).val($('#harness-detail-box #msh_password').val());
+                        }
+                    }else{
+                        $('#harness-detail-box .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
+                    }
+                },
+                error: function(err){
+                    $('#harness-detail-box .loading').hide();
+                    $('#harness-detail-box .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
+                }
+            })
+            return false;
+        })
     })    
 })(jQuery);

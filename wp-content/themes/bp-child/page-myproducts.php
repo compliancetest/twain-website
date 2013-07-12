@@ -86,7 +86,7 @@ get_header();
                                <div class="td td-role"><?php echo $claim->role?></div>
                                <div class="td td-status status-<?php echo convert_css_name($claim->status) ?>"><?php echo $claim->status?></div>
                                <div class="td td-date"><?php echo formatDate($claim->last_updated)?></div>
-                               <div class="td td-audit"><?php //echo $claim->audit?> - </div>
+                               <div class="td td-audit"><?php //echo $claim->audit?></div>
                                <div class="td td-action">
                                    <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn blue-edit-btn icon-btn edit-claim-btn"><span class="p"></span></a>
                                    <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
