@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div class="right width15P">
-                        <?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
+                        <?php if ( bp_docs_current_user_can( 'create' ) && (!bp_is_group() || groups_is_user_member(get_current_user_id(), bp_get_current_group_id())) ) : ?>                        
                         <a href="<?php echo bp_docs_get_create_link()?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">Create New Wiki</span></a>
                         <?php endif; ?>
                     </div>
