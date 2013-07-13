@@ -84,7 +84,7 @@ function makeClaim()
             'suite_id'    =>  $_POST['suite_id'],
             'conformance_level'    =>  $_POST['level'],
             'role'    =>  $_POST['role'],
-            'status'    =>  'Unverified',
+            'status'    =>  'Self Assessed',
             'created_date'    =>  date('Y-m-d H:i:s'),
             'last_updated'    =>  date('Y-m-d H:i:s'),
             'audit'    =>  ''

@@ -469,10 +469,16 @@ function optionsframework_options() {
 		'type' => 'text');		
 		
 	$options[] = array(
-		'desc' => __('Copyright text'),
-		'id' => 'copyright',
-		'type' => 'text');			
+        'desc' => __('Copyright text'),
+        'id' => 'copyright',
+        'type' => 'text');            
 
+    $options[] = array(
+		'desc' => __('Google Analytics Code'),
+		'id' => 'google-analytics-code',
+		'type' => 'textarea');			
+
+        
     $options[] = array(
         'name'  => __('Contact Us Page'),
         'type'  =>  'heading'

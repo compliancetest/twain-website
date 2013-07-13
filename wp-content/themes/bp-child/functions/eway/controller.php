@@ -123,7 +123,7 @@ function process_eway_payment()
             $group = groups_get_group( array('group_id' => $suite->community_id));
             
             //Create Backend Customer Using SOAP
-            /*$esb_client = new nusoap_client('http://esb.test.compliancetest.net:8280/api/integrationAPI', false);            
+            $esb_client = new nusoap_client('http://esb.test.compliancetest.net:8280/api/integrationAPI', false);            
             $esb_client->namespaces['man'] = 'http://compliancetest.net/messaging';            
             $requestbody = array(
                 'msg:user' => array(
@@ -140,9 +140,10 @@ function process_eway_payment()
                     'msg:userEndpointPassword' => $msh['password'],
                 )
             );
-            $soapaction = 'http://esb.test.compliancetest.net:8280/api/integrationAPI/user/create';
-            $result = $client->call('msg:createUserRequest', $requestbody, '', $soapaction);
-            */
+            $soapaction = '/user/create';
+            $result = $esb_client->call('msg:createUserRequest', $requestbody, '', $soapaction);
+            print_r($requestbody);
+            print_r($result);
             
             if(!$id)
             {

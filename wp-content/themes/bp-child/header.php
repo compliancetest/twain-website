@@ -12,6 +12,9 @@
         <link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
 
         <?php wp_head(); ?>
+        <?php
+            echo of_get_option('google-analytics-code');
+        ?>
     </head>
 
     <body <?php body_class(); ?> id="bp-default">
