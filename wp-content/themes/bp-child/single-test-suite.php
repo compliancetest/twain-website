@@ -130,7 +130,7 @@ Template Name Posts: Test Suite
                         <?php    
                         foreach($suite->conformanceLevel as $i => $row){
                         ?>
-                            <div class="grid_cell width10P bold blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
+                            <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
                             <div class="grid_cell width90P">
                                 <?php echo $row['desc']; ?>
                             </div>
@@ -150,7 +150,7 @@ Template Name Posts: Test Suite
 						    foreach($suite->roles as $idx=>$row){
 							
 					        ?>		
-										<div class="grid_cell width25P bold blue_txt size13 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
+										<div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
 										<div class="grid_cell width70P">
 											<?php echo $row['desc']; ?>
 										</div>
