@@ -696,21 +696,59 @@ img {
 	width: 400px !important;
 }
 
-.width5P {
-	width: 5% !important;
+.width2P {
+    width: 2% !important;
 }
 
+.width4P {
+    width: 4% !important;
+}
+
+.width5P {
+    width: 5% !important;
+}
+
+.width6P {
+    width: 6% !important;
+}
+
+.width8P {
+    width: 8% !important;
+}
+
+
 .width10P {
-	width: 10% !important;
+    width: 10% !important;
+}
+
+.width12P {
+    width: 12% !important;
+}
+
+.width14P {
+    width: 14% !important;
 }
 
 .width15P {
 	width: 15% !important;
 }
 
-.width20P {
-	width: 20% !important;
+.width16P {
+    width: 16% !important;
 }
+
+.width18P {
+    width: 18% !important;
+}
+
+.width20P {
+    width: 20% !important;
+}
+
+.width22P {
+	width: 22% !important;
+}
+
 
 .width25P {
 	width: 25% !important;

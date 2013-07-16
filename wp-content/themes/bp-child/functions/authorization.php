@@ -22,23 +22,23 @@ function checkCurrentUserCapability()
         if(current_user_can('read_case'))
             return true;
         
-        $redirect = get_site_url();
+        $suiteID = _get_current_test_suite(get_the_ID());
+        $redirect = get_permalink($suiteID);
+        $groupID = get_post_meta($suiteID, 'community_id', true);
+        $group = groups_get_group(array('group_id' => $groupID));
+        
         if(is_user_logged_in())
         {
             //Get Test Suite Id
-            $suiteID = _get_current_test_suite(get_the_ID());
-        
             if($suiteID){
                 //check Community Member
-                $groupID = get_post_meta($suiteID, 'community_id', true);
                 if(groups_is_user_member(get_current_user_id(), $groupID))            
                 {
                     return true;
-                }
-                $redirect = get_permalink($suiteID);
+                }                
             }        
         }
-        addMessage('You must join the community to view Test Case details.', 'notice');
+        addMessage('You must join the community to view Test Case details. Go to the <a href="' . bp_get_group_permalink($group) . '">Community Home Page</a> to join', 'notice');
         wp_redirect($redirect);
         
         exit;

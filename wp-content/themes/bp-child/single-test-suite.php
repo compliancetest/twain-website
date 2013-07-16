@@ -25,15 +25,15 @@ Template Name Posts: Test Suite
 				</div> 
                 <?php } ?>
 				<div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
-					<div class="dark_gray_txt bold width80P left">
+					<div class="dark_gray_txt bold width75P left">
 						<h2 class="left"><?php the_title(); ?></h2>
                         <?php if(can_edit_suite($suite->id)){ ?>
 						<a href="/edit-test-suite?id=<?php echo get_the_ID()?>" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
                         <?php } ?>
 						<div class="clear"></div>
 					</div>
-					<div class="width15P right">
-						<a href="<?php echo bp_get_group_permalink($group); ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Issuer Home Page</span></a>
+					<div class="width20P right">
+						<a href="<?php echo bp_get_group_permalink($group); ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Community Home Page</span></a>
 					</div>
 					<div class="clear"></div>
 					<div class="grids noradiusbottom">
@@ -130,7 +130,7 @@ Template Name Posts: Test Suite
                         <?php    
                         foreach($suite->conformanceLevel as $i => $row){
                         ?>
-                            <div class="grid_cell width10P bold blue_txt size26px top5 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
+                            <div class="grid_cell width10P bold blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
                             <div class="grid_cell width90P">
                                 <?php echo $row['desc']; ?>
                             </div>
@@ -150,7 +150,7 @@ Template Name Posts: Test Suite
 						    foreach($suite->roles as $idx=>$row){
 							
 					        ?>		
-										<div class="grid_cell width25P bold blue_txt size26px top5 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
+										<div class="grid_cell width25P bold blue_txt size13 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
 										<div class="grid_cell width70P">
 											<?php echo $row['desc']; ?>
 										</div>
@@ -243,15 +243,15 @@ Template Name Posts: Test Suite
 						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
 						<!--<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>-->
 						<div class="grid_cell nopaddingtop width10P toleft tocenter single_line">Published</div>
-						<div class="grid_cell nopaddingtop width10P toleft tocenter">Tester<br/>Role</div>
-						<div class="grid_cell nopaddingtop width10P toleft tocenter">Harness<br/>Role(s)</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter">Tester<br/>Role</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Harness<br/>Role(s)</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
 						<div class="grid_cell nopaddingtop width10P toleft tocenter">Outcome<br/>Type</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
 						<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
-						<div class="grid_cell nopaddingtop width15P toleft single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop width22P toleft single_line">Test Intent Description</div>
 						<div class="grid_cell nopaddingtop width5P toleft single_line">Actions</div>
 						<div class="clear"></div>	
 					</div>
@@ -299,10 +299,10 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width10P toleft tocenter ">
                                 <?php echo get_post_meta($row->ID ,'published', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                            <div class="grid_cell nopaddingtop width5P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                            <div class="grid_cell nopaddingtop width8P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter ">
@@ -323,7 +323,7 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width10P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width15P toleft">
+                            <div class="grid_cell nopaddingtop width22P toleft">
                             <?php 
                                 $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
                                 if(strlen($intentDesc) > 150)
@@ -331,16 +331,21 @@ Template Name Posts: Test Suite
                                 else
                                     echo $intentDesc;
                             ?>
-                            </div>
+                            </div>                            
                             <div class="grid_cell nopaddingtop width5P toleft tocenter grid_action_cell">
+                                <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
                                 <?php if(can_edit_test_case($row->ID)){ ?>
                                 <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
                                 <?php } ?>
                                 <?php if(can_delete_test_case($row->ID)){ ?>
                                 <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
                                 <?php } ?>
+                                <?php }else{ ?>
+                                -
+                                <?php } ?>
                                 <div class="clear"></div>                                                                        
                             </div>
+                            
                             <div class="clear"></div>
                         </div>
                 <?php                        
