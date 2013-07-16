@@ -358,11 +358,11 @@ get_header();
                     <div class="field-row">
                        <div class="grid-cell">
                            <label>Action:</label>
-                           <input type="text" name="step_action[]" value="<?php echo $row['action']?>" class="input" />
+                           <textarea name="step_action[]" class="textarea width280"><?php echo $row['action']?></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>Expected Result:</label>
-                           <input type="text" name="step_expected[]" value="<?php echo $row['result']?>" class="input medium-input" />
+                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width350"><?php echo $row['result']?></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -466,11 +466,11 @@ jQuery(document).ready(function(){
         jQuery('#test-step-box .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' + 
                            '<label>Action:</label>' +
-                           '<input type="text" name="step_action[]" value="" class="input" />' +
+                           '<textarea name="step_action[]" class="textarea width280"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>Expected Result:</label>' +
-                           '<input type="text" name="step_expected[]" value="" class="input medium-input" />' +
+                           '<textarea name="step_expected[]" class="textarea width350"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' +

@@ -29,7 +29,7 @@ $case->load();
                 ?>
                 <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($case->testSuite)?>"><?php echo get_the_title($case->testSuite) ?></a></span>
                 <div class="clear"></div>
-				<p class="dark_gray_txt"><?php echo $case->testIntentDescription ; ?></p>
+				<p class="dark_gray_txt"><?php echo _convertLineSymbolToBR($case->testIntentDescription) ; ?></p>
 				<div class="grids noradiusbottom">
 					<div class="grid_row white_bcg noborderbottom">
 						<div class="grid_cell width10P left size13 bold dark_blue_txt">Info:</div>
@@ -76,7 +76,7 @@ $case->load();
 							<p>Outcome Type: <span><?php echo $case->outcomeType; ?></span></p>
 						</div>
 						<div class="grid_cell width15P left">
-							<p>Test Pattern: <span><?php echo $case->testPattern; ?></span></p>
+							<p>Test Pattern: <span><a href="/help-faq/test-patterns/"><?php echo $case->testPattern; ?></a></span></p>
 						</div>
 						<div class="grid_cell width15P left">	
 							<p>Bulk: <span><?php echo $case->bulk; ?></span></p>
@@ -184,8 +184,8 @@ $case->load();
 					?>
 							<div class="grid_row white_bcg padding5-10">
 								<div class="grid_cell width10P tocenter"><?php echo ($key+1); ?></div>
-								<div class="grid_cell width35P left5P"><?php echo $row['action']; ?></div>
-								<div class="grid_cell width35P left5P"><?php echo $row['result']; ?></div>
+								<div class="grid_cell width35P left5P"><?php echo _convertLineSymbolToBR($row['action']); ?></div>
+								<div class="grid_cell width35P left5P"><?php echo _convertLineSymbolToBR($row['result']); ?></div>
 								<div class="clear"></div>
 							</div>	
 					<?php	

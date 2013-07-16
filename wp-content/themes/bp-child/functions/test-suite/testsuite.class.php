@@ -99,8 +99,8 @@ class TestSuite
     
     public function loadRoles()
     {
-        $roleNames = get_post_meta($this->id, 'role_names', true);
-        $roleDescs = get_post_meta($this->id, 'role_descs', true);
+        $roleNames = cp_get_post_meta($this->id, 'role_names', true);
+        $roleDescs = cp_get_post_meta($this->id, 'role_descs', true);
         $roles = array();
         if(!$roleNames)
         {
@@ -123,8 +123,8 @@ class TestSuite
     
     public function loadRelatedSuites()
     {
-        $suiteIDs = get_post_meta($this->id, 'ts', true);
-        $suiteDescs = get_post_meta($this->id, 'ts_desc', true);
+        $suiteIDs = cp_get_post_meta($this->id, 'ts', true);
+        $suiteDescs = cp_get_post_meta($this->id, 'ts_desc', true);
         $result = array();
         foreach($suiteIDs as $i=>$sid)
         {
@@ -156,8 +156,8 @@ class TestSuite
     
     public function loadConformanceLevel()
     {
-        $lvl_code = get_post_meta($this->id, 'lvl_code', true);
-        $lvl_desc = get_post_meta($this->id, 'lvl_desc', true);
+        $lvl_code = cp_get_post_meta($this->id, 'lvl_code', true);
+        $lvl_desc = cp_get_post_meta($this->id, 'lvl_desc', true);
         
         $result = array();
         
@@ -177,7 +177,7 @@ class TestSuite
     
     public function loadSingleValue($key)
     {
-        return get_post_meta($this->id, $key, true);
+        return cp_get_post_meta($this->id, $key, true);
     }
     
     /**

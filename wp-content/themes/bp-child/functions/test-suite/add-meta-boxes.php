@@ -31,7 +31,7 @@ function subscription_price_metabox_html()
 {
     global $post;
     
-    $monthly_price = get_post_meta($post->ID, 'monthly_subscription_price', true);
+    $monthly_price = cp_get_post_meta($post->ID, 'monthly_subscription_price', true);
     
     ?>
     <div>
@@ -45,8 +45,8 @@ function subscription_price_metabox_html()
 function test_suites_conformance_level_metabox_html(){
     global $post;
     
-    $current_lvl_code = get_post_meta($post->ID, 'lvl_code', true);
-    $current_lvl_desc= get_post_meta($post->ID, 'lvl_desc', true);
+    $current_lvl_code = cp_get_post_meta($post->ID, 'lvl_code', true);
+    $current_lvl_desc= cp_get_post_meta($post->ID, 'lvl_desc', true);
         
     ?>
     <div id="suites3">
@@ -187,11 +187,11 @@ function test_suites_spec_doc_metabox_html(){
 function test_suites_related_test_suites_metabox_html(){
     global $post;
     
-    $current_ts = get_post_meta($post->ID, 'ts', true);
+    $current_ts = cp_get_post_meta($post->ID, 'ts', true);
     if(!$current_ts)
         $current_ts = array(0);
         
-    $current_desc = get_post_meta($post->ID, 'ts_desc', true);
+    $current_desc = cp_get_post_meta($post->ID, 'ts_desc', true);
     if(!$current_desc)
         $current_desc = array('');
     
@@ -340,7 +340,7 @@ function test_suite_test_cases_metabox_html(){
 function test_suite_initiating_message_metabox_html(){
     global $post;
     
-    $current_initiating_messages = get_post_meta($post->ID, 'init_message', true);
+    $current_initiating_messages = cp_get_post_meta($post->ID, 'init_message', true);
     //echo '<input type="hidden" name="custom_initiating_message" value="', wp_create_nonce(basename(__FILE__)), '" />';
     ?>
     <textarea name="init_message" id="initiating_message_id" rows="4" cols="100"><?php echo $current_initiating_messages;?></textarea>
@@ -432,12 +432,12 @@ function save_test_suite_on_admin($post_id)
         //Insert Group Id to bp_groups_testsuites table
         $wpdb->insert($wpdb->prefix . "bp_groups_testsuites", array('group_id' => $group_id, 'ts_ids' => $post_id));
         //Update Post Meta
-        update_post_meta($post_id, 'community_id', $group_id);
+        cp_update_post_meta($post_id, 'community_id', $group_id);
     }
     
     //Save Initial Messages
     $init_message = $_POST['init_message'];
-    update_post_meta($post_id, 'init_message', $init_message);
+    cp_update_post_meta($post_id, 'init_message', $init_message);
     
     //Save Roles
     
@@ -468,8 +468,8 @@ function save_test_suite_on_admin($post_id)
     $ts = $_POST['ts'] ;
     $ts_desc = $_POST['ts_desc'];
 
-    update_post_meta($post_id, 'ts', $ts);
-    update_post_meta($post_id, 'ts_desc', $ts_desc);
+    cp_update_post_meta($post_id, 'ts', $ts);
+    cp_update_post_meta($post_id, 'ts_desc', $ts_desc);
     
     //Save Spec Documents        
     $docs_names = $_POST['doc_name'];
@@ -531,17 +531,17 @@ function save_test_suite_on_admin($post_id)
     $lvl_code = $_POST['lvl_code'];
     $lvl_desc = $_POST['lvl_desc'] ;
     
-    update_post_meta($post_id, 'lvl_code', $lvl_code);
-    update_post_meta($post_id, 'lvl_desc', $lvl_desc);
+    cp_update_post_meta($post_id, 'lvl_code', $lvl_code);
+    cp_update_post_meta($post_id, 'lvl_desc', $lvl_desc);
     
     //Subscription Price
-    update_post_meta($post_id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
+    cp_update_post_meta($post_id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
 }
 
 function getTestSuiteRoles($suite_id)
 {
-    $roleNames = get_post_meta($suite_id, 'role_names', true);
-    $roleDescs = get_post_meta($suite_id, 'role_descs', true);
+    $roleNames = cp_get_post_meta($suite_id, 'role_names', true);
+    $roleDescs = cp_get_post_meta($suite_id, 'role_descs', true);
     $roles = array();
     if(!$roleNames)
     {

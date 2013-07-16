@@ -156,13 +156,13 @@ function test_case_choose_initiating_message_metabox_html(){
     
     $current_test_suite = _get_current_test_suite($post->ID);
     
-    $current_init_message = get_post_meta($post->ID, 'choose_init_messages', true);
+    $current_init_message = cp_get_post_meta($post->ID, 'choose_init_messages', true);
     
     $all_init_messages = array();
     echo '<select name="choose_init_messages" id="checkinitmsg">';
     echo '<option value="">Choose Initiating Message</option>';
 //    foreach ($current_test_suite as $test_suite){
-        $metas_result = get_post_meta($current_test_suite, 'init_message', true);
+        $metas_result = cp_get_post_meta($current_test_suite, 'init_message', true);
         $metas_array = explode(',', $metas_result);
         foreach($metas_array as $ts_init_message){
             if(!in_array($ts_init_message,$all_init_messages)){
@@ -187,12 +187,12 @@ function test_case_conformance_level_metabox_html(){
     
     $current_test_suite = _get_current_test_suite($post->ID);
     
-    $current_conformance_level = get_post_meta($post->ID, 'conformance_level', true);
+    $current_conformance_level = cp_get_post_meta($post->ID, 'conformance_level', true);
     $all_conf_level = array();
     echo '<select name="conformance_level" id="checkconflvl">';
     echo '<option value="">Choose Conformance Level</option>';
 //    foreach ($current_test_suite as $test_suite){
-        $metas_array = get_post_meta($current_test_suite, 'lvl_code', true);
+        $metas_array = cp_get_post_meta($current_test_suite, 'lvl_code', true);
         //$metas_array = explode(',', $metas_result);
         foreach($metas_array as $ts_lvl){
             if(!in_array($ts_lvl,$all_conf_level)){
@@ -218,8 +218,8 @@ function test_case_choose_roles_metabox_html(){
     $current_test_suite = _get_current_test_suite($post->ID);
     
     //Current Roles Selected
-    $current_tester_role = get_post_meta($post->ID, 'choose_tester_role', true);
-    $current_harness_role = get_post_meta($post->ID, 'choose_harness_role', true);
+    $current_tester_role = cp_get_post_meta($post->ID, 'choose_tester_role', true);
+    $current_harness_role = cp_get_post_meta($post->ID, 'choose_harness_role', true);
     
     //Roles Test Suite Associated
     //Tester Role
@@ -260,7 +260,7 @@ function test_case_choose_roles_metabox_html(){
 //    }
     echo '</select> </div> <br />';
     
-    $current_initiator = get_post_meta($post->ID, 'choose_initiator', true);
+    $current_initiator = cp_get_post_meta($post->ID, 'choose_initiator', true);
     //Initiator
     echo '<div id="initiator_role"><label for="choose_initiator"><b>Initiator</b></label><br />';
     echo '<label><input type="radio" value="tester" name="choose_initiator" ' . ($current_initiator == 'tester' ? 'checked="checked"' : '') . ' /> Tester</label>';
@@ -273,10 +273,10 @@ function test_case_choose_roles_metabox_html(){
 function test_case_test_execution_metabox_html(){
     global $post;
     $post_backup = $post;
-    $test_url = get_post_meta($post->ID, 'test_url', true);
-    $protocol_binding2 = get_post_meta($post->ID, 'protocol_binding2', true);
-    $current_property_name_exec= get_post_meta($post->ID, 'property_name_exec', true);
-    $current_property_value_exec= get_post_meta($post->ID, 'property_value_exec', true);
+    $test_url = cp_get_post_meta($post->ID, 'test_url', true);
+    $protocol_binding2 = cp_get_post_meta($post->ID, 'protocol_binding2', true);
+    $current_property_name_exec= cp_get_post_meta($post->ID, 'property_name_exec', true);
+    $current_property_value_exec= cp_get_post_meta($post->ID, 'property_value_exec', true);
     echo '<input type="hidden" name="custom_test_execution" value="', wp_create_nonce(basename(__FILE__)), '" />';
     ?>
     <label for="test_url"><b>Test endpoint URL:</b></label> <br />
@@ -346,8 +346,8 @@ function test_case_test_execution_metabox_html(){
 function test_case_test_data_metabox_html(){
     global $post;
     $post_backup = $post;
-    $current_property_name_data= get_post_meta($post->ID, 'property_name_data', true);
-    $current_property_value_data= get_post_meta($post->ID, 'property_value_data', true);
+    $current_property_name_data= cp_get_post_meta($post->ID, 'property_name_data', true);
+    $current_property_value_data= cp_get_post_meta($post->ID, 'property_value_data', true);
     echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
     if(!$current_property_name_data)
         $current_property_name_data = array();
@@ -408,8 +408,8 @@ function test_case_test_data_metabox_html(){
 function test_case_test_step2_metabox_html(){
     global $post;
     $post_backup = $post;
-    $current_step_action= get_post_meta($post->ID, 'step_action', true);
-    $current_step_expected= get_post_meta($post->ID, 'step_expected', true);
+    $current_step_action= cp_get_post_meta($post->ID, 'step_action', true);
+    $current_step_expected= cp_get_post_meta($post->ID, 'step_expected', true);
     echo '<input type="hidden" name="custom_test_data" value="', wp_create_nonce(basename(__FILE__)), '" />';
     
     if(!$current_step_action)
@@ -420,11 +420,11 @@ function test_case_test_step2_metabox_html(){
             if( $key == $key2){ ?>
             <div class="elem-step"> <div class="elem-step"> 
                 <label for="step_action"><b>Step <?php echo ($key+1); ?>. Action:</b></label> <br />
-                <input type="text" name="step_action[]" value="<?php echo $step_action; ?>" size="30" class="mf_text"/> 
+                <textarea name="step_action[]" class="mf_text"><?php echo $step_action; ?></textarea> 
                 <br />
                 
                 <label for="step_expected"><b>Step <?php echo($key+1); ?>. Expected Result:</b></label> <br />
-                <input type="text" name="step_expected[]" value="<?php echo $step_expected; ?>" size="30" class="mf_text"/> 
+                <textarea name="step_expected[]" class="mf_text"><?php echo $step_expected; ?></textarea> 
                 <br />
                 
                 <div class="button remove_step left">Remove</div>
@@ -437,11 +437,11 @@ function test_case_test_step2_metabox_html(){
     if (empty($current_step_action)){ ?>
         <div class="elem-step">
             <label for="step_action"><b>Step Action:</b></label> <br />
-            <input type="text" name="step_action[]" size="30" class="mf_text"/> 
+            <textarea name="step_action[]" class="mf_text"></textarea>
             <br />
             
             <label for="step_expected"><b>Step Expected Result:</b></label> <br />
-            <input type="text" name="step_expected[]" size="30" class="mf_text"/> 
+            <textarea name="step_expected[]" class="mf_text"></textarea>
             <br /> <br />
         </div>
     <?php
@@ -498,45 +498,45 @@ function save_test_case_on_admin($post_id)
     //Save Selected Test Suites
     $test_suite = isset($_POST['test_suite']) ? $_POST['test_suite'] : null;    
     
-    update_post_meta($post_id, 'test_suite', $test_suite);    
+    cp_update_post_meta($post_id, 'test_suite', $test_suite);    
     
     //Save Conformance level
-    update_post_meta($post_id, 'conformance_level', $_POST['conformance_level']);
+    cp_update_post_meta($post_id, 'conformance_level', $_POST['conformance_level']);
     
     //Save Role
     $tester_role = $_POST['choose_tester_role'];
-    update_post_meta($post_id, 'choose_tester_role',$tester_role);
+    cp_update_post_meta($post_id, 'choose_tester_role',$tester_role);
     $harness_role = $_POST['choose_harness_role'];
-    update_post_meta($post_id, 'choose_harness_role',$harness_role);
+    cp_update_post_meta($post_id, 'choose_harness_role',$harness_role);
     $initiator = $_POST['choose_initiator'];
-    update_post_meta($post_id, 'choose_initiator',$initiator);
+    cp_update_post_meta($post_id, 'choose_initiator',$initiator);
     
     //Save Initial Message
     $message_type = $_POST['choose_init_messages'] ;
-    update_post_meta($post_id, 'choose_init_messages',$message_type);
+    cp_update_post_meta($post_id, 'choose_init_messages',$message_type);
     
     //Save Test Step2
     $step_expected = $_POST['step_expected']; 
-    update_post_meta($post_id, 'step_expected', $step_expected);
+    cp_update_post_meta($post_id, 'step_expected', $step_expected);
     $step_action = $_POST['step_action']; 
-    update_post_meta($post_id, 'step_action', $step_action);
+    cp_update_post_meta($post_id, 'step_action', $step_action);
     
     //Saev Test Data
     $property_name_data = $_POST['property_name_data']; 
-    update_post_meta($post_id, 'property_name_data', $property_name_data);
+    cp_update_post_meta($post_id, 'property_name_data', $property_name_data);
     $property_value_data = $_POST['property_value_data']; 
-    update_post_meta($post_id, 'property_value_data', $property_value_data);
+    cp_update_post_meta($post_id, 'property_value_data', $property_value_data);
     
     //Save Test Execution
     $test_url = $_POST['test_url']; 
-    update_post_meta($post_id, 'test_url', $test_url);
+    cp_update_post_meta($post_id, 'test_url', $test_url);
     $protocol_binding2 = $_POST['protocol_binding2']; 
-    update_post_meta($post_id, 'protocol_binding2', $protocol_binding2);
+    cp_update_post_meta($post_id, 'protocol_binding2', $protocol_binding2);
     
     $property_name_exec = $_POST['property_name_exec']; 
-    update_post_meta($post_id, 'property_name_exec', $property_name_exec);
+    cp_update_post_meta($post_id, 'property_name_exec', $property_name_exec);
     $property_value_exec = $_POST['property_value_exec']; 
-    update_post_meta($post_id, 'property_value_exec', $property_value_exec);
+    cp_update_post_meta($post_id, 'property_value_exec', $property_value_exec);
     
     
     return $post_id;

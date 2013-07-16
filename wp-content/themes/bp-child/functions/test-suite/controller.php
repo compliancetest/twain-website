@@ -147,14 +147,14 @@ function saveSuite()
     $r = wp_set_post_terms($id, $suiteTypes, 'test_suite_type');
     
     //Update Post Metas
-    update_post_meta($id, 'ts_name', $_POST['ts_name']);
-    update_post_meta($id, 'ts_identifier', $_POST['ts_identifier']);
-    update_post_meta($id, 'ts_issue_date', date('Y-m-d', strtotime($_POST['ts_issue_date'])));
-    update_post_meta($id, 'ts_issuer', $_POST['ts_issuer']);
-    update_post_meta($id, 'ts_status', $_POST['ts_status']);
-    update_post_meta($id, 'ts_revision_description', $_POST['ts_revision_description']);
-    update_post_meta($id, 'ts_version', $_POST['ts_version']);
-    update_post_meta($id, 'ts_description', $_POST['ts_description']);
+    cp_update_post_meta($id, 'ts_name', $_POST['ts_name']);
+    cp_update_post_meta($id, 'ts_identifier', $_POST['ts_identifier']);
+    cp_update_post_meta($id, 'ts_issue_date', date('Y-m-d', strtotime($_POST['ts_issue_date'])));
+    cp_update_post_meta($id, 'ts_issuer', $_POST['ts_issuer']);
+    cp_update_post_meta($id, 'ts_status', $_POST['ts_status']);
+    cp_update_post_meta($id, 'ts_revision_description', $_POST['ts_revision_description']);
+    cp_update_post_meta($id, 'ts_version', $_POST['ts_version']);
+    cp_update_post_meta($id, 'ts_description', $_POST['ts_description']);
     
     //Remove the assigned group
     $wpdb->delete($wpdb->prefix . "bp_groups_testsuites", array("ts_ids"=>$id));
@@ -166,12 +166,12 @@ function saveSuite()
         //Insert Group Id to bp_groups_testsuites table
         $wpdb->insert($wpdb->prefix . "bp_groups_testsuites", array('group_id' => $group_id, 'ts_ids' => $id));
         //Update Post Meta
-        update_post_meta($id, 'community_id', $group_id);
+        cp_update_post_meta($id, 'community_id', $group_id);
     }
     
     //Save Initial Messages
     $init_message = $_POST['init_message'];
-    update_post_meta($id, 'init_message', $init_message);
+    cp_update_post_meta($id, 'init_message', $init_message);
     
     //Save Roles    
     $roleNames = array();
@@ -201,18 +201,18 @@ function saveSuite()
     $ts = $_POST['ts'] ;
     $ts_desc = $_POST['ts_desc'];
 
-    update_post_meta($id, 'ts', $ts);
-    update_post_meta($id, 'ts_desc', $ts_desc);
+    cp_update_post_meta($id, 'ts', $ts);
+    cp_update_post_meta($id, 'ts_desc', $ts_desc);
     
     //Save Conformance Level
     $lvl_code = $_POST['lvl_code'];
     $lvl_desc = $_POST['lvl_desc'] ;
     
-    update_post_meta($id, 'lvl_code', $lvl_code);
-    update_post_meta($id, 'lvl_desc', $lvl_desc);
+    cp_update_post_meta($id, 'lvl_code', $lvl_code);
+    cp_update_post_meta($id, 'lvl_desc', $lvl_desc);
     
     //Subscription Price
-    update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
+    cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
     
     //Save Spec Documents        
     $docs_names = $_POST['doc_name'];

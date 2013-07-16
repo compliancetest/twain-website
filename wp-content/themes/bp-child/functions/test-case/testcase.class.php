@@ -71,7 +71,7 @@ class TestCase
         $this->protocolBinding = $this->loadSingleValue('protocol_binding2');
         $this->outcomeType = $this->loadSingleValue('outcome_type');
         $this->bulk = $this->loadSingleValue('bulk');
-        $this->testPattern = $this->loadSingleValue('message_pattern');
+        $this->testPattern = $this->loadSingleValue('message_count');
         
         $this->loadTestSteps();
         $this->loadTestData();
@@ -81,8 +81,8 @@ class TestCase
     
     public function loadTestSteps()
     {
-        $stepActions = get_post_meta($this->id, 'step_action', true);
-        $stepResults = get_post_meta($this->id, 'step_expected', true);
+        $stepActions = cp_get_post_meta($this->id, 'step_action', true);
+        $stepResults = cp_get_post_meta($this->id, 'step_expected', true);
         
         $result = array();
         foreach($stepActions as $i=>$action)
@@ -99,8 +99,8 @@ class TestCase
     
     public function loadTestData()
     {
-        $dataNames = get_post_meta($this->id, 'property_name_data', true);
-        $dataValues = get_post_meta($this->id, 'property_value_data', true);
+        $dataNames = cp_get_post_meta($this->id, 'property_name_data', true);
+        $dataValues = cp_get_post_meta($this->id, 'property_value_data', true);
         
         $result = array();
         foreach($dataNames as $i=>$name)
@@ -117,8 +117,8 @@ class TestCase
     
     public function loadTestExecutionData()
     {
-        $dataNames = get_post_meta($this->id, 'property_name_exec', true);
-        $dataValues = get_post_meta($this->id, 'property_value_exec', true);
+        $dataNames = cp_get_post_meta($this->id, 'property_name_exec', true);
+        $dataValues = cp_get_post_meta($this->id, 'property_value_exec', true);
         
         $result = array();
         foreach($dataNames as $i=>$name)
@@ -135,7 +135,7 @@ class TestCase
     
     public function loadSingleValue($key)
     {
-        return get_post_meta($this->id, $key, true);
+        return cp_get_post_meta($this->id, $key, true);
     }
     
     

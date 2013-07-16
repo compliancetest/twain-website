@@ -444,3 +444,219 @@ function convert_css_name($string)
     
     return $string;
 }
+
+function _convertHTMLToBBCode($html)
+{
+    $pattern = array(
+//        '/[\r|\n]/',
+        '/<br.*?>/i',
+        '/<b.*?>/i',
+        '/<\/b>/i',
+        '/<strong.*?>/i',
+        '/<\/strong>/i',
+        '/<div(.*?)>/i',
+        '/<\/div>/i',
+        '/<pre(.*?)>/i',
+        '/<\/pre>/i',
+        '/<font(.*?)>/i',
+        '/<\/font>/i',
+        '/<span(.*?)>/i',
+        '/<\/span>/i',
+        '/<p(.*?)>/i',
+        '/<\/p>/i',
+//        '/<ul>/i',
+//        '/<\/ul>/i',
+//        '/<ol>/i',
+//        '/<\/ol>/i',
+//        '/<li>/i',
+//        '/<\/li>/i',            
+        '/<em.*?>/i',
+        '/<\/em>/i',
+        '/<u.*?>/i',
+        '/<\/u>/i',
+        '/<ins.*?>/i',
+        '/<\/ins>/i',
+        '/<strike>/i',
+        '/<\/strike>/i',
+        '/<del>/i',
+        '/<\/del>/i',
+        '/<a.*?href="(.*?)".*?>(.*?)<\/a>/i', '/<a.*?href=\\\"(.*?)\\\".*?>(.*?)<\/a>/i', 
+        '/<a.*?href=\'(.*?)\'.*?>(.*?)<\/a>/i', "/<a.*?href=\\\\'(.*?)\\\\'.*?>(.*?)<\\/a>/i",
+        '/<img(.*?)src="(.*?)"(.*?)>/i',     
+        '/<i.*?>/i',
+        '/<\/i>/i',
+        '/<.*?>(.*?)<\/.*?>/'
+    );
+    
+    $replace = array(
+//      "",
+      "\r\n",
+      '[b]',
+      '[/b]',
+      '[b]',
+      '[/b]',
+      '[div$1]',
+      '[/div]',
+      '[code$1]',
+      '[/code]',
+      '[font$1]',
+      '[/font]',
+      '[span$1]',
+      '[/span]',
+      '[p$1]',
+      '[/p]',
+//      '[list]',
+//      '[/list]',
+//      '[list=1]',
+//      '[/list]',
+//      '[*]',
+//      '[/*]',
+      '[i]',
+      '[/i]',          
+      '[u]',
+      '[/u]',
+      '[u]',
+      '[/u]',
+      '[s]',
+      '[/s]',
+      '[s]',
+      '[/s]',
+      '[url=$1]$2[/url]', '[url=$1]$2[/url]', '[url=$1]$2[/url]', '[url=$1]$2[/url]', 
+      '[img $1$3]$2[/img]',
+      '[i]',
+      '[/i]',
+      '$1'
+    );
+    
+    $html = preg_replace($pattern, $replace, $html);
+    
+    //Convert Single Quote to Double Quote for div, code, font, img tags
+    $html = preg_replace_callback('/\[code(.*?)\](.*?)\[\/code\]/i', create_function('$matches', 'return "[code" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/code]";'), $html);
+    $html = preg_replace_callback('/\[font(.*?)\](.*?)\[\/font\]/i', create_function('$matches', 'return "[font" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/font]";'), $html);
+    $html = preg_replace_callback('/\[span(.*?)\](.*?)\[\/span\]/i', create_function('$matches', 'return "[span" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/span]";'), $html);
+    $html = preg_replace_callback('/\[div(.*?)\](.*?)\[\/div\]/i', create_function('$matches', 'return "[div" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/div]";'), $html);
+    $html = preg_replace_callback('/\[p(.*?)\](.*?)\[\/p\]/i', create_function('$matches', 'return "[p" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/p]";'), $html);
+    $html = preg_replace_callback('/\[img(.*?)\](.*?)\[\/img\]/i', create_function('$matches', 'return "[img" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/img]";'), $html);
+    
+    return $html;
+}
+
+/**
+* Convert BBCode To HTML
+* 
+* @param mixed $code
+*/
+function _convertBBCodeToHTML($code)
+{
+    $pattern = array(
+ //       '/\\\r/',
+//        '/\\\n/',
+        '/\[b\]/i',
+        '/\[\/b\]/i',
+        '/\[code(.*?)\]/i',
+        '/\[\/code\]/i',
+        '/\[font(.*?)\]/i',
+        '/\[\/font\]/i',
+        '/\[div(.*?)\]/i',            
+        '/\[\/div\]/i',            
+        '/\[span(.*?)\]/i',
+        '/\[\/span\]/i',
+        '/\[p(.*?)\]/i',
+        '/\[\/p\]/i',
+        '/\[i\]/i',
+        '/\[\/i\]/i',
+        '/\[u\]/i',
+        '/\[\/u\]/i',
+        '/\[s\]/i',
+        '/\[\/s\]/i',
+        '/\[url=(.*?)\](.*?)\[\/url\]/i',
+        '/\[img(.*?)\](.*?)\[\/img\]/i',
+/*        '/\[list\](.*?)\[\/list\]/i',
+        '/\[list=1\](.*?)\[\/list\]/i',
+        '/\[list\]/i',
+        '/\[list=1\]/i',
+        '/\[\*\](.*?)\[\/\*\]/',
+        '/\[\*\]/'*/
+    );
+    $replace = array(
+//      "",
+//      '<br />',
+      '<b>',
+      '</b>',
+      '<pre$1>',
+      '</pre>',
+      '<font$1>',
+      '</font>',
+      '<div$1>',          
+      '</div>',          
+      '<span$1>',
+      '</span>',
+      '<p$1>',
+      '</p>',
+      '<i>',
+      '</i>',
+      '<u>',
+      '</u>',
+      '<strike>',
+      '</strike>',
+      '<a href=\'$1\'>$2</a>',
+      '<img $1 src=\'$2\'>',
+//      '<ul>$1</ul>',
+//      '<ol>$1</ol>',
+//      '<ul>',
+//      '<ol>',
+//      '<li>$1</li>',
+//      '<li>'
+    );
+       
+    $code = preg_replace($pattern, $replace, $code);
+    
+    return $code;
+}
+
+function _convertLineSymbolToBR($string)
+{
+    return str_replace("\r\n", "<br />", $string);
+}
+
+/**
+* Customize Update Post Meta to allow some html tags such as a, b, i
+* 
+* @param mixed $post_id
+* @param mixed $meta_key
+* @param mixed $meta_value
+* @param mixed $prev_value
+*/
+function cp_update_post_meta($post_id, $meta_key, $meta_value, $prev_value = '')
+{
+    //Allow Some HTML Tags
+    if(is_array($meta_value)){
+        $new_value = array();
+        foreach($meta_value as $k=>$v)
+        {
+            $new_value[$k] = _convertHTMLToBBCode($v);
+        }
+        $meta_value = $new_value;
+    }else{
+        $meta_value = _convertHTMLToBBCode($meta_value);
+    }
+        
+    return update_post_meta($post_id, $meta_key, $meta_value, $prev_value = '');
+}
+
+function cp_get_post_meta($post_id, $key = '', $single = false)
+{
+    $meta_value = get_post_meta($post_id, $key, $single);
+    if(is_array($meta_value)){
+        $new_value = array();
+        foreach($meta_value as $k=>$v)
+        {
+            $new_value[$k] = _convertBBCodeToHTML($v);
+        }
+        $meta_value = $new_value;
+    }else{
+        $meta_value = _convertBBCodeToHTML($meta_value);
+    }
+    
+    return $meta_value;
+}

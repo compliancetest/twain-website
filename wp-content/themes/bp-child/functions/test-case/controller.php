@@ -266,47 +266,47 @@ function saveCase()
     }
     
     //update post metas
-    update_post_meta($id, 'test_suite', $suiteID);    
-    update_post_meta($id, 'conformance_level', $_POST['conformance_level']);
+    cp_update_post_meta($id, 'test_suite', $suiteID);    
+    cp_update_post_meta($id, 'conformance_level', $_POST['conformance_level']);
     
-    update_post_meta($id, 'test_case_id', $_POST['test_case_id']);
-    update_post_meta($id, 'published', $_POST['published']);
-    update_post_meta($id, 'version', $_POST['version']);
-    update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
+    cp_update_post_meta($id, 'test_case_id', $_POST['test_case_id']);
+    cp_update_post_meta($id, 'published', $_POST['published']);
+    cp_update_post_meta($id, 'version', $_POST['version']);
+    cp_update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
     
-    update_post_meta($id, 'outcome_type', $_POST['outcome_type']);
-    update_post_meta($id, 'bulk', $_POST['bulk']);
-    update_post_meta($id, 'message_count', $_POST['message_count']);
+    cp_update_post_meta($id, 'outcome_type', $_POST['outcome_type']);
+    cp_update_post_meta($id, 'bulk', $_POST['bulk']);
+    cp_update_post_meta($id, 'message_count', $_POST['message_count']);
     
     $tester_role = $_POST['choose_tester_role'];
-    update_post_meta($id, 'choose_tester_role',$tester_role);
+    cp_update_post_meta($id, 'choose_tester_role',$tester_role);
     $harness_role = $_POST['choose_harness_role'];
-    update_post_meta($id, 'choose_harness_role',$harness_role);
+    cp_update_post_meta($id, 'choose_harness_role',$harness_role);
     $initiator = $_POST['choose_initiator'];
-    update_post_meta($id, 'choose_initiator',$initiator);
+    cp_update_post_meta($id, 'choose_initiator',$initiator);
     
     $message_type = $_POST['choose_init_message'] ;
-    update_post_meta($id, 'choose_init_messages',$message_type);
+    cp_update_post_meta($id, 'choose_init_messages',$message_type);
     
     $step_expected = $_POST['step_expected']; 
-    update_post_meta($id, 'step_expected', $step_expected);
+    cp_update_post_meta($id, 'step_expected', $step_expected);
     $step_action = $_POST['step_action']; 
-    update_post_meta($id, 'step_action', $step_action);
+    cp_update_post_meta($id, 'step_action', $step_action);
     
     $property_name_data = $_POST['property_name_data']; 
-    update_post_meta($id, 'property_name_data', $property_name_data);
+    cp_update_post_meta($id, 'property_name_data', $property_name_data);
     $property_value_data = $_POST['property_value_data']; 
-    update_post_meta($id, 'property_value_data', $property_value_data);
+    cp_update_post_meta($id, 'property_value_data', $property_value_data);
     
     $test_url = $_POST['test_url']; 
-    update_post_meta($id, 'test_url', $test_url);
+    cp_update_post_meta($id, 'test_url', $test_url);
     $protocol_binding2 = $_POST['protocol_binding2']; 
-    update_post_meta($id, 'protocol_binding2', $protocol_binding2);
+    cp_update_post_meta($id, 'protocol_binding2', $protocol_binding2);
     
     $property_name_exec = $_POST['property_name_exec']; 
-    update_post_meta($id, 'property_name_exec', $property_name_exec);
+    cp_update_post_meta($id, 'property_name_exec', $property_name_exec);
     $property_value_exec = $_POST['property_value_exec']; 
-    update_post_meta($id, 'property_value_exec', $property_value_exec);
+    cp_update_post_meta($id, 'property_value_exec', $property_value_exec);
     
     addMessage('Test Case was saved successfully!');
     wp_redirect(get_permalink($id));
