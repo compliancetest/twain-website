@@ -92,6 +92,20 @@ function _get_current_test_suite($test_case_id)
 }
 
 
+function get_next_sequence_number($suite_id = null)
+{
+    global $wpdb;
+    
+    if(!$suite_id)
+        return  10;
+    
+    $query = $wpdb->prepare("SELECT MAX(meta_value) FROM " . $wpdb->postmeta . " WHERE meta_key='sequence_number' AND post_id IN (SELECT post_id FROM " . $wpdb->postmeta . " WHERE meta_key='test_suite' AND meta_value=%d)", $suite_id);
+    $value = $wpdb->get_var($query);
+    
+    return $value + 10;
+}
+
+
 add_action('init', 'process_testcase_actions');
 function process_testcase_actions()
 {
@@ -307,6 +321,8 @@ function saveCase()
     cp_update_post_meta($id, 'property_name_exec', $property_name_exec);
     $property_value_exec = $_POST['property_value_exec']; 
     cp_update_post_meta($id, 'property_value_exec', $property_value_exec);
+    
+    cp_update_post_meta($id, 'sequence_number', $_POST['sequence_number']);
     
     addMessage('Test Case was saved successfully!');
     wp_redirect(get_permalink($id));

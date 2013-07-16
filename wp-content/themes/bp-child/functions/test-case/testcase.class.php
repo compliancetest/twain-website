@@ -4,6 +4,8 @@ class TestCase
 {
     var $id = null;
     
+    var $sequenceNumber = null;
+    
     var $name = '';
     
     var $testSuite = null;
@@ -57,6 +59,7 @@ class TestCase
             return;
             
         $this->name = get_the_title($this->id);
+        $this->sequenceNumber = $this->loadSingleValue('sequence_number');
         $this->testSuite = $this->loadSingleValue('test_suite');
         $this->conformanceLevel = $this->loadSingleValue('conformance_level');
         $this->testerRole = $this->loadSingleValue('choose_tester_role');

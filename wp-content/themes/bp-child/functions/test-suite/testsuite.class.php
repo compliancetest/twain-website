@@ -141,6 +141,9 @@ class TestSuite
         $args = array(
                 'post_type' => 'test-case',         
                 'posts_per_page' => -1,
+                'order_by'  => 'meta_value title',
+                'order'     => 'ASC',
+                'meta_key'  => 'sequence_number',
                 'meta_query' => array(
                                     array('key' => 'test_suite', 
                                           'value' => $this->id, 

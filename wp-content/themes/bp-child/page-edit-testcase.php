@@ -108,6 +108,10 @@ get_header();
                            <label>Test Intent Description:</label>
                            <textarea name="test_intent_description" id="test_intent_description" class="textarea"><?php echo $case->testIntentDescription?></textarea>
                        </div>                   
+                       <div class="grid-cell">
+                           <label>Execution Sequence Number:</label>
+                           <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />
+                       </div>                                                
                        <div class="clear"></div>
                    </div>               
                    

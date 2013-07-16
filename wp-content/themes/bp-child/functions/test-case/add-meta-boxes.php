@@ -7,8 +7,7 @@
 //MetaBoxes For Test Cases
 add_action('admin_init', 'add_test_cases_metaboxes');
 
-function add_test_cases_metaboxes(){    
-    
+function add_test_cases_metaboxes(){        
     add_meta_box("select_test_suites_metabox", "Select Test Suite", 'test_case_test_suites_metabox_html', "test-case", "normal", "high");
     add_meta_box("test_execution_metabox", "Test Execution", 'test_case_test_execution_metabox_html', "test-case", "normal", "high");
     add_meta_box("test_data_metabox", "Test Data", 'test_case_test_data_metabox_html', "test-case", "normal", "high");
@@ -16,6 +15,19 @@ function add_test_cases_metaboxes(){
     add_meta_box("choose_initiating_message_metabox", "Choose Initiating Message", 'test_case_choose_initiating_message_metabox_html','test-case',"normal","high");
     add_meta_box("choose_roles_metabox", "Choose Roles", 'test_case_choose_roles_metabox_html','test-case',"normal","high");
     add_meta_box("choose_level_metabox", "Choose Conformance Level", 'test_case_conformance_level_metabox_html','test-case',"normal","high");
+    add_meta_box("execution_sequence_number", "Execution Sequence Number", 'execution_sequence_number_metabox_html','test-case',"side","high");
+}
+
+function execution_sequence_number_metabox_html()
+{
+    global $post;
+    $n = cp_get_post_meta($post->ID, 'sequence_number', true);
+    
+    if(!$n)
+        $n = get_next_sequence_number(cp_get_post_meta($post->ID, 'test_suite', true))    
+    ?>
+    <p><input type="text" name="sequence_number" id="sequence_number" value="<?php echo $n ?>" /></p>
+    <?php
 }
 
 function test_case_test_suites_metabox_html(){
@@ -538,6 +550,7 @@ function save_test_case_on_admin($post_id)
     $property_value_exec = $_POST['property_value_exec']; 
     cp_update_post_meta($post_id, 'property_value_exec', $property_value_exec);
     
+    cp_update_post_meta($post_id, 'sequence_number', $_POST['sequence_number']);
     
     return $post_id;
 }
