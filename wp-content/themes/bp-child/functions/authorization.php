@@ -72,10 +72,10 @@ function is_customer($suite_id = null, $user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
     
-    if(is_admin() || is_super_admin())
-    {
-        return ture;
-    }
+//    if(is_admin() || is_super_admin())
+//    {
+//        return ture;
+//    }
     
     if($suite_id == null)
         $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d and `status`='Active' AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id);

@@ -60,11 +60,11 @@ function process_eway_payment()
             exit;        
         }
         
-        //Create Recurring Payment
         require_once(THE_FUNCTION . '/soap/nusoap.php');
         
         $client = new nusoap_client($webserviceURL, false);
         $err = $client->getError();
+        
         if ($err) {
             return 'Soap Construction Error: ' . $err;
         }
@@ -123,27 +123,28 @@ function process_eway_payment()
             $group = groups_get_group( array('group_id' => $suite->community_id));
             
             //Create Backend Customer Using SOAP
-            $esb_client = new nusoap_client('http://esb.test.compliancetest.net:8280/api/integrationAPI', false);            
-            $esb_client->namespaces['man'] = 'http://compliancetest.net/messaging';            
+/*            $esb_client = new nusoap_client('http://esb.test.compliancetest.net:8280/api/users');            
+            $esb_client->namespaces['api'] = 'http://compliancetest.net/api';
+            
             $requestbody = array(
-                'msg:user' => array(
-                    'msg:username' => $msh['username'],
-                    'msg:userGroups' => array(
-                        'msg:group' => array(
-                            'msg:groupID' => $suite->community_id,
-                            'msg:groupName' => bp_get_group_name($group)
+                'api:user' => array(
+                    'api:username' => $msh['username'],
+                    'api:userGroups' => array(
+                        'api:group' => array(
+                            'api:groupID' => $suite->community_id,
+                            'api:groupName' => bp_get_group_name($group)
                         )        
                     ),                    
-                    'msg:userPMode' => $msh['mode'],
-                    'msg:userEndpoint' => $msh['url'],
-                    'msg:userEndpointUsername' => $msh['username'],
-                    'msg:userEndpointPassword' => $msh['password'],
+                    'api:userPMode' => $msh['mode'],
+                    'api:userEndpoint' => $msh['url'],
+                    'api:userEndpointUsername' => $msh['username'],
+                    'api:userEndpointPassword' => $msh['password'],
                 )
             );
             $soapaction = '/user/create';
-            $result = $esb_client->call('msg:createUserRequest', $requestbody, '', $soapaction);
-            print_r($requestbody);
-            print_r($result);
+            $result = $esb_client->call('api:createUserRequest', $requestbody, '', $soapaction);
+            
+            var_dump($result);*/
             
             if(!$id)
             {

@@ -203,7 +203,7 @@ Template Name Posts: Test Suite
                     <h5 class="blue_txt">Test Cases</h5>
                 </div>
                 <form id="filter_ts" method="get" action="<?php echo get_the_guid()?>">                                        
-                    <div class="grid_cell right selecteds">
+                    <div class="grid_cell right">
                         <span class="left padding5-10">Filter By: </span>
                         <div class="styled_select left right13">
                             <label>
@@ -446,7 +446,7 @@ Template Name Posts: Test Suite
                         <select name="exp_year" id="exp_year" class="select">
                             <option value="">Year</option>                        
                             <?php for($i=0; $i < 20; $i++){ ?>
-                            <option value="<?php echo $i + date("Y")?>"><?php echo $i + date("Y")?></option>
+                            <option value="<?php echo $i + date("y")?>"><?php echo $i + date("Y")?></option>
                             <?php } ?>
                         </select>                    
                     </div>                
