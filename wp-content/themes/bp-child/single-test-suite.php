@@ -242,12 +242,12 @@ Template Name Posts: Test Suite
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
 						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
 						<!--<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>-->
-						<div class="grid_cell nopaddingtop width10P toleft tocenter single_line">Published</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter">Tester<br/>Role</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Published</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Harness<br/>Role(s)</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
-						<div class="grid_cell nopaddingtop width10P toleft tocenter">Outcome<br/>Type</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
 						<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
@@ -296,10 +296,10 @@ Template Name Posts: Test Suite
                                 <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
                                 <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span>
                             </div>
-                            <div class="grid_cell nopaddingtop width10P toleft tocenter ">
+                            <div class="grid_cell nopaddingtop width8P toleft tocenter ">
                                 <?php echo get_post_meta($row->ID ,'published', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter">
+                            <div class="grid_cell nopaddingtop width8P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter">
@@ -311,7 +311,7 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width5P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'conformance_level', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
+                            <div class="grid_cell nopaddingtop width8P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter">
