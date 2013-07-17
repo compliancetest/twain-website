@@ -105,6 +105,7 @@ function process_eway_payment()
                 'user_id' => $user->ID,
                 'suite_id' => $suite->id,
                 'customer_id' => $card->customer_id,
+                'esb_user_id' => 0,
                 'esb_username' => $msh['username'],
                 'msh_p_mode' => $msh['mode'],
                 'msh_url' => $msh['url'],
@@ -114,6 +115,7 @@ function process_eway_payment()
                 'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                 'created_date' => date('Y-m-d H:i:s')
             ));
+            $id = $wpdb->insert_id;
             //Make this customer a member of the group
             if(!groups_is_user_member($user->ID, $suite->community_id))
             {
@@ -122,35 +124,37 @@ function process_eway_payment()
             
             $group = groups_get_group( array('group_id' => $suite->community_id));
             
-            //Create Backend Customer Using SOAP
-/*            $esb_client = new nusoap_client('http://esb.test.compliancetest.net:8280/api/users');            
-            $esb_client->namespaces['api'] = 'http://compliancetest.net/api';
+            //Create Backend Customer Using SOAP            
+            $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
+                        <api:user>
+                            <api:username>' . $msh['username'] . '</api:username>
+                            <api:userGroups>
+                                <api:group>
+                                    <api:groupId>' . $suite->community_id . '</api:groupId>
+                                    <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                                </api:group>
+                            </api:userGroups>
+                            <api:userPMode>' . $msh['mode'] . '</api:userPMode>                            
+                            <api:userEndpointUsername>' . $msh['username'] . '</api:userEndpointUsername>
+                            <api:userEndpointPassword>' . $msh['password'] . '</api:userEndpointPassword>
+                        </api:user>
+                    </api:createUserRequest>';
             
-            $requestbody = array(
-                'api:user' => array(
-                    'api:username' => $msh['username'],
-                    'api:userGroups' => array(
-                        'api:group' => array(
-                            'api:groupID' => $suite->community_id,
-                            'api:groupName' => bp_get_group_name($group)
-                        )        
-                    ),                    
-                    'api:userPMode' => $msh['mode'],
-                    'api:userEndpoint' => $msh['url'],
-                    'api:userEndpointUsername' => $msh['username'],
-                    'api:userEndpointPassword' => $msh['password'],
-                )
-            );
-            $soapaction = '/user/create';
-            $result = $esb_client->call('api:createUserRequest', $requestbody, '', $soapaction);
+            $result = sendRestUserAction('/user/create', $data);
             
-            var_dump($result);*/
+            $resultDoc = new DOMDocument();
             
-            if(!$id)
+            if(!$resultDoc->loadXML($result))
             {
-                echo 'Your payment successfully sent! But there was an error while storing your purchase.';
+                echo $result;
             }else{
-                echo 'success';    
+                if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
+                {
+                    echo 'Your payment was proceed successfully, But there was an error.' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
+                }else{            
+                    $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));
+                    echo 'success';
+                }
             }
             
         }

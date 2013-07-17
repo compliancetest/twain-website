@@ -74,6 +74,8 @@ require_once(THE_FUNCTION . '/login-redirect.php');
 require_once(THE_FUNCTION . '/eway/settings.php');
 require_once(THE_FUNCTION . '/eway/controller.php');
 
+require_once(THE_FUNCTION . '/rest.php');
+
  
 /* 
  * Loads the Options Panel

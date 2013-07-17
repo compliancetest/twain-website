@@ -343,6 +343,8 @@ function cp_save_customer_harness_detail()
     $id = $_POST['id'];
     $user_id = get_current_user_id();
     
+    $user = get_userdata($user_id);
+    
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE id=%d AND user_id=%d", $id, $user_id);
     $data = $wpdb->get_row($query);
     
@@ -350,16 +352,86 @@ function cp_save_customer_harness_detail()
     {
         return 'Invalid Request!';
     }
-    if($_POST['msh_p_mode'] == 'POP')
+    
+    $isSaved = false;
+    
+    if($_POST['msh_p_mode'] == 'POP'){
+        $_POST['msh_url'] = $data->msh_url;
+        $_POST['msh_username'] = $data->msh_username;
+        $_POST['msh_password'] = $data->msh_password;
+    }
+    
+    if(!$data->esb_user_id)
+    {
+        $suite = new TestSuite($data->suite_id);
+        $group = groups_get_group( array('group_id' => $suite->community_id));
+        
+        //Create New Data
+        $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
+                    <api:user>
+                        <api:username>' . $user->user_login . "_" . $data->suite_id . '</api:username>
+                        <api:userGroups>
+                            <api:group>
+                                <api:groupId>' . $suite->community_id . '</api:groupId>
+                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                            </api:group>
+                        </api:userGroups>
+                        <api:userPMode>' . $_POST['msh_p_mode'] . '</api:userPMode>' .                             
+                        (!$_POST['msh_url'] ? '' : '<api:userEndpoint>' . $_POST['msh_url'] . '</api:userEndpoint>') .
+                        '<api:userEndpointUsername>' . $_POST['msh_username'] . '</api:userEndpointUsername>
+                        <api:userEndpointPassword>' . $_POST['msh_password'] . '</api:userEndpointPassword>
+                    </api:user>
+                </api:createUserRequest>';
+        
+        $result = sendRestUserAction('/user/create', $data);
+        
+        $resultDoc = new DOMDocument();
+        
+        if(!$resultDoc || !$resultDoc->loadXML($result))
+        {
+            return "There was ane error while saving your data.";
+        }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
+            return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
+        }else{ //Success
+            $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));            
+        }
+    }else{
+        //Update Data
+        $data = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
+                    <api:user>
+                        <api:userId>' . $data->esb_user_id . '</api:userId>
+                        <api:userPMode>' . $_POST['msh_p_mode'] . '</api:userPMode>' .
+                        (!$_POST['msh_url'] ? '' : '<api:userEndpoint>' . $_POST['msh_url'] . '</api:userEndpoint>') .
+                        '<api:userEndpointUsername>' . $_POST['msh_username'] . '</api:userEndpointUsername>
+                        <api:userEndpointPassword>' . $_POST['msh_password'] . '</api:userEndpointPassword>
+                    </api:user>
+                </api:updateUserRequest>';
+                
+        $result = sendRestUserAction('/user/update', $data);
+        
+        $resultDoc = new DOMDocument();
+        
+        if(!$result || !$resultDoc->loadXML($result))
+        {
+            return 'There was an error while updating your data.';
+        }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
+            return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
+        }
+    }
+    
+    if($_POST['msh_p_mode'] == 'POP'){
         $wpdb->update($wpdb->prefix . "users_purchases", 
                 array('msh_p_mode' => $_POST['msh_p_mode']),
                 array('id' => $data->id)
         );
-    else
+    }else{
         $wpdb->update($wpdb->prefix . "users_purchases", 
             array('msh_p_mode' => $_POST['msh_p_mode'], 'msh_url' => $_POST['msh_url'], 'msh_password' => $_POST['msh_password'], 'msh_username' => $_POST['msh_username']),
             array('id' => $data->id)
         );
+    }
+    
+    
     
     return "success";
 }

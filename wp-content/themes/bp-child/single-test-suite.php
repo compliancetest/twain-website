@@ -229,8 +229,8 @@ Template Name Posts: Test Suite
                             </select>
                             </label>
                         </div>
-                        <?php if(is_admin() || is_super_admin()){ ?>
-                        <a href="/wp-admin/post-new.php?post_type=test-case" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
+                        <?php if(can_create_test_case()){ ?>
+                        <a href="/add-new-test-case" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
                         <?php } ?>
                         <div class="clear"></div>
                     </div>
