@@ -143,7 +143,7 @@ function process_eway_payment()
             $result = sendRestUserAction('/user/create', $data);
             
             $resultDoc = new DOMDocument();
-            
+            var_dump($result);
             if(!$result || !$resultDoc->loadXML($result))
             {
                 echo "Payment was proceed successfully with an error.";
