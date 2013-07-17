@@ -144,9 +144,9 @@ function process_eway_payment()
             
             $resultDoc = new DOMDocument();
             
-            if(!$resultDoc->loadXML($result))
+            if(!$result || !$resultDoc->loadXML($result))
             {
-                echo $result;
+                echo "Payment was proceed successfully with an error.";
             }else{
                 if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
                 {
@@ -192,11 +192,33 @@ function unsubscribe_purchase()
             exit;
         }
         
+        //Remove Backend Account
+        $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
+                    <api:user>
+                        <api:userId>' . $purchase->esb_user_id . '</api:userId>                        
+                    </api:user>
+                </api:deleteUserRequest>';
         
-        addMessage('Your subscription has been cancelled.');
-        //Change status to canceled 
-        $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
+        $result = sendRestUserAction('/user/delete', $data);
         
+        $resultDoc = new DOMDocument();
+        
+        if(!$result || !$resultDoc->loadXML($result))
+        {
+            addMessage("There was an error while cancelling your subscription.", "error");
+            
+        }else{
+            if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
+            {
+                addMessage('Error:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue);
+            }else{            
+                
+                addMessage('Your subscription has been cancelled.');
+                //Change status to canceled 
+                $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
+                            
+            }
+        }
         
         wp_redirect($return);
         exit;
