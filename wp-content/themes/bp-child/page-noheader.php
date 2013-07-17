@@ -9,6 +9,7 @@ get_header();
         
             <?php if (have_posts()) while (have_posts()) : the_post(); ?> 
                 <div class="content_inner">
+                    <a href="#" class="action-btn print-btn icon-btn" id="print-static-page-btn" style="margin-top: 10px; margin-right: 10px;"><span class="p"></span></a>
                     <?php if (has_post_thumbnail()) {
                         echo '<a href="'.get_permalink().'">';
                         the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));

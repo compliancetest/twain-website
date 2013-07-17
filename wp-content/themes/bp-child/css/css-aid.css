@@ -1693,6 +1693,7 @@ tr {
 }
 
 .blue-edit-btn,
+.print-btn,
 .blue-delete-btn{
     border-color: #3577ad;
     background: #2d83cd;
@@ -1707,6 +1708,7 @@ tr {
     -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
 }
 .blue-edit-btn:hover,
+.print-btn:hover,
 .blue-delete-btn:hover{
     background: #288ce2;
 }
@@ -1729,7 +1731,10 @@ tr {
     line-height: 16px;
     font-weight: bold;
 }
-
+.print-btn span.p{
+    background-position: 0 -899px;
+    width: 14px;
+}
 .large-plus-link{
     color: #2c80e8;
     font-size: 18px;

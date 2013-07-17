@@ -5377,3 +5377,6 @@ a.suite-subscript-link:hover{
     margin-right: 40px;
     display: none;
 }
+#print-static-page-btn{
+    float: right;    
+}

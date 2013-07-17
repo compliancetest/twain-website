@@ -5,13 +5,14 @@
 get_header();
 ?>
 
-    <div class="content container"><!-- Start Content Container-->        
-        
+    <div class="content container"><!-- Start Content Container-->                    
             <?php if (have_posts()) while (have_posts()) : the_post(); ?>
             <div class="page-title-block column">
-                <h2 class="nomarginbottom"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                <h2 class="nomarginbottom left"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                <a href="#" class="action-btn print-btn icon-btn" id="print-static-page-btn"><span class="p"></span></a>
+                <div class="clear"></div>
             </div>        
-                <div class="content_inner column">
+                <div class="content_inner column">                
                     <?php if (has_post_thumbnail()) {
                         echo '<a href="'.get_permalink().'">';
                         the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));
