@@ -176,11 +176,21 @@ Template Name Posts: Test Suite
                 You have already purchased a subscription to this test suite.
                 If you want to unsubscribe it, please click <a onclick="return confirm('Are you sure that you want to unsubscribe it')" href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>"><i>here</i></a>.
             </div>
-            <?php }else{ ?>            
+            <?php }else{ ?>  
+            <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
+            <a href="<?php echo get_permalink()?>&_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
+            <?php }else{ ?>          
 			<a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
+            <?php } ?>
                 <span class="price-b">
                     <span class="l"></span>
-                    <span class="m"><b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month</span>
+                    <span class="m">
+                    <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
+                    <b style="margin-top: 5px; display: block">Free</b>    
+                    <?php }else{ ?>
+                    <b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month
+                    <?php } ?>
+                    </span>
                     <span class="r"></span>
                 </span>
                 <span class="text-b"><b>ACCESS</b><br />Test Harness</span>

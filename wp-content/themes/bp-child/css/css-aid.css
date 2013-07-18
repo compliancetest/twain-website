@@ -1641,6 +1641,8 @@ tr {
     padding: 0 12px !important;
 }
 .certify-grey-btn,        
+.grey-edit-btn,        
+.grey-delete-btn,        
 .view-log-btn{        
     border-color: #a9a9a9;
     background: #caced2;
@@ -1655,6 +1657,8 @@ tr {
     -webkit-box-shadow: 0 1px 0 0 #e7ebef inset;    
 }
 .certify-grey-btn span.t,
+.grey-edit-btn span.t,
+.grey-delete-btn span.t,
 .view-log-btn span.t{
     color: #5f6670;
     text-shadow: 0 -1px 1px #ebedef;
@@ -1665,10 +1669,18 @@ tr {
 .certify-grey-btn span.p{
     background-position: 0 -409px;
 }
+.grey-delete-btn span.p{
+    background-position: 1px -1004px;
+}
 
 .certify-grey-btn:hover,
+.grey-edit-btn:hover,
+.grey-delete-btn:hover,
 .view-log-btn:hover{ 
     background: #c3c3c5;
+}
+.grey-edit-btn span.p{
+    background-position: 0 -951px;
 }
 .delete-btn{
     border-color: #7B1413;

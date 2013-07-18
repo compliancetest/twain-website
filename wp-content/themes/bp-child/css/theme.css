@@ -4436,7 +4436,8 @@ min-height: 70px;
 .status-testing{
     color: #e33f3f;
 }
-#my_products .add-claim-btn{
+#my_products .add-claim-btn,
+#test_suite_coverage .add-plan-btn{
     float: right;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -4463,26 +4464,62 @@ min-height: 70px;
 
 /*** Test Suite Coverage ***/
 #test_suite_coverage .td-product{
-    width: 202px;
+    width: 160px;
 }
 #test_suite_coverage .td-conflevel{
-    width: 70px;
+    width: 45px;
 }
+#test_suite_coverage .td-role{
+    width: 91px;
+}
+
 #test_suite_coverage .td-coverage{
-    width: 237px;
+    width: 246px;
 }
 #test_suite_coverage .tbody .td-coverage{
     padding: 7px 10px;
 }
 
 #test_suite_coverage .td-action{
-    width: 166px;
+    width: 111px;
 }
 #test_suite_coverage .tbody .td-action{
     padding: 3px 10px;
 }
-#test_suite_coverage .td-action .view-log-btn{
+#test_suite_coverage .td-action .view-log-btn,
+#test_suite_coverage .td-action .grey-delete-btn,
+#test_suite_coverage .td-action .grey-edit-btn{
     margin-right: 5px;
+}
+
+#test_suite_coverage .td-action .action-btn{
+    position: relative;
+}
+#test_suite_coverage .td-action .action-btn:hover .simple_tooltip{
+    display: block;
+    top: auto;
+    bottom: 30px;
+    left: 4px;
+}
+#make-plan-box{
+    width: 460px;
+}
+#make-plan-box #product_id{
+    width: auto;
+    min-width: 200px;
+}
+#make-plan-box .checkbox-cell label{
+    border-bottom: solid 1px #cbcbcb;
+    width: 200px;
+}
+#make-plan-box .checkbox-cell span{
+    display: block;
+    width: 194px;
+    padding: 3px;
+}
+#make-plan-box .checkbox-cell span input{
+    top: 2px;
+    position: relative;
 }
 .td-full{
     width: 100%;
@@ -4492,54 +4529,30 @@ min-height: 70px;
 }
 
 .coverage-progress{
-    width: 237px;
-    height: 17px;
-    background: url(../images/coverage-progress-bg.png) no-repeat;
     position: relative;
     text-align: center;
-    overflow: hidden;
+    overflow: hidden;    
+    padding: 2px;
+    background: #f6f6f6;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px 0px #ccc;
+    float: left;
 }
 .coverage-progress span{
     display: block;
-    width: 229px;
-    margin: 0 auto;
-    height: 100%;
-    background: url(../images/coverage-progress-bar.png) no-repeat 4px 4px;
+    width: 22px;
+    height: 9px;
+    margin: 1px;    
+    float: left;
+    background: url(../images/suite-progress-blob.png) no-repeat 0 0;
 }
-.coverage-progress .bar0{
-    background-position: -252px 0;
+.coverage-progress span.pass{
+    background-position: 0 -9px;
 }
-.coverage-progress .bar1{
-    background-position: -230px 0;
+.coverage-progress span.fail{
+    background-position: 0 -18px;
 }
-.coverage-progress .bar2{
-    background-position: -207px 0;
-}
-.coverage-progress .bar3{
-    background-position: -184px 0;
-}
-.coverage-progress .bar4{
-    background-position: -161px 0;
-}
-.coverage-progress .bar5{
-    background-position: -138px 0;
-}
-.coverage-progress .bar6{
-    background-position: -115px 0;
-}
-.coverage-progress .bar7{
-    background-position: -92px 0;
-}
-.coverage-progress .bar8{
-    background-position: -69px 0;
-}
-.coverage-progress .bar9{
-    background-position: -46px 0;
-}
-.coverage-progress .bar10{
-    background-position: 0 0;
-}
-
 /*** My Transactin Log ***/
 #my_transaction_log .filter-box{
     background: #f4f4f4;

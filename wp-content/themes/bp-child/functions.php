@@ -67,6 +67,10 @@ require_once(THE_FUNCTION . '/product-and-service/controller.php');
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');
 require_once(THE_FUNCTION . '/compliance-claim/controller.php');
 
+//Test Plan
+require_once(THE_FUNCTION . '/test-plan/class.plan.php');
+require_once(THE_FUNCTION . '/test-plan/controller.php');
+
 //Manage Login URLs
 require_once(THE_FUNCTION . '/login-redirect.php');
 
@@ -663,3 +667,34 @@ function cp_get_post_meta($post_id, $key = '', $single = false)
     
     return $meta_value;
 }
+
+function cp_implode($arr, $gule = ';;')
+{
+    if(!$arr)
+        return "";
+        
+    $str = implode($gule, $arr);
+    if($str != "")
+        $str = $gule . $str . $gule;
+    
+    return $str;
+}
+
+function cp_explode($str, $gule = ';;')
+{
+    if(!$str)
+        return array();
+        
+    $arr = explode($gule, $str);
+    
+    $result = array();
+    foreach($arr as $r)
+    {
+        if(!$r)
+            continue;
+        $result[] = $r;
+    }
+    
+    return $result;
+}
+

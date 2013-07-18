@@ -143,7 +143,7 @@ function process_eway_payment()
             $result = sendRestUserAction('/user/create', $data);
             
             $resultDoc = new DOMDocument();
-            var_dump($result);
+            
             if(!$result || !$resultDoc->loadXML($result))
             {
                 echo "Payment was proceed successfully with an error.";
@@ -163,6 +163,99 @@ function process_eway_payment()
     
 }
 
+add_action('init', 'free_charge');
+function free_charge()
+{
+    global $wpdb;
+    
+    if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'free_charge'))
+    {        
+        $suite_id = $_GET['suite_id'];
+        $return = !$suite_id ? "/" : get_permalink($suite_id);
+        
+        if(!is_user_logged_in())
+        {
+            addMessage("Permission Denied!", "error");
+            wp_redirect($return);
+            exit;
+        }
+        
+        $user_id = get_current_user_id();        
+        $user = get_userdata($user_id);
+        
+        $suite = new TestSuite($suite_id);
+        $suite->load();
+        
+        if($suite->monthlySubscriptionPrice > 0)
+        {
+            addMessage("Invalid Request!", "error");
+            wp_redirect($return);
+            exit;
+        }
+        
+        $group = groups_get_group( array('group_id' => $suite->community_id));
+        
+        if(!groups_is_user_member($user_id, $suite->community_id))
+        {
+            addMessage("You must join to this community to get the access of the test suite.", "error");
+            wp_redirect(bp_get_group_permalink($group));
+            exit;
+        }
+        
+        //Create MSH Datas 
+        $msh = array('mode' => 'PUSH', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => wp_generate_password(15, true));
+        
+        //Create Backend Customer Using SOAP            
+        $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
+                    <api:user>
+                        <api:username>' . $msh['username'] . '</api:username>
+                        <api:userGroups>
+                            <api:group>
+                                <api:groupId>' . $suite->community_id . '</api:groupId>
+                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                            </api:group>
+                        </api:userGroups>
+                        <api:userPMode>' . $msh['mode'] . '</api:userPMode>                            
+                        <api:userEndpointUsername>' . $msh['username'] . '</api:userEndpointUsername>
+                        <api:userEndpointPassword>' . $msh['password'] . '</api:userEndpointPassword>
+                    </api:user>
+                </api:createUserRequest>';
+        
+        $result = sendRestUserAction('/user/create', $data);
+        
+        $resultDoc = new DOMDocument();
+        
+        if(!$result || !$resultDoc->loadXML($result))
+        {
+            addMessage("There was an error while processing your request!", 'error');            
+        }else{
+            if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
+            {
+                addMessage($resultDoc->getElementsByTagName('error')->item(0)->nodeValue, "error");
+            }else{            
+                //Save Billing Data to Database
+                $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
+                    'user_id' => $user->ID,
+                    'suite_id' => $suite->id,
+                    'customer_id' => 0,
+                    'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
+                    'esb_username' => $msh['username'],
+                    'msh_p_mode' => $msh['mode'],
+                    'msh_url' => $msh['url'],
+                    'msh_username' => $msh['username'],
+                    'msh_password' => $msh['password'],
+                    'status' => 'Active',
+                    'expiry_date' => date("Y-m-d", strtotime('+1 month')),
+                    'created_date' => date('Y-m-d H:i:s')
+                ));
+                $id = $wpdb->insert_id;
+                addMessage("Your subscription has been proceeded successfully");
+            }
+        }
+        wp_redirect($return);
+        exit;
+    }
+}
 add_action('init', 'unsubscribe_purchase');
 function unsubscribe_purchase()
 {
@@ -201,7 +294,7 @@ function unsubscribe_purchase()
         
         $result = sendRestUserAction('/user/delete', $data);
         
-        $resultDoc = new DOMDocument();
+        $resultDoc = new DOMDocument(); 
         
         if(!$result || !$resultDoc->loadXML($result))
         {

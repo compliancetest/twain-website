@@ -302,3 +302,13 @@ function getClaimsBySuiteId($suite_id)
     return $rows;
 }
 
+function getTestPlansBySuiteId($suite_id)
+{
+    global $wpdb;
+        
+    $query = $wpdb->prepare("SELECT p.*, pm.meta_value as `product_name` FROM " . $wpdb->prefix . "test_plans AS p LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.product_id AND pm.meta_key='product_name'  WHERE p.suite_id=%d", $suite_id);
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+

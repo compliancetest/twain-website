@@ -61,6 +61,8 @@ class TestSuite
         $this->version = $this->loadSingleValue('ts_version');
         $this->initiatingMessage = $this->loadSingleValue('init_message');
         $this->monthlySubscriptionPrice = $this->loadSingleValue('monthly_subscription_price');
+        if(!$this->monthlySubscriptionPrice)
+            $this->monthlySubscriptionPrice = 0;
         
         $this->loadConformanceLevel();
         $this->loadTestCases();
