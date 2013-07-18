@@ -95,4 +95,17 @@ class ProductAndService
     {
         return $this->loadSingleValue('community_id');
     }
+    
+    public function getComplianceClaims($status = null)
+    {
+        global $wpdb;
+        
+        $query = "SELECT count(id) FROM " . $wpdb->prefix . "compliance_claims WHERE product_id='" . $this->id . "'";
+        if($status != null)
+            $query .= " AND `status`='" . $status . "'";
+        
+        $count = $wpdb->get_var($query);
+        
+        return $count;
+    }
 }

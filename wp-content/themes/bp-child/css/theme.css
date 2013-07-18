@@ -5393,3 +5393,9 @@ a.suite-subscript-link:hover{
 #print-static-page-btn{
     float: right;    
 }
+#search_product_block .grid_head .grid_cell{
+    line-height: 28px;
+}
+#search_product_block .grid_head .two-lines{
+    line-height: 14px;
+}

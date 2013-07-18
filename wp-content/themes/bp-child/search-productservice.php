@@ -37,7 +37,6 @@ if($term)
 $filterType = getFilterParam('type');
 $filterOwner = getFilterParam('owner');
 $filterYear = getFilterParam('product_year');
-$filterStatus = getFilterParam('status');
 
 foreach($filterType as $f)
 {
@@ -57,18 +56,13 @@ foreach($filterYear as $v)
     $params[] = urlencode('product_year[]') . '=' . $v;
     $filterParams['product_year[]'] = $v;
 }
-foreach($filterStatus as $v)
-{
-    $args['meta_query'][] = array('key' => 'product_status', 'value' => $v, 'compare' => '=');
-    $params[] = urlencode('status[]') . '=' . $v;
-    $filterParams['status[]'] = $v;
-}
+
 
 //For Right Panels
 $caseTypes = array();
 $caseOwners = array();
 $caseIssueYears = array();
-$caseStatuses = array();
+
     
 //For Filter Values
 $all_posts = new WP_Query($args);
@@ -89,8 +83,7 @@ foreach($allSuites as $row)
     
     $tsYear = date('Y', strtotime($issueDate));
     $caseIssueYears[$tsYear] = isset($caseIssueYears[$tsYear]) ? $caseIssueYears[$tsYear] + 1 : 1;
-    
-    $caseStatuses[$issueStatus] = isset($caseStatuses[$issueStatus]) ? $caseStatuses[$issueStatus] + 1 : 1;                    
+
 }
 
 //Getting Pagination Params
@@ -99,13 +92,13 @@ $args['paged'] = $page;
 $args['posts_per_page'] = $posts_per_page;
 
 $get_posts = new WP_Query($args);
-$testsuites = $get_posts->get_posts();
+$products = $get_posts->get_posts();
 ?>
 <div class="content container" id="search">      
     <div id="search_title_block" class="page-title-block column noshadow">                    
         <?php get_sidebar('search') ?>        
         <p class="search_result_label">            
-            <?php if (count($testsuites) > 0) { ?>
+            <?php if (count($products) > 0) { ?>
                 Showing <?php echo ($page - 1) * $posts_per_page + 1?> - <?php echo $page * $posts_per_page ?> of <b><?php echo $get_posts->found_posts?></b> Results
                 <?php if($term){ ?> for "<b><?php echo $term?></b>" <?php } ?>
             <?php }else{ ?>
@@ -118,8 +111,8 @@ $testsuites = $get_posts->get_posts();
         <div class="clear"></div>        
     </div> <!-- end search_title_block -->
         
-    <?php if(count($testsuites) > 0) {?> 
-    <div id="search_result_block" class="search_result_block">      
+    <?php if(count($products) > 0) {?> 
+    <div id="search_product_block" class="search_result_block">      
         <div class="four_fifths right">
             <div class="column padding20-10">
                 <div class="grid dark_gray_txt">
@@ -127,19 +120,23 @@ $testsuites = $get_posts->get_posts();
                         <div class="grid_cell nopaddingtop width35P">Name</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Owner</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Type</div>
-                        <div class="grid_cell nopaddingtop width20P tocenter">Date</div>
-                        <div class="grid_cell nopaddingtop width15P tocenter">Status</div>                        
+                        <div class="grid_cell nopaddingtop width15P tocenter">Date</div>
+                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Unverified<br />Claims</div>                        
+                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Tested<br />Claims</div>                        
                         <div class="clear"></div>                        
                     </div>
                     <div class="grid_body">
                         <?php
-                            foreach($testsuites as $row){
-                                $owner = get_post_meta($row->ID, 'product_owner', true);
+                            foreach($products as $row){
+                                $product = new ProductAndService($row->ID);
+                                $product->load();
+                                
+                                $owner = $product->owner;
                                 if(!$owner)
                                     $owner = get_user_meta($row->post_author, 'user_organisation', ture);
-                                $productType = get_post_meta($row->ID, 'product_type', true);
-                                $productDate = get_post_meta($row->ID, 'product_date', true);
-                                $productStatus = get_post_meta($row->ID, 'product_status', true);
+                                $productType = $product->type;
+                                $productDate = $product->release_date;
+                                
                                 $groupID = get_post_meta($row->ID, 'community_id', true);
                                 $group = groups_get_group( array( 'group_id' => $groupID ) )
                         ?>
@@ -154,17 +151,21 @@ $testsuites = $get_posts->get_posts();
                             <div class="grid_cell width15P tocenter">
                                 <?php echo $productType?>
                             </div>                                       
-                            <div class="grid_cell width20P tocenter">
+                            <div class="grid_cell width15P tocenter">
                             <?php                            
                                 echo date('M Y', strtotime($productDate));
                             ?>
                             </div>
-                            <div class="grid_cell width15P tocenter">
+                            <div class="grid_cell width10P tocenter">
                                 <?php                             
-                                if($productStatus == 'Active')
-                                    echo '<span class="status_btn status_btn_active">ACTIVE</span>';
-                                else if($productStatus == 'On Hold')
-                                    echo '<span class="status_btn status_btn_on_hold">ON HOLD</span>';
+                                    $c = $product->getComplianceClaims('Self Assessed');
+                                    echo !$c ? 'None' : $c;
+                                ?>
+                            </div>                       
+                            <div class="grid_cell width10P tocenter">
+                                <?php                             
+                                    $c = $product->getComplianceClaims('Verified');
+                                    echo !$c ? 'None' : $c;
                                 ?>
                             </div>                       
                             <div class="clear"></div>
@@ -246,20 +247,7 @@ $testsuites = $get_posts->get_posts();
                             }
                         ?>
                         </div>
-                    </div>
-                    <div class="expandable">
-                        <h6 class="exp_title">Status</h6>
-                        <div class="exp_content">
-                        <?php
-                            foreach ($caseStatuses as $k => $v){
-                        ?>
-                            <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="status[]" <?php echo in_array($k, $filterStatus) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
-                            <div class="clear"></div>
-                        <?php
-                            }
-                        ?>
-                        </div>
-                    </div>
+                    </div>                   
                 </form>
             </div>
         </div>
