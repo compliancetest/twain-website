@@ -36,34 +36,57 @@ function certifyPlan()
         exit;
     }
     
-    //Create Compliance Claim
-    /*foreach($plan->level as $level)
+    $suite = new TestSuite($plan->suite_id);
+    $cases = $suite->loadTestCases($plan->level, $plan->role);                                   
+    
+    //Getting Esb Customer ID
+    $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE suite_id=%d AND user_id=%d", $plan->suite_id, $user_id);
+    $esbUserId = $wpdb->get_var($query);
+    
+    $esb = new ManageESB();
+    $caseStatus = $esb->getCaseStatus($esbUserId, $plan->suite_id);
+    
+    $all_verified = true;
+    foreach($cases as $case)
     {
-        foreach($plan->role as $role)
+        if(!isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass') 
         {
-            $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
-            $oId = $wpdb->get_var($query);
-            if(!$oId)
+            $all_verified = false;   
+            break; 
+        }
+    }
+    
+    //Create Compliance Claim
+    if($all_verified)
+    {
+        foreach($plan->level as $level)
+        {
+            foreach($plan->role as $role)
             {
-                $wpdb->insert($wpdb->prefix . "compliance_claims", array(
-                    'product_id'    =>  $plan->product_id,
-                    'creator_id'    =>  $user_id,
-                    'suite_id'    =>  $plan->suite_id,
-                    'conformance_level'    =>  $level,
-                    'role'    =>  $role,
-                    'status'    =>  'Verified',
-                    'created_date'    =>  date('Y-m-d H:i:s'),
-                    'last_updated'    =>  date('Y-m-d H:i:s'),
-                    'audit'    =>  ''
-                ));
-            }else{
-                $nId = $wpdb->update(TABLE_CLAIM, array(
-                    'status'    =>  'Verified',
-                    'last_updated'    =>  date('Y-m-d H:i:s')
-                ), array('id' => $oId));
+                $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
+                $oId = $wpdb->get_var($query);
+                if(!$oId)
+                {
+                    $wpdb->insert($wpdb->prefix . "compliance_claims", array(
+                        'product_id'    =>  $plan->product_id,
+                        'creator_id'    =>  $user_id,
+                        'suite_id'    =>  $plan->suite_id,
+                        'conformance_level'    =>  $level,
+                        'role'    =>  $role,
+                        'status'    =>  'Verified',
+                        'created_date'    =>  date('Y-m-d H:i:s'),
+                        'last_updated'    =>  date('Y-m-d H:i:s'),
+                        'audit'    =>  ''
+                    ));
+                }else{
+                    $nId = $wpdb->update(TABLE_CLAIM, array(
+                        'status'    =>  'Verified',
+                        'last_updated'    =>  date('Y-m-d H:i:s')
+                    ), array('id' => $oId));
+                }
             }
         }
-    }*/
+    }
     
     addMessage('The plan was certified successfully');
     

@@ -24,8 +24,8 @@ function deleteClaim()
 {
     global $wpdb;
     
-    $productID = $_POST['product_id'];
-    $claimID = isset($_POST['id']) ? $_POST['id'] : null;
+    $productID = $_REQUEST['product_id'];
+    $claimID = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
     
     $user_id = get_current_user_id();
     
@@ -34,7 +34,7 @@ function deleteClaim()
     
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
     
-    if(!can_delete_compliance_claim($claimID, $claimID))
+    if(!can_delete_compliance_claim($claimID))
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect($return);

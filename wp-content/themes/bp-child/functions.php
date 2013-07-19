@@ -20,6 +20,8 @@ function cp_session_start()
 
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 
+require_once(THE_FUNCTION . '/esb.php');
+
 //Include change role names
 require_once(THE_FUNCTION . '/role-customize.php');
 require_once(THE_FUNCTION . '/authorization.php');
@@ -79,6 +81,8 @@ require_once(THE_FUNCTION . '/eway/settings.php');
 require_once(THE_FUNCTION . '/eway/controller.php');
 
 require_once(THE_FUNCTION . '/rest.php');
+
+
 
  
 /* 

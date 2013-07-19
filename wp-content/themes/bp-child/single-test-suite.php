@@ -240,7 +240,7 @@ Template Name Posts: Test Suite
                             </label>
                         </div>
                         <?php if(can_create_test_case()){ ?>
-                        <a href="/add-new-test-case" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
+                        <a href="/add-new-test-case?suite_id=<?php echo $suite->id?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
                         <?php } ?>
                         <div class="clear"></div>
                     </div>

@@ -104,6 +104,7 @@ class TestSuite
         $roleNames = cp_get_post_meta($this->id, 'role_names', true);
         $roleDescs = cp_get_post_meta($this->id, 'role_descs', true);
         $roles = array();
+        
         if(!$roleNames)
         {
             return $roles;
@@ -138,7 +139,7 @@ class TestSuite
         return $result;
     }
     
-    public function loadTestCases()
+    public function loadTestCases($level = array(), $role = array())
     {        
         $args = array(
                 'post_type' => 'test-case',         
@@ -147,11 +148,26 @@ class TestSuite
                 'order'     => 'ASC',
                 'meta_key'  => 'sequence_number',
                 'meta_query' => array(
+                                    'relation' => 'AND',
                                     array('key' => 'test_suite', 
                                           'value' => $this->id, 
                                           'compare' => '=')
                                 )
         );
+        
+        if(!empty($level))
+        {
+            if(!is_array($level))
+                $level = array($level);
+            $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $level, 'compare'=> 'IN');
+        }
+        
+        if(!empty($role))
+        {
+            if(!is_array($role))
+                $role = array($role);
+            $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $role, 'compare'=> 'IN');
+        }
         
         $case_query = new WP_Query($args);
         $this->testCases = $case_query->get_posts();

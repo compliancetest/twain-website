@@ -86,45 +86,57 @@ get_header();
             </div>            
             <div class="clear"></div>
         </div> 
-    <div class="grid-box table-box">
-       <div class="grid-box-header">
-           <h5><b>SuperStream MCS v1.1</b></h5>                   
-           <div class="clear"></div>
-       </div>
-       <div class="grid-box-body">
-           <div class="thead tr">
-               <div class="td td-product">Product</div>
-               <div class="td td-conflevel">Conf Level</div>
-               <div class="td td-coverage">Coverage</div>
-               <div class="td td-action">Action</div>
-               <div class="clear"></div>
-           </div>
-           <div class="tbody">
-               <div class="tr">
-                   <div class="td td-product">Product</div>
-                   <div class="td td-conflevel">Conf Level</div>
-                   <div class="td td-coverage">
-                       <div class="coverage-progress"><span class="bar0"></span></div>    
+        <div class="column">
+            <div class="grid-box table-box">               
+               <div class="grid-box-body">
+                   <div class="thead tr">
+                       <div class="td td-product">Product Name</div>
+                       <div class="td td-case td-two-lines">Test<br />Case</div>
+                       <div class="td td-suite td-two-lines">Test<br />Suite</div>
+                       <div class="td td-outcome td-two-lines">Test<br />Outcome</div>
+                       <div class="td td-audit td-two-lines">Audit<br />Record</div>
+                       <div class="td td-service">Service</div>
+                       <div class="td td-convsn">Convsn</div>
+                       <div class="td td-date">Date</div>
+                       <div class="td td-from">From</div>
+                       <div class="td td-to">To</div>
+                       <div class="td td-customer">Customer</div>
+                       <div class="clear"></div>
                    </div>
-                   <div class="td td-action">
-                      <a href="#" class="action-btn view-log-btn"><span class="p"></span><span class="t">View Log</span></a>
-                      <a href="#" class="action-btn certify-btn"><span class="p"></span><span class="t">Certify</span></a>
+                   <div class="tbody">
+                       <div class="tr">
+                           <div class="td td-product">Product Name</div>
+                           <div class="td td-case">Test<br />Case</div>
+                           <div class="td td-suite">Test<br />Suite</div>
+                           <div class="td td-outcome">Test<br />Outcome</div>
+                           <div class="td td-audit">Audit<br />Record</div>
+                           <div class="td td-service">Service</div>
+                           <div class="td td-convsn">Convsn</div>
+                           <div class="td td-date">Date</div>
+                           <div class="td td-from">From</div>
+                           <div class="td td-to">To</div>
+                           <div class="td td-customer">Customer</div>
+                           <div class="clear"></div> 
+                       </div>
+                       <div class="tr">
+                           <div class="td td-product">Product Name</div>
+                           <div class="td td-case">Test<br />Case</div>
+                           <div class="td td-suite">Test<br />Suite</div>
+                           <div class="td td-outcome">Test<br />Outcome</div>
+                           <div class="td td-audit">Audit<br />Record</div>
+                           <div class="td td-service">Service</div>
+                           <div class="td td-convsn">Convsn</div>
+                           <div class="td td-date">Date</div>
+                           <div class="td td-from">From</div>
+                           <div class="td td-to">To</div>
+                           <div class="td td-customer">Customer</div>
+                           <div class="clear"></div> 
+                       </div>
+                       
                    </div>
-                   <div class="clear"></div>
                </div>
-               <div class="tr">
-                   <div class="td td-product">Product</div>
-                   <div class="td td-conflevel">Conf Level</div>
-                   <div class="td td-coverage">Coverage</div>
-                   <div class="td td-action">
-                      <a href="#" class="action-btn view-log-btn"><span class="p"></span><span class="t">View Log</span></a>
-                      <a href="#" class="action-btn certify-grey-btn"><span class="p"></span><span class="t">Certify</span></a>
-                   </div>
-                   <div class="clear"></div>
-               </div>
            </div>
-       </div>
-   </div>
+        </div>
     </div>
     <div class="clear"></div>
             

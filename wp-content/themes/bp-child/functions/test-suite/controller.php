@@ -274,3 +274,4 @@ function saveSuite()
     wp_redirect(get_permalink($id));
     exit;
 }
+

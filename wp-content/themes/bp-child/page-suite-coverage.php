@@ -7,6 +7,7 @@ get_header();
 //Getting The Suites that belonged to the Community 
 $mysuites = getUserSubscribedSuites();
 
+$esb = new ManageESB();
 ?>
 <div class="content" id="test_suite_coverage">
 	<div class="column fifth left nopaddingleft nopaddingright sidebar">
@@ -19,6 +20,9 @@ $mysuites = getUserSubscribedSuites();
             <div class="clear space15"></div>
             <?php } ?>
            <?php foreach($mysuites as $suite){ ?>
+           <?php
+               $caseStatus = $esb->getCaseStatus($suite->esb_user_id, $suite->suite_id);
+           ?>
            <div class="grid-box table-box">
                <div class="grid-box-header">
                    <h5 class="left"><a href="<?php echo get_permalink($suite->suite_id)?>"><b><?php echo $suite->name?></b></a></h5>                   
@@ -55,17 +59,32 @@ $mysuites = getUserSubscribedSuites();
                            <div class="td td-conflevel"><?php echo implode(cp_explode($crow->level), ", ") ?></div>
                            <div class="td td-role"><?php echo implode(cp_explode($crow->role), ", ")?></div>
                            <div class="td td-coverage">
+                               <?php
+                                   $suiteObj = new TestSuite($suite->suite_id);
+                                   $testCases = $suiteObj->loadTestCases(cp_explode($crow->level), cp_explode($crow->role));                                   
+                               ?> 
                                <div class="coverage-progress">
-                                   <span class=""></span>
-                                   <span class=""></span>
-                                   <span class=""></span>
-                                   <span class=""></span>
-                                   <span class=""></span>
-                                   <span class=""></span>
-                                   <span class=""></span>                                   
-                                   <span class=""></span>                                   
-                                   <span class=""></span>                                   
-                                   <span class=""></span>                                   
+                                   <?php
+                                       $passedBlobs = "";
+                                       $failedBlobs = "";
+                                       $normalBlobs = "";
+                                       foreach($testCases as $case)
+                                       {
+                                           if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 
+                                           {
+                                               if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
+                                               {
+                                                   $passedBlobs .= '<span class="' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
+                                               }else{
+                                                   $failedBlobs .= '<span class="' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
+                                               }
+                                               
+                                           }else{
+                                               $normalBlobs .= '<span></span>';
+                                           }
+                                       }
+                                       echo $passedBlobs . $failedBlobs . $normalBlobs;
+                                   ?>
                                </div>    
                                <div class="clear"></div>
                            </div>

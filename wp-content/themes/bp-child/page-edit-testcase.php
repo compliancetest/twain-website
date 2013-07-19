@@ -152,9 +152,10 @@ get_header();
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label>Tester Role:</label>
+                           <label>Tester Role:</label>                           
                            <select name="choose_tester_role" class="select">
                                <option>- Select -</option>
+                               
                                <?php foreach($suite->roles as $row) {?>
                                <option value="<?php echo $row['name']?>" <?php echo $case->testerRole == $row['name'] ? 'selected="selected"' : ''?>><?php echo $row['name']?></option>
                                <?php } ?>
