@@ -25,6 +25,9 @@ function cp_print_page()
         }else if($pageType == 'test-case'){
             require_once(THE_FUNCTION . "/print/print-test-case.php");
             exit;
+        }else if($pageType == 'wiki'){
+            require_once(THE_FUNCTION . "/print/print-wiki.php");
+            exit;
         }
     }
 }

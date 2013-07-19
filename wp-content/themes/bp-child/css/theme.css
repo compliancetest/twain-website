@@ -3685,7 +3685,7 @@ p.copyright{
 
 /* **************************** TABS ******************************** */
 
-.tabs li {
+body .tabs li {
     float: left;
     border-radius: 6px 6px 0 0;
     -moz-border-radius: 6px 6px 0 0;
@@ -3705,11 +3705,11 @@ p.copyright{
     position: relative;
 }
 
-    .tabs li:hover {
+    body .tabs li:hover {
         background: #fff;
     }
     
-    .tabs li.active {
+    body .tabs li.active {
         background: #2d85cf;
         box-shadow: 0 0 30px -7px #002747 inset;
         -moz-box-shadow: 0 0 30px -7px #002747 inset;
@@ -3720,7 +3720,7 @@ p.copyright{
         margin-top: 0px;
     }
 
-    .tabs li a {
+    body .tabs li a {
         padding: 5px;
         display: block;
         font-family: 'Open Sans', Arial, sans-serif;
@@ -3733,21 +3733,21 @@ p.copyright{
         font-weight: normal;
     }
     
-        .tabs li a span {
+        body .tabs li a span {
             display: block;
         }
         
-        .tabs li a span.text {
+        body .tabs li a span.text {
             line-height: 28px;
             padding: 0 15px;
             background: url(../images/tab_separator.png) left center no-repeat;
             font-family: 'Oswald', Arial, Helvetica sans-serif;
         }
         
-        .tabs li.active a span.text{
+        body .tabs li.active a span.text{
         background: url(../images/blue_separator.png) left center no-repeat;
         }
-            .tabs li.active a span.text {
+            body .tabs li.active a span.text {
                 color: #fff;
                 text-shadow: 0 1px 0 #002747;
                 -moz-text-shadow: 0 1px 0 #002747;
@@ -3756,21 +3756,21 @@ p.copyright{
                 font-family: 'Oswald', Arial, Helvetica sans-serif;
             }
         
-            .tabs li a .icon {
+            body .tabs li a .icon {
                 width: 27px;
                 height: 27px;
             }
             
-            .tabs li a  #icon_test_suites {
+            body .tabs li a  #icon_test_suites {
                 background: url(../images/issuer_sprite.png) -1px 1px no-repeat;
                 margin: 2px;
             }
             
-                .tabs li.active a  #icon_test_suites {
+                body .tabs li.active a  #icon_test_suites {
                     background: url(../images/issuer_sprite.png) -27px 0px no-repeat;
                 }
                 
-                .tabs li.active a.selected .tabactive{
+                body .tabs li.active a.selected .tabactive{
                     background: url(../images/tab_active.png) no-repeat;
                     width: 16px;
                     height: 8px;
@@ -3780,79 +3780,79 @@ p.copyright{
                     position: absolute;
                 }
             
-            .tabs li a  #icon_wiki {
+            body .tabs li a  #icon_wiki {
                 background: url(../images/wiki_tab_icon.png) 2px 1px no-repeat;
                 margin: 2px;
                 margin-right: 4px;
             }
-            .tabs li.active a #icon_wiki {
+            body .tabs li.active a #icon_wiki {
                 background: url(../images/issuer_sprite.png) -26px -35px no-repeat;
             }
             
-            .tabs li a  #icon_forum {
+            body .tabs li a  #icon_forum {
                 background: url(../images/issuer_sprite.png) 2px -68px no-repeat;
                 margin: 2px;
                 margin-right: 7px;
             }
             
-            .tabs li.active a  #icon_forum {
+            body .tabs li.active a  #icon_forum {
                 background: url(../images/issuer_sprite.png) -26px -67px no-repeat;
             }
             
-            .tabs li a  #icon_downloads {
+            body .tabs li a  #icon_downloads {
                 background: url(../images/issuer_sprite.png) -24px -103px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
             
-            .tabs li.active a  #icon_downloads {
+            body .tabs li.active a  #icon_downloads {
                 background: url(../images/issuer_sprite.png) -1px -104px no-repeat;
             }
             
             /* Document page */
-            .tabs li a  #icon_read {
+            body .tabs li a  #icon_read {
                 background: url(../images/document_sprite.png) 0px 0px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
             
-            .tabs li.active a  #icon_read {
+            body .tabs li.active a  #icon_read {
                 background: url(../images/document_sprite.png) -25px 0px no-repeat;
             }
             
-            .tabs li a  #icon_edit {
+            body .tabs li a  #icon_edit {
                 background: url(../images/document_sprite.png) 1px -35px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
             
-            .tabs li.active a  #icon_edit {
+            body .tabs li.active a  #icon_edit {
                 background: url(../images/document_sprite.png) -25px -35px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
             
-            .tabs li a  #icon_history {
+            body .tabs li a  #icon_history {
                 background:url(../images/document_sprite.png) 0px -68px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
             
-            .tabs li.active a  #icon_history {
+            body .tabs li.active a  #icon_history {
                 background: url(../images/document_sprite.png) -25px -68px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
-            .tabs li a  #icon_admin {
+            body .tabs li a  #icon_admin {
                 background: url(../images/sproket_icon_g.png) 2px 3px no-repeat;
                 margin: 2px;
                 margin-right: 5px;
             }
 
-            .tabs li.active a  #icon_admin {
+            body .tabs li.active a  #icon_admin {
                 background: url(../images/sproket_icon_w.png) 2px 3px no-repeat;
             }
-            .tabs li.active a .tabactive{
+            body .tabs li.active a .tabactive{
             background: url(../images/tab_active.png) no-repeat;
             width: 16px;
             height: 8px;
@@ -3861,7 +3861,7 @@ p.copyright{
             left: 7px;
             }
             
-    .tabs li.active {
+    body .tabs li.active {
         background: #2b87d6;
     }
 
