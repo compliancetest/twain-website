@@ -82,6 +82,8 @@ require_once(THE_FUNCTION . '/eway/controller.php');
 
 require_once(THE_FUNCTION . '/rest.php');
 
+require_once(THE_FUNCTION . '/print/print.php');
+
 
 
  

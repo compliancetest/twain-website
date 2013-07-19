@@ -27,6 +27,7 @@ $case->load();
                 <?php
                     }
                 ?>
+                <a href="<?php echo addPrintParams(get_permalink(), 'test-case')?>" class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span class="t">PRINT</span></a>
                 <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($case->testSuite)?>"><?php echo get_the_title($case->testSuite) ?></a></span>
                 <div class="clear"></div>
 				<p class="dark_gray_txt"><?php echo _convertLineSymbolToBR($case->testIntentDescription) ; ?></p>

@@ -9,7 +9,7 @@ get_header();
             <?php if (have_posts()) while (have_posts()) : the_post(); ?>
             <div class="page-title-block column">
                 <h2 class="nomarginbottom left"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                <a href="#" class="action-btn print-btn icon-btn" id="print-static-page-btn"><span class="p"></span></a>
+                <a href="<?php echo addPrintParams(get_permalink(), 'static')?>" class="action-btn print-btn icon-btn print-page-btn" id="print-static-page-btn"><span class="p"></span></a>
                 <div class="clear"></div>
             </div>        
                 <div class="content_inner column">                

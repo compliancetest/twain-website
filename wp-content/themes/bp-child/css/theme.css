@@ -5413,3 +5413,8 @@ a.suite-subscript-link:hover{
 #search_product_block .grid_head .two-lines{
     line-height: 14px;
 }
+#print-suite-btn,
+#print-case-btn{
+    float: left;
+    margin-left: 10px;
+}

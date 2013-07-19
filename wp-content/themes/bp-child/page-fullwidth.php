@@ -12,7 +12,7 @@ get_header();
 			<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 				
 				<div class="content_inner">
-                <a href="#" class="action-btn print-btn"><span class="p"></span><span class="t">PRINT</span></a>                    
+                     <a href="<?php echo addPrintParams(get_permalink(), 'static')?>" class="action-btn print-btn icon-btn print-page-btn" id="print-static-page-btn"><span class="p"></span></a>                  
 					<?php if (has_post_thumbnail()) {
 						echo '<a href="'.get_permalink().'">';
 						the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));
