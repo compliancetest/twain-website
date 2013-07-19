@@ -35,7 +35,7 @@ $esb = new ManageESB();
                    <div class="clear"></div>
                </div>
                <?php
-                   $plans = getTestPlansBySuiteId($suite->suite_id);
+                   $plans = getTestPlansBySuiteId($suite->suite_id, get_current_user_id());
                ?>
                <div class="grid-box-body">
                    <div class="thead tr">
