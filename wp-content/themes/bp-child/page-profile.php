@@ -432,7 +432,7 @@ get_header();
                     <label>P Mode:</label>
                     <select name="msh_p_mode" id="msh_p_mode" class="select">
                         <option value="PUSH">PUSH</option>
-                        <option value="POP">POP</option>
+                        <option value="PULL">PULL</option>
                     </select>
                 </div>
                 <div class="clear"></div>

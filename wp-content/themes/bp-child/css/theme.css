@@ -4589,6 +4589,10 @@ min-height: 70px;
     -webkit-border-radius: 5px 5px 0 0;
     -o-border-radius: 5px 5px 0 0;
 }
+#my_transaction_log .table-box .td{
+    padding-left: 5px;
+    padding-right: 5px;
+}
 #my_transaction_log .table-box .thead .td{
     border-color: #1d76c0;
     font-size: 11px;
@@ -4597,6 +4601,37 @@ min-height: 70px;
 #my_transaction_log .table-box .thead .td-two-lines{
     line-height: 14px;
 }
+#my_transaction_log .td-product{
+    width: 100px;
+}
+#my_transaction_log .td-case{
+    width: 45px;
+}
+#my_transaction_log .td-suite{
+    width: 52px;
+}
+#my_transaction_log .td-outcome{
+    width: 50px;
+}
+#my_transaction_log .td-audit{
+    width: 40px;
+}
+#my_transaction_log .td-service{
+    width: 50px;
+}
+#my_transaction_log .td-convsn{
+    width: 61px;
+}
+#my_transaction_log .td-date{
+    width: 50px;
+}
+#my_transaction_log .td-from,
+#my_transaction_log .td-customer,
+#my_transaction_log .td-to{
+    width: 70px;
+}
+
+
 /*** Group Admin Section ***/
 #group_admin_page .grid-box-body{
     background: #fff;

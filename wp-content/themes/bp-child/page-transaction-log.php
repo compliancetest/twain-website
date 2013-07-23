@@ -83,24 +83,26 @@ get_header();
             </div>
             <div class="left">
                 <input type="text" name="date" id="date" class="input datepicker" />
+                <div class="space10"></div>
+                <a href="#" class="action-btn process-btn left15"><span class="p"></span><span class="t">APPLY FILTER</span></a>
             </div>            
             <div class="clear"></div>
         </div> 
-        <div class="column">
+        <div class="padding20-10">
             <div class="grid-box table-box">               
                <div class="grid-box-body">
                    <div class="thead tr">
                        <div class="td td-product">Product Name</div>
-                       <div class="td td-case td-two-lines">Test<br />Case</div>
-                       <div class="td td-suite td-two-lines">Test<br />Suite</div>
-                       <div class="td td-outcome td-two-lines">Test<br />Outcome</div>
-                       <div class="td td-audit td-two-lines">Audit<br />Record</div>
-                       <div class="td td-service">Service</div>
-                       <div class="td td-convsn">Convsn</div>
-                       <div class="td td-date">Date</div>
-                       <div class="td td-from">From</div>
-                       <div class="td td-to">To</div>
-                       <div class="td td-customer">Customer</div>
+                       <div class="td td-case td-two-lines tocenter">Test<br />Case</div>
+                       <div class="td td-suite td-two-lines tocenter">Test<br />Suite</div>
+                       <div class="td td-outcome td-two-lines tocenter">Test<br />Outcome</div>
+                       <div class="td td-audit td-two-lines tocenter">Audit<br />Record</div>
+                       <div class="td td-service tocenter">Service</div>
+                       <div class="td td-convsn tocenter">Convsn</div>
+                       <div class="td td-date tocenter">Date</div>
+                       <div class="td td-from tocenter">From</div>
+                       <div class="td td-to tocenter">To</div>
+                       <div class="td td-customer tocenter">Customer</div>
                        <div class="clear"></div>
                    </div>
                    <div class="tbody">
@@ -108,11 +110,11 @@ get_header();
                            <div class="td td-product">Product Name</div>
                            <div class="td td-case">Test<br />Case</div>
                            <div class="td td-suite">Test<br />Suite</div>
-                           <div class="td td-outcome">Test<br />Outcome</div>
-                           <div class="td td-audit">Audit<br />Record</div>
+                           <div class="td td-outcome tocenter">Test<br />Outcome</div>
+                           <div class="td td-audit tocenter">Audit<br />Record</div>
                            <div class="td td-service">Service</div>
                            <div class="td td-convsn">Convsn</div>
-                           <div class="td td-date">Date</div>
+                           <div class="td td-date tocenter">Date</div>
                            <div class="td td-from">From</div>
                            <div class="td td-to">To</div>
                            <div class="td td-customer">Customer</div>
@@ -126,9 +128,9 @@ get_header();
                            <div class="td td-audit">Audit<br />Record</div>
                            <div class="td td-service">Service</div>
                            <div class="td td-convsn">Convsn</div>
-                           <div class="td td-date">Date</div>
-                           <div class="td td-from">From</div>
-                           <div class="td td-to">To</div>
+                           <div class="td td-date">12/22/15</div>
+                           <div class="td td-from">AMP0195AU</div>
+                           <div class="td td-to">AMP0195AU</div>
                            <div class="td td-customer">Customer</div>
                            <div class="clear"></div> 
                        </div>

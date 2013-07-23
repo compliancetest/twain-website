@@ -355,7 +355,7 @@ function cp_save_customer_harness_detail()
     
     $isSaved = false;
     
-    if($_POST['msh_p_mode'] == 'POP'){
+    if($_POST['msh_p_mode'] == 'PULL'){
         $_POST['msh_url'] = $data->msh_url;
         $_POST['msh_username'] = $data->msh_username;
         $_POST['msh_password'] = $data->msh_password;
@@ -419,7 +419,7 @@ function cp_save_customer_harness_detail()
         }
     }
     
-    if($_POST['msh_p_mode'] == 'POP'){
+    if($_POST['msh_p_mode'] == 'PULL'){
         $wpdb->update($wpdb->prefix . "users_purchases", 
                 array('msh_p_mode' => $_POST['msh_p_mode']),
                 array('id' => $data->id)

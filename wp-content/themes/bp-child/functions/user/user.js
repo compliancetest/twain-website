@@ -356,7 +356,7 @@
                     $('#harness-detail-box #msh_username').val($('#msh_username' + id).val());
                     $('#harness-detail-box #msh_password').val($('#msh_password' + id).val());
                     $('#harness-detail-box #harness-id').val(id);
-                    if($('#msh_p_mode' + id).val() == 'POP')
+                    if($('#msh_p_mode' + id).val() == 'PULL')
                     {
                         $('#harness-detail-box #msh_url').prop('disabled', 'disabled');
                         $('#harness-detail-box #msh_username').prop('disabled', 'disabled');
@@ -371,7 +371,7 @@
         })
         
         $('#harness-form #msh_p_mode').change(function(){
-            if($(this).val() == 'POP')
+            if($(this).val() == 'PULL')
             {
                 $('#harness-detail-box #msh_url').prop('disabled', 'disabled');
                 $('#harness-detail-box #msh_username').prop('disabled', 'disabled');
