@@ -25,21 +25,25 @@ if(is_user_logged_in()){
     exit;
 }
 get_header();
+
+$esb = new ManageESB();
+
+$results = $esb->getUserTransactionLog();
 ?>
 
 <div class="content" id="my_transaction_log">
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>
-    <div class="four_fifths right container">
+    <!--<div class="four_fifths right container">
         <div class="column">
             <h2>My Transaction Log</h2>
             <div class="space10"></div>
             <div class="message notice">This function is under construction</div>
         </div>
         <div class="space100"></div>
-    </div>
-    <div class="four_fifths right container" style="display: none;">
+    </div>-->
+    <div class="four_fifths right container">
         <div class="filter-box column">
             <div class="left"><label>Filter By:</label></div>
             <div class="left">
@@ -106,35 +110,53 @@ get_header();
                        <div class="clear"></div>
                    </div>
                    <div class="tbody">
+                   <?php if(!$results){ ?>
                        <div class="tr">
-                           <div class="td td-product">Product Name</div>
-                           <div class="td td-case">Test<br />Case</div>
-                           <div class="td td-suite">Test<br />Suite</div>
-                           <div class="td td-outcome tocenter">Test<br />Outcome</div>
-                           <div class="td td-audit tocenter">Audit<br />Record</div>
-                           <div class="td td-service">Service</div>
-                           <div class="td td-convsn">Convsn</div>
-                           <div class="td td-date tocenter">Date</div>
-                           <div class="td td-from">From</div>
-                           <div class="td td-to">To</div>
+                           <div class="td td-full">No Transaction Found.</div>
+                           <div class="clear"></div>
+                       </div>
+                   <?php }else{?>
+                     <?php foreach($results as $row){ ?>
+                       <div class="tr">
+                           <div class="td td-product">
+                               <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
+                           </div>
+                           <div class="td td-case">
+                               <a href="<?php echo get_permalink($row->TEST_CASE_ID)?>"><?php echo get_post_meta($row->TEST_CASE_ID, 'test_case_id', true)?></a>
+                           </div>
+                           <div class="td td-suite">
+                               <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo get_post_meta($row->TEST_SUITE_ID, 'ts_name', true)?></a>
+                           </div>
+                           <div class="td td-outcome tocenter">
+                               <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
+                               <span class="status-certified">Pass</span>
+                               <?php }else{ ?>
+                               <span class="status-testing">Fail</span>
+                               <?php } ?>
+                           </div>
+                           <div class="td td-audit tocenter">
+                               <?php if(!$row->AUDIT_RECORD){ ?>
+                                   No
+                               <?php }else{ ?>
+                                   <a href="#">Yes</a>
+                               <?php } ?>
+                           </div>
+                           <div class="td td-service">
+                               <?php echo $row->SERVICE?>
+                           </div>
+                           <div class="td td-convsn">
+                               <?php echo  $row->CONVERSATION_ID ?>
+                           </div>
+                           <div class="td td-date tocenter">
+                               <?php echo formatDate($row->EXECUTION_DATE)?>
+                           </div>
+                           <div class="td td-from"><?php echo $row->FROM_PARTY_ID?></div>
+                           <div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>
                            <div class="td td-customer">Customer</div>
                            <div class="clear"></div> 
-                       </div>
-                       <div class="tr">
-                           <div class="td td-product">Product Name</div>
-                           <div class="td td-case">Test<br />Case</div>
-                           <div class="td td-suite">Test<br />Suite</div>
-                           <div class="td td-outcome">Test<br />Outcome</div>
-                           <div class="td td-audit">Audit<br />Record</div>
-                           <div class="td td-service">Service</div>
-                           <div class="td td-convsn">Convsn</div>
-                           <div class="td td-date">12/22/15</div>
-                           <div class="td td-from">AMP0195AU</div>
-                           <div class="td td-to">AMP0195AU</div>
-                           <div class="td td-customer">Customer</div>
-                           <div class="clear"></div> 
-                       </div>
-                       
+                       </div>                       
+                     <?php } ?>
+                   <?php } ?>
                    </div>
                </div>
            </div>

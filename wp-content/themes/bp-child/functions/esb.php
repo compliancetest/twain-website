@@ -69,4 +69,28 @@ class ManageESB
         
         return $result;
     }
+    
+    public function  getUserTransactionLog($user_id = null)
+    {
+        global $wpdb;
+        
+        if($user_id == null)
+            $user_id = get_current_user_id();
+        
+        if(!$user_id)
+            return array();
+        
+        //Getting User Customer IDs
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT * FROM " . $this->table_metadata . " WHERE CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $rows = ManageESB::$esbdb->get_results($query);
+        
+        return $rows;
+        
+    }
 }
