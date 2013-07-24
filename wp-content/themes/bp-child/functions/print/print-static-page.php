@@ -7,11 +7,11 @@
 <html>
     <head profile="http://gmpg.org/xfn/11">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
+    <title><?php wp_title( '', true, 'right' ); ?></title>
     </head>
     <body onload="print_page()">
     <style type="text/css">
-        body{font-family: 'Open Sans',Arial,Tahoma,Helevetica,sans-serif; font-size: 12px; line-height: 14px; color: #111;}a{color: #2c80e8; text-decoration: none; }h2{font-size: 20px;}h3{font-size: 18px;}h4{font-size: 16px}h5{font-size: 14px;}table{border: solid 1px #333; border-collapse: collapse; vertical-align: top;}th{text-align: left; font-weight: bolid; border: solid 1px #333; padding: 5px;}td{border: solid 1px #333;  padding: 5px;}
+        body{font-family: 'Open Sans',Arial,Tahoma,Helevetica,sans-serif; font-size: 12px; line-height: 14px; color: #111;}a{color: #2c80e8; text-decoration: none; }h2{font-size: 20px;}h3{font-size: 18px;}h4{font-size: 16px}h5{font-size: 14px;}table{border: solid 1px #999; border-collapse: collapse; vertical-align: top;}th{text-align: left; font-weight: bolid; border: solid 1px #999; padding: 5px;}td{border: solid 1px #999;  padding: 5px;}
     </style>
      <?php if (have_posts()) while (have_posts()) : the_post(); ?>
         <?php if(!isset($hideHeader)){ ?>

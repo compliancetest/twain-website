@@ -9,7 +9,7 @@ $case->load();
 <html>
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
+<title><?php wp_title( '', true, 'right' ); ?></title>
 </head>
 <body onload="print_page()">
     <style type="text/css">
@@ -22,9 +22,9 @@ $case->load();
         h3{font-size: 18px; margin:0 0 15px;}
         h4{font-size: 16px;  margin:0 0 10px;}
         h5{font-size: 14px;  margin:0 0 8px;}
-        table{border: solid 1px #333; border-collapse: collapse; vertical-align: top; width: 100%}
-        th{text-align: left; font-weight: bolid; border: solid 1px #333; padding: 5px;}
-        td{border: solid 1px #333;  padding: 5px; vertical-align: top;}
+        table{border: solid 1px #999; border-collapse: collapse; vertical-align: top; width: 100%}
+        th{text-align: left; font-weight: bolid; border: solid 1px #999; padding: 5px;}
+        td{border: solid 1px #999;  padding: 5px; vertical-align: top;}
         .clear{
             clear: both;
         }

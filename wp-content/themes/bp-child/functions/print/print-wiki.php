@@ -20,9 +20,9 @@
         h3{font-size: 18px; margin:0 0 15px;}
         h4{font-size: 16px;  margin:0 0 10px;}
         h5{font-size: 14px;  margin:0 0 8px;}
-        table{border: solid 1px #333; border-collapse: collapse; vertical-align: top;}
-        th{text-align: left; font-weight: bolid; border: solid 1px #333; padding: 5px;}
-        td{border: solid 1px #333;  padding: 5px;}
+        table{border: solid 1px #999; border-collapse: collapse; vertical-align: top;}
+        th{text-align: left; font-weight: bolid; border: solid 1px #999; padding: 5px;}
+        td{border: solid 1px #999;  padding: 5px;}
         .clear{
             clear: both;
         }

@@ -28,6 +28,9 @@ function cp_print_page()
         }else if($pageType == 'wiki'){
             require_once(THE_FUNCTION . "/print/print-wiki.php");
             exit;
+        }else if($pageType == 'product'){
+            require_once(THE_FUNCTION . "/print/print-product-service.php");
+            exit;
         }
     }
 }

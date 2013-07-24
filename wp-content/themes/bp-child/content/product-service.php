@@ -7,7 +7,8 @@
   <?php if(!$isAjax){ ?>
     <div class="grid_head column">
         <div class="grid_row nopadding">
-            <h4>Product / Service Detalils</h4>
+            <h4 class="left">Product / Service Detalils</h4>
+            <a href="<?php echo addPrintParams(get_permalink(), 'product')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">PRINT</span></a>
         </div>
     </div>
   <?php } ?>
@@ -127,7 +128,13 @@
                         <div class="grid_cell nopaddingtop width30P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>
-                        <div class="grid_cell nopaddingtop width10P"> - </div>
+                        <div class="grid_cell nopaddingtop width10P">
+                            <?php if($claim->status == 'Verified'){ ?>
+                            <span class="status-certified"><?php echo $claim->status?></span>
+                            <?php }else{ ?>
+                            <span class="status-unverified"><?php echo $claim->status?></span>
+                            <?php } ?>
+                        </div>
                         <div class="grid_cell nopaddingtop width15P toleft left5P"><?php echo formatDate($claim->last_updated)?></div>    
                         <div class="clear"></div>
                     </div>
