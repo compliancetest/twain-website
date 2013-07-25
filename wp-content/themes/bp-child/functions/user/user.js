@@ -305,7 +305,7 @@
         $('#edit-card-form .cancel-btn').click(function(){
             $('#my_payment').removeClass('grid-box-editing');
             $('#edit-card-form').hide();
-            form.find('.cnumber-desc').hide();                    
+            $('#edit-card-form').find('.cnumber-desc').hide();                    
             $('#cards-list').fadeIn('fast');                        
             return false;
         })
