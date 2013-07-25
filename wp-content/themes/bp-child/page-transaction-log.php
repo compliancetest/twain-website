@@ -64,7 +64,8 @@ foreach($results as $row){
     $tPartyIDs[] = $row->FROM_PARTY_ID;
     $tPartyIDs[] = $row->TO_PARTY_ID;
 ?>
-   <div class="tr">
+
+   <!--div class="tr">
        <div class="td td-product">
            <input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" />
            <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
@@ -101,7 +102,7 @@ foreach($results as $row){
        <div class="td td-from"><?php echo $row->FROM_PARTY_ID?></div>
        <div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>
        <div class="clear"></div> 
-   </div>                       
+   </div-->                       
 <?php 
 }
  
