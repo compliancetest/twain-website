@@ -66,14 +66,14 @@ foreach($results as $row){
 $tbodyHTML.='
    <div class="tr">
        <div class="td td-product">
-           <input type="checkbox" name="id[]" id="id'.<?php echo  $row->ID?>" value="<?php echo $row->ID?>.'" />
-           <a href="'.<?php echo get_permalink($row->PRODUCT_ID)?>.'">'.<?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?>.'</a>
+           <input type="checkbox" name="id[]" id="id"'.<?php  $row->ID?>" value="<?php $row->ID?>.'" />
+           <a href="'.<?php get_permalink($row->PRODUCT_ID)?>.'">'.<?php get_post_meta($row->PRODUCT_ID, 'product_name', true)?>.'</a>
        </div>
        <div class="td td-case">
-           <a href="'.<?php echo get_permalink($row->TEST_CASE_ID)?>.'">'.<?php echo cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 10)?>.'</a>
+           <a href="'.<?php get_permalink($row->TEST_CASE_ID)?>.'">'.<?php cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 10)?>.'</a>
        </div>
        <div class="td td-suite">
-           <a href="'.<?php echo get_permalink($row->TEST_SUITE_ID)?>.'">'.<?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 10)?>.'</a>
+           <a href="'.<?php get_permalink($row->TEST_SUITE_ID)?>.'">'.<?php cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 10)?>.'</a>
        </div>
        <div class="td td-outcome tocenter">';
            <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
@@ -90,17 +90,15 @@ $tbodyHTML.='
            <?php } ?>
        $tbodyHTML.='</div>
        <div class="td td-service">'.
-           <?php echo cp_wrap($row->SERVICE, 17)?>.'
+           <?php cp_wrap($row->SERVICE, 17)?>.'
        </div>
        <div class="td td-convsn">'.
            
-<?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>.
+<?php cp_wrap($row->CONVERSATION_ID, 12) ?>.
        '</div>
-       <div class="td td-date tocenter">'.
-           <?php echo formatDate($row->EXECUTION_DATE)?>.
-       '</div>
-       <div class="td td-from">'.<?php echo $row->FROM_PARTY_ID?>'.</div>
-       <div class="td td-to">'.<?php echo $row->TO_PARTY_ID?>.'</div>
+       <div class="td td-date tocenter">'.<?php formatDate($row->EXECUTION_DATE)?>.'</div>
+       <div class="td td-from">'.<?php $row->FROM_PARTY_ID?>.'</div>
+       <div class="td td-to">'.<?php $row->TO_PARTY_ID?>.'</div>
        <div class="clear"></div> 
    </div>                       
 ';
