@@ -75,11 +75,11 @@ $tbodyHTML.='
        <div class="td td-suite">
            <a href="'.<?php echo get_permalink($row->TEST_SUITE_ID)?>.'">'.<?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 10)?>.'</a>
        </div>
-       <div class="td td-outcome tocenter">.';
+       <div class="td td-outcome tocenter">';
            <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
-           $tbodyHTML.='<span class="status-certified">Pass</span>'
+           $tbodyHTML.='<span class="status-certified">Pass</span>';
            <?php }else{ ?>
-           $tbodyHTML.='<span class="status-testing">Fail</span>'
+           $tbodyHTML.='<span class="status-testing">Fail</span>';
            <?php } ?>
        $tbodyHTML.='</div>
        <div class="td td-audit tocenter">';
