@@ -4566,10 +4566,6 @@ min-height: 70px;
     line-height: 20px;
     font-size: 12px;
 }
-#my_transaction_log #filterForm label{
-    display: block;
-    font-weight: 600;
-}
 #my_transaction_log .filter-box .styled_select{
     margin-left: 25px;
 }
@@ -4691,16 +4687,6 @@ min-height: 70px;
 }
 #edit-transaction-log-box .tbody .td-fixed{
     background: #D7D7D7;
-}
-#edit-transaction-log-box .select{
-    width: 100%;
-}
-#my_transaction_log .loading1{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
 }
 #log-filter-btn{
     margin-left: 20px;

@@ -440,7 +440,7 @@ function cp_edit_transaction_log(){
     global $wpdb;    
     
     if(!is_user_logged_in())
-        return '<p class="message error">Permission Denied!</p>';
+        return '<p class="message error">Permission Denied</p>';
     
     $ids = $_POST['id'];
     
@@ -456,33 +456,22 @@ function cp_edit_transaction_log(){
     {
         //Getting User Products
         $products = getUserProductsAndServices();
-        $testCases  = getUserSubscribedCases();
-        
         $result = "";
         ob_start();
         foreach($rows as $row)
         {
             ?>
-            <input type="hidden" name="id[]" value="<?php echo $row->ID?>" />
             <div class="tr">
                <div class="td td-product">                               
-                   <select name="product<?php echo $row->ID?>" class="select">
-                      <?php foreach($products as $p){?>
-                      <option value="<?php echo $p->ID?>" <?php echo $row->PRODUCT_ID == $p->ID ? 'selected="selected"' : ''?>><?php echo get_post_meta($p->ID, 'product_name', true)?></option>
-                      <?php } ?>
-                   </select>       
+                   <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
                </div>
                <div class="td td-case">
-                   <select name="case<?php echo $row->ID?>" class="select">
-                       <?php foreach($testCases as $c){ ?>
-                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo $c->caseName?></option>
-                       <?php } ?>
-                   </select>
+                   <a href="<?php echo get_permalink($row->TEST_CASE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 14)?></a>
                </div>
                <div class="td td-suite td-fixed">
                    <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 12)?></a>
                </div>
-               <div class="td td-outcome tocenter td-fixed">
+               <div class="td td-outcome tocenter">
                    <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
                    <span class="status-certified">Pass</span>
                    <?php }else{ ?>
@@ -490,22 +479,23 @@ function cp_edit_transaction_log(){
                    <?php } ?>
                </div>
                <div class="td td-audit tocenter">
-                   <select name="audit<?php echo $row->ID?>" class="select">
-                       <option value="1" <?php echo $row->AUDIT_RECORD ? 'selected="selected"' : ''?>>Yes</option>
-                       <option value="0" <?php echo !$row->AUDIT_RECORD ? 'selected="selected"' : ''?>>No</option>
-                   </select>                   
+                   <?php if(!$row->AUDIT_RECORD){ ?>
+                       No
+                   <?php }else{ ?>
+                       <a href="#">Yes</a>
+                   <?php } ?>
                </div>
-               <div class="td td-service td-fixed">
+               <div class="td td-service">
                    <?php echo cp_wrap($row->SERVICE, 19)?>
                </div>
-               <div class="td td-convsn td-fixed">
+               <div class="td td-convsn">
                    <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
                </div>
-               <div class="td td-date tocenter td-fixed">
+               <div class="td td-date tocenter">
                    <?php echo formatDate($row->EXECUTION_DATE)?>
                </div>
-               <div class="td td-from td-fixed"><?php echo $row->FROM_PARTY_ID?></div>
-               <div class="td td-to td-fixed"><?php echo $row->TO_PARTY_ID?></div>
+               <div class="td td-from"><?php echo $row->FROM_PARTY_ID?></div>
+               <div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>
                <div class="clear"></div> 
            </div>                       
             <?php
@@ -517,40 +507,4 @@ function cp_edit_transaction_log(){
     }else{
         return '<p class="message error">Invalid Request!</p>';
     }
-}
-
-function cp_save_transaction_log()
-{
-    global $wpdb;    
-    
-    if(!is_user_logged_in())
-        return '<p class="message error">Permission Denied!</p>';
-    
-    $ids = $_POST['id'];
-    
-    if(!$ids)
-    {
-        return '<p class="message error">Invalid Request!</p>';
-    }else{
-        $esb = new ManageESB();
-        $rows =$esb->getUserTransactionLog(null, null, null, null, null, null, null, null, $ids);
-        
-        foreach($rows as $row)
-        {
-            $caseId = $_POST['case' . $row->ID];
-            $suiteId = get_post_meta($caseId, 'test_suite', true);
-            $productId = $_POST['product' . $row->ID];
-            $audit = $_POST['audit' . $row->ID];
-            
-            $esb = new ManageESB();
-            
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_metadata . " SET TEST_CASE_ID=%d, TEST_SUITE_ID=%d, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $caseId, $suiteId, $productId, $audit, $row->ID);
-            ManageESB::$esbdb->query($query);
-        }
-        
-    }
-    
-    
-    return 'success';
-    
 }
