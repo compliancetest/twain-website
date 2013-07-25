@@ -350,7 +350,7 @@
             $(this).cplightbox({
                 type: 'inline',
                 href: '#harness-detail-box',
-                onLoad: function(){                    
+                onStart: function(){                    
                     $('#harness-detail-box .message').remove();
                     $('#harness-detail-box #msh_p_mode').val($('#msh_p_mode' + id).val());
                     $('#harness-detail-box #msh_url').val($('#msh_url' + id).val());

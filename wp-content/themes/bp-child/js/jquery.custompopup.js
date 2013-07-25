@@ -80,13 +80,15 @@
                                 if($overlay.find('.popup-box:visible').length > 0)
                                 {
                                     $overlay.find('.popup-box:visible').fadeOut('fast', function(){     
-                                        opts.onClose();               
+                                        opts.onClose();   
+                                        opts.onStart();            
                                         opts.box.fadeIn('fast', function(){
                                             setOverlaySize();
                                             opts.onLoad();                                                    
                                         });
                                     })
                                 }else{
+                                    opts.onStart();
                                     opts.box.fadeIn('fast', function(){
                                         setOverlaySize();
                                         opts.onLoad();        
@@ -108,12 +110,14 @@
                         {
                             $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
                                 opts.onClose();
+                                opts.onStart();
                                 opts.box.fadeIn('fast', function(){
                                     setOverlaySize();
                                     opts.onLoad();        
                                 });
                             })
                         }else{
+                            opts.onStart();
                             opts.box.fadeIn('fast', function(){
                                 setOverlaySize();
                                 opts.onLoad();        
@@ -209,6 +213,7 @@
         showTemplate: false,
         headerTitle: '',
         onLoad: function() {},
+        onStart: function() {},
         onClose: function() {},
         additionalClass: ''
     }
@@ -252,12 +257,14 @@
         if($overlay.find('.popup-box:visible').length > 0)
         {
             $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
+                opts.onStart();
                 opts.box.fadeIn('fast', function(){
                     setOverlaySize();
                     opts.onLoad();        
                 });
             })
         }else{
+            opts.onStart();
             opts.box.fadeIn('fast', function(){
                 setOverlaySize();
                 opts.onLoad();        
