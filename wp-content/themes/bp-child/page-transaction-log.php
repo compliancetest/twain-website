@@ -63,48 +63,47 @@ foreach($results as $row){
     $tActions[] = $row->ACTION;
     $tPartyIDs[] = $row->FROM_PARTY_ID;
     $tPartyIDs[] = $row->TO_PARTY_ID;
-?>
-
-   <!--div class="tr">
+$tbodyHTML.='
+   <div class="tr">
        <div class="td td-product">
-           <input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" />
-           <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
+           <input type="checkbox" name="id[]" id="id'.<?php echo  $row->ID?>" value="<?php echo $row->ID?>.'" />
+           <a href="'.<?php echo get_permalink($row->PRODUCT_ID)?>.'">'.<?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?>.'</a>
        </div>
        <div class="td td-case">
-           <a href="<?php echo get_permalink($row->TEST_CASE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 10)?></a>
+           <a href="'.<?php echo get_permalink($row->TEST_CASE_ID)?>.'">'.<?php echo cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 10)?>.'</a>
        </div>
        <div class="td td-suite">
-           <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 10)?></a>
+           <a href="'.<?php echo get_permalink($row->TEST_SUITE_ID)?>.'">'.<?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 10)?>.'</a>
        </div>
-       <div class="td td-outcome tocenter">
+       <div class="td td-outcome tocenter">.';
            <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
-           <span class="status-certified">Pass</span>
+           $tbodyHTML.='<span class="status-certified">Pass</span>'
            <?php }else{ ?>
-           <span class="status-testing">Fail</span>
+           $tbodyHTML.='<span class="status-testing">Fail</span>'
            <?php } ?>
-       </div>
-       <div class="td td-audit tocenter">
+       $tbodyHTML.='</div>
+       <div class="td td-audit tocenter">';
            <?php if(!$row->AUDIT_RECORD){ ?>
-               No
+               $tbodyHTML.='No';
            <?php }else{ ?>
-               Yes
+               $tbodyHTML.='Yes';
            <?php } ?>
+       $tbodyHTML.='</div>
+       <div class="td td-service">'.
+           <?php echo cp_wrap($row->SERVICE, 17)?>.'
        </div>
-       <div class="td td-service">
-           <?php echo cp_wrap($row->SERVICE, 17)?>
-       </div>
-       <div class="td td-convsn">
-           <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
-       </div>
-       <div class="td td-date tocenter">
-           <?php echo formatDate($row->EXECUTION_DATE)?>
-       </div>
-       <div class="td td-from"><?php echo $row->FROM_PARTY_ID?></div>
-       <div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>
+       <div class="td td-convsn">'.
+           
+<?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>.
+       '</div>
+       <div class="td td-date tocenter">'.
+           <?php echo formatDate($row->EXECUTION_DATE)?>.
+       '</div>
+       <div class="td td-from">'.<?php echo $row->FROM_PARTY_ID?>'.</div>
+       <div class="td td-to">'.<?php echo $row->TO_PARTY_ID?>.'</div>
        <div class="clear"></div> 
-   </div-->                       
-<?php 
-}
+   </div>                       
+';
  
 $tbodyHTML = ob_get_clean();
 ob_end_clean();
