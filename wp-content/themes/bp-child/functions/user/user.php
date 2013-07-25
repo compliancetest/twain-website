@@ -66,6 +66,10 @@ function compliancetest_user_actions()
         $result = cp_edit_transaction_log();               
         echo $result;
         exit;
+    }else if(wp_verify_nonce($cpAction, 'save-transaction-log')){
+        $result = cp_save_transaction_log();               
+        echo $result;
+        exit;
     }
 }
 
@@ -280,6 +284,31 @@ function getUserSubscribedSuites($user_id = null)
         "LEFT JOIN " . $wpdb->postmeta . " AS pm ON pm.post_id=sp.suite_id AND pm.meta_key='ts_name' " .
         "WHERE sp.user_id=%d AND sp.status='Active'", $user_id
     );
+    
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function getUserSubscribedCases($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    $query = $wpdb->prepare(
+        "SELECT suite_id FROM " . $wpdb->prefix . "users_purchases " .
+        "WHERE user_id=%d AND status='Active'", $user_id
+    );
+    
+    $suite_ids = $wpdb->get_col($query);
+    
+    if(!$suite_ids)
+        return array();
+        
+    $query = "SELECT DISTINCT(p.ID), pm1.meta_value as caseName FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' LEFT JOIN " . 
+            $wpdb->postmeta ." AS pm1 ON p.ID=pm1.post_id AND pm1.meta_key='test_case_id' WHERE p.post_type='test-case' AND p.post_status='publish' AND pm.meta_value IN (" . implode(", ", $suite_ids) . ")";
     
     $rows = $wpdb->get_results($query);
     

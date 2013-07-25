@@ -38,6 +38,13 @@ $esb = new ManageESB();
 
 $results = $esb->getUserTransactionLog(get_current_user_id(), $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
 
+if($filterProduct === 'NULL')
+    $filterProduct = null;
+if($filterSuite === 'NULL')
+    $filterSuite = null;
+if($filterCase === 'NULL')
+    $filterCase = null;
+    
 $tbodyHTML = '';
 
 $tProducts = array();
@@ -59,7 +66,7 @@ foreach($results as $row){
 ?>
    <div class="tr">
        <div class="td td-product">
-           <!--<input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" />-->
+           <input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" />
            <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
        </div>
        <div class="td td-case">
@@ -79,7 +86,7 @@ foreach($results as $row){
            <?php if(!$row->AUDIT_RECORD){ ?>
                No
            <?php }else{ ?>
-               <a href="#">Yes</a>
+               Yes
            <?php } ?>
        </div>
        <div class="td td-service">
@@ -108,6 +115,12 @@ $tServices = array_unique($tServices);
 $tActions = array_unique($tActions);
 $tPartyIDs = array_unique($tPartyIDs);
 
+asort($tProducts);
+asort($tSuites);
+asort($tCases);
+asort($tServices);
+asort($tActions);
+asort($tPartyIDs);
 ?>
 <div class="content" id="my_transaction_log">
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
@@ -127,17 +140,23 @@ $tPartyIDs = array_unique($tPartyIDs);
             <form name="filterForm" id="filterForm" method="get">
                 <div class="left">
                     <div class="styled_select">
+                        <label>Product / Service:</label>
                         <select name="product" id="product" autocomplete="off">
-                            <option value="">- Product -</option>
-                            <?php foreach($tProducts as $t){ ?>
+                            <option value="">- All -</option>
+                          <?php foreach($tProducts as $t){ ?>
+                           <?php if($t === null){ ?>
+                            <option value="NULL" <?php echo $filterProduct === null ? "selected='selected'" : ""?>>Not Assigned</option>
+                           <?php }else{ ?>
                             <option value="<?php echo $t?>" <?php echo $t == $filterProduct ? "selected='selected'" : "" ?>><?php echo get_post_meta($t, 'product_name', true) ?></option>
-                            <?php } ?>
+                           <?php } ?>
+                          <?php } ?>
                         </select>
                     </div>
                     <div class="space10"></div>
                     <div class="styled_select">
+                        <label>eb:Service:</label>
                         <select name="service" id="service" autocomplete="off">
-                            <option value="">eb:Service</option>
+                            <option value="">- All -</option>
                             <?php foreach($tServices as $s){ ?>
                             <option value="<?php echo $s?>" <?php echo $s == $filterService ? "selected='selected'" : "" ?>><?php echo $s ?></option>
                             <?php } ?>
@@ -146,17 +165,23 @@ $tPartyIDs = array_unique($tPartyIDs);
                 </div>
                 <div class="left">
                     <div class="styled_select">
+                        <label>Test Suite:</label>
                         <select name="suite" id="suite" autocomplete="off">
-                            <option value="">- Suite -</option>
-                            <?php foreach($tSuites as $s){ ?>
+                            <option value="">- All -</option>
+                          <?php foreach($tSuites as $s){ ?>
+                           <?php if($s === null){ ?>
+                            <option value="NULL" <?php echo $filterSuite === null ? "selected='selected'" : ""?>>Not Assigned</option> 
+                           <?php }else{ ?>
                             <option value="<?php echo $s?>" <?php echo $s == $filterSuite ? "selected='selected'" : "" ?>><?php echo get_post_meta($s, 'ts_name', true) ?></option>
-                            <?php } ?>
+                           <?php } ?>
+                          <?php } ?>
                         </select>
                     </div>
                     <div class="space10"></div>
                     <div class="styled_select">
+                        <label>eb:Action:</label>
                         <select name="action" id="action" autocomplete="off">
-                            <option value="">eb:Action</option>
+                            <option value="">- All -</option>
                             <?php foreach($tActions as $a){ ?>
                             <option value="<?php echo $a?>" <?php echo $a == $filterAction ? "selected='selected'" : "" ?>><?php echo $a ?></option>
                             <?php } ?>
@@ -165,17 +190,23 @@ $tPartyIDs = array_unique($tPartyIDs);
                 </div>
                 <div class="left">
                     <div class="styled_select">
+                        <label>Test Case:</label>
                         <select name="case" id="case" autocomplete="off">
-                            <option value="">- Case -</option>
-                            <?php foreach($tCases as $c){ ?>
+                            <option value="">- All -</option>
+                          <?php foreach($tCases as $c){ ?>
+                           <?php if($c === null){ ?>
+                            <option value="NULL" <?php echo $filterCase === null ? "selected='selected'" : ""?>>Not Assigned</option> 
+                           <?php }else{ ?>
                             <option value="<?php echo $c?>" <?php echo $c == $filterCase ? "selected='selected'" : "" ?>><?php echo get_post_meta($c, 'test_case_id', true) ?></option>
-                            <?php } ?>
+                           <?php } ?>
+                          <?php } ?>
                         </select>
                     </div>
                     <div class="space10"></div>
                     <div class="styled_select">
+                        <label>eb:PartyID:</label>
                         <select name="partyid" id="partyid" autocomplete="off">
-                            <option value="">eb:PartyID</option>
+                            <option value="">- All -</option>
                             <?php foreach($tPartyIDs as $p){ ?>
                             <option value="<?php echo $p?>" <?php echo $p == $filterPartyId ? "selected='selected'" : "" ?>><?php echo $p ?></option>
                             <?php } ?>
@@ -183,18 +214,19 @@ $tPartyIDs = array_unique($tPartyIDs);
                     </div>
                 </div>
                 <div class="left">
+                    <label class="left15">&nbsp;Date:</label>
                     <input type="text" name="date" id="date" class="input datepicker" value="<?php echo $filterDate?>" />
-                    <div class="space10"></div>
+                    <div class="space25"></div>
                     <a href="#" class="action-btn process-btn submit-btn" id="log-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>
                 </div>            
                 <div class="clear"></div>
             </form>
         </div> 
         <div class="padding10">
-            <!--<a href="#" id="delete-log-link" class="action-btn blue-delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Fields<span></span></span></a>
+            <a href="#" id="delete-log-link" class="action-btn blue-delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Fields<span></span></span></a>
             <a href="#" id="edit-log-link" class="action-btn blue-edit-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Selected Fields<span></span></span></a>            
             <div class="clear"></div>
-            <div class="space10"></div>-->
+            <div class="space10"></div>
             <div class="grid-box table-box" id="log-result-table">               
                <div class="grid-box-body">
                    <div class="thead tr">
@@ -232,7 +264,7 @@ $tPartyIDs = array_unique($tPartyIDs);
         fixTdHeight(jQuery('#my_transaction_log .table-box'));
                 
         //Edit Log
-        /*jQuery('#edit-log-link').click(function(){
+        jQuery('#edit-log-link').click(function(){
             var checked = jQuery('#log-result-table input[type="checkbox"]:checked').length;
             
             if(checked == 0)
@@ -244,9 +276,9 @@ $tPartyIDs = array_unique($tPartyIDs);
                 jQuery('#log-result-table input[type="checkbox"]:checked').each(function(){
                     ids.push(this.value);
                 })           
-                jQuery('#my_transaction_log').append('<div class="loading"></div>');
-                jQuery('#my_transaction_log .loading').show();
-                jQuery('.mask-wrapper').show();
+                jQuery('#my_transaction_log').append('<div class="loading1"></div>');
+                jQuery('#my_transaction_log .loading1').show();
+                
                 jQuery.ajax({
                     url: '/',
                     data: {
@@ -256,10 +288,16 @@ $tPartyIDs = array_unique($tPartyIDs);
                     type: 'post',
                     dataType: 'html',
                     success: function(rsp){                        
-                        jQuery('#edit-transaction-log-box .tbody').html(rsp);
+                        jQuery('#my_transaction_log .loading1').remove();
+                        jQuery('#edit-transaction-log-box .tbody').html(rsp);                        
                         jQuery('#edit-transaction-log-box').showPopupBox({
+                            closeWhenClickOveraly: false,
                             onClose: function(){
                                 jQuery('#edit-transaction-log-box .tbody').html("");
+                                jQuery('#edit-transaction-log-box .message').remove();
+                            },
+                            onLoad: function(){
+                                fixTdHeight(jQuery('#edit-transaction-log-box .table-box'));
                             }
                         });
                     }
@@ -267,7 +305,28 @@ $tPartyIDs = array_unique($tPartyIDs);
             }
             
             return false;
-        })*/
+        })
+        
+        jQuery('#editLogForm').submit(function(){
+            jQuery('#edit-transaction-log-box .loading').show();
+            jQuery.ajax({
+                url: "/",
+                type: 'post',
+                data: jQuery('#editLogForm').serialize(),
+                success: function(rsp){
+                    jQuery('#edit-transaction-log-box .loading').hide();    
+                    if(rsp == 'success')
+                    {
+                        jQuery('#edit-transaction-log-box .popup-box-footer').prepend('<p class="message success">Successfully Saved!</p>');
+                        document.location.reload();
+                    }else
+                        jQuery('#edit-transaction-log-box .popup-box-footer').prepend(rsp);
+                    
+                    
+                }
+            })
+            return false;
+        })
     })
  </script>       
 </div> <!--end content-->
@@ -299,12 +358,14 @@ $tPartyIDs = array_unique($tPartyIDs);
        </div>
        <div class="space10"></div>
     </div>
-    <div class="popup-box-footer radius6 noradiustop">                                            
-        <a href="#make-claim-box" cp-type="inline"  class="action-btn process-btn"><span class="p"></span><span class="t">SAVE</span></a>
-        <a href="#make-claim-box" cp-type="inline"  class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
+    <div class="popup-box-footer radius6 noradiustop">                                                    
+        <a href="#make-claim-box" cp-type="inline"  class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>
+        <a href="#make-claim-box" cp-type="inline"  class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
         <div class="clear"></div>
     </div>
-    <a class="close_btn"></a>                
+    <div class="loading"></div>
+    <a class="close_btn"></a>      
+    <input type="hidden" name="cp-action" value="<?php echo wp_create_nonce('save-transaction-log') ?>" />
 </form>
 </div>        
 <?php

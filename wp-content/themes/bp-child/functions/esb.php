@@ -13,8 +13,6 @@ class ManageESB
     var $table_metadata = 'MSH_METADATA';
     var $table_metadata_payload = 'MSH_METADATA_PAYLOAD';
     
-    var $db = null;
-    
     public static $esbdb = null;
     
     public function __construct()
@@ -99,12 +97,21 @@ class ManageESB
             }
         }
         
-        if($product_id != null)
+        if($product_id == 'NULL')
+            $query .= " AND PRODUCT_ID IS NULL";
+        else if($product_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND PRODUCT_ID=%d", $product_id);
-        if($suite_id != null)
+            
+        if($suite_id == 'NULL')
+            $query .= " AND TEST_SUITE_ID IS NULL";
+        else if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND TEST_SUITE_ID=%d", $suite_id);
-        if($case_id != null)
+            
+        if($case_id == 'NULL')
+            $query .= " AND TEST_CASE_ID IS NULL";
+        else if($case_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND TEST_CASE_ID=%d", $case_id);
+            
         if($service != null)
             $query .= ManageESB::$esbdb->prepare(" AND SERVICE=%s", $service);
         if($action != null)
