@@ -179,7 +179,7 @@
                             </div>        
                         </div><!-- end ComplianceTest SERVICE DIV-->
                         
-                        <div class="help_faq normal_dd small_dd">
+                        <!--div class="help_faq normal_dd small_dd">
                             <div class="submenu_inner">
                                 <div class="left menuitem1">
                                     <span class="left"><img src="<?php echo of_get_option('how_icon'); ?>"></span>
@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="clear"></div>
                             </div>
-                        </div>
+                        </div-->
                         <!--end Help & Faq DIV -->
                     </div>
                 </div><!-- End Sub Menu -->
