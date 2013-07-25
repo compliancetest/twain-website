@@ -98,7 +98,7 @@ function process_eway_payment()
                 "created_date" => date("Y-m-d H:i:s")
             ));
             //Create MSH Datas 
-            $msh = array('mode' => 'PUSH', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => wp_generate_password(15, true));
+            $msh = array('mode' => 'PULL', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => cp_generate_password(8));
             
             //Save Billing Data to Database
             $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
@@ -135,6 +135,7 @@ function process_eway_payment()
                                 </api:group>
                             </api:userGroups>
                             <api:userPMode>' . $msh['mode'] . '</api:userPMode>                            
+                            <api:userEndpoint>' . $msh['username'] . '</api:userEndpoint>
                             <api:userEndpointUsername>' . $msh['username'] . '</api:userEndpointUsername>
                             <api:userEndpointPassword>' . $msh['password'] . '</api:userEndpointPassword>
                         </api:user>
@@ -203,8 +204,8 @@ function free_charge()
         }
         
         //Create MSH Datas 
-        $msh = array('mode' => 'PUSH', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => wp_generate_password(15, true));
-        
+        $msh = array('mode' => 'PULL', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => cp_generate_password(8));
+
         //Create Backend Customer Using SOAP            
         $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
                     <api:user>
@@ -216,6 +217,7 @@ function free_charge()
                             </api:group>
                         </api:userGroups>
                         <api:userPMode>' . $msh['mode'] . '</api:userPMode>                            
+                        <api:userEndpoint>' . $msh['username'] . '</api:userEndpoint>
                         <api:userEndpointUsername>' . $msh['username'] . '</api:userEndpointUsername>
                         <api:userEndpointPassword>' . $msh['password'] . '</api:userEndpointPassword>
                     </api:user>

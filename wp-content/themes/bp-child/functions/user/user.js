@@ -351,6 +351,7 @@
                 type: 'inline',
                 href: '#harness-detail-box',
                 onLoad: function(){                    
+                    $('#harness-detail-box .message').remove();
                     $('#harness-detail-box #msh_p_mode').val($('#msh_p_mode' + id).val());
                     $('#harness-detail-box #msh_url').val($('#msh_url' + id).val());
                     $('#harness-detail-box #msh_username').val($('#msh_username' + id).val());
@@ -358,13 +359,13 @@
                     $('#harness-detail-box #harness-id').val(id);
                     if($('#msh_p_mode' + id).val() == 'PULL')
                     {
-                        $('#harness-detail-box #msh_url').prop('disabled', 'disabled');
-                        $('#harness-detail-box #msh_username').prop('disabled', 'disabled');
-                        $('#harness-detail-box #msh_password').prop('disabled', 'disabled');
+                        $('#harness-detail-box #msh_url').prop('disabled', 'disabled').parent().parent().hide();
+                        $('#harness-detail-box #msh_username').prop('disabled', 'disabled').parent().parent().hide();;
+                        $('#harness-detail-box #msh_password').prop('disabled', 'disabled').parent().parent().hide();;
                     }else{
-                        $('#harness-detail-box #msh_url').removeAttr('disabled');
-                        $('#harness-detail-box #msh_username').removeAttr('disabled');
-                        $('#harness-detail-box #msh_password').removeAttr('disabled');
+                        $('#harness-detail-box #msh_url').removeAttr('disabled').parent().parent().show();
+                        $('#harness-detail-box #msh_username').removeAttr('disabled').parent().parent().show();
+                        $('#harness-detail-box #msh_password').removeAttr('disabled').parent().parent().show();
                     }
                 }
             })
@@ -373,13 +374,13 @@
         $('#harness-form #msh_p_mode').change(function(){
             if($(this).val() == 'PULL')
             {
-                $('#harness-detail-box #msh_url').prop('disabled', 'disabled');
-                $('#harness-detail-box #msh_username').prop('disabled', 'disabled');
-                $('#harness-detail-box #msh_password').prop('disabled', 'disabled');
+                $('#harness-detail-box #msh_url').prop('disabled', 'disabled').parent().parent().hide();
+                $('#harness-detail-box #msh_username').prop('disabled', 'disabled').parent().parent().hide();
+                $('#harness-detail-box #msh_password').prop('disabled', 'disabled').parent().parent().hide();
             }else{
-                $('#harness-detail-box #msh_url').removeAttr('disabled');
-                $('#harness-detail-box #msh_username').removeAttr('disabled');
-                $('#harness-detail-box #msh_password').removeAttr('disabled');
+                $('#harness-detail-box #msh_url').removeAttr('disabled').parent().parent().show();
+                $('#harness-detail-box #msh_username').removeAttr('disabled').parent().parent().show();
+                $('#harness-detail-box #msh_password').removeAttr('disabled').parent().parent().show();
             }
         })
         $('#harness-form').submit(function(){

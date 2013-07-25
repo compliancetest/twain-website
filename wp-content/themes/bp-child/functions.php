@@ -709,3 +709,8 @@ function cp_wrap($string, $length)
 {
     return wordwrap($string, $length, "\n", true);
 }
+
+function cp_generate_password($length = 12) {
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    return substr(str_shuffle($chars),0,$length);
+}
