@@ -89,7 +89,7 @@ $esb = new ManageESB();
                                <div class="clear"></div>
                            </div>
                            <div class="td td-action">
-                              <a href="/my-transaction-log" class="action-btn view-log-btn icon-btn"><span class="p"></span>
+                              <a href="/my-transaction-log?suite=<?php echo $suite->suite_id?>&product=<?php echo $crow->product_id?>" class="action-btn view-log-btn icon-btn"><span class="p"></span>
                                   <span class="simple_tooltip radius6">View Log<span></span></span>
                               </a>
                               <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>&id=<?php echo $crow->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn grey-edit-btn edit-plan-btn icon-btn"><span class="p"></span>

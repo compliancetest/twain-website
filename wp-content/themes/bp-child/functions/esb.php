@@ -70,7 +70,7 @@ class ManageESB
         return $result;
     }
     
-    public function  getUserTransactionLog($user_id = null)
+    public function  getUserTransactionLog($user_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $id = null)
     {
         global $wpdb;
         
@@ -88,6 +88,32 @@ class ManageESB
             return array();
         
         $query = "SELECT * FROM " . $this->table_metadata . " WHERE CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        
+        if($id)   
+        {
+            if(is_array($id))
+            {
+                $query .= " AND ID in (" . implode(", ", $id) . ")";
+            }else{
+                $query .= ManageESB::$esbdb->prepare(" AND ID=%d", $id);
+            }
+        }
+        
+        if($product_id != null)
+            $query .= ManageESB::$esbdb->prepare(" AND PRODUCT_ID=%d", $product_id);
+        if($suite_id != null)
+            $query .= ManageESB::$esbdb->prepare(" AND TEST_SUITE_ID=%d", $suite_id);
+        if($case_id != null)
+            $query .= ManageESB::$esbdb->prepare(" AND TEST_CASE_ID=%d", $case_id);
+        if($service != null)
+            $query .= ManageESB::$esbdb->prepare(" AND SERVICE=%s", $service);
+        if($action != null)
+            $query .= ManageESB::$esbdb->prepare(" AND ACTION=%s", $action);
+        if($partyid != null)
+            $query .= ManageESB::$esbdb->prepare(" AND (FROM_PARTY_ID=%s OR TO_PARTY_ID=%s)", $partyid, $partyid);
+        if($date != null)
+            $query .= ManageESB::$esbdb->prepare(" AND DATE(EXECUTION_DATE)=%s", date("Y-m-d", strtotime($date)));
+               
         $rows = ManageESB::$esbdb->get_results($query);
         
         return $rows;

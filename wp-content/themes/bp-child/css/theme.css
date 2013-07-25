@@ -4576,11 +4576,21 @@ min-height: 70px;
     width: 110px;
     margin-left: 20px;
 }
+#my_transaction_log .has-tooltip .simple_tooltip{
+    width: 125px;
+    text-align: center;    
+}
+#my_transaction_log .has-tooltip:hover .simple_tooltip{
+    top: -40px;
+    left: -6px;
+}
+
 .ui-datepicker-trigger{
     position: relative; 
     top: 2px;
     left: 5px;
 }
+#edit-transaction-log-box .table-box .thead,
 #my_transaction_log .table-box .thead{
     background: #1f7ac7 url(../images/blue_dotted_bcg.png) !important;
     border: 1px solid #1d76c0;
@@ -4589,26 +4599,34 @@ min-height: 70px;
     -webkit-border-radius: 5px 5px 0 0;
     -o-border-radius: 5px 5px 0 0;
 }
+#edit-transaction-log-box .table-box .td,
 #my_transaction_log .table-box .td{
     padding-left: 5px;
     padding-right: 5px;
 }
+#edit-transaction-log-box .table-box .thead .td,
 #my_transaction_log .table-box .thead .td{
     border-color: #1d76c0;
     font-size: 11px;
     line-height: 24px;
 }
+#edit-transaction-log-box .table-box .thead .td-two-lines,
 #my_transaction_log .table-box .thead .td-two-lines{
     line-height: 14px;
 }
 #my_transaction_log .td-product{
     width: 100px;
 }
+#my_transaction_log .td-product input{
+    position: relative;
+    top: 3px;
+    margin-right: 5px;
+}
 #my_transaction_log .td-case{
-    width: 45px;
+    width: 55px;
 }
 #my_transaction_log .td-suite{
-    width: 52px;
+    width: 62px;
 }
 #my_transaction_log .td-outcome{
     width: 50px;
@@ -4617,20 +4635,62 @@ min-height: 70px;
     width: 40px;
 }
 #my_transaction_log .td-service{
-    width: 50px;
+    width: 91px;
 }
 #my_transaction_log .td-convsn{
-    width: 61px;
+    width: 71px;
 }
 #my_transaction_log .td-date{
-    width: 50px;
+    width: 60px;
 }
 #my_transaction_log .td-from,
-#my_transaction_log .td-customer,
 #my_transaction_log .td-to{
     width: 70px;
 }
 
+#edit-transaction-log-box .table-box .tbody .td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#edit-transaction-log-box .td-product{
+    width: 100px;
+}
+#edit-transaction-log-box .td-product input{
+    position: relative;
+    top: 3px;
+    margin-right: 5px;
+}
+#edit-transaction-log-box .td-case{
+    width: 90px;
+}
+#edit-transaction-log-box .td-suite{
+    width: 83px;
+}
+#edit-transaction-log-box .td-outcome{
+    width: 50px;
+}
+#edit-transaction-log-box .td-audit{
+    width: 55px;
+}
+#edit-transaction-log-box .td-service{
+    width: 100px;
+}
+#edit-transaction-log-box .td-convsn{
+    width: 71px;
+}
+#edit-transaction-log-box .td-date{
+    width: 60px;
+}
+#edit-transaction-log-box .td-from,
+#edit-transaction-log-box .td-to{
+    width: 70px;
+}
+#edit-transaction-log-box .tbody .td-fixed{
+    background: #D7D7D7;
+}
+#log-filter-btn{
+    margin-left: 20px;
+}
 
 /*** Group Admin Section ***/
 #group_admin_page .grid-box-body{
@@ -5382,6 +5442,9 @@ a.suite-subscript-link:hover{
 #payment-success-box .popup-box-content p{
     font-size: 14px;
     line-height: 1.5em;
+}
+.has-tooltip{
+    position: relative;
 }
 .has-tooltip:hover .simple_tooltip{
     display: block !important;

@@ -435,3 +435,76 @@ function cp_save_customer_harness_detail()
     
     return "success";
 }
+
+function cp_edit_transaction_log(){
+    global $wpdb;    
+    
+    if(!is_user_logged_in())
+        return '<p class="message error">Permission Denied</p>';
+    
+    $ids = $_POST['id'];
+    
+    if(!$ids)
+    {
+        $rows = array();    
+    }else{
+        $esb = new ManageESB();
+        $rows =$esb->getUserTransactionLog(null, null, null, null, null, null, null, null, $ids);
+    }
+    
+    if($rows)
+    {
+        //Getting User Products
+        $products = getUserProductsAndServices();
+        $result = "";
+        ob_start();
+        foreach($rows as $row)
+        {
+            ?>
+            <div class="tr">
+               <div class="td td-product">                               
+                   <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
+               </div>
+               <div class="td td-case">
+                   <a href="<?php echo get_permalink($row->TEST_CASE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 14)?></a>
+               </div>
+               <div class="td td-suite td-fixed">
+                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 12)?></a>
+               </div>
+               <div class="td td-outcome tocenter">
+                   <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
+                   <span class="status-certified">Pass</span>
+                   <?php }else{ ?>
+                   <span class="status-testing">Fail</span>
+                   <?php } ?>
+               </div>
+               <div class="td td-audit tocenter">
+                   <?php if(!$row->AUDIT_RECORD){ ?>
+                       No
+                   <?php }else{ ?>
+                       <a href="#">Yes</a>
+                   <?php } ?>
+               </div>
+               <div class="td td-service">
+                   <?php echo cp_wrap($row->SERVICE, 19)?>
+               </div>
+               <div class="td td-convsn">
+                   <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
+               </div>
+               <div class="td td-date tocenter">
+                   <?php echo formatDate($row->EXECUTION_DATE)?>
+               </div>
+               <div class="td td-from"><?php echo $row->FROM_PARTY_ID?></div>
+               <div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>
+               <div class="clear"></div> 
+           </div>                       
+            <?php
+        }
+        $result = ob_get_contents();
+        ob_end_clean();
+        
+        return $result;
+    }else{
+        return '<p class="message error">Invalid Request!</p>';
+    }
+}

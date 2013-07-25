@@ -704,3 +704,8 @@ function cp_explode($str, $gule = ';;')
     return $result;
 }
 
+
+function cp_wrap($string, $length)
+{
+    return wordwrap($string, $length, "\n", true);
+}
