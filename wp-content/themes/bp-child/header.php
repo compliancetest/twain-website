@@ -186,7 +186,9 @@
                                     <h3><a href="<?php echo of_get_option('how_linkto'); ?>"><?php echo of_get_option('how_t'); ?></a></h3>
                                     <p><?php echo of_get_option('how_desc'); ?></p>
                                     <br />
-                                  
+                                    <span class="left"><img src="<?php echo of_get_option('faq_icon'); ?>"></span>
+                                    <h3><a href="<?php echo of_get_option('faq_linkto'); ?>"><?php echo of_get_option('faq_t'); ?></a></h3>
+                                    <p><?php echo of_get_option('faq_desc'); ?></p>
                                 </div>
                                 <div class="left menuitem2">
                                     <span class="left"><img src="<?php echo of_get_option('documentation_icon'); ?>"></span>
