@@ -4622,9 +4622,12 @@ min-height: 70px;
     width: 100px;
 }
 #my_transaction_log .td-product input{
-    position: relative;
-    top: 3px;
     margin-right: 5px;
+    float: left;
+}
+#my_transaction_log .td-product a{
+    float: left;
+    width: 80px;
 }
 #my_transaction_log .td-case{
     width: 55px;
