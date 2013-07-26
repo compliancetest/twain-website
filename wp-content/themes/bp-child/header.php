@@ -180,27 +180,7 @@
                         </div><!-- end ComplianceTest SERVICE DIV-->
                         
                         <div class="help_faq normal_dd small_dd">
-                            <div class="submenu_inner">
-                                <div class="left menuitem1">
-                                    <span class="left"><img src="<?php echo of_get_option('how_icon'); ?>"></span>
-                                    <h3><a href="<?php echo of_get_option('how_linkto'); ?>"><?php echo of_get_option('how_t'); ?></a></h3>
-                                    <p><?php echo of_get_option('how_desc'); ?></p>
-                                    <br />
-                                    <span class="left"><img src="<?php echo of_get_option('faq_icon'); ?>"></span>
-                                    <h3><a href="<?php echo of_get_option('faq_linkto'); ?>"><?php echo of_get_option('faq_t'); ?></a></h3>
-                                    <p><?php echo of_get_option('faq_desc'); ?></p>
-                                </div>
-                                <div class="left menuitem2">
-                                    <span class="left"><img src="<?php echo of_get_option('documentation_icon'); ?>"></span>
-                                    <h3><a href="<?php echo of_get_option('documentation_linkto'); ?>"><?php echo of_get_option('documentation_t'); ?></a></h3>
-                                    <p><?php echo of_get_option('documentation_desc'); ?></p>
-                                    <br />
-                                    <span class="left"><img src="<?php echo of_get_option('forum_icon'); ?>"></span>
-                                    <h3><a href="<?php echo of_get_option('forum_linkto'); ?>"><?php echo of_get_option('forum_t'); ?></a></h3>
-                                    <p><?php echo of_get_option('forum_desc'); ?></p>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
+                            
                         </div>
                         <!--end Help & Faq DIV -->
                     </div>
