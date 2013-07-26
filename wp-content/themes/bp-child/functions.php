@@ -20,7 +20,7 @@ function cp_session_start()
 
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 
-require_once(THE_FUNCTION . '/esb.php');
+require_once(THE_FUNCTION . '/esb/esb.php');
 
 //Include change role names
 require_once(THE_FUNCTION . '/role-customize.php');

@@ -2,18 +2,12 @@
 /**
 * Manage Backend Data
 */
+require_once(THE_FUNCTION . "/esb/config.php");
 
 class ManageESB
 {
-    var $esb_db_host = 'esb.test.compliancetest.net';
-    var $esb_db_username = 'root';
-    var $esb_db_password = 'H1cubase666';
-    var $esb_db_database = 'MSH_METADATA';
-    
     var $table_metadata = 'MSH_METADATA';
     var $table_metadata_payload = 'MSH_METADATA_PAYLOAD';
-    
-    var $db = null;
     
     public static $esbdb = null;
     
@@ -26,7 +20,7 @@ class ManageESB
     
     public function  loadDatabase()
     {
-        $db = new wpdb($this->esb_db_username, $this->esb_db_password, $this->esb_db_database, $this->esb_db_host);
+        $db = new wpdb(ESB_DB_USERNAME, ESB_DB_PASSWORD, ESB_DB_DATABASE, ESB_DB_HOST);
         ManageESB::$esbdb = $db;
         
         return $db;
@@ -99,12 +93,21 @@ class ManageESB
             }
         }
         
-        if($product_id != null)
+        if($product_id == 'NULL')
+            $query .= " AND PRODUCT_ID IS NULL";
+        else if($product_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND PRODUCT_ID=%d", $product_id);
-        if($suite_id != null)
+            
+        if($suite_id == 'NULL')
+            $query .= " AND TEST_SUITE_ID IS NULL";
+        else if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND TEST_SUITE_ID=%d", $suite_id);
-        if($case_id != null)
+            
+        if($case_id == 'NULL')
+            $query .= " AND TEST_CASE_ID IS NULL";
+        else if($case_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND TEST_CASE_ID=%d", $case_id);
+            
         if($service != null)
             $query .= ManageESB::$esbdb->prepare(" AND SERVICE=%s", $service);
         if($action != null)
