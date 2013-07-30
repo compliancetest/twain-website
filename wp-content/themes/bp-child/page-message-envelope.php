@@ -21,5 +21,12 @@ if(!$message){
     exit;
 }
 header("Content-type: application/xml");
-echo $message;
+if($mode != 'html'){
+    
+    echo $message;
+}else{
+    $xslt = 'http://lc.compliancetest.com/message-envelope.xsl';
+    $message = str_replace('?>', '?><?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>', $message);
+    echo $message;
+}
 
