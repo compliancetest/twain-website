@@ -397,7 +397,7 @@ function cp_save_customer_harness_detail()
         }
     }else{
         //Update Data
-        $data = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
+        $xmlData = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
                     <api:user>
                         <api:userId>' . $data->esb_user_id . '</api:userId>
                         <api:userPMode>' . $_POST['msh_p_mode'] . '</api:userPMode>' .
@@ -407,7 +407,7 @@ function cp_save_customer_harness_detail()
                     </api:user>
                 </api:updateUserRequest>';
                 
-        $result = sendRestUserAction('/user/update', $data);
+        $result = sendRestUserAction('/user/update', $xmlData);
         
         $resultDoc = new DOMDocument();
         
@@ -425,10 +425,11 @@ function cp_save_customer_harness_detail()
                 array('id' => $data->id)
         );
     }else{
+        echo "ddd";
         $wpdb->update($wpdb->prefix . "users_purchases", 
             array('msh_p_mode' => $_POST['msh_p_mode'], 'msh_url' => $_POST['msh_url'], 'msh_password' => $_POST['msh_password'], 'msh_username' => $_POST['msh_username']),
             array('id' => $data->id)
-        );
+        );        
     }
     
     
