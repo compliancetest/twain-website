@@ -408,7 +408,7 @@ function cp_save_customer_harness_detail()
                 </api:updateUserRequest>';
                 
         $result = sendRestUserAction('/user/update', $xmlData);
-        echo $result;exit;
+        
         $resultDoc = new DOMDocument();
         
         if(!$result || !$resultDoc->loadXML($result))
@@ -417,6 +417,7 @@ function cp_save_customer_harness_detail()
         }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
             return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
         }
+        echo $result;exit;
     }
     
     if($_POST['msh_p_mode'] == 'PULL'){
