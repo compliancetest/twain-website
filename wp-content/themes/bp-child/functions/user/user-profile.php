@@ -410,7 +410,7 @@ function cp_save_customer_harness_detail()
         $result = sendRestUserAction('/user/update', $xmlData);
         
         $resultDoc = new DOMDocument();
-        
+        echo $result;
         if(!$result || !$resultDoc->loadXML($result))
         {
             return 'There was an error while updating your data.';
@@ -425,7 +425,7 @@ function cp_save_customer_harness_detail()
                 array('id' => $data->id)
         );
     }else{
-        echo "ddd";
+        
         $wpdb->update($wpdb->prefix . "users_purchases", 
             array('msh_p_mode' => $_POST['msh_p_mode'], 'msh_url' => $_POST['msh_url'], 'msh_password' => $_POST['msh_password'], 'msh_username' => $_POST['msh_username']),
             array('id' => $data->id)
