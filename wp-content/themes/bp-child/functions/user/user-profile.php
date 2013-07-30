@@ -339,7 +339,7 @@ function cp_get_user_fullname($user_id)
 function cp_save_customer_harness_detail()
 {
     global $wpdb;
-    
+    die("ddd");
     $id = $_POST['id'];
     $user_id = get_current_user_id();
     
@@ -410,7 +410,7 @@ function cp_save_customer_harness_detail()
         $result = sendRestUserAction('/user/update', $xmlData);
         
         $resultDoc = new DOMDocument();
-        echo $result;
+        
         if(!$result || !$resultDoc->loadXML($result))
         {
             return 'There was an error while updating your data.';
