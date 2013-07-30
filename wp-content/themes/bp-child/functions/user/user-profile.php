@@ -339,7 +339,7 @@ function cp_get_user_fullname($user_id)
 function cp_save_customer_harness_detail()
 {
     global $wpdb;
-    die("ddd");
+    
     $id = $_POST['id'];
     $user_id = get_current_user_id();
     
@@ -360,7 +360,7 @@ function cp_save_customer_harness_detail()
         $_POST['msh_username'] = $data->msh_username;
         $_POST['msh_password'] = $data->msh_password;
     }
-    
+    die("ddd");
     if(!$data->esb_user_id)
     {
         $suite = new TestSuite($data->suite_id);
