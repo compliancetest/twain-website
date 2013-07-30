@@ -415,9 +415,10 @@ function cp_save_customer_harness_detail()
         {
             return 'There was an error while updating your data.';
         }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
+            echo $result;exit;
             return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
         }
-        echo $result;exit;
+        
     }
     
     if($_POST['msh_p_mode'] == 'PULL'){
