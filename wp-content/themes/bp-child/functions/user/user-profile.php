@@ -408,9 +408,9 @@ function cp_save_customer_harness_detail()
                 </api:updateUserRequest>';
                 
         $result = sendRestUserAction('/user/update', $xmlData);
-        
+        echo $result;exit;
         $resultDoc = new DOMDocument();
-         echo $result;exit;
+         
         if(!$result || !$resultDoc->loadXML($result))
         {
             return 'There was an error while updating your data.';
