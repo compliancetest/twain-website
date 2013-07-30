@@ -4595,6 +4595,7 @@ min-height: 70px;
     left: 5px;
 }
 #edit-transaction-log-box .table-box .thead,
+#view-validation-log-box .table-box .thead,
 #my_transaction_log .table-box .thead{
     background: #1f7ac7 url(../images/blue_dotted_bcg.png) !important;
     border: 1px solid #1d76c0;
@@ -4604,20 +4605,24 @@ min-height: 70px;
     -o-border-radius: 5px 5px 0 0;
 }
 #edit-transaction-log-box .table-box .td,
+#view-validation-log-box .table-box .td,
 #my_transaction_log .table-box .td{
     padding-left: 5px;
     padding-right: 5px;
 }
 #edit-transaction-log-box .table-box .thead .td,
+#view-validation-log-box .table-box .thead .td,
 #my_transaction_log .table-box .thead .td{
     border-color: #1d76c0;
     font-size: 11px;
     line-height: 24px;
 }
 #edit-transaction-log-box .table-box .thead .td-two-lines,
+#view-validation-log-box .table-box .thead .td-two-lines,
 #my_transaction_log .table-box .thead .td-two-lines{
     line-height: 14px;
 }
+
 #my_transaction_log .td-product{
     width: 100px;
 }
@@ -4642,13 +4647,20 @@ min-height: 70px;
     width: 40px;
 }
 #my_transaction_log .td-service{
-    width: 91px;
+    width: 86px;
+}
+#my_transaction_log .td-action{
+    width: 70px;
+/*    width: 30px;*/
 }
 #my_transaction_log .td-convsn{
-    width: 71px;
+    width: 76px;
 }
 #my_transaction_log .td-date{
     width: 60px;
+}
+#my_transaction_log .td-log{
+    width: 14px;
 }
 #my_transaction_log .td-from,
 #my_transaction_log .td-to{
@@ -4682,6 +4694,10 @@ min-height: 70px;
 #edit-transaction-log-box .td-service{
     width: 100px;
 }
+#edit-transaction-log-box .td-action{
+    width: 70px;
+}
+
 #edit-transaction-log-box .td-convsn{
     width: 71px;
 }
@@ -4707,6 +4723,15 @@ min-height: 70px;
 }
 #log-filter-btn{
     margin-left: 20px;
+}
+#view-validation-log-box .td-phase{
+    width: 110px;
+}
+#view-validation-log-box .td-status{
+    width: 120px;
+}
+#view-validation-log-box .td-result{
+    width: 106px;
 }
 
 /*** Group Admin Section ***/

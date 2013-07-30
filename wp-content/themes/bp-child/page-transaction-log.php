@@ -36,7 +36,20 @@ $filterDate = isset($_GET['date']) ? $_GET['date'] : null;
 
 $esb = new ManageESB();
 
-$results = $esb->getUserTransactionLog(get_current_user_id(), $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('transactions');                    
+setItemsPerPage($limit, 'transactions');
+
+/*$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'PRODUCT_NAME';
+if(!in_array($orderBy, array('PRODUCT_NAME'))
+    $orderBy = 'PRODUCT_NAME';*/
+    
+$order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+
+$page = get_query_var('page') ? get_query_var('page') : 1;
+
+$log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $page, $limit);
+$results = $log_results['data'];
+$params = array();                 
 
 if($filterProduct === 'NULL')
     $filterProduct = null;
@@ -78,6 +91,29 @@ asort($tCases);
 asort($tServices);
 asort($tActions);
 asort($tPartyIDs);
+
+if($filterProduct){ 
+    $params[] = 'product=' .$filterProduct;
+}
+if($filterSuite){
+    $params[] = 'suite=' . $filterSuite;
+} 
+if($filterCase){
+    $params[] = 'case=' . $filterCase;
+}
+if($filterService){
+    $params[] = 'service=' . $filterService;
+}
+if($filterAction){
+    $params[] = 'action=' . $filterAction;
+}
+if($filterPartyId){
+    $params[] = 'partyid=' . $filterPartyId;
+}
+if($filterDate){
+    $params[] = 'date=' . $filterDate;
+} 
+
 ?>
 <div class="content" id="my_transaction_log">
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
@@ -180,23 +216,44 @@ asort($tPartyIDs);
             </form>
         </div> 
         <div class="padding10">
-            <!--<a href="#" id="delete-log-link" class="action-btn blue-delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Fields<span></span></span></a>-->
-            <a href="#" id="edit-log-link" class="action-btn blue-edit-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Selected Fields<span></span></span></a>            
+            <a href="#" id="delete-log-link" class="action-btn blue-delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
+            <a href="#" id="edit-log-link" class="action-btn blue-edit-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Selected Rows<span></span></span></a>            
             <div class="clear"></div>
             <div class="space10"></div>
             <div class="grid-box table-box" id="log-result-table">               
                <div class="grid-box-body">
                    <div class="thead tr">
-                       <div class="td td-product">Product Name</div>
-                       <div class="td td-case td-two-lines tocenter">Test<br />Case</div>
-                       <div class="td td-suite td-two-lines tocenter">Test<br />Suite</div>
-                       <div class="td td-outcome td-two-lines tocenter">Test<br />Outcome</div>
-                       <div class="td td-audit td-two-lines tocenter">Audit<br />Record</div>
-                       <div class="td td-service tocenter">Service</div>
-                       <div class="td td-convsn tocenter">Convsn</div>
-                       <div class="td td-date tocenter">Date</div>
-                       <div class="td td-from tocenter">From</div>
-                       <div class="td td-to tocenter">To</div>
+                       <div class="td td-product td-sortable">
+                           <a href="#" class="asc">Product Name <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-case td-two-lines tocenter td-sortable">
+                           <a href="#">Test<br />Case <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-suite td-two-lines tocenter td-sortable">
+                           <a href="#">Test<br />Suite <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-outcome td-two-lines tocenter td-sortable">
+                           <a href="#">Test<br />Outcome <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-audit td-two-lines tocenter td-sortable">
+                           <a href="#">Audit<br />Record <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-service tocenter td-sortable">
+                           <a href="#">Service <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-action tocenter td-sortable">
+                           <a href="#">Action <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-convsn td-two-lines tocenter td-sortable">
+                           <a href="#">Message<br />Envelope <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-date tocenter td-sortable">
+                           <a href="#">Date <span class="sort"></span></a>
+                       </div>
+                       <div class="td td-from tocenter td-sortable">
+                           <a href="#">From / To <span class="sort"></span></a>
+                       </div>
+<!--                       <div class="td td-to tocenter">To</div>-->
                        <div class="clear"></div>
                    </div>
                    <div class="tbody">
@@ -208,7 +265,7 @@ asort($tPartyIDs);
                    <?php }else{
                         foreach($results as $row){ 
                          ?>
-                           <div class="tr">
+                           <div class="tr has-actions">
                                <div class="td td-product">
                                    <input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" />
                                    <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
@@ -225,26 +282,32 @@ asort($tPartyIDs);
                                    <?php }else{ ?>
                                    <span class="status-testing">Fail</span>
                                    <?php } ?>
+                                   <br />
+                                   <a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>
                                </div>
-                               <div class="td td-audit tocenter">
-                                   <?php if(!$row->AUDIT_RECORD){ ?>
-                                       No
-                                   <?php }else{ ?>
-                                       Yes
-                                   <?php } ?>
-                               </div>
+                               <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-service">
                                    <?php echo cp_wrap($row->SERVICE, 17)?>
                                </div>
+                               <div class="td td-action">
+                                   <?php echo cp_wrap($row->ACTION, 14)?>
+                               </div>
+                               
                                <div class="td td-convsn">
                                    <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
+                                   <br />
+                                   <a href="/message-envelope?id=<?php echo $row->ID?>" target="_blank">XML</a> | <a href="/message-envelope?id=<?php echo $row->ID?>&mode=html" target="_blank">HTML</a>
                                </div>
                                <div class="td td-date tocenter">
-                                   <?php echo formatDate($row->EXECUTION_DATE)?>
+                                   <?php echo formatDate($row->EXECUTION_DATE, 'm/d/y')?>
                                </div>
-                               <div class="td td-from"><?php echo $row->FROM_PARTY_ID?></div>
-                               <div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>
+                               <div class="td td-from tocenter">
+                                   <div style="border-bottom: solid 1px #ccc; padding-bottom: 3px; margin-bottom: 3px;"><?php echo $row->FROM_PARTY_ID?></div>
+                                   <?php echo $row->TO_PARTY_ID?>
+                               </div>
+                               <!--<div class="td td-to"><?php echo $row->TO_PARTY_ID?></div>-->
                                <div class="clear"></div> 
+                               
                            </div>                       
                         <?php 
                         }
@@ -255,6 +318,65 @@ asort($tPartyIDs);
                </div>
            </div>
            <div class="space10"></div>
+           <?php if($log_results['total'] > 0) { ?>
+           <div class="pagination-wrapper">
+                <div class="pagination-limit">
+                    <form method="get" action="<?php echo get_permalink()?>" name="pform">
+                        Display # 
+                        <select name="limit" class="select" onchange="document.pform.submit()">
+                            <option value="10" <?php echo $limit == 10 ? 'selected="selected"' : ''?>>10</option>
+                            <option value="20" <?php echo $limit == 20 ? 'selected="selected"' : ''?>>20</option>
+                            <option value="50" <?php echo $limit == 50 ? 'selected="selected"' : ''?>>50</option>
+                            <option value="100" <?php echo $limit == 100 ? 'selected="selected"' : ''?>>100</option>
+                            <option value="-1" <?php echo $limit == -1 ? 'selected="selected"' : ''?>>All</option>
+                        </select>
+                        <?php if($filterProduct){ ?>
+                        <input type="hidden" name="product" value="<?php echo $filterProduct?>" /> 
+                        <?php } ?>
+                        <?php if($filterSuite){ ?>
+                        <input type="hidden" name="suite" value="<?php echo $filterSuite?>" /> 
+                        <?php } ?>
+                        <?php if($filterCase){ ?>
+                        <input type="hidden" name="case" value="<?php echo $filterCase?>" /> 
+                        <?php } ?>
+                        <?php if($filterService){ ?>
+                        <input type="hidden" name="service" value="<?php echo $filterService?>" /> 
+                        <?php } ?>
+                        <?php if($filterAction){ ?>
+                        <input type="hidden" name="action" value="<?php echo $filterAction?>" /> 
+                        <?php } ?>
+                        <?php if($filterPartyId){ ?>
+                        <input type="hidden" name="partyid" value="<?php echo $filterPartyId?>" /> 
+                        <?php } ?>
+                        <?php if($filterDate){ ?>
+                        <input type="hidden" name="date" value="<?php echo $filterDate?>" /> 
+                        <?php } ?>
+                    </form>
+                </div>
+                <div class="pagination">
+                    <?php                
+                    
+                        $args = array(
+                            'base'         => get_permalink() . '?%_%',
+                            'format'       => 'page=%#%',
+                            'total'        => ceil($log_results['total'] / $limit),
+                            'current'      => $page,
+                            'show_all'     => False,
+                            'end_size'     => 5,
+                            'mid_size'     => 5,
+                            'prev_next'    => True,
+                            'prev_text'    => __('« Previous'),
+                            'next_text'    => __('Next »'),
+                            'type'         => 'plain',
+                            'add_args'     => false,
+                            'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)
+                        ); 
+                        echo paginate_links($args);
+                    ?>
+                </div>         
+            </div>
+            <div class="space15"></div>
+            <?php } ?>
         </div>
     </div>
     <div class="clear"></div>
@@ -268,7 +390,7 @@ asort($tPartyIDs);
             
             if(checked == 0)
             {
-                alert("Please select a field.");
+                alert("Please select a row.");
                 return false;
             }else{
                 var ids = new Array();
@@ -305,6 +427,35 @@ asort($tPartyIDs);
             
             return false;
         })
+        jQuery('.view-validation-log').click(function(){
+            var link = jQuery(this);
+            jQuery('#my_transaction_log').append('<div class="loading1"></div>');
+            jQuery('#my_transaction_log .loading1').show();
+            jQuery.ajax({
+                url: '/',
+                data: {
+                    'cp-action': '<?php echo wp_create_nonce('view-validation-log')?>',
+                    'id': link.attr('data-id')
+                },
+                type: 'post',
+                dataType: 'html',
+                success: function(rsp){                        
+                    jQuery('#my_transaction_log .loading1').remove();
+                    jQuery('#view-validation-log-box .tbody').html(rsp);                        
+                    jQuery('#view-validation-log-box').showPopupBox({
+                        closeWhenClickOveraly: false,
+                        onClose: function(){
+                            jQuery('#view-validation-log-box .tbody').html("");
+                        },
+                        onLoad: function(){
+                            fixTdHeight(jQuery('#view-validation-log-box .table-box'));
+                        }
+                    });
+                }
+            })    
+            
+            return false;
+        })
         
         jQuery('#editLogForm').submit(function(){
             jQuery('#edit-transaction-log-box .loading').show();
@@ -326,6 +477,45 @@ asort($tPartyIDs);
             })
             return false;
         })
+        
+        jQuery('#delete-log-link').click(function(){
+            var checked = jQuery('#log-result-table input[type="checkbox"]:checked').length;            
+            if(checked == 0)
+            {
+                alert("Please select a row.");
+                return false;
+            }else{
+                var isAudit = false;
+                
+                var ids = new Array();
+                jQuery('#log-result-table input[type="checkbox"]:checked').each(function(){
+                    ids.push(this.value);
+                    if(jQuery(this).parents('.tr').find('.td-audit').html() == 'Yes')
+                        isAudit = true;
+                })           
+                if(isAudit && !confirm('Are you sure you want to delete? Some of the rows you have selected are marked as audit records'))
+                {
+                    return false;
+                }
+                
+                jQuery('#my_transaction_log').append('<div class="loading1"></div>');
+                jQuery('#my_transaction_log .loading1').show();
+                
+                jQuery.ajax({
+                    url: '/',
+                    data: {
+                        'cp-action': '<?php echo wp_create_nonce('delete-transaction-log')?>',
+                        'id': ids
+                    },
+                    type: 'post',
+                    dataType: 'html',
+                    success: function(rsp){                        
+                        document.location.reload();
+                    }
+                })    
+                return false;
+            }
+        });
     })
  </script>       
 </div> <!--end content-->
@@ -344,10 +534,11 @@ asort($tPartyIDs);
                    <div class="td td-outcome td-two-lines tocenter">Test<br />Outcome</div>
                    <div class="td td-audit td-two-lines tocenter">Audit<br />Record</div>
                    <div class="td td-service tocenter">Service</div>
-                   <div class="td td-convsn tocenter">Convsn</div>
+                   <div class="td td-action tocenter">Action</div>
+                   <div class="td td-convsn td-two-lines tocenter">Message<br />Envelope</div>
                    <div class="td td-date tocenter">Date</div>
-                   <div class="td td-from tocenter">From</div>
-                   <div class="td td-to tocenter">To</div>
+                   <div class="td td-from tocenter">From / To</div>
+<!--                   <div class="td td-to tocenter">To</div>-->
                    <div class="clear"></div>
                </div>
                <div class="tbody">
@@ -367,6 +558,33 @@ asort($tPartyIDs);
     <input type="hidden" name="cp-action" value="<?php echo wp_create_nonce('save-transaction-log') ?>" />
 </form>
 </div>        
+
+<div class="popup-box" id="view-validation-log-box" style="display: none; width: 410px">
+    <div class="popup-box-header radius6 noradiusbottom">ESB validation log</div>
+    <div class="popup-box-content"> 
+        <div class="space10"></div>
+        <div class="grid-box table-box">               
+           <div class="grid-box-body">
+               <div class="thead tr">
+                   <div class="td td-phase">Phase Name</div>
+                   <div class="td td-status tocenter">Status</div>
+                   <div class="td td-result tocenter">Result</div>
+                   <div class="clear"></div>
+               </div>
+               <div class="tbody">
+                   
+               </div>
+           </div>
+       </div>
+       <div class="space10"></div>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">                                                    
+        <a href="#" cp-type="inline"  class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+        <div class="clear"></div>
+    </div>
+    <div class="loading"></div>
+    <a class="close_btn"></a>      
+</div> 
 <?php
 get_footer();
 ?>

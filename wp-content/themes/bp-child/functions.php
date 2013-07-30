@@ -433,12 +433,12 @@ function getFilterParam($name)
 }
 
 
-function formatDate($date)
+function formatDate($date, $format = 'm/d/Y')
 {
     if(is_numeric($date))
-        $date = date('m/d/Y', $date);
+        $date = date($format, $date);
     else
-        $date = date('m/d/Y', strtotime($date));
+        $date = date($format, strtotime($date));
     return $date;
 }
 
@@ -713,4 +713,19 @@ function cp_wrap($string, $length)
 function cp_generate_password($length = 12) {
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     return substr(str_shuffle($chars),0,$length);
+}
+
+function getItemsPerPage($page = '', $default = 20)
+{
+    if(isset($_SESSION[$page . '_limit']))
+    {
+        return $_SESSION[$page . '_limit'];
+    }else{
+        return $default;
+    }
+}
+
+function setItemsPerPage($value, $page = '')
+{
+    $_SESSION[$page . '_limit'] = $value;
 }

@@ -449,7 +449,7 @@ function cp_edit_transaction_log(){
         $rows = array();    
     }else{
         $esb = new ManageESB();
-        $rows =$esb->getUserTransactionLog(null, null, null, null, null, null, null, null, $ids);
+        $rows =$esb->getTransactionLogByID($ids);
     }
     
     if($rows)
@@ -498,14 +498,20 @@ function cp_edit_transaction_log(){
                <div class="td td-service td-fixed">
                    <?php echo cp_wrap($row->SERVICE, 19)?>
                </div>
+               <div class="td td-action td-fixed">
+                   <?php echo cp_wrap($row->ACTION, 14)?>
+               </div>               
                <div class="td td-convsn td-fixed">
                    <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
                </div>
                <div class="td td-date tocenter td-fixed">
                    <?php echo formatDate($row->EXECUTION_DATE)?>
                </div>
-               <div class="td td-from td-fixed"><?php echo $row->FROM_PARTY_ID?></div>
-               <div class="td td-to td-fixed"><?php echo $row->TO_PARTY_ID?></div>
+               <div class="td td-from td-fixed">
+                    <div style="border-bottom: solid 1px #999; padding-bottom: 3px; margin-bottom: 3px;"><?php echo $row->FROM_PARTY_ID?></div>
+                    <?php echo $row->TO_PARTY_ID?>
+               </div>
+               <!--<div class="td td-to td-fixed"><?php echo $row->TO_PARTY_ID?></div>-->
                <div class="clear"></div> 
            </div>                       
             <?php
@@ -517,6 +523,70 @@ function cp_edit_transaction_log(){
     }else{
         return '<p class="message error">Invalid Request!</p>';
     }
+}
+
+
+function cp_view_validation_log()
+{
+    global $wpdb;
+    
+    $id = $_POST['id'];
+    
+    $esb = new ManageESB();
+    
+    $data = $esb->getValidationResult($id);
+    
+    if($data === null)
+    {
+        return '<p class="message error">Invalid Request!</p>';
+    }
+    
+    ob_start();
+    foreach($data as $row){
+    ?>
+    <div class="tr">
+        <div class="td td-phase"><?php echo $row->PHASE ?></div>
+        <div class="td td-status tocenter">
+            <?php
+                switch($row->STATUS)
+                {
+                    case 'Passed':
+                        echo '<span class="status-active">Passed</span>';
+                        break;
+                    case 'Failed':
+                        echo '<span class="status-suspended">Failed</span>';
+                        break;
+                    default:
+                        echo '<span>' . $row->STATUS . '</span>';
+                        break;
+                }
+            ?>
+        </div>
+        <div class="td td-result tocenter">
+            <?php
+                if(!$row->VALIDATION_ERROR)
+                    echo '-';
+                else
+                    echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">Error Details</a>';
+            ?>
+        </div>
+        <div class="clear"></div>    
+    </div>
+    <?php
+    }
+    if(!$data)
+    {
+        ?>
+        <div class="tr">
+            <div class="td td-full">No data found!</div>
+            <div class="clear"></div>
+        </div>
+        <?php
+    }
+    $result = ob_get_contents();
+    ob_end_clean();
+    
+    return $result;
 }
 
 function cp_save_transaction_log()
@@ -533,7 +603,7 @@ function cp_save_transaction_log()
         return '<p class="message error">Invalid Request!</p>';
     }else{
         $esb = new ManageESB();
-        $rows =$esb->getUserTransactionLog(null, null, null, null, null, null, null, null, $ids);
+        $rows =$esb->getTransactionLogByID($ids);
         
         foreach($rows as $row)
         {
@@ -553,4 +623,52 @@ function cp_save_transaction_log()
     
     return 'success';
     
+}
+
+function cp_delete_transaction_log(){
+    global $wpdb;    
+    
+    if(!is_user_logged_in())
+    {
+        addMessage('Permission Denied!', 'error');
+        return false;
+    }
+    
+    $ids = $_POST['id'];
+    
+    if(!$ids)
+    {
+        addMessage('Invalid Request!', 'error');
+        return false;
+    }else{
+        $esb = new ManageESB();
+        $rows =$esb->getTransactionLogByID($ids);
+    }
+    
+    if(!$rows)
+    {
+        addMessage('Invalid Request!', 'error');
+        return false;
+    }
+    
+    $lIds = array();
+    foreach($rows as $row)
+    {
+        $lIds[] = $row->ID;
+    }
+    
+    $esb = new ManageESB();
+    
+    //Delete MSH_METADATA_PAYLOAD            
+    $query = "DELETE FROM " . $esb->table_metadata_payload . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
+    ManageESB::$esbdb->query($query);
+    
+    $query = "DELETE FROM " . $esb->table_metadata . " WHERE ID in (" . implode(", ", $lIds) . ")";    
+    ManageESB::$esbdb->query($query);
+    
+    
+    
+    addMessage("Selected data was removed!");
+    
+    return true;
 }

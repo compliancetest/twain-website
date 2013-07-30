@@ -1470,10 +1470,66 @@ tr {
     -webkit-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
     -o-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
 }
+.table-box .thead .td-sortable a{
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+    text-decoration: none;
+}
+.table-box .thead .td-sortable{
+    position: relative;
+}
+.table-box .thead .td-sortable a .sort{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: url(../images/sortable_up_icon_b.png) no-repeat;
+    position: absolute;
+    top:13px;
+    right: 2px;
+    display: none !important;
+}
+.table-box .thead .td-sortable a.desc .sort{
+    background: url(../images/sortable_down_icon_b.png) no-repeat;    
+    display: block;
+}
+.table-box .thead .td-sortable a.asc .sort{
+    display: block;
+}
+
+.table-box .thead .td-sortable a:hover .sort{
+    display: block;
+} 
+.table-box .thead .td-sortable a.asc:hover .sort{
+    background: url(../images/sortable_down_icon_b.png) no-repeat;    
+} 
+.table-box .thead .td-sortable a.desc:hover .sort-desc{
+    background: url(../images/sortable_down_icon_b.png) no-repeat;    
+} 
+
+
+
+
 .table-box .tbody{
     border-left: solid 1px #1767ab;
     border-right: solid 1px #1767ab;
     border-bottom: solid 1px #1767ab;
+}
+.table-box .has-actions{
+    position: relative;
+}
+.table-box .tr-actions{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 5px 0;
+    text-align: center;
+    width: 100%;
+    background: #eee;
+    display: none;
+    border-top: solid 1px #ccc;
+}
+.table-box .has-actions:hover .tr-actions{
+    display: block;
 }
 .grid-box .td a{
     text-decoration: underline;
@@ -1904,6 +1960,12 @@ tr {
 .pagination-wrapper{
     padding: 0;
     text-align: center;
+    position: relative;
+}
+.pagination-limit{
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 .pagination{
     margin: 0 auto;
