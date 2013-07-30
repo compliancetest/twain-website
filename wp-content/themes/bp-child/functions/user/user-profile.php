@@ -360,7 +360,7 @@ function cp_save_customer_harness_detail()
         $_POST['msh_username'] = $data->msh_username;
         $_POST['msh_password'] = $data->msh_password;
     }
-    die("ddd");
+    
     if(!$data->esb_user_id)
     {
         $suite = new TestSuite($data->suite_id);
@@ -395,7 +395,7 @@ function cp_save_customer_harness_detail()
         }else{ //Success
             $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));            
         }
-    }else{
+    }else{die("ddd");
         //Update Data
         $xmlData = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
                     <api:user>
