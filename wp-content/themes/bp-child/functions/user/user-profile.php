@@ -410,10 +410,9 @@ function cp_save_customer_harness_detail()
         $result = sendRestUserAction('/user/update', $xmlData);
         
         $resultDoc = new DOMDocument();
-        
+         echo $result;exit;
         if(!$result || !$resultDoc->loadXML($result))
         {
-            die("dddd");
             return 'There was an error while updating your data.';
         }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){            
             return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
