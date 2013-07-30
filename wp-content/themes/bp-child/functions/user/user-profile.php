@@ -395,7 +395,7 @@ function cp_save_customer_harness_detail()
         }else{ //Success
             $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));            
         }
-    }else{die("ddd");
+    }else{
         //Update Data
         $xmlData = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
                     <api:user>
@@ -408,7 +408,7 @@ function cp_save_customer_harness_detail()
                 </api:updateUserRequest>';
                 
         $result = sendRestUserAction('/user/update', $xmlData);
-        
+        echo $result;exit;
         $resultDoc = new DOMDocument();
         
         if(!$result || !$resultDoc->loadXML($result))
