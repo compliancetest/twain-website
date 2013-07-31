@@ -12,17 +12,24 @@ if(!$id){
     exit;
 }
 
+if(!is_user_logged_in())
+{
+    addMessage('Please login to see the xml', 'error');
+    wp_redirect('/');
+    exit;
+}
+
 $esb = new ManageESB();
 
 $message = $esb->getMessageEnvelope($id);
 
 if(!$message){
-    echo '<p>Invalid Request!</p>';
+    echo '<p>Permission Denied!</p>';
     exit;
 }
+
 header("Content-type: application/xml");
-if($mode != 'html'){
-    
+if($mode != 'html'){    
     echo $message;
 }else{
     $xslt = get_site_url() . '/message-envelope.xsl';
