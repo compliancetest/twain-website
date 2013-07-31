@@ -21,5 +21,8 @@ if(!$message){
     exit;
 }
 header("Content-type: application/xml");
+$xslt = get_site_url() . '/validation-result.xsl';
+echo "<?xml version='1.0' encoding='utf-8'?>";
+echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
 echo $message;
 
