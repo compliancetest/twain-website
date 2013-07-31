@@ -665,6 +665,11 @@ function cp_delete_transaction_log(){
     $query = "DELETE FROM " . $esb->table_metadata_payload . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
     ManageESB::$esbdb->query($query);
     
+    //DELETE FROM MSH_METADATA_VALIDATION_RESULT
+    $query = "DELETE FROM " . $esb->table_metadata_validation_result . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
+    ManageESB::$esbdb->query($query);
+    
+    
     $query = "DELETE FROM " . $esb->table_metadata . " WHERE ID in (" . implode(", ", $lIds) . ")";    
     ManageESB::$esbdb->query($query);
     
