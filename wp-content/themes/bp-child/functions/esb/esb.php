@@ -219,13 +219,13 @@ class ManageESB
                     $status = false;
             }
         }
-        print_r($rows);var_dump($status);echo $outcomeType;
+        
         if($outcomeType == 'Positive')
         {
-            if(!$row || $stats === true)
-                return 'SUCCESS';
+            if($status === false)
+                return 'FAILURE';                
             else
-                return 'FAILURE';
+                return 'SUCCESS';
         }else if($outcomeType == 'Negative'){
             if($status === false)
                 return 'SUCCESS';
