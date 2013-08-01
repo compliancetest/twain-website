@@ -276,14 +276,14 @@ Template Name Posts: Test Suite
                     $posts_per_page = 10;
                     $page = get_query_var('page') ? get_query_var('page') : 1;
 				    //Getting Test Cases
-                    $args = $args = array(
+                    $args = array(
                             'post_type' => 'test-case',         
                             'posts_per_page' => $posts_per_page,
-                            'order_by'  => 'meta_value',
-                            'order'     => 'ASC',
                             'meta_key'  => 'sequence_number',
+                            'orderby'  => 'meta_value_num',
+                            'order'     => 'ASC',                            
                             'paged' => $page,
-                            'tax_query' => array('relation' => 'and')
+                            'meta_query' => array('relation' => 'and')
                     );
                     $params = array();
                     //Add Test Suite ID
