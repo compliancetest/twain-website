@@ -219,7 +219,7 @@ class ManageESB
                     $status = false;
             }
         }
-        print_r($rows);var_dump($status);
+        print_r($rows);var_dump($status);echo $outcomeType;
         if($outcomeType == 'Positive')
         {
             if(!$row || $stats === true)
