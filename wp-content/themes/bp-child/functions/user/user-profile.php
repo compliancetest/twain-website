@@ -569,8 +569,10 @@ function cp_view_validation_log()
             <?php
                 if(!$row->VALIDATION_ERROR)
                     echo '-';
-                else
-                    echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">Error Details</a>';
+                else{
+                    echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">XML</a>' . ' &middot; '
+                    . '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';;
+                }
             ?>
         </div>
         <div class="clear"></div>    

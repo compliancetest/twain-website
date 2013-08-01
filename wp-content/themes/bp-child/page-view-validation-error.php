@@ -21,8 +21,10 @@ if(!$message){
     exit;
 }
 header("Content-type: application/xml");
-$xslt = get_site_url() . '/validation-result.xsl';
+$xslt = get_site_url() . '/xslt/validation-result.xsl';
 echo "<?xml version='1.0' encoding='utf-8'?>";
-echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
+if($mode == 'html'){
+    echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
+}
 echo $message;
 

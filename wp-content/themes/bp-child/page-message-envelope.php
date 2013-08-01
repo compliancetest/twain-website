@@ -32,7 +32,7 @@ header("Content-type: application/xml");
 if($mode != 'html'){    
     echo $message;
 }else{
-    $xslt = get_site_url() . '/message-envelope.xsl';
+    $xslt = get_site_url() . '/xslt/message-envelope.xsl';
     $message = str_replace('?>', '?><?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>', $message);
     echo $message;
 }
