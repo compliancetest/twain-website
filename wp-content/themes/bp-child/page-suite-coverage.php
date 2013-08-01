@@ -68,6 +68,7 @@ $esb = new ManageESB();
                                        $passedBlobs = "";
                                        $failedBlobs = "";
                                        $normalBlobs = "";
+                                       
                                        foreach($testCases as $case)
                                        {
                                            if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 

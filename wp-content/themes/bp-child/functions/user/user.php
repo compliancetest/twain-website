@@ -289,7 +289,7 @@ function getUserSubscribedSuites($user_id = null)
     $query = $wpdb->prepare(
         "SELECT sp.*, pm.meta_value as `name` FROM " . $wpdb->prefix . "users_purchases AS sp " .
         "LEFT JOIN " . $wpdb->postmeta . " AS pm ON pm.post_id=sp.suite_id AND pm.meta_key='ts_name' " .
-        "WHERE sp.user_id=%d AND sp.status='Active'", $user_id
+        "WHERE sp.user_id=%d AND sp.status='Active' AND pm.meta_value IS NOT NULL", $user_id
     );
     
     $rows = $wpdb->get_results($query);

@@ -281,7 +281,11 @@ if($filterDate){
                                     <?php if($row->TEST_SUITE_ID){ ?>
                                     <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 10)?></a>
                                     <?php }else if(!$row->TEST_SUITE_ID && $row->TEST_CASE_DB_ID){ ?>
-                                    <?php $tSuiteId = get_post_meta($row->TEST_CASE_DB_ID, 'test_suite', true); ?>
+                                    <?php 
+                                        $tSuiteId = get_post_meta($row->TEST_CASE_DB_ID, 'test_suite', true); 
+                                        $esb->updateTestSuiteID($row->ID, $tSuiteId);
+                                        
+                                    ?>
                                     <a href="<?php echo get_permalink($tSuiteId)?>"><?php echo cp_wrap(get_post_meta($tSuiteId, 'ts_name', true), 10)?></a>
                                     <?php } ?>
                                    

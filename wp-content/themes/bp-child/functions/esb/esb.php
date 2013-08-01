@@ -31,17 +31,20 @@ class ManageESB
     
     public function getCaseStatus($customer_id, $suite_id = null, $product_id = null, $case_id = null)
     {
+        if($suite_id != null)
+            $this->addTestSuiteIDToLog($suite_id);
         
-        $query = ManageESB::$esbdb->prepare("SELECT TEST_SUITE_ID, PRODUCT_ID, TEST_CASE_ID,`TEST_OUTCOME` FROM " . $this->table_metadata . " WHERE CUSTOMER_ID=%d", $customer_id);
+        $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, m.PRODUCT_ID, m.TEST_CASE_ID, m.`TEST_OUTCOME`, c.ID as TEST_CASE_DB_ID FROM " . $this->table_metadata . " AS m " .
+                                            "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID WHERE m.CUSTOMER_ID=%d", $customer_id);
         
         if($suite_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND TEST_SUITE_ID=%d", $suite_id);
+            $query .= ManageESB::$esbdb->prepare(" AND m.TEST_SUITE_ID=%d", $suite_id);
         
         if($product_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND PRODUCT_ID=%d", $product_id);
+            $query .= ManageESB::$esbdb->prepare(" AND m.PRODUCT_ID=%d", $product_id);
         
         if($case_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND TEST_CASE_ID=%d", $case_id);
+            $query .= ManageESB::$esbdb->prepare(" AND c.TEST_CASE_ID=%d", $case_id);
         
         $rows = ManageESB::$esbdb->get_results($query);
         
@@ -59,12 +62,33 @@ class ManageESB
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID] = array();
             
             if($row->TEST_OUTCOME == 'SUCCESS')
-                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_ID] = 'pass';
+                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'pass';
             else
-                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_ID] = 'fail';
+                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'fail';
         }
         
         return $result;
+    }
+    
+    public function addTestSuiteIDToLog($suite_id)
+    {
+        $suiteObj = new TestSuite($suite_id);
+        $testCases = $suiteObj->loadTestCases();
+        
+        $where = array();
+        foreach($testCases as $c)
+        {
+            $where[] = ManageESB::$esbdb->prepare(" c.ID=%s ", $c->ID);
+        }
+        
+        if($where)
+        {
+            $query = "UPDATE " . $this->table_metadata . " AS m " . 
+            "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID SET m.TEST_SUITE_ID=" . $suite_id . " WHERE " . implode(" OR ", $where);
+            
+            ManageESB::$esbdb->query($query);
+        }
+        
     }
     
     public function  getTransactionLogByID($id = null, $user_id = null)
@@ -322,6 +346,13 @@ class ManageESB
         
         return $data;
     }
+    
+    
+    public function updateTestSuiteID($id, $suiteID)
+    {
+        ManageESB::$esbdb->update($this->table_metadata, array('TEST_SUITE_ID'=>$suiteID), array('ID' => $id));
+    }
+    
     
     
     public function addTestCaseNameIDMap($id, $name)
