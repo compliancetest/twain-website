@@ -279,7 +279,7 @@ Template Name Posts: Test Suite
                     $args = $args = array(
                             'post_type' => 'test-case',         
                             'posts_per_page' => $posts_per_page,
-                            'order_by'  => 'meta_value title',
+                            'order_by'  => 'meta_value',
                             'order'     => 'ASC',
                             'meta_key'  => 'sequence_number',
                             'paged' => $page,
