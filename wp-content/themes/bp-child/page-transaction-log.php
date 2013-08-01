@@ -294,6 +294,7 @@ if($filterDate){
                                    <?php }else if($row->TEST_CASE_DB_ID){ 
                                        $outComeType = get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true);
                                        $outComeStatus = $esb->getTestOutcomeStatus($row->ID, $outComeType);
+                                       echo $outComeStatus;
                                        if($outComeStatus == 'SUCCESS')
                                            echo '<span class="status-certified">Pass</span>';
                                        else if($outComeStatus == 'FAILURE')
