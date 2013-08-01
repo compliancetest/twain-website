@@ -278,14 +278,28 @@ if($filterDate){
                                    <a href="<?php echo get_permalink($row->TEST_CASE_DB_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 10)?></a>
                                </div>
                                <div class="td td-suite">
-                                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 10)?></a>
+                                    <?php if($row->TEST_SUITE_ID){ ?>
+                                    <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 10)?></a>
+                                    <?php }else if(!$row->TEST_SUITE_ID && $row->TEST_CASE_DB_ID){ ?>
+                                    <?php $tSuiteId = get_post_meta($row->TEST_CASE_DB_ID, 'test_suite', true); ?>
+                                    <a href="<?php echo get_permalink($tSuiteId)?>"><?php echo cp_wrap(get_post_meta($tSuiteId, 'ts_name', true), 10)?></a>
+                                    <?php } ?>
+                                   
                                </div>
                                <div class="td td-outcome tocenter">
                                    <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
                                    <span class="status-certified">Pass</span>
-                                   <?php }else{ ?>
+                                   <?php }else if($row->TEST_OUTCOME == 'FAILURE'){ ?>
                                    <span class="status-testing">Fail</span>
-                                   <?php } ?>
+                                   <?php }else if($row->TEST_CASE_DB_ID){ 
+                                       $outComeType = get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true);
+                                       $outComeStatus = $esb->getTestOutcomeStatus($row->ID, $outComeType);
+                                       if($outComeStatus == 'SUCCESS')
+                                           echo '<span class="status-certified">Pass</span>';
+                                       else if($outComeStatus == 'FAILURE')
+                                           echo '<span class="status-testing">Fail</span>';
+                                       
+                                   } ?>
                                    <?php if(isset($row->HAS_VALIDATION_LOG)){ ?>
                                    <br />
                                    <a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>

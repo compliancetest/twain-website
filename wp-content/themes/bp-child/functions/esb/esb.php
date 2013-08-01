@@ -205,6 +205,38 @@ class ManageESB
         
     }
     
+    public function getTestOutcomeStatus($id, $outcomeType)
+    {        
+        $rows = ManageESB::$esbdb->get_col("SELECT `STATUS` FROM " . $this->table_metadata_validation_result . " WHERE MSH_METADATA_ID = " . $id);
+        
+        $status = null;
+        if($rows)
+        {
+            $status = true;
+            foreach($rows as $r)
+            {
+                if($r != 'Pass')
+                    $status = false;
+            }
+        }
+        
+        if($outcomeType == 'Positive')
+        {
+            if(!$row || $stats === true)
+                return 'SUCCESS';
+            else
+                return 'FAILURE';
+        }else if($outcomeType == 'Negative'){
+            if($status === false)
+                return 'SUCCESS';
+            else
+                return 'FAILURE';
+            
+        }
+        
+        
+    }
+    
     public function  getMessageEnvelope($id, $user_id = null)
     {
         global $wpdb;
