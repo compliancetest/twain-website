@@ -41,19 +41,19 @@ $filterYear = getFilterParam('product_year');
 foreach($filterType as $f)
 {
     $args['meta_query'][] = array('key' => 'product_type', 'value' => $f, 'compare' => '=');
-    $params[] = urlencode('type[]') . '=' . $f;
+    $params[] = urlencode('type[]') . '=' . urlencode($f);
     $filterParams['type[]'] = $f;
 }
 foreach($filterOwner as $v)
 {
     $args['meta_query'][] = array('key' => 'product_owner', 'value' => $v, 'compare' => '=');
-    $params[] = urlencode('owner[]') . '=' . $v;
+    $params[] = urlencode('owner[]') . '=' . urlencode($v);
     $filterParams['owner[]'] = $v;
 }
 foreach($filterYear as $v)
 {
-    $args['meta_query'][] = array('key' => 'product_date', 'value' => $v . "-", 'compare' => 'LIKE');
-    $params[] = urlencode('product_year[]') . '=' . $v;
+    $args['meta_query'][] = array('key' => 'product_release_date', 'value' => $v . "-", 'compare' => 'LIKE');
+    $params[] = urlencode('product_year[]') . '=' . urlencode($v);
     $filterParams['product_year[]'] = $v;
 }
 
@@ -71,7 +71,7 @@ $allSuites = $all_posts->get_posts();
 foreach($allSuites as $row)
 {
     $issueStatus = get_post_meta($row->ID, 'product_status', true);
-    $issueDate = get_post_meta($row->ID, 'product_date', true);
+    $issueDate = get_post_meta($row->ID, 'product_release_date', true);
     
     $productType = get_post_meta($row->ID, 'product_type', true);    
     $caseTypes[$productType] = isset($caseTypes[$productType]) ? $caseTypes[$productType] + 1 : 1;
@@ -87,12 +87,13 @@ foreach($allSuites as $row)
 }
 
 //Getting Pagination Params
-$page = get_query_var('page') ? get_query_var('page') : 1;
+$page = get_query_var('paged') ? get_query_var('paged') : 1;
 $args['paged'] = $page;
 $args['posts_per_page'] = $posts_per_page;
 
 $get_posts = new WP_Query($args);
 $products = $get_posts->get_posts();
+
 ?>
 <div class="content container" id="search">      
     <div id="search_title_block" class="page-title-block column noshadow">                    
@@ -179,8 +180,8 @@ $products = $get_posts->get_posts();
                         <div class="pagination">
                             <?php                                 
                                 $args = array(
-                                    'base'         =>  get_permalink() . '?%_%',
-                                    'format'       => '&page=%#%',
+                                    'base'         =>  get_permalink() . '%_%?',
+                                    'format'       => 'page/%#%',
                                     'total'        => $get_posts->max_num_pages,
                                     'current'      => $page,
                                     'show_all'     => False,
@@ -193,6 +194,7 @@ $products = $get_posts->get_posts();
                                     'add_args'     => false,
                                     'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)
                                 ); 
+                                
                                 echo paginate_links($args);
                             ?>
                         </div>                        

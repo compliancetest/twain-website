@@ -42,25 +42,25 @@ $filterStatus = getFilterParam('status');
 foreach($filterType as $f)
 {
     $args['tax_query'][] = array('taxonomy' => 'test_suite_type', 'field' => 'slug', 'terms' => $f);
-    $params[] = urlencode('type[]') . '=' . $f;
+    $params[] = urlencode('type[]') . '=' . urlencode($f);
     $filterParams['type[]'] = $f;
 }
 foreach($filterIssuer as $v)
 {
     $args['meta_query'][] = array('key' => 'ts_issuer', 'value' => $v, 'compare' => '=');
-    $params[] = urlencode('issue_year[]') . '=' . $v;
+    $params[] = urlencode('issue_year[]') . '=' . urlencode($v);
     $filterParams['issue_year[]'] = $v;
 }
 foreach($filterYear as $v)
 {
     $args['meta_query'][] = array('key' => 'ts_issue_date', 'value' => $v . "-", 'compare' => 'LIKE');
-    $params[] = urlencode('year[]') . '=' . $v;
+    $params[] = urlencode('year[]') . '=' . urlencode($v);
     $filterParams['year[]'] = $v;
 }
 foreach($filterStatus as $v)
 {
     $args['meta_query'][] = array('key' => 'ts_status', 'value' => $v, 'compare' => '=');
-    $params[] = urlencode('status[]') . '=' . $v;
+    $params[] = urlencode('status[]') . '=' . urlencode($v);
     $filterParams['status[]'] = $v;
 }
 
@@ -95,7 +95,7 @@ foreach($allSuites as $row)
 }
 
 //Getting Pagination Params
-$page = get_query_var('page') ? get_query_var('page') : 1;
+$page = get_query_var('paged') ? get_query_var('paged') : 1;
 $args['paged'] = $page;
 $args['posts_per_page'] = $posts_per_page;
 
@@ -172,8 +172,8 @@ $testsuites = $get_posts->get_posts();
                         <div class="pagination">
                             <?php                                 
                                 $args = array(
-                                    'base'         => get_permalink() . '?%_%',
-                                    'format'       => '&page=%#%',
+                                    'base'         => get_permalink() . '%_%?',
+                                    'format'       => 'page/%#%',
                                     'total'        => $get_posts->max_num_pages,
                                     'current'      => $page,
                                     'show_all'     => False,

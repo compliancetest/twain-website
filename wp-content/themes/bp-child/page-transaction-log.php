@@ -45,7 +45,7 @@ if(!in_array($orderBy, array('PRODUCT_NAME'))
     
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
-$page = get_query_var('page') ? get_query_var('page') : 1;
+$page = get_query_var('paged') ? get_query_var('paged') : 1;
 
 $log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $page, $limit);
 $results = $log_results['data'];
@@ -364,8 +364,8 @@ if($filterDate){
                     <?php                
                     
                         $args = array(
-                            'base'         => get_permalink() . '?%_%',
-                            'format'       => 'page=%#%',
+                            'base'         => get_permalink() . '%_%?',
+                            'format'       => 'page/%#%',
                             'total'        => ceil($log_results['total'] / $limit),
                             'current'      => $page,
                             'show_all'     => False,

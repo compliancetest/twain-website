@@ -229,7 +229,7 @@ class more_types_object extends more_plugins_object_sputnik_8 {
         			register_taxonomy_for_object_type($taxonomy, $name);
 				}		
 		}
-
+flush_rewrite_rules();
 		//exit();
 
 	}

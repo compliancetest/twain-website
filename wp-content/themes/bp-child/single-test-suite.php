@@ -231,7 +231,7 @@ Template Name Posts: Test Suite
                         <div class="styled_select left" style="margin-right: 30px">
                             <label>
                             <select name="conformance" class="change_ts">
-                              <option value="">Conformance Level</option>
+                              <option value="">- Conformance Level -</option>
                               <?php 
                               foreach($suite->conformanceLevel as $r){
                                   echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r['code'].'" >'.$r['code'].'</option>';
@@ -274,7 +274,7 @@ Template Name Posts: Test Suite
 				<div class="grids" id="testcases-list">
 				<?php 
                     $posts_per_page = 10;
-                    $page = get_query_var('page') ? get_query_var('page') : 1;
+                    $page = get_query_var('paged') ? get_query_var('paged') : 1;
 				    //Getting Test Cases
                     $args = array(
                             'post_type' => 'test-case',         
@@ -378,8 +378,8 @@ Template Name Posts: Test Suite
                 <div class="pagination">
                     <?php                                 
                         $args = array(
-                            'base'         => get_permalink() . '%_%',
-                            'format'       => '&page=%#%',
+                            'base'         => get_permalink() . '%_%?',
+                            'format'       => 'page/%#%',
                             'total'        => $get_query->max_num_pages,
                             'current'      => $page,
                             'show_all'     => False,
