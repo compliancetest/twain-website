@@ -61,9 +61,12 @@ class ManageESB
             if(!isset($result[$row->TEST_SUITE_ID][$row->PRODUCT_ID]))
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID] = array();
             
+            if(!$row->TEST_OUTCOME)
+                $row->TEST_OUTCOME = $this->getTestOutcomeStatus($row->TEST_CASE_DB_ID, get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true));
+            
             if($row->TEST_OUTCOME == 'SUCCESS')
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'pass';
-            else
+            else if($row->TEST_OUTCOME == 'FAILURE')
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'fail';
         }
         
@@ -352,6 +355,12 @@ class ManageESB
     {
         ManageESB::$esbdb->update($this->table_metadata, array('TEST_SUITE_ID'=>$suiteID), array('ID' => $id));
     }
+    
+    public function updateTestOutcome($id, $outcome)
+    {
+        ManageESB::$esbdb->update($this->table_metadata, array('TEST_OUTCOME'=>$suiteID), array('ID' => $id));
+    }
+    
     
     
     
