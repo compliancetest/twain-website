@@ -3,6 +3,14 @@
 * Process Actions
 */
 
+add_action('after_delete_post', 'remove_suite_name_id_map', 10, 1);
+function remove_suite_name_id_map($postid)
+{
+    $esb = new ManageESB();
+    $esb->deleteTestSuiteNameIDMap($postid);
+    
+}
+
 add_action('init', 'process_testsuite_actions', 100);
 function process_testsuite_actions()
 {
@@ -62,12 +70,15 @@ function deleteTestSuite()
         exit;
     }
     
-    if(!wp_trash_post($id))
+    if(!wp_delete_post($id, true))
     {
         addMessage("There was an error while deleting the suite", 'error');
         wp_redirect($return);
         exit;
     }
+    
+    $esb = new ManageESB();
+    $esb->deleteTestSuiteNameIDMap($id);
     
     addMessage("The test suite was deleted");
     wp_redirect($return);
@@ -125,6 +136,7 @@ function saveSuite()
         wp_redirect(get_site_url());
         exit;
     }
+    
     if(!$id) //Create New Suite
     {
         //Update Test Suite Title and Excerpt
@@ -134,13 +146,19 @@ function saveSuite()
             addMessage($id->get_error_message(), 'error');            
             return;
         }
+        
     }else{  //Update Suite
         if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['ts_name'], 'post_excerpt' => $_POST['excerpt'], 'post_name' => sanitize_title($_POST['ts_name']))))
         {
             addMessage('There was an error while updating the test suite.', true);
             return;
         }
+        
     }
+    
+    $esb = new ManageESB();
+    $esb->addTestSuiteNameIDMap($id, $_POST['ts_name']);
+    
     //Save Types
     $suiteTypes = isset($_POST['test_suite_type']) ? $_POST['test_suite_type'] : array();
     

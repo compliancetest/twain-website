@@ -274,6 +274,9 @@ input.input-error{
     background: -ms-linear-gradient(top, #cc2e27, #981716);
     background: -o-linear-gradient(top, #cc2e27, #981716);
 }
+.relative{
+    position: relative;
+}
 .button_red:hover{
     background-color: #cc2e26;   
 }
@@ -1218,7 +1221,6 @@ tr {
     left: 0;
     top: 0;
 }
-
 
 .block{
 	display:block !important;

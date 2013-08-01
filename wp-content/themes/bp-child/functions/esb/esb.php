@@ -9,6 +9,8 @@ class ManageESB
     var $table_metadata = 'MSH_METADATA';
     var $table_metadata_payload = 'MSH_METADATA_PAYLOAD';
     var $table_metadata_validation_result = 'MSH_METADATA_VALIDATION_RESULTS';
+    var $table_test_case_name_id_map = 'TEST_CASE_NAME_ID_MAPS';
+    var $table_test_suite_name_id_map = 'TEST_SUITE_NAME_ID_MAPS';
     
     public static $esbdb = null;
     
@@ -82,42 +84,20 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT * FROM " . $this->table_metadata . " WHERE CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
+                 "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
+                 "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
+                 "WHERE m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
         if($id)   
         {
             if(is_array($id))
             {
-                $query .= " AND ID in (" . implode(", ", $id) . ")";
+                $query .= " AND m.ID in (" . implode(", ", $id) . ")";
             }else{
-                $query .= ManageESB::$esbdb->prepare(" AND ID=%d", $id);
+                $query .= ManageESB::$esbdb->prepare(" AND m.ID=%d", $id);
             }
         }
-        
-        if($product_id == 'NULL')
-            $query .= " AND PRODUCT_ID IS NULL";
-        else if($product_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND PRODUCT_ID=%d", $product_id);
-            
-        if($suite_id == 'NULL')
-            $query .= " AND TEST_SUITE_ID IS NULL";
-        else if($suite_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND TEST_SUITE_ID=%d", $suite_id);
-            
-        if($case_id == 'NULL')
-            $query .= " AND TEST_CASE_ID IS NULL";
-        else if($case_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND TEST_CASE_ID=%d", $case_id);
-            
-        if($service != null)
-            $query .= ManageESB::$esbdb->prepare(" AND SERVICE=%s", $service);
-        if($action != null)
-            $query .= ManageESB::$esbdb->prepare(" AND ACTION=%s", $action);
-        if($partyid != null)
-            $query .= ManageESB::$esbdb->prepare(" AND (FROM_PARTY_ID=%s OR TO_PARTY_ID=%s)", $partyid, $partyid);
-        if($date != null)
-            $query .= ManageESB::$esbdb->prepare(" AND DATE(EXECUTION_DATE)=%s", date("Y-m-d", strtotime($date)));
-        
         
         
         $rows = ManageESB::$esbdb->get_results($query);
@@ -136,6 +116,9 @@ class ManageESB
         if(!$user_id)
             return array();
         
+        
+        $where = array();
+        
         //Getting User Customer IDs
         $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
         $esbIDs = $wpdb->get_col($query);
@@ -143,54 +126,78 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = " FROM " . $this->table_metadata . " WHERE CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = " FROM " . $this->table_metadata . " AS m WHERE m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $where[] = "m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
         
         if($id)   
         {
             if(is_array($id))
             {
-                $query .= " AND ID in (" . implode(", ", $id) . ")";
+                $where[] = " m.ID in (" . implode(", ", $id) . ")";
             }else{
-                $query .= ManageESB::$esbdb->prepare(" AND ID=%d", $id);
+                $where[] = ManageESB::$esbdb->prepare(" AND m.ID=%d", $id);
             }
         }
         
         if($product_id == 'NULL')
-            $query .= " AND PRODUCT_ID IS NULL";
+            $where[] = " m.PRODUCT_ID IS NULL";
         else if($product_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND PRODUCT_ID=%d", $product_id);
+            $where[] = ManageESB::$esbdb->prepare(" m.PRODUCT_ID=%d", $product_id);
             
         if($suite_id == 'NULL')
-            $query .= " AND TEST_SUITE_ID IS NULL";
+            $where[] = " m.TEST_SUITE_ID IS NULL";
         else if($suite_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND TEST_SUITE_ID=%d", $suite_id);
+            $where[] = ManageESB::$esbdb->prepare(" m.TEST_SUITE_ID=%d", $suite_id);
             
         if($case_id == 'NULL')
-            $query .= " AND TEST_CASE_ID IS NULL";
+            $where[] = " m.TEST_CASE_ID IS NULL";
         else if($case_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND TEST_CASE_ID=%d", $case_id);
+            $where[] = ManageESB::$esbdb->prepare(" c.ID=%d", $case_id);
             
         if($service != null)
-            $query .= ManageESB::$esbdb->prepare(" AND SERVICE=%s", $service);
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
         if($action != null)
-            $query .= ManageESB::$esbdb->prepare(" AND ACTION=%s", $action);
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
         if($partyid != null)
-            $query .= ManageESB::$esbdb->prepare(" AND (FROM_PARTY_ID=%s OR TO_PARTY_ID=%s)", $partyid, $partyid);
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
         if($date != null)
-            $query .= ManageESB::$esbdb->prepare(" AND DATE(EXECUTION_DATE)=%s", date("Y-m-d", strtotime($date)));
+            $where[] = ManageESB::$esbdb->prepare(" DATE(m.EXECUTION_DATE)=%s", date("Y-m-d", strtotime($date)));
         
         
         if($limit > 0)
         {            
-            $query1 = "SELECT count(*) " . $query;
-            $totalItems = ManageESB::$esbdb->get_var($query1);
-            $query2 .= "SELECT * " . $query . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
+            $query = "SELECT count(m.ID) FROM " . $this->table_metadata . " AS m WHERE " . implode(" AND ", $where);
+            $totalItems = ManageESB::$esbdb->get_var($query);
+            $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
+                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
+                     "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
+                     "WHERE " . implode(" AND ", $where) . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
         }else{
-            $query2 = "SELECT * " . $query;
+            $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
+                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
+                     "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
+                     "WHERE " . implode(" AND ", $where);
         }
         
-        $rows = ManageESB::$esbdb->get_results($query2);
+        $rows = ManageESB::$esbdb->get_results($query);
         
+        //Check if the rows has validation result or not
+        $ids = array();
+        foreach($rows as $row)
+            $ids[] = $row->ID;
+        
+        if($ids)
+        {
+            $hasVResults = ManageESB::$esbdb->get_col("SELECT DISTINCT(MSH_METADATA_ID) FROM " . $this->table_metadata_validation_result . " WHERE VALIDATION_ERROR IS NOT NULL AND MSH_METADATA_ID IN (" . implode(", ", $ids) .")");
+            if($hasVResults)            
+            {
+                foreach($rows as $k=>$row)
+                {
+                    if(in_array($row->ID, $hasVResults))
+                        $rows[$k]->HAS_VALIDATION_LOG = 1;
+                }
+            }
+        }
         if(!isset($totalItems))
             $totalItems = count($rows);
         
@@ -283,6 +290,40 @@ class ManageESB
         
         return $data;
     }
+    
+    
+    public function addTestCaseNameIDMap($id, $name)
+    {
+        $result = ManageESB::$esbdb->insert($this->table_test_case_name_id_map, array('ID' => $id, 'NAME' => $name));
+        
+        return $result;        
+    }
+    public function deleteTestCaseNameIDMap($id)
+    {
+        $result = ManageESB::$esbdb->delete($this->table_test_case_name_id_map, array('ID' => $id));
+        
+        return $result;        
+    }
+    
+    
+    public function addTestSuiteNameIDMap($id, $name)
+    {
+        //Delete Old Data
+        $this->deleteTestSuiteNameIDMap($id);
+        
+        $result = ManageESB::$esbdb->insert($this->table_test_suite_name_id_map, array('ID' => $id, 'NAME' => $name));
+        
+        return $result;
+    }
+    
+    public function deleteTestSuiteNameIDMap($id)
+    {
+        
+        $result = ManageESB::$esbdb->delete($this->table_test_suite_name_id_map, array('ID' => $id));
+        
+        return $result;
+    }
+    
     
     
 }

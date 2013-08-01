@@ -70,8 +70,12 @@ $tPartyIDs = array();
 
 foreach($results as $row){ 
     $tProducts[] = $row->PRODUCT_ID;
-    $tSuites[] = $row->TEST_SUITE_ID;
-    $tCases[] = $row->TEST_CASE_ID;
+    
+    if(!isset($tSuites[$row->TEST_SUITE_ID]))
+        $tSuites[$row->TEST_SUITE_ID] = $row->TEST_SUITE_NAME;
+    if(!isset($tCases[$row->TEST_CASE_DB_ID]))
+        $tCases[$row->TEST_CASE_DB_ID] = $row->TEST_CASE_ID;
+        
     $tServices[] = $row->SERVICE;
     $tActions[] = $row->ACTION;
     $tPartyIDs[] = $row->FROM_PARTY_ID;
@@ -161,11 +165,11 @@ if($filterDate){
                         <label>Test Suite:</label>
                         <select name="suite" id="suite" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tSuites as $s){ ?>
-                           <?php if($s === null){ ?>
+                          <?php foreach($tSuites as $k=>$s){ ?>
+                           <?php if($k === null){ ?>
                             <option value="NULL" <?php echo $filterSuite === null ? "selected='selected'" : ""?>>Not Assigned</option> 
                            <?php }else{ ?>
-                            <option value="<?php echo $s?>" <?php echo $s == $filterSuite ? "selected='selected'" : "" ?>><?php echo get_post_meta($s, 'ts_name', true) ?></option>
+                            <option value="<?php echo $k?>" <?php echo $k == $filterSuite ? "selected='selected'" : "" ?>><?php echo $s ?></option>
                            <?php } ?>
                           <?php } ?>
                         </select>
@@ -186,11 +190,11 @@ if($filterDate){
                         <label>Test Case:</label>
                         <select name="case" id="case" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tCases as $c){ ?>
-                           <?php if($c === null){ ?>
+                          <?php foreach($tCases as $k=>$c){ ?>
+                           <?php if($k === null){ ?>
                             <option value="NULL" <?php echo $filterCase === null ? "selected='selected'" : ""?>>Not Assigned</option> 
                            <?php }else{ ?>
-                            <option value="<?php echo $c?>" <?php echo $c == $filterCase ? "selected='selected'" : "" ?>><?php echo get_post_meta($c, 'test_case_id', true) ?></option>
+                            <option value="<?php echo $k?>" <?php echo $k == $filterCase ? "selected='selected'" : "" ?>><?php echo $c ?></option>
                            <?php } ?>
                           <?php } ?>
                         </select>
@@ -248,7 +252,7 @@ if($filterDate){
                            <a href="#">Message<br />Envelope <span class="sort"></span></a>
                        </div>
                        <div class="td td-date tocenter td-sortable">
-                           <a href="#">Date <span class="sort"></span></a>
+                           <a href="#">Date / Time <span class="sort"></span></a>
                        </div>
                        <div class="td td-from tocenter td-sortable">
                            <a href="#">From / To <span class="sort"></span></a>
@@ -271,10 +275,10 @@ if($filterDate){
                                    <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
                                </div>
                                <div class="td td-case">
-                                   <a href="<?php echo get_permalink($row->TEST_CASE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_CASE_ID, 'test_case_id', true), 10)?></a>
+                                   <a href="<?php echo get_permalink($row->TEST_CASE_DB_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 10)?></a>
                                </div>
                                <div class="td td-suite">
-                                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 10)?></a>
+                                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 10)?></a>
                                </div>
                                <div class="td td-outcome tocenter">
                                    <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
@@ -282,8 +286,10 @@ if($filterDate){
                                    <?php }else{ ?>
                                    <span class="status-testing">Fail</span>
                                    <?php } ?>
+                                   <?php if(isset($row->HAS_VALIDATION_LOG)){ ?>
                                    <br />
                                    <a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>
+                                   <?php } ?>
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-service">
@@ -299,7 +305,8 @@ if($filterDate){
                                    <a href="/message-envelope?id=<?php echo $row->ID?>" target="_blank">XML</a> | <a href="/message-envelope?id=<?php echo $row->ID?>&mode=html" target="_blank">HTML</a>
                                </div>
                                <div class="td td-date tocenter">
-                                   <?php echo formatDate($row->EXECUTION_DATE, 'm/d/y')?>
+                                   <?php echo formatDate($row->EXECUTION_DATE, 'm/d/y')?><br />
+                                   <?php echo date("H:i:s", strtotime($row->EXECUTION_DATE)) ?>
                                </div>
                                <div class="td td-from tocenter">
                                    <div style="border-bottom: solid 1px #ccc; padding-bottom: 3px; margin-bottom: 3px;"><?php echo $row->FROM_PARTY_ID?></div>
@@ -536,7 +543,7 @@ if($filterDate){
                    <div class="td td-service tocenter">Service</div>
                    <div class="td td-action tocenter">Action</div>
                    <div class="td td-convsn td-two-lines tocenter">Message<br />Envelope</div>
-                   <div class="td td-date tocenter">Date</div>
+                   <div class="td td-date tocenter">Date / Time</div>
                    <div class="td td-from tocenter">From / To</div>
 <!--                   <div class="td td-to tocenter">To</div>-->
                    <div class="clear"></div>

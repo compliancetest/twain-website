@@ -420,6 +420,10 @@ function save_test_suite_on_admin($post_id)
     {
         return $post_id;
     }
+    
+    $esb = new ManageESB();
+    $esb->addTestSuiteNameIDMap($post_id, $_POST['ts_name']);
+    
     //Save Group
     $group_id = $_POST['group'];
     //Remove the assigned group

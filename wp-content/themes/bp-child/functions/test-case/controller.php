@@ -1,4 +1,11 @@
 <?php
+add_action('after_delete_post', 'remove_case_name_id_map', 10, 1);
+function remove_case_name_id_map($postid)
+{
+    $esb = new ManageESB();
+    $esb->deleteTestCaseNameIDMap($postid);
+    
+}
 
 
 add_action('admin_init', 'do_test_case_admin_ajax_action');
@@ -69,26 +76,7 @@ function do_test_case_admin_ajax_action()
 function _get_current_test_suite($test_case_id)
 {
       return get_post_meta($test_case_id, 'test_suite', true);
-//    $current_test_suites = get_post_meta($test_case_id, 'test_suites', true);
-    
-    //if(is_array($current_test_suites))
-//        $current_test_suites = $current_test_suites[0];
-//    if(!$current_test_suites)
-//        $current_test_suites = null;
-//    else
-//        $current_test_suites = explode('|', $current_test_suites);
-//    
-//    if(!$current_test_suites)
-//        $current_test_suites = array(isset($_GET['set_ts']) ? $_GET['set_ts'] : 0);
-//    
-//    $ids = array();
-//    foreach($current_test_suites as $id)
-//    {
-//        if($id == '')
-//            continue;
-//        $ids[] = $id;
-//    }
-//    return $ids;
+
 }
 
 
@@ -142,12 +130,16 @@ function deleteCase()
         exit;
     }
     
-    if(!wp_trash_post($id))
+    if(!wp_delete_post($id, true))
     {
         addMessage("There was an error while deleting the test case.", "error");
         wp_redirect($return);
         exit;
     }
+    
+    //Remove Data From Backend
+    $esb = new ManageESB();
+    $esb->deleteTestCaseNameIDMap($id);
     
     addMessage("The test case was deleted.");
     wp_redirect($return);
@@ -238,18 +230,20 @@ function getTestSuiteInfoForCase()
 
 function saveCase()
 {
-    global $wp;
+    global $wpdb;
     
     $id = $_POST['id'];
     if(!$id)
         $isNew = true;
     else
         $isNew = false;
+        
+    $isAjax = isset($_POST['byAjax']) ? true : false;
     
     if(($isNew && !can_create_test_case()) || (!$isNew && !can_edit_test_case($id)))
     {
-        addMessage('Permission Denied!', 'error');
-        wp_redirect(get_site_url());
+        echo json_encode(array('status' => 'error', 'message' => 'Permission Denied!'));
+//        wp_redirect(get_site_url());
         exit;
     }
     
@@ -258,32 +252,53 @@ function saveCase()
     $user_id = get_current_user_id();
     if(!$community_id || !groups_is_user_admin($user_id, $community_id))
     {
-        addMessage('Permission Denied!', 'error');
-        wp_redirect(get_site_url());
+        echo json_encode(array('status' => 'error', 'message' => 'Permission Denied!'));
+//        wp_redirect(get_site_url());
         exit;
     }
     
     if($isNew)
     {
-        $id = wp_insert_post(array('post_title' => $_POST['test_case_id'], 'post_type'=>'test-case', 'post_status' => 'publish'), true);
+        //Check Test Case ID
+        $testCaseId = $_POST['test_case_id'];
+        //Remove Space From the Test Case ID
+        $testCaseId = str_replace(' ', '', $testCaseId);
+        
+        $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type= %s", $testCaseId, 'test-case') );
+        if($pTestCase)
+        {
+            echo json_encode(array('status' => 'error', 'message' => 'The Test Case Id already exists!'));
+            exit;
+        }
+        
+        $id = wp_insert_post(array('post_title' => $testCaseId, 'post_type'=>'test-case', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
-            addMessage($id->get_error_message(), 'error');            
+            echo json_encode(array('status' => 'error', 'message' => $id->get_error_message()));
+//            addMessage($id->get_error_message(), 'error');            
             return;
         }    
-    }else{
+        
+        //Save Test Case Name ID Map to ESB Database
+        $esb = new ManageESB();
+        $esb->addTestCaseNameIDMap($id, $testCaseId);
+    }
+    //Test Case ID can't be changed
+    /*else{
         if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['test_case_id'], 'post_name' => sanitize_title($_POST['test_case_id']))))
         {
             addMessage('There was an error while updating the test suite.', true);
             return;
         }
-    }
+    }*/
     
+    if($isNew)
+        cp_update_post_meta($id, 'test_case_id', $testCaseId);        
+        
     //update post metas
     cp_update_post_meta($id, 'test_suite', $suiteID);    
     cp_update_post_meta($id, 'conformance_level', $_POST['conformance_level']);
-    
-    cp_update_post_meta($id, 'test_case_id', $_POST['test_case_id']);
+
     cp_update_post_meta($id, 'published', $_POST['published']);
     cp_update_post_meta($id, 'version', $_POST['version']);
     cp_update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
@@ -325,6 +340,7 @@ function saveCase()
     cp_update_post_meta($id, 'sequence_number', $_POST['sequence_number']);
     
     addMessage('Test Case was saved successfully!');
-    wp_redirect(get_permalink($id));
+//    wp_redirect(get_permalink($id));
+    echo json_encode(array('status' => 'success', 'link' => get_permalink($id)));
     exit;
 }

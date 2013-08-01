@@ -477,12 +477,12 @@ function cp_edit_transaction_log(){
                <div class="td td-case">
                    <select name="case<?php echo $row->ID?>" class="select">
                        <?php foreach($testCases as $c){ ?>
-                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo $c->caseName?></option>
+                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo cp_wrap($c->caseName, 12)?></option>
                        <?php } ?>
                    </select>
                </div>
                <div class="td td-suite td-fixed">
-                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap(get_post_meta($row->TEST_SUITE_ID, 'ts_name', true), 12)?></a>
+                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 12)?></a>
                </div>
                <div class="td td-outcome tocenter td-fixed">
                    <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
@@ -506,8 +506,9 @@ function cp_edit_transaction_log(){
                <div class="td td-convsn td-fixed">
                    <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
                </div>
-               <div class="td td-date tocenter td-fixed">
-                   <?php echo formatDate($row->EXECUTION_DATE)?>
+               <div class="td td-date tocenter td-fixed">                   
+                   <?php echo formatDate($row->EXECUTION_DATE, 'm/d/y')?><br />
+                   <?php echo date("H:i:s", strtotime($row->EXECUTION_DATE)) ?>
                </div>
                <div class="td td-from td-fixed">
                     <div style="border-bottom: solid 1px #999; padding-bottom: 3px; margin-bottom: 3px;"><?php echo $row->FROM_PARTY_ID?></div>
@@ -609,14 +610,16 @@ function cp_save_transaction_log()
         
         foreach($rows as $row)
         {
-            $caseId = $_POST['case' . $row->ID];
-            $suiteId = get_post_meta($caseId, 'test_suite', true);
+            $caseDBId = $_POST['case' . $row->ID];
+            $caseId = get_post_meta($caseDBId, 'test_case_id', true);
+            $suiteId = get_post_meta($caseDBId, 'test_suite', true);
             $productId = $_POST['product' . $row->ID];
             $audit = $_POST['audit' . $row->ID];
             
+            
             $esb = new ManageESB();
             
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_metadata . " SET TEST_CASE_ID=%d, TEST_SUITE_ID=%d, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $caseId, $suiteId, $productId, $audit, $row->ID);
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_metadata . " SET TEST_CASE_ID=%s, TEST_SUITE_ID=%d, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $caseId, $suiteId, $productId, $audit, $row->ID);
             ManageESB::$esbdb->query($query);
         }
         

@@ -51,7 +51,7 @@ get_header();
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>        
-    <div class="column four_fifths right container"> 
+    <div class="column four_fifths right container relative"> 
       <form name="caseForm" id="caseForm" action="" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
         <h2>Add New Test Case</h2>
@@ -91,7 +91,7 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Test Case ID:</label>
-                           <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" />
+                           <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" <?php echo !$isNew ? 'readonly="readonly"' : ''?> />
                        </div>           
                        <div class="grid-cell">
                            <label>Version:</label>
@@ -380,11 +380,11 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Action:</label>
-                           <input type="text" name="step_action[]" value="" class="input" />
+                           <textarea name="step_action[]" class="textarea width280"></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>Expected Result:</label>
-                           <input type="text" name="step_expected[]" value="" class="input medium-input" />
+                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width350"></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -404,13 +404,14 @@ get_header();
         </div>     
         <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">
-               <div class="btn-row nopaddingright">
+               <div class="btn-row nopaddingright nopaddingleft">
                    <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span class="t">SAVE TEST CASE</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                   <div class="clear"></div>
+                   <div class="clear"></div>                   
                </div>
            </div>
        </div>
+       <div class="loading loading-with-text" id="saving-wrapper"><div><b>SAVING YOUR DATA</b><span>Please wait...</span></div></div>
        <input type="hidden" name="id" value="<?php echo $case->id?>" />
        <?php
            wp_nonce_field('save-case');
@@ -514,6 +515,31 @@ jQuery(document).ready(function(){
                 }                
             }
         })
+    })
+    
+    jQuery('#caseForm').submit(function(){
+        jQuery('#saving-wrapper').show();
+        jQuery('#edit_test_case_wrapper .grid-box-footer .message').remove();
+        jQuery.ajax({
+            url: "/",
+            type: "post",
+            data: jQuery("#caseForm").serialize() + "&byAjax=1",
+            dataType: 'json',
+            success: function(rsp){                
+                if(rsp.status == 'success')
+                {
+                    document.location.href = rsp.link;
+                }else{
+                    jQuery('#saving-wrapper').hide();
+                    jQuery('#edit_test_case_wrapper .grid-box-footer').append('<div class="message error">' + rsp.message + "</div>");
+                }
+            },
+            error: function(err){
+                jQuery('#saving-wrapper').hide();
+                jQuery('#edit_test_case_wrapper .grid-box-footer').append('<div class="message error">' + err.responseText + "</div>");
+            }
+        })
+        return false;
     })
 });
 </script>
