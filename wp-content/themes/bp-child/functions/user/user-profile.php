@@ -551,13 +551,13 @@ function cp_view_validation_log()
         <div class="td td-phase"><?php echo $row->PHASE ?></div>
         <div class="td td-status tocenter">
             <?php
-                switch($row->STATUS)
+                switch(strtolower($row->STATUS))
                 {
-                    case 'Passed':
-                        echo '<span class="status-active">Passed</span>';
+                    case 'ok':
+                        echo '<span class="status-active">Ok</span>';
                         break;
-                    case 'Failed':
-                        echo '<span class="status-suspended">Failed</span>';
+                    case 'error':
+                        echo '<span class="status-suspended">Error</span>';
                         break;
                     default:
                         echo '<span>' . $row->STATUS . '</span>';
