@@ -554,7 +554,7 @@ function cp_view_validation_log()
                 switch(strtolower($row->STATUS))
                 {
                     case 'ok':
-                    case 'pass':
+                    case 'passed':
                         echo '<span class="status-active">Ok</span>';
                         break;
                     case 'error':
