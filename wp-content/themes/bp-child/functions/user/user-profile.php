@@ -490,7 +490,7 @@ function cp_edit_transaction_log(){
                    <?php }else if($row->TEST_OUTCOME == 'FAILURE'){ ?>
                    <span class="status-testing">Fail</span>
                    <?php }else{ ?>
-                   <span class="status-testing">Not Performed</span>
+                   <span class="status-unverified">Not Performed</span>
                    <?php } ?>
                </div>
                <div class="td td-audit tocenter">
@@ -500,10 +500,10 @@ function cp_edit_transaction_log(){
                    </select>                   
                </div>
                <div class="td td-service td-fixed">
-                   <?php echo cp_wrap($row->SERVICE, 19)?>
+                   <?php echo cp_wrap($row->SERVICE, 17)?>
                </div>
                <div class="td td-action td-fixed">
-                   <?php echo cp_wrap($row->ACTION, 14)?>
+                   <?php echo cp_wrap($row->ACTION, 11)?>
                </div>               
                <div class="td td-convsn td-fixed">
                    <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>

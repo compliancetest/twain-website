@@ -296,7 +296,7 @@ if($filterDate){
                                    <?php }else if($row->TEST_OUTCOME == 'FAILURE'){ ?>
                                    <span class="status-testing">Fail</span>
                                    <?php }else{ ?>
-                                   <span>Not Performed</span>
+                                   <span class="status-unverified">Not Performed</span>
                                    <?php } ?>
                                    <?php /*}else if($row->TEST_CASE_DB_ID){ 
                                        $outComeType = get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true);

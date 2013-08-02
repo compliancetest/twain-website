@@ -4686,16 +4686,16 @@ min-height: 70px;
     width: 83px;
 }
 #edit-transaction-log-box .td-outcome{
-    width: 50px;
+    width: 60px;
 }
 #edit-transaction-log-box .td-audit{
     width: 55px;
 }
 #edit-transaction-log-box .td-service{
-    width: 100px;
+    width: 95px;
 }
 #edit-transaction-log-box .td-action{
-    width: 70px;
+    width: 65px;
 }
 
 #edit-transaction-log-box .td-convsn{
