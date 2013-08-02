@@ -242,12 +242,11 @@ class ManageESB
             $status = true;
             foreach($rows as $r)
             {
-                if($r != 'Pass')
+                if($r != 'Passed')
                     $status = false;
             }
         }
-        print_r($rows);
-        var_dump($status);
+        
         if($outcomeType == 'Positive')
         {
             if($status === false)
