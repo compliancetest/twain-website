@@ -295,7 +295,10 @@ if($filterDate){
                                    <span class="status-certified">Pass</span>
                                    <?php }else if($row->TEST_OUTCOME == 'FAILURE'){ ?>
                                    <span class="status-testing">Fail</span>
-                                   <?php }else if($row->TEST_CASE_DB_ID){ 
+                                   <?php }else{ ?>
+                                   <span>Not Performed</span>
+                                   <?php } ?>
+                                   <?php /*}else if($row->TEST_CASE_DB_ID){ 
                                        $outComeType = get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true);
                                        $outComeStatus = $esb->getTestOutcomeStatus($row->ID, $outComeType);                                       
                                        if($outComeStatus == 'SUCCESS')
@@ -303,7 +306,7 @@ if($filterDate){
                                        else if($outComeStatus == 'FAILURE')
                                            echo '<span class="status-testing">Fail</span>';
                                        
-                                   } ?>
+                                   } */?>
                                    <?php if(isset($row->HAS_VALIDATION_LOG)){ ?>
                                    <br />
                                    <a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>
@@ -314,7 +317,7 @@ if($filterDate){
                                    <?php echo cp_wrap($row->SERVICE, 17)?>
                                </div>
                                <div class="td td-action">
-                                   <?php echo cp_wrap($row->ACTION, 14)?>
+                                   <?php echo cp_wrap($row->ACTION, 12)?>
                                </div>
                                
                                <div class="td td-convsn">

@@ -4641,7 +4641,7 @@ min-height: 70px;
     width: 62px;
 }
 #my_transaction_log .td-outcome{
-    width: 50px;
+    width: 60px;
 }
 #my_transaction_log .td-audit{
     width: 40px;
@@ -4650,11 +4650,11 @@ min-height: 70px;
     width: 86px;
 }
 #my_transaction_log .td-action{
-    width: 70px;
+    width: 65px;
 /*    width: 30px;*/
 }
 #my_transaction_log .td-convsn{
-    width: 76px;
+    width: 71px;
 }
 #my_transaction_log .td-date{
     width: 60px;

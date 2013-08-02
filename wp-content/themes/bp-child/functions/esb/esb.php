@@ -62,7 +62,8 @@ class ManageESB
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID] = array();
             
             if(!$row->TEST_OUTCOME)
-                $row->TEST_OUTCOME = $this->getTestOutcomeStatus($row->TEST_CASE_DB_ID, get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true));
+                continue;
+//                $row->TEST_OUTCOME = $this->getTestOutcomeStatus($row->TEST_CASE_DB_ID, get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true));
             
             if($row->TEST_OUTCOME == 'SUCCESS')
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'pass';

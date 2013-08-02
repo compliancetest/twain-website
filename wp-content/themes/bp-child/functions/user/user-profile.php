@@ -487,8 +487,10 @@ function cp_edit_transaction_log(){
                <div class="td td-outcome tocenter td-fixed">
                    <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
                    <span class="status-certified">Pass</span>
-                   <?php }else{ ?>
+                   <?php }else if($row->TEST_OUTCOME == 'FAILURE'){ ?>
                    <span class="status-testing">Fail</span>
+                   <?php }else{ ?>
+                   <span class="status-testing">Not Performed</span>
                    <?php } ?>
                </div>
                <div class="td td-audit tocenter">
