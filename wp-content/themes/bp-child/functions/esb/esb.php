@@ -246,6 +246,7 @@ class ManageESB
                     $status = false;
             }
         }
+        print_r($rows);
         var_dump($status);
         if($outcomeType == 'Positive')
         {
