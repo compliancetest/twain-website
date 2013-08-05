@@ -77,10 +77,10 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 mkdir($baseDir, 0777);
             
             //Upload Files
-            $fileNames = $_POST['file_name'];
+            $fileNames = stripslashes_deep($_POST['file_name']);
             $fileVersions = $_POST['file_version'];
-            $fileDescs = $_POST['file_description'];
-            $fileLicenses = $_POST['file_license'];
+            $fileDescs = stripslashes_deep($_POST['file_description']);
+            $fileLicenses = stripslashes_deep($_POST['file_license']);
             $files = $_FILES['file'];
             
             for($i=0; $i < count($files['name']); $i++)
@@ -96,7 +96,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                if ($file['error'] == UPLOAD_ERR_OK) {
                    //Upload File
                    //check file exists or not
-                   $fileName = $file['name'];
+                   $fileName = $file['name']; 
                    while(file_exists($baseDir . '/' . $fileName))
                    {
                        $fileName = rand(0, 9999) . $file['name'];
@@ -106,11 +106,11 @@ if ( class_exists( 'BP_Group_Extension' ) )
                        //Save data
                        $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
                             array('group_id'=>$group_id, 
-                                  'name' => !$fileNames[$i] ? $fileName : $fileNames[$i],
+                                  'name' => !$fileNames[$i] ? $fileName : htmlspecialchars($fileNames[$i]),
                                   'version' => $fileVersions[$i],
-                                  'description' => $fileDescs[$i], 
+                                  'description' => htmlspecialchars($fileDescs[$i]), 
                                   'version_description' => '', 
-                                  'license' => $fileLicenses[$i], 
+                                  'license' => htmlspecialchars($fileLicenses[$i]), 
                                   'size' => $file['size'], 
                                   'created_date' => date('Y-m-d H:i:s'), 
                                   'last_updated' => date('Y-m-d H:i:s'), 
@@ -221,15 +221,16 @@ if ( class_exists( 'BP_Group_Extension' ) )
                
                 
                 if(isset($_POST['file_name']) && $_POST['file_name'] != '')
-                    $data['name'] = $_POST['file_name'];
+                    $data['name'] = htmlspecialchars($_POST['file_name']);
                 else{
                     $data['name'] = basename($row->location);
                 }
-                $data['description'] = $_POST['file_desc'];
-                $data['version'] = $_POST['file_version'];
-                $data['version_description'] = $_POST['file_changes_desc'];
-                $data['license'] = $_POST['file_license'];
                 
+                $data['description'] = htmlspecialchars($_POST['file_desc']);
+                $data['version'] = $_POST['file_version'];
+                $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
+                $data['license'] = htmlspecialchars($_POST['file_license']);
+                $data = stripslashes_deep( $data );
                 $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
                 addMessage('File has been updated successfully!');
                 return true;
