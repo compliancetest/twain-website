@@ -33,6 +33,9 @@ $downloads = new CP_Downloads_Group_Extension();
                     <?php }else{ ?>
                     <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_download')?>&id=<?php echo $file->id?>" class="download-link"><?php echo $file->name?></a><br />
                     <?php } ?>
+                    <?php if($file->version){ ?>
+                    Version: <b><?php echo $file->version?></b> <?php echo $file->version_description ? "(" . $file->version_description . ")" : "" ?><br />
+                    <?php } ?>
                     <?php echo $file->description?>
                 </div>
                 <div class="grid-list-cell width15P tocenter">
@@ -97,7 +100,7 @@ $downloads = new CP_Downloads_Group_Extension();
                         <label>File Name:</label>
                         <input type="text" class="input" name="file_name[]" /><br clear="all">
                         <label>File Version:</label>
-                        <input type="text" class="input" name="file_version[]" value="1.0" /><br clear="all">
+                        <input type="text" class="input" name="file_version[]" value="" /><br clear="all">
                         <label>Description:</label>
                         <input type="text" class="input" name="file_description[]" class="text" /><br clear="all">
                         <label>File License Agreement:</label>

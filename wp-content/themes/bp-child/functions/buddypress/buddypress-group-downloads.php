@@ -196,7 +196,30 @@ if ( class_exists( 'BP_Group_Extension' ) )
             $row = $wpdb->get_row($query);
             if($row)
             {
+                $uploadDir = wp_upload_dir();
+            
+                $baseDir = $uploadDir['basedir'] . "/downloads/" . $group_id;
+                
                 $data = array();
+                $file = $_FILES['file'];
+                if ($file['error'] == UPLOAD_ERR_OK) {
+                    //Upload File
+                    //check file exists or not
+                    $fileName = $file['name'];
+                    while(file_exists($baseDir . '/' . $fileName))
+                    {
+                        $fileName = rand(0, 9999) . $file['name'];
+                    }
+                    
+                    if(move_uploaded_file($file['tmp_name'], $baseDir . '/' . $fileName))
+                    {
+                        //Remove Old One
+                        @unlink($row->location);                        
+                        $data['location'] = $baseDir . '/' . $fileName;
+                    }
+                }
+               
+                
                 if(isset($_POST['file_name']) && $_POST['file_name'] != '')
                     $data['name'] = $_POST['file_name'];
                 else{
@@ -208,7 +231,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 $data['license'] = $_POST['file_license'];
                 
                 $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
-                addMessage('File Information updated successfully!');
+                addMessage('File has been updated successfully!');
                 return true;
             }else{
                 addMessage('Invalid Request!', 'error');
@@ -366,8 +389,8 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                     <div class="grid-list">
                                         <div class="grid-list-row">
                                             <div class="grid-list-cell width35P">
-                                                <input type="file" name="file[]" class="input-file" />
-                                                <br />(The original file will be replaced.)
+                                                <input type="file" name="file" class="input-file" />
+                                                <br />(The original file will be replaced. Please leave this blank if you don't want change the file.)
                                             </div>
                                             <div class="grid-list-cell left15 grid-field-cell">
                                                 <label>File Name:</label>

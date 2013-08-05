@@ -8,7 +8,7 @@
       $('#add-more-file').click(function(){
           var newRow = $('#new-downloads .grid-list-row:eq(0)').clone(true);
           newRow.find('input[type="text"], textarea').val('');
-          newRow.find('input[name="file_version[]"]').val('1.0');
+//          newRow.find('input[name="file_version[]"]').val('1.0');
           newRow.hide();
           $('#new-downloads .grid-list-footer').before(newRow);
           newRow.fadeIn('fast');
@@ -34,7 +34,7 @@
                 $(this).remove();
           })
           $('#new-downloads .grid-list-row').find('input[type="text"], textarea').val('');
-          $('#new-downloads .grid-list-row').find('input[name="file_version[]"]').val('1.0');
+//          $('#new-downloads .grid-list-row').find('input[name="file_version[]"]').val('1.0');
           $('#new-downloads').hide();
           $('#uploaded-files .grid-list-footer').fadeIn('fast');
           $('#new-downloads .message').hide();
