@@ -213,7 +213,7 @@ Template Name Posts: Test Suite
                 <div class="grid_cell width35P">
                     <h5 class="blue_txt">Test Cases</h5>
                 </div>
-                <form id="filter_ts" method="get" action="<?php echo get_the_guid()?>">                                        
+                <form id="filter_ts" method="get" action="<?php the_permalink()?>">                                        
                     <div class="grid_cell right">
                         <span class="left padding5-10">Filter By: </span>
                         <div class="styled_select left right13">
