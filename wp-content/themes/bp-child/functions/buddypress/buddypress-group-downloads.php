@@ -78,6 +78,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             //Upload Files
             $fileNames = $_POST['file_name'];
+            $fileVersions = $_POST['file_version'];
             $fileDescs = $_POST['file_description'];
             $fileLicenses = $_POST['file_license'];
             $files = $_FILES['file'];
@@ -106,10 +107,13 @@ if ( class_exists( 'BP_Group_Extension' ) )
                        $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
                             array('group_id'=>$group_id, 
                                   'name' => !$fileNames[$i] ? $fileName : $fileNames[$i],
+                                  'version' => $fileVersions[$i],
                                   'description' => $fileDescs[$i], 
+                                  'version_description' => '', 
                                   'license' => $fileLicenses[$i], 
                                   'size' => $file['size'], 
                                   'created_date' => date('Y-m-d H:i:s'), 
+                                  'last_updated' => date('Y-m-d H:i:s'), 
                                   'location' => $baseDir . '/' . $fileName)
                         );
                    }
@@ -199,6 +203,8 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     $data['name'] = basename($row->location);
                 }
                 $data['description'] = $_POST['file_desc'];
+                $data['version'] = $_POST['file_version'];
+                $data['version_description'] = $_POST['file_changes_desc'];
                 $data['license'] = $_POST['file_license'];
                 
                 $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
@@ -354,28 +360,39 @@ if ( class_exists( 'BP_Group_Extension' ) )
                             json_encode(array('name' => $file->name, 'id' => $file->id, 'description' => $file->description, 'license' => $file->license));
                             ob_start();
                             ?>
-                            <div class="grid-list-row grid-file-edit-row" id="fileEditRow<?php echo $file->id?>" style="display: none;">
-                                <form id="fileEditForm<?php echo $file->id?>" class="file-edit-form" action="" method="post" onsubmit="return saveFile()">
-                                    <div class="grid-list-cell width50P">
-                                        <label>File Name:</label>
-                                        <input type="text" class="text" name="file_name" value="<?php echo $file->name?>" />
-                                    </div>
-                                    <div class="grid-list-cell width50P">
-                                        <label>Description:</label>
-                                        <input type="text" class="text" name="file_desc" value="<?php echo $file->description?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                    <div class="grid-list-cell width100P">
-                                        <label>License<br />Agreement: </label>
-                                        <textarea cols="20" rows="5" class="textarea" name="file_license"><?php echo $file->license?></textarea>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <div class="grid-list-cell grid-btn-cell">                                        
-                                        <a href="#" class="action-btn cancel-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="t">Cancel</span></a>
-                                        <a href="javascript: void(0)" onclick="document.getElementById('fileEditForm<?php echo $file->id?>').submit();" class="action-btn process-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="t">SAVE</span></a>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <?php wp_nonce_field('groups_downloads_update') ?>
+                            <div class="grid-list-row grid-file-edit-row" id="fileEditRow<?php echo $file->id?>">
+                                <form id="fileEditForm<?php echo $file->id?>" class="file-edit-form" action="" enctype="multipart/form-data" method="post">
+                                    <h3>Edit File</h3>
+                                    <div class="grid-list">
+                                        <div class="grid-list-row">
+                                            <div class="grid-list-cell width35P">
+                                                <input type="file" name="file[]" class="input-file" />
+                                                <br />(The original file will be replaced.)
+                                            </div>
+                                            <div class="grid-list-cell left15 grid-field-cell">
+                                                <label>File Name:</label>
+                                                <input type="text" class="text" name="file_name" value="<?php echo $file->name?>" /><br clear="all">
+                                                <label>File Version:</label>
+                                                <input type="text" class="text" name="file_version" value="<?php echo $file->version?>" /><br clear="all">
+                                                <label>Description:</label>
+                                                <input type="text" class="text" name="file_desc" value="<?php echo $file->description?>" /><br clear="all">
+                                                <label>Description of Changes:</label>
+                                                <input type="text" class="text" name="file_changes_desc" value="<?php echo $file->version_description?>" /><br clear="all">
+                                                <label>File License Agreement:</label>
+                                                <textarea cols="20" rows="5" class="textarea" name="file_license"><?php echo $file->license?></textarea>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                        <div class="grid-list-footer grid-list-row">                                        
+                                            <a href="#" class="action-btn cancel-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="t">Cancel</span></a>
+                                            <a href="javascript: void(0)" onclick="document.getElementById('fileEditForm<?php echo $file->id?>').submit();" class="action-btn process-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="t">SAVE</span></a>
+                                            <div class="clear"></div>
+                                            <div class="message" style="display: none;"></div>                                            
+                                        </div>
+                                    </div>                
+                                    <?php             
+                                        wp_nonce_field('groups_downloads_update'); 
+                                    ?>
                                     <input type="hidden" name="group_id" value="<?php echo $group->id?>" />
                                     <input type="hidden" name="file_id" value="<?php echo $file->id?>" />
                                 </form>

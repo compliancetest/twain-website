@@ -135,7 +135,7 @@ class ManageESB
     }
     
     
-    public function  getUserTransactionLog($product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $page = 1, $limit = -1)
+    public function  getUserTransactionLog($product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $page = 1, $limit = -1, $orderby = null, $order = 'asc')
     {
         global $wpdb;
         
@@ -191,6 +191,43 @@ class ManageESB
         if($date != null)
             $where[] = ManageESB::$esbdb->prepare(" DATE(m.EXECUTION_DATE)=%s", date("Y-m-d", strtotime($date)));
         
+        $orderQuery = "";
+        if($orderby)
+        {
+            switch($orderby)
+            {
+                case 'product':
+                    $orderQuery .= ' ORDER BY PRODUCT_NAME ' . $order . ', m.PRODUCT_ID ' . $order;
+                    break;
+                case 'case':
+                    $orderQuery .= ' ORDER BY TEST_CASE_ID ' . $order;
+                    break;
+                case 'suite':
+                    $orderQuery .= ' ORDER BY TEST_SUITE_NAME ' . $order;
+                    break;
+                case 'test_outcome':
+                    $orderQuery .= ' ORDER BY TEST_OUTCOME ' . $order;
+                    break;
+                case 'audit':
+                    $orderQuery .= ' ORDER BY AUDIT_RECORD ' . $order;
+                    break;
+                case 'service':
+                    $orderQuery .= ' ORDER BY SERVICE ' . $order;
+                    break;
+                case 'action':
+                    $orderQuery .= ' ORDER BY ACTION ' . $order;
+                    break;
+                case 'message':
+                    $orderQuery .= ' ORDER BY CONVERSATION_ID ' . $order;
+                    break;
+                case 'date':
+                    $orderQuery .= ' ORDER BY EXECUTION_DATE ' . $order;
+                    break;
+                case 'from':
+                    $orderQuery .= ' ORDER BY FROM_PARTY_ID ' . $order;
+                    break;                
+            }
+        }
         
         if($limit > 0)
         {            
@@ -199,12 +236,12 @@ class ManageESB
             $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
                      "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
-                     "WHERE " . implode(" AND ", $where) . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
+                     "WHERE " . implode(" AND ", $where) . $orderQuery . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
         }else{
             $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
                      "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
-                     "WHERE " . implode(" AND ", $where);
+                     "WHERE " . implode(" AND ", $where) . $orderQuery;
         }
         
         $rows = ManageESB::$esbdb->get_results($query);

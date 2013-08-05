@@ -39,15 +39,16 @@ $esb = new ManageESB();
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('transactions');                    
 setItemsPerPage($limit, 'transactions');
 
-/*$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'PRODUCT_NAME';
-if(!in_array($orderBy, array('PRODUCT_NAME'))
-    $orderBy = 'PRODUCT_NAME';*/
+$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'product';
+if(!in_array($orderBy, array('product', 'case', 'suite', 'test_outcome', 'audit', 'service', 'action', 'message', 'date', 'from')))
+    $orderBy = 'product';
     
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
+
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
-$log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $page, $limit);
+$log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $page, $limit, $orderBy, $order);
 $results = $log_results['data'];
 $params = array();                 
 
@@ -228,34 +229,34 @@ if($filterDate){
                <div class="grid-box-body">
                    <div class="thead tr">
                        <div class="td td-product td-sortable">
-                           <a href="#" class="asc">Product Name <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=product&order=<?php echo $orderBy == 'product' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'product'){ ?>class="<?php echo $order?>"<?php } ?>>Product Name <span class="sort"></span></a>
                        </div>
                        <div class="td td-case td-two-lines tocenter td-sortable">
-                           <a href="#">Test<br />Case <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=case&order=<?php echo $orderBy == 'case' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'case'){ ?>class="<?php echo $order?>"<?php } ?>>Test<br />Case <span class="sort"></span></a>
                        </div>
                        <div class="td td-suite td-two-lines tocenter td-sortable">
-                           <a href="#">Test<br />Suite <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=suite&order=<?php echo $orderBy == 'suite' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'suite'){ ?>class="<?php echo $order?>"<?php } ?>>Test<br />Suite <span class="sort"></span></a>
                        </div>
                        <div class="td td-outcome td-two-lines tocenter td-sortable">
-                           <a href="#">Test<br />Outcome <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=test_outcome&order=<?php echo $orderBy == 'test_outcome' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'test_outcome'){ ?>class="<?php echo $order?>"<?php } ?>>Test<br />Outcome <span class="sort"></span></a>
                        </div>
                        <div class="td td-audit td-two-lines tocenter td-sortable">
-                           <a href="#">Audit<br />Record <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=audit&order=<?php echo $orderBy == 'audit' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'audit'){ ?>class="<?php echo $order?>"<?php } ?>>Audit<br />Record <span class="sort"></span></a>
                        </div>
                        <div class="td td-service tocenter td-sortable">
-                           <a href="#">Service <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=service&order=<?php echo $orderBy == 'service' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'service'){ ?>class="<?php echo $order?>"<?php } ?>>Service <span class="sort"></span></a>
                        </div>
                        <div class="td td-action tocenter td-sortable">
-                           <a href="#">Action <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=action&order=<?php echo $orderBy == 'action' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'action'){ ?>class="<?php echo $order?>"<?php } ?>>Action <span class="sort"></span></a>
                        </div>
                        <div class="td td-convsn td-two-lines tocenter td-sortable">
-                           <a href="#">Message<br />Envelope <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Message<br />Envelope <span class="sort"></span></a>
                        </div>
                        <div class="td td-date tocenter td-sortable">
-                           <a href="#">Date / Time <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderBy == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'date'){ ?>class="<?php echo $order?>"<?php } ?>>Date/Time <span class="sort"></span></a>
                        </div>
                        <div class="td td-from tocenter td-sortable">
-                           <a href="#">From / To <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=from&order=<?php echo $orderBy == 'from' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'from'){ ?>class="<?php echo $order?>"<?php } ?>>From/To <span class="sort"></span></a>
                        </div>
 <!--                       <div class="td td-to tocenter">To</div>-->
                        <div class="clear"></div>

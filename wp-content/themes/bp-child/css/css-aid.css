@@ -1476,41 +1476,39 @@ tr {
     color: #fff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
     text-decoration: none;
+    display: block;    
 }
 .table-box .thead .td-sortable{
-    position: relative;
+    position: relative;    
 }
 .table-box .thead .td-sortable a .sort{
     display: inline-block;
-    width: 15px;
-    height: 15px;
-    background: url(../images/sortable_up_icon_b.png) no-repeat;
+    width: 9px;
+    height: 6px;
+    background: url(../images/order.png) no-repeat 0 -6px;
     position: absolute;
-    top:13px;
-    right: 2px;
-    display: none !important;
+    top: 17px;
+    right: 4px;
+    display: none;
+    
 }
+
 .table-box .thead .td-sortable a.desc .sort{
-    background: url(../images/sortable_down_icon_b.png) no-repeat;    
+    background-position: 0 0;
     display: block;
 }
 .table-box .thead .td-sortable a.asc .sort{
     display: block;
 }
-
 .table-box .thead .td-sortable a:hover .sort{
     display: block;
 } 
 .table-box .thead .td-sortable a.asc:hover .sort{
-    background: url(../images/sortable_down_icon_b.png) no-repeat;    
+    background-position: 0 0;
 } 
 .table-box .thead .td-sortable a.desc:hover .sort-desc{
-    background: url(../images/sortable_down_icon_b.png) no-repeat;    
-} 
-
-
-
-
+    background-position: 0 -6px;
+}
 .table-box .tbody{
     border-left: solid 1px #1767ab;
     border-right: solid 1px #1767ab;

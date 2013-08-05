@@ -160,19 +160,23 @@
     width: 180px;
     margin: 0 auto;
 }
-#new-downloads{
+#new-downloads,
+.grid-file-edit-row{
     background: #f8f8f8;
     padding: 0;
 }
-#new-downloads h3{
+#new-downloads h3,
+.grid-file-edit-row h3{
     padding:15px 0 0 10px;
 }
-#new-downloads .grid-list-row{
+#new-downloads .grid-list-row,
+.grid-file-edit-row .grid-list-row{
     padding-left: 20px;
     padding-right: 20px;
     position: relative;
 }
-#new-downloads .grid-field-cell label{
+#new-downloads .grid-field-cell label,
+.grid-file-edit-row .grid-field-cell label{
     float: left;
     width: 160px;
     padding-right: 20px;
@@ -180,25 +184,31 @@
     text-align: right;
 }
 #new-downloads .grid-field-cell input,
-#new-downloads .grid-field-cell textarea{
+#new-downloads .grid-field-cell textarea,
+.grid-file-edit-row .grid-field-cell input,
+.grid-file-edit-row .grid-field-cell textarea{
     float: right;
     width: 325px;
     margin-bottom: 12px;
 }
-#new-downloads .grid-field-cell{
+#new-downloads .grid-field-cell,
+.grid-file-edit-row .grid-field-cell{
     float: right;
     padding-right: 20px;
 }
-#new-downloads .grid-list-footer{
+#new-downloads .grid-list-footer,
+.grid-file-edit-row .grid-list-footer{
     padding: 6px 12px;
     background: #e8e8e8;
     
 }
-#new-downloads .grid-list-footer .action-btn{
+#new-downloads .grid-list-footer .action-btn,
+.grid-file-edit-row .grid-list-footer .action-btn{
     float: right;
     margin-left: 10px;
 }
-#new-downloads .grid-list-row .delete-btn{
+#new-downloads .grid-list-row .delete-btn,
+.grid-file-edit-row .grid-list-row .delete-btn{
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -256,7 +266,7 @@
 #uploaded-files .grid-list-row .action-btn:hover .simple_tooltip{
     display: block;
 }
-.grid-file-edit-row{
+/*.grid-file-edit-row{
     background: #f8f8f8;
     padding: 10px 0 0;
 }
@@ -291,7 +301,7 @@
 .grid-file-edit-row .grid-btn-cell a.action-btn{
     float: right;
     margin-right: 10px;
-}
+}*/
 #agree-file-license{
     width: 500px;
 }

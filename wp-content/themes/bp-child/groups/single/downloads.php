@@ -96,6 +96,8 @@ $downloads = new CP_Downloads_Group_Extension();
                     <div class="grid-list-cell left15 grid-field-cell">
                         <label>File Name:</label>
                         <input type="text" class="input" name="file_name[]" /><br clear="all">
+                        <label>File Version:</label>
+                        <input type="text" class="input" name="file_version[]" value="1.0" /><br clear="all">
                         <label>Description:</label>
                         <input type="text" class="input" name="file_description[]" class="text" /><br clear="all">
                         <label>File License Agreement:</label>

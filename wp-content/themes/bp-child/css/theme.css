@@ -4617,12 +4617,48 @@ min-height: 70px;
     font-size: 11px;
     line-height: 24px;
 }
+#my_transaction_log .table-box .thead .td-sortable{
+    padding-left: 0;
+    padding-right: 0;
+}
+#my_transaction_log .table-box .thead .td-sortable a{
+    padding-left: 5px;
+    padding-right: 5px;    
+}
+
 #edit-transaction-log-box .table-box .thead .td-two-lines,
 #view-validation-log-box .table-box .thead .td-two-lines,
 #my_transaction_log .table-box .thead .td-two-lines{
     line-height: 14px;
 }
 
+#my_transaction_log .thead .td-product{ width: 110px; }
+#my_transaction_log .thead .td-case{ width: 65px; }
+#my_transaction_log .thead .td-suite{ width: 72px; }
+#my_transaction_log .thead .td-outcome{ width: 70px; }
+#my_transaction_log .thead .td-audit{ width: 50px; }
+#my_transaction_log .thead .td-service{ width: 96px; }
+#my_transaction_log .thead .td-action{ width: 75px;/*    width: 30px;*/ }
+#my_transaction_log .thead .td-convsn{ width: 81px; }
+#my_transaction_log .thead .td-date{ width: 70px; }
+#my_transaction_log .thead .td-log{ width: 24px; }
+#my_transaction_log .thead .td-from,#my_transaction_log .thead .td-to{ width: 80px; }
+
+#my_transaction_log .table-box .thead .td-audit a .sort,
+#my_transaction_log .table-box .thead .td-date a .sort{
+    right: 2px;
+}
+#my_transaction_log .table-box .thead .td-audit a.desc,
+#my_transaction_log .table-box .thead .td-audit a.asc,
+#my_transaction_log .table-box .thead .td-audit a:hover{
+    padding-left: 0;
+}
+#my_transaction_log .table-box .thead .td-date a.desc,
+#my_transaction_log .table-box .thead .td-date a.asc,
+#my_transaction_log .table-box .thead .td-date a:hover{
+    text-align: left;
+    padding-left: 3px;
+}
 #my_transaction_log .td-product{
     width: 100px;
 }
