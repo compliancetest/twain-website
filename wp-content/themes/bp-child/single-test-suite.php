@@ -291,12 +291,12 @@ Template Name Posts: Test Suite
                     
                     if($selectedRole){
                         $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');
-                        $params[] = 'tester_role=' . $selectedRole;
+                        $params[] = 'tester_role=' . urlencode($selectedRole);
                     }
                     
                     if($selectedConfLevel){
                         $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $selectedConfLevel, 'compare' => '=');
-                        $params[] = 'conformance=' . $selectedConfLevel;
+                        $params[] = 'conformance=' . urlencode($selectedConfLevel);
                     }
                     
                     $get_query = new WP_Query($args);
