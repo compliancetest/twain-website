@@ -308,7 +308,7 @@ if($filterDate){
                                            echo '<span class="status-testing">Fail</span>';
                                        
                                    } */?>
-                                   <?php if(isset($row->HAS_VALIDATION_LOG)){ ?>
+                                   <?php if(1|| isset($row->HAS_VALIDATION_LOG)){ ?>
                                    <br />
                                    <a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>
                                    <?php } ?>

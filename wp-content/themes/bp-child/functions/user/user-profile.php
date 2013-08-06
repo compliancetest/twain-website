@@ -571,7 +571,7 @@ function cp_view_validation_log()
         </div>
         <div class="td td-result tocenter">
             <?php
-                if(0 && !$row->VALIDATION_ERROR)
+                if(!$row->VALIDATION_ERROR)
                     echo '-';
                 else{
                     echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">XML</a>' . ' &middot; '
