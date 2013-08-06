@@ -216,3 +216,132 @@ function cp_bp_docs_get_tag_link($html, $url, $tag, $type){
     }
     return $html;
 }
+
+add_filter('bp_docs_user_can', 'cp_bp_docs_user_can', 90, 4);
+function cp_bp_docs_user_can($user_can, $action, $user_id, $doc_id = false){
+    global $bp, $post;
+
+        // If a doc_id is provided, check it against the current post before querying
+        if ( $doc_id && isset( $post->ID ) && $doc_id == $post->ID ) {
+            $doc = $post;
+        }
+
+        if ( empty( $post->ID ) )
+            $doc = !empty( $bp->bp_docs->current_post ) ? $bp->bp_docs->current_post : false;
+
+        // Keep on trying to set up a post
+        if ( empty( $doc ) )
+            $doc = bp_docs_get_current_doc();
+
+        // If we still haven't got a post by now, query based on doc id
+        if ( empty( $doc ) )
+            $doc = get_post( $doc_id );
+
+        if ( ! empty( $doc ) ) {
+            $doc_settings = get_post_meta( $doc->ID, 'bp_docs_settings', true );
+
+            // Manage settings don't always get set on doc creation, so we need a default
+            if ( empty( $doc_settings['manage'] ) )
+                $doc_settings['manage'] = 'creator';
+
+            // Likewise with view_history
+            if ( empty( $doc_settings['view_history'] ) )
+                $doc_settings['view_history'] = 'anyone';
+
+            // Likewise with read_comments
+            if ( empty( $doc_settings['read_comments'] ) )
+                $doc_settings['read_comments'] = 'anyone';
+        } else if ( bp_docs_is_doc_create() && 'manage' == $action ) {
+            // Anyone can do anything during doc creation
+            return true;
+        }
+
+        // Default to the current group, but get the associated doc if not
+        $group_id = 0;
+        if ( ! empty( $doc ) ) {
+            $group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
+            $group = groups_get_group( array( 'group_id' => $group_id ) );
+        }
+
+        if ( ! $group_id ) {
+            return $user_can;
+        }
+
+        switch ( $action ) {
+            case 'create' :
+                $group_settings = groups_get_groupmeta( $group_id, 'bp-docs' );
+
+                // Provide a default value for legacy backpat
+                if ( empty( $group_settings['can-create'] ) ) {
+                    $group_settings['can-create'] = 'member';
+                }
+
+                if ( !empty( $group_settings['can-create'] ) ) {
+                    switch ( $group_settings['can-create'] ) {
+                        case 'admin' :
+                            if ( groups_is_user_admin( $user_id, $group_id ) )
+                                $user_can = true;
+                            break;
+                        case 'mod' :
+                            if ( groups_is_user_mod( $user_id, $group_id ) || groups_is_user_admin( $user_id, $group_id ) )
+                                $user_can = true;
+                            break;
+                        case 'member' :
+                        default :
+                            if ( groups_is_user_member( $user_id, $group_id ) )
+                                $user_can = true;
+                            break;
+                    }
+                }
+
+                break;
+
+            case 'read' :
+            case 'delete' : // Delete and Edit are the same for the time being
+            case 'edit' :
+            default :
+                // Delete defaults to Edit for now
+                if ( 'delete' == $action ) {
+                    $action = 'edit';
+                }
+
+                // Make sure there's a default
+                if ( empty( $doc_settings[$action] ) ) {
+                    if ( ! empty( $group_id ) ) {
+                        $doc_settings[ $action ] = 'group-members';
+                    } else {
+                        $doc_settings[ $action ] = 'anyone';
+                    }
+                }
+
+                switch ( $doc_settings[$action] ) {
+                    case 'anyone' :
+                        $user_can = true;
+                        break;
+
+                    case 'creator' :
+                        if ( $doc->post_author == $user_id )
+                            $user_can = true;
+                        break;
+
+                    case 'group-members' :
+                        if ( groups_is_user_member( $user_id, $group_id ) )
+                            $user_can = true;
+                        break;
+
+                    case 'admins-mods' :
+                        if ( groups_is_user_admin( $user_id, $group_id ) || groups_is_user_mod( $user_id, $group_id ) )
+                            $user_can = true;
+                        break;
+
+                    case 'no-one' :
+                    default :
+                        break; // In other words, other types return false
+                }
+
+                break;
+        }
+
+        return $user_can;
+}
+
