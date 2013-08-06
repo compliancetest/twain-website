@@ -100,6 +100,7 @@ function bp_docs_has_docs( $args = array() ) {
 
 		$doc_query_builder      = new BP_Docs_Query( $r );
 		$bp->bp_docs->doc_query = $doc_query_builder->get_wp_query();
+        
 	}
 
 	return $bp->bp_docs->doc_query->have_posts();
