@@ -179,7 +179,7 @@ function cp_bp_docs_get_access_options($options, $settings_field, $doc_id = 0, $
         if(isset($options[$k]['default']))
             unset($options[$k]['default']);
     }
-    
+    $options[20] = array('name' => 'anyone', 'label' => 'Anyone');
     //Set New Values
     foreach($options as $k=>$v)
     {
