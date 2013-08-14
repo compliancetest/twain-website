@@ -173,7 +173,7 @@ function cp_current_action($current_action)
 add_filter('bp_displayed_user_id', 'cp_displayed_user_id', 50, 1);
 function cp_displayed_user_id($id)
 {
-    if(!$id && is_user_logged_in() && (is_page('my-messages') || is_page('inbox') || is_page('sentbox') || is_page('compose') || is_page('view')) )
+    if(!$id && is_user_logged_in() && (is_page('my-profile') || is_page('my-messages') || is_page('inbox') || is_page('sentbox') || is_page('compose') || is_page('view')) )
     {
         return  get_current_user_id();
     }
@@ -241,6 +241,8 @@ function cp_members_title($title)
         return 'New Message | ';
     }else if(is_page('View')){
         return 'Message Details | ';
+    }else if(is_page('my-profile')){
+        return 'My Profile | ';
     }
     
     return $title;
