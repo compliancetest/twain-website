@@ -2774,8 +2774,7 @@ p.copyright{
     .sidebar_widget h3, .sidebar_widget ul li.current-menu-item a  {
         color: #fff;
         padding: 10px;
-        margin-bottom: 0;
-        padding-bottom: 20px;
+        margin-bottom: 0;        
         padding-left: 25px;
         font-size: 13px;
         font-weight: bold;
@@ -2791,6 +2790,7 @@ p.copyright{
         background: url(../images/sidebar_title.png) left top no-repeat;
         margin-bottom: -10px;
         margin-left: -10px;
+        padding-bottom: 10px;
     }
     
     .sidebar_widget ul {
@@ -2799,6 +2799,7 @@ p.copyright{
     
         .sidebar_widget ul li {
             background: url(../images/sidebar_item_border.png) right bottom no-repeat;
+            position: relative;
         }
         
             .sidebar_widget ul li a span.notification_number{
@@ -2913,7 +2914,30 @@ p.copyright{
     .sidebar_widget #searchsubmit:hover {
     
     }
-
+.sidebar_widget ul li.my_messages span.new{
+    position: absolute;
+    font-family: 'Open Sans', Arial;
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 0 1px 1px #888;
+    text-shadow: 0 1px 1px rgba(0,0,0, 50);
+    display: block;
+    line-height: 13px;
+    text-align: center;
+    padding: 0 3px;
+    background: #d41118;
+    border: solid 1px #9e0b0f;
+    box-shadow: 0 0 3px 1px #ccc;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    top: 13px;
+    left: -6px;    
+}
+.sidebar_widget ul li.my_messages.current-page-ancestor span.new,
+.sidebar_widget ul li.my_messages.current-menu-item span.new{
+    left: 3px;
+}
 /* **************** PAGINATION ELEMENTS *********************** */    
     
 .pagination {
@@ -4360,6 +4384,10 @@ border-radius: 3px;
 -o-border-radius: 3px;
 min-height: 70px;
 }
+#my_profile #my_details textarea{
+    padding: 4px 8px;
+    width: 68%;
+}
 .grid-box-editing .grid-box-body .grid-row label{
     line-height: 24px;
 }
@@ -4392,6 +4420,11 @@ min-height: 70px;
     float: left;
     width: 120px;
     line-height: 28px;
+}
+
+#my_avatar .input-file{
+    padding: 0;
+    margin: 0 0 10px;
 }
 
 /*** My Products Page **/
@@ -5595,5 +5628,284 @@ a.suite-subscript-link:hover{
     margin-left: 10px;
 }
 #print-product-btn{
+    float: right;
+}
+
+/*** Public Profile Page ***/
+.profile-avatar{
+    float: left;
+}
+.profile-title{
+    float: left;
+    padding-left: 20px;
+    width: 780px;
+}
+.profile-title .mail-btn{
+    margin: 5px 0 0 20px;    
+}
+body .profile-nav .tabs{
+    padding: 0;
+}
+body .profile-nav .tabs li a {
+    line-height: 28px;
+    padding: 5px 15px;
+    font-family: 'Oswald', Arial, Helvetica sans-serif;
+    color: #666;
+    position: relative;
+}
+body .profile-nav .tabs li a span{
+    position: absolute;
+    right: 0;
+    top: 6px;
+}
+body .profile-nav .tabs li.active a{
+    color: #fff;
+    text-shadow: 0 1px 0 #002747;
+    -moz-text-shadow: 0 1px 0 #002747;
+    -webkit-text-shadow: 0 1px 0 #002747;
+    -o-text-shadow: 0 1px 0 #002747;
+}
+ul.sub-nav{
+    padding: 0;
+    float: left;
+    width: 100%;
+    margin: 0 0 15px;
+    border-bottom: solid 1px #cbcbcb;
+}
+ul.sub-nav li{
+    float: left;
+    background: none;
+    padding-left: 0;
+    padding-right: 20px;
+}
+ul.sub-nav li a{
+    font-size: 13px;
+}
+ul.sub-nav li.current a{
+    color: #666;
+    font-weight: 700;
+}
+#send_message_form .grid-list-row{
+    border: none;
+    padding: 0 0 10px;
+    color: #333;
+}
+#send_message_form .grid-list-row label{
+    color: #333;
+    float: left;
+    margin-right: 15px;
+    width: 300px;
+}
+#send_message_form .grid-list-row ul{
+    float: left;
+    width: 430px;
+}
+#send_message_form .grid-list-row ul li{
+    background: none;
+    margin: 0;
+    padding: 0;
+    margin-right: 10px;    
+    margin-bottom: 5px;
+}
+#send_message_form #send-to-input{
+    width: 180px;
+    text-align: left !important;
+}
+#send_message_form #subject{
+    width: 300px;
+}
+#send_message_form #message_content{
+    width: 435px;
+}
+#send_message_form ul.acfb-holder li.friend-tab{
+    border: solid 1px #cbcbcb;
+    padding: 3px;
+    line-height: 15px;
+}
+#send_message_form ul.acfb-holder li.friend-tab .avatar{
+    margin-right: 1px;
+}
+#send_message_form .submit label{
+    float: left;
+    line-height: 25px;
+    margin-left: 15px;
+}
+.ac_results{
+    float: left;
+    width: auto !important;
+}
+.ac_results ul li{
+    white-space: nowrap;
+}
+.message-box{    
+    padding: 10px 0;
+}
+.message-metadata{
+    
+}
+.message-metadata img{
+    float: left;
+}
+.message-metadata strong{
+    float: left;
+    margin-left: 10px;
+    font-weight: 700;
+}
+.message-metadata strong .activity{
+    font-weight: normal;
+    font-style: italic;
+}
+.message-content{
+    padding: 5px 0 0;
+}
+
+div#message-thread div.message-box {
+    padding: 15px;
+}
+div#message-thread div.alt {
+    background: #f4f4f4;
+}
+div#message-thread p#message-recipients {
+    margin: 10px 0 20px 0;
+}
+div#message-thread img.avatar {
+    float: left;
+    margin: 0 10px 0 0;
+    vertical-align: middle;
+}
+div#message-thread strong {
+    margin: 0;
+}
+div#message-thread strong a {
+    text-decoration: none;
+}
+
+div#message-thread div.message-metadata {
+    overflow: hidden;
+}
+div#message-thread div.message-content {
+    margin-left: 40px;
+}
+div#message-thread div.message-content p{
+    margin-bottom: 0;
+}
+div#message-thread div.message-options {
+    text-align: right;
+}
+#send-reply .message-box{
+    border-bottom: none;
+}
+#send-reply .message-box div.message-content{
+    margin-left: 0;
+}
+#send-reply .message-metadata strong{
+    font-size: 14px;
+}
+#my_messages_list #message{
+    padding: 11px 20px 11px 45px;    
+    border-style: solid;
+    border-width: 1px;
+    font-family: 'Open Sans', 'Arial'; 
+    font-size: 13px;
+    line-height: 15px;
+    color: #fff;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);    
+    margin-top: 8px;
+    background: #3db118 url(../images/success-icon.png) 8px 7px no-repeat;
+    border-color: #37a215;
+}
+#my_messages_list #message p{
+    color: #fff;
+    margin: 0;
+}
+#my_messages_list #message.error{
+    background: #e52727 url(../images/error-icon.png) 8px 7px no-repeat;
+    border-color: #b61313;
+}
+#send-reply #send_reply_button{
+    margin-top: 10px;
+}
+#send-reply #send_reply_button.loading{
+    background:#39a517 url(../images/loading-small.gif) center center no-repeat;
+}
+.no-message-found{
+    padding:10px 0 150px;
+}
+#delete_inbox_messages.loading,
+#delete_sentbox_messages.loading{
+    float: left !important;
+    width: auto !important;
+    font-size: 11px !important;
+}
+#delete_inbox_messages.loading span.t,
+#delete_sentbox_messages.loading span.t{
+    color: #fff !important;
+    font-size: 11px !important;
+}
+table#message-threads tr.unread *{
+    font-weight: 700 !important;
+}
+.messages .pagination{
+    position: relative;
+    float: right;
+}
+#messages-dir-count{
+    float: left;
+    line-height: 25px;
+}
+#messages_search_submit{
+    border-color: #369817;
+    background: #39a517;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3eb618), to(#369817));
+    background: -webkit-linear-gradient(top, #3eb618, #369817);
+    background: -moz-linear-gradient(top, #3eb618, #369817);
+    background: -ms-linear-gradient(top, #3eb618, #369817);
+    background: -o-linear-gradient(top, #3eb618, #369817);
+/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#268fe8', endColorstr='#369817',GradientType=0 );     */
+    box-shadow: 0 1px 0 0 #95d780 inset;
+    -moz-box-shadow: 0 1px 0 0 #95d780 inset;
+    -webkit-box-shadow: 0 1px 0 0 #95d780 inset;
+    color: #fff;
+    margin-left: 5px;
+}
+#messages_search_submit:hover{
+    background: #3eb518;
+}
+table#message-threads{
+    
+}
+table#message-threads td{
+    vertical-align: middle;
+}
+table#message-threads .thread-from .avatar{
+    float: left;
+}
+table#message-threads .thread-from div{
+    width: 220px;
+}
+.messages-sub-nav{
+    border-bottom: solid 1px #cbcbcb;
+    height: 22px;
+    margin-bottom: 15px;
+}
+.messages-sub-nav li{
+    float: left;
+    padding-right: 15px;
+}
+.messages-sub-nav li a{
+    font-size: 13px;
+}
+.messages-sub-nav li.current a{
+    color: #666;
+}
+.messages-navigations .messages-options-nav{
+    float: left;
+    line-height: 22px;
+}
+
+.messages-navigations .message-search{
     float: right;
 }

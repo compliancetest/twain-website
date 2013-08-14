@@ -414,13 +414,16 @@ jQuery(document).ready(function($) {
     jQuery('.grid-box .btn-row').append('<div class="loading"><div><b>SAVING YOUR DATA</b><span>Please wait...</span></div></div>');
     
     //Datepicker
-    jQuery('input.datepicker').datepicker({
-        showOn: "both",
-        buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
-        buttonImageOnly: true
-    })
+    if(jQuery('input.datepicker').length > 0)
+    {
+        jQuery('input.datepicker').datepicker({
+            showOn: "both",
+            buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
+            buttonImageOnly: true
+        })
+    }
     
-    jQuery('a.submit-btn').click(function(){
+    jQuery('a.submit-btn').click(function(){        
         jQuery(this).parents('form').submit();
         return false;
     })

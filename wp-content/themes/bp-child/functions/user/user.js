@@ -193,7 +193,10 @@
                else
                    var dataType = 'text';
                
-               $(this).replaceWith('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+               if(dataType == 'textarea')
+                   $(this).replaceWith('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+               else
+                   $(this).replaceWith('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
 
             });        
             

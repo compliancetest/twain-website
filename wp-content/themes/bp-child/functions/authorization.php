@@ -43,6 +43,7 @@ function checkCurrentUserCapability()
         
         exit;
     }
+    
 }
 add_action('template_redirect', 'checkCurrentUserCapability', 0);
 
@@ -343,4 +344,32 @@ function can_edit_product_and_service($product_service_id, $user_id = null)
 function can_delete_product_and_service($product_service_id, $user_id = null)
 {
     return can_edit_product_and_service($product_service_id, $user_id = null);
+}
+
+function can_view_profile($profileID)
+{
+    if(!is_user_logged_in())
+        return false;
+    
+    $user_id = get_current_user_id();
+    if($profileID == $user_id)
+        return true;
+    
+    if(is_admin() || is_super_admin())
+        return true;
+        
+    //Getting Groups
+    $groups = groups_get_user_groups($profileID);
+    if(!$groups || !$groups['groups'])
+        return false;
+    
+    foreach($groups['groups'] as $group_id)
+    {
+        if(groups_is_user_admin($user_id, $group_id) || groups_is_user_member($user_id, $group_id) || groups_is_user_mod($user_id, $group_id))
+        {
+            return true;
+        }
+    }
+    
+    return false;
 }

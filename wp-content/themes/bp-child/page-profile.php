@@ -12,6 +12,9 @@ if(is_user_logged_in()){
     $fname = $userInfo['first_name'][0];
     $lname = $userInfo['last_name'][0];
     $uemail = $current_user->user_email;
+    $phone = get_user_meta($current_user->ID, 'phone_number', true);
+    
+    $biography = get_user_meta($current_user->ID, 'description', true);
     
     $user_org = get_user_meta($current_user->ID, 'user_organisation', true);
     $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
@@ -66,6 +69,7 @@ get_header();
                         <h5 class="left">My Details</h5>
                         <?php if($user_status != 3){?>
                             <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
+                            <a href="<?php bp_loggedin_user_link() ?>" class="gbh-btn gbh-btn-view-stats has-tooltip right">View<span class="simple_tooltip radius6">View Public Profile<span></span></span></a>
                         <?php }?>
                         <span class="header-text right">Role: <?php echo $urole;?></span>
                         <div class="clear"></div>
@@ -84,6 +88,11 @@ get_header();
                                 <div class="clear"></div>
                             </div>
                             <div class="grid-row">
+                                <div class="grid-cell width30P"><label>Phone Number</label></div>
+                                <div data-name="phone_number" data-value="<?php echo $phone;?>" class="grid-cell in_input"><?php echo !$phone ? '-' : $phone;?></div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="grid-row">
                                 <div class="grid-cell width30P"><label>Password</label></div>
                                 <div data-name="new_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
                                 <div class="clear"></div>
@@ -92,8 +101,14 @@ get_header();
                                 <div class="grid-cell width30P"><label>Confirm Password</label></div>
                                 <div data-name="conf_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
                                 <div class="clear"></div>
+                            </div>
+                            <div class="grid-row">
+                                <div class="grid-cell width30P"><label>About me</label></div>
+                                <div data-name="biography" data-value="<?php echo $biography?>" class="grid-cell in_input" data-type="textarea"><?php echo !$biography ? '-' : _convertLineSymbolToBR($biography)?></div>
+                                <div class="clear"></div>
                                 <?php wp_nonce_field('my_details_edit', 'cp-action'); ?>
                             </div>
+                            
                             <div class="grid-row btn-row">                                
                                 <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>                                
                                 <div class="clear"></div>
@@ -102,6 +117,7 @@ get_header();
                     </div>
                     <?php } ?>
                 </div>				
+                <div class="clear"></div>            
 			</div>
 			<div class="right two_fifths">
 				<div class="gray_message_box radius9 light_gray_txt">
@@ -109,8 +125,73 @@ get_header();
 					<?php echo get_post_meta($post->ID, 'my_details_desc', true);?>
 				</div>
 			</div>
-			<div class="clear"></div>			
+			
+            <div class="clear"></div>            
+            <div class="space25"></div>            
+            
+            <div class="column left three_fifths nopadding">
+                <div class="grid-box" id="my_avatar">
+                    <div class="grid-box-header">
+                        <h5>My Picture</h5>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="grid-box-body">
+                        <div class="grid-row">
+                          <form action="" method="post" id="avatar-upload-form" class="standard-form" enctype="multipart/form-data">                                        
+                            <?php if ( 'crop-image' == bp_get_avatar_admin_step() ){ ?> <!-- Crop Image -->
+                                <p><?php _e( 'Crop Your New Avatar', 'buddypress' ); ?></p>
+
+                                <img src="<?php bp_avatar_to_crop(); ?>" id="avatar-to-crop" class="avatar" alt="<?php _e( 'Avatar to crop', 'buddypress' ); ?>" />
+
+                                <div id="avatar-crop-pane" class="left">
+                                    <img src="<?php bp_avatar_to_crop(); ?>" id="avatar-crop-preview" class="avatar" alt="<?php _e( 'Avatar preview', 'buddypress' ); ?>" />
+                                </div>
+
+                                <a href="#" class="action-btn submit-btn process-btn right" style="margin-top: 120px; margin-right: 10px;"><span class="p"></span><span class="t">Crop Image</span></a>
+                                <div class="clear"></div>
+                                <div class="space10"></div>
+                                <input type="hidden" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e( 'Crop Image', 'buddypress' ); ?>" />
+
+                                <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src(); ?>" />
+                                <input type="hidden" id="x" name="x" value="" />
+                                <input type="hidden" id="y" name="y" value="" />
+                                <input type="hidden" id="w" name="width" value="" />
+                                <input type="hidden" id="h" name="height" value="" />
+
+                                <?php wp_nonce_field( 'bp_avatar_cropstore' ); ?>
+                            <?php }else{?> <!-- Upload Avatar -->
+                                <div class="grid-cell width40P">
+                                    <a href="<?php bp_loggedin_user_link(); ?>">                                    
+                                        <?php bp_loggedin_user_avatar( 'type=full' ); ?>
+                                    </a>
+                                </div>
+                                <div class="grid-cell width60P">
+                                    <p>Your avatar will be used on your profile and throughout the site.</p>
+                                    <?php if($user_status != 3){?>            
+                                    <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
+                                    <p>
+                                        
+                                            <input type="file" name="file" id="file" class="left input-file" /><br />
+                                            <a href="#" class="action-btn submit-btn process-btn"><span class="p"></span><span class="t">Upload Image</span></a>
+                                            <?php if ( bp_get_user_has_avatar($current_user->ID) ){ ?>
+                                            <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete-avatar')?>" class="action-btn delete-btn left15"><span class="p"></span><span class="t">Delete My Avatar</span></a>
+                                            <?php } ?>
+                                            <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
+                                            <input type="hidden" name="upload" id="action" value="<?php _e( 'Upload Image', 'buddypress' ); ?>" />
+                                            <?php wp_nonce_field( 'bp_avatar_upload' ); ?>                                    
+                                    </p>
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                            <div class="clear"></div>
+                          </form>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>			
 			<div class="space25"></div>			
+            
             <?php
                 $cards = getUserCreditCards();
             ?>

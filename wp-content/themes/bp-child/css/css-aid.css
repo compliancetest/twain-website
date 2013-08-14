@@ -1623,11 +1623,18 @@ tr {
     text-shadow: 0 -1px 0 #777778; /**For Old Browser **/
     text-shadow: 0 -1px 0 rgba(0,0,0, 0.35);
 }
+.green-btn{
+    color: #fff;
+    font-family: 'Open Sans', Arial;
+    font-size: 11px;    
+}
 .upload-btn,
 .process-btn,
 .continue-btn,
+.mail-btn,
 .add-new-btn,
 .certify-btn,
+.green-btn,
 .edit-btn{
     border-color: #369817;
     background: #39a517;
@@ -1650,6 +1657,8 @@ tr {
 .edit-btn:hover,
 .certify-btn:hover,
 .continue-btn:hover,
+.mail-btn:hover,
+.green-btn:hover,
 .add-new-btn:hover{
     background: #3eb518;
 }
@@ -1667,6 +1676,9 @@ tr {
 }
 .continue-btn span.p{
     background-position: 2px -748px;
+}
+.mail-btn span.p{
+    background-position: 0 -1049px;
 }
 
 .cancel-btn,
@@ -2107,4 +2119,50 @@ tr {
     position: absolute;
     color: #dd0000;
     font-style: italic;
+}
+
+table.result-table{
+    border: solid 1px #b7b7b7;
+    background: #FbFBFB;
+    border-collapse: collapse;
+    width: 100%;
+}
+.result-table thead tr{
+    background:#de6262 url(../images/red_dotted_bcg.png) !important;
+    border-left: solid 1px #e33f3f;
+    border-right: solid 1px #e33f3f;
+    border-top: solid 1px #b56a79;
+    border-bottom: solid 1px #e33f3f;
+}
+.result-table thead th{
+    color: #ececec;
+    font-size: 13px;
+/*    padding: 6px 10px;*/
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+    /*border-left: solid 1px #e33f3f;*/
+    font-weight: 600;
+    text-align: left;
+    box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
+    -moz-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
+    -webkit-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
+    -o-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
+}
+
+.result-table tbody tr{
+    background:#eeeeee url(../images/tr-bg-odd.png) repeat;    
+    border-top: solid 1px #F5F5F5;
+    border-bottom: solid 1px #cccccc;
+}
+.result-table tbody tr:nth-child(odd){
+    background:#d9d9d9 url(../images/tr-bg-even.png) repeat;
+}
+
+.result-table tbody td{
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #3c3f43;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
+    border-left: solid 1px #ccc;
+    font-weight: 600;
+    background: transparent;
 }

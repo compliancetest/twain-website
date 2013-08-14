@@ -49,6 +49,7 @@ require_once(THE_FUNCTION . '/buddypress/customize.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
+require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');
 
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');
@@ -173,9 +174,13 @@ function add_header_scripts()
 {   
     $actions_depends = array('jquery');
 
-    wp_enqueue_script('jquery_ui', get_stylesheet_directory_uri().'/js/jquery-ui-1.10.3.custom.js', $actions_depends);
+    if(!bp_is_user_messages())
+    {
+        wp_enqueue_script('jquery_ui', get_stylesheet_directory_uri().'/js/jquery-ui-1.10.3.custom.js', $actions_depends);
+        wp_enqueue_script('cp-combobox', get_stylesheet_directory_uri().'/js/jquery.combobox.js', $actions_depends);
+    }
     wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
-    wp_enqueue_script('cp-combobox', get_stylesheet_directory_uri().'/js/jquery.combobox.js', $actions_depends);
+    
     wp_enqueue_script('cp-lightbox', get_stylesheet_directory_uri().'/js/jquery.custompopup.js', $actions_depends);
     wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);        
     wp_enqueue_script('print', get_stylesheet_directory_uri().'/js/print.js', $actions_depends);        

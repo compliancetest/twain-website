@@ -6,8 +6,8 @@
 
 		<h3 id="message-subject"><?php bp_the_thread_subject(); ?></h3>
 
-		<p id="message-recipients">
-			<span class="highlight">
+		<p id="message-recipients" class="left">
+			<span class="highlight left">
 
 				<?php if ( !bp_get_the_thread_recipients() ) : ?>
 
@@ -19,11 +19,10 @@
 
 				<?php endif; ?>
 
-			</span>
-
-			<a class="button confirm" href="<?php bp_the_thread_delete_link(); ?>" title="<?php _e( "Delete Message", "buddypress" ); ?>"><?php _e( 'Delete', 'buddypress' ); ?></a> &nbsp;
+			</span>               
 		</p>
-
+        <a class="action-btn delete-btn confirm right" href="<?php bp_the_thread_delete_link(); ?>" title="<?php _e( "Delete Message", "buddypress" ); ?>"><span class="p"></span><span class="t"><?php _e( 'Delete', 'buddypress' ); ?></span></a>   
+        <div class="clear"></div>
 		<?php do_action( 'bp_before_message_thread_list' ); ?>
 
 		<?php while ( bp_thread_messages() ) : bp_thread_the_message(); ?>
@@ -38,7 +37,7 @@
 					<strong><a href="<?php bp_the_thread_message_sender_link(); ?>" title="<?php bp_the_thread_message_sender_name(); ?>"><?php bp_the_thread_message_sender_name(); ?></a> <span class="activity"><?php bp_the_thread_message_time_since(); ?></span></strong>
 
 					<?php do_action( 'bp_after_message_meta' ); ?>
-
+                    <div class="clear"></div>
 				</div><!-- .message-metadata -->
 
 				<?php do_action( 'bp_before_message_content' ); ?>
@@ -70,7 +69,7 @@
 					<?php do_action( 'bp_before_message_meta' ); ?>
 
 					<div class="avatar-box">
-						<?php bp_loggedin_user_avatar( 'type=thumb&height=30&width=30' ); ?>
+						<?php bp_loggedin_user_avatar( 'type=thumb&height=20&width=20' ); ?>
 
 						<strong><?php _e( 'Send a Reply', 'buddypress' ); ?></strong>
 					</div>
@@ -87,8 +86,8 @@
 
 					<?php do_action( 'bp_after_message_reply_box' ); ?>
 
-					<div class="submit">
-						<input type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ); ?>" id="send_reply_button"/>
+					<div class="submit">                        
+						<input type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ); ?>" id="send_reply_button" class="green-btn" />
 					</div>
 
 					<input type="hidden" id="thread_id" name="thread_id" value="<?php bp_the_thread_id(); ?>" />

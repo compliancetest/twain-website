@@ -31,6 +31,10 @@ function cp_user_detail_edit()
         exit;
     }
     
+    //Update Phonenumber
+    update_user_meta($user_id, 'phone_number', $_POST['phone_number']);
+    update_user_meta($user_id, 'description', htmlentities($_POST['biography']));
+    
     //Update User Name
     $uname = explode(' ', $uname);
     update_user_meta($user_id, 'first_name', $uname[1]);
