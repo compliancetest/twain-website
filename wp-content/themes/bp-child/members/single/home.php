@@ -36,22 +36,6 @@ get_header( 'buddypress' ); ?>
                             $currentTab = 'message';
                         }
                     ?>
-			        <div id="item-nav" class="profile-nav">
-				        <div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
-					        <ul class="tabs no-ajax">
-                                <li class="<?php echo $currentTab == 'profile' ? 'active' : ''?>"><a href="<?php echo bp_get_displayed_user_link()?>">Information</a></li>
-                                <?php if( bp_current_user_id() == get_current_user_id() ){ ?>
-                                <li class="<?php echo $currentTab == 'message' ? 'active' : ''?>"><a href="<?php echo bp_get_displayed_user_link()?>messages">Messages</a></li>
-                                <?php } ?>
-                                <?php /*if( bp_current_user_id() == get_current_user_id() ){ ?>
-						            <?php bp_get_displayed_user_nav(); ?>
-						            <?php do_action( 'bp_member_options_nav' ); ?>
-                                <?php }*/ ?>
-					        </ul>
-				        </div>
-                        <div class="clear"></div>
-			        </div><!-- #item-nav -->
-                    
 			        <div id="item-body">                    
 				        <?php do_action( 'bp_before_member_body' );
 

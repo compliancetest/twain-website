@@ -10,7 +10,7 @@
 ?>
 
 <?php do_action( 'bp_before_profile_content' ); ?>
-<div class="profile tab-content white_bcg column" role="main">
+<div class="profile" role="main">
 
 	<?php
 		// Profile Edit
