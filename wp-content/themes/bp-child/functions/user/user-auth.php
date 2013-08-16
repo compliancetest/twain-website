@@ -56,10 +56,18 @@ function compliancetest_create_new_user(){
         update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
         update_user_meta ($user_id, 'contact_phone', $_POST['contact_phone']);
         
+        $data = array(
+            '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],
+            '[username]' => $_POST['user_login'],
+            '[email]' => $_POST['user_email'],
+            '[password]' => $_POST['user_pass'],
+            '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
+        );
+        
+        cp_send_email($_POST['first_name'] . " " . $_POST['last_name'] . ' <' . $_POST['user_email'] . '>', 'new_user_email', $data);
         send_email_verification($_POST['user_email'], $_POST['user_login'], $_POST['user_pass']);
         
-        //auto login user
-//        wp_set_auth_cookie($user_id);    
+        //Send Email To Admin        
         addMessage('Please verify your email address to use your account.', 'notice');
         echo 'success';
     }
@@ -282,7 +290,7 @@ if(!is_user_logged_in())
                                 <div class="clear"></div>
 
                                 <input type="hidden" name="redirect_to" value="<?php echo get_settings('home'); ?>/registration-succeeded"/>                                
-                                <input type="hidden" name="cp-action" value="register"/>
+                                <input type="hidden" name="cp-action" value="<?php echo wp_create_nonce('register')?>"/>
                                 <!--<input type="submit" name="wp_register" class="button" value="Register Me!" tabindex="100" id="reg_user"/>-->
                                 <div id="reg_user">Register Me</div>
                                 <div class="space10"></div>

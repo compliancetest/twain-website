@@ -92,7 +92,6 @@ function get_eway_payment_url()
     }else{
         return 'https://www.eway.com.au/gateway_cvn/xmltest/testpage.asp';        
     }
-    
 }
 
 function get_eway_rebill_webservice_url()
