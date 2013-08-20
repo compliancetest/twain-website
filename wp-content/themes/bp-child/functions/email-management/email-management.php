@@ -43,7 +43,7 @@ function create_email_management_page()
             <div id="emails">
                 <ul>
                     <li><a href="#new-user">New User Registered</a></li>
-                    <li><a href="#verification-email">Verification Email</a></li>
+                    <li><a href="#verification-email">Resend Verification Email</a></li>
                     <li><a href="#verification-success">User Verification Success</a></li>
                     <li><a href="#purchase-subscription">Purchase Subscription</a></li>       
                     <li><a href="#cancel-subscription">Cancel Subscription</a></li>       
@@ -508,7 +508,7 @@ function cp_send_email($to, $template_name, $data = array())
     $emailContent = str_replace($shortCodes, $values, $emailContent);
     
     //Send Email
-    return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>'/*, 'content-type: text/html'*/));
+    return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>', 'content-type: text/html'));
 }
 
 function cp_send_email_to_admin($template_name, $data = array())
