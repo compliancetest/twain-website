@@ -64,9 +64,9 @@ function compliancetest_create_new_user(){
             '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
         );
         
-        cp_send_email($_POST['first_name'] . " " . $_POST['last_name'] . ' <' . $_POST['user_email'] . '>', 'new_user_email', $data);
-        send_email_verification($_POST['user_email'], $_POST['user_login'], $_POST['user_pass']);
-        
+        cp_send_email($_POST['first_name'] . " " . $_POST['last_name'] . ' <' . $_POST['user_email'] . '>', 'new_user', $data);
+        cp_send_email_to_admin('new_user_admin', $data);
+                
         //Send Email To Admin        
         addMessage('Please verify your email address to use your account.', 'notice');
         echo 'success';

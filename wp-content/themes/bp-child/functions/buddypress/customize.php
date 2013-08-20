@@ -42,6 +42,11 @@ function save_group_terms_and_license($group_id)
     {
         groups_update_groupmeta($group_id, 'obligation_for_claim', $_POST['obligation_for_claim']);
     }
+    if(isset($_POST['notification_email_of_changes']))
+    {
+        groups_update_groupmeta($group_id, 'notification_email_of_changes', $_POST['notification_email_of_changes']);
+    }
+    
     
     
 }

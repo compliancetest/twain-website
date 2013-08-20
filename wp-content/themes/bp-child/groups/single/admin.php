@@ -40,6 +40,12 @@
                         </div>
                         
                         <div class="field-row">
+                            <label>Notification Email Content</label>
+                            <span class="input-holder"><textarea name="notification_email_of_changes" id="notification_email_of_changes" aria-required="true" class="textarea"><?php echo groups_get_groupmeta(bp_get_group_id(), 'notification_email_of_changes'); ?></textarea></span>
+                            <div class="clear"></div>
+                        </div>
+                        
+                        <div class="field-row">
                             <label><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
                             <span class="radio-holder">
                                 <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'YES', 'buddypress' ); ?></label>

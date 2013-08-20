@@ -36,6 +36,10 @@ function create_email_management_page()
                 <input type="submit" value="Save Changes" name="email-templates" class="button-primary" />                    
                 <?php wp_nonce_field('save-email-templates'); ?>
             </div>
+            <p>
+                <label><b>Support Name:</b> <input type="text" name="support_name" id="support_name" value="<?php echo get_option('support_name')?>" size="50" /></label>
+                <label style="margin-left: 20px"><b>Support Email:</b> <input type="text" name="support_email" id="support_email" value="<?php echo get_option('support_email')?>" size="50" /></label>
+            </p>
             <div id="emails">
                 <ul>
                     <li><a href="#new-user">New User Registered</a></li>
@@ -103,7 +107,7 @@ function create_email_management_page()
                         $verify_email_title = get_option('verify_email_title');
                         $verify_email_content = get_option('verify_email_content');                
                     ?>                    
-                    <p><b>Short Codes:</b> [name], [email], [link], [usertype]</p>
+                    <p><b>Short Codes:</b> [name], [email], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -409,6 +413,9 @@ function save_email_templates()
     {
         check_admin_referer('save-email-templates');
         
+          update_option('support_name', $_POST['support_name']);          
+          update_option('support_email', $_POST['support_email']);          
+        
           $new_user_email_title = htmlentities(stripslashes_deep($_POST['new_user_email_title']));          
           update_option('new_user_email_title', $new_user_email_title);          
           $new_user_email_content = stripslashes_deep($_POST['new_user_email_content']);          
@@ -480,6 +487,14 @@ function save_email_templates()
 //Front End Functions
 function cp_send_email($to, $template_name, $data = array())
 {
+    $supportName = get_option('support_name');
+    if(!$supportName)
+        $supportName = 'ComplianceTest';
+        
+    $supportEmail = get_option('support_email');
+    if(!$supportEmail)
+        $supportEmail = 'support@compliancetest.net';
+    
     $emailTitle = get_option($template_name . "_title");
     $emailContent = get_option($template_name . "_content");
     
@@ -494,10 +509,20 @@ function cp_send_email($to, $template_name, $data = array())
     $emailContent = str_replace($shortCodes, $values, $emailContent);
     
     //Send Email
-    return wp_mail($to, $emailTitle, $emailContent, array('From: ComplianceTest <support@compliancetest.net>'));
+    return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>'));
 }
 
 function cp_send_email_to_admin($template_name, $data = array())
 {
+    //Getting Admin Users    
+    $users = get_users(array('role'=>'administrator'));
+    $to = array();
+    foreach($users as $u)
+    {           
+        $fname = get_user_meta($u->ID, 'first_name', true);
+        $lname = get_user_meta($u->ID, 'last_name', true);
+        $to[] = $fname . " " . $lname . " <" . $u->user_email . ">";
+    }    
     
+    cp_send_email($to, $template_name, $data);
 }
