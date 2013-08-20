@@ -506,7 +506,7 @@ function cp_send_email($to, $template_name, $data = array())
     $values = array_values($data);
     $emailTitle = str_replace($shortCodes, $values, $emailTitle);
     $emailContent = str_replace($shortCodes, $values, $emailContent);
-    
+    $emailContent = _convertLineSymbolToBR($emailContent);
     //Send Email
     return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>', 'content-type: text/html'));
 }
