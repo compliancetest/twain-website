@@ -113,7 +113,7 @@ function cp_activate_user()
     {
         $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0 WHERE ID =" . $user->ID);
         $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
-                      VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/members/{$user->user_login}/','{$current_date}','0')");
+                      VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/{$user->user_login}/','{$current_date}','0')");
         
         //redirect
         wp_redirect(home_url().'/my-profile');              

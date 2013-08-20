@@ -107,7 +107,7 @@ function create_email_management_page()
                         $verify_email_title = get_option('verify_email_title');
                         $verify_email_content = get_option('verify_email_content');                
                     ?>                    
-                    <p><b>Short Codes:</b> [name], [email], [link]</p>
+                    <p><b>Short Codes:</b> [name],[username], [email], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -135,10 +135,9 @@ function create_email_management_page()
                         $user_verify_success_email_title = get_option('user_verify_success_email_title');
                         $user_verify_success_email_content = get_option('user_verify_success_email_content');
                         $user_verify_success_admin_email_title = get_option('user_verify_success_admin_email_title');
-                        $user_verify_success_admin_email_content = get_option('user_verify_success_admin_email_content');
-                        
+                        $user_verify_success_admin_email_content = get_option('user_verify_success_admin_email_content');                        
                     ?>                    
-                    <p><b>Short Codes:</b> [name], [email]</p>
+                    <p><b>Short Codes:</b> [name], [email], [username]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -188,7 +187,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_title = get_option('purchase_subscription_admin_email_title');
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
-                    <p><b>Short Codes:</b> [name], [email], [paid_amount], [test_suite], [address]</p>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -238,7 +237,7 @@ function create_email_management_page()
                     $cancel_subscription_admin_email_title = get_option('cancel_subscription_admin_email_title');
                     $cancel_subscription_admin_email_content = get_option('cancel_subscription_admin_email_content');
                     ?>
-                    <p><b>Short Codes:</b> [name], [email], [paid_amount], [test_suite], [address]</p>
+                    <p><b>Short Codes:</b> [name], [email], [test_suite], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -286,7 +285,7 @@ function create_email_management_page()
                     $membership_request_received_admin_email_title = get_option('membership_request_received_admin_email_title');
                     $membership_request_received_admin_email_content = get_option('membership_request_received_admin_email_content');
                 ?>
-                    <p><b>Short Codes:</b> [name], [email], [password]</p>
+                    <p><b>Short Codes:</b> [name], [email], [username], [community]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -425,58 +424,58 @@ function save_email_templates()
           $new_user_admin_email_content = stripslashes_deep($_POST['new_user_admin_email_content']);          
           update_option('new_user_admin_email_content', $new_user_admin_email_content);
           
-          $user_verify_success_email_title = $_POST['user_verify_success_email_title'];          
+          $user_verify_success_email_title = htmlentities(stripslashes_deep($_POST['user_verify_success_email_title']));          
           update_option('user_verify_success_email_title', $user_verify_success_email_title);          
-          $user_verify_success_email_content = $_POST['user_verify_success_email_content'];          
+          $user_verify_success_email_content = stripslashes_deep($_POST['user_verify_success_email_content']);          
           update_option('user_verify_success_email_content', $user_verify_success_email_content);          
-          $user_verify_success_admin_email_title = $_POST['user_verify_success_admin_email_title'];          
+          $user_verify_success_admin_email_title = htmlentities(stripslashes_deep($_POST['user_verify_success_admin_email_title']));          
           update_option('user_verify_success_admin_email_title', $user_verify_success_admin_email_title);          
-          $user_verify_success_admin_email_content = $_POST['user_verify_success_admin_email_content'];          
+          $user_verify_success_admin_email_content = stripslashes_deep($_POST['user_verify_success_admin_email_content']);          
           update_option('user_verify_success_admin_email_content', $user_verify_success_admin_email_content);          
           
           
-          $purchase_subscription_email_title = $_POST['purchase_subscription_email_title'];          
+          $purchase_subscription_email_title = htmlentities(stripslashes_deep($_POST['purchase_subscription_email_title']));          
           update_option('purchase_subscription_email_title', $purchase_subscription_email_title);          
-          $purchase_subscription_email_content = $_POST['purchase_subscription_email_content'];          
+          $purchase_subscription_email_content = stripslashes_deep($_POST['purchase_subscription_email_content']);          
           update_option('purchase_subscription_email_content', $purchase_subscription_email_content);          
-          $purchase_subscription_admin_email_title = $_POST['purchase_subscription_admin_email_title'];          
+          $purchase_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['purchase_subscription_admin_email_title']));          
           update_option('purchase_subscription_admin_email_title', $purchase_subscription_admin_email_title);          
-          $purchase_subscription_admin_email_content = $_POST['purchase_subscription_admin_email_content'];          
+          $purchase_subscription_admin_email_content = stripslashes_deep($_POST['purchase_subscription_admin_email_content']);          
           update_option('purchase_subscription_admin_email_content', $purchase_subscription_admin_email_content);
           
-          $membership_request_received_admin_email_title = $_POST['membership_request_received_admin_email_title'];          
+          $membership_request_received_admin_email_title = htmlentities(stripslashes_deep($_POST['membership_request_received_admin_email_title']));
           update_option('membership_request_received_admin_email_title', $membership_request_received_admin_email_title);          
-          $membership_request_received_admin_email_content = $_POST['membership_request_received_admin_email_content'];          
+          $membership_request_received_admin_email_content = stripslashes_deep($_POST['membership_request_received_admin_email_content']);
           update_option('membership_request_received_admin_email_content', $membership_request_received_admin_email_content);
           
-          $membership_request_approved_email_title = $_POST['membership_request_approved_email_title'];          
+          $membership_request_approved_email_title = htmlentities(stripslashes_deep($_POST['membership_request_approved_email_title']));
           update_option('membership_request_approved_email_title', $membership_request_approved_email_title);          
-          $membership_request_approved_email_content = $_POST['membership_request_approved_email_content'];          
+          $membership_request_approved_email_content = stripslashes_deep($_POST['membership_request_approved_email_content']);
           update_option('membership_request_approved_email_content', $membership_request_approved_email_content);
           
-          $member_leave_community_admin_email_title = $_POST['member_leave_community_admin_email_title'];          
+          $member_leave_community_admin_email_title = htmlentities(stripslashes_deep($_POST['member_leave_community_admin_email_title']));          
           update_option('member_leave_community_admin_email_title', $member_leave_community_admin_email_title);          
-          $member_leave_community_admin_email_content = $_POST['member_leave_community_admin_email_content'];          
+          $member_leave_community_admin_email_content = stripslashes_deep($_POST['member_leave_community_admin_email_content']);
           update_option('member_leave_community_admin_email_content', $member_leave_community_admin_email_content);
           
           
-          $cancel_subscription_email_title = $_POST['cancel_subscription_email_title'];          
+          $cancel_subscription_email_title = htmlentities(stripslashes_deep($_POST['cancel_subscription_email_title']));          
           update_option('cancel_subscription_email_title', $cancel_subscription_email_title);          
-          $cancel_subscription_email_content = $_POST['cancel_subscription_email_content'];          
+          $cancel_subscription_email_content = stripslashes_deep($_POST['cancel_subscription_email_content']);          
           update_option('cancel_subscription_email_content', $cancel_subscription_email_content);          
-          $cancel_subscription_admin_email_title = $_POST['cancel_subscription_admin_email_title'];          
+          $cancel_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['cancel_subscription_admin_email_title']));          
           update_option('cancel_subscription_admin_email_title', $cancel_subscription_admin_email_title);          
-          $cancel_subscription_admin_email_content = $_POST['cancel_subscription_admin_email_content'];          
+          $cancel_subscription_admin_email_content = stripslashes_deep($_POST['cancel_subscription_admin_email_content']);          
           update_option('cancel_subscription_admin_email_content', $cancel_subscription_admin_email_content);
           
-          $forgot_password_email_title = $_POST['forgot_password_email_title'];          
+          $forgot_password_email_title = htmlentities(stripslashes_deep($_POST['forgot_password_email_title']));          
           update_option('forgot_password_email_title', $forgot_password_email_title);          
-          $forgot_password_email_content = $_POST['forgot_password_email_content'];          
+          $forgot_password_email_content = stripslashes_deep($_POST['forgot_password_email_content']);          
           update_option('forgot_password_email_content', $forgot_password_email_content);
           
-          $verify_email_title = $_POST['verify_email_title'];          
+          $verify_email_title = htmlentities(stripslashes_deep($_POST['verify_email_title']));          
           update_option('verify_email_title', $verify_email_title);          
-          $verify_email_content = $_POST['verify_email_content'];          
+          $verify_email_content = stripslashes_deep($_POST['verify_email_content']);          
           update_option('verify_email_content', $verify_email_content);
           
           
