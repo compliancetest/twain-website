@@ -58,7 +58,7 @@ get_header();
             }                    
         ?>
           <?php if($user_status == 3){?>
-                <div class="inner-warning">Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="<?php echo get_site_url()?>?cp-action=<?php echo wp_create_nonce('resend_email_verification')?>" data-email="<?php echo $current_user->user_email?>">link verification</a>)</span></div>
+                <div class="inner-warning">Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="<?php echo get_site_url()?>?cp-action=<?php echo wp_create_nonce('resend_email_verification')?>&uemail=<?php echo $current_user->user_email?>">link verification</a>)</span></div>
             <?php }?>
                 
             <input type="hidden" name="user_id" value="<?php echo $current_user->ID;?>"/>
