@@ -92,7 +92,7 @@ function resend_email_verification(){
         '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
     );
     
-    cp_send_email_to_admin('verify', $data);
+    cp_send_email($data['name'] . ' <' . $data['email'] . '>', 'verify', $data);
     
     return wp_mail( $to, $subject, $message, $headers );
     
