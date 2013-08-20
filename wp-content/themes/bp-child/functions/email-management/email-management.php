@@ -516,6 +516,7 @@ function cp_send_email_to_admin($template_name, $data = array())
 {
     //Getting Admin Users    
     $users = get_users(array('role'=>'administrator'));
+    
     $to = array();
     foreach($users as $u)
     {           
