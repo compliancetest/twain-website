@@ -22,7 +22,7 @@ function compliancetest_login()
     }else{
         if($user->user_status == 3)
         {
-            addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp_action=' . wp_create_nonce('resend_email_verification') . '" data-email="' . $user->user_email . '">link verification</a>).', 'notice');
+            addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '" data-email="' . $user->user_email . '">link verification</a>).', 'notice');
             wp_logout();    
         }        
         echo 'success';
@@ -78,11 +78,11 @@ function compliancetest_create_new_user(){
 
 function resend_email_verification(){
     
-    global $current_user;
+    global $current_user, $wpdb;
     
     $userData = get_user_by_email($_POST['uemail']);
     
-    $activation_key =  md5($email);
+    $activation_key =  md5($userData->user_email);
     $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID = " . $userData->ID);
 
     $data = array(
