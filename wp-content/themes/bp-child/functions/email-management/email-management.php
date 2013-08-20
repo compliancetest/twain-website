@@ -495,8 +495,8 @@ function cp_send_email($to, $template_name, $data = array())
     if(!$supportEmail)
         $supportEmail = 'support@compliancetest.net';
     
-    $emailTitle = get_option($template_name . "_title");
-    $emailContent = get_option($template_name . "_content");
+    $emailTitle = get_option($template_name . "_email_title");
+    $emailContent = get_option($template_name . "_email_content");
     
     if(!$emailTitle || !$emailContent)
     {
