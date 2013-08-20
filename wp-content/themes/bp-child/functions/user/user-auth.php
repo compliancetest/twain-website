@@ -91,7 +91,7 @@ function resend_email_verification(){
         '[email]' => $userData->user_email,
         '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
     );
-print_r($data)    ;
+
     cp_send_email($data['[name]'] . ' <' . $data['[email]'] . '>', 'verify', $data);
     
     echo 'success';
