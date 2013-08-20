@@ -23,7 +23,7 @@ function compliancetest_user_actions()
         compliancetest_login();
     }else if(wp_verify_nonce($cpAction, 'register')){
         compliancetest_create_new_user();
-    }else if($cpAction == 'resend_email_verification'){
+    }else if(wp_verify_nonce($cpAction,'resend_email_verification')){
         resend_email_verification();
     }else if(wp_verify_nonce($cpAction, 'user_activation')){
         cp_activate_user();

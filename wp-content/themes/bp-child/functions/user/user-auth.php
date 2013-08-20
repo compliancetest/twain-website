@@ -22,7 +22,7 @@ function compliancetest_login()
     }else{
         if($user->user_status == 3)
         {
-            addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="javascript: void(0);">link verification</a>).', 'notice');
+            addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp_action=' . wp_create_nonce('resend_email_verification') . '" data-email="' . $user->user_email . '">link verification</a>).', 'notice');
             wp_logout();    
         }        
         echo 'success';
@@ -80,7 +80,21 @@ function resend_email_verification(){
     
     global $current_user;
     
-    send_email_verification($_POST['uemail'], '', '');
+    $userData = get_user_by_email($_POST['uemail']);
+    
+    $activation_key =  md5($email);
+    $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID = " . $userData->ID);
+
+    $data = array(
+        '[name]' => get_user_meta($userData->ID, 'first_name', true) . " " . get_user_meta($userData->ID, 'first_name', true),
+        '[username]' => $userData->user_login,
+        '[email]' => $userData->user_email,
+        '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
+    );
+    
+    cp_send_email_to_admin('verify', $data);
+    
+    return wp_mail( $to, $subject, $message, $headers );
     
     echo 'success';
     exit();
@@ -107,39 +121,6 @@ function cp_activate_user()
         wp_redirect(home_url().'/my-profile');              
     }
 }
-
-//Function Send Email Verification
-function send_email_verification($email, $username, $password){
-    //$headers[] = 'From: Nego Office <office@nego-solutions.com>';
-    //$headers[] = 'Cc: John Q Codex <jqc@wordpress.org>';
-    //$headers[] = 'Cc: iluvwp@wordpress.org'; // note you can just use a simple email address
-
-    $to = $email;
-    $subject = 'ComplianceTest Confirmation Email';
-    
-    if($username !='' && $password!= ''){
-        $message = 'Username: ';
-        $message .= $username;
-        $message .= '<br />';
-        $message .= 'Password: ';
-        $message .= $password;
-    }
-    $message .= '<br />To activate you account click the link below <br />';
-    $message .= $_SERVER['SERVER_NAME'];
-    $message .= $_SERVER['REQUEST_URI'];
-    $message .='?cp-action=user_activation&token=';
-    $message .= md5($email);
-
-    add_filter( 'wp_mail_content_type', 'set_html_content_type' );
-    return wp_mail( $to, $subject, $message, $headers );
-    remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
-}
-
-function set_html_content_type()
-{
-    return 'text/html';
-}
-
 
 if(!is_user_logged_in())    
 {

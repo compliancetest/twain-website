@@ -155,19 +155,18 @@
         });
         
         //resend email verification
-        $('#resend_email_verification').on('click', function(){
-            
+        $('#resend_email_verification').on('click', function(){            
             var getThis = $(this);
-            
             $.ajax({
-                url: window.location.href,
+                url: getThis.attr('href'),
                 type: 'POST',
-                data: {'cp-action': 'resend_email_verification', uemail: $('input[name="uemail"]').val(), uname: $('input[name="uname"]').val()},
+                data: {uemail: getThis.attr('data-email')},
                 success: function(data){
                     //alert(data);
                     getThis.parent().parent().html('Email successfully sent! Please check your email address to verify your email');
                 }
             });
+            return false;
         });
         
        //transform divs in inputs at click on edit button
