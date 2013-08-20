@@ -508,7 +508,7 @@ function cp_send_email($to, $template_name, $data = array())
     $emailContent = str_replace($shortCodes, $values, $emailContent);
     
     //Send Email
-    return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>'));
+    return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>', 'content-type: text/html'));
 }
 
 function cp_send_email_to_admin($template_name, $data = array())
