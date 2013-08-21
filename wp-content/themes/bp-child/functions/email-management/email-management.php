@@ -515,7 +515,7 @@ function cp_send_email($to, $template_name, $data = array())
     $values = array_values($data);
     $emailTitle = str_replace($shortCodes, $values, $emailTitle);
     $emailContent = str_replace($shortCodes, $values, $emailContent);
-//    $emailContent = apply_filters('the_content', $emailContent);
+    $emailContent = apply_filters('the_content', $emailContent);
     
     $mailer = new PHPMailer();
     
