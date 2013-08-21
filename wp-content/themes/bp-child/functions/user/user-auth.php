@@ -64,7 +64,7 @@ function compliancetest_create_new_user(){
             '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
         );
         
-        cp_send_email($_POST['first_name'] . " " . $_POST['last_name'] . ' <' . $_POST['user_email'] . '>', 'new_user', $data);
+        cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user', $data);
         cp_send_email_to_admin('new_user_admin', $data);
                 
         //Send Email To Admin        
@@ -92,7 +92,7 @@ function resend_email_verification(){
         '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
     );
 
-    cp_send_email($data['[name]'] . ' <' . $data['[email]'] . '>', 'verify', $data);
+    cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'verify', $data);
     
     echo 'success';
     exit();
