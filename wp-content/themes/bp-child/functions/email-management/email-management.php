@@ -27,6 +27,13 @@ function create_email_management_page()
         #emails input[type="text"]{
             width: 50%;
         }
+        .mceIframeContainer{
+            height: 500px;
+        }
+        .mceIframeContainer iframe{
+            height: 100% !important;
+            
+        }
     </style>
       <form name="adminform" method="post" action="admin.php">
           <div class="wrap">
@@ -76,8 +83,8 @@ function create_email_management_page()
                             </tr>
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
-                                <td>
-                                    <textarea cols="80" rows="8" id="new_user_email_content" name="new_user_email_content"><?php echo $new_user_email_content ?></textarea>                                
+                                <td>                                    
+                                    <?php the_editor($new_user_email_content, 'new_user_email_content', 'new_user_email_content_p', false) ?>
                                 </td>
                             </tr>
                         </tbody>                        
@@ -96,7 +103,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="new_user_admin_email_content" name="new_user_admin_email_content"><?php echo $new_user_admin_email_content ?></textarea>                                
+                                    <?php the_editor($new_user_admin_email_content, 'new_user_admin_email_content', 'new_user_admin_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -124,7 +131,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="verify_email_content" name="verify_email_content"><?php echo $verify_email_content ?></textarea>                                
+                                    <?php the_editor($verify_email_content, 'verify_email_content', 'verify_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>     
@@ -153,8 +160,8 @@ function create_email_management_page()
                             </tr>
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
-                                <td>
-                                    <textarea cols="80" rows="8" id="user_verify_success_email_content" name="user_verify_success_email_content"><?php echo $user_verify_success_email_content?></textarea>                                
+                                <td>                                    
+                                    <?php the_editor($user_verify_success_email_content, 'user_verify_success_email_content', 'user_verify_success_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -173,7 +180,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="user_verify_success_admin_email_content" name="user_verify_success_admin_email_content"><?php echo $user_verify_success_admin_email_content?></textarea>                                
+                                    <?php the_editor($user_verify_success_admin_email_content, 'user_verify_success_admin_email_content', 'user_verify_success_admin_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -204,7 +211,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="purchase_subscription_email_content" name="purchase_subscription_email_content"><?php echo $purchase_subscription_email_content ?></textarea>                                
+                                    <?php the_editor($purchase_subscription_email_content, 'purchase_subscription_email_content', 'purchase_subscription_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -223,7 +230,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="purchase_subscription_admin_email_content" name="purchase_subscription_admin_email_content"><?php echo $purchase_subscription_admin_email_content ?></textarea>                                
+                                    <?php the_editor($purchase_subscription_admin_email_content, 'purchase_subscription_admin_email_content', 'purchase_subscription_admin_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -254,7 +261,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="cancel_subscription_email_content" name="cancel_subscription_email_content"><?php echo $cancel_subscription_email_content ?></textarea>                                
+                                    <?php the_editor($cancel_subscription_email_content, 'cancel_subscription_email_content', 'cancel_subscription_email_content', false) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -273,7 +280,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="cancel_subscription_admin_email_content" name="cancel_subscription_admin_email_content"><?php echo $cancel_subscription_admin_email_content ?></textarea>                                
+                                    <?php the_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', 'cancel_subscription_admin_email_content', false) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -302,7 +309,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="membership_request_received_admin_email_content" name="membership_request_received_admin_email_content"><?php echo $membership_request_received_admin_email_content ?></textarea>                                
+                                    <?php the_editor($membership_request_received_admin_email_content, 'membership_request_received_admin_email_content', 'membership_request_received_admin_email_content', false) ?>               
                                 </td>
                             </tr>
                         </tbody>
@@ -330,7 +337,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="membership_request_approved_email_content" name="membership_request_approved_email_content"><?php echo $membership_request_approved_email_content ?></textarea>                                
+                                    <?php the_editor($membership_request_approved_email_content, 'membership_request_approved_email_content', 'membership_request_approved_email_content', false) ?>     
                                 </td>
                             </tr>
                         </tbody>
@@ -358,7 +365,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="member_leave_community_admin_email_content" name="member_leave_community_admin_email_content"><?php echo $member_leave_community_admin_email_content ?></textarea>                                
+                                    <?php the_editor($member_leave_community_admin_email_content, 'member_leave_community_admin_email_content', 'member_leave_community_admin_email_content', false) ?>                
                                 </td>
                             </tr>
                         </tbody>
@@ -386,7 +393,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <textarea cols="80" rows="8" id="forgot_password_email_content" name="forgot_password_email_content"><?php echo $forgot_password_email_content ?></textarea>                                
+                                <?php the_editor($forgot_password_email_content, 'forgot_password_email_content', 'forgot_password_email_content', false) ?>                
                                 </td>
                             </tr>
                         </tbody>
@@ -506,7 +513,7 @@ function cp_send_email($to, $template_name, $data = array())
     $values = array_values($data);
     $emailTitle = str_replace($shortCodes, $values, $emailTitle);
     $emailContent = str_replace($shortCodes, $values, $emailContent);
-    $emailContent = _convertLineSymbolToBR($emailContent);
+    $emailContent = apply_filters('the_content', $emailContent);
     //Send Email
     return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>', 'content-type: text/html'));
 }
