@@ -84,7 +84,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>                                    
-                                    <?php the_editor($new_user_email_content, 'new_user_email_content', 'new_user_email_content_p', false) ?>
+                                    <?php wp_editor($new_user_email_content, 'new_user_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>                        
@@ -103,7 +103,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($new_user_admin_email_content, 'new_user_admin_email_content', 'new_user_admin_email_content', false) ?>
+                                    <?php wp_editor($new_user_admin_email_content, 'new_user_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -131,7 +131,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($verify_email_content, 'verify_email_content', 'verify_email_content', false) ?>
+                                    <?php wp_editor($verify_email_content, 'verify_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>     
@@ -161,7 +161,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>                                    
-                                    <?php the_editor($user_verify_success_email_content, 'user_verify_success_email_content', 'user_verify_success_email_content', false) ?>
+                                    <?php wp_editor($user_verify_success_email_content, 'user_verify_success_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -180,7 +180,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($user_verify_success_admin_email_content, 'user_verify_success_admin_email_content', 'user_verify_success_admin_email_content', false) ?>
+                                    <?php wp_editor($user_verify_success_admin_email_content, 'user_verify_success_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -211,7 +211,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($purchase_subscription_email_content, 'purchase_subscription_email_content', 'purchase_subscription_email_content', false) ?>
+                                    <?php wp_editor($purchase_subscription_email_content, 'purchase_subscription_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -230,7 +230,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($purchase_subscription_admin_email_content, 'purchase_subscription_admin_email_content', 'purchase_subscription_admin_email_content', false) ?>
+                                    <?php wp_editor($purchase_subscription_admin_email_content, 'purchase_subscription_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -261,7 +261,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($cancel_subscription_email_content, 'cancel_subscription_email_content', 'cancel_subscription_email_content', false) ?>    
+                                    <?php wp_editor($cancel_subscription_email_content, 'cancel_subscription_email_content', array('media_buttons' => false)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -280,7 +280,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', 'cancel_subscription_admin_email_content', false) ?>
+                                    <?php wp_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -309,7 +309,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($membership_request_received_admin_email_content, 'membership_request_received_admin_email_content', 'membership_request_received_admin_email_content', false) ?>               
+                                    <?php wp_editor($membership_request_received_admin_email_content, 'membership_request_received_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -337,7 +337,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($membership_request_approved_email_content, 'membership_request_approved_email_content', 'membership_request_approved_email_content', false) ?>     
+                                    <?php wp_editor($membership_request_approved_email_content, 'membership_request_approved_email_content', array('media_buttons' => false)) ?>     
                                 </td>
                             </tr>
                         </tbody>
@@ -365,7 +365,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php the_editor($member_leave_community_admin_email_content, 'member_leave_community_admin_email_content', 'member_leave_community_admin_email_content', false) ?>                
+                                    <?php wp_editor($member_leave_community_admin_email_content, 'member_leave_community_admin_email_content', array('media_buttons' => false)) ?>                
                                 </td>
                             </tr>
                         </tbody>
@@ -393,7 +393,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                <?php the_editor($forgot_password_email_content, 'forgot_password_email_content', 'forgot_password_email_content', false) ?>                
+                                <?php wp_editor($forgot_password_email_content, 'forgot_password_email_content', array('media_buttons' => false)) ?>                
                                 </td>
                             </tr>
                         </tbody>
