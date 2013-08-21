@@ -3,6 +3,8 @@
 * Management Site Emails
 */
 
+require_once( THE_FUNCTION . "/email-management/phpmailer/class.phpmailer.php" );
+
 //Add New Menu
 add_action('admin_menu', 'add_email_management_page');
 function add_email_management_page()
@@ -514,8 +516,26 @@ function cp_send_email($to, $template_name, $data = array())
     $emailTitle = str_replace($shortCodes, $values, $emailTitle);
     $emailContent = str_replace($shortCodes, $values, $emailContent);
     $emailContent = apply_filters('the_content', $emailContent);
-    //Send Email
-    return wp_mail($to, $emailTitle, $emailContent, array('From: ' . $supportName . ' <' . $supportEmail . '>', 'content-type: text/html'));
+    
+    $mailer = new PHPMailer();
+    
+    $mailer->AddReplyTo($supportEmail, $supportName);
+    $mailer->FromName = $supportName;
+    $mailer->From = $supportEmail;
+    
+    if(isset($to['name']))
+    {
+        $mailer->AddAddress($to['email'], $to['name']);        
+    }else{
+        foreach($to as $u)
+            $mailer->AddAddress($u['email'], $u['name']);        
+    }
+    
+    $mailer->IsHTML(true);
+    $mailer->Subject = $emailTitle;
+    $mailer->Body = $emailContent;
+    
+    return $mailer->Send();    
 }
 
 function cp_send_email_to_admin($template_name, $data = array())
@@ -528,7 +548,7 @@ function cp_send_email_to_admin($template_name, $data = array())
     {           
         $fname = get_user_meta($u->ID, 'first_name', true);
         $lname = get_user_meta($u->ID, 'last_name', true);
-        $to[] = $fname . " " . $lname . " <" . $u->user_email . ">";
+        $to[] = array('name' => $fname . " " . $lname, 'email' => $u->user_email);
     }    
     
     cp_send_email($to, $template_name, $data);
