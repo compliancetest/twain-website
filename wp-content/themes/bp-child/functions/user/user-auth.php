@@ -124,6 +124,9 @@ function cp_activate_user()
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'user_verify_success', $data);
         cp_send_email_to_admin('user_verify_success_admin', $data);
         
+        //Make User Login
+        wp_set_auth_cookie($user->ID);
+        addMessage('You have successfully verified your email address with ComplianceTest.');
         //redirect
         wp_redirect(home_url().'/my-profile');              
     }
