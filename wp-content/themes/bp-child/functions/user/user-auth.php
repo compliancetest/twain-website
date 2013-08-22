@@ -219,7 +219,7 @@ function cp_reset_password()
         addMessage('Your password has been reset.');
         
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'password_changed', $data);
-        cp_send_email_to_admin('password_changed', $data);
+        cp_send_email_to_admin('password_changed_admin', $data);
         
         wp_redirect("/");
         exit;
