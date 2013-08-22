@@ -129,7 +129,10 @@ function cp_activate_user()
         addMessage('You have successfully verified your email address with ComplianceTest.');
         //redirect
         wp_redirect(home_url().'/my-profile');              
+        exit;
     }
+    
+    addMessage('Invalid Request.', 'error');
 }
 
 if(!is_user_logged_in())    
