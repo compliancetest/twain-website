@@ -409,7 +409,7 @@ function create_email_management_page()
                     $password_changed_admin_email_title = get_option('password_changed_admin_email_title');
                     $password_changed_admin_email_content = get_option('password_changed_admin_email_content');
                     ?>
-                    <p><b>Short Codes:</b> [name], [email], [test_suite], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [username]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -527,6 +527,15 @@ function save_email_templates()
           update_option('cancel_subscription_admin_email_title', $cancel_subscription_admin_email_title);          
           $cancel_subscription_admin_email_content = stripslashes_deep($_POST['cancel_subscription_admin_email_content']);          
           update_option('cancel_subscription_admin_email_content', $cancel_subscription_admin_email_content);
+          
+          $password_changed_email_title = htmlentities(stripslashes_deep($_POST['password_changed_email_title']));          
+          update_option('password_changed_email_title', $password_changed_email_title);          
+          $password_changed_email_content = stripslashes_deep($_POST['password_changed_email_content']);          
+          update_option('password_changed_email_content', $password_changed_email_content);          
+          $password_changed_admin_email_title = htmlentities(stripslashes_deep($_POST['password_changed_admin_email_title']));          
+          update_option('password_changed_admin_email_title', $password_changed_admin_email_title);          
+          $password_changed_admin_email_content = stripslashes_deep($_POST['password_changed_admin_email_content']);          
+          update_option('password_changed_admin_email_content', $password_changed_admin_email_content);
           
           $forgot_password_email_title = htmlentities(stripslashes_deep($_POST['forgot_password_email_title']));          
           update_option('forgot_password_email_title', $forgot_password_email_title);          
