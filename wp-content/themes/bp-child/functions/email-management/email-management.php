@@ -530,7 +530,7 @@ function cp_send_email($to, $template_name, $data = array())
         foreach($to as $u)
             $mailer->AddAddress($u['email'], $u['name']);        
     }
-    
+    $mailer->IsSMTP();
     $mailer->IsHTML(true);
     $mailer->Subject = $emailTitle;
     $mailer->Body = $emailContent;
