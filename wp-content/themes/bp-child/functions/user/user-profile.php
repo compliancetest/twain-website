@@ -71,6 +71,14 @@ function cp_user_detail_edit()
         }else{
             //update password
             wp_update_user( array ('ID' => $user_id, 'user_pass' => $confPass) ) ;
+            $data = array(
+                '[name]' => get_user_meta($current_user->ID, 'first_name', true) . " " . get_user_meta($current_user->ID, 'last_name', true),
+                '[username]' => $current_user->user_login,
+                '[email]' => $current_user->user_email,
+            );
+            
+            cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'password_changed', $data);
+            cp_send_email_to_admin('password_changed', $data);
         }
     }
     
