@@ -381,14 +381,14 @@ function my_check_password_reset_key($key, $login) {
     $key = preg_replace('/[^a-z0-9]/i', '', $key);
 
     if ( empty( $key ) || !is_string( $key ) )
-	return new WP_Error('invalid_key', __('Invalid key'));
+	return null;
     if ( empty($login) || !is_string($login) )
-	return new WP_Error('invalid_key', __('Invalid key'));
+	return null;
 
     $user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE user_activation_key = %s AND user_login = %s", $key, $login));
 
     if ( empty( $user ) )
-	return new WP_Error('invalid_key', __('Invalid key'));
+	return null;
 
     return $user;
 }

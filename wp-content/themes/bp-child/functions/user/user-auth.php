@@ -135,7 +135,7 @@ function cp_activate_user()
     addMessage('Invalid Request.', 'error');
 }
 
-function request_reset_password()
+function cp_request_reset_password()
 {
     global $wpdb;
     
@@ -159,7 +159,7 @@ function request_reset_password()
     $user_login = $user->user_login;
     $user_email = $user->user_email;
     
-    $key = $wpdb->get_var($wpdb->prepare("SELECT user_activation_key FROM $wpdb->users WHERE user_login = %s", $user_login));
+    $key = $wpdb->get_var($wpdb->prepare("SELECT user_activation_key FROM $wpdb->users WHERE user_ = %s", $user_login));
     if ( empty($key) ) {
         // Generate something random for a key...
         $key = wp_generate_password(20, false);
@@ -172,15 +172,61 @@ function request_reset_password()
         '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),
         '[username]' => $user->user_login,
         '[email]' => $user->user_email,
-        '[link]' => network_site_url("password-recovery/?cp-action=" . wp_create_nonce('reset_password') . "&key=$key&login=" . rawurlencode($user_login), 'login')
+        '[link]' => network_site_url("reset-password/?cp-action=" . wp_create_nonce('pre_reset_password') . "&key=$key&login=" . rawurlencode($user_login), 'login')
     );
 
     cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'forgot_password', $data);
     
     addMessage('A message will be sent to your email address');
     
-    wp_redirect('/password-recovery');
+    wp_redirect('/reset-password');
     exit;
+}
+
+function cp_reset_password()
+{
+    if(isset($_POST['user_login']) && isset($_POST['key']))
+    {
+        $login = $_POST['user_login'];
+        $key = $_POST['key'];
+        $user = my_check_password_reset_key($key, $login);
+        if(!$user)
+        {
+            addMessage('The current url is not valid.', 'error');
+            return;
+        }
+        
+        if(!$_POST['pass1'] || !$_POST['pass2'])
+        {
+            addMessage('The passwords should not be empty.', 'error');
+            return;
+        }
+        if($_POST['pass1'] != $_POST['pass2'])
+        {
+            addMessage('The passwords do not match.', 'error');
+            return;
+        }
+        
+        do_action('password_reset', $user, $_POST['pass1']);
+        wp_set_password($_POST['pass1'], $user->ID);
+        
+        $data = array(
+            '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),
+            '[username]' => $user->user_login,
+            '[email]' => $user->user_email,
+        );
+        
+        addMessage('Your password has been reset.');
+        
+        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'password_changed', $data);
+        cp_send_email_to_admin('password_changed', $data);
+        
+        wp_redirect("/");
+        exit;
+    }else{
+        addMessage('Invalid Request!', 'error');
+        
+    }
 }
 
 if(!is_user_logged_in())    
@@ -210,7 +256,7 @@ if(!is_user_logged_in())
             <?php 
             wp_login_form($args); 
             ?>
-            <a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="pass_recovery">Password Recovery</a>
+            <a href="<?php echo get_bloginfo('url');?>/reset-password/" id="pass_recovery">Forgot Password?</a>
             <span class="simple_tooltip_pop radius6" id="header_login_error_msg"><span></span>Wrong username or password, please try again!</span>
             <div id="or" class="left">
                 <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
@@ -270,7 +316,7 @@ if(!is_user_logged_in())
                                     'value_remember' => false ); 
 
                             wp_login_form($args); ?>
-                            <a href="<?php echo get_bloginfo('url');?>/password-recovery/" id="recover_pass">Password recovery</a>
+                            <a href="<?php echo get_bloginfo('url');?>/reset-password/" id="recover_pass">Forgot Password</a>
                             <div class="clear"></div>
                             <div class="space10"></div>
                             <div class="message" style="display: none;"></div>

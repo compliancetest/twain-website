@@ -5909,3 +5909,24 @@ table#message-threads .thread-from div{
 .messages-navigations .message-search{
     float: right;
 }
+/*** Reset Password ***/
+#reset-password-container .field-row{
+    padding-bottom: 10px;
+}
+#reset-password-container .btn-row{
+/*    padding-top: 10px;*/
+    padding-bottom: 20px;
+}
+#reset-password-container .field-row label{
+    font-weight: bold;
+    float: left;
+    line-height: 25px;
+    width: 150px;
+}
+#reset-password-container .field-row .input{
+    float: left;
+    width: 200px;
+}
+#reset-password-container .btn-row .action-btn{
+    margin-left: 150px;
+}

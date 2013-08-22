@@ -60,6 +60,7 @@ function create_email_management_page()
                     <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
                     <li><a href="#member-leave-community">Member Leave Community</a></li>       
                     <li><a href="#forgot-password">Forgot Password</a></li>
+                    <li><a href="#password-changed">Password Changed</a></li>
                 </ul>
                 <div id="new-user">
                     <?php
@@ -399,6 +400,56 @@ function create_email_management_page()
                                 </td>
                             </tr>
                         </tbody>
+                    </table>
+                </div>
+                <div id="password-changed">
+                    <?php
+                    $password_changed_email_title = get_option('password_changed_email_title');
+                    $password_changed_email_content = get_option('password_changed_email_content');
+                    $password_changed_admin_email_title = get_option('password_changed_admin_email_title');
+                    $password_changed_admin_email_content = get_option('password_changed_admin_email_content');
+                    ?>
+                    <p><b>Short Codes:</b> [name], [email], [test_suite], [paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="password_changed_email_title" id="password_changed_email_title" value="<?php echo $password_changed_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($password_changed_email_content, 'password_changed_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="password_changed_admin_email_title" id="password_changed_admin_email_title" value="<?php echo $password_changed_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($password_changed_admin_email_content, 'password_changed_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
                     </table>
                 </div>
             </div>
