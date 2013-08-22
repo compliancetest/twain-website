@@ -86,7 +86,7 @@ function resend_email_verification(){
     $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID = " . $userData->ID);
 
     $data = array(
-        '[name]' => get_user_meta($userData->ID, 'first_name', true) . " " . get_user_meta($userData->ID, 'first_name', true),
+        '[name]' => get_user_meta($userData->ID, 'first_name', true) . " " . get_user_meta($userData->ID, 'last_name', true),
         '[username]' => $userData->user_login,
         '[email]' => $userData->user_email,
         '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
@@ -114,6 +114,15 @@ function cp_activate_user()
         $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0 WHERE ID =" . $user->ID);
         $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
                       VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/{$user->user_login}/','{$current_date}','0')");
+        
+        $data = array(
+            '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),
+            '[username]' => $user->user_login,
+            '[email]' => $user->user_email,
+        );
+
+        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'user_verify_success', $data);
+        cp_send_email_to_admin('user_verify_success_admin', $data);
         
         //redirect
         wp_redirect(home_url().'/my-profile');              

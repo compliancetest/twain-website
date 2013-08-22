@@ -519,6 +519,12 @@ function cp_send_email($to, $template_name, $data = array())
     
     $mailer = new PHPMailer();
     
+    //SMTP Information
+    //$mailer->Host = 'ssl://email-smtp.us-east-1.amazonaws.com';
+//    $mailer->Username = 'AKIAI5UJTIWIMSXIIVMQ';
+//    $mailer->Password = 'AuC+62r7QeZbOPt4x5Sge/ytwSbdYzN1MHAzDGUUY964';
+//    $mailer->Port = '465';
+    
     $mailer->AddReplyTo($supportEmail, $supportName);
     $mailer->FromName = $supportName;
     $mailer->From = $supportEmail;
