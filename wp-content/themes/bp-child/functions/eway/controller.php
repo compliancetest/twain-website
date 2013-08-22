@@ -98,7 +98,12 @@ function process_eway_payment()
                 "created_date" => date("Y-m-d H:i:s")
             ));
             //Create MSH Datas 
-            $msh = array('mode' => 'PULL', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => cp_generate_password(8));
+            $esb_data = array(
+                'p_mode_agreement' => 'LIGHT',
+                'harness_endpoint_url' => 'http://esb.compliancetest.net/services/LoggingProxy/mediate', 
+                'harness_username' => $user->user_login . "_" . $suite->id, 
+                'harness_password' => cp_generate_password(8)
+            );
             
             //Save Billing Data to Database
             $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
@@ -106,11 +111,13 @@ function process_eway_payment()
                 'suite_id' => $suite->id,
                 'customer_id' => $card->customer_id,
                 'esb_user_id' => 0,
-                'esb_username' => $msh['username'],
-                'msh_p_mode' => $msh['mode'],
-                'msh_url' => $msh['url'],
-                'msh_username' => $msh['username'],
-                'msh_password' => $msh['password'],
+                'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+                'harness_username' => $esb_data['harness_username'],
+                'harness_password' => $esb_data['harness_password'],
+                'p_mode_agreement' => $esb_data['p_mode_agreement'],
+                'tester_endpoint_url' => '',
+                'tester_username' => '',
+                'tester_password' => '',
                 'status' => 'Active',
                 'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                 'created_date' => date('Y-m-d H:i:s')
@@ -127,17 +134,18 @@ function process_eway_payment()
             //Create Backend Customer Using SOAP            
             $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
                         <api:user>
-                            <api:username>' . $msh['username'] . '</api:username>
+                            <api:username>' . $esb_data['harness_username'] . '</api:username>
+                            <api:password>' . $esb_data['harness_password'] . '</api:password>
                             <api:userGroups>
                                 <api:group>
                                     <api:groupId>' . $suite->community_id . '</api:groupId>
                                     <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
                                 </api:group>
-                            </api:userGroups>
-                            <api:userPMode>' . $msh['mode'] . '</api:userPMode>                            
-                            <api:userEndpoint>' . $msh['username'] . '</api:userEndpoint>
-                            <api:userEndpointUsername>' . $msh['username'] . '</api:userEndpointUsername>
-                            <api:userEndpointPassword>' . $msh['password'] . '</api:userEndpointPassword>
+                            </api:userGroups>                       
+                            <api:userPModeAgreement>' . $esb_data['p_mode_agreement'] . '</api:userPModeAgreement>                            
+                            <api:userEndpoint />
+                            <api:userEndpointUsername />
+                            <api:userEndpointPassword />
                         </api:user>
                     </api:createUserRequest>';
             
@@ -204,24 +212,33 @@ function free_charge()
         }
         
         //Create MSH Datas 
-        $msh = array('mode' => 'PULL', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => cp_generate_password(8));
+        $esb_data = array(
+            'p_mode_agreement' => 'LIGHT',
+            'harness_endpoint_url' => 'http://esb.compliancetest.net/services/LoggingProxy/mediate', 
+            'harness_username' => $user->user_login . "_" . $suite->id, 
+            'harness_password' => cp_generate_password(8)
+        );
+        
+        //Create MSH Datas 
+        $esb_data = array('mode' => 'PULL', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => cp_generate_password(8));
 
         //Create Backend Customer Using SOAP            
         $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:username>' . $msh['username'] . '</api:username>
-                        <api:userGroups>
-                            <api:group>
-                                <api:groupId>' . $suite->community_id . '</api:groupId>
-                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                            </api:group>
-                        </api:userGroups>
-                        <api:userPMode>' . $msh['mode'] . '</api:userPMode>                            
-                        <api:userEndpoint>' . $msh['username'] . '</api:userEndpoint>
-                        <api:userEndpointUsername>' . $msh['username'] . '</api:userEndpointUsername>
-                        <api:userEndpointPassword>' . $msh['password'] . '</api:userEndpointPassword>
-                    </api:user>
-                </api:createUserRequest>';
+                        <api:user>
+                            <api:username>' . $esb_data['harness_username'] . '</api:username>
+                            <api:password>' . $esb_data['harness_password'] . '</api:password>
+                            <api:userGroups>
+                                <api:group>
+                                    <api:groupId>' . $suite->community_id . '</api:groupId>
+                                    <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                                </api:group>
+                            </api:userGroups>                       
+                            <api:userPModeAgreement>' . $esb_data['p_mode_agreement'] . '</api:userPModeAgreement>                            
+                            <api:userEndpoint />
+                            <api:userEndpointUsername />
+                            <api:userEndpointPassword />
+                        </api:user>
+                    </api:createUserRequest>';
         
         $result = sendRestUserAction('/user/create', $data);
         
@@ -241,11 +258,13 @@ function free_charge()
                     'suite_id' => $suite->id,
                     'customer_id' => 0,
                     'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
-                    'esb_username' => $msh['username'],
-                    'msh_p_mode' => $msh['mode'],
-                    'msh_url' => $msh['url'],
-                    'msh_username' => $msh['username'],
-                    'msh_password' => $msh['password'],
+                    'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+                    'harness_username' => $esb_data['harness_username'],
+                    'harness_password' => $esb_data['harness_password'],
+                    'p_mode_agreement' => $esb_data['p_mode_agreement'],
+                    'tester_endpoint_url' => '',
+                    'tester_username' => '',
+                    'tester_password' => '',
                     'status' => 'Active',
                     'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                     'created_date' => date('Y-m-d H:i:s')
@@ -305,7 +324,7 @@ function unsubscribe_purchase()
         }else{
             if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
             {
-                addMessage('Error:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue);
+                addMessage('Error:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue, 'error');
             }else{            
                 
                 addMessage('Your subscription has been cancelled.');
