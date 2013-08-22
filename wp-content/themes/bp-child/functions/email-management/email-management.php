@@ -378,7 +378,7 @@ function create_email_management_page()
                     $forgot_password_email_title = get_option('forgot_password_email_title');
                     $forgot_password_email_content = get_option('forgot_password_email_content');
                 ?>
-                    <p><b>Short Codes:</b> [name], [email], [password]</p>
+                    <p><b>Short Codes:</b> [name], [email], [username], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>

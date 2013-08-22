@@ -111,7 +111,7 @@ function cp_activate_user()
     
     if($user)
     {
-        $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0 WHERE ID =" . $user->ID);
+        $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0, user_activation_key='' WHERE ID =" . $user->ID);
         $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
                       VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/{$user->user_login}/','{$current_date}','0')");
         
@@ -133,6 +133,54 @@ function cp_activate_user()
     }
     
     addMessage('Invalid Request.', 'error');
+}
+
+function request_reset_password()
+{
+    global $wpdb;
+    
+    if(!$_POST['user_login'])
+    {
+        addMessage('Please enter your email address or username', 'error');
+        return;
+    }
+    
+    $username = trim($_POST['user_login']);
+    
+    if ( username_exists( $username ) ){
+        $user = get_user_by('login', $username);
+    }elseif( email_exists($username) ){
+        $user = get_user_by_email($username);            
+    }else{
+        addMessage('Username or Email was not found, try again!', 'error');
+        return;
+    }
+    
+    $user_login = $user->user_login;
+    $user_email = $user->user_email;
+    
+    $key = $wpdb->get_var($wpdb->prepare("SELECT user_activation_key FROM $wpdb->users WHERE user_login = %s", $user_login));
+    if ( empty($key) ) {
+        // Generate something random for a key...
+        $key = wp_generate_password(20, false);
+        do_action('retrieve_password_key', $user_login, $key);
+        // Now insert the new md5 key into the db
+        $wpdb->update($wpdb->users, array('user_activation_key' => $key), array('user_login' => $user_login));
+    }
+    
+    $data = array(
+        '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),
+        '[username]' => $user->user_login,
+        '[email]' => $user->user_email,
+        '[link]' => network_site_url("password-recovery/?cp-action=" . wp_create_nonce('reset_password') . "&key=$key&login=" . rawurlencode($user_login), 'login')
+    );
+
+    cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'forgot_password', $data);
+    
+    addMessage('A message will be sent to your email address');
+    
+    wp_redirect('/password-recovery');
+    exit;
 }
 
 if(!is_user_logged_in())    
