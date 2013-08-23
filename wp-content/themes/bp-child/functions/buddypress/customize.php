@@ -379,6 +379,17 @@ function cp_mail_from_name($from)
     return $fromName;
 }
 
+//Set Mail Content Type
+add_filter('wp_mail_content_type', 'cp_set_mail_content_type_to_html', 100, 1);
+function cp_set_mail_content_type_to_html($content_type)
+{
+    if(isset($_SESSION['membership_request_approved_user_id']) && isset($_SESSION['membership_requesting_user_id']))
+    {
+        return 'text/html';
+    }
+    return $content_type;
+}
+
 //Membership Request Send Email Customize
 add_filter('groups_notification_new_membership_request_to', 'cp_groups_notification_new_membership_request_to', 100, 1);
 function cp_groups_notification_new_membership_request_to($to)
@@ -449,3 +460,4 @@ function cp_groups_notification_membership_request_completed_message($message, $
     $message = str_replace(array_keys($emailData), array_values($emailData), $message);
     return $message;
 }
+
