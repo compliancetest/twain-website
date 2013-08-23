@@ -83,9 +83,9 @@ function cp_groups_notification_membership_request_completed_message($message, $
 {
     $user_id = $_SESSION['membership_request_approved_user_id'];
     if(strpos($message, 'accepted') !== false)
-        $message = get_option('membership_request_approved_email_title');
+        $message = get_option('membership_request_approved_email_content');
     else
-        $message = get_option('membership_request_rejected_email_title');
+        $message = get_option('membership_request_rejected_email_content');
     $emailData = array(
         '[community]' => bp_get_group_name($group),
         '[community_url]' => $group_link,
@@ -98,4 +98,25 @@ function cp_groups_notification_membership_request_completed_message($message, $
     return $message;
 }
 
-
+add_action('groups_leave_group', 'cp_send_leave_community_notification', 100, 2);
+function cp_send_leave_community_notification($group_id, $user_id)
+{
+    $group = groups_get_group( array('group_id'=> $group_id) );
+    $user = get_userdata($user_id);
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => $group_link,
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    
+    $admins = groups_get_group_admins($group_id);
+    $to = array();
+    foreach($admins as $aid)
+    {
+        $au = get_userdata($aid);
+        $to[] = array('name' => cp_get_user_fullname($aid), 'email' => $au->user_email);        
+    }
+    cp_send_email($to, 'member_leave_community_admin', $emailData);
+}

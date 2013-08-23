@@ -397,7 +397,7 @@ function create_email_management_page()
                     $member_leave_community_admin_email_title = get_option('member_leave_community_admin_email_title');
                     $member_leave_community_admin_email_content = get_option('member_leave_community_admin_email_content');
                 ?>
-                    <p><b>Short Codes:</b> [name], [email], [password]</p>
+                    <p><b>Short Codes:</b> [name], [email], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
