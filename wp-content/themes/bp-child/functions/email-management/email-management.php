@@ -74,7 +74,7 @@ function create_email_management_page()
                     <li><a href="#cancel-subscription">Cancel Subscription</a></li>       
                     <li><a href="#membership-request-received">Membership Request Received</a></li>       
                     <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
-                    <li><a href="#membership-request-rejcted">Membership Request Rejected</a></li>       
+                    <li><a href="#membership-request-rejected">Membership Request Rejected</a></li>       
                     <li><a href="#member-leave-community">Member Leave Community</a></li>       
                     <li><a href="#forgot-password">Forgot Password</a></li>
                     <li><a href="#password-changed">Password Changed</a></li>
