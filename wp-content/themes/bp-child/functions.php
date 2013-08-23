@@ -737,14 +737,3 @@ function setItemsPerPage($value, $page = '')
 {
     $_SESSION[$page . '_limit'] = $value;
 }
-
-function cp_get_user_fullname($user_id = null)
-{
-    if(!$user_id)
-        $user_id = get_current_user_id();
-    
-    if(!$user_id)
-        return null;
-        
-    return get_user_meta($user_id, 'first_name', true) . ' ' . get_user_meta($user_id, 'last_name', true);
-}
