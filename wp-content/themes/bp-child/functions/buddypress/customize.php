@@ -383,8 +383,10 @@ function cp_mail_from_name($from)
 add_filter('wp_mail_content_type', 'cp_set_mail_content_type_to_html', 100, 1);
 function cp_set_mail_content_type_to_html($content_type)
 {
-    if(isset($_SESSION['membership_request_approved_user_id']) && isset($_SESSION['membership_requesting_user_id']))
+    if(isset($_SESSION['membership_request_approved_user_id']) || isset($_SESSION['membership_requesting_user_id']))
     {
+        unset($_SESSION['membership_request_approved_user_id']);
+        unset($_SESSION['membership_requesting_user_id']);
         return 'text/html';
     }
     return $content_type;
