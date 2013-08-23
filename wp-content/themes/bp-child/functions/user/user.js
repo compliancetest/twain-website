@@ -352,35 +352,26 @@
                 href: '#harness-detail-box',
                 onStart: function(){                    
                     $('#harness-detail-box .message').remove();
-                    $('#harness-detail-box #msh_p_mode').val($('#msh_p_mode' + id).val());
-                    $('#harness-detail-box #msh_url').val($('#msh_url' + id).val());
-                    $('#harness-detail-box #msh_username').val($('#msh_username' + id).val());
-                    $('#harness-detail-box #msh_password').val($('#msh_password' + id).val());
-                    $('#harness-detail-box #harness-id').val(id);
-                    if($('#msh_p_mode' + id).val() == 'PULL')
+                    $('#harness-id').val(id);
+                    $('#harness-detail-box input[type="text"], #harness-detail-box select').each(function(){
+                        $(this).val($('#' + $(this).attr('id') + id).val());
+                    })
+                    if($('#p_mode_agreement' + id).val() == 'LIGHT')
                     {
-                        $('#harness-detail-box #msh_url').prop('disabled', 'disabled').parent().parent().hide();
-                        $('#harness-detail-box #msh_username').prop('disabled', 'disabled').parent().parent().hide();;
-                        $('#harness-detail-box #msh_password').prop('disabled', 'disabled').parent().parent().hide();;
+                        $('#harness-form .tester-endpoint-info').hide();
                     }else{
-                        $('#harness-detail-box #msh_url').removeAttr('disabled').parent().parent().show();
-                        $('#harness-detail-box #msh_username').removeAttr('disabled').parent().parent().show();
-                        $('#harness-detail-box #msh_password').removeAttr('disabled').parent().parent().show();
+                        $('#harness-form .tester-endpoint-info').show();
                     }
                 }
             })
         })
         
-        $('#harness-form #msh_p_mode').change(function(){
-            if($(this).val() == 'PULL')
+        $('#harness-form #p_mode_agreement').change(function(){
+            if($(this).val() == 'LIGHT')
             {
-                $('#harness-detail-box #msh_url').prop('disabled', 'disabled').parent().parent().hide();
-                $('#harness-detail-box #msh_username').prop('disabled', 'disabled').parent().parent().hide();
-                $('#harness-detail-box #msh_password').prop('disabled', 'disabled').parent().parent().hide();
+                $('#harness-form .tester-endpoint-info').hide();
             }else{
-                $('#harness-detail-box #msh_url').removeAttr('disabled').parent().parent().show();
-                $('#harness-detail-box #msh_username').removeAttr('disabled').parent().parent().show();
-                $('#harness-detail-box #msh_password').removeAttr('disabled').parent().parent().show();
+                $('#harness-form .tester-endpoint-info').show();                
             }
         })
         $('#harness-form').submit(function(){
@@ -396,12 +387,15 @@
                     {
                         $('#harness-detail-box .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');
                         var id = $('#harness-form #harness-id').val();
-                        $('#msh_p_mode' + id).val($('#harness-detail-box #msh_p_mode').val());
-                        if($('#harness-detail-box #msh_p_mode').val() == 'PUSH')
+                        $('#p_mode_agreement' + id).val($('#harness-detail-box #p_mode_agreement').val());
+                        $('#harness_endpoint_url' + id).val($('#harness-detail-box #harness_endpoint_url').val());
+                        $('#harness_username' + id).val($('#harness-detail-box #harness_username').val());
+                        $('#harness_password' + id).val($('#harness-detail-box #harness_password').val());                            
+                        if($('#harness-detail-box #p_mode_agreement').val() == 'HIGH-END')
                         {
-                            $('#msh_url' + id).val($('#harness-detail-box #msh_url').val());
-                            $('#msh_username' + id).val($('#harness-detail-box #msh_username').val());
-                            $('#msh_password' + id).val($('#harness-detail-box #msh_password').val());
+                            $('#tester_endpoint_url' + id).val($('#harness-detail-box #tester_endpoint_url').val());
+                            $('#tester_username' + id).val($('#harness-detail-box #tester_username').val());
+                            $('#tester_password' + id).val($('#harness-detail-box #tester_password').val());                                
                         }
                     }else{
                         $('#harness-detail-box .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");

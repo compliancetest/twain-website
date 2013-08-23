@@ -4421,7 +4421,22 @@ min-height: 70px;
     width: 120px;
     line-height: 28px;
 }
-
+#harness-detail-box .field-row .select{
+    width: 120px;
+}
+#harness-detail-box .field-row .input
+{
+    width: 285px;
+}
+/*#harness-detail-box .field-row #harness_endpoint_url,
+#harness-detail-box .field-row #tester_endpoint_url{
+    width: 285px;
+}*/
+#harness-detail-box .tester-endpoint-info{
+    border-top: solid 1px #cbcbcb; 
+    padding-top: 10px;
+    display: none;
+}
 #my_avatar .input-file{
     padding: 0;
     margin: 0 0 10px;

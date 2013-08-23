@@ -394,10 +394,13 @@ get_header();
                                     | 
                                     <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="unsubscribe-link">Unsubscribe</a>
                                 </div>
-                                <input type="hidden" id="msh_p_mode<?php echo $row->id?>" value="<?php echo $row->msh_p_mode?>" />
-                                <input type="hidden" id="msh_url<?php echo $row->id?>" value="<?php echo $row->msh_url?>" />
-                                <input type="hidden" id="msh_username<?php echo $row->id?>" value="<?php echo $row->msh_username?>" />
-                                <input type="hidden" id="msh_password<?php echo $row->id?>" value="<?php echo $row->msh_password?>" />
+                                <input type="hidden" id="p_mode_agreement<?php echo $row->id?>" value="<?php echo $row->p_mode_agreement?>" />
+                                <input type="hidden" id="harness_endpoint_url<?php echo $row->id?>" value="<?php echo $row->harness_endpoint_url?>" />
+                                <input type="hidden" id="harness_username<?php echo $row->id?>" value="<?php echo $row->harness_username?>" />
+                                <input type="hidden" id="harness_password<?php echo $row->id?>" value="<?php echo $row->harness_password?>" />
+                                <input type="hidden" id="tester_endpoint_url<?php echo $row->id?>" value="<?php echo $row->tester_endpoint_url?>" />
+                                <input type="hidden" id="tester_username<?php echo $row->id?>" value="<?php echo $row->tester_username?>" />
+                                <input type="hidden" id="tester_password<?php echo $row->id?>" value="<?php echo $row->tester_password?>" />
                                 <div class="clear"></div>
                             </div>
                        <?php
@@ -504,41 +507,67 @@ get_header();
 	</div>
     <div class="clear"></div>
 </div> <!--end content-->
-<div class="popup-box" id="harness-detail-box" style="display: none; width: 370px;">
+<div class="popup-box" id="harness-detail-box" style="display: none; width: 450px;">
     <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>        
     <form name="harness-form" id="harness-form" action="">
         <div class="popup-box-content grid-box-body">    
             <div class="field-row">
                 <div class="grid-cell">
-                    <label>P Mode:</label>
-                    <select name="msh_p_mode" id="msh_p_mode" class="select">
-                        <option value="PUSH">PUSH</option>
-                        <option value="PULL">PULL</option>
+                    <label>P Mode Agreement:</label>
+                    <select name="p_mode_agreement" id="p_mode_agreement" class="select">
+                        <option value="LIGHT">LIGHT</option>
+                        <option value="HIGH-END">HIGH-END</option>
                     </select>
                 </div>
                 <div class="clear"></div>
             </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>EndPoint URL:</label>
-                    <input class="input" type="text" name="msh_url" id="msh_url" value="" />
+            <div class="harness-endpoint-info">                
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Harness EndPoint:</label>
+                        <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="" />
+                    </div>
+                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Harness Username:</label>
+                        <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="" />
+                    </div>
+                    <div class="clear"></div>
+                </div>            
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Harness Password:</label>
+                        <input class="input" type="text" name="harness_password" id="harness_password" value="" />
+                    </div>
+                    <div class="clear"></div>
+                </div>                 
             </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Username:</label>
-                    <input class="input" type="text" name="msh_username" id="msh_username" value="" />
+            <div class="tester-endpoint-info">
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Tester EndPoint:</label>
+                        <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="" />
+                    </div>
+                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
-            </div>            
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Password:</label>
-                    <input class="input" type="text" name="msh_password" id="msh_password" value="" />
-                </div>
-                <div class="clear"></div>
-            </div>                        
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Tester Username:</label>
+                        <input class="input" type="text" name="tester_username" id="tester_username" value="" />
+                    </div>
+                    <div class="clear"></div>
+                </div>            
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Tester Password:</label>
+                        <input class="input" type="text" name="tester_password" id="tester_password" value="" />
+                    </div>
+                    <div class="clear"></div>
+                </div>                 
+            </div>
+            
         </div>
         <div class="popup-box-footer radius6 noradiustop">                                    
             <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            

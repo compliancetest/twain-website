@@ -179,7 +179,7 @@ Template Name Posts: Test Suite
             </div>
             <?php }else{ ?>  
             <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
-            <a href="<?php echo get_permalink()?>&_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
+            <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
             <?php }else{ ?>          
 			<a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
             <?php } ?>

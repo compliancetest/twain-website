@@ -367,35 +367,41 @@ function cp_save_customer_harness_detail()
     
     $isSaved = false;
     
-    if($_POST['msh_p_mode'] == 'PULL'){
-        $_POST['msh_url'] = $data->msh_url;
-        $_POST['msh_username'] = $data->msh_username;
-        $_POST['msh_password'] = $data->msh_password;
+    //Harness Username and Password Should not be changed
+    
+    $_POST['harness_endpoint_url'] = $data->harness_endpoint_url;    
+    $_POST['harness_username'] = $data->harness_username;
+    
+    if($_POST['p_mode_agreement'] == 'HIGH-END'){        
+        $_POST['tester_endpoint_url'] = $data->tester_endpoint_url;
+        $_POST['tester_username'] = $data->tester_username;
+        $_POST['tester_password'] = $data->tester_password;
     }
+    
+    
+    $community_id = cp_get_post_meta($data->suite_id, 'community_id', true);    
+    $group = groups_get_group( array('group_id' => $community_id));
     
     if(!$data->esb_user_id)
     {
-        $suite = new TestSuite($data->suite_id);
-        $group = groups_get_group( array('group_id' => $suite->community_id));
+        $xmlData = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
+                        <api:user>
+                            <api:username>' . $user->user_login . "_" . $data->suite_id . '</api:username>
+                            <api:password>' . $_POST['harness_password'] . '</api:password>
+                            <api:userGroups>
+                                <api:group>
+                                    <api:groupId>' . $community_id . '</api:groupId>
+                                    <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                                </api:group>
+                            </api:userGroups>                       
+                            <api:userPModeAgreement>' . $_POST['p_mode_agreement'] . '</api:userPModeAgreement>                            
+                            <api:userEndpoint>' . $_POST['tester_endpoint_url'] . '</api:userEndpoint>
+                            <api:userEndpointUsername>' . $_POST['tester_username'] . '</api:userEndpointUsername>
+                            <api:userEndpointPassword>' . $_POST['tester_password'] . '</api:userEndpointPassword>
+                        </api:user>
+                    </api:createUserRequest>';
         
-        //Create New Data
-        $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:username>' . $user->user_login . "_" . $data->suite_id . '</api:username>
-                        <api:userGroups>
-                            <api:group>
-                                <api:groupId>' . $suite->community_id . '</api:groupId>
-                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                            </api:group>
-                        </api:userGroups>
-                        <api:userPMode>' . $_POST['msh_p_mode'] . '</api:userPMode>' .                             
-                        (!$_POST['msh_url'] ? '' : '<api:userEndpoint>' . $_POST['msh_url'] . '</api:userEndpoint>') .
-                        '<api:userEndpointUsername>' . $_POST['msh_username'] . '</api:userEndpointUsername>
-                        <api:userEndpointPassword>' . $_POST['msh_password'] . '</api:userEndpointPassword>
-                    </api:user>
-                </api:createUserRequest>';
-        
-        $result = sendRestUserAction('/user/create', $data);
+        $result = sendRestUserAction('/user/create', $xmlData);
         
         $resultDoc = new DOMDocument();
         
@@ -412,13 +418,21 @@ function cp_save_customer_harness_detail()
         $xmlData = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
                     <api:user>
                         <api:userId>' . $data->esb_user_id . '</api:userId>
-                        <api:userPMode>' . $_POST['msh_p_mode'] . '</api:userPMode>' .
-                        (!$_POST['msh_url'] ? '' : '<api:userEndpoint>' . $_POST['msh_url'] . '</api:userEndpoint>') .
-                        '<api:userEndpointUsername>' . $_POST['msh_username'] . '</api:userEndpointUsername>
-                        <api:userEndpointPassword>' . $_POST['msh_password'] . '</api:userEndpointPassword>
+                        <api:username>' . $data->harness_username . '</api:username>            
+                        <api:password>' . $_POST['harness_password'] . '</api:password>                        
+                        <api:userGroups>
+                            <api:group>
+                                <api:groupId>' . $community_id . '</api:groupId>
+                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                            </api:group>
+                        </api:userGroups>   
+                        <api:userPModeAgreement>' . $_POST['p_mode_agreement'] . '</api:userPModeAgreement>                            
+                        <api:userEndpoint>' . $_POST['tester_endpoint_url'] . '</api:userEndpoint>
+                        <api:userEndpointUsername>' . $_POST['tester_username'] . '</api:userEndpointUsername>
+                        <api:userEndpointPassword>' . $_POST['tester_password'] . '</api:userEndpointPassword>
                     </api:user>
                 </api:updateUserRequest>';
-                
+        
         $result = sendRestUserAction('/user/update', $xmlData);
         
         $resultDoc = new DOMDocument();
@@ -432,20 +446,21 @@ function cp_save_customer_harness_detail()
         
     }
     
-    if($_POST['msh_p_mode'] == 'PULL'){
-        $wpdb->update($wpdb->prefix . "users_purchases", 
-                array('msh_p_mode' => $_POST['msh_p_mode']),
-                array('id' => $data->id)
-        );
-    }else{
-        
-        $wpdb->update($wpdb->prefix . "users_purchases", 
-            array('msh_p_mode' => $_POST['msh_p_mode'], 'msh_url' => $_POST['msh_url'], 'msh_password' => $_POST['msh_password'], 'msh_username' => $_POST['msh_username']),
-            array('id' => $data->id)
-        );        
+    $updateArr = array(
+        'p_mode_agreement' => $_POST['p_mode_agreement'],
+        'harness_password' => $_POST['harness_password']
+    );
+    
+    if($_POST['p_mode_agreement'] == 'HIGH-END'){
+        $updateArr['tester_endpoint_url'] = $_POST['tester_endpoint_url'];
+        $updateArr['tester_password'] = $_POST['tester_username'];
+        $updateArr['tester_password'] = $_POST['tester_password'];
     }
-    
-    
+        
+    $wpdb->update($wpdb->prefix . "users_purchases", 
+        $updateArr,
+        array('id' => $data->id)
+    );        
     
     return "success";
 }

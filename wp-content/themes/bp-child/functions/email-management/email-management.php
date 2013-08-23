@@ -197,7 +197,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_title = get_option('purchase_subscription_admin_email_title');
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>

@@ -122,7 +122,9 @@ function process_eway_payment()
                 'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                 'created_date' => date('Y-m-d H:i:s')
             ));
+            
             $id = $wpdb->insert_id;
+            
             //Make this customer a member of the group
             if(!groups_is_user_member($user->ID, $suite->community_id))
             {
@@ -130,6 +132,18 @@ function process_eway_payment()
             }
             
             $group = groups_get_group( array('group_id' => $suite->community_id));
+            
+            //Send Email
+            $emailData = array(
+                '[name]' => cp_get_user_fullname($user->ID),
+                '[email]' => $user->user_email,
+                '[suite_name]' => $suite->name,
+                '[suite_url]' => get_permalink($suite->id),
+                '[paid_amount]' => $suite->monthlySubscriptionPrice,
+                '[community_url]' => bp_get_group_permalink($group)
+            );
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+            cp_send_email_to_admin('purchase_subscription', $emailData);
             
             //Create Backend Customer Using SOAP            
             $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
@@ -219,9 +233,6 @@ function free_charge()
             'harness_password' => cp_generate_password(8)
         );
         
-        //Create MSH Datas 
-        $esb_data = array('mode' => 'PULL', 'url' => '', 'username' => $user->user_login . "_" . $suite->id, 'password' => cp_generate_password(8));
-
         //Create Backend Customer Using SOAP            
         $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
                         <api:user>
@@ -246,12 +257,24 @@ function free_charge()
         
         if(!$result || !$resultDoc->loadXML($result))
         {
-            addMessage("There was an error while processing your request!", 'error');            
+            addMessage("There was an error while processing your request!", 'error');                        
         }else{
             if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
             {
-                addMessage($resultDoc->getElementsByTagName('error')->item(0)->nodeValue, "error");
+                addMessage($resultDoc->getElementsByTagName('error')->item(0)->nodeValue, "error");                
             }else{            
+                //Send Email
+                $emailData = array(
+                    '[name]' => cp_get_user_fullname($user->ID),
+                    '[email]' => $user->user_email,
+                    '[suite_name]' => $suite->name,
+                    '[suite_url]' => get_permalink($suite->id),
+                    '[paid_amount]' => $suite->monthlySubscriptionPrice,
+                    '[community_url]' => bp_get_group_permalink($group)
+                );
+                cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+                cp_send_email_to_admin('purchase_subscription', $emailData);
+                
                 //Save Billing Data to Database
                 $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
                     'user_id' => $user->ID,
@@ -269,8 +292,11 @@ function free_charge()
                     'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                     'created_date' => date('Y-m-d H:i:s')
                 ));
-                $id = $wpdb->insert_id;
+                
+                $id = $wpdb->insert_id;                
+                
                 addMessage("Your subscription has been proceeded successfully");
+                
             }
         }
         wp_redirect($return);
