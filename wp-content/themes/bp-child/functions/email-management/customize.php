@@ -113,10 +113,12 @@ function cp_send_leave_community_notification($group_id, $user_id)
     
     $admins = groups_get_group_admins($group_id);
     $to = array();
-    foreach($admins as $aid)
+    foreach($admins as $admin)
     {
-        $au = get_userdata($aid);
-        $to[] = array('name' => cp_get_user_fullname($aid), 'email' => $au->user_email);        
+        $au = get_userdata($admin->user_id);
+        $to[] = array('name' => cp_get_user_fullname($au->ID), 'email' => $au->user_email);        
     }
     cp_send_email($to, 'member_leave_community_admin', $emailData);
+    
+    return true;
 }
