@@ -377,6 +377,7 @@
         $('#harness-form').submit(function(){
             $('#harness-detail-box .loading').show();
             $('#harness-detail-box .message').remove();
+            
             $.ajax({
                 url: '/',
                 data: $('#harness-form').serialize(),

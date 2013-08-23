@@ -2,9 +2,6 @@
 /**
 * Management Site Emails
 */
-
-//require_once( THE_FUNCTION . "/email-management/phpmailer/class.phpmailer.php" );
-
 //Add New Menu
 add_action('admin_menu', 'add_email_management_page');
 function add_email_management_page()
@@ -610,6 +607,14 @@ function save_email_templates()
 //Front End Functions
 function cp_send_email($to, $template_name, $data = array())
 {
+    global $phpmailer;
+    
+    if ( !is_object( $phpmailer ) || !is_a( $phpmailer, 'PHPMailer' ) ) {
+        require_once ABSPATH . WPINC . '/class-phpmailer.php';
+        require_once ABSPATH . WPINC . '/class-smtp.php';
+        $phpmailer = new PHPMailer( true );
+    }
+    
     $supportName = get_option('support_name');
     if(!$supportName)
         $supportName = 'ComplianceTest';
@@ -632,31 +637,23 @@ function cp_send_email($to, $template_name, $data = array())
     $emailContent = str_replace($shortCodes, $values, $emailContent);
     $emailContent = apply_filters('the_content', $emailContent);
     
-    $mailer = new PHPMailer();
-    
-    //SMTP Information
-    //$mailer->Host = 'ssl://email-smtp.us-east-1.amazonaws.com';
-//    $mailer->Username = 'AKIAI5UJTIWIMSXIIVMQ';
-//    $mailer->Password = 'AuC+62r7QeZbOPt4x5Sge/ytwSbdYzN1MHAzDGUUY964';
-//    $mailer->Port = '465';
-    
-    $mailer->AddReplyTo($supportEmail, $supportName);
-    $mailer->FromName = $supportName;
-    $mailer->From = $supportEmail;
+    $phpmailer->AddReplyTo($supportEmail, $supportName);
+    $phpmailer->FromName = $supportName;
+    $phpmailer->From = $supportEmail;
     
     if(isset($to['name']))
     {
-        $mailer->AddAddress($to['email'], $to['name']);        
+        $phpmailer->AddAddress($to['email'], $to['name']);        
     }else{
         foreach($to as $u)
-            $mailer->AddAddress($u['email'], $u['name']);        
+            $phpmailer->AddAddress($u['email'], $u['name']);        
     }
-    $mailer->IsSMTP();
-    $mailer->IsHTML(true);
-    $mailer->Subject = $emailTitle;
-    $mailer->Body = $emailContent;
+    $phpmailer->IsSMTP();
+    $phpmailer->IsHTML(true);
+    $phpmailer->Subject = $emailTitle;
+    $phpmailer->Body = $emailContent;
     
-    return $mailer->Send();    
+    return $phpmailer->Send();    
 }
 
 function cp_send_email_to_admin($template_name, $data = array())

@@ -372,7 +372,7 @@ function cp_save_customer_harness_detail()
     $_POST['harness_endpoint_url'] = $data->harness_endpoint_url;    
     $_POST['harness_username'] = $data->harness_username;
     
-    if($_POST['p_mode_agreement'] == 'HIGH-END'){        
+    if($_POST['p_mode_agreement'] == 'LIGHT'){        
         $_POST['tester_endpoint_url'] = $data->tester_endpoint_url;
         $_POST['tester_username'] = $data->tester_username;
         $_POST['tester_password'] = $data->tester_password;
@@ -436,7 +436,7 @@ function cp_save_customer_harness_detail()
         $result = sendRestUserAction('/user/update', $xmlData);
         
         $resultDoc = new DOMDocument();
-         
+        
         if(!$result || !$resultDoc->loadXML($result))
         {
             return 'There was an error while updating your data.';
@@ -453,7 +453,7 @@ function cp_save_customer_harness_detail()
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
         $updateArr['tester_endpoint_url'] = $_POST['tester_endpoint_url'];
-        $updateArr['tester_password'] = $_POST['tester_username'];
+        $updateArr['tester_username'] = $_POST['tester_username'];
         $updateArr['tester_password'] = $_POST['tester_password'];
     }
         
