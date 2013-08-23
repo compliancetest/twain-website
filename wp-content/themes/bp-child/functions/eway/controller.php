@@ -273,7 +273,7 @@ function free_charge()
                     '[community_url]' => bp_get_group_permalink($group)
                 );
                 cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-                cp_send_email_to_admin('purchase_subscription', $emailData);
+                cp_send_email_to_admin('purchase_subscription_admin', $emailData);
                 
                 //Save Billing Data to Database
                 $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
