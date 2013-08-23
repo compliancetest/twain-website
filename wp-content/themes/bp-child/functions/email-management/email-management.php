@@ -3,7 +3,7 @@
 * Management Site Emails
 */
 
-require_once( THE_FUNCTION . "/email-management/phpmailer/class.phpmailer.php" );
+//require_once( THE_FUNCTION . "/email-management/phpmailer/class.phpmailer.php" );
 
 //Add New Menu
 add_action('admin_menu', 'add_email_management_page');
@@ -19,8 +19,15 @@ function create_email_management_page()
     <link href="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/css/jquery-ui-1.10.3.custom.css"  type="text/css" rel="stylesheet" />
     <style type="text/css">
         #emails .ui-tabs-nav{
-            border-bottom: solid 1px #aaa;
-            border-radius: 0;
+            padding: 0.2em 0.2em 0;
+            border: solid 1px #aaa;
+            background: #ccc;
+            background: -moz-linear-gradient(top,  #cecece 0%, #ccc 9%, #eee 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cecece), color-stop(9%,#ccc), color-stop(100%,#eee)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  #cecece 0%,#ccc 9%,#eee 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  #cecece 0%,#ccc 9%,#eee 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  #cecece 0%,#ccc 9%,#eee 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  #cecece 0%,#ccc 9%,#eee 100%); /* W3C */
         }
         #emails textarea{
             width: 100%;
@@ -36,6 +43,17 @@ function create_email_management_page()
             height: 100% !important;
             
         }
+        .ui-tabs .ui-tabs-nav li{
+            background: #eee;
+            border: solid 1px #d3d3d3;
+        }
+        .ui-tabs .ui-tabs-nav li.ui-tabs-active{
+            background: #fff;
+        }
+        #emails{
+            border: solid 1px #aaa;
+        }
+        
     </style>
       <form name="adminform" method="post" action="admin.php">
           <div class="wrap">
@@ -58,6 +76,7 @@ function create_email_management_page()
                     <li><a href="#cancel-subscription">Cancel Subscription</a></li>       
                     <li><a href="#membership-request-received">Membership Request Received</a></li>       
                     <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
+                    <li><a href="#membership-request-rejcted">Membership Request Rejected</a></li>       
                     <li><a href="#member-leave-community">Member Leave Community</a></li>       
                     <li><a href="#forgot-password">Forgot Password</a></li>
                     <li><a href="#password-changed">Password Changed</a></li>
@@ -295,7 +314,7 @@ function create_email_management_page()
                     $membership_request_received_admin_email_title = get_option('membership_request_received_admin_email_title');
                     $membership_request_received_admin_email_content = get_option('membership_request_received_admin_email_content');
                 ?>
-                    <p><b>Short Codes:</b> [name], [email], [username], [community]</p>
+                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -323,7 +342,7 @@ function create_email_management_page()
                     $membership_request_approved_email_title = get_option('membership_request_approved_email_title');
                     $membership_request_approved_email_content = get_option('membership_request_approved_email_content');
                 ?>
-                    <p><b>Short Codes:</b> [name], [email], [password]</p>
+                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -346,6 +365,35 @@ function create_email_management_page()
                         </tbody>
                     </table>
                 </div>
+                <div id="membership-request-rejected">
+                <?php
+                    $membership_request_rejected_email_title = get_option('membership_request_rejected_email_title');
+                    $membership_request_rejected_email_content = get_option('membership_request_rejected_email_content');
+                ?>
+                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="membership_request_rejected_email_title" id="membership_request_rejected_email_title" value="<?php echo $membership_request_rejected_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($membership_request_rejected_email_content, 'membership_request_rejected_email_content', array('media_buttons' => false)) ?>     
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
                 <div id="member-leave-community">
                 <?php
                     $member_leave_community_admin_email_title = get_option('member_leave_community_admin_email_title');
@@ -512,6 +560,13 @@ function save_email_templates()
           update_option('membership_request_approved_email_title', $membership_request_approved_email_title);          
           $membership_request_approved_email_content = stripslashes_deep($_POST['membership_request_approved_email_content']);
           update_option('membership_request_approved_email_content', $membership_request_approved_email_content);
+          
+          $membership_request_rejected_email_title = htmlentities(stripslashes_deep($_POST['membership_request_rejected_email_title']));
+          update_option('membership_request_rejected_email_title', $membership_request_rejected_email_title);          
+          $membership_request_rejected_email_content = stripslashes_deep($_POST['membership_request_rejected_email_content']);
+          update_option('membership_request_rejected_email_content', $membership_request_rejected_email_content);
+          
+          
           
           $member_leave_community_admin_email_title = htmlentities(stripslashes_deep($_POST['member_leave_community_admin_email_title']));          
           update_option('member_leave_community_admin_email_title', $member_leave_community_admin_email_title);          

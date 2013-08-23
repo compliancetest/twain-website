@@ -364,3 +364,98 @@ function cp_template_customize($template)
     
     return $template;
 }
+
+add_action('groups_join_group', 'cp_send_membership_request_received_email', 100, 2);
+function cp_send_membership_request_received_email($group_id, $user_id)
+{
+    die("ddd");
+    $group = groups_get_group(array('group_id' => $group_id));
+    $admins = groups_get_group_admins($group_id);
+    $user = get_userdata($user_id);
+    
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => bp_get_group_permalink($group),
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    $to = array();
+    foreach($admins as $aid)
+    {
+        $aUser = get_userdata($aid);
+        $to[] = array('name' => cp_get_user_fullname($aid), 'email' => $aUser->user_email);
+    }
+    cp_send_email($to, 'membership_request_received_admin', $emailData);
+}
+
+//Membership Request Send Email Customize
+add_filter('groups_notification_new_membership_request_to', 'cp_groups_notification_new_membership_request_to', 100, 1);
+function cp_groups_notification_new_membership_request_to($to)
+{    
+    $toData = get_user_by_email($to);
+    $_SESSION['membership_requesting_user_id'] = $toData->ID;
+    return cp_get_user_fullname($toData->ID . " <" . $to . ">");
+}
+add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 2);
+function cp_groups_notification_new_membership_request_subject($subject, $group)
+{
+    $subject = get_option('membership_request_received_admin_email_title');
+    $subject = str_replace('[community]', bp_get_group_name($group), $subject);
+    return $subject;
+}
+
+add_filter('groups_notification_new_membership_request_message', 'cp_groups_notification_new_membership_request_message', 100, 6);
+function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_name, $profile_link, $group_requests, $settings_link)
+{
+    $user_id = $_SESSION['membership_requesting_user_id'];
+    $message = get_option('membership_request_received_admin_email_content');
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => bp_get_group_permalink($group),
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    return $message;
+}
+
+//Membership Request Approved/Rejected Email Customize
+add_filter('groups_notification_membership_request_completed_to', 'cp_groups_notification_membership_request_completed_to', 1);
+function cp_groups_notification_membership_request_completed_to($to)
+{
+    $toData = get_user_by_email($to);
+    $_SESSION['membership_request_approved_user_id'] = $toData->ID;
+    return cp_get_user_fullname($toData->ID . " <" . $to . ">");
+}
+
+add_filter('groups_notification_membership_request_completed_subject', 'cp_groups_notification_membership_request_completed_subject', 100, 2);
+function cp_groups_notification_membership_request_completed_subject($subject, $group)
+{
+    if(strpos($subject, 'accepted') !== false)
+        $subject = get_option('membership_request_approved_email_title');
+    else
+        $subject = get_option('membership_request_rejected_email_title');
+    $subject = str_replace('[community]', bp_get_group_name($group), $subject);
+    return $subject;
+}
+
+add_filter('groups_notification_membership_request_completed_message', 'cp_groups_notification_membership_request_completed_message', 100, 4);
+function cp_groups_notification_membership_request_completed_message($message, $group, $group_link, $settings_link)
+{
+    $user_id = $_SESSION['membership_request_approved_user_id'];
+    if(strpos($message, 'accepted') !== false)
+        $message = get_option('membership_request_approved_email_title');
+    else
+        $message = get_option('membership_request_rejected_email_title');
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => $group_link,
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    return $message;
+}
