@@ -356,7 +356,18 @@ function unsubscribe_purchase()
                 addMessage('Your subscription has been cancelled.');
                 //Change status to canceled 
                 $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
-                            
+                $suite = new TestSuite($purchase->suite_id);
+                $suite->load();
+                //Send Mail
+                $emailData = array(
+                    '[name]' => cp_get_user_fullname($user->ID),
+                    '[email]' => $user->user_email,
+                    '[suite_name]' => $suite->name,
+                    '[suite_url]' => get_permalink($suite->id),
+                    '[paid_amount]' => $suite->monthlySubscriptionPrice
+                );
+                cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+                cp_send_email_to_admin('purchase_subscription', $emailData);            
             }
         }
         
@@ -364,3 +375,4 @@ function unsubscribe_purchase()
         exit;
     }    
 }
+

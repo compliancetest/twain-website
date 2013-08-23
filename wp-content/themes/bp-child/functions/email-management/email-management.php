@@ -264,7 +264,7 @@ function create_email_management_page()
                     $cancel_subscription_admin_email_title = get_option('cancel_subscription_admin_email_title');
                     $cancel_subscription_admin_email_content = get_option('cancel_subscription_admin_email_content');
                     ?>
-                    <p><b>Short Codes:</b> [name], [email], [test_suite], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
