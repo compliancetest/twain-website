@@ -385,7 +385,7 @@ function cp_groups_notification_new_membership_request_to($to)
 {    
     $toData = get_user_by_email($to);
     $_SESSION['membership_requesting_user_id'] = $toData->ID;
-    return cp_get_user_fullname($toData->ID . " <" . $to . ">");
+    return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
 }
 add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 2);
 function cp_groups_notification_new_membership_request_subject($subject, $group)
@@ -417,7 +417,7 @@ function cp_groups_notification_membership_request_completed_to($to)
 {
     $toData = get_user_by_email($to);
     $_SESSION['membership_request_approved_user_id'] = $toData->ID;
-    return cp_get_user_fullname($toData->ID . " <" . $to . ">");
+    return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
 }
 
 add_filter('groups_notification_membership_request_completed_subject', 'cp_groups_notification_membership_request_completed_subject', 100, 2);
