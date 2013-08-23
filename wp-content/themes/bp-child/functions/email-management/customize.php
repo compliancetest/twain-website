@@ -1,0 +1,101 @@
+<?php
+/**
+* Customize Site Default Emails  
+*/
+
+
+//Set Correct From for WP Mail
+add_filter('wp_mail_from', 'cp_mail_from', 10, 1);
+function cp_mail_from($from)
+{
+    $from = get_option('support_email');
+    return $from;
+}
+add_filter('wp_mail_from_name', 'cp_mail_from_name', 10, 1);
+function cp_mail_from_name($from)
+{
+    $fromName = get_option('support_name');
+    return $fromName;
+}
+
+//Set Mail Content Type
+add_filter('wp_mail_content_type', 'cp_set_mail_content_type_to_html', 100, 1);
+function cp_set_mail_content_type_to_html($content_type)
+{       
+    return 'text/html';    
+}
+
+//Membership Request Send Email Customize
+add_filter('groups_notification_new_membership_request_to', 'cp_groups_notification_new_membership_request_to', 100, 1);
+function cp_groups_notification_new_membership_request_to($to)
+{    
+    $toData = get_user_by_email($to);
+    $_SESSION['membership_requesting_user_id'] = $toData->ID;
+    return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
+}
+add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 2);
+function cp_groups_notification_new_membership_request_subject($subject, $group)
+{
+    $subject = get_option('membership_request_received_admin_email_title');
+    $subject = str_replace('[community]', bp_get_group_name($group), $subject);
+    return $subject;
+}
+
+add_filter('groups_notification_new_membership_request_message', 'cp_groups_notification_new_membership_request_message', 100, 6);
+function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_name, $profile_link, $group_requests, $settings_link)
+{
+    $user_id = $_SESSION['membership_requesting_user_id'];
+    $message = get_option('membership_request_received_admin_email_content');
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => bp_get_group_permalink($group),
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    $message = apply_filters('the_content', $message);
+    return $message;
+}
+
+//Membership Request Approved/Rejected Email Customize
+add_filter('groups_notification_membership_request_completed_to', 'cp_groups_notification_membership_request_completed_to', 1);
+function cp_groups_notification_membership_request_completed_to($to)
+{
+    $toData = get_user_by_email($to);
+    $_SESSION['membership_request_approved_user_id'] = $toData->ID;
+    return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
+}
+
+add_filter('groups_notification_membership_request_completed_subject', 'cp_groups_notification_membership_request_completed_subject', 100, 2);
+function cp_groups_notification_membership_request_completed_subject($subject, $group)
+{
+    if(strpos($subject, 'accepted') !== false)
+        $subject = get_option('membership_request_approved_email_title');
+    else
+        $subject = get_option('membership_request_rejected_email_title');
+    $subject = str_replace('[community]', bp_get_group_name($group), $subject);
+    return $subject;
+}
+
+add_filter('groups_notification_membership_request_completed_message', 'cp_groups_notification_membership_request_completed_message', 100, 4);
+function cp_groups_notification_membership_request_completed_message($message, $group, $group_link, $settings_link)
+{
+    $user_id = $_SESSION['membership_request_approved_user_id'];
+    if(strpos($message, 'accepted') !== false)
+        $message = get_option('membership_request_approved_email_title');
+    else
+        $message = get_option('membership_request_rejected_email_title');
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => $group_link,
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    $message = apply_filters('the_content', $message);
+    return $message;
+}
+
+

@@ -87,6 +87,7 @@ require_once(THE_FUNCTION . '/print/print.php');
 
 //Email Management
 require_once(THE_FUNCTION . '/email-management/email-management.php');
+require_once(THE_FUNCTION . '/email-management/customize.php');
 
 
 

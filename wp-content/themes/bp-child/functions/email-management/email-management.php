@@ -2,6 +2,7 @@
 /**
 * Management Site Emails
 */
+
 //Add New Menu
 add_action('admin_menu', 'add_email_management_page');
 function add_email_management_page()
