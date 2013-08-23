@@ -346,6 +346,7 @@ function cp_get_user_fullname($user_id)
     $lname = get_user_meta($user_id, 'last_name', true);
     
     return $fname . " " . $lname;
+    
 }
 
 function cp_save_customer_harness_detail()
