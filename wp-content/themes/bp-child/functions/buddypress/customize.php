@@ -365,6 +365,20 @@ function cp_template_customize($template)
     return $template;
 }
 
+//Set Correct From for WP Mail
+add_filter('wp_mail_from', 'cp_mail_from', 10, 1);
+function cp_mail_from($from)
+{
+    $from = get_option('support_email');
+    return $from;
+}
+add_filter('wp_mail_from_name', 'cp_mail_from_name', 10, 1);
+function cp_mail_from_name($from)
+{
+    $fromName = get_option('support_name');
+    return $fromName;
+}
+
 //Membership Request Send Email Customize
 add_filter('groups_notification_new_membership_request_to', 'cp_groups_notification_new_membership_request_to', 100, 1);
 function cp_groups_notification_new_membership_request_to($to)
