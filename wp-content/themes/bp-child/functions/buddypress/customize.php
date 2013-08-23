@@ -419,6 +419,7 @@ function cp_groups_notification_new_membership_request_message($message, $group,
         '[username]' => $user->user_login
     );
     $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    $message = apply_filters('the_content', $message);
     return $message;
 }
 
@@ -458,6 +459,7 @@ function cp_groups_notification_membership_request_completed_message($message, $
         '[username]' => $user->user_login
     );
     $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    $message = apply_filters('the_content', $message);
     return $message;
 }
 
