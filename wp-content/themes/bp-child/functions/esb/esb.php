@@ -253,7 +253,7 @@ class ManageESB
         
         if($ids)
         {
-            $hasVResults = ManageESB::$esbdb->get_col("SELECT DISTINCT(MSH_METADATA_ID) FROM " . $this->table_metadata_validation_result . " WHERE VALIDATION_ERROR IS NOT NULL AND MSH_METADATA_ID IN (" . implode(", ", $ids) .")");
+            $hasVResults = ManageESB::$esbdb->get_col("SELECT DISTINCT(MSH_METADATA_ID) FROM " . $this->table_metadata_validation_result . " WHERE HARNESS_VALIDATION_ERROR IS NOT NULL AND MSH_METADATA_ID IN (" . implode(", ", $ids) .")");
             if($hasVResults)            
             {
                 foreach($rows as $k=>$row)
@@ -381,7 +381,7 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT ml.VALIDATION_ERROR FROM " . $this->table_metadata_validation_result . " AS ml, " . $this->table_metadata . " AS m WHERE ml.MSH_METADATA_ID=m.ID AND ml.ID=" . intval($id) . " AND m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT ml.HARNESS_VALIDATION_ERROR FROM " . $this->table_metadata_validation_result . " AS ml, " . $this->table_metadata . " AS m WHERE ml.MSH_METADATA_ID=m.ID AND ml.ID=" . intval($id) . " AND m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
         $data = ManageESB::$esbdb->get_var($query);
         
