@@ -366,8 +366,8 @@ function unsubscribe_purchase()
                     '[suite_url]' => get_permalink($suite->id),
                     '[paid_amount]' => $suite->monthlySubscriptionPrice
                 );
-                cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-                cp_send_email_to_admin('purchase_subscription', $emailData);            
+                cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
+                cp_send_email_to_admin('cancel_subscription', $emailData);            
             }
         }
         
