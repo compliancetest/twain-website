@@ -61,12 +61,12 @@ $tPartyIDs = $log_results['tPartyIDs'];
 
 $params = array();                 
 
-if($filterProduct === 'NULL')
+/*if($filterProduct === 'NULL')
     $filterProduct = null;
 if($filterSuite === 'NULL')
     $filterSuite = null;
 if($filterCase === 'NULL')
-    $filterCase = null;
+    $filterCase = null;*/
     
 $tbodyHTML = '';
 
