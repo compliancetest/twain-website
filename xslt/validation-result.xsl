@@ -64,16 +64,8 @@
                 <div id="menu-wrapper"></div>
                 <div id="content-wrapper">
                     <div class="content">
-                        <div id="content-inner">
-                            <h2>ESB Validation Result</h2>
-                            <xsl:for-each select="/soapenv:Body/event.02.data:EventItems/event.02.data:EventItem">            
-                                <div class="grid-box">
-                                    <div class="grid-box-header"><h3><xsl:value-of select="name(/soapenv:Body/event.02.data:EventItems/event.02.data:EventItem)"/></h3></div>
-                                    <div class="grid-box-body">
-                                        <xsl:call-template name="eventItemTemplate"/>
-                                    </div>
-                                </div>
-                            </xsl:for-each>
+                        <div id="content-inner">                            
+                            <xsl:apply-templates />
                         </div>
                     </div>
                 </div>
@@ -82,55 +74,173 @@
     </html>
 </xsl:template>
 
-<xsl:template name="eventItemTemplate">
+<!-- ************************************************************* Default Validation Results  ************************************************************* -->
+<xsl:template match="/soapenv:Body/event.02.data:EventItems">
+    <h2>ESB Validation Result</h2>
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template name="eventItemTemplate" match="/soapenv:Body/event.02.data:EventItems/event.02.data:EventItem">
+    <div class="grid-box">
+        <div class="grid-box-header"><h3><xsl:value-of select="name()"/></h3></div>
+        <div class="grid-box-body">
+            <table cellpadding="0" cellspacing="0" class="format-table">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Error.Code)" /></td>
+                        <td><xsl:value-of select="event.02.data:Error.Code/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Severity.Code)" /></td>
+                        <td><xsl:value-of select="event.02.data:Severity.Code/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Short.Description)" /></td>
+                        <td><xsl:value-of select="event.02.data:Short.Description/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Detailed.Description)" /></td>
+                        <td><xsl:value-of select="event.02.data:Detailed.Description/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Parameters)" /></td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="format-table1">
+                                <tr>
+                                    <th>Identifier</th>
+                                    <th>Value</th>
+                                </tr>
+                                <xsl:for-each select="event.02.data:Parameters/event.02.data:Parameter">
+                                    <tr>
+                                        <td><xsl:value-of select="event.02.data:Parameter.Identifier/text()" /></td>
+                                        <td><xsl:value-of select="event.02.data:Parameter.Text/text()" /></td>
+                                    </tr>
+                                </xsl:for-each>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Locations/event.02.data:Location.Instance.Identifier)" /></td>
+                        <td><xsl:value-of select="event.02.data:Locations/event.02.data:Location.Path.Text/text()" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- ************************************************************* Arelle ************************************************************* -->
+<xsl:template name="evenTemplate" match="log/entry">    
+    <div class="grid-box arelle-entry-box">
+        <div class="grid-box-header">
+            <h4>
+                <span class="entry-code">Entry Code: <b><xsl:value-of select="@code" /></b></span>
+                <span class="entry-level">Level: <b><xsl:value-of select="@level" /></b></span>
+                <div class="clear"></div>
+            </h4>            
+        </div>
+        <div class="grid-box-body">            
+            <xsl:apply-templates />
+           
+        </div>
+    </div>
+</xsl:template>
+<xsl:template match="entry/message">
     <table cellpadding="0" cellspacing="0" class="format-table">
         <thead>
-            <tr>
-                <th>Identifier</th>
-                <th>Value</th>
+            <tr class="header">
+                <th>
+                    Message
+                    <xsl:if test="@contextID">
+                    (<xsl:value-of select="name(@contextID)"/>: <xsl:value-of select="@contextID"/>)
+                    </xsl:if>
+                </th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><xsl:value-of select="name(event.02.data:Error.Code)" /></td>
-                <td><xsl:value-of select="event.02.data:Error.Code/text()" /></td>
-            </tr>
-            <tr>
-                <td><xsl:value-of select="name(event.02.data:Severity.Code)" /></td>
-                <td><xsl:value-of select="event.02.data:Severity.Code/text()" /></td>
-            </tr>
-            <tr>
-                <td><xsl:value-of select="name(event.02.data:Short.Description)" /></td>
-                <td><xsl:value-of select="event.02.data:Short.Description/text()" /></td>
-            </tr>
-            <tr>
-                <td><xsl:value-of select="name(event.02.data:Detailed.Description)" /></td>
-                <td><xsl:value-of select="event.02.data:Detailed.Description/text()" /></td>
-            </tr>
-            <tr>
-                <td><xsl:value-of select="name(event.02.data:Parameters)" /></td>
-                <td>
-                    <table cellpadding="0" cellspacing="0" class="format-table1">
-                        <tr>
-                            <th>Identifier</th>
-                            <th>Value</th>
-                        </tr>
-                        <xsl:for-each select="event.02.data:Parameters/event.02.data:Parameter">
-                            <tr>
-                                <td><xsl:value-of select="event.02.data:Parameter.Identifier/text()" /></td>
-                                <td><xsl:value-of select="event.02.data:Parameter.Text/text()" /></td>
-                            </tr>
-                        </xsl:for-each>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td><xsl:value-of select="name(event.02.data:Locations/event.02.data:Location.Instance.Identifier)" /></td>
-                <td><xsl:value-of select="event.02.data:Locations/event.02.data:Location.Path.Text/text()" /></td>
-            </tr>
+        <tr>
+            <td>
+                <xsl:value-of select="text()"/>
+            </td>
+        </tr>                
         </tbody>
     </table>
 </xsl:template>
+<xsl:template match="entry/ref">
+    <table cellpadding="0" cellspacing="0" class="format-table">
+        <thead>
+            <tr class="header">
+                <th>
+                    Ref
+                    (<xsl:if test="@href">
+                        <xsl:value-of select="name(@href)"/>: <b><xsl:value-of select="@href"/></b>
+                    </xsl:if>                            
+                    <xsl:if test="@sourceLine">
+                        <span style="float: right"><xsl:value-of select="name(@sourceLine)"/>: <b><xsl:value-of select="@sourceLine"/> </b></span>
+                    </xsl:if>)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <xsl:if test="property">
+            <tr>
+                <td>                
+                    <b>Properties:</b>                    
+                    <table class="format-table1" cellpadding="0" cellspacing="0" width="936" style="table-layout: fixed;">
+                        <tr>
+                            <th>Name</th>
+                            <th width="90%">Value</th>
+                        </tr>
 
-<!-- And that's it!  All done :-) Close the stylesheet -->
+                            <xsl:apply-templates /> 
+                    </table>
+                </td>
+            </tr>
+        </xsl:if>                   
+        </tbody>
+    </table>    
+</xsl:template>
+
+<xsl:template match="ref/property">
+    <tr>
+        <td><xsl:value-of select="@name" /></td>
+        <td width="70%">
+            <div style="overflow: auto">
+                <xsl:value-of select="@value" />
+                <xsl:if test="property">
+                    <table class="format-table1" cellpadding="0" cellspacing="0" width="100%">
+                        <xsl:apply-templates />
+                    </table>
+                </xsl:if>
+            </div>
+        </td>
+    </tr>    
+</xsl:template>
+
+<xsl:template match="property">
+    <tr>
+        <td>
+            <div style="overflow: auto; word-break:break-all;">
+                <xsl:value-of select="@name" />
+            </div>            
+        </td>
+        <td width="70%">
+            <div style="overflow: auto; word-break:break-all; ">
+                <xsl:value-of select="@value" />                            
+                <xsl:if test="property">
+                    <table class="format-table1" cellpadding="0" cellspacing="0" width="100%">
+                        <xsl:apply-templates />
+                    </table>
+                </xsl:if>
+            </div>
+        </td>
+    </tr>                   
+</xsl:template>
+
 </xsl:stylesheet>
