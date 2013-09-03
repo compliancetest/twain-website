@@ -41,6 +41,7 @@
                     xmlns:sch="http://www.ascc.net/xml/schematron" 
                     xmlns:pyid.02.05="http://sbr.gov.au/icls/py/pyid/pyid.02.05.data" 
                     xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+                    xmlns:arelle="http://arelle.org/xbrl/validation/xml"
             >
 
 <!-- Match to the root node -->
@@ -136,7 +137,7 @@
 </xsl:template>
 
 <!-- ************************************************************* Arelle ************************************************************* -->
-<xsl:template name="evenTemplate" match="log/entry">    
+<xsl:template name="evenTemplate" match="/arelle:log/arelle:entry">
     <div class="grid-box arelle-entry-box">
         <div class="grid-box-header">
             <h4>
@@ -151,7 +152,7 @@
         </div>
     </div>
 </xsl:template>
-<xsl:template match="entry/message">
+<xsl:template match="arelle:entry/arelle:message">
     <table cellpadding="0" cellspacing="0" class="format-table">
         <thead>
             <tr class="header">
@@ -172,7 +173,9 @@
         </tbody>
     </table>
 </xsl:template>
-<xsl:template match="entry/ref">
+
+
+<xsl:template match="arelle:entry/arelle:ref">
     <table cellpadding="0" cellspacing="0" class="format-table">
         <thead>
             <tr class="header">
@@ -188,7 +191,7 @@
             </tr>
         </thead>
         <tbody>
-        <xsl:if test="property">
+        <xsl:if test="boolean(arelle:property)">
             <tr>
                 <td>                
                     <b>Properties:</b>                    
@@ -207,13 +210,13 @@
     </table>    
 </xsl:template>
 
-<xsl:template match="ref/property">
+<xsl:template match="arelle:ref/arelle:property">
     <tr>
         <td><xsl:value-of select="@name" /></td>
         <td width="70%">
             <div style="overflow: auto">
                 <xsl:value-of select="@value" />
-                <xsl:if test="property">
+                <xsl:if test="boolean(.)">
                     <table class="format-table1" cellpadding="0" cellspacing="0" width="100%">
                         <xsl:apply-templates />
                     </table>
@@ -223,7 +226,7 @@
     </tr>    
 </xsl:template>
 
-<xsl:template match="property">
+<xsl:template match="arelle:property">
     <tr>
         <td>
             <div style="overflow: auto; word-break:break-all;">
@@ -233,7 +236,7 @@
         <td width="70%">
             <div style="overflow: auto; word-break:break-all; ">
                 <xsl:value-of select="@value" />                            
-                <xsl:if test="property">
+                <xsl:if test="boolean(.)">
                     <table class="format-table1" cellpadding="0" cellspacing="0" width="100%">
                         <xsl:apply-templates />
                     </table>
