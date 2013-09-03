@@ -509,11 +509,11 @@ function hideGridBoxResultMessage(obj)
 
 function fixTdHeight(table)
 {
-    jQuery(table).find('.tr').each(function(){
+    jQuery(table).find('.tr:visible').each(function(){
         var h = 0;
         jQuery(this).find('.td').each(function(){
             h = Math.max(jQuery(this).height(), h);
         })
-        jQuery(this).find('.td').height(h);
+        jQuery(this).children('.td').height(h);
     });
 }

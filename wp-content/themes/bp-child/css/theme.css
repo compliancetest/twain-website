@@ -4617,26 +4617,42 @@ min-height: 70px;
 #my_transaction_log #filterForm label{
     display: block;
     font-weight: 600;
+    position: relative;
 }
-#my_transaction_log .filter-box .styled_select{
-    margin-left: 25px;
+#my_transaction_log .filter-box #filterForm .left{
+    padding-right: 25px;
+}
+#my_transaction_log .filter-box #filterForm .last-div{
+    padding-right: 15px;
 }
 #my_transaction_log .filter-box select{
     width: 160px;
 }
 #my_transaction_log .filter-box .datepicker{
     width: 110px;
-    margin-left: 20px;
+    
 }
 #my_transaction_log .has-tooltip .simple_tooltip{
     width: 125px;
     text-align: center;    
 }
+
 #my_transaction_log .has-tooltip:hover .simple_tooltip{
     top: -40px;
     left: -6px;
 }
-
+#my_transaction_log .filter-box #filterForm .left .clear-filter{
+    position: absolute;
+    color: #e33f3f;
+    text-shadow:0 1px 1px rgba(0,0,0, 0.5);
+    font-size: 10px;
+    font-weight: bold;
+    right: -13px;
+    top: 22px;
+}
+#my_transaction_log .filter-box #filterForm .last-div .clear-filter{
+    right: -15px;
+}
 .ui-datepicker-trigger{
     position: relative; 
     top: 2px;
@@ -4666,8 +4682,8 @@ min-height: 70px;
     line-height: 24px;
 }
 #my_transaction_log .table-box .thead .td-sortable{
-    padding-left: 0;
-    padding-right: 0;
+    /*padding-left: 0;
+    padding-right: 0;*/
 }
 #my_transaction_log .table-box .thead .td-sortable a{
     padding-left: 5px;
@@ -4680,83 +4696,99 @@ min-height: 70px;
     line-height: 14px;
 }
 
-#my_transaction_log .thead .td-product{ width: 110px; }
-#my_transaction_log .thead .td-case{ width: 65px; }
-#my_transaction_log .thead .td-suite{ width: 72px; }
-#my_transaction_log .thead .td-outcome{ width: 70px; }
-#my_transaction_log .thead .td-audit{ width: 50px; }
-#my_transaction_log .thead .td-service{ width: 96px; }
-#my_transaction_log .thead .td-action{ width: 75px;/*    width: 30px;*/ }
-#my_transaction_log .thead .td-convsn{ width: 81px; }
-#my_transaction_log .thead .td-date{ width: 70px; }
-#my_transaction_log .thead .td-log{ width: 24px; }
-#my_transaction_log .thead .td-from,#my_transaction_log .thead .td-to{ width: 80px; }
-
-#my_transaction_log .table-box .thead .td-audit a .sort,
-#my_transaction_log .table-box .thead .td-date a .sort{
-    right: 2px;
+#my_transaction_log .td-product{ width: 157px; }
+#my_transaction_log .td-product a{ float: left; width: 137px; }
+#my_transaction_log .td-product a.view-messages-link{ 
+    width: 11px;
+    height: 11px;
+    margin: 2px 5px 0 0;
+    background: url(../images/expand-icon.png) no-repeat 0 0;
 }
-#my_transaction_log .table-box .thead .td-audit a.desc,
-#my_transaction_log .table-box .thead .td-audit a.asc,
-#my_transaction_log .table-box .thead .td-audit a:hover{
-    padding-left: 0;
+#my_transaction_log .td-product a.expanded{ 
+    background-position: 0 -11px;
 }
-#my_transaction_log .table-box .thead .td-date a.desc,
-#my_transaction_log .table-box .thead .td-date a.asc,
-#my_transaction_log .table-box .thead .td-date a:hover{
-    text-align: left;
-    padding-left: 3px;
-}
-#my_transaction_log .td-product{
-    width: 100px;
-}
-#my_transaction_log .td-product input{
-    margin-right: 5px;
-    float: left;
-}
-#my_transaction_log .td-product a{
-    float: left;
-    width: 80px;
-}
-#my_transaction_log .td-case{
-    width: 55px;
-}
-#my_transaction_log .td-suite{
-    width: 62px;
-}
-#my_transaction_log .td-outcome{
-    width: 60px;
-}
+#my_transaction_log .thead .td-chk{ width: 15px; }
+#my_transaction_log .td-chk{ width: 15px; }
+#my_transaction_log .td-case{ width: 70px; }
+#my_transaction_log .td-suite{ width: 124px; }
+#my_transaction_log .td-outcome{ width: 60px; }
 #my_transaction_log .td-audit{
-    width: 40px;
-}
-#my_transaction_log .td-service{
-    width: 86px;
-}
-#my_transaction_log .td-action{
-    width: 65px;
-/*    width: 30px;*/
+    width: 50px;
 }
 #my_transaction_log .td-convsn{
-    width: 71px;
+    width: 145px;
 }
 #my_transaction_log .td-date{
-    width: 60px;
-}
-#my_transaction_log .td-log{
-    width: 14px;
-}
-#my_transaction_log .td-from,
-#my_transaction_log .td-to{
     width: 70px;
 }
+#my_transaction_log .td-from{
+    width: 70px;
+    text-align: center;
+}
+#my_transaction_log .td-to{
+    width: 70px;
+    text-align: center;
+}
+#my_transaction_log .td-service{
+    width: 111px;    
+}
+#my_transaction_log .td-action{
+    width: 205px;
+}
+#my_transaction_log .td-message-outcome{
+    width: 80px;
+}
+#my_transaction_log .td-message-date{
+    width: 55px;
+    text-align: center;
+}
+#my_transaction_log .td-message-view{
+    width: 73px;
+    text-align: center;
+}
+#my_transaction_log .td-chk input{
+/*    margin-top: 3px;*/
+}
+/*** Sub Table Box ***/
+#my_transaction_log .table-box .sub-table{
+    border-top: solid 1px #ccc;
+    border-left: solid 1px #ccc;
+    padding: 5px;
+    margin-left: 25px;
+    display: none;
+}
+#my_transaction_log .table-box .sub-table .table{
+    
+}
+#my_transaction_log .table-box .sub-table .thead{
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    background:#de6262 url(../images/red_dotted_bcg.png) !important;
+    border-left: solid 1px #e33f3f;
+    border-right: solid 1px #e33f3f;
+    border-top: solid 1px #b56a79;
+    border-bottom: solid 1px #e33f3f;
+}
 
+#my_transaction_log .table-box .sub-table .thead .td{
+    border-left: solid 1px #e33f3f;
+    padding: 1px 5px;
+}
+#my_transaction_log .table-box .sub-table .table .tbody{
+    border-color: #ccc;
+    border-bottom: none;
+}
+#my_transaction_log .table-box .sub-table .table .tbody .td{
+    min-height: 28px;
+    padding: 3px 5px;
+}
 #edit-transaction-log-box .table-box .tbody .td{
     padding-top: 5px;
     padding-bottom: 5px;
 }
 #edit-transaction-log-box .td-product{
-    width: 100px;
+    width: 200px;
 }
 #edit-transaction-log-box .td-product input{
     position: relative;
@@ -4764,10 +4796,10 @@ min-height: 70px;
     margin-right: 5px;
 }
 #edit-transaction-log-box .td-case{
-    width: 90px;
+    width: 120px;
 }
 #edit-transaction-log-box .td-suite{
-    width: 83px;
+    width: 120px;
 }
 #edit-transaction-log-box .td-outcome{
     width: 60px;
@@ -4775,18 +4807,13 @@ min-height: 70px;
 #edit-transaction-log-box .td-audit{
     width: 55px;
 }
-#edit-transaction-log-box .td-service{
-    width: 95px;
-}
-#edit-transaction-log-box .td-action{
-    width: 65px;
-}
+
 
 #edit-transaction-log-box .td-convsn{
-    width: 71px;
+    width: 157px;
 }
 #edit-transaction-log-box .td-date{
-    width: 60px;
+    width: 70px;
 }
 #edit-transaction-log-box .td-from,
 #edit-transaction-log-box .td-to{
@@ -4804,9 +4831,6 @@ min-height: 70px;
     top: 0;
     width: 100%;
     height: 100%;
-}
-#log-filter-btn{
-    margin-left: 20px;
 }
 #view-validation-log-box .td-phase{
     width: 110px;

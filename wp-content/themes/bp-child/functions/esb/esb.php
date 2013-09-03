@@ -6,9 +6,15 @@ require_once(THE_FUNCTION . "/esb/config.php");
 
 class ManageESB
 {
-    var $table_metadata = 'MSH_METADATA';
-    var $table_metadata_payload = 'MSH_METADATA_PAYLOAD';
-    var $table_metadata_validation_result = 'MSH_METADATA_VALIDATION_RESULTS';
+    var $table_conversation_metadata = 'MSH_CONVERSATION_METADATA';
+    var $table_test_outcome_status = 'MSH_TEST_OUTCOME_STATUS';
+    var $table_message_metadata = 'MSH_MESSAGE_METADATA';
+    var $table_message_outcome_status = 'MSH_MESSAGE_OUTCOME_STATUS';
+    
+    var $table_message_validation_results = 'MSH_MESSAGE_VALIDATION_RESULTS';    
+    var $table_message_validation_phases = 'MSH_MESSAGE_VALIDATION_PHASES';
+    var $table_message_validation_statuses = 'MSH_MESSAGE_VALIDATION_STATUSES';
+    
     var $table_test_case_name_id_map = 'TEST_CASE_NAME_ID_MAPS';
     var $table_test_suite_name_id_map = 'TEST_SUITE_NAME_ID_MAPS';
     
@@ -29,13 +35,14 @@ class ManageESB
         return $db;
     }
     
-    public function getCaseStatus($customer_id, $suite_id = null, $product_id = null, $case_id = null)
+    public function getCaseStatus($esb_user_id, $suite_id = null, $product_id = null, $case_id = null)
     {
         if($suite_id != null)
             $this->addTestSuiteIDToLog($suite_id);
         
-        $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, m.PRODUCT_ID, m.TEST_CASE_ID, m.`TEST_OUTCOME`, c.ID as TEST_CASE_DB_ID FROM " . $this->table_metadata . " AS m " .
-                                            "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID WHERE m.CUSTOMER_ID=%d", $customer_id);
+        $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, m.PRODUCT_ID, m.TEST_CASE_ID, ts.*, c.ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
+                                            "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
+                                            "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID WHERE m.CUSTOMER_ID=%d", $esb_user_id);
         
         if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND m.TEST_SUITE_ID=%d", $suite_id);
@@ -61,13 +68,13 @@ class ManageESB
             if(!isset($result[$row->TEST_SUITE_ID][$row->PRODUCT_ID]))
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID] = array();
             
-            if(!$row->TEST_OUTCOME)
+            if(!$row->TEST_OUTCOME_CODE)
                 continue;
 //                $row->TEST_OUTCOME = $this->getTestOutcomeStatus($row->TEST_CASE_DB_ID, get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true));
             
-            if($row->TEST_OUTCOME == 'SUCCESS')
+            if($row->TEST_OUTCOME_CODE == 'PASS')
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'pass';
-            else if($row->TEST_OUTCOME == 'FAILURE')
+            else if($row->TEST_OUTCOME_CODE == 'FAIL')
                 $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'fail';
         }
         
@@ -87,7 +94,7 @@ class ManageESB
         
         if($where)
         {
-            $query = "UPDATE " . $this->table_metadata . " AS m " . 
+            $query = "UPDATE " . $this->table_conversation_metadata . " AS m " . 
             "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID SET m.TEST_SUITE_ID=" . $suite_id . " WHERE " . implode(" OR ", $where);
             
             ManageESB::$esbdb->query($query);
@@ -112,9 +119,10 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
+        $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS m " .
                  "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
                  "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
+                 "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                  "WHERE m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
         if($id)   
@@ -146,6 +154,8 @@ class ManageESB
         
         
         $where = array();
+        $message_where = array();
+        $has_message_query = false;
         
         //Getting User Customer IDs
         $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
@@ -153,43 +163,55 @@ class ManageESB
         
         if(!$esbIDs)
             return array();
-        
-        $query = " FROM " . $this->table_metadata . " AS m WHERE m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
-        $where[] = "m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
         
         if($id)   
         {
             if(is_array($id))
             {
-                $where[] = " m.ID in (" . implode(", ", $id) . ")";
+                $where[] = " c.ID in (" . implode(", ", $id) . ")";
             }else{
-                $where[] = ManageESB::$esbdb->prepare(" AND m.ID=%d", $id);
+                $where[] = ManageESB::$esbdb->prepare(" AND c.ID=%d", $id);
             }
         }
         
         if($product_id == 'NULL')
-            $where[] = " m.PRODUCT_ID IS NULL";
+            $where[] = " c.PRODUCT_ID IS NULL";
         else if($product_id != null)
-            $where[] = ManageESB::$esbdb->prepare(" m.PRODUCT_ID=%d", $product_id);
+            $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);
             
         if($suite_id == 'NULL')
-            $where[] = " m.TEST_SUITE_ID IS NULL";
+            $where[] = " c.TEST_SUITE_ID IS NULL";
         else if($suite_id != null)
-            $where[] = ManageESB::$esbdb->prepare(" m.TEST_SUITE_ID=%d", $suite_id);
+            $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
             
         if($case_id == 'NULL')
-            $where[] = " m.TEST_CASE_ID IS NULL";
+            $where[] = " c.TEST_CASE_ID IS NULL";
         else if($case_id != null)
-            $where[] = ManageESB::$esbdb->prepare(" c.ID=%d", $case_id);
+            $where[] = ManageESB::$esbdb->prepare(" cm.ID=%d", $case_id);
             
-        if($service != null)
-            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
-        if($action != null)
-            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
-        if($partyid != null)
-            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
         if($date != null)
-            $where[] = ManageESB::$esbdb->prepare(" DATE(m.EXECUTION_DATE)=%s", date("Y-m-d", strtotime($date)));
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+                
+        if($service != null)
+        {
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
+            $message_where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
+            $has_message_query = true;
+        }
+            
+        if($action != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+            $message_where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+            $has_message_query = true;
+        }
+            
+        if($partyid != null){
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+            $message_where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+            $has_message_query = true;
+        }
         
         $orderQuery = "";
         if($orderby)
@@ -197,7 +219,7 @@ class ManageESB
             switch($orderby)
             {
                 case 'product':
-                    $orderQuery .= ' ORDER BY PRODUCT_NAME ' . $order . ', m.PRODUCT_ID ' . $order;
+                    $orderQuery .= ' ORDER BY PRODUCT_NAME ' . $order . ', c.PRODUCT_ID ' . $order;
                     break;
                 case 'case':
                     $orderQuery .= ' ORDER BY TEST_CASE_ID ' . $order;
@@ -206,73 +228,172 @@ class ManageESB
                     $orderQuery .= ' ORDER BY TEST_SUITE_NAME ' . $order;
                     break;
                 case 'test_outcome':
-                    $orderQuery .= ' ORDER BY TEST_OUTCOME ' . $order;
+                    $orderQuery .= ' ORDER BY TEST_OUTCOME_LABEL ' . $order;
                     break;
                 case 'audit':
                     $orderQuery .= ' ORDER BY AUDIT_RECORD ' . $order;
                     break;
-                case 'service':
+                /*case 'service':
                     $orderQuery .= ' ORDER BY SERVICE ' . $order;
                     break;
                 case 'action':
                     $orderQuery .= ' ORDER BY ACTION ' . $order;
-                    break;
+                    break;*/
                 case 'message':
                     $orderQuery .= ' ORDER BY CONVERSATION_ID ' . $order;
                     break;
                 case 'date':
-                    $orderQuery .= ' ORDER BY EXECUTION_DATE ' . $order;
+                    $orderQuery .= ' ORDER BY CONVERSATION_TIMESTAMP ' . $order;
                     break;
-                case 'from':
-                    $orderQuery .= ' ORDER BY FROM_PARTY_ID ' . $order;
+                //case 'from':
+//                    $orderQuery .= ' ORDER BY FROM_PARTY_ID ' . $order;
                     break;                
             }
         }
         
         if($limit > 0)
         {            
-            $query = "SELECT count(m.ID) FROM " . $this->table_metadata . " AS m WHERE " . implode(" AND ", $where);
+            $query = "SELECT count(DISTINCT(c.ID)) FROM " . $this->table_conversation_metadata . " AS c ";
+            if($has_message_query > 0) 
+                $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+            
+            $query .= " WHERE " . implode(" AND ", $where);            
             $totalItems = ManageESB::$esbdb->get_var($query);
-            $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
-                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
-                     "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
-                     "WHERE " . implode(" AND ", $where) . $orderQuery . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
+            
+            $query = "SELECT DISTINCT(c.ID), c.*, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
+                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS cm ON cm.NAME=c.TEST_CASE_ID " .
+                     "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                     "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
+            if($has_message_query > 0) 
+                $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+            $query .= " WHERE " . implode(" AND ", $where) . $orderQuery . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
+            
         }else{
-            $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_metadata . " AS m " .
-                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
-                     "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
-                     "WHERE " . implode(" AND ", $where) . $orderQuery;
-        }
-        
+            $query = "SELECT DISTINCT(c.ID), c.*, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
+                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=c.TEST_CASE_ID " .
+                     "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                     "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
+            if($has_message_query > 0) 
+                $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+            $query .= " WHERE " . implode(" AND ", $where) . $orderQuery;
+        }        
         $rows = ManageESB::$esbdb->get_results($query);
         
-        //Check if the rows has validation result or not
+        //Getting Messages
         $ids = array();
         foreach($rows as $row)
             $ids[] = $row->ID;
         
+        $messages = array();
+        
         if($ids)
         {
-            $hasVResults = ManageESB::$esbdb->get_col("SELECT DISTINCT(MSH_METADATA_ID) FROM " . $this->table_metadata_validation_result . " WHERE HARNESS_VALIDATION_ERROR IS NOT NULL AND MSH_METADATA_ID IN (" . implode(", ", $ids) .")");
-            if($hasVResults)            
+            $query = "SELECT DISTINCT(m.ID), m.*, ms.MESSAGE_OUTCOME_CODE, ms.MESSAGE_OUTCOME_LABEL FROM " . $this->table_message_metadata . " AS m " . 
+                     "LEFT JOIN " . $this->table_message_outcome_status . " AS ms ON ms.ID=m.MSH_MESSAGE_OUTCOME_STATUS_ID " . 
+                     "LEFT JOIN " . $this->table_message_validation_results . " AS mv ON mv.MSH_MESSAGE_METADATA_ID=m.ID " . 
+                     "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . ($has_message_query ? " AND " . implode(", ", $message_where) : "") .  " ORDER BY m.MSH_CONVERSATION_ID";
+            
+            $results = ManageESB::$esbdb->get_results($query);
+
+            foreach($results as $m)
             {
-                foreach($rows as $k=>$row)
-                {
-                    if(in_array($row->ID, $hasVResults))
-                        $rows[$k]->HAS_VALIDATION_LOG = 1;
-                }
+                if(!isset($messages[$m->MSH_CONVERSATION_ID]))
+                    $messages[$m->MSH_CONVERSATION_ID] = array();
+                    
+                $messages[$m->MSH_CONVERSATION_ID][] = $m;
             }
         }
+        
+        //Getting Filter Products, Test Suites, Test Cases, Date, eb:Service, eb:Action, eb:PartID
+        $tProducts = array();
+        $tSuites = array();
+        $tCases = array();
+        $tServices = array();
+        $tActions = array();
+        $tPartyIDs = array();
+
+        if($ids)
+        {
+            if($limit > 0)    
+            {
+                $query = "SELECT c.ID, c.PRODUCT_ID, c.TEST_CASE_ID, c.TEST_SUITE_ID, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_conversation_metadata . " AS c " .
+                         "LEFT JOIN " . $this->table_test_case_name_id_map . " AS cm ON cm.NAME=c.TEST_CASE_ID " .
+                         "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID ";
+                                                                 
+                if($has_message_query > 0) 
+                    $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+                    
+                $query .= " WHERE " . implode(" AND ", $where);                
+                $tRows = ManageESB::$esbdb->get_results($query);
+                
+                $tIDs = array();
+                
+                foreach($tRows as $row){ 
+                    $tProducts[] = $row->PRODUCT_ID;
+                    $tIDs[] = $row->ID;
+                    if(!isset($tSuites[$row->TEST_SUITE_ID]))
+                        $tSuites[$row->TEST_SUITE_ID] = $row->TEST_SUITE_NAME;
+                    if(!isset($tCases[$row->TEST_CASE_DB_ID]))
+                        $tCases[$row->TEST_CASE_DB_ID] = $row->TEST_CASE_ID;
+                }
+                
+                $query = "SELECT SERVICE, ACTION, FROM_PARTY_ID, TO_PARTY_ID FROM " . $this->table_message_metadata . " WHERE MSH_CONVERSATION_ID IN (" . implode(", ", $tIDs) . ")";
+                $tRows = ManageESB::$esbdb->get_results($query);
+                
+                foreach($tRows as $m)
+                {
+                    $tServices[] = $m->SERVICE;
+                    $tActions[] = $m->ACTION;
+                    $tPartyIDs[] = $m->FROM_PARTY_ID;
+                    $tPartyIDs[] = $m->TO_PARTY_ID;
+                }
+                
+            }else{
+                foreach($rows as $row){ 
+                    $tProducts[] = $row->PRODUCT_ID;
+                    
+                    if(!isset($tSuites[$row->TEST_SUITE_ID]))
+                        $tSuites[$row->TEST_SUITE_ID] = $row->TEST_SUITE_NAME;
+                    if(!isset($tCases[$row->TEST_CASE_DB_ID]))
+                        $tCases[$row->TEST_CASE_DB_ID] = $row->TEST_CASE_ID;
+                    
+                    if(isset($messages[$row->ID])){
+                        foreach($messages[$row->ID] as $m)
+                        {
+                            $tServices[] = $m->SERVICE;
+                            $tActions[] = $m->ACTION;
+                            $tPartyIDs[] = $m->FROM_PARTY_ID;
+                            $tPartyIDs[] = $m->TO_PARTY_ID;
+                        }
+                    }
+                }
+
+            }
+            $tProducts = array_unique($tProducts);
+            $tSuites = array_unique($tSuites);
+            $tCases = array_unique($tCases);
+            $tServices = array_unique($tServices);
+            $tActions = array_unique($tActions);
+            $tPartyIDs = array_unique($tPartyIDs);
+
+            asort($tProducts);
+            asort($tSuites);
+            asort($tCases);
+            asort($tServices);
+            asort($tActions);
+            asort($tPartyIDs);
+        }
+        
         if(!isset($totalItems))
             $totalItems = count($rows);
         
-        return array('total' => $totalItems, 'data' => $rows);
+        return array('total' => $totalItems, 'data' => $rows, 'messages' => $messages, 'tProducts' => $tProducts, 'tSuites' => $tSuites, 'tCases' => $tCases, 'tServices' => $tServices, 'tActions' => $tActions, 'tPartyIDs' => $tPartyIDs);
         
     }
     
     public function getTestOutcomeStatus($id, $outcomeType)
     {        
-        $rows = ManageESB::$esbdb->get_col("SELECT `STATUS` FROM " . $this->table_metadata_validation_result . " WHERE MSH_METADATA_ID = " . $id);
+        $rows = ManageESB::$esbdb->get_col("SELECT `STATUS` FROM " . $this->table_message_validation_results . " WHERE MSH_METADATA_ID = " . $id);
         
         $status = null;
         if($rows)
@@ -319,7 +440,7 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT ml.PAYLOAD FROM " . $this->table_metadata_payload . " AS ml, " . $this->table_metadata . " AS m WHERE ml.MSH_METADATA_ID=m.ID AND m.ID=" . intval($id) . " AND m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT m.PAYLOAD FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
         $data = ManageESB::$esbdb->get_var($query);
         
@@ -330,7 +451,7 @@ class ManageESB
     /**
     * Get Validation Rows
     * 
-    * @param Int $id: Metadata ID
+    * @param Int $id:Message Metadata ID
     * @param Int $user_id
     */
     public function  getValidationResult($id, $user_id = null)
@@ -350,7 +471,11 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT ml.* FROM " . $this->table_metadata_validation_result . " AS ml, " . $this->table_metadata . " AS m WHERE ml.MSH_METADATA_ID=m.ID AND m.ID=" . intval($id) . " AND m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT mv.*, mvp.PHASE_CODE, mvp.PHASE_LABEL, mvs.STATUS_CODE, mvs.STATUS_LABEL " . 
+                 "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
+                 "LEFT JOIN " . $this->table_message_validation_phases . " AS mvp ON mvp.ID = mv.MSH_MESSAGE_VALIDATION_PHASES_ID " .
+                 "LEFT JOIN " . $this->table_message_validation_statuses . " AS mvs ON mvs.ID = mv.MSH_MESSAGE_VALIDATION_STATUSES_ID " .
+                 "WHERE m.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ")";
         
         $data = ManageESB::$esbdb->get_results($query);
         
@@ -381,7 +506,9 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT ml.HARNESS_VALIDATION_ERROR FROM " . $this->table_metadata_validation_result . " AS ml, " . $this->table_metadata . " AS m WHERE ml.MSH_METADATA_ID=m.ID AND ml.ID=" . intval($id) . " AND m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT mv.HARNESS_VALIDATION_ERROR " . 
+                 "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
+                 "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ")";
         
         $data = ManageESB::$esbdb->get_var($query);
         
@@ -391,12 +518,12 @@ class ManageESB
     
     public function updateTestSuiteID($id, $suiteID)
     {
-        ManageESB::$esbdb->update($this->table_metadata, array('TEST_SUITE_ID'=>$suiteID), array('ID' => $id));
+        ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_SUITE_ID'=>$suiteID), array('ID' => $id));
     }
     
     public function updateTestOutcome($id, $outcome)
     {
-        ManageESB::$esbdb->update($this->table_metadata, array('TEST_OUTCOME'=>$suiteID), array('ID' => $id));
+        ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_OUTCOME'=>$suiteID), array('ID' => $id));
     }
     
     

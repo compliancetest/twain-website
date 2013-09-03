@@ -1535,6 +1535,7 @@ tr {
     text-decoration: underline;
 }
 
+
 .grid-box-closed .grid-box-body{
 /*    display: none;*/
 }
@@ -1579,12 +1580,17 @@ tr {
 .status-suspended{
     color: #d9231f !important;
 }
+.status-success,
+.status-pass,
 .status-certified{
     color: #4aa31e !important;
 }
-.status-testing{
+.status-fail,
+.status-testing,
+.status-failure{
     color: #e33f3f !important;
 }
+.status-not_performed,
 .status-unverified{
     color: #666 !important;
 }

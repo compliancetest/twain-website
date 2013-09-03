@@ -513,37 +513,25 @@ function cp_edit_transaction_log(){
                    <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 12)?></a>
                </div>
                <div class="td td-outcome tocenter td-fixed">
-                   <?php if($row->TEST_OUTCOME == 'SUCCESS'){ ?>
-                   <span class="status-certified">Pass</span>
-                   <?php }else if($row->TEST_OUTCOME == 'FAILURE'){ ?>
-                   <span class="status-testing">Fail</span>
+                   <?php if($row->TEST_OUTCOME_CODE){ ?>
+                   <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>                                   
                    <?php }else{ ?>
                    <span class="status-unverified">Not Performed</span>
-                   <?php } ?>
+                   <?php } ?>                                   
                </div>
                <div class="td td-audit tocenter">
                    <select name="audit<?php echo $row->ID?>" class="select">
                        <option value="1" <?php echo $row->AUDIT_RECORD ? 'selected="selected"' : ''?>>Yes</option>
                        <option value="0" <?php echo !$row->AUDIT_RECORD ? 'selected="selected"' : ''?>>No</option>
                    </select>                   
-               </div>
-               <div class="td td-service td-fixed">
-                   <?php echo cp_wrap($row->SERVICE, 17)?>
-               </div>
-               <div class="td td-action td-fixed">
-                   <?php echo cp_wrap($row->ACTION, 11)?>
                </div>               
                <div class="td td-convsn td-fixed">
-                   <?php echo  cp_wrap($row->CONVERSATION_ID, 12) ?>
+                   <?php echo $row->CONVERSATION_ID ?>
                </div>
                <div class="td td-date tocenter td-fixed">                   
-                   <?php echo formatDate($row->EXECUTION_DATE, 'm/d/y')?><br />
-                   <?php echo date("H:i:s", strtotime($row->EXECUTION_DATE)) ?>
-               </div>
-               <div class="td td-from td-fixed">
-                    <div style="border-bottom: solid 1px #999; padding-bottom: 3px; margin-bottom: 3px;"><?php echo $row->FROM_PARTY_ID?></div>
-                    <?php echo $row->TO_PARTY_ID?>
-               </div>
+                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'm/d/y')?><br />
+                   <?php echo date("H:i:s", strtotime($row->CONVERSATION_TIMESTAMP)) ?>
+               </div>           
                <!--<div class="td td-to td-fixed"><?php echo $row->TO_PARTY_ID?></div>-->
                <div class="clear"></div> 
            </div>                       
@@ -578,24 +566,9 @@ function cp_view_validation_log()
     foreach($data as $row){
     ?>
     <div class="tr">
-        <div class="td td-phase"><?php echo $row->PHASE ?></div>
+        <div class="td td-phase"><?php echo $row->PHASE_LABEL ?></div>
         <div class="td td-status tocenter">
-            <?php
-                switch(strtolower($row->STATUS))
-                {
-                    case 'ok':
-                    case 'passed':
-                        echo '<span class="status-active">Ok</span>';
-                        break;
-                    case 'error':
-                    case 'failed':
-                        echo '<span class="status-suspended">Error</span>';
-                        break;
-                    default:
-                        echo '<span>' . $row->STATUS . '</span>';
-                        break;
-                }
-            ?>
+            <span class="status-<?php echo strtolower($row->STATUS_CODE) ?>"><?php echo $row->STATUS_LABEL?></span>            
         </div>
         <div class="td td-result tocenter">
             <?php
@@ -653,7 +626,7 @@ function cp_save_transaction_log()
             
             $esb = new ManageESB();
             
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_metadata . " SET TEST_CASE_ID=%s, TEST_SUITE_ID=%d, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $caseId, $suiteId, $productId, $audit, $row->ID);
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_ID=%s, TEST_SUITE_ID=%d, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $caseId, $suiteId, $productId, $audit, $row->ID);
             ManageESB::$esbdb->query($query);
         }
         
@@ -699,15 +672,15 @@ function cp_delete_transaction_log(){
     $esb = new ManageESB();
     
     //Delete MSH_METADATA_PAYLOAD            
-    $query = "DELETE FROM " . $esb->table_metadata_payload . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
+    $query = "DELETE FROM " . $esb->table_message_metadata . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
     ManageESB::$esbdb->query($query);
     
     //DELETE FROM MSH_METADATA_VALIDATION_RESULT
-    $query = "DELETE FROM " . $esb->table_metadata_validation_result . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
+    $query = "DELETE FROM " . $esb->table_message_validation_results . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
     ManageESB::$esbdb->query($query);
     
     
-    $query = "DELETE FROM " . $esb->table_metadata . " WHERE ID in (" . implode(", ", $lIds) . ")";    
+    $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE ID in (" . implode(", ", $lIds) . ")";    
     ManageESB::$esbdb->query($query);
     
     

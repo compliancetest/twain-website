@@ -119,6 +119,13 @@ Table
 .grid-box-header h4{
     font-size: 13px;
 }
+.grid-box-header h4 span{
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+.grid-box-header h4 span b{
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
 .grid-box-header h5{
     font-size: 12px;
 }
@@ -166,7 +173,10 @@ table.format-table{
     -webkit-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
     -o-box-shadow: 0 1px 2px 0px rgba(255,255,255,0.4) inset;
 }
-
+.format-table thead th b{
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+    font-weight: 700;
+}
 .format-table tbody tr{
     background:#eeeeee url(../images/tr-bg-odd.png) repeat;    
     border-top: solid 1px #F5F5F5;
@@ -199,6 +209,8 @@ table.format-table{
 .format-table1 td{
     border: solid 1px #666 !important;   
     padding: 3px 10px !important;
+    word-wrap: break-all;
+    vertical-align: top;    
 }
 
 /*.grid-box h4,
@@ -212,3 +224,6 @@ table.format-table{
     margin: 0;
     text-align: center;
 }*/
+.arelle-entry-box .entry-level{
+    float: right;    
+}
