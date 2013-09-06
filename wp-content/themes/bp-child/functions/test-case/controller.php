@@ -341,6 +341,30 @@ function saveCase()
     
     addMessage('Test Case was saved successfully!');
 //    wp_redirect(get_permalink($id));
+
+    //Send Notification Email
+    if(!$isNew && isset($_POST['send-notification']))
+    {
+        $group = groups_get_group(array('group_id'=>$group_id));
+        
+        $emailData = array(
+            '[case_name]' => get_post_meta($id, 'test_case_id', true),
+            '[case_url]' => get_permalink($id),
+            '[suite_name]' => get_post_meta($suiteID, 'ts_name', true),
+            '[suite_url]' => get_permalink($suiteID),
+            '[editor_name]' => cp_get_user_fullname($user_id)
+        );
+        
+        //Getting Subscribers
+        $subscribers = getSubscribersBySuiteId($suiteID);
+        
+        foreach($subscribers as $subscriber)
+        {
+            $emailData['[name]'] = cp_get_user_fullname($subscriber->user_id);                
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $subscriber->user_email), 'case_changed', $emailData);
+        }
+    }
     echo json_encode(array('status' => 'success', 'link' => get_permalink($id)));
     exit;
 }
+

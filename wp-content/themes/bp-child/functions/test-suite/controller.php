@@ -288,6 +288,32 @@ function saveSuite()
         );
     }
     
+    //Send Notification Email
+    if(!$isNew && isset($_POST['send-notification']))
+    {
+        
+        $group = groups_get_group(array('group_id'=>$group_id));
+        
+        $emailData = array(
+            '[community]' => bp_get_group_name($group),
+            '[community_url]' => bp_get_group_permalink($group),
+            '[suite_name]' => $_POST['ts_name'],
+            '[suite_url]' => get_permalink($id),
+            '[editor_name]' => cp_get_user_fullname($user_id)
+        );
+        //Getting Group Members
+        $members = groups_get_group_members($group_id);
+        
+        if($members && $members['count'] > 0)
+        {
+            foreach($members['members'] as $member)       
+            {                
+                $emailData['[name]'] = cp_get_user_fullname($member->user_id);                
+                cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
+            }
+        }
+    }
+    
     addMessage('Test Suite was saved successfully!');
     wp_redirect(get_permalink($id));
     exit;

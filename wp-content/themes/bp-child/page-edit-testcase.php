@@ -405,6 +405,9 @@ get_header();
         <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">
                <div class="btn-row nopaddingright nopaddingleft">
+                   <?php if(!$isNew) { ?>
+                   <div class="left"><label><input type="checkbox" name="send-notification" id="send-notification" value="1" autocomplete="off" /> Send Notification to subscribers</label></div>
+                   <?php } ?>
                    <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span class="t">SAVE TEST CASE</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                    <div class="clear"></div>                   

@@ -283,6 +283,18 @@ function getUserSubscriptions($user_id = null)
     
 }
 
+function getSubscribersBySuiteId($suite_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT user_id, u.user_email FROM " . $wpdb->prefix . "users_purchases p LEFT JOIN " . $wpdb->users . " AS u ON p.user_id=u.ID WHERE suite_id=%d AND status='Active'", $suite_id);
+    $result = $wpdb->get_results($query);
+    
+    return $result;
+    
+}
+
+
 function getUserSubscribedSuites($user_id = null)
 {
     global $wpdb;

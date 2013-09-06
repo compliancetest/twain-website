@@ -78,6 +78,8 @@ function create_email_management_page()
                     <li><a href="#member-leave-community">Member Leave Community</a></li>       
                     <li><a href="#forgot-password">Forgot Password</a></li>
                     <li><a href="#password-changed">Password Changed</a></li>
+                    <li><a href="#suite-changed">Test Suite Changed</a></li>
+                    <li><a href="#case-changed">Test Case Changed</a></li>
                 </ul>
                 <div id="new-user">
                     <?php
@@ -498,6 +500,64 @@ function create_email_management_page()
                         
                     </table>
                 </div>
+                <div id="suite-changed">
+                    <?php
+                    $suite_changed_email_title = get_option('suite_changed_email_title');
+                    $suite_changed_email_content = get_option('suite_changed_email_content');
+                    ?>
+                    <p><b>Short Codes:</b> [name], [community], [community_url], [suite_name], [suite_url], [editor_name]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="suite_changed_email_title" id="suite_changed_email_title" value="<?php echo $suite_changed_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($suite_changed_email_content, 'suite_changed_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div id="case-changed">
+                    <?php
+                    $case_changed_email_title = get_option('case_changed_email_title');
+                    $case_changed_email_content = get_option('case_changed_email_content');
+                    ?>
+                    <p><b>Short Codes:</b> [name], [suite_name], [suite_url], [case_name], [case_url], [editor_name]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="case_changed_email_title" id="case_changed_email_title" value="<?php echo $case_changed_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($case_changed_email_content, 'case_changed_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
             </div>
           </div>
           
@@ -600,6 +660,16 @@ function save_email_templates()
           $verify_email_content = stripslashes_deep($_POST['verify_email_content']);          
           update_option('verify_email_content', $verify_email_content);
           
+          $suite_changed_email_title = htmlentities(stripslashes_deep($_POST['suite_changed_email_title']));          
+          update_option('suite_changed_email_title', $suite_changed_email_title);          
+          $suite_changed_email_content = stripslashes_deep($_POST['suite_changed_email_content']);          
+          update_option('suite_changed_email_content', $suite_changed_email_content);
+          
+          $case_changed_email_title = htmlentities(stripslashes_deep($_POST['case_changed_email_title']));          
+          update_option('case_changed_email_title', $case_changed_email_title);          
+          $case_changed_email_content = stripslashes_deep($_POST['case_changed_email_content']);          
+          update_option('case_changed_email_content', $case_changed_email_content);
+          
           
           wp_redirect("/wp-admin/options-general.php?page=email-management");
     }
@@ -649,6 +719,7 @@ function cp_send_email($to, $template_name, $data = array())
         foreach($to as $u)
             $phpmailer->AddAddress($u['email'], $u['name']);        
     }
+    
     $phpmailer->IsSMTP();
     $phpmailer->IsHTML(true);
     $phpmailer->Subject = $emailTitle;
