@@ -689,3 +689,21 @@ function cp_delete_transaction_log(){
     
     return true;
 }
+
+function cp_save_suite_notify_changes()
+{
+    global $wpdb;
+    
+    $user_id = get_current_user_id();
+    if(!$user_id)
+        return;
+    
+    $suiteID = intval($_POST['id']);
+    if(!$suiteID)
+        return;
+    
+    if($_POST['checked'] == 1)
+        update_user_meta($user_id, 'notify_suite_changes' . $suiteID, 1);
+    else
+        delete_user_meta($user_id, 'notify_suite_changes' . $suiteID);
+}

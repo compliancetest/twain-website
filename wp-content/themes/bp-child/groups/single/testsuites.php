@@ -50,10 +50,11 @@ $roles = array();
         <div class="grid dark_gray_txt" id="test_suites_tab_grid">
             <div class="grid_head grid_head_border">
                 <div class="padding10 nopaddingtop">
-                    <div class="grid_cell nopaddingtop width50P">Name</div>
+                    <div class="grid_cell nopaddingtop width40P">Name</div>                    
                     <div class="grid_cell nopaddingtop width20P tocenter">Date</div>
                     <div class="grid_cell nopaddingtop width15P tocenter">Status</div>
                     <div class="grid_cell nopaddingtop width15P tocenter">Products</div>
+                    <div class="grid_cell nopaddingtop width10P tocenter two-lines">Notify Changes</div>
                     <div class="clear"></div>
                 </div>
             </div>
@@ -68,10 +69,10 @@ $roles = array();
                 foreach($testsuites as $row){
             ?>
             <div class="grid_row grid_row_border">
-                <div class="grid_cell width50P">
+                <div class="grid_cell width40P">
                     <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
                     <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
-                </div>
+                </div>                
                 <div class="grid_cell width20P tocenter">
                 <?php
                     $issueDate = get_post_meta($row->ID, 'ts_issue_date', true);
@@ -89,6 +90,10 @@ $roles = array();
                 </div>
                 <div class="grid_cell width15P tocenter">
                     <a href="#" class="white_grey_btn view_products_btn"><b></b>VIEW</a>
+                </div>
+                <div class="grid_cell width10P tocenter notify-changes">
+                    <input type="checkbox" name="notify_changes<?php echo $row->ID?>" value="<?php echo $row->ID?>" <?php if(get_user_meta(get_current_user_id(), 'notify_suite_changes' . $row->ID, true)){?> checked="checked" <?php }?> />
+                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/loading-small.gif" alt="" style="display: none;" />
                 </div>              
                 <div class="clear"></div>
             </div>
@@ -108,6 +113,7 @@ $roles = array();
                     $tsStatuses[$issueStatus] = isset($tsStatuses[$issueStatus]) ? $tsStatuses[$issueStatus] + 1 : 1;                    
                 }
             ?>
+                
             </div>
         </div>
     </div>
@@ -170,7 +176,28 @@ $roles = array();
         </form>
     </div>
     <div class="clear"></div>
+    <div class="loading"></div>
     <?php }else{ ?>
     <p class="column">No Data Found!</p>
     <?php } ?>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.notify-changes input[type="checkbox"]').click(function(){
+            var chObj = jQuery(this);
+            chObj.next().show();
+            chObj.hide();
+            var isChecked = this.checked;
+            var sID = chObj.val();
+            jQuery.ajax({
+                url: '/?cp-action=<?php echo wp_create_nonce('suite-notify-changes')?>',
+                type: 'post',
+                data: {id: sID, checked: isChecked ? 1 : 0},
+                complete: function(rsp){
+                    chObj.next().hide();
+                    chObj.show();        
+                }
+            });
+        })
+    })
+</script>

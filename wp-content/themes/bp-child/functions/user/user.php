@@ -81,6 +81,10 @@ function compliancetest_user_actions()
         $result = cp_view_validation_log();        
         echo $result;
         exit;
+    }else if(wp_verify_nonce($cpAction, 'suite-notify-changes')){
+        $result = cp_save_suite_notify_changes();        
+        echo $result;
+        exit;
     }
 }
 

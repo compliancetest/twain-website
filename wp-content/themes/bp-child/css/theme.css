@@ -2293,12 +2293,19 @@ bottom: -6px;
     marign-top:-5px;
 }
 
-
 #test_suites_tab_grid .grid_body {
 
 }
+#test_suites_tab_grid .grid_head .grid_cell{
+    line-height: 26px;
+}
+#test_suites_tab_grid .grid_head .two-lines{
+    line-height: 14px;
+}
 
-
+#test_suites_tab_grid .notify-changes{
+    position: relative;
+}
 #test_suites_tab_grid{
     border-right: 1px solid #D8D8D8;
     padding-right: 20px;

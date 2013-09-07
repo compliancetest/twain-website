@@ -302,14 +302,17 @@ function saveSuite()
             '[editor_name]' => cp_get_user_fullname($user_id)
         );
         //Getting Group Members
-        $members = groups_get_group_members($group_id);
+        $members = BP_Groups_Member::get_all_for_group($group_id, false, false, false);
         
         if($members && $members['count'] > 0)
         {
             foreach($members['members'] as $member)       
-            {                
-                $emailData['[name]'] = cp_get_user_fullname($member->user_id);                
-                cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
+            {
+                if($member->user_id != $user_id && get_user_meta($member->user_id, 'notify_suite_changes' . $id, true))
+                {
+                    $emailData['[name]'] = cp_get_user_fullname($member->user_id);                
+                    cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
+                }
             }
         }
     }
