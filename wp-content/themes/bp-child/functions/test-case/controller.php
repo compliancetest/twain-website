@@ -280,9 +280,10 @@ function saveCase()
         }    
         
         //Save Test Case Name ID Map to ESB Database
-        $esb = new ManageESB();
-        $esb->addTestCaseNameIDMap($id, $testCaseId);
+        
     }
+    $esb = new ManageESB();
+        $esb->addTestCaseNameIDMap($id, $testCaseId);
     //Test Case ID can't be changed
     /*else{
         if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['test_case_id'], 'post_name' => sanitize_title($_POST['test_case_id']))))
