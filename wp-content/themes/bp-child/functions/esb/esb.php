@@ -475,7 +475,7 @@ class ManageESB
                  "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                  "LEFT JOIN " . $this->table_message_validation_phases . " AS mvp ON mvp.ID = mv.MSH_MESSAGE_VALIDATION_PHASES_ID " .
                  "LEFT JOIN " . $this->table_message_validation_statuses . " AS mvs ON mvs.ID = mv.MSH_MESSAGE_VALIDATION_STATUSES_ID " .
-                 "WHERE m.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ")";
+                 "WHERE m.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ") ORDER BY mvp.ID";
         
         $data = ManageESB::$esbdb->get_results($query);
         
