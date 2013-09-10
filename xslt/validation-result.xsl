@@ -76,12 +76,12 @@
 </xsl:template>
 
 <!-- ************************************************************* Default Validation Results  ************************************************************* -->
-<xsl:template match="/soapenv:Body/event.02.data:EventItems">
+<xsl:template match="/event.02.data:EventItems">
     <h2>ESB Validation Result</h2>
     <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template name="eventItemTemplate" match="/soapenv:Body/event.02.data:EventItems/event.02.data:EventItem">
+<xsl:template name="eventItemTemplate" match="/event.02.data:EventItems/event.02.data:EventItem">
     <div class="grid-box">
         <div class="grid-box-header"><h3><xsl:value-of select="name()"/></h3></div>
         <div class="grid-box-body">
