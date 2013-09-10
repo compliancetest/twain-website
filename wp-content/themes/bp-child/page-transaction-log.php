@@ -39,11 +39,11 @@ $esb = new ManageESB();
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('transactions');                    
 setItemsPerPage($limit, 'transactions');
 
-$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'product';
+$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'date';
 if(!in_array($orderBy, array('product', 'case', 'suite', 'test_outcome', 'audit', 'service', 'action', 'message', 'date', 'from')))
     $orderBy = 'product';
     
-$order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+$order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'date' ? 'desc' : 'asc');
 
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;

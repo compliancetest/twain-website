@@ -270,13 +270,14 @@ class ManageESB
             
         }else{
             $query = "SELECT DISTINCT(c.ID), c.*, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
-                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=c.TEST_CASE_ID " .
+                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS cm ON cm.NAME=c.TEST_CASE_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
                 $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
             $query .= " WHERE " . implode(" AND ", $where) . $orderQuery;
         }        
+        
         $rows = ManageESB::$esbdb->get_results($query);
         
         //Getting Messages
