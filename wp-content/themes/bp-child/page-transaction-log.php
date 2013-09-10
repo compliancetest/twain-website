@@ -285,8 +285,8 @@ if($filterDate){
                                            <div class="tbody">
                                              <?php foreach($messages[$row->ID] as $message) {?>
                                                <div class="tr">
-                                                   <div class="td td-from"><?php echo $message->FROM_PARTY_ID ?></div>
-                                                   <div class="td td-to"><?php echo $message->TO_PARTY_ID?></div>
+                                                   <div class="td td-from"><?php echo cp_wrap($message->FROM_PARTY_ID, 11) ?></div>
+                                                   <div class="td td-to"><?php echo cp_wrap($message->TO_PARTY_ID, 11)?></div>
                                                    <div class="td td-service"><?php echo cp_wrap($message->SERVICE, 21) ?></div>
                                                    <div class="td td-action"><?php echo $message->ACTION ?></div>
                                                    <div class="td td-message-outcome tocenter">
