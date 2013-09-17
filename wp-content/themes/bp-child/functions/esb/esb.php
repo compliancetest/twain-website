@@ -924,7 +924,7 @@ class ManageESB
     public function addTestCaseInfo($id, $name, $outcome_type, $pattern)
     {
         $result = ManageESB::$esbdb->insert($this->table_test_case_configuration, 
-            array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'RESPONSE_REQUIRED' => in_array($pattern, array(1,3)) ? 0 : 1)
+            array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern)
         );
         
         return $result;        
@@ -933,7 +933,7 @@ class ManageESB
     public function updateTestCaseInfo($id, $outcome_type, $pattern)
     {
         $result = ManageESB::$esbdb->update($this->table_test_case_configuration, 
-            array('TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'RESPONSE_REQUIRED' => in_array($pattern, array(1,3)) ? 0 : 1),
+            array('TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern),
             array('TEST_CASE_WP_ID' => $id)
         );
         
