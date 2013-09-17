@@ -155,9 +155,8 @@ class TestSuite
         $args = array(
                 'post_type' => 'test-case',         
                 'posts_per_page' => -1,
-                'order_by'  => 'meta_value title',
-                'order'     => 'ASC',
-                'meta_key'  => 'sequence_number',
+                'order_by'  => 'title',
+                'order'     => 'ASC',                
                 'meta_query' => array(
                                     'relation' => 'AND',
                                     array('key' => 'test_suite', 

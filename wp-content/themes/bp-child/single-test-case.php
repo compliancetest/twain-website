@@ -9,7 +9,7 @@ if(!isset($_REQUEST['is_ajax']))
 }
 
 $case = new TestCase(get_the_ID());
-$case->load();
+
 ?>
 <?php if(!isset($_REQUEST['is_ajax'])){ ?>
 	<div class="content container">
