@@ -287,8 +287,8 @@ function saveCase()
         //Add Test Case
         $esb->addTestCaseInfo($id, $testCaseId, $_POST['outcome_type'], $_POST['message_count']);        
     }else{
-        $esb->addTestCaseInfo($id, get_post_meta($id, 'test_case_id', true), $_POST['outcome_type'], $_POST['message_count']);        
-//        $esb->updateTestCaseInfo($id, $_POST['outcome_type'], $_POST['message_count']);
+//        $esb->addTestCaseInfo($id, get_post_meta($id, 'test_case_id', true), $_POST['outcome_type'], $_POST['message_count']);        
+        $esb->updateTestCaseInfo($id, $_POST['outcome_type'], $_POST['message_count']);
     }
     
     if($isNew)
