@@ -85,10 +85,15 @@ require_once(THE_FUNCTION . '/rest.php');
 
 require_once(THE_FUNCTION . '/print/print.php');
 
+//Support Ticket
+require_once(THE_FUNCTION . '/support-ticket/index.php');
+
 //Email Management
 require_once(THE_FUNCTION . '/email-management/email-management.php');
 require_once(THE_FUNCTION . '/email-management/customize.php');
 
+//Blog
+require_once(THE_FUNCTION . "/blog.php");
 
 
  

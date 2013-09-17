@@ -176,7 +176,9 @@ class more_types_object extends more_plugins_object_sputnik_8 {
 				$options['labels']['singular_name'] = $page['singular_label'];
 			if (!array_key_exists('menu_name', $options['labels'])) $options['labels']['menu_name'] =  $page['labels']['name'];
 			else if (!$options['labels']['menu_name']) $options['labels']['menu_name'] =  $page['labels']['name'];
-
+            
+            $options['labels']['slug'] = sanitize_title($options['name']);
+            
 			$options['labels']['parent_item_colon'] = '';
 
 //			unset($options['name']);
@@ -199,6 +201,9 @@ class more_types_object extends more_plugins_object_sputnik_8 {
 			
 			if (!isset($page['has_archive'])) $options['has_archive'] = true;
 			
+            /*if($options['has_archive'])
+                $options['has_archive'] = sanitize_title($options['name']);*/
+            
 			// Heter det har nat annat. 
 			$options['capability_type'] = ($options['hierarchical']) ? 'page' : 'post';
 

@@ -234,6 +234,67 @@ if(!$suite->community_id)
            </div>
        </div>
        <div class="space20"></div>
+       <div class="grid-box grid-box-expandable grid-box-opened" id="template-variables-box">
+           <div class="grid-box-header">
+               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+               <h5 class="left">Template Variables</h5>
+               <div class="clear"></div>
+           </div>
+           <div class="grid-box-body">
+               <div class="column">
+                   <?php                    
+                   foreach($suite->templateVariables as $row){ ?>
+                   <div class="field-row">
+                       <div class="grid-cell">
+                           <label>Variable Name:</label>
+                           <input type="text" class="input" name="variable_names[]" value="<?php echo $row->variable_name?>" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Description:</label>
+                           <input type="text" class="input medium-input" name="variable_descriptions[]" value="<?php echo $row->variable_description?>" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Default Value:</label>
+                           <input type="text" class="input" name="variable_defaults[]" value="<?php echo $row->variable_default?>" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>&nbsp;</label>
+                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                       </div>
+                       <div class="clear"></div>
+                   </div>                 
+                   <?php } ?>  
+                   <?php if(!$suite->id){ ?>
+                   <div class="field-row">
+                       <div class="grid-cell">
+                           <label>Variable Name:</label>
+                           <input type="text" class="input" name="variable_names[]" value="" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Description:</label>
+                           <input type="text" class="input medium-input" name="variable_descriptions[]" value="" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Default Value:</label>
+                           <input type="text" class="input" name="variable_defaults[]" value="" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>&nbsp;</label>
+                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                       </div>
+                       <div class="clear"></div>
+                   </div>  
+                   <?php } ?>                 
+                   <div class="btn-row">
+                       <div class="grid-cell">
+                           <a href="#" class="action-btn add-new-btn" id="add-new-variable"><span class="p"></span><span class="t">New Variable</span></a>                       
+                       </div>
+                       <div class="clear"></div>
+                   </div>
+               </div>               
+           </div>
+       </div>
+       <div class="space20"></div>
        <?php if($suite->id){ ?>
        <div class="grid-box grid-box-expandable grid-box-opened" id="test-cases-box">
            <div class="grid-box-header">
@@ -578,8 +639,30 @@ if(!$suite->community_id)
             return false;
         })
         
+        jQuery('#add-new-variable').click(function(){
+            jQuery('#template-variables-box .btn-row').before('<div class="field-row">' + 
+                       '<div class="grid-cell">' +
+                           '<label>Variable Name:</label>' +
+                           '<input type="text" class="input" name="variable_names[]" value="" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>Description:</label>' +
+                           '<input type="text" class="input medium-input" name="variable_descriptions[]" value="" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>Default Value:</label>' +
+                           '<input type="text" class="input" name="variable_defaults[]" value="" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>&nbsp;</label>' +
+                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                       '</div>' + 
+                       '<div class="clear"></div>' + 
+                   '</div>');
+            return false;
+        })
         //Delete
-        jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box').on('click', '.blue-delete-btn', function(){
+        jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box, #template-variables-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
             })

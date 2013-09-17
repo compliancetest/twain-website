@@ -1,6 +1,22 @@
 /*************** BGINE CSS AID ******************/
 /*************** BROWSER RESET ******************/
 
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -29,6 +45,7 @@ table { border-collapse: collapse; }
 	margin: 0;
 	padding: 0;
 }
+
 textarea { overflow: auto; resize: vertical; }
 textarea, input[type=text], input[type=password], input { font-size: 13px; color: #6e747c; padding: 4px 8px;}
 textarea:focus, input[type=text]:focus, input[type=password]:focus {

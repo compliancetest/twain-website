@@ -279,24 +279,18 @@ function saveCase()
             return;
         }    
         
-        //Save Test Case Name ID Map to ESB Database
-        $esb = new ManageESB();
-        $esb->addTestCaseNameIDMap($id, $testCaseId);    
+    }else{
+        
     }
-    /*if(!$isNew)
+    
+    $esb = new ManageESB();
+    if($isNew)
     {
-        $testCaseId = get_post_meta($id, 'test_case_id', true);
-        $esb = new ManageESB();
-        $esb->addTestCaseNameIDMap($id, $testCaseId);
-    }*/
-    //Test Case ID can't be changed
-    /*else{
-        if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['test_case_id'], 'post_name' => sanitize_title($_POST['test_case_id']))))
-        {
-            addMessage('There was an error while updating the test suite.', true);
-            return;
-        }
-    }*/
+        //Add Test Case
+        $esb->addTestCaseInfo($id, $testCaseId, $_POST['outcome_type'], $_POST['message_count']);        
+    }else{
+        $esb->updateTestCaseInfo($id, $_POST['outcome_type'], $_POST['message_count']);
+    }
     
     if($isNew)
         cp_update_post_meta($id, 'test_case_id', $testCaseId);        

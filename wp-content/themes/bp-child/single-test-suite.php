@@ -69,14 +69,18 @@ Template Name Posts: Test Suite
 						<a href="javascript: void(0)" rel="tabs_sv1">Related Compliance Suites</a>
 					</li>
 					<li class="">
-						<a href="javascript: void(0)" rel="tabs_sv2">Specification Documents &amp; Materials</a>
+						<a href="javascript: void(0)" rel="tabs_sv2">Specification Documents</a>
 					</li>
 					<li class="">
                         <a href="javascript: void(0)" rel="tabs_sv3">Comformance Levels</a>
                     </li>
                     
                     <li class="">
-						<a href="javascript: void(0)" rel="tabs_sv4">Test Suite Roles</a>
+                        <a href="javascript: void(0)" rel="tabs_sv4">Test Suite Roles</a>
+                    </li>
+                    
+                    <li class="">
+						<a href="javascript: void(0)" rel="tabs_sv5">Template Variables</a>
 					</li>
                     
 				</ul>
@@ -91,7 +95,7 @@ Template Name Posts: Test Suite
 							foreach($suite->relatedSuites as $row){
 						?>
                         <div>
-                            <a href="<?php echo get_permalink($row['id'])?>"><?php echo get_the_title($row['id'])?></a><br />
+                            <a href="<?php echo get_permalink($row['id'])?>"><?php echo get_post_meta($row['id'], 'ts_name', true)?></a><br />
                             <?php echo $row['desc']?>
                             <div class="space7"></div>
                         </div>
@@ -145,18 +149,42 @@ Template Name Posts: Test Suite
                 </div><!--end tab 3-->
                 
                 <div class="tab-content white_bcg" id="tabs_sv4" style="display: none; ">
+                    <div class="column padding15-20">
+                        
+                        <?php
+                            foreach($suite->roles as $idx=>$row){
+                            
+                            ?>        
+                                        <div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
+                                        <div class="grid_cell width70P">
+                                            <?php echo $row['desc']; ?>
+                                        </div>
+                                        <div class="clear"></div> 
+                                        <div class="grey-border-bottom <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'displaynone';} ?>"></div>                                                                    
+                            <?php
+                            
+                            }
+                        ?>
+                    </div>
+                    <div class="clear"></div>
+                </div><!--end tab 3-->
+                
+                <div class="tab-content white_bcg" id="tabs_sv5" style="display: none; ">
 					<div class="column padding15-20">
 						
 						<?php
-						    foreach($suite->roles as $idx=>$row){
+						    foreach($suite->templateVariables as $idx=>$row){
 							
 					        ?>		
-										<div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
-										<div class="grid_cell width70P">
-											<?php echo $row['desc']; ?>
+										<div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->templateVariables)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row->variable_name; ?></div>
+										<div class="grid_cell width45P">
+                                            <?php echo $row->variable_description; ?>
+                                        </div>
+                                        <div class="grid_cell width25P">
+											<?php echo $row->variable_default; ?>
 										</div>
 										<div class="clear"></div> 
-										<div class="grey-border-bottom <?php if ($idx == ((count($roles)) -1 )) { echo 'displaynone';} ?>"></div>																	
+										<div class="grey-border-bottom <?php if ($idx == ((count($suite->templateVariables)) -1 )) { echo 'displaynone';} ?>"></div>																	
 						    <?php
 							
 							}

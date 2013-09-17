@@ -238,6 +238,26 @@ function saveSuite()
     $docs_locs = $_POST['doc_loc'];
     $docs_files = $_FILES['doc_file'];    
     
+    //Remove Old Template Variables
+    $wpdb->query("DELETE FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=" . $id);
+    if(isset($_POST['variable_names']))
+    {
+        $variableNames = $_POST['variable_names'];    
+        $variableDescs = $_POST['variable_descriptions'];    
+        $variableDefaults = $_POST['variable_defaults'];    
+        for($i = 0; $i < count($variableNames); $i++)
+        {
+            $wpdb->insert($wpdb->prefix . "suites_template_variables", 
+                array('suite_id' => $id, 
+                      'variable_name' => $variableNames[$i], 
+                      'variable_description' => $variableDescs[$i],
+                      'variable_default' => $variableDefaults[$i])
+            );
+        }
+    }
+    
+    
+    
     //Remove Old documents
     $wpdb->query("DELETE FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id=" . $id);
     //Save New Data

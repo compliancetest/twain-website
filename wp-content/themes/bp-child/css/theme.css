@@ -5346,6 +5346,7 @@ a.suite-subscript-link:hover{
 #test-step-box .field-row,
 #conf-level-box .field-row,
 #related-suites-box .field-row,
+#template-variables-box .field-row,
 #specs-box .field-row,
 #roles-box .field-row{
     border-bottom: solid 1px #e3e3e3;
@@ -5375,6 +5376,13 @@ a.suite-subscript-link:hover{
 #test-cases-box .blue-delete-btn{
     float: right;
 }
+#template-variables-box .input{
+    width: 130px;
+}
+#template-variables-box .medium-input{
+    width: 340px;
+}
+
 #suites-box .select,
 #choose-init-msg-box .select{
     min-width: 200px;
@@ -5975,4 +5983,58 @@ table#message-threads .thread-from div{
 }
 #reset-password-container .btn-row .action-btn{
     margin-left: 150px;
+}
+.page-title-block h2{
+    margin-bottom: 0;    
+    line-height: 1.2em;
+}
+
+
+#newsevents-sidebar .expandable .exp_title{
+/*    border-bottom: none;*/
+    margin-bottom: 5px;
+}
+#newsevents-sidebar .expandable .exp_title a{
+    float: right;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#newsevents-sidebar .exp_content{
+    padding-left: 12px;
+}
+#newsevents-sidebar .exp_content a{
+    font-size: 12px;
+    display: block;
+    margin-bottom: 5px;
+}
+#newsevents-sidebar .exp_content a.current{
+    color: #666;
+    font-weight: bold;
+}
+
+.news-events-wrapper h3{
+    margin-top: 18px;
+}
+.news-events-wrapper .articles h5{
+    font-size: 13px;
+    margin-bottom: 0;
+    line-height: 1.2em;
+}
+.news-events-wrapper .articles .date{
+    font-weight: normal;
+    font-size: 11px;
+}
+.news-events-wrapper .articles .readmore-articles{
+    background: none;
+    
+}
+.news-events-wrapper #event li{
+/*    background: none;*/
+}
+.news-events-wrapper #event li p{
+    
+}
+#print-page-btn{
+    float: right;
 }
