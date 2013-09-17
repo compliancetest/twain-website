@@ -226,7 +226,7 @@ function ct_get_blog_communities($type = null, $year = null)
 
 function ct_get_blog_years($type = null, $community_id = null)
 {
-    global $wpdb;
+    global $wpdb, $postTypes;
     
     $query = "SELECT DISTINCT(YEAR(p.post_date)) as pyear FROM $wpdb->posts AS p " .
              "LEFT JOIN $wpdb->postmeta AS pm ON p.ID=pm.post_id ";
@@ -235,6 +235,8 @@ function ct_get_blog_years($type = null, $community_id = null)
     if($type)
     {
         $where[] = $wpdb->prepare(" p.post_type=%s ", $type);
+    }else{
+        $where[] = $wpdb->prepare(" p.post_type IN ('" . implode("', '", $postTypes) . "') ");
     }
     
     if($community_id)
@@ -287,17 +289,7 @@ function ct_display_blog_articles($postType, $community_id = null, $year = null,
             if($postType == 'event'){
                 ?>
                 <li>
-                    <h5><a href="<?php echo get_permalink($article->ID)?>"><?php echo get_the_title($article)?></a></h5>                                
-                    <p><b><?php echo apply_filters('the_content', $article->post_content)?></b></p>
-                    <p><?php echo get_post_meta($article->ID, 'event_date', true)?></p>
-                    <p><?php echo get_post_meta($article->ID, 'event_location', true)?></p>
-                    <div class="clear"></div>
-                    <?php
-                        if(has_excerpt($article->ID))
-                        {
-                            ?><p><?php echo apply_filters( 'get_the_excerpt', $article->post_excerpt );?></p><?php
-                        }
-                    ?>
+                    <h5><a href="<?php echo get_permalink($article->ID)?>"><?php echo get_the_title($article)?></a> (<span class="date"><?php echo get_post_meta($article->ID, 'event_date', true)?></span>)</h5>
                 </li>
                 <?php
             }else if($postType == 'link'){

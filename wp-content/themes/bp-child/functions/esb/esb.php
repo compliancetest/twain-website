@@ -15,7 +15,7 @@ class ManageESB
     var $table_message_validation_phases = 'MSH_MESSAGE_VALIDATION_PHASES';
     var $table_message_validation_statuses = 'MSH_MESSAGE_VALIDATION_STATUSES';
     
-    var $table_test_case_name_id_map = 'TEST_CASE_NAME_ID_MAPS';
+    var $table_test_case_configuration = 'TEST_CASE_CONFIGURATION';
     var $table_test_suite_name_id_map = 'TEST_SUITE_NAME_ID_MAPS';
     
     public static $esbdb = null;
@@ -40,9 +40,9 @@ class ManageESB
         if($suite_id != null)
             $this->addTestSuiteIDToLog($suite_id);
         
-        $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, m.PRODUCT_ID, m.TEST_CASE_ID, ts.*, c.ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
+        $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, m.PRODUCT_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
                                             "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
-                                            "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID WHERE m.CUSTOMER_ID=%d", $esb_user_id);
+                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.CUSTOMER_ID=%d", $esb_user_id);
         
         if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND m.TEST_SUITE_ID=%d", $suite_id);
@@ -51,7 +51,7 @@ class ManageESB
             $query .= ManageESB::$esbdb->prepare(" AND m.PRODUCT_ID=%d", $product_id);
         
         if($case_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND c.TEST_CASE_ID=%d", $case_id);
+            $query .= ManageESB::$esbdb->prepare(" AND c.TEST_CASE_DB_ID=%d", $case_id);
         
         $rows = ManageESB::$esbdb->get_results($query);
         
@@ -95,7 +95,7 @@ class ManageESB
         if($where)
         {
             $query = "UPDATE " . $this->table_conversation_metadata . " AS m " . 
-            "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID SET m.TEST_SUITE_ID=" . $suite_id . " WHERE " . implode(" OR ", $where);
+            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID SET m.TEST_SUITE_ID=" . $suite_id . " WHERE " . implode(" OR ", $where);
             
             ManageESB::$esbdb->query($query);
         }
@@ -119,8 +119,8 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT m.*, c.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS m " .
-                 "LEFT JOIN " . $this->table_test_case_name_id_map . " AS c ON c.NAME=m.TEST_CASE_ID " .
+        $query = "SELECT m.*, c.TEST_CASE_ID, c.TEST_CASE_ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS m " .
+                 "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID " .
                  "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
                  "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                  "WHERE m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
@@ -176,25 +176,29 @@ class ManageESB
             }
         }
         
-        if($product_id == 'NULL')
-            $where[] = " c.PRODUCT_ID IS NULL";
-        else if($product_id != null)
-            $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);
+        if($product_id !== null && $product_id != "")
+        {
+            if($product_id == 0)
+                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+        }
+        
+        if($suite_id !== null && $suite_id != "")
+        {
+            if($suite_id == 0)
+                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+        }
             
-        if($suite_id == 'NULL')
-            $where[] = " c.TEST_SUITE_ID IS NULL";
-        else if($suite_id != null)
-            $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
-            
-        if($case_id == 'NULL')
-            $where[] = " c.TEST_CASE_ID IS NULL";
-        else if($case_id != null)
-            $where[] = ManageESB::$esbdb->prepare(" cm.ID=%d", $case_id);
+        if($case_id !== "" && $case_id !== null)
+            $where[] = ManageESB::$esbdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);
             
         if($date != null)
             $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
                 
-        if($service != null)
+        if($service != null)    
         {
             $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
             $message_where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
@@ -260,8 +264,16 @@ class ManageESB
             $query .= " WHERE " . implode(" AND ", $where);            
             $totalItems = ManageESB::$esbdb->get_var($query);
             
-            $query = "SELECT DISTINCT(c.ID), c.*, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
-                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS cm ON cm.NAME=c.TEST_CASE_ID " .
+            $query = "SELECT 
+                        DISTINCT(c.ID), 
+                        c.*,
+                        cm.TEST_CASE_WP_ID, 
+                        cm.TEST_CASE_ID, 
+                        s.NAME as TEST_SUITE_NAME, 
+                        ts.TEST_OUTCOME_CODE, 
+                        ts.TEST_OUTCOME_LABEL 
+                     FROM " . $this->table_conversation_metadata . " AS c " .
+                     "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
@@ -269,8 +281,16 @@ class ManageESB
             $query .= " WHERE " . implode(" AND ", $where) . $orderQuery . " LIMIT " . ($page -1 ) * $limit . ", " . $limit;
             
         }else{
-            $query = "SELECT DISTINCT(c.ID), c.*, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
-                     "LEFT JOIN " . $this->table_test_case_name_id_map . " AS cm ON cm.NAME=c.TEST_CASE_ID " .
+            $query = "SELECT 
+                        DISTINCT(c.ID), 
+                        c.*,
+                        cm.TEST_CASE_ID, 
+                        cm.TEST_CASE_WP_ID, 
+                        s.NAME as TEST_SUITE_NAME, 
+                        ts.TEST_OUTCOME_CODE, 
+                        ts.TEST_OUTCOME_LABEL 
+                     FROM " . $this->table_conversation_metadata . " AS c " .
+                     "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
@@ -289,7 +309,12 @@ class ManageESB
         
         if($ids)
         {
-            $query = "SELECT DISTINCT(m.ID), m.*, ms.MESSAGE_OUTCOME_CODE, ms.MESSAGE_OUTCOME_LABEL FROM " . $this->table_message_metadata . " AS m " . 
+            $query = "SELECT 
+                        DISTINCT(m.ID), 
+                        m.*, 
+                        ms.MESSAGE_OUTCOME_CODE, 
+                        ms.MESSAGE_OUTCOME_LABEL 
+                     FROM " . $this->table_message_metadata . " AS m " . 
                      "LEFT JOIN " . $this->table_message_outcome_status . " AS ms ON ms.ID=m.MSH_MESSAGE_OUTCOME_STATUS_ID " . 
                      "LEFT JOIN " . $this->table_message_validation_results . " AS mv ON mv.MSH_MESSAGE_METADATA_ID=m.ID " . 
                      "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . ($has_message_query ? " AND " . implode(", ", $message_where) : "") .  " ORDER BY m.MSH_CONVERSATION_ID";
@@ -305,92 +330,459 @@ class ManageESB
             }
         }
         
-        //Getting Filter Products, Test Suites, Test Cases, Date, eb:Service, eb:Action, eb:PartID
-        $tProducts = array();
-        $tSuites = array();
-        $tCases = array();
-        $tServices = array();
-        $tActions = array();
-        $tPartyIDs = array();
-
-        if($ids)
-        {
-            if($limit > 0)    
-            {
-                $query = "SELECT c.ID, c.PRODUCT_ID, c.TEST_CASE_ID, c.TEST_SUITE_ID, cm.ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME FROM " . $this->table_conversation_metadata . " AS c " .
-                         "LEFT JOIN " . $this->table_test_case_name_id_map . " AS cm ON cm.NAME=c.TEST_CASE_ID " .
-                         "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID ";
-                                                                 
-                if($has_message_query > 0) 
-                    $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
-                    
-                $query .= " WHERE " . implode(" AND ", $where);                
-                $tRows = ManageESB::$esbdb->get_results($query);
-                
-                $tIDs = array();
-                
-                foreach($tRows as $row){ 
-                    $tProducts[] = $row->PRODUCT_ID;
-                    $tIDs[] = $row->ID;
-                    if(!isset($tSuites[$row->TEST_SUITE_ID]))
-                        $tSuites[$row->TEST_SUITE_ID] = $row->TEST_SUITE_NAME;
-                    if(!isset($tCases[$row->TEST_CASE_DB_ID]))
-                        $tCases[$row->TEST_CASE_DB_ID] = $row->TEST_CASE_ID;
-                }
-                
-                $query = "SELECT SERVICE, ACTION, FROM_PARTY_ID, TO_PARTY_ID FROM " . $this->table_message_metadata . " WHERE MSH_CONVERSATION_ID IN (" . implode(", ", $tIDs) . ")";
-                $tRows = ManageESB::$esbdb->get_results($query);
-                
-                foreach($tRows as $m)
-                {
-                    $tServices[] = $m->SERVICE;
-                    $tActions[] = $m->ACTION;
-                    $tPartyIDs[] = $m->FROM_PARTY_ID;
-                    $tPartyIDs[] = $m->TO_PARTY_ID;
-                }
-                
-            }else{
-                foreach($rows as $row){ 
-                    $tProducts[] = $row->PRODUCT_ID;
-                    
-                    if(!isset($tSuites[$row->TEST_SUITE_ID]))
-                        $tSuites[$row->TEST_SUITE_ID] = $row->TEST_SUITE_NAME;
-                    if(!isset($tCases[$row->TEST_CASE_DB_ID]))
-                        $tCases[$row->TEST_CASE_DB_ID] = $row->TEST_CASE_ID;
-                    
-                    if(isset($messages[$row->ID])){
-                        foreach($messages[$row->ID] as $m)
-                        {
-                            $tServices[] = $m->SERVICE;
-                            $tActions[] = $m->ACTION;
-                            $tPartyIDs[] = $m->FROM_PARTY_ID;
-                            $tPartyIDs[] = $m->TO_PARTY_ID;
-                        }
-                    }
-                }
-
-            }
-            $tProducts = array_unique($tProducts);
-            $tSuites = array_unique($tSuites);
-            $tCases = array_unique($tCases);
-            $tServices = array_unique($tServices);
-            $tActions = array_unique($tActions);
-            $tPartyIDs = array_unique($tPartyIDs);
-
-            asort($tProducts);
-            asort($tSuites);
-            asort($tCases);
-            asort($tServices);
-            asort($tActions);
-            asort($tPartyIDs);
-        }
-        
         if(!isset($totalItems))
             $totalItems = count($rows);
         
-        return array('total' => $totalItems, 'data' => $rows, 'messages' => $messages, 'tProducts' => $tProducts, 'tSuites' => $tSuites, 'tCases' => $tCases, 'tServices' => $tServices, 'tActions' => $tActions, 'tPartyIDs' => $tPartyIDs);
+        return array('total' => $totalItems, 'data' => $rows, 'messages' => $messages);
         
     }
+    
+    /**
+    * Get Product IDs For Filter Nav
+    * 
+    * @param Int $suite_id
+    * @param Int $case_id
+    * @param String $service
+    * @param String $action
+    * @param String $partyid
+    * @param Date $date
+    */
+    public function getFilterOptionsForProduct($suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        $where = array();
+        
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT 
+                    DISTINCT(c.PRODUCT_ID)
+                  FROM " . $this->table_conversation_metadata . " AS c 
+                  LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        
+        if($suite_id !== null && $suite_id != "")
+        {
+            if($suite_id == 0)
+                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+        }
+            
+        if($case_id !== "" && $case_id !== null)
+            $where[] = ManageESB::$esbdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);
+            
+        if($date != null)
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+        
+        if($service != null)    
+        {
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);            
+        }
+            
+        if($action != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+        }
+            
+        if($partyid != null){
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+        
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+        
+        $ids = ManageESB::$esbdb->get_col($query);
+        
+        return $ids;
+        
+    }
+    
+    /**
+    * Get Suites For Filter Options
+    * 
+    * @param Int $product_id
+    * @param Int $case_id
+    * @param String $service
+    * @param String $action
+    * @param String $partyid
+    * @param Date $date
+    * @param mixed $product_id
+    */
+    public function getFilterOptionsForSuite($product_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        $where = array();
+        
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT 
+                    DISTINCT(IFNULL(c.TEST_SUITE_ID, '')) as ID, tm.NAME
+                  FROM " . $this->table_conversation_metadata . " AS c 
+                  LEFT JOIN " . $this->table_test_suite_name_id_map . " AS tm ON tm.id = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        
+        if($product_id !== null && $product_id != "")
+        {
+            if($product_id == 0)
+                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+        }
+            
+        if($case_id !== "" && $case_id !== null)
+            $where[] = ManageESB::$esbdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);
+            
+        if($date != null)
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+        
+        if($service != null)    
+        {
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);            
+        }
+            
+        if($action != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+        }
+            
+        if($partyid != null){
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+        
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+        
+        $rows = ManageESB::$esbdb->get_results($query);
+        
+        return $rows;
+        
+    }
+    
+    /**
+    * Get Test Cases for Filter Navigation
+    * 
+    * @param mixed $product_id
+    * @param mixed $suite_id
+    * @param mixed $service
+    * @param mixed $action
+    * @param mixed $partyid
+    * @param mixed $date
+    * @return array
+    */
+    public function getFilterOptionsForCase($product_id = null, $suite_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        $where = array();
+        
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT 
+                    DISTINCT(cm.TEST_CASE_ID) as NAME, cm.TEST_CASE_WP_ID as ID
+                  FROM " . $this->table_conversation_metadata . " AS c 
+                  LEFT JOIN " . $this->table_test_suite_name_id_map . " AS tm ON tm.id = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        
+        if($product_id !== null && $product_id != "")
+        {
+            if($product_id == 0)
+                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+        }
+            
+        if($suite_id !== null && $suite_id != "")
+        {
+            if($suite_id == 0)
+                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+        }
+            
+        if($date != null)
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+        
+        if($service != null)    
+        {
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);            
+        }
+            
+        if($action != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+        }
+            
+        if($partyid != null){
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+        
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+        
+        $rows = ManageESB::$esbdb->get_results($query);
+        
+        return $rows;
+        
+    }
+    
+    /**
+    * Get Services for Filter Options
+    * 
+    * @param mixed $product_id
+    * @param mixed $suite_id
+    * @param mixed $case_id
+    * @param mixed $action
+    * @param mixed $partyid
+    * @param mixed $date
+    */
+    public function getFilterOptionsForService($product_id = null, $suite_id = null, $case_id = null, $action = null, $partyid = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        $where = array();
+        
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT 
+                    DISTINCT(m.SERVICE)
+                  FROM " . $this->table_conversation_metadata . " AS c 
+                  LEFT JOIN " . $this->table_test_suite_name_id_map . " AS tm ON tm.id = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        
+        if($product_id !== null && $product_id != "")
+        {
+            if($product_id == 0)
+                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+        }
+            
+        if($suite_id !== null && $suite_id != "")
+        {
+            if($suite_id == 0)
+                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+        }
+        
+        if($case_id !== "" && $case_id !== null)
+            $where[] = ManageESB::$esbdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);
+            
+        if($date != null)
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+            
+        if($action != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+        }
+            
+        if($partyid != null){
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+        
+        //Remove Empty Fields
+        $where[] = " SERVICE IS NOT NULL ";
+        
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+        
+        $rows = ManageESB::$esbdb->get_col($query);
+        
+        return $rows;
+        
+    }
+    
+    /**
+    * Getting Actions for Filter Options
+    * 
+    * @param mixed $product_id
+    * @param mixed $suite_id
+    * @param mixed $case_id
+    * @param mixed $service
+    * @param mixed $partyid
+    * @param mixed $date
+    * @return array
+    */
+    public function getFilterOptionsForAction($product_id = null, $suite_id = null, $case_id = null, $service = null, $partyid = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        $where = array();
+        
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT 
+                    DISTINCT(m.ACTION)
+                  FROM " . $this->table_conversation_metadata . " AS c 
+                  LEFT JOIN " . $this->table_test_suite_name_id_map . " AS tm ON tm.id = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        
+        if($product_id !== null && $product_id != "")
+        {
+            if($product_id == 0)
+                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+        }
+            
+        if($suite_id !== null && $suite_id != "")
+        {
+            if($suite_id == 0)
+                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+        }
+        
+        if($case_id !== "" && $case_id !== null)
+            $where[] = ManageESB::$esbdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);
+            
+        if($date != null)
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+            
+        if($service != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
+        }
+            
+        if($partyid != null){
+            $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+        
+        //Remove Empty Fields
+        $where[] = " ACTION IS NOT NULL ";
+        
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+        
+        $rows = ManageESB::$esbdb->get_col($query);
+        
+        return $rows;
+        
+    }
+    
+    /**
+    * Get Party ID 
+    * 
+    * @param mixed $product_id
+    * @param mixed $suite_id
+    * @param mixed $case_id
+    * @param mixed $service
+    * @param mixed $action
+    * @param mixed $date
+    */
+    public function getFilterOptionsForPartId($product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        $where = array();
+        
+        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d", $user_id);
+        $esbIDs = $wpdb->get_col($query);
+        
+        if(!$esbIDs)
+            return array();
+        
+        $query = "SELECT 
+                    DISTINCT(m.FROM_PARTY_ID), m.TO_PARTY_ID
+                  FROM " . $this->table_conversation_metadata . " AS c 
+                  LEFT JOIN " . $this->table_test_suite_name_id_map . " AS tm ON tm.id = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                
+        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        
+        if($product_id !== null && $product_id != "")
+        {
+            if($product_id == 0)
+                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+        }
+            
+        if($suite_id !== null && $suite_id != "")
+        {
+            if($suite_id == 0)
+                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+        }
+        
+        if($case_id !== "" && $case_id !== null)
+            $where[] = ManageESB::$esbdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);
+            
+        if($date != null)
+            $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+            
+        if($service != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);
+        }
+            
+        if($action != null){
+            $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
+        }
+        
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+        
+        $rows = ManageESB::$esbdb->get_results($query);
+        $results = array();
+        foreach($rows as $row)
+        {
+            if($row->FROM_PARTY_ID)
+                $results[] = $row->FROM_PARTY_ID;    
+            if($row->TO_PARTY_ID)
+                $results[] = $row->TO_PARTY_ID;    
+        }
+        $results = array_unique($results);
+        
+        return $results;
+        
+    }
+    
+    
     
     public function getTestOutcomeStatus($id, $outcomeType)
     {        
@@ -423,6 +815,8 @@ class ManageESB
         
         
     }
+    
+    
     
     public function  getMessageEnvelope($id, $user_id = null)
     {
@@ -527,18 +921,29 @@ class ManageESB
         ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_OUTCOME'=>$suiteID), array('ID' => $id));
     }
     
-    
-    
-    
-    public function addTestCaseNameIDMap($id, $name)
+    public function addTestCaseInfo($id, $name, $outcome_type, $pattern)
     {
-        $result = ManageESB::$esbdb->insert($this->table_test_case_name_id_map, array('ID' => $id, 'NAME' => $name));
+        $result = ManageESB::$esbdb->insert($this->table_test_case_configuration, 
+            array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'RESPONSE_REQUIRED' => $pattern)
+        );
         
         return $result;        
     }
+    
+    public function updateTestCaseInfo($id, $outcome_type, $pattern)
+    {
+        $result = ManageESB::$esbdb->update($this->table_test_case_configuration, 
+            array('TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'RESPONSE_REQUIRED' => $pattern),
+            array('TEST_CASE_WP_ID' => $id)
+        );
+        
+        return $result;        
+    }
+    
+    
     public function deleteTestCaseNameIDMap($id)
     {
-        $result = ManageESB::$esbdb->delete($this->table_test_case_name_id_map, array('ID' => $id));
+        $result = ManageESB::$esbdb->delete($this->table_test_case_configuration, array('ID' => $id));
         
         return $result;        
     }
@@ -562,6 +967,13 @@ class ManageESB
         return $result;
     }
     
+    public function getTestCaseConfigurationID($case_id)
+    {
+        $query = "SELECT ID FROM " . $this->table_test_case_configuration . " WHERE TEST_CASE_WP_ID=" . $case_id;
+        $id = ManageESB::$esbdb->get_var($query);
+        
+        return $id;
+    }
     
     
 }

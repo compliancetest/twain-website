@@ -2,7 +2,7 @@
 /**
 * Archive Page  
 */
-$postType = 'press-release';
+$postType = get_post_type();
 
 $communities = ct_get_blog_communities($postType, $year);
 $years = ct_get_blog_years($postType);
@@ -48,38 +48,9 @@ get_header();
             </div>
             <div class="fifth left">
                 <div class="column">                    
-                    <div id="newsevents-sidebar">
-                        <div class="expandable">
-                            <h6 class="exp_title">Community</h6>
-                            <div class="exp_content">                           
-                            <?php                                 
-                                foreach($communities as $g_id)
-                                {
-                                    $group = groups_get_group(array('group_id' => $g_id));
-                                    
-                                    ?>
-                                    <a href="<?php echo get_post_type_archive_link($postType) ?>?<?php echo $year ? "y=$year&" : ""?>community_id=<?php echo $g_id?>" <?php if($community_id == $g_id){?> class="current"<?php }?>>
-                                        <?php echo bp_get_group_name($group)?>                                    
-                                    </a><?php
-                                }
-                            ?>
-                            </div>
-                        </div>                    
-                        <div class="expandable">
-                            <h6 class="exp_title">Year</h6>
-                            <div class="exp_content">                           
-                            <?php                                 
-                                foreach($years as $y)
-                                {
-                                    ?>
-                                    <a href="<?php echo get_post_type_archive_link($postType) ?>?<?php echo $community_id ? "community_id=$community_id&" : ""?>y=<?php echo $y?>" <?php if($year == $y){?> class="current"<?php }?>>
-                                        <?php echo $y?>                                    
-                                    </a><?php
-                                }
-                            ?>
-                            </div>
-                        </div>   
-                    </div>
+                    <?php
+                        get_sidebar('newsevents');
+                    ?>                    
                 </div>
             </div>
             <div class="clear"></div>

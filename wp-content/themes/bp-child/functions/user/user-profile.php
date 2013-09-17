@@ -504,6 +504,7 @@ function cp_edit_transaction_log(){
                </div>
                <div class="td td-case">
                    <select name="case<?php echo $row->ID?>" class="select">
+                       <option value="0">Not Assigned</option>
                        <?php foreach($testCases as $c){ ?>
                        <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo cp_wrap($c->caseName, 12)?></option>
                        <?php } ?>
@@ -617,16 +618,24 @@ function cp_save_transaction_log()
         
         foreach($rows as $row)
         {
-            $caseDBId = $_POST['case' . $row->ID];
-            $caseId = get_post_meta($caseDBId, 'test_case_id', true);
-            $suiteId = get_post_meta($caseDBId, 'test_suite', true);
+            $caseDBId = intval($_POST['case' . $row->ID]);
+            
+            if($caseDBId > 0){
+                $suiteId = get_post_meta($caseDBId, 'test_suite', true);                
+            }else{
+                $suiteId = '';
+                
+            }
+            
             $productId = $_POST['product' . $row->ID];
             $audit = $_POST['audit' . $row->ID];
             
-            
             $esb = new ManageESB();
             
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_ID=%s, TEST_SUITE_ID=%d, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $caseId, $suiteId, $productId, $audit, $row->ID);
+            $case_conf_id = $esb->getTestCaseConfigurationID($caseDBId);
+            
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_CONFIGURATION_ID=%d, TEST_SUITE_ID=%s, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $case_conf_id, $suiteId, $productId, $audit, $row->ID);
+            
             ManageESB::$esbdb->query($query);
         }
         

@@ -52,21 +52,14 @@ $log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filter
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 
-$tProducts = $log_results['tProducts'];
-$tSuites = $log_results['tSuites'];
-$tCases = $log_results['tCases'];
-$tServices = $log_results['tServices'];
-$tActions = $log_results['tActions'];
-$tPartyIDs = $log_results['tPartyIDs'];
+$tProducts = $esb->getFilterOptionsForProduct($filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
+$tSuites = $esb->getFilterOptionsForSuite($filterProduct, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
+$tCases = $esb->getFilterOptionsForCase($filterProduct, $filterSuite, $filterService, $filterAction, $filterPartyId, $filterDate);
+$tServices = $esb->getFilterOptionsForService($filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate);
+$tActions = $esb->getFilterOptionsForAction($filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate);
+$tPartyIDs = $esb->getFilterOptionsForPartId($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate);
 
 $params = array();                 
-
-/*if($filterProduct === 'NULL')
-    $filterProduct = null;
-if($filterSuite === 'NULL')
-    $filterSuite = null;
-if($filterCase === 'NULL')
-    $filterCase = null;*/
     
 $tbodyHTML = '';
 
@@ -103,15 +96,11 @@ if($filterDate){
             <form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
                 <div class="left">
                     <div class="styled_select">
-                        <label>Product / Service: <?php if($filterProduct){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <label>Product / Service: <?php if($filterProduct != "" && $filterProduct != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="product" id="product" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tProducts as $t){ ?>
-                           <?php if($t === null){ ?>
-                            <option value="NULL" <?php echo $filterProduct === null ? "selected='selected'" : ""?>>Not Assigned</option>
-                           <?php }else{ ?>
-                            <option value="<?php echo $t?>" <?php echo $t == $filterProduct ? "selected='selected'" : "" ?>><?php echo get_post_meta($t, 'product_name', true) ?></option>
-                           <?php } ?>
+                          <?php foreach($tProducts as $t){ ?>                           
+                            <option value="<?php echo !$t ? 0 : $t?>" <?php echo $filterProduct != "" && $t == intval($filterProduct) ? "selected='selected'" : "" ?>><?php echo !$t ? "Not assigned" : get_post_meta($t, 'product_name', true) ?></option>
                           <?php } ?>
                         </select>
                         
@@ -129,15 +118,11 @@ if($filterDate){
                 </div>
                 <div class="left">
                     <div class="styled_select">
-                        <label>Test Suite: <?php if($filterSuite){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <label>Test Suite: <?php if($filterSuite != "" && $filterSuite != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="suite" id="suite" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tSuites as $k=>$s){ ?>
-                           <?php if($k === null){ ?>
-                            <option value="NULL" <?php echo $filterSuite === null ? "selected='selected'" : ""?>>Not Assigned</option> 
-                           <?php }else{ ?>
-                            <option value="<?php echo $k?>" <?php echo $k == $filterSuite ? "selected='selected'" : "" ?>><?php echo $s ?></option>
-                           <?php } ?>
+                          <?php foreach($tSuites as $s){ ?>                           
+                            <option value="<?php echo !$s->ID ? 0 : $s->ID?>" <?php echo $filterSuite != "" && $s->ID == intval($filterSuite) ? "selected='selected'" : "" ?>><?php echo !$s->NAME ? 'Not assigned' : $s->NAME?></option>                           
                           <?php } ?>
                         </select>
                     </div>
@@ -154,15 +139,13 @@ if($filterDate){
                 </div>
                 <div class="left">
                     <div class="styled_select">
-                        <label>Test Case: <?php if($filterCase){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <label>Test Case: <?php if($filterCase != "" && $filterCase != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="case" id="case" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tCases as $k=>$c){ ?>
-                           <?php if($k === null){ ?>
-                            <option value="NULL" <?php echo $filterCase === null ? "selected='selected'" : ""?>>Not Assigned</option> 
-                           <?php }else{ ?>
-                            <option value="<?php echo $k?>" <?php echo $k == $filterCase ? "selected='selected'" : "" ?>><?php echo $c ?></option>
-                           <?php } ?>
+                          <?php foreach($tCases as $c){ ?>
+                            <option value="<?php echo !$c->ID ? 0 : $c->ID?>" <?php echo $filterCase != "" && $c->ID == intval($filterCase) ? "selected='selected'" : "" ?>>
+                                <?php echo $c->NAME == 'DEFAULT' ? 'Not Assigned' : $c->NAME ?>
+                            </option>
                           <?php } ?>
                         </select>
                     </div>
@@ -225,18 +208,26 @@ if($filterDate){
                            <div class="td td-full">No Transaction Found.</div>
                            <div class="clear"></div>
                        </div>
-                   <?php }else{
-                       
+                   <?php }else{                       
                         foreach($results as $row){ 
                          ?>
                            <div class="tr">
                                <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" /></div>
                                <div class="td td-product">
                                    <a href="#" class="view-messages-link"></a>
+                                   <?php if(!$row->PRODUCT_ID){?>
+                                   Not Assigned
+                                   <?php }else{ ?>
                                    <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
+                                   <?php } ?>
                                </div>
                                <div class="td td-case">
-                                   <a href="<?php echo get_permalink($row->TEST_CASE_DB_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 10)?></a>
+                                    <?php if(!$row->TEST_CASE_WP_ID) {?>
+                                    Not Assigned
+                                    <?php }else{ ?>
+                                    <a href="<?php echo get_permalink($row->TEST_CASE_WP_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 10)?></a>
+                                    <?php } ?>
+                                   
                                </div>
                                <div class="td td-suite">
                                     <?php if($row->TEST_SUITE_ID){ ?>
@@ -244,12 +235,10 @@ if($filterDate){
                                     <?php }else if(!$row->TEST_SUITE_ID && $row->TEST_CASE_DB_ID){ ?>
                                     <?php 
                                         $tSuiteId = get_post_meta($row->TEST_CASE_DB_ID, 'test_suite', true); 
-                                        $esb->updateTestSuiteID($row->ID, $tSuiteId);
-                                        
+                                        $esb->updateTestSuiteID($row->ID, $tSuiteId);                                        
                                     ?>
                                     <a href="<?php echo get_permalink($tSuiteId)?>"><?php echo cp_wrap(get_post_meta($tSuiteId, 'ts_name', true), 10)?></a>
-                                    <?php } ?>
-                                   
+                                    <?php } ?>                                   
                                </div>
                                <div class="td td-outcome tocenter">
                                    <?php if($row->TEST_OUTCOME_CODE){ ?>
@@ -525,7 +514,7 @@ if($filterDate){
         });
         
         jQuery('#my_transaction_log .clear-filter').click(function(){
-            jQuery(this).parents('.left').find('input, select').val('');
+            jQuery(this).parent().parent().find('input, select').val('');
             jQuery('#filterForm').submit();
             return false;
         })
