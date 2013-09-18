@@ -232,32 +232,48 @@ function saveSuite()
     //Subscription Price
     cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
     
-    //Save Spec Documents        
-    $docs_names = $_POST['doc_name'];
-    $docs_descs = $_POST['doc_desc'];
-    $docs_locs = $_POST['doc_loc'];
-    $docs_files = $_FILES['doc_file'];    
     
-    //Remove Old Template Variables
-    $wpdb->query("DELETE FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=" . $id);
     if(isset($_POST['variable_names']))
     {
         $variableNames = $_POST['variable_names'];    
         $variableDescs = $_POST['variable_descriptions'];    
         $variableDefaults = $_POST['variable_defaults'];    
+        $variableIDs = $_POST['variable_ids'];
+        
+        //Delete removed values
+        $wpdb->query("DELETE FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=" . $id . " AND id NOT IN ('" . implode("', '", $variableIDs) . "')");       
+        
         for($i = 0; $i < count($variableNames); $i++)
         {
-            $wpdb->insert($wpdb->prefix . "suites_template_variables", 
-                array('suite_id' => $id, 
-                      'variable_name' => $variableNames[$i], 
-                      'variable_description' => $variableDescs[$i],
-                      'variable_default' => $variableDefaults[$i])
-            );
+            if(!$variableIDs[$i])
+            {
+                $wpdb->insert($wpdb->prefix . "suites_template_variables", 
+                    array('suite_id' => $id, 
+                          'variable_name' => $variableNames[$i], 
+                          'variable_description' => $variableDescs[$i],
+                          'variable_default' => $variableDefaults[$i])
+                );
+            }else{
+                $wpdb->update($wpdb->prefix . "suites_template_variables", 
+                    array('suite_id' => $id, 
+                          'variable_name' => $variableNames[$i], 
+                          'variable_description' => $variableDescs[$i],
+                          'variable_default' => $variableDefaults[$i]),
+                    array('id' => $variableIDs[$i])                    
+                );
+            }
         }
+    }else{
+        //Remove Old Template Variables
+        $wpdb->query("DELETE FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=" . $id);       
     }
     
     
-    
+    //Save Spec Documents        
+    $docs_names = $_POST['doc_name'];
+    $docs_descs = $_POST['doc_desc'];
+    $docs_locs = $_POST['doc_loc'];
+    $docs_files = $_FILES['doc_file'];    
     //Remove Old documents
     $wpdb->query("DELETE FROM " . $wpdb->prefix . "ts_options_documents WHERE ts_id=" . $id);
     //Save New Data

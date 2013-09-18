@@ -4665,6 +4665,7 @@ min-height: 70px;
     top: 2px;
     left: 5px;
 }
+#template-variables-box .table-box .thead,
 #edit-transaction-log-box .table-box .thead,
 #view-validation-log-box .table-box .thead,
 #my_transaction_log .table-box .thead{
@@ -4675,12 +4676,14 @@ min-height: 70px;
     -webkit-border-radius: 5px 5px 0 0;
     -o-border-radius: 5px 5px 0 0;
 }
+#template-variables-box .table-box .td,
 #edit-transaction-log-box .table-box .td,
 #view-validation-log-box .table-box .td,
 #my_transaction_log .table-box .td{
     padding-left: 5px;
     padding-right: 5px;
 }
+#template-variables-box .table-box .thead .td,
 #edit-transaction-log-box .table-box .thead .td,
 #view-validation-log-box .table-box .thead .td,
 #my_transaction_log .table-box .thead .td{
@@ -4697,6 +4700,7 @@ min-height: 70px;
     padding-right: 5px;    
 }
 
+#template-variables-box .table-box .thead .td-two-lines,
 #edit-transaction-log-box .table-box .thead .td-two-lines,
 #view-validation-log-box .table-box .thead .td-two-lines,
 #my_transaction_log .table-box .thead .td-two-lines{
@@ -4849,6 +4853,25 @@ min-height: 70px;
     width: 106px;
 }
 
+#template-variables-popup-box .td-variable-name{
+    width: 140px;
+}
+#template-variables-popup-box .td-variable-value{
+    width: 161px;
+}
+#template-variables-popup-box .td-action{
+    width: 65px;
+}
+#template-variables-popup-box .input{
+    width: 158px;
+}
+#template-variables-popup-box .tr .message{
+    position: absolute;
+    width: 295px;
+    left: 10px;
+    top: 3px;
+    display: none;
+}
 /*** Group Admin Section ***/
 #group_admin_page .grid-box-body{
     background: #fff;

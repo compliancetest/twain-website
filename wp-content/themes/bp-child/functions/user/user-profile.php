@@ -716,3 +716,4 @@ function cp_save_suite_notify_changes()
     else
         delete_user_meta($user_id, 'notify_suite_changes' . $suiteID);
 }
+

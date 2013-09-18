@@ -261,6 +261,7 @@ if(!$suite->community_id)
                            <label>&nbsp;</label>
                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
                        </div>
+                            <input type="hidden" name="variable_ids[]" value="<?php echo $row->id?>" />
                        <div class="clear"></div>
                    </div>                 
                    <?php } ?>  
@@ -282,6 +283,7 @@ if(!$suite->community_id)
                            <label>&nbsp;</label>
                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
                        </div>
+                            <input type="hidden" name="variable_ids[]" value="" />
                        <div class="clear"></div>
                    </div>  
                    <?php } ?>                 
@@ -657,6 +659,7 @@ if(!$suite->community_id)
                            '<label>&nbsp;</label>' +
                            '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
                        '</div>' + 
+                       '<input type="hidden" name="variable_ids[]" value="" />' + 
                        '<div class="clear"></div>' + 
                    '</div>');
             return false;

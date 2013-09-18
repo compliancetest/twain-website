@@ -366,6 +366,18 @@
             })
         })
         
+        $("#my_subscriptions .template-variables-link").each(function(){
+            var url = $(this).attr('href');
+            var id = $(this).attr('data-id');
+            $(this).cplightbox({
+                type: 'ajax',
+                href: url                
+            })
+            return false;
+        })
+        
+        
+        
         $('#harness-form #p_mode_agreement').change(function(){
             if($(this).val() == 'LIGHT')
             {
@@ -409,5 +421,32 @@
             })
             return false;
         })
-    })    
+    })  
+    
 })(jQuery);
+function saveVariableDefaults(obj)
+{   
+    var parentObj = jQuery(obj).parent().parent();
+    parentObj.find(".loading1").show();
+    parentObj.find(".message").remove();
+    var value = parentObj.find('.td-variable-value input').val();
+    jQuery.ajax({
+        url: jQuery(obj).attr('href') + "&value=" + value,
+        type: 'POST',
+        success: function(rsp){
+            parentObj.find(".loading1").hide();
+            if(rsp == 'success')
+            {
+                parentObj.append('<p class="message success">Successully Saved!</p>');
+            }else{
+                parentObj.append('<p class="message error">' + rsp + '</p>');
+            }
+            parentObj.find('.message').fadeIn('fast');
+            setTimeout(function(){
+                parentObj.find('.message').fadeOut('fast');
+            }, 1500);
+            
+        }
+    })   
+    return false;
+}

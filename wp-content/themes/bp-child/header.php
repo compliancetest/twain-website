@@ -29,6 +29,7 @@
         <div id="header-wrapper"><!-- Start Header-Wrapper -->
             <div class="header column">
                 <a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+                <div style="float: left; width: 300px;font-size: 16px;font-weight: bold;line-height: 1.3em;padding: 20px 0 0 70px">Development Site Only - Customers please use <a href="http://www.compliancetest.net">www.compliancetest.net</a></div>
                  <?php     
                  if ( is_user_logged_in() ) { 
                         ?>

@@ -108,6 +108,8 @@ class TestSuite
         
         $query = $wpdb->prepare( "SELECT * FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=%d ORDER BY id", $this->id);            
         $this->templateVariables = $wpdb->get_results($query);
+        
+        return $this->templateVariables;
     }
     
     public function loadRoles()
