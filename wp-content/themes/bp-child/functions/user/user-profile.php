@@ -3,6 +3,19 @@
 * Manage User Profile Section
 */
 
+add_filter('user_contactmethods', 'cp_user_details');
+function cp_user_details( $user_contactmethods, $user = null )
+{
+    $user_contactmethods['phone_number'] = 'Phone Number';
+    $user_contactmethods['user_organisation'] = 'Organisation Name';
+    $user_contactmethods['user_organisation_web'] = 'Organisation Website';
+    $user_contactmethods['user_organisation_desc'] = 'Organisation Description';
+    $user_contactmethods['user_organisation_abn'] = 'Organisation ABN';
+    
+    return $user_contactmethods;
+}
+
+
 function cp_user_detail_edit()
 {
     global $wpdb, $current_user;
