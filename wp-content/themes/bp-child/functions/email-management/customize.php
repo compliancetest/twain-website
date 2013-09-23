@@ -43,8 +43,9 @@ function cp_groups_notification_new_membership_request_subject($subject, $group)
 
 add_filter('groups_notification_new_membership_request_message', 'cp_groups_notification_new_membership_request_message', 100, 6);
 function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_name, $profile_link, $group_requests, $settings_link)
-{
+{    
     $user_id = $_SESSION['membership_requesting_user_id'];
+    $user = get_userdata($user_id);
     $message = get_option('membership_request_received_admin_email_content');
     $emailData = array(
         '[community]' => bp_get_group_name($group),
