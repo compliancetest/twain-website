@@ -686,6 +686,15 @@ function cp_send_email($to, $template_name, $data = array())
         $phpmailer = new PHPMailer( true );
     }
     
+    //Clear Values
+    $phpmailer->ClearAddresses();
+    $phpmailer->ClearAllRecipients();
+    $phpmailer->ClearAttachments();
+    $phpmailer->ClearCustomHeaders();
+    $phpmailer->ClearBCCs();
+    $phpmailer->ClearCCs();
+    $phpmailer->ClearReplyTos();
+    
     $supportName = get_option('support_name');
     if(!$supportName)
         $supportName = 'ComplianceTest';
