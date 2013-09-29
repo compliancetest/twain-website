@@ -29,8 +29,7 @@ function cp_set_mail_content_type_to_html($content_type)
 add_filter('groups_notification_new_membership_request_to', 'cp_groups_notification_new_membership_request_to', 100, 1);
 function cp_groups_notification_new_membership_request_to($to)
 {    
-    $toData = get_user_by_email($to);
-    $_SESSION['membership_requesting_user_id'] = $toData->ID;
+    $toData = get_user_by_email($to);    
     return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
 }
 add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 2);
@@ -42,18 +41,19 @@ function cp_groups_notification_new_membership_request_subject($subject, $group)
 }
 
 add_filter('groups_notification_new_membership_request_message', 'cp_groups_notification_new_membership_request_message', 100, 6);
-function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_name, $profile_link, $group_requests, $settings_link)
+function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_id, $profile_link, $group_requests, $settings_link)
 {    
-    $user_id = $_SESSION['membership_requesting_user_id'];
-    $user = get_userdata($user_id);
+    
+    $user = get_userdata($requesting_user_id);
     $message = get_option('membership_request_received_admin_email_content');
     $emailData = array(
         '[community]' => bp_get_group_name($group),
         '[community_url]' => bp_get_group_permalink($group),
-        '[name]' => cp_get_user_fullname($user_id),
+        '[name]' => cp_get_user_fullname($requesting_user_id),
         '[email]' => $user->user_email,
         '[username]' => $user->user_login
     );
+    
     $message = str_replace(array_keys($emailData), array_values($emailData), $message);
     $message = apply_filters('the_content', $message);
     return $message;
