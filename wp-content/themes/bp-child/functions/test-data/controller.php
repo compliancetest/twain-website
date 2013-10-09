@@ -14,7 +14,7 @@ function saveProfileType()
     $type_id = isset($_POST['type_id']) ? $_POST['type_id'] : null;
     $user_id = get_current_user_id();
     
-    if(!$community_id || !$user_id || !groups_is_user_admin($user_id, $community_id))
+    if(!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
         addMessage('Invalid Request!', 'error');
         return false;
@@ -69,7 +69,7 @@ function deleteProfileType()
     $community_id = $_REQUEST['community_id'];
     $user_id = get_current_user_id();
     
-    if(!$community_id || !$user_id || !groups_is_user_admin($user_id, $community_id))
+    if(!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
         addMessage('Invalid Request!', 'error');
         return false;
@@ -108,7 +108,7 @@ function readProfileType()
     
     header('Content-type: application/xml');
     
-    if(!$community_id || !$user_id || !groups_is_user_admin($user_id, $community_id))
+    if(!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
         echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
         exit;
@@ -157,7 +157,7 @@ function createUIFromProfileType($action)
     {
         $instance_type = 'harness';
         
-        if(!groups_is_user_admin($user_id, $community_id))
+        if(!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
         {
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;    
@@ -216,7 +216,7 @@ function saveProfileInstance($action)
     {
         $instance_type = 'harness';
         
-        if(!groups_is_user_admin($user_id, $community_id))
+        if(!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
         {
             echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
             exit;    
