@@ -25,7 +25,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width55P">                    
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a><br />
-                    <input type="text" class="url-txt width95P" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" readonly="readonly" />
+                    <input type="text" class="url-txt width95P" value="<?php echo get_site_url()?>/wp-content/uploads/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" readonly="readonly" />
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>                    
