@@ -76,13 +76,13 @@ $esb = new ManageESB();
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
                                                {
-                                                   $passedBlobs .= '<span class="' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
+                                                   $passedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
                                                }else{
-                                                   $failedBlobs .= '<span class="' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
+                                                   $failedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
                                                }
                                                
                                            }else{
-                                               $normalBlobs .= '<span></span>';
+                                               $normalBlobs .= '<span class="bubble"><span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . get_post_meta($case->ID, 'test_case_id', true) . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span></span>';
                                            }
                                        }
                                        echo $passedBlobs . $failedBlobs . $normalBlobs;
@@ -162,6 +162,14 @@ jQuery(document).ready(function(){
         
         form.submit();
     }
+    
+    //Show Bubble Tooltip
+    jQuery('.coverage-progress .bubble').hover(function(){
+        jQuery(this).find('.simple_tooltip').css('left', -jQuery(this).find('.simple_tooltip').outerWidth() / 2 + 11);
+        jQuery(this).find('.simple_tooltip').show();
+    }, function(){
+        jQuery(this).find('.simple_tooltip').hide();
+    })
 })
 </script>
 <?php

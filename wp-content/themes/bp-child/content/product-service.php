@@ -21,7 +21,10 @@
             <?php } ?>
             <div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
                 <div class="width100P grid_cell suite_view">
-                    <p class="left"><span class="normal">Product: </span><?php echo $product->name; ?></p>                
+                    <div class="left">
+                        <p><span class="normal">Product Name: </span><?php echo $product->name; ?></p>                
+                        <p><small>(<span class="normal">Product ID: </span> <?php echo $product->product_id; ?>)</small></p>                
+                    </div>
                 <?php if(can_delete_product_and_service(get_the_ID())){ ?>
                     <a href="<?php get_permalink()?>?id=<?php echo $product->id?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode("/my-products") ?>" class="action-btn delete-btn right left10"><span class="p"></span><span class="t">DELETE</span></a>
                 <?php } ?>                            

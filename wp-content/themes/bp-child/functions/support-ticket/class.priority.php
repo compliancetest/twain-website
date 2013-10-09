@@ -74,4 +74,19 @@ class CT_TicketPriority
             $wpdb->query("UPDATE " . TABLE_TICKET_PRIORITIES . " SET sort_number=" . ($i+1) . " WHERE id=" . $r);            
         }
     }
+    
+    public function getPrioritiesSelectboxHTML($name = 'ticket_priority', $id='ticket_priority', $default = null, $emptyOptionLabel = '- All -')
+    {
+        $priorities = $this->getPriorities('sort_number');
+        $html = "<select name='$name' id='$id' class='select'>";
+        if($emptyOptionLabel)
+            $html .= "<option value=''>$emptyOptionLabel</option>";
+        foreach($priorities as $p)
+        {
+            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . $p->ttresolve . "' ttresponse='" . $p->ttresponse . "' price='" . $p->price . "'>$p->priority</option>";
+        }
+        $html .= "</select>";
+        
+        return $html;
+    }
 }

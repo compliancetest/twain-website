@@ -170,6 +170,7 @@ if($filterDate){
             </form>
         </div> 
         <div class="padding10">
+            <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('trigger-message')?>" id="trigger-message-link" class="action-btn process-btn left"><span class="p"></span><span class="t">TRIGGER MESSAGE</span></a>
             <a href="#" id="delete-log-link" class="action-btn blue-delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
             <a href="#" id="edit-log-link" class="action-btn blue-edit-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Selected Rows<span></span></span></a>            
             <div class="clear"></div>
@@ -593,6 +594,9 @@ if($filterDate){
     <div class="loading"></div>
     <a class="close_btn"></a>      
 </div> 
+
+
+
 <?php
 get_footer();
 ?>

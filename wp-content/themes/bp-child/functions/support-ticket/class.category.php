@@ -6,6 +6,8 @@ class CT_TicketCategory
 {
     var $last_id = null;
     
+    var $categories = null;
+    
     public function __construct()
     {
             
@@ -14,11 +16,15 @@ class CT_TicketCategory
     public function getCategories($orderby = 'category_name', $order = 'asc')
     {
         global $wpdb;
+    
+        if(!$this->categories)    
+        {
+            $query = "SELECT * FROM " . TABLE_TICKET_CATEGORIES . " ORDER BY $orderby $order";
+            $rows = $wpdb->get_results($query);
+            $this->categories = $rows;
+        }
         
-        $query = "SELECT * FROM " . TABLE_TICKET_CATEGORIES . " ORDER BY $orderby $order";
-        $rows = $wpdb->get_results($query);
-        
-        return $rows;
+        return $this->categories;
     }
     
     public function getCategoriesWithTicketCounts()
@@ -93,5 +99,20 @@ class CT_TicketCategory
         {
             $wpdb->query("UPDATE " . TABLE_TICKET_CATEGORIES . " SET sort_number=" . ($i+1) . " WHERE id=" . $r);
         }
+    }
+    
+    public function getCategoriesSelectboxHTML($name = 'ticket_category', $id='ticket_categoriy', $default = null, $emptyOptionLabel = '- All -')
+    {
+        $categories = $this->getCategories('sort_number');
+        $html = "<select name='$name' id='$id' class='select'>";
+        if($emptyOptionLabel)
+            $html .= "<option value=''>$emptyOptionLabel</option>";
+        foreach($categories as $c)
+        {
+            $html .= "<option value='$c->id' " . ($c->id == $default ? "selected='selected'" : "") . " has-fee='" . ($c->has_fee ? 'yes' : 'no') . "'>$c->category_title</option>";
+        }
+        $html .= "</select>";
+        
+        return $html;
     }
 }

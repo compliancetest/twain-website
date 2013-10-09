@@ -317,6 +317,20 @@ function getUserSubscribedSuites($user_id = null)
     return $rows;
 }
 
+function getUserSubscribedCommunities($user_id = null)
+{
+    global $wpdb;
+    
+    $purchases = getUserSubscriptions($customer_id);
+    $community_ids = array();
+    foreach($purchases as $r)
+        $community_ids[] = get_post_meta($r->suite_id, 'community_id', true);
+    
+    $community_ids = array_unique($community_ids);
+    
+    return $community_ids;
+}
+
 function getUserSubscribedCases($user_id = null)
 {
     global $wpdb;
@@ -340,4 +354,82 @@ function getUserSubscribedCases($user_id = null)
     $rows = $wpdb->get_results($query);
     
     return $rows;
+}
+
+/**
+* Get the last used data for user to trigger message
+* 
+* @param mixed $user_id
+*/
+function getUserLastDataForMessage($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    $query = $wpdb->prepare(
+        "SELECT * FROM " . $wpdb->prefix . "message_tmp " .
+        "WHERE user_id=%d", $user_id
+    );
+    
+    $data = $wpdb->get_row($query);
+    
+    return $data;
+}
+
+/**
+* Get User Message Templates
+* 
+* @param mixed $user_id
+*/
+function getUserPreviousMessageTemplates($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+        
+    $query = $wpdb->prepare(
+        "SELECT * FROM " . $wpdb->prefix . "message_templates " .
+        "WHERE user_id=%d", $user_id
+    );
+    
+    $rows = $wpdb->get_results($query);
+    
+    $results = array();
+    foreach($rows as $r)
+    {
+        $r->params = unserialize(base64_decode($r->params));
+        $results[] = $r;
+    }
+    
+    return $results;
+}
+
+function getTestCaseTemplates($case_id)
+{
+    global $CPRest;
+    
+    if(is_numeric($case_id))
+        $case_id = get_post_meta($case_id, 'test_case_id', true);
+    
+    $result = $CPRest->doRepositoryAPI('template/list/' . $case_id, null, false, false);
+    
+    $resultDoc = new DOMDocument();
+        
+    if(!$resultDoc || !$resultDoc->loadXML($result))
+        return array();
+    
+    $results = array();
+    
+    $templates = $resultDoc->getElementsByTagName('template');
+    for($i=0; $i<$templates->length; $i++)
+    {
+        $results[] = $templates->item($i)->nodeValue;
+    }
+    
+    asort($results);
+    
+    return $results;
 }

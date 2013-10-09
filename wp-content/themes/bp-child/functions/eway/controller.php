@@ -3,7 +3,7 @@
 add_action('init', 'process_eway_payment');
 function process_eway_payment()
 {
-    global $wpdb;
+    global $wpdb, $CPRest;
     
     $webserviceURL = get_eway_token_webservice_url();
     $customerID = get_eway_customer_id();
@@ -164,8 +164,7 @@ function process_eway_payment()
                         </api:user>
                     </api:createUserRequest>';
             
-            $result = sendRestUserAction('/user/create', $data);
-            
+            $result = $CPRest->doUserAPI('user/create', $data);
             $resultDoc = new DOMDocument();
             
             if(!$result || !$resultDoc->loadXML($result))
@@ -190,7 +189,7 @@ function process_eway_payment()
 add_action('init', 'free_charge');
 function free_charge()
 {
-    global $wpdb;
+    global $wpdb, $CPRest;
     
     if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'free_charge'))
     {        
@@ -252,7 +251,8 @@ function free_charge()
                         </api:user>
                     </api:createUserRequest>';
         
-        $result = sendRestUserAction('/user/create', $data);
+        
+        $result = $CPRest->doUserAPI('user/create', $data);
         
         $resultDoc = new DOMDocument();
         
@@ -308,7 +308,7 @@ function free_charge()
 add_action('init', 'unsubscribe_purchase');
 function unsubscribe_purchase()
 {
-    global $wpdb;
+    global $wpdb, $CPRest;
     
     if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'unsubscribe'))
     {        
@@ -341,7 +341,7 @@ function unsubscribe_purchase()
                     </api:user>
                 </api:deleteUserRequest>';
         
-        $result = sendRestUserAction('/user/delete', $data);
+        $result = $CPRest->doUserAPI('user/delete', $data);
         
         $resultDoc = new DOMDocument(); 
         

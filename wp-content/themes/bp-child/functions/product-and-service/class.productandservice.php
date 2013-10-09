@@ -6,6 +6,8 @@ class ProductAndService
     
     var $name = '';
     
+    var $product_id = '';
+    
     var $release_date = '';
     
     var $type = '';
@@ -40,6 +42,7 @@ class ProductAndService
             return;
         
         $this->name = $this->loadSingleValue('product_name');
+        $this->product_id = $this->loadSingleValue('product_id');
         $this->release_date = $this->loadSingleValue('product_release_date');
         $this->type = $this->loadSingleValue('product_type');
         $this->owner = $this->loadSingleValue('product_owner');

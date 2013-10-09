@@ -48,7 +48,7 @@ function ct_ticket_display_categories()
                     </tr>
                 </tbody></table>
                 <p class="submit">
-                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Add New Category">
+                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Category">
                 </p>
                 <input type="hidden" name="id" value="<?php echo $category->id?>" />
                 <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('save-ticket-category')?>" />
@@ -123,7 +123,7 @@ function ct_ticket_priorities()
                 $priority = $ct_ticket_priority->getpriorityById($_GET['id']);
             ?>
             <p>
-                <a href="admin.php?page=ct-tickets-categories">Back to the priority list page</a>
+                <a href="admin.php?page=ct-tickets-priorities">Back to the priority list page</a>
             </p>
             <form id='editpriorityform' action="" method="post">
                 <table class="form-table">
@@ -172,7 +172,7 @@ function ct_ticket_priorities()
                     
                 </tbody></table>
                 <p class="submit">
-                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Add New priority">
+                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Save priority">
                 </p>
                 <input type="hidden" name="id" value="<?php echo $priority->id?>" />
                 <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('save-ticket-priority')?>" />
@@ -255,6 +255,102 @@ function ct_ticket_priorities()
     </script>
     <?php
 }
+
+function ct_ticket_statuses()
+{
+    global $ct_ticket_status;
+    
+    $listTable = new CT_Tickets_Status_List_Table();
+    $listTable->prepare_items();
+    ?>
+    <div class="wrap">
+        <h2>Statuses</h2>
+        <?php if( isset($_GET['ct-ticket-action']) && wp_verify_nonce($_GET['ct-ticket-action'], 'edit-ticket-status') ){ ?>
+            <?php
+                $status = $ct_ticket_status->getStatusById($_GET['id']);
+            ?>
+            <p>
+                <a href="admin.php?page=ct-tickets-statuses">Back to the status list page</a>
+            </p>
+            <form id='editstatusform' action="" method="post">
+                <table class="form-table">
+                    <tbody>
+                        <tr class="form-field form-required">
+                        <th scope="row" valign="top">
+                            <label for="status">Name</label>
+                        </th>
+                        <td>
+                            <input name="status" id="status" type="text" value="<?php echo $status->status?>" size="40" maxlength="255" aria-required="true">
+                            <p>The name is how it appears on your site.</p>
+                        </td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row" valign="top">
+                            <label for="sort-number">Sort Number</label>
+                        </th>
+                        <td>
+                            <input name="sort-number" id="sort-number" type="text" value="<?php echo $status->sort_number?>" size="40" />
+                        </td>
+                    </tr>
+                    
+                </tbody></table>
+                <p class="submit">
+                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Status">
+                </p>
+                <input type="hidden" name="id" value="<?php echo $status->id?>" />
+                <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('save-ticket-status')?>" />
+            </form>
+        <?php }else{ ?>
+            <div id="col-right">
+                <form id="list-filter" action="" method="post">
+                    <input type="hidden" name="page" value="ct-tickets-categories" />
+                    <?php
+                        $listTable->display();
+                    ?>
+                </form>
+            </div>
+            <div id="col-left">
+                <div class="col-wrap">
+                    <div class="form-wrap">
+                        <h3>Add New Status</h3>
+                        <form id="addpriority" method="post" action="">
+                            <div class="form-field form-required">
+                                <label for="status">Name</label>
+                                <input name="status" id="status" type="text" value="" size="40" maxlength="255" aria-required="true">
+                                <p>The name is how it appears on your site.</p>
+                            </div>                            
+                            <div class="form-field form-required">
+                                <label for="sort-number">Sort Number</label>
+                                <input name="sort-number" id="sort-number" type="text" value="<?php echo $listTable->get_pagination_arg('total_items') + 1?>" size="40" />
+                                <p>The number is the position of the status on your site</p>
+                            </div>
+                            <p class="submit">
+                                <input type="submit" name="submit" id="submit" class="button button-primary" value="Add New Status">
+                            </p>
+                            <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('save-ticket-status')?>" />
+                        </form>
+                    </div>
+                </div>            
+            </div>        
+        <?php } ?>
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            jQuery('#addpriority').submit(function(){
+                var isValid = true;                
+                if(jQuery('#addpriority #status').val() == '')
+                {                    
+                    jQuery('#addpriority #status').parent().addClass('form-invalid');
+                    isValid = false;                    
+                }
+                
+                return isValid;
+            })
+        })
+    </script>
+    <?php
+}
+
 
 function ct_ticket_display_tickets()
 {

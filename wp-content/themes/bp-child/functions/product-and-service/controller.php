@@ -45,8 +45,37 @@ function saveProductService()
         }
     }
         
-    //Update Permalink    
-//    wp_update_post(array('ID' => $id, 'guid' => get_site_url() . "?post_type=product-service&p=" . $id ));
+    $product_url = sanitize_url($_POST['product_url']);
+    
+    //Update Product ID
+    $product_id = $_POST['product_id'];
+    if(!$product_id)
+    {        
+        //Generate Product ID
+        $productUrlInfo = parse_url($product_url);
+        $domain = $productUrlInfo['host'];                
+        $product_slug = sanitize_title($_POST['product_name']);
+        if(!$domain)
+            $product_id .= implode(".", array($product_slug, $_POST['product_version']));        
+        else
+            $product_id .= implode(".", array($domain, $product_slug, $_POST['product_version']));
+    }
+    
+    //Check Product ID duplication
+    $query = $wpdb->prepare("SELECT meta_id FROM $wpdb->postmeta WHERE post_id!=%d AND meta_key='product_id' AND meta_value=%s", $id, $product_id);
+    $meta_id = $wpdb->get_var($query);
+    
+    $idx = 2;
+    $t_product_id = $product_id;
+    while($meta_id)
+    {
+        $t_product_id = $product_id . "-" .$idx;
+        $query = $wpdb->prepare("SELECT meta_id FROM $wpdb->postmeta WHERE post_id!=%d AND meta_key='product_id' AND meta_value=%s", $id, $t_product_id);
+        $meta_id = $wpdb->get_var($query);    
+    }
+    $product_id = $t_product_id;
+    
+    update_post_meta($id, 'product_id', $product_id);
     
     update_post_meta($id, 'product_name', $_POST['product_name']);
     update_post_meta($id, 'product_release_date', date('Y-m-d', strtotime($_POST['product_release_date'])));

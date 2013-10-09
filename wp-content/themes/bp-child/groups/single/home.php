@@ -40,6 +40,12 @@
                                 
                             }else{ //Show Tabs
                         ?>
+                            <div id="testdata-container" class="tab-content column white_bcg" style="display: none;">
+                                <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
+                                <p>You need to join the community to participate in the test data section.</p>
+                                <?php } ?>                            
+                            </div>
+                            
                             <div id="wiki-container" class="" style="display: none;">
                                 <?php include( bp_docs_locate_template( 'docs-loop.php' ) ) ?>
                             </div>

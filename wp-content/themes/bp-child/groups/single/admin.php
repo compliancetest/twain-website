@@ -159,6 +159,150 @@
         
     </div>
     <div class="right">
+        <!-- Profile -->
+        <div class="grid-box" id="group_members_box">
+            <div class="grid-box-header">
+                <h5>Profile Types</h5>
+            </div>            
+            <?php
+                if(isset($_POST['td-action']) && wp_verify_nonce($_POST['td-action'], 'save-profile-type'))
+                    $isEditType = true;
+                else
+                    $isEditType = false;
+            ?>
+            <div class="grid-box-body" id="profile-type-list" <?php if($isEditType){ ?> style="display:none" <?php } ?>>
+            <?php
+                $profileTypes = getCommunityProfileTypes(bp_get_group_id());            
+            ?>  
+                <div class="grid-box table-box">
+                    <div class="grid-box-body">
+                        <div class="thead tr">
+                           <div class="td td-profile-title">Title</div>
+                           <div class="td td-profile-instances">Instances</div>
+                           <div class="td td-profile-action">Action</div>
+                           <div class="clear"></div>
+                       </div>
+                       <div class="tbody">
+                            <?php if(!$profileTypes){ ?>
+                            <div class="tr"><div class="td td-full">No data found</div><div class="clear"></div></div>
+                            <?php } ?>
+                            <?php foreach($profileTypes as $row) {?>
+                            <div class="tr">
+                               <div class="td td-profile-title"><?php echo $row->title?></div>
+                               <div class="td td-profile-instances"><?php echo $row->instances?></div>
+                               <div class="td td-profile-action">
+                                   <a href="<?php echo bp_get_group_admin_permalink()?>?td-action=<?php echo wp_create_nonce('edit-profile-type')?>&type_id=<?php echo $row->id?>&community_id=<?php echo bp_get_group_id()?>" class="action-btn blue-edit-btn icon-btn profile-type-edit-btn"><span class="p"></span></a>
+                                   <a href="<?php echo bp_get_group_admin_permalink()?>?td-action=<?php echo wp_create_nonce('delete-profile-type')?>&type_id=<?php echo $row->id?>&community_id=<?php echo bp_get_group_id()?>" class="action-btn blue-delete-btn icon-btn left10 profile-type-delete-btn"><span class="p"></span></a>
+                               </div>     
+                               <div class="clear"></div>                               
+                            </div>
+                            <?php } ?>
+                            
+                       </div>                          
+                    </div>                    
+                </div>
+                <div class="column">
+                    <a href='<?php echo bp_group_admin_permalink()  ?>?td-action=<?php echo wp_create_nonce('edit-profile-type')?>&community_id=<?php bp_group_id() ?>' class="action-btn process-btn" id="add-profile-type-btn"><span class="p"></span><span class="t">Add New Profile Type</span></a>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            
+            <div id="edit-profile-type" <?php if($isEditType){ ?> style="display: block" <?php } ?>>
+                <form name="profileTypeForm" id="profileTypeForm" action="" enctype="multipart/form-data" method="post">
+                    <div class="grid-box-body column">                    
+                        <h5><?php echo $isEditType && $_POST['type_id'] ? 'Edit' : 'Add New'?> Profile Type</h5>
+                        <div class="field-row">
+                            <label>Enter Schema:</label>
+                            <textarea name="profile_type_text" id="profile_type_text" class="textarea"><?php echo isset($_POST['profile_type_text']) ? stripslashes($_POST['profile_type_text']) : '' ?></textarea>
+                        </div>      
+                        <div class="field-row">
+                            <label>Or Select File:</label>
+                            <input type="file" name="profile_type_file" id="profile_type_file" class="input_file" value="" />                                
+                            <p><small>(.txt or .json file)</small></p>
+                        </div>                        
+                        <div class="clear"></div>
+                        
+                        <input type="hidden" name="community_id" value="<?php bp_group_id() ?>" />
+                        <input type="hidden" name="type_id" id="type_id" value="<?php if($isEditType){ echo $_POST['type_id']; } ?>" />
+                        <input type="hidden" name="td-action" value="<?php echo wp_create_nonce('save-profile-type')?>" />                        
+                    </div>
+                    <div class="grid-box-footer">
+                        <div class="btn-row">                    
+                            <a href="#" class="action-btn process-btn left10"><span class="p"></span><span class="t">SAVE</span></a>                    
+                            <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>                    
+                            <div class="clear"></div>                        
+                        </div>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function(){                
+                jQuery('#add-profile-type-btn').click(function(){
+                    jQuery('#profileTypeForm h5').html('Add New Profile Type');
+                    jQuery('#profileTypeForm .message').remove();
+                    jQuery('#profileTypeForm #profile_type_text').val('');
+                    jQuery('#profileTypeForm #profile_type_file').val('');
+                    jQuery('#edit-profile-type').fadeIn();
+                    jQuery('#profile-type-list').hide();
+                    return false;
+                });                
+                
+                jQuery('#edit-profile-type .cancel-btn').click(function(){                    
+                    jQuery('#profile-type-list').fadeIn();
+                    jQuery('#edit-profile-type').hide();
+                    return false;
+                });                
+                
+                jQuery('#profileTypeForm').submit(function(){
+                    jQuery('#profileTypeForm .message').remove();
+                    if(jQuery('#profile_type_file').val() == '' && jQuery('#profile_type_text').val() == '')
+                    {
+                        jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="message error">Please enter schema or select a schema file.</p>');
+                        return false;
+                    }
+                    jQuery('#save-profile-type-box .loading b').html('SAVING PROFILE TYPE');
+                    jQuery('#save-profile-type-box .loading').show();
+                    return true;                    
+                });
+                
+                jQuery('.profile-type-edit-btn').click(function(){
+                    jQuery('#profileTypeForm h5').html('Edit Profile Type');
+                    jQuery('#profileTypeForm #profile_type_text').val('');
+                    jQuery('#profileTypeForm #profile_type_file').val('');
+                    jQuery('#edit-profile-type').fadeIn();
+                    jQuery('#profile-type-list').hide();                    
+                    jQuery('#edit-profile-type .loading b').html('READING PROFILE TYPE');
+                    jQuery('#edit-profile-type .loading').show();
+                    jQuery('#profileTypeForm .message').remove();
+                    var link = jQuery(this).attr('href');
+                    jQuery.ajax({
+                        url: link,
+                        dataType: 'xml',
+                        success: function(rsp)
+                        {
+                            if(jQuery(rsp).find('status').text() == 'success')
+                            {
+                                jQuery('#profileTypeForm #profile_type_text').val(jQuery(rsp).find('schema').text());
+                                jQuery('#profileTypeForm #type_id').val(jQuery(rsp).find('id').text());
+                            }else{
+                                jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
+                            }
+                            jQuery('#edit-profile-type .loading').hide();
+                        },
+                        error: function(err)
+                        {
+                            jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="message error">' + err.responseText + '</p>');
+                            jQuery('#edit-profile-type .loading').hide();
+                        }
+                    })
+                    return false;
+                })
+            })
+        </script>
+        <div class="space20"></div>
+        
+        
         <!-- Memebers -->
         <div class="grid-box" id="group_members_box">
             <div class="grid-box-header">
@@ -427,6 +571,3 @@
     </div>
     <div class="clear"></div>
 </div>
-
-
-

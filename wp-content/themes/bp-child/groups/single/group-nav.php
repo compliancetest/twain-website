@@ -11,6 +11,14 @@
             <span class="clear"></span>
         </a>
     </li>
+    <li class="<?php echo (bp_current_action() == 'testdata') ? 'active' : ''?>">
+        <a href="<?php echo bp_get_group_permalink()?>testdata" rel="testdata-container" class="<?php echo (bp_current_action() == 'testdata') ? 'selected' : ''?>">
+            <span class="left icon" id="icon_testdata"></span>
+            <span class="right text">TEST DATA</span>
+            <span class="tabactive"></span>
+            <span class="clear"></span>
+        </a>
+    </li>
     <li class="<?php echo (bp_current_action() == 'wiki') ? 'active' : ''?>">
         <a href="<?php echo bp_get_group_permalink();?>wiki" rel="wiki-container" class="<?php echo (bp_current_action() == 'wiki') ? 'selected' : ''?>">
             <span class="left icon" id="icon_wiki"></span>

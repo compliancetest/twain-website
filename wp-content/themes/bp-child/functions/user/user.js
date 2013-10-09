@@ -365,15 +365,12 @@
                 }
             })
         })
-        
-        $("#my_subscriptions .template-variables-link").each(function(){
-            var url = $(this).attr('href');
-            var id = $(this).attr('data-id');
+        $("#my_subscriptions .template-variables-link").each(function(){            
+            var url = $(this).attr('href');            
             $(this).cplightbox({
                 type: 'ajax',
                 href: url                
-            })
-            return false;
+            })            
         })
         
         

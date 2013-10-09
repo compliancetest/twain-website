@@ -48,8 +48,10 @@ require_once(THE_FUNCTION . '/test-suite/controller.php');
 require_once(THE_FUNCTION . '/buddypress/customize.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
+require_once(THE_FUNCTION . '/buddypress/buddypress-group-test-data.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');
+
 
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');
@@ -82,11 +84,12 @@ require_once(THE_FUNCTION . '/eway/settings.php');
 require_once(THE_FUNCTION . '/eway/controller.php');
 
 require_once(THE_FUNCTION . '/rest.php');
+$CPRest = new CPRest();
 
 require_once(THE_FUNCTION . '/print/print.php');
 
 //Support Ticket
-//require_once(THE_FUNCTION . '/support-ticket/index.php');
+require_once(THE_FUNCTION . '/support-ticket/index.php');
 
 //Email Management
 require_once(THE_FUNCTION . '/email-management/email-management.php');
@@ -95,6 +98,11 @@ require_once(THE_FUNCTION . '/email-management/customize.php');
 //Blog
 require_once(THE_FUNCTION . "/blog.php");
 
+//Test Data(Profile Type and Profile Instances)
+require_once(THE_FUNCTION . "/test-data/index.php");
+
+//Trigger Message
+require_once(THE_FUNCTION . "/message.php");
 
  
 /* 
@@ -194,6 +202,10 @@ function add_header_scripts()
     wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);        
     wp_enqueue_script('print', get_stylesheet_directory_uri().'/js/print.js', $actions_depends);        
     wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends, '1.0', true);
+    
+    if(is_page('my-transaction-log'))
+        wp_enqueue_script('message-trigger', get_stylesheet_directory_uri().'/js/message.js', $actions_depends, '1.0', true);
+        
     if(bp_is_groups_component()){        
         wp_enqueue_script('groups-download', get_stylesheet_directory_uri().'/groups/js/groups-downloads.js', $actions_depends, '1.0', true);
     }
@@ -206,6 +218,17 @@ function add_header_scripts()
     {
         wp_enqueue_style( 'bp-docs-css', plugins_url() . '/' . BP_DOCS_PLUGIN_SLUG . '/includes/' . 'css/screen.css' );
     }
+    
+    
+    if(is_user_logged_in())   
+    {
+        //Ticket Script
+        wp_enqueue_script( 'support-ticket', get_stylesheet_directory_uri() . '/functions/support-ticket/support-ticket.js', $actions_depends, '1.0', true );
+    }
+    
+    //Test Data
+    wp_enqueue_script( 'jsonary-super-bundle', get_stylesheet_directory_uri() . '/functions/test-data/jsonary-super-bundle.js', $actions_depends, '1.0', true );
+    wp_enqueue_script( 'json-schema-validator', get_stylesheet_directory_uri() . '/functions/test-data/tv4.js', $actions_depends, '1.0', true );
     
 }
 
@@ -742,4 +765,11 @@ function getItemsPerPage($page = '', $default = 20)
 function setItemsPerPage($value, $page = '')
 {
     $_SESSION[$page . '_limit'] = $value;
+}
+
+function cp_get_group_permalink_by_id($group_id)
+{
+    $group = groups_get_group(array('group_id'=> $group_id));
+    
+    return bp_get_group_permalink($group);
 }

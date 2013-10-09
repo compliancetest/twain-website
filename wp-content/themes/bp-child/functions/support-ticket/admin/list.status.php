@@ -3,7 +3,7 @@
 * Priority List Table
 */
 
-class CT_Tickets_Priority_List_Table extends WP_List_Table
+class CT_Tickets_Status_List_Table extends WP_List_Table
 {
     var $per_pages = 20;
     
@@ -18,13 +18,9 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
     function get_columns()
     {
         return $column = array(
-//            "cb" => "<input type='checkbox' />",            
-            "priority" => __("Priority"),
-            "price" => __('Price($/hr)'),
-            "ttresponse" => __("TTResponse"),
-            "ttresolve" => __("TTResolve"),            
-            "sort_number" => __("Sort Number"),            
             "id" => __("ID"),  
+            "status" => __("Status"),
+            "sort_number" => __("Sort Number")
         );
     }
     
@@ -32,11 +28,8 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
     {
         return $sortable = array(
             "id" => array("id", $orderby == 'id'),
-            "priority" => array("priority", $orderby == 'priority'),
-            "price" => array("price", $orderby == 'price'),
-            "ttresponse" => array("ttresponse", $orderby == 'ttresponse'),
-            "ttresolve" => array("ttresolve", $orderby == 'ttresolve'),
-            "sort_number" => array("sort_number", $orderby == 'sort_number')
+            "status" => array("status", $orderby == 'status'),
+            "sort_number" => array("sort_number", $orderby == 'sort_number')            
         );
     }
     
@@ -52,11 +45,10 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
     {
         switch($column_name)
         {
-            case 'priority':
-                return $item->priority . $this->row_actions(array(
-                    "<a href='admin.php?page=ct-tickets-priorities&ct-ticket-action=" . wp_create_nonce('edit-ticket-priority') . "&id=" . $item->id . "'>Edit</a>",
-//                    "<a href='admin.php?page=ct-tickets&priority=" . $item->id . "'>View Ticketes</a>",
-                    "<a href='admin.php?page=ct-tickets-priorities&ct-ticket-action=" . wp_create_nonce('delete-ticket-priority') . "&id=" . $item->id . "'>Delete</a>"
+            case 'status':
+                return $item->status . $this->row_actions(array(
+                    "<a href='admin.php?page=ct-tickets-statuses&ct-ticket-action=" . wp_create_nonce('edit-ticket-status') . "&id=" . $item->id . "'>Edit</a>",
+                    "<a href='admin.php?page=ct-tickets-statuses&ct-ticket-action=" . wp_create_nonce('delete-ticket-status') . "&id=" . $item->id . "'>Delete</a>"
                     
                 ));
             default:
@@ -68,10 +60,10 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
     {
         global $wpdb;
         
-        $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'priority';
+        $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'status';
         $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : 'asc';
         
-        $query = "SELECT count(id) FROM " . TABLE_TICKET_PRIORITIES;
+        $query = "SELECT count(id) FROM " . TABLE_TICKET_STATUSES;
         $totalItems = $wpdb->get_var($query);
         
         $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
@@ -84,7 +76,7 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
         if($paged > $totalPages)
             $paged = $totalPages; 
         
-        $query = "SELECT * FROM " . TABLE_TICKET_PRIORITIES . " ORDER BY $orderby $order LIMIT " . (($paged - 1) * $this->per_pages) . ", " . $this->per_pages;
+        $query = "SELECT * FROM " . TABLE_TICKET_STATUSES . " ORDER BY $orderby $order LIMIT " . (($paged - 1) * $this->per_pages) . ", " . $this->per_pages;
         $this->items = $wpdb->get_results($query);
         
         $this->set_pagination_args(array(

@@ -336,7 +336,7 @@ get_header();
                            <input type="radio" name="outcome_type" value="Negative" <?php echo $case->outcomeType == 'Negative' ? 'checked="checked"' : ''?> /> Negative
                        </div>             
                        <div class="grid-cell radio-cell">
-                           <label>Bluk:</label>
+                           <label>Bulk:</label>
                            <input type="radio" name="bulk" value="Yes"  <?php echo $case->bulk == 'Yes' ? 'checked="checked"' : ''?> /> Yes
                            <input type="radio" name="bulk" value="No"  <?php echo $case->bulk == 'No' ? 'checked="checked"' : ''?> /> No
                        </div>             

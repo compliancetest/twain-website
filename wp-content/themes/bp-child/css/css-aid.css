@@ -242,7 +242,9 @@ select{
     -webkit-border-radius: 3px;
     border: solid 1px #cbcbcb;
 }
-input.input-error{
+input.input-error,
+select.select-error,
+textarea.textarea-error{
     border: 1px solid #B61313;
     box-shadow: 0 0 3px rgba(255, 0, 0, .5);
     -moz-box-shadow: 0 0 3px rgba(255, 0, 0, .5);
@@ -1216,6 +1218,7 @@ tr {
     height: 100%;
     text-align: center;
     display: none;    
+    z-index: 100;
 }
 
 .loading b{

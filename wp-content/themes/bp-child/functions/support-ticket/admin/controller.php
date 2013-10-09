@@ -10,6 +10,7 @@ function ct_ticket_create_admin_menus()
     add_submenu_page('ct-tickets', 'Support Tickets', 'Tickets', 'administrator', 'ct-tickets', 'ct_ticket_display_tickets');
     add_submenu_page('ct-tickets', 'Support Tickets Categories', 'Categories', 'administrator', 'ct-tickets-categories', 'ct_ticket_display_categories');
     add_submenu_page('ct-tickets', 'Support Tickets Priorities', 'Priorities', 'administrator', 'ct-tickets-priorities', 'ct_ticket_priorities');
+    add_submenu_page('ct-tickets', 'Support Tickets Statues', 'Statuses', 'administrator', 'ct-tickets-statuses', 'ct_ticket_statuses');
 }
 
 /**
@@ -74,6 +75,10 @@ function ct_delete_ticket_category()
     return;
 }
 
+/**
+* Priority Functions
+* 
+*/
 function ct_save_ticket_priority()
 {
     global $wpdb, $ct_ticket_priority;
@@ -98,6 +103,70 @@ function ct_save_ticket_priority()
     }
     
     $ct_ticket_priority->sortPriorities();
+    
+    return;
+}
+
+function ct_delete_ticket_priority()
+{
+    global $wpdb, $ct_ticket_priority;
+    
+    $id = $_REQUEST['id'];
+    if(is_array($id))
+    {
+        $query = "DELETE FROM " . TABLE_TICKET_PRIORITIES . " WHERE id IN (" . implode(",", $id) . ")";
+    }else{
+        $query = $wpdb->prepare("DELETE FROM " . TABLE_TICKET_PRIORITIES . " WHERE id=%d", $id);
+    }
+    
+    $wpdb->query($query);
+    
+    $ct_ticket_priority->sortPriorities();
+    
+    return;
+}
+
+/**
+* Status Functions
+* 
+*/
+function ct_save_ticket_status()
+{
+    global $wpdb, $ct_ticket_status;
+    
+    if(!isset($_POST['id']))
+    {
+        $ct_ticket_status->addStatus(array(
+            'status' => $_POST['status'],
+            'sort_number' => $_POST['sort-number'],
+        ));
+    }else{
+        $ct_ticket_status->updateStatus($_POST['id'], array(
+            'status' => $_POST['status'],
+            'sort_number' => $_POST['sort-number'],
+        ));
+    }
+    
+    $ct_ticket_status->sortStatues();
+    
+    return;
+}
+
+function ct_delete_ticket_status()
+{
+    global $wpdb, $ct_ticket_status;
+    
+    $id = $_REQUEST['id'];
+    if(is_array($id))
+    {
+        $query = "DELETE FROM " . TABLE_TICKET_STATUSES . " WHERE id IN (" . implode(",", $id) . ")";
+    }else{
+        $query = $wpdb->prepare("DELETE FROM " . TABLE_TICKET_STATUSES . " WHERE id=%d", $id);
+    }
+    
+    $wpdb->query($query);
+    
+    $ct_ticket_status->sortStatues();
     
     return;
 }

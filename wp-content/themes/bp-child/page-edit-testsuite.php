@@ -252,6 +252,10 @@ if(!$suite->community_id)
                        <div class="grid-cell">
                            <label>Description:</label>
                            <input type="text" class="input medium-input" name="variable_descriptions[]" value="<?php echo $row->variable_description?>" />
+                       </div>                       
+                       <div class="grid-cell">
+                           <label>Profile</label>
+                           <span>A</span>
                        </div>
                        <div class="grid-cell">
                            <label>Default Value:</label>
@@ -274,6 +278,10 @@ if(!$suite->community_id)
                        <div class="grid-cell">
                            <label>Description:</label>
                            <input type="text" class="input medium-input" name="variable_descriptions[]" value="" />
+                       </div>                       
+                       <div class="grid-cell">
+                           <label>Profile:</label>
+                           <input type="text" class="input" name="variable_defaults[]" value="" />
                        </div>
                        <div class="grid-cell">
                            <label>Default Value:</label>

@@ -52,12 +52,40 @@
                 if($overlay.css('display') == 'none')
                     $overlay.show();
                 setOverlaySize();
+                
+                if(opts.box != null)
+                {
+                    $overlay.append(opts.box);
+                                
+                    setSelfPosition();
+                    initPopupEvents();
+                    if($overlay.find('.popup-box:visible').length > 0)
+                    {
+                        $overlay.find('.popup-box:visible').fadeOut('fast', function(){     
+                            opts.onClose();   
+                            opts.onStart();            
+                            opts.box.fadeIn('fast', function(){
+                                setOverlaySize();
+                                opts.onLoad();                                                    
+                            });
+                        })
+                    }else{
+                        opts.onStart();
+                        opts.box.fadeIn('fast', function(){
+                            setOverlaySize();
+                            opts.onLoad();        
+                        });
+                    }
+                    
+                    return false;
+                }
+                
                 switch(opts.type)
                 {
                     case 'ajax':
                         //Getting HTML By Ajax
                         if($overlay.find('.loading').length < 1)
-                            $overlay.append('<div class="loading"></div>');
+                            $overlay.append('<div class="loading"></div>');                            
                         loadImagePosition();
                         $overlay.find('.loading').show();
                         $.ajax({
@@ -70,11 +98,14 @@
                                 if(opts.showTemplate)
                                 {                                    
                                     opts.template.find('.popup-box-content').append(rsp);
-                                    $overlay.append(opts.template);
-                                }else{
-                                    $overlay.append(rsp);    
-                                }                                
-                                opts.box = $overlay.find('.popup-box:last');
+                                    opts.box = opts.template;
+                                }else{                       
+                                    opts.box = $(rsp);
+                                }
+                                $overlay.append(opts.box);
+                                
+                                opts.onAjaxSuccess();
+                                
                                 setSelfPosition();
                                 initPopupEvents();
                                 if($overlay.find('.popup-box:visible').length > 0)
@@ -136,7 +167,7 @@
             
             function setOverlaySize()
             {
-                $overlay.css({'height': '100%', 'width': '100%'});
+                $overlay.css({'height': '100%', 'width': '100%'});                
                 var wWidth = $(document).width();
                 var wHeight = $(document).height();
                 $overlay.height(wHeight);
@@ -151,8 +182,8 @@
                 {
                     opts.box.css('top', 50);
                 }else if(selfHeight > 0){
-                    opts.box.css('top', (wHeight - selfHeight) / 2); //Keep Vertical Align Middle
-                }
+                    opts.box.css('top', (wHeight - selfHeight) / 2 + $(window).scrollTop()); //Keep Vertical Align Middle
+                }                
             }
             
             function loadImagePosition()
@@ -169,10 +200,12 @@
                     opts.box.fadeOut('fast', function(){
                         opts.onClose();
                         $overlay.hide();
-                        if(opts.removeBoxAfterClose)
+                        if(opts.removeBoxAfterClose){
                             opts.box.remove();
-                        else
+                            opts.box = null;
+                        }else{
                             $('body').append(opts.box);
+                        }
                     })
                 })
                 
@@ -186,10 +219,12 @@
                         opts.box.fadeOut('fast', function(){
                             opts.onClose();
                             $overlay.hide();
-                            if(opts.removeBoxAfterClose)
+                            if(opts.removeBoxAfterClose){
                                 opts.box.remove();
-                            else
+                                opts.box = null;
+                            }else{
                                 $('body').append(opts.box);
+                            }
                         })
                     })
                 }
@@ -215,6 +250,7 @@
         onLoad: function() {},
         onStart: function() {},
         onClose: function() {},
+        onAjaxSuccess: function() {},
         additionalClass: ''
     }
     
@@ -298,10 +334,12 @@
                 opts.box.fadeOut('fast', function(){
                     opts.onClose();
                     $overlay.hide();
-                    if(opts.removeBoxAfterClose)
+                    if(opts.removeBoxAfterClose){
                         opts.box.remove();
-                    else
+                        opts.box = null;
+                    }else{
                         $('body').append(opts.box);
+                    }
                 })
             })
             
@@ -315,10 +353,12 @@
                     opts.box.fadeOut('fast', function(){
                         opts.onClose();
                         $overlay.hide();
-                        if(opts.removeBoxAfterClose)
+                        if(opts.removeBoxAfterClose){
                             opts.box.remove();
-                        else
+                            opts.box = null;
+                        }else{
                             $('body').append(opts.box);
+                        }
                     })
                 })
             }

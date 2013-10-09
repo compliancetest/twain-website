@@ -312,10 +312,10 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 }
                 if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_show_license')) //Download Files
                 {
+                    
                     //Get File
                     $file = $obj->getFile($group->id, $_REQUEST['id']);
                     ?>
-                    <!-- License Popup Box -->
                     <div id="agree-file-license" class="popup-box" style="display: none;">                
                         <div class="popup-box-header radius6 noradiusbottom">License Agreement</div>
                         <div class="popup-box-content">

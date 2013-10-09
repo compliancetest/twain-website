@@ -71,9 +71,9 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                    </div>
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">                           
-                           <label>Version:</label>                    
-                           <input type="text" class="input" name="product_version" id="product_version" value="<?php echo $product->version?>" />
-                           <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
+                           <label>Product ID:</label>                    
+                           <input type="text" class="input" name="product_id" id="product_id" value="<?php echo $product->product_id?>" />
+                           <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. Or we will generate it by using product name, domain and version. (doman.productname.version)</span>
                        </div>                   
                        <div class="grid-cell has-focus-tooltip">
                            <label>Access URL:</label>     
@@ -83,14 +83,18 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        <div class="clear"></div>
                    </div>          
                    <div class="field-row">
-                       <div class="grid-cell has-focus-tooltip">                           
+                       <div class="grid-cell has-focus-tooltip">                                                     
+                           <label>Version:</label>                    
+                           <input type="text" class="input" name="product_version" id="product_version" value="<?php echo $product->version?>" />
+                           <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
+                           
                            <label>Product Owner:</label>                    
                            <input type="text" class="input required" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
                            <span class="focus-tooltip"><span></span>Enter the owner of your product or service. It is the same with your organisation name in default.</span>
                        </div> 
                        <div class="grid-cell has-focus-tooltip">
                             <label>Description:</label>
-                            <textarea cols="" rows="" class="textarea" name="product_description"><?php echo $product->descrition?></textarea>
+                            <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $product->descrition?></textarea>
                             <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
                        </div>
                        <div class="clear"></div>
