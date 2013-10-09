@@ -326,7 +326,8 @@ function saveProfileInstance($action)
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id
                         )
-                    );    
+                    );   
+          $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $type_id));
     }
     
     echo '<result><status>success</status></result>';
@@ -362,6 +363,7 @@ function deleteProfileTypeInstance($action)
     //Remove File
     @unlink(ABSPATH . "profiles/" . $row->type . "/" . $row->filename);
     $wpdb->delete($wpdb->prefix . "community_profile_instances", array('id' => $row->id));
+    $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` - 1 WHERE id=%d", $row->type_id));
     addMessage('Profile instance was removed.');
     wp_redirect($redirect);
     exit;
