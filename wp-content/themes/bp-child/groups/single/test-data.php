@@ -11,9 +11,10 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
     <div id="testdata-lists">
         <div class="grid-list">
             <div class="grid-list-row grid-list-header">
-                <div class="grid-list-cell width55P">Profile Name</div>                
+                <div class="grid-list-cell width45P">Profile Name</div>                
+                <div class="grid-list-cell width15P">Profile Purpose</div>                
                 <div class="grid-list-cell width15P tocenter">Profile Type</div>                
-                <div class="grid-list-cell width20P tocenter">Created Date</div>                
+                <div class="grid-list-cell width15P tocenter">Created Date</div>                
                 <div class="clear"></div>
             </div>                          
             <?php                    
@@ -21,16 +22,20 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                 $instances = getCommunityProfileInstatnces(bp_get_group_id());
                 foreach($instances as $instance)
                 {
+                    $instanceObj = json_decode(base64_decode($instance->content));
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
-                <div class="grid-list-cell width55P">                    
+                <div class="grid-list-cell width45P">                    
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a><br />
-                    <input type="text" class="url-txt width95P" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" readonly="readonly" />
+                    <p><?php echo $instanceObj->ProfileDescription?></p>
+                </div>
+                <div class="grid-list-cell width15P">
+                    <?php echo $instanceObj->ProfilePurpose?>            
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>                    
                 </div>
-                <div class="grid-list-cell width20P tocenter">
+                <div class="grid-list-cell width15P tocenter">
                     <?php echo formatDate($instance->created_date) ?>                    
                 </div>
                 <div class="grid-list-cell width10P tocenter">

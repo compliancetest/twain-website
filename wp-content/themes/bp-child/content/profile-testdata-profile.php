@@ -39,11 +39,13 @@ $profileInstances = getCustomerProfileInstances();
            }else{
                foreach($profileInstances as $instance)
                {
+                   $instanceObj = json_decode(base64_decode($instance->content));
            ?>
                 <div class="tr">
                    <div class="td td-profile-name">
                        <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>  <br />
-                       <input type="text" class="url-txt width100P" value="<?php echo get_site_url()?>/wp-content/uploads/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" readonly="readonly" />                     
+                       <b>Purpose: </b> <?php echo $instanceObj->ProfilePurpose?>
+                       <p><?php echo $instanceObj->ProfileDescription?></p>                   
                    </div>
                    <div class="td td-profile-type">
                        <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>                    
