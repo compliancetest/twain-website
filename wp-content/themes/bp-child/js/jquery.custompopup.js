@@ -207,6 +207,7 @@
                             $('body').append(opts.box);
                         }
                     })
+                    return false;
                 })
                 
                 $overlay.unbind('click');
@@ -226,6 +227,7 @@
                                 $('body').append(opts.box);
                             }
                         })
+                        
                     })
                 }
                 

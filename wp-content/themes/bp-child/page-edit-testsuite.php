@@ -48,6 +48,7 @@ if(!$suite->community_id)
                    <div class="field-row">
                        <div class="grid-cell">
                            <select name="community_id" id="community_id" class="select">
+                           <option></option>
                                <?php foreach($groups as $row){ ?>
                                <option value="<?php echo $row->id?>" <?php echo cp_selected($row->id, $suite->community_id)?>><?php echo apply_filters('the_title', $row->name)?></option>
                                <?php } ?>
@@ -234,7 +235,7 @@ if(!$suite->community_id)
            </div>
        </div>
        <div class="space20"></div>
-       <div class="grid-box grid-box-expandable grid-box-opened" id="template-variables-box">
+       <div class="grid-box grid-box-expandable grid-box-opened" id="test-data-profiles-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                <h5 class="left">Test Data Profiles</h5>
@@ -645,7 +646,7 @@ if(!$suite->community_id)
         
         //Update Related Test Suites 
         jQuery('#community_id').change(function(){
-            jQuery('#community-box .loading1, #related-suites-box .loading1').show();
+            jQuery('#community-box .loading1, #related-suites-box .loading1, #test-data-profiles-box .loading1').show();
             jQuery.ajax({
                 url: '<?php echo get_site_url()?>',
                 data: {
@@ -656,12 +657,13 @@ if(!$suite->community_id)
                 type: 'POST',
                 dataType: 'xml',
                 complete: function(){
-                    jQuery('#community-box .loading1, #related-suites-box .loading1').hide();    
+                    jQuery('#community-box .loading1, #related-suites-box .loading1, #test-data-profiles-box .loading1').hide();
                 },
                 success: function(rsp)
                 {
                     jQuery('#related-suites-box select').replaceWith(jQuery(rsp).find('suites').text());
                     jQuery('#suite_profile_types').html(jQuery(rsp).find('profileTypes').text());
+                    jQuery("#suite_profile_types a[rel='custom-popup']").cplightbox();
                 }
             })
         })

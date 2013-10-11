@@ -776,7 +776,7 @@ function cp_get_group_permalink_by_id($group_id)
 
 function cp_checked($value1, $value2)
 {
-    return $value1 == $value2 ? "checked='checked'" : "";
+    return $value1 == $value2 || in_array($value1, $value2) ? "checked='checked'" : "";
 }
 function cp_selected($value1, $value2)
 {

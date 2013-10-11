@@ -215,12 +215,41 @@ function getTestSuiteInfoForCase()
         $initMsgHTML = ob_get_clean();
         ob_end_clean();
         
+        //Getting Profile Instances
+        $profilesHTML = '';
+        ob_start();
+        $profileInstances = getCommunityProfileInstatnces($suite->community_id);
+           foreach($profileInstances as $instance){
+               $instanceObj = json_decode(base64_decode($instance->content));
+       ?>
+           <div class="field-row">
+               <div class="grid-cell width15P">
+                   <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" />
+                   <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>
+               </div>
+               <div class="grid-cell width10P">
+                   <label><?php echo $instanceObj->ProfilePurpose?></label>
+               </div>
+               <div class="grid-cell width15P">
+                   <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a> 
+               </div>
+               <div class="grid-cell width45P">
+                   <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" class="input width100P" />
+               </div>                                                             
+               <div class="clear"></div>
+           </div>              
+       <?php
+           }
+        $profilesHTML = ob_get_clean();
+        ob_end_clean();
+        
         header('content-type: application/xml');
         echo '<result>';
         echo '<status>success</status>';
         echo '<conflevel><![CDATA[' . $confLevelHTML . ']]></conflevel>';
         echo '<roles><![CDATA[' . $rolesHTML . ']]></roles>';
         echo '<initmsg><![CDATA[' . $initMsgHTML . ']]></initmsg>';
+        echo '<profiles><![CDATA[' . $profilesHTML . ']]></profiles>';
         echo '</result>';
        
     }
@@ -321,10 +350,12 @@ function saveCase()
     $step_action = $_POST['step_action']; 
     cp_update_post_meta($id, 'step_action', $step_action);
     
-    $property_name_data = $_POST['property_name_data']; 
-    cp_update_post_meta($id, 'property_name_data', $property_name_data);
-    $property_value_data = $_POST['property_value_data']; 
-    cp_update_post_meta($id, 'property_value_data', $property_value_data);
+    $property_name_data = $_POST['message_template_name']; 
+    cp_update_post_meta($id, 'message_template_name', $property_name_data);
+    $property_value_data = $_POST['message_template_url']; 
+    cp_update_post_meta($id, 'message_template_url', $property_value_data);
+    
+    cp_update_post_meta($id, 'profile_instances', cp_implode($_POST['profile_instances']));
     
     $test_url = $_POST['test_url']; 
     cp_update_post_meta($id, 'test_url', $test_url);

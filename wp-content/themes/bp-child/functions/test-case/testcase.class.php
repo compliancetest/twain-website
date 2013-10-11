@@ -32,6 +32,10 @@ class TestCase
     
     var $testData = array();
     
+    var $messageTemplates = array();
+    
+    var $profileInstances = array();
+    
     var $testEndpointURL = '';
     
     var $protocolBinding = '';
@@ -79,6 +83,8 @@ class TestCase
         $this->loadTestSteps();
         $this->loadTestData();
         $this->loadTestExecutionData();
+        $this->loadMessageTemplates();
+        $this->loadProfileInstances();
         
     }
     
@@ -116,6 +122,48 @@ class TestCase
         $this->testData = $result;
         
         return $result;
+    }
+    
+    public function loadMessageTemplates()
+    {
+        $dataNames = cp_get_post_meta($this->id, 'message_template_name', true);
+        $dataValues = cp_get_post_meta($this->id, 'message_template_url', true);
+        
+        $result = array();
+        foreach($dataNames as $i=>$name)
+        {
+            if(!$name)
+                continue;
+            $result[] = array('name' => $name, 'url' => $dataValues[$i]);
+        }
+        
+        $this->messageTemplates = $result;
+        
+        return $result;
+    }
+    
+    public function loadProfileInstances()
+    {
+        $instances = cp_get_post_meta($this->id, 'profile_instances', true);
+        
+        $this->profileInstances = cp_explode($instances);    
+        return $roles;
+    }
+    
+    public function getProfileInstanceRows()
+    {
+        global $wpdb;
+        
+        if(!$this->profileInstances)
+            return array();
+            
+        $ids = $wpdb->escape($this->profileInstances);
+        
+        $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id IN (" . implode(", ", $ids) . ")";        
+        $rows = $wpdb->get_results($query);
+        
+        return $rows;
+        
     }
     
     public function loadTestExecutionData()

@@ -68,7 +68,7 @@ get_header();
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell">
-                           <select name="suite_id" id="suite_id" class="select">
+                           <select name="suite_id" id="suite_id" class="select">                           
                                <?php foreach($testsuites as $row){ ?>
                                <option value="<?php echo $row->ID?>" <?php echo $case->testSuite == $row->ID ? 'selected="selected"' : ''?>><?php echo apply_filters('the_title', $row->post_title)?></option>
                                <?php } ?>
@@ -214,46 +214,97 @@ get_header();
            </div>
            <div class="grid-box-body">
                <div class="column">
-                   <?php foreach($case->testData as $row){ ?>
-                   <div class="field-row">
-                       <div class="grid-cell">
-                           <label>Property Name:</label>
-                           <input type="text" name="property_name_data[]" value="<?php echo $row['name']?>" class="input" />
-                       </div>                       
-                       <div class="grid-cell">
-                           <label>Property Value:</label>
-                           <input type="text" name="property_value_data[]" value="<?php echo $row['value']?>" class="input medium-input" />
-                       </div>                       
-                       <div class="grid-cell">
-                           <label>&nbsp;</label>
-                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                       </div>                   
-                       <div class="clear"></div>
-                   </div>               
-                   <?php } ?>
-                   <?php if($isNew){ ?>
-                   <div class="field-row">
-                       <div class="grid-cell">
-                           <label>Property Name:</label>
-                           <input type="text" name="property_name_data[]" value="" class="input" />
-                       </div>                       
-                       <div class="grid-cell">
-                           <label>Property Value:</label>
-                           <input type="text" name="property_value_data[]" value="" class="input medium-input" />
-                       </div>                       
-                       <div class="grid-cell">
-                           <label>&nbsp;</label>
-                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                       </div>                   
-                       <div class="clear"></div>
-                   </div>               
-                   <?php } ?>
-                   <div class="btn-row">
-                       <div class="grid-cell">
-                           <a href="#" class="action-btn add-new-btn" id="add-test-data"><span class="p"></span><span class="t">New Test Data</span></a>                       
+                   <div id="case-template-data">
+                       <h6><B>Message Templates</b></h6>
+                       <?php foreach($case->messageTemplates as $row){ ?>
+                       <div class="field-row">
+                           <div class="grid-cell">
+                               <label>Template Name:</label>
+                               <input type="text" name="message_template_name[]" value="<?php echo $row['name']?>" class="input" />
+                           </div> 
+                           <div class="grid-cell">
+                               <label>Template URL:</label>
+                               <input type="text" name="message_template_url[]" value="<?php echo $row['url']?>" class="input medium-input" />
+                           </div>                   
+                           <div class="grid-cell">
+                               <label>&nbsp;</label>
+                               <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           </div>                                     
+                           <div class="clear"></div>
+                       </div> 
+                       <?php } ?>
+                       <?php if($isNew){ ?>
+                       <div class="field-row">
+                           <div class="grid-cell">
+                               <label>Template Name:</label>
+                               <input type="text" name="message_template_name[]" value="" class="input" />
+                           </div> 
+                           <div class="grid-cell">
+                               <label>Template URL:</label>
+                               <input type="text" name="message_template_url[]" value="" class="input medium-input" />
+                           </div>                   
+                           <div class="grid-cell">
+                               <label>&nbsp;</label>
+                               <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           </div>                                     
+                           <div class="clear"></div>
+                       </div> 
+                       <?php } ?>                       
+                       <div class="btn-row">
+                           <div class="grid-cell">
+                               <a href="#" class="action-btn add-new-btn" id="add-message-template"><span class="p"></span><span class="t">New Template</span></a>                       
+                           </div>
+                           <div class="clear"></div>
                        </div>
+                   </div>
+                   
+                   <h6><B>Profile Data</b></h6>      
+                   <div class="field-row">
+                       <div class="grid-cell width15P">
+                           <label>Profile Name</label>
+                       </div>
+                       <div class="grid-cell width10P">
+                           <label>Purpose</label>
+                       </div>
+                       <div class="grid-cell width15P">
+                           <label>Type</label>
+                       </div>
+                       <div class="grid-cell width45P">
+                           <label>URL</label>
+                       </div>
+                       <div class="grid-cell width5P">
+                           
+                       </div>
+                       
                        <div class="clear"></div>
                    </div>
+                   <div id="profile-instances">
+                   <?php
+                       $profileInstances = getCommunityProfileInstatnces($suite->community_id);
+                       foreach($profileInstances as $instance){
+                           $instanceObj = json_decode(base64_decode($instance->content));
+                   ?>
+                       <div class="field-row">
+                           <div class="grid-cell width15P">
+                               <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" <?php echo cp_checked($instance->id, $case->profileInstances) ?> />
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>
+                           </div>
+                           <div class="grid-cell width10P">
+                               <label><?php echo $instanceObj->ProfilePurpose?></label>
+                           </div>
+                           <div class="grid-cell width15P">
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a> 
+                           </div>
+                           <div class="grid-cell width45P">
+                               <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" class="input width100P" />
+                           </div>                                                             
+                           <div class="clear"></div>
+                       </div>              
+                   <?php
+                       }
+                   ?>
+                   </div>
+                        <div class="field-row noborder"></div>
                </div>
            </div>
         </div>   
@@ -433,17 +484,16 @@ jQuery(document).ready(function(){
             jQuery(this).remove();                
         })
         return false;
-    })    
-    
-    jQuery('#add-test-data').click(function(){
-        jQuery('#test-data-box .btn-row').before('<div class="field-row">' + 
+    })        
+    jQuery('#add-message-template').click(function(){
+        jQuery('#case-template-data .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' + 
-                           '<label>Property Name:</label>' +
-                           '<input type="text" name="property_name_data[]" value="" class="input" />' +
+                           '<label>Template Name:</label>' +
+                           '<input type="text" name="message_template_name[]" value="" class="input" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
-                           '<label>Property Value:</label>' +
-                           '<input type="text" name="property_value_data[]" value="" class="input medium-input" />' +
+                           '<label>Template URL:</label>' +
+                           '<input type="text" name="message_template_url[]" value="" class="input medium-input" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' +
@@ -491,7 +541,7 @@ jQuery(document).ready(function(){
     })
     
     jQuery('#suite_id').change(function(){
-        jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1').show();
+        jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1').show();
         jQuery.ajax({
             url: '<?php echo get_site_url()?>',
             data: {
@@ -501,7 +551,7 @@ jQuery(document).ready(function(){
             type: 'POST',
             dataType: 'xml',
             complete: function(){
-                jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1').hide();
+                jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1').hide();
             },
             success: function(rsp)
             {
@@ -514,6 +564,8 @@ jQuery(document).ready(function(){
                     jQuery('#choose-roles-box .column .field-row').prepend(jQuery(rsp).find('roles').text());
                     
                     jQuery('#choose-init-msg-box select[name="choose_init_message"]').replaceWith(jQuery(rsp).find('initmsg').text());
+                    jQuery('#profile-instances').html(jQuery(rsp).find('profiles').text());
+                    jQuery("#profile-instances a[rel='custom-popup']").cplightbox();
                     
                 }                
             }

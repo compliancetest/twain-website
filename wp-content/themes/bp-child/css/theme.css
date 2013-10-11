@@ -5457,9 +5457,10 @@ a.suite-subscript-link:hover{
 #test-data-box .field-row,
 #test-execution-box .field-row,
 #test-step-box .field-row,
+#test-data-profiles-box .field-row,
 #conf-level-box .field-row,
 #related-suites-box .field-row,
-#template-variables-box .field-row,
+
 #specs-box .field-row,
 #roles-box .field-row{
     border-bottom: solid 1px #e3e3e3;
@@ -5488,16 +5489,6 @@ a.suite-subscript-link:hover{
 }
 #test-cases-box .blue-delete-btn{
     float: right;
-}
-#template-variables-box .input{
-    width: 130px;
-}
-#template-variables-box .medium-input{
-    width: 270px;
-}
-#template-variables-box span{
-    line-height: 26px;
-    
 }
 #suites-box .select,
 #choose-init-msg-box .select{
@@ -6442,4 +6433,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .edit-ticket-box #ticket-time-row span{
     float: left;
     line-height: 26px;
+}
+#case-template-data{
+    border-bottom: solid 1px #cbcbcb;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }
