@@ -459,7 +459,7 @@ function viewProfileType()
                 <div id="json-view-panel"><?php echo base64_decode($row->schema)?></div>                
             </div>
             
-            <div class="popup-box-footer radius6 noradiustop">                                
+            <div class="popup-box-footer radius6 noradiustop">                                                
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-type')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>            
                 <div class="clear"></div>
@@ -509,6 +509,7 @@ function viewProfileInstance()
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                
+                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $row->type?>/<?php echo $row->filename?>" class="input width60P" />
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-instance')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>  
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
                 <div class="clear"></div>
