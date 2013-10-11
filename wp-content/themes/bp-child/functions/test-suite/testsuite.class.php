@@ -22,6 +22,8 @@ class TestSuite
     
     var $templateVariables = array();
     
+    var $profileTypes = array();
+    
     var $testCases = array();
     
     var $relatedSuites = array();

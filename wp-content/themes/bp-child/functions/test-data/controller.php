@@ -248,17 +248,11 @@ function saveProfileInstance($action)
     
     
     //Getting Data
-    $data = array();
-    foreach($_POST as $k=>$p)
-    {
-        if(in_array($p, array('community-id', 'instance-id', 'td-action', 'profile-type-id')))
-            continue;
-        $data[$k] = $p;
-    }
+    $data = stripcslashes($_POST['data']);
     
-    $jsonData = base64_encode(json_encode($data));
-    
-    $basePath = ABSPATH . "wp-content/uploads/profiles";
+    $jsonData = base64_encode($data);
+    $jsonObject = json_decode($data);
+    $basePath = ABSPATH . "profiles";
     
     //Save File
     if(!is_dir($basePath))
@@ -286,12 +280,12 @@ function saveProfileInstance($action)
         @unlink($basePath . "/" . $profile_instance->filename );
     }
     
-    $filename = sanitize_file_name($_POST['ProfileName']) . ".json";
+    $filename = sanitize_file_name($jsonObject->ProfileName) . ".json";
     
     $idx = 2;
     while(file_exists($basePath . "/" . $filename))
     {
-        $filename = sanitize_file_name($_POST['ProfileName']) . "-$idx.json";
+        $filename = sanitize_file_name($jsonObject->ProfileName) . "-$idx.json";
         $idx++;
     }
     
@@ -304,7 +298,7 @@ function saveProfileInstance($action)
         $wpdb->update($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => $_POST['ProfileName'],
+                            'profile_name' => $jsonObject->ProfileName,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => $filename,
@@ -318,7 +312,7 @@ function saveProfileInstance($action)
         $wpdb->insert($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => $_POST['ProfileName'],
+                            'profile_name' => $jsonObject->ProfileName,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => $filename,
@@ -361,7 +355,7 @@ function deleteProfileTypeInstance($action)
     }
     
     //Remove File
-    @unlink(ABSPATH . "wp-content/uploads/profiles/" . $row->type . "/" . $row->filename);
+    @unlink(ABSPATH . "profiles/" . $row->type . "/" . $row->filename);
     $wpdb->delete($wpdb->prefix . "community_profile_instances", array('id' => $row->id));
     $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` - 1 WHERE id=%d", $row->type_id));
     addMessage('Profile instance was removed.');
@@ -393,7 +387,7 @@ function downloadProfileTypeInstance()
     header("Content-Type: Application/octet-stream");
     header("Content-disposition: attachment; filename=" . $row->filename);
     
-    $fp = fopen(ABSPATH . "wp-content/uploads/profiles/" . $row->type . "/" . $row->filename, 'r');
+    $fp = fopen(ABSPATH . "profiles/" . $row->type . "/" . $row->filename, 'r');
     while (!feof($fp))
     {
         echo fread($fp, 65536); 

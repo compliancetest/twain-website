@@ -6314,10 +6314,12 @@ table.json-object .json-string-content-editable{
     -o-border-radius: 3px;
     outline: none;
     font-size: 12px;
-    width: 100px;
-    max-width: 100px;
+    width: 150px;
+    max-width: 150px;
 }
-
+table.json-object .json-array-table .json-string-content-editable{
+    width: 100px;
+}
 .jsonary table.json-object input[type=text],
 table.json-object .json-number-input{
     display: inline-block;

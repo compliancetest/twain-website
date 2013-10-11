@@ -25,7 +25,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width55P">                    
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a><br />
-                    <input type="text" class="url-txt width95P" value="<?php echo get_site_url()?>/wp-content/uploads/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" readonly="readonly" />
+                    <input type="text" class="url-txt width95P" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" readonly="readonly" />
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>                    
@@ -117,6 +117,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             jQuery('#create_profile_panel').html('');
             jQuery('#edit-profile-box #profile-type-id').val('');
             jQuery('#edit-profile-box #instance-id').val('');
+            jQuery('#edit-profile-box .message').remove();
             profileData = null;
             profileType = null;
         }
@@ -164,7 +165,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                             var targetElement = document.getElementById('create_profile_panel');
                             profileType = jQuery.parseJSON(jQuery(rsp).find('schema').text());
                             profileType.additionalProperties = false;                            
-                            var schema = Jsonary.createSchema(profileType);
+                            var schema = Jsonary.createSchema(profileType);                            
                             profileData = Jsonary.create(jQuery.parseJSON(jQuery(rsp).find('data').text())).addSchema(schema);
                             Jsonary.render(targetElement, profileData);                            
                         }else{
@@ -196,7 +197,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             {
                 jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please choose a profile type.</p>');
                 return false;
-            }
+            }            
             if(!tv4.validate(profileData.value(), profileType))
             {
                 jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
@@ -206,9 +207,10 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             jQuery('#edit-profile-box .loading b').html('SAVING DATA');
             jQuery('#edit-profile-box .loading').show();
             jQuery('#edit-profile-box .message').remove();
+            
             jQuery.ajax({
                 url: "/?td-action=<?php echo wp_create_nonce('save-harness-instance')?>&" + jQuery('#editProfileForm').serialize(),
-                data: profileData.value(),
+                data: 'data=' + encodeURIComponent(JSON.stringify(profileData.value())),
                 type: 'post',
                 dataType: 'xml',
                 success: function(rsp)
