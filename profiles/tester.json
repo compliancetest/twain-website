@@ -1,0 +1,46 @@
+{
+    "ProfileType" : "Fund",
+    "ProfileID" : "compliancetest.net/profile/fund/123",
+    "ProfilePurpose" : "Positive",
+    "ProfileName" : "APRA Fund 123",
+
+    "OrganisationName" : "ACME Superannuation",
+    "OrganisationABN" : 76514770399,
+
+    "FundAdministrator" : {
+             "OrganisationName" : "Hilltop Member Fund",
+             "OrganisationABN" : 25002981919},
+
+    "SuperannuationProducts": [
+        {
+            "ProductName": "SuperTrust",
+            "ProductUSI": "AMI0100AU" 
+        },
+        {
+            "ProductName": "SuperInvest",
+            "ProductUSI": "55446633772288" 
+        },
+        {
+            "ProductName": "SuperPension",
+            "ProductUSI": "99887766554433" 
+        } ],
+      "SuperFundMembers": [
+        {
+            "GivenName": "Kerrigan",
+            "FamilyName": "John",
+            "FundMemberID" : "KER214",
+            "PersonTFN":123456774
+         },
+        {
+            "GivenName": "Sapolete",
+            "FamilyName": "Adrian",
+            "FundMemberID" : "SAPO412",
+            "PersonTFN": 123456782
+         },
+        {
+            "GivenName": "Sutejo",
+            "FamilyName": "NOT APPLICABLE",
+            "FundMemberID" : "TEJO456",
+            "PersonTFN": 123456790
+         }  ]
+}
