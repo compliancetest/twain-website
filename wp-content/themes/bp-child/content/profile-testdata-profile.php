@@ -54,7 +54,7 @@ $profileInstances = getCustomerProfileInstances();
                             {
                         ?>
                         <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn grey-edit-btn"><span class="p"></span></a>
-                        <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn grey-delete-btn left10"><span class="p"></span></a>
+                        <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-profile")?>" class="action-btn icon-btn grey-delete-btn left10"><span class="p"></span></a>
                         <?php
                             }
                         ?>
@@ -214,7 +214,7 @@ if(count($subscriptions) > 0){
             jQuery('#edit-profile-box .message').remove();
             jQuery.ajax({
                 url: "/?td-action=<?php echo wp_create_nonce('save-tester-instance')?>&" + jQuery('#editProfileForm').serialize(),
-                data: profileData.value(),
+                data: "data=" + encodeURIComponent(JSON.stringify(profileData.value())),
                 type: 'post',
                 dataType: 'xml',
                 success: function(rsp)
