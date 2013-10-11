@@ -73,8 +73,8 @@ class TestSuite
         $this->loadRelatedSuites();
         $this->loadRoles();
         $this->loadSpecDocuments();
-        $this->loadTypes();
-        $this->loadVariables();
+        $this->loadTypes();        
+        $this->loadProfileTypes();
         
         $p = get_post($this->id);
         
@@ -137,6 +137,26 @@ class TestSuite
         }
         $this->roles = $roles;    
         return $roles;
+    }
+    
+    public function loadProfileTypes()
+    {
+        $types = cp_get_post_meta($this->id, 'ts_profile_types', true);
+        
+        $this->profileTypes = cp_explode($types);    
+        return $roles;
+    }
+    
+    public function getProfileTypesRows()
+    {
+        global $wpdb;
+        
+        $ids = $wpdb->escape($this->profileTypes);
+        $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id IN (" . implode(", ", $ids) . ")";
+        $rows = $wpdb->get_results($query);
+        
+        return $rows;
+        
     }
     
     public function loadRelatedSuites()

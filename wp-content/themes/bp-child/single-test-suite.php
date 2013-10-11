@@ -80,7 +80,7 @@ Template Name Posts: Test Suite
                     </li>
                     
                     <li class="">
-						<a href="javascript: void(0)" rel="tabs_sv5">Template Variables</a>
+						<a href="javascript: void(0)" rel="tabs_sv5">Test Data Profiles</a>
 					</li>
                     
 				</ul>
@@ -171,24 +171,15 @@ Template Name Posts: Test Suite
                 
                 <div class="tab-content white_bcg" id="tabs_sv5" style="display: none; ">
 					<div class="column padding15-20">
+						<?php                    
+                       $profileTypes = $suite->getProfileTypesRows();
+                       foreach($profileTypes as $profileType){ ?>
+                       
+                           <div class="grid-cell width100P">
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profileType->title?></a>
+                           </div>      
+                       <?php } ?>  
 						
-						<?php
-						    foreach($suite->templateVariables as $idx=>$row){
-							
-					        ?>		
-										<div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->templateVariables)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row->variable_name; ?></div>
-										<div class="grid_cell width45P">
-                                            <?php echo $row->variable_description; ?>
-                                        </div>
-                                        <div class="grid_cell width25P">
-											<?php echo $row->variable_default; ?>
-										</div>
-										<div class="clear"></div> 
-										<div class="grey-border-bottom <?php if ($idx == ((count($suite->templateVariables)) -1 )) { echo 'displaynone';} ?>"></div>																	
-						    <?php
-							
-							}
-						?>
 					</div>
 					<div class="clear"></div>
 				</div><!--end tab 3-->

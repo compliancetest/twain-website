@@ -174,6 +174,8 @@ function saveSuite()
     cp_update_post_meta($id, 'ts_version', $_POST['ts_version']);
     cp_update_post_meta($id, 'ts_description', $_POST['ts_description']);
     
+    cp_update_post_meta($id, 'ts_profile_types', cp_implode($_POST['ts_profile_types']));
+    
     //Remove the assigned group
     $wpdb->delete($wpdb->prefix . "bp_groups_testsuites", array("ts_ids"=>$id));
     if(!$group_id)
