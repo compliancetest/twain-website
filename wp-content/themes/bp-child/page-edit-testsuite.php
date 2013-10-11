@@ -49,7 +49,7 @@ if(!$suite->community_id)
                        <div class="grid-cell">
                            <select name="community_id" id="community_id" class="select">
                                <?php foreach($groups as $row){ ?>
-                               <option value="<?php echo $row->id?>"><?php echo apply_filters('the_title', $row->name)?></option>
+                               <option value="<?php echo $row->id?>" <?php echo cp_selected($row->id, $suite->community_id)?>><?php echo apply_filters('the_title', $row->name)?></option>
                                <?php } ?>
                            </select>                           
                        </div>
@@ -242,7 +242,7 @@ if(!$suite->community_id)
            </div>
            <div class="grid-box-body">
                <div class="column">
-                   <div class="field-row noborder">
+                   <div class="field-row noborder" id="suite_profile_types">
                    <?php                    
                    $profileTypes = getCommunityProfileTypes($suite->community_id);
                    foreach($profileTypes as $row){ ?>
@@ -651,15 +651,17 @@ if(!$suite->community_id)
                 data: {
                     'community_id': jQuery(this).val(),
                     'id': '<?php echo $suite->id ?>',
-                    '_wpnonce': '<?php echo wp_create_nonce('get-brother-suites')?>'
+                    '_wpnonce': '<?php echo wp_create_nonce('get-brother-suites-and-profile-types')?>'
                 },
                 type: 'POST',
+                dataType: 'xml',
                 complete: function(){
                     jQuery('#community-box .loading1, #related-suites-box .loading1').hide();    
                 },
                 success: function(rsp)
                 {
-                    jQuery('#related-suites-box select').replaceWith(rsp);
+                    jQuery('#related-suites-box select').replaceWith(jQuery(rsp).find('suites').text());
+                    jQuery('#suite_profile_types').html(jQuery(rsp).find('profileTypes').text());
                 }
             })
         })

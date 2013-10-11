@@ -15,9 +15,9 @@ add_action('init', 'process_testsuite_actions', 100);
 function process_testsuite_actions()
 {
     $action = isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : null;
-    if(wp_verify_nonce($action, 'get-brother-suites'))
+    if(wp_verify_nonce($action, 'get-brother-suites-and-profile-types'))
     {        
-        getBrotherSuites();
+        getBrotherSuitesAndProfileTypes();
     }else if(wp_verify_nonce($action, 'save-suite')){
         saveSuite();        
     }else if(wp_verify_nonce($action, 'hide_testcase')){        
@@ -85,7 +85,7 @@ function deleteTestSuite()
     exit;
 }
 
-function getBrotherSuites()
+function getBrotherSuitesAndProfileTypes()
 {
     $groupID = $_POST['community_id'];
     $user_id = get_current_user_id();
@@ -96,15 +96,31 @@ function getBrotherSuites()
     $suite = new TestSuite($_POST['id']);
     
     $brotherSuites = $suite->getBrotherSuites($groupID);
+    $suitesHtml = "";
     
-    ?>
-    <select name="ts[]" class="select">
-       <option>- Select -</option>
-       <?php foreach($brotherSuites as $row) { 
-           echo '<option value="' . $row->ID . '">' . $row->post_title . '</option>';
-       } ?>
-   </select>
-    <?php
+    $suitesHtml .= '<select name="ts[]" class="select">' .
+       '<option>- Select -</option>';
+       foreach($brotherSuites as $row) {
+           $suitesHtml .= '<option value="' . $row->ID . '">' . $row->post_title . '</option>';
+       }
+   $suitesHtml .= '</select>';
+    
+    //Getting Profile Instances
+    $typesHtml = '';
+    
+    $profileTypes = getCommunityProfileTypes($groupID);
+    foreach($profileTypes as $row){
+                   
+    $typesHtml .= '<div class="grid-cell width50P nopadding">' .
+                  ' <input type="checkbox" class="checkbox-input" name="ts_profile_types[]" value="' . $row->id . '" />' . 
+                  ' <a href="' . get_site_url() . '?td-action=' . wp_create_nonce("view-profile-type") . '&id=' . $row->id . '" rel="custom-popup" cp-type="ajax">' . $row->title . '</a>' .
+                  '</div>';
+    }
+    header('application/xml');
+    echo '<result>';
+    echo '<suites><![CDATA[' . $suitesHtml . ']]></suites>';
+    echo '<profileTypes><![CDATA[' . $typesHtml . ']]></profileTypes>';
+    echo '</result>';
     exit;
 }
 

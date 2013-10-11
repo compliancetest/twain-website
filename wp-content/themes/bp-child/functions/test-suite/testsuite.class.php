@@ -164,9 +164,12 @@ class TestSuite
         $suiteIDs = cp_get_post_meta($this->id, 'ts', true);
         $suiteDescs = cp_get_post_meta($this->id, 'ts_desc', true);
         $result = array();
-        foreach($suiteIDs as $i=>$sid)
+        if(is_array($suiteIDs))
         {
-            $result[] = array('id' => $sid, 'desc' => $suiteDescs[$i]);
+            foreach($suiteIDs as $i=>$sid)
+            {
+                $result[] = array('id' => $sid, 'desc' => $suiteDescs[$i]);
+            }
         }
         
         $this->relatedSuites = $result;
