@@ -104,16 +104,6 @@ class TestSuite
         $this->specDocuments = $wpdb->get_results($query);
     }
     
-    public function loadVariables()
-    {
-        global $wpdb;
-        
-        $query = $wpdb->prepare( "SELECT * FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=%d ORDER BY id", $this->id);            
-        $this->templateVariables = $wpdb->get_results($query);
-        
-        return $this->templateVariables;
-    }
-    
     public function loadRoles()
     {
         $roleNames = cp_get_post_meta($this->id, 'role_names', true);

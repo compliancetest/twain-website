@@ -397,13 +397,6 @@ function getUserPreviousMessageTemplates($user_id = null)
     
     $rows = $wpdb->get_results($query);
     
-    $results = array();
-    foreach($rows as $r)
-    {
-        $r->params = unserialize(base64_decode($r->params));
-        $results[] = $r;
-    }
-    
     return $results;
 }
 

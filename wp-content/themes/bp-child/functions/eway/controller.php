@@ -118,7 +118,6 @@ function process_eway_payment()
                 'tester_endpoint_url' => '',
                 'tester_username' => '',
                 'tester_password' => '',
-                'params' => '',
                 'status' => 'Active',
                 'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                 'created_date' => date('Y-m-d H:i:s')
@@ -289,13 +288,12 @@ function free_charge()
                     'tester_endpoint_url' => '',
                     'tester_username' => '',
                     'tester_password' => '',
-                    'params' => '',
                     'status' => 'Active',
                     'expiry_date' => date("Y-m-d", strtotime('+1 month')),
                     'created_date' => date('Y-m-d H:i:s')
                 ));
                 
-                $id = $wpdb->insert_id;                
+                $id = $wpdb->insert_id;
                 
                 addMessage("Your subscription has been proceeded successfully");
                 

@@ -43,8 +43,7 @@ if(!defined('ABSPATH'))
                     <div class="td td-action tocenter">
                         <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="harness-detail-link" data-id="<?php echo $row->id?>">Harness Detail</a>
                         | 
-                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="unsubscribe-link">Unsubscribe</a><br />
-                        <a href="?_paymentnonce=<?php echo wp_create_nonce('show-variables-popup') ?>&id=<?php echo $row->id ?>" class="template-variables-link">Variable Defaults</a>
+                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="unsubscribe-link">Unsubscribe</a><br />                        
                     </div>
                     <input type="hidden" id="p_mode_agreement<?php echo $row->id?>" value="<?php echo $row->p_mode_agreement?>" />
                     <input type="hidden" id="harness_endpoint_url<?php echo $row->id?>" value="<?php echo $row->harness_endpoint_url?>" />
