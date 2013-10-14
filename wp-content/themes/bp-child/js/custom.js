@@ -459,6 +459,12 @@ jQuery(document).ready(function($) {
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');
     })
     
+    //Fix the footer Position
+    if(jQuery('body').height() > jQuery('#wrapper').height())
+    {
+        jQuery('#content-pattern').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height());
+    }    
+    
 });
 
 function isMobile()

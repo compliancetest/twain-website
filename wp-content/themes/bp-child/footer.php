@@ -35,7 +35,7 @@
 				    </div>
                     <div class="clear"></div>
                     <div class="space10"></div>
-                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/drummond_group_logo.jpg" alt="Drummond Group Logo" />
+                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/drummond_group_logo.png" alt="Drummond Group Logo" />
                 </div>    
 				<div id="footer-twitters">
 					<h5>Follow us on Twitter</h5>

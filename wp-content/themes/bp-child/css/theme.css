@@ -1945,59 +1945,52 @@ display:block;
 
 #pass_recovery{
 top: 2px;
-margin-left: 1px;
+margin-left: 115px;
 text-decoration: underline;
 color: #2C80E8;
-font-size: 12px;
+font-size: 10px;
 }
 
-#top_access input[type="text"] {
-    font-size: 12px;
-    color: #666;
-    font-style: normal;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-weight: 400;
-    border-radius: 5px 5px 0px 0px;
-    border-top: 1px solid #C8C8C8;
-    border-left: 1px solid #C8C8C8;
-    border-right: 1px solid #C8C8C8;
-    border-bottom: none;
-    height: 29px;
-    width: 200px;
-    box-shadow: none;
-    background: white url(../images/mail_icon.jpg) center left no-repeat;
-    padding: 0px 3px 3px 40px;
-    font-family: 'Open Sans', Arial, sans-serif;
-    box-shadow: 0px 0px 5px #C1C1C1;
-    -webkit-box-shadow: 0px 0px 5px #C1C1C1;
-    -moz-box-shadow: 0px 0px 5px #C1C1C1;
-    -o-box-shadow: 0px 0px 5px #C1C1C1;
-}
-
+#top_access input[type="text"] ,
 #top_access input[type="password"] {
     font-size: 12px;
     color: #666;
     font-style: normal;
     font-family: 'Open Sans', Arial, sans-serif;
-    font-weight: 400;
-    border-radius: 0px 0px 5px 5px;
-    border-top: 1px solid #C8C8C8;
-    border-left: 1px solid #C8C8C8;
-    border-right: 1px solid #C8C8C8;
-    border-bottom: 1px solid #C8C8C8;
-    height: 26px;
-    width: 200px;
-    margin-top: -5px;
-    box-shadow: none;
+    font-weight: 400;    
+    height: 20px;
+    width: 155px;
+    padding: 0;
+    border: none;
+}
+
+#top_access p.login-username,
+#top_access p.login-password {
+    height: 20px;
+    width: 155px;
+    padding: 2px 5px 2px 38px;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid #C8C8C8;
+    border-bottom: none;
+    background: white url(../images/mail_icon.jpg) center left no-repeat;
+    box-shadow: 0px 0px 5px #C1C1C1;
+    -webkit-box-shadow: 0px 0px 5px #C1C1C1;
+    -moz-box-shadow: 0px 0px 5px #C1C1C1;
+    -o-box-shadow: 0px 0px 5px #C1C1C1;
+    margin: 0;
+}
+#top_access p.login-password{
     background: white url(../images/password_icon.jpg) center left no-repeat;
-    padding: 3px 3px 3px 40px;
+    padding: 2px 5px 2px 38px;
     background-position: 1px 0px;
     box-shadow: 0px 1px 3px #c1c1c1;
     -webkit-box-shadow: 0px 1px 3px #c1c1c1;
     -moz-box-shadow: 0px 1px 3px #c1c1c1;
-    -o-box-shadow: 0px 1px 3px #c1c1c1;
+    -o-box-shadow: 0px 1px 3px #c1c1c1;    
+    box-shadow: none;
+    border-radius: 0px 0px 5px 5px;
+    border: 1px solid #C8C8C8;
 }
-
 /*Placeholders
  * */
 
@@ -2651,6 +2644,7 @@ p.copyright{
 #footer-twitters{
     border-top: 6px solid #666;
     width: 445px;
+    min-height: 225px;
     padding-top: 20px;
     float: left;
     position: relative;    
@@ -4372,6 +4366,7 @@ span.button_sign {
 #my_profile .grid-box{
     
 }
+
 #my_profile .grid-box .grid-box-header h5{
     font-weight: bold;
 }
@@ -6438,4 +6433,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     border-bottom: solid 1px #cbcbcb;
     padding-bottom: 15px;
     margin-bottom: 15px;
+}
+/***
+* Dashboard Page Min Heights
+*/
+#my_profile .four_fifths, #my_products .four_fifths, #test_suite_coverage .four_fifths, #my_transaction_log .four_fifths, #my_messages .four_fifths, #my_tickets .four_fifths{
+    min-height: 312px;
 }

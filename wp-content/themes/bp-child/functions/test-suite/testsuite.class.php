@@ -20,8 +20,6 @@ class TestSuite
     
     var $conformanceLevel = array();
     
-    var $templateVariables = array();
-    
     var $profileTypes = array();
     
     var $testCases = array();
