@@ -310,18 +310,11 @@ function saveCase()
         
     }
     
-    $esb = new ManageESB();
-    if($isNew)
-    {
-        //Add Test Case
-        $esb->addTestCaseInfo($id, $testCaseId, $_POST['outcome_type'], $_POST['message_count']);        
-    }else{
-//        $esb->addTestCaseInfo($id, get_post_meta($id, 'test_case_id', true), $_POST['outcome_type'], $_POST['message_count']);        
-        $esb->updateTestCaseInfo($id, $_POST['outcome_type'], $_POST['message_count']);
-    }
-    
     if($isNew)
         cp_update_post_meta($id, 'test_case_id', $testCaseId);        
+    
+    $esb = new ManageESB();
+    $esb->saveTestCaseInfo($id, get_post_meta($id, 'test_case_id', true), $_POST['outcome_type'], $_POST['message_count']);        
         
     //update post metas
     cp_update_post_meta($id, 'test_suite', $suiteID);    

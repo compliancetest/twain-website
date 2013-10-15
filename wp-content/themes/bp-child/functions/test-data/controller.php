@@ -439,7 +439,7 @@ function viewProfileType()
     if(!$type_id)
     {
         ?>
-        <div class="popup-box edit-profile-box" style="display: none; width: 900px;">
+        <div class="popup-box view-profile-type-box" style="display: none; width: 900px;" id="view-profile-type-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Error</div>        
             <div class="popup-box-content grid-box-body">                    
                 <p class="message error">Invalid Request!</p>
@@ -452,24 +452,31 @@ function viewProfileType()
         </div>
         <?php
     }else{
+        $boxId = time();
         ?>
-        <div class="popup-box edit-profile-box" style="display: none; width: 900px;">
+        <div class="popup-box view-profile-type-box" style="display: none; width: 900px;" id="view-profile-type-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Type Detail</div>        
             <div class="popup-box-content grid-box-body">                    
-                <div id="json-view-panel"><?php echo base64_decode($row->schema)?></div>                
+                <div id="json-view-panel<?php echo $boxId?>"><?php echo base64_decode($row->schema)?></div>                
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                                                
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+                <?php if(isset($_REQUEST['back'])){ ?>
+                    <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a> 
+                <?php }else{?>                
+                    <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>                                
+                <?php } ?>
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-type')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>            
                 <div class="clear"></div>
             </div>                        
-            <a class="close_btn"></a>                        
+            <?php if(!isset($_REQUEST['back'])){ ?>
+            <a class="close_btn"></a>                    
+            <?php }?>                               
         </div>
         <script type="text/javascript">
             var t_data = Jsonary.create(<?php echo base64_decode($row->schema)?>).readOnlyCopy();
-            var t_element = document.getElementById('json-view-panel');
-            Jsonary.render(t_element, t_data);    
+            var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
+            Jsonary.render(t_element, t_data);                
         </script>
         <?php
     }
@@ -488,7 +495,7 @@ function viewProfileInstance()
     if(!$row)
     {
         ?>
-        <div class="popup-box edit-profile-box" style="display: none; width: 900px;">
+        <div class="popup-box" style="display: none; width: 900px;">
             <div class="popup-box-header radius6 noradiusbottom">Error</div>        
             <div class="popup-box-content grid-box-body">                    
                 <p class="message error">Invalid Request!</p>
@@ -501,24 +508,31 @@ function viewProfileInstance()
         </div>
         <?php
     }else{
+        $boxId = time();
         ?>
-        <div class="popup-box edit-profile-box" style="display: none; width: 900px;">
+        <div class="popup-box" style="display: none; width: 900px;" id="view-profile-instance-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Instance Detail</div>        
             <div class="popup-box-content grid-box-body">                            
-                <div id="json-view-panel"><?php echo base64_decode($row->content)?></div>                
+                <div id="json-view-panel<?php echo $boxId?>"><?php echo base64_decode($row->content)?></div>                
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                
-                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $row->type?>/<?php echo $row->filename?>" class="input width60P" />
+                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $row->type?>/<?php echo $row->filename?>" class="input width60P" />                
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-instance')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>  
+                <?php if(isset($_REQUEST['back'])){ ?>
+                <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a>            
+                <?php }else{ ?>
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+                <?php } ?>
                 <div class="clear"></div>
             </div>                        
-            <a class="close_btn"></a>                        
+            <?php if(!isset($_REQUEST['back'])){ ?>
+            <a class="close_btn"></a>                    
+            <?php }?>                       
         </div>
         <script type="text/javascript">
             var t_data = Jsonary.create(<?php echo base64_decode($row->content)?>).readOnlyCopy();
-            var t_element = document.getElementById('json-view-panel');
+            var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
             Jsonary.render(t_element, t_data);    
         </script>
         <?php

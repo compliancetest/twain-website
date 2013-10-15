@@ -6170,6 +6170,15 @@ table#message-threads .thread-from div{
     font-weight: bold;    
     
 }
+#trigger-message-box .harness-profiles-section h5,
+#trigger-message-box .tester-profiles-section h5{
+    border-bottom: solid 1px #bbb;
+    line-height: 25px;
+}
+.harness-profiles-section .field-row,
+.tester-profiles-section .field-row{
+    padding-bottom: 5px;
+}
 #template-variables-contr .field-row label{
     line-height: 26px;
 }
@@ -6178,7 +6187,7 @@ table#message-threads .thread-from div{
 }
 #trigger-message-box .popup-box-footer .grid-cell .input{
     width: 150px;
-}!
+}
 #trigger-message-box .popup-box-footer .grid-cell .action-btn{
     margin: 0 10px 0 0;
 }
@@ -6230,7 +6239,13 @@ div.popup-box .loading-with-text{
     padding-bottom: 3px;
 }
 
-
+#edit_profile_instance_panel{
+    display: none;
+}
+#edit_profile_instance_panel h5{
+    font-size: 14px;
+    margin: 10px 0 0;
+}
 #create_profile_panel .element{
     padding:5px 0 5px 20px;
 }
@@ -6243,13 +6258,42 @@ div.popup-box .loading-with-text{
     vertical-align: middle;
     height: 25px;
 }
+.file-placeholder{
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    width: 85px;
+}
+.file-placeholder .input-file{
+    opacity: 0;
+    filter: alpha(opacity=0);
+    position: absolute;
+    bottom: 0;
+    right: 0;    
+}
+#edit_profile_instance_panel .enter-values{
+    background: url(../images/double_border.png) left 7px repeat-x;    
+    text-align: center;
+    padding-bottom: 10px;
+}
+#edit_profile_instance_panel .enter-values span{
+    display: inline-block;
+    background: #fff;
+    padding: 0 10px;
+}
+
+#upload_profile_panel #file-name-list{
+    padding: 5px 0;
+    color: #666;
+    margin: 0;
+}
 .json-object-outer .json-object-title{
     font-size: 13px;
     width: 100%;
     padding: 5px 0;
     border: none;
     background: none;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     display: block;
 }

@@ -181,7 +181,7 @@ $case->load();
                 </div>
                 <div class="grids">
                     <?php                    
-                    $profileInstances = $case->getProfileInstanceRows();                    
+                    $profileInstances = $suiteObj->getProfileInstancesRows();                    
                     foreach($profileInstances as $instance){
                         $instanceObj = json_decode(base64_decode($instance->content));
                     ?>

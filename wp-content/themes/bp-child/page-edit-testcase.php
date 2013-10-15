@@ -280,7 +280,7 @@ get_header();
                    </div>
                    <div id="profile-instances">
                    <?php
-                       $profileInstances = getCommunityProfileInstatnces($suite->community_id);
+                       $profileInstances = $suite->getProfileInstancesRows();
                        foreach($profileInstances as $instance){
                            $instanceObj = json_decode(base64_decode($instance->content));
                    ?>

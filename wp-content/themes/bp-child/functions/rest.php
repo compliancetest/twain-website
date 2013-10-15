@@ -39,7 +39,8 @@ class CPRest
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data); 
         if($isXMLHeader)
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/xml")); 
-
+        
+        curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
         $response = curl_exec($ch);
         
         if(!curl_errno($ch)){ 

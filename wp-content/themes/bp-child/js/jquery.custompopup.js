@@ -37,7 +37,7 @@
             if(opts.headerTitle)    
                 opts.template.find('.popup-box-header').html(opts.headerTitle);            
             
-            $self.click(function(){                
+            $self.click(function(){     
                 if($('.mask-wrapper').length < 1)
                 {
                     $('body').append("<div class='mask-wrapper'></div>");
@@ -62,7 +62,7 @@
                     if($overlay.find('.popup-box:visible').length > 0)
                     {
                         $overlay.find('.popup-box:visible').fadeOut('fast', function(){     
-                            opts.onClose();   
+                            $.data(this, 'options').onClose();   
                             opts.onStart();            
                             opts.box.fadeIn('fast', function(){
                                 setOverlaySize();
@@ -104,17 +104,21 @@
                                 }
                                 $overlay.append(opts.box);
                                 
-                                opts.onAjaxSuccess();
+                                //Store Data
+                                $.data(opts.box.get(0), 'options', opts);
+                                
+                                opts.onAjaxSuccess(opts.box);
                                 
                                 setSelfPosition();
                                 initPopupEvents();
                                 if($overlay.find('.popup-box:visible').length > 0)
                                 {
-                                    $overlay.find('.popup-box:visible').fadeOut('fast', function(){     
-                                        opts.onClose();   
+                                    $overlay.find('.popup-box:visible').fadeOut('fast', function(){                                             
+                                        $.data(this, 'options').onClose();   
                                         opts.onStart();            
-                                        opts.box.fadeIn('fast', function(){
+                                        opts.box.fadeIn('fast', function(){                                            
                                             setOverlaySize();
+                                            setSelfPosition();
                                             opts.onLoad();                                                    
                                         });
                                     })
@@ -122,6 +126,7 @@
                                     opts.onStart();
                                     opts.box.fadeIn('fast', function(){
                                         setOverlaySize();
+                                        setSelfPosition();
                                         opts.onLoad();        
                                     });
                                 }
@@ -133,17 +138,22 @@
                     default:                                    
                         opts.box = $(opts.href);    
                         opts.box.hide();                        
-                        $overlay.append(opts.box);                        
+                        $overlay.append(opts.box);                      
+                        
+                        //Store Data
+                        $.data(opts.box.get(0), 'options', opts);
+                                  
                         setSelfPosition();
                         initPopupEvents();
                         
                         if($overlay.find('.popup-box:visible').length > 0)
                         {
                             $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
-                                opts.onClose();
+                                $.data(this, 'options').onClose();   
                                 opts.onStart();
                                 opts.box.fadeIn('fast', function(){
                                     setOverlaySize();
+                                    setSelfPosition();
                                     opts.onLoad();        
                                 });
                             })
@@ -151,6 +161,7 @@
                             opts.onStart();
                             opts.box.fadeIn('fast', function(){
                                 setOverlaySize();
+                                setSelfPosition();
                                 opts.onLoad();        
                             });
                         }
@@ -288,13 +299,15 @@
         setOverlaySize();
                                   
         opts.box.hide();                        
-        $overlay.append(opts.box);                        
+        $overlay.append(opts.box);  
+        $.data(opts.box.get(0), 'options', opts);
         setSelfPosition();
         initPopupEvents();
         
         if($overlay.find('.popup-box:visible').length > 0)
         {
             $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
+                $.data(this, 'options').onClose(); 
                 opts.onStart();
                 opts.box.fadeIn('fast', function(){
                     setOverlaySize();

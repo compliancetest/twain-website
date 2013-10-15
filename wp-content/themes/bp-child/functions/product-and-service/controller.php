@@ -77,6 +77,10 @@ function saveProductService()
     
     update_post_meta($id, 'product_id', $product_id);
     
+    //Update Product Name ID Map Table on ESB
+    $esb = new ManageESB();
+    $esb->addProductNameIDMap($id, $product_id);
+    
     update_post_meta($id, 'product_name', $_POST['product_name']);
     update_post_meta($id, 'product_release_date', date('Y-m-d', strtotime($_POST['product_release_date'])));
     update_post_meta($id, 'product_type', $_POST['product_type']);

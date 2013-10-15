@@ -99,11 +99,34 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                 </select>
                 <div class="clear"></div>
             </div>
-            <div id="create_profile_panel">                
-                <div class="clear"></div>
+            <div id="edit_profile_instance_panel">
+                <div id="upload_profile_panel">                    
+                    <div class="field-row">
+                        <label class="padding5-10-5-0"> Upload Json file</label> 
+                        <div class="grid-cell">                                        
+                            <span class="file-placeholder action-btn add-new-btn left nomarginleft">
+                                <span class="p"></span>
+                                <span class="t">Select File</span>
+                                <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" />
+                            </span>
+                            <small class="left lineheight22px">&nbsp;&nbsp;(.txt or .json file)</small>
+                            <div class="clear"></div>
+                            <p id="file-name-list"></p>
+                        </div>
+                        <div class="grid-cell">
+                            <a href="#" class="action-btn process-btn plus" id="profile_instance_upload_btn"><span class="p"></span><span class="t">Upload</span></a>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="enter-values"><span>Or enter values</span></div>
+                <div id="create_profile_panel">                
+                    <div class="clear"></div>
+                </div>
+                
             </div>
         </div>
-        <div class="popup-box-footer radius6 noradiustop">                
+        <div class="popup-box-footer radius6 noradiustop">                            
             <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
             <div class="clear"></div>
@@ -117,9 +140,82 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
     var profileData = null;
     var profileType = null;
     jQuery(document).ready(function(){
+        //Ajax File Uploader
+        jQuery('#profile_instance_file').fileupload({
+            url: '/upload-json.php',
+            dataType: 'json',
+            add: function (e, data) {
+                jQuery('#edit-profile-box .message').remove();                       
+                jQuery('#upload_profile_panel #file-name-list').html('<span>' + data.files[0].name + '</span>');
+                data.context = jQuery('#profile_instance_upload_btn')
+                    .click(function () {
+                        jQuery('#edit-profile-box .message').remove();  
+                        if(data.files.length < 1)
+                        {
+                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select a file to upload</p>');
+                        }else{
+                            //Check File Extension Validation
+                            fileName = data.files[0].name;
+                            var ext = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();                            
+                            if(ext != 'json' && ext != 'txt')
+                            {
+                                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select a valid file.</p>');
+                                return false;
+                            }
+                            jQuery('#edit-profile-box .loading b').html('UPLOADING DATA');
+                            jQuery('#edit-profile-box .loading').show();
+                            data.submit();    
+                        }
+                        
+                    });
+            },
+            done: function (e, data) {
+                jQuery('#edit-profile-box .message').remove();
+                jQuery('#edit-profile-box .loading').hide();
+                //Check Validation
+                if(!tv4.validate(data.result, profileType))
+                {
+                    jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
+                    return false;
+                }
+                //Saving Data
+                jQuery('#edit-profile-box .loading b').html('SAVING DATA');
+                jQuery('#edit-profile-box .loading').show();                
+                
+                jQuery.ajax({
+                    url: "/?td-action=<?php echo wp_create_nonce('save-harness-instance')?>&" + jQuery('#editProfileForm').serialize(),
+                    data: 'data=' + encodeURIComponent(JSON.stringify(data.result)),
+                    type: 'post',
+                    dataType: 'xml',
+                    success: function(rsp)
+                    {
+                        if(jQuery(rsp).find('status').text() == 'success')   
+                        {
+                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
+                            document.location.reload();
+                        }else{                    
+                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
+                        }
+                    },
+                    error: function(rsp){
+                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
+                    },
+                    complete: function(rsp){
+                        jQuery('#edit-profile-box .loading').hide();
+                    }
+                })
+                return false;
+            },
+            fail: function(e, data){
+                jQuery('#edit-profile-box .loading').hide();
+                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Uploaded file is not a valid json format.</p>');
+            }
+        });
+        
         function initEditProfileBox()
         {
             jQuery('#create_profile_panel').html('');
+            jQuery('#edit_profile_instance_panel').hide();
             jQuery('#edit-profile-box #profile-type-id').val('');
             jQuery('#edit-profile-box #instance-id').val('');
             jQuery('#edit-profile-box .message').remove();
@@ -167,6 +263,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                     {
                         if(jQuery(rsp).find('status').text() == 'success')   
                         {
+                            jQuery('#edit_profile_instance_panel').show();
                             var targetElement = document.getElementById('create_profile_panel');
                             profileType = jQuery.parseJSON(jQuery(rsp).find('schema').text());
                             profileType.additionalProperties = false;                            
@@ -175,11 +272,12 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                             Jsonary.render(targetElement, profileData);                            
                         }else{
                             jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
-                            jQuery('#edit-profile-box .loading b').html('LOADING DATA');
+                            jQuery('#edit_profile_instance_panel').hide();
                             jQuery('#edit-profile-box #profile-type-id').val('');
                             profileData = null;
                             profileType = null;
                         }
+                        jQuery(window).resize();
                     },
                     error: function(rsp){
                         jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
@@ -198,6 +296,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
         });
         
         jQuery('#edit-profile-box .submit-btn').click(function(){        
+            jQuery('#edit-profile-box .message').remove();
             if(profileData == null || profileType == null)
             {
                 jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please choose a profile type.</p>');
@@ -211,7 +310,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             //Saving Data
             jQuery('#edit-profile-box .loading b').html('SAVING DATA');
             jQuery('#edit-profile-box .loading').show();
-            jQuery('#edit-profile-box .message').remove();
+            
             
             jQuery.ajax({
                 url: "/?td-action=<?php echo wp_create_nonce('save-harness-instance')?>&" + jQuery('#editProfileForm').serialize(),

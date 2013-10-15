@@ -130,13 +130,14 @@ class TestCase
         $dataValues = cp_get_post_meta($this->id, 'message_template_url', true);
         
         $result = array();
-        foreach($dataNames as $i=>$name)
-        {
-            if(!$name)
-                continue;
-            $result[] = array('name' => $name, 'url' => $dataValues[$i]);
+        if($dataNames){
+            foreach($dataNames as $i=>$name)
+            {
+                if(!$name)
+                    continue;
+                $result[] = array('name' => $name, 'url' => $dataValues[$i]);
+            }
         }
-        
         $this->messageTemplates = $result;
         
         return $result;

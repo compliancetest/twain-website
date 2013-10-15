@@ -397,7 +397,7 @@ function getUserPreviousMessageTemplates($user_id = null)
     
     $rows = $wpdb->get_results($query);
     
-    return $results;
+    return $rows;
 }
 
 function getTestCaseTemplates($case_id)

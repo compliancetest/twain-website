@@ -17,6 +17,7 @@ class ManageESB
     
     var $table_test_case_configuration = 'TEST_CASE_CONFIGURATION';
     var $table_test_suite_name_id_map = 'TEST_SUITE_NAME_ID_MAPS';
+    var $table_product_name_id_map = 'PRODUCT_NAME_ID_MAPS';
     
     public static $esbdb = null;
     
@@ -921,25 +922,23 @@ class ManageESB
         ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_OUTCOME'=>$suiteID), array('ID' => $id));
     }
     
-    public function addTestCaseInfo($id, $name, $outcome_type, $pattern)
+    
+    public function saveTestCaseInfo($id, $name, $outcome_type, $pattern)
     {
-        $result = ManageESB::$esbdb->insert($this->table_test_case_configuration, 
-            array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern)
-        );
+        //Check if the id already exists on the ESB DB
+        $esb_id = ManageESB::$esbdb->get_var("SELECT ID FROM " . $this->table_test_case_configuration . " WHERE TEST_CASE_WP_ID=" . $id . " OR TEST_CASE_ID='" .  $name . "'");
+        if(!$esb_id) //New
+        {
+            $result = ManageESB::$esbdb->insert($this->table_test_case_configuration, 
+                array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern)
+            );
+        
+        }else{
+            ManageESB::$esbdb->update($this->table_test_case_configuration, array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern), array('ID' => $esb_id));    
+        }
         
         return $result;        
     }
-    
-    public function updateTestCaseInfo($id, $outcome_type, $pattern)
-    {
-        $result = ManageESB::$esbdb->update($this->table_test_case_configuration, 
-            array('TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern),
-            array('TEST_CASE_WP_ID' => $id)
-        );
-        
-        return $result;        
-    }
-    
     
     public function deleteTestCaseNameIDMap($id)
     {
@@ -963,6 +962,24 @@ class ManageESB
     {
         
         $result = ManageESB::$esbdb->delete($this->table_test_suite_name_id_map, array('ID' => $id));
+        
+        return $result;
+    }
+    
+    public function addProductNameIDMap($id, $name)
+    {
+        //Delete Old Data
+        $this->deleteProductNameIDMap($id);
+        
+        $result = ManageESB::$esbdb->insert($this->table_product_name_id_map, array('ID' => $id, 'NAME' => $name));
+        
+        return $result;
+    }
+    
+    public function deleteProductNameIDMap($id)
+    {
+        
+        $result = ManageESB::$esbdb->delete($this->table_product_name_id_map, array('ID' => $id));
         
         return $result;
     }

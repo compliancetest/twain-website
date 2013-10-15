@@ -3,7 +3,16 @@ jQuery(document).ready(function(){
     jQuery('#trigger-message-link').cplightbox({
         type: 'ajax',
         closeWhenClickOveraly: false,
-        onStart: function(){
+        onAjaxSuccess: function(obj){
+            //Custom Popup Box
+            jQuery(obj).find("a[rel='custom-popup']").cplightbox({
+                closeWhenClickOveraly: false,
+                onAjaxSuccess: function(obj){
+                    jQuery(obj).find("a[rel='custom-popup']").cplightbox();        
+                }
+            });
+        },
+        onStart: function(){            
             jQuery('#trigger-message-box .input-error').removeClass('input-error');
             jQuery('#trigger-message-box .select-error').removeClass('select-error');
             jQuery('#trigger-message-box .message').remove();
@@ -54,14 +63,7 @@ jQuery(document).ready(function(){
                     jQuery('#tm-template').append('<option value="' + jQuery(this).text() + '">' + jQuery(this).text() + '</option>');
                 });
                 
-                jQuery('#template-variables-contr .field-row:gt(0)').remove();
-                jQuery(rsp).find('variable').each(function(){
-                    jQuery('#template-variables-contr').append('<div class="field-row">' + 
-                                '<div class="grid-cell width45P"><label>' + jQuery(this).find('name').text() + '</label></div>' + 
-                                '<div class="grid-cell width55P"><input type="text" name="variable' + jQuery(this).attr('id') + '" class="input" value="' + jQuery(this).find('value').text() + '" /></div>' +
-                                '<div class="clear"></div>' +
-                            '</div>');
-                })
+                jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());                
             },
             error: function(err){
                 showTriggerMessageResultMessage('Sorry, there was an error while getting data.', 'error');                
@@ -80,7 +82,7 @@ jQuery(document).ready(function(){
         jQuery('#trigger-message-box .popup-box-content .message').fadeOut('fast');
         jQuery.ajax({
             url: '/',
-            data: {'ct-message-action': 'get-case-templates', 'suite_id': suite_id, 'case_id': case_id},
+            data: {'ct-message-action': 'get-case-templates-and-profiles', 'suite_id': suite_id, 'case_id': case_id},
             type: 'post',
             dataType: 'xml',
             complete: function(){
@@ -91,7 +93,7 @@ jQuery(document).ready(function(){
                 jQuery(rsp).find('template').each(function(idx){
                     jQuery('#tm-template').append('<option value="' + jQuery(this).text() + '">' + jQuery(this).text() + '</option>');
                 });
-                
+                jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());
             },
             error: function(err){
                 showTriggerMessageResultMessage('Sorry, there was an error while getting data.', 'error');
@@ -124,7 +126,7 @@ jQuery(document).ready(function(){
                 {
                     showTriggerMessageResultMessage(jQuery(rsp).find('error').text(), 'error');
                 }else{
-                    
+                    jQuery('#trigger-message-box .tester-profiles-section input').prop('checked', false);
                     var new_suite_id = jQuery(rsp).find('suiteid').text();
                     var new_case_id = jQuery(rsp).find('caseid').text();
                     var new_product_id = jQuery(rsp).find('productid').text();
@@ -138,22 +140,7 @@ jQuery(document).ready(function(){
                         jQuery('#tm-test-case').find('option').remove();                
                         jQuery(rsp).find('case').each(function(idx){
                             jQuery('#tm-test-case').append('<option value="' + jQuery(this).attr('id') + '">' + jQuery(this).text() + '</option>');
-                        });
-                        
-                        //Update Template Variables
-                        jQuery('#template-variables-contr .field-row:gt(0)').remove();
-                        jQuery(rsp).find('variable').each(function(){
-                            jQuery('#template-variables-contr').append('<div class="field-row">' + 
-                                        '<div class="grid-cell width45P"><label>' + jQuery(this).find('name').text() + '</label></div>' + 
-                                        '<div class="grid-cell width55P"><input type="text" name="variable' + jQuery(this).attr('id') + '" class="input" value="' + jQuery(this).find('value').text() + '" /></div>' +
-                                        '<div class="clear"></div>' +
-                                    '</div>');
-                        })
-                    }else{
-                        //Update Template Variables
-                        jQuery(rsp).find('variable').each(function(){
-                            jQuery('input[name="variable' + jQuery(this).attr('id') + '"]').val(jQuery(this).find('value').text());                            
-                        })
+                        });                  
                     }
                     jQuery('#tm-test-case').val(new_case_id);
                     
@@ -164,8 +151,21 @@ jQuery(document).ready(function(){
                         jQuery(rsp).find('template').each(function(idx){
                             jQuery('#tm-template').append('<option value="' + jQuery(this).text() + '">' + jQuery(this).text() + '</option>');
                         });
+                        
+                        //Update Harness Profiles
+                        jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());   
                     }
                     jQuery('#tm-template').val(new_template_id);
+                    
+                    jQuery(rsp).find('harness_id').each(function(){
+                        var id = jQuery(this).text();
+                        jQuery('#harness_profile' + id).prop('checked', true);
+                    })
+                    jQuery(rsp).find('tester_id').each(function(){
+                        var id = jQuery(this).text();
+                        jQuery('#tester_profile' + id).prop('checked', true);
+                    })
+                    
                 }
             },
             error: function(err){
@@ -192,11 +192,10 @@ jQuery(document).ready(function(){
             suite_id: jQuery('#tm-test-suite').val(),
             case_id: jQuery('#tm-test-case').val(),
             product_id: jQuery('#tm-product').val(),
-            case_template: jQuery('#tm-template').val()
+            case_template: jQuery('#tm-template').val(),
+            harness_profiles: jQuery('.harness-profiles-section input[type="checkbox"]:checked').map(function(){ return jQuery(this).val()}).get(),
+            tester_profiles: jQuery('.tester-profiles-section input[type="checkbox"]:checked').map(function(){ return jQuery(this).val()}).get()
         };
-        jQuery('#template-variables-contr input[type="text"]').each(function(){
-            postData[jQuery(this).attr('name')] = jQuery(this).val()
-        })
         
         jQuery.ajax({
             url: url,
@@ -269,13 +268,15 @@ jQuery(document).ready(function(){
     /**
     * Send Message
     */
-    jQuery('body').on('click', '#trigger-message-link', function(){
+    jQuery('body').on('click', '#send-message-link', function(){
         jQuery('#messageForm').submit();
         return false;
     })
     jQuery('body').on('submit', '#messageForm', function(){
         
         jQuery('#trigger-message-box .popup-box-content').find('.message').remove();
+        jQuery('#trigger-message-box .popup-box-content').find('.input-error').removeClass('input-error');
+        jQuery('#trigger-message-box .popup-box-content').find('.select-error').removeClass('select-error');
         var isValid = true;
         if(!jQuery('#tm-test-suite').val())
         {
@@ -300,6 +301,12 @@ jQuery(document).ready(function(){
         if(!isValid)
         {
             showTriggerMessageResultMessage('Please complete fields in red.', 'error');
+            return false;
+        }
+        
+        if(jQuery('.harness-profiles-section input[type="checkbox"]:checked').length < 1 || jQuery('.tester-profiles-section input[type="checkbox"]:checked').length < 1)
+        {
+            showTriggerMessageResultMessage('Please select profile(s).', 'error');
             return false;
         }
         

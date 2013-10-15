@@ -20,8 +20,8 @@ function ct_process_message_actions()
         sendMessage();
     }else if($action == 'get-test-cases'){
         getTestCases();    
-    }else if($action == 'get-case-templates'){
-        getCaseTemplates();    
+    }else if($action == 'get-case-templates-and-profiles'){
+        getCaseTemplatesAndProfiles();    
     }else if($action == 'load-message-template'){
         loadMessageTemplate();    
     }
@@ -38,10 +38,13 @@ function sendMessage()
     $case_id = $_POST['test-case'];
     $template = $_POST['template'];
     
+    $harness_profiles = $_POST['harness_profiles'];
+    $tester_profiles = $_POST['tester_profiles'];
+    
     header('content-type: application/xml');
     echo '<result>';
     
-    if(!$suite_id || !$product_id || !$case_id || !$template)
+    if(!$suite_id || !$product_id || !$case_id || !$template || !$harness_profiles || !$tester_profiles)
     {
         echo '<status>error</status>';
         echo '<error>Invalid Request!</error>';
@@ -55,23 +58,32 @@ function sendMessage()
             echo '<error>Invalid Request!</error>';    
         }else{
             $suiteObj = new TestSuite($suite_id);
-            $variables = $suiteObj->loadVariables();
             
             //Create XML
             $xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
                             <api:testCase>
-                                <api:testCaseId>' . get_post_meta($case_id, 'test_case_id', true) . '</api:testCaseId>                                
-                                <api:testSuiteId>' . $suite_id . '</api:testSuiteId>                                
-                                <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>                                                                
-                                <api:productId>' . $product_id . '</api:productId>
-                                <api:messageTemplate url="' . $template . '">
-                                    <api:templateProperties>';
-            foreach($variables as $v)
+                                <api:testCaseId>' . get_post_meta($case_id, 'test_case_id', true) . '</api:testCaseId>
+                                <api:testSuiteId>' . $suite_id . '</api:testSuiteId>
+                                <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
+                                <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>
+                                <api:messageTemplate  templateName="' . $template . '">
+                                    <api:profile namespace="Tester">' ; 
+            //Getting Tester Profiles
+            $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id IN (" . implode(", ", $wpdb->escape($tester_profiles)) . ")";
+            $testerProfileInstances = $wpdb->get_results($query);
+            foreach($testerProfileInstances as $instance)
             {
-                $xmlData .= '<api:property name="' . $v->variable_name . '" value="' . $_POST['variable' . $v->id] . '"/>';
+                $xmlData .= '<api:profileURL>' . get_site_url() . "/profiles/" . $instance->type . "/" . $instance->filename . '</api:profileURL>';
             }
-            
-            $xmlData .= '</api:templateProperties>
+            $xmlData .= '</api:profile>
+                            <api:profile namespace="Harness">';
+            $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id IN (" . implode(", ", $wpdb->escape($harness_profiles)) . ")";
+            $harnessProfileInstances = $wpdb->get_results($query);
+            foreach($harnessProfileInstances as $instance)
+            {
+                $xmlData .= '<api:profileURL>' . get_site_url() . "/profiles/" . $instance->type . "/" . $instance->filename . '</api:profileURL>';
+            }
+            $xmlData .= '</api:profile> 
                     </api:messageTemplate>
                     <api:identity>
                         <api:username>' . $subscription->harness_username . '</api:username>
@@ -79,9 +91,31 @@ function sendMessage()
                     </api:identity>
                 </api:testCase>
             </api:invokeMessageRequest>';
-            
+            /*$xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
+                            <api:testCase>
+                                <api:testCaseId>' . get_post_meta($case_id, 'test_case_id', true) . '</api:testCaseId>
+                                <api:testSuiteId>' . $suite_id . '</api:testSuiteId>
+                                <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
+                                <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>
+                        </api:invokeMessageRequest>';*/
+            $xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
+                            <api:testCase>
+                                <api:testCaseId>SS-RLV-001</api:testCaseId>
+                                <api:testSuiteId>123</api:testSuiteId>
+                                <api:productName>ComplianceTest SOAP UI Client</api:productName>
+                                <api:productId>lc.compliancetest.com.compliancetest-soap-ui-client.2.0</api:productId>
+                                <api:messageTemplate  templateName="SS-RLV-001.Template.xml">
+                                    <api:profile namespace="Tester"><api:profileURL>https://lc.compliancetest.com/profiles/tester/22.json</api:profileURL></api:profile>
+                            <api:profile namespace="Harness"><api:profileURL>https://lc.compliancetest.com/profiles/harness/OOS-001.json</api:profileURL></api:profile> 
+                    </api:messageTemplate>
+                    <api:identity>
+                        <api:username>steve.capell@compliancetest.net_123</api:username>
+                        <api:password>YZ0OaWUQ</api:password>
+                    </api:identity>
+                </api:testCase>
+            </api:invokeMessageRequest>';
             $result = $CPRest->doMessageAPI('message/invoke', $xmlData);
-            echo $xmlData;
+            
             $resultDoc = new DOMDocument();
             
             if(!$result || !$resultDoc->loadXML($result))
@@ -103,7 +137,7 @@ function sendMessage()
                 }
                 
             }
-            echo $result;
+            
         }
         
     }
@@ -154,19 +188,6 @@ function loadMessageTemplate()
             
         }
         
-        //Getting Template Variables            
-        $variables = $suiteObj->loadVariables();
-        $userDefaults = unserialize(base64_decode($row->params));
-        echo '<variables>';
-        foreach($variables as $v)
-        {
-            echo '<variable id="' . $v->id . '">';
-            echo '<name><![CDATA[' . $v->variable_name . ']]></name>';
-            echo '<value><![CDATA[' . (isset($userDefaults[$v->id]) ? $userDefaults[$v->id] : $v->variable_default) . ']]></value>';
-            echo '</variable>';
-        }
-        echo '</variables>';
-        
         if($current_case_id != $row->case_id)
         {
             //Getting Case Message Templates
@@ -177,6 +198,19 @@ function loadMessageTemplate()
                 echo '<template>' . $t . '</template>';
             }
             echo '</templates>';
+            
+            //Getting Profile Instances
+            echo '<harness><![CDATA[';
+            echo _getHarnessProfilesHTML($row->case_id);
+            echo ']]></harness>';
+        }        
+        foreach(unserialize($row->harness_profile_id) as $i)
+        {
+            echo '<harness_id>' . $i . '</harness_id>';   
+        }
+        foreach(unserialize($row->tester_profile_id) as $i)
+        {
+            echo '<tester_id>' . $i . '</tester_id>';   
         }
         
     }
@@ -195,15 +229,7 @@ function saveMessageTemplate()
     $product_id = $_POST['product_id'];
     $case_template = $_POST['case_template'];
     $name = $_POST['name'];
-    //Getting Template Variables
-    $values = array();
-    foreach($_POST as $k=>$v)
-    {
-        if(strpos($k, 'variable') !== false)
-        {
-            $values[str_replace('variable', '', $k)] = $v;
-        }
-    }
+    
     
     $r = $wpdb->insert($wpdb->prefix . "message_templates", 
         array(
@@ -213,7 +239,8 @@ function saveMessageTemplate()
             'case_id' => $case_id,
             'product_id' => $product_id, 
             'template' => $case_template,
-            'params' => base64_encode(serialize($values)),
+            'harness_profile_id' => serialize(!$_POST['harness_profiles'] ? array() : $_POST['harness_profiles']),
+            'tester_profile_id' => serialize(!$_POST['tester_profiles'] ? array() : $_POST['harness_profiles']),
             'created_date' => date('Y-m-d H:i:s')
         )
     );
@@ -258,7 +285,7 @@ function removeMessageTemplate()
 
 
 
-function getCaseTemplates()
+function getCaseTemplatesAndProfiles()
 {
     global $wpdb;
     
@@ -268,6 +295,7 @@ function getCaseTemplates()
     
     $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
     $suite_id = $wpdb->get_var($query);
+    
     header('Content-type: application/xml');
     echo '<results>';
     if($suite_id)
@@ -282,6 +310,11 @@ function getCaseTemplates()
                 echo '<template>' . $t . '</template>';
             }
             echo '</templates>';
+            
+            //Getting Harness Profile Instances
+            echo '<harness><![CDATA[';
+            echo _getHarnessProfilesHTML($case_id);
+            echo ']]></harness>';
         }
     }
     
@@ -323,25 +356,45 @@ function getTestCases()
             }
             echo '</templates>';
         }
+                
+        echo '<harness><![CDATA[';
+        echo _getHarnessProfilesHTML($cases[0]->ID);
+        echo ']]></harness>';
         
-        //Getting Template Variables
-        $variables = $suiteObj->loadVariables();
-        $userDefaults = unserialize(base64_decode($subscription->params));
-        echo '<variables>';
-        foreach($variables as $v)
-        {
-            echo '<variable id="' . $v->id . '">';
-            echo '<name><![CDATA[' . $v->variable_name . ']]></name>';
-            echo '<value><![CDATA[' . (isset($userDefaults[$v->id]) ? $userDefaults[$v->id] : $v->variable_default) . ']]></value>';
-            echo '</variable>';
-        }
-        echo '</variables>';
     }
     
     echo '</results>';
     
     exit;
 }
+
+function _getHarnessProfilesHTML($case_id, $defaults = array())
+{
+    $html = '';
+    
+    $caseObj = new TestCase($case_id);        
+    $caseObj->loadProfileInstances();
+    $harnessProfiles = $caseObj->getProfileInstanceRows();
+    $html .= '<h5>Harness Profiles</h5>';
+    $html .= '<div class="field-row">';
+    $html .= '<div class="grid-cell width50P"><b>Name</b></div>';
+    $html .= '<div class="grid-cell width20P"><b>Purpose</b></div>';
+    $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
+    $html .= '<div class="clear"></div>';
+    $html .= '</div>';
+    foreach($harnessProfiles as $instance){
+        $instanceObj = json_decode(base64_decode($instance->content));
+        $html .= '<div class="field-row">';
+        $html .= '<div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profiles' . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
+        $html .= '<div class="grid-cell width20P">' . $instanceObj->ProfilePurpose . '</div>';
+        $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
+        $html .= '<div class="clear"></div>';
+        $html .= '</div>';
+    }
+    
+    return $html;
+}
+
 
 function showTriggerMessageBox()
 {
@@ -399,10 +452,12 @@ function showTriggerMessageBox()
             $current_suite_id = !$lastData ? $suites[0]->suite_id : $lastData->suite_id;
             $current_product_id = !$lastData ? $products[0]->ID : $lastData->product_id;
             
+            $current_harness_profile_id = !$lastData ? array() : unserialize($lastData->harness_profile_id);
+            $current_tester_profile_id = !$lastData ? array() : unserialize($lastData->tester_profile_id);
+            
             //Getting Test Cases
             $suiteObj = new TestSuite($current_suite_id);
             $cases = $suiteObj->loadTestCases();
-            $templateVariables = $suiteObj->loadVariables();
             
             $current_case_id = !$lastData ? $cases[0]->ID : $lastData->case_id;
                         
@@ -410,7 +465,15 @@ function showTriggerMessageBox()
             $prevMessages = getUserPreviousMessageTemplates($user_id);            
             
             $caseTemplates = getTestCaseTemplates($current_case_id);
+            
             $current_template = !$lastData ? $caseTemplates[0] : $lastData->template;
+            
+            //Getting Harness Profiles
+            $caseObj = new TestCase($current_case_id);
+            $caseObj->loadProfileInstances();
+            $harnessProfiles = $caseObj->getProfileInstanceRows();
+            
+            $testerProfiles = getCustomerProfileInstances();
         ?>
         <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">
             <form name="messageForm" id="messageForm" action="">
@@ -474,40 +537,41 @@ function showTriggerMessageBox()
                                 <div class="clear"></div>
                             </div>
                         </div>
-                        <?php
-                            //Getting User Default Values
-                            $userDefaults = array();
-                            foreach($suites as $s)
-                            {
-                                if($s->suite_id == $current_suite_id)
-                                {
-                                    $userDefaults = unserialize(base64_decode($s->params));
-                                }
-                            }
-                        ?>
-                        <div id="template-variables-contr" class="info-section">
-                            <h5>Template Variables</h5>
-                            <div class="field-row field-label-row">
-                                <div class="grid-cell width45P">Name</div>
-                                <div class="grid-cell width55P">Value</div>
-                                <div class="clear"></div>
-                            </div>
-                            <?php foreach($templateVariables as $v){ ?>
-                            <?php
-                                $value = $v->variable_default;                                
-                                
-                                if(isset($userDefaults[$v->id]))
-                                    $value = $userDefaults[$v->id];
-                                
-                                if($lastData && isset($lastData->params[$v->id]))
-                                    $value = $lastData->params[$v->id];
-                            ?>
+                        <div class="harness-profiles-section">
+                            <h5>Harness Profiles</h5>
                             <div class="field-row">
-                                <div class="grid-cell width45P"><label><?php echo $v->variable_name?></label></div>
-                                <div class="grid-cell width55P"><input type="text" name="variable<?php echo $v->id?>" class="input" value="<?php echo $value ?>" /></div>
+                                <div class="grid-cell width50P"><b>Name</b></div>
+                                <div class="grid-cell width20P"><b>Purpose</b></div>
+                                <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php } ?>                            
+                            <?php foreach($harnessProfiles as $instance){ ?>
+                                <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
+                                <div class="field-row">
+                                    <div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profile<?php echo $instance->id?>" value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $current_harness_profile_id)?> /> <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>&back=1" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a></div>
+                                    <div class="grid-cell width20P"><?php echo $instanceObj->ProfilePurpose?></div>
+                                    <div class="grid-cell width30P"><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>  </div>
+                                    <div class="clear"></div>
+                                </div>    
+                            <?php } ?>
+                        </div>
+                        <div class="tester-profiles-section">
+                            <h5>Tester Profiles</h5>
+                            <div class="field-row">
+                                <div class="grid-cell width50P"><b>Name</b></div>
+                                <div class="grid-cell width20P"><b>Purpose</b></div>
+                                <div class="grid-cell width30P"><b>Type</b></div>
+                                <div class="clear"></div>
+                            </div>
+                            <?php foreach($testerProfiles as $instance){ ?>
+                                <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
+                                <div class="field-row">
+                                    <div class="grid-cell width50P"><input type="checkbox" name="tester_profiles[]" id="tester_profile<?php echo $instance->id?>" value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $current_tester_profile_id)?> /> <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>&back=1" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a></div>
+                                    <div class="grid-cell width20P"><?php echo $instanceObj->ProfilePurpose?></div>
+                                    <div class="grid-cell width30P"><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>  </div>
+                                    <div class="clear"></div>
+                                </div>    
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">
@@ -515,7 +579,7 @@ function showTriggerMessageBox()
                             <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('save-message')?>" class="action-btn process-btn left" id="save-message-template-link"><span class="p"></span><span class="t">Save</span></a>
                             <input type="text" class="input left" name="message-template-name" id="message-template-name" placeholder="Message Name" />
                         </div>
-                        <a href="#" class="action-btn process-btn submit-btn" id="trigger-message-link"><span class="p"></span><span class="t">Send Message</span></a>
+                        <a href="#" class="action-btn process-btn submit-btn" id="send-message-link"><span class="p"></span><span class="t">Send Message</span></a>
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>
