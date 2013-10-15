@@ -73,7 +73,7 @@ function sendMessage()
             $testerProfileInstances = $wpdb->get_results($query);
             foreach($testerProfileInstances as $instance)
             {
-                $xmlData .= '<api:profileURL>' . get_site_url() . "/profiles/" . $instance->type . "/" . $instance->filename . '</api:profileURL>';
+                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'http') . "/profiles/" . $instance->type . "/" . $instance->filename . '</api:profileURL>';
             }
             $xmlData .= '</api:profile>
                             <api:profile namespace="Harness">';
@@ -81,7 +81,7 @@ function sendMessage()
             $harnessProfileInstances = $wpdb->get_results($query);
             foreach($harnessProfileInstances as $instance)
             {
-                $xmlData .= '<api:profileURL>' . get_site_url() . "/profiles/" . $instance->type . "/" . $instance->filename . '</api:profileURL>';
+                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'http') . "/profiles/" . $instance->type . "/" . $instance->filename . '</api:profileURL>';
             }
             $xmlData .= '</api:profile> 
                     </api:messageTemplate>
@@ -91,29 +91,8 @@ function sendMessage()
                     </api:identity>
                 </api:testCase>
             </api:invokeMessageRequest>';
-            /*$xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
-                            <api:testCase>
-                                <api:testCaseId>' . get_post_meta($case_id, 'test_case_id', true) . '</api:testCaseId>
-                                <api:testSuiteId>' . $suite_id . '</api:testSuiteId>
-                                <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
-                                <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>
-                        </api:invokeMessageRequest>';*/
-            $xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
-                            <api:testCase>
-                                <api:testCaseId>SS-RLV-001</api:testCaseId>
-                                <api:testSuiteId>123</api:testSuiteId>
-                                <api:productName>ComplianceTest SOAP UI Client</api:productName>
-                                <api:productId>lc.compliancetest.com.compliancetest-soap-ui-client.2.0</api:productId>
-                                <api:messageTemplate  templateName="SS-RLV-001.Template.xml">
-                                    <api:profile namespace="Tester"><api:profileURL>https://lc.compliancetest.com/profiles/tester/22.json</api:profileURL></api:profile>
-                            <api:profile namespace="Harness"><api:profileURL>https://lc.compliancetest.com/profiles/harness/OOS-001.json</api:profileURL></api:profile> 
-                    </api:messageTemplate>
-                    <api:identity>
-                        <api:username>steve.capell@compliancetest.net_123</api:username>
-                        <api:password>YZ0OaWUQ</api:password>
-                    </api:identity>
-                </api:testCase>
-            </api:invokeMessageRequest>';
+            
+            
             $result = $CPRest->doMessageAPI('message/invoke', $xmlData);
             
             $resultDoc = new DOMDocument();
@@ -133,7 +112,7 @@ function sendMessage()
                     echo '<error><![CDATA[' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . ']]</error>';
                 }else{
                     echo '<status>error</status>';
-                    echo '<error>There was an error while sending this message</error>';    
+                    echo '<error>There was an error while sending this message.</error>';    
                 }
                 
             }

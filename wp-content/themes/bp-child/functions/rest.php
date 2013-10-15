@@ -75,7 +75,7 @@ class CPRest
     
     public function doMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace . "/messaging/" . $action, $isPost, $isXMLHeader);
+        return $this->doAPI($this->api_namespace . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
     }    
     
 }
