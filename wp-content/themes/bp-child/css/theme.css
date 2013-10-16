@@ -1962,6 +1962,7 @@ font-size: 10px;
     width: 155px;
     padding: 0;
     border: none;
+    box-shadow: none !important;
 }
 
 #top_access p.login-username,
