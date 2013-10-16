@@ -104,6 +104,19 @@ function sendMessage()
             }else{                
                 if($resultDoc->getElementsByTagName('code')->length > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ACCEPTED'){
                     echo '<status>success</status>';
+                    //Save Previous Data To Tmp Table
+                    $wpdb->insert($wpdb->prefix . "message_tmp", 
+                        array(
+                            'user_id' => $user_id,
+                            'suite_id' => $suite_id,
+                            'case_id' => $case_id,
+                            'product_id' => $product_id, 
+                            'template' => $case_template,
+                            'harness_profile_id' => serialize(!$harness_profiles ? array() : $harness_profiles),
+                            'tester_profile_id' => serialize(!$tester_profiles ? array() : $tester_profiles),
+                            'created_date' => date('Y-m-d H:i:s')
+                        )
+                    );
                 }else if($resultDoc->getElementsByTagName('faultstring')->length > 0){
                     echo '<status>error</status>';
                     echo '<error><![CDATA[' . $resultDoc->getElementsByTagName('faultstring')->item(0)->nodeValue . ']]></error>';
