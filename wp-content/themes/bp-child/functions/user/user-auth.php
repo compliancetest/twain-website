@@ -54,7 +54,7 @@ function compliancetest_create_new_user(){
         $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
 
         update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
-        update_user_meta ($user_id, 'contact_phone', $_POST['contact_phone']);
+        update_user_meta ($user_id, 'phone_number', $_POST['contact_phone']);
         
         $data = array(
             '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],
