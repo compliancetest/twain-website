@@ -168,7 +168,7 @@
         });
         
        //transform divs in inputs at click on edit button
-       $(document).on('click', '.gbh-btn-edit', function(){           
+       $('#my_profile').on('click', '.gbh-btn-edit', function(){           
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
 
@@ -191,13 +191,34 @@
                    var dataType = 'text';
                
                if(dataType == 'textarea')
-                   $(this).replaceWith('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+                   $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
                else
-                   $(this).replaceWith('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
-
+                   $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+                   
+               $(this).hide();
             });        
-            
+            return false;
         });
+        
+        //Edit Cancel
+        $('#my_profile').on('click', '.edit-cancel-btn', function(){           
+            var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
+            var findInputs = $(thisParentId+' .grid-row input:visible').size();
+
+            //if( findInputs == 0){
+
+            $(thisParentId+' .btn-row').fadeIn();
+             $(thisParentId).addClass('grid-box-editing');
+            //transform all divs in inputs
+            $(thisParentId+' .grid-cell.in_input').each(function(){
+               $(this).next().remove();
+               $(this).show();
+            });        
+            $(thisParentId+' .btn-row').hide();
+            return false;
+        });
+        
+        
         
         //save my details updates
         $('#my_profile').on('click', '.process-btn', function(){
