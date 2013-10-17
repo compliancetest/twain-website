@@ -120,19 +120,20 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT m.*, c.TEST_CASE_ID, c.TEST_CASE_ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS m " .
-                 "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID " .
-                 "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=m.TEST_SUITE_ID " .
-                 "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
-                 "WHERE m.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT c.*, tc.TEST_CASE_WP_ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
+                 "LEFT JOIN " . $this->table_test_case_configuration . " AS tc ON tc.ID=c.TEST_CASE_CONFIGURATION_ID " .
+                 "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                 "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
+                 "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID " .
+                 "WHERE c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
         if($id)   
         {
             if(is_array($id))
             {
-                $query .= " AND m.ID in (" . implode(", ", $id) . ")";
+                $query .= " AND c.ID in (" . implode(", ", $id) . ")";
             }else{
-                $query .= ManageESB::$esbdb->prepare(" AND m.ID=%d", $id);
+                $query .= ManageESB::$esbdb->prepare(" AND c.ID=%d", $id);
             }
         }
         
@@ -180,9 +181,9 @@ class ManageESB
         if($product_id !== null && $product_id != "")
         {
             if($product_id == 0)
-                $where[] = " IFNULL(c.PRODUCT_ID, 0) = 0";
+                $where[] = " IFNULL(p.ID, 0) = 0";
             else if($product_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.PRODUCT_ID=%d", $product_id);    
+                $where[] = ManageESB::$esbdb->prepare(" p.ID=%d", $product_id);    
         }
         
         if($suite_id !== null && $suite_id != "")
@@ -270,12 +271,14 @@ class ManageESB
                         c.*,
                         cm.TEST_CASE_WP_ID, 
                         cm.TEST_CASE_ID, 
+                        p.ID as PRODUCT_WP_ID,
                         s.NAME as TEST_SUITE_NAME, 
                         ts.TEST_OUTCOME_CODE, 
                         ts.TEST_OUTCOME_LABEL 
                      FROM " . $this->table_conversation_metadata . " AS c " .
                      "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                     "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
                 $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
@@ -287,12 +290,14 @@ class ManageESB
                         c.*,
                         cm.TEST_CASE_ID, 
                         cm.TEST_CASE_WP_ID, 
+                        p.ID as PRODUCT_WP_ID,
                         s.NAME as TEST_SUITE_NAME, 
                         ts.TEST_OUTCOME_CODE, 
                         ts.TEST_OUTCOME_LABEL 
                      FROM " . $this->table_conversation_metadata . " AS c " .
                      "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                     "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
                 $query .= " LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";

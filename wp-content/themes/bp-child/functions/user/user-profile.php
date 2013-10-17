@@ -516,6 +516,7 @@ function cp_edit_transaction_log(){
                    </select>       
                </div>
                <div class="td td-case">
+               
                    <select name="case<?php echo $row->ID?>" class="select">
                        <option value="0">Not Assigned</option>
                        <?php foreach($testCases as $c){ ?>
@@ -629,6 +630,8 @@ function cp_save_transaction_log()
         $esb = new ManageESB();
         $rows =$esb->getTransactionLogByID($ids);
         
+        $rest = new CPRest();
+        
         foreach($rows as $row)
         {
             $caseDBId = intval($_POST['case' . $row->ID]);
@@ -640,16 +643,27 @@ function cp_save_transaction_log()
                 
             }
             
-            $productId = $_POST['product' . $row->ID];
+            $productId = get_post_meta($_POST['product' . $row->ID], 'product_id', true);
+            $productName = get_post_meta($_POST['product' . $row->ID], 'product_name', true);
             $audit = $_POST['audit' . $row->ID];
             
             $esb = new ManageESB();
             
             $case_conf_id = $esb->getTestCaseConfigurationID($caseDBId);
             
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_CONFIGURATION_ID=%d, TEST_SUITE_ID=%s, PRODUCT_ID=%d, AUDIT_RECORD=%d WHERE ID=%d", $case_conf_id, $suiteId, $productId, $audit, $row->ID);
-            
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_CONFIGURATION_ID=%d, TEST_SUITE_ID=%s, PRODUCT_ID=%s, PRODUCT_NAME=%s, AUDIT_RECORD=%d WHERE ID=%d", $case_conf_id, $suiteId, $productId, $productName, $audit, $row->ID);
+               
             ManageESB::$esbdb->query($query);
+            
+            //Recalculate Test Outcome
+            if($row->TEST_CASE_DB_ID != $caseDBId && $caseDBId)
+            {
+                $xmlData = '<api:calculateTestCaseOutcomeRequest xmlns:api="http://compliancetest.net/api">
+                              <api:testCaseId>' . get_post_meta($caseDBId, 'test_case_id', true) . '</api:testCaseId>
+                              <api:conversationId>' . $row->CONVERSATION_ID . '</api:conversationId>
+                            </api:calculateTestCaseOutcomeRequest>';
+                $result = $rest->doMetadataAPI("testcase/outcome", $xmlData);                
+            }
         }
         
     }

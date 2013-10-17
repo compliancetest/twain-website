@@ -78,4 +78,11 @@ class CPRest
         return $this->doAPI($this->api_namespace . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
     }    
     
+    public function doMetadataAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
+    {
+        return $this->doAPI($this->api_namespace . "/metadata/" . $action, $data, $isPost, $isXMLHeader);
+    }    
+    
+    
+    
 }

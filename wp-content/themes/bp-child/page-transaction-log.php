@@ -216,10 +216,10 @@ if($filterDate){
                                <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" /></div>
                                <div class="td td-product">
                                    <a href="#" class="view-messages-link"></a>
-                                   <?php if(!$row->PRODUCT_ID){?>
+                                   <?php if(!$row->PRODUCT_WP_ID){?>
                                    Not Assigned
                                    <?php }else{ ?>
-                                   <a href="<?php echo get_permalink($row->PRODUCT_ID)?>"><?php echo get_post_meta($row->PRODUCT_ID, 'product_name', true)?></a>
+                                   <a href="<?php echo get_permalink($row->PRODUCT_WP_ID)?>"><?php echo get_post_meta($row->PRODUCT_WP_ID, 'product_name', true)?></a>
                                    <?php } ?>
                                </div>
                                <div class="td td-case">
