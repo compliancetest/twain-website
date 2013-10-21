@@ -399,7 +399,7 @@ function getManageableCustomers($user_id = null)
     }else{
         $query = "SELECT p.esb_user_id as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
     }
-    
+    echo $query;
     $customers = $wpdb->get_results($query);
     
     return $customers;
