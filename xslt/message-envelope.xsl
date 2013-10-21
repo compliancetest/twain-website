@@ -427,6 +427,36 @@
                 </xsl:for-each>
                 </tbody>
                 <!-- End this fact table, add some space, and go back for the next context table -->
+                <!-- Start Segment Table -->
+                <xsl:if  test="xbrli:entity/xbrli:segment/xbrldi:typedMember">
+                    <thead>
+                    <tr class="header">
+                        <th colspan="2">Members</th>
+                    </tr>                
+                    </thead>
+                    <xsl:for-each select="xbrli:entity/xbrli:segment/xbrldi:typedMember">
+                    <tr>
+                        <td>                        
+                            <xsl:value-of select="substring-after(@dimension, ':')" />
+                        </td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="format-table1" width="100%">
+                                <xsl:for-each select="*">
+                                    <tr>
+                                        <td width="75%">
+                                            <xsl:value-of select="local-name()" />
+                                        </td>                                    
+                                        <td><xsl:value-of select="text()" /></td>
+                                    </tr>
+                                </xsl:for-each>
+                            </table>
+                            
+                        </td>
+                    </tr>
+                    </xsl:for-each>
+                </xsl:if>
+                <!-- End Segment Table -->
+                
             </table>
         </div>
     </div>
