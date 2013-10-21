@@ -162,7 +162,13 @@ class ManageESB
         
         if($customer_id !== null && $customer_id != "")
         {
-            $where[] = ManageESB::$esbdb->prepare(" c.CUSTOMER_ID = %d ", $customer_id );
+            $query = $wpdb->prepare("SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active' AND `user_id`=%d", $customer_id);
+            $esbIDs = $wpdb->get_col($query);
+            
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";            
         }else{
             $query = "SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active'";
             if(is_super_admin() || is_admin()) //Show All Transactions
