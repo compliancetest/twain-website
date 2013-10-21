@@ -369,7 +369,7 @@ function getManageableSuiteIds($user_id = null)
     foreach($communities['groups'] as $community)
     {
         if(groups_is_user_admin($user_id, $community->id) || groups_is_user_mod($user_id, $community->id))
-        {
+        {echo $community->id . ":";
             //Get Group Suites
             $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";
             $sid = $wpdb->get_var($query);
@@ -399,7 +399,7 @@ function getManageableCustomers($user_id = null)
     }else{
         $query = "SELECT p.esb_user_id as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
     }
-    echo $query;
+    
     $customers = $wpdb->get_results($query);
     
     return $customers;
