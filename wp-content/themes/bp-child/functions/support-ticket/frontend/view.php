@@ -9,9 +9,10 @@ function showSumitTicketBox()
     
     $user_id = get_current_user_id();
     
-    $subscriptions = getUserSubscriptions($user_id);
+    //Getting Subscription IDs and Manageable customer IDs
+    $esbIDs = getUserPermittedCustomersIDs($user_id);    
     
-    if(!$subscriptions)
+    if(!$esbIDs)
     {
     ?>
     <div class="popup-box edit-ticket-box" id="submit-ticket-box" style="display: none; width: 700px;">

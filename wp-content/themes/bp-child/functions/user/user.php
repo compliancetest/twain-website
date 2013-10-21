@@ -338,12 +338,14 @@ function getUserSubscribedCases($user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
         
-    $query = $wpdb->prepare(
+    /*$query = $wpdb->prepare(
         "SELECT suite_id FROM " . $wpdb->prefix . "users_purchases " .
         "WHERE user_id=%d AND status='Active'", $user_id
     );
     
-    $suite_ids = $wpdb->get_col($query);
+    $suite_ids = $wpdb->get_col($query);*/
+    
+    $suite_ids = getUserPermittedSuiteIDs($user_id);
     
     if(!$suite_ids)
         return array();
@@ -427,6 +429,25 @@ function getUserPermittedCustomersIDs($user_id = null)
     
     return $ids;
 }
+
+function getUserPermittedSuiteIDs($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+            
+    $suite_ids1 = getManageableSuiteIds($user_id);
+    
+    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);    
+    $suite_ids2 = $wpdb->get_col($query);
+    
+    $result = array_merge($suite_ids1, $suite_ids2);
+    $result = array_unique($result);
+    
+    return $result;
+}
+
 
 /**
 * Get the last used data for user to trigger message
