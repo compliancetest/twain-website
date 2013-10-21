@@ -416,9 +416,9 @@ function getUserPermittedCustomersIDs($user_id = null)
     {
         $suite_ids = getManageableSuiteIds($user_id);
         if(!$suite_ids)
-            $query = "SELECT p.esb_user_id AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND user_id=" . intval($user_id) . " ORDER BY u.display_name";        
+            $query = "SELECT DISTINCT(p.esb_user_id) AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND user_id=" . intval($user_id) . " ORDER BY u.display_name";        
         else
-            $query = "SELECT p.esb_user_id AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR user_id=" . intval($user_id) . ") ORDER BY u.display_name";        
+            $query = "SELECT DISTINCT(p.esb_user_id) AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR user_id=" . intval($user_id) . ") ORDER BY u.display_name";        
     }else{
         $query = "SELECT p.esb_user_id FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
     }
