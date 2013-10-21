@@ -33,6 +33,7 @@ $filterService = isset($_GET['service']) ? $_GET['service'] : null;
 $filterAction = isset($_GET['action']) ? $_GET['action'] : null;
 $filterPartyId = isset($_GET['partyid']) ? $_GET['partyid'] : null;
 $filterDate = isset($_GET['date']) ? $_GET['date'] : null;
+$filterCustomer = isset($_GET['customer']) ? $_GET['customer'] : null;
 
 $esb = new ManageESB();
 
@@ -48,7 +49,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'date' ? 'desc' :
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
-$log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $page, $limit, $orderBy, $order);
+$log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer, $page, $limit, $orderBy, $order);
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 
@@ -58,6 +59,8 @@ $tCases = $esb->getFilterOptionsForCase($filterProduct, $filterSuite, $filterSer
 $tServices = $esb->getFilterOptionsForService($filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate);
 $tActions = $esb->getFilterOptionsForAction($filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate);
 $tPartyIDs = $esb->getFilterOptionsForPartId($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate);
+$tCustomers = getManageableCustomers();
+
 
 $params = array();                 
     
@@ -83,7 +86,11 @@ if($filterPartyId){
 }
 if($filterDate){
     $params[] = 'date=' . $filterDate;
-} 
+}
+if($filterCustomer){
+    $params[] = 'customer=' . $filterCustomer;
+}
+ 
 
 ?>
 <div class="content" id="my_transaction_log">
@@ -163,7 +170,19 @@ if($filterDate){
                 <div class="last-div left">
                     <label>&nbsp;Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <input type="text" name="date" id="date" class="input datepicker" value="<?php echo $filterDate?>" />
-                    <div class="space25"></div>
+                    <?php if($tCustomers){ ?>
+                    <div class="space10"></div>
+                    <label>&nbsp;Customer</label>
+                    <select name="customer" id="customer" class="select" style="width: 130px;">
+                        <option value="">- All -</option>
+                        <?php foreach($tCustomers as $c){ ?>
+                        <option value="<?php echo $c->CUSTOMER_ID?>" <?php echo cp_selected($c->CUSTOMER_ID, $filterCustomer)?>><?php echo $c->CUSTOMER_NAME?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="space10"></div>                    
+                    <?php }else{?>
+                    <div class="space25"></div>                    
+                    <?php } ?>
                     <a href="#" class="action-btn process-btn submit-btn" id="log-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>
                 </div>            
                 <div class="clear"></div>

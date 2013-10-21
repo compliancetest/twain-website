@@ -152,6 +152,7 @@ table.format-table{
     background: #FbFBFB;
     border-collapse: collapse;
     width: 100%;
+    table-layout: fixed;
 }
 .format-table thead tr{
     background:#de6262 url(../images/red_dotted_bcg.png) !important;
@@ -193,10 +194,12 @@ table.format-table{
     text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
     border-left: solid 1px #ccc;
     font-weight: 600;
+    word-wrap: break-word;
 }
 
 .format-table1{
     border-collapse: collapse;
+    table-layout: fixed;
     
 }
 .format-table1 th{
@@ -209,7 +212,7 @@ table.format-table{
 .format-table1 td{
     border: solid 1px #666 !important;   
     padding: 3px 10px !important;
-    word-wrap: break-all;
+    word-wrap: break-word;
     vertical-align: top;    
 }
 

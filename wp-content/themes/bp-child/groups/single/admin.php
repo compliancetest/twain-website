@@ -160,7 +160,7 @@
     </div>
     <div class="right">
         <!-- Profile -->
-        <div class="grid-box" id="group_members_box">
+        <div class="grid-box" id="group_profile_types_box">
             <div class="grid-box-header">
                 <h5>Profile Types</h5>
             </div>            
@@ -351,12 +351,12 @@
             <div class="grid-box-body" id="group_members_body">
             <form name="group-members-form" id="group-members-form" action="<?php bp_group_admin_form_action('manage-members')?>" method="post" enctype="multipart/form-data" role="main">
                 <div class="space20"></div>
-                <div class="nav">
+                <div class="nav left15">
                     <ul>
                         <li><a href="#" data-action="ban">Kick &amp; Ban</a></li>
-                        <li><a href="#" data-action="promote_to_mod">Promote to Mod</a></li>
+                        <li><a href="#" data-action="promote_to_mod">Promote to Support Staff</a></li>
                         <li><a href="#" data-action="promote_to_admin">Promote to Admin</a></li>
-                        <li class="last-li"><a href="#" data-action="remove_from_group">Remove from Group</a></li>
+                        <li class="last-li"><a href="#" data-action="remove_from_group">Remove</a></li>
                     </ul>
                     <div class="clear"></div>
                 </div>
@@ -395,7 +395,7 @@
             <?php if(bp_group_has_moderators()){ ?>
                 <?php if(bp_has_members( '&include='. bp_group_mod_ids())){?>        
                 <div class="field-row">
-                    <p><b>Moderators</b></p>
+                    <p><b>Support Staff</b></p>
                     <ul id="mods-list" class="member-list">                    
                         <?php while ( bp_members() ) : bp_the_member(); ?>
                         <?php

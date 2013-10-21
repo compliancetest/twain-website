@@ -49,11 +49,10 @@ function cp_user_detail_edit()
     update_user_meta($user_id, 'description', htmlentities($_POST['biography']));
     
     //Update User Name
-    $uname = explode(' ', $uname);
-    update_user_meta($user_id, 'first_name', $uname[1]);
-    update_user_meta($user_id, 'last_name', $uname[0]);
+    $uname = explode(' ', $uname);    
+    wp_update_user( array ('ID' => $user_id, 'first_name' => $uname[0], 'last_name' => $uname[1], 'display_name' => trim($_POST['uname']))) ;
     
-    $email_regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/'; 
+    $email_regex = '/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/'; 
     if(!preg_match($email_regex, $email))
     {
         echo 'Please enter a valid email address';

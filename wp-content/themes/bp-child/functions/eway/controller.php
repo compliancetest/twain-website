@@ -356,6 +356,9 @@ function unsubscribe_purchase()
                 addMessage('Your subscription has been cancelled.');
                 //Change status to canceled 
                 $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
+                //Delete User Subscription Row
+//                $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $purchase->id));            
+                
                 $suite = new TestSuite($purchase->suite_id);
                 $suite->load();
                 //Send Mail

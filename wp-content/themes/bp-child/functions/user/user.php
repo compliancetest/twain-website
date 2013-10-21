@@ -356,6 +356,78 @@ function getUserSubscribedCases($user_id = null)
     return $rows;
 }
 
+function getManageableSuiteIds($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    $suite_ids = array();    
+    $communities = groups_get_groups(array('user_id' => $user_id));
+    
+    foreach($communities['groups'] as $community)
+    {
+        if(groups_is_user_admin($user_id, $community->id) || groups_is_user_mod($user_id, $community->id))
+        {
+            //Get Group Suites
+            $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";
+            $sid = $wpdb->get_var($query);
+            if($sid)
+                $suite_ids[] = $sid;
+        }
+    }
+    
+    return $suite_ids;    
+}
+
+
+function getManageableCustomers($user_id = null)
+{
+    global $wpdb;
+       
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    if(!is_super_admin() && !is_admin())
+    {
+        $suite_ids = getManageableSuiteIds($user_id);
+        if(!$suite_ids)
+            return null;
+            
+        $query = "SELECT p.esb_user_id as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ") ORDER BY u.display_name";        
+    }else{
+        $query = "SELECT p.esb_user_id as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
+    }
+    
+    $customers = $wpdb->get_results($query);
+    
+    return $customers;
+}
+
+function getUserPermittedCustomersIDs($user_id = null)
+{
+    global $wpdb;
+        
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    if(!is_super_admin() && !is_admin())
+    {
+        $suite_ids = getManageableSuiteIds($user_id);
+        if(!$suite_ids)
+            $query = "SELECT p.esb_user_id AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND user_id=" . intval($user_id) . " ORDER BY u.display_name";        
+        else
+            $query = "SELECT p.esb_user_id AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR user_id=" . intval($user_id) . ") ORDER BY u.display_name";        
+    }else{
+        $query = "SELECT p.esb_user_id FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
+    }
+    
+    $ids = $wpdb->get_col($query);
+    
+    return $ids;
+}
+
 /**
 * Get the last used data for user to trigger message
 * 
