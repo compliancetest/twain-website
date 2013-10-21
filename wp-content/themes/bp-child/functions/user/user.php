@@ -365,7 +365,7 @@ function getManageableSuiteIds($user_id = null)
     
     $suite_ids = array();    
     $communities = groups_get_groups(array('user_id' => $user_id));
-    
+    var_dump($communities['groups']);
     foreach($communities['groups'] as $community)
     {
         if(groups_is_user_admin($user_id, $community->id) || groups_is_user_mod($user_id, $community->id))
@@ -378,7 +378,7 @@ function getManageableSuiteIds($user_id = null)
                 $suite_ids[] = $sid;
         }
     }
-    var_dump($suite_ids);
+    
     return $suite_ids;    
 }
 
@@ -400,7 +400,7 @@ function getManageableCustomers($user_id = null)
     }else{
         $query = "SELECT p.esb_user_id as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
     }
-    echo $query;
+    
     $customers = $wpdb->get_results($query);
     
     return $customers;
