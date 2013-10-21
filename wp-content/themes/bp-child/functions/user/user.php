@@ -367,9 +367,9 @@ function getManageableSuiteIds($user_id = null)
     $communities = groups_get_groups(array('user_id' => $user_id));
     
     foreach($communities['groups'] as $community)
-    {
+    {echo $community->id . ":";
         if(groups_is_user_admin($user_id, $community->id) || groups_is_user_mod($user_id, $community->id))
-        {echo $community->id . ":";
+        {
             //Get Group Suites
             $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";
             $sid = $wpdb->get_var($query);
