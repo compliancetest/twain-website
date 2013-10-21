@@ -374,7 +374,7 @@ function getManageableSuiteIds($user_id = null)
             $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";            
             $sid = $wpdb->get_col($query);
             if($sid)
-                $suite_ids[] = array_merge($sid, $suite_ids);
+                $suite_ids = array_merge($sid, $suite_ids);
         }
     }
     
