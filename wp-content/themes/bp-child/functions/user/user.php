@@ -378,7 +378,7 @@ function getManageableSuiteIds($user_id = null)
                 $suite_ids[] = $sid;
         }
     }
-    
+    var_dump($suite_ids);
     return $suite_ids;    
 }
 
