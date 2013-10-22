@@ -113,20 +113,25 @@ class ManageESB
         if(!$user_id)
             return array();
         
-        //Getting User Customer IDs
-        /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);*/
-        $esbIDs = getUserPermittedCustomersIDs($user_id);
-        
-        if(!$esbIDs)
-            return array();
+        $customerWhere = '';
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            
+            if(!$esbIDs)
+                return array();
+            
+            $customer_id = " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }        
         
         $query = "SELECT c.*, tc.TEST_CASE_WP_ID AS TEST_CASE_DB_ID, s.NAME as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
                  "LEFT JOIN " . $this->table_test_case_configuration . " AS tc ON tc.ID=c.TEST_CASE_CONFIGURATION_ID " .
                  "LEFT JOIN " . $this->table_test_suite_name_id_map . " AS s ON s.ID=c.TEST_SUITE_ID " .
                  "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
                  "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID " .
-                 "WHERE c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+                 "WHERE 1 " . $customerWhere;                
+        
+        $id = $wpdb->escape($id);
         
         if($id)   
         {
@@ -145,6 +150,40 @@ class ManageESB
         
     }
     
+    /**
+    * Getting User 
+    * 
+    * @param Int $user_id
+    * @param Int $customer_id
+    */
+    public function _getUserESBIds($user_id = null, $customer_id = null)
+    {
+        global $wpdb;
+        
+        if($user_id == null)
+            $user_id = get_current_user_id();
+        
+        $query = "SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active'";
+        
+        if($customer_id != null)
+            $query .= " AND " . $wpdb->prepare("user_id=%d", $customer_id);
+        
+        if(!is_super_admin($user_id) && !is_admin())
+        {
+            $suite_ids = getAssignedSuiteIds($user_id);
+        
+            if(!$suite_ids)
+                $query .= " AND " . $wpdb->prepare("user_id=%d", $user_id);
+            else
+                $query .= " AND (user_id=$user_id OR suite_id IN (" . implode(", ", $suite_ids) . ") )";
+        }
+        
+        $ids = $wpdb->get_col($query);
+        
+        return $ids;
+    }
+
+
     
     public function  getUserTransactionLog($product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $customer_id = null, $page = 1, $limit = -1, $orderby = null, $order = 'asc')
     {
@@ -160,38 +199,14 @@ class ManageESB
         $message_where = array();
         $has_message_query = false;
         
-        if($customer_id !== null && $customer_id != "")
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $query = $wpdb->prepare("SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active' AND `user_id`=%d", $customer_id);
-            $esbIDs = $wpdb->get_col($query);
-            
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";            
-        }else{
-            $query = "SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active'";
-            if(is_super_admin() || is_admin()) //Show All Transactions
-            {
-                                
-            }else{
-                $suite_ids = getManageableSuiteIds($user_id);
-                
-                //Getting User Customer IDs        
-                $query .= $wpdb->prepare(" AND (user_id=%d", $user_id);
-                if($suite_ids)
-                    $query .= " OR suite_id IN (" . implode(", ", $suite_ids) . ")";
-                $query .= ")";
-            }
-               
-            $esbIDs = $wpdb->get_col($query);
-                
-            if(!$esbIDs)
-                return array();
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";            
-            
-        }
-        
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }        
         
         if($id)   
         {
@@ -383,27 +398,29 @@ class ManageESB
     * @param String $partyid
     * @param Date $date
     */
-    public function getFilterOptionsForProduct($suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    public function getFilterOptionsForProduct($suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $customer_id = null)
     {
         global $wpdb;
         
         $user_id = get_current_user_id();
-        
-        $where = array();
-        
-        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);
-        
-        if(!$esbIDs)
-            return array();
         
         $query = "SELECT 
                     DISTINCT(c.PRODUCT_ID)
                   FROM " . $this->table_conversation_metadata . " AS c 
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+        
+        $where = array();
                 
-        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }
+        
         
         if($suite_id !== null && $suite_id != "")
         {
@@ -460,12 +477,6 @@ class ManageESB
         
         $where = array();
         
-        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);
-        
-        if(!$esbIDs)
-            return array();
-        
         $query = "SELECT 
                     DISTINCT(IFNULL(c.TEST_SUITE_ID, '')) as ID, tm.NAME
                   FROM " . $this->table_conversation_metadata . " AS c 
@@ -473,7 +484,14 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }
         
         if($product_id !== null && $product_id != "")
         {
@@ -530,12 +548,6 @@ class ManageESB
         
         $where = array();
         
-        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);
-        
-        if(!$esbIDs)
-            return array();
-        
         $query = "SELECT 
                     DISTINCT(cm.TEST_CASE_ID) as NAME, cm.TEST_CASE_WP_ID as ID
                   FROM " . $this->table_conversation_metadata . " AS c 
@@ -543,7 +555,14 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }
         
         if($product_id !== null && $product_id != "")
         {
@@ -604,12 +623,6 @@ class ManageESB
         
         $where = array();
         
-        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);
-        
-        if(!$esbIDs)
-            return array();
-        
         $query = "SELECT 
                     DISTINCT(m.SERVICE)
                   FROM " . $this->table_conversation_metadata . " AS c 
@@ -617,7 +630,14 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }
         
         if($product_id !== null && $product_id != "")
         {
@@ -680,12 +700,6 @@ class ManageESB
         
         $where = array();
         
-        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);
-        
-        if(!$esbIDs)
-            return array();
-        
         $query = "SELECT 
                     DISTINCT(m.ACTION)
                   FROM " . $this->table_conversation_metadata . " AS c 
@@ -693,7 +707,14 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }
         
         if($product_id !== null && $product_id != "")
         {
@@ -755,12 +776,6 @@ class ManageESB
         
         $where = array();
         
-        $query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);
-        
-        if(!$esbIDs)
-            return array();
-        
         $query = "SELECT 
                     DISTINCT(m.FROM_PARTY_ID), m.TO_PARTY_ID
                   FROM " . $this->table_conversation_metadata . " AS c 
@@ -768,7 +783,14 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
+        {
+            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            if(!$esbIDs)
+                return array();
+            
+            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        }
         
         if($product_id !== null && $product_id != "")
         {
@@ -867,7 +889,7 @@ class ManageESB
         //Getting User Customer IDs
         /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
         $esbIDs = $wpdb->get_col($query);*/
-        $esbIDs = getUserPermittedCustomersIDs($user_id);
+        $esbIDs = getUserAllCustomerESBIDs($user_id);
         
         if(!$esbIDs)
             return array();
@@ -899,7 +921,7 @@ class ManageESB
         //Getting User Customer IDs
         /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
         $esbIDs = $wpdb->get_col($query);*/
-        $esbIDs = getUserPermittedCustomersIDs($user_id);
+        $esbIDs = getUserAllCustomerESBIDs($user_id);
         if(!$esbIDs)
             return null;
         
@@ -934,7 +956,7 @@ class ManageESB
         //Getting User Customer IDs
         /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
         $esbIDs = $wpdb->get_col($query);*/
-        $esbIDs = getUserPermittedCustomersIDs($user_id);
+        $esbIDs = getUserAllCustomerESBIDs($user_id);
         
         if(!$esbIDs)
             return null;

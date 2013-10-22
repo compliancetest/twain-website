@@ -10,7 +10,7 @@ function showSumitTicketBox()
     $user_id = get_current_user_id();
     
     //Getting Subscription IDs and Manageable customer IDs
-    $esbIDs = getUserPermittedCustomersIDs($user_id);    
+    $esbIDs = getUserAllCustomerESBIDs($user_id);    
     
     if(!$esbIDs)
     {

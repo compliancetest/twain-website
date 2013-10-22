@@ -53,13 +53,13 @@ $log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filter
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 
-$tProducts = $esb->getFilterOptionsForProduct($filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
-$tSuites = $esb->getFilterOptionsForSuite($filterProduct, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
-$tCases = $esb->getFilterOptionsForCase($filterProduct, $filterSuite, $filterService, $filterAction, $filterPartyId, $filterDate);
-$tServices = $esb->getFilterOptionsForService($filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate);
-$tActions = $esb->getFilterOptionsForAction($filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate);
-$tPartyIDs = $esb->getFilterOptionsForPartId($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate);
-$tCustomers = getManageableCustomers();
+$tProducts = $esb->getFilterOptionsForProduct($filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+$tSuites = $esb->getFilterOptionsForSuite($filterProduct, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+$tCases = $esb->getFilterOptionsForCase($filterProduct, $filterSuite, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+$tServices = $esb->getFilterOptionsForService($filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+$tActions = $esb->getFilterOptionsForAction($filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate, $filterCustomer);
+$tPartyIDs = $esb->getFilterOptionsForPartId($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate, $filterCustomer);
+$tCustomers = getManagedCustomers();
 
 
 $params = array();                 
@@ -172,7 +172,7 @@ if($filterCustomer){
                     <input type="text" name="date" id="date" class="input datepicker" value="<?php echo $filterDate?>" />
                     <?php if($tCustomers){ ?>
                     <div class="space10"></div>
-                    <label>&nbsp;Customer</label>
+                    <label>&nbsp;Customer <?php if($filterCustomer){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="customer" id="customer" class="select" style="width: 130px;">
                         <option value="">- All -</option>
                         <?php foreach($tCustomers as $c){ ?>
@@ -366,6 +366,9 @@ if($filterCustomer){
                         <?php } ?>
                         <?php if($filterDate){ ?>
                         <input type="hidden" name="date" value="<?php echo $filterDate?>" /> 
+                        <?php } ?>
+                        <?php if($filterCustomer){ ?>
+                        <input type="hidden" name="customer" value="<?php echo $filterCustomer?>" /> 
                         <?php } ?>
                     </form>
                 </div>

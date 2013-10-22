@@ -396,6 +396,8 @@ function showTriggerMessageBox()
     
     //Getting Subscribed Test Suites
     $suites = getUserSubscriptions();
+    
+    
     if(!$suites)    
     {
     ?>

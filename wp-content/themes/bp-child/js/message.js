@@ -15,7 +15,7 @@ jQuery(document).ready(function(){
         onStart: function(){            
             jQuery('#trigger-message-box .input-error').removeClass('input-error');
             jQuery('#trigger-message-box .select-error').removeClass('select-error');
-            jQuery('#trigger-message-box .message').remove();
+            jQuery('#trigger-message-box p.error').remove();
         }
     })
     

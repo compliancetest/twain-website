@@ -4,6 +4,7 @@
 */
 require_once('user-auth.php');
 require_once('user-profile.php');
+require_once('user-transactions.php');
 
 
 add_action('init', 'compliancetest_user_actions');
@@ -180,69 +181,6 @@ function getUserAdminGroups($user_id)
     return $result;
 }
 
-//Get User Test Suites
-function getUserTestSuites($user_id = null)
-{
-    if($user_id == null)
-        $user_id = get_current_user_id();
-    
-    //Getting User Groups
-    $groups = groups_get_groups( array('user_id' => $user_id) );
-    
-    $args = array(
-        'post_type' => 'test-suite', 
-        'posts_per_page' => -1,
-        'meta_query' => array(
-            'relation' => 'OR'            
-        )
-    );
-    
-    if(!is_admin() && !is_super_admin())
-    {        
-        foreach($groups['groups'] as $group)
-        {
-            $args['meta_query'][] = array(
-                    'key' => 'community_id',
-                    'value' => $group->id,
-                    'compare' => '='
-                );
-        }
-    }
-    
-    $testsuites = get_posts( $args );
-    
-    return $testsuites;
-}
-
-function getUserProductsAndServices($user_id = null, $exclusive = array())
-{
-    if($user_id == null)
-        $user_id = get_current_user_id();
-    
-    $args = array(
-        'post_type' => 'product-service', 
-        'posts_per_page' => -1,
-        'author' => $user_id
-    );
-    
-    
-    $rows = get_posts($args);
-    $results = array();
-    
-    if(!$exclusive)
-    {        
-        $results = $rows;
-    }else{
-        foreach($rows as $row)
-        {
-            if(in_array($row->ID, $exclusive))
-                continue;
-            $results[] = $row;
-        }    
-    }
-    
-    return $results;
-}
 
 
 function getUserPurchase($suite_id = null, $status='Active', $user_id = null)
@@ -317,6 +255,12 @@ function getUserSubscribedSuites($user_id = null)
     return $rows;
 }
 
+/**
+* Getting User Communities that includes the subscribed suites.
+* Used in Test Data Section
+* 
+* @param mixed $user_id
+*/
 function getUserSubscribedCommunities($user_id = null)
 {
     global $wpdb;
@@ -331,34 +275,13 @@ function getUserSubscribedCommunities($user_id = null)
     return $community_ids;
 }
 
-function getUserSubscribedCases($user_id = null)
-{
-    global $wpdb;
-    
-    if($user_id == null)
-        $user_id = get_current_user_id();
-        
-    /*$query = $wpdb->prepare(
-        "SELECT suite_id FROM " . $wpdb->prefix . "users_purchases " .
-        "WHERE user_id=%d AND status='Active'", $user_id
-    );
-    
-    $suite_ids = $wpdb->get_col($query);*/
-    
-    $suite_ids = getUserPermittedSuiteIDs($user_id);
-    
-    if(!$suite_ids)
-        return array();
-        
-    $query = "SELECT DISTINCT(p.ID), pm1.meta_value as caseName FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' LEFT JOIN " . 
-            $wpdb->postmeta ." AS pm1 ON p.ID=pm1.post_id AND pm1.meta_key='test_case_id' WHERE p.post_type='test-case' AND p.post_status='publish' AND pm.meta_value IN (" . implode(", ", $suite_ids) . ")";
-    
-    $rows = $wpdb->get_results($query);
-    
-    return $rows;
-}
 
-function getManageableSuiteIds($user_id = null)
+/***
+* Get the test suites belong to the communities where the user has admin or mod rule in
+* 
+* @param int $user_id
+*/
+function getAssignedSuiteIds($user_id = null)
 {
     global $wpdb;
     
@@ -384,7 +307,37 @@ function getManageableSuiteIds($user_id = null)
 }
 
 
-function getManageableCustomers($user_id = null)
+/**
+* Get All Test Suites that the user subscribed to or can manage
+* 
+* @param mixed $user_id
+*/
+function getUserAllSuiteIDs($user_id = null)
+{
+    global $wpdb;
+    
+    if($user_id == null)
+        $user_id = get_current_user_id();
+            
+    $suite_ids1 = getAssignedSuiteIds($user_id);
+    
+    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);    
+    $suite_ids2 = $wpdb->get_col($query);
+    
+    $result = array_merge($suite_ids1, $suite_ids2);
+    $result = array_unique($result);
+    
+    return $result;
+}
+
+
+/***
+* Get the Customers that subscribed to the suites that the user can manage
+* 
+* @param int $user_id
+* @return []
+*/
+function getManagedCustomers($user_id = null)
 {
     global $wpdb;
        
@@ -393,7 +346,7 @@ function getManageableCustomers($user_id = null)
     
     if(!is_super_admin() && !is_admin())
     {
-        $suite_ids = getManageableSuiteIds($user_id);
+        $suite_ids = getAssignedSuiteIds($user_id);
         if(!$suite_ids)
             return null;
             
@@ -407,22 +360,28 @@ function getManageableCustomers($user_id = null)
     return $customers;
 }
 
-function getUserPermittedCustomersIDs($user_id = null)
+/***
+* Get the Customer WP IDs that subscribed to the suites that the user can manage
+* 
+* @param int $user_id
+* @return []
+*/
+function getManagedCustomerWPIDs($user_id = null)
 {
     global $wpdb;
-        
+       
     if($user_id == null)
         $user_id = get_current_user_id();
     
     if(!is_super_admin() && !is_admin())
     {
-        $suite_ids = getManageableSuiteIds($user_id);
+        $suite_ids = getAssignedSuiteIds($user_id);
         if(!$suite_ids)
-            $query = "SELECT DISTINCT(p.esb_user_id) FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND user_id=" . intval($user_id) . " ORDER BY u.display_name";        
-        else
-            $query = "SELECT DISTINCT(p.esb_user_id) FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR user_id=" . intval($user_id) . ") ORDER BY u.display_name";        
+            return null;
+            
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
     }else{
-        $query = "SELECT DISTINCT(p.esb_user_id) FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE  p.status='Active'";
     }
     
     $ids = $wpdb->get_col($query);
@@ -430,24 +389,62 @@ function getUserPermittedCustomersIDs($user_id = null)
     return $ids;
 }
 
-function getUserPermittedSuiteIDs($user_id = null)
+/***
+* Get the Customer ESB IDs that subscribed to the suites that the user can manage
+* 
+* @param int $user_id
+* @return []
+*/
+function getManagedCustomerESBIDs($user_id = null)
+{
+    global $wpdb;
+       
+    if($user_id == null)
+        $user_id = get_current_user_id();
+    
+    if(!is_super_admin() && !is_admin())
+    {
+        $suite_ids = getAssignedSuiteIds($user_id);
+        if(!$suite_ids)
+            return null;
+            
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
+    }else{
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE  p.status='Active'";
+    }
+    
+    $ids = $wpdb->get_col($query);
+    
+    return $ids;
+}
+
+/***
+* Getting User Customer ESB IDs as well as Managed customer ids
+* 
+* @param mixed $user_id
+*/
+function getUserAllCustomerESBIDs($user_id = null)
 {
     global $wpdb;
     
     if($user_id == null)
         $user_id = get_current_user_id();
+    
+    if(!is_super_admin() && !is_admin())
+    {
+        $suite_ids = getAssignedSuiteIds($user_id);
+        if(!$suite_ids)
+            return null;
             
-    $suite_ids1 = getManageableSuiteIds($user_id);
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR p.user_id=$user_id) ORDER BY u.display_name";        
+    }else{
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' ORDER BY u.display_name";
+    }
     
-    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);    
-    $suite_ids2 = $wpdb->get_col($query);
+    $ids = $wpdb->get_col($query);
     
-    $result = array_merge($suite_ids1, $suite_ids2);
-    $result = array_unique($result);
-    
-    return $result;
+    return $ids;
 }
-
 
 /**
 * Get the last used data for user to trigger message
