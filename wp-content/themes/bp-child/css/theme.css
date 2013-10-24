@@ -4751,6 +4751,7 @@ min-height: 70px;
     top: 2px;
     left: 5px;
 }
+#tickets_list .table-box .thead,
 #template-variables-box .table-box .thead,
 #edit-transaction-log-box .table-box .thead,
 #view-validation-log-box .table-box .thead,
@@ -4762,6 +4763,7 @@ min-height: 70px;
     -webkit-border-radius: 5px 5px 0 0;
     -o-border-radius: 5px 5px 0 0;
 }
+#tickets_list .table-box .td,
 #template-variables-box .table-box .td,
 #edit-transaction-log-box .table-box .td,
 #view-validation-log-box .table-box .td,
@@ -4769,6 +4771,7 @@ min-height: 70px;
     padding-left: 5px;
     padding-right: 5px;
 }
+#tickets_list .table-box .thead .td,
 #template-variables-box .table-box .thead .td,
 #edit-transaction-log-box .table-box .thead .td,
 #view-validation-log-box .table-box .thead .td,
@@ -4777,6 +4780,7 @@ min-height: 70px;
     font-size: 11px;
     line-height: 24px;
 }
+#tickets_list .table-box .thead .td-sortable,
 #my_transaction_log .table-box .thead .td-sortable{
     /*padding-left: 0;
     padding-right: 0;*/
@@ -4786,6 +4790,7 @@ min-height: 70px;
     padding-right: 5px;    
 }
 
+#tickets_list .table-box .thead .td-two-lines,
 #template-variables-box .table-box .thead .td-two-lines,
 #edit-transaction-log-box .table-box .thead .td-two-lines,
 #view-validation-log-box .table-box .thead .td-two-lines,
@@ -6435,19 +6440,21 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 */
 #my_tickets .filter-box label{
     float: left;
-    padding-right: 20px;
+    padding-right: 8px;
 }
 #my_tickets form{
     float: left;
-    border-right: solid 1px #ccc;
-    padding-right: 10px;
-    margin-right: 10px;
 }
 #my_tickets .filter-box select{
     width: 130px;
 }
 #my_tickets .filter-box #filterForm .left{
     padding-right: 18px;
+    position: relative;
+}
+#my_tickets .filter-box #filterForm .left .clear-filter{
+    top: 3px;
+    right: 8px;
 }
 
 /*** Support Ticket Popup ***/
@@ -6466,6 +6473,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .edit-ticket-box .grid-box-body .field-row .small_input{
     width: 100px !important;
 }
+.edit-ticket-box .field-desc{
+    margin-left: 130px;
+}
 .edit-ticket-box #ticket-price-row span{
     float: left;
     line-height: 26px;
@@ -6478,6 +6488,117 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     border-bottom: solid 1px #cbcbcb;
     padding-bottom: 15px;
     margin-bottom: 15px;
+}
+
+
+/*** Ticket List ***/
+#tickets_list .td-ticket-id{
+    width: 60px;
+}
+#tickets_list .td-ticket-subject{
+    width: 213px;
+}
+#tickets_list .td-ticket-requested,
+#tickets_list .td-ticket-solved,
+#tickets_list .td-ticket-updated{
+    width: 78px;
+}
+#tickets_list .td-ticket-status{
+    width: 75px;
+}
+#tickets_list .td-ticket-type{
+    width: 120px;
+}
+#tickets_list span.new{
+    position: absolute;
+    font-family: 'Open Sans', Arial;
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 0 1px 1px #888;
+    text-shadow: 0 1px 1px rgba(0,0,0, 50);
+    display: block;
+    line-height: 13px;
+    text-align: center;
+    padding: 0 3px;
+    background: #d41118;
+    border: solid 1px #9e0b0f;
+    box-shadow: 0 0 3px 1px #ccc;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    top: 2px;
+    right: 90%;
+}
+#tickets_list .td-ticket-id{
+    position: relative;
+}
+.ticket-priorities{
+    
+}
+.ticket-priorities > span{
+    display: block;
+    float: left;
+    line-height: 25px;
+    padding: 0 5px;
+}
+.ticket-priorities > span > span{
+    height: 23px;    
+    width: 23px;    
+    display: block;
+    float: left;    
+    margin-right: 5px;
+    border: solid 1px #ccc;
+}
+#tickets_list .has-new .td{
+    font-weight: bold !important;
+}
+#tickets_list .tbody .tr{
+    cursor: pointer;
+}
+/*.ticket-priorities span.normal{}
+.ticket-priorities span.normal span{}
+
+.ticket-priorities span.high{color: #e67070;}
+.ticket-priorities span.high span{background: #e67070;}
+
+.ticket-priorities span.urgent{color: #e52727}
+.ticket-priorities span.urgent span{background: #e52727}
+
+#tickets_list .priority-high{
+    border-bottom-color: #e67070;
+}
+#tickets_list .priority-high .td{
+    color: #fff;
+    background-color: #e67070;
+    border-left-color: #fbb;
+    text-shadow: 1px 1px 1px #000;
+}
+#tickets_list .priority-urgent{
+    border-bottom-color: #e52727;
+}
+#tickets_list .priority-urgent .td{
+    color: #fff;
+    background-color: #e52727;
+    border-left-color: #fbb;
+    text-shadow: 1px 1px 1px #000;
+}
+*/
+
+.ticket-detail{
+    
+}
+.ticket-detail .ticket-info{
+    padding: 5px 0;
+    margin-bottom: 5px;
+}
+.ticket-detail .ticket-info span{
+    display: inline-block;
+    margin-right: 30px;
+    color: #333;
+}
+.ticket-detail .ticket-info span label{
+    font-weight: 700;
+    padding-right: 10px;
 }
 /***
 * Dashboard Page Min Heights

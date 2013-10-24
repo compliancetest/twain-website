@@ -433,12 +433,12 @@ function getUserAllCustomerESBIDs($user_id = null)
     if(!is_super_admin() && !is_admin())
     {
         $suite_ids = getAssignedSuiteIds($user_id);
-        if(!$suite_ids)
-            return null;
-            
-        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR p.user_id=$user_id) ORDER BY u.display_name";        
+        if(!$suite_ids)            
+            $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND p.user_id=$user_id";        
+        else
+            $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND (p.suite_id IN (" . implode(", ", $suite_ids) . ") OR p.user_id=$user_id)";        
     }else{
-        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' ORDER BY u.display_name";
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active'";
     }
     
     $ids = $wpdb->get_col($query);

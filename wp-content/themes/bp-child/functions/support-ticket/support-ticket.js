@@ -36,6 +36,10 @@ jQuery(document).ready(function(){
     
     
     jQuery('body').on('click', '#submit-ticket-link', function(){
+        jQuery('#ticketForm').submit();
+    });
+    jQuery('body').on('submit', '#ticketForm', function(){
+        
         var isValid = true;
         var form = jQuery('#ticketForm');
         
@@ -67,7 +71,12 @@ jQuery(document).ready(function(){
             isValid = false;
         }
         
+        if(isValid)
+        {
+            form.find('.loading').show()
+        }
         
-        return false;
-    })
+        return isValid;
+    });
+    
 })

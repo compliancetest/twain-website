@@ -1509,8 +1509,7 @@ tr {
     position: absolute;
     top: 17px;
     right: 4px;
-    display: none;
-    
+    display: none;    
 }
 
 .table-box .thead .td-sortable a.desc .sort{
@@ -1524,10 +1523,10 @@ tr {
     display: block;
 } 
 .table-box .thead .td-sortable a.asc:hover .sort{
-    background-position: 0 0;
+    background-position: 0 0 !important;
 } 
-.table-box .thead .td-sortable a.desc:hover .sort-desc{
-    background-position: 0 -6px;
+.table-box .thead .td-sortable a.desc:hover .sort{
+    background-position: 0 -6px !important;
 }
 .table-box .tbody{
     border-left: solid 1px #1767ab;
@@ -1710,26 +1709,26 @@ tr {
 .cancel-btn,
 .delete-grey-btn{
     border-color: #9f9f9f;
-    background: #b1b1b1;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c2c2c2), to(#9f9f9f));
-    background: -webkit-linear-gradient(top, #c2c2c2, #9f9f9f);
-    background: -moz-linear-gradient(top, #c2c2c2, #9f9f9f);
-    background: -ms-linear-gradient(top, #c2c2c2, #9f9f9f);
-    background: -o-linear-gradient(top, #c2c2c2, #9f9f9f);
+    background: #8a8a8a;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#a5a5a5), to(#7a7979));
+    background: -webkit-linear-gradient(top, #a5a5a5, #7a7979);
+    background: -moz-linear-gradient(top, #a5a5a5, #7a7979);
+    background: -ms-linear-gradient(top, #a5a5a5, #7a7979);
+    background: -o-linear-gradient(top, #a5a5a5, #7a7979);
 /*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#9f9f9f',GradientType=0 );     */
-    box-shadow: 0 1px 0 0 #dfdfdf inset;
-    -moz-box-shadow: 0 1px 0 0 #dfdfdf inset;
-    -webkit-box-shadow: 0 1px 0 0 #dfdfdf inset;
+    box-shadow: 0 1px 0 0 #b8b8b8 inset;
+    -moz-box-shadow: 0 1px 0 0 #b8b8b8 inset;
+    -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
 .cancel-btn span.p{
-    background-position: 0 1px;
+    background-position: 0 -1098px;
 }
 .delete-grey-btn span.p{
     background-position: 0 1px;
 }
 .delete-grey-btn:hover,
 .cancel-btn:hover{
-    background: #c1c1c2;
+    background: #a0a0a0;
 }
 .delete-grey-btn{
     padding: 0 12px !important;

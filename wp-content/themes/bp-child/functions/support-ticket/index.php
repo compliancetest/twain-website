@@ -27,6 +27,8 @@ $ct_ticket_category = new CT_TicketCategory();
 $ct_ticket_priority = new CT_TicketPriority();
 $ct_ticket_status = new CT_TicketStatus();
 
+$ct_ticket_status->defineStatusConstants();
+
 require_once(dirname(__FILE__) . "/admin/index.php");    
 require_once(dirname(__FILE__) . "/frontend/index.php");    
 

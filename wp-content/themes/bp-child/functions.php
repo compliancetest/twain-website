@@ -784,3 +784,18 @@ function cp_selected($value1, $value2)
 {
     return $value1 == $value2 ? "selected='selected'" : "";
 }
+
+//Add rewrite rule
+add_action("generate_rewrite_rules", "add_ticket_rewrite");
+function add_ticket_rewrite()
+{
+    add_rewrite_rule('^my-support-tickets/([0-9]*)$','index.php?pagename=my-support-tickets&ticket=$matches[1]', 'top');
+}
+
+add_filter('query_vars', 'add_ticket_query_var');
+function add_ticket_query_var($public_query_vars)
+{
+    $public_query_vars[] = 'ticket';
+    
+    return $public_query_vars;
+}

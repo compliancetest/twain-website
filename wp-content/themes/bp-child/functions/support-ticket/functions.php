@@ -24,3 +24,10 @@ function ct_ticket_unique_category_slug($slug, $id)
     return $new_slug;
 }
 
+function ct_ticket_format_date($date)
+{
+    if(time() - strtotime($date) < 60 * 60 * 24)
+        return date("m/d/y H:i", strtotime($date));
+    else
+        return date("m/d/y H:i", strtotime($date));
+}

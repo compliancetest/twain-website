@@ -7,7 +7,7 @@ class CT_TicketPriority
 {
     var $last_id = null;
     
-    public function getPriorities($orderby = 'priority', $order='asc')
+    public function getPriorities($orderby = 'sort_number', $order='asc')
     {
         global $wpdb;
         

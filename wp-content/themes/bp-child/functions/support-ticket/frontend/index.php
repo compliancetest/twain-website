@@ -17,6 +17,8 @@ function ct_process_ticket_frontend_actions()
         {
             showSumitTicketBox();            
             exit;
+        }else if(wp_verify_nonce($action, 'submit-ticket')){
+            createSupportTicket();
         }
     }
 }

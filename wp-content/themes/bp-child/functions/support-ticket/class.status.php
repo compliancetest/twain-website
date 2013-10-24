@@ -7,7 +7,7 @@ class CT_TicketStatus
 {
     var $last_id = null;
     
-    public function getStatues($orderby = 'sort_number', $order='asc')
+    public function getStatuses($orderby = 'sort_number', $order='asc')
     {
         global $wpdb;
         
@@ -48,7 +48,7 @@ class CT_TicketStatus
     
     public function sortStatues()
     {
-        $statuses = $this->getStatues('sort_number');
+        $statuses = $this->getStatuses('sort_number');
         $orders = array();
         
         if($this->last_id)
@@ -73,5 +73,33 @@ class CT_TicketStatus
         {
             $wpdb->query("UPDATE " . TABLE_TICKET_STATUSES . " SET sort_number=" . ($i+1) . " WHERE id=" . $r);            
         }
+    }
+    
+    public function defineStatusConstants()
+    {
+        $statuses = $this->getStatuses();
+        $variables = array();
+        
+        foreach($statuses as $row)
+        {
+            if(!defined("TICKET_STATUS_" . strtoupper(str_replace(" ", "_", $row->status))))
+                define("TICKET_STATUS_" . strtoupper(str_replace(" ", "_", $row->status)), $row->id);
+        }        
+        
+    }
+    
+    public function getStatusesSelectboxHTML($name = 'ticket_status', $id='ticket_status', $default = null, $emptyOptionLabel = '- All -')
+    {
+        $priorities = $this->getStatuses('sort_number');
+        $html = "<select name='$name' id='$id' class='select'>";
+        if($emptyOptionLabel)
+            $html .= "<option value=''>$emptyOptionLabel</option>";
+        foreach($priorities as $p)
+        {
+            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . ">$p->status</option>";
+        }
+        $html .= "</select>";
+        
+        return $html;
     }
 }

@@ -34,7 +34,7 @@ function showSumitTicketBox()
     }else{
     ?>
     <div class="popup-box edit-ticket-box" id="submit-ticket-box" style="display: none; width: 700px;">
-        <form name="ticketForm" id="ticketForm" action="">
+        <form name="ticketForm" id="ticketForm" action="" method="post">
             <div class="popup-box-header radius6 noradiusbottom">Submit a Request</div>        
                 <div class="popup-box-content grid-box-body">
                     
@@ -42,7 +42,8 @@ function showSumitTicketBox()
                     <div class="field-row">
                         <div class="grid-cell">
                             <label>Subject:</label>
-                            <input type="text" name="subject" id="subject" value="" class="input" />
+                            <input type="text" name="subject" id="subject" maxlength="50" value="" class="input" />
+                            <span class="field-desc">Maximum 50 characters</span>
                         </div>
                         <div class="clear"></div>
                     </div>                
@@ -92,9 +93,9 @@ function showSumitTicketBox()
                     <div class="clear"></div>
                 </div>
             <a class="close_btn"></a>                        
-            <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
+            <div class="loading loading-with-text"><div><b>SENDING YOUR MESSAGE</b><span>Please wait...</span></div></div>
             <input type="hidden" name="suite_id" value="<?php echo $suite->id?>" />
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('direct_payment')?>" />
+            <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('submit-ticket')?>" />
         </form>
     </div>
     <?php

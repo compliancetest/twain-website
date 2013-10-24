@@ -5,10 +5,5 @@
 
 class CT_Ticket
 {
-    public function displayTicketListForAdmin()
-    {
-        ?>
-        Hello
-        <?php
-    }
+    
 }

@@ -378,7 +378,7 @@ if($filterCustomer){
                         $args = array(
                             'base'         => get_permalink() . '%_%?',
                             'format'       => 'page/%#%',
-                            'total'        => ceil($log_results['total'] / $limit),
+                            'total'        => $limit > 0 ? ceil($log_results['total'] / $limit) : 1,
                             'current'      => $page,
                             'show_all'     => False,
                             'end_size'     => 5,

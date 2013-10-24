@@ -75,7 +75,6 @@ function compliancetest_create_new_user(){
 }
 
 //Function Resend Email Verification
-
 function resend_email_verification(){
     
     global $current_user, $wpdb;
