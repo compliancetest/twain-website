@@ -66,3 +66,10 @@ if(!defined('ABSPATH'))
         </div>
     </div>
 </div>
+
+<div class="right two_fifths">
+    <div class="gray_message_box radius9 light_gray_txt">
+        <div class="indicator"></div>
+        <?php echo get_post_meta($post->ID, 'my_pictures_desc', true);?>
+    </div>
+</div>
