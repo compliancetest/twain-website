@@ -14,12 +14,12 @@
                 <div class="grid-box-body">
                     <div class="column">                      
                         <div class="field-row">
-                            <label>Group Name</label>
+                            <label>Community Name</label>
                             <span class="input-holder"><input type="text" name="group-name" id="group-name" value="<?php bp_group_name(); ?>" aria-required="true" class="input" /></span>
                             <div class="clear"></div>
                         </div>
                         <div class="field-row">
-                            <label>Group Description</label>
+                            <label>Community Description</label>
                             <span class="input-holder"><textarea name="group-desc" id="group-desc" aria-required="true" class="textarea"><?php bp_group_description_editable(); ?></textarea></span>
                             <div class="clear"></div>
                         </div>
@@ -46,7 +46,7 @@
                         </div>
                         
                         <div class="field-row">
-                            <label><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></label>
+                            <label><?php _e( 'Notify community members of changes via email', 'buddypress' ); ?></label>
                             <span class="radio-holder">
                                 <label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'YES', 'buddypress' ); ?></label>
                                 <label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'NO', 'buddypress' ); ?></label>
@@ -77,7 +77,7 @@
                 <div class="grid-box-body">
                     <div class="column">     
                         <div class="field-row">
-                            <i><?php _e("Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results.", 'buddypress'); ?></i>
+                            <i><?php _e("Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.", 'buddypress'); ?></i>
                         </div>
                         <div class="field-row">
                             <div class="grid_cell current_avatar">
@@ -139,15 +139,15 @@
                     <div class="column">                      
                         <?php do_action( 'bp_before_group_delete_admin' ); ?>
                         <div class="field-row">
-                            <font color='#ce1515'>WARNING</font>: Deleting this group will completely remove ALL content associated with it. There is no way back, please be careful with this option.
+                            <font color='#ce1515'>WARNING</font>: Deleting this community will completely remove ALL content associated with it. There is no way back, please be careful with this option.
                         </div>
                         <div class="field-row">
-                            <label><input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" /> <?php _e( 'I understand the consequences of deleting this group.', 'buddypress' ); ?></label>
+                            <label><input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" /> <?php _e( 'I understand the consequences of deleting this community.', 'buddypress' ); ?></label>
                         </div>    
                         <?php do_action( 'bp_after_group_delete_admin' ); ?>
                         <div class="btn-row">
-                            <input type="hidden" value="<?php _e( 'Delete Group', 'buddypress' ); ?>" id="delete-group-button" name="delete-group-button" />
-                            <a href="#" class="action-btn delete-grey-btn"><span class="p"></span><span class="t">DELETE GROUP</span></a>                    
+                            <input type="hidden" value="<?php _e( 'Delete Community', 'buddypress' ); ?>" id="delete-group-button" name="delete-group-button" />
+                            <a href="#" class="action-btn delete-grey-btn"><span class="p"></span><span class="t">DELETE COMMUNITY</span></a>                    
                             <div class="clear"></div>
                         </div>                        
                     </div>
@@ -482,34 +482,34 @@
                         <div class="field-row">
                             <label>
                                 <input type="radio" name="group-status" value="public"<?php bp_group_show_status_setting( 'public' ); ?> />
-                                <b><?php _e( 'This is a public group', 'buddypress' ); ?></b>
+                                <b><?php _e( 'This is a public community', 'buddypress' ); ?></b>
                             </label>                        
                             <ul>
-                                <li><?php _e( 'Any site member can join this group.', 'buddypress' ); ?></li>
-                                <li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
-                                <li><?php _e( 'Group content and activity will be visible to any site member.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'Any site member can join this community.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'This community will be listed in the communities directory and in search results.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'Community content and activity will be visible to any site member.', 'buddypress' ); ?></li>
                             </ul>
                         </div>
                         <div class="field-row">
                             <label>
                                 <input type="radio" name="group-status" value="private"<?php bp_group_show_status_setting( 'private' ); ?> />
-                                <b><?php _e( 'This is a private group', 'buddypress' ); ?></b>
+                                <b><?php _e( 'This is a private community', 'buddypress' ); ?></b>
                             </label>
                             <ul>
-                                <li><?php _e( 'Only users who request membership and are accepted can join the group.', 'buddypress' ); ?></li>
-                                <li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
-                                <li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'Only users who request membership and are accepted can join the community.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'This community will be listed in the communities directory and in search results.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'Community content and activity will only be visible to members of the community.', 'buddypress' ); ?></li>
                             </ul>
                         </div>
                         <div class="field-row">
                             <label>
                                 <input type="radio" name="group-status" value="hidden"<?php bp_group_show_status_setting( 'hidden' ); ?> />
-                                <b><?php _e( 'This is a hidden group', 'buddypress' ); ?></b>
+                                <b><?php _e( 'This is a hidden community', 'buddypress' ); ?></b>
                             </label>
                             <ul>
-                                <li><?php _e( 'Only users who are invited can join the group.', 'buddypress' ); ?></li>
-                                <li><?php _e( 'This group will not be listed in the groups directory or search results.', 'buddypress' ); ?></li>
-                                <li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'Only users who are invited can join the community.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'This community will not be listed in the communities directory or search results.', 'buddypress' ); ?></li>
+                                <li><?php _e( 'Community content and activity will only be visible to members of the community.', 'buddypress' ); ?></li>
                             </ul>
                         </div>
                     </div>
@@ -530,29 +530,29 @@
         <div class="grid-box" id="group_invitations_box">
             <form name="group-invitation-form" id="group-invitation-form" action="<?php bp_group_admin_form_action('group-settings')?>" method="post" enctype="multipart/form-data" role="main">
                 <div class="grid-box-header">
-                    <h5>Group Invitations</h5>
+                    <h5>Community Invitations</h5>
                 </div>
                 <div class="grid-box-body">
                     <div class="column">                   
                         <div class="field-row">
-                            Which members of this group are allowed to invite others?
+                            Which members of this community are allowed to invite others?
                         </div>
                         <div class="field-row">
                             <label> 
                                 <input type="radio" name="group-invite-status" value="members"<?php bp_group_show_invite_status_setting( 'members' ); ?> /> 
-                                <b><?php _e( 'All group members', 'buddypress' ); ?></b> 
+                                <b><?php _e( 'All community members', 'buddypress' ); ?></b> 
                             </label>                             
                         </div>
                         <div class="field-row">
                             <label> 
                                 <input type="radio" name="group-invite-status" value="mods"<?php bp_group_show_invite_status_setting( 'mods' ); ?> /> 
-                                <b><?php _e( 'Group admins and mods only', 'buddypress' ); ?></b>
+                                <b><?php _e( 'Community admins and mods only', 'buddypress' ); ?></b>
                             </label>
                         </div>
                         <div class="field-row">
                             <label> 
                                 <input type="radio" name="group-invite-status" value="admins"<?php bp_group_show_invite_status_setting( 'admins' ); ?> /> 
-                                <b><?php _e( 'Group admins only', 'buddypress' ); ?></b> 
+                                <b><?php _e( 'Community admins only', 'buddypress' ); ?></b> 
                             </label>
                         </div>                        
                     </div>
