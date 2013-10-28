@@ -178,8 +178,8 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
         </div>                
         <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">
-               <div class="btn-row nopaddingright">
-                   <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span class="t">SAVE PRODUCT/SERVICE</span></a>
+               <div class="btn-row nopaddingleft">
+                   <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE PRODUCT/SERVICE</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                    <div class="clear"></div>
                </div>

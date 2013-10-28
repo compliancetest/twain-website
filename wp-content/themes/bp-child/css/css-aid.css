@@ -1446,7 +1446,11 @@ tr {
     padding: 15px;
 }
 .grid-box-footer .btn-row .action-btn{
-    float: right;
+    float: left;
+    margin-left: 10px;
+}
+.grid-box-footer .btn-row .action-btn:first-child{
+    margin-left: 0;
 }
 /*** Table ***/
 .table-box .grid-box-body{
@@ -1911,8 +1915,8 @@ tr {
     cursor: pointer;    
 }
 .popup-box .action-btn{
-    float: right;
-    margin-left: 13px;
+    float: left;
+    margin-right: 13px;
 }
 /*** Calendar Style ***/
 .ui-datepicker{

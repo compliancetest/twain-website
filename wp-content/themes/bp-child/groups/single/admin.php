@@ -227,10 +227,10 @@
                         <input type="hidden" name="td-action" value="<?php echo wp_create_nonce('save-profile-type')?>" />                        
                     </div>
                     <div class="grid-box-footer">
-                        <div class="btn-row">                    
-                            <a href="#" class="action-btn process-btn left10"><span class="p"></span><span class="t">SAVE</span></a>                    
-                            <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>                    
-                            <div class="clear"></div>                        
+                        <div class="btn-row">
+                            <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SAVE</span></a>
+                            <a href="#" class="action-btn cancel-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
+                            <div class="clear"></div>
                         </div>
                     </div>                    
                 </form>
