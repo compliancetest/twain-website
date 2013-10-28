@@ -75,25 +75,24 @@
                 
               <?php if('crop-image' != bp_get_avatar_admin_step()){?>
                 <div class="grid-box-body">
-                    <div class="column">     
-                        <div class="field-row">
-                            <i><?php _e("Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.", 'buddypress'); ?></i>
-                        </div>
+                    <div class="column grid-row">
                         <div class="field-row">
                             <div class="grid_cell current_avatar">
                                 <?php if(bp_get_group_has_avatar()){ ?>
                                 <?php echo bp_get_group_avatar(array('width' => 98, 'height' => 98))?>
-                                <div class="space10"></div>
-                                <a href="<?php echo bp_get_group_avatar_delete_link()?>" class="action-btn delete-btn"><span class="p"></span><span class="t">DELETE</span></a>
                                 <?php }else{ ?>
                                 <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/default-group-avatar.png" title="Default Avatar" />                                
                                 <?php } ?>
                                 <?php wp_nonce_field( 'bp_avatar_upload' ); ?>
                             </div>
-                            <div class="grid_cell width250 left15">
-                                <input type="file" name="file" id="file" />
-                                <div class="space10"></div>
-                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Upload</span></a>                                                    
+                            <div class="grid_cell width300 left15">
+                                <p class="field-row"><?php _e("Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.", 'buddypress'); ?></p>
+                                <p class="field-row"><?php _e("Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.") ?></p>
+                                <input type="file" name="file" id="file" class="input-file" />
+                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Upload Image</span></a>
+                                <?php if(bp_get_group_has_avatar()){ ?>
+                                    <a href="<?php echo bp_get_group_avatar_delete_link()?>" class="action-btn delete-btn left10"><span class="p"></span><span class="t">Delete Image</span></a>
+                                <?php } ?>
                                 <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
                                 <input type="hidden" name="upload" id="upload" value="Upload Image" />
                             </div>

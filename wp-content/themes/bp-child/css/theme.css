@@ -4493,7 +4493,7 @@ min-height: 70px;
     padding-top: 10px;
     display: none;
 }
-#my_avatar .input-file{
+#my_avatar .input-file, #group-avatar-form .input-file{
     padding: 0;
     margin: 0 0 10px;
 }
