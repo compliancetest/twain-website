@@ -14,7 +14,6 @@ if(!defined('ABSPATH'))
             <?php if($user_status != 3){?>
                 <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
             <?php }?>
-            <span class="header-text right">Role: <?php echo $urole;?></span>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">

@@ -32,7 +32,7 @@ if(is_user_logged_in()){
 
 	foreach ( $wp_roles->role_names as $role => $name ):
 		if ( array_key_exists( $role, $capabilities ) )
-			$urole = ucfirst($role);
+			$urole = ucfirst($name);
 	endforeach;
     
 }else{
