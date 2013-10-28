@@ -64,9 +64,12 @@ if(!defined('ABSPATH'))
         </div>                    
     </div>
 </div>
+<?php $my_subscriptions_desc = get_post_meta($post->ID, 'my_subscriptions_desc', true);?>
+<?php if($my_subscriptions_desc): ?>
 <div class="right two_fifths">
     <div class="gray_message_box radius9 light_gray_txt">
         <div class="indicator"></div>
-        <?php echo get_post_meta($post->ID, 'my_subscriptions_desc', true);?>
+        <?php echo $my_subscriptions_desc; ?>
     </div>
 </div>
+<?php endif; ?>
