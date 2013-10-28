@@ -21,8 +21,13 @@ if(!defined('ABSPATH'))
         <div class="grid-box-body">
             <form action="#" method="post">
                 <div class="grid-row">
-                    <div class="grid-cell width30P"><label>Name</label></div>
-                    <div data-name="uname" data-value="<?php echo $lname.' '.$fname;?>" class="grid-cell in_input"><?php echo $lname.' '.$fname;?></div>
+                    <div class="grid-cell width30P"><label>First Name</label></div>
+                    <div data-name="first_name" data-value="<?php echo $fname;?>" class="grid-cell in_input"><?php echo $fname;?></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell width30P"><label>Last Name</label></div>
+                    <div data-name="last_name" data-value="<?php echo $lname;?>" class="grid-cell in_input"><?php echo $lname;?></div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">

@@ -28,29 +28,34 @@ function cp_user_detail_edit()
     
     $user_id = $current_user->ID;
     
-    $uname = trim($_POST['uname']);
+    $first_name = trim($_POST['first_name']);
+    $last_name = trim($_POST['last_name']);
     $email = trim($_POST['email']);
-    if(!$uname && !$email)
+    if(!$first_name && !$last_name && !$email)
     {
-        echo 'Name and Email should not be empty';
+        echo 'First Name, Last Name and Email should not be empty';
         exit;
     }
-    if(!$uname){
-        echo 'Please enter your name';
+    if(!$first_name){
+        echo 'Please enter your first name';
+        exit;
+    }
+    if(!$last_name){
+        echo 'Please enter your last name';
         exit;
     }
     if(!$email){
         echo 'Please enter your email address.';
         exit;
     }
-    
+
     //Update Phonenumber
     update_user_meta($user_id, 'phone_number', $_POST['phone_number']);
     update_user_meta($user_id, 'description', htmlentities($_POST['biography']));
     
     //Update User Name
-    $uname = explode(' ', $uname);    
-    wp_update_user( array ('ID' => $user_id, 'first_name' => $uname[0], 'last_name' => $uname[1], 'display_name' => trim($_POST['uname']))) ;
+    //$uname = explode(' ', $uname);
+    wp_update_user( array ('ID' => $user_id, 'first_name' => $first_name, 'last_name' => $last_name, 'display_name' => trim($_POST['uname']))) ;
     
     $email_regex = '/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/'; 
     if(!preg_match($email_regex, $email))
