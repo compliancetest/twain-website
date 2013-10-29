@@ -71,7 +71,7 @@ function cp_change_avatar()
 add_filter('bp_core_avatar_original_max_width', 'cp_core_avatar_original_max_width');
 function cp_core_avatar_original_max_width()
 {
-    return 430;
+    return 390;
 }
 
 add_action( 'bp_actions', 'cp_xprofile_action_delete_avatar' );
