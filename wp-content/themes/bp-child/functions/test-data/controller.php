@@ -280,12 +280,12 @@ function saveProfileInstance($action)
         @unlink($basePath . "/" . $profile_instance->filename );
     }
     
-    $filename = sanitize_file_name($jsonObject->ProfileName) . ".json";
+    $filename = sanitize_file_name($jsonObject->Profile->Title) . ".json";
     
     $idx = 2;
     while(file_exists($basePath . "/" . $filename))
     {
-        $filename = sanitize_file_name($jsonObject->ProfileName) . "-$idx.json";
+        $filename = sanitize_file_name($jsonObject->Profile->Title) . "-$idx.json";
         $idx++;
     }
     
@@ -298,7 +298,7 @@ function saveProfileInstance($action)
         $wpdb->update($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => $jsonObject->ProfileName,
+                            'profile_name' => $jsonObject->Profile->Title,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => $filename,
@@ -312,7 +312,7 @@ function saveProfileInstance($action)
         $wpdb->insert($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => $jsonObject->ProfileName,
+                            'profile_name' => $jsonObject->Profile->Title,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => $filename,
