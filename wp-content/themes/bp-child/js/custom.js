@@ -523,3 +523,4 @@ function fixTdHeight(table)
         jQuery(this).children('.td').height(h);
     });
 }
+

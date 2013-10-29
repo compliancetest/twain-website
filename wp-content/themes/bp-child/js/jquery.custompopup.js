@@ -195,6 +195,7 @@
                 }else if(selfHeight > 0){
                     opts.box.css('top', (wHeight - selfHeight) / 2 + $(window).scrollTop()); //Keep Vertical Align Middle
                 }                
+                setOverlaySize();
             }
             
             function loadImagePosition()

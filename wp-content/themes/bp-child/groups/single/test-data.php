@@ -82,7 +82,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
 <?php 
     $profileTypes = getCommunityProfileTypes(bp_get_group_id());
 ?>
-<div class="popup-box" id="edit-profile-box" style="display: none; width: 900px;">
+<div class="popup-box" id="edit-profile-box" style="display: none; width: 500px;">
     <form name="editProfileForm" id="editProfileForm" action="">
         <div class="popup-box-header radius6 noradiusbottom">Create Profile Instance</div>        
         <div class="popup-box-content grid-box-body">                    
@@ -101,7 +101,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                     <div class="field-row">
                         <label class="padding5-10-5-0"> Upload Json file</label> 
                         <div class="grid-cell">                                        
-                            <span class="file-placeholder action-btn add-new-btn left nomarginleft">
+                            <span class="file-placeholder left nomarginleft">
                                 <span class="p"></span>
                                 <span class="t">Select File</span>
                                 <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" />
@@ -136,6 +136,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
 <script type="text/javascript">
     var profileData = null;
     var profileType = null;
+    
     jQuery(document).ready(function(){
         //Ajax File Uploader
         jQuery('#profile_instance_file').fileupload({
@@ -336,5 +337,21 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
         
     })    
 
+    /**
+    * Customize the popup box
+    * 
+    */
+    function afterJsonRender()
+    {
+        var maxWidth = jQuery('#create_profile_panel table:eq(0)').width();
+        
+        //Resize The box width
+        if(jQuery('#edit-profile-box').width() < maxWidth + 40)
+        {
+            jQuery('#edit-profile-box').width(maxWidth + 40);                
+            jQuery('.mask-wrapper').width(jQuery(document).width());
+            jQuery('.mask-wrapper').height(jQuery(document).height());           
+        }        
+    }
 </script>
 <?php } ?>

@@ -6303,6 +6303,9 @@ div.popup-box .loading-with-text{
     font-weight: 600;
     display: block;
 }
+table.json-object table{
+    margin: 0;
+}
 table.json-object{
     font-weight: normal;
 }
@@ -6314,6 +6317,7 @@ table.json-object td{
     background: transparent;
     border-right: solid 1px #b7b7b7;
     height: 26px;
+    vertical-align: top;
 }
 #json-view-panel table.json-object td{
     height: auto;
@@ -6352,6 +6356,8 @@ table.json-object .json-string-content-editable{
     font-size: 12px;
     width: 150px;
     max-width: 150px;
+    min-height: 24px;
+    
 }
 table.json-object .json-array-table .json-string-content-editable{
     width: 100px;

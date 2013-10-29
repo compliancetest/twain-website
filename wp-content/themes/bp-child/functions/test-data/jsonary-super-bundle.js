@@ -7843,6 +7843,11 @@
 					this.renderFunction(element, data, context);
 				}
 				context.enhanceElement(element);
+                //Custom Function
+                if(typeof(afterJsonRender) != 'undefined')
+                {                    
+                    afterJsonRender();
+                }
 				return this;
 			},
 			renderHtml: function (data, context) {
