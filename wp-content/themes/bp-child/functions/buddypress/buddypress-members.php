@@ -35,6 +35,8 @@ function cp_change_avatar()
 
                 // Make sure we include the jQuery jCrop file for image cropping
                 add_action( 'wp_print_scripts', 'bp_core_add_jquery_cropper' );
+            }else{
+                hook_buddypress_action_messages();
             }
         }
 
