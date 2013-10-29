@@ -95,7 +95,12 @@ To view %4$s\'s profile: %5$s
 	/* Send the message */
 	$to      = apply_filters( 'groups_notification_new_membership_request_to', $to );
 	$subject = apply_filters_ref_array( 'groups_notification_new_membership_request_subject', array( $subject, &$group ) );
-	$message = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $message, &$group, $requesting_user_name, $profile_link, $group_requests, $settings_link ) );
+    /*********************************************************
+    *****************  Change User Display Name to User ID********************* 
+    * Original params:   $message, &$group, $requesting_user_name, $profile_link, $group_requests, $settings_link
+    * New params:        $message, &$group, $requesting_user_id, $profile_link, $group_requests, $settings_link  
+    **********************************************************/
+	$message = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $message, &$group, $requesting_user_id, $profile_link, $group_requests, $settings_link ) );
 
 	wp_mail( $to, $subject, $message );
 
