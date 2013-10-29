@@ -358,6 +358,7 @@ function deleteProfileTypeInstance($action)
     @unlink(ABSPATH . "profiles/" . $row->type . "/" . $row->filename);
     $wpdb->delete($wpdb->prefix . "community_profile_instances", array('id' => $row->id));
     $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` - 1 WHERE id=%d", $row->type_id));
+    
     addMessage('Profile instance was removed.');
     wp_redirect($redirect);
     exit;
