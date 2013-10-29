@@ -312,7 +312,7 @@
                 <div class="column nopaddingbottom">
                     <form name="group-requests-form" id="group-requests-form" action="<?php bp_group_admin_form_action('membership-requests')?>" method="post" enctype="multipart/form-data" role="main">
                     <?php if(bp_group_has_membership_requests()){ ?>
-                    <p class="nomarginbottom">The following persons wants to join the Group:</p>
+                    <p class="nomarginbottom">The following persons wants to join the Community:</p>
                     <div class="field-row">
                         <ul id="request-list" class="member-list">
                             <?php while ( bp_group_membership_requests() ) : bp_group_the_membership_request(); ?>

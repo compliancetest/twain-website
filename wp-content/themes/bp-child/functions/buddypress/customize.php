@@ -203,7 +203,7 @@ function hook_buddypress_action_messages()
     
     if(isset($bp->template_message) && $bp->template_message)
     {
-        addMessage($bp->template_message, $bp->template_message_type == 'error' ? 'error' : 'success');
+        addMessage(str_replace(array("Group", "Groups"), array("Community", "Communities"), $bp->template_message), $bp->template_message_type == 'error' ? 'error' : 'success');
         //Remove Cookie
         @setcookie('bp-message',      null, time() + 60 * 60 * 24, COOKIEPATH);
         @setcookie('bp-message-type', null,    time() + 60 * 60 * 24, COOKIEPATH);
