@@ -47,11 +47,11 @@
                                 <div class="clear"></div>
                                 <div id="top_loged_actions">
                                     <?php
-                                    if(is_home() || is_page('my-profile') ) {
+//                                    if(is_home() || is_page('my-profile') ) {
                                         $logout_redirect = get_bloginfo('siteurl');
-                                    }else{
+                                    /*}else{
                                         $logout_redirect = get_permalink();
-                                    }
+                                    }*/
                                     ?>
                                     <ul>
                                         <li><a href="<?php echo home_url();?>/my-profile/">Dashboard</a></li>

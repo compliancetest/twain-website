@@ -197,7 +197,7 @@ add_action('groups_screen_group_admin_avatar', "hook_buddypress_action_messages"
 add_action('groups_unbanned_member', "hook_buddypress_action_messages");
 add_action('groups_demoted_member', "hook_buddypress_action_messages");
 add_action('groups_group_request_managed', "hook_buddypress_action_messages");
-add_action('xprofile_screen_change_avatar', "hook_buddypress_action_messages");
+
 function hook_buddypress_action_messages()
 {
     global $bp;
