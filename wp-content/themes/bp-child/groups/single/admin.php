@@ -89,7 +89,7 @@
                                 <p class="field-row"><?php _e("Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.", 'buddypress'); ?></p>
                                 <p class="field-row"><?php _e("Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.") ?></p>
                                 <input type="file" name="file" id="file" class="input-file" />
-                                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Upload Image</span></a>
+                                <a href="#" class="action-btn process-btn no-submit" id="upload-image-btn"><span class="p"></span><span class="t">Upload Image</span></a>
                                 <?php if(bp_get_group_has_avatar()){ ?>
                                     <a href="<?php echo bp_get_group_avatar_delete_link()?>" class="action-btn delete-btn left10"><span class="p"></span><span class="t">Delete Image</span></a>
                                 <?php } ?>

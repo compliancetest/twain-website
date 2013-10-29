@@ -5,6 +5,13 @@
         $(this).parents('form').submit();
         return false;
     })
+    $('#group_admin_page #group_avatar_box #upload-image-btn').click(function(){
+        if($('#group_avatar_box #file').val() != '')
+        {
+            $(this).parents('form').submit();    
+        }
+        return false;
+    })
     $('#group-details-form').submit(function(){
         var form = $(this);
         form.find('.message').remove();
