@@ -27,14 +27,6 @@ if(is_user_logged_in()){
 
 	$capabilities = $user->{$wpdb->prefix . 'capabilities'};
 
-	if ( !isset( $wp_roles ) )
-		$wp_roles = new WP_Roles();
-
-	foreach ( $wp_roles->role_names as $role => $name ):
-		if ( array_key_exists( $role, $capabilities ) )
-			$urole = ucfirst($name);
-	endforeach;
-    
 }else{
     wp_redirect(home_url());
     exit;
