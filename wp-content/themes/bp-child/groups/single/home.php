@@ -100,6 +100,7 @@
                     <div class="clear"></div>
                     <div class="message" style="display: none;">Please aggree the Terms & Conditions and License Agreement.</div>
                 </div>
+                <div class="loading loading-with-text radius6"><div><b>SENDING REQUEST</b><p>Please wait...</p></div></div>
                 <a id="close-popup-community" class="close_btn"></a>                
             </div>
             <div id="community-terms-box" style="display: none" class="popup-box">

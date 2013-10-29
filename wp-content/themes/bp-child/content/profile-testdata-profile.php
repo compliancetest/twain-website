@@ -14,10 +14,10 @@ $profileInstances = getCustomerProfileInstances();
             <?php
                 if(count($subscriptions) > 0){
             ?>
-            <a class="gbh-btn gbh-btn-add right" id="add-new-test-data-link" href="#edit-profile-box">Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
-            <?php
-                }
-            ?>
+                <a class="gbh-btn gbh-btn-add right" id="add-new-test-data-link" href="#edit-profile-box">Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
+            <?php }else{ ?>
+                <a class="gbh-btn gbh-btn-add right" href="#need-subscription-box" rel="custom-popup" cp-type="inline" >Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
+            <?php } ?>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">
@@ -344,6 +344,19 @@ if(count($subscriptions) > 0){
     })    
 
 </script>
+<?php
+}else{ 
+?>
+<div class="popup-box" id="need-subscription-box" style="display: none; width: 500px;">
+    <div class="popup-box-header radius6 noradiusbottom">Need a subscription</div>        
+    <div class="popup-box-content grid-box-body">                    
+        <p class="message notice">You must subscribe to a test suite before you can create a test data profile.</p>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">                                    
+        <div class="clear"></div>
+    </div>                        
+    <a class="close_btn"></a>                        
+</div>
 <?php
 }
 ?>

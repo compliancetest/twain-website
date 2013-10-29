@@ -65,19 +65,16 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
         <?php
             }
         ?>
-        <?php
-            if($is_group_admin)
-            {
-        ?>
+        
             <div class="grid-list-footer grid-list-row">                    
                 <div class="grid-list-cell width100P">                    
-                    <a href="#edit-profile-box" id="add-new-test-data-link" class="action-btn process-btn right"><span class="p"></span><span class="t">Add New Test Data</span></a>
+                    <?php if($is_group_admin):  ?>
+                        <a href="#edit-profile-box" id="add-new-test-data-link" class="action-btn add-new-btn right"><span class="p"></span><span class="t">Add New Test Data</span></a>
+                    <?php endif; ?>
                 </div>
                 <div class="clear"></div>
             </div>
-        <?php
-            }
-        ?>
+        
          </div> 
     </div>
 </div>

@@ -75,7 +75,7 @@ function cp_bp_get_group_join_button_filter($button)
 {    
     if(is_user_logged_in())
     {
-        if($button['id'] == 'request_membership'){        
+        if($button['id'] == 'request_membership' || $button['id'] == 'join_group'){        
             $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
             $button['link_text'] = "Join Community";
             $button['link_title'] = "Join Community";            

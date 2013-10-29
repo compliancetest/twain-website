@@ -20,7 +20,7 @@
         nonce = nonce.split('?_wpnonce=');
         nonce = nonce[1].split('&');
         nonce = nonce[0];
-
+        $('#community_registration .loading').show();
         $.post( ajaxurl, {
                 action: 'joinleave_group',
                 'cookie': encodeURIComponent(document.cookie),
@@ -28,6 +28,7 @@
                 '_wpnonce': nonce
             },
             function(response){            
+                $('#community_registration .loading').hide();
                 if(response == 'Error joining group' || response == 'Error requesting membership')
                 {
                     $('#community_registration .message').html(response).addClass('error').fadeIn('fast');
