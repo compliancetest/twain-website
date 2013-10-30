@@ -55,7 +55,17 @@ if(!defined('ABSPATH'))
                     <div class="clear"></div>
                     <?php wp_nonce_field('my_details_edit', 'cp-action'); ?>
                 </div>
-                
+                <div class="grid-row field-row">
+                    <div class="grid-cell width30P"><label>Timezone settings</label></div>
+                    <div data-value="Europe/London" class="grid-cell timezone-text" data-type="select">Europe/London</div>
+                    <?php $timezone_list = DateTimeZone::listIdentifiers(DateTimeZone::ALL); ?>
+                    <select name="timezone" id="timezone" class="select" style="display: none;">
+                        <?php foreach($timezone_list as $timezone): ?>
+                            <option value="<?php echo $timezone; ?>"><?php echo $timezone; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="clear"></div>
+                </div>
                 <div class="grid-row btn-row">
                     <a href="#" class="action-btn process-btn "><span class="p"></span><span class="t">Save</span></a>
                     <a href="#" class="action-btn cancel-btn edit-cancel-btn left10"><span class="p"></span><span class="t">Cancel</span></a>

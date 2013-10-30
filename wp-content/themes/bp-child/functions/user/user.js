@@ -177,6 +177,7 @@
        $('#my_profile').on('click', '.gbh-btn-edit', function(){           
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
+            var timezoneText = $(".timezone-text");
 
             if( findInputs == 0){
 
@@ -195,20 +196,27 @@
                        var dataType = $(this).attr('data-type');
                    else
                        var dataType = 'text';
-                   
+
                    if(dataType == 'textarea')
                        $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
                    else
                        $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
-                       
+
                    $(this).hide();
                 });        
             }
-            return false;
+
+            $("#timezone option").filter(function() {
+               return $(this).val() == timezoneText.attr('data-value');
+            }).prop('selected', true);
+           timezoneText.hide();
+           $("#timezone").show();
+
+           return false;
         });
-        
+
         //Edit Cancel
-        $('#my_profile').on('click', '.edit-cancel-btn', function(){           
+        $('#my_profile').on('click', '.edit-cancel-btn', function(){
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
 
@@ -220,17 +228,20 @@
             $(thisParentId+' .grid-cell.in_input').each(function(){
                $(this).next().remove();
                $(this).show();
-            });        
+            });
             $(thisParentId+' .btn-row').hide();
+
+            $("#timezone").hide();
+            $(".timezone-text").show();
+
             return false;
         });
-        
-        
-        
+
+
         //save my details updates
         $('#my_profile').on('click', '.process-btn', function(){
-            
-            var form = $(this).parents('form');            
+
+            var form = $(this).parents('form');
             form.find('.errors_msg').hide();
             showGridBoxLoadingWrapper(form);
             hideGridBoxResultMessage(form);
@@ -244,14 +255,14 @@
                     if(rsp == 'success')
                     {
                         showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
-                        document.location.reload(); 
+                        document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp, 'error');
                     }
                 }
             })
         });
-        
+
         //Add Payment Method
         $('#add-payment-method').click(function(){
             $('#cards-list').hide();
@@ -270,29 +281,29 @@
                 url: link.attr('href'),
                 type: 'get',
                 dataType: 'json',
-                success: function(rsp){                    
+                success: function(rsp){
                     pRow.find('.loading1').remove();
                     var form = $('#edit-card-form');
                     form.find('#card_number').val(rsp.CCNumber);
                     form.find('#name_on_card').val(rsp.CCName);
                     form.find('#card_expiry').val(rsp.CCExpiryMonth + "/" + rsp.CCExpiryYear);
                     form.find('#card_cvc').val(rsp.CCCvn);
-                    form.find('#id').val(link.attr('data-id'));                    
-                    form.find('.cnumber-desc').show();                    
+                    form.find('#id').val(link.attr('data-id'));
+                    form.find('.cnumber-desc').show();
                     $('#cards-list').hide();
-                    $('#edit-card-form').fadeIn('fast');            
-                    $('#my_payment').addClass('grid-box-editing');                
+                    $('#edit-card-form').fadeIn('fast');
+                    $('#my_payment').addClass('grid-box-editing');
                 },
                 error: function(rsp){
                     pRow.find('.loading1').remove();
                     $('#cards-list').append('<div class="message error">' + rsp.responseText + "</div>");
                     setTimeout(function(){
                         $('#cards-list .message').fadeOut('fast', function(){
-                            $('#cards-list .message').remove();    
+                            $('#cards-list .message').remove();
                         })
                     }, 2000);
                 }
-            })            
+            })
             return false;
         });
         $('#cards-list .delete-payment-method').click(function(){
@@ -311,8 +322,8 @@
                             pRow.remove();
                             if($('#cards-list .grid-row').length == 0)
                             {
-                                $('#cards-list').append('<div class="grid-row">' + 
-                                        '<div class="grid-cell width100P">No Payment Method Found! Please add new one.</div>' + 
+                                $('#cards-list').append('<div class="grid-row">' +
+                                        '<div class="grid-cell width100P">No Payment Method Found! Please add new one.</div>' +
                                         '<div class="clear"></div>' +
                                     '</div>');
                             }
@@ -321,33 +332,33 @@
                         $('#cards-list').append('<div class="message error">' + rsp + "</div>");
                         setTimeout(function(){
                             $('#cards-list .message').fadeOut('fast', function(){
-                                $('#cards-list .message').remove();    
+                                $('#cards-list .message').remove();
                             })
                         }, 2000);
                     }
                 }
-            })            
+            })
             return false;
         });
-        
+
         $('#edit-card-form .cancel-btn').click(function(){
             $('#my_payment').removeClass('grid-box-editing');
             $('#edit-card-form').hide();
-            $('#edit-card-form').find('.cnumber-desc').hide();                    
-            $('#cards-list').fadeIn('fast');                        
+            $('#edit-card-form').find('.cnumber-desc').hide();
+            $('#cards-list').fadeIn('fast');
             return false;
         })
-        
+
         //Remove Membership
         $('#my_community_memberships .leave-community-link').click(function(){
             $('#my_community_memberships .message').remove();
             if(confirm('Are you sure that you want to remove this membership?'))
             {
-                var link = $(this);                        
+                var link = $(this);
                 $('#my_community_memberships .loading1').show();
                 $.ajax({
                     url: link.attr('href'),
-                    type: 'get',                    
+                    type: 'get',
                     success: function(rsp){
                         $('#my_community_memberships .loading1').hide();
                         if(rsp == 'success')
@@ -355,9 +366,9 @@
                             link.parents('.tr').fadeOut('fast', function(){
                                 $(this).remove();
                                 if($('#my_community_memberships .tbody .tr').size() < 1)
-                                    $('#my_community_memberships .tbody').append('<div class="tr">' + 
+                                    $('#my_community_memberships .tbody').append('<div class="tr">' +
                                                    '<div class="td td-full">There is no community that you joined.</div>' +
-                                                   '<div class="clear"></div>' + 
+                                                   '<div class="clear"></div>' +
                                                '</div>');
                             })
                         }else{
@@ -372,13 +383,13 @@
             }
             return false;
         })
-        
+
         $("#my_subscriptions .harness-detail-link").each(function(){
             var id = $(this).attr('data-id');
             $(this).cplightbox({
                 type: 'inline',
                 href: '#harness-detail-box',
-                onStart: function(){                    
+                onStart: function(){
                     $('#harness-detail-box .message').remove();
                     $('#harness-id').val(id);
                     $('#harness-detail-box input[type="text"], #harness-detail-box select').each(function(){
@@ -393,28 +404,28 @@
                 }
             })
         })
-        $("#my_subscriptions .template-variables-link").each(function(){            
-            var url = $(this).attr('href');            
+        $("#my_subscriptions .template-variables-link").each(function(){
+            var url = $(this).attr('href');
             $(this).cplightbox({
                 type: 'ajax',
-                href: url                
-            })            
+                href: url
+            })
         })
-        
-        
-        
+
+
+
         $('#harness-form #p_mode_agreement').change(function(){
             if($(this).val() == 'LIGHT')
             {
                 $('#harness-form .tester-endpoint-info').hide();
             }else{
-                $('#harness-form .tester-endpoint-info').show();                
+                $('#harness-form .tester-endpoint-info').show();
             }
         })
         $('#harness-form').submit(function(){
             $('#harness-detail-box .loading').show();
             $('#harness-detail-box .message').remove();
-            
+
             $.ajax({
                 url: '/',
                 data: $('#harness-form').serialize(),
@@ -428,12 +439,12 @@
                         $('#p_mode_agreement' + id).val($('#harness-detail-box #p_mode_agreement').val());
                         $('#harness_endpoint_url' + id).val($('#harness-detail-box #harness_endpoint_url').val());
                         $('#harness_username' + id).val($('#harness-detail-box #harness_username').val());
-                        $('#harness_password' + id).val($('#harness-detail-box #harness_password').val());                            
+                        $('#harness_password' + id).val($('#harness-detail-box #harness_password').val());
                         if($('#harness-detail-box #p_mode_agreement').val() == 'HIGH-END')
                         {
                             $('#tester_endpoint_url' + id).val($('#harness-detail-box #tester_endpoint_url').val());
                             $('#tester_username' + id).val($('#harness-detail-box #tester_username').val());
-                            $('#tester_password' + id).val($('#harness-detail-box #tester_password').val());                                
+                            $('#tester_password' + id).val($('#harness-detail-box #tester_password').val());
                         }
                     }else{
                         $('#harness-detail-box .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
@@ -446,11 +457,11 @@
             })
             return false;
         })
-    })  
-    
+    })
+
 })(jQuery);
 function saveVariableDefaults(obj)
-{   
+{
     var parentObj = jQuery(obj).parent().parent();
     parentObj.find(".loading1").show();
     parentObj.find(".message").remove();
@@ -470,8 +481,8 @@ function saveVariableDefaults(obj)
             setTimeout(function(){
                 parentObj.find('.message').fadeOut('fast');
             }, 1500);
-            
+
         }
-    })   
+    })
     return false;
 }

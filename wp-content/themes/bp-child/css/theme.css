@@ -4437,7 +4437,7 @@ border-radius: 3px;
 -o-border-radius: 3px;
 min-height: 70px;
 }
-#my_profile #my_details textarea{
+#my_profile #my_details textarea, #my_profile #my_details select{
     padding: 4px 8px;
     width: 68%;
 }
