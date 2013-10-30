@@ -77,12 +77,14 @@ $downloads = new CP_Downloads_Group_Extension();
         <?php
             }
         ?>
+        <?php if(bp_group_is_admin()) {?> 
             <div class="grid-list-footer grid-list-row">                    
                 <div class="grid-list-cell width100P">
                     <a href="#" id="add-new-download" class="large-plus-link">Upload New File(s)</a>
                 </div>
                 <div class="clear"></div>
             </div>
+        <?php } ?>
          </div> 
 <!--          </form>-->
     </div>
