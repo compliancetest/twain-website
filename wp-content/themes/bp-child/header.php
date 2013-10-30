@@ -208,5 +208,6 @@
                     </div>
                 </div><!-- End Sub Menu -->
                 <?php do_action( 'bp_before_container' ); ?>
+                <?php do_action( 'template_notices' ) ?>
                 <div id="container"><!-- Start Container -->
                 <div class="space25"></div>

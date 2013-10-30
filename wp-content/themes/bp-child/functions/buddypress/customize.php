@@ -193,7 +193,7 @@ function bp_core_avatar_original_max_width_for_cp()
 }
 
 //Hook Buddypress action messages
-add_action('groups_screen_group_admin_avatar', "hook_buddypress_action_messages");
+/*add_action('groups_screen_group_admin_avatar', "hook_buddypress_action_messages");
 add_action('groups_unbanned_member', "hook_buddypress_action_messages");
 add_action('groups_demoted_member', "hook_buddypress_action_messages");
 add_action('groups_group_request_managed', "hook_buddypress_action_messages");
@@ -209,7 +209,40 @@ function hook_buddypress_action_messages()
         @setcookie('bp-message',      null, time() + 60 * 60 * 24, COOKIEPATH);
         @setcookie('bp-message-type', null,    time() + 60 * 60 * 24, COOKIEPATH);
     }
+}*/
+
+
+//Hook Buddypress message render action
+add_action('bp_actions', 'cp_bp_message_setup', 10);
+
+function cp_bp_message_setup()
+{    
+    //Remove Action 
+    remove_action( 'template_notices', 'bp_core_render_message' );
+    //Add My action
+    add_action( 'template_notices', 'cp_bp_render_message' );
 }
+
+function cp_bp_render_message() {
+    global $bp;
+
+    if ( !empty( $bp->template_message ) ) :
+        $type    = ( 'success' == $bp->template_message_type ) ? 'update' : 'error';
+        $content = apply_filters( 'bp_core_render_message_content', $bp->template_message, $type ); ?>
+        
+        <div id="messages-wrapper" class="bp-template-notice">        
+            <p  class="message <?php echo ( 'success' == $bp->template_message_type ) ? 'success' : 'error'?>">
+            <?php echo $bp->template_message; ?>
+            </p>
+        </div>
+
+    <?php
+
+        do_action( 'bp_core_render_message' );
+
+    endif;
+}
+
 
 //Manage Group Members
 add_action('init', 'cp_groups_screen_group_admin_manage_members');
