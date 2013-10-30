@@ -14,9 +14,9 @@ $profileInstances = getCustomerProfileInstances();
             <?php
                 if(count($subscriptions) > 0){
             ?>
-                <a class="gbh-btn gbh-btn-add right" id="add-new-test-data-link" href="#edit-profile-box">Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
+                <a class="gbh-btn gbh-btn-add" id="add-new-test-data-link" href="#edit-profile-box">Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
             <?php }else{ ?>
-                <a class="gbh-btn gbh-btn-add right" href="#need-subscription-box" rel="custom-popup" cp-type="inline" >Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
+                <a class="gbh-btn gbh-btn-add" href="#need-subscription-box" rel="custom-popup" cp-type="inline" >Add<span class="simple_tooltip radius6">Add Test Data<span></span></span></a>
             <?php } ?>
             <div class="clear"></div>
         </div>
