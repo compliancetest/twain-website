@@ -237,7 +237,8 @@ function cp_bp_render_message() {
         </div>
 
     <?php
-
+        $bp->template_message = null;
+        $bp->template_message_type = null;
         do_action( 'bp_core_render_message' );
 
     endif;
