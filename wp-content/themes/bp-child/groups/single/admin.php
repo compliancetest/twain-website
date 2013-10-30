@@ -176,7 +176,7 @@
                 <div class="grid-box table-box">
                     <div class="grid-box-body">
                         <div class="thead tr">
-                           <div class="td td-profile-title">Title</div>
+                           <div class="td td-profile-title">Name</div>
                            <div class="td td-profile-instances">Instances</div>
                            <div class="td td-profile-action">Action</div>
                            <div class="clear"></div>
