@@ -107,7 +107,7 @@ function cp_wiki_header( ) {
         </div>
         <div id="item-header-content" class="page-title-content">
             <h3 class="dark_gray_txt"><?php the_title(); ?></h3>            
-            <b>Group: </b><a href="<?php echo $group_link?>"><?php echo $group_name ?></a><br />
+            <b><?php _e("Group", "bp-docs")?>: </b><a href="<?php echo $group_link?>"><?php echo $group_name ?></a><br />
             <b>Access: </b><?php echo $summary_label?>
         </div><!-- #item-header-content -->
         <?php
