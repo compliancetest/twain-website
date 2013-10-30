@@ -21,6 +21,8 @@
             $(".simple_tooltip_pop").fadeOut('fast');
         });
         
+        //Add Loading Wrapper to Top Login Form
+        $('#top_access').append('<div class="loading1"></div>');
         //Header Login Form
         $('#top_access').on('submit', function(){                        
             var form = $(this);
@@ -31,11 +33,14 @@
                 return false;
             }
             $('#header_login_error_msg').hide();
+            $('#top_access .loading1').show();
             $.ajax({
+                url: site_path,
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
                 success: function(rsp)
                 {
+                    $('#top_access .loading1').hide();
                     if(rsp == 'success') //Login Success
                     {
                         //Goto Profile Page
@@ -66,6 +71,7 @@
             msgObj.hide();
             $('.loading').show();
             $.ajax({
+                url: site_path,
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
                 success: function(rsp)
@@ -126,7 +132,7 @@
                     $('.loading').show();
                     msgObj.hide();
                     $.ajax({
-                        url: '/',
+                        url: site_path,
                         type: "POST",
                         data: form.serialize(),
                         success: function(data) {

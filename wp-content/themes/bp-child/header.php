@@ -16,6 +16,7 @@
         <?php
             echo of_get_option('google-analytics-code');
         ?>
+            var site_path = '<?php echo get_site_url(null, "/", "https") ?>';
         </script>
     </head>
 

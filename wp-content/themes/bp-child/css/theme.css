@@ -179,7 +179,12 @@ a:hover {
     margin-top: 10px;
     position: relative;
 }    
-
+#top_access .loading1{
+    position: absolute;
+    width: 200px;
+    height: 51px;
+    top: 0;
+}
 #top_logged_wrap {
     background: #fff;
     border-radius: 0 0 6px 6px;
