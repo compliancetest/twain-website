@@ -799,3 +799,18 @@ function add_ticket_query_var($public_query_vars)
     
     return $public_query_vars;
 }
+
+
+//Get User Name for Whole site
+function cp_get_user_display_name($user)
+{
+    if(is_integer($user))
+    {
+        $user = get_user_by("id", $user);
+    }else if(is_string($user)){
+        $user = get_user_by("email", $user);
+    }
+    
+    //Now only show user first name
+    return $user->first_name;
+}

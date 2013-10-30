@@ -43,7 +43,7 @@
                                 <?php echo get_avatar($current_user->user_email, 28);  ?>
                                 <div class="right toright">
                                     Welcome
-                                    <h5 class="dark_gray_txt"><?php echo $current_user->user_firstname .' '.$current_user->user_lastname;?></h5>
+                                    <h5 class="dark_gray_txt"><?php echo cp_get_user_display_name($current_user) ;?></h5>
                                 </div>
                                 <div class="clear"></div>
                                 <div id="top_loged_actions">

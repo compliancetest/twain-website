@@ -22,10 +22,13 @@ $profileID = bp_current_user_id();
     <div id="item-header-content" class="profile-title">
 	    <h3 class="left">
 		    <a href="<?php bp_displayed_user_link(); ?>">
-                <?php echo get_user_meta($profileID, 'first_name', true) . " " . get_user_meta($profileID, 'last_name', true) ?>
+                <?php echo cp_get_user_display_name($profileID) ?>
             </a>
 	    </h3>
-        <?php echo cp_bp_get_send_message_button() ?>
+        <?php 
+            //Temporarily disable it
+            //echo cp_bp_get_send_message_button() 
+        ?>
         <div class="clear"></div>
         <?php
             $biography = get_user_meta($profileID, 'description', true);
