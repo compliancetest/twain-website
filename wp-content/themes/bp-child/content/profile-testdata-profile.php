@@ -93,7 +93,7 @@ if(count($subscriptions) > 0){
 <?php 
     $profileTypes = getCustomerProfileTypes(get_current_user_id());
 ?>
-<div class="popup-box" id="edit-profile-box" style="display: none; width: 900px;">
+<div class="popup-box" id="edit-profile-box" style="display: none; width: 500px;">
     <form name="editProfileForm" id="editProfileForm" action="">
         <div class="popup-box-header radius6 noradiusbottom">Create Profile Instance</div>        
         <div class="popup-box-content grid-box-body">                    
@@ -135,9 +135,11 @@ if(count($subscriptions) > 0){
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
-            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-            <div class="clear"></div>
+            <div class="btn-row displaynone">
+                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <div class="clear"></div>
+            </div>
         </div>                        
         <a class="close_btn"></a>                        
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
@@ -226,6 +228,7 @@ if(count($subscriptions) > 0){
             jQuery('#edit-profile-box #profile-type-id').val('');
             jQuery('#edit-profile-box #instance-id').val('');
             jQuery('#edit-profile-box .message').remove();
+            jQuery('#edit-profile-box .btn-row').hide();
             profileData = null;
             profileType = null;
         }
@@ -277,6 +280,7 @@ if(count($subscriptions) > 0){
                             var schema = Jsonary.createSchema(profileType);
                             profileData = Jsonary.create(jQuery.parseJSON(jQuery(rsp).find('data').text())).addSchema(schema);
                             Jsonary.render(targetElement, profileData);                            
+                            jQuery('#edit-profile-box .btn-row').show();
                         }else{
                             jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
                             jQuery('#edit-profile-box .loading b').html('LOADING DATA');
@@ -342,7 +346,18 @@ if(count($subscriptions) > 0){
         })
         
     })    
-
+    function afterJsonRender()
+    {
+        var maxWidth = jQuery('#create_profile_panel table:eq(0)').width();
+        
+        //Resize The box width
+        if(jQuery('#edit-profile-box').width() < maxWidth + 40)
+        {
+            jQuery('#edit-profile-box').width(maxWidth + 40);                
+            jQuery('.mask-wrapper').width(jQuery(document).width());
+            jQuery('.mask-wrapper').height(jQuery(document).height());           
+        }        
+    }
 </script>
 <?php
 }else{ 

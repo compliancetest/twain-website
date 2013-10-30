@@ -124,9 +124,11 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
-            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-            <div class="clear"></div>
+            <div class="btn-row displaynone">
+                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <div class="clear"></div>
+            </div>
         </div>                        
         <a class="close_btn"></a>                        
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
@@ -217,6 +219,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             jQuery('#edit-profile-box #profile-type-id').val('');
             jQuery('#edit-profile-box #instance-id').val('');
             jQuery('#edit-profile-box .message').remove();
+            jQuery('#edit-profile-box .btn-row').hide();
             profileData = null;
             profileType = null;
         }
@@ -268,6 +271,8 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                             var schema = Jsonary.createSchema(profileType);                            
                             profileData = Jsonary.create(jQuery.parseJSON(jQuery(rsp).find('data').text())).addSchema(schema);
                             Jsonary.render(targetElement, profileData);                            
+                            jQuery('#edit-profile-box .btn-row').show();
+                            
                         }else{
                             jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
                             jQuery('#edit_profile_instance_panel').hide();
