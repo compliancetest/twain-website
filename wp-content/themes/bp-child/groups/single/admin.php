@@ -187,7 +187,21 @@
                             <?php } ?>
                             <?php foreach($profileTypes as $row) {?>
                             <div class="tr">
-                               <div class="td td-profile-title"><?php echo $row->title?></div>
+                               <div class="td td-profile-title">
+                                <?php echo $row->title?><br />
+                                <?php
+                                    $pJSON = json_decode(base64_decode($row->schema));
+                                    if($pJSON->Version)
+                                    {
+                                        $version = array();
+                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)      
+                                        {
+                                            $version[] = $k . " v" . $v;
+                                        }
+                                        echo "<b>Version:</b> " . implode(", ", $version);
+                                    }
+                                ?>
+                               </div>
                                <div class="td td-profile-instances"><?php echo $row->instances?></div>
                                <div class="td td-profile-action">
                                    <a href="<?php echo bp_get_group_admin_permalink()?>?td-action=<?php echo wp_create_nonce('edit-profile-type')?>&type_id=<?php echo $row->id?>&community_id=<?php echo bp_get_group_id()?>" class="action-btn blue-edit-btn icon-btn profile-type-edit-btn"><span class="p"></span></a>

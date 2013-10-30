@@ -27,6 +27,17 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width45P">                    
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a><br />
+                    <?php
+                        if($instanceObj->Profile->Version)
+                        {
+                            $version = array();
+                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                            {
+                                $version[] = $k . " v" . $v;
+                            }
+                            echo "<b>Version:</b> " . implode(", ", $version) . "<br />";
+                        }
+                    ?>
                     <p><?php echo $instanceObj->Profile->Description?></p>
                 </div>
                 <div class="grid-list-cell width15P">

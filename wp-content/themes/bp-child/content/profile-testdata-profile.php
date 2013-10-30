@@ -44,7 +44,18 @@ $profileInstances = getCustomerProfileInstances();
                 <div class="tr">
                    <div class="td td-profile-name">
                        <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>  <br />
-                       <b>Purpose: </b> <?php echo $instanceObj->Profile->Purpose?>
+                       <?php
+                            if($instanceObj->Profile->Version)
+                            {
+                                $version = array();
+                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                                {
+                                    $version[] = $k . " v" . $v;
+                                }
+                                echo "<b>Version:</b> " . implode(", ", $version) . "<br />";
+                            }
+                        ?>
+                       <b>Purpose: </b> <?php echo $instanceObj->Profile->Purpose?>                       
                        <p><?php echo $instanceObj->Profile->Description?></p>                   
                    </div>
                    <div class="td td-profile-type">
