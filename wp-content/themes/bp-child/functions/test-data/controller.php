@@ -252,7 +252,7 @@ function saveProfileInstance($action)
     
     $jsonData = base64_encode($data);
     $jsonObject = json_decode($data);
-    $basePath = ABSPATH . "profiles";
+    /*$basePath = ABSPATH . "profiles";
     
     //Save File
     if(!is_dir($basePath))
@@ -291,7 +291,7 @@ function saveProfileInstance($action)
     
     $fp = fopen($basePath . "/" . $filename, "w");
     fwrite($fp, base64_decode($jsonData), strlen(base64_decode($jsonData)));
-    fclose($fp);
+    fclose($fp);*/
     
     if($instance_id)
     {
@@ -301,7 +301,7 @@ function saveProfileInstance($action)
                             'profile_name' => $jsonObject->Profile->Title,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
-                            'filename' => $filename,
+                            'filename' => '',
                             'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id
@@ -315,10 +315,11 @@ function saveProfileInstance($action)
                             'profile_name' => $jsonObject->Profile->Title,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
-                            'filename' => $filename,
+                            'filename' => '',
                             'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
-                            'creator_id' => $user_id
+                            'creator_id' => $user_id,
+                            'token' => sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id)
                         )
                     );   
           $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $type_id));
@@ -386,15 +387,10 @@ function downloadProfileTypeInstance()
     header("Cache-Control: no-cache, must-revalidate");
     header("Pragma: no-cache");
     header("Content-Type: Application/octet-stream");
-    header("Content-disposition: attachment; filename=" . $row->filename);
+    header("Content-disposition: attachment; filename=" . sanitize_file_name($row->profile_name . ".json"));
     
-    $fp = fopen(ABSPATH . "profiles/" . $row->type . "/" . $row->filename, 'r');
-    while (!feof($fp))
-    {
-        echo fread($fp, 65536); 
-        flush();
-    }  
-    fclose($fp); 
+    echo base64_decode($row->content);
+    
     exit;
 }
 
@@ -518,7 +514,7 @@ function viewProfileInstance()
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                
-                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $row->type?>/<?php echo $row->filename?>" class="input width60P" />                
+                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P" />                
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-instance')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>  
                 <?php if(isset($_REQUEST['back'])){ ?>
                 <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a>            

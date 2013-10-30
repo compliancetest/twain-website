@@ -30,12 +30,17 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                     <?php
                         if($instanceObj->Profile->Version)
                         {
-                            $version = array();
-                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                            if(is_object($instanceObj->Profile->Version))
                             {
-                                $version[] = $k . " v" . $v;
+                                $version = array();
+                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                                {
+                                    $version[] = $k . " v" . $v;
+                                }
+                                echo "<b>Version:</b> " . implode(", ", $version) . "<br />";
+                            }else{
+                                echo "<b>Version:</b> " . $instanceObj->Profile->Version . "<br />";
                             }
-                            echo "<b>Version:</b> " . implode(", ", $version) . "<br />";
                         }
                     ?>
                     <p><?php echo $instanceObj->Profile->Description?></p>
