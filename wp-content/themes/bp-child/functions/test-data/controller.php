@@ -510,12 +510,13 @@ function viewProfileInstance()
         <div class="popup-box" style="display: none; width: 900px;" id="view-profile-instance-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Instance Detail</div>        
             <div class="popup-box-content grid-box-body">                            
+                <a href="#" class="action-btn process-btn left zcliplink" data-id="profile-url<?php echo $row->id?>"><span class="p"></span><span class="t">Copy URL</span></a>
+                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />                
+                <div class="clear"></div>
                 <div id="json-view-panel<?php echo $boxId?>"><?php echo base64_decode($row->content)?></div>                
             </div>
             
-            <div class="popup-box-footer radius6 noradiustop">                
-                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P right" id="profile-url<?php echo $row->id?>" />                
-                <a href="#" class="action-btn process-btn right zcliplink" data-id="profile-url<?php echo $row->id?>"><span class="p"></span><span class="t">Copy URL</span></a>
+            <div class="popup-box-footer radius6 noradiustop">                                
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-instance')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>  
                 <?php if(isset($_REQUEST['back'])){ ?>
                 <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a>            

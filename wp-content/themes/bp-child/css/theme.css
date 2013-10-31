@@ -6619,8 +6619,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 .popup-box-footer .zclipsucces-msg{
     position: absolute;
-    bottom: 11px;
-    left: 360px;
+    top: 60px;
+    left: 123px;
     z-index: 100;
     
 }
