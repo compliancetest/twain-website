@@ -146,8 +146,8 @@ if(count($subscriptions) > 0){
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
-            <div class="btn-row displaynone">
-                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
+            <div class="btn-row">
+                <a href="#" class="action-btn process-btn submit-btn displaynone"><span class="p"></span><span class="t">SAVE</span></a>            
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                 <div class="clear"></div>
             </div>
@@ -239,7 +239,7 @@ if(count($subscriptions) > 0){
             jQuery('#edit-profile-box #profile-type-id').val('');
             jQuery('#edit-profile-box #instance-id').val('');
             jQuery('#edit-profile-box .message').remove();
-            jQuery('#edit-profile-box .btn-row').hide();
+            jQuery('#edit-profile-box .btn-row .process-btn').hide();
             profileData = null;
             profileType = null;
         }
@@ -291,7 +291,7 @@ if(count($subscriptions) > 0){
                             var schema = Jsonary.createSchema(profileType);
                             profileData = Jsonary.create(jQuery.parseJSON(jQuery(rsp).find('data').text())).addSchema(schema);
                             Jsonary.render(targetElement, profileData);                            
-                            jQuery('#edit-profile-box .btn-row').show();
+                            jQuery('#edit-profile-box .btn-row .process-btn').show();
                         }else{
                             jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
                             jQuery('#edit-profile-box .loading b').html('LOADING DATA');
