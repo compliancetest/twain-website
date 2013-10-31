@@ -6189,6 +6189,16 @@ div.popup-box .loading-with-text{
     padding-bottom: 3px;
 }
 
+#profile-type-list  .action-btn{
+    position: relative;
+}
+
+#profile-type-list .action-btn:hover .simple_tooltip{
+    display: block;
+    width: 120px;
+    margin-left: -55px;
+}
+
 #edit_profile_instance_panel{
     display: none;
 }
