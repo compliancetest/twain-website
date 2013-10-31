@@ -73,7 +73,7 @@ function sendMessage()
             $testerProfileInstances = $wpdb->get_results($query);
             foreach($testerProfileInstances as $instance)
             {
-                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'http') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
+                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
             }
             $xmlData .= '</api:profile>
                             <api:profile namespace="Harness">';
@@ -81,7 +81,7 @@ function sendMessage()
             $harnessProfileInstances = $wpdb->get_results($query);
             foreach($harnessProfileInstances as $instance)
             {
-                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'http') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
+                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
             }
             $xmlData .= '</api:profile> 
                     </api:messageTemplate>
