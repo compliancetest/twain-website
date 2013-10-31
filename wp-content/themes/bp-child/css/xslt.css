@@ -199,12 +199,10 @@ table.format-table{
 
 .format-table1{
     border-collapse: collapse;
-    table-layout: fixed;
-    
 }
 .format-table1 th{
     border: solid 1px #666 !important;
-    font-size: 13px;   
+    font-size: 13px;
     font-weight: 600;
     padding: 5px 10px;
     color: #333 !important;
@@ -229,4 +227,9 @@ table.format-table{
 }*/
 .arelle-entry-box .entry-level{
     float: right;    
+}
+
+.break-all{
+    overflow: auto;
+    word-break:break-all;
 }

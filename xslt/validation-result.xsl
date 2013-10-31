@@ -119,7 +119,7 @@
                                 </tr>
                                 <xsl:for-each select="event.02.data:Parameters/event.02.data:Parameter">
                                     <tr>
-                                        <td><xsl:value-of select="event.02.data:Parameter.Identifier/text()" /></td>
+                                        <td><div class="break-all"><xsl:value-of select="event.02.data:Parameter.Identifier/text()" /></div></td>
                                         <td><xsl:value-of select="event.02.data:Parameter.Text/text()" /></td>
                                     </tr>
                                 </xsl:for-each>
