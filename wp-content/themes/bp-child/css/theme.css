@@ -6360,8 +6360,9 @@ table.json-object .json-string-content-editable{
     -o-border-radius: 3px;
     outline: none;
     font-size: 12px;
-    width: 150px;
-    max-width: 150px;
+    width: auto;
+    min-width: 150px;
+    max-width: 100%;
     min-height: 24px;
     
 }
