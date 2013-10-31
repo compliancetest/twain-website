@@ -266,6 +266,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             jQuery('#edit-profile-box #instance-id').val('');
             jQuery('#edit-profile-box .message').remove();
             jQuery('#edit-profile-box .btn-row .process-btn').hide();
+            jQuery('#edit-profile-box').width(500);
             profileData = null;
             profileType = null;
         }

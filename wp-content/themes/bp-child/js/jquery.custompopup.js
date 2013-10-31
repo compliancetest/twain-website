@@ -56,7 +56,7 @@
                 if(opts.box != null)
                 {
                     $overlay.append(opts.box);
-                                
+                                        
                     setSelfPosition();
                     initPopupEvents();
                     if($overlay.find('.popup-box:visible').length > 0)
@@ -65,16 +65,18 @@
                             $.data(this, 'options').onClose();   
                             opts.onStart();            
                             opts.box.fadeIn('fast', function(){
-                                setOverlaySize();
+                                setOverlaySize();                                
                                 opts.onLoad();                                                    
                             });
+                            setSelfPosition();
                         })
                     }else{
                         opts.onStart();
                         opts.box.fadeIn('fast', function(){
-                            setOverlaySize();
+                            setOverlaySize();                            
                             opts.onLoad();        
                         });
+                        setSelfPosition();
                     }
                     
                     return false;
@@ -312,6 +314,7 @@
                 opts.onStart();
                 opts.box.fadeIn('fast', function(){
                     setOverlaySize();
+                    setSelfPosition();
                     opts.onLoad();        
                 });
             })
@@ -319,6 +322,7 @@
             opts.onStart();
             opts.box.fadeIn('fast', function(){
                 setOverlaySize();
+                setSelfPosition();
                 opts.onLoad();        
             });
         }
