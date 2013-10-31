@@ -514,7 +514,8 @@ function viewProfileInstance()
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                
-                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P" />                
+                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P right" id="profile-url<?php echo $row->id?>" />                
+                <a href="#" class="action-btn process-btn right zcliplink" data-id="profile-url<?php echo $row->id?>"><span class="p"></span><span class="t">Copy URL</span></a>
                 <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-instance')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>  
                 <?php if(isset($_REQUEST['back'])){ ?>
                 <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a>            
@@ -522,6 +523,7 @@ function viewProfileInstance()
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
                 <?php } ?>
                 <div class="clear"></div>
+                <div class="message success zclipsucces-msg displaynone">The profile url has been copied to clipboard.</div>
             </div>                        
             <?php if(!isset($_REQUEST['back'])){ ?>
             <a class="close_btn"></a>                    
@@ -531,6 +533,7 @@ function viewProfileInstance()
             var t_data = Jsonary.create(<?php echo base64_decode($row->content)?>).readOnlyCopy();
             var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
             Jsonary.render(t_element, t_data);    
+            
         </script>
         <?php
     }

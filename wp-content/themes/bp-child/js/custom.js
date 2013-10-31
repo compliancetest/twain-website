@@ -463,7 +463,7 @@ jQuery(document).ready(function($) {
     if(jQuery('body').height() > jQuery('#wrapper').height())
     {
         jQuery('#content-pattern #content-wrapper').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height());
-    }    
+    }        
     
 });
 

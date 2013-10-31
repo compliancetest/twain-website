@@ -26,7 +26,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width45P">                    
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a><br />
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name?></a><br />
                     <?php
                         if($instanceObj->Profile->Version)
                         {
@@ -153,9 +153,39 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
 </div>
 <script type="text/javascript">
     var profileData = null;
-    var profileType = null;
+    var profileType = null;    
+    var zclipTimer = null;
     
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function(){        
+        //View Profile Link
+        jQuery('.view-profile-instance-link').cplightbox({
+            type: 'ajax',
+            onLoad: function()
+            {                
+                jQuery('.popup-box:visible .zcliplink').each(function(){
+                    if(!jQuery(this).data('zclipId'))
+                    {
+                        jQuery('.popup-box:visible .zcliplink').zclip({
+                            path: '<?php echo get_stylesheet_directory_uri()?>/js/ZeroClipboard.swf',
+                            copy: function(){
+                                return jQuery('#' + jQuery(this).attr('data-id')).val();    
+                            },
+                            afterCopy: function(){
+                                jQuery('.popup-box:visible .zclipsucces-msg').fadeIn();
+                                if(zclipTimer != null)
+                                {
+                                    clearTimeout(zclipTimer);
+                                }
+                                zclipTimer = setTimeout(function(){
+                                    jQuery('.popup-box:visible .zclipsucces-msg').fadeOut('fast');
+                                }, 2000);
+                            }
+                        })        
+                    }
+                })
+                
+            }
+        })
         //Ajax File Uploader
         jQuery('#profile_instance_file').fileupload({
             url: '/upload-json.php',
