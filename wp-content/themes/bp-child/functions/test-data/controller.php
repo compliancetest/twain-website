@@ -348,7 +348,7 @@ function deleteProfileTypeInstance($action)
     
     $redirect = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : cp_get_group_permalink_by_id($row->community_id) . "testdata";
     
-    if( (wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-harness-instance') && $row->creator_id != $user_id ) )
+    if( (wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id ) )
     {
         addMessage('Permission Denied!', 'error');        
         wp_redirect($redirect);

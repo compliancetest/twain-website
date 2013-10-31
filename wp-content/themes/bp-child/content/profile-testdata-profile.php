@@ -63,7 +63,7 @@ $profileInstances = getCustomerProfileInstances();
                    </div>
                    <div class="td td-action">
                         <?php
-                            if(bp_is_group_admin(get_current_user_id()))
+                            if($instance->creator_id == get_current_user_id())
                             {
                         ?>
                         <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn grey-edit-btn"><span class="p"></span></a>
