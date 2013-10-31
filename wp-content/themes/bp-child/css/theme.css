@@ -6367,7 +6367,9 @@ table.json-object .json-string-content-editable{
     
 }
 table.json-object .json-array-table .json-string-content-editable{
-    width: 100px;
+    min-width: 100px;
+    max-width: 100%;
+    width: auto;
 }
 .jsonary table.json-object input[type=text],
 table.json-object .json-number-input{
