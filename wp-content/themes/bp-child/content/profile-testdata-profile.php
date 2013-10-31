@@ -113,7 +113,21 @@ if(count($subscriptions) > 0){
                 <select class="select left" name="profile-type-id" id="profile-type-id">
                     <option value="">- Select -</option>
                     <?php foreach($profileTypes as $p){ ?>
-                    <option value="<?php echo $p->id?>"><?php echo $p->title?></option>
+                    <option value="<?php echo $p->id?>">
+                        <?php 
+                            echo $p->title;
+                            $pJSON = json_decode(base64_decode($p->schema));
+                            if($pJSON->Version)
+                            {
+                                $version = array();
+                                foreach(get_object_vars($pJSON->Version) as $k=>$v)      
+                                {
+                                    $version[] = $k . " v" . $v;
+                                }
+                                echo " (Version: " . implode(", ", $version) . ")";
+                            }
+                        ?>
+                    </option>
                     <?php } ?>
                 </select>
                 <div class="clear"></div>
@@ -138,7 +152,7 @@ if(count($subscriptions) > 0){
                         <div class="clear"></div>
                     </div>
                 </div>
-                <div class="enter-values"><span>Or enter values</span></div>
+                <div class="enter-values"><span>Or enter values</span></div>                
                 <div id="create_profile_panel">                
                     <div class="clear"></div>
                 </div>

@@ -6306,7 +6306,7 @@ div.popup-box .loading-with-text{
     background: none;
     text-align: left;
     font-weight: 600;
-    display: block;
+    display: none;
 }
 table.json-object table{
     margin: 0;
@@ -6618,10 +6618,14 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #my_profile .four_fifths, #my_products .four_fifths, #test_suite_coverage .four_fifths, #my_transaction_log .four_fifths, #my_messages .four_fifths, #my_tickets .four_fifths{
     min-height: 312px;
 }
-.popup-box-footer .zclipsucces-msg{
+.popup-box .zclipsucces-msg{
     position: absolute;
     top: 60px;
     left: 123px;
     z-index: 100;
     
+}
+#edit-profile-box .select{
+    min-width: 200px;
+    width: auto !important;
 }

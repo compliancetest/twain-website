@@ -10554,7 +10554,8 @@
 				var uiState = context.uiState;
 				var result = "";
 				result += '<fieldset class="json-object-outer">';
-				var title = data.schemas().title();
+                var title = data.schemas().title();
+				
 				if (title) {
 					result += '<legend class="json-object-title">' + Jsonary.escapeHtml(title) + '</legend>';
 				}
