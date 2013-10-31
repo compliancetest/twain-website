@@ -230,6 +230,5 @@ table.format-table{
 }
 
 .break-all{
-    overflow: auto;
     word-break:break-all;
 }
