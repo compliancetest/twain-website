@@ -513,7 +513,7 @@ function viewProfileInstance()
                 <a href="#" class="action-btn process-btn left zcliplink" data-id="profile-url<?php echo $row->id?>"><span class="p"></span><span class="t">Copy URL</span></a>
                 <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />                
                 <div class="clear"></div>
-                <div id="json-view-panel<?php echo $boxId?>"><?php echo base64_decode($row->content)?></div>                
+                <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel"><?php echo base64_decode($row->content)?></div>                
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                                

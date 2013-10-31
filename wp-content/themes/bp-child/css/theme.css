@@ -6324,7 +6324,8 @@ table.json-object td{
     height: 26px;
     vertical-align: top;
 }
-#json-view-panel table.json-object td{
+
+.json-view-panel table.json-object td{
     height: auto;
 }
 
