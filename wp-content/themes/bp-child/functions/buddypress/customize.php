@@ -399,3 +399,12 @@ function cp_template_customize($template)
     
     return $template;
 }
+
+//Customize Forum Title
+add_filter('bbp_get_forum_title', 'cp_get_forum_title', 10, 2);
+function cp_get_forum_title($title, $forum_id)
+{
+    $post = get_post( $forum_id );
+    
+    return apply_filters("the_title", $post->post_title);
+}
