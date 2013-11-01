@@ -1136,6 +1136,7 @@ tr {
     margin: 0 auto;
     padding: 17px 0 0;
 }
+
 .message {    
 	padding: 11px 20px 11px 45px;	
 	border-style: solid;
@@ -1150,6 +1151,7 @@ tr {
     -o-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);    
     margin-top: 8px;
 }
+
 .error {
     background: #e52727 url(../images/error-icon.png) 8px 7px no-repeat;
     border-color: #b61313;

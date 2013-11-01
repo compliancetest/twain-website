@@ -613,3 +613,31 @@ ul.single-line li {
     width: 100%;
 }
 
+
+body div.bbp-template-notice.error{    
+    padding: 11px 20px 11px 45px;    
+    border-style: solid;
+    border-width: 1px;
+    font-family: 'Open Sans', 'Arial'; 
+    font-size: 13px;
+    line-height: 15px;
+    color: #fff;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);    
+    margin-top: 8px;
+    /*background: #f7941d url(../images/notice-icon.png) 8px 7px no-repeat;
+    border-color: #e38413;*/
+    background: #e52727 url(../images/error-icon.png) 8px 7px no-repeat;
+    border-color: #b61313;
+    
+}
+
+body div.bbp-template-notice.error p{
+    margin: 0 !important;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+    color: #fff;
+}

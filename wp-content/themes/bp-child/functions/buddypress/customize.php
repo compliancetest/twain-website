@@ -242,6 +242,9 @@ function cp_bp_render_message() {
         do_action( 'bp_core_render_message' );
 
     endif;
+    
+    //Getting BBPress Errors    
+    $bbp = bbpress();
 }
 
 
