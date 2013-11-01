@@ -6218,6 +6218,7 @@ div.popup-box .loading-with-text{
     vertical-align: middle;
     height: 25px;
 }
+
 .file-placeholder{
     position: relative;
     display: inline-block;
@@ -6231,6 +6232,7 @@ div.popup-box .loading-with-text{
     bottom: 0;
     right: 0;    
 }
+
 #edit_profile_instance_panel .enter-values{
     background: url(../images/double_border.png) left 7px repeat-x;    
     text-align: center;
@@ -6243,10 +6245,19 @@ div.popup-box .loading-with-text{
 }
 
 #upload_profile_panel #file-name-list{
-    padding: 5px 0;
+    height: 24px;
+    line-height: 24px;
     color: #666;
     margin: 0;
+    position: absolute;
+    left: 88px;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    min-width: 350px;
+    max-width: 80%;    
 }
+
 .json-object-outer .json-object-title{
     font-size: 13px;
     width: 100%;

@@ -103,6 +103,10 @@ if(count($subscriptions) > 0){
 
 <?php 
     $profileTypes = getCustomerProfileTypes(get_current_user_id());
+    
+    $lastTypeID = getUserLastUsedProfileType('tester');
+    
+    $lastType = null;
 ?>
 <div class="popup-box" id="edit-profile-box" style="display: none; width: 500px;">
     <form name="editProfileForm" id="editProfileForm" action="">
@@ -111,9 +115,17 @@ if(count($subscriptions) > 0){
             <div class="field-row">
                 <label class="left right10 lineheight22px">Profile Type:</label>
                 <select class="select left" name="profile-type-id" id="profile-type-id">
-                    <option value="">- Select -</option>
+<!--                    <option value="">- Select -</option>-->
                     <?php foreach($profileTypes as $p){ ?>
-                    <option value="<?php echo $p->id?>">
+                    <?php
+                        if(!$lastType && !$lastTypeID)
+                        {
+                            $lastType = $p;
+                        }else if(!$lastType && $p->id == $lastTypeID){
+                            $lastType = $p;
+                        }
+                    ?>
+                    <option value="<?php echo $p->id?>" <?php echo $lastType && $lastType->id == $p->id ? "selected='selected'" : "" ?>>
                         <?php 
                             echo $p->title;
                             $pJSON = json_decode(base64_decode($p->schema));
@@ -156,12 +168,13 @@ if(count($subscriptions) > 0){
                 <div id="create_profile_panel">                
                     <div class="clear"></div>
                 </div>
-                
+                <textarea id="profile_type_txt" class="displaynone"><?php echo $lastType ? base64_decode($lastType->schema) : ''?></textarea>                
+                <textarea id="profile_instance_txt" class="displaynone"></textarea>                
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
             <div class="btn-row">
-                <a href="#" class="action-btn process-btn submit-btn displaynone"><span class="p"></span><span class="t">SAVE</span></a>            
+                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                 <div class="clear"></div>
             </div>
@@ -169,254 +182,10 @@ if(count($subscriptions) > 0){
         <a class="close_btn"></a>                        
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
         <input type="hidden" name="instance-id" id="instance-id" value="" />
+        <input type="hidden" id="save-instance-action" value="<?php echo wp_create_nonce('save-tester-instance')?>" />
+        <input type="hidden" id="get-profile-ui-action" value="<?php echo wp_create_nonce('get-tester-profile-ui')?>" />
     </form>
 </div>
-<script type="text/javascript">
-    var profileData = null;
-    var profileType = null;
-    var zclipTimer = null;
-    jQuery(document).ready(function(){        
-        //View Profile Link
-        jQuery('.view-profile-instance-link').cplightbox({
-            type: 'ajax',
-            onLoad: function()
-            {                
-                jQuery('.popup-box:visible .zcliplink').each(function(){
-                    if(!jQuery(this).data('zclipId'))
-                    {
-                        jQuery('.popup-box:visible .zcliplink').zclip({
-                            path: '<?php echo get_stylesheet_directory_uri()?>/js/ZeroClipboard.swf',
-                            copy: function(){
-                                return jQuery('#' + jQuery(this).attr('data-id')).val();    
-                            },
-                            afterCopy: function(){
-                                jQuery('.popup-box:visible .zclipsucces-msg').fadeIn();
-                                if(zclipTimer != null)
-                                {
-                                    clearTimeout(zclipTimer);
-                                }
-                                zclipTimer = setTimeout(function(){
-                                    jQuery('.popup-box:visible .zclipsucces-msg').fadeOut('fast');
-                                }, 2000);
-                            }
-                        })        
-                    }
-                })
-                
-            }
-        })
-        
-        
-        //Ajax File Uploader
-        jQuery('#profile_instance_file').fileupload({
-            url: '/upload-json.php',
-            dataType: 'json',
-            add: function (e, data) {
-                jQuery('#edit-profile-box .message').remove();                       
-                jQuery('#upload_profile_panel #file-name-list').html('<span>' + data.files[0].name + '</span>');
-                data.context = jQuery('#profile_instance_upload_btn')
-                    .click(function () {
-                        jQuery('#edit-profile-box .message').remove();  
-                        if(data.files.length < 1)
-                        {
-                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select a file to upload</p>');
-                        }else{
-                            //Check File Extension Validation
-                            fileName = data.files[0].name;
-                            var ext = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();                            
-                            if(ext != 'json' && ext != 'txt')
-                            {
-                                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select a valid file.</p>');
-                                return false;
-                            }
-                            jQuery('#edit-profile-box .loading b').html('UPLOADING DATA');
-                            jQuery('#edit-profile-box .loading').show();
-                            data.submit();    
-                        }
-                        
-                    });
-            },
-            done: function (e, data) {
-                jQuery('#edit-profile-box .message').remove();
-                jQuery('#edit-profile-box .loading').hide();
-                //Check Validation
-                if(!tv4.validate(data.result, profileType))
-                {
-                    jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
-                    return false;
-                }
-                //Saving Data
-                jQuery('#edit-profile-box .loading b').html('SAVING DATA');
-                jQuery('#edit-profile-box .loading').show();                
-                
-                jQuery.ajax({
-                    url: "/?td-action=<?php echo wp_create_nonce('save-tester-instance')?>&" + jQuery('#editProfileForm').serialize(),
-                    data: 'data=' + encodeURIComponent(JSON.stringify(data.result)),
-                    type: 'post',
-                    dataType: 'xml',
-                    success: function(rsp)
-                    {
-                        if(jQuery(rsp).find('status').text() == 'success')   
-                        {
-                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
-                            document.location.reload();
-                        }else{                    
-                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
-                        }
-                    },
-                    error: function(rsp){
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
-                    },
-                    complete: function(rsp){
-                        jQuery('#edit-profile-box .loading').hide();
-                    }
-                })
-                return false;
-            },
-            fail: function(e, data){
-                jQuery('#edit-profile-box .loading').hide();
-                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Uploaded file is not a valid json format.</p>');
-            }
-        });
-        function initEditProfileBox()
-        {
-            jQuery('#create_profile_panel').html('');
-            jQuery('#edit_profile_instance_panel').hide();
-            jQuery('#edit-profile-box #profile-type-id').val('');
-            jQuery('#edit-profile-box #instance-id').val('');
-            jQuery('#edit-profile-box .message').remove();
-            jQuery('#edit-profile-box .btn-row .process-btn').hide();
-            jQuery('#edit-profile-box').width(500);
-            profileData = null;
-            profileType = null;
-        }
-        jQuery('#add-new-test-data-link').cplightbox({
-            inline: true,
-            closeWhenClickOveraly: false,
-            onStart: function(){
-                initEditProfileBox();
-                jQuery('#edit-profile-box #instance-id').val('');
-                jQuery('#edit-profile-box .popup-box-header').html('Create Profile Instance');
-            }
-        });
-        jQuery('.edit-profile-instance-link').each(function(){
-            var id = jQuery(this).attr('data-id');
-            var type_id = jQuery(this).attr('data-type-id');
-            jQuery(this).cplightbox({
-                inline: true,
-                closeWhenClickOveraly: false,
-                onStart: function(){
-                    initEditProfileBox();
-                    jQuery('#edit-profile-box #instance-id').val(id);
-                    jQuery('#edit-profile-box .popup-box-header').html('Edit Profile Instance');
-                    jQuery('#edit-profile-box #profile-type-id').val(type_id);
-                    jQuery('#edit-profile-box #profile-type-id').change();
-                }
-            });
-        })
-        
-        jQuery('#edit-profile-box #profile-type-id').change(function(){
-            if(this.value == '')
-            {
-                initEditProfileBox();
-            }else{
-                jQuery('#edit-profile-box .loading b').html('LOADING DATA');
-                jQuery('#edit-profile-box .loading').show();
-                jQuery('#edit-profile-box .message').remove();
-                jQuery.ajax({
-                    url: '<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('get-tester-profile-ui')?>',
-                    data: jQuery('#editProfileForm').serialize(),
-                    dataType: 'xml',
-                    success: function(rsp)
-                    {
-                        if(jQuery(rsp).find('status').text() == 'success')   
-                        {
-                            jQuery('#edit_profile_instance_panel').show();
-                            var targetElement = document.getElementById('create_profile_panel');
-                            profileType = jQuery.parseJSON(jQuery(rsp).find('schema').text());
-                            profileType.additionalProperties = false;                            
-                            var schema = Jsonary.createSchema(profileType);
-                            profileData = Jsonary.create(jQuery.parseJSON(jQuery(rsp).find('data').text())).addSchema(schema);
-                            Jsonary.render(targetElement, profileData);                            
-                            jQuery('#edit-profile-box .btn-row .process-btn').show();
-                        }else{
-                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
-                            jQuery('#edit-profile-box .loading b').html('LOADING DATA');
-                            jQuery('#edit_profile_instance_panel').hide();
-                            jQuery('#edit-profile-box #profile-type-id').val('');
-                            profileData = null;
-                            profileType = null;
-                        }
-                        jQuery(window).resize();
-                    },
-                    error: function(rsp){
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
-                    },
-                    complete: function(rsp){
-                        jQuery('#edit-profile-box .loading').hide();
-                    }
-                })
-            }
-        })
-                
-        jQuery('#editProfileForm').submit(function(){
-            return false;
-        });
-        
-        jQuery('#edit-profile-box .submit-btn').click(function(){        
-            jQuery('#edit-profile-box .message').remove();
-            if(profileData == null || profileType == null)
-            {
-                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please choose a profile type.</p>');
-                return false;
-            }
-            if(!tv4.validate(profileData.value(), profileType))
-            {
-                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
-                return false;
-            }
-            //Saving Data
-            jQuery('#edit-profile-box .loading b').html('SAVING DATA');
-            jQuery('#edit-profile-box .loading').show();            
-            jQuery.ajax({
-                url: "/?td-action=<?php echo wp_create_nonce('save-tester-instance')?>&" + jQuery('#editProfileForm').serialize(),
-                data: "data=" + encodeURIComponent(JSON.stringify(profileData.value())),
-                type: 'post',
-                dataType: 'xml',
-                success: function(rsp)
-                {
-                    if(jQuery(rsp).find('status').text() == 'success')   
-                    {
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
-                        document.location.reload();
-                    }else{                    
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
-                    }
-                },
-                error: function(rsp){
-                    jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
-                },
-                complete: function(rsp){
-                    jQuery('#edit-profile-box .loading').hide();
-                }
-            })
-            return false;
-        })
-        
-    })    
-    function afterJsonRender()
-    {
-        var maxWidth = jQuery('#create_profile_panel table:eq(0)').width();
-        
-        //Resize The box width
-        if(jQuery('#edit-profile-box').width() < maxWidth + 40)
-        {
-            jQuery('#edit-profile-box').width(maxWidth + 40);                
-            jQuery('.mask-wrapper').width(jQuery(document).width());
-            jQuery('.mask-wrapper').height(jQuery(document).height());           
-        }        
-    }
-</script>
 <?php
 }else{ 
 ?>

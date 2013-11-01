@@ -78,7 +78,7 @@
                             <li>
                                 <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>">
                                     <img src="<?php echo get_bloginfo('stylesheet_directory') ?>/images/history_doc.png" class="top1"/>
-                                    <span class="simple_tooltip radius6">Hystory<span></span></span>
+                                    <span class="simple_tooltip radius6">History<span></span></span>
                                 </a>
                             </li>          
                             <?php

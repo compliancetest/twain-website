@@ -220,18 +220,21 @@ function add_header_scripts()
     }
     
     
-    if(is_user_logged_in())   
-    {
-        //Ticket Script
-        wp_enqueue_script( 'support-ticket', get_stylesheet_directory_uri() . '/functions/support-ticket/support-ticket.js', $actions_depends, '1.0', true );
-    }
-    
     //Test Data
     wp_enqueue_script( 'iframe-trasport', get_stylesheet_directory_uri() . '/functions/test-data/jquery.iframe-transport.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'jquery-fileupload', get_stylesheet_directory_uri() . '/functions/test-data/jquery.fileupload.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'jsonary-super-bundle', get_stylesheet_directory_uri() . '/functions/test-data/jsonary-super-bundle.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'json-schema-validator', get_stylesheet_directory_uri() . '/functions/test-data/tv4.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'zclip', get_stylesheet_directory_uri() . '/js/jquery.zclip.js', $actions_depends, '1.0', true );
+    
+    
+    
+    if(is_user_logged_in())   
+    {
+        //Ticket Script
+        wp_enqueue_script( 'support-ticket', get_stylesheet_directory_uri() . '/functions/support-ticket/support-ticket.js', $actions_depends, '1.0', true );
+        wp_enqueue_script( 'testdata', get_stylesheet_directory_uri() . '/functions/test-data/testdata.js', $actions_depends, '1.0', true );
+    }
     
 }
 

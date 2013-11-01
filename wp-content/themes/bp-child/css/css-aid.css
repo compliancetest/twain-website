@@ -2197,3 +2197,6 @@ table.result-table{
     font-weight: 600;
     background: transparent;
 }
+.input-file{
+    padding: 0;
+}

@@ -8,6 +8,7 @@ function getCommunityProfileTypes($community_id)
     global $wpdb;
     
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id=%d", $community_id);
+    
     $rows = $wpdb->get_results($query);
     
     return $rows;
@@ -47,4 +48,17 @@ function getCustomerProfileInstances($user_id = null)
     
     return $rows;
     
+}
+
+function getUserLastUsedProfileType($type = 'harness', $user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT type_id FROM " . $wpdb->prefix . "community_profile_instances WHERE creator_id=%d AND type=%s ORDER BY created_date DESC", $user_id, $type);
+    $type = $wpdb->get_var($query);
+    
+    return $type;
 }

@@ -454,7 +454,7 @@ function viewProfileType()
         <div class="popup-box view-profile-type-box" style="display: none; width: 900px;" id="view-profile-type-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Type Detail</div>        
             <div class="popup-box-content grid-box-body">                    
-                <div id="json-view-panel<?php echo $boxId?>"><?php echo base64_decode($row->schema)?></div>                
+                <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel"><?php echo base64_decode($row->schema)?></div>                
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                                                
