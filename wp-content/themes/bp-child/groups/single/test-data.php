@@ -107,7 +107,21 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                 <select class="select left" name="profile-type-id" id="profile-type-id">
                     <option value="">- Select -</option>
                     <?php foreach($profileTypes as $p){ ?>
-                    <option value="<?php echo $p->id?>"><?php echo $p->title?></option>
+                    <option value="<?php echo $p->id?>">
+                        <?php 
+                            echo $p->title;
+                            $pJSON = json_decode(base64_decode($p->schema));
+                            if($pJSON->Version)
+                            {
+                                $version = array();
+                                foreach(get_object_vars($pJSON->Version) as $k=>$v)      
+                                {
+                                    $version[] = $k . " v" . $v;
+                                }
+                                echo " (Version: " . implode(", ", $version) . ")";
+                            }
+                        ?>                        
+                    </option>
                     <?php } ?>
                 </select>
                 <div class="clear"></div>
