@@ -231,18 +231,19 @@ function cp_delete_transaction_log(){
     
     $esb = new ManageESB();
     
-    //Delete MSH_METADATA_PAYLOAD            
-    $query = "DELETE FROM " . $esb->table_message_metadata . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
+    //DELETE FROM MSH_METADATA_VALIDATION_RESULT
+/*    
+    $query = "DELETE FROM " . $esb->table_message_validation_results . " WHERE MSH_MESSAGE_METADATA_ID in (SELECT ID FROM " . $esb->table_message_metadata . ")";    
     ManageESB::$esbdb->query($query);
     
-    //DELETE FROM MSH_METADATA_VALIDATION_RESULT
-    $query = "DELETE FROM " . $esb->table_message_validation_results . " WHERE MSH_METADATA_ID in (" . implode(", ", $lIds) . ")";    
-    ManageESB::$esbdb->query($query);
+    */
+    //Delete MSH_METADATA_PAYLOAD            
+    /*$query = "DELETE FROM " . $esb->table_message_metadata . " WHERE MSH_CONVERSATION_ID in (" . implode(", ", $lIds) . ")";    
+    ManageESB::$esbdb->query($query);*/
     
     
     $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE ID in (" . implode(", ", $lIds) . ")";    
     ManageESB::$esbdb->query($query);
-    
     
     
     addMessage("Selected data was removed!");

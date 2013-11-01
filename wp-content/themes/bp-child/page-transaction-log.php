@@ -530,6 +530,7 @@ if($filterCustomer){
                     dataType: 'html',
                     success: function(rsp){                        
                         document.location.reload();
+
                     }
                 })    
                 return false;
