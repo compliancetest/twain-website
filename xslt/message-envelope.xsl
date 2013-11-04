@@ -31,8 +31,8 @@
                 </div>
                 <div id="menu-wrapper"></div>
                 <div id="content-wrapper">
-                    <div class="content">
-                        <div id="content-inner">
+<!--                    <div class="content">-->
+                    <table boder="0" cellpadding="0" cellspacing="0" align="center"><tr><td id="content-inner">
                             <h2>SOAP Headers Information</h2>
 
                             <xsl:call-template name="soapHeaderTable"/>
@@ -58,8 +58,8 @@
                                 </xsl:call-template>
                             </xsl:for-each>
                             <!-- Close out the html stuff and end the master template -->
-                        </div>
-                    </div>
+                    </td></tr></table>
+<!--                    </div>-->
                 </div>
             </div>
         </body>

@@ -65,9 +65,9 @@
                 <div id="menu-wrapper"></div>
                 <div id="content-wrapper">
                     <div class="content">
-                        <div id="content-inner">                            
+                        <table boder="0" cellpadding="0" cellspacing="0" align="center"><tr><td id="content-inner">
                             <xsl:apply-templates />
-                        </div>
+                        </td></tr></table>
                     </div>
                 </div>
             </div>
