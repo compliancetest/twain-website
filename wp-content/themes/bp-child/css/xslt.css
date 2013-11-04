@@ -50,6 +50,9 @@ h5 {
     width: 1000px;
     margin: 0 auto;
 }
+img{
+    border: none;
+}
 #header-wrapper{
     padding: 15px 0 5px;
     width: 100%;
@@ -57,6 +60,10 @@ h5 {
     margin-bottom: 0px;
     background: url(../images/header_wrapper.jpg) top center repeat-x;
     height: 60px;
+    text-align: center;
+}
+#header-wrapper .content{
+    text-align: left;
 }
 #menu-wrapper {
     width: 100%;
@@ -66,6 +73,7 @@ h5 {
     height: 39px;
     border-top: 1px solid white; 
     border-bottom: 1px solid white; 
+    
 }
 #content-wrapper{
     width: 100%;
@@ -80,6 +88,7 @@ h5 {
     -moz-box-shadow: 0 0 5px #999;
     -webkit-box-shadow: 0 0 5px #999;
     -o-box-shadow: 0 0 5px #999;
+    border: solid 1px #ccc;
 }
 /*
 Table
@@ -152,7 +161,7 @@ table.format-table{
     background: #FbFBFB;
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;
+/*    table-layout: fixed;*/
 }
 .format-table thead tr{
     background:#de6262 url(../images/red_dotted_bcg.png) !important;
