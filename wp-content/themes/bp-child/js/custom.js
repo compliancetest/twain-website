@@ -348,8 +348,7 @@ jQuery(document).ready(function($) {
 
 	
 
-	// Dashboard Add New Test Suite 
-	
+	// Dashboard Add New Test Suite 	
 	jQuery('.add_new_lvl').click(function() {
 			 jQuery('.copy-correct-lvl').append(jQuery('.conformance_level').html());
 			// jQuery('.copy-correct-docs input').val('');
@@ -465,7 +464,38 @@ jQuery(document).ready(function($) {
         jQuery('#content-pattern #content-wrapper').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height());
     }        
     
+    customizeFileTag();
 });
+
+function customizeFileTag()
+{
+    jQuery('input[type="file"]').each(function(){
+        if(!jQuery(this).data('file-customized'))
+        {
+            jQuery(this).wrap('<span class="custom-file-tag"><span class="action-btn file-btn"></span></span>');
+            jQuery(this).parent().append('<span class="p"></span><span class="t">Browse</span>');
+            if(jQuery(this).attr('file-type'))
+            {
+                jQuery(this).parent().before('<span class="file-label-wrap file-type-' + jQuery(this).attr('file-type') + '"><span class="file-value">Choose File</span><span class="file-extensions">' + jQuery(this).attr('file-extensions') + '</span></span>');    
+            }else{
+                jQuery(this).parent().before('<span class="file-label-wrap file-label-oneline"><span class="file-value">Choose File</span></span>');                
+            }
+            
+            jQuery(this).change(function(){
+                var fileName = jQuery(this).val();
+                fileName = fileName.replace(/\\/g, "/");                                 
+                fName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("."));
+                fExt = fileName.substr(fileName.lastIndexOf("."));
+                if(fName.length > 16)
+                {
+                    fName = fName.substr(0, 7) + "..." + fName.substring(fName.length - 6);
+                }
+                jQuery(this).parent().parent().find('.file-value').html(fName + fExt);
+            })
+            jQuery(this).data('file-customized', 1);
+        }
+    })
+}
 
 function isMobile()
 {

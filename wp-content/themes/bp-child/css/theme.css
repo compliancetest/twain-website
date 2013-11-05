@@ -761,6 +761,8 @@ width: 28%;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
+    line-height: 18px;
+    font-weight: normal;
 }
 
 .simple_tooltip_pop {
@@ -4414,13 +4416,13 @@ min-height: 70px;
     margin-left: -55px;
 }
 #my_subscriptions .td-suite{
-    width: 168px;
+    width: 267px;
 }
 #my_subscriptions .td-fee{
     width: 65px;
 }
 #my_subscriptions .td-action{
-    width: 159px;
+    width: 60px;
 }
 #harness-detail-box .field-row label{
     float: left;
@@ -5718,7 +5720,7 @@ a.suite-subscript-link:hover{
     top: 0;
     left: 0;
 }
-#testcases-list .grid_action_cell .blue-delete-btn{
+#testcases-list .grid_action_cell .delete-btn{
     position: absolute;
     left: 28px;
 }
@@ -6198,7 +6200,27 @@ div.popup-box .loading-with-text{
     width: 120px;
     margin-left: -55px;
 }
-
+.edit-profile-content-inner{
+    border: solid 1px #bfbfbf;
+    padding: 15px 10px;
+    position: relative;
+    margin-top: 15px;
+}
+#edit-profile-box .select{
+    min-width: 200px;
+    width: auto !important;
+    position: absolute;
+    top: -13px;
+    left: 10px;
+}
+#edit-profile-box .popup-box-content label{
+    font-weight: 600;
+    font-size: 13px;
+    color: #2a2a2a;
+}
+#edit-profile-box .upload-btn{
+    margin-top: 3px;
+}
 #edit_profile_instance_panel{
     display: none;
 }
@@ -6271,18 +6293,21 @@ div.popup-box .loading-with-text{
 table.json-object table{
     margin: 0;
 }
+table.json-object tbody{
+    border: none;
+}
 table.json-object{
     font-weight: normal;
 }
-table.json-object tr{
-    border: none;
+table.json-object tr{    
     background: transparent;
+    border: none;
 }
 table.json-object td{
     background: transparent;
-    border-right: solid 1px #b7b7b7;
+    border: solid 1px #fff;
     height: 26px;
-    vertical-align: top;
+    vertical-align: top;    
 }
 
 .json-view-panel table.json-object td{
@@ -6298,9 +6323,38 @@ table.json-object .json-object-value{
 }
 table.json-object .json-object-key-title{
     font-weight: 600;
-    color: #333;
+    color: #666;
     border-right: none;
 }
+table.json-object .json-object-key{
+    background: #f9f9f9;
+    border-right: solid 1px #fff;
+}
+table.json-object .json-object-value{
+    background: #f0f0f0;
+}
+/*table.json-object tr:nth-child(odd) tr:nth-child(odd) .json-object-key,
+table.json-object tr:nth-child(even) tr:nth-child(odd) .json-object-key,
+table.json-object tr:nth-child(odd) .json-object-key{
+    background: #f9f9f9;
+    border-right: solid 1px #fff;
+}
+table.json-object tr:nth-child(odd) tr:nth-child(odd) .json-object-value,
+table.json-object tr:nth-child(even) tr:nth-child(odd) .json-object-value,
+table.json-object tr:nth-child(odd) .json-object-value{
+    background: #f0f0f0;
+}
+
+table.json-object tr:nth-child(odd) tr:nth-child(even) .json-object-key,
+table.json-object tr:nth-child(even) tr:nth-child(even) .json-object-key,
+table.json-object tr:nth-child(even) .json-object-key,
+table.json-object tr:nth-child(odd) tr:nth-child(even) .json-object-value,
+table.json-object tr:nth-child(even) tr:nth-child(even) .json-object-value,
+table.json-object tr:nth-child(even) .json-object-value{
+    background: #fff;
+}
+*/
+
 table.json-object .json-string-content-editable{
     display: inline-block;
     border: 1px solid #cbcbcb;
@@ -6377,6 +6431,19 @@ table.json-object .json-undefined-create{
     color: #2c80e8;
     font-size: 12px;
 }
+table.json-object .json-undefined-create > span{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #288ce2;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    margin-right: 5px;
+    text-align: center;
+}
 table.json-object select{
     padding:3px 3px 3px 3px;
     margin: 0;
@@ -6394,11 +6461,20 @@ table.json-object select{
 table.json-array-table{
     margin: 0;
 }
+.json-array-table>thead{
+    border: none !important;
+}
+
 table.json-array-table > thead > tr > th{
     font-size: 12px;
     border-bottom: none;
-    color: #fff;
+    color: #999;
     padding: 5px;
+    border: solid 1px #fff;
+    background: #f0f0f0 !important;
+}
+.json-array-table > tbody > tr > td{
+    border: solid 1px #fff !important;
 }
 table.json-array-table > thead > tr > th .json-array-table-move-cancel{
     float: none !important; 
@@ -6406,6 +6482,9 @@ table.json-array-table > thead > tr > th .json-array-table-move-cancel{
 table.json-array-table>tbody>tr>td.json-array-table-remove,
 table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 20px;
+}
+.json-object-delete{
+    line-height: 24px;
 }
 /**
 * My Tickets page
@@ -6506,56 +6585,73 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     position: relative;
 }
 .ticket-priorities{
-    
+    font-weight: bold;
+    font-size: 11px;
+    line-height: 18px;
 }
 .ticket-priorities > span{
-    display: block;
-    float: left;
-    line-height: 25px;
-    padding: 0 5px;
+    margin-left: 15px;
 }
-.ticket-priorities > span > span{
-    height: 23px;    
-    width: 23px;    
-    display: block;
-    float: left;    
+.ticket-priorities .ticket-priority{
     margin-right: 5px;
-    border: solid 1px #ccc;
 }
+.ticket-priorities .urgent{
+    color: #c51e1e;
+}
+.ticket-priorities .high{
+    color: #f26522;
+}
+.ticket-priorities .normal{
+    color: #aaa;
+}
+
+.ticket-priority{
+    border-width: 1px;
+    border-style: solid;    
+    height: 16px;
+    width: 16px;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+    display: inline-block;
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7) inset;
+    vertical-align: top;
+}
+.ticket-priority-normal{
+    border-color: #aaa;
+    background: #b7b7b7;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c4c4c4), to(#ababab));
+    background: -webkit-linear-gradient(top, #c4c4c4, #ababab);
+    background: -moz-linear-gradient(top, #c4c4c4, #ababab);
+    background: -ms-linear-gradient(top, #c4c4c4, #ababab);
+    background: -o-linear-gradient(top, #c4c4c4, #ababab);
+}
+.ticket-priority-high{
+    border-color: #f26522;
+    background: #f67234;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f98047), to(#f36623));
+    background: -webkit-linear-gradient(top, #f98047, #f36623);
+    background: -moz-linear-gradient(top, #f98047, #f36623);
+    background: -ms-linear-gradient(top, #f98047, #f36623);
+    background: -o-linear-gradient(top, #f98047, #f36623);
+}
+.ticket-priority-urgent{
+    border-color: #c51e1e;
+    background: #dc1516;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f00e0e), to(#c61d1d));
+    background: -webkit-linear-gradient(top, #f00e0e, #c61d1d);
+    background: -moz-linear-gradient(top, #f00e0e, #c61d1d);
+    background: -ms-linear-gradient(top, #f00e0e, #c61d1d);
+    background: -o-linear-gradient(top, #f00e0e, #c61d1d);
+}
+
 #tickets_list .has-new .td{
     font-weight: bold !important;
 }
 #tickets_list .tbody .tr{
     cursor: pointer;
 }
-/*.ticket-priorities span.normal{}
-.ticket-priorities span.normal span{}
 
-.ticket-priorities span.high{color: #e67070;}
-.ticket-priorities span.high span{background: #e67070;}
-
-.ticket-priorities span.urgent{color: #e52727}
-.ticket-priorities span.urgent span{background: #e52727}
-
-#tickets_list .priority-high{
-    border-bottom-color: #e67070;
-}
-#tickets_list .priority-high .td{
-    color: #fff;
-    background-color: #e67070;
-    border-left-color: #fbb;
-    text-shadow: 1px 1px 1px #000;
-}
-#tickets_list .priority-urgent{
-    border-bottom-color: #e52727;
-}
-#tickets_list .priority-urgent .td{
-    color: #fff;
-    background-color: #e52727;
-    border-left-color: #fbb;
-    text-shadow: 1px 1px 1px #000;
-}
-*/
 
 .ticket-detail{
     
@@ -6585,8 +6681,4 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     left: 123px;
     z-index: 100;
     
-}
-#edit-profile-box .select{
-    min-width: 200px;
-    width: auto !important;
 }

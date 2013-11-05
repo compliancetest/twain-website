@@ -1660,13 +1660,13 @@ tr {
     font-size: 11px;    
 }
 .upload-btn,
+.download-btn,
 .process-btn,
 .continue-btn,
 .mail-btn,
 .add-new-btn,
 .certify-btn,
-.green-btn,
-.edit-btn{
+.green-btn{
     border-color: #369817;
     background: #39a517;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3eb618), to(#369817));
@@ -1685,23 +1685,20 @@ tr {
 }
 .process-btn:hover,
 .upload-btn:hover,
-.edit-btn:hover,
+.download-btn:hover,
 .certify-btn:hover,
 .continue-btn:hover,
 .mail-btn:hover,
-.green-btn:hover,
 .add-new-btn:hover{
     background: #3eb518;
-}
-.edit-btn span.p{
-    background-position: 0 -90px;
-}
-.edit-btn span.t{
-    padding-left: 3px;
 }
 .upload-btn span.p{
     background-position: 0 -527px;
 }
+.download-btn span.p{
+    background-position: 0 -1299px;
+}
+
 .add-new-btn span.p{
     background-position: 0 -128px;
 }
@@ -1713,6 +1710,8 @@ tr {
 }
 
 .cancel-btn,
+.unsubscribe-btn,
+.delete-btn,
 .delete-grey-btn{
     border-color: #9f9f9f;
     background: #8a8a8a;
@@ -1729,9 +1728,12 @@ tr {
 .cancel-btn span.p{
     background-position: 0 -1098px;
 }
+
 .delete-grey-btn span.p{
     background-position: 0 1px;
 }
+.unsubscribe-btn:hover,
+.delete-btn:hover,
 .delete-grey-btn:hover,
 .cancel-btn:hover{
     background: #a0a0a0;
@@ -1739,6 +1741,16 @@ tr {
 .delete-grey-btn{
     padding: 0 12px !important;
 }
+.delete-btn span.p{
+    background-position: 2px -574px;
+    width: 12px;
+}
+
+.unsubscribe-btn span.p{
+    background-position: 0 -1205px;
+}
+
+
 .certify-grey-btn,        
 .grey-edit-btn,        
 .grey-delete-btn,        
@@ -1781,27 +1793,44 @@ tr {
 .grey-edit-btn span.p{
     background-position: 0 -951px;
 }
-.delete-btn{
-    border-color: #7B1413;
-    background: #b3241e;
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cc2e27), to(#981716));
-    background: -webkit-linear-gradient(top, #cc2e27, #981716);
-    background: -moz-linear-gradient(top, #cc2e27, #981716);
-    background: -ms-linear-gradient(top, #cc2e27, #981716);
-    background: -o-linear-gradient(top, #cc2e27, #981716);
+
+.harness-detail-btn,
+.file-btn,
+.edit-btn{
+    border-color: #3577ad;
+    background: #2d83cd;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));
+    background: -webkit-linear-gradient(top, #2690ea, #3577ad);
+    background: -moz-linear-gradient(top, #2690ea, #3577ad);
+    background: -ms-linear-gradient(top, #2690ea, #3577ad);
+    background: -o-linear-gradient(top, #2690ea, #3577ad);
 /*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#9f9f9f',GradientType=0 );     */
-    box-shadow: 0 1px 0 0 #dfdfdf inset;
-    -moz-box-shadow: 0 1px 0 0 #dfdfdf inset;
-    -webkit-box-shadow: 0 1px 0 0 #dfdfdf inset;
-    
+    box-shadow: 0 1px 0 0 #7cbcf4 inset;
+    -moz-box-shadow: 0 1px 0 0 #7cbcf4 inset;
+    -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
 }
-.delete-btn:hover{
-    background: #cc2e26;
+.edit-btn span.p{
+    background-position: 0 -614px;
 }
-.delete-btn span.p{
-    background-position: 2px -574px;
-    width: 12px;
+.edit-btn span.t{
+    padding-left: 3px;
 }
+.file-btn:hover,
+.harness-detail-btn:hover,
+.edit-btn:hover{
+    background: #288ce2;
+}
+.harness-detail-btn{
+    padding: 0 3px;
+}
+.harness-detail-btn span.p{
+    background-position: 0 -1152px;
+    width: 15px;
+}
+.file-btn span.p{
+    background-position: 0 -1249px;    
+}
+
 
 .blue-edit-btn,
 .print-btn,
@@ -1844,7 +1873,7 @@ tr {
 }
 .print-btn span.p{
     background-position: 0 -899px;
-    width: 14px;
+    width: 18px;
 }
 .large-plus-link{
     color: #2c80e8;
@@ -1862,6 +1891,58 @@ tr {
     padding-left: 22px;
     height: 16px;
     line-height: 16px;
+}
+.action-btn.has-tooltip .simple_tooltip{
+    margin-left: -45px;
+}
+
+/**
+* Custom File Tag
+*/
+.custom-file-tag{
+    float: left;
+}
+.custom-file-tag input{
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    opacity: 0;
+    -moz-opacity: 0;
+    -webkit-opacity: 0;
+    filter: alpha(opacity=0);
+    height: 100%;
+}
+.custom-file-tag .file-btn{
+    position: relative;
+    overflow: hidden;  
+    top: 3px;  
+}
+.custom-file-tag .file-label-wrap{
+    float: left;
+    line-height: 12px;
+    padding: 2px 5px 2px 25px;
+}
+.custom-file-tag .file-label-oneline{
+    padding: 2px 5px;
+    line-height: 24px;
+}
+.custom-file-tag .file-type-image{
+    background: url(../images/file-type-doc.png) no-repeat 0 0;
+}
+.custom-file-tag .file-type-doc{
+    background: url(../images/file-type-doc.png) no-repeat 0 0;
+}
+
+.custom-file-tag .file-value{    
+    font-weight: normal;
+    padding: 0 5px;    
+    display: block;
+}
+.custom-file-tag .file-extensions{    
+    font-weight: normal;  
+    padding: 0 5px;    
+    font-size: 10px;
 }
 
 /*** Common Popup Boxes Style ***/
@@ -1899,13 +1980,21 @@ tr {
     -moz-box-shadow: 0 3px 5px -1px #D3d3d3 inset;
     -o-box-shadow: 0 3px 5px -1px #D3d3d3 inset;
 }
+.popup-box-top-nav{
+    background: #f0f0f0 !important;
+    padding: 15px;
+    box-shadow: 0 -13px 7px -12px #CBCBCB inset;
+    -webkit-box-shadow: 0 -13px 7px -12px #CBCBCB inset;
+    -moz-box-shadow: 0 -13px 7px -12px #CBCBCB inset;
+    -o-box-shadow: 0 -13px 7px -12px #CBCBCB inset;
+}
 .popup-box-footer{
     background: #f0f0f0 !important;
     padding: 15px;
-    box-shadow: 0 13px 7px -10px #CBCBCB inset;
-    -webkit-box-shadow: 0 13px 7px -10px #CBCBCB inset;
-    -moz-box-shadow: 0 13px 7px -10px #CBCBCB inset;
-    -o-box-shadow: 0 13px 7px -10px #CBCBCB inset;
+    box-shadow: 0 13px 7px -12px #CBCBCB inset;
+    -webkit-box-shadow: 0 13px 7px -12px #CBCBCB inset;
+    -moz-box-shadow: 0 13px 7px -12px #CBCBCB inset;
+    -o-box-shadow: 0 13px 7px -12px #CBCBCB inset;
 }
 .popup-close-btn{
     background: url(../images/close.png) center left no-repeat;

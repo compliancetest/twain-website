@@ -66,7 +66,7 @@ function makeClaim()
     $is_allowed = false;
     if(!$claimID && can_make_compliance_claim($productID))
         $is_allowed = true;
-    else if($claimID && $claim->creator_id == $user_id)
+    else if(can_edit_compliance_claim($claimID))
         $is_allowed = true;
     
     if(!$is_allowed)
@@ -121,7 +121,7 @@ function editClaim()
     $is_allowed = false;
     if(!$claimID && can_make_compliance_claim($productID))
         $is_allowed = true;
-    else if($claimID && $claim->creator_id == $user_id)
+    else if(can_edit_compliance_claim($claimID))
         $is_allowed = true;
     
     if(!$is_allowed)
@@ -140,6 +140,7 @@ function editClaim()
             <div class="loading" style="display: none;"></div>
         </div>
         <?php
+        exit;
     }
     
     

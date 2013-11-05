@@ -10181,7 +10181,7 @@
 						});
 						title = schemas.title() || data.parentKey() || title;
 					}
-					return context.actionHtml('<span class="json-undefined-create">+ ' + Jsonary.escapeHtml(title) + '</span>', "create");
+					return context.actionHtml('<span class="json-undefined-create"><span>+</span> ' + Jsonary.escapeHtml(title) + '</span>', "create");
 				}
 				delete context.uiState.undefined;
 				var showDelete = false;

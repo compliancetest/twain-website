@@ -368,10 +368,10 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width5P toleft tocenter grid_action_cell">
                                 <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
                                 <?php if(can_edit_test_case($row->ID)){ ?>
-                                <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
+                                <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Case<span></span></span></a>
                                 <?php } ?>
                                 <?php if(can_delete_test_case($row->ID)){ ?>
-                                <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn blue-edit-btn blue-delete-btn"><span class="p"></span></a>
+                                <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn delete-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
                                 <?php } ?>
                                 <?php }else{ ?>
                                 -

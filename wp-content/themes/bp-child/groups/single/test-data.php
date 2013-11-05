@@ -26,7 +26,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width45P">                    
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name?></a><br />
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name?>
                     <?php
                         if($instanceObj->Profile->Version)
                         {
@@ -35,21 +35,36 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                                 $version = array();
                                 foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
                                 {
-                                    $version[] = $k . " v" . $v;
+                                    $version[] = $v;
                                 }
-                                echo "<b>Version:</b> " . implode(", ", $version) . "<br />";
+                                echo " v" . implode(".", $version);
                             }else{
-                                echo "<b>Version:</b> " . $instanceObj->Profile->Version . "<br />";
+                                echo " v " . $instanceObj->Profile->Version;
                             }
                         }
                     ?>
+                    </a>
+                    <br />
                     <p><?php echo $instanceObj->Profile->Description?></p>
                 </div>
                 <div class="grid-list-cell width15P">
                     <?php echo $instanceObj->Profile->Purpose?>            
                 </div>
                 <div class="grid-list-cell width15P tocenter">
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>                    
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?>
+                        <?php
+                            $pJSON = json_decode(base64_decode($instance->schema));                            
+                            if($pJSON->Version)
+                            {
+                                $version = array();
+                                foreach(get_object_vars($pJSON->Version) as $k=>$v)      
+                                {
+                                    $version[] = $v;
+                                }
+                                echo " v" . implode(".", $version);
+                            }
+                        ?>
+                    </a>                    
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <?php echo formatDate($instance->created_date) ?>                    
@@ -104,11 +119,17 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
 <div class="popup-box" id="edit-profile-box" style="display: none; width: 500px;">
     <form name="editProfileForm" id="editProfileForm" action="">
         <div class="popup-box-header radius6 noradiusbottom">Create Profile Instance</div>        
-        <div class="popup-box-content grid-box-body">                    
-            <div class="field-row">
-                <label class="left right10 lineheight22px">Profile Type:</label>
+        <div class="popup-box-top-nav">            
+            <div class="btn-row">      
+                <h5 class="left nomarginbottom lineheight22px">Please Select Profile Type</h5>          
+                <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="popup-box-content grid-box-body noshadow padding20-10">                    
+            <div class="edit-profile-content-inner">                
                 <select class="select left" name="profile-type-id" id="profile-type-id">
-<!--                    <option value="">- Select -</option>-->
                     <?php foreach($profileTypes as $p){ ?>
                     <?php 
                         if(!$lastType && !$lastTypeID)
@@ -116,8 +137,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                             $lastType = $p;
                         }else if(!$lastType && $p->id == $lastTypeID){
                             $lastType = $p;
-                        }
-                        
+                        }                        
                     ?>
                     <option value="<?php echo $p->id?>" <?php echo $lastType && $lastType->id == $p->id ? "selected='selected'" : "" ?>>
                         <?php 
@@ -128,41 +148,41 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                                 $version = array();
                                 foreach(get_object_vars($pJSON->Version) as $k=>$v)      
                                 {
-                                    $version[] = $k . " v" . $v;
+                                    $version[] = $v;
                                 }
-                                echo " (Version: " . implode(", ", $version) . ")";
+                                echo " v" . implode(".", $version);
                             }
                         ?>                        
                     </option>
                     <?php } ?>
                 </select>
-                <div class="clear"></div>
-            </div>
-            <div id="edit_profile_instance_panel">
-                <div id="upload_profile_panel">                    
-                    <div class="field-row">
-                        <label class="padding5-10-5-0"> Upload Json file <small class="lineheight22px">(.txt or .json file)</small></label> 
-                        <div class="grid-cell relative">                                                                    
-                            <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" />                            
-                            <p id="file-name-list">No file chosen.</p>
+                <div class="clear"></div>            
+                <div id="edit_profile_instance_panel">
+                    <div id="upload_profile_panel">                    
+                        <div class="field-row">
+                            <label class="padding5-10-5-0">Upload Json file</label> 
+                            <div class="grid-cell relative">                                                                    
+                                <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />                                
+                                <a href="#" class="action-btn upload-btn plus" id="profile_instance_upload_btn"><span class="p"></span><span class="t">Upload</span></a>
+                                <div class="clear"></div>
+                            </div>
                             <div class="clear"></div>
-                            <a href="#" class="action-btn upload-btn plus" id="profile_instance_upload_btn"><span class="p"></span><span class="t">Upload</span></a>                            
                         </div>
+                    </div>
+                    <div class="enter-values"><span>or</span></div>
+                    <label class="padding5-10-5-0">Enter Values</label> 
+                    <div id="create_profile_panel">                
                         <div class="clear"></div>
                     </div>
+                    <textarea id="profile_type_txt" class="displaynone"><?php echo $lastType ? base64_decode($lastType->schema) : ''?></textarea>                
+                    <textarea id="profile_instance_txt" class="displaynone"></textarea>                
                 </div>
-                <div class="enter-values"><span>Or enter values</span></div>
-                <div id="create_profile_panel">                
-                    <div class="clear"></div>
-                </div>
-                <textarea id="profile_type_txt" class="displaynone"><?php echo $lastType ? base64_decode($lastType->schema) : ''?></textarea>                
-                <textarea id="profile_instance_txt" class="displaynone"></textarea>                
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
             <div class="btn-row">
-                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">SAVE</span></a>                            
                 <div class="clear"></div>
             </div>
         </div>                        

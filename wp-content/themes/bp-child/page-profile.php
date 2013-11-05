@@ -13,6 +13,7 @@ if(is_user_logged_in()){
     $lname = $userInfo['last_name'][0];
     $uemail = $current_user->user_email;
     $phone = get_user_meta($current_user->ID, 'phone_number', true);
+    $timezone = get_user_meta($current_user->ID, 'timezone', true);
     
     $biography = get_user_meta($current_user->ID, 'description', true);
     

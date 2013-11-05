@@ -75,7 +75,7 @@
                   $('#agree-file-license .close_btn').click();
                   return false;
               });
-              $('#agree-file-license .process-btn').click(function(){
+              $('#agree-file-license .download-btn').click(function(){
                   $('#agree-file-license form').submit();
                   return false;
               });

@@ -245,7 +245,7 @@ function makePlan()
     $product = get_post($_POST['product_id']);
     
     //Product/Service
-    if($user_id != $product->post_author)
+    if(!is_super_admin() && !is_admin() && $user_id != $product->post_author)
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect('/test-suite-coverage');

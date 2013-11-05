@@ -55,6 +55,8 @@ function compliancetest_create_new_user(){
 
         update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
         update_user_meta ($user_id, 'phone_number', $_POST['contact_phone']);
+        //Default Value
+        update_user_meta ($user_id, 'timezone', 'UTC');
         
         $data = array(
             '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],

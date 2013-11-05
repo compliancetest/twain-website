@@ -16,7 +16,7 @@ if(!defined('ABSPATH'))
             <div class="thead tr">
                <div class="td td-suite">Test Suite</div>
                <div class="td td-fee">Fee</div>
-               <div class="td td-action">Action</div>
+               <div class="td td-action tocenter">Action</div>
                <div class="clear"></div>
            </div>
            <div class="tbody">
@@ -41,9 +41,8 @@ if(!defined('ABSPATH'))
                     </div>
                     <div class="td td-fee">$<?php echo get_post_meta($row->suite_id, 'monthly_subscription_price', true); ?>/m</div>
                     <div class="td td-action tocenter">
-                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="harness-detail-link" data-id="<?php echo $row->id?>">Harness Detail</a>
-                        | 
-                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="unsubscribe-link">Unsubscribe</a><br />                        
+                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
+                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
                     </div>
                     <input type="hidden" id="p_mode_agreement<?php echo $row->id?>" value="<?php echo $row->p_mode_agreement?>" />
                     <input type="hidden" id="harness_endpoint_url<?php echo $row->id?>" value="<?php echo $row->harness_endpoint_url?>" />

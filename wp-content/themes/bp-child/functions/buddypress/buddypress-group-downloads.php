@@ -160,13 +160,13 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     exit;
                 }else{
                     addMessage('File not found!', 'error');
-                    $group = groups_get_current_group();
-                    wp_redirect(bp_get_group_permalink($group) . $obj->slug);    
+                    $group = groups_get_current_group();                    
+                    wp_redirect(bp_get_group_permalink($group) . $this->slug);    
                     exit;
                 }
             }else{
                 $group = groups_get_current_group();
-                wp_redirect(bp_get_group_permalink($group) . $obj->slug);
+                wp_redirect(bp_get_group_permalink($group) . $this->slug);
                 exit;
             }
         }
@@ -346,7 +346,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                             </form>    
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">                                                        
-                            <a href="javascript: void(0)" class="action-btn process-btn"><span class="p"></span><span class="t">DOWNLOAD</span></a>
+                            <a href="javascript: void(0)" class="action-btn download-btn"><span class="p"></span><span class="t">DOWNLOAD</span></a>
                             <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
                             <div class="clear"></div>
                             <div class="message error" style="display: none;">Please aggree the License Agreement.</div>

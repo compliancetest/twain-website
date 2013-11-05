@@ -57,11 +57,11 @@ if(!defined('ABSPATH'))
                 </div>
                 <div class="grid-row field-row">
                     <div class="grid-cell width30P"><label>Timezone settings</label></div>
-                    <div data-value="Europe/London" class="grid-cell timezone-text" data-type="select">Europe/London</div>
+                    <div data-value="Europe/London" class="grid-cell timezone-text" data-type="select"><?php echo $timezone?></div>
                     <?php $timezone_list = DateTimeZone::listIdentifiers(DateTimeZone::ALL); ?>
                     <select name="timezone" id="timezone" class="select" style="display: none;">
-                        <?php foreach($timezone_list as $timezone): ?>
-                            <option value="<?php echo $timezone; ?>"><?php echo $timezone; ?></option>
+                        <?php foreach($timezone_list as $t): ?>
+                            <option value="<?php echo $t; ?>" <?php echo cp_selected($t, $timezone)?>><?php echo $t; ?></option>
                         <?php endforeach; ?>
                     </select>
                     <div class="clear"></div>

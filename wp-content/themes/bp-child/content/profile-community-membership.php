@@ -54,7 +54,7 @@ if(!defined('ABSPATH'))
                         ?>
                     </div>
                     <div class="td td-action">
-                        <a href="?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn grey-delete-btn icon-btn leave-community-link"><span class="p"></span><span class="simple_tooltip radius6">Remove Membership<span></span></span></a>
+                        <a href="?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn leave-community-link"><span class="p"></span><span class="simple_tooltip radius6">Remove Membership<span></span></span></a>
                     </div>
                     <div class="clear"></div>
                 </div>

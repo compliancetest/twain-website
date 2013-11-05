@@ -48,10 +48,12 @@ if(!defined('ABSPATH'))
                         <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
                         <p>
                             
-                                <input type="file" name="file" id="file" class="left input-file" /><br />
-                                <a href="#" class="action-btn submit-btn process-btn"><span class="p"></span><span class="t">Upload Image</span></a>
+                                <input type="file" name="file" id="file" class="left input-file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />
+                                <div class="clear"></div>
+                                <br />                                                                
+                                <a href="#" class="action-btn submit-btn upload-btn"><span class="p"></span><span class="t">Upload Image</span></a>
                                 <?php if ( bp_get_user_has_avatar($current_user->ID) ){ ?>
-                                <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete-avatar')?>" class="action-btn delete-btn left15"><span class="p"></span><span class="t">Delete My Avatar</span></a>
+                                <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete-avatar')?>" class="action-btn delete-btn icon-btn left15"><span class="p"></span><span class="t">Delete My Avatar</span></a>
                                 <?php } ?>
                                 <input type="hidden" name="action" id="action" value="bp_avatar_upload" />
                                 <input type="hidden" name="upload" id="action" value="<?php _e( 'Upload Image', 'buddypress' ); ?>" />

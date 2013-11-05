@@ -94,13 +94,13 @@ $esb = new ManageESB();
                               <a href="/my-transaction-log?suite=<?php echo $suite->suite_id?>&product=<?php echo $crow->product_id?>" class="action-btn view-log-btn icon-btn"><span class="p"></span>
                                   <span class="simple_tooltip radius6">View Log<span></span></span>
                               </a>
-                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>&id=<?php echo $crow->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn grey-edit-btn edit-plan-btn icon-btn"><span class="p"></span>
+                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>&id=<?php echo $crow->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn edit-plan-btn icon-btn"><span class="p"></span>
                                   <span class="simple_tooltip radius6">Edit Plan<span></span></span>
                               </a>
-                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('delete-plan')?>&id=<?php echo $crow->id?>" onclick="return confirm('Are you sure you want to delete this plan?')" class="action-btn grey-delete-btn icon-btn"><span class="p"></span>
+                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('delete-plan')?>&id=<?php echo $crow->id?>" onclick="return confirm('Are you sure you want to delete this plan?')" class="action-btn delete-btn icon-btn left5"><span class="p"></span>
                                   <span class="simple_tooltip radius6">Delete Plan<span></span></span>
                               </a>                              
-                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-grey-btn icon-btn">
+                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-grey-btn icon-btn left5">
                                   <span class="p"></span>
                                   <span class="simple_tooltip radius6">Certify<span></span></span>
                               </a>

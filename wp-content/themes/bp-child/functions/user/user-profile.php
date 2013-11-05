@@ -53,6 +53,9 @@ function cp_user_detail_edit()
     update_user_meta($user_id, 'phone_number', $_POST['phone_number']);
     update_user_meta($user_id, 'description', htmlentities($_POST['biography']));
     
+    //Timezone
+    update_user_meta($user_id, 'timezone', htmlentities($_POST['timezone']));
+    
     //Update User Name
     //$uname = explode(' ', $uname);
     wp_update_user( array ('ID' => $user_id, 'first_name' => $first_name, 'last_name' => $last_name, 'display_name' => $first_name /*. " " . $last_name*/)) ;

@@ -69,7 +69,7 @@ if($filterCategory)
         <?php
             $priorities = $ct_ticket_priority->getPriorities('sort_number', 'desc');
             foreach($priorities as $row){
-                ?><span class="<?php echo sanitize_title($row->priority)?>"><span></span> <?php echo $row->priority?></span><?php
+                ?><span class="<?php echo sanitize_title($row->priority)?>"><span class="ticket-priority ticket-priority-<?php echo sanitize_title($row->priority)?>"></span><b><?php echo $row->priority?></b></span><?php
             }
         ?>
     </div>
@@ -124,6 +124,14 @@ if($filterCategory)
                                 ?>
                             </div>
                             <div class="td td-ticket-subject">
+                                <?php 
+                                    if($ticket->status_id == TICKET_STATUS_SOLVED)
+                                    {
+                                        echo "<span class='ticket-status-solved-label'></span>";
+                                    }else{
+                                        echo "<span class='ticket-priority ticket-priority-" . sanitize_title($ticket->priority_title) . "'></span>";
+                                    }
+                                ?>
                                 <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo $ticket->title?></a>
                             </div>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'm/d/y H:i') ?></div>

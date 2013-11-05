@@ -88,8 +88,8 @@ get_header();
                                <div class="td td-date"><?php echo formatDate($claim->last_updated)?></div>
                                <div class="td td-audit"><?php //echo $claim->audit?></div>
                                <div class="td td-action">
-                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn blue-edit-btn icon-btn edit-claim-btn"><span class="p"></span></a>
-                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn icon-btn edit-claim-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Claim<span></span></span></a>
+                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn delete-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Delete Claim<span></span></span></a>
                                </div>
                                <div class="clear"></div>
                            </div>
