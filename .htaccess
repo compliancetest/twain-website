@@ -17,4 +17,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
 </IfModule>
 
+# adding test changes
+
 # END WordPress
