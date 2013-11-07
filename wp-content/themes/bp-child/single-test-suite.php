@@ -330,7 +330,7 @@ Template Name Posts: Test Suite
                                 <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span>
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter ">
-                                <?php echo get_post_meta($row->ID ,'published', true)?>
+                                <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>

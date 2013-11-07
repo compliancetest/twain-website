@@ -206,9 +206,7 @@
                 });        
             }
 
-            $("#timezone option").filter(function() {
-               return $(this).val() == timezoneText.attr('data-value');
-            }).prop('selected', true);
+            $("#timezone").val(timezoneText.attr('data-value'));
            timezoneText.hide();
            $("#timezone").show();
 

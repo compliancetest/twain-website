@@ -150,7 +150,7 @@ $testsuites = $get_posts->get_posts();
                             </div>           
                             <div class="grid_cell width20P tocenter">
                             <?php                            
-                                echo date('M Y', strtotime($issueDate));
+                                echo formatDate(strtotime($issueDate), 'M Y');
                             ?>
                             </div>
                             <div class="grid_cell width15P tocenter">

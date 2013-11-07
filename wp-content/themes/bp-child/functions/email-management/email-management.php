@@ -734,7 +734,12 @@ function cp_send_email($to, $template_name, $data = array())
     $phpmailer->Subject = $emailTitle;
     $phpmailer->Body = $emailContent;
     
-    return $phpmailer->Send();    
+    
+    try{
+        return $phpmailer->Send();    
+    }catch(Exception $e){
+        return false;
+    }
 }
 
 function cp_send_email_to_admin($template_name, $data = array())

@@ -7,6 +7,7 @@ add_action('bp_groups_admin_meta_boxes', 'add_terms_and_license_metabox_to_group
 function add_terms_and_license_metabox_to_group()
 {
     add_meta_box( 'bp_group_terms_and_license', _x( 'Terms and Conditions, License Agreement', 'group admin edit screen', 'buddypress' ), 'bp_groups_admin_edit_metabox_terms_and_license', get_current_screen()->id, 'normal', 'core' );    
+    add_meta_box( 'bp_group_mailchimp_list', _x( 'MailChimp List', 'group admin edit screen', 'buddypress' ), 'bp_groups_admin_edit_mailchimp_list', get_current_screen()->id, 'side', 'core' );    
     
 }
 function bp_groups_admin_edit_metabox_terms_and_license($item)
@@ -24,6 +25,20 @@ function bp_groups_admin_edit_metabox_terms_and_license($item)
     <p><textarea cols="30" rows="5" name="obligation_for_claim" style="width: 100%;" id="obligation_for_claim"><?php echo $obligation?></textarea></p>
     
     <?php
+}
+function bp_groups_admin_edit_mailchimp_list($item)
+{
+    $mailchimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+    $mailchimp_list = new mailchimp_lists($mailchimp);
+    $lists = $mailchimp_list->getList();
+    $list_id = groups_get_groupmeta($item->id, 'community_mailchimp_list_id');
+    ?>
+    <h4>Select a List</h4>        
+    <?php
+    foreach($lists['data'] as $list)
+    {
+        ?><p><input type="radio" name="community_mailchimp_list_id" value="<?php echo $list['id']?>" <?php echo $list['id'] == $list_id ? 'checked="checked"' : ''?> /> <label><?php echo $list['name']?></label></p><?php
+    }
 }
 
 //Save Terms and License Agreements
@@ -47,8 +62,11 @@ function save_group_terms_and_license($group_id)
         groups_update_groupmeta($group_id, 'notification_email_of_changes', $_POST['notification_email_of_changes']);
     }
     
-    
-    
+    //Save Mail Chimp ID
+    if(isset($_POST['community_mailchimp_list_id']))
+    {
+        groups_update_groupmeta($group_id, 'community_mailchimp_list_id', $_POST['community_mailchimp_list_id']);
+    }
 }
 
 function flushMessages($class = '')
@@ -410,4 +428,56 @@ function cp_get_forum_title($title, $forum_id)
     $post = get_post( $forum_id );
     
     return apply_filters("the_title", $post->post_title);
+}
+
+//Add user to subscribe list when user join the group
+add_filter('groups_join_group', 'subscribe_user_to_community_list', 10, 2);
+function subscribe_user_to_community_list($group_id, $user_id)
+{
+    $list_id = groups_get_groupmeta($group_id, 'community_mailchimp_list_id');
+    //Integrate User to Mailchimp
+    $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+    $mailChimpList = new Mailchimp_Lists($mailChimp);
+    $user = get_userdata($user_id);
+    try{
+        $result = $mailChimpList->subscribe($list_id, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name));        
+    }catch(Exception $e){
+        
+    }
+    
+}
+
+//Add user to subscribe list when user join the group
+add_filter('groups_membership_accepted', 'subscribe_user_to_community_list1', 10, 2);
+function subscribe_user_to_community_list1($user_id, $group_id)
+{
+    $list_id = groups_get_groupmeta($group_id, 'community_mailchimp_list_id');
+    //Integrate User to Mailchimp
+    $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+    $mailChimpList = new Mailchimp_Lists($mailChimp);
+    $user = get_userdata($user_id);
+    try{
+        $result = $mailChimpList->subscribe($list_id, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name));        
+    }catch(Exception $e){
+        
+    }
+    
+}
+
+//remove user to subscribe list when user join the group
+add_filter('groups_leave_group', 'unsubscribe_user_to_community_list', 10, 2);
+add_filter('groups_remove_member', 'unsubscribe_user_to_community_list', 10, 2);
+function unsubscribe_user_to_community_list($group_id, $user_id)
+{
+    $list_id = groups_get_groupmeta($group_id, 'community_mailchimp_list_id');
+    //Integrate User to Mailchimp
+    $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+    $mailChimpList = new Mailchimp_Lists($mailChimp);
+    $user = get_userdata($user_id);
+    try{
+        $result = $mailChimpList->unsubscribe($list_id, array('email' => $user->user_email));    
+    }catch(Exception $e){
+        
+    }
+    
 }

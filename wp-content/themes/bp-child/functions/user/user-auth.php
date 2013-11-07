@@ -112,6 +112,11 @@ function cp_activate_user()
     
     if($user)
     {
+        //Integrate User to Mailchimp
+        $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+        $mailChimpList = new Mailchimp_Lists($mailChimp);
+        $result = $mailChimpList->subscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name));
+        
         $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0, user_activation_key='' WHERE ID =" . $user->ID);
         $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
                       VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/{$user->user_login}/','{$current_date}','0')");
@@ -124,6 +129,7 @@ function cp_activate_user()
 
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'user_verify_success', $data);
         cp_send_email_to_admin('user_verify_success_admin', $data);
+        
         
         //Make User Login
         wp_set_auth_cookie($user->ID);

@@ -57,7 +57,7 @@ if(!defined('ABSPATH'))
                 </div>
                 <div class="grid-row field-row">
                     <div class="grid-cell width30P"><label>Timezone settings</label></div>
-                    <div data-value="Europe/London" class="grid-cell timezone-text" data-type="select"><?php echo $timezone?></div>
+                    <div class="grid-cell timezone-text" data-type="select" data-value="<?php echo $timezone?>"><?php echo $timezone?></div>
                     <?php $timezone_list = DateTimeZone::listIdentifiers(DateTimeZone::ALL); ?>
                     <select name="timezone" id="timezone" class="select" style="display: none;">
                         <?php foreach($timezone_list as $t): ?>

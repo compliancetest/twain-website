@@ -9,6 +9,8 @@ if(!defined('CHILD_TEMPLATE_DIRECTORY'))
 if(!defined('GOOGLE_API_KEY'))
     define('GOOGLE_API_KEY', 'AIzaSyBwGPBjQXOTbPlzPGIFF7QHwX6VdH4mufE' );
 
+if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
+    define('DEFAULT_MAILCHIMP_LIST_ID', '5af09ce467');
     
 //Session Start
 add_action('init', 'cp_session_start');
@@ -104,6 +106,8 @@ require_once(THE_FUNCTION . "/test-data/index.php");
 //Trigger Message
 require_once(THE_FUNCTION . "/message.php");
 
+//Include Mailchimp
+require_once(THE_FUNCTION . "/Mailchimp/Mailchimp.php");
  
 /* 
  * Loads the Options Panel
@@ -477,12 +481,21 @@ function getFilterParam($name)
 
 
 function formatDate($date, $format = 'm/d/Y')
-{
+{    
     if(is_numeric($date))
-        $date = date($format, $date);
+        $date = new DateTime(date("Y-m-d H:i:s", $date));
     else
-        $date = date($format, strtotime($date));
-    return $date;
+        $date = new DateTime($date);
+    
+    $user_id = get_current_user_id();
+    if($user_id && ($timezone = get_user_meta($user_id, 'timezone', true)))
+    {        
+    
+        $dateTimeZone = new DateTimeZone($timezone);                        
+        $date->setTimezone($dateTimeZone);        
+    }
+    
+    return $date->format($format);    
 }
 
 
@@ -817,4 +830,14 @@ function cp_get_user_display_name($user)
     
     //Now only show user first name
     return $user->first_name;
+}
+
+/**
+* Get Mailchimp API KEY from Mailchimp For WP Plugin
+* 
+*/
+function get_mailchimp_api_key()
+{
+    $options = get_option('mc4wp');
+    return $options['api_key'];
 }
