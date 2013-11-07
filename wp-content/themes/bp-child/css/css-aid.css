@@ -1922,13 +1922,14 @@ tr {
     float: left;
     line-height: 12px;
     padding: 2px 5px 2px 25px;
+    background: url(../images/file-type-simple.png) no-repeat 0 0;
 }
 .custom-file-tag .file-label-oneline{
-    padding: 2px 5px;
+/*    padding: 2px 5px;*/
     line-height: 24px;
 }
 .custom-file-tag .file-type-image{
-    background: url(../images/file-type-doc.png) no-repeat 0 0;
+    background: url(../images/file-type-image.png) no-repeat 0 0;
 }
 .custom-file-tag .file-type-doc{
     background: url(../images/file-type-doc.png) no-repeat 0 0;
