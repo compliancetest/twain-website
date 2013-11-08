@@ -45,7 +45,7 @@ get_header( 'buddypress' );
 
 		<?php do_action( 'bp_before_directory_groups' ); ?>
 
-		<form action="" method="post" id="groups-directory-form" class="dir-form">            
+		<form action="" method="post" id="groups-directory-form">            
 			<?php do_action( 'bp_before_directory_groups_content' ); ?>
             <div class="column">
 			    
@@ -70,13 +70,12 @@ get_header( 'buddypress' );
 				    </ul>
 			    </div>
                 <div class="clear"></div>-->
-
-			<?php do_action( 'bp_before_groups_loop' ); ?>
+			    <?php do_action( 'bp_before_groups_loop' ); ?>
 
                 <?php if ( bp_has_groups( bp_ajax_querystring( 'groups' ) ) ) : ?>
 
                     <?php do_action( 'bp_before_directory_groups_list' ); ?>
-                    <div class="grid dark_gray_txt">
+                    <div class="grid dark_gray_txt" id="groups-dir-list">
                         <div class="grid_head grid_head_border">                        
                             <div class="grid_cell nopaddingtop width50P">Community Name</div>
                             <div class="grid_cell nopaddingtop width15P tocenter">Test Suites</div>
@@ -84,7 +83,7 @@ get_header( 'buddypress' );
                             <div class="grid_cell nopaddingtop width15P tocenter">Compliant Products</div>                        
                             <div class="clear"></div>                        
                         </div>
-                        <div class="grid_body">
+                        <div class="grid_body" id="groups-list">
                             <?php while ( bp_groups() ) : bp_the_group(); ?>
                                 <div class="grid_row grid_row_border">
                                     <div class="grid_cell nopaddingtop width50P">
@@ -97,14 +96,20 @@ get_header( 'buddypress' );
                                         </div>
                                         <div class="clear"></div>
                                     </div>
-                                    <div class="grid_cell nopaddingtop width15P tocenter">
-                                        <?php 
-                                            $suites = getCommunityTestSuites(bp_get_group_id());                                             
-                                            echo count($suites);
-                                        ?>
+                                    <div class="grid_cell width50P">
+                                        <div class="grid_cell nopaddingtop width30P tocenter">
+                                            <?php 
+                                                $suites = getCommunityTestSuites(bp_get_group_id());                                             
+                                                echo count($suites);
+                                            ?>
+                                        </div>
+                                        <div class="grid_cell nopaddingtop width40P tocenter"><?php bp_group_total_members(); ?></div>
+                                        <div class="grid_cell nopaddingtop width30P tocenter"><?php echo getCommunityProductsCount(bp_get_group_id()) ?></div>                        
+                                        <div class="clear space5"></div>
+                                        <div class="action">
+                                        <?php do_action( 'bp_directory_groups_actions' ); ?>
+                                        </div>
                                     </div>
-                                    <div class="grid_cell nopaddingtop width20P tocenter"><?php bp_group_total_members(); ?></div>
-                                    <div class="grid_cell nopaddingtop width15P tocenter"><?php echo getCommunityProductsCount(bp_get_group_id()) ?></div>                        
                                     <div class="clear"></div>
                                 </div>
                             <?php endwhile; ?>

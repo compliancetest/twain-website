@@ -5206,6 +5206,21 @@ body #bbpress-forums{
     float: left;
     margin-top: 8px;
 }
+#groups-list .grid_row{    
+    position: relative;
+}
+#groups-list a.group-button{    
+    float: right;    
+    padding: 10px 18px;
+    display: block;
+    text-align: center;
+    font-size: 14px;
+/*    font-weight: normal;*/
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
 .container p.search_result_label{
     font-size: 18px;
     color: #1f5aa4;
