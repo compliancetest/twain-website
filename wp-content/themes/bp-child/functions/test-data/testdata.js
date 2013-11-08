@@ -270,9 +270,9 @@ function afterJsonRender()
     var maxWidth = jQuery('#create_profile_panel table:eq(0)').width();
     
     //Resize The box width
-    if(jQuery('#edit-profile-box').width() < maxWidth + 40 + 22)
+    if(jQuery('#edit-profile-box').width() < maxWidth + 20 + 22)
     {
-        jQuery('#edit-profile-box').width(maxWidth + 40 + 22);                
+        jQuery('#edit-profile-box').width(maxWidth + 20 + 22);                
         jQuery('.mask-wrapper').width(jQuery(document).width());
         jQuery('.mask-wrapper').height(jQuery(document).height());           
     }        

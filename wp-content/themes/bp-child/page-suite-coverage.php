@@ -14,11 +14,13 @@ $esb = new ManageESB();
 		<?php get_sidebar('dashboard'); ?>
 	</div>
 	<div class="four_fifths right container">
-        <div class="column">
-            <?php if(can_create_suite()){ ?>
-            <a href="/add-new-test-suite" class="action-btn add-new-btn"><span class="p"></span><span class="t">Add New Test Suite</span></a>
-            <div class="clear space15"></div>
-            <?php } ?>
+        <div class="column">            
+            <div class="page-description">
+            <?php if (have_posts()) while (have_posts()) : the_post(); 
+                the_content();
+                endwhile;
+            ?>
+            </div>
            <?php foreach($mysuites as $suite){ ?>
            <?php
                $caseStatus = $esb->getCaseStatus($suite->esb_user_id, $suite->suite_id);
@@ -111,7 +113,7 @@ $esb = new ManageESB();
                    <?php } ?>
                    </div>
                    <?php if(is_customer($suite->suite_id)){ ?>
-                   <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn process-btn add-plan-btn"><span class="p"></span><span class="t">New Test Plan</span></a>
+                   <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn add-plan-btn"><span class="p"></span><span class="t">New Test Plan</span></a>
                    <?php } ?>
                </div>
            </div>           

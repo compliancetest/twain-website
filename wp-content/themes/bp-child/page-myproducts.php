@@ -37,7 +37,7 @@ get_header();
     <div class="four_fifths right container"> <!--Temporary -->
         <div class="column">
            <?php if(can_create_product_and_service()){ ?>
-           <a href="/add-new-product-and-service" class="action-btn process-btn"><span class="p"></span><span class="t">Add new Product or Service</span></a>
+           <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Product or Service</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
            <?php } ?>

@@ -16,6 +16,7 @@ get_header();
 							<ul>
 								<li><a id="choose_one" class="current_chosen">Test Suites</a>
 									<ul>
+                                        <li><a id="communities">Communities</a></li>
 										<li><a id="test-suite">Test Suites</a></li>
 										<li><a id="product-service">Certified Products</a></li>
 									</ul>

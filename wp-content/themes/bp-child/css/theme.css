@@ -5170,11 +5170,13 @@ body #bbpress-forums{
 }
 
 /*** Search Form ***/
+#search-groups-form,
 .searchform{
     position: relative;
     background: #fff;
     float: left;
 }
+#search-groups-form #groups_search,
 .searchform .keyword{
     border: solid 2px #D8D8D8; 
     border-radius:8px;
@@ -5184,6 +5186,7 @@ body #bbpress-forums{
     width: 255px;    
 
 }
+#search-groups-form #groups_search_submit,
 .searchform .search-button {
     width: 35px !important;
     height: 40px;
@@ -5196,10 +5199,12 @@ body #bbpress-forums{
     display: block;
     box-shadow: none;
     padding: 0;
+    margin: 0;
+    text-indent: -9999px;
 }
 #clear-search-filter-btn{
-    float: right;
-    margin-top: 12px;
+    float: left;
+    margin-top: 8px;
 }
 .container p.search_result_label{
     font-size: 18px;

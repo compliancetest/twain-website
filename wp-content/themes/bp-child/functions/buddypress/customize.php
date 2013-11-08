@@ -481,3 +481,48 @@ function unsubscribe_user_to_community_list($group_id, $user_id)
     }
     
 }
+
+
+//Getting Community Test Suite Counts
+function getCommunityTestSuites($community_id)
+{
+    global $wpdb;
+    
+    $args = array(
+        'post_type' => 'test-suite', 
+        'posts_per_page' => -1,
+        'tax_query' => array('relation' => 'and'),
+        'meta_query' => array(
+            array(
+                'key' => 'community_id',
+                'value' => $community_id,
+                'compare' => '='
+            )
+        )
+    );
+    
+    $testsuites = get_posts( $args );
+    
+    return $testsuites;
+}
+
+
+//Getting Community Products&Service Counts
+function getCommunityProductsCount($community_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT 
+                              COUNT(DISTINCT (p.product_id)) 
+                            FROM
+                              wp_test_plans AS p 
+                              LEFT JOIN wp_postmeta AS m 
+                                ON p.suite_id = m.post_id 
+                            WHERE m.meta_key = 'community_id' 
+                              AND m.meta_value = %d 
+                            GROUP BY m.meta_value ", $community_id);
+    
+    $count = $wpdb->get_var($query);
+    
+    return !$count ? 0 : $count;
+}

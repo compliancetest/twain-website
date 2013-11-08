@@ -189,7 +189,7 @@
                             <?php foreach($profileTypes as $row) {?>
                             <div class="tr">
                                <div class="td td-profile-title">
-                                <?php echo $row->title?><br />
+                                <?php echo $row->title?>
                                 <?php
                                     $pJSON = json_decode(base64_decode($row->schema));
                                     if($pJSON->Version)
@@ -197,9 +197,9 @@
                                         $version = array();
                                         foreach(get_object_vars($pJSON->Version) as $k=>$v)      
                                         {
-                                            $version[] = $k . " v" . $v;
+                                            $version[] = $v;
                                         }
-                                        echo "<b>Version:</b> " . implode(", ", $version);
+                                        echo " v" . implode(".", $version);
                                     }
                                 ?>
                                </div>

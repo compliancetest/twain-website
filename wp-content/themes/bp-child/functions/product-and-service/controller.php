@@ -148,3 +148,4 @@ function deleteProductService()
     wp_redirect($return);
     exit;
 }
+

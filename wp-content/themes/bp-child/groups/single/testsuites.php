@@ -45,8 +45,8 @@ $testsuites = get_posts( $args );
 $roles = array();
 ?>
 <div id="testsuites-container" class="tab-content white_bcg">
-    <?php if(count($testsuites) > 0) {?> 
-    <div class="column four_fifths left padding20-10">
+    <?php if(count($testsuites) > 0) {?>     
+    <div class="column four_fifths left padding20-10">        
         <div class="grid dark_gray_txt" id="test_suites_tab_grid">
             <div class="grid_head grid_head_border">
                 <div class="padding10 nopaddingtop">
@@ -116,6 +116,7 @@ $roles = array();
                 
             </div>
         </div>
+        
     </div>
     <div class="column fifth right expendables">
         <form name="form_filter" id="form_filter" action="<?php echo bp_get_group_permalink() ?>" method="get">
@@ -176,6 +177,12 @@ $roles = array();
         </form>
     </div>
     <div class="clear"></div>
+    <?php if(can_create_suite()){ ?>
+    <div class="column">
+    <a href="/add-new-test-suite" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
+    <div class="clear"></div>
+    </div>
+    <?php } ?>
     <div class="loading"></div>
     <?php }else{ ?>
     <p class="column">No Data Found!</p>

@@ -9,7 +9,8 @@ if(!defined('ABSPATH'))
 <div class="column left three_fifths nopadding">
     <div class="grid-box table-box" id="my_community_memberships">
         <div class="grid-box-header">
-            <h5>My Community Memberships</h5>
+            <h5 class="left">My Community Memberships</h5>
+            <a class="gbh-btn gbh-btn-add right" href="/communities">Add<span class="simple_tooltip radius6">View Communities<span></span></span></a>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">

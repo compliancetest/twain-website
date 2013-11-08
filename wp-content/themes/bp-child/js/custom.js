@@ -341,6 +341,9 @@ jQuery(document).ready(function($) {
             jQuery(this).attr('action', '/test-suites');
         }else if(search_value == 'product-service'){
             jQuery(this).attr('action', '/products-and-services');
+        }else if(search_value == 'communities'){
+            jQuery(this).attr('action', '/communities');
+            jQuery(this).find('#q').attr('name', 's');
         }
         
         return true;

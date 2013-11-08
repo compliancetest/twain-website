@@ -19,7 +19,7 @@ get_header( 'buddypress' ); ?>
 			    <h2 class="nomarginbottom left">
                     <?php _e( 'Create a Community', 'buddypress' ); ?> 
                 </h2>
-                <a class="action-btn process-btn left15" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ); ?>"><?php _e( 'Groups Directory', 'buddypress' ); ?></a>
+                <a class="right top10" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ); ?>"><b><?php _e( 'Communities', 'buddypress' ); ?></b></a>
                 <div class="clear"></div>
             </div>
 			<?php do_action( 'bp_before_create_group' ); ?>
