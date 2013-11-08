@@ -10918,9 +10918,9 @@
 			renderHtml: function (data, context) {
 				if (data.readOnly()) {
 					if (data.value()) {
-						return '<span class="json-boolean-true">True</span>';
+						return '<span class="json-boolean-true">true</span>';
 					} else {
-						return '<span class="json-boolean-false">False</span>';
+						return '<span class="json-boolean-false">false</span>';
 					}
 				}
 				var result = "";
