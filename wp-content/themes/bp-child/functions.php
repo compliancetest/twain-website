@@ -480,7 +480,7 @@ function getFilterParam($name)
 }
 
 
-function formatDate($date, $format = 'm/d/Y')
+function formatDate($date, $format = 'Y-m-d')
 {    
     if(is_numeric($date))
         $date = new DateTime(date("Y-m-d H:i:s", $date));

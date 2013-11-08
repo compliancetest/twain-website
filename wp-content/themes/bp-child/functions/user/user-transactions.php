@@ -68,7 +68,7 @@ function cp_edit_transaction_log(){
                    <?php echo $row->CONVERSATION_ID ?>
                </div>
                <div class="td td-date tocenter td-fixed">                   
-                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'm/d/y H:i:s')?><br />
+                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />
                </div>           
                <!--<div class="td td-to td-fixed"><?php echo $row->TO_PARTY_ID?></div>-->
                <div class="clear"></div> 

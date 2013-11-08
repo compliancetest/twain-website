@@ -274,7 +274,7 @@ if($filterCustomer){
                                    <?php echo $row->CONVERSATION_ID ?>                                   
                                </div>
                                <div class="td td-date tocenter">
-                                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'm/d/y H:i:s')?><br />                                   
+                                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />                                   
                                </div>                               
                                <div class="clear"></div> 
                                <?php if(isset($messages[$row->ID])){ ?>                               
@@ -307,7 +307,7 @@ if($filterCustomer){
                                                        <a href="#" data-id="<?php echo $message->ID ?>" class="view-message-validation-log">View Log</a>                                   
                                                    </div>
                                                    <div class="td td-message-date">
-                                                       <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'm/d/y H:i:s')?>                                                       
+                                                       <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
                                                    </div>
                                                    <div class="td td-message-view">                                                   
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
