@@ -10,7 +10,8 @@ $row = $wpdb->get_row($query);
 
 if(!$row)
 {
-    echo 'Invalid Request';
+    header('HTTP/1.0 404 Not Found');
+    exit();
 }else{
     header('content-type: text/json');
     echo base64_decode($row->content);
