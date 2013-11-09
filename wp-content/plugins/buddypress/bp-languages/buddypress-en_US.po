@@ -2,16 +2,17 @@
 # This file is distributed under the same license as the BuddyPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Compliancetest-Buddypress\n"
+"Project-Id-Version: ComplianceTest BuddyPress\n"
 "Report-Msgid-Bugs-To: http://wppolyglots.wordpress.com\n"
 "POT-Creation-Date: 2013-05-15 18:35:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-11-08 17:17+0800\n"
+"PO-Revision-Date: 2013-11-09 15:46+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: ComplianceTest team <LL@li.org>\n"
 "X-Generator: Poedit 1.5.7\n"
+"Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
 
 #: bp-activity/bp-activity-actions.php:158
 msgid "Activity deleted successfully"
@@ -156,6 +157,9 @@ msgid ""
 "example, <code>created_group</code> is used when a group is created and "
 "<code>joined_group</code> is used when a user joins a group."
 msgstr ""
+"<strong>Type</strong> - Each distinct kind of activity has its own type. For "
+"example, <code>created_group</code> is used when a community is created and "
+"<code>joined_group</code> is used when a user joins a community."
 
 #: bp-activity/bp-activity-admin.php:211
 msgid ""
@@ -664,6 +668,13 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"%1$s mentioned you in the community \"%2$s\":\n"
+"\n"
+"\"%3$s\"\n"
+"\n"
+"To view and respond to the message, log in and visit: %4$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-activity/bp-activity-notifications.php:87
 msgid ""
@@ -777,12 +788,12 @@ msgstr ""
 
 #: bp-activity/bp-activity-template.php:1087
 msgid "Group logo"
-msgstr ""
+msgstr "Community logo"
 
 #: bp-activity/bp-activity-template.php:1090
 #: bp-groups/bp-groups-admin.php:1262 bp-groups/bp-groups-template.php:494
 msgid "Group logo of %s"
-msgstr ""
+msgstr "Community logo of %s"
 
 #: bp-activity/bp-activity-template.php:1101
 msgid "Profile picture of the author of the site %s"
@@ -878,11 +889,11 @@ msgstr ""
 #. Group Activity"
 #: bp-activity/feeds/bp-activity-group-feed.php:27
 msgid "Group Activity"
-msgstr ""
+msgstr "Community Activity"
 
 #: bp-activity/feeds/bp-activity-group-feed.php:30
 msgid "%s - Group Activity Feed"
-msgstr ""
+msgstr "%s - Community Activity Feed"
 
 #. translators: Mentions RSS title - "[Site Name] | [Displayed User Name] |
 #. Mentions"
@@ -1240,7 +1251,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/create.php:105
 #: bp-themes/bp-default/groups/create.php:112
 msgid "Group Forums"
-msgstr ""
+msgstr "Cmmunity Forums"
 
 #: bp-core/admin/bp-core-components.php:349
 msgid "BuddyPress Forums are retired. Use %s."
@@ -1284,6 +1295,9 @@ msgid ""
 "direct posting, favoriting and @mentions, all with full RSS feed and email "
 "notification support."
 msgstr ""
+"Global, personal, and community activity streams with threaded commenting, "
+"direct posting, favoriting and @mentions, all with full RSS feed and email "
+"notification support."
 
 #: bp-core/admin/bp-core-components.php:376 bp-groups/bp-groups-loader.php:83
 msgid "User Communities"
@@ -1298,11 +1312,12 @@ msgstr ""
 
 #: bp-core/admin/bp-core-components.php:380
 msgid "Group Forums (Legacy)"
-msgstr ""
+msgstr "Community Forums (Legacy)"
 
 #: bp-core/admin/bp-core-components.php:381
 msgid "Group forums allow for focused, bulletin-board style conversations."
 msgstr ""
+"Community forums allow for focused, bulletin-board style conversations."
 
 #: bp-core/admin/bp-core-components.php:385
 msgid "Record activity for new posts and comments from your site."
@@ -1422,6 +1437,9 @@ msgid ""
 "relevant profile fields that will show on each users profile.</br></br>Note: "
 "Any fields in the first group will appear on the signup page."
 msgstr ""
+"Your users will distinguish themselves through their profile page. Create "
+"relevant profile fields that will show on each users profile.</br></br>Note: "
+"Any fields in the first community will appear on the signup page."
 
 #: bp-core/admin/bp-core-schema.php:244
 msgctxt "First field-group name"
@@ -1463,11 +1481,12 @@ msgstr ""
 
 #: bp-core/admin/bp-core-settings.php:194
 msgid "Enable group creation for all users"
-msgstr ""
+msgstr "Enable community creation for all users"
 
 #: bp-core/admin/bp-core-settings.php:195
 msgid "Administrators can always create groups, regardless of this setting."
 msgstr ""
+"Administrators can always create communities, regardless of this setting."
 
 #: bp-core/admin/bp-core-settings.php:226
 msgid "Attempt to save a new config file."
@@ -1578,11 +1597,11 @@ msgstr ""
 
 #: bp-core/bp-core-admin.php:279
 msgid "Group Creation"
-msgstr ""
+msgstr "Community Creation"
 
 #: bp-core/bp-core-admin.php:288
 msgid "Legacy Group Forums"
-msgstr ""
+msgstr "Legacy Community Forums"
 
 #: bp-core/bp-core-admin.php:291
 msgid "bbPress Configuration"
@@ -1694,7 +1713,7 @@ msgstr ""
 
 #: bp-core/bp-core-admin.php:430
 msgid "Group Management"
-msgstr ""
+msgstr "Community Management"
 
 #: bp-core/bp-core-admin.php:433
 msgid "Get More Done Quickly"
@@ -1710,6 +1729,9 @@ msgid ""
 "BuddyPress installation. Delete groups, edit group details, modify "
 "memberships, and more, with just a few clicks."
 msgstr ""
+"The new %s makes it easy to handle large numbers of communities on your "
+"BuddyPress installation. Delete communities, edit community details, modify "
+"memberships, and more, with just a few clicks."
 
 #: bp-core/bp-core-admin.php:450
 msgid "Under the Hood"
@@ -1755,6 +1777,9 @@ msgid ""
 "bbPress plugin, is better than ever. Still using bbPress 1.x? Our new "
 "migration tools are field-tested."
 msgstr ""
+"Support for community and sitewide forums, using the latest version of the "
+"bbPress plugin, is better than ever. Still using bbPress 1.x? Our new "
+"migration tools are field-tested."
 
 #: bp-core/bp-core-admin.php:471 bp-core/bp-core-admin.php:598
 msgid "Go to the BuddyPress Settings page"
@@ -1887,7 +1912,7 @@ msgstr ""
 
 #: bp-core/bp-core-buddybar.php:575
 msgid "Random Group"
-msgstr ""
+msgstr "Random Community"
 
 #: bp-core/bp-core-buddybar.php:581
 msgid "Random Site"
@@ -1912,8 +1937,8 @@ msgstr ""
 #: bp-core/bp-core-classes.php:732
 msgid "%d group"
 msgid_plural "%d groups"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d community"
+msgstr[1] "%d communities"
 
 #: bp-core/bp-core-dependency.php:81
 msgid "The current user is being initialized without using $wp->init()."
@@ -1990,7 +2015,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/create.php:18
 #: bp-themes/bp-default/groups/index.php:21
 msgid "Create a Group"
-msgstr "New Community"
+msgstr "Create a Community"
 
 #: bp-core/bp-core-functions.php:204
 msgctxt "Page title for the Activity directory."
@@ -2290,7 +2315,7 @@ msgstr ""
 
 #: bp-core/deprecated/1.5.php:352
 msgid "%1$s mentioned you in the group \"%2$s\""
-msgstr ""
+msgstr "%1$s mentioned you in the community \"%2$s\""
 
 #: bp-core/deprecated/1.6.php:128 bp-core/deprecated/1.6.php:149
 #: bp-groups/bp-groups-template.php:2498 bp-groups/bp-groups-template.php:2520
@@ -2349,6 +2374,7 @@ msgstr ""
 #: bp-forums/bp-forums-screens.php:58 bp-forums/bp-forums-screens.php:63
 msgid "Please pick the group forum where you would like to post this topic."
 msgstr ""
+"Please pick the community forum where you would like to post this topic."
 
 #: bp-forums/bp-forums-screens.php:188 bp-groups/bp-groups-template.php:1690
 #: bp-groups/bp-groups-template.php:1691
@@ -2378,7 +2404,7 @@ msgstr ""
 
 #: bp-forums/bp-forums-template.php:585
 msgid "Group logo for %s"
-msgstr ""
+msgstr "Community logo for %s"
 
 #: bp-forums/bp-forums-template.php:683 bp-groups/bp-groups-template.php:1013
 msgid "%d post"
@@ -2449,6 +2475,8 @@ msgid ""
 "Give each individual group its own discussion forum. Choose this if you'd "
 "like to keep your members' conversations separated into distinct areas."
 msgstr ""
+"Give each individual community its own discussion forum. Choose this if "
+"you'd like to keep your members' conversations separated into distinct areas."
 
 #: bp-forums/deprecated/1.6.php:48 bp-forums/deprecated/1.6.php:148
 #: bp-forums/deprecated/1.7.php:86 bp-forums/deprecated/1.7.php:223
@@ -2464,7 +2492,7 @@ msgstr ""
 #: bp-forums/deprecated/1.6.php:52 bp-forums/deprecated/1.6.php:152
 #: bp-forums/deprecated/1.7.php:90 bp-forums/deprecated/1.7.php:227
 msgid "Group Integration"
-msgstr ""
+msgstr "Community Integration"
 
 #: bp-forums/deprecated/1.6.php:53 bp-forums/deprecated/1.6.php:153
 #: bp-forums/deprecated/1.7.php:91 bp-forums/deprecated/1.7.php:228
@@ -2485,7 +2513,7 @@ msgstr ""
 
 #: bp-forums/deprecated/1.6.php:59
 msgid "Reinstall Group Forums"
-msgstr ""
+msgstr "Reinstall Community Forums"
 
 #: bp-forums/deprecated/1.6.php:78 bp-forums/deprecated/1.7.php:153
 msgid ""
@@ -2552,7 +2580,7 @@ msgstr ""
 
 #: bp-forums/deprecated/1.6.php:159 bp-forums/deprecated/1.7.php:234
 msgid "Install Group Forums"
-msgstr ""
+msgstr "Install Community Forums"
 
 #: bp-forums/deprecated/1.6.php:160 bp-forums/deprecated/1.7.php:235
 msgid "Use Existing Installation"
@@ -2572,7 +2600,7 @@ msgstr ""
 
 #: bp-forums/deprecated/1.7.php:97
 msgid "Uninstall Group Forums"
-msgstr ""
+msgstr "Uninstall Community Forums"
 
 #: bp-forums/deprecated/1.7.php:102 bp-forums/deprecated/1.7.php:240
 msgid "New! Site Wide Forums"
@@ -2584,12 +2612,17 @@ msgid ""
 "group. Choose this if you'd like to have a central forum area for your "
 "members."
 msgstr ""
+"Your site will have central forums that are not isolated to any specific "
+"community. Choose this if you'd like to have a central forum area for your "
+"members."
 
 #: bp-forums/deprecated/1.7.php:104 bp-forums/deprecated/1.7.php:242
 msgid ""
 "You may activate both Group and Site Wide forums, but this may create a poor "
 "experience for your members."
 msgstr ""
+"You may activate both Community and Site Wide forums, but this may create a "
+"poor experience for your members."
 
 #: bp-forums/deprecated/1.7.php:108 bp-forums/deprecated/1.7.php:246
 msgid "Central Discussion Area"
@@ -2604,6 +2637,8 @@ msgid ""
 "Need help deciding between Group Forums and Site Wide Forums? Visit <a href="
 "\"%s\">the BuddyPress codex</a> for more information."
 msgstr ""
+"Need help deciding between Community Forums and Site Wide Forums? Visit <a "
+"href=\"%s\">the BuddyPress codex</a> for more information."
 
 #: bp-friends/bp-friends-actions.php:35
 msgid "Friendship could not be requested."
@@ -2825,11 +2860,11 @@ msgstr ""
 
 #: bp-groups/bp-groups-actions.php:28
 msgid "Sorry, you are not allowed to create groups."
-msgstr ""
+msgstr "Sorry, you are not allowed to create communities."
 
 #: bp-groups/bp-groups-actions.php:50
 msgid "There was an error saving group details. Please try again."
-msgstr ""
+msgstr "There was an error saving community details. Please try again."
 
 #: bp-groups/bp-groups-actions.php:72
 msgid "Please fill in all of the required fields"
@@ -2837,117 +2872,120 @@ msgstr ""
 
 #: bp-groups/bp-groups-actions.php:79 bp-groups/bp-groups-actions.php:106
 msgid "There was an error saving group details, please try again."
-msgstr ""
+msgstr "There was an error saving community details, please try again."
 
 #: bp-groups/bp-groups-actions.php:145
 msgid "%1$s created the group %2$s"
-msgstr ""
+msgstr "%1$s created the community %2$s"
 
 #: bp-groups/bp-groups-actions.php:197
 msgid "There was an error saving the group avatar, please try uploading again."
 msgstr ""
+"There was an error saving the community avatar, please try uploading again."
 
 #: bp-groups/bp-groups-actions.php:199
 msgid "The group avatar was uploaded successfully!"
-msgstr ""
+msgstr "The community avatar was uploaded successfully!"
 
 #: bp-groups/bp-groups-actions.php:223 bp-groups/bp-groups-actions.php:230
 msgid "There was an error joining the group."
-msgstr ""
+msgstr "There was an error joining the community."
 
 #: bp-groups/bp-groups-actions.php:232
 msgid "You joined the group!"
-msgstr ""
+msgstr "You joined the community!"
 
 #: bp-groups/bp-groups-actions.php:258 bp-groups/bp-groups-screens.php:709
 msgid "This group must have at least one admin"
-msgstr ""
+msgstr "This community must have at least one admin"
 
 #: bp-groups/bp-groups-actions.php:261
 msgid "There was an error leaving the group."
-msgstr ""
+msgstr "There was an error leaving the community."
 
 #: bp-groups/bp-groups-actions.php:263 bp-groups/bp-groups-functions.php:313
 msgid "You successfully left the group."
-msgstr ""
+msgstr "You successfully left the community."
 
 #: bp-groups/bp-groups-activity.php:23
 msgid "Created a group"
-msgstr ""
+msgstr "Created a community"
 
 #: bp-groups/bp-groups-activity.php:24
 msgid "Joined a group"
-msgstr ""
+msgstr "Joined a community"
 
 #: bp-groups/bp-groups-activity.php:30
 msgid "New group forum topic"
-msgstr ""
+msgstr "New community forum topic"
 
 #: bp-groups/bp-groups-activity.php:31
 msgid "New group forum post"
-msgstr ""
+msgstr "New community forum post"
 
 #: bp-groups/bp-groups-activity.php:108
 msgid "%1$d new membership requests for the group \"%2$s\""
-msgstr ""
+msgstr "%1$d new membership requests for the community \"%2$s\""
 
 #: bp-groups/bp-groups-activity.php:113
 msgid "Group Membership Requests"
-msgstr ""
+msgstr "Community Membership Requests"
 
 #: bp-groups/bp-groups-activity.php:122 bp-groups/bp-groups-activity.php:127
 msgid "%s requests group membership"
-msgstr ""
+msgstr "%s requests community membership"
 
 #: bp-groups/bp-groups-activity.php:145
 msgid "%d accepted group membership requests"
-msgstr ""
+msgstr "%d accepted community membership requests"
 
 #: bp-groups/bp-groups-activity.php:158
 msgid "Membership for group \"%s\" accepted"
-msgstr ""
+msgstr "Membership for community \"%s\" accepted"
 
 #: bp-groups/bp-groups-activity.php:181
 msgid "%d rejected group membership requests"
-msgstr ""
+msgstr "%d rejected community membership requests"
 
 #: bp-groups/bp-groups-activity.php:194
 msgid "Membership for group \"%s\" rejected"
-msgstr ""
+msgstr "Membership for community \"%s\" rejected"
 
 #: bp-groups/bp-groups-activity.php:217
 msgid "You were promoted to an admin in %d groups"
-msgstr ""
+msgstr "You were promoted to an admin in %d communities"
 
 #: bp-groups/bp-groups-activity.php:230
 msgid "You were promoted to an admin in the group \"%s\""
-msgstr ""
+msgstr "You were promoted to an admin in the community \"%s\""
 
 #: bp-groups/bp-groups-activity.php:253
 msgid "You were promoted to a mod in %d groups"
-msgstr ""
+msgstr "You were promoted to a mod in %d communities"
 
 #: bp-groups/bp-groups-activity.php:266
 msgid "You were promoted to a mod in the group \"%s\""
-msgstr ""
+msgstr "You were promoted to a mod in the community \"%s\""
 
 #: bp-groups/bp-groups-activity.php:290
 msgid "You have %d new group invitations"
-msgstr ""
+msgstr "You have %d new community invitations"
 
 #: bp-groups/bp-groups-activity.php:294
 msgid "Group Invites"
-msgstr ""
+msgstr "Community Invites"
 
 #: bp-groups/bp-groups-activity.php:302
 msgid "You have an invitation to the group: %s"
-msgstr ""
+msgstr "You have an invitation to the community: %s"
 
 #: bp-groups/bp-groups-admin.php:109
 msgid ""
 "This page is a convenient way to edit the details associated with one of "
 "your groups."
 msgstr ""
+"This page is a convenient way to edit the details associated with one of "
+"your communities."
 
 #: bp-groups/bp-groups-admin.php:110
 msgid ""
@@ -2993,16 +3031,22 @@ msgid ""
 "and you can act on groups by using the on-hover action links or the Bulk "
 "Actions."
 msgstr ""
+"You can manage communities much like you can manage comments and other "
+"content. This screen is customizable in the same ways as other management "
+"screens, and you can act on communities by using the on-hover action links "
+"or the Bulk Actions."
 
 #: bp-groups/bp-groups-admin.php:150
 msgid "Group Actions"
-msgstr ""
+msgstr "Community Actions"
 
 #: bp-groups/bp-groups-admin.php:152
 msgid ""
 "Clicking \"Visit\" will take you to the group&#8217;s public page. Use this "
 "link to see what the group looks like on the front end of your site."
 msgstr ""
+"Clicking \"Visit\" will take you to the community&#8217;s public page. Use "
+"this link to see what the community looks like on the front end of your site."
 
 #: bp-groups/bp-groups-admin.php:153
 msgid ""
@@ -3010,6 +3054,9 @@ msgid ""
 "various details about the group, such as its name and description, its "
 "members, and other settings."
 msgstr ""
+"Clicking \"Edit\" will take you to a Dashboard panel where you can manage "
+"various details about the community, such as its name and description, its "
+"members, and other settings."
 
 #: bp-groups/bp-groups-admin.php:154
 msgid ""
@@ -3018,6 +3065,10 @@ msgid ""
 "where you&#8217;ll be asked to confirm the permanent deletion of the group"
 "(s)."
 msgstr ""
+"If you click \"Delete\" under a specific community, or select a number of "
+"communities and then choose Delete from the Bulk Actions menu, you will be "
+"led to a page where you&#8217;ll be asked to confirm the permanent deletion "
+"of the community(ies)."
 
 #: bp-groups/bp-groups-admin.php:169
 msgid "Start typing a username to add a new member."
@@ -3025,23 +3076,24 @@ msgstr ""
 
 #: bp-groups/bp-groups-admin.php:443
 msgid "You cannot remove all administrators from a group."
-msgstr ""
+msgstr "You cannot remove all administrators from a community."
 
 #: bp-groups/bp-groups-admin.php:447
 msgid "An error occurred when trying to update your group details."
-msgstr ""
+msgstr "An error occurred when trying to update your community details."
 
 #: bp-groups/bp-groups-admin.php:449
 msgid "The group has been updated successfully."
-msgstr ""
+msgstr "The community has been updated successfully."
 
 #: bp-groups/bp-groups-admin.php:453
 msgid "The following users could not be added to the group: <em>%s</em>"
-msgstr ""
+msgstr "The following users could not be added to the community: <em>%s</em>"
 
 #: bp-groups/bp-groups-admin.php:457
 msgid "The following users were successfully added to the group: <em>%s</em>"
 msgstr ""
+"The following users were successfully added to the community: <em>%s</em>"
 
 #: bp-groups/bp-groups-admin.php:462
 msgid ""
@@ -3055,7 +3107,7 @@ msgstr ""
 #: bp-groups/bp-groups-admin.php:486 bp-groups/bp-groups-adminbar.php:40
 #: bp-xprofile/bp-xprofile-admin.php:114
 msgid "Edit Group"
-msgstr ""
+msgstr "Edit Community"
 
 #: bp-groups/bp-groups-admin.php:489
 msgid "Add New"
@@ -3068,6 +3120,7 @@ msgstr ""
 #: bp-groups/bp-groups-admin.php:535
 msgid "No group found with this ID. <a href=\"%s\">Go back and try again</a>."
 msgstr ""
+"No community found with this ID. <a href=\"%s\">Go back and try again</a>."
 
 #: bp-groups/bp-groups-admin.php:573
 msgid "Delete Communities"
@@ -3075,7 +3128,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-admin.php:574
 msgid "You are about to delete the following groups:"
-msgstr ""
+msgstr "You are about to delete the following communities:"
 
 #: bp-groups/bp-groups-admin.php:582
 msgid "This action cannot be undone."
@@ -3084,8 +3137,8 @@ msgstr ""
 #: bp-groups/bp-groups-admin.php:609
 msgid "%s group has been permanently deleted."
 msgid_plural "%s groups have been permanently deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s community has been permanently deleted."
+msgstr[1] "%s communities have been permanently deleted."
 
 #: bp-groups/bp-groups-admin.php:638
 msgid "Search all Communities"
@@ -3119,7 +3172,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-admin.php:674
 msgid "Who can invite others to this group?"
-msgstr ""
+msgstr "Who can invite others to this community?"
 
 #: bp-groups/bp-groups-admin.php:677
 #: bp-templates/bp-legacy/buddypress/groups/create.php:89
@@ -3127,7 +3180,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/create.php:96
 #: bp-themes/bp-default/groups/single/admin.php:99
 msgid "All group members"
-msgstr ""
+msgstr "All community members"
 
 #: bp-groups/bp-groups-admin.php:678
 #: bp-templates/bp-legacy/buddypress/groups/create.php:94
@@ -3135,7 +3188,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/create.php:101
 #: bp-themes/bp-default/groups/single/admin.php:104
 msgid "Group admins and mods only"
-msgstr ""
+msgstr "Community admins and mods only"
 
 #: bp-groups/bp-groups-admin.php:679
 #: bp-templates/bp-legacy/buddypress/groups/create.php:99
@@ -3143,7 +3196,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/create.php:106
 #: bp-themes/bp-default/groups/single/admin.php:109
 msgid "Group admins only"
-msgstr ""
+msgstr "Community admins only"
 
 #: bp-groups/bp-groups-admin.php:694
 msgid "Enter a comma-separated list of user logins."
@@ -3178,7 +3231,7 @@ msgstr ""
 #: bp-groups/bp-groups-admin.php:776
 msgctxt "Group member role in group admin"
 msgid "Group Role"
-msgstr ""
+msgstr "Community Role"
 
 #: bp-groups/bp-groups-admin.php:799
 msgid "Administrator"
@@ -3198,7 +3251,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-admin.php:803
 msgid "Remove From Group"
-msgstr ""
+msgstr "Remove From Community"
 
 #: bp-groups/bp-groups-admin.php:824
 msgid "No members of this type"
@@ -3210,7 +3263,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/single/admin.php:360
 #: bp-xprofile/bp-xprofile-admin.php:118
 msgid "Delete Group"
-msgstr ""
+msgstr "Delete Community"
 
 #: bp-groups/bp-groups-admin.php:853
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:32
@@ -3238,7 +3291,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-admin.php:1075
 msgid "No groups found."
-msgstr ""
+msgstr "No communities found."
 
 #: bp-groups/bp-groups-admin.php:1139
 msgid "Public <span class=\"count\">(%s)</span>"
@@ -3307,45 +3360,45 @@ msgstr ""
 
 #: bp-groups/bp-groups-buddybar.php:36
 msgid "Group Settings"
-msgstr ""
+msgstr "Community Settings"
 
 #: bp-groups/bp-groups-buddybar.php:40 bp-groups/bp-groups-loader.php:585
 #: bp-groups/bp-groups-template.php:2586
 msgid "Group Avatar"
-msgstr ""
+msgstr "Community Avatar"
 
 #: bp-groups/bp-groups-classes.php:884
 msgid "Group Mod"
-msgstr ""
+msgstr "Community Mod"
 
 #: bp-groups/bp-groups-classes.php:890 bp-groups/bp-groups-functions.php:121
 msgid "Group Admin"
-msgstr ""
+msgstr "Community Admin"
 
 #: bp-groups/bp-groups-forums.php:104 bp-groups/bp-groups-forums.php:253
 msgid "%1$s replied to the forum topic %2$s in the group %3$s"
-msgstr ""
+msgstr "%1$s replied to the forum topic %2$s in the community %3$s"
 
 #: bp-groups/bp-groups-forums.php:154
 msgid "%1$s started the forum topic %2$s in the group %3$s"
-msgstr ""
+msgstr "%1$s started the forum topic %2$s in the community %3$s"
 
 #: bp-groups/bp-groups-forums.php:206
 msgid "%1$s edited the forum topic %2$s in the group %3$s"
-msgstr ""
+msgstr "%1$s edited the forum topic %2$s in the community %3$s"
 
 #: bp-groups/bp-groups-functions.php:288
 msgid "As the only Admin, you cannot leave the group."
-msgstr ""
+msgstr "As the only Admin, you cannot leave the community."
 
 #: bp-groups/bp-groups-functions.php:357 bp-groups/bp-groups-functions.php:878
 #: bp-groups/bp-groups-screens.php:62
 msgid "%1$s joined the group %2$s"
-msgstr ""
+msgstr "%1$s joined the community %2$s"
 
 #: bp-groups/bp-groups-functions.php:568
 msgid "%1$s posted an update in the group %2$s"
-msgstr ""
+msgstr "%1$s posted an update in the community %2$s"
 
 #: bp-groups/bp-groups-loader.php:144
 msgid "Search Communities..."
@@ -3353,11 +3406,11 @@ msgstr ""
 
 #: bp-groups/bp-groups-loader.php:273
 msgid "You do not have access to this group."
-msgstr ""
+msgstr "You do not have access to this community."
 
 #: bp-groups/bp-groups-loader.php:288
 msgid "You are not an admin of this group."
-msgstr ""
+msgstr "You are not an admin of this community."
 
 #: bp-groups/bp-groups-loader.php:298 bp-groups/bp-groups-template.php:1439
 msgid "Details"
@@ -3428,7 +3481,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-notifications.php:19
 msgid "Group Details Updated"
-msgstr ""
+msgstr "Community Details Updated"
 
 #: bp-groups/bp-groups-notifications.php:34
 msgid ""
@@ -3438,10 +3491,15 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"Community details for the group \"%1$s\" were updated:\n"
+"\n"
+"To view the community: %2$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-groups/bp-groups-notifications.php:75
 msgid "Membership request for group: %s"
-msgstr ""
+msgstr "Membership request for community: %s"
 
 #: bp-groups/bp-groups-notifications.php:77
 msgid ""
@@ -3457,10 +3515,21 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"%1$s wants to join the community \"%2$s\".\n"
+"\n"
+"Because you are the administrator of this community, you must either accept "
+"or reject the membership request.\n"
+"\n"
+"To view all pending membership requests for this community, please visit:\n"
+"%3$s\n"
+"\n"
+"To view %4$s's profile: %5$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-groups/bp-groups-notifications.php:128
 msgid "Membership request for group \"%s\" accepted"
-msgstr ""
+msgstr "Membership request for community \"%s\" accepted"
 
 #: bp-groups/bp-groups-notifications.php:129
 msgid ""
@@ -3470,10 +3539,15 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"Your membership request for the community \"%1$s\" has been accepted.\n"
+"\n"
+"To view the group please login and visit: %2$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-groups/bp-groups-notifications.php:138
 msgid "Membership request for group \"%s\" rejected"
-msgstr ""
+msgstr "Membership request for community \"%s\" rejected"
 
 #: bp-groups/bp-groups-notifications.php:139
 msgid ""
@@ -3483,6 +3557,11 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"Your membership request for the community \"%1$s\" has been rejected.\n"
+"\n"
+"To submit another request please log in and visit: %2$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-groups/bp-groups-notifications.php:166
 msgid "an administrator"
@@ -3494,7 +3573,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-notifications.php:187
 msgid "You have been promoted in the group: \"%s\""
-msgstr ""
+msgstr "You have been promoted in the community: \"%s\""
 
 #: bp-groups/bp-groups-notifications.php:188
 msgid ""
@@ -3504,10 +3583,15 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"You have been promoted to %1$s for the community: \"%2$s\".\n"
+"\n"
+"To view the community please visit: %3$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-groups/bp-groups-notifications.php:238
 msgid "You have an invitation to the group: \"%s\""
-msgstr ""
+msgstr "You have an invitation to the community: \"%s\""
 
 #: bp-groups/bp-groups-notifications.php:240
 msgid ""
@@ -3521,22 +3605,31 @@ msgid ""
 "\n"
 "---------------------\n"
 msgstr ""
+"One of your friends %1$s has invited you to the community: \"%2$s\".\n"
+"\n"
+"To view your community invites visit: %3$s\n"
+"\n"
+"To view the community visit: %4$s\n"
+"\n"
+"To view %5$s's profile visit: %6$s\n"
+"\n"
+"---------------------\n"
 
 #: bp-groups/bp-groups-screens.php:54
 msgid "Group invite could not be accepted"
-msgstr ""
+msgstr "Community invite could not be accepted"
 
 #: bp-groups/bp-groups-screens.php:56
 msgid "Group invite accepted"
-msgstr ""
+msgstr "Community invite accepted"
 
 #: bp-groups/bp-groups-screens.php:76
 msgid "Group invite could not be rejected"
-msgstr ""
+msgstr "Community invite could not be rejected"
 
 #: bp-groups/bp-groups-screens.php:78
 msgid "Group invite rejected"
-msgstr ""
+msgstr "Community invite rejected"
 
 #: bp-groups/bp-groups-screens.php:161
 msgid "It looks like you've already said that!"
@@ -3616,42 +3709,47 @@ msgstr ""
 
 #: bp-groups/bp-groups-screens.php:354 bp-groups/bp-groups-screens.php:373
 msgid "You have been banned from this group."
-msgstr ""
+msgstr "You have been banned from this community."
 
 #: bp-groups/bp-groups-screens.php:387
 msgid "This group does not have a forum setup yet."
-msgstr ""
+msgstr "This community does not have a forum setup yet."
 
 #: bp-groups/bp-groups-screens.php:446
 msgid "Group invites sent."
-msgstr ""
+msgstr "Community invites sent."
 
 #: bp-groups/bp-groups-screens.php:478
 msgid ""
 "There was an error sending your group membership request, please try again."
 msgstr ""
+"There was an error sending your community membership request, please try "
+"again."
 
 #: bp-groups/bp-groups-screens.php:480
 msgid ""
 "Your membership request was sent to the group administrator successfully. "
 "You will be notified when the group administrator responds to your request."
 msgstr ""
+"Your membership request was sent to the community administrator "
+"successfully. You will be notified when the community administrator responds "
+"to your request."
 
 #: bp-groups/bp-groups-screens.php:527
 msgid "There was an error updating group details, please try again."
-msgstr ""
+msgstr "There was an error updating community details, please try again."
 
 #: bp-groups/bp-groups-screens.php:529
 msgid "Group details were successfully updated."
-msgstr ""
+msgstr "Community details were successfully updated."
 
 #: bp-groups/bp-groups-screens.php:571
 msgid "There was an error updating group settings, please try again."
-msgstr ""
+msgstr "There was an error updating community settings, please try again."
 
 #: bp-groups/bp-groups-screens.php:573
 msgid "Group settings were successfully updated."
-msgstr ""
+msgstr "Community settings were successfully updated."
 
 #: bp-groups/bp-groups-screens.php:605 bp-xprofile/bp-xprofile-actions.php:39
 msgid "Your avatar was deleted successfully!"
@@ -3667,7 +3765,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-screens.php:652
 msgid "The new group avatar was uploaded successfully."
-msgstr ""
+msgstr "The new community avatar was uploaded successfully."
 
 #: bp-groups/bp-groups-screens.php:688
 msgid "There was an error when promoting that user, please try again"
@@ -3704,6 +3802,7 @@ msgstr ""
 #: bp-groups/bp-groups-screens.php:767
 msgid "There was an error removing that user from the group, please try again"
 msgstr ""
+"There was an error removing that user from the community, please try again"
 
 #: bp-groups/bp-groups-screens.php:769
 msgid "User removed successfully"
@@ -3715,7 +3814,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-screens.php:809
 msgid "Group membership request accepted"
-msgstr ""
+msgstr "Community membership request accepted"
 
 #: bp-groups/bp-groups-screens.php:818
 msgid "There was an error rejecting the membership request, please try again."
@@ -3723,31 +3822,32 @@ msgstr ""
 
 #: bp-groups/bp-groups-screens.php:820
 msgid "Group membership request rejected"
-msgstr ""
+msgstr "Community membership request rejected"
 
 #: bp-groups/bp-groups-screens.php:852
 msgid "There was an error deleting the group, please try again."
-msgstr ""
+msgstr "There was an error deleting the community, please try again."
 
 #: bp-groups/bp-groups-screens.php:854
 msgid "The group was deleted successfully"
-msgstr ""
+msgstr "The community was deleted successfully"
 
 #: bp-groups/bp-groups-screens.php:902
 msgid "A member invites you to join a group"
-msgstr ""
+msgstr "A member invites you to join a community"
 
 #: bp-groups/bp-groups-screens.php:908
 msgid "Group information is updated"
-msgstr ""
+msgstr "Community information is updated"
 
 #: bp-groups/bp-groups-screens.php:914
 msgid "You are promoted to a group administrator or moderator"
-msgstr ""
+msgstr "You are promoted to a community administrator or moderator"
 
 #: bp-groups/bp-groups-screens.php:920
 msgid "A member requests to join a private group for which you are an admin"
 msgstr ""
+"A member requests to join a private community for which you are an admin"
 
 #: bp-groups/bp-groups-template.php:214
 msgctxt "Group pagination previous text"
@@ -3761,19 +3861,19 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:458
 msgid "Public Group"
-msgstr ""
+msgstr "Public Community"
 
 #: bp-groups/bp-groups-template.php:460
 msgid "Hidden Group"
-msgstr ""
+msgstr "Hidden Community"
 
 #: bp-groups/bp-groups-template.php:462
 msgid "Private Group"
-msgstr ""
+msgstr "Private Community"
 
 #: bp-groups/bp-groups-template.php:464
 msgid "Group"
-msgstr ""
+msgstr "Community"
 
 #: bp-groups/bp-groups-template.php:536
 msgid "not yet active"
@@ -3781,7 +3881,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:718
 msgid "Group creator avatar of %s"
-msgstr ""
+msgstr "Community creator avatar of %s"
 
 #: bp-groups/bp-groups-template.php:753
 msgid "No Admins"
@@ -3797,7 +3897,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:910
 msgid "Viewing group %1$s to %2$s (of %3$s groups)"
-msgstr "Showing %1$s - %2$s of %3$s Results"
+msgstr "Viewing community %1$s to %2$s (of %3$s communities)"
 
 #: bp-groups/bp-groups-template.php:938
 msgid "%s member"
@@ -3832,7 +3932,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:1243
 msgid "This group has no administrators"
-msgstr ""
+msgstr "This community has no administrators"
 
 #: bp-groups/bp-groups-template.php:1271
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:216
@@ -3844,19 +3944,19 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:1305
 msgid "This group has no moderators"
-msgstr ""
+msgstr "This community has no moderators"
 
 #: bp-groups/bp-groups-template.php:1730 bp-groups/bp-groups-template.php:1731
 #: bp-templates/bp-legacy/buddypress-functions.php:987
 #: bp-themes/bp-default/_inc/ajax.php:703
 msgid "Leave Group"
-msgstr ""
+msgstr "Leave Community"
 
 #: bp-groups/bp-groups-template.php:1753 bp-groups/bp-groups-template.php:1754
 #: bp-templates/bp-legacy/buddypress-functions.php:1006
 #: bp-themes/bp-default/_inc/ajax.php:722
 msgid "Join Group"
-msgstr ""
+msgstr "Join Community"
 
 #: bp-groups/bp-groups-template.php:1786 bp-groups/bp-groups-template.php:1787
 msgid "Request Sent"
@@ -3867,22 +3967,28 @@ msgid ""
 "This is a private group and you must request group membership in order to "
 "join."
 msgstr ""
+"This is a private community and you must request community membership in "
+"order to join."
 
 #: bp-groups/bp-groups-template.php:1819
 msgid ""
 "This is a private group. To join you must be a registered site member and "
 "request group membership."
 msgstr ""
+"This is a private community. To join you must be a registered site member "
+"and request community membership."
 
 #: bp-groups/bp-groups-template.php:1822
 msgid ""
 "This is a private group. Your membership request is awaiting approval from "
 "the group administrator."
 msgstr ""
+"This is a private community. Your membership request is awaiting approval "
+"from the community administrator."
 
 #: bp-groups/bp-groups-template.php:1826
 msgid "This is a hidden group and only invited members can join."
-msgstr ""
+msgstr "This is a hidden community and only invited members can join."
 
 #: bp-groups/bp-groups-template.php:2133
 msgid "Viewing members %1$s to %2$s (of %3$s members)"
@@ -3890,7 +3996,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:2359
 msgid "Group avatar"
-msgstr ""
+msgstr "Community avatar"
 
 #: bp-groups/bp-groups-template.php:2499 bp-groups/bp-groups-template.php:2523
 msgid "Recently Joined"
@@ -3910,7 +4016,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:2590
 msgid "No Group Avatar"
-msgstr ""
+msgstr "No Community Avatar"
 
 #: bp-groups/bp-groups-template.php:2791
 msgid "requested %s"
@@ -3918,11 +4024,11 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:2966
 msgid "Group Activity RSS Feed"
-msgstr ""
+msgstr "Community Activity RSS Feed"
 
 #: bp-groups/bp-groups-widgets.php:28
 msgid "A dynamic list of recently active, popular, and newest groups"
-msgstr ""
+msgstr "A dynamic list of recently active, popular, and newest communities"
 
 #: bp-groups/bp-groups-widgets.php:31
 msgctxt "widget name"
@@ -3935,7 +4041,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-widgets.php:95
 msgid "There are no groups to display."
-msgstr ""
+msgstr "There are no communities to display."
 
 #: bp-groups/bp-groups-widgets.php:132
 msgid "Link widget title to Communities directory"
@@ -3943,15 +4049,15 @@ msgstr ""
 
 #: bp-groups/bp-groups-widgets.php:134
 msgid "Max groups to show:"
-msgstr ""
+msgstr "Max communities to show:"
 
 #: bp-groups/bp-groups-widgets.php:137
 msgid "Default groups to show:"
-msgstr ""
+msgstr "Default communities to show:"
 
 #: bp-groups/bp-groups-widgets.php:197
 msgid "No groups matched the current filter."
-msgstr ""
+msgstr "No communities matched the current filter."
 
 #: bp-loader.php:162 bp-loader.php:169
 msgid "Cheatin&#8217; huh?"
@@ -4568,7 +4674,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/activity/index.php:41
 #: bp-themes/bp-default/activity/index.php:61
 msgid "The activity of groups I am a member of."
-msgstr ""
+msgstr "The activity of communities I am a member of."
 
 #: bp-templates/bp-legacy/buddypress/activity/index.php:41
 #: bp-templates/bp-legacy/buddypress/groups/index.php:22
@@ -4677,7 +4783,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/single/activity.php:18
 #: bp-themes/bp-default/members/single/activity.php:51
 msgid "Group Memberships"
-msgstr ""
+msgstr "Community Memberships"
 
 #: bp-templates/bp-legacy/buddypress/activity/index.php:104
 #: bp-themes/bp-default/activity/index.php:124
@@ -4869,7 +4975,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/forums/index.php:95
 #: bp-themes/bp-default/forums/index.php:113
 msgid "Post In Group Forum:"
-msgstr ""
+msgstr "Post In Community Forum:"
 
 #. translators: no option picked in select box
 #: bp-templates/bp-legacy/buddypress/forums/index.php:98
@@ -4894,6 +5000,11 @@ msgid ""
 "href='%s'>create a new group</a>? Once you have joined or created the group "
 "you can post your topic in that group's forum."
 msgstr ""
+"You are not a member of any communities so you don't have any community "
+"forums you can post in. To start posting, first find a community that "
+"matches the topic subject you'd like to start. If this community does not "
+"exist, why not <a href='%s'>create a new community</a>? Once you have joined "
+"or created the community you can post your topic in that community's forum."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:29
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:16
@@ -4907,7 +5018,7 @@ msgstr "Community Name (required)"
 #: bp-themes/bp-default/groups/create.php:42
 #: bp-themes/bp-default/groups/single/admin.php:19
 msgid "Group Description (required)"
-msgstr ""
+msgstr "Community Description (required)"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:51
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:56
@@ -4921,14 +5032,14 @@ msgstr ""
 #: bp-themes/bp-default/groups/create.php:62
 #: bp-themes/bp-default/groups/single/admin.php:61
 msgid "This is a public group"
-msgstr ""
+msgstr "This is a public community"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:57
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:63
 #: bp-themes/bp-default/groups/create.php:64
 #: bp-themes/bp-default/groups/single/admin.php:63
 msgid "Any site member can join this group."
-msgstr ""
+msgstr "Any site member can join this community."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:58
 #: bp-templates/bp-legacy/buddypress/groups/create.php:67
@@ -4941,20 +5052,22 @@ msgstr ""
 msgid ""
 "This group will be listed in the groups directory and in search results."
 msgstr ""
+"This community will be listed in the communities directory and in search "
+"results."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:59
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:65
 #: bp-themes/bp-default/groups/create.php:66
 #: bp-themes/bp-default/groups/single/admin.php:65
 msgid "Group content and activity will be visible to any site member."
-msgstr ""
+msgstr "Community content and activity will be visible to any site member."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:64
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:71
 #: bp-themes/bp-default/groups/create.php:71
 #: bp-themes/bp-default/groups/single/admin.php:71
 msgid "This is a private group"
-msgstr ""
+msgstr "This is a private community"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:66
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:73
@@ -4962,6 +5075,7 @@ msgstr ""
 #: bp-themes/bp-default/groups/single/admin.php:73
 msgid "Only users who request membership and are accepted can join the group."
 msgstr ""
+"Only users who request membership and are accepted can join the community."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:68
 #: bp-templates/bp-legacy/buddypress/groups/create.php:77
@@ -4974,20 +5088,22 @@ msgstr ""
 msgid ""
 "Group content and activity will only be visible to members of the group."
 msgstr ""
+"Community content and activity will only be visible to members of the "
+"community."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:73
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:81
 #: bp-themes/bp-default/groups/create.php:80
 #: bp-themes/bp-default/groups/single/admin.php:81
 msgid "This is a hidden group"
-msgstr ""
+msgstr "This is a hidden community"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:75
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:83
 #: bp-themes/bp-default/groups/create.php:82
 #: bp-themes/bp-default/groups/single/admin.php:83
 msgid "Only users who are invited can join the group."
-msgstr ""
+msgstr "Only users who are invited can join the community."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:76
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:84
@@ -4996,6 +5112,8 @@ msgstr ""
 msgid ""
 "This group will not be listed in the groups directory or search results."
 msgstr ""
+"This community will not be listed in the communities directory or search "
+"results."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:82
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:92
@@ -5009,12 +5127,12 @@ msgstr "Community Invitations"
 #: bp-themes/bp-default/groups/create.php:91
 #: bp-themes/bp-default/groups/single/admin.php:94
 msgid "Which members of this group are allowed to invite others?"
-msgstr ""
+msgstr "Which members of this community are allowed to invite others?"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:109
 #: bp-themes/bp-default/groups/create.php:116
 msgid "Should this group have a forum?"
-msgstr ""
+msgstr "Should this community have a forum?"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:116
 #: bp-themes/bp-default/groups/create.php:123
@@ -5022,6 +5140,8 @@ msgid ""
 "<strong>Attention Site Admin:</strong> Group forums require the <a href=\"%s"
 "\">correct setup and configuration</a> of a bbPress installation."
 msgstr ""
+"<strong>Attention Site Admin:</strong> Community forums require the <a href="
+"\"%s\">correct setup and configuration</a> of a bbPress installation."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:142
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:127
@@ -5031,6 +5151,8 @@ msgid ""
 "Upload an image to use as an avatar for this group. The image will be shown "
 "on the main group page, and in search results."
 msgstr ""
+"Upload an image to use as an avatar for this community. The image will be "
+"shown on the main community page, and in search results."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:146
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:131
@@ -5049,7 +5171,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/create.php:157
 #: bp-themes/bp-default/groups/create.php:164
 msgid "Crop Group Avatar"
-msgstr ""
+msgstr "Crop Community Avatar"
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:159
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:151
@@ -5102,6 +5224,8 @@ msgid ""
 "Once you have built up friend connections you will be able to invite others "
 "to your group."
 msgstr ""
+"Once you have built up friend connections you will be able to invite others "
+"to your community."
 
 #: bp-templates/bp-legacy/buddypress/groups/create.php:261
 #: bp-themes/bp-default/groups/create.php:268
@@ -5126,7 +5250,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/groups-loop.php:95
 #: bp-themes/bp-default/groups/groups-loop.php:95
 msgid "There were no groups found."
-msgstr ""
+msgstr "There were no communities found."
 
 #: bp-templates/bp-legacy/buddypress/groups/index.php:19
 #: bp-themes/bp-default/groups/index.php:35
@@ -5150,7 +5274,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:25
 #: bp-themes/bp-default/groups/single/admin.php:25
 msgid "Notify group members of changes via email"
-msgstr ""
+msgstr "Notify community members of changes via email"
 
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:137
 #: bp-themes/bp-default/groups/single/admin.php:137
@@ -5209,14 +5333,14 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:276
 #: bp-themes/bp-default/groups/single/admin.php:276
 msgid "Remove from group"
-msgstr ""
+msgstr "Remove from community"
 
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:290
 #: bp-templates/bp-legacy/buddypress/groups/single/members.php:87
 #: bp-themes/bp-default/groups/single/admin.php:290
 #: bp-themes/bp-default/groups/single/members.php:87
 msgid "This group has no members."
-msgstr ""
+msgstr "This community has no members."
 
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:320
 #: bp-templates/bp-legacy/buddypress/members/single/friends/requests.php:37
@@ -5247,11 +5371,13 @@ msgid ""
 "WARNING: Deleting this group will completely remove ALL content associated "
 "with it. There is no way back, please be careful with this option."
 msgstr ""
+"WARNING: Deleting this community will completely remove ALL content "
+"associated with it. There is no way back, please be careful with this option."
 
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:355
 #: bp-themes/bp-default/groups/single/admin.php:355
 msgid "I understand the consequences of deleting this group."
-msgstr ""
+msgstr "I understand the consequences of deleting this community."
 
 #: bp-templates/bp-legacy/buddypress/groups/single/forum/edit.php:16
 #: bp-templates/bp-legacy/buddypress/groups/single/forum/topic.php:17
@@ -5295,7 +5421,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/single/forum/topic.php:134
 #: bp-themes/bp-default/groups/single/forum/topic.php:134
 msgid "You will auto join this group when you reply to this topic."
-msgstr ""
+msgstr "You will auto join this community when you reply to this topic."
 
 #: bp-templates/bp-legacy/buddypress/groups/single/forum/topic.php:139
 #: bp-themes/bp-default/groups/single/forum/topic.php:139
@@ -5315,7 +5441,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/single/forum.php:69
 #: bp-themes/bp-default/groups/single/forum.php:69
 msgid "You will auto join this group when you start a new topic."
-msgstr ""
+msgstr "You will auto join this community when you start a new topic."
 
 #: bp-templates/bp-legacy/buddypress/groups/single/forum.php:73
 #: bp-themes/bp-default/groups/single/forum.php:73
@@ -5325,17 +5451,17 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/single/group-header.php:11
 #: bp-themes/bp-default/groups/single/group-header.php:11
 msgid "Group Admins"
-msgstr ""
+msgstr "Community Admins"
 
 #: bp-templates/bp-legacy/buddypress/groups/single/group-header.php:20
 #: bp-themes/bp-default/groups/single/group-header.php:20
 msgid "Group Mods"
-msgstr ""
+msgstr "Community Mods"
 
 #: bp-templates/bp-legacy/buddypress/groups/single/request-membership.php:4
 #: bp-themes/bp-default/groups/single/request-membership.php:4
 msgid "You are requesting to become a member of the group '%s'."
-msgstr ""
+msgstr "You are requesting to become a member of the community '%s'."
 
 #: bp-templates/bp-legacy/buddypress/groups/single/request-membership.php:7
 #: bp-themes/bp-default/groups/single/request-membership.php:7
@@ -5552,7 +5678,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/members/single/groups/invites.php:37
 #: bp-themes/bp-default/members/single/groups/invites.php:37
 msgid "You have no outstanding group invites."
-msgstr ""
+msgstr "You have no outstanding community invites."
 
 #: bp-templates/bp-legacy/buddypress/members/single/messages/compose.php:5
 #: bp-themes/bp-default/members/single/messages/compose.php:5
@@ -5690,7 +5816,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/members/single/profile/edit.php:10
 #: bp-themes/bp-default/members/single/profile/edit.php:10
 msgid "Editing '%s' Profile Group"
-msgstr ""
+msgstr "Editing '%s' Profile Community"
 
 #: bp-templates/bp-legacy/buddypress/members/single/profile/edit.php:120
 #: bp-themes/bp-default/members/single/profile/edit.php:120
@@ -5842,7 +5968,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress-functions.php:985
 #: bp-themes/bp-default/_inc/ajax.php:701
 msgid "Error joining group"
-msgstr ""
+msgstr "Error joining community"
 
 #: bp-templates/bp-legacy/buddypress-functions.php:994
 #: bp-themes/bp-default/_inc/ajax.php:710
@@ -5857,7 +5983,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress-functions.php:1004
 #: bp-themes/bp-default/_inc/ajax.php:720
 msgid "Error leaving group"
-msgstr ""
+msgstr "Error leaving community"
 
 #: bp-templates/bp-legacy/buddypress-functions.php:1027
 #: bp-themes/bp-default/_inc/ajax.php:743
@@ -6223,11 +6349,11 @@ msgstr ""
 #: bp-xprofile/bp-xprofile-admin.php:72
 #: bp-xprofile/bp-xprofile-classes.php:354
 msgid "Add New Field Group"
-msgstr ""
+msgstr "Add New Field Community"
 
 #: bp-xprofile/bp-xprofile-admin.php:75
 msgid "Fields in the \"%s\" group will appear on the signup page."
-msgstr ""
+msgstr "Fields in the \"%s\" community will appear on the signup page."
 
 #: bp-xprofile/bp-xprofile-admin.php:98 bp-xprofile/bp-xprofile-admin.php:382
 msgid "(Primary)"
@@ -6239,31 +6365,31 @@ msgstr ""
 
 #: bp-xprofile/bp-xprofile-admin.php:152
 msgid "There are no fields in this group."
-msgstr ""
+msgstr "There are no fields in this community."
 
 #: bp-xprofile/bp-xprofile-admin.php:161
 msgid "You have no groups."
-msgstr ""
+msgstr "You have no communities."
 
 #: bp-xprofile/bp-xprofile-admin.php:162
 msgid "Add New Group"
-msgstr ""
+msgstr "Add New Community"
 
 #: bp-xprofile/bp-xprofile-admin.php:189
 msgid "There was an error saving the group. Please try again"
-msgstr ""
+msgstr "There was an error saving the community. Please try again"
 
 #: bp-xprofile/bp-xprofile-admin.php:192
 msgid "The group was saved successfully."
-msgstr ""
+msgstr "The community was saved successfully."
 
 #: bp-xprofile/bp-xprofile-admin.php:221
 msgid "There was an error deleting the group. Please try again"
-msgstr ""
+msgstr "There was an error deleting the community. Please try again"
 
 #: bp-xprofile/bp-xprofile-admin.php:224
 msgid "The group was deleted successfully."
-msgstr ""
+msgstr "The community was deleted successfully."
 
 #: bp-xprofile/bp-xprofile-admin.php:265
 msgid "There was an error saving the field. Please try again"
@@ -6295,23 +6421,23 @@ msgstr ""
 
 #: bp-xprofile/bp-xprofile-classes.php:271
 msgid "Please make sure you give the group a name."
-msgstr ""
+msgstr "Please make sure you give the community a name."
 
 #: bp-xprofile/bp-xprofile-classes.php:356
 msgid "Create Field Group"
-msgstr ""
+msgstr "Create Field Community"
 
 #: bp-xprofile/bp-xprofile-classes.php:358
 msgid "Edit Field Group"
-msgstr ""
+msgstr "Edit Field Community"
 
 #: bp-xprofile/bp-xprofile-classes.php:384
 msgid "Field Group Title"
-msgstr ""
+msgstr "Field Community Title"
 
 #: bp-xprofile/bp-xprofile-classes.php:391
 msgid "Group Description"
-msgstr ""
+msgstr "Community Description"
 
 #: bp-xprofile/bp-xprofile-classes.php:753
 msgid "Please enter options for this Field:"
@@ -6464,6 +6590,8 @@ msgid ""
 "Please make sure you fill in all required fields in this profile field group "
 "before saving."
 msgstr ""
+"Please make sure you fill in all required fields in this profile field "
+"community before saving."
 
 #: bp-xprofile/bp-xprofile-screens.php:129
 msgid ""
@@ -6544,3 +6672,11 @@ msgstr ""
 #: bp-xprofile/bp-xprofile-template.php:861
 msgid "Profile updated %s"
 msgstr ""
+
+#: bp-groups/bp-groups-admin.php:622
+msgid "Groups"
+msgstr "Communities"
+
+#: bp-groups/bp-groups-admin.php:638
+msgid "Search all Groups"
+msgstr "Search all Communities"
