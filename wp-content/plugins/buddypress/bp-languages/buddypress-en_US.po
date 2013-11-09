@@ -5,12 +5,12 @@ msgstr ""
 "Project-Id-Version: ComplianceTest BuddyPress\n"
 "Report-Msgid-Bugs-To: http://wppolyglots.wordpress.com\n"
 "POT-Creation-Date: 2013-05-15 18:35:23+00:00\n"
+"PO-Revision-Date: 2013-11-09 16:15+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: ComplianceTest team <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-11-09 15:46+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: ComplianceTest team <LL@li.org>\n"
 "X-Generator: Poedit 1.5.7\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
 
@@ -617,7 +617,7 @@ msgstr ""
 #: bp-groups/bp-groups-screens.php:1001 bp-groups/bp-groups-screens.php:1037
 #: bp-groups/bp-groups-screens.php:1039 bp-groups/bp-groups-widgets.php:48
 #: bp-groups/bp-groups-widgets.php:117
-msgid "Communities"
+msgid "Groups"
 msgstr "Communities"
 
 #: bp-activity/bp-activity-loader.php:233
@@ -902,16 +902,16 @@ msgid "%s - Mentions"
 msgstr ""
 
 #. translators: Member groups activity RSS title - "[Site Name] | [Displayed
-#. User Name] | My Communities - Public Activity"
+#. User Name] | My Groups - Public Activity"
 #: bp-activity/feeds/bp-activity-mygroups-feed.php:27
-msgid "My Communities - Public Activity"
+msgid "My Groups - Public Activity"
 msgstr "My Communities - Public Activity"
 
 #. translators: Member groups activity RSS description - "[Displayed user name]
-#. - My Communities - Public Activity"
+#. - My Groups - Public Activity"
 #: bp-activity/feeds/bp-activity-mygroups-feed.php:31
-msgid "%1$s - My Communities - Public Activity"
-msgstr ""
+msgid "%1$s - My Groups - Public Activity"
+msgstr "%1$s - My Communities - Public Activity"
 
 #: bp-activity/feeds/bp-activity-personal-feed.php:30
 msgid "%s - Activity Feed"
@@ -1300,15 +1300,17 @@ msgstr ""
 "notification support."
 
 #: bp-core/admin/bp-core-components.php:376 bp-groups/bp-groups-loader.php:83
-msgid "User Communities"
-msgstr ""
+msgid "User Groups"
+msgstr "User Communities"
 
 #: bp-core/admin/bp-core-components.php:377
 msgid ""
+"Groups allow your users to organize themselves into specific public, private "
+"or hidden sections with separate activity streams and member listings."
+msgstr ""
 "Communities allow your users to organize themselves into specific public, "
 "private or hidden sections with separate activity streams and member "
 "listings."
-msgstr ""
 
 #: bp-core/admin/bp-core-components.php:380
 msgid "Group Forums (Legacy)"
@@ -1592,8 +1594,8 @@ msgid "Profile Syncing"
 msgstr ""
 
 #: bp-core/bp-core-admin.php:276
-msgid "Communities Settings"
-msgstr ""
+msgid "Groups Settings"
+msgstr "Communities Settings"
 
 #: bp-core/bp-core-admin.php:279
 msgid "Group Creation"
@@ -1720,8 +1722,8 @@ msgid "Get More Done Quickly"
 msgstr ""
 
 #: bp-core/bp-core-admin.php:436
-msgid "Communities administration panel"
-msgstr ""
+msgid "Groups administration panel"
+msgstr "Communities administration panel"
 
 #: bp-core/bp-core-admin.php:443
 msgid ""
@@ -2023,9 +2025,9 @@ msgid "Activity"
 msgstr ""
 
 #: bp-core/bp-core-functions.php:205
-msgctxt "Page title for the Communities directory."
-msgid "Communities"
-msgstr ""
+msgctxt "Page title for the Groups directory."
+msgid "Groups"
+msgstr "Communities"
 
 #: bp-core/bp-core-functions.php:206
 msgctxt "Page title for the Sites directory."
@@ -2466,7 +2468,7 @@ msgstr ""
 
 #: bp-forums/deprecated/1.6.php:45 bp-forums/deprecated/1.6.php:145
 #: bp-forums/deprecated/1.7.php:83 bp-forums/deprecated/1.7.php:220
-msgid "Forums for Communities"
+msgid "Forums for Groups"
 msgstr ""
 
 #: bp-forums/deprecated/1.6.php:47 bp-forums/deprecated/1.6.php:147
@@ -3020,9 +3022,9 @@ msgid "Manage Members"
 msgstr ""
 
 #: bp-groups/bp-groups-admin.php:138
-msgctxt "Communities per page (screen options)"
-msgid "Communities"
-msgstr ""
+msgctxt "Groups per page (screen options)"
+msgid "Groups"
+msgstr "Communities"
 
 #: bp-groups/bp-groups-admin.php:145
 msgid ""
@@ -3123,8 +3125,8 @@ msgstr ""
 "No community found with this ID. <a href=\"%s\">Go back and try again</a>."
 
 #: bp-groups/bp-groups-admin.php:573
-msgid "Delete Communities"
-msgstr ""
+msgid "Delete Groups"
+msgstr "Delete Communities"
 
 #: bp-groups/bp-groups-admin.php:574
 msgid "You are about to delete the following groups:"
@@ -3141,8 +3143,8 @@ msgstr[0] "%s community has been permanently deleted."
 msgstr[1] "%s communities have been permanently deleted."
 
 #: bp-groups/bp-groups-admin.php:638
-msgid "Search all Communities"
-msgstr ""
+msgid "Search all Groups"
+msgstr "Search all Communities"
 
 #: bp-groups/bp-groups-admin.php:660
 #: bp-templates/bp-legacy/buddypress/groups/create.php:112
@@ -3306,27 +3308,27 @@ msgid "Hidden <span class=\"count\">(%s)</span>"
 msgstr ""
 
 #: bp-groups/bp-groups-admin.php:1170
-msgctxt "Communities admin Group Name column header"
+msgctxt "Groups admin Group Name column header"
 msgid "Name"
 msgstr ""
 
 #: bp-groups/bp-groups-admin.php:1171
-msgctxt "Communities admin Group Description column header"
+msgctxt "Groups admin Group Description column header"
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: bp-groups/bp-groups-admin.php:1172
-msgctxt "Communities admin Privacy Status column header"
+msgctxt "Groups admin Privacy Status column header"
 msgid "Status"
 msgstr ""
 
 #: bp-groups/bp-groups-admin.php:1173
-msgctxt "Communities admin Members column header"
+msgctxt "Groups admin Members column header"
 msgid "# Members"
-msgstr ""
+msgstr "# Members"
 
 #: bp-groups/bp-groups-admin.php:1174
-msgctxt "Communities admin Last Active column header"
+msgctxt "Groups admin Last Active column header"
 msgid "Last Active"
 msgstr ""
 
@@ -3401,8 +3403,8 @@ msgid "%1$s posted an update in the group %2$s"
 msgstr "%1$s posted an update in the community %2$s"
 
 #: bp-groups/bp-groups-loader.php:144
-msgid "Search Communities..."
-msgstr ""
+msgid "Search Groups..."
+msgstr "Search Communities..."
 
 #: bp-groups/bp-groups-loader.php:273
 msgid "You do not have access to this group."
@@ -3425,7 +3427,7 @@ msgid "Invites"
 msgstr ""
 
 #: bp-groups/bp-groups-loader.php:346
-msgid "Communities <span>%d</span>"
+msgid "Groups <span>%d</span>"
 msgstr ""
 
 #: bp-groups/bp-groups-loader.php:368 bp-groups/bp-groups-loader.php:398
@@ -3472,7 +3474,7 @@ msgid "No Pending Invites"
 msgstr ""
 
 #: bp-groups/bp-groups-loader.php:521
-msgid "Communities <span class=\"count\">%s</span>"
+msgid "Groups <span class=\"count\">%s</span>"
 msgstr ""
 
 #: bp-groups/bp-groups-loader.php:522
@@ -3892,8 +3894,8 @@ msgid "No Mods"
 msgstr ""
 
 #: bp-groups/bp-groups-template.php:862
-msgid "Filter Communities"
-msgstr ""
+msgid "Filter Groups"
+msgstr "Filter Communities"
 
 #: bp-groups/bp-groups-template.php:910
 msgid "Viewing group %1$s to %2$s (of %3$s groups)"
@@ -4032,7 +4034,7 @@ msgstr "A dynamic list of recently active, popular, and newest communities"
 
 #: bp-groups/bp-groups-widgets.php:31
 msgctxt "widget name"
-msgid "(BuddyPress) Communities"
+msgid "(BuddyPress) Groups"
 msgstr ""
 
 #: bp-groups/bp-groups-widgets.php:76 bp-groups/bp-groups-widgets.php:179
@@ -4044,7 +4046,7 @@ msgid "There are no groups to display."
 msgstr "There are no communities to display."
 
 #: bp-groups/bp-groups-widgets.php:132
-msgid "Link widget title to Communities directory"
+msgid "Link widget title to Groups directory"
 msgstr ""
 
 #: bp-groups/bp-groups-widgets.php:134
@@ -4680,7 +4682,7 @@ msgstr "The activity of communities I am a member of."
 #: bp-templates/bp-legacy/buddypress/groups/index.php:22
 #: bp-themes/bp-default/activity/index.php:61
 #: bp-themes/bp-default/groups/index.php:39
-msgid "My Communities <span>%s</span>"
+msgid "My Groups <span>%s</span>"
 msgstr ""
 
 #: bp-templates/bp-legacy/buddypress/activity/index.php:51
@@ -4773,8 +4775,8 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/members/single/activity.php:50
 #: bp-themes/bp-default/activity/index.php:113
 #: bp-themes/bp-default/members/single/activity.php:50
-msgid "New Communities"
-msgstr ""
+msgid "New Groups"
+msgstr "New Communities"
 
 #: bp-templates/bp-legacy/buddypress/activity/index.php:94
 #: bp-templates/bp-legacy/buddypress/groups/single/activity.php:18
@@ -5254,7 +5256,7 @@ msgstr "There were no communities found."
 
 #: bp-templates/bp-legacy/buddypress/groups/index.php:19
 #: bp-themes/bp-default/groups/index.php:35
-msgid "All Communities <span>%s</span>"
+msgid "All Groups <span>%s</span>"
 msgstr ""
 
 #: bp-templates/bp-legacy/buddypress/groups/index.php:40
@@ -6237,8 +6239,8 @@ msgstr ""
 
 #: bp-themes/bp-default/groups/create.php:18
 #: bp-themes/bp-default/groups/index.php:21
-msgid "Communities Directory"
-msgstr ""
+msgid "Groups Directory"
+msgstr "Communities Creation"
 
 #: bp-themes/bp-default/header.php:22
 msgctxt "Home page banner link title"
@@ -6673,10 +6675,5 @@ msgstr ""
 msgid "Profile updated %s"
 msgstr ""
 
-#: bp-groups/bp-groups-admin.php:622
-msgid "Groups"
-msgstr "Communities"
-
-#: bp-groups/bp-groups-admin.php:638
-msgid "Search all Groups"
-msgstr "Search all Communities"
+#~ msgid "Communities"
+#~ msgstr "Communities"
