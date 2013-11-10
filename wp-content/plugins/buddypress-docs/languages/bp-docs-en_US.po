@@ -8,7 +8,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-10-30 16:59+0800\n"
+"PO-Revision-Date: 2013-11-10 17:23+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: Poedit 1.5.7\n"
@@ -97,7 +97,7 @@ msgstr ""
 
 #: includes/addon-history.php:117
 msgid "You have successfully restored the Doc to the revision from %s."
-msgstr ""
+msgstr "You do not have permission to create a Wiki in this community."
 
 #: includes/addon-history.php:165
 msgid "Compare Revisions of &#8220;%1$s&#8221;"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: includes/addon-taxonomy.php:409
 msgid "You are viewing docs with the following tags: %s"
-msgstr ""
+msgstr "You are viewing wikis with the following tags: %s"
 
 #: includes/addon-taxonomy.php:418
 msgid "Tag"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: includes/addon-taxonomy.php:528
 msgid "Docs tagged %s"
-msgstr ""
+msgstr "Wikis tagged"
 
 #: includes/addon-taxonomy.php:587
 msgid "Most Used"
@@ -261,11 +261,11 @@ msgstr ""
 
 #: includes/component.php:217 includes/templatetags.php:1297
 msgid "Create New Doc"
-msgstr ""
+msgstr "Create New Wiki"
 
 #: includes/component.php:308
 msgid "My Docs "
-msgstr ""
+msgstr "My Wikis"
 
 #: includes/component.php:308
 msgid "%s&#8217;s Docs"
@@ -284,6 +284,8 @@ msgid ""
 "This doc is currently being edited by %s. To prevent overwrites, you cannot "
 "edit until that user has finished. Please try again in a few minutes."
 msgstr ""
+"This wiki is currently being edited by %s. To prevent overwrites, you cannot "
+"edit until that user has finished. Please try again in a few minutes."
 
 #: includes/component.php:422
 msgid "You do not have permission to edit the doc."
@@ -303,7 +305,7 @@ msgstr ""
 
 #: includes/component.php:503
 msgid "Doc successfully deleted!"
-msgstr ""
+msgstr "Wiki successfully deleted!"
 
 #: includes/component.php:505
 msgid "Could not delete doc."
@@ -355,7 +357,7 @@ msgstr ""
 
 #: includes/functions.php:160
 msgid "Docs associated with the %1$s %2$s"
-msgstr ""
+msgstr "Wikis associated with the %1$s %2$s"
 
 #: includes/functions.php:480 includes/templatetags.php:1363
 msgid "Logged-in Users"
@@ -434,6 +436,11 @@ msgid ""
 "to co-author and co-edit documents with your fellow group members, which you "
 "can then sort and tag in a way that helps your group to get work done."
 msgstr ""
+"ComplianceTest Wiki is a powerful tool for collaboration with members of "
+"your group. A cross between document editor and wiki, ComplianceTest Wiki "
+"allows you to co-author and co-edit documents with your fellow community "
+"members, which you can then sort and tag in a way that helps your community "
+"to get work done."
 
 #: includes/integration-groups.php:1068
 msgid "Enable BuddyPress Docs for this group"
@@ -445,7 +452,7 @@ msgstr ""
 
 #: includes/integration-groups.php:1077
 msgid "Minimum role to create new Docs:"
-msgstr ""
+msgstr "Minimum role to create new Wiki:"
 
 #: includes/integration-groups.php:1082
 msgid "Group admin"
@@ -632,6 +639,11 @@ msgid ""
 "your changes will be auto-saved, and you'll be sent out of Edit mode so that "
 "others can access the doc."
 msgstr ""
+"In order to prevent overwriting content, only one person can edit a given "
+"wiki at a time. For that reason, you must periodically ensure the system "
+"that you're still actively editing. If you are idle for more than 30 "
+"minutes, your changes will be auto-saved, and you'll be sent out of Edit "
+"mode so that others can access the wiki."
 
 #: includes/templates/docs/single/edit.php:184
 msgid "I'm still editing!"
@@ -677,6 +689,8 @@ msgid ""
 "This doc is currently being edited by %1$s. In order to prevent edit "
 "conflicts, only one user can edit a doc at a time."
 msgstr ""
+"This wiki is currently being edited by %1$s. In order to prevent edit "
+"conflicts, only one user can edit a wiki at a time."
 
 #: includes/templates/docs/single/index.php:12
 msgid ""
@@ -694,7 +708,7 @@ msgstr ""
 
 #: includes/templatetags.php:191
 msgid "You are viewing <strong>all</strong> docs."
-msgstr ""
+msgstr "You are viewing <strong>all</strong> wikis."
 
 #: includes/templatetags.php:200
 msgid ""
@@ -908,7 +922,7 @@ msgstr "Wiki associated with the community %s"
 
 #: includes/upgrade.php:258
 msgid "Group terms migrated. Now migrating Doc access terms...."
-msgstr ""
+msgstr "Community terms migrated. Now migrating Wiki access terms...."
 
 #: includes/upgrade.php:306
 msgid "Migrated %s of %s Docs. Migrating...."
