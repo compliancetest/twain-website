@@ -48,6 +48,8 @@ class TestCase
     
     var $testPattern = '';
     
+    var $status = '';
+    
     public function __construct($id = null)
     {        
         if($id !== null)   
@@ -79,6 +81,7 @@ class TestCase
         $this->outcomeType = $this->loadSingleValue('outcome_type');
         $this->bulk = $this->loadSingleValue('bulk');
         $this->testPattern = $this->loadSingleValue('message_count');
+        $this->status = $this->loadSingleValue('test_case_status');
         
         $this->loadTestSteps();
         $this->loadTestData();

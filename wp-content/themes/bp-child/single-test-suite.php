@@ -43,7 +43,7 @@ Template Name Posts: Test Suite
 								Version: <span><?php echo $suite->version; ?></span>
 								Issue Date: <span><?php echo formatDate($suite->issueDate); ?></span>
 								Issuer: <a href="<?php echo bp_get_group_permalink($group);; ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
-								Status: <span class="green_txt"><?php echo $suite->status; ?></span> 
+								Status: <span class="status_txt status_btn_<?php echo sanitize_title($suite->status)?>"><?php echo $suite->status?></span>
 								Revision: <span><?php echo $suite->revisionDescription; ?></span> 								
 							</div>
 							<div class="clear"></div>
@@ -327,7 +327,9 @@ Template Name Posts: Test Suite
                         <div class="grid_row white_bcg tocenter testcase_line ">
                             <div class="grid_cell nopaddingtop width10P toleft ">
                                 <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
-                                <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span>
+                                <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span><br />
+                                <div class="space5"></div>
+                                <span class="status_btn left status_btn_<?php echo sanitize_title(get_post_meta($row->ID ,'test_case_status', true))?>"><?php echo get_post_meta($row->ID ,'test_case_status', true)?></span>                                
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter ">
                                 <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>

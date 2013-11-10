@@ -146,7 +146,7 @@ function saveSuite()
     
     $group_id = $_POST['community_id'];
     
-    if(!groups_is_user_admin($user_id, $group_id))
+    if(!groups_is_user_admin($user_id, $group_id) && !is_super_admin() && is_admin())
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect(get_site_url());

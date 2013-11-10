@@ -103,6 +103,17 @@ get_header();
                        </div>                   
                        <div class="clear"></div>
                    </div>               
+                   <div class="field-row">
+                       <div class="grid-cell radio-cell width90P">
+                           <label for="ts_identifier">Status: </label>
+                           <input type="radio" name="test_case_status" id="ts_status_draft" value="Draft" <?php echo $case->status == 'Draft' ? 'checked="checked"' : ''?> /> Draft
+                           <input type="radio" name="test_case_status" id="ts_status_build" class="left15" value="Build" <?php echo $case->status == 'Build' ? 'checked="checked"' : ''?> /> Build
+                           <input type="radio" name="test_case_status" id="ts_status_active" class="left15" value="Active" <?php echo $case->status == 'Active' ? 'checked="checked"' : ''?> /> Active
+                           <input type="radio" name="test_case_status" id="ts_status_deprecated" class="left15" value="Deprecated" <?php echo $case->status == 'Deprecated' ? 'checked="checked"' : ''?> /> Deprecated
+                           <input type="radio" name="test_case_status" id="ts_status_obsolete" class="left15" value="Obsolete" <?php echo $case->status == 'Obsolete' ? 'checked="checked"' : ''?> /> Obsolete
+                       </div>
+                       <div class="clear"></div>
+                   </div>
                    <div class="field-row">                                 
                        <div class="grid-cell">
                            <label>Test Intent Description:</label>
@@ -110,7 +121,7 @@ get_header();
                        </div>                   
                        <div class="grid-cell">
                            <label>Execution Sequence Number:</label>
-                           <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />
+                           <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />                           
                        </div>                                                
                        <div class="clear"></div>
                    </div>               

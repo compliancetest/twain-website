@@ -162,7 +162,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                         <div class="field-row">
                             <label class="padding5-10-5-0">Upload Json file</label> 
                             <div class="grid-cell relative">                                                                    
-                                <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />                                
+                                <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" file-type="doc" file-extensions="(.txt or .json file)" />                                
                                 <a href="#" class="action-btn upload-btn plus" id="profile_instance_upload_btn"><span class="p"></span><span class="t">Upload</span></a>
                                 <div class="clear"></div>
                             </div>

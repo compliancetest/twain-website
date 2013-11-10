@@ -155,10 +155,7 @@ $testsuites = $get_posts->get_posts();
                             </div>
                             <div class="grid_cell width15P tocenter">
                                 <?php                             
-                                if($issueStatus == 'Active')
-                                    echo '<span class="status_btn status_btn_active">ACTIVE</span>';
-                                else if($issueStatus == 'On Hold')
-                                    echo '<span class="status_btn status_btn_on_hold">ON HOLD</span>';
+                                    echo '<span class="status_btn status_btn_' . sanitize_title($issueStatus) . '">ACTIVE</span>';
                                 ?>
                             </div>                       
                             <div class="clear"></div>

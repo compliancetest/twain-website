@@ -34,16 +34,22 @@ $case->load();
 				<div class="grids noradiusbottom">
 					<div class="grid_row white_bcg noborderbottom">
 						<div class="grid_cell width10P left size13 bold dark_blue_txt">Info:</div>
-						<div class="grid_cell width30P left">
+						<div class="grid_cell width15P left">
 							<p>Version: <span><?php echo $case->version; ?></span></p>
 						</div>
-						<div class="grid_cell width30P left">
-							<p>Published: <span>
-								<?php 
-								    echo formatDate($case->publishedDate);
-								?>
-								</span></p>
+						<div class="grid_cell width25P left">
+                            <p>Published: <span>
+                                <?php 
+                                    echo formatDate($case->publishedDate);
+                                ?>
+                                </span></p>
+                        </div>
+                        <div class="grid_cell width20P left">
+							<p>Status: 
+                                <span class="status_txt status_btn_<?php echo sanitize_title($case->status)?>"><?php echo $case->status?></span>								
+							</p>
 						</div>
+                        
 						<div class="grid_cell width30P left">
 							<p>Initiating Messsage: <span><?php echo $case->initiationgMessage; ?></span></p>
 						</div>

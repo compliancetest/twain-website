@@ -279,7 +279,7 @@ function saveCase()
     $suiteID = $_POST['suite_id'];
     $community_id = get_post_meta($suiteID, 'community_id', true);
     $user_id = get_current_user_id();
-    if(!$community_id || !groups_is_user_admin($user_id, $community_id))
+    if(!$community_id || (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
         echo json_encode(array('status' => 'error', 'message' => 'Permission Denied!'));
 //        wp_redirect(get_site_url());
@@ -327,6 +327,7 @@ function saveCase()
     cp_update_post_meta($id, 'outcome_type', $_POST['outcome_type']);
     cp_update_post_meta($id, 'bulk', $_POST['bulk']);
     cp_update_post_meta($id, 'message_count', $_POST['message_count']);
+    cp_update_post_meta($id, 'test_case_status', $_POST['test_case_status']);
     
     $tester_role = $_POST['choose_tester_role'];
     cp_update_post_meta($id, 'choose_tester_role',$tester_role);
