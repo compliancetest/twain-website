@@ -155,7 +155,7 @@ $testsuites = $get_posts->get_posts();
                             </div>
                             <div class="grid_cell width15P tocenter">
                                 <?php                             
-                                    echo '<span class="status_btn status_btn_' . sanitize_title($issueStatus) . '">' . $issueStatus . '</span>';
+                                    echo '<span class="status_btn status_' . sanitize_title($issueStatus) . '">' . $issueStatus . '</span>';
                                 ?>
                             </div>                       
                             <div class="clear"></div>

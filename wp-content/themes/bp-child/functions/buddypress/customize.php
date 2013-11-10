@@ -102,7 +102,7 @@ function cp_bp_get_group_join_button_filter($button)
             $button['link_text'] = "Leave Community";
             $button['link_title'] = "Leave Community";
         }else if($button['id'] == 'membership_requested'){
-            $button['link_class'] .= " button button_medium status_btn_on_hold white_txt radius6";    
+            $button['link_class'] .= " button button_medium status_deprecated white_txt radius6";    
             $button['link_text'] = "Request Sent";
             $button['link_title'] = "Request Sent";
             $button['link_href'] = "#";

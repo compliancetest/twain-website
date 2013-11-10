@@ -35,7 +35,7 @@
                 }else{
                     $('#community_registration .close_btn').click();            
                     //Change the Request Membership Button
-                    $('#item-buttons a.request-membership').unbind('click').attr('href', '#').attr('class', 'group-button pending membership-requested button button_medium status_btn_on_hold white_txt radius6').html('Request Sent');
+                    $('#item-buttons a.request-membership').unbind('click').attr('href', '#').attr('class', 'group-button pending membership-requested button button_medium status_btn_deprecated white_txt radius6').html('Request Sent');
                     $('#community_registration .message').html('Your request has been sent successfully!').removeClass('error').addClass('success').fadeIn('fast');
                     setTimeout(function(){
                         $('#community_registration .close_btn').click();    
