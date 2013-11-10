@@ -82,10 +82,7 @@ $roles = array();
                 <div class="grid_cell width15P tocenter">
                     <?php 
                     $issueStatus = get_post_meta($row->ID, 'ts_status', true);
-                    if($issueStatus == 'Active')
-                        echo '<span class="status_btn status_btn_active">ACTIVE</span>';
-                    else if($issueStatus == 'On Hold')
-                        echo '<span class="status_btn status_btn_on_hold">ON HOLD</span>';
+                    echo '<span class="status_btn status_btn_' . sanitize_title($issueStatus) . '">' . $issueStatus . '</span>';
                     ?>
                 </div>
                 <div class="grid_cell width15P tocenter">

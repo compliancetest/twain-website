@@ -111,6 +111,7 @@ get_header();
                            <input type="radio" name="test_case_status" id="ts_status_active" class="left15" value="Active" <?php echo $case->status == 'Active' ? 'checked="checked"' : ''?> /> Active
                            <input type="radio" name="test_case_status" id="ts_status_deprecated" class="left15" value="Deprecated" <?php echo $case->status == 'Deprecated' ? 'checked="checked"' : ''?> /> Deprecated
                            <input type="radio" name="test_case_status" id="ts_status_obsolete" class="left15" value="Obsolete" <?php echo $case->status == 'Obsolete' ? 'checked="checked"' : ''?> /> Obsolete
+                           
                        </div>
                        <div class="clear"></div>
                    </div>

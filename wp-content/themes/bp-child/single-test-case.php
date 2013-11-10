@@ -46,7 +46,7 @@ $case->load();
                         </div>
                         <div class="grid_cell width20P left">
 							<p>Status: 
-                                <span class="status_txt status_btn_<?php echo sanitize_title($case->status)?>"><?php echo $case->status?></span>								
+                                <span class="status_btn status_<?php echo sanitize_title($case->status)?>"><?php echo $case->status?></span>								
 							</p>
 						</div>
                         

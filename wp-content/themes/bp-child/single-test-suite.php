@@ -43,7 +43,7 @@ Template Name Posts: Test Suite
 								Version: <span><?php echo $suite->version; ?></span>
 								Issue Date: <span><?php echo formatDate($suite->issueDate); ?></span>
 								Issuer: <a href="<?php echo bp_get_group_permalink($group);; ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
-								Status: <span class="status_txt status_btn_<?php echo sanitize_title($suite->status)?>"><?php echo $suite->status?></span>
+								Status: <span class="status_btn status_<?php echo sanitize_title($suite->status)?>"><?php echo $suite->status?></span>
 								Revision: <span><?php echo $suite->revisionDescription; ?></span> 								
 							</div>
 							<div class="clear"></div>
@@ -270,7 +270,8 @@ Template Name Posts: Test Suite
 			</div>
 				<div class="grid_head blue_grid special_grid_big">
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
-						<div class="grid_cell nopaddingtop width10P toleft single_line">Test Case ID</div>
+                        <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
+						<div class="grid_cell nopaddingtop width8P toleft single_line">Test Case ID</div>
 						<!--<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>-->
 						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Published</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
@@ -325,11 +326,12 @@ Template Name Posts: Test Suite
                     {
                         ?>
                         <div class="grid_row white_bcg tocenter testcase_line ">
-                            <div class="grid_cell nopaddingtop width10P toleft ">
+                            <div class="grid_cell nopaddingtop width2P tocenter relative">
+                                <span class="status_btn status_circle has-tooltip status_<?php echo sanitize_title(get_post_meta($row->ID ,'test_case_status', true))?>"><?php echo substr(get_post_meta($row->ID ,'test_case_status', true), 0, 1)?><span class="simple_tooltip"><?php echo get_post_meta($row->ID ,'test_case_status', true)?><span></span></span></span>                                
+                            </div>
+                            <div class="grid_cell nopaddingtop width8P toleft ">
                                 <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
-                                <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span><br />
-                                <div class="space5"></div>
-                                <span class="status_btn left status_btn_<?php echo sanitize_title(get_post_meta($row->ID ,'test_case_status', true))?>"><?php echo get_post_meta($row->ID ,'test_case_status', true)?></span>                                
+                                <br /><span class="version">Version: <?php echo get_post_meta($row->ID ,'version', true)?></span><br />
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter ">
                                 <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>
