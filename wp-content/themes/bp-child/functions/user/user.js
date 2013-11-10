@@ -71,7 +71,7 @@
             msgObj.hide();
             $('.loading').show();
             $.ajax({
-                url: site_path,
+                url: "/",
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
                 success: function(rsp)
@@ -132,7 +132,7 @@
                     $('.loading').show();
                     msgObj.hide();
                     $.ajax({
-                        url: site_path,
+                        url: "/",
                         type: "POST",
                         data: form.serialize(),
                         success: function(data) {
