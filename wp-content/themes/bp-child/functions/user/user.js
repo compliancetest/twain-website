@@ -35,7 +35,7 @@
             $('#header_login_error_msg').hide();
             $('#top_access .loading1').show();
             $.ajax({
-                url: site_path,
+                url: "/",
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
                 success: function(rsp)
