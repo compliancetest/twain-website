@@ -471,17 +471,18 @@ div.docs-info-header p.currently-viewing{
     font-size: 12px;
 }
 .quick_actions {
-    background: #F7F7F7;
-    background: -moz-linear-gradient(top, white 2%, #EAEAEA 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,white), color-stop(100%,#EAEAEA));
-    background: -webkit-linear-gradient(top, white 2%,#EAEAEA 100%);
-    background: -o-linear-gradient(top, white 2%,#EAEAEA 100%);
-    background: -ms-linear-gradient(top, white 2%,#EAEAEA 100%);
-    background: linear-gradient(to bottom, white 2%,#EAEAEA 100%);
-/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eaeaea',GradientType=0 );*/
-    border: 1px solid #E1E1E1;
+    border:solid 1px #3577ad;
+    background: #2d83cd;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));
+    background: -webkit-linear-gradient(top, #2690ea, #3577ad);
+    background: -moz-linear-gradient(top, #2690ea, #3577ad);
+    background: -ms-linear-gradient(top, #2690ea, #3577ad);
+    background: -o-linear-gradient(top, #2690ea, #3577ad);
+/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#9f9f9f',GradientType=0 );     */
+    box-shadow: 0 1px 0 0 #7cbcf4 inset;
+    -moz-box-shadow: 0 1px 0 0 #7cbcf4 inset;
+    -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
 }
-
 .quick_actions li:first-child {
     background-image: none;
 }
@@ -489,16 +490,28 @@ div.docs-info-header p.currently-viewing{
 .quick_actions li {
     float: left;
     padding: 4px 7px;
-    background: url(../images/tab_separator.png) left center no-repeat;
+    background: url(../images/wiki-tab-seperator.png) left center no-repeat;
     position: relative;
 }
 
 .quick_actions li a {
     display: block;
     height: 18px;
+    width: 12px;
+    background: url(../images/wiki-icons.png) no-repeat;
 }
+.quick_actions li a.read-wiki {
+    background-position: 0 -46px;
+}
+.quick_actions li a.edit-wiki {
+    background-position: 1px 3px;
+}
+.quick_actions li a.history-wiki {
+    background-position: 1px -107px;
+}
+
 .quick_actions li:hover{
-    background-color: #f9f9f9;
+    background: #288ce2;
 }
 .quick_actions li:hover .simple_tooltip {
     display: block;

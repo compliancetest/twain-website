@@ -59,15 +59,13 @@
                     <div class="quick_actions radius3">
                         <ul>
                             <li>
-                                <a href="<?php echo bp_docs_get_doc_link() ?>">
-                                    <img src="<?php echo get_bloginfo('stylesheet_directory') ?>/images/view_doc.png" class="top3" />
+                                <a href="<?php echo bp_docs_get_doc_link() ?>" class="read-wiki">
                                     <span class="simple_tooltip radius6">Read<span></span></span>
                                 </a>
                             </li>
                             <?php if ( bp_docs_current_user_can( 'edit', get_the_ID() ) ) { ?>
                             <li>
-                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG?>">
-                                    <img src="<?php echo get_bloginfo('stylesheet_directory') ?>/images/edit_doc.png" class="top1"/>
+                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG?>" class="edit-wiki">
                                     <span class="simple_tooltip radius6">Edit<span></span></span>
                                 </a>
                             </li>
@@ -76,8 +74,7 @@
                             if ( bp_docs_current_user_can( 'view_history', get_the_ID() ) && defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
                             ?>                      
                             <li>
-                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>">
-                                    <img src="<?php echo get_bloginfo('stylesheet_directory') ?>/images/history_doc.png" class="top1"/>
+                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>" class="history-wiki">
                                     <span class="simple_tooltip radius6">History<span></span></span>
                                 </a>
                             </li>          
