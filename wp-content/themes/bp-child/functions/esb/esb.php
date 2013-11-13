@@ -55,7 +55,7 @@ class ManageESB
             $query .= ManageESB::$esbdb->prepare(" AND c.TEST_CASE_DB_ID=%d", $case_id);
         
         $rows = ManageESB::$esbdb->get_results($query);
-        
+        echo $query;
         if(!$rows)
             return array();
     
