@@ -75,17 +75,18 @@ $esb = new ManageESB();
                                        
                                        foreach($testCases as $case)
                                        {
+                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . get_post_meta($case->ID, 'test_case_id', true) . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span>';
                                            if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
                                                {
-                                                   $passedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
+                                                   $passedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
                                                }else{
-                                                   $failedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '"></span>';
+                                                   $failedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
                                                }
                                                
                                            }else{
-                                               $normalBlobs .= '<span class="bubble"><span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . get_post_meta($case->ID, 'test_case_id', true) . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span></span>';
+                                               $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
                                            }
                                        }
                                        echo $passedBlobs . $failedBlobs . $normalBlobs;
