@@ -44,7 +44,7 @@ class ManageESB
         $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, p.ID AS PRODUCT_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
                                             "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                                             "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=m.PRODUCT_ID " .
-                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.CUSTOMER_ID=%d", $esb_user_id);
+                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1 AND m.CUSTOMER_ID=%d", $esb_user_id);
         
         if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND m.TEST_SUITE_ID=%d", $suite_id);
