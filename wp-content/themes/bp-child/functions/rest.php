@@ -27,8 +27,8 @@ function sendRestAction($url, $data = '')
 
 class CPRest
 {
-    var $api_namespace = 'http://esb.test.compliancetest.net:18280/api';
-    var $api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
+    var $api_namespace = 'https://esb.test.compliancetest.net:18280/api';
+    var $api_namespace2 = 'https://esb.test.compliancetest.net:8280/api';
     
     public function doAPI($url, $data, $isPost = true, $isXMLHeader = true)
     {
@@ -44,7 +44,8 @@ class CPRest
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
         $response = curl_exec($ch);
         
-        if(!curl_errno($ch)){ 
+        if(!curl_errno($ch)){
+        print_r($response) ;
             return $response;
         } else { 
             return 'Curl Error:' . curl_error($ch);
