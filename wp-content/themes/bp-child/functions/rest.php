@@ -45,7 +45,8 @@ class CPRest
         echo $url;
         var_dump($data);
         $response = curl_exec($ch);
-        
+        var_dump($response);
+        var_dump(curl_error($ch));
         if(!curl_errno($ch)){        
             return $response;
         } else { 
