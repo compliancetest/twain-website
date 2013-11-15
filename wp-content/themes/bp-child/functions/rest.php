@@ -43,9 +43,8 @@ class CPRest
         
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
         $response = curl_exec($ch);
-        
-        if(!curl_errno($ch)){
-        print_r($response) ;
+        print_r($response);
+        if(!curl_errno($ch)){        
             return $response;
         } else { 
             return 'Curl Error:' . curl_error($ch);
