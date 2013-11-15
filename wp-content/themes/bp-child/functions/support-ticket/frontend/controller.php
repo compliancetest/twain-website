@@ -288,11 +288,19 @@ function changeTicketTerm()
         exit;        
     }
     
+    $message = "New Term: \r\n";
+    $message .= "Time to Pay: " . $ttpay . "\r\n";
+    $message .= "Time to Resolve: " . $ttresolve . "\r\n";
+    $message .= "Time to Response: " . $ttresponse . "\r\n";
+    
+    if($comment)
+        $message .= "\r\n" . $comment . "\r\n" ;
+    
     //Save Message
     $messageData = array(
         'ticket_id' => $ticketDetail->id,
         'sender' => $user_id,
-        'message' => $comment,
+        'message' => $message,
         'is_new' => 1,
         'message_type' => 'term',
         'receiver' => $ticketDetail->customer_id != $user_id ? $ticketDetail->customer_id : $ticketDetail->support_id,
@@ -303,8 +311,10 @@ function changeTicketTerm()
     {
         addMessage($wpdb->last_error, "error");        
     }else{
+        if($ticketDetail->customer_id != $user_id)
+            $ticketDetail->support_id = $user_id;
         //Update Term
-        $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id), array('id' => $ticketDetail->id));
+        $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id, 'support_id' => $ticketDetail->support_id), array('id' => $ticketDetail->id));
         
         /******* Send Term Updated Email **********/
         

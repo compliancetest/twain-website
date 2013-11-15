@@ -39,7 +39,13 @@ if(!defined('ABSPATH'))
                     <div class="td td-suite">
                         <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo get_post_meta($row->suite_id, 'ts_name',  true) ?></a>
                     </div>
-                    <div class="td td-fee">$<?php echo get_post_meta($row->suite_id, 'monthly_subscription_price', true); ?>/m</div>
+                    <div class="td td-fee">$<?php 
+                        $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
+                        if($currPrice < $row->price)
+                            echo $currPrice;
+                        else 
+                            echo $row->price;                        
+                    ?>/m</div>
                     <div class="td td-action tocenter">
                         <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
                         <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        

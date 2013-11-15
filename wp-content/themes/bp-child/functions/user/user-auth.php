@@ -65,7 +65,7 @@ function compliancetest_create_new_user(){
             '[password]' => $_POST['user_pass'],
             '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
         );
-        
+
         cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user', $data);
         cp_send_email_to_admin('new_user_admin', $data);
                 
@@ -115,7 +115,11 @@ function cp_activate_user()
         //Integrate User to Mailchimp
         $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
         $mailChimpList = new Mailchimp_Lists($mailChimp);
-        $result = $mailChimpList->subscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name));
+        try{
+            $result = $mailChimpList->subscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $user->user_email), array('FNAME' => get_user_meta($user->ID, "first_name", true), 'LNAME' => get_user_meta($user->ID, "last_name", true)), 'html', false);
+        }catch(Exception $e){
+            
+        }
         
         $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0, user_activation_key='' WHERE ID =" . $user->ID);
         $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     

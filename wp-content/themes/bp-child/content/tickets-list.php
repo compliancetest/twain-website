@@ -136,15 +136,7 @@ if($filterCategory)
                             </div>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
                             <div class="td td-ticket-type"><?php echo $ticket->category_title ?></div>
-                            <div class="td td-ticket-status tocenter"><?php echo $ticket->status_title ?></div>                                    
-                            <div class="td td-ticket-solved tocenter">
-                                 <?php 
-                                    if($ticket->solved_date == '0000-00-00 00:00:00')
-                                        echo " - "; 
-                                    else
-                                        echo formatDate($ticket->solved_date, 'Y-m-d H:i'); 
-                                 ?>
-                            </div>
+                            <div class="td td-ticket-status tocenter"><?php echo $ticket->status_title ?></div>                            
                             <div class="td td-ticket-updated"><?php echo formatDate($ticket->last_updated, 'Y-m-d H:i') ?></div>
                             <div class="clear"></div>
                         </div>

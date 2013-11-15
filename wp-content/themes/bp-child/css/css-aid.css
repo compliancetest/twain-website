@@ -229,7 +229,7 @@ input[type="search_button"], input[type="submit"], input[type="reset"], input[ty
 }
 
 input[type="search_button"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, .button:hover {
-	background-image: url(../images/white_gloss.png);
+	
 	text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
 	-moz-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
 	-webkit-text-shadow: 0 1px 1px rgba(0, 0, 0, .2);

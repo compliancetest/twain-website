@@ -109,6 +109,7 @@ function process_eway_payment()
             $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
                 'user_id' => $user->ID,
                 'suite_id' => $suite->id,
+                'price' => $suite->monthlySubscriptionPrice,
                 'customer_id' => $card->customer_id,
                 'esb_user_id' => 0,
                 'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
@@ -279,6 +280,7 @@ function free_charge()
                 $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
                     'user_id' => $user->ID,
                     'suite_id' => $suite->id,
+                    'price' => 0.0,
                     'customer_id' => 0,
                     'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
                     'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
@@ -378,114 +380,27 @@ function unsubscribe_purchase()
         exit;
     }    
 }
-add_action('init', 'cp_edit_variables_defaults');
-   
-function cp_edit_variables_defaults()
+
+
+add_action("init", "proceed_recurring_payments");
+/**
+* Getting Recurring Payments
+* 
+*/
+function proceed_recurring_payments()
 {
     global $wpdb;
     
-    if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'show-variables-popup'))
-    {  
-        $user_id = get_current_user_id();
-        if(!$user_id)
-            return;
+    if(isset($_GET['_paymentnonce']) && $_GET['_paymentnonce'] == 'recurring_payments')
+    {
+        //Getting All Expired Payments
+        $query = "SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active' AND `customer_id` > 0 AND `expiry_date` <= '" . date('Y-m-d') . "'";
+        $rows = $wpdb->get_results($query);
         
-        $id = $_REQUEST['id'];
-        $query = $wpdb->prepare("SELECT id, suite_id, params FROM " . $wpdb->prefix . "users_purchases WHERE id=%d AND user_id=%d AND `status`='Active'", $id, $user_id);
-        $purchase = $wpdb->get_row($query);                
-        ?>
-        <div class="popup-box" id="template-variables-popup-box" style="display: none;width: 450px;">
-            <div class="popup-box-header radius6 noradiusbottom">Template Variables</div>        
-            <form name="variables-form" id="variables-form" action="">        
-                <div class="popup-box-content padding10">  
-                    <div class="grid-box table-box">
-                        <div class="grid-box-body">
-                            <div class="thead tr">
-                               <div class="td td-variable-name">Name</div>
-                               <div class="td td-variable-value">Value</div>
-                               <div class="td td-action tocenter">Action</div>
-                               <div class="clear"></div>
-                           </div>
-                           <div class="tbody">
-                                <?php 
-                                    if(!$purchase){
-                                ?>
-                                <div class="tr">
-                                    <div class="td td-full">Invalid Request!</div>
-                                    <div class="clear"></div>
-                                </div>                                
-                                <?php 
-                                    }else{
-                                        $suite = new TestSuite($purchase->suite_id);
-                                        $variables = $suite->loadVariables();
-                                        $params = !$purchase->params  ? array() : unserialize(base64_decode($purchase->params));
-                                        
-                                        if(!$variables)
-                                        {
-                                            ?>
-                                            <div class="tr">
-                                                <div class="td td-full">No data found.</div>
-                                                <div class="clear"></div>
-                                            </div>
-                                            <?php            
-                                        }else{
-                                            foreach($variables as $v)
-                                            {
-                                ?>
-                                                <div class="tr relative">
-                                                    <div class="td td-variable-name"><?php echo $v->variable_name?></div>
-                                                    <div class="td td-variable-value">
-                                                        <input type="text" class="input" id="variable" value="<?php echo isset($params[$v->id]) ? $params[$v->id] : $v->variable_default?>" />
-                                                    </div>
-                                                    <div class="td td-action">
-                                                        <a href="/?p_id=<?php echo $purchase->id?>&v_id=<?php echo $v->id?>&_paymentnonce=<?php echo wp_create_nonce("save-template-varaible")?>" class="action-btn process-btn nomarginleft" onclick="return saveVariableDefaults(this)"><span class="p"></span><span class="t">Save</span></a>
-                                                    </div>     
-                                                    <div class="clear"></div>
-                                                    <div class="loading1"></div>                                                    
-                                                </div>
-                                <?php
-                                            }
-                                        }
-                                ?>
-                                <?php 
-                                    } 
-                                ?>
-                           </div>           
-                        </div>                
-                    </div>
-                </div>
-                <div class="loading"></div>
-                <a class="close_btn"></a>
-                <input type="hidden" name="id" id="harness-id" value="" />
-                <?php wp_nonce_field('save-harness', 'cp-action'); ?>
-            </form>
-        </div>
-        <?php
-        exit;
-    }else if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'save-template-varaible')){  
-        $user_id = get_current_user_id();
-        if(!$user_id)
-            return;
-            
-        $p_id = $_REQUEST['p_id'];
-        $v_id = intval($_REQUEST['v_id']);
-        $value = $_REQUEST['value'];
-        
-        //Getting Purchase
-        $purchase = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE id=%d AND user_id=%d AND `status`='Active'", $p_id,  $user_id));
-        if(!$purchase)
+        foreach($rows as $row)
         {
-            echo 'Invalid Request';
-            exit;
+            //Send Payment
+            
         }
-        
-        $params = !$purchase->params ? array() : unserialize(base64_decode($purchase->params));
-        
-        $params[$v_id] = stripslashes_deep($value);
-        $wpdb->update($wpdb->prefix . "users_purchases", array('params' => base64_encode(serialize($params))), array('id' => $p_id));
-        
-        echo 'success';
-        exit;
-        
     }
 }
