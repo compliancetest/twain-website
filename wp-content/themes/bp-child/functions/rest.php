@@ -27,7 +27,8 @@ function sendRestAction($url, $data = '')
 
 class CPRest
 {
-    var $api_namespace = 'http://esb.test.compliancetest.net:8280/api';
+    var $api_namespace = 'http://esb.test.compliancetest.net:18280/api';
+    var $api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
     
     public function doAPI($url, $data, $isPost = true, $isXMLHeader = true)
     {
@@ -75,7 +76,7 @@ class CPRest
     
     public function doMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->api_namespace2 . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
     }    
     
     public function doMetadataAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
