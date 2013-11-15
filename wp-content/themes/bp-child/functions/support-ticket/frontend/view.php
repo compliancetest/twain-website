@@ -42,7 +42,7 @@ function showSumitTicketBox()
                     <div class="field-row">
                         <div class="grid-cell">
                             <label>Subject:</label>
-                            <input type="text" name="subject" id="subject" maxlength="50" value="" class="input" />
+                            <input type="text" name="subject" id="subject" maxlength="50" value="" class="input" /><br clear="all" />
                             <span class="field-desc">Maximum 50 characters</span>
                         </div>
                         <div class="clear"></div>

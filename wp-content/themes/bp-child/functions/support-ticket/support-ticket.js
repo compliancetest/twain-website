@@ -79,4 +79,46 @@ jQuery(document).ready(function(){
         return isValid;
     });
     
+    //Show Change Term Form
+    jQuery('#change-term-link').click(function(){
+        jQuery('#change-term-contr').fadeIn('fast');
+        jQuery('#term-actions').hide();
+        return false;
+    });
+    
+    jQuery('#change-term-contr .cancel-btn').click(function(){
+        jQuery('#change-term-contr').fadeOut('fast');
+        jQuery('#term-actions').show();
+        return  false;
+    });
+    
+    //Submit Term Changes
+    jQuery('#changeTermForm').submit(function(){
+        var isValid = true;
+        
+        jQuery('#changeTermForm .input-error').removeClass('input-error');
+        
+        //Validate the input values
+        if(!jQuery('#changeTermForm #ttpay').val() || isNaN(jQuery('#changeTermForm #ttpay').val()))
+        {
+            jQuery('#changeTermForm #ttpay').addClass("input-error");
+            isValid = false;
+        }
+        
+        if(!jQuery('#changeTermForm #ttresolve').val() || isNaN(jQuery('#changeTermForm #ttresolve').val()))
+        {
+            jQuery('#changeTermForm #ttresolve').addClass("input-error");
+            isValid = false;
+        }
+        
+        if(!jQuery('#changeTermForm #ttresponse').val() || isNaN(jQuery('#changeTermForm #ttresponse').val()))
+        {
+            jQuery('#changeTermForm #ttresponse').addClass("input-error");
+            isValid = false;
+        }
+        
+        return isValid;
+        
+    })
+    
 })

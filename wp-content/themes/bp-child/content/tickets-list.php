@@ -75,7 +75,7 @@ if($filterCategory)
     </div>
     <div class="clear"></div>
     <div class="space10"></div>
-    <div class="grid-box table-box">
+    <div class="grid-box table-box" id="tickets_table">
        <div class="grid-box-body">
            <div class="thead tr">
                <div class="td td-ticket-id td-sortable tocenter">

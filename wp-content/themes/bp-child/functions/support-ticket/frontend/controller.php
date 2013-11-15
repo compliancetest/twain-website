@@ -63,7 +63,8 @@ function createSupportTicket()
         'ttresolve' => $priority->ttresolve,
         'ttresponse' => $priority->ttresponse,
         'price' => $category->has_fee ? $priority->price : 0.00,
-        'is_confirmed' => 1,
+        'term_accepted' => 0,
+        'term_creator_id' => $user_id,
         'customer_new_messages' => 0,
         'support_new_messages' => 1,
         'last_message_id' => 0,
@@ -78,6 +79,11 @@ function createSupportTicket()
         wp_redirect("/my-support-tickets");
         exit;
     }
+    
+    /***************** Begin Send Mail ***************************/
+    //Send Email Notification to Support
+    //Send Email Notification to the Customer
+    /***************** End Send Mail *****************************/
     
     addMessage('Your ticket has been submitted successfully.');
     wp_redirect("/my-support-tickets");
@@ -209,4 +215,102 @@ function getTicketMessagesByTicketId($ticket_id)
     $rows = $wpdb->get_results($query);
     
     return $rows;
+}
+
+/**
+* Accept Terms
+*/
+function acceptTerm()
+{
+    global $wpdb;    
+    
+    $ticket_id = $_REQUEST['id'];
+    
+    $user_id = get_current_user_id();
+    
+    $user = get_currentuserinfo();
+    
+    //Validate the ticket id
+    if(!$ticket_id || !($ticketDetail = getTicketById($ticket_id)))
+    {
+        addMessage("Invalid Request!", "error");
+        wp_redirect("/my-support-tickets");
+        exit;
+    }
+    
+    //Validate that the term was not created by this user
+    if($user_id == $ticketDetail->term_creator_id)
+    {
+        wp_redirect("/my-support-tickets/" . $ticketDetail->id);
+        exit;
+    }
+    
+    //Accept Term
+    $wpdb->update($wpdb->prefix . "tickets", array('term_accepted' => 1), array('id' => $ticketDetail->id));
+    
+    if($ticketDetail->customer_id != $user_id)
+    {
+        //Set Support ID
+        $wpdb->update($wpdb->prefix . "tickets", array('support' => $user_id), array('id' => $ticketDetail->id));
+    }
+    
+    /***************** Begin Send Mail ***************************/
+    //Send Email Notification to Support
+    //Send Email Notification to the Customer
+    /***************** End Send Mail *****************************/
+    
+    addMessage("The term has been accepted.", "success");
+    
+    wp_redirect("/my-support-tickets/" . $ticketDetail->id);
+    exit;    
+}
+
+/**
+* Change Ticket Term
+* 
+*/
+function changeTicketTerm()
+{
+    global $wpdb;
+    
+    $user_id = get_current_user_id();
+    
+    $ticket_id = $_POST['id'];
+    $ttpay = $_POST['ttpay'];
+    $ttresponse = $_POST['ttresponse'];
+    $ttresolve = $_POST['ttresolve'];
+    $comment = stripslashes_deep($_POST['content']);
+    
+    if(!$ticket_id || !($ticketDetail = getTicketById($ticket_id)))
+    {
+        addMessage("Invalid Request!", "error");
+        wp_redirect("/my-support-tickets");
+        exit;        
+    }
+    
+    //Save Message
+    $messageData = array(
+        'ticket_id' => $ticketDetail->id,
+        'sender' => $user_id,
+        'message' => $comment,
+        'is_new' => 1,
+        'message_type' => 'term',
+        'receiver' => $ticketDetail->customer_id != $user_id ? $ticketDetail->customer_id : $ticketDetail->support_id,
+        'created_date' => date("Y-m-d H:i:s")
+    );
+    
+    if(!$wpdb->insert($wpdb->prefix .  "ticket_messages", $messageData))
+    {
+        addMessage($wpdb->last_error, "error");        
+    }else{
+        //Update Term
+        $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id), array('id' => $ticketDetail->id));
+        
+        /******* Send Term Updated Email **********/
+        
+        addMessage("Your ticket has been updated.", "success");
+        wp_redirect("/my-support-tickets/" . $ticketDetail->id);
+        exit;
+    }
+    
 }

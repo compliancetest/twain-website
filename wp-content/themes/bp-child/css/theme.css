@@ -6682,7 +6682,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #tickets_list .tbody .tr{
     cursor: pointer;
 }
-
+#tickets_table .ticket-priority{
+    width: 10px;
+    height: 10px;
+}
 
 .ticket-detail{
     
@@ -6699,6 +6702,13 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .ticket-detail .ticket-info span label{
     font-weight: 700;
     padding-right: 10px;
+}
+#change-term-contr .field-row label{
+    float: left;
+}
+#change-term-contr .field-row input, 
+#change-term-contr .field-row textarea{
+    float: left;
 }
 /***
 * Dashboard Page Min Heights
