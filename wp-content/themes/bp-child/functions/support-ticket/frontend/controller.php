@@ -288,10 +288,10 @@ function changeTicketTerm()
         exit;        
     }
     
-    $message = "New Term: \r\n";
-    $message .= "Time to Pay: " . $ttpay . "\r\n";
-    $message .= "Time to Resolve: " . $ttresolve . "\r\n";
-    $message .= "Time to Response: " . $ttresponse . "\r\n";
+    $message = "<h5>New Term:</h5> \r\n";
+    $message .= "<b>Time to Pay:</b> " . $ttpay . "\r\n";
+    $message .= "<b>Time to Resolve:<b/> " . $ttresolve . "\r\n";
+    $message .= "<b>Time to Response:<b/> " . $ttresponse . "\r\n";
     
     if($comment)
         $message .= "\r\n" . $comment . "\r\n" ;

@@ -631,9 +631,10 @@ img {
 }
 
 .space25 {
-	height: 25px !important;
-	display: block !important;
+    height: 25px !important;
+    display: block !important;
 }
+
 
 .space30 {
 	height: 30px !important;
@@ -774,6 +775,10 @@ img {
 
 .width25P {
 	width: 25% !important;
+}
+
+.width27P {
+    width: 27% !important;
 }
 
 .width30P {

@@ -21,30 +21,39 @@ $user_id = get_current_user_id();
             $is_customer = $ticket->customer_id == $user_id ? true : false;
     ?>
         <div class="ticket-detail">
-            <h3><?php echo apply_filters('the_title', $ticket->title)?></h3>
-            <p class="ticket-info">
-                <span><label>Requested Date:</label> <?php echo formatDate($ticket->created_date, 'F d, Y h:i A'); ?></span>             
-                <span><label>Type: </label> <?php echo $ticket->category_title ?></span>                                            
-                <span><label>Priority: </label> <?php echo $ticket->priority_title ?></span>
-                <span><label>Status: </label> <?php echo $ticket->status_title ?></span>                
-            </p>                        
-            <?php echo apply_filters('the_content', $ticket->content)?>            
-            <p class="ticket-info">
-                <span><label>Price: </label> <?php echo $ticket->price > 0 ? ('$' . $ticket->price . '/hr') : 'Free' ?></span>
-                <span><label>Time to Pay: </label> <?php echo $ticket->ttpay ?> hours</span>
-                <span><label>Time to Resolve: </label> <?php echo $ticket->ttresolve ?> hours</span>
-                <span><label>Time to Response: </label> <?php echo $ticket->ttresponse ?> hours</span>                
-            </p>            
-            <p id="term-actions">
-                <?php
-                    if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id){
-                ?>
-                    <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn right10" id="accept-term-link"><span class="p"></span><span class="t">Accept Term</span></a>
-                <?php
-                    }
-                ?>
-                <a href="#" class="action-btn edit-btn" id="change-term-link"><span class="p"></span><span class="t">Change Term</span></a>
-            </p>
+            <div class="left width10P">
+                <a href="<?php bp_loggedin_user_link(); ?>">                                    
+                    <?php bp_loggedin_user_avatar( 'type=thumb' ); ?><br />
+                    <?php echo cp_get_user_display_name($user_id); ?>
+                </a><br />
+                <?php echo formatDate($ticket->created_date, "M d"); ?>
+            </div>
+            <div class="left width90P">
+                <h3><?php echo apply_filters('the_title', $ticket->title)?></h3>
+                <p class="ticket-info">
+                    <span><label>Requested Date:</label> <?php echo formatDate($ticket->created_date, 'F d, Y h:i A'); ?></span>             
+                    <span><label>Type: </label> <?php echo $ticket->category_title ?></span>                                            
+                    <span><label>Priority: </label> <?php echo $ticket->priority_title ?></span>
+                    <span><label>Status: </label> <?php echo $ticket->status_title ?></span>                
+                </p>                        
+                <?php echo apply_filters('the_content', $ticket->content)?>            
+                <p class="ticket-info">
+                    <span><label>Price: </label> <?php echo $ticket->price > 0 ? ('$' . $ticket->price . '/hr') : 'Free' ?></span>
+                    <span><label>Time to Pay: </label> <?php echo $ticket->ttpay ?> hours</span>
+                    <span><label>Time to Resolve: </label> <?php echo $ticket->ttresolve ?> hours</span>
+                    <span><label>Time to Response: </label> <?php echo $ticket->ttresponse ?> hours</span>                
+                </p>            
+                <p id="term-actions">
+                    <?php
+                        if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id){
+                    ?>
+                        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn right10" id="accept-term-link"><span class="p"></span><span class="t">Accept Term</span></a>
+                    <?php
+                        }
+                    ?>
+                    <a href="#" class="action-btn edit-btn" id="change-term-link"><span class="p"></span><span class="t">Change Term</span></a>
+                </p>
+            </div>
             <div class="clear"></div>
             <div id="change-term-contr" style="display: none;">
                 <form name="changeTermForm" id="changeTermForm" method="post">

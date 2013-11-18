@@ -380,27 +380,3 @@ function unsubscribe_purchase()
         exit;
     }    
 }
-
-
-add_action("init", "proceed_recurring_payments");
-/**
-* Getting Recurring Payments
-* 
-*/
-function proceed_recurring_payments()
-{
-    global $wpdb;
-    
-    if(isset($_GET['_paymentnonce']) && $_GET['_paymentnonce'] == 'recurring_payments')
-    {
-        //Getting All Expired Payments
-        $query = "SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active' AND `customer_id` > 0 AND `expiry_date` <= '" . date('Y-m-d') . "'";
-        $rows = $wpdb->get_results($query);
-        
-        foreach($rows as $row)
-        {
-            //Send Payment
-            
-        }
-    }
-}

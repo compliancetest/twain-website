@@ -280,9 +280,9 @@ Template Name Posts: Test Suite
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>
+<!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
 						<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
-						<div class="grid_cell nopaddingtop width22P toleft single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop width27P toleft single_line">Test Intent Description</div>
 						<div class="grid_cell nopaddingtop width5P toleft single_line">Actions</div>
 						<div class="clear"></div>	
 					</div>
@@ -354,13 +354,13 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width5P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'message_count', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter ">
+                            <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
                                 <?php echo get_post_meta($row->ID ,'bulk', true)?>
-                            </div>
+                            </div>-->
                             <div class="grid_cell nopaddingtop width10P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                             </div>
-                            <div class="grid_cell nopaddingtop width22P toleft">
+                            <div class="grid_cell nopaddingtop width27P toleft">
                             <?php 
                                 $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
                                 if(strlen($intentDesc) > 150)
