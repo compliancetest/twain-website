@@ -6584,7 +6584,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #tickets_list .td-ticket-requested,
 #tickets_list .td-ticket-solved,
 #tickets_list .td-ticket-updated{
-    width: 78px;
+    width: 90px;
 }
 #tickets_list .td-ticket-status{
     width: 75px;

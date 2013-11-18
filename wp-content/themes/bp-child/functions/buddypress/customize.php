@@ -526,3 +526,4 @@ function getCommunityProductsCount($community_id)
     
     return !$count ? 0 : $count;
 }
+

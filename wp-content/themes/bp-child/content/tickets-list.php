@@ -93,9 +93,9 @@ if($filterCategory)
                <div class="td td-ticket-status td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=status_id&order=<?php echo $orderBy == 'status_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'status_id'){ ?>class="<?php echo $order?>"<?php } ?>>Status <span class="sort"></span></a>
                </div>
-               <div class="td td-ticket-solved td-sortable tocenter">
+               <!--<div class="td td-ticket-solved td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=solved_date&order=<?php echo $orderBy == 'solved_date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'solved_date'){ ?>class="<?php echo $order?>"<?php } ?>>Solved <span class="sort"></span></a>
-               </div>
+               </div>-->
                <div class="td td-ticket-updated td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated&order=<?php echo $orderBy == 'last_updated' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'last_updated'){ ?>class="<?php echo $order?>"<?php } ?>>Updated <span class="sort"></span></a>
                </div>                               

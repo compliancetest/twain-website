@@ -830,7 +830,7 @@ function cp_get_user_display_name($user)
     }
     
     //Now only show user first name
-    return $user->first_name;
+    return $user->display_name;
 }
 
 /**
@@ -841,4 +841,20 @@ function get_mailchimp_api_key()
 {
     $options = get_option('mc4wp');
     return $options['api_key'];
+}
+
+function cp_get_user_avatar($user_id, $args = '')
+{
+    $defaults = array(
+        'type'   => 'thumb',
+        'width'  => false,
+        'height' => false,
+        'html'   => true,
+        'alt'    => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_loggedin_user_fullname() )
+    );
+
+    $r = wp_parse_args( $args, $defaults );
+    extract( $r, EXTR_SKIP );
+
+    return apply_filters( 'bp_get_loggedin_user_avatar', bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => $type, 'width' => $width, 'height' => $height, 'html' => $html, 'alt' => $alt ) ) );
 }

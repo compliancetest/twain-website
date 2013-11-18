@@ -18,13 +18,13 @@ $user_id = get_current_user_id();
         <p>Ticket not found. The ticket id is not correct or not your ticket.</p>
     <?php
         }else{
-            $is_customer = $ticket->customer_id == $user_id ? true : false;
+            $is_customer = $ticket->customer_id == $user_id ? true : false;            
     ?>
         <div class="ticket-detail">
             <div class="left width10P">
                 <a href="<?php bp_loggedin_user_link(); ?>">                                    
-                    <?php bp_loggedin_user_avatar( 'type=thumb' ); ?><br />
-                    <?php echo cp_get_user_display_name($user_id); ?>
+                    <?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb' ); ?><br />
+                    <?php echo cp_get_user_display_name(intval($ticket->customer_id)); ?>
                 </a><br />
                 <?php echo formatDate($ticket->created_date, "M d"); ?>
             </div>
@@ -94,9 +94,16 @@ $user_id = get_current_user_id();
                 </form>
             </div>
         </div>
+        <div id="ticket-messages-list">
         <?php   
             $messages = getTicketMessagesByTicketId($ticket->id);
+            foreach($messages as $message){ 
         ?>
+            
+        <?php 
+            }
+        ?>
+        </div>
         <div class="new-message">
             <form name="newMessageForm" id="newMessageForm">
                 
