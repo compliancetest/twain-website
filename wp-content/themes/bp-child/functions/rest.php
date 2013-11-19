@@ -42,7 +42,8 @@ class CPRest
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/xml")); 
         
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
-        
+        echo $url;
+        var_dump($data);
         $response = curl_exec($ch);
         var_dump($response);
         var_dump(curl_error($ch));exit;

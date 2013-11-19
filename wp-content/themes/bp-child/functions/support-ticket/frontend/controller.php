@@ -228,7 +228,7 @@ function acceptTerm()
     
     $user_id = get_current_user_id();
     
-    $user = get_currentuserinfo();
+    $user = get_userdata($user_id);
     
     //Validate the ticket id
     if(!$ticket_id || !($ticketDetail = getTicketById($ticket_id)))
@@ -245,21 +245,40 @@ function acceptTerm()
         exit;
     }
     
-    //Accept Term
-    $wpdb->update($wpdb->prefix . "tickets", array('term_accepted' => 1), array('id' => $ticketDetail->id));
+    $message = $user->display_name . " has accepted the term.";
     
-    if($ticketDetail->customer_id != $user_id)
+    //Save Message    
+    $messageData = array(
+        'ticket_id' => $ticketDetail->id,
+        'sender' => $user_id,
+        'message' => $message,
+        'is_new' => 1,
+        'message_type' => 'term',
+        'receiver' => $ticketDetail->customer_id != $user_id ? $ticketDetail->customer_id : $ticketDetail->support_id,
+        'created_date' => date("Y-m-d H:i:s")
+    );
+    
+    if(!$wpdb->insert($wpdb->prefix .  "ticket_messages", $messageData))
     {
-        //Set Support ID
-        $wpdb->update($wpdb->prefix . "tickets", array('support' => $user_id), array('id' => $ticketDetail->id));
+        addMessage($wpdb->last_error, "error");        
+    }else{
+    
+        //Accept Term
+        $wpdb->update($wpdb->prefix . "tickets", array('term_accepted' => 1), array('id' => $ticketDetail->id));
+        
+        if($ticketDetail->customer_id != $user_id)
+        {
+            //Set Support ID
+            $wpdb->update($wpdb->prefix . "tickets", array('support' => $user_id), array('id' => $ticketDetail->id));
+        }
+        
+        /***************** Begin Send Mail ***************************/
+        //Send Email Notification to Support    
+        //Send Email Notification to the Customer
+        /***************** End Send Mail *****************************/
+        
+        addMessage("The term has been accepted.", "success");
     }
-    
-    /***************** Begin Send Mail ***************************/
-    //Send Email Notification to Support
-    //Send Email Notification to the Customer
-    /***************** End Send Mail *****************************/
-    
-    addMessage("The term has been accepted.", "success");
     
     wp_redirect("/my-support-tickets/" . $ticketDetail->id);
     exit;    
