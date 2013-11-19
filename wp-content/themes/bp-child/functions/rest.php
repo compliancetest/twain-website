@@ -28,7 +28,7 @@ function sendRestAction($url, $data = '')
 class CPRest
 {
     var $api_namespace = 'http://esb.test.compliancetest.net:18280/api';
-    var $api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
+    var $api_namespace2 = 'http://esb.test.compliancetest.net:18280/api';
     
     public function doAPI($url, $data, $isPost = true, $isXMLHeader = true)
     {
