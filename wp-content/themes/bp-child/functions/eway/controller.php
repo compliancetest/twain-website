@@ -144,7 +144,7 @@ function process_eway_payment()
                 '[community_url]' => bp_get_group_permalink($group)
             );
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-            cp_send_email_to_admin('purchase_subscription', $emailData);
+            cp_send_email_to_admin('purchase_subscription_admin', $emailData);
             
             //Create Backend Customer Using SOAP            
             $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
