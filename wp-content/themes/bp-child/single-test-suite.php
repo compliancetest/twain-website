@@ -442,9 +442,7 @@ Template Name Posts: Test Suite
                             <option value="">Select a Card</option>
                             <?php foreach($userCards as $row){ ?>
                             <option value="<?php echo $row->id?>">
-                                <?php echo ucfirst(check_cc($row->card_number)); ?>
-                                <?php echo chunk_split(encrypt_card_number($row->card_number), 4)?>,
-                                <?php echo $row->name?>
+                                <?php echo chunk_split(encrypt_card_number($row->card_number), 4)?>
                             </option>
                             <?php } ?>
                         </select>

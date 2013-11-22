@@ -23,6 +23,8 @@ function ct_process_ticket_frontend_actions()
             acceptTerm();
         }else if(wp_verify_nonce($action, 'change-ticket-term')){
             changeTicketTerm();
+        }else if(wp_verify_nonce($action, 'send-ticket-message')){
+            sendTicketMessage();
         }
     }
 }

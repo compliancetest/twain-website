@@ -6526,7 +6526,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding-right: 8px;
 }
 #my_tickets form{
-    float: left;
+/*    float: left;*/
 }
 #my_tickets .filter-box select{
     width: 130px;
@@ -6703,6 +6703,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     font-weight: 700;
     padding-right: 10px;
 }
+.ticket-date{margin-bottom: 0;}
 #change-term-contr .field-row label{
     float: left;
 }
@@ -6723,3 +6724,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     z-index: 100;
     
 }
+#new-message-wrap{
+    position: relative;
+}
+

@@ -18,7 +18,8 @@ $user_id = get_current_user_id();
         <p>Ticket not found. The ticket id is not correct or not your ticket.</p>
     <?php
         }else{
-            $is_customer = $ticket->customer_id == $user_id ? true : false;            
+            $is_customer = $ticket->customer_id == $user_id ? true : false;     
+            makeTicketRead($ticket_id, $is_customer ? 'customer' : 'support');
     ?>
         <div class="ticket-detail">                            
             <?php if(!$is_customer){ ?>                
@@ -108,21 +109,35 @@ $user_id = get_current_user_id();
                 </div>
                 <div class="left width90P">
                     <?php echo apply_filters("the_content", $message->message); ?>                    
-                </div>
-                <p class="ticket-date"><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></p>
+                    <p class="ticket-date"><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></p>
+                </div>                
                 <div class="clear"></div>
             </div>
         <?php 
             }
         ?>
         </div>
-        <div class="new-message">
-            <form name="newMessageForm" id="newMessageForm">
-                
-                <div class="btn-row">
-                    
+        <div id="new-message-wrap">
+            <form name="newMessageForm" id="newMessageForm" method="post">
+                <div class="field-row">
+                    <div class="field-cell left width10P">
+                        <a href="<?php bp_loggedin_user_link(); ?>">                                    
+                            <?php echo cp_get_user_avatar($user_id, 'type=thumb' ); ?><br />
+                            <?php echo cp_get_user_display_name($user_id); ?>
+                        </a>
+                    </div>
+                    <div class="field-cell left width90P">
+                        <textarea cols="8" rows="5" class="textarea width70P" id="message-content" name="content" placeholder="Message"></textarea>                        
+                        <div class="btn-row">
+                            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Send Message</span></a>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('send-ticket-message')?>" />
+                    <input type="hidden" name="id" value="<?php echo $ticket->id ?>" />
                 </div>
             </form>
+            <div class="loading loading-with-text"><div><b>SENDING YOUR MESSAGE</b><span>Please wait...</span></div></div>
         </div>
     <?php            
         }

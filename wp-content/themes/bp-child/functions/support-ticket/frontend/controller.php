@@ -245,7 +245,7 @@ function acceptTerm()
         exit;
     }
     
-    $message = $user->display_name . " has accepted the term.";
+    $message = "<b>" . $user->display_name . "</b> has accepted the term.";
     
     //Save Message    
     $messageData = array(
@@ -307,10 +307,12 @@ function changeTicketTerm()
         exit;        
     }
     
-    $message = "<h5>New Term:</h5> \r\n";
+    $user = get_userdata($user_id);
+    
+    $message = "<b>" . $user->display_name . "</b> has updated the term.\r\n\r\n";
     $message .= "<b>Time to Pay:</b> " . $ttpay . "\r\n";
-    $message .= "<b>Time to Resolve:<b/> " . $ttresolve . "\r\n";
-    $message .= "<b>Time to Response:<b/> " . $ttresponse . "\r\n";
+    $message .= "<b>Time to Resolve:</b> " . $ttresolve . "\r\n";
+    $message .= "<b>Time to Response:</b> " . $ttresponse . "\r\n";
     
     if($comment)
         $message .= "\r\n" . $comment . "\r\n" ;
@@ -335,6 +337,13 @@ function changeTicketTerm()
         //Update Term
         $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id, 'support_id' => $ticketDetail->support_id), array('id' => $ticketDetail->id));
         
+        //Update New Message Count
+        if($ticketDetail->customer_id != $user_id)
+            $query = "UPDATE " . $wpdb->prefix . "tickets SET `customer_new_messages`=`customer_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+        else
+            $query = "UPDATE " . $wpdb->prefix . "tickets SET `support_new_messages`=`support_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+        $wpdb->query($query);
+        
         /******* Send Term Updated Email **********/
         
         addMessage("Your ticket has been updated.", "success");
@@ -342,4 +351,54 @@ function changeTicketTerm()
         exit;
     }
     
+}
+
+/**
+* Send Ticket Message
+*/
+function sendTicketMessage()
+{
+    global $wpdb;
+    
+    $user_id = get_current_user_id();
+    
+    $ticket_id = $_POST['id'];
+    
+    if(!$ticket_id || !($ticketDetail = getTicketById($ticket_id)))
+    {
+        addMessage("Invalid Request!", "error");
+        wp_redirect("/my-support-tickets");
+        exit;        
+    }
+    
+    $message = stripslashes_deep($_POST['content']);
+    
+    //Save Message
+    $messageData = array(
+        'ticket_id' => $ticketDetail->id,
+        'sender' => $user_id,
+        'message' => $message,
+        'is_new' => 1,
+        'message_type' => 'term',
+        'receiver' => $ticketDetail->customer_id != $user_id ? $ticketDetail->customer_id : $ticketDetail->support_id,
+        'created_date' => date("Y-m-d H:i:s")
+    );
+    
+    if(!$wpdb->insert($wpdb->prefix .  "ticket_messages", $messageData))
+    {
+        addMessage($wpdb->last_error, "error");        
+    }else{
+        
+        //Update New Message Count
+        if($ticketDetail->customer_id != $user_id)
+            $query = "UPDATE " . $wpdb->prefix . "tickets SET `customer_new_messages`=`customer_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+        else
+            $query = "UPDATE " . $wpdb->prefix . "tickets SET `support_new_messages`=`support_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+        $wpdb->query($query);
+        
+        ///Send Email Notification
+        addMessage("Your ticket has been updated.", "success");
+        wp_redirect("/my-support-tickets/" . $ticketDetail->id);
+        exit;
+    }
 }

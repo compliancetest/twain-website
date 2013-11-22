@@ -157,6 +157,7 @@ function cp_user_payment_edit()
     }
     
     $result = getCustomerCardDetailById($card->customer_id);
+    
     if(!$result || isset($result['faultstring'])) 
     {
         echo "There was an error while getting the information from eWay.";
@@ -223,10 +224,56 @@ function cp_user_payment_save()
         return 'Your CVC code is incorrect';
     }
     
-    $tokenWebserviceURL = get_eway_token_webservice_url();
     $customerID = get_eway_customer_id();
     $userName = get_eway_user_name();
     $userPWD = get_eway_user_pwd();
+    
+    //Validate the card info using PreAuth Service    
+    $preAuthServiceURL = get_eway_pre_auth_url();
+    $xmlData = '<ewaygateway> 
+                <ewayCustomerID>' . $customerID . '</ewayCustomerID> 
+                <ewayTotalAmount>10</ewayTotalAmount> 
+                <ewayCustomerFirstName></ewayCustomerFirstName> 
+                <ewayCustomerLastName></ewayCustomerLastName> 
+                <ewayCustomerEmail></ewayCustomerEmail> 
+                <ewayCustomerAddress></ewayCustomerAddress> 
+                <ewayCustomerPostcode></ewayCustomerPostcode>
+                <ewayCustomerInvoiceDescription></ewayCustomerInvoiceDescription> 
+                <ewayCustomerInvoiceRef></ewayCustomerInvoiceRef>
+                <ewayCardHoldersName>' . $name_on_card . '</ewayCardHoldersName> 
+                <ewayCardNumber>' . $card_number . '</ewayCardNumber> 
+                <ewayCardExpiryMonth>' . $card_expiry_arr[0] . '</ewayCardExpiryMonth> 
+                <ewayCardExpiryYear>' . $card_expiry_arr[1] . '</ewayCardExpiryYear> 
+                <ewayTrxnNumber></ewayTrxnNumber> 
+                <ewayOption1></ewayOption1> 
+                <ewayOption2></ewayOption2> 
+                <ewayOption3></ewayOption3> 
+                <ewayCVN>' . $card_cvc . '</ewayCVN> 
+                </ewaygateway>';
+    
+    $ch = curl_init($preAuthServiceURL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+    curl_setopt($ch, CURLOPT_POST, 1); 
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlData); 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/xml")); 
+    
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);  
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);  
+    
+    curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');        
+    $response = curl_exec($ch);
+    
+    if(!curl_errno($ch)){        
+        $xmlObj = simplexml_load_string($response);
+        if($xmlObj && $xmlObj->ewayTrxnStatus == 'False')
+        {
+            return 'Card Validation Error: ' . $xmlObj->ewayTrxnError;
+        }
+    } else { 
+        return 'Curl Error:' . curl_error($ch);
+    }
+    
+    $tokenWebserviceURL = get_eway_token_webservice_url();    
     
     //Create or Update Customer Information
     require_once(THE_FUNCTION . '/soap/nusoap.php');    
@@ -280,8 +327,8 @@ function cp_user_payment_save()
                 'user_id' => $user_id,
                 'card_number' => encrypt_card_number($card_number),
                 'customer_id' => $result,
-                'name' => $name_on_card,
-                'cvn' => $card_cvc,
+                /*'name' => $name_on_card,
+                'cvn' => $card_cvc,*/
                 'created_date' => date('Y-m-d H:i:s')
             ));        
             if(!$query_result)

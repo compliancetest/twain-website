@@ -121,4 +121,19 @@ jQuery(document).ready(function(){
         
     })
     
+    jQuery('#newMessageForm').submit(function(){
+        var isValid = true;
+        
+        jQuery('#newMessageForm .input-error').removeClass('textarea-error');
+        
+        //Validate the input values
+        if(!jQuery('#newMessageForm #message-content').val())
+        {
+            jQuery('#newMessageForm #message-content').addClass("textarea-error");
+            isValid = false;
+        }
+        jQuery('#new-message-wrap .loading').show();
+        return isValid;
+    })
+    
 })

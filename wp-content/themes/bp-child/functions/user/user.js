@@ -259,6 +259,8 @@
                     }
                 }
             })
+            
+            return false;
         });
 
         //Add Payment Method

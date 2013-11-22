@@ -116,6 +116,19 @@ function get_eway_token_webservice_url()
     
 }
 
+function get_eway_pre_auth_url()
+{
+    if(get_option('eway_payment_mode') == 'live')
+    {
+        return 'https://www.eway.com.au/gateway_cvn/xmlauth.asp';
+    }else{
+        return 'https://www.eway.com.au/gateway_cvn/xmltest/authtestpage.asp';        
+        /*https://www.eway.com.au/gateway/xmltest/authcompletetestpage.asp
+        https://www.eway.com.au/gateway/xmltest/authvoidtestpage.asp*/
+    }
+    
+}
+
 
 
 function get_eway_customer_id()

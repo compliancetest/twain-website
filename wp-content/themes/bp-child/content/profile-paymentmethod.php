@@ -29,21 +29,9 @@ if(!defined('ABSPATH'))
               <?php }else{ ?>
                 <?php foreach($cards as $card){ ?>
                 <div class="grid-row grid-action-row">
-                    <div class="grid-cell width25P">
-                        <?php echo $card->name?>
-                        <input type="hidden" id="cname" value="<?php echo $card->name?>" />
-                    </div>
-                    <div class="grid-cell width35P">
+                    <div class="grid-cell width80P">
                         <?php echo chunk_split($card->card_number, 4)?>
                         <input type="hidden" id="cnumber" value="<?php echo $card->card_number?>" />                                    
-                    </div>
-                    <div class="grid-cell width10P">
-                        <?php echo $card->expiry?>
-                        <input type="hidden" id="cexpiry" value="<?php echo $card->expiry?>" />
-                    </div>
-                    <div class="grid-cell width10P">
-                        <?php echo $card->cvc?>
-                        <input type="hidden" id="ccvc" value="<?php echo $card->cvc?>" />
                     </div>
                     <div class="grid-cell grid-action-cell width20P">
                         <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete_payment_method')?>&id=<?php echo $card->id ?>" class="delete-payment-method gbh-btn gbh-btn-delete-grey has-tooltip" data-id="<?php echo $card->id?>">Delete<span class="simple_tooltip radius6">Delete Card<span></span></span></a>

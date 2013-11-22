@@ -42,3 +42,19 @@ function ct_can_manage_customer($customer_id, $support_id = null)
     return in_array($support_id, $customers);
     
 }
+
+
+function makeTicketRead($ticket_id, $type)
+{
+    global $wpdb;
+    
+    if($type == 'customer')
+    {
+        $query = $wpdb->prepare("UPDATE " . $wpdb->prefix . "tickets SET customer_new_messages=0 WHERE id=%d", $ticket_id);
+    }else if($type == 'support'){
+        $query = $wpdb->prepare("UPDATE " . $wpdb->prefix . "tickets SET support_new_messages=0 WHERE id=%d", $ticket_id);
+    }
+    
+    $wpdb->query($query);
+    
+}
