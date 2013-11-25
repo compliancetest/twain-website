@@ -170,8 +170,7 @@ function process_eway_payment()
             if(!$result || !$resultDoc->loadXML($result))
             {
                 echo "Payment was proceed successfully with an error.";
-            }else{
-                var_dump($result);
+            }else{                
                 if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
                 {
                     echo 'Your payment was proceed successfully, But there was an error.' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;

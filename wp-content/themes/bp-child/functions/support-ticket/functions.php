@@ -118,7 +118,7 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
         if(!$support_id)
         {
             //Getting Customer Communities
-            $query = $wpdb->prepare("SELECT pm.meta_key FROM {$wpdb->prefix}users_purchases AS p " .
+            $query = $wpdb->prepare("SELECT pm.meta_value FROM {$wpdb->prefix}users_purchases AS p " .
                      "LEFT JOIN {$wpdb->postmeta} AS pm ON p.suite_id=pm.post_id AND pm.meta_key='community_id' ".
                      "WHERE p.user_id=%d AND p.status='Active' AND p.customer_id > 0", $customer_id);
             
