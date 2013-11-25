@@ -114,7 +114,7 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
     
     if($email_type == 'customer')
     {
-        cp_send_email($customer_id, $email_id, $emailData);
+        cp_send_email(array('name' => cp_get_user_display_name($customerDetail), 'email' => $customerDetail->user_email), $email_id, $emailData);
     }else{
         if(!$support_id)
         {
@@ -126,7 +126,7 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
             $community_ids = $wpdb->get_col($query);
             cp_send_email_to_support($community_ids, $email_id, $emailData);
         }else{
-            cp_send_email($support_id, $email_id, $emailData);
+            cp_send_email(array('name' => cp_get_user_display_name($supportDetail), 'email' => $supportDetail->user_email), $email_id, $emailData);
         }
         
     }
