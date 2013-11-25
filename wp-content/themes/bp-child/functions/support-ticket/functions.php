@@ -80,7 +80,8 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
         $ticketDetail = getTicketById($ticket_id);
         $emailData['[ticket_id]'] = $ticketDetail->id;
         $emailData['[ticket_title]'] = $ticketDetail->title;
-        $emailData['[ticket_url]'] = get_site_url(null, "/support-tickets/" . $ticketDetail->id, "https");
+        $emailData['[ticket_content]'] = apply_filters('the_content', $ticketDetail->content);
+        $emailData['[ticket_url]'] = get_site_url(null, "/my-support-tickets/" . $ticketDetail->id, "https");
         $emailData['[ticket_type]'] = $ticketDetail->category_title;
         $emailData['[ticket_priority]'] = $ticketDetail->priority_title;
         $emailData['[ticket_price]'] = $ticketDetail->price;
@@ -108,7 +109,7 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
     if($message_id)
     {
         $messageDetail = getTicketMessageById($message_id);
-        $emailData['[message_content]'] = $messageDetail->message;
+        $emailData['[message_content]'] = apply_filters("the_content", $messageDetail->message);
     }
     
     if($email_type == 'customer')
