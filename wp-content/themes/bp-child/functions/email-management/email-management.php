@@ -1072,9 +1072,9 @@ function cp_send_email_to_support($communities, $template_name, $data = array())
     
     //Getting Community Supports(Moderators)
     if(is_array($communities))
-        $query = "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JON {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = (" . implode(", ", $communities) . ") AND is_mod = 1 AND is_banned = 0";
+        $query = "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id IN (" . implode(", ", $communities) . ") AND p.is_mod = 1 AND p.is_banned = 0";
     else
-        $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JON {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND is_mod = 1 AND is_banned = 0", $group_id );
+        $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND p.is_mod = 1 AND p.is_banned = 0", $group_id );
     
     $users = $wpdb->get_results($query);
     
