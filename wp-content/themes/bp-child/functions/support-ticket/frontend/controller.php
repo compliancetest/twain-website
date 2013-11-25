@@ -86,7 +86,7 @@ function createSupportTicket()
     //Send Email Notification to Support
     sendTicketEmail('ticket_created_support', 'support', $wpdb->insert_id, null, $user_id, null);
     //Send Email Notification to the Customer
-    sendTicketEmail('ticket_created', 'support', $wpdb->insert_id, null, $user_id, null);
+    sendTicketEmail('ticket_created', 'customer', $wpdb->insert_id, null, $user_id, null);
     /***************** End Send Mail *****************************/
     
     addMessage('Your ticket has been submitted successfully.');
