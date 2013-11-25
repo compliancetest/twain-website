@@ -71,6 +71,7 @@ function create_email_management_page()
                     <li><a href="#verification-email">Resend Verification Email</a></li>
                     <li><a href="#verification-success">User Verification Success</a></li>
                     <li><a href="#purchase-subscription">Purchase Subscription</a></li>       
+                    <li><a href="#recurring-subscription">Recurring Subscription</a></li>
                     <li><a href="#cancel-subscription">Cancel Subscription</a></li>       
                     <li><a href="#membership-request-received">Membership Request Received</a></li>       
                     <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
@@ -79,7 +80,12 @@ function create_email_management_page()
                     <li><a href="#forgot-password">Forgot Password</a></li>
                     <li><a href="#password-changed">Password Changed</a></li>
                     <li><a href="#suite-changed">Test Suite Changed</a></li>
-                    <li><a href="#case-changed">Test Case Changed</a></li>
+                    <li><a href="#case-changed">Test Case Changed</a></li>                    
+                    <li><a href="#ticket-created">Ticket Created</a></li>                    
+                    <li><a href="#ticket-updated">Ticket Updated</a></li>                    
+                    <li><a href="#ticket-started">Ticket Started</a></li>                    
+                    <li><a href="#ticket-solved">Ticket Solved</a></li>                    
+                    <li><a href="#ticket-closed">Ticket Closed</a></li>                    
                 </ul>
                 <div id="new-user">
                     <?php
@@ -253,6 +259,56 @@ function create_email_management_page()
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
                                     <?php wp_editor($purchase_subscription_admin_email_content, 'purchase_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div id="recurring-subscription">
+                    <?php
+                    $recurring_subscription_email_title = get_option('recurring_subscription_email_title');
+                    $recurring_subscription_email_content = get_option('recurring_subscription_email_content');
+                    $recurring_subscription_admin_email_title = get_option('recurring_subscription_admin_email_title');
+                    $recurring_subscription_admin_email_content = get_option('recurring_subscription_admin_email_content');
+                    ?>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [community_url]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="recurring_subscription_email_title" id="recurring_subscription_email_title" value="<?php echo $recurring_subscription_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($recurring_subscription_email_content, 'recurring_subscription_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="recurring_subscription_admin_email_title" id="recurring_subscription_admin_email_title" value="<?php echo $recurring_subscription_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($recurring_subscription_admin_email_content, 'recurring_subscription_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -558,6 +614,219 @@ function create_email_management_page()
                         
                     </table>
                 </div>
+                
+                <div id="ticket-created">
+                    <?php
+                    $ticket_created_email_title = get_option('ticket_created_email_title');
+                    $ticket_created_email_content = get_option('ticket_created_email_content');
+                    $ticket_created_support_email_title = get_option('ticket_created_support_email_title');
+                    $ticket_created_support_email_content = get_option('ticket_created_support_email_content');                    
+                    ?>                    
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_created_email_title" id="ticket_created_email_title" value="<?php echo $ticket_created_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_created_email_content, 'ticket_created_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_created_support_email_title" id="ticket_created_support_email_title" value="<?php echo $ticket_created_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_created_support_email_content, 'ticket_created_support_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
+                <div id="ticket-updated">
+                    <?php
+                    $ticket_updated_email_title = get_option('ticket_updated_email_title');
+                    $ticket_updated_email_content = get_option('ticket_updated_email_content');                    
+                    $ticket_updated_support_email_title = get_option('ticket_updated_support_email_title');
+                    $ticket_updated_support_email_content = get_option('ticket_updated_support_email_content');                    
+                    
+                    ?>
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_updated_email_title" id="ticket_updated_email_title" value="<?php echo $ticket_updated_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_updated_email_content, 'ticket_updated_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_updated_support_email_title" id="ticket_updated_support_email_title" value="<?php echo $ticket_updated_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_updated_support_email_content, 'ticket_updated_support_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
+                <div id="ticket-started">
+                    <?php
+                    $ticket_started_email_title = get_option('ticket_started_email_title');
+                    $ticket_started_email_content = get_option('ticket_started_email_content');                    
+                    
+                    ?>
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_started_email_title" id="ticket_started_email_title" value="<?php echo $ticket_started_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_started_email_content, 'ticket_started_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="ticket-solved">
+                    <?php
+                    $ticket_solved_email_title = get_option('ticket_solved_email_title');
+                    $ticket_solved_email_content = get_option('ticket_solved_email_content');
+                    $ticket_solved_support_email_title = get_option('ticket_solved_support_email_title');
+                    $ticket_solved_support_email_content = get_option('ticket_solved_support_email_content');
+                    
+                    ?>
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_solved_email_title" id="ticket_solved_email_title" value="<?php echo $ticket_solved_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_solved_email_content, 'ticket_solved_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_solved_support_email_title" id="ticket_solved_support_email_title" value="<?php echo $ticket_solved_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_solved_support_email_content, 'ticket_solved_support_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="ticket-closed">
+                    <?php
+                    $ticket_closed_email_title = get_option('ticket_closed_email_title');
+                    $ticket_closed_email_content = get_option('ticket_closed_email_content');
+                    ?>
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_closed_email_title" id="ticket_closed_email_title" value="<?php echo $ticket_closed_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_closed_email_content, 'ticket_closed_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
           </div>
           
@@ -670,6 +939,45 @@ function save_email_templates()
           $case_changed_email_content = stripslashes_deep($_POST['case_changed_email_content']);          
           update_option('case_changed_email_content', $case_changed_email_content);
           
+          $ticket_created_email_title = htmlentities(stripslashes_deep($_POST['ticket_created_email_title']));          
+          update_option('ticket_created_email_title', $ticket_created_email_title);          
+          $ticket_created_email_content = stripslashes_deep($_POST['ticket_created_email_content']);          
+          update_option('ticket_created_email_content', $ticket_created_email_content);
+          $ticket_created_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_created_support_email_title']));          
+          update_option('ticket_created_support_email_title', $ticket_created_support_email_title);          
+          $ticket_created_support_email_content = stripslashes_deep($_POST['ticket_created_support_email_content']);          
+          update_option('ticket_created_support_email_content', $ticket_created_support_email_content);
+          
+          $ticket_updated_email_title = htmlentities(stripslashes_deep($_POST['ticket_updated_email_title']));          
+          update_option('ticket_updated_email_title', $ticket_updated_email_title);          
+          $ticket_updated_email_content = stripslashes_deep($_POST['ticket_updated_email_content']);          
+          update_option('ticket_updated_email_content', $ticket_updated_email_content);
+          $ticket_updated_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_updated_support_email_title']));          
+          update_option('ticket_updated_support_email_title', $ticket_updated_support_email_title);          
+          $ticket_updated_support_email_content = stripslashes_deep($_POST['ticket_updated_support_email_content']);          
+          update_option('ticket_updated_support_email_content', $ticket_updated_support_email_content);
+          
+          
+          $ticket_started_email_title = htmlentities(stripslashes_deep($_POST['ticket_started_email_title']));          
+          update_option('ticket_started_email_title', $ticket_started_email_title);          
+          $ticket_started_email_content = stripslashes_deep($_POST['ticket_started_email_content']);          
+          update_option('ticket_started_email_content', $ticket_started_email_content);
+          
+          $ticket_solved_email_title = htmlentities(stripslashes_deep($_POST['ticket_solved_email_title']));          
+          update_option('ticket_solved_email_title', $ticket_solved_email_title);          
+          $ticket_solved_email_content = stripslashes_deep($_POST['ticket_solved_email_content']);          
+          update_option('ticket_solved_email_content', $ticket_solved_email_content);
+          $ticket_solved_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_solved_support_email_title']));          
+          update_option('ticket_solved_support_email_title', $ticket_solved_support_email_title);          
+          $ticket_solved_support_email_content = stripslashes_deep($_POST['ticket_solved_support_email_content']);          
+          update_option('ticket_solved_support_email_content', $ticket_solved_support_email_content);
+          
+          
+          
+          $ticket_closed_email_title = htmlentities(stripslashes_deep($_POST['ticket_closed_email_title']));          
+          update_option('ticket_closed_email_title', $ticket_closed_email_title);          
+          $ticket_closed_email_content = stripslashes_deep($_POST['ticket_closed_email_content']);          
+          update_option('ticket_closed_email_content', $ticket_closed_email_content);
           
           wp_redirect("/wp-admin/options-general.php?page=email-management");
     }
@@ -757,3 +1065,27 @@ function cp_send_email_to_admin($template_name, $data = array())
     
     cp_send_email($to, $template_name, $data);
 }
+
+function cp_send_email_to_support($communities, $template_name, $data = array())
+{
+    global $bp, $wpdb;
+    
+    //Getting Community Supports(Moderators)
+    if(is_array($communities))
+        $query = "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JON {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = (" . implode(", ", $communities) . ") AND is_mod = 1 AND is_banned = 0";
+    else
+        $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JON {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND is_mod = 1 AND is_banned = 0", $group_id );
+    
+    $users = $wpdb->get_results($query);
+    
+    $to = array();
+    foreach($users as $u)
+    {           
+        $fname = get_user_meta($u->ID, 'first_name', true);
+        $lname = get_user_meta($u->ID, 'last_name', true);
+        $to[] = array('name' => $fname . " " . $lname, 'email' => $u->user_email);
+    }    
+    
+    cp_send_email($to, $template_name, $data);
+}
+

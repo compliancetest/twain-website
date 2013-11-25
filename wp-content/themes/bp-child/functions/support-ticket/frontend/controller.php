@@ -81,8 +81,12 @@ function createSupportTicket()
     }
     
     /***************** Begin Send Mail ***************************/
+    $customer = get_userdata($user_id);
+    
     //Send Email Notification to Support
+    sendTicketEmail('ticket_created_support', 'support', $wpdb->insert_id, null, $user_id, null);
     //Send Email Notification to the Customer
+    sendTicketEmail('ticket_created', 'support', $wpdb->insert_id, null, $user_id, null);
     /***************** End Send Mail *****************************/
     
     addMessage('Your ticket has been submitted successfully.');
@@ -200,6 +204,20 @@ function getTicketById($ticket_id)
 }
 
 /**
+* Get Message By DI
+* 
+* @param Int $message_id
+*/
+function getTicketMessageById($message_id)
+{
+    global $wpdb;
+    
+    $query  = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "ticket_messages WHERE id=%d", $message_id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;
+}
+/**
 * Get Ticket Messages Using Ticket ID
 * 
 * @param Int $ticket_id
@@ -262,9 +280,10 @@ function acceptTerm()
     {
         addMessage($wpdb->last_error, "error");        
     }else{
-    
+        $messageID = $wpdb->insert_id;
+        
         //Accept Term
-        $wpdb->update($wpdb->prefix . "tickets", array('term_accepted' => 1), array('id' => $ticketDetail->id));
+        $wpdb->update($wpdb->prefix . "tickets", array('term_accepted' => 1, 'last_message_id' => $messageID, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticketDetail->id));
         
         if($ticketDetail->customer_id != $user_id)
         {
@@ -273,8 +292,18 @@ function acceptTerm()
         }
         
         /***************** Begin Send Mail ***************************/
-        //Send Email Notification to Support    
-        //Send Email Notification to the Customer
+        if($ticketDetail->customer_id == $user_id)
+        {
+            //Send To Support
+            sendTicketEmail("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        }else{
+            //Send to Customer
+            sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        }        
+        
+        //Send ticket Started Notification
+        sendTicketEmail("ticket_started", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        
         /***************** End Send Mail *****************************/
         
         addMessage("The term has been accepted.", "success");
@@ -332,10 +361,12 @@ function changeTicketTerm()
     {
         addMessage($wpdb->last_error, "error");        
     }else{
+        $messageID =$wpdb->insert_id;
+        
         if($ticketDetail->customer_id != $user_id)
             $ticketDetail->support_id = $user_id;
         //Update Term
-        $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id, 'support_id' => $ticketDetail->support_id), array('id' => $ticketDetail->id));
+        $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id, 'support_id' => $ticketDetail->support_id, 'last_message_id' => $messageID, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticketDetail->id));
         
         //Update New Message Count
         if($ticketDetail->customer_id != $user_id)
@@ -345,6 +376,14 @@ function changeTicketTerm()
         $wpdb->query($query);
         
         /******* Send Term Updated Email **********/
+        if($ticketDetail->customer_id == $user_id)
+        {
+            //Send To Support
+            sendTicketEmail("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        }else{
+            //Send to Customer
+            sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        }
         
         addMessage("Your ticket has been updated.", "success");
         wp_redirect("/my-support-tickets/" . $ticketDetail->id);
@@ -388,17 +427,30 @@ function sendTicketMessage()
     {
         addMessage($wpdb->last_error, "error");        
     }else{
+        $messageID = $wpdb->insert_id;
         
         //Update New Message Count
         if($ticketDetail->customer_id != $user_id)
-            $query = "UPDATE " . $wpdb->prefix . "tickets SET `customer_new_messages`=`customer_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . $wpdb->prefix . "tickets SET `customer_new_messages`=`customer_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
         else
-            $query = "UPDATE " . $wpdb->prefix . "tickets SET `support_new_messages`=`support_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . $wpdb->prefix . "tickets SET `support_new_messages`=`support_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
         $wpdb->query($query);
         
         ///Send Email Notification
+        if($ticketDetail->customer_id == $user_id)
+        {
+            //Send To Support
+            sendTicketEmail("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        }else{
+            //Send to Customer
+            sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        }
+        
+        
         addMessage("Your ticket has been updated.", "success");
         wp_redirect("/my-support-tickets/" . $ticketDetail->id);
         exit;
     }
 }
+
+//function 

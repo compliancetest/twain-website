@@ -58,3 +58,76 @@ function makeTicketRead($ticket_id, $type)
     $wpdb->query($query);
     
 }
+
+/**
+* Send Ticket Email
+* 
+* @param Int $email_id: 
+* @param String $email_type: 'customer' or 'support'
+* @param Int $ticket_id
+* @param Int $message_id
+* @param Int $customer_id
+* @param Int $support_id
+*/
+function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null, $customer_id = null, $support_id = null)
+{
+    global $wpdb;
+    
+    $emailData = array();
+    
+    if($ticket_id)
+    {
+        $ticketDetail = getTicketById($ticket_id);
+        $emailData['ticket_id'] = $ticketDetail->id;
+        $emailData['ticket_title'] = $ticketDetail->title;
+        $emailData['ticket_url'] = get_site_url(null, "/support-tickets/" . $ticketDetail->id, "https");
+        $emailData['ticket_type'] = $ticketDetail->category_title;
+        $emailData['ticket_priority'] = $ticketDetail->priority_title;
+        $emailData['ticket_price'] = $ticketDetail->price;
+        $emailData['ticket_ttpay'] = $ticketDetail->ttpay;
+        $emailData['ticket_ttresolve'] = $ticketDetail->ttresolve;
+        $emailData['ticket_ttresponse'] = $ticketDetail->ttresponse;
+        $emailData['ticket_created'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
+        $emailData['ticket_updated'] = formatDate($ticketDetail->last_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
+    }
+    
+    if($customer_id)
+    {
+        $customerDetail = get_userdata($customer_id);
+        $emailData['customer_name'] = cp_get_user_display_name($customerDetail);
+        $emailData['customer_email'] = $customerDetail->user_email;
+    }
+    
+    if($support_id)
+    {
+        $supportDetail = get_userdata($support_id);
+        $emailData['support_name'] = cp_get_user_display_name($supportDetail);
+        $emailData['support_email'] = $supportDetail->user_email;
+    }
+    
+    if($message_id)
+    {
+        $messageDetail = getTicketMessageById($message_id);
+        $emailData['message_content'] = $messageDetail->message;
+    }
+    
+    if($email_type == 'customer')
+    {
+        cp_send_email($customer_id, $email_id, $emailData);
+    }else{
+        if(!$support_id)
+        {
+            //Getting Customer Communities
+            $query = $wpdb->prepare("SELECT pm.meta_key FROM {$wpdb->prefix}users_purchases AS p " .
+                     "LEFT JOIN {$wpdb->postmeta} AS pm ON p.suite_id=pm.post_id AND pm.meta_key='community_id' ".
+                     "WHERE p.user_id=%d AND p.status='Active' AND p.customer_id > 0", $customer_id);
+            
+            $community_ids = $wpdb->get_col($query);
+            cp_send_email_to_support($community_ids, $email_id, $emailData);
+        }else{
+            cp_send_email($support_id, $email_id, $emailData);
+        }
+        
+    }
+    
+}

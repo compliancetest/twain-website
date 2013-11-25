@@ -423,7 +423,7 @@ function getManagedCustomerESBIDs($user_id = null)
 * 
 * @param mixed $user_id
 */
-function getUserAllCustomerESBIDs($user_id = null)
+function getUserAllCustomerESBIDs($user_id = null, $exclude_free_charge = false)
 {
     global $wpdb;
     
@@ -440,6 +440,9 @@ function getUserAllCustomerESBIDs($user_id = null)
     }else{
         $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active'";
     }
+    
+    if($exclude_free_charge)
+        $query  .= " AND p.customer_id > 0";
     
     $ids = $wpdb->get_col($query);
     
