@@ -78,37 +78,37 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
     if($ticket_id)
     {
         $ticketDetail = getTicketById($ticket_id);
-        $emailData['ticket_id'] = $ticketDetail->id;
-        $emailData['ticket_title'] = $ticketDetail->title;
-        $emailData['ticket_url'] = get_site_url(null, "/support-tickets/" . $ticketDetail->id, "https");
-        $emailData['ticket_type'] = $ticketDetail->category_title;
-        $emailData['ticket_priority'] = $ticketDetail->priority_title;
-        $emailData['ticket_price'] = $ticketDetail->price;
-        $emailData['ticket_ttpay'] = $ticketDetail->ttpay;
-        $emailData['ticket_ttresolve'] = $ticketDetail->ttresolve;
-        $emailData['ticket_ttresponse'] = $ticketDetail->ttresponse;
-        $emailData['ticket_created'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
-        $emailData['ticket_updated'] = formatDate($ticketDetail->last_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
+        $emailData['[ticket_id]'] = $ticketDetail->id;
+        $emailData['[ticket_title]'] = $ticketDetail->title;
+        $emailData['[ticket_url]'] = get_site_url(null, "/support-tickets/" . $ticketDetail->id, "https");
+        $emailData['[ticket_type]'] = $ticketDetail->category_title;
+        $emailData['[ticket_priority]'] = $ticketDetail->priority_title;
+        $emailData['[ticket_price]'] = $ticketDetail->price;
+        $emailData['[ticket_ttpay]'] = $ticketDetail->ttpay;
+        $emailData['[ticket_ttresolve]'] = $ticketDetail->ttresolve;
+        $emailData['[ticket_ttresponse]'] = $ticketDetail->ttresponse;
+        $emailData['[ticket_created]'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
+        $emailData['[ticket_updated]'] = formatDate($ticketDetail->last_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
     }
     
     if($customer_id)
     {
         $customerDetail = get_userdata($customer_id);
-        $emailData['customer_name'] = cp_get_user_display_name($customerDetail);
-        $emailData['customer_email'] = $customerDetail->user_email;
+        $emailData['[customer_name]'] = cp_get_user_display_name($customerDetail);
+        $emailData['[customer_email]'] = $customerDetail->user_email;
     }
     
     if($support_id)
     {
         $supportDetail = get_userdata($support_id);
-        $emailData['support_name'] = cp_get_user_display_name($supportDetail);
-        $emailData['support_email'] = $supportDetail->user_email;
+        $emailData['[support_name]'] = cp_get_user_display_name($supportDetail);
+        $emailData['[support_email]'] = $supportDetail->user_email;
     }
     
     if($message_id)
     {
         $messageDetail = getTicketMessageById($message_id);
-        $emailData['message_content'] = $messageDetail->message;
+        $emailData['[message_content]'] = $messageDetail->message;
     }
     
     if($email_type == 'customer')
