@@ -674,7 +674,7 @@ function create_email_management_page()
                     $ticket_updated_support_email_content = get_option('ticket_updated_support_email_content');                    
                     
                     ?>
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email], [message_content]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -756,7 +756,7 @@ function create_email_management_page()
                     $ticket_solved_support_email_content = get_option('ticket_solved_support_email_content');
                     
                     ?>
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount]</p>
+                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount], [message_content]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
