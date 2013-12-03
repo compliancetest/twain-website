@@ -25,6 +25,8 @@ function ct_process_ticket_frontend_actions()
             changeTicketTerm();
         }else if(wp_verify_nonce($action, 'send-ticket-message')){
             sendTicketMessage();
+        }else if(wp_verify_nonce($action, 'download-attachment')){
+            downloadAttachment();
         }
     }
 }

@@ -6,130 +6,139 @@
 $ticket = getTicketById($ticket_id);
 $user_id = get_current_user_id();
 ?>
-<div class="column">
-    <a href="/my-support-tickets" class="right"><b>Back to the Tickets Page</b></a>    
-    <div class="clear"></div>        
+<?php if(!$ticket): ?>
+<div class="column ticket-detail">       
+    <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
     <h2>Ticket #<?php echo $ticket_id?></h2>
-    <div class="space15"></div>
-    <?php
-        if(!$ticket)
-        {
-    ?>
-        <p>Ticket not found. The ticket id is not correct or not your ticket.</p>
-    <?php
-        }else{
-            $is_customer = $ticket->customer_id == $user_id ? true : false;     
-            makeTicketRead($ticket_id, $is_customer ? 'customer' : 'support');
-    ?>
-        <div class="ticket-detail">                            
-            <?php if(!$is_customer){ ?>                
-                <a href="<?php bp_loggedin_user_link(); ?>" class="left">
-                    <?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb&width=25&height=25' ); ?>
-                    <br /><?php echo cp_get_user_display_name(intval($ticket->customer_id)); ?>
-                </a>
-            <?php } ?>            
-            <h3 class="left"><?php echo apply_filters('the_title', $ticket->title)?></h3>                        
-            <div class="clear"></div>
-            <p class="ticket-info">
-                <span><label>Requested Date:</label> <?php echo formatDate($ticket->created_date, 'F d, Y h:i A'); ?></span>             
-                <span><label>Type: </label> <?php echo $ticket->category_title ?></span>                                            
-                <span><label>Priority: </label> <?php echo $ticket->priority_title ?></span>
-                <span><label>Status: </label> <?php echo $ticket->status_title ?></span>                
-            </p>                        
-            <?php echo apply_filters('the_content', $ticket->content)?>            
-            <p class="ticket-info">
-                <span><label>Price: </label> <?php echo $ticket->price > 0 ? ('$' . $ticket->price . '/hr') : 'Free' ?></span>
-                <span><label>Time to Pay: </label> <?php echo $ticket->ttpay ?> hours</span>
-                <span><label>Time to Resolve: </label> <?php echo $ticket->ttresolve ?> hours</span>
-                <span><label>Time to Response: </label> <?php echo $ticket->ttresponse ?> hours</span>                
-            </p>            
-            <p id="term-actions">
-                <?php
-                    if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id){
-                ?>
-                    <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn right10" id="accept-term-link"><span class="p"></span><span class="t">Accept Term</span></a>
-                <?php
-                    }
-                ?>
-                <a href="#" class="action-btn edit-btn" id="change-term-link"><span class="p"></span><span class="t">Change Term</span></a>
-            </p>
-            
-            <div id="change-term-contr" style="display: none;">
-                <form name="changeTermForm" id="changeTermForm" method="post">
-                    <div class="field-row">                        
-                        <div class="field-cell">
-                            <label>Time to Pay:</label>
-                            <input type="text" name="ttpay" id="ttpay" value="<?php echo $ticket->ttpay?>"  class="input-text" /> hours
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-cell">
-                            <label>Time to Resolve:</label>
-                            <input type="text" name="ttresolve" id="ttresolve" value="<?php echo $ticket->ttresolve?>" class="input-text" /> hours
-                        </div>                   
-                        <div class="clear"></div>     
-                    </div>
-                    <div class="field-row">
-                        <div class="field-cell">
-                            <label>Time to Response:</label>
-                            <input type="text" name="ttresponse" id="ttresponse" value="<?php echo $ticket->ttresponse?>" class="input-text" /> hours
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-cell">
-                            <label>Comments(optional): </label>
-                            <textarea cols="8" rows="5" class="textarea width70P" id="message-content" name="content"></textarea>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="btn-row">
-                        <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Submit Changes</span></a>                        
-                        <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>                        
-                    </div>
-                    <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('change-ticket-term')?>" />
-                    <input type="hidden" name="id" value="<?php echo $ticket->id ?>" />
-                </form>
-            </div>
-        </div>        
-        <div class="clear"></div>
-        <div id="ticket-messages-list">
-            <h3>Comments</h3>
-        <?php   
-            $messages = getTicketMessagesByTicketId($ticket->id);
-            foreach($messages as $message){ 
-        ?>
-            <div class="ticket-message">
-                <div class="left width10P">
-                    <a href="<?php bp_loggedin_user_link(); ?>">                                    
-                        <?php echo cp_get_user_avatar($message->sender, 'type=thumb' ); ?><br />
-                        <?php echo cp_get_user_display_name(intval($message->sender)); ?>
-                    </a>
-                </div>
-                <div class="left width90P">
-                    <?php echo apply_filters("the_content", $message->message); ?>                    
-                    <p class="ticket-date"><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></p>
-                </div>                
-                <div class="clear"></div>
-            </div>
+    <p>Ticket not found. The ticket id is not correct or not your ticket.</p>
+</div>
+<?php else: ?>
+<div class="column ticket-detail"> 
+    <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
+    <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar"><?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb&width=77&height=77' ); ?></a>
+    <div class="left">
+        <h2>Ticket #<?php echo $ticket_id?> (<?php echo apply_filters('the_title', $ticket->title)?>)</h2>
+        <span class="ticket-creator">Rasied by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo cp_get_user_display_name(intval($ticket->customer_id))?></b></a></span>
+        <span class="ticket-priorities">
         <?php 
+            if($ticket->status_id == TICKET_STATUS_RESOLVED)
+            {
+                echo "<span class='solved'><span class='ticket-status-solved-label'></span><b>Solved</b></span>";
+            }else{
+                echo "<span class='" . sanitize_title($ticket->priority_title) . "'><span class='ticket-priority ticket-priority-" . sanitize_title($ticket->priority_title) . "'></span><b>" . $ticket->priority_title . "</b></span>";
             }
         ?>
+        </span>
+        <p class="ticket-info">
+            <span><label>Requested Date:</label> <b><?php echo formatDate($ticket->created_date, 'F d, Y h:i A'); ?></b></span>             
+            <span><label>Type: </label> <b><?php echo $ticket->category_title ?></b></span>
+            <span><label>Status: </label> <b><?php echo $ticket->status_title ?></b></span>            
+        </p>    
+    </div>
+    <div class="clear"></div>
+    <br />
+    <div class="ticket-content">
+        <?php echo apply_filters("the_content", $ticket->content); ?>
+    </div>        
+</div>
+<div class="ticket-term-detail">
+    <p class="ticket-info" id="ticket-term-info">
+        <span><b>Price:</b> <?php echo $ticket->price > 0 ? '$' . $ticket->price . "/hr" : 'Free'?></span>
+        <span><b>Time to Pay:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
+        <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>
+        <span><b>Time to Response:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
+        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="simple_tooltip"><span></span>Change Term</span></a>
+        <?php if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id): ?>
+        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip"><span></span>Accept Term</span></a>
+        <?php endif; ?>
+    </p>
+    <div id="change-term-contr" style="display: none;">
+        <form name="changeTermForm" id="changeTermForm" method="post">
+            <div class="term-row">                        
+                <span>
+                    <b>Time to Pay:</b>
+                    <input type="text" name="ttpay" id="ttpay" value="<?php echo $ticket->ttpay?>"  class="input-text" /> hours
+                </span>
+                <span>
+                    <b>Time to Resolve:</b>
+                    <input type="text" name="ttresolve" id="ttresolve" value="<?php echo $ticket->ttresolve?>" class="input-text" /> hours
+                </span>
+                <span>
+                    <b>Time to Response:</b>
+                    <input type="text" name="ttresponse" id="ttresponse" value="<?php echo $ticket->ttresponse?>" class="input-text" /> hours
+                </span>
+            </div>
+            <div class="field-row">
+                <label><b>Comments:</b><br />(Optional)</label>
+                <textarea cols="8" rows="3" class="textarea" id="message-content" name="content" placeholder="Write a Message"></textarea>
+                <div class="clear"></div>
+            </div>
+            <div class="btn-row">
+                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="simple_tooltip"><span></span>Canel</span></a>                        
+                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip"><span></span>Submit</span></a>                
+                <div class="clear"></div>
+            </div>
+            <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('change-ticket-term')?>" />
+            <input type="hidden" name="id" value="<?php echo $ticket->id ?>" />
+            <div class="loading loading-with-text"><div><b>SAVING YOUR DATA</b><span>Please wait...</span></div></div>
+        </form>
+    </div>
+</div>
+<?php 
+    $messages = getTicketMessagesByTicketId($ticket->id); 
+?>
+<div class="column" id="ticket-messages-list">
+    <h2>Comments</h2>
+    <?php
+    foreach($messages as $message){         
+    ?>
+        <div class="ticket-message">
+            <div class="left width10P">
+                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>">                                    
+                    <?php echo cp_get_user_avatar($message->sender, 'type=thumb' ); ?>                    
+                </a>
+            </div>
+            <div class="left width90P">
+                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>" class="left"><b><?php echo cp_get_user_display_name(intval($message->sender)); ?></b></a>                
+                <span class="right"><b><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></b></span>                
+                <div class="clear"></div>
+                <div class="space7"></div>
+                <?php echo apply_filters("the_content", $message->message); ?>                
+                <?php if($message->has_attachment): ?>
+                <div class="ticket-attachments">
+                    <?php $attachments = getAttachmentsByMessageId($message->id); ?>
+                    <?php foreach($attachments as $file): ?>
+                    <a href="<?php echo get_site_url(null, null, 'https')?>/?ct-ticket-action=<?php echo wp_create_nonce('download-attachment')?>&file=<?php echo $file->token?>"><?php echo $file->file_name?></a><br />
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>                
+            <div class="clear"></div>
         </div>
+    <?php 
+        }
+    ?>
+    <div class="ticket-message">
         <div id="new-message-wrap">
-            <form name="newMessageForm" id="newMessageForm" method="post">
+            <form name="newMessageForm" id="newMessageForm" method="post" enctype="multipart/form-data">
                 <div class="field-row">
                     <div class="field-cell left width10P">
                         <a href="<?php bp_loggedin_user_link(); ?>">                                    
-                            <?php echo cp_get_user_avatar($user_id, 'type=thumb' ); ?><br />
-                            <?php echo cp_get_user_display_name($user_id); ?>
+                            <?php echo cp_get_user_avatar($user_id, 'type=thumb' ); ?>
                         </a>
                     </div>
                     <div class="field-cell left width90P">
-                        <textarea cols="8" rows="5" class="textarea width70P" id="message-content" name="content" placeholder="Message"></textarea>                        
+                        <textarea cols="8" rows="3" class="textarea" id="message-content" name="content" placeholder="Write a Message"></textarea>                        
+                        <div class="clear"></div>
                         <div class="btn-row">
-                            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Send Message</span></a>
+                            <div class="left">
+                                <div class="attachments-wrap"></div>
+                                <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>                                
+                            </div>
+                            <div class="right">
+                                <label>Please consider this request resolved. <input type="checkbox" name="resolved" value="1" /></label><br />
+                                <a href="#" class="action-btn process-btn submit-btn right"><span class="p"></span><span class="t">Send</span></a>
+                            </div>
                         </div>
                     </div>
                     <div class="clear"></div>
@@ -139,9 +148,6 @@ $user_id = get_current_user_id();
             </form>
             <div class="loading loading-with-text"><div><b>SENDING YOUR MESSAGE</b><span>Please wait...</span></div></div>
         </div>
-    <?php            
-        }
-    ?>
-    <div class="clear"></div>
+    </div>
 </div>
-<?php
+<?php endif;?>

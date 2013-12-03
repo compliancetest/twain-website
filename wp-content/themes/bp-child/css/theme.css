@@ -2799,13 +2799,25 @@ p.copyright{
         padding-bottom: 10px;
     }
     
+    .sidebar_widget ul li:last-child.current-page-ancestor  ,
+    .sidebar_widget h3, .sidebar_widget ul li:last-child.current-menu-item  {
+        background: url(../images/sidebar_title.png) left -50px no-repeat;
+        margin-top: -12px;
+        margin-left: -10px;
+        padding-top: 10px;
+        margin-bottom: -11px;
+    }
+    
     .sidebar_widget ul {
-        padding-bottom: 10px;    
+/*        padding-bottom: 10px;    */
     }
     
         .sidebar_widget ul li {
             background: url(../images/sidebar_item_border.png) right bottom no-repeat;
             position: relative;
+        }
+        .sidebar_widget ul li:last-child {
+            background: none;
         }
         
             .sidebar_widget ul li a span.notification_number{
@@ -6687,29 +6699,152 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     height: 10px;
 }
 
+#my_tickets .back-to-supports{
+    position: absolute;
+    right: 20px;
+}
 .ticket-detail{
-    
+    background: #f4f4f4;    
+    border-bottom: solid 1px #e3e3e3;
+    position: relative;
 }
-.ticket-detail .ticket-info{
-    padding: 5px 0;
-    margin-bottom: 5px;
+.ticket-detail h2{
+    margin: 0 0 5px;
 }
-.ticket-detail .ticket-info span{
+.ticket-detail .ticket-priorities{line-height: 10px;}
+.ticket-detail .ticket-priority{
+    width: 10px;
+    height: 10px;
+}
+.ticket-info{
+    margin: 5px 0 0;
+    padding: 7px 15px;
+    background: #fff;
+    border: solid 1px #cfcfcf;
+    width: 639px;
+}
+.ticket-info > span{
     display: inline-block;
     margin-right: 30px;
-    color: #333;
+    color: #666;
 }
-.ticket-detail .ticket-info span label{
-    font-weight: 700;
-    padding-right: 10px;
+.ticket-info > span label{
+    
 }
-.ticket-date{margin-bottom: 0;}
+.ticket-date{
+    margin-bottom: 0;
+}
+.ticket-creator-avatar{
+    margin-right: 12px;
+    line-height: 0;
+    float: left;
+}
+
+.ticket-term-detail{
+    padding: 0 20px;
+    margin-top: -20px;    
+    position: relative;
+}
+
+#ticket-term-info{
+    width: 728px;     
+    position: relative;
+    margin-bottom: 0;
+}
+#ticket-term-info .action-btn{
+    position: absolute;
+    top: 3px;
+}
+#ticket-term-info .edit-btn{
+    right: 5px;
+}
+#ticket-term-info .process-btn{
+    right: 35px;
+}
+
+
+#change-term-contr{
+    border: solid 1px #cfcfcf;
+    background: #f8f8f8;
+    position: relative;
+}
+#change-term-contr .term-row{
+    background: #d9e8fa;
+    margin: 0;
+    padding: 2px 15px;
+    border-bottom: solid 1px #cfcfcf;
+}
+#change-term-contr .term-row .input-text{
+    width: 55px;
+}
+#change-term-contr .term-row span{
+    margin-right: 40px;
+}
+
+#change-term-contr .field-row{
+    
+    padding: 10px 15px;
+    
+    border-top: none;
+}
 #change-term-contr .field-row label{
     float: left;
+    padding-right: 10px;
 }
-#change-term-contr .field-row input, 
 #change-term-contr .field-row textarea{
     float: left;
+    width: 650px;
+}
+
+#change-term-contr .btn-row{
+    padding: 0 15px 10px;
+}
+#change-term-contr .btn-row .action-btn{
+    float: right;
+}
+
+#ticket-messages-list h2{
+    background: url(../images/comments-icon.png) no-repeat left 9px;
+    padding: 5px 0 20px 30px;    
+    margin: 0;
+}
+#ticket-messages-list .ticket-message{
+    padding: 18px 0 5px;
+    border-top: solid 1px #cfcfcf;
+}
+#ticket-messages-list .ticket-message .ticket-attachments a{
+    display: inline-block;
+    background: url(../images/attachment-icon.png) no-repeat 0 0;
+    line-height: 16px;
+    padding-left: 15px;
+}
+#new-message-wrap .field-row textarea{
+    width: 680px;
+}
+#new-message-wrap .btn-row{
+    padding: 10px 0;
+}
+#new-message-wrap .btn-row .submit-btn{
+    margin-top: 5px;
+}
+#new-message-wrap .attachments-wrap{
+    width: 270px;
+}
+#new-message-wrap .attachments-wrap .file-item{
+    padding: 5px 0 7px;
+    border-bottom: solid 1px #cbcbcb;
+    float: left;
+    width: 100%;
+}
+#new-message-wrap .attachments-wrap .file-item:last-child{
+    margin-bottom: 15px;
+}
+#new-message-wrap #add-attachment-link{
+    float: left;
+}
+#new-message-wrap .attachments-wrap .file-item .delete-btn{
+    margin: 3px 0 0 10px;
+    float: right;
 }
 /***
 * Dashboard Page Min Heights
@@ -6727,4 +6862,5 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #new-message-wrap{
     position: relative;
 }
+
 

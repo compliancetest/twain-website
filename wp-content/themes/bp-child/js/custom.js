@@ -488,12 +488,17 @@ function customizeFileTag()
                 var fileName = jQuery(this).val();
                 fileName = fileName.replace(/\\/g, "/");                                 
                 fName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("."));
-                fExt = fileName.substr(fileName.lastIndexOf("."));
-                if(fName.length > 16)
+                if(!fName)
                 {
-                    fName = fName.substr(0, 7) + "..." + fName.substring(fName.length - 6);
+                    jQuery(this).parent().parent().find('.file-value').html('Choose File');
+                }else{
+                    fExt = fileName.substr(fileName.lastIndexOf("."));
+                    if(fName.length > 16)
+                    {
+                        fName = fName.substr(0, 7) + "..." + fName.substring(fName.length - 6);
+                    }
+                    jQuery(this).parent().parent().find('.file-value').html(fName + fExt);
                 }
-                jQuery(this).parent().parent().find('.file-value').html(fName + fExt);
             })
             jQuery(this).data('file-customized', 1);
         }

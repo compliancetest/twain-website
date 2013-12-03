@@ -125,7 +125,7 @@ if($filterCategory)
                             </div>
                             <div class="td td-ticket-subject">
                                 <?php 
-                                    if($ticket->status_id == TICKET_STATUS_SOLVED)
+                                    if($ticket->status_id == TICKET_STATUS_RESOLVED)
                                     {
                                         echo "<span class='ticket-status-solved-label'></span>";
                                     }else{

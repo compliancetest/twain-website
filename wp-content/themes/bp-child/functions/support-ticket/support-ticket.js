@@ -82,15 +82,31 @@ jQuery(document).ready(function(){
     //Show Change Term Form
     jQuery('#change-term-link').click(function(){
         jQuery('#change-term-contr').fadeIn('fast');
-        jQuery('#term-actions').hide();
+        jQuery('#ticket-term-info').hide();
         return false;
     });
     
     jQuery('#change-term-contr .cancel-btn').click(function(){
-        jQuery('#change-term-contr').fadeOut('fast');
-        jQuery('#term-actions').show();
+        jQuery('#change-term-contr').hide();
+        jQuery('#ticket-term-info').fadeIn('fast');
         return  false;
     });
+    
+    jQuery('#add-attachment-link').click(function(){
+        jQuery('#new-message-wrap .attachments-wrap').append('<div class="file-item">' + 
+                    '<input type="file" name="attachments[]" />' + 
+                    '<a href="#" class="action-btn delete-btn icon-btn"><span class="p"></span></a>' +
+                '</div>');
+        customizeFileTag();
+        return false;
+    })
+    
+    jQuery('#new-message-wrap .attachments-wrap').on('click', '.delete-btn', function(){
+        jQuery(this).parent().fadeOut("fast", function(){
+            jQuery(this).remove();
+        })
+        return false;
+    })
     
     //Submit Term Changes
     jQuery('#changeTermForm').submit(function(){
@@ -117,6 +133,11 @@ jQuery(document).ready(function(){
             isValid = false;
         }
         
+        if(isValid)
+        {
+            jQuery('#changeTermForm .loading').show();
+        }
+        
         return isValid;
         
     })
@@ -132,7 +153,10 @@ jQuery(document).ready(function(){
             jQuery('#newMessageForm #message-content').addClass("textarea-error");
             isValid = false;
         }
-        jQuery('#new-message-wrap .loading').show();
+        
+        if(isValid)
+            jQuery('#new-message-wrap .loading').show();
+            
         return isValid;
     })
     

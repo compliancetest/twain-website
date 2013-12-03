@@ -354,7 +354,72 @@ function ct_ticket_statuses()
 
 function ct_ticket_display_tickets()
 {
+    $listTable = new CT_Tickets_Ticket_List_Table();
+    $listTable->prepare_items();
+    
     ?>
+    <style type="text/css">
+        .ticket-priority b{
+            font-size: 12px;
+            line-height: 18px;
+/*            margin-left: 5px;*/
+        }
+        .ticket-priority span{
+            border-width: 1px;
+            border-style: solid;    
+            height: 12px;
+            width: 12px;
+            border-radius: 9px;
+            -moz-border-radius: 9px;
+            -webkit-border-radius: 9px;
+            display: inline-block;
+            box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7) inset;
+            vertical-align: top;
+            font-weight: bold;
+        }
+        .ticket-priority-normal b{
+            color: #aaa;
+        }
+        .ticket-priority-normal span{            
+            border-color: #aaa;
+            background: #b7b7b7;
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c4c4c4), to(#ababab));
+            background: -webkit-linear-gradient(top, #c4c4c4, #ababab);
+            background: -moz-linear-gradient(top, #c4c4c4, #ababab);
+            background: -ms-linear-gradient(top, #c4c4c4, #ababab);
+            background: -o-linear-gradient(top, #c4c4c4, #ababab);
+        }
+        .ticket-priority-high b{
+            color: #f26522;
+        }
+        .ticket-priority-high span{            
+            border-color: #f26522;
+            background: #f67234;
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f98047), to(#f36623));
+            background: -webkit-linear-gradient(top, #f98047, #f36623);
+            background: -moz-linear-gradient(top, #f98047, #f36623);
+            background: -ms-linear-gradient(top, #f98047, #f36623);
+            background: -o-linear-gradient(top, #f98047, #f36623);
+        }
+        .ticket-priority-urgent b{
+            color: #c51e1e;
+        }
+        .ticket-priority-urgent span{            
+            border-color: #c51e1e;
+            background: #dc1516;
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f00e0e), to(#c61d1d));
+            background: -webkit-linear-gradient(top, #f00e0e, #c61d1d);
+            background: -moz-linear-gradient(top, #f00e0e, #c61d1d);
+            background: -ms-linear-gradient(top, #f00e0e, #c61d1d);
+            background: -o-linear-gradient(top, #f00e0e, #c61d1d);
+        }
+    </style>
+    <div class="wrap">
+        <h2>Tickets</h2>
+        <?php
+            echo $listTable->display();
+        ?>
+    </div>
     <?php
     return true;
 }

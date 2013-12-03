@@ -110,6 +110,14 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
     {
         $messageDetail = getTicketMessageById($message_id);
         $emailData['[message_content]'] = apply_filters("the_content", $messageDetail->message);
+        if($messageDetail->has_attachment)
+        {
+             $emailData['[message_content]'] .= "<br />";
+             $attachments = getAttachmentsByMessageId($message->id);
+             foreach($attachments as $file){
+                $emailData['[message_content]'] .= '<a href="' . get_site_url(null, null, 'https') .'/?action=' . wp_create_nonce('download-ticket-attachment') .'&file=' . $file->token . '">' . $file->file_name . '</a><br />';
+             }
+        }
     }
     
     if($email_type == 'customer')

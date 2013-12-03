@@ -9,6 +9,7 @@ require_once ABSPATH . "wp-admin/includes/class-wp-list-table.php";
 require_once(dirname(__FILE__) . "/list.category.php");
 require_once(dirname(__FILE__) . "/list.priority.php");
 require_once(dirname(__FILE__) . "/list.status.php");
+require_once(dirname(__FILE__) . "/list.tickets.php");
 
 add_action("admin_menu", "ct_ticket_create_admin_menus");
 

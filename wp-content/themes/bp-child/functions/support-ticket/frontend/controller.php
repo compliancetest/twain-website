@@ -73,7 +73,7 @@ function createSupportTicket()
         'solved_date' => '0000-00-00 00:00:00',
     );
     
-    if(!$wpdb->insert($wpdb->prefix . 'tickets', $data))
+    if(!$wpdb->insert(TABLE_TICKETS, $data))
     {
         addMessage($wpdb->last_error, 'error');
         wp_redirect("/my-support-tickets");
@@ -111,10 +111,10 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     
     $customer_ids = getManagedCustomerWPIDs($user_id);
     
-    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title FROM " . $wpdb->prefix . "tickets AS t "
-           . "LEFT JOIN $wpdb->prefix" . "ticket_statuses AS ts ON ts.id=t.status_id "
-           . "LEFT JOIN $wpdb->prefix" . "ticket_categories AS tc ON tc.id=t.category_id "
-           . "LEFT JOIN $wpdb->prefix" . "ticket_priorities AS tp ON tp.id=t.priority_id ";
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title FROM " . TABLE_TICKETS . " AS t "
+           . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
+           . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
+           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id ";
     
     $customer_ids[] = $user_id;
     $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
@@ -156,7 +156,7 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     
     if($limit > 0)
     {
-        $tQuery = "SELECT count(id) FROM $wpdb->prefix" . "tickets AS t WHERE " . implode(" AND  ", $where);
+        $tQuery = "SELECT count(id) FROM " . TABLE_TICKETS . " AS t WHERE " . implode(" AND  ", $where);
         $totalItems = $wpdb->get_var($tQuery);        
         $query .= " LIMIT " . ($page - 1) * $limit . ", $limit";
     }
@@ -187,10 +187,10 @@ function getTicketById($ticket_id)
     
     $customer_ids = getManagedCustomerWPIDs($user_id);
     
-    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title FROM " . $wpdb->prefix . "tickets AS t "
-           . "LEFT JOIN $wpdb->prefix" . "ticket_statuses AS ts ON ts.id=t.status_id "
-           . "LEFT JOIN $wpdb->prefix" . "ticket_categories AS tc ON tc.id=t.category_id "
-           . "LEFT JOIN $wpdb->prefix" . "ticket_priorities AS tp ON tp.id=t.priority_id ";
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title FROM " . TABLE_TICKETS . " AS t "
+           . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
+           . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
+           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id ";
     
     $customer_ids[] = $user_id;
     $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
@@ -212,7 +212,7 @@ function getTicketMessageById($message_id)
 {
     global $wpdb;
     
-    $query  = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "ticket_messages WHERE id=%d", $message_id);
+    $query  = $wpdb->prepare("SELECT * FROM " . TABLE_TICKET_MESSAGES . " WHERE id=%d", $message_id);
     $row = $wpdb->get_row($query);
     
     return $row;
@@ -229,12 +229,22 @@ function getTicketMessagesByTicketId($ticket_id)
     
     $user = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "ticket_messages WHERE ticket_id=%d ORDER BY created_date", $ticket_id);
+    $query = $wpdb->prepare("SELECT *  FROM " . TABLE_TICKET_MESSAGES . " WHERE ticket_id=%d ORDER BY created_date", $ticket_id);
+    
     $rows = $wpdb->get_results($query);
     
     return $rows;
 }
 
+function getAttachmentsByMessageId($message_id)
+{
+    global $wpdb;
+    
+    $query  = $wpdb->prepare("SELECT * FROM " . TABLE_TICKET_ATTACHMENTS . " WHERE message_id=%d", $message_id);
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
 /**
 * Accept Terms
 */
@@ -276,19 +286,20 @@ function acceptTerm()
         'created_date' => date("Y-m-d H:i:s")
     );
     
-    if(!$wpdb->insert($wpdb->prefix .  "ticket_messages", $messageData))
+    if(!$wpdb->insert(TABLE_TICKET_MESSAGES, $messageData))
     {
         addMessage($wpdb->last_error, "error");        
     }else{
         $messageID = $wpdb->insert_id;
         
         //Accept Term
-        $wpdb->update($wpdb->prefix . "tickets", array('term_accepted' => 1, 'last_message_id' => $messageID, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticketDetail->id));
+        $wpdb->update(TABLE_TICKETS, array('term_accepted' => 1, 'last_message_id' => $messageID, 'status_id' => TICKET_STATUS_IN_PROGRESS, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticketDetail->id));
+        $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticketDetail->id, 'status_id' => TICKET_STATUS_IN_PROGRESS, 'created_date' => date("Y-m-d H:i:s")));
         
         if($ticketDetail->customer_id != $user_id)
         {
             //Set Support ID
-            $wpdb->update($wpdb->prefix . "tickets", array('support' => $user_id), array('id' => $ticketDetail->id));
+            $wpdb->update(TABLE_TICKETS, array('support' => $user_id), array('id' => $ticketDetail->id));
         }
         
         /***************** Begin Send Mail ***************************/
@@ -357,7 +368,7 @@ function changeTicketTerm()
         'created_date' => date("Y-m-d H:i:s")
     );
     
-    if(!$wpdb->insert($wpdb->prefix .  "ticket_messages", $messageData))
+    if(!$wpdb->insert(TABLE_TICKET_MESSAGES, $messageData))
     {
         addMessage($wpdb->last_error, "error");        
     }else{
@@ -366,13 +377,13 @@ function changeTicketTerm()
         if($ticketDetail->customer_id != $user_id)
             $ticketDetail->support_id = $user_id;
         //Update Term
-        $wpdb->update($wpdb->prefix . 'tickets', array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id, 'support_id' => $ticketDetail->support_id, 'last_message_id' => $messageID, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticketDetail->id));
+        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'term_accepted' => 0, 'term_creator_id' => $user_id, 'support_id' => $ticketDetail->support_id, 'last_message_id' => $messageID, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticketDetail->id));
         
         //Update New Message Count
         if($ticketDetail->customer_id != $user_id)
-            $query = "UPDATE " . $wpdb->prefix . "tickets SET `customer_new_messages`=`customer_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . TABLE_TICKETS . " SET `customer_new_messages`=`customer_new_messages` + 1 WHERE id=" . $ticketDetail->id;
         else
-            $query = "UPDATE " . $wpdb->prefix . "tickets SET `support_new_messages`=`support_new_messages` + 1 WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . TABLE_TICKETS . " SET `support_new_messages`=`support_new_messages` + 1 WHERE id=" . $ticketDetail->id;
         $wpdb->query($query);
         
         /******* Send Term Updated Email **********/
@@ -418,22 +429,65 @@ function sendTicketMessage()
         'sender' => $user_id,
         'message' => $message,
         'is_new' => 1,
-        'message_type' => 'term',
+        'message_type' => 'message',
+        'has_attachment' => 0,
         'receiver' => $ticketDetail->customer_id != $user_id ? $ticketDetail->customer_id : $ticketDetail->support_id,
         'created_date' => date("Y-m-d H:i:s")
     );
     
-    if(!$wpdb->insert($wpdb->prefix .  "ticket_messages", $messageData))
+    if(!$wpdb->insert(TABLE_TICKET_MESSAGES, $messageData))
     {
         addMessage($wpdb->last_error, "error");        
     }else{
         $messageID = $wpdb->insert_id;
         
+        //Upload Files
+        if(!is_dir(TICKET_ATTACHMENTS_DIR))
+        {
+            mkdir(TICKET_ATTACHMENTS_DIR, 0777);
+            //Add .htaccess to prevent direct access
+            $fp = fopen(TICKET_ATTACHMENTS_DIR . "/.htaccess", "w");
+            fwrite($fp, "deny from all");
+            fclose($fp);
+        }
+        $has_attachment = 0;
+        if($_FILES['attachments']['error'])
+        {
+            foreach($_FILES['attachments']['error'] as $i => $error)
+            {
+                if($error == UPLOAD_ERR_OK)
+                {
+                    if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id))
+                        mkdir(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id, 0777);
+                    
+                    $name = $_FILES['attachments']['name'][$i];
+                    $k = 1;
+                    while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id . "/" . $name))
+                    {
+                        $name = $k . "_" . $_FILES['attachments']['name'][$i];
+                        $k++;
+                    }
+                    
+                    if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id . "/" . $name))
+                    {
+                        //Store Data to the Table
+                        $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $ticketDetail->id, 'message_id' => $messageID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => sha1($ticket_id . "_" . $messageID . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand(0, 999999))));                        
+                        $has_attachment = 1;
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+        if($has_attachment)
+            $wpdb->update(TABLE_TICKET_MESSAGES, array('has_attachment' => 1), array('id' => $messageID));
+        
         //Update New Message Count
         if($ticketDetail->customer_id != $user_id)
-            $query = "UPDATE " . $wpdb->prefix . "tickets SET `customer_new_messages`=`customer_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . TABLE_TICKETS . " SET `customer_new_messages`=`customer_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
         else
-            $query = "UPDATE " . $wpdb->prefix . "tickets SET `support_new_messages`=`support_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . TABLE_TICKETS . " SET `support_new_messages`=`support_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
         $wpdb->query($query);
         
         ///Send Email Notification
@@ -446,6 +500,13 @@ function sendTicketMessage()
             sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }
         
+        if(isset($_POST['resolved']) && $_POST['resolved'])
+        {
+            //Change Ticket Status
+            $wpdb->update(TABLE_TICKETS, array('solved_date' => date("Y-m-d H:i:s"), 'status_id' => TICKET_STATUS_RESOLVED), array('id' => $ticketDetail->id));
+            $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticketDetail->id, 'status_id' => TICKET_STATUS_RESOLVED, 'created_date' => date("Y-m-d H:i:s")));
+            sendTicketMessage();
+        }
         
         addMessage("Your ticket has been updated.", "success");
         wp_redirect("/my-support-tickets/" . $ticketDetail->id);
@@ -453,4 +514,61 @@ function sendTicketMessage()
     }
 }
 
-//function 
+function downloadAttachment()
+{
+    global $wpdb;
+    
+    $token = $_GET['file'];
+    
+    if(!$token)
+    {
+        addMessage("Invalid Request!", 'error');
+        wp_redirect("/");
+        exit;
+    }
+    
+    //Getting File from The Token
+    $query = $wpdb->prepare("SELECT * FROM " . TABLE_TICKET_ATTACHMENTS . " WHERE token=%s", $token);
+    $file = $wpdb->get_row($query);
+    if(!$file)
+    {
+        addMessage("Invalid Request!", 'error');
+        wp_redirect("/");
+        exit;
+    }
+    
+    //Check Permission
+    $ticketDetail = getTicketById($file->ticket_id);
+    
+    if(!$ticketDetail)
+    {
+        addMessage("Invalid Request!", 'error');
+        wp_redirect("/");
+        exit;
+    }
+    
+    if(!file_exists(TICKET_ATTACHMENTS_DIR . "/" . $file->ticket_id . "/" . $file->file_name))
+    {
+        addMessage("File not found!", 'error');
+        wp_redirect("/");
+        exit;
+    }
+    
+    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+    header("Content-Type: Application/octet-stream");
+    header("Content-disposition: attachment; filename=" . $file->file_name);
+    
+    $fp = fopen(TICKET_ATTACHMENTS_DIR . "/" . $file->ticket_id . "/" . $file->file_name, "r");
+    while (!feof($fp))
+    {
+        echo fread($fp, 65536); 
+        flush();
+    }  
+    fclose($fp); 
+    
+    exit;
+    
+}
