@@ -54,16 +54,27 @@ function process_external_actions()
         
         exit;
     }else if($action == 'recurring-payment'){
+        require_once(THE_FUNCTION . '/soap/nusoap.php');
+        
+        $webserviceURL = get_eway_token_webservice_url();
+        $customerID = get_eway_customer_id();
+        $userName = get_eway_user_name();
+        $userPWD = get_eway_user_pwd();
+        
         //Getting All Expired Payments
         $query = "SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active' AND `customer_id` > 0 AND `expiry_date` <= '" . date('Y-m-d') . "'";
         $rows = $wpdb->get_results($query);
         
+        
         foreach($rows as $row)
-        {
+        {           
+            $user = get_userdata($row->user_id);
+            
+            $suite_name = get_post_meta($row->suite_id, 'ts_name', true);
             //Send Payment
             $current_price = get_post_meta($row->suite_id, 'monthly_subscription_price', true);
             $price = $current_price < $row->price ? $current_price : $row->price;
-            require_once(THE_FUNCTION . '/soap/nusoap.php');
+            
         
             $client = new nusoap_client($webserviceURL, false);
             $err = $client->getError();
@@ -81,19 +92,32 @@ function process_external_actions()
                 'man:amount' => $price * 100,
 //                'man:cvn' => $card->cvn,
                 //'man:invoiceReference' => '',
-    //            'man:invoiceDescription' => ''
+                'man:invoiceDescription' => 'Recurring Monthly Bill for ' . $suite_name
             );
             $soapaction = 'https://www.eway.com.au/gateway/managedpayment/ProcessPayment';
             $result = $client->call('man:ProcessPayment', $requestbody, '', $soapaction);
             
-            if($result['ewayTrxnStatus'] == 'False')
+            if(!$result || $result['ewayTrxnStatus'] == 'False')
             {
-                echo $result['ewayTrxnError'];
-                exit;
+                //Make the subscription expired
+                $payment_error = $result['ewayTrxnError'];
+                //Send Email
+                $emailData = array(
+                    '[name]' => cp_get_user_fullname($row->user_id),
+                    '[email]' => $user->user_email,
+                    '[suite_name]' => $suite_name,
+                    '[suite_url]' => get_permalink($row->suite_id),
+                    '[paid_amount]' => $price
+                );
+                /*cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'expire_subscription', $emailData);
+                cp_send_email_to_admin('expire_subscription_admin', $emailData);*/
             }else{            
-                
+                //Expand the expiry
+                $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('+1 month')), 'Status' => 'Active'), array('id' => $row->id));
             }
         }
+        
+        exit;
     }
 }
 

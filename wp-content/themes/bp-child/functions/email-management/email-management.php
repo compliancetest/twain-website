@@ -71,7 +71,7 @@ function create_email_management_page()
                     <li><a href="#verification-email">Resend Verification Email</a></li>
                     <li><a href="#verification-success">User Verification Success</a></li>
                     <li><a href="#purchase-subscription">Purchase Subscription</a></li>       
-                    <li><a href="#recurring-subscription">Recurring Subscription</a></li>
+                    <li><a href="#expire-subscription">Expire Subscription</a></li>
                     <li><a href="#cancel-subscription">Cancel Subscription</a></li>       
                     <li><a href="#membership-request-received">Membership Request Received</a></li>       
                     <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
@@ -265,14 +265,14 @@ function create_email_management_page()
                         
                     </table>
                 </div>
-                <div id="recurring-subscription">
+                <div id="expire-subscription">
                     <?php
-                    $recurring_subscription_email_title = get_option('recurring_subscription_email_title');
-                    $recurring_subscription_email_content = get_option('recurring_subscription_email_content');
-                    $recurring_subscription_admin_email_title = get_option('recurring_subscription_admin_email_title');
-                    $recurring_subscription_admin_email_content = get_option('recurring_subscription_admin_email_content');
+                    $expire_subscription_email_title = get_option('expire_subscription_email_title');
+                    $expire_subscription_email_content = get_option('expire_subscription_email_content');
+                    $expire_subscription_admin_email_title = get_option('expire_subscription_admin_email_title');
+                    $expire_subscription_admin_email_content = get_option('expire_subscription_admin_email_content');
                     ?>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [payment_error]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -283,13 +283,13 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Title</b></td>
                                 <td>
-                                    <input type="text" size="50" name="recurring_subscription_email_title" id="recurring_subscription_email_title" value="<?php echo $recurring_subscription_email_title?>" />
+                                    <input type="text" size="50" name="expire_subscription_email_title" id="expire_subscription_email_title" value="<?php echo $expire_subscription_email_title?>" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($recurring_subscription_email_content, 'recurring_subscription_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($expire_subscription_email_content, 'expire_subscription_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -302,13 +302,13 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Title</b></td>
                                 <td>
-                                    <input type="text" size="50" name="recurring_subscription_admin_email_title" id="recurring_subscription_admin_email_title" value="<?php echo $recurring_subscription_admin_email_title?>" />
+                                    <input type="text" size="50" name="expire_subscription_admin_email_title" id="expire_subscription_admin_email_title" value="<?php echo $expire_subscription_admin_email_title?>" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($recurring_subscription_admin_email_content, 'recurring_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($expire_subscription_admin_email_content, 'expire_subscription_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -909,6 +909,17 @@ function save_email_templates()
           update_option('cancel_subscription_admin_email_title', $cancel_subscription_admin_email_title);          
           $cancel_subscription_admin_email_content = stripslashes_deep($_POST['cancel_subscription_admin_email_content']);          
           update_option('cancel_subscription_admin_email_content', $cancel_subscription_admin_email_content);
+          
+          $expire_subscription_email_title = htmlentities(stripslashes_deep($_POST['expire_subscription_email_title']));          
+          update_option('expire_subscription_email_title', $expire_subscription_email_title);          
+          $expire_subscription_email_content = stripslashes_deep($_POST['expire_subscription_email_content']);          
+          update_option('expire_subscription_email_content', $expire_subscription_email_content);          
+          $expire_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['expire_subscription_admin_email_title']));          
+          update_option('expire_subscription_admin_email_title', $expire_subscription_admin_email_title);          
+          $expire_subscription_admin_email_content = stripslashes_deep($_POST['expire_subscription_admin_email_content']);          
+          update_option('expire_subscription_admin_email_content', $expire_subscription_admin_email_content);
+          
+          
           
           $password_changed_email_title = htmlentities(stripslashes_deep($_POST['password_changed_email_title']));          
           update_option('password_changed_email_title', $password_changed_email_title);          
