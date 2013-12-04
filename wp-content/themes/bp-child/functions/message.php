@@ -444,6 +444,19 @@ function showTriggerMessageBox()
             $products = getUserProductsAndServices($user_id);
             
             $current_suite_id = !$lastData ? $suites[0]->suite_id : $lastData->suite_id;
+            $is_valid_suite = false;
+            foreach($suites as $s)
+            {
+                if($s->suite_id == $current_suite_id)
+                {
+                    $is_valid_suite = true;
+                    break;        
+                }
+            }
+            if(!$is_valid_suite)
+                $current_suite_id = $suites[0]->suite_id;
+                
+                
             $current_product_id = !$lastData ? $products[0]->ID : $lastData->product_id;
             
             $current_harness_profile_id = !$lastData ? array() : unserialize($lastData->harness_profile_id);
@@ -454,7 +467,18 @@ function showTriggerMessageBox()
             $cases = $suiteObj->loadTestCases();
             
             $current_case_id = !$lastData ? $cases[0]->ID : $lastData->case_id;
-                        
+            $is_valid_case = false;
+            foreach($cases as $c)
+            {
+                if($c->ID == $current_case_id)
+                {
+                    $is_valid_case = true;
+                    break;
+                }
+            }
+            if(!$is_valid_case)
+                $current_case_id = $cases[0]->ID;
+            
             //Getting User Previous Message Templates
             $prevMessages = getUserPreviousMessageTemplates($user_id);            
             
