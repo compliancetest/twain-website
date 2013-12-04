@@ -452,7 +452,7 @@ function showTriggerMessageBox()
             //Getting Test Cases
             $suiteObj = new TestSuite($current_suite_id);
             $cases = $suiteObj->loadTestCases();
-            var_dump($cases);
+            
             $current_case_id = !$lastData ? $cases[0]->ID : $lastData->case_id;
                         
             //Getting User Previous Message Templates
