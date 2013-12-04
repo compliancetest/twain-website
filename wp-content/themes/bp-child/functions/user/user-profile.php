@@ -164,7 +164,7 @@ function cp_user_payment_edit()
         exit;
     }
     
-    $result['CCCvn'] = $card->cvn;
+    $result['nickname'] = $card->nickname;
     
     echo json_encode($result);
     exit;
@@ -185,6 +185,7 @@ function cp_user_payment_save()
     $user_id = $current_user->ID;
     
     $card_number = str_replace(' ', '', $_POST['card_number']);
+    $nickname = trim($_POST['nickname']);
     $name_on_card = trim($_POST['name_on_card']);
     $card_expiry = trim($_POST['card_expiry']);
     $card_cvc = trim($_POST['card_cvc']);
@@ -199,7 +200,10 @@ function cp_user_payment_save()
             return "Invalid Request!";
         }
     }
-    
+    if(!$nickname)
+    {
+        return 'Please enter a nickname of this card!';
+    }
     //Card Number
     if($card_number == '')
     {
@@ -325,10 +329,9 @@ function cp_user_payment_save()
             //Success            
             $query_result = $wpdb->insert($wpdb->prefix . "users_cards", array(
                 'user_id' => $user_id,
+                'nickname' => $nickname,
                 'card_number' => encrypt_card_number($card_number),
-                'customer_id' => $result,
-                /*'name' => $name_on_card,
-                'cvn' => $card_cvc,*/
+                'customer_id' => $result,                
                 'created_date' => date('Y-m-d H:i:s')
             ));        
             if(!$query_result)
@@ -368,7 +371,7 @@ function cp_user_payment_save()
         $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
         if($result == 'true')
         {
-            $wpdb->update($wpdb->prefix . "users_cards", array('cvn' => $card_cvc, 'name' => $name_on_card), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname), array('id' => $card->id));
             echo 'success';
         }else{
             echo $result['faultstring'];

@@ -442,7 +442,7 @@ Template Name Posts: Test Suite
                             <option value="">Select a Card</option>
                             <?php foreach($userCards as $row){ ?>
                             <option value="<?php echo $row->id?>">
-                                <?php echo chunk_split(encrypt_card_number($row->card_number), 4)?>
+                                <?php echo $row->nickname . " " . chunk_split(encrypt_card_number($row->card_number), 4)?>
                             </option>
                             <?php } ?>
                         </select>
@@ -452,9 +452,18 @@ Template Name Posts: Test Suite
                 <div class="add-new-border"><span>or add new</span></div>
                 <div class="field-row">
                     <div class="grid-cell">
+                        <label>NickName</label>
+                        <input type="text" name="nickname" id="nickname" value="" class="input" maxlength="50" />
+                        <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
+                    </div>                
+                    <div class="clear"></div>
+                </div>
+                
+                <div class="field-row">
+                    <div class="grid-cell">
                         <label>Name on Card</label>
                         <input type="text" name="name_on_card" id="name_on_card" value="" class="input" />
-                        <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />
+                        <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
                     </div>                
                     <div class="clear"></div>
                 </div>
@@ -552,8 +561,30 @@ jQuery(document).ready(function($) {
     })
     
     jQuery('#paymentForm').submit(function(){
-        jQuery('#subscribe-box .loading').show();
         jQuery('#subscribe-box .message').remove();
+        jQuery('#subscribe-box .input-error').removeClass('input-error');
+        jQuery('#subscribe-box .select-error').removeClass('select-error');
+        
+        var isValid = true;
+        if(jQuery('#paymentForm #card_id').val() == '')
+        {
+            jQuery('#paymentForm').find('input[type="text"], select[id!="card_id"]').each(function(){
+                if(jQuery(this).val() == '')
+                {                    
+                    jQuery(this).addClass(this.tagName.toLowerCase() == 'input' ? 'input-error' : 'select-error');
+                    isValid = false;
+                }
+            })
+        }
+        
+        if(!isValid)
+        {
+            jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">Please complete fields in red.</div>');
+            return false;
+        }
+        
+        jQuery('#subscribe-box .loading').show();
+        
         jQuery.ajax({
             url: '/',
             type: 'post',

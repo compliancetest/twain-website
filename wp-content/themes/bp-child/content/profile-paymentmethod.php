@@ -30,7 +30,7 @@ if(!defined('ABSPATH'))
                 <?php foreach($cards as $card){ ?>
                 <div class="grid-row grid-action-row">
                     <div class="grid-cell width80P">
-                        <?php echo chunk_split($card->card_number, 4)?>
+                        <?php echo $card->nickname . " " . chunk_split($card->card_number, 4)?>
                         <input type="hidden" id="cnumber" value="<?php echo $card->card_number?>" />                                    
                     </div>
                     <div class="grid-cell grid-action-cell width20P">
@@ -44,6 +44,11 @@ if(!defined('ABSPATH'))
             </div>
             <div id="edit-card-form" style="display: none;">
                 <form action="#" method="post">
+                    <div class="grid-row">
+                        <div class="grid-cell width30P"><label>NickName</label></div>
+                        <input type="text" name="nickname" id="nickname" value="" class="input" autocomplete="off" />                                    
+                        <div class="clear"></div>
+                    </div>                    
                     <div class="grid-row">
                         <div class="grid-cell width30P"><label>Card Number</label></div>
                         <input type="text" name="card_number" id="card_number" value="" class="input" autocomplete="off" /> 
