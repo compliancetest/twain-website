@@ -334,23 +334,25 @@ function unsubscribe_purchase()
             exit;
         }
         
-        //Remove Backend Account
-        $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:userId>' . $purchase->esb_user_id . '</api:userId>                        
-                    </api:user>
-                </api:deleteUserRequest>';
-        
-        $result = $CPRest->doUserAPI('user/delete', $data);
-        
-        $resultDoc = new DOMDocument(); 
-        
-        if(!$result || !$resultDoc->loadXML($result))
+        if(intval($purchase->esb_user_id) > 0)
+        {
+            //Remove Backend Account
+            $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
+                        <api:user>
+                            <api:userId>' . $purchase->esb_user_id . '</api:userId>                        
+                        </api:user>
+                    </api:deleteUserRequest>';
+            
+            $result = $CPRest->doUserAPI('user/delete', $data);
+            
+            $resultDoc = new DOMDocument(); 
+        }
+        if(intval($purchase->esb_user_id) > 0 && (!$result || !$resultDoc->loadXML($result)))
         {
             addMessage("There was an error while cancelling your subscription.", "error");
             
         }else{
-            if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
+            if(intval($purchase->esb_user_id) > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
             {
                 addMessage('Error:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue, 'error');
             }else{            
