@@ -109,8 +109,8 @@ function process_external_actions()
                     '[suite_url]' => get_permalink($row->suite_id),
                     '[paid_amount]' => $price
                 );
-                /*cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'expire_subscription', $emailData);
-                cp_send_email_to_admin('expire_subscription_admin', $emailData);*/
+                cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'expire_subscription', $emailData);
+                cp_send_email_to_admin('expire_subscription_admin', $emailData);
             }else{            
                 //Expand the expiry
                 $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('+1 month')), 'Status' => 'Active'), array('id' => $row->id));
