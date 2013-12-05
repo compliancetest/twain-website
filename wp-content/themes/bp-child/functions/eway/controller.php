@@ -169,11 +169,11 @@ function process_eway_payment()
             
             if(!$result || !$resultDoc->loadXML($result))
             {
-                echo "Payment was proceed successfully with an error.";
+                echo "Your payment was processed successfully, but there was a unknown problem creating you test credentials ";
             }else{                
                 if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
                 {
-                    echo 'Your payment was proceed successfully, But there was an error.' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
+                    echo 'Your payment was processed successfully, but there was a problem creating you test credentials:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
                 }else{            
                     $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));
                     echo 'success';
