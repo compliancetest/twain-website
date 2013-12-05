@@ -166,7 +166,8 @@ function process_eway_payment()
             
             $result = $CPRest->doUserAPI('user/create', $data);
             $resultDoc = new DOMDocument();
-            
+            var_dump($data);
+            var_dump($result);
             if(!$result || !$resultDoc->loadXML($result))
             {
                 echo "Payment was proceed successfully with an error.";

@@ -110,6 +110,9 @@ require_once(THE_FUNCTION . "/message.php");
 require_once(THE_FUNCTION . "/Mailchimp/Mailchimp.php");
  
 require_once(THE_FUNCTION . "/external-actions.php");
+
+require_once(THE_FUNCTION . "/tools.php");
+
 /* 
  * Loads the Options Panel
  *
