@@ -45,7 +45,10 @@ if(!defined('ABSPATH'))
                         <?php echo chunk_split($card->card_number, 4)?>
                     </div>
                     <div class="td td-card-status tocenter">
-                        Expired
+                        <span class="status_btn status_<?php echo strtolower($card->status)?> has-tooltip">
+                            <?php echo $card->status?>
+                            <?php echo $card->status_message ? '<span class="simple_tooltip radius6">' . $card->status_message . '<span></span></span>' : ''?>
+                        </span>
                     </div>
                     <div class="td td-action">
                         <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('edit_payment_method')?>&id=<?php echo $card->id ?>" class="edit-payment-method action-btn edit-btn icon-btn has-tooltip" data-id="<?php echo $card->id?>"><span class="p"></span><span class="simple_tooltip radius6">Edit Card<span></span></span></a>

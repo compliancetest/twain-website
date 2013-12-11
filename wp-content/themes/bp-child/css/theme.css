@@ -761,7 +761,7 @@ width: 28%;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    line-height: 18px;
+    line-height: 1.2em;
     font-weight: normal;
 }
 
@@ -4420,10 +4420,16 @@ min-height: 70px;
     display: block;
 }
 #cards-list .td-nickname{
-    width: 126px;
+    width: 106px;
 }
 #cards-list .td-card-status{
-    width: 60px;
+    width: 80px;
+}
+#cards-list .td-card-status .status_btn{
+    min-width: 60px;
+}
+#cards-list .td-card-status .simple_tooltip{
+    min-width: 200px;
 }
 #cards-list .td-card-number{
     width: 125px;
@@ -4455,10 +4461,16 @@ min-height: 70px;
     margin-left: -55px;
 }
 #my_subscriptions .td-suite{
-    width: 267px;
+    width: 156px;
 }
 #my_subscriptions .td-fee{
     width: 65px;
+}
+#my_subscriptions .td-status{
+    width: 90px;
+}
+#my_subscriptions .td-status .status_btn{
+    min-width: 75px;
 }
 #my_subscriptions .td-action{
     width: 60px;

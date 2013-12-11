@@ -361,8 +361,8 @@ function unsubscribe_purchase()
             }else{            
                 
                 addMessage('Your subscription has been cancelled.');
-                //Change status to canceled 
-                $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Cancelled'), array('id' => $purchase->id));            
+                //Change status to unsubscribing 
+                $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Unsubscribing'), array('id' => $purchase->id));            
                 //Delete User Subscription Row
 //                $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $purchase->id));            
                 

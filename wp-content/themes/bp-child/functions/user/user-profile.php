@@ -332,6 +332,7 @@ function cp_user_payment_save()
                 'nickname' => $nickname,
                 'card_number' => encrypt_card_number($card_number),
                 'customer_id' => $result,                
+                'status' => 'Active',                
                 'created_date' => date('Y-m-d H:i:s')
             ));        
             if(!$query_result)
@@ -371,7 +372,7 @@ function cp_user_payment_save()
         $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
         if($result == 'true')
         {
-            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'status' => 'Active'), array('id' => $card->id));
             echo 'success';
         }else{
             echo $result['faultstring'];

@@ -16,6 +16,7 @@ if(!defined('ABSPATH'))
             <div class="thead tr">
                <div class="td td-suite">Test Suite</div>
                <div class="td td-fee">Fee</div>
+               <div class="td td-status tocenter">Status</div>
                <div class="td td-action tocenter">Action</div>
                <div class="clear"></div>
            </div>
@@ -42,10 +43,15 @@ if(!defined('ABSPATH'))
                     <div class="td td-fee">$<?php 
                         $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
                         if($currPrice < $row->price)
-                            echo $currPrice;
+                            echo ceil($currPrice);
                         else 
-                            echo $row->price;                        
-                    ?>/m</div>
+                            echo ceil($row->price);                        
+                    ?>/month</div>
+                    <div class="td td-status">
+                        <span class="status_btn status_<?php echo strtolower($card->status)?> has-tooltip">
+                            <?php echo $card->status?>
+                        </span>
+                    </div>
                     <div class="td td-action tocenter">
                         <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
                         <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
