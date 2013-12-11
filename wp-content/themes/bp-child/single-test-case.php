@@ -19,7 +19,7 @@ $case->load();
     <div class="popup-box-content">
 <?php } ?>
 		<div class="infos">
-				<h3 class="dark_gray_txt normal left">Test case ID: <span class="dark_blue_txt bold"><?php echo $case->testCaseID ; ?></span></h3>
+				<h3 class="dark_gray_txt normal left">Test case ID: <span class="dark_blue_txt bold"><?php echo $case->title ; ?></span></h3>
                 <?php
                     if(can_edit_test_case($case->id)){ 
                 ?>
