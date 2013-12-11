@@ -213,6 +213,7 @@ jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_community_memberships'));
     fixTdHeight(jQuery('#my_subscriptions'));
     fixTdHeight(jQuery('#my_test_data_profiles'));
+    fixTdHeight(jQuery('#cards-list'));
 })
 </script>
 <?php

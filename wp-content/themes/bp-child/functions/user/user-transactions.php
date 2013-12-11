@@ -44,7 +44,7 @@ function cp_edit_transaction_log(){
                    <select name="case<?php echo $row->ID?>" class="select">
                        <option value="0">Not Assigned</option>
                        <?php foreach($testCases as $c){ ?>
-                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo cp_wrap($c->caseName, 12)?></option>
+                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo cp_wrap($c->post_title, 12)?></option>
                        <?php } ?>
                    </select>
                </div>
@@ -348,8 +348,7 @@ function getUserSubscribedCases($user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
         
-    $query = "SELECT DISTINCT(p.ID), pm1.meta_value as caseName FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' LEFT JOIN " . 
-            $wpdb->postmeta ." AS pm1 ON p.ID=pm1.post_id AND pm1.meta_key='test_case_id' WHERE p.post_type='test-case' AND p.post_status='publish'";
+    $query = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' WHERE p.post_type='test-case' AND p.post_status='publish'";
     if(!is_super_admin() && !is_admin())
     {
         $suite_ids = getUserAllSuiteIDs($user_id);

@@ -126,6 +126,8 @@ function getBrotherSuitesAndProfileTypes()
 
 function saveSuite()
 {
+    require_once(ABSPATH . "/wp-admin/includes/post.php");
+    
     global $wpdb;
     
     $id = $_POST['id'];
@@ -153,10 +155,22 @@ function saveSuite()
         exit;
     }
     
+    $versions = array();
+    if($_POST['ts_version_major'])
+        $versions[] = $_POST['ts_version_major'];
+    if($_POST['ts_version_minor'])
+        $versions[] = $_POST['ts_version_minor'];
+    if($_POST['ts_version_patch'])
+        $versions[] = $_POST['ts_version_patch'];
+    
+    $version = " v" . implode(".", $versions);
+    
+    $post_title = $_POST['ts_name'] . $version;
+    
     if(!$id) //Create New Suite
     {
         //Update Test Suite Title and Excerpt
-        $id = wp_insert_post(array('post_title' => $_POST['ts_name'], 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
+        $id = wp_insert_post(array('post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             addMessage($id->get_error_message(), 'error');            
@@ -164,7 +178,14 @@ function saveSuite()
         }
         
     }else{  //Update Suite
-        if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['ts_name'], 'post_excerpt' => $_POST['excerpt'], 'post_name' => sanitize_title($_POST['ts_name']))))
+        $post_name = sanitize_title($post_title);
+        $post = get_post($id);
+        //Update Post Name
+        $post_name = wp_unique_post_slug($post_name, $id, $post->post_status, $post->post_type, $post->post_parent);
+        
+        $guid = get_sample_permalink($post->ID, $post_title, $post_name);
+        
+        if( !wp_update_post(array('ID' => $id, 'post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0]))) )
         {
             addMessage('There was an error while updating the test suite.', true);
             return;
@@ -173,7 +194,7 @@ function saveSuite()
     }
     
     $esb = new ManageESB();
-    $esb->addTestSuiteNameIDMap($id, $_POST['ts_name']);
+    $esb->addTestSuiteNameIDMap($id, $post_title);
     
     //Save Types
     $suiteTypes = isset($_POST['test_suite_type']) ? $_POST['test_suite_type'] : array();
@@ -187,7 +208,9 @@ function saveSuite()
     cp_update_post_meta($id, 'ts_issuer', $_POST['ts_issuer']);
     cp_update_post_meta($id, 'ts_status', $_POST['ts_status']);
     cp_update_post_meta($id, 'ts_revision_description', $_POST['ts_revision_description']);
-    cp_update_post_meta($id, 'ts_version', $_POST['ts_version']);
+    cp_update_post_meta($id, 'ts_version_major', $_POST['ts_version_major']);
+    cp_update_post_meta($id, 'ts_version_minor', $_POST['ts_version_minor']);
+    cp_update_post_meta($id, 'ts_version_patch', $_POST['ts_version_patch']);
     cp_update_post_meta($id, 'ts_description', $_POST['ts_description']);
     
     cp_update_post_meta($id, 'ts_profile_types', cp_implode($_POST['ts_profile_types']));

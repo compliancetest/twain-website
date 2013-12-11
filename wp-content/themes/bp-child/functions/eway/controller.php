@@ -60,6 +60,8 @@ function process_eway_payment()
             exit;        
         }
         
+        $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+        
         require_once(THE_FUNCTION . '/soap/nusoap.php');
         
         $client = new nusoap_client($webserviceURL, false);
@@ -75,8 +77,8 @@ function process_eway_payment()
         
         $requestbody = array(
             'man:managedCustomerID' => $card->customer_id,
-            'man:amount' => $suite->monthlySubscriptionPrice * 100,
-            'man:cvn' => $card->cvn,
+            'man:amount' => $paymentAmount * 100,
+//            'man:cvn' => $card->cvn,
             //'man:invoiceReference' => '',
 //            'man:invoiceDescription' => ''
         );
@@ -93,7 +95,7 @@ function process_eway_payment()
                 "user_id" => $user->ID,
                 "suite_id" => $suite->id,
                 "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $suite->monthlySubscriptionPrice * 100,
+                "amount" => $paymentAmount,
                 "auth_code" => $result['ewayAuthCode'],
                 "created_date" => date("Y-m-d H:i:s")
             ));
@@ -109,7 +111,7 @@ function process_eway_payment()
             $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
                 'user_id' => $user->ID,
                 'suite_id' => $suite->id,
-                'price' => $suite->monthlySubscriptionPrice,
+                'price' => number_format($paymentAmount, 2),
                 'customer_id' => $card->customer_id,
                 'esb_user_id' => 0,
                 'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
@@ -120,7 +122,7 @@ function process_eway_payment()
                 'tester_username' => '',
                 'tester_password' => '',
                 'status' => 'Active',
-                'expiry_date' => date("Y-m-d", strtotime('+1 month')),
+                'expiry_date' => date("Y-m-d", strtotime('first day next month')),
                 'created_date' => date('Y-m-d H:i:s')
             ));
             
@@ -140,7 +142,7 @@ function process_eway_payment()
                 '[email]' => $user->user_email,
                 '[suite_name]' => $suite->name,
                 '[suite_url]' => get_permalink($suite->id),
-                '[paid_amount]' => $suite->monthlySubscriptionPrice,
+                '[paid_amount]' => number_format($paymentAmount * 100, 2),
                 '[community_url]' => bp_get_group_permalink($group)
             );
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
@@ -169,11 +171,11 @@ function process_eway_payment()
             
             if(!$result || !$resultDoc->loadXML($result))
             {
-                echo "Your payment was processed successfully, but there was a unknown problem creating you test credentials ";
+                echo "Your payment was processed successfully, but there was a unknown problem creating your test credentials ";
             }else{                
                 if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
                 {
-                    echo 'Your payment was processed successfully, but there was a problem creating you test credentials:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
+                    echo 'Your payment was processed successfully, but there was a problem creating your test credentials:' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
                 }else{            
                     $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));
                     echo 'success';
@@ -258,11 +260,11 @@ function free_charge()
         
         if(!$result || !$resultDoc->loadXML($result))
         {
-            addMessage("There was an error while processing your request!", 'error');                        
+            addMessage("There was a problem creating your test credentials.", 'error');                        
         }else{
             if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
             {
-                addMessage($resultDoc->getElementsByTagName('error')->item(0)->nodeValue, "error");                
+                addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue, "error");                
             }else{            
                 //Send Email
                 $emailData = array(
@@ -347,6 +349,7 @@ function unsubscribe_purchase()
             
             $resultDoc = new DOMDocument(); 
         }
+        
         if(intval($purchase->esb_user_id) > 0 && (!$result || !$resultDoc->loadXML($result)))
         {
             addMessage("There was an error while cancelling your subscription.", "error");
@@ -381,4 +384,13 @@ function unsubscribe_purchase()
         wp_redirect($return);
         exit;
     }    
+}
+
+
+function calculateFirstPaymentAmount($monthly_price)
+{
+    $remainedDay = (strtotime("first day next month") - time()) / 86400;
+    $totalDay = date("t");
+    
+    return ceil($monthly_price * ($remainedDay / $totalDay));
 }

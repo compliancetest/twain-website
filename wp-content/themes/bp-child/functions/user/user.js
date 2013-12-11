@@ -274,7 +274,7 @@
         });
         $('#cards-list .edit-payment-method').click(function(){
             var link = $(this);
-            var pRow = $(this).parents('.grid-row');
+            var pRow = $(this).parents('.tr');
             pRow.append('<div class="loading1"></div>');
             pRow.find('.loading1').show();
             $.ajax({

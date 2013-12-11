@@ -218,7 +218,7 @@ function getUserSubscriptions($user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
         
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND status='Active'", $user_id);
+    $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title FROM " . $wpdb->prefix . "users_purchases AS s LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id WHERE s.user_id=%d AND s.status='Active'", $user_id);
     $result = $wpdb->get_results($query);
     
     return $result;
@@ -245,9 +245,9 @@ function getUserSubscribedSuites($user_id = null)
         $user_id = get_current_user_id();
         
     $query = $wpdb->prepare(
-        "SELECT sp.*, pm.meta_value as `name` FROM " . $wpdb->prefix . "users_purchases AS sp " .
-        "LEFT JOIN " . $wpdb->postmeta . " AS pm ON pm.post_id=sp.suite_id AND pm.meta_key='ts_name' " .
-        "WHERE sp.user_id=%d AND sp.status='Active' AND pm.meta_value IS NOT NULL", $user_id
+        "SELECT sp.*, p.post_title as `name` FROM " . $wpdb->prefix . "users_purchases AS sp " .
+        "LEFT JOIN " . $wpdb->posts . " AS p ON p.ID=sp.suite_id " .
+        "WHERE sp.user_id=%d AND sp.status='Active' AND p.ID IS NOT NULL", $user_id
     );
     
     $rows = $wpdb->get_results($query);

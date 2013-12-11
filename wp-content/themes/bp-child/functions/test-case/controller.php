@@ -258,9 +258,11 @@ function getTestSuiteInfoForCase()
 
 
 function saveCase()
-{
+{    
     global $wpdb;
     
+    require_once(ABSPATH . "/wp-admin/includes/post.php");
+       
     $id = $_POST['id'];
     if(!$id)
         $isNew = true;
@@ -286,6 +288,16 @@ function saveCase()
         exit;
     }
     
+    if($_POST['version_major'])
+        $versions[] = $_POST['version_major'];
+    if($_POST['version_minor'])
+        $versions[] = $_POST['version_minor'];
+    if($_POST['version_patch'])
+        $versions[] = $_POST['version_patch'];
+    
+    $version = " v" . implode(".", $versions);
+    
+    
     if($isNew)
     {
         //Check Test Case ID
@@ -293,35 +305,58 @@ function saveCase()
         //Remove Space From the Test Case ID
         $testCaseId = str_replace(' ', '', $testCaseId);
         
-        $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type= %s", $testCaseId, 'test-case') );
+        $case_title = $testCaseId . $version;
+        
+        $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s", $case_title, 'test-case') );
         if($pTestCase)
         {
-            echo json_encode(array('status' => 'error', 'message' => 'The Test Case Id already exists!'));
+            echo json_encode(array('status' => 'error', 'message' => 'The test case id with the version already exists!'));
             exit;
         }
         
-        $id = wp_insert_post(array('post_title' => $testCaseId, 'post_type'=>'test-case', 'post_status' => 'publish'), true);
+        $id = wp_insert_post(array('post_title' => $case_title, 'post_type'=>'test-case', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             echo json_encode(array('status' => 'error', 'message' => $id->get_error_message()));
 //            addMessage($id->get_error_message(), 'error');            
             return;
         }    
+        if($isNew)
+            cp_update_post_meta($id, 'test_case_id', $testCaseId);        
         
+    }else{
+        $case_title = get_post_meta($id, "test_case_id", true) . $version;
+        $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s ANd ID != %d", $case_title, 'test-case', $id) );
+        if($pTestCase)
+        {
+            echo json_encode(array('status' => 'error', 'message' => 'The test case id with the version already exists!'));
+            exit;
+        }
+        $post = get_post($id);
+        $case_name = wp_unique_post_slug(sanitize_title($case_title), $id, $post->post_status, $post->post_type, $post->post_parent);
+        
+        $guid = get_sample_permalink($post->ID, $case_title, $case_name);
+        
+        if( !wp_update_post(array('ID' => $id, 'post_title' => $case_title, 'post_name' => $guid[1], 'guid' => str_replace('%postname%', $guid[1], $guid[0]))) )
+        {
+            addMessage('There was an error while updating the test case.', true);
+            return;
+        }
     }
     
-    if($isNew)
-        cp_update_post_meta($id, 'test_case_id', $testCaseId);        
-    
     $esb = new ManageESB();
-    $esb->saveTestCaseInfo($id, get_post_meta($id, 'test_case_id', true), $_POST['outcome_type'], $_POST['message_count']);        
+    $esb->saveTestCaseInfo($id, $case_title, $_POST['outcome_type'], $_POST['message_count']);        
         
     //update post metas
     cp_update_post_meta($id, 'test_suite', $suiteID);    
     cp_update_post_meta($id, 'conformance_level', $_POST['conformance_level']);
 
     cp_update_post_meta($id, 'published', $_POST['published']);
-    cp_update_post_meta($id, 'version', $_POST['version']);
+    
+    cp_update_post_meta($id, 'version_major', $_POST['version_major']);
+    cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
+    cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
+    
     cp_update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
     
     cp_update_post_meta($id, 'outcome_type', $_POST['outcome_type']);

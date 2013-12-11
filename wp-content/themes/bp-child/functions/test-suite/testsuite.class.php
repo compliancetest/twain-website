@@ -7,6 +7,8 @@ class TestSuite
 {
     var $id = null;
     //Test Suite Information
+    var $title = '';
+    
     var $name = '';
     var $identifier = '';
     var $issueDate = '';
@@ -14,6 +16,11 @@ class TestSuite
     var $status = 'Active';
     var $revisionDescription = '';
     var $version = '';
+    
+    var $version_major = '';
+    var $version_minor = 0;
+    var $version_patch = 0;
+    
     var $description = '';
     
     var $initiatingMessage = '';
@@ -60,7 +67,22 @@ class TestSuite
         $this->status = $this->loadSingleValue('ts_status');
         $this->revisionDescription = $this->loadSingleValue('ts_revision_description');
         $this->description = $this->loadSingleValue('ts_description');
-        $this->version = $this->loadSingleValue('ts_version');
+        
+        $this->version_major = $this->loadSingleValue('ts_version_major');
+        $this->version_minor = $this->loadSingleValue('ts_version_minor');
+        $this->version_patch = $this->loadSingleValue('ts_version_patch');
+        
+        $versions = array();
+        if($this->version_major)
+            $versions[] = $this->version_major;
+        if($this->version_minor)
+            $versions[] = $this->version_minor;
+        if($this->version_patch)
+            $versions[] = $this->version_patch;
+        
+        
+        $this->version = implode(".", $versions);
+        
         $this->initiatingMessage = $this->loadSingleValue('init_message');
         $this->monthlySubscriptionPrice = $this->loadSingleValue('monthly_subscription_price');
         if(!$this->monthlySubscriptionPrice)
@@ -75,6 +97,8 @@ class TestSuite
         $this->loadProfileTypes();
         
         $p = get_post($this->id);
+        
+        $this->title = $p->post_title;
         
         $this->excerpt = $p->post_excerpt;
     }

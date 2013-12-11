@@ -93,14 +93,15 @@ get_header();
                            <label>Test Case ID:</label>
                            <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" <?php echo !$isNew ? 'readonly="readonly"' : ''?> />
                        </div>           
-                       <div class="grid-cell">
-                           <label>Version:</label>
-                           <input type="text" name="version" id="version" value="<?php echo $case->version?>" class="input" />
-                       </div>                                                
+                        
                        <div class="grid-cell">
                            <label>Published:</label>
                            <input type="text" name="published" id="published" value="<?php echo $case->publishedDate?>" class="input datepicker" />
                        </div>                   
+                       <div class="grid-cell">
+                           <label>Execution Sequence Number:</label>
+                           <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />                           
+                       </div> 
                        <div class="clear"></div>
                    </div>               
                    <div class="field-row">
@@ -112,18 +113,20 @@ get_header();
                            <input type="radio" name="test_case_status" id="ts_status_deprecated" class="left15" value="Deprecated" <?php echo $case->status == 'Deprecated' ? 'checked="checked"' : ''?> /> Deprecated
                            <input type="radio" name="test_case_status" id="ts_status_obsolete" class="left15" value="Obsolete" <?php echo $case->status == 'Obsolete' ? 'checked="checked"' : ''?> /> Obsolete
                            
-                       </div>
+                       </div>                                                                      
                        <div class="clear"></div>
                    </div>
-                   <div class="field-row">                                 
+                   <div class="field-row">      
+                       <div class="grid-cell version-cell">
+                           <label for="version">Version: </label>
+                           <span><b>Major</b> <input type="text" id="version_major" name="version_major" class="input" value="<?php echo $case->version_major?>" /></span>
+                           <span><b>Minor</b> <input type="text" id="version_minor" name="version_minor" class="input" value="<?php echo $case->version_minor?>" /></span>
+                           <span><b>Patch</b> <input type="text" id="version_patch" name="version_patch" class="input" value="<?php echo $case->version_patch?>" /></span>
+                       </div>                              
                        <div class="grid-cell">
                            <label>Test Intent Description:</label>
                            <textarea name="test_intent_description" id="test_intent_description" class="textarea"><?php echo $case->testIntentDescription?></textarea>
-                       </div>                   
-                       <div class="grid-cell">
-                           <label>Execution Sequence Number:</label>
-                           <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />                           
-                       </div>                                                
+                       </div>                                          
                        <div class="clear"></div>
                    </div>               
                    

@@ -485,7 +485,7 @@ function test_case_test_step2_metabox_html(){
 add_action('save_post', 'save_test_case_on_admin');
 function save_test_case_on_admin($post_id)
 {
-    global $post;
+    global $post, $wpdb;
     
     // check autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -506,6 +506,23 @@ function save_test_case_on_admin($post_id)
     {
         return $post_id;
     }
+    
+    $versions = array();
+    if($_POST['version_major'] != '')
+        $versions[] = $_POST['version_major'];
+    if($_POST['version_minor'] != '')
+        $versions[] = $_POST['version_minor'];
+    if($_POST['version_patch'] != '')
+        $versions[] = $_POST['version_patch'];
+    
+    $version = " v" . implode(".", $versions);
+    
+    $post_title = $_POST['test_case_id'] . $version;
+    
+    $post_name = wp_unique_post_slug(sanitize_title($post_title), $post->ID, $post->post_status, $post->post_type, $post->post_parent);
+    
+    $guid = get_sample_permalink($post->ID, $post_title, $post_name);
+    $wpdb->update($wpdb->posts, array('post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])), array('ID' => $post->ID));
     
     //Save Selected Test Suites
     $test_suite = isset($_POST['test_suite']) ? $_POST['test_suite'] : null;    

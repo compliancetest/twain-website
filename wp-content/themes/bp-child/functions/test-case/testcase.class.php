@@ -6,6 +6,8 @@ class TestCase
     
     var $sequenceNumber = null;
     
+    var $title = '';
+    
     var $name = '';
     
     var $testSuite = null;
@@ -23,6 +25,10 @@ class TestCase
     var $testCaseID = '';
     
     var $version = '';
+    
+    var $version_major = '';
+    var $version_minor = '';
+    var $version_patch = '';
     
     var $publishedDate = '';
     
@@ -73,7 +79,22 @@ class TestCase
         $this->Initiator = $this->loadSingleValue('choose_initiator');
         $this->initiationgMessage = $this->loadSingleValue('choose_init_messages');
         $this->testCaseID = $this->loadSingleValue('test_case_id');
-        $this->version = $this->loadSingleValue('version');
+        
+        
+        $this->version_major = $this->loadSingleValue('version_major');
+        $this->version_minor = $this->loadSingleValue('version_minor');
+        $this->version_patch = $this->loadSingleValue('version_patch');
+        
+        $versions = array();
+        if($this->version_major)
+            $versions[] = $this->version_major;
+        if($this->version_minor)
+            $versions[] = $this->version_minor;
+        if($this->version_patch)
+            $versions[] = $this->version_patch;
+        
+        $this->version = implode(".", $versions);
+        
         $this->publishedDate = $this->loadSingleValue('published');
         $this->testIntentDescription = $this->loadSingleValue('test_intent_description');
         $this->testEndpointURL = $this->loadSingleValue('test_url');
@@ -88,6 +109,8 @@ class TestCase
         $this->loadTestExecutionData();
         $this->loadMessageTemplates();
         $this->loadProfileInstances();
+        
+        $this->title = get_the_title($this->id);
         
     }
     

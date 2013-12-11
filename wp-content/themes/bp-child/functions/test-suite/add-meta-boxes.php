@@ -421,8 +421,28 @@ function save_test_suite_on_admin($post_id)
         return $post_id;
     }
     
+    $versions = array();
+    if($_POST['ts_version_major'])
+        $versions[] = $_POST['ts_version_major'];
+    if($_POST['ts_version_minor'])
+        $versions[] = $_POST['ts_version_minor'];
+    if($_POST['ts_version_patch'])
+        $versions[] = $_POST['ts_version_patch'];
+    
+    $version = " v" . implode(".", $versions);
+    
+    $post_title = $_POST['ts_name'] . $version;
+    
     $esb = new ManageESB();
-    $esb->addTestSuiteNameIDMap($post_id, $_POST['ts_name']);
+    $esb->addTestSuiteNameIDMap($post_id, $post_title);
+    
+    $post_name = sanitize_title($post_title);
+    //Update Post Name
+    $post_name = wp_unique_post_slug($post_name, $post->ID, $post->post_status, $post->post_type, $post->post_parent);
+    
+    $guid = get_sample_permalink($post->ID, $post_title, $post_name);
+    
+    $wpdb->update($wpdb->posts, array('post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])), array('ID' => $post->ID));
     
     //Save Group
     $group_id = $_POST['group'];

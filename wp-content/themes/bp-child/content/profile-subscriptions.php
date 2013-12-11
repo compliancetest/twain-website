@@ -37,7 +37,7 @@ if(!defined('ABSPATH'))
            ?>
                 <div class="tr">
                     <div class="td td-suite">
-                        <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo get_post_meta($row->suite_id, 'ts_name',  true) ?></a>
+                        <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                     </div>
                     <div class="td td-fee">$<?php 
                         $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 

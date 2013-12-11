@@ -2308,7 +2308,9 @@ bottom: -6px;
     border-right: 1px solid #D8D8D8;
     padding-right: 20px;
 }
-
+#test_suites_tab_grid .grid_cell h5{
+    line-height: 1.2em;
+}
 #buddypress h2{
     color: #666666 !important;
     font-weight: bold;
@@ -4417,7 +4419,21 @@ min-height: 70px;
 #my_profile .grid-box #edit-card-form .btn-row{
     display: block;
 }
-
+#cards-list .td-nickname{
+    width: 126px;
+}
+#cards-list .td-card-status{
+    width: 60px;
+}
+#cards-list .td-card-number{
+    width: 125px;
+}
+#cards-list .td-action{
+    width: 60px;    
+}
+#edit-card-form{
+    border: solid 1px #b7b7b7;
+}
 #my_community_memberships .td-name{
     width: 181px;
 }
@@ -5444,7 +5460,20 @@ a.suite-subscript-link:hover{
 .edit-item-wrapper .field-row .radio-cell label{
     margin-bottom: 5px;
 }
-
+.edit-item-wrapper .field-row .version-cell span{
+    display: block;
+    margin: 0 0 5px;
+    width: 200px;
+}
+.edit-item-wrapper .field-row .version-cell span b{
+    display: inline-block;
+    font-weight: normal;
+    width: 30px;
+}
+.edit-item-wrapper .field-row .version-cell .input{
+    width: 40%;
+    margin-left: 10px;
+}
 #choose-conf-level-box .field-row,
 #test-data-box .field-row,
 #test-execution-box .field-row,

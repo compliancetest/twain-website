@@ -6,11 +6,11 @@
 add_action('admin_menu', 'add_eway_options_page');
 function add_eway_options_page()
 {
-    add_options_page('eWay Payment Settings', 'eWay Settings', 'administrator', 'eway-settings', 'create_eway_settings_page');
+    add_options_page('Payment Settings', 'Payment Settings', 'administrator', 'payment-settings', 'create_payment_settings_page');
     
     add_action('admin_init', 'register_eway_settings');
 }
-function create_eway_settings_page()
+function create_payment_settings_page()
 {
     if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-eway-options'))
     {
@@ -23,11 +23,16 @@ function create_eway_settings_page()
         update_option('eway_sandbox_user_name', $_POST['eway_sandbox_user_name']);
         update_option('eway_sandbox_user_pwd', $_POST['eway_sandbox_user_pwd']);
         
+    }else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-subscription-settings')){
+        //Save Options
+        update_option('suspended_count', $_POST['suspended_count']);
+        update_option('frozen_count', $_POST['frozen_count']);
+        
     }
 ?>
 <div id="eway-options-wrap">    
     <div class="icon32" id="icon-tools"> <br /> </div>    
-    <h2>eWay Payment Settings</h2>    
+    <h2>eWay Settings</h2>    
     <p>You can config the information for eway payment.</p>    
     <form method="post" action="">      
         <p>
@@ -68,6 +73,22 @@ function create_eway_settings_page()
         <?php submit_button()   ?>
         <?php wp_nonce_field('save-eway-options'); ?>
     </form>  
+    <hr />
+    <h2>Subscription Settings</h2>        
+    <form method="post" action="">      
+        <table cellpadding="5">
+            <tr>
+                <td><label><b>Suspended Count:</b></label></td>
+                <td><input type="text" name="suspended_count" id="suspended_count" value="<?php echo get_option('suspended_count')?>" autocomplete="off" /> Days</td>
+            </tr>
+            <tr>
+                <td><label><b>Frozen Count:</b></label></td>
+                <td><input type="text" name="frozen_count" id="frozen_count" value="<?php echo get_option('frozen_count')?>" autocomplete="off" /> Days</td>
+            </tr>
+        </table>      
+        <?php submit_button()   ?>
+        <?php wp_nonce_field('save-subscription-settings'); ?>
+    </form>  
 </div>
 <?php   
 }
@@ -82,6 +103,8 @@ function register_eway_settings()
     register_setting('eway-settings', 'eway_sandbox_customer_id');
     register_setting('eway-settings', 'eway_sandbox_user_name');
     register_setting('eway-settings', 'eway_sandbox_user_pwd');        
+    register_setting('subscription-settings', 'suspended_count');        
+    register_setting('subscription-settings', 'frozen_count');        
 }
 
 function get_eway_payment_url()

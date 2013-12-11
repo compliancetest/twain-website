@@ -324,6 +324,18 @@ Template Name Posts: Test Suite
                     
                     foreach($testCases as $row)
                     {
+                        $majorVersion = get_post_meta($row->ID, 'version_major', true);
+                        $minorVersion = get_post_meta($row->ID, 'version_minor', true);
+                        $patchVersion = get_post_meta($row->ID, 'version_patch', true);
+                        $versions = array();
+                        if($majorVersion)
+                            $versions[] = $majorVersion;
+                        if($minorVersion)
+                            $versions[] = $minorVersion;
+                        if($patchVersion)
+                            $versions[] = $patchVersion;
+                        
+                        $version = implode(".", $versions);
                         ?>
                         <div class="grid_row white_bcg tocenter testcase_line ">
                             <div class="grid_cell nopaddingtop width2P tocenter relative">
@@ -331,7 +343,6 @@ Template Name Posts: Test Suite
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft ">
                                 <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
-                                <br /><span class="version">Version: <?php echo get_post_meta($row->ID ,'version', true)?></span><br />
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter ">
                                 <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>

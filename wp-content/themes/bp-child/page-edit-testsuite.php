@@ -48,7 +48,7 @@ if(!$suite->community_id)
                    <div class="field-row">
                        <div class="grid-cell">
                            <select name="community_id" id="community_id" class="select">
-                           <option></option>
+                               <!--<option></option>-->
                                <?php foreach($groups as $row){ ?>
                                <option value="<?php echo $row->id?>" <?php echo cp_selected($row->id, $suite->community_id)?>><?php echo apply_filters('the_title', $row->name)?></option>
                                <?php } ?>
@@ -127,9 +127,11 @@ if(!$suite->community_id)
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
-                       <div class="grid-cell">
+                       <div class="grid-cell version-cell">
                            <label for="ts_name">Version Test Suite: </label>
-                           <input type="text" id="ts_version" name="ts_version" class="input" value="<?php echo $suite->version?>" />
+                           <span><b>Major</b> <input type="text" id="ts_version_major" name="ts_version_major" class="input" value="<?php echo $suite->version_major?>" /></span>
+                           <span><b>Minor</b> <input type="text" id="ts_version_minor" name="ts_version_minor" class="input" value="<?php echo $suite->version_minor?>" /></span>
+                           <span><b>Patch</b> <input type="text" id="ts_version_patch" name="ts_version_patch" class="input" value="<?php echo $suite->version_patch?>" /></span>
                        </div>
                        <div class="grid-cell">
                            <label for="ts_identifier">Description: </label>

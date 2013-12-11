@@ -505,7 +505,7 @@ function showTriggerMessageBox()
                                     <label for="tm-test-suite">Test Suite</label>
                                     <select name="test-suite" id="tm-test-suite" class="select">
                                         <?php foreach($suites as $s){ ?>
-                                        <option value="<?php echo $s->suite_id?>" <?php echo $s->suite_id == $current_suite_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($s->suite_id, 'ts_name', true) ?></option>
+                                        <option value="<?php echo $s->suite_id?>" <?php echo $s->suite_id == $current_suite_id ? 'selected="selected"' : '' ?>><?php echo $s->suite_title ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -524,7 +524,7 @@ function showTriggerMessageBox()
                                     <label for="tm-test-suite">Test Case</label>
                                     <select name="test-case" id="tm-test-case" class="select">
                                         <?php foreach($cases as $c){ ?>
-                                        <option value="<?php echo $c->ID?>" <?php echo $c->ID == $current_case_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($c->ID, 'test_case_id', true) ?></option>
+                                        <option value="<?php echo $c->ID?>" <?php echo $c->ID == $current_case_id ? 'selected="selected"' : '' ?>><?php echo $c->post_title ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
