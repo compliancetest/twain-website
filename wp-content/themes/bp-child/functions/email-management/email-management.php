@@ -442,7 +442,7 @@ function create_email_management_page()
                     $inarrears_subscription_admin_email_title = get_option('inarrears_subscription_admin_email_title');
                     $inarrears_subscription_admin_email_content = get_option('inarrears_subscription_admin_email_content');
                     ?>
-                    <h3>Subscription Cancelled</h3>
+                    <h3>InArrears Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
@@ -493,7 +493,7 @@ function create_email_management_page()
                     $frozen_subscription_admin_email_title = get_option('frozen_subscription_admin_email_title');
                     $frozen_subscription_admin_email_content = get_option('frozen_subscription_admin_email_content');
                     ?>
-                    <h3>Subscription Cancelled</h3>
+                    <h3>Frozen Changes</h3>
                     <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
