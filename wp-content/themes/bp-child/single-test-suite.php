@@ -463,7 +463,7 @@ Template Name Posts: Test Suite
                 <div class="add-new-border"><span>or add new</span></div>
                 <div class="field-row">
                     <div class="grid-cell">
-                        <label>NickName</label>
+                        <label>Nickname</label>
                         <input type="text" name="nickname" id="nickname" value="" class="input" maxlength="50" />
                         <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
                     </div>                

@@ -22,7 +22,7 @@ if(!defined('ABSPATH'))
         <div class="grid-box-body">
           <div id="cards-list">
             <div class="thead tr">
-               <div class="td td-nickname">NickName</div>
+               <div class="td td-nickname">Nickname</div>
                <div class="td td-card-number">Card Number</div>
                <div class="td td-status tocenter">Status</div>
                <div class="td td-action tocenter">Action</div>
@@ -67,7 +67,7 @@ if(!defined('ABSPATH'))
             <div id="edit-card-form" style="display: none;">
                 <form action="#" method="post">
                     <div class="grid-row">
-                        <div class="grid-cell width30P"><label>NickName</label></div>
+                        <div class="grid-cell width30P"><label>Nickname</label></div>
                         <input type="text" name="nickname" id="nickname" value="" class="input" autocomplete="off" />                                    
                         <div class="clear"></div>
                     </div>                    
