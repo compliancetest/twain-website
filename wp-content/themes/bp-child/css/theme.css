@@ -763,6 +763,7 @@ width: 28%;
     -webkit-border-radius: 3px;
     line-height: 1.2em;
     font-weight: normal;
+    text-indent: 0;
 }
 
 .simple_tooltip_pop {
@@ -4422,13 +4423,13 @@ min-height: 70px;
 #cards-list .td-nickname{
     width: 106px;
 }
-#cards-list .td-card-status{
+#cards-list .td-status{
     width: 80px;
 }
-#cards-list .td-card-status .status_btn{
+#cards-list .td-status .status_btn{
     min-width: 60px;
 }
-#cards-list .td-card-status .simple_tooltip{
+#cards-list .td-status .simple_tooltip{
     min-width: 200px;
 }
 #cards-list .td-card-number{
@@ -4471,6 +4472,9 @@ min-height: 70px;
 }
 #my_subscriptions .td-status .status_btn{
     min-width: 75px;
+}
+#my_subscriptions .td-status .simple_tooltip{
+    min-width: 200px;
 }
 #my_subscriptions .td-action{
     width: 60px;

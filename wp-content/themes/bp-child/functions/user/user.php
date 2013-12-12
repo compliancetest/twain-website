@@ -211,14 +211,17 @@ function getGroupMemberDetail($group_id, $member_id)
     return $row;
 }
 
-function getUserSubscriptions($user_id = null)
+function getUserSubscriptions($user_id = null, $all = false)
 {
     global $wpdb;
     
     if($user_id == null)
         $user_id = get_current_user_id();
-        
-    $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title FROM " . $wpdb->prefix . "users_purchases AS s LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id WHERE s.user_id=%d AND s.status='Active'", $user_id);
+    
+    if($all)
+        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title FROM " . $wpdb->prefix . "users_purchases AS s LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id WHERE s.user_id=%d", $user_id);
+    else
+        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title FROM " . $wpdb->prefix . "users_purchases AS s LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id WHERE s.user_id=%d AND s.status != 'Frozen'", $user_id);
     $result = $wpdb->get_results($query);
     
     return $result;
@@ -237,23 +240,6 @@ function getSubscribersBySuiteId($suite_id)
 }
 
 
-function getUserSubscribedSuites($user_id = null)
-{
-    global $wpdb;
-    
-    if($user_id == null)
-        $user_id = get_current_user_id();
-        
-    $query = $wpdb->prepare(
-        "SELECT sp.*, p.post_title as `name` FROM " . $wpdb->prefix . "users_purchases AS sp " .
-        "LEFT JOIN " . $wpdb->posts . " AS p ON p.ID=sp.suite_id " .
-        "WHERE sp.user_id=%d AND sp.status='Active' AND p.ID IS NOT NULL", $user_id
-    );
-    
-    $rows = $wpdb->get_results($query);
-    
-    return $rows;
-}
 
 /**
 * Getting User Communities that includes the subscribed suites.

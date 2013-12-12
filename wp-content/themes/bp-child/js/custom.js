@@ -469,11 +469,9 @@ jQuery(document).ready(function($) {
     
     customizeFileTag();
     
-    //Fix Simple ToolTips
-    jQuery('.td-status .simple_tooltip').each(function(){
-        jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
+    jQuery('.simple_tooltip').each(function(){
+        jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
     })
-    
 });
 
 function customizeFileTag()

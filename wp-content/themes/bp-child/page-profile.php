@@ -214,6 +214,10 @@ jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_subscriptions'));
     fixTdHeight(jQuery('#my_test_data_profiles'));
     fixTdHeight(jQuery('#cards-list'));
+    //Fix Simple ToolTips
+    jQuery('.td-status .simple_tooltip').each(function(){
+        jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
+    })
 })
 </script>
 <?php

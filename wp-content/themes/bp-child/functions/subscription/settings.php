@@ -1,6 +1,6 @@
 <?php
 /**
-* Manage Ewaypayment Settings
+* Manage Subscription Settings
 */
 
 add_action('admin_menu', 'add_eway_options_page');
@@ -25,7 +25,7 @@ function create_payment_settings_page()
         
     }else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-subscription-settings')){
         //Save Options
-        update_option('suspended_count', $_POST['suspended_count']);
+        update_option('inarrears_count', $_POST['inarrears_count']);
         update_option('frozen_count', $_POST['frozen_count']);
         
     }
@@ -78,8 +78,8 @@ function create_payment_settings_page()
     <form method="post" action="">      
         <table cellpadding="5">
             <tr>
-                <td><label><b>Suspended Count:</b></label></td>
-                <td><input type="text" name="suspended_count" id="suspended_count" value="<?php echo get_option('suspended_count')?>" autocomplete="off" /> Days</td>
+                <td><label><b>InArrears Count:</b></label></td>
+                <td><input type="text" name="inarrears_count" id="inarrears_count" value="<?php echo get_option('inarrears_count')?>" autocomplete="off" /> Days</td>
             </tr>
             <tr>
                 <td><label><b>Frozen Count:</b></label></td>
@@ -103,7 +103,7 @@ function register_eway_settings()
     register_setting('eway-settings', 'eway_sandbox_customer_id');
     register_setting('eway-settings', 'eway_sandbox_user_name');
     register_setting('eway-settings', 'eway_sandbox_user_pwd');        
-    register_setting('subscription-settings', 'suspended_count');        
+    register_setting('subscription-settings', 'inarrears_count');        
     register_setting('subscription-settings', 'frozen_count');        
 }
 

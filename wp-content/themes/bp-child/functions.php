@@ -81,9 +81,11 @@ require_once(THE_FUNCTION . '/test-plan/controller.php');
 //Manage Login URLs
 require_once(THE_FUNCTION . '/login-redirect.php');
 
-//eWay Payment
-require_once(THE_FUNCTION . '/eway/settings.php');
-require_once(THE_FUNCTION . '/eway/controller.php');
+//Manage Subscription
+require_once(THE_FUNCTION . '/subscription/class.subscription.php');
+require_once(THE_FUNCTION . '/subscription/settings.php');
+require_once(THE_FUNCTION . '/subscription/controller.php');
+require_once(THE_FUNCTION . '/subscription/function.php');
 
 require_once(THE_FUNCTION . '/rest.php');
 $CPRest = new CPRest();

@@ -24,7 +24,7 @@ if(!defined('ABSPATH'))
             <div class="thead tr">
                <div class="td td-nickname">NickName</div>
                <div class="td td-card-number">Card Number</div>
-               <div class="td td-card-status tocenter">Status</div>
+               <div class="td td-status tocenter">Status</div>
                <div class="td td-action tocenter">Action</div>
                <div class="clear"></div>
             </div>
@@ -44,10 +44,12 @@ if(!defined('ABSPATH'))
                     <div class="td td-card-number">
                         <?php echo chunk_split($card->card_number, 4)?>
                     </div>
-                    <div class="td td-card-status tocenter">
+                    <div class="td td-status tocenter">
                         <span class="status_btn status_<?php echo strtolower($card->status)?> has-tooltip">
                             <?php echo $card->status?>
-                            <?php echo $card->status_message ? '<span class="simple_tooltip radius6">' . $card->status_message . '<span></span></span>' : ''?>
+                            <span class="simple_tooltip radius6">
+                                <?php echo $card->status == 'Active' ? 'The last transaction attempted with this payment method was successful.' : 'A problem has been encountered in using this payment method. Please confirm the details are correct.'?>
+                            <span></span></span>
                         </span>
                     </div>
                     <div class="td td-action">

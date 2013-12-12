@@ -479,7 +479,7 @@ function cp_save_customer_harness_detail()
         
         if(!$resultDoc || !$resultDoc->loadXML($result))
         {
-            return "There was ane error while saving your data.";
+            return "There was a problem managing your test credentials. Please try again later.";
         }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
             return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
         }else{ //Success
@@ -511,7 +511,7 @@ function cp_save_customer_harness_detail()
         
         if(!$result || !$resultDoc->loadXML($result))
         {
-            return 'There was an error while updating your data.';
+            return 'There was a problem managing your test credentials. Please try again later.';
         }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){            
             return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
         }

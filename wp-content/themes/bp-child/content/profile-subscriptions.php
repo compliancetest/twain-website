@@ -22,7 +22,7 @@ if(!defined('ABSPATH'))
            </div>
            <div class="tbody">
            <?php
-               $subscriptions =  getUserSubscriptions();
+               $subscriptions =  getUserSubscriptions(null, true);
                if(count($subscriptions) < 1)
                {
            ?>
@@ -48,8 +48,27 @@ if(!defined('ABSPATH'))
                             echo ceil($row->price);                        
                     ?>/month</div>
                     <div class="td td-status">
-                        <span class="status_btn status_<?php echo strtolower($card->status)?> has-tooltip">
-                            <?php echo $card->status?>
+                        <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
+                            <?php echo $row->status?>
+                            <span class="simple_tooltip radius6">
+                                <?php
+                                    switch($row->status)
+                                    {
+                                        case 'Active';
+                                            echo 'You have an active subscription to this test suite.';
+                                            break;
+                                        case 'InArrears';
+                                            echo 'There is a problem with the payment method associated with your subscription to this test suite.';
+                                            break;
+                                        case 'Frozen';
+                                            echo 'Testing is frozen until the problem with the payment method associated with this subscription is resolved.';
+                                            break;
+                                        case 'Unsubscribing';
+                                            echo 'You have requested to be unsubscribed from this test suite. This will occur at the end of the month.';
+                                            break;
+                                    }
+                                ?>
+                            <span></span></span>
                         </span>
                     </div>
                     <div class="td td-action tocenter">

@@ -2,6 +2,11 @@
 /*
  * Template Name: Test Suite Coverage
  */
+if(!is_user_logged_in()){
+    wp_redirect(home_url());
+    exit;
+} 
+
 get_header();
 
 //Getting The Suites that belonged to the Community 
@@ -32,9 +37,6 @@ $esb = new ManageESB();
                    <?php if(can_edit_suite($suite->suite_id)){ ?>
                    <a class="gbh-btn gbh-btn-edit right" href="/edit-test-suite?id=<?php echo $suite->suite_id?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
                    <?php } ?>
-                   <?php /*if(can_edit_suite($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-delete right" href="<?php get_permalink()?>?id=<?php echo $suite->suite_id?>&_wpnonce=<?php echo wp_create_nonce('delete-suite') ?>&return=<?php echo base64_encode(get_permalink()) ?>" onclick="return confirm('Are you sure that you want to delete this Test Suite?')">Edit<span class="simple_tooltip radius6">Delete<span></span></span></a>
-                   <?php }*/ ?>
                    <div class="clear"></div>
                </div>
                <?php

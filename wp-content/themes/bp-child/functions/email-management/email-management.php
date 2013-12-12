@@ -7,7 +7,7 @@
 add_action('admin_menu', 'add_email_management_page');
 function add_email_management_page()
 {
-    add_options_page('Email Template Management', 'Email Management', 'administrator', 'email-management', 'create_email_management_page');
+    add_menu_page('Email Template Management', 'Email Templates', 'administrator', 'email-management', 'create_email_management_page');
 }
 
 function create_email_management_page()
@@ -16,77 +16,141 @@ function create_email_management_page()
     <script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/js/jquery-ui-1.10.3.custom.js"></script>
     <link href="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/css/jquery-ui-1.10.3.custom.css"  type="text/css" rel="stylesheet" />
     <style type="text/css">
-        #emails .ui-tabs-nav{
-            padding: 0.2em 0.2em 0;
-            border: solid 1px #aaa;
-            background: #ccc;
-            background: -moz-linear-gradient(top,  #cecece 0%, #ccc 9%, #eee 100%); /* FF3.6+ */
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cecece), color-stop(9%,#ccc), color-stop(100%,#eee)); /* Chrome,Safari4+ */
-            background: -webkit-linear-gradient(top,  #cecece 0%,#ccc 9%,#eee 100%); /* Chrome10+,Safari5.1+ */
-            background: -o-linear-gradient(top,  #cecece 0%,#ccc 9%,#eee 100%); /* Opera 11.10+ */
-            background: -ms-linear-gradient(top,  #cecece 0%,#ccc 9%,#eee 100%); /* IE10+ */
-            background: linear-gradient(to bottom,  #cecece 0%,#ccc 9%,#eee 100%); /* W3C */
+        #emails .ui-tabs-nav{            
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            
         }
-        #emails textarea{
+        /*#emails textarea{
             width: 100%;
-            height: 400px;
-        }
+            height: 200px;
+        }*/
         #emails input[type="text"]{
             width: 50%;
         }
         .mceIframeContainer{
-            height: 500px;
+            height: 300px;
         }
         .mceIframeContainer iframe{
             height: 100% !important;
             
         }
-        .ui-tabs .ui-tabs-nav li{
-            background: #eee;
-            border: solid 1px #d3d3d3;
+        .ui-tabs .ui-tabs-nav li{            
+            display: block;
+            float: none;
+            border-radius: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
         }
-        .ui-tabs .ui-tabs-nav li.ui-tabs-active{
-            background: #fff;
-        }
-        #emails{
-            border: solid 1px #aaa;
+        .ui-tabs .ui-tabs-nav li a{
+            float: none;
+            display: block;
+            border-radius: 0;
+            background: #f7f7f7;
+            padding: 8px 14px;
+            margin: 0;
+            border-right: solid 1px #DFDFDF;
+            border-left: solid 1px #DFDFDF;
+            border-bottom: 1px solid #DFDFDF;
+            border-top: 1px solid #F9F9F9;
+            outline: none;
         }
         
+        .ui-tabs .ui-tabs-nav li.ui-tabs-active a{
+            background: #fff;
+            color: #333;
+            border-right: solid 1px #fff;            
+        }
+        .ui-tabs .ui-tabs-nav li.tab-separator{
+            background: none repeat scroll 0 0 #F0F0F0;
+            border: 1px solid #DDD !important;
+            color: #333;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 14px !important;
+            margin-top: 10px !important; 
+        }
+        .ui-tabs .ui-tabs-nav li.tab-separator:first-child{
+            margin-top: 0 !important;
+        }
+        #emails{
+            padding: 0;
+            border-radius: 0;
+        }
+        #email-templates-nav{
+            width: 210px;
+            float: left;
+        }
+        #email-templates-wrapper{
+            margin-left: 210px;
+            border-top: solid 1px #ddd;
+        }
+        #email-templates-wrapper .widefat{
+            clear: none;
+        }
+        #email-templates-wrapper h3{
+            border-bottom: 1px solid #A0A0A0;
+            font-size: 18px;
+            margin: 0;
+            padding-bottom: 10px;
+        }
     </style>
-      <form name="adminform" method="post" action="admin.php">
+      <form name="adminform" method="post" action="admin.php" onsubmit="return saveEmailTemplates()">
+          <input type="hidden" name="tab" id="email-tab-idx" value="0" />
           <div class="wrap">
             <h2>ComplianceTest Email Templates</h2>                
             <br />
-            <div style="padding: 0 0 10px; text-align: left;">
-                <input type="submit" value="Save Changes" name="email-templates" class="button-primary" />                    
-                <?php wp_nonce_field('save-email-templates'); ?>
+            <div>
+                <p style="float: left;">
+                    <label><b>Support Name:</b> <input type="text" name="support_name" id="support_name" value="<?php echo get_option('support_name')?>" size="30" /></label>
+                    <label style="margin-left: 20px"><b>Support Email:</b> <input type="text" name="support_email" id="support_email" value="<?php echo get_option('support_email')?>" size="30" /></label>
+                </p>
+                <div style="float: right">
+                    <input type="submit" value="Save Changes" name="email-templates" class="button-primary" />                    
+                    <?php wp_nonce_field('save-email-templates'); ?>
+                </div>
+                <br clear="all" />
             </div>
-            <p>
-                <label><b>Support Name:</b> <input type="text" name="support_name" id="support_name" value="<?php echo get_option('support_name')?>" size="50" /></label>
-                <label style="margin-left: 20px"><b>Support Email:</b> <input type="text" name="support_email" id="support_email" value="<?php echo get_option('support_email')?>" size="50" /></label>
-            </p>
             <div id="emails">
-                <ul>
-                    <li><a href="#new-user">New User Registered</a></li>
-                    <li><a href="#verification-email">Resend Verification Email</a></li>
-                    <li><a href="#verification-success">User Verification Success</a></li>
-                    <li><a href="#purchase-subscription">Purchase Subscription</a></li>       
-                    <li><a href="#expire-subscription">Expire Subscription</a></li>
-                    <li><a href="#cancel-subscription">Cancel Subscription</a></li>       
-                    <li><a href="#membership-request-received">Membership Request Received</a></li>       
-                    <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
-                    <li><a href="#membership-request-rejected">Membership Request Rejected</a></li>       
-                    <li><a href="#member-leave-community">Member Leave Community</a></li>       
-                    <li><a href="#forgot-password">Forgot Password</a></li>
-                    <li><a href="#password-changed">Password Changed</a></li>
-                    <li><a href="#suite-changed">Test Suite Changed</a></li>
-                    <li><a href="#case-changed">Test Case Changed</a></li>                    
-                    <li><a href="#ticket-created">Ticket Created</a></li>                    
-                    <li><a href="#ticket-updated">Ticket Updated</a></li>                    
-                    <li><a href="#ticket-started">Ticket Started</a></li>                    
-                    <li><a href="#ticket-solved">Ticket Solved</a></li>                    
-                    <li><a href="#ticket-closed">Ticket Closed</a></li>                    
-                </ul>
+                <div id="email-templates-nav">
+                    <ul>
+                        <li class="tab-separator">User Section</li>
+                        <li><a href="#new-user">User Registered</a></li>
+                        <li><a href="#verification-email">Resend Verification Email</a></li>
+                        <li><a href="#verification-success">User Verification Success</a></li>
+                        <li><a href="#forgot-password">Forgot Password</a></li>
+                        <li><a href="#password-changed">Password Changed</a></li>
+                        
+                        <li class="tab-separator">Subscription Section</li>
+                        <li><a href="#purchase-subscription">Purchase</a></li>       
+                        <li><a href="#unsubscribe-subscription">Unsubscribe</a></li>
+                        <li><a href="#inarrears-subscription">InArrears</a></li>
+                        <li><a href="#frozen-subscription">Frozen</a></li>
+                        <li><a href="#cancel-subscription">Cancel</a></li>       
+                        
+                        
+                        <li class="tab-separator">Membership Section</li>
+                        <li><a href="#membership-request-received">Membership Request Received</a></li>       
+                        <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
+                        <li><a href="#membership-request-rejected">Membership Request Rejected</a></li>       
+                        <li><a href="#member-leave-community">Member Leave Community</a></li>                               
+                        
+                        <li class="tab-separator">Suite & Case Section</li>
+                        <li><a href="#suite-changed">Test Suite Changed</a></li>
+                        <li><a href="#case-changed">Test Case Changed</a></li>                    
+                        
+                        
+                        <li class="tab-separator">Ticket Section</li>                        
+                        <li><a href="#ticket-created">Ticket Created</a></li>                    
+                        <li><a href="#ticket-updated">Ticket Updated</a></li>                    
+                        <li><a href="#ticket-started">Ticket Started</a></li>                    
+                        <li><a href="#ticket-solved">Ticket Solved</a></li>                    
+                        <li><a href="#ticket-closed">Ticket Closed</a></li>                    
+                    </ul>
+                </div>
+                <div id="email-templates-wrapper">
                 <div id="new-user">
                     <?php
                         $new_user_email_title = get_option('new_user_email_title');
@@ -95,6 +159,7 @@ function create_email_management_page()
                         $new_user_admin_email_content = get_option('new_user_admin_email_content');
                         
                     ?>       
+                    <h3>User Registered</h3>
                     <p><b>Short Codes:</b> [name], [username], [email], [password], [link]</p>
                     <table class="widefat">
                         <thead>
@@ -141,7 +206,8 @@ function create_email_management_page()
                     <?php
                         $verify_email_title = get_option('verify_email_title');
                         $verify_email_content = get_option('verify_email_content');                
-                    ?>                    
+                    ?>                
+                    <h3>Re-send Verification Email</h3>    
                     <p><b>Short Codes:</b> [name],[username], [email], [link]</p>
                     <table class="widefat">
                         <thead>
@@ -171,7 +237,8 @@ function create_email_management_page()
                         $user_verify_success_email_content = get_option('user_verify_success_email_content');
                         $user_verify_success_admin_email_title = get_option('user_verify_success_admin_email_title');
                         $user_verify_success_admin_email_content = get_option('user_verify_success_admin_email_content');                        
-                    ?>                    
+                    ?>   
+                    <h3>User Verification Success</h3>                 
                     <p><b>Short Codes:</b> [name], [email], [username]</p>
                     <table class="widefat">
                         <thead>
@@ -222,6 +289,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_title = get_option('purchase_subscription_admin_email_title');
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
+                    <h3>Purchase Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [community_url]</p>
                     <table class="widefat">
                         <thead>
@@ -265,13 +333,14 @@ function create_email_management_page()
                         
                     </table>
                 </div>
-                <div id="expire-subscription">
+                <div id="unsubscribe-subscription">
                     <?php
-                    $expire_subscription_email_title = get_option('expire_subscription_email_title');
-                    $expire_subscription_email_content = get_option('expire_subscription_email_content');
-                    $expire_subscription_admin_email_title = get_option('expire_subscription_admin_email_title');
-                    $expire_subscription_admin_email_content = get_option('expire_subscription_admin_email_content');
+                    $unsubscribing_email_title = get_option('unsubscribing_email_title');
+                    $unsubscribing_email_content = get_option('unsubscribing_email_content');
+                    $unsubscribing_admin_email_title = get_option('unsubscribing_admin_email_title');
+                    $unsubscribing_admin_email_content = get_option('unsubscribing_admin_email_content');
                     ?>
+                    <h3>Unsubscribe</h3>
                     <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [payment_error]</p>
                     <table class="widefat">
                         <thead>
@@ -283,13 +352,13 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Title</b></td>
                                 <td>
-                                    <input type="text" size="50" name="expire_subscription_email_title" id="expire_subscription_email_title" value="<?php echo $expire_subscription_email_title?>" />
+                                    <input type="text" size="50" name="unsubscribing_email_title" id="unsubscribing_email_title" value="<?php echo $unsubscribing_email_title?>" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($expire_subscription_email_content, 'expire_subscription_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($unsubscribing_email_content, 'unsubscribing_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -302,13 +371,13 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Title</b></td>
                                 <td>
-                                    <input type="text" size="50" name="expire_subscription_admin_email_title" id="expire_subscription_admin_email_title" value="<?php echo $expire_subscription_admin_email_title?>" />
+                                    <input type="text" size="50" name="unsubscribing_admin_email_title" id="unsubscribing_admin_email_title" value="<?php echo $unsubscribing_admin_email_title?>" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($expire_subscription_admin_email_content, 'expire_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($unsubscribing_admin_email_content, 'unsubscribing_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -322,6 +391,7 @@ function create_email_management_page()
                     $cancel_subscription_admin_email_title = get_option('cancel_subscription_admin_email_title');
                     $cancel_subscription_admin_email_content = get_option('cancel_subscription_admin_email_content');
                     ?>
+                    <h3>Subscription Cancelled</h3>
                     <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
@@ -365,11 +435,115 @@ function create_email_management_page()
                         
                     </table>
                 </div>
+                <div id="inarrears-subscription">
+                    <?php
+                    $inarrears_subscription_email_title = get_option('inarrears_subscription_email_title');
+                    $inarrears_subscription_email_content = get_option('inarrears_subscription_email_content');
+                    $inarrears_subscription_admin_email_title = get_option('inarrears_subscription_admin_email_title');
+                    $inarrears_subscription_admin_email_content = get_option('inarrears_subscription_admin_email_content');
+                    ?>
+                    <h3>Subscription Cancelled</h3>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="inarrears_subscription_email_title" id="inarrears_subscription_email_title" value="<?php echo $inarrears_subscription_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($inarrears_subscription_email_content, 'inarrears_subscription_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="inarrears_subscription_admin_email_title" id="inarrears_subscription_admin_email_title" value="<?php echo $inarrears_subscription_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($inarrears_subscription_admin_email_content, 'inarrears_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div id="frozen-subscription">
+                    <?php
+                    $frozen_subscription_email_title = get_option('frozen_subscription_email_title');
+                    $frozen_subscription_email_content = get_option('frozen_subscription_email_content');
+                    $frozen_subscription_admin_email_title = get_option('frozen_subscription_admin_email_title');
+                    $frozen_subscription_admin_email_content = get_option('frozen_subscription_admin_email_content');
+                    ?>
+                    <h3>Subscription Cancelled</h3>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="frozen_subscription_email_title" id="frozen_subscription_email_title" value="<?php echo $frozen_subscription_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($frozen_subscription_email_content, 'frozen_subscription_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="frozen_subscription_admin_email_title" id="frozen_subscription_admin_email_title" value="<?php echo $frozen_subscription_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($frozen_subscription_admin_email_content, 'frozen_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
                 <div id="membership-request-received">
                 <?php
                     $membership_request_received_admin_email_title = get_option('membership_request_received_admin_email_title');
                     $membership_request_received_admin_email_content = get_option('membership_request_received_admin_email_content');
                 ?>
+                    <h3>Membership Request Received</h3>
                     <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
@@ -398,6 +572,7 @@ function create_email_management_page()
                     $membership_request_approved_email_title = get_option('membership_request_approved_email_title');
                     $membership_request_approved_email_content = get_option('membership_request_approved_email_content');
                 ?>
+                    <h3>Membership Request Approved</h3>
                     <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
@@ -426,6 +601,7 @@ function create_email_management_page()
                     $membership_request_rejected_email_title = get_option('membership_request_rejected_email_title');
                     $membership_request_rejected_email_content = get_option('membership_request_rejected_email_content');
                 ?>
+                    <h3>Membership Request Rejected</h3>
                     <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
@@ -455,6 +631,7 @@ function create_email_management_page()
                     $member_leave_community_admin_email_title = get_option('member_leave_community_admin_email_title');
                     $member_leave_community_admin_email_content = get_option('member_leave_community_admin_email_content');
                 ?>
+                    <h3>Member Leave Community</h3>
                     <p><b>Short Codes:</b> [name], [email], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
@@ -483,6 +660,7 @@ function create_email_management_page()
                     $forgot_password_email_title = get_option('forgot_password_email_title');
                     $forgot_password_email_content = get_option('forgot_password_email_content');
                 ?>
+                    <h3>Forgot Password</h3>
                     <p><b>Short Codes:</b> [name], [email], [username], [link]</p>
                     <table class="widefat">
                         <thead>
@@ -513,6 +691,7 @@ function create_email_management_page()
                     $password_changed_admin_email_title = get_option('password_changed_admin_email_title');
                     $password_changed_admin_email_content = get_option('password_changed_admin_email_content');
                     ?>
+                    <h3>Password Changed</h3>
                     <p><b>Short Codes:</b> [name], [email], [username]</p>
                     <table class="widefat">
                         <thead>
@@ -561,6 +740,7 @@ function create_email_management_page()
                     $suite_changed_email_title = get_option('suite_changed_email_title');
                     $suite_changed_email_content = get_option('suite_changed_email_content');
                     ?>
+                    <h3>Test Suite Changed</h3>
                     <p><b>Short Codes:</b> [name], [community], [community_url], [suite_name], [suite_url], [editor_name]</p>
                     <table class="widefat">
                         <thead>
@@ -590,6 +770,7 @@ function create_email_management_page()
                     $case_changed_email_title = get_option('case_changed_email_title');
                     $case_changed_email_content = get_option('case_changed_email_content');
                     ?>
+                    <h3>Test Case Changed</h3>
                     <p><b>Short Codes:</b> [name], [suite_name], [suite_url], [case_name], [case_url], [editor_name]</p>
                     <table class="widefat">
                         <thead>
@@ -621,7 +802,8 @@ function create_email_management_page()
                     $ticket_created_email_content = get_option('ticket_created_email_content');
                     $ticket_created_support_email_title = get_option('ticket_created_support_email_title');
                     $ticket_created_support_email_content = get_option('ticket_created_support_email_content');                    
-                    ?>                    
+                    ?>           
+                    <h3>Ticket Created</h3>         
                     <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
                     <table class="widefat">
                         <thead>
@@ -674,6 +856,7 @@ function create_email_management_page()
                     $ticket_updated_support_email_content = get_option('ticket_updated_support_email_content');                    
                     
                     ?>
+                    <h3>Ticket Updated</h3>
                     <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email], [message_content]</p>
                     <table class="widefat">
                         <thead>
@@ -724,6 +907,7 @@ function create_email_management_page()
                     $ticket_started_email_content = get_option('ticket_started_email_content');                    
                     
                     ?>
+                    <h3>Ticket Started</h3>
                     <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
                     <table class="widefat">
                         <thead>
@@ -756,6 +940,7 @@ function create_email_management_page()
                     $ticket_solved_support_email_content = get_option('ticket_solved_support_email_content');
                     
                     ?>
+                    <h3>Ticket Resolved</h3>
                     <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount], [message_content]</p>
                     <table class="widefat">
                         <thead>
@@ -804,6 +989,7 @@ function create_email_management_page()
                     $ticket_closed_email_title = get_option('ticket_closed_email_title');
                     $ticket_closed_email_content = get_option('ticket_closed_email_content');
                     ?>
+                    <h3>Ticket Closed</h3>
                     <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
                     <table class="widefat">
                         <thead>
@@ -827,15 +1013,24 @@ function create_email_management_page()
                         </tbody>
                     </table>
                 </div>
+                </div>
             </div>
           </div>
           
       </form>
       <script type="text/javascript">
             jQuery(document).ready(function(){
-                jQuery('#emails').tabs();
-                
+                jQuery('#emails').tabs({"active": "<?php echo isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 0?>"});
+                    
             })
+            function saveEmailTemplates()
+            {
+                //Getting Actived Tabs
+                var idx = jQuery('#email-templates-nav li.ui-state-default').index(jQuery('#email-templates-nav li.ui-tabs-active').get(0));
+                jQuery('#email-tab-idx').val(idx);
+                return true;
+            }
+            
       </script>
       <?php
 }
@@ -910,17 +1105,33 @@ function save_email_templates()
           $cancel_subscription_admin_email_content = stripslashes_deep($_POST['cancel_subscription_admin_email_content']);          
           update_option('cancel_subscription_admin_email_content', $cancel_subscription_admin_email_content);
           
-          $expire_subscription_email_title = htmlentities(stripslashes_deep($_POST['expire_subscription_email_title']));          
-          update_option('expire_subscription_email_title', $expire_subscription_email_title);          
-          $expire_subscription_email_content = stripslashes_deep($_POST['expire_subscription_email_content']);          
-          update_option('expire_subscription_email_content', $expire_subscription_email_content);          
-          $expire_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['expire_subscription_admin_email_title']));          
-          update_option('expire_subscription_admin_email_title', $expire_subscription_admin_email_title);          
-          $expire_subscription_admin_email_content = stripslashes_deep($_POST['expire_subscription_admin_email_content']);          
-          update_option('expire_subscription_admin_email_content', $expire_subscription_admin_email_content);
+          $unsubscribing_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_email_title']));          
+          update_option('unsubscribing_email_title', $unsubscribing_email_title);          
+          $unsubscribing_email_content = stripslashes_deep($_POST['unsubscribing_email_content']);          
+          update_option('unsubscribing_email_content', $unsubscribing_email_content);          
+          $unsubscribing_admin_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_admin_email_title']));          
+          update_option('unsubscribing_admin_email_title', $unsubscribing_admin_email_title);          
+          $unsubscribing_admin_email_content = stripslashes_deep($_POST['unsubscribing_admin_email_content']);          
+          update_option('unsubscribing_admin_email_content', $unsubscribing_admin_email_content);
           
+          $inarrears_subscription_email_title = htmlentities(stripslashes_deep($_POST['inarrears_subscription_email_title']));          
+          update_option('inarrears_subscription_email_title', $inarrears_subscription_email_title);          
+          $inarrears_subscription_email_content = stripslashes_deep($_POST['inarrears_subscription_email_content']);          
+          update_option('inarrears_subscription_email_content', $inarrears_subscription_email_content);          
+          $inarrears_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['inarrears_subscription_admin_email_title']));          
+          update_option('inarrears_subscription_admin_email_title', $inarrears_subscription_admin_email_title);          
+          $inarrears_subscription_admin_email_content = stripslashes_deep($_POST['inarrears_subscription_admin_email_content']);          
+          update_option('inarrears_subscription_admin_email_content', $inarrears_subscription_admin_email_content);          
           
-          
+          $frozen_subscription_email_title = htmlentities(stripslashes_deep($_POST['frozen_subscription_email_title']));          
+          update_option('frozen_subscription_email_title', $frozen_subscription_email_title);          
+          $frozen_subscription_email_content = stripslashes_deep($_POST['frozen_subscription_email_content']);          
+          update_option('frozen_subscription_email_content', $frozen_subscription_email_content);          
+          $frozen_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['frozen_subscription_admin_email_title']));          
+          update_option('frozen_subscription_admin_email_title', $frozen_subscription_admin_email_title);          
+          $frozen_subscription_admin_email_content = stripslashes_deep($_POST['frozen_subscription_admin_email_content']);          
+          update_option('frozen_subscription_admin_email_content', $frozen_subscription_admin_email_content);
+                    
           $password_changed_email_title = htmlentities(stripslashes_deep($_POST['password_changed_email_title']));          
           update_option('password_changed_email_title', $password_changed_email_title);          
           $password_changed_email_content = stripslashes_deep($_POST['password_changed_email_content']);          
@@ -990,7 +1201,7 @@ function save_email_templates()
           $ticket_closed_email_content = stripslashes_deep($_POST['ticket_closed_email_content']);          
           update_option('ticket_closed_email_content', $ticket_closed_email_content);
           
-          wp_redirect("/wp-admin/options-general.php?page=email-management");
+          wp_redirect("/wp-admin/admin.php?page=email-management&tab=" . (!$_REQUEST['tab'] ? 0 : $_REQUEST['tab']));
     }
 }
 
