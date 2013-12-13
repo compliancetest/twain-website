@@ -237,9 +237,9 @@ function cp_user_payment_save()
     $xmlData = '<ewaygateway> 
                 <ewayCustomerID>' . $customerID . '</ewayCustomerID> 
                 <ewayTotalAmount>10</ewayTotalAmount> 
-                <ewayCustomerFirstName></ewayCustomerFirstName> 
-                <ewayCustomerLastName></ewayCustomerLastName> 
-                <ewayCustomerEmail></ewayCustomerEmail> 
+                <ewayCustomerFirstName>' . $current_user->first_name . '</ewayCustomerFirstName> 
+                <ewayCustomerLastName>' . $current_user->last_name . '</ewayCustomerLastName> 
+                <ewayCustomerEmail>' . $current_user->user_email . '</ewayCustomerEmail> 
                 <ewayCustomerAddress></ewayCustomerAddress> 
                 <ewayCustomerPostcode></ewayCustomerPostcode>
                 <ewayCustomerInvoiceDescription></ewayCustomerInvoiceDescription> 

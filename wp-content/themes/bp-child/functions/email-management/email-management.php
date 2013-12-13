@@ -341,7 +341,7 @@ function create_email_management_page()
                     $unsubscribing_admin_email_content = get_option('unsubscribing_admin_email_content');
                     ?>
                     <h3>Unsubscribe</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [payment_error]</p>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>

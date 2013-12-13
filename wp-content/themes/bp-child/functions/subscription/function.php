@@ -34,8 +34,8 @@ function processEwayPayment($eway_profile_id, $amount)
         'man:managedCustomerID' => $eway_profile_id,
         'man:amount' => $amount * 100,
 //            'man:cvn' => $card->cvn,
-        //'man:invoiceReference' => '',
-//            'man:invoiceDescription' => ''
+//        'man:invoiceReference' => '',
+        'man:invoiceDescription' => 'This is test suite subscription'
     );
     $soapaction = 'https://www.eway.com.au/gateway/managedpayment/ProcessPayment';
     $result = $client->call('man:ProcessPayment', $requestbody, '', $soapaction);
