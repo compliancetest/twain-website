@@ -318,12 +318,7 @@ function unsubscribe_purchase()
         exit;
     }
     
-    /*** For Testing ***/
-    removeSubscription($subscription);
-    wp_redirect($return);
-    exit;
-    
-    if($subscription->status != 'Active')
+    if($subscription->status != 'Active' || isset($_POST['delete-now']))
     {
         //Unsubscribe the purchasement now
         removeSubscription($subscription);
@@ -331,7 +326,7 @@ function unsubscribe_purchase()
         //Just Update the Status to Unsubscribing        
         $subscription->cancel();
         
-        addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of the month.");
+        addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
     }
     
     wp_redirect($return);
@@ -342,41 +337,92 @@ function process_recurring_payment()
 {
     global $wpdb;
     
-    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='Active'";
-    $subscriptions = $wpdb->get_results($query);
-    foreach($subscriptions as $subscription)
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='Active' AND p.expiry_date <= '" . date("Y-m-d") . "'";
+    $subscriptions = $wpdb->get_results($query, ARRAY_A);
+    foreach($subscriptions as $row)
     {
         //Monthly Billing
-        $currentPrice = get_post_meta($subscription->id, 'monthly_subscription_price', true);
-        $paymentAmount = $currentPrice > $subscription->price ? $subscription->price : $currentPrice;
+        $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
+        if($row['price'] < $currentPrice)
+            $row['price'] = $currentPrice;
         
-        $result = processEwayPayment($card->customer_id, $paymentAmount);
+        $result = processEwayPayment($row['customer_id'], $row['price']);
         
-        $user = get_userdata($subscription->user_id);
-        
-        $suite = new TestSuite($subscription->suite_id);
-        $suite->load();
+        $subscription = new CT_Subscription();
+        $subscription->bind($row);
         
         if($result['ewayTrxnStatus'] == 'False')
         {
+            //Set the status to InArrears
+            $subscription->inArrears();
             
-            exit;
         }else{                        
             //Save Transaction
             $wpdb->insert($wpdb->prefix . 'users_transactions', array(
-                "user_id" => $subscription->user_id,
-                "suite_id" => $subscription->suite_id,
+                "user_id" => $row['user_id'],
+                "suite_id" => $row['suite_id'],
                 "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $paymentAmount,
+                "amount" => $row['price'],
                 "auth_code" => $result['ewayAuthCode'],
                 "created_date" => date("Y-m-d H:i:s")
             ));
-            //Extend the period of the subscription
-            $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $subscription->id));
             
+            //Extend the period of the subscription
+            $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $row['id']));            
         }
         
     }
     
     exit;
+}
+
+function process_suspended_subscriptions()
+{
+    global $wpdb;
+    
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active'";
+    $subscriptions = $wpdb->get_results($query, ARRAY_A);
+    foreach($subscriptions as $row)
+    {
+        //Monthly Billing
+        $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
+        if($row['price'] < $currentPrice)
+            $row['price'] = $currentPrice;
+        
+        $result = processEwayPayment($row['customer_id'], $row['price']);
+        
+        $subscription = new CT_Subscription();
+        $subscription->bind($row);
+        
+        if($result['ewayTrxnStatus'] == 'False')
+        {
+            //Set Card Status to Suspended
+            $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row->card_id));
+            
+        }else{                        
+            //Save Transaction
+            $wpdb->insert($wpdb->prefix . 'users_transactions', array(
+                "user_id" => $row['user_id'],
+                "suite_id" => $row['suite_id'],
+                "trxn_number" => $result['ewayTrxnNumber'],
+                "amount" => $row['price'],
+                "auth_code" => $result['ewayAuthCode'],
+                "created_date" => date("Y-m-d H:i:s")
+            ));
+            
+            //Extend the period of the subscription
+            $wpdb->update($wpdb->prefix . "users_purchases", array('status'=>'Active', 'expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $row['id']));            
+        }
+        
+    }
+    
+    exit;
+}
+
+function process_inarrear_frozen_subscriptions()
+{
+    global $wpdb;
+    
+    //Increase InArrears Count
+    $query = "UPDATE {$wpdb->prefix}users_purchases SET `inarrears_count`=`inarrears_count` + 1 WHERE ";
 }

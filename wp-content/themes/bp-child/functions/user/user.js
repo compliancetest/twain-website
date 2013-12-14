@@ -178,7 +178,7 @@
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
             var timezoneText = $(".timezone-text");
-
+            jQuery(thisParentId).find('.message').remove();
             if( findInputs == 0){
 
                 $(thisParentId+' .btn-row').fadeIn();
@@ -216,8 +216,8 @@
         //Edit Cancel
         $('#my_profile').on('click', '.edit-cancel-btn', function(){
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
-            var findInputs = $(thisParentId+' .grid-row input:visible').size();
-
+            var findInputs = $(thisParentId+' .grid-row input:visible').size();            
+            $(thisParentId).find('.message').remove();
             //if( findInputs == 0){
 
             $(thisParentId+' .btn-row').fadeIn();
@@ -270,19 +270,20 @@
             $('#edit-card-form #id').val('');
             $('#edit-card-form input[type="text"]').val('');
             $('#my_payment').addClass('grid-box-editing');
+            $('#my_payment').find('.message').remove();
             return false;
         });
         $('#cards-list .edit-payment-method').click(function(){
             var link = $(this);
             var pRow = $(this).parents('.tr');
-            pRow.append('<div class="loading1"></div>');
-            pRow.find('.loading1').show();
+            $('#cards-list').find('.loading b').html('LOADING DATA');
+            $('#cards-list').find('.loading').show();
             $.ajax({
                 url: link.attr('href'),
                 type: 'get',
                 dataType: 'json',
                 success: function(rsp){
-                    pRow.find('.loading1').remove();
+                    $('#cards-list').find('.loading').hide();
                     var form = $('#edit-card-form');
                     form.find('#nickname').val(rsp.nickname);
                     form.find('#card_number').val(rsp.CCNumber);
@@ -296,7 +297,7 @@
                     $('#my_payment').addClass('grid-box-editing');
                 },
                 error: function(rsp){
-                    pRow.find('.loading1').remove();
+                    $('#cards-list').find('.loading').hide();
                     $('#cards-list').append('<div class="message error">' + rsp.responseText + "</div>");
                     setTimeout(function(){
                         $('#cards-list .message').fadeOut('fast', function(){
@@ -309,24 +310,24 @@
         });
         $('#cards-list .delete-payment-method').click(function(){
             var link = $(this);
-            var pRow = $(this).parents('.grid-row');
-            pRow.append('<div class="loading1"></div>');
-            pRow.find('.loading1').show();
+            var pRow = $(this).parents('.tr'); 
+            $('#cards-list').find('.loading b').html('DELETING DATA');           
+            $('#cards-list').find('.loading').show();
             $.ajax({
                 url: link.attr('href'),
                 type: 'get',
                 success: function(rsp){
-                    pRow.find('.loading1').remove();
+                    $('#cards-list').find('.loading').hide();
                     if(rsp == 'success')
                     {
                         pRow.fadeOut('fast', function(){
                             pRow.remove();
-                            if($('#cards-list .grid-row').length == 0)
+                            if($('#cards-list .tbody .tr').length == 0)
                             {
-                                $('#cards-list').append('<div class="grid-row">' +
-                                        '<div class="grid-cell width100P">No Payment Method Found! Please add new one.</div>' +
-                                        '<div class="clear"></div>' +
-                                    '</div>');
+                                $('#cards-list .tbody').append('<div class="tr">' + 
+                                           '<div class="td td-full">No Payment Method Found! Please add new one.</div>' +
+                                           '<div class="clear"></div>' +
+                                       '</div>');
                             }
                         })
                     }else{
@@ -335,7 +336,7 @@
                             $('#cards-list .message').fadeOut('fast', function(){
                                 $('#cards-list .message').remove();
                             })
-                        }, 2000);
+                        }, 4000);
                     }
                 }
             })
@@ -347,6 +348,7 @@
             $('#edit-card-form').hide();
             $('#edit-card-form').find('.cnumber-desc').hide();
             $('#cards-list').fadeIn('fast');
+            $('#my_payment').find('.message').remove();            
             return false;
         })
 
@@ -405,15 +407,30 @@
                 }
             })
         })
-        $("#my_subscriptions .template-variables-link").each(function(){
-            var url = $(this).attr('href');
+        
+        $('#my_subscriptions .unsubscribe-btn').each(function(){
+            var status = $(this).attr('data-status');
+            var id = $(this).attr('data-id');
+            
             $(this).cplightbox({
-                type: 'ajax',
-                href: url
+                type: 'inline',
+                href: '#unsubscription-confirm-box',
+                onStart: function(){
+                    $('#unsubscription-confirm-box #subscription-id').val(id);
+                    if(status != 'Active')
+                    {
+                        $('#unsubscription-confirm-box #delete-now').prop('checked', true);
+                        $('#unsubscription-confirm-box #delete-now').prop('disabled', true);
+                    }else{
+                        $('#unsubscription-confirm-box #delete-now').prop('checked', false);
+                    }
+                }
             })
         })
-
-
+        
+        $("#unsubscription-confirm-box form").submit(function(){
+            $(this).find('.loading').show();
+        })
 
         $('#harness-form #p_mode_agreement').change(function(){
             if($(this).val() == 'LIGHT')

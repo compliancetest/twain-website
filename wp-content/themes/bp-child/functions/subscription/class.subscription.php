@@ -70,6 +70,14 @@ class CT_Subscription
         }
     }
     
+    function bind($data)
+    {
+        foreach($data as $f=>$v) 
+       {                   
+           $this->$f = $v;
+       }
+    }
+    
     /**
     * Cancel Subscription
     * Update the subscription to Unsubscribing Status
@@ -80,7 +88,85 @@ class CT_Subscription
         global $wpdb;
         if($this->id)
         {
-            return $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Unsubscribing'), array('id' => $this->id));
+            //Update subscription status
+            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Unsubscribing'), array('id' => $this->id));
+            
+            //Send Email Notification
+            $user = get_userdata($this->user_id);
+        
+            //Send Subscription UnSubscribing Mails
+            
+            $suite = new TestSuite($this->suite_id);
+            $suite->load();
+            //Send Mail
+            $emailData = array(
+                '[name]' => cp_get_user_fullname($user->ID),
+                '[email]' => $user->user_email,
+                '[suite_name]' => $suite->name,
+                '[suite_url]' => get_permalink($suite->id)
+            );
+            
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
+            cp_send_email_to_admin('unsubscribing_admin', $emailData);            
+        }
+    }
+    
+    
+    /**
+    * Set Subscription status to InArrears 
+    * 
+    */
+    function inArrears()
+    {
+        global $wpdb;
+        if($this->id)
+        {
+            //Update subscription status
+            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'InArrears'), array('id' => $this->id));
+            //Update Card Status
+            $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
+            //Send Email Notification
+            $user = get_userdata($this->user_id);
+        
+            
+            //Send Mail
+            $emailData = array(
+                '[name]' => $user->first_name . " " . $user->last_name,
+                '[email]' => $user->user_email,
+                '[suite_name]' => get_the_title($this->suite_id),
+                '[suite_url]' => get_permalink($this->suite_id),
+                '[paid_amount]' => $this->paid_amount
+            );
+            
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'inarrears_subscription', $emailData);
+            cp_send_email_to_admin('inarrears_subscription_admin', $emailData);            
+        }
+    }
+    
+    /**
+    * Set Subscription status to Frozen
+    * 
+    */
+    function frozen()
+    {
+        global $wpdb;
+        if($this->id)
+        {
+            //Update subscription status
+            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Frozen'), array('id' => $this->id));            
+            //Send Email Notification
+            $user = get_userdata($this->user_id);
+            //Send Mail
+            $emailData = array(
+                '[name]' => $user->first_name . " " . $user->last_name,
+                '[email]' => $user->user_email,
+                '[suite_name]' => get_the_title($this->suite_id),
+                '[suite_url]' => get_permalink($this->suite_id),
+                '[paid_amount]' => $this->paid_amount
+            );
+            
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'frozen_subscription', $emailData);
+            cp_send_email_to_admin('frozen_subscription_admin', $emailData);            
         }
     }
     
@@ -101,16 +187,16 @@ class CT_Subscription
         
         $user = get_userdata($this->user_id);
         
-        //Send Subscription Cancell Mails
+        //Send Subscription Cancel Mails
         
         $suite = new TestSuite($this->suite_id);
         $suite->load();
         //Send Mail
         $emailData = array(
-            '[name]' => cp_get_user_fullname($user->ID),
+            '[name]' => $user->first_name . " " . $user->last_name,
             '[email]' => $user->user_email,
-            '[suite_name]' => $suite->name,
-            '[suite_url]' => get_permalink($suite->id),
+            '[suite_name]' => get_the_title($this->suite_id),
+            '[suite_url]' => get_permalink($this->suite_id),
             '[paid_amount]' => $suite->monthlySubscriptionPrice
         );
         

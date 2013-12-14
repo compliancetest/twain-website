@@ -136,7 +136,7 @@ function can_delete_suite($suiteID, $user_id = null)
 
 
 
-function can_create_suite($user_id = null)
+function can_create_suite($user_id = null, $group_id = null)
 {
     if($user_id == null)
         $user_id = get_current_user_id();
@@ -149,7 +149,7 @@ function can_create_suite($user_id = null)
     
     //Check if the user is an admin of a Community    
     
-    if(bp_is_group_admin($user_id))
+    if(groups_is_user_admin($user_id, $group_id))
     {
         return true;
     }

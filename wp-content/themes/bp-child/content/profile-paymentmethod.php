@@ -62,7 +62,7 @@ if(!defined('ABSPATH'))
                 <?php } ?>
                <?php } ?>
             </div>
-            <div class="loading"><div><b>GETTING DATA</b><span>Please wait...</span></div></div>
+            <div class="loading loading-with-text"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>
           </div>
             <div id="edit-card-form" style="display: none;">
                 <form action="#" method="post">

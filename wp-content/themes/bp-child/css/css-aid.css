@@ -1276,10 +1276,10 @@ tr {
     position: absolute;
     left: 0;
     top: 50%;
-    margin-top: -70px;
-    padding-top: 50px;
+    margin-top: -35px;
+    padding-top: 42px;
     background: url(../images/loader.gif) no-repeat center 5px;
-    height: 50px;
+    height: 28px;
     width: 100%;
 }
 

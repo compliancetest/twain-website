@@ -127,6 +127,14 @@ function cp_delete_payment_method()
         exit;
     }
     
+    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix ."users_purchases WHERE card_id=%d", $id);
+    $count = $wpdb->get_var($query);
+    if($count > 0)
+    {
+        echo "All subscriptions associated with this payment method must be unsubscribed before the payment method can be deleted.";
+        exit;
+    }
+    
     $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_cards WHERE id=" . $id);
     echo "success";
     exit;

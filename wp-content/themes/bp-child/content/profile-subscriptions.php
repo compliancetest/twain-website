@@ -72,8 +72,10 @@ if(!defined('ABSPATH'))
                         </span>
                     </div>
                     <div class="td td-action tocenter">
-                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
-                        <a href="?_paymentnonce=<?php echo wp_create_nonce('unsubscribe') ?>&id=<?php echo $row->id ?>" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
+                        <a href="javascript: void(0)" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
+                        <?php if($row->status != 'Unsubscribing'){ ?>
+                        <a href="javascript: void(0)" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip" data-status="<?php echo $row->status?>" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
+                        <?php } ?>
                     </div>
                     <input type="hidden" id="p_mode_agreement<?php echo $row->id?>" value="<?php echo $row->p_mode_agreement?>" />
                     <input type="hidden" id="harness_endpoint_url<?php echo $row->id?>" value="<?php echo $row->harness_endpoint_url?>" />
@@ -103,3 +105,24 @@ if(!defined('ABSPATH'))
     </div>
 </div>
 <?php endif; ?>
+<div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
+    <form name="unsubscribe-form" action="" method="post">
+        <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
+        <div class="popup-box-content grid-box-body">    
+            <p>Are you sure that you want to unsubscribe the subscription?<br > will remain active until then, and you can continue to test as normal by the end of this month.</p>        
+            <p>If you check the below checkbox, the subscription will be cancelled immediately.</p>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">              
+            <label class="left"><input type="checkbox" id="delete-now" name="delete-now" /> Delete immediately</label>
+            <div class="right">
+                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">OK</span></a>            
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="loading loading-with-text radius6"><div><b>UNSUBSCRIBING</b><span>Please wait...</span></div></div>
+        <a class="close_btn"></a>
+        <input type="hidden" name="id" id="subscription-id" value="" />    
+        <?php wp_nonce_field('unsubscribe', '_paymentnonce'); ?>
+    </form>
+</div>
