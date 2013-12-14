@@ -85,11 +85,17 @@ class TestCase
         $this->version_minor = $this->loadSingleValue('version_minor');
         $this->version_patch = $this->loadSingleValue('version_patch');
         
+        if(!$this->version_major)
+            $this->version_major = 0;
+        if(!$this->version_minor)
+            $this->version_minor = 0;
+        
+        
         $versions = array();
-        if($this->version_major)
-            $versions[] = $this->version_major;
-        if($this->version_minor)
-            $versions[] = $this->version_minor;
+        
+        $versions[] = $this->version_major;    
+        $versions[] = $this->version_minor;
+        
         if($this->version_patch)
             $versions[] = $this->version_patch;
         

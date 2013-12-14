@@ -72,11 +72,12 @@ class TestSuite
         $this->version_minor = $this->loadSingleValue('ts_version_minor');
         $this->version_patch = $this->loadSingleValue('ts_version_patch');
         
+        $this->version_major = !$this->version_major ? 0 : $this->version_major;
+        $this->version_minor = !$this->version_minor ? 0 : $this->version_minor;
+        
         $versions = array();
-        if($this->version_major)
-            $versions[] = $this->version_major;
-        if($this->version_minor)
-            $versions[] = $this->version_minor;
+        $versions[] = $this->version_major;
+        $versions[] = $this->version_minor;
         if($this->version_patch)
             $versions[] = $this->version_patch;
         

@@ -178,7 +178,7 @@ $roles = array();
     <?php }else{ ?>
     <p class="column">No Data Found!</p>
     <?php } ?>
-    <?php if(can_create_suite(null, bp_get_group_id())){ ?>
+    <?php if(groups_is_user_admin(get_current_user_id(), bp_get_group_id())){ ?>
     <div class="column">
     <a href="/add-new-test-suite" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
     <div class="clear"></div>

@@ -288,10 +288,11 @@ function saveCase()
         exit;
     }
     
-    if($_POST['version_major'])
-        $versions[] = $_POST['version_major'];
-    if($_POST['version_minor'])
-        $versions[] = $_POST['version_minor'];
+//    if($_POST['version_major'])
+    $versions[] = !$_POST['version_major'] ? 0 : $_POST['version_major'];
+//    if($_POST['version_minor'])
+    $versions[] = !$_POST['version_minor'] ? 0 : $_POST['version_minor'];
+    
     if($_POST['version_patch'])
         $versions[] = $_POST['version_patch'];
     

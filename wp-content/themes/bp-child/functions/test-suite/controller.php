@@ -156,10 +156,10 @@ function saveSuite()
     }
     
     $versions = array();
-    if($_POST['ts_version_major'])
-        $versions[] = $_POST['ts_version_major'];
-    if($_POST['ts_version_minor'])
-        $versions[] = $_POST['ts_version_minor'];
+    $versions[] = !$_POST['ts_version_major'] ? 0 : $_POST['ts_version_major'];
+//    if($_POST['ts_version_minor'])
+    $versions[] = !$_POST['ts_version_minor'] ? 0 : $_POST['ts_version_minor'];
+    
     if($_POST['ts_version_patch'])
         $versions[] = $_POST['ts_version_patch'];
     
