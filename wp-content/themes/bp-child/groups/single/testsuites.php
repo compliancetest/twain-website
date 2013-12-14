@@ -173,16 +173,16 @@ $roles = array();
         </div>
         </form>
     </div>
-    <div class="clear"></div>    
+    <div class="clear"></div>        
+    <div class="loading"></div>
+    <?php }else{ ?>
+    <p class="column">No Data Found!</p>
+    <?php } ?>
     <?php if(can_create_suite(null, bp_get_group_id())){ ?>
     <div class="column">
     <a href="/add-new-test-suite" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
     <div class="clear"></div>
     </div>
-    <?php } ?>
-    <div class="loading"></div>
-    <?php }else{ ?>
-    <p class="column">No Data Found!</p>
     <?php } ?>
 </div>
 <script type="text/javascript">
