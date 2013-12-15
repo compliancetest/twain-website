@@ -12,6 +12,8 @@ Template Name Posts: Test Suite
     
 	$current_group_id = get_post_meta($suiteID, 'community_id', true);
 	
+    $user_id = get_current_user_id();
+    
 	global $bp;
     
 	$group = groups_get_group( array( 'group_id' => $current_group_id ) );
@@ -188,33 +190,52 @@ Template Name Posts: Test Suite
 			</div>
 			<!--end tabs-->
             <div class="space15"></div>
-            <?php if(is_customer($suite->id)){ ?>
-            <?php
-                $subscription = getUserPurchase($suite->id);
+            <?php 
+                global $wpdb;
+                
+                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite->id);
+                $subscription = $wpdb->get_row($query);
+                
+            if($subscription){ 
+                
+                if($subscription->status == 'Active'):
             ?>
-            <div class="message success">
-                You have already purchased a subscription to this test suite.
-                If you want to unsubscribe it, please click <a onclick="return confirm('Are you sure that you want to unsubscribe it')" href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>"><i>here</i></a>.
-            </div>
+                <div class="message success">
+                    You have already purchased a subscription to this test suite.
+                    If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                </div>
+                <?php elseif($subscription->status == 'InArrears'): ?>
+                <div class="message notice">
+                    You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                </div>
+                <?php elseif($subscription->status == 'Frozen'): ?>
+                <div class="message error">
+                    You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                </div>
+                <?php elseif($subscription->status == 'Unsubscribing'): ?>
+                <div class="message notice">
+                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month.
+                </div>
+                <?php endif; ?>
             <?php }else{ ?>  
-            <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
-            <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
-            <?php }else{ ?>          
-			<a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
-            <?php } ?>
-                <span class="price-b">
-                    <span class="l"></span>
-                    <span class="m">
-                    <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
-                    <b style="margin-top: 5px; display: block">Free</b>    
-                    <?php }else{ ?>
-                    <b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month
-                    <?php } ?>
+                <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
+                <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
+                <?php }else{ ?>          
+			    <a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
+                <?php } ?>
+                    <span class="price-b">
+                        <span class="l"></span>
+                        <span class="m">
+                        <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
+                        <b style="margin-top: 5px; display: block">Free</b>    
+                        <?php }else{ ?>
+                        <b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month
+                        <?php } ?>
+                        </span>
+                        <span class="r"></span>
                     </span>
-                    <span class="r"></span>
-                </span>
-                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-            </a>
+                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                </a>
             <?php } ?>
             <div class="clear"></div>
             <div class="space20"></div>
@@ -436,7 +457,7 @@ Template Name Posts: Test Suite
 			
 	</div> <!--end content container-->
 <?php
-    $userCards = getUserCreditCards();    
+    $userCards = getUserCreditCards(null, true);    
 ?>
 <div class="popup-box" id="subscribe-box" style="display: none;">
     <form name="paymentForm" id="paymentForm" action="">
@@ -560,7 +581,9 @@ Template Name Posts: Test Suite
         </div>
     <a class="close_btn"></a>
 </div>
-
+<?php
+    render_unsubscription_popup(get_permalink($suite->id));    
+?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	jQuery('.change_ts').change(function(){
@@ -620,6 +643,26 @@ jQuery(document).ready(function($) {
             
         })
         return false;
+    })
+    
+    jQuery('.unsubscribe-link').each(function(){
+        var status = jQuery(this).attr('data-status');
+        var id = jQuery(this).attr('data-id');
+        
+        jQuery(this).cplightbox({
+            type: 'inline',
+            href: '#unsubscription-confirm-box',
+            onStart: function(){
+                jQuery('#unsubscription-confirm-box #subscription-id').val(id);
+                if(status != 'Active')
+                {
+                    jQuery('#unsubscription-confirm-box #delete-now').prop('checked', true);
+                    jQuery('#unsubscription-confirm-box #delete-now').prop('disabled', true);
+                }else{
+                    jQuery('#unsubscription-confirm-box #delete-now').prop('checked', false);
+                }
+            }
+        })
     })
 });
 </script>

@@ -15,6 +15,12 @@ function execute_subscription_actions()
         $frozenCount = get_option('frozen_count');
     }else if(isset($_REQUEST['ext-action']) && $_REQUEST['ext-action'] == 'process_recurring_payment'){
         process_recurring_payment();
+        process_suspended_subscriptions();
+        process_inarrear_frozen_subscriptions();
+        exit;
+    }else if(isset($_REQUEST['ext-action']) && $_REQUEST['ext-action'] == 'increase_inarrear_frozen_count'){
+        increase_inarrear_frozen_count();
+        exit;
     }
 }
 
@@ -72,11 +78,8 @@ function process_eway_payment()
     
     $result = processEwayPayment($card->customer_id, $paymentAmount);
     
-    if($result['ewayTrxnStatus'] == 'False')
+    if($result['ewayTrxnStatus'] == 'True')
     {
-        echo $result['ewayTrxnError'];
-        exit;
-    }else{            
         //Save Transaction
         $wpdb->insert($wpdb->prefix . 'users_transactions', array(
             "user_id" => $user->ID,
@@ -170,6 +173,12 @@ function process_eway_payment()
             }
         }
         
+    }else{            
+        if(isset($result['ewayTrxnError']))
+            echo $result['ewayTrxnError'];
+        else if(isset($result['faultstring']))
+            echo $result['faultstring'];
+        exit;
     }
     exit;
     
@@ -351,12 +360,8 @@ function process_recurring_payment()
         $subscription = new CT_Subscription();
         $subscription->bind($row);
         
-        if($result['ewayTrxnStatus'] == 'False')
+        if($result['ewayTrxnStatus'] == 'True')
         {
-            //Set the status to InArrears
-            $subscription->inArrears();
-            
-        }else{                        
             //Save Transaction
             $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                 "user_id" => $row['user_id'],
@@ -369,11 +374,13 @@ function process_recurring_payment()
             
             //Extend the period of the subscription
             $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $row['id']));            
+        }else{
+            //Set the status to InArrears
+            $subscription->inArrears();
         }
         
     }
     
-    exit;
 }
 
 function process_suspended_subscriptions()
@@ -394,12 +401,8 @@ function process_suspended_subscriptions()
         $subscription = new CT_Subscription();
         $subscription->bind($row);
         
-        if($result['ewayTrxnStatus'] == 'False')
-        {
-            //Set Card Status to Suspended
-            $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row->card_id));
-            
-        }else{                        
+        if($result['ewayTrxnStatus'] == 'True')
+        {            
             //Save Transaction
             $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                 "user_id" => $row['user_id'],
@@ -410,19 +413,53 @@ function process_suspended_subscriptions()
                 "created_date" => date("Y-m-d H:i:s")
             ));
             
-            //Extend the period of the subscription
-            $wpdb->update($wpdb->prefix . "users_purchases", array('status'=>'Active', 'expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $row['id']));            
+            $subscription->active();
+            
+        }else{             
+            //Set Card Status to Suspended
+            $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row['card_id']));
         }
         
     }
     
-    exit;
+}
+
+function increase_inarrear_frozen_count()
+{
+    global $wpdb;
+    
+    //Increase InArrears Count
+    $query = "UPDATE {$wpdb->prefix}users_purchases SET `inarrears_count`=`inarrears_count` + 1 WHERE `status`='InArrears'";
+    $wpdb->query($query);
+    //Increase Frozen Count
+    $query = "UPDATE {$wpdb->prefix}users_purchases SET `frozen_count`=`frozen_count` + 1 WHERE `status`='Frozen'";
+    $wpdb->query($query);
+    
 }
 
 function process_inarrear_frozen_subscriptions()
 {
     global $wpdb;
     
-    //Increase InArrears Count
-    $query = "UPDATE {$wpdb->prefix}users_purchases SET `inarrears_count`=`inarrears_count` + 1 WHERE ";
+    $InArrearsCount = get_option('inarrears_count');
+    $FrozenCount = get_option('frozen_count');
+    
+    //Move subscription of expired InArrears Cound InArrears to Frozen 
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='InArrears' AND `inarrears_count` > " . $InArrearsCount;
+    $rows = $wpdb->get_results($query, ARRAY_A);
+    foreach($rows as $row)
+    {
+        $obj = new CT_Subscription($row);
+        $obj->frozen();
+    }
+    
+    //Move subscription of expired InArrears Cound InArrears to Frozen 
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='Frozen' AND `frozen_count` > " . $FrozenCount;
+    $rows = $wpdb->get_results($query, ARRAY_A);
+    foreach($rows as $row)
+    {
+        $obj = new CT_Subscription($row);
+        $obj->delete();
+    }
+    
 }

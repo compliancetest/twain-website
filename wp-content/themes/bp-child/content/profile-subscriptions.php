@@ -105,24 +105,4 @@ if(!defined('ABSPATH'))
     </div>
 </div>
 <?php endif; ?>
-<div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
-    <form name="unsubscribe-form" action="" method="post">
-        <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
-        <div class="popup-box-content grid-box-body">    
-            <p>Are you sure that you want to unsubscribe the subscription?<br > will remain active until then, and you can continue to test as normal by the end of this month.</p>        
-            <p>If you check the below checkbox, the subscription will be cancelled immediately.</p>
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">              
-            <label class="left"><input type="checkbox" id="delete-now" name="delete-now" /> Delete immediately</label>
-            <div class="right">
-                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">OK</span></a>            
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div class="loading loading-with-text radius6"><div><b>UNSUBSCRIBING</b><span>Please wait...</span></div></div>
-        <a class="close_btn"></a>
-        <input type="hidden" name="id" id="subscription-id" value="" />    
-        <?php wp_nonce_field('unsubscribe', '_paymentnonce'); ?>
-    </form>
-</div>
+<?php render_unsubscription_popup(); ?>

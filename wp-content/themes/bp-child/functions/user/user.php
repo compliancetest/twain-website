@@ -91,14 +91,17 @@ function compliancetest_user_actions()
 
 
 
-function getUserCreditCards($user_id = null)
+function getUserCreditCards($user_id = null, $only_active = false)
 {
     global $wpdb;
     
     if(!$user_id)
         $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d", $user_id);
+    if($only_active)
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d And `status`='Active'", $user_id);
+    else
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d", $user_id);
     $rows = $wpdb->get_results($query);
     
     return $rows;
@@ -183,7 +186,7 @@ function getUserAdminGroups($user_id)
 
 
 
-function getUserPurchase($suite_id = null, $status='Active', $user_id = null)
+function getUserPurchase($suite_id = null, $user_id = null)
 {
     global $wpdb;
     
@@ -191,10 +194,10 @@ function getUserPurchase($suite_id = null, $status='Active', $user_id = null)
         $user_id = get_current_user_id();
     
     if($suite_id == null){
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`=%s AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id, $status);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d GROUP BY id", $user_id);
         $result = $wpdb->get_results($query);
     }else{
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d AND `status`=%s AND expiry_date >= '" . date("Y-m-d") . "' GROUP BY id", $user_id, $suite_id, $status);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite_id);
         $result = $wpdb->get_row($query);
     }    
     

@@ -126,8 +126,10 @@ function create_email_management_page()
                         <li class="tab-separator">Subscription Section</li>
                         <li><a href="#purchase-subscription">Purchase</a></li>       
                         <li><a href="#unsubscribe-subscription">Unsubscribe</a></li>
-                        <li><a href="#inarrears-subscription">InArrears</a></li>
-                        <li><a href="#frozen-subscription">Frozen</a></li>
+                        <li><a href="#inarrears-subscription">Active -> InArrears</a></li>                        
+                        <li><a href="#frozen-subscription">InArrears -> Frozen</a></li>
+                        <li><a href="#active-subscription">InArrears -> Active</a></li>
+                        <li><a href="#active-subscription2">Frozen -> Active</a></li>
                         <li><a href="#cancel-subscription">Cancel</a></li>       
                         
                         
@@ -429,6 +431,108 @@ function create_email_management_page()
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
                                     <?php wp_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div id="active-subscription">
+                    <?php
+                    $active_subscription_email_title = get_option('active_subscription_email_title');
+                    $active_subscription_email_content = get_option('active_subscription_email_content');
+                    $active_subscription_admin_email_title = get_option('active_subscription_admin_email_title');
+                    $active_subscription_admin_email_content = get_option('active_subscription_admin_email_content');
+                    ?>
+                    <h3>Subscription Cancelled</h3>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="active_subscription_email_title" id="active_subscription_email_title" value="<?php echo $active_subscription_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($active_subscription_email_content, 'active_subscription_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="active_subscription_admin_email_title" id="active_subscription_admin_email_title" value="<?php echo $active_subscription_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($active_subscription_admin_email_content, 'active_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div id="active-subscription2">
+                    <?php
+                    $active_subscription2_email_title = get_option('active_subscription2_email_title');
+                    $active_subscription2_email_content = get_option('active_subscription2_email_content');
+                    $active_subscription2_admin_email_title = get_option('active_subscription2_admin_email_title');
+                    $active_subscription2_admin_email_content = get_option('active_subscription2_admin_email_content');
+                    ?>
+                    <h3>Subscription Cancelled</h3>
+                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="active_subscription2_email_title" id="active_subscription2_email_title" value="<?php echo $active_subscription2_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($active_subscription2_email_content, 'active_subscription2_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="active_subscription2_admin_email_title" id="active_subscription2_admin_email_title" value="<?php echo $active_subscription2_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($active_subscription2_admin_email_content, 'active_subscription2_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1131,7 +1235,27 @@ function save_email_templates()
           update_option('frozen_subscription_admin_email_title', $frozen_subscription_admin_email_title);          
           $frozen_subscription_admin_email_content = stripslashes_deep($_POST['frozen_subscription_admin_email_content']);          
           update_option('frozen_subscription_admin_email_content', $frozen_subscription_admin_email_content);
-                    
+          
+          $active_subscription_email_title = htmlentities(stripslashes_deep($_POST['active_subscription_email_title']));          
+          update_option('active_subscription_email_title', $active_subscription_email_title);          
+          $active_subscription_email_content = stripslashes_deep($_POST['active_subscription_email_content']);          
+          update_option('active_subscription_email_content', $active_subscription_email_content);          
+          $active_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['active_subscription_admin_email_title']));          
+          update_option('active_subscription_admin_email_title', $active_subscription_admin_email_title);          
+          $active_subscription_admin_email_content = stripslashes_deep($_POST['active_subscription_admin_email_content']);          
+          update_option('active_subscription_admin_email_content', $active_subscription_admin_email_content);
+          
+          $active_subscription2_email_title = htmlentities(stripslashes_deep($_POST['active_subscription2_email_title']));          
+          update_option('active_subscription2_email_title', $active_subscription2_email_title);          
+          $active_subscription2_email_content = stripslashes_deep($_POST['active_subscription2_email_content']);          
+          update_option('active_subscription2_email_content', $active_subscription2_email_content);          
+          $active_subscription2_admin_email_title = htmlentities(stripslashes_deep($_POST['active_subscription2_admin_email_title']));          
+          update_option('active_subscription2_admin_email_title', $active_subscription2_admin_email_title);          
+          $active_subscription2_admin_email_content = stripslashes_deep($_POST['active_subscription2_admin_email_content']);          
+          update_option('active_subscription2_admin_email_content', $active_subscription2_admin_email_content);
+          
+          
+                              
           $password_changed_email_title = htmlentities(stripslashes_deep($_POST['password_changed_email_title']));          
           update_option('password_changed_email_title', $password_changed_email_title);          
           $password_changed_email_content = stripslashes_deep($_POST['password_changed_email_content']);          

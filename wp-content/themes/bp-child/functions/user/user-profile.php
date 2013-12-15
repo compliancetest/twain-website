@@ -381,6 +381,42 @@ function cp_user_payment_save()
         if($result == 'true')
         {
             $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'status' => 'Active'), array('id' => $card->id));
+            
+            $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
+            $subscriptions = $wpdb->get_results($query, ARRAY_A);
+            foreach($subscriptions as $row)
+            {
+                //Monthly Billing
+                $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
+                if($row['price'] < $currentPrice)
+                    $row['price'] = $currentPrice;
+                
+                $result = processEwayPayment($row['customer_id'], $row['price']);
+                
+                $subscription = new CT_Subscription();
+                $subscription->bind($row);
+                
+                if($result['ewayTrxnStatus'] == 'True')
+                {            
+                    //Save Transaction
+                    $wpdb->insert($wpdb->prefix . 'users_transactions', array(
+                        "user_id" => $row['user_id'],
+                        "suite_id" => $row['suite_id'],
+                        "trxn_number" => $result['ewayTrxnNumber'],
+                        "amount" => $row['price'],
+                        "auth_code" => $result['ewayAuthCode'],
+                        "created_date" => date("Y-m-d H:i:s")
+                    ));
+                    
+                    $subscription->active();
+                    
+                }else{             
+                    //Set Card Status to Suspended
+                    $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row['card_id']));
+                }
+                
+            }
+            
             echo 'success';
         }else{
             echo $result['faultstring'];
