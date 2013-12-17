@@ -76,7 +76,7 @@ function calculateFirstPaymentAmount($monthly_price)
 {
     $remainedDay = (strtotime("first day next month") - time()) / 86400;
     $totalDay = date("t");
-    
+    echo $remainedDay . "/" . $totalDay;
     return ceil($monthly_price * ($remainedDay / $totalDay));
 }
 
