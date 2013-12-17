@@ -74,9 +74,9 @@ function getUserSubscribedSuites($user_id = null)
 */
 function calculateFirstPaymentAmount($monthly_price)
 {
-    $remainedDay = (strtotime("first day next month") - time()) / 86400;
+    $remainedDay = (strtotime(date("Y-m-d", mktime(0, 0, 0, date('n') + 1, 1, date("Y")))) - strtotime(date("Y-m-d"))) / 86400;
     $totalDay = date("t");
-    echo $remainedDay . "/" . $totalDay;
+    
     return ceil($monthly_price * ($remainedDay / $totalDay));
 }
 
