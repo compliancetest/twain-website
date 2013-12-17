@@ -133,7 +133,7 @@ function process_eway_payment()
             '[email]' => $user->user_email,
             '[suite_name]' => $suite->name,
             '[suite_url]' => get_permalink($suite->id),
-            '[paid_amount]' => $paymentAmount * 100,
+            '[paid_amount]' => $paymentAmount,
             '[community_url]' => bp_get_group_permalink($group)
         );
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
