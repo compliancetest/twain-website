@@ -93,13 +93,13 @@ if(!$suite->community_id)
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label for="ts_name">Name: </label>
+                           <label for="ts_name">Title: </label>
                            <input type="text" id="ts_name" name="ts_name" class="input required" value="<?php echo $suite->name?>" />
                            
                        </div>
                        <div class="grid-cell">
-                           <label for="ts_identifier">Identifier: </label>
-                           <input type="text" id="ts_identifier" name="ts_identifier" class="input" value="<?php echo $suite->identifier?>" />
+                           <label for="ts_identifier">Name: </label>
+                           <input type="text" id="ts_identifier" name="ts_identifier" class="input" readonly="readonly" value="<?php echo $suite->identifier?>" />
                        </div>
                        <div class="grid-cell">
                            <label for="ts_issue_date">Issue Date: </label>

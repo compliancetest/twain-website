@@ -90,7 +90,7 @@ get_header();
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label>Test Case ID:</label>
+                           <label>Test Case Name:</label>
                            <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" <?php echo !$isNew ? 'readonly="readonly"' : ''?> />
                        </div>           
                         

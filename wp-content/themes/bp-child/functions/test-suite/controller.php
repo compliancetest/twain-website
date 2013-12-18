@@ -163,14 +163,14 @@ function saveSuite()
     if($_POST['ts_version_patch'])
         $versions[] = $_POST['ts_version_patch'];
     
-    $version = " v" . implode(".", $versions);
+    $version = implode(".", $versions);
     
-    $post_title = $_POST['ts_name'] . $version;
+    $post_title = $_POST['ts_name'] . "-" . $version;
     
     if(!$id) //Create New Suite
     {
         //Update Test Suite Title and Excerpt
-        $id = wp_insert_post(array('post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
+        $id = wp_insert_post(array('post_title' => $_POST['ts_name'] . " v" . $version, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             addMessage($id->get_error_message(), 'error');            
@@ -185,7 +185,7 @@ function saveSuite()
         
         $guid = get_sample_permalink($post->ID, $post_title, $post_name);
         
-        if( !wp_update_post(array('ID' => $id, 'post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0]))) )
+        if( !wp_update_post(array('ID' => $id, 'post_title' => $_POST['ts_name'] . " v" . $version, 'post_excerpt' => $_POST['excerpt'], 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0]))) )
         {
             addMessage('There was an error while updating the test suite.', true);
             return;

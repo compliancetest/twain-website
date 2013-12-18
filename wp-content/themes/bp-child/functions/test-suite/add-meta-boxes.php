@@ -429,7 +429,7 @@ function save_test_suite_on_admin($post_id)
     if($_POST['ts_version_patch'])
         $versions[] = $_POST['ts_version_patch'];
     
-    $version = " v" . implode(".", $versions);
+    $version = implode(".", $versions);
     
     $post_title = $_POST['ts_name'] . $version;
     
@@ -442,7 +442,7 @@ function save_test_suite_on_admin($post_id)
     
     $guid = get_sample_permalink($post->ID, $post_title, $post_name);
     
-    $wpdb->update($wpdb->posts, array('post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])), array('ID' => $post->ID));
+    $wpdb->update($wpdb->posts, array('post_title' => $_POST['ts_name'] . " v" . $version, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])), array('ID' => $post->ID));
     
     //Save Group
     $group_id = $_POST['group'];
