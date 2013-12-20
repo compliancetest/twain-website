@@ -94,31 +94,23 @@ if(!$suite->community_id)
                    <div class="field-row">
                        <div class="grid-cell">
                            <label for="ts_name">Title: </label>
-                           <input type="text" id="ts_name" name="ts_name" class="input required" value="<?php echo $suite->name?>" />
+                           <input type="text" id="ts_name" name="ts_name" class="input required half-width" value="<?php echo $suite->name?>" />
                            
                        </div>
                        <div class="grid-cell">
                            <label for="ts_identifier">Name: </label>
-                           <input type="text" id="ts_identifier" name="ts_identifier" class="input" readonly="readonly" value="<?php echo $suite->identifier?>" />
-                       </div>
-                       <div class="grid-cell">
-                           <label for="ts_issue_date">Issue Date: </label>
-                           <input type="text" id="ts_issue_date" name="ts_issue_date" class="input datepicker" value="<?php echo $suite->issueDate?>" />
+                           <input type="text" id="ts_identifier" name="ts_identifier" class="input half-width" value="<?php echo $suite->identifier?>" />
                        </div>
                        <div class="clear"></div>
                    </div>
-                   <div class="field-row">
+                   <div class="field-row">                       
+                       <div class="grid-cell">
+                           <label for="ts_issue_date">Issued: </label>
+                           <input type="text" id="ts_issue_date" name="ts_issue_date" class="input datepicker" value="<?php echo $suite->issueDate?>" />
+                       </div> 
                        <div class="grid-cell">
                            <label for="ts_name">Issuer: </label>
                            <input type="text" id="ts_issuer" name="ts_issuer" class="input" value="<?php echo $suite->issuer?>" />                           
-                       </div>
-                       <div class="grid-cell radio-cell">
-                           <label for="ts_identifier">Status: </label>
-                           <input type="radio" name="ts_status" id="ts_status_draft" value="Draft" <?php echo $suite->status == 'Draft' ? 'checked="checked"' : ''?> /> Draft
-                           <input type="radio" name="ts_status" id="ts_status_active" value="Active" <?php echo $suite->status == 'Active' ? 'checked="checked"' : ''?> style="margin-left: 60px" /> Active<br />
-                           <input type="radio" name="ts_status" id="ts_status_deprecated" value="Deprecated" <?php echo $suite->status == 'Deprecated' ? 'checked="checked"' : ''?> /> Deprecated
-                           <input type="radio" name="ts_status" id="ts_status_obsolete" value="Obsolete" <?php echo $suite->status == 'Obsolete' ? 'checked="checked"' : ''?> style="margin-left: 23px" /> Obsolete<br />
-                           <input type="radio" name="ts_status" id="ts_status_partial" value="Partial" <?php echo $suite->status == 'Partial' ? 'checked="checked"' : ''?> /> Partial
                        </div>
                        <div class="grid-cell">
                            <label for="ts_issue_date">Revision Description: </label>
@@ -127,18 +119,34 @@ if(!$suite->community_id)
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
+                       <div class="grid-cell status-cell">
+                           <label>Status: </label>
+                           <input type="radio" name="ts_status" id="ts_status_draft" value="Draft" <?php echo $suite->status == 'Draft' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_draft">D</span> Draft</span>
+                           <input type="radio" name="ts_status" id="ts_status_active" value="Active" <?php echo $suite->status == 'Active' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_active">A</span> Active</span>
+                           <input type="radio" name="ts_status" id="ts_status_deprecated" value="Deprecated" <?php echo $suite->status == 'Deprecated' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_deprecated">C</span> Deprecated</span><br />
+                           <input type="radio" name="ts_status" id="ts_status_obsolete" value="Obsolete" <?php echo $suite->status == 'Obsolete' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_obsolete">O</span> Obsolete</span>
+                           <input type="radio" name="ts_status" id="ts_status_partial" value="Partial" <?php echo $suite->status == 'Partial' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_partial">P</span> Partial</span>
+                       </div>
                        <div class="grid-cell version-cell">
-                           <label for="ts_name">Version Test Suite: </label>
+                           <label for="ts_name">Version: </label>
                            <span><b>Major</b> <input type="text" id="ts_version_major" name="ts_version_major" class="input" value="<?php echo $suite->version_major?>" /></span>
                            <span><b>Minor</b> <input type="text" id="ts_version_minor" name="ts_version_minor" class="input" value="<?php echo $suite->version_minor?>" /></span>
                            <span><b>Patch</b> <input type="text" id="ts_version_patch" name="ts_version_patch" class="input" value="<?php echo $suite->version_patch?>" /></span>
                        </div>
+                       <div class="clear"></div>
+                   </div>    
+                   <div class="field-row">                       
                        <div class="grid-cell">
                            <label for="ts_identifier">Description: </label>
-                           <textarea cols="" rows="" class="textarea" name="ts_description" id="ts_description"><?php echo $suite->description?></textarea>
+                           <textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php echo $suite->description?></textarea>
                        </div>
                        <div class="clear"></div>
-                   </div>                   
+                   </div>
                </div>
            </div>
        </div>

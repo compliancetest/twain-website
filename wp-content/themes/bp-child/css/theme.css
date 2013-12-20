@@ -5452,13 +5452,18 @@ a.suite-subscript-link:hover{
 .grid-box-body .field-row .medium-input{
     width: 430px;
 }    
+.grid-box-body .field-row .half-width{
+    width: 320px;
+}
 
 .grid-box-body .field-row .textarea{
     width: 430px;
     min-height: 75px;
     resize: vertical;
 }    
-
+.grid-box-body .field-row .large-textarea{
+    width: 675px;
+}
 .edit-item-wrapper .field-row .grid-cell:first-child{
     padding-left: 0;
 }
@@ -5476,10 +5481,40 @@ a.suite-subscript-link:hover{
 .edit-item-wrapper .field-row .radio-cell label{
     margin-bottom: 5px;
 }
-.edit-item-wrapper .field-row .version-cell span{
-    display: block;
-    margin: 0 0 5px;
-    width: 200px;
+.edit-item-wrapper .field-row .status-cell{
+    width: 320px;
+    line-height: 22px;
+}
+.edit-item-wrapper .field-row .status-cell label{
+    margin-bottom: 5px;
+}
+.edit-item-wrapper .field-row .status-cell .label{
+    display: inline-block;
+    width: 85px;
+    margin-left: 3px;
+}
+.edit-item-wrapper .field-row .status-cell .status_circle{
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 6px !important;
+    -moz-border-radius: 6px !important;
+    -webkit-border-radius: 6px !important;
+    font-size: 8px !important;
+    min-width: 10px !important;
+    line-height: 10px !important;
+    position: relative;
+    top: -1px;
+}
+.edit-item-wrapper .field-row .status-cell input{
+    position: relative;
+    top: 2px;
+}
+.edit-item-wrapper .field-row .version-cell{
+    width: 320px;
+}
+.edit-item-wrapper .field-row .version-cell span{    
+    
+    
 }
 .edit-item-wrapper .field-row .version-cell span b{
     display: inline-block;
@@ -5487,8 +5522,8 @@ a.suite-subscript-link:hover{
     width: 30px;
 }
 .edit-item-wrapper .field-row .version-cell .input{
-    width: 40%;
-    margin-left: 10px;
+    width: 55px;
+    margin: 0 10px 0 5px;
 }
 #choose-conf-level-box .field-row,
 #test-data-box .field-row,

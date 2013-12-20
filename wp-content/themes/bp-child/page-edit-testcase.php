@@ -90,7 +90,7 @@ get_header();
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label>Test Case Name:</label>
+                           <label>Name:</label>
                            <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" <?php echo !$isNew ? 'readonly="readonly"' : ''?> />
                        </div>           
                         
@@ -105,27 +105,31 @@ get_header();
                        <div class="clear"></div>
                    </div>               
                    <div class="field-row">
-                       <div class="grid-cell radio-cell width90P">
+                       <div class="grid-cell status-cell">
                            <label for="ts_identifier">Status: </label>
-                           <input type="radio" name="test_case_status" id="ts_status_draft" value="Draft" <?php echo $case->status == 'Draft' ? 'checked="checked"' : ''?> /> Draft
-                           <input type="radio" name="test_case_status" id="ts_status_build" class="left15" value="Build" <?php echo $case->status == 'Build' ? 'checked="checked"' : ''?> /> Build
-                           <input type="radio" name="test_case_status" id="ts_status_active" class="left15" value="Active" <?php echo $case->status == 'Active' ? 'checked="checked"' : ''?> /> Active
-                           <input type="radio" name="test_case_status" id="ts_status_deprecated" class="left15" value="Deprecated" <?php echo $case->status == 'Deprecated' ? 'checked="checked"' : ''?> /> Deprecated
-                           <input type="radio" name="test_case_status" id="ts_status_obsolete" class="left15" value="Obsolete" <?php echo $case->status == 'Obsolete' ? 'checked="checked"' : ''?> /> Obsolete
-                           
-                       </div>                                                                      
-                       <div class="clear"></div>
-                   </div>
-                   <div class="field-row">      
+                           <input type="radio" name="test_case_status" id="ts_status_draft" value="Draft" <?php echo $case->status == 'Draft' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_draft">D</span> Draft</span>
+                           <input type="radio" name="test_case_status" id="ts_status_build" value="Build" <?php echo $case->status == 'Build' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_build">B</span> Build</span>
+                           <input type="radio" name="test_case_status" id="ts_status_active"  value="Active" <?php echo $case->status == 'Active' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_active">A</span> Active</span><br />
+                           <input type="radio" name="test_case_status" id="ts_status_deprecated" value="Deprecated" <?php echo $case->status == 'Deprecated' ? 'checked="checked"' : ''?> />
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_deprecated">C</span> Deprecated</span>
+                           <input type="radio" name="test_case_status" id="ts_status_obsolete" value="Obsolete" <?php echo $case->status == 'Obsolete' ? 'checked="checked"' : ''?> /> 
+                           <span class="label"><span class="status_btn status_circle has-tooltip status_obsolete">O</span> Obsolete</span>                           
+                       </div>      
                        <div class="grid-cell version-cell">
                            <label for="version">Version: </label>
                            <span><b>Major</b> <input type="text" id="version_major" name="version_major" class="input" value="<?php echo $case->version_major?>" /></span>
                            <span><b>Minor</b> <input type="text" id="version_minor" name="version_minor" class="input" value="<?php echo $case->version_minor?>" /></span>
                            <span><b>Patch</b> <input type="text" id="version_patch" name="version_patch" class="input" value="<?php echo $case->version_patch?>" /></span>
-                       </div>                              
+                       </div>                                                                     
+                       <div class="clear"></div>
+                   </div>
+                   <div class="field-row">                                                     
                        <div class="grid-cell">
-                           <label>Test Intent Description:</label>
-                           <textarea name="test_intent_description" id="test_intent_description" class="textarea"><?php echo $case->testIntentDescription?></textarea>
+                           <label>Description:</label>
+                           <textarea name="test_intent_description" id="test_intent_description" class="textarea large-textarea"><?php echo $case->testIntentDescription?></textarea>
                        </div>                                          
                        <div class="clear"></div>
                    </div>               

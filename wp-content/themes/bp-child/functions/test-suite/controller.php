@@ -165,12 +165,12 @@ function saveSuite()
     
     $version = implode(".", $versions);
     
-    $post_title = $_POST['ts_name'] . "-" . $version;
+    $post_title = $_POST['ts_name'] . " v" . $version;
     
     if(!$id) //Create New Suite
     {
         //Update Test Suite Title and Excerpt
-        $id = wp_insert_post(array('post_title' => $_POST['ts_name'] . " v" . $version, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
+        $id = wp_insert_post(array('post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             addMessage($id->get_error_message(), 'error');            
@@ -185,7 +185,7 @@ function saveSuite()
         
         $guid = get_sample_permalink($post->ID, $post_title, $post_name);
         
-        if( !wp_update_post(array('ID' => $id, 'post_title' => $_POST['ts_name'] . " v" . $version, 'post_excerpt' => $_POST['excerpt'], 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0]))) )
+        if( !wp_update_post(array('ID' => $id, 'post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0]))) )
         {
             addMessage('There was an error while updating the test suite.', true);
             return;
@@ -201,9 +201,11 @@ function saveSuite()
     
     $r = wp_set_post_terms($id, $suiteTypes, 'test_suite_type');
     
+    $identifier = sanitize_title($_POST['ts_identifier']) . "-" . $version;
+    
     //Update Post Metas
     cp_update_post_meta($id, 'ts_name', $_POST['ts_name']);
-    cp_update_post_meta($id, 'ts_identifier', $_POST['ts_identifier']);
+    cp_update_post_meta($id, 'ts_identifier', $identifier);
     cp_update_post_meta($id, 'ts_issue_date', date('Y-m-d', strtotime($_POST['ts_issue_date'])));
     cp_update_post_meta($id, 'ts_issuer', $_POST['ts_issuer']);
     cp_update_post_meta($id, 'ts_status', $_POST['ts_status']);
