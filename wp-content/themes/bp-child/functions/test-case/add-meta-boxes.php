@@ -517,7 +517,7 @@ function save_test_case_on_admin($post_id)
     
     $version = " v" . implode(".", $versions);
     
-    $post_title = $_POST['test_case_id'] . $version;
+    $post_title = $_POST['test_case_id'] ." v" . $version;
     
     $post_name = wp_unique_post_slug(sanitize_title($post_title), $post->ID, $post->post_status, $post->post_type, $post->post_parent);
     

@@ -431,7 +431,7 @@ function save_test_suite_on_admin($post_id)
     
     $version = implode(".", $versions);
     
-    $post_title = $_POST['ts_name'] . $version;
+    $post_title = $_POST['ts_name'] . " v" . $version;
     
     $esb = new ManageESB();
     $esb->addTestSuiteNameIDMap($post_id, $post_title);
@@ -442,7 +442,7 @@ function save_test_suite_on_admin($post_id)
     
     $guid = get_sample_permalink($post->ID, $post_title, $post_name);
     
-    $wpdb->update($wpdb->posts, array('post_title' => $_POST['ts_name'] . " v" . $version, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])), array('ID' => $post->ID));
+    $wpdb->update($wpdb->posts, array('post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])), array('ID' => $post->ID));
     
     //Save Group
     $group_id = $_POST['group'];

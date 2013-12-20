@@ -201,7 +201,7 @@ function saveSuite()
     
     $r = wp_set_post_terms($id, $suiteTypes, 'test_suite_type');
     
-    $identifier = sanitize_title($_POST['ts_identifier']) . "-" . $version;
+    $identifier = sanitize_title($_POST['ts_identifier']);
     
     //Update Post Metas
     cp_update_post_meta($id, 'ts_name', $_POST['ts_name']);
