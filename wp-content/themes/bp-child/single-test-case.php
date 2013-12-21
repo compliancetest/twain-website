@@ -19,7 +19,7 @@ $case->load();
     <div class="popup-box-content">
 <?php } ?>
 		<div class="infos">
-				<h3 class="dark_gray_txt normal left">Test case ID: <span class="dark_blue_txt bold"><?php echo $case->title ; ?></span></h3>
+				<h3 class="dark_gray_txt normal left">Test case: <span class="dark_blue_txt bold"><?php echo $case->title ; ?></span></h3>
                 <?php
                     if(can_edit_test_case($case->id)){ 
                 ?>
@@ -28,7 +28,7 @@ $case->load();
                     }
                 ?>
                 <a href="<?php echo addPrintParams(get_permalink(), 'test-case')?>" class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span class="t">PRINT</span></a>
-                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($case->testSuite)?>"><?php echo get_the_title($case->testSuite) ?></a></span>
+                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($case->testSuite[0])?>"><?php echo get_the_title($case->testSuite[0]) ?></a></span>
                 <div class="clear"></div>
 				<p class="dark_gray_txt"><?php echo _convertLineSymbolToBR($case->testIntentDescription) ; ?></p>
 				<div class="grids noradiusbottom">
@@ -77,7 +77,7 @@ $case->load();
 					<div class="grid_row white_bcg noborderbottom">
 						<div class="grid_cell width10P left size13 bold dark_blue_txt">Properties:</div>
 						<div class="grid_cell width30P left">
-							<p>Conformance Level: <span><?php echo $case->conformanceLevel; ?></span></p>
+							<p>Conformance Level: <span><?php echo $case->conformanceLevel ? implode(', ', $case->conformanceLevel) : ''; ?></span></p>
 						</div>
 						<div class="grid_cell width30P left">
 							<p>Outcome Type: <span><?php echo $case->outcomeType; ?></span></p>
@@ -197,13 +197,13 @@ $case->load();
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>
                                 </div>
                                 <div class="grid_cell width15P left5P">
-                                    <?php echo $instanceObj->ProfilePurpose?>
+                                    <?php echo $instanceObj->Profile->Purpose?>
                                 </div>
                                 <div class="grid_cell width10P left5P">
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>                    
                                 </div>
                                 <div class="grid_cell width40P left5P">
-                                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" class="input width100P" />
+                                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $instance->token?>" class="input width100P" />
                                 </div>
                                 <div class="clear"></div>
                             </div>    

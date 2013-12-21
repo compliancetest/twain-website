@@ -16,6 +16,7 @@ $isNew = true;
 
 $case = new TestCase($caseID);
 $case->load();
+
 if(!$case->id)
     $isNew = true;
 else
@@ -30,17 +31,18 @@ if(isset($_GET['suite_id']))
     {
         if($r->ID == $_GET['suite_id'])
         {
-            $case->testSuite = $r->ID;
+            $case->testSuite = array($r->ID);
             break;
         }
     }
 }
 
 if(!$case->testSuite && $isNew && count($testsuites) > 0)
-    $case->testSuite = $testsuites[0]->ID;
+    $case->testSuite = array($testsuites[0]->ID);
 
-$suite = new TestSuite($case->testSuite);
-$suite->load();
+$suiteRoles = $case->getAvailableRoles();
+$suiteInitMessages = $case->getAvailableInitMessages();
+
 
 get_header();
 
@@ -58,28 +60,6 @@ get_header();
         <?php }else{ ?>
         <h2>Edit Test Case: <?php $case->name ?></h2>
         <?php } ?>        
-        <div class="grid-box grid-box-expandable grid-box-opened" id="suites-box">
-           <div class="grid-box-header">
-               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Choose Test Suite</h5>
-               <div class="clear"></div>
-           </div>
-           <div class="grid-box-body">
-               <div class="column">
-                   <div class="field-row">
-                       <div class="grid-cell">
-                           <select name="suite_id" id="suite_id" class="select">                           
-                               <?php foreach($testsuites as $row){ ?>
-                               <option value="<?php echo $row->ID?>" <?php echo $case->testSuite == $row->ID ? 'selected="selected"' : ''?>><?php echo apply_filters('the_title', $row->post_title)?></option>
-                               <?php } ?>
-                           </select>                           
-                       </div>
-                       <div class="clear"></div>
-                   </div>
-               </div>
-           </div>
-        </div>
-        <div class="space25"></div>
         <div class="grid-box grid-box-expandable grid-box-opened" id="case-info-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
@@ -138,24 +118,53 @@ get_header();
            </div>
         </div>   
         <div class="space25"></div>
+        <div class="grid-box grid-box-expandable grid-box-opened" id="suites-box">
+           <div class="grid-box-header">
+               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+               <h5 class="left">Choose Test Suite</h5>
+               <div class="clear"></div>
+           </div>
+           <div class="grid-box-body">
+               <div class="column">
+                   <div class="field-row">
+                       <div class="grid-cell" id="suites-cell">
+                           <?php foreach($testsuites as $row){ ?>
+                           <label class="bottom8"><input type="checkbox" name="suite_id[]" id="suite_id<?php echo $row->ID?>" value="<?php echo $row->ID?>" <?php echo in_array($row->ID, $case->testSuite) ? 'checked="checked"' : ''?>> <?php echo apply_filters('the_title', $row->post_title)?></label>
+                           <?php } ?>
+
+                       </div>
+                       <div class="clear"></div>
+                   </div>
+               </div>
+           </div>
+        </div>
+        <div class="space25"></div>
+        
         <div class="grid-box grid-box-expandable grid-box-opened" id="choose-conf-level-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                <h5 class="left">Choose Conformance Level</h5>
                <div class="clear"></div>
            </div>
-           <div class="grid-box-body">
-               <div class="column">
-                   <?php foreach($suite->conformanceLevel as $row){ ?>
-                   <div class="field-row">
-                       <div class="grid-cell radio-cell">
-                           <label><input type="radio" name="conformance_level" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel == $row['code'] ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+           <div class="grid-box-body">               
+               <div class="column">               
+                   <?php foreach($case->testSuite as $sid){ ?>
+                       <p><b><?php echo get_the_title($sid)?></b></p>
+                       <?php
+                           $suiteObj = new TestSuite($sid);
+                           $levels = $suiteObj->loadConformanceLevel();
+                       ?>
+                       <?php foreach($levels as $row){ ?>
+                       <div class="field-row">
+                           <div class="grid-cell radio-cell">
+                               <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array($row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                           </div>
+                           <div class="grid-cell width60P">
+                               <?php echo $row['desc']?>
+                           </div>
+                           <div class="clear"></div>
                        </div>
-                       <div class="grid-cell width60P">
-                           <?php echo $row['desc']?>
-                       </div>
-                       <div class="clear"></div>
-                   </div>
+                       <?php } ?>                   
                    <?php } ?>                   
                </div>
            </div>
@@ -175,7 +184,7 @@ get_header();
                            <select name="choose_tester_role" class="select">
                                <option>- Select -</option>
                                
-                               <?php foreach($suite->roles as $row) {?>
+                               <?php foreach($suiteRoles as $row) {?>
                                <option value="<?php echo $row['name']?>" <?php echo $case->testerRole == $row['name'] ? 'selected="selected"' : ''?>><?php echo $row['name']?></option>
                                <?php } ?>
                            </select>
@@ -184,7 +193,7 @@ get_header();
                            <label>Harness Role:</label>
                            <select name="choose_harness_role" class="select">
                                <option>- Select -</option>
-                               <?php foreach($suite->roles as $row) {?>
+                               <?php foreach($suiteRoles as $row) {?>
                                <option value="<?php echo $row['name']?>" <?php echo $case->harnessRole == $row['name'] ? 'selected="selected"' : ''?>><?php echo $row['name']?></option>
                                <?php } ?>
                            </select>
@@ -212,9 +221,8 @@ get_header();
                        <div class="grid-cell width100P">
                            <select name="choose_init_message" class="select">
                                <option>- Select -</option>
-                               <?php 
-                               $messages = explode(',', $suite->initiatingMessage);
-                               foreach($messages as $row) {?>
+                               <?php                                
+                               foreach($suiteInitMessages as $row) {?>
                                <option value="<?php echo $row?>" <?php echo $case->initiationgMessage == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
                                <?php } ?>
                            </select>
@@ -299,23 +307,36 @@ get_header();
                    </div>
                    <div id="profile-instances">
                    <?php
-                       $profileInstances = $suite->getProfileInstancesRows();
+                       $profileInstances = $case->getAvailableProfileInstances();
                        foreach($profileInstances as $instance){
                            $instanceObj = json_decode(base64_decode($instance->content));
                    ?>
                        <div class="field-row">
                            <div class="grid-cell width15P">
                                <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" <?php echo cp_checked($instance->id, $case->profileInstances) ?> />
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
+                                <?php echo $instance->profile_name?>
+                                <?php
+                                    if($instanceObj->Profile->Version)
+                                    {
+                                        $version = array();
+                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                                        {
+                                            $version[] = $v;
+                                        }
+                                        echo " v" . implode(".", $version);
+                                    }
+                                ?>
+                               </a>
                            </div>
                            <div class="grid-cell width10P">
-                               <label><?php echo $instanceObj->ProfilePurpose?></label>
+                               <label><?php echo $instanceObj->Profile->Purpose?></label>
                            </div>
                            <div class="grid-cell width15P">
                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a> 
                            </div>
                            <div class="grid-cell width45P">
-                               <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" class="input width100P" />
+                               <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $instance->token?>" class="input width100P" />
                            </div>                                                             
                            <div class="clear"></div>
                        </div>              
@@ -559,14 +580,21 @@ jQuery(document).ready(function(){
         return false;
     })
     
-    jQuery('#suite_id').change(function(){
+    jQuery('input[name="suite_id[]"]').change(function(){        
+        if(jQuery('input[name="suite_id[]"]:checked').length < 1)
+        {
+            jQuery('#choose-conf-level-box .column').html('');
+            jQuery('#choose-roles-box select').each(function(){
+                jQuery(this).find('option:gt(0)').remove();
+            })
+            jQuery('#choose-init-msg-box  select option:gt(0)').remove();
+            jQuery('#profile-instances').html('');            
+            return false;
+        }
         jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1').show();
         jQuery.ajax({
             url: '<?php echo get_site_url()?>',
-            data: {
-                'suite_id': jQuery(this).val(),
-                '_wpnonce': '<?php echo wp_create_nonce('get-suite-info-for-case')?>'
-            },
+            data: jQuery('input[name="suite_id[]"]:checked').serialize() + '&_wpnonce=<?php echo wp_create_nonce('get-suite-info-for-case')?>&id=<?php echo $case->id?>',
             type: 'POST',
             dataType: 'xml',
             complete: function(){
@@ -576,7 +604,7 @@ jQuery(document).ready(function(){
             {
                 if(jQuery(rsp).find('status').text() == 'success')
                 {
-                    jQuery('#choose-conf-level-box .field-row').remove();
+                    jQuery('#choose-conf-level-box .column').html('');
                     jQuery('#choose-conf-level-box .column').append(jQuery(rsp).find('conflevel').text());
                     
                     jQuery('#choose-roles-box .grid-cell:lt(2)').remove();
@@ -591,7 +619,7 @@ jQuery(document).ready(function(){
         })
     })
     
-    jQuery('#caseForm').submit(function(){
+    jQuery('#caseForm').submit(function(){                
         jQuery('#saving-wrapper').show();
         jQuery('#edit_test_case_wrapper .grid-box-footer .message').remove();
         jQuery.ajax({

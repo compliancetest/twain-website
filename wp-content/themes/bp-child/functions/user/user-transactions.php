@@ -24,6 +24,7 @@ function cp_edit_transaction_log(){
         //Getting User Products
         $products = getUserProductsAndServices();
         $testCases  = getUserSubscribedCases();
+        $allSuites = getAssociatedSuitesFromCases($testCases);
         
         $result = "";
         ob_start();
@@ -43,13 +44,35 @@ function cp_edit_transaction_log(){
                
                    <select name="case<?php echo $row->ID?>" class="select">
                        <option value="0">Not Assigned</option>
-                       <?php foreach($testCases as $c){ ?>
-                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?>><?php echo cp_wrap($c->post_title, 12)?></option>
+                       <?php foreach($testCases as $c){ 
+                           $tSuiteIDs = get_post_meta($c->ID, 'test_suite');
+                           ?>
+                       <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?> data-suites="<?php echo implode(',', $tSuiteIDs)?>"><?php echo cp_wrap($c->post_title, 12)?></option>
                        <?php } ?>
                    </select>
                </div>
-               <div class="td td-suite td-fixed">
-                   <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 12)?></a>
+               <div class="td td-suite td-fixed" data-id="<?php echo $row->ID?>">
+                   <?php
+                       if($row->TEST_CASE_DB_ID)
+                       {
+                           $cSuiteIDs = get_post_meta($row->TEST_CASE_DB_ID, 'test_suite');
+                           if(count($cSuiteIDs) > 1)
+                           {
+                               ?>
+                               <select name="suite<?php echo $row->ID?>" class="select">
+                               <?php
+                                   foreach($allSuites as $s){
+                                       if(in_array($s->ID, $cSuiteIDs))
+                                           echo '<option value="' . $s->ID . '" ' . ($row->TEST_SUITE_ID == $s->ID ? 'selected="selected"' : '') . '>' . $s->post_title . '</option>';
+                                   }
+                               ?>
+                               </select>
+                               <?php             
+                           }else{
+                               ?><a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 12)?></a><?php
+                           }
+                       }                       
+                   ?>
                </div>
                <div class="td td-outcome tocenter td-fixed">
                    <?php if($row->TEST_OUTCOME_CODE){ ?>
@@ -75,6 +98,12 @@ function cp_edit_transaction_log(){
            </div>                       
             <?php
         }
+        echo '<select id="all-suites" style="display: none">';
+        foreach($allSuites as $s)
+        {
+            echo '<option value="' . $s->ID .'" data-permalink="' . get_permalink($s->ID) . '">' . $s->post_title . '</option>';
+        }
+        echo '</select>';
         $result = ob_get_contents();
         ob_end_clean();
         
@@ -159,11 +188,12 @@ function cp_save_transaction_log()
         {
             $caseDBId = intval($_POST['case' . $row->ID]);
             
-            if($caseDBId > 0){
+            if(isset($_POST['suite' . $row->ID])){
+                $suiteId = $_POST['suite' . $row->ID];
+            }else if($caseDBId > 0){
                 $suiteId = get_post_meta($caseDBId, 'test_suite', true);                
             }else{
                 $suiteId = '';
-                
             }
             
             $productId = get_post_meta($_POST['product' . $row->ID], 'product_id', true);
@@ -358,6 +388,23 @@ function getUserSubscribedCases($user_id = null)
         
         $query .= " AND pm.meta_value IN (" . implode(", ", $suite_ids) . ")";
     }
+    
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+
+function getAssociatedSuitesFromCases($cases)
+{
+    global $wpdb;
+    
+    //Getting Case IDS
+    $ids = array();
+    foreach($cases as $c)
+        $ids[] = $c->ID;
+    
+    $query = "SELECT DISTINCT(p.ID), p.post_title FROM {$wpdb->posts} AS p LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.meta_value AND pm.meta_key='test_suite' WHERE p.post_type='test-suite' AND p.post_status='publish' AND pm.post_id IN (" . implode(", ", $ids) . ")";
     
     $rows = $wpdb->get_results($query);
     

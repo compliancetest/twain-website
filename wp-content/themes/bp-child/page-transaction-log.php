@@ -254,11 +254,15 @@ if($filterCustomer){
                                     <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 10)?></a>
                                     <?php }else if(!$row->TEST_SUITE_ID && $row->TEST_CASE_WP_ID){ ?>
                                     <?php 
-                                        $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite', true); 
-                                        $esb->updateTestSuiteID($row->ID, $tSuiteId);                                        
-                                    ?>
-                                    <a href="<?php echo get_permalink($tSuiteId)?>"><?php echo cp_wrap(get_post_meta($tSuiteId, 'ts_name', true), 10)?></a>
-                                    <?php } ?>                                   
+                                        $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite'); 
+                                        if($tSuiteId && count($tSuiteId) == 1)
+                                        {
+                                            $esb->updateTestSuiteID($row->ID, $tSuiteId[0]);    
+                                            ?>
+                                            <a href="<?php echo get_permalink($tSuiteId[0])?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 10)?></a>
+                                            <?php
+                                        }
+                                    } ?>                                   
                                </div>
                                <div class="td td-outcome tocenter">
                                    <?php if($row->TEST_OUTCOME_CODE){ ?>
@@ -436,6 +440,38 @@ if($filterCustomer){
                             },
                             onLoad: function(){
                                 fixTdHeight(jQuery('#edit-transaction-log-box .table-box'));
+                                jQuery('#edit-transaction-log-box .table-box .tbody .td-suite').each(function(){
+                                    if(jQuery(this).find('select').length > 0)
+                                    {
+                                        jQuery(this).removeClass('td-fixed');
+                                    }
+                                });
+                                jQuery('#edit-transaction-log-box .table-box .tbody .td-case select').change(function(){
+                                    var sids = jQuery(this).find('option:selected').attr('data-suites').split(",");
+                                    var tdSuite = jQuery(this).parent().parent().find('.td-suite');
+                                    if(sids.length > 1)
+                                    {
+                                        tdSuite.removeClass('td-fixed');
+                                        tdSuite.html('<select name="suite' + tdSuite.attr('data-id') + '" class="select"></select>');
+                                        jQuery('#edit-transaction-log-box #all-suites option').each(function(){
+                                            if(sids.indexOf(jQuery(this).val()) > -1)
+                                            {                                                
+                                                tdSuite.find('select').append(jQuery(this).clone());
+                                            }
+                                        })
+                                    }else if(sids.length == 1){
+                                        tdSuite.addClass('td-fixed');
+                                        jQuery('#edit-transaction-log-box #all-suites option').each(function(){
+                                            if(jQuery(this).val() == sids[0])
+                                            {
+                                                tdSuite.html('<a href="' + jQuery(this).attr('data-permalink') + '">' + jQuery(this).text() + '</a>')
+                                            }
+                                        })
+                                    }else{
+                                        tdSuite.addClass('td-fixed');
+                                        tdSuite.html('');
+                                    }
+                                })
                             }
                         });
                     }

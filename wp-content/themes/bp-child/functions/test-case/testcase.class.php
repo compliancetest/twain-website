@@ -72,8 +72,9 @@ class TestCase
             
         $this->name = get_the_title($this->id);
         $this->sequenceNumber = $this->loadSingleValue('sequence_number');
-        $this->testSuite = $this->loadSingleValue('test_suite');
-        $this->conformanceLevel = $this->loadSingleValue('conformance_level');
+        $this->testSuite = $this->loadValues('test_suite');
+        
+        $this->conformanceLevel = $this->loadValues('conformance_level');
         $this->testerRole = $this->loadSingleValue('choose_tester_role');
         $this->harnessRole = $this->loadSingleValue('choose_harness_role');
         $this->Initiator = $this->loadSingleValue('choose_initiator');
@@ -222,6 +223,11 @@ class TestCase
         return cp_get_post_meta($this->id, $key, true);
     }
     
+    public function loadValues($key)
+    {
+        return cp_get_post_meta($this->id, $key);
+    }
+    
     
     public function getAvailableTestSuites()
     {
@@ -254,4 +260,87 @@ class TestCase
         
         return $testsuites;
     }
+    
+    public function getAvailableRoles()
+    {
+        $roles = array();
+        
+        foreach($this->testSuite as $sid)
+        {
+            $roleNames = cp_get_post_meta($sid, 'role_names', true);
+            $roleDescs = cp_get_post_meta($sid, 'role_descs', true);
+            
+            if(!$roleNames)
+            {
+                continue;
+            }else{        
+                $arrName = explode('|', $roleNames);
+                $arrDescs = explode('|', $roleDescs);
+                
+                foreach($arrName as $i=>$n)
+                {
+                    if(!$arrName[$i])
+                        continue;
+                    
+                    if(!in_array(array('name' => $arrName[$i], 'desc' => $arrDescs[$i]), $roles))
+                    {
+                        $roles[] = array('name' => $arrName[$i], 'desc' => $arrDescs[$i]);    
+                    }
+                    
+                }
+            }    
+        }
+        
+        $this->availableRoles = $roles;
+        
+        return $roles;
+    }
+    
+    public function getAvailableInitMessages()
+    {
+        $messages = array();
+        
+        foreach($this->testSuite as $sid)
+        {
+            $msgs = explode(',',  cp_get_post_meta($sid, 'init_message', true));
+            foreach($msgs as $m)
+            {
+                if(!trim($m) || in_array(trim($m), $messages))
+                    continue;
+                    
+                $messages[] = trim($m);
+            }
+        }
+        
+        $this->availableInitMessages = $messages;
+        
+        return $messages;
+    }
+    
+    public function getAvailableProfileInstances()
+    {
+        global $wpdb;
+                
+        $instances = array();
+        
+        foreach($this->testSuite as $sid)
+        {
+            $types = cp_get_post_meta($sid, 'ts_profile_types', true);
+            $types = cp_explode($types);
+            
+            $ids = $wpdb->escape($types);    
+            
+            $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.type='harness' AND pt.id IN (" . implode(", ", $ids) . ")";                    
+            $rows = $wpdb->get_results($query);
+            
+            foreach($rows as $row)
+            {
+                $instances[$row->id] = $row;
+            }
+            
+        }
+        
+        return $instances;
+    }
+    
 }

@@ -150,28 +150,42 @@ function getTestSuiteInfoForCase()
 {
     $suiteID = $_POST['suite_id'];
     
-    $suite = new TestSuite($suiteID);
-        
-    $suite->load();
-    
-    if(!$suite->id)
+    if(!$suiteID)
     {
         echo '<result><status>error</status></result>';
     }else{
+        if(!is_array($suiteID))
+            $suiteID = array($suiteID);
+        
+        $case = new TestCase($_POST['id']);
+        $case->load();
+        
+        $case->testSuite = $suiteID;
+        
+        $suiteRoles = $case->getAvailableRoles();
+        $suiteInitMessages = $case->getAvailableInitMessages();
+        
         $confLevelHTML = '';
         ob_start();
         ?>
-        <?php foreach($suite->conformanceLevel as $row){ ?>
-       <div class="field-row">
-           <div class="grid-cell radio-cell">
-               <label><input type="radio" name="conformance_level" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel == $row['code'] ? 'selected="selected"' : ''?> /> <?php echo $row['code']?></label>
+        <?php foreach($case->testSuite as $sid){ ?>
+           <p><b><?php echo get_the_title($sid)?></b></p>
+           <?php
+               $suiteObj = new TestSuite($sid);
+               $levels = $suiteObj->loadConformanceLevel();
+           ?>
+           <?php foreach($levels as $row){ ?>
+           <div class="field-row">
+               <div class="grid-cell radio-cell">
+                   <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array($row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+               </div>
+               <div class="grid-cell width60P">
+                   <?php echo $row['desc']?>
+               </div>
+               <div class="clear"></div>
            </div>
-           <div class="grid-cell width60P">
-               <?php echo $row['desc']?>
-           </div>
-           <div class="clear"></div>
-       </div>
-       <?php } ?>
+           <?php } ?>                   
+        <?php } ?>     
         <?php
         $confLevelHTML = ob_get_clean();
         ob_end_clean();
@@ -179,10 +193,11 @@ function getTestSuiteInfoForCase()
         $rolesHTML = '';
         ?>
         <div class="grid-cell">
-           <label>Tester Role:</label>
+           <label>Tester Role:</label>                           
            <select name="choose_tester_role" class="select">
                <option>- Select -</option>
-               <?php foreach($suite->roles as $row) {?>
+               
+               <?php foreach($suiteRoles as $row) {?>
                <option value="<?php echo $row['name']?>" <?php echo $case->testerRole == $row['name'] ? 'selected="selected"' : ''?>><?php echo $row['name']?></option>
                <?php } ?>
            </select>
@@ -191,7 +206,7 @@ function getTestSuiteInfoForCase()
            <label>Harness Role:</label>
            <select name="choose_harness_role" class="select">
                <option>- Select -</option>
-               <?php foreach($suite->roles as $row) {?>
+               <?php foreach($suiteRoles as $row) {?>
                <option value="<?php echo $row['name']?>" <?php echo $case->harnessRole == $row['name'] ? 'selected="selected"' : ''?>><?php echo $row['name']?></option>
                <?php } ?>
            </select>
@@ -205,9 +220,8 @@ function getTestSuiteInfoForCase()
         ?>
         <select name="choose_init_message" class="select">
            <option>- Select -</option>
-           <?php 
-           $messages = explode(',', $suite->initiatingMessage);
-           foreach($messages as $row) {?>
+           <?php                                
+           foreach($suiteInitMessages as $row) {?>
            <option value="<?php echo $row?>" <?php echo $case->initiationgMessage == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
            <?php } ?>
        </select>
@@ -218,23 +232,36 @@ function getTestSuiteInfoForCase()
         //Getting Profile Instances
         $profilesHTML = '';
         ob_start();
-        $profileInstances = getCommunityProfileInstatnces($suite->community_id);
+        $profileInstances = $case->getAvailableProfileInstances();
            foreach($profileInstances as $instance){
-               $instanceObj = json_decode(base64_decode($instance->content));
+           $instanceObj = json_decode(base64_decode($instance->content));
        ?>
            <div class="field-row">
                <div class="grid-cell width15P">
-                   <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" />
-                   <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>
+                   <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" <?php echo cp_checked($instance->id, $case->profileInstances) ?> />
+                   <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
+                   <?php echo $instance->profile_name?>
+                   <?php
+                        if($instanceObj->Profile->Version)
+                        {
+                            $version = array();
+                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                            {
+                                $version[] = $v;
+                            }
+                            echo " v" . implode(".", $version);
+                        }
+                    ?>
+                   </a>
                </div>
                <div class="grid-cell width10P">
-                   <label><?php echo $instanceObj->ProfilePurpose?></label>
+                   <label><?php echo $instanceObj->Profile->Purpose?></label>
                </div>
                <div class="grid-cell width15P">
                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a> 
                </div>
                <div class="grid-cell width45P">
-                   <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/profiles/<?php echo $instance->type?>/<?php echo $instance->filename?>" class="input width100P" />
+                   <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $instance->token?>" class="input width100P" />
                </div>                                                             
                <div class="clear"></div>
            </div>              
@@ -278,8 +305,17 @@ function saveCase()
         exit;
     }
     
+    if(!$_POST['suite_id'])
+    {
+        echo json_encode(array('status' => 'error', 'message' => 'Please select a test suite.'));
+        exit;
+    }
+    
     $suiteID = $_POST['suite_id'];
-    $community_id = get_post_meta($suiteID, 'community_id', true);
+    if(!is_array($suiteID))
+        $suiteID = array($suiteID);
+        
+    $community_id = get_post_meta($suiteID[0], 'community_id', true);
     $user_id = get_current_user_id();
     if(!$community_id || (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
@@ -347,10 +383,16 @@ function saveCase()
     
     $esb = new ManageESB();
     $esb->saveTestCaseInfo($id, $case_title, $_POST['outcome_type'], $_POST['message_count']);        
-        
+    
+    delete_post_meta($id, 'test_suite');
+    delete_post_meta($id, 'conformance_level');
     //update post metas
-    cp_update_post_meta($id, 'test_suite', $suiteID);    
-    cp_update_post_meta($id, 'conformance_level', $_POST['conformance_level']);
+    foreach($suiteID as $sid)
+    {
+        add_post_meta($id, 'test_suite', $sid);   
+        if(isset($_POST['conformance_level' . $sid]))     
+            add_post_meta($id, 'conformance_level', $_POST['conformance_level' . $sid]);
+    }
 
     cp_update_post_meta($id, 'published', $_POST['published']);
     
