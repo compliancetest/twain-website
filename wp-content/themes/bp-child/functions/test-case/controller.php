@@ -20,50 +20,40 @@ function do_test_case_admin_ajax_action()
         //Check _wpnounce
         if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_roles'))
         {   
-            $suiteRoles = getTestSuiteRoles($_POST['suite_id']);
+            $case = new TestCase($postID);            
+            $case->testSuite = $_POST['suite_id'];
+            
+            $allRoles = $case->getAvailableRoles();            
+            
             echo '<option value="">Choose Tester Role</option>';
-            foreach($suiteRoles as $role){            
+            foreach($allRoles as $role){            
                 echo '<option value="'. $role['name']. '"  class="'.$test_suite.'">'.$role['name'].'</option>';                        
             }    
             exit;
-        }else if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_init_messages')){   
-            $metas_result = get_post_meta($_POST['suite_id'], 'init_message', true);
-            echo '<select name="choose_init_messages" id="checkinitmsg">';
-            echo '<option value="">Choose Initiating Message</option>';
-            $metas_array = explode(',', $metas_result);
-            if($metas_result)
-            {
-                foreach($metas_array as $ts_init_message){
-                    echo '<option value="'.$ts_init_message.'">'.$ts_init_message.'</option>';             
-                }
-            }
-            echo '</select>';
-            exit;
         }else if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_conf_level')){   
-            $metas_result = get_post_meta($_POST['suite_id'], 'lvl_code', true);
-            echo '<select name="conformance_level" id="checkconflvl">';
-            echo '<option value="">Choose Conformance Level</option>';
             
-            if($metas_result)
-            {
-                foreach($metas_result as $v){
-                    echo '<option value="'.$v.'">'.$v.'</option>';             
-                }
+            foreach ($_POST['suite_id'] as $test_suite){
+                echo "<b>" . get_the_title($test_suite) . "</b><br />";
+                $suiteObj = new TestSuite($test_suite);
+                $levels = $suiteObj->loadConformanceLevel();
+                echo '<select name="conformance_level' . $test_suite . '" id="checkconflvl">';
+                echo '<option value="">Choose Conformance Level</option>';                
+                foreach($levels as $row){
+                    echo '<option value="'. $row['code'] .'">'.$row['code'].'</option>';        
+                }    
+                echo '</select><br /><br />';
             }
-            echo '</select>';
             exit;
         }else if(wp_verify_nonce($_POST['_wpnonce'], 'get_init_message')){   
-            $metas_result = get_post_meta($_POST['suite_id'], 'init_message', true);
-            $metas_result = explode(',', $metas_result);
+            $case = new TestCase($postID);            
+            $case->testSuite = $_POST['suite_id'];
+            $initMessages = $case->getAvailableInitMessages();
             echo '<select name="choose_init_messages" id="checkinitmsg">';
-            echo '<option value="">Choose Initiating Message</option>';
-            
-            if($metas_result)
-            {
-                foreach($metas_result as $v){
-                    echo '<option value="'.$v.'">'.$v.'</option>';             
-                }
+            echo '<option value="">Choose Initiating Message</option>';            
+            foreach($initMessages as $msg){
+                echo '<option value="'.$msg.'">'.$msg.'</option>';             
             }
+            
             echo '</select>';
             exit;
         }
@@ -75,7 +65,7 @@ function do_test_case_admin_ajax_action()
 //Get selected test suites of the test case
 function _get_current_test_suite($test_case_id)
 {
-      return get_post_meta($test_case_id, 'test_suite', true);
+      return get_post_meta($test_case_id, 'test_suite');
 
 }
 

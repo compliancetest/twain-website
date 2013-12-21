@@ -23,20 +23,29 @@ function checkCurrentUserCapability()
             return true;
         
         $suiteID = _get_current_test_suite(get_the_ID());
-        $redirect = get_permalink($suiteID);
-        $groupID = get_post_meta($suiteID, 'community_id', true);
-        $group = groups_get_group(array('group_id' => $groupID));
+        
         
         if(is_user_logged_in())
         {
             //Get Test Suite Id
             if($suiteID){
                 //check Community Member
-                if(groups_is_user_member(get_current_user_id(), $groupID))            
+                foreach($suiteID as $sid)
                 {
-                    return true;
-                }                
+                    $redirect = get_permalink($sid);
+                    
+                    $groupID = get_post_meta($sid, 'community_id', true);
+                    $group = groups_get_group(array('group_id' => $groupID));        
+                    
+                    if(groups_is_user_member(get_current_user_id(), $groupID))            
+                    {
+                        return true;
+                    }                
+                }
             }        
+        }else{
+            $groupID = get_post_meta($suiteID[0], 'community_id', true);
+            $group = groups_get_group(array('group_id' => $groupID)); 
         }
         addMessage('You must join the community to view Test Case details. Go to the <a href="' . bp_get_group_permalink($group) . '">Community Home Page</a> to join', 'notice');
         wp_redirect($redirect);
@@ -172,11 +181,15 @@ function can_edit_test_case($caseID, $user_id = null)
     if(!$suiteID)
         return false;
     //Check if the user is the admin of the Community
-    $comunity_id = get_post_meta($suiteID, 'community_id', true);
-    if(groups_is_user_admin($user_id, $comunity_id))
+    foreach($suiteID as $sID)
     {
-        return true;
+        $comunity_id = get_post_meta($sID, 'community_id', true);
+        if(groups_is_user_admin($user_id, $comunity_id))
+        {
+            return true;
+        }    
     }
+    
     
     return false;
 }
@@ -195,13 +208,15 @@ function can_delete_test_case($caseID, $user_id = null)
     $suiteID = _get_current_test_suite($caseID);
     if(!$suiteID)
         return false;
-    //Check if the user is the admin of the Community
-    $comunity_id = get_post_meta($suiteID, 'community_id', true);
-    if(groups_is_user_admin($user_id, $comunity_id))
+    foreach($suiteID as $sID)
     {
-        return true;
+        //Check if the user is the admin of the Community
+        $comunity_id = get_post_meta($sID, 'community_id', true);
+        if(groups_is_user_admin($user_id, $comunity_id))
+        {
+            return true;
+        }
     }
-    
     return false;
 }
 

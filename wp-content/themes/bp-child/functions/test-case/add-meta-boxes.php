@@ -9,12 +9,12 @@ add_action('admin_init', 'add_test_cases_metaboxes');
 
 function add_test_cases_metaboxes(){        
     add_meta_box("select_test_suites_metabox", "Select Test Suite", 'test_case_test_suites_metabox_html', "test-case", "normal", "high");
-    add_meta_box("test_execution_metabox", "Test Execution", 'test_case_test_execution_metabox_html', "test-case", "normal", "high");
-    add_meta_box("test_data_metabox", "Test Data", 'test_case_test_data_metabox_html', "test-case", "normal", "high");
-    add_meta_box("test_steps_metabox", "Test Steps 2", 'test_case_test_step2_metabox_html', "test-case", "normal", "high");
     add_meta_box("choose_initiating_message_metabox", "Choose Initiating Message", 'test_case_choose_initiating_message_metabox_html','test-case',"normal","high");
     add_meta_box("choose_roles_metabox", "Choose Roles", 'test_case_choose_roles_metabox_html','test-case',"normal","high");
     add_meta_box("choose_level_metabox", "Choose Conformance Level", 'test_case_conformance_level_metabox_html','test-case',"normal","high");
+    add_meta_box("test_execution_metabox", "Test Execution", 'test_case_test_execution_metabox_html', "test-case", "normal", "high");
+    add_meta_box("test_data_metabox", "Test Data", 'test_case_test_data_metabox_html', "test-case", "normal", "high");
+    add_meta_box("test_steps_metabox", "Test Steps 2", 'test_case_test_step2_metabox_html', "test-case", "normal", "high");    
     add_meta_box("execution_sequence_number", "Execution Sequence Number", 'execution_sequence_number_metabox_html','test-case',"side","high");
 }
 
@@ -44,16 +44,13 @@ function test_case_test_suites_metabox_html(){
 //            continue;
     ?>
     <div class="elem-ts"> <div class="elem-ts">
-        <select name="test_suite" class="testsuite_values">
-            <option value="">Select Test Suites</option>
             <?php
             foreach($testsuites as $testsuite){
                  ?>
-                 <option <?php if ($testsuite->ID == $current_test_suite) { echo 'selected="selected"'; }; ?> value="<?php echo $testsuite->ID; ?>" style="margin-right: 5px; margin-bottom: 5px;"><?php echo $testsuite->post_title; ?> </option>
+                 <label><input type="checkbox" name="suite_id[]" class="testsuite_values" <?php if (in_array($testsuite->ID, $current_test_suite)) { echo 'checked="checked"'; }; ?> value="<?php echo $testsuite->ID; ?>" /><?php echo $testsuite->post_title; ?> </label><br />
                 <?php
             }
             ?>
-        </select>
         <!--<div class="button remove_ts left">Remove Test Suite</div>-->
     </div> </div>    
     <?php 
@@ -77,7 +74,7 @@ function test_case_test_suites_metabox_html(){
             });
             //Select Test Suite, Show Roles & Initiating Message
             
-            if (jQuery(".testsuite_values").val() ==''){
+            if (jQuery(".testsuite_values:checked").length == 0){
                 jQuery("#choose_roles_metabox .inside #tester_role").html('<b>Tester Role</b><br />First choose a test suite');
                 jQuery("#choose_roles_metabox .inside #harness_role").html('<b>Harness Role</b><br />First choose a test suite');
                 jQuery("#choose_initiating_message_metabox .inside").html('First choose a test suite');
@@ -91,7 +88,13 @@ function test_case_test_suites_metabox_html(){
             var checkElem3 = jQuery('#checkconflvl').size() > 0 ? 1 : 0;
             
             jQuery(document).on('change', '.testsuite_values', function(){
-                
+                if (jQuery(".testsuite_values:checked").length == 0){
+                    jQuery("#choose_roles_metabox .inside #tester_role").html('<b>Tester Role</b><br />First choose a test suite');
+                    jQuery("#choose_roles_metabox .inside #harness_role").html('<b>Harness Role</b><br />First choose a test suite');
+                    jQuery("#choose_initiating_message_metabox .inside").html('First choose a test suite');
+                    jQuery("#choose_level_metabox .inside").html('First choose a test suite');
+                    return false;
+                }
                 checkElem_tester = jQuery('#choose_tester_role').size() > 0 ? 1 : 0;
                 checkElem_harness = jQuery('#checkharness').size() > 0 ? 1 : 0;
                 checkElem_initiator = jQuery('#checkinitiator').size() > 0 ? 1 : 0;
@@ -100,16 +103,9 @@ function test_case_test_suites_metabox_html(){
                 
                 var testsuite_val = jQuery(this).val();
                 
-                //Tester Role
-                var fields = {
-                        suite_id: testsuite_val,                        
-                        post_id: '<?php echo $post->ID?>',
-                        '_wpnonce': '<?php echo wp_create_nonce('get_suite_roles')?>'
-                    }
-                
                 jQuery.ajax({
                     url: '',
-                    data: fields,
+                    data: jQuery('.testsuite_values').serialize() + '&post_id=<?php echo $post->ID?>&_wpnonce=<?php echo wp_create_nonce('get_suite_roles')?>',
                     type:'POST',
                     success: function(data){
                         jQuery("#choose_roles_metabox .inside #tester_role").html('<label for="choose_tester_role"><b>Tester Role</b></label><br /><select name="choose_tester_role" id="choose_tester_role">' + data + '</select>');
@@ -121,14 +117,9 @@ function test_case_test_suites_metabox_html(){
                 });
                 
                 //Level Code
-                var fields3 = {
-                        suite_id: testsuite_val,                        
-                        post_id: '<?php echo $post->ID?>',
-                        '_wpnonce': '<?php echo wp_create_nonce('get_init_message')?>'
-                    }
                 jQuery.ajax({
                     url: '',
-                    data: fields3,
+                    data: jQuery('.testsuite_values').serialize() + '&post_id=<?php echo $post->ID?>&_wpnonce=<?php echo wp_create_nonce('get_init_message')?>',
                     type:'POST',
                     success: function(data){                        
                         jQuery("#choose_initiating_message_metabox .inside").html(data);
@@ -138,15 +129,9 @@ function test_case_test_suites_metabox_html(){
                     }
                 });
                 
-                //Level Code
-                var fields3 = {
-                        suite_id: testsuite_val,                        
-                        post_id: '<?php echo $post->ID?>',
-                        '_wpnonce': '<?php echo wp_create_nonce('get_suite_conf_level')?>'
-                    }
                 jQuery.ajax({
                     url: '',
-                    data: fields3,
+                    data: jQuery('.testsuite_values').serialize() + '&post_id=<?php echo $post->ID?>&_wpnonce=<?php echo wp_create_nonce('get_suite_conf_level')?>',
                     type:'POST',
                     success: function(data){                        
                         jQuery("#choose_level_metabox .inside").html(data);
@@ -165,30 +150,18 @@ function test_case_test_suites_metabox_html(){
 function test_case_choose_initiating_message_metabox_html(){
     global $post;
     
-    
-    $current_test_suite = _get_current_test_suite($post->ID);
+    $testCase = new TestCase($post->ID);
+    $testCase->testSuite = _get_current_test_suite($post->ID);
+    $allInitMessages = $testCase->getAvailableInitMessages();
     
     $current_init_message = cp_get_post_meta($post->ID, 'choose_init_messages', true);
     
     $all_init_messages = array();
     echo '<select name="choose_init_messages" id="checkinitmsg">';
     echo '<option value="">Choose Initiating Message</option>';
-//    foreach ($current_test_suite as $test_suite){
-        $metas_result = cp_get_post_meta($current_test_suite, 'init_message', true);
-        $metas_array = explode(',', $metas_result);
-        foreach($metas_array as $ts_init_message){
-            if(!in_array($ts_init_message,$all_init_messages)){
-                if($ts_init_message == $current_init_message){
-                    $selected_init_message = 'selected = "selected"';
-                }
-                else {
-                    $selected_init_message = '';
-                }
-            echo '<option value="'.$ts_init_message.'" '.$selected_init_message.'>'.$ts_init_message.'</option>';
-            array_push($all_init_messages,$ts_init_message);
-            }
-        }    
-//    }
+    foreach($allInitMessages as $initMessage){
+        echo '<option value="'. $initMessage .'" '. ($current_init_message == $initMessage) .'>'.$initMessage.'</option>';            
+    }    
     echo '</select>';
     
 }
@@ -199,35 +172,33 @@ function test_case_conformance_level_metabox_html(){
     
     $current_test_suite = _get_current_test_suite($post->ID);
     
-    $current_conformance_level = cp_get_post_meta($post->ID, 'conformance_level', true);
-    $all_conf_level = array();
-    echo '<select name="conformance_level" id="checkconflvl">';
-    echo '<option value="">Choose Conformance Level</option>';
-//    foreach ($current_test_suite as $test_suite){
-        $metas_array = cp_get_post_meta($current_test_suite, 'lvl_code', true);
-        //$metas_array = explode(',', $metas_result);
-        foreach($metas_array as $ts_lvl){
-            if(!in_array($ts_lvl,$all_conf_level)){
-                if($ts_lvl == $current_conformance_level){
-                    $selected_conf_lvl = 'selected = "selected"';
-                }
-                else {
-                    $selected_conf_lvl = '';
-                }
-            echo '<option value="'.$ts_lvl.'" '.$selected_conf_lvl.'>'.$ts_lvl.'</option>';
-            array_push($all_conf_level,$ts_lvl);
-            }
+    $current_conformance_level = cp_get_post_meta($post->ID, 'conformance_level');
+    
+    foreach ($current_test_suite as $test_suite){
+        echo "<b>" . get_the_title($test_suite) . "</b><br />";
+        echo '<select name="conformance_level" id="checkconflvl">';
+        echo '<option value="">Choose Conformance Level</option>';
+        
+        $suiteObj = new TestSuite($test_suite);
+        $levels = $suiteObj->loadConformanceLevel();
+        
+        foreach($levels as $row){
+            echo '<option value="'. $row['code'] .'" '.(in_array($row['code'], $current_conformance_level) ? 'selected="selected"' : '').'>'.$row['code'].'</option>';        
         }    
-//    }
-    echo '</select>';
-    $post = $post_backup;
+        echo '</select><br /><br />';
+    }
+    
 }
 
 function test_case_choose_roles_metabox_html(){
     global $post;
-    $post_backup = $post;
+    
+    $case = new TestCase($post->ID);
     
     $current_test_suite = _get_current_test_suite($post->ID);
+    $case->testSuite = $current_test_suite;
+    
+    $allRoles = $case->getAvailableRoles();
     
     //Current Roles Selected
     $current_tester_role = cp_get_post_meta($post->ID, 'choose_tester_role', true);
@@ -238,38 +209,18 @@ function test_case_choose_roles_metabox_html(){
     echo '<div id="tester_role"><label for="choose_tester_role"><b>Tester Role</b></label><br />';
     echo '<select name="choose_tester_role" id="choose_tester_role">';
     echo '<option value="">Choose Tester Role</option>';
-//    foreach ($current_test_suite as $test_suite){
-        $suiteRoles = getTestSuiteRoles($current_test_suite);
-        
-        foreach($suiteRoles as $role){            
-            if($role['name'] == $current_tester_role){
-                $selected_tester_role = 'selected = "selected"';
-            }
-            else {
-                $selected_tester_role = '';
-            }
-            echo '<option value="'.$role['name'].'" '.$selected_tester_role.' >'.$role['name'].'</option>';                        
-        }    
-//    }
+    foreach($allRoles as $role){                        
+        echo '<option value="'.$role['name'].'" '. ($role == $current_tester_role ? 'selected="selected"' : '') .' >'.$role['name'].'</option>';                        
+    }    
     echo '</select> </div> <br />';
     
     //Harness Role
     echo '<div id="harness_role"><label for="choose_harness_role"><b>Harness Role</b></label><br />';
     echo '<select name="choose_harness_role" id="choose_harness_role">';
     echo '<option value="">Choose Harness Role</option>';
-//    foreach ($current_test_suite as $test_suite){
-        
-        
-        foreach($suiteRoles as $role){            
-            if($role['name'] == $current_harness_role){
-                $selected_tester_role = 'selected = "selected"';
-            }
-            else {
-                $selected_tester_role = '';
-            }
-            echo '<option value="'.$role['name'].'" '.$selected_tester_role.' class="'.$test_suite.'">'.$role['name'].'</option>';                        
-        }   
-//    }
+    foreach($allRoles as $role){                        
+        echo '<option value="'.$role['name'].'" '. ($role == $current_harness_role ? 'selected="selected"' : '') .' >'.$role['name'].'</option>';                        
+    } 
     echo '</select> </div> <br />';
     
     $current_initiator = cp_get_post_meta($post->ID, 'choose_initiator', true);
