@@ -138,6 +138,7 @@ function create_email_management_page()
                         <li><a href="#membership-request-approved">Membership Request Approved</a></li>       
                         <li><a href="#membership-request-rejected">Membership Request Rejected</a></li>       
                         <li><a href="#member-leave-community">Member Leave Community</a></li>                               
+                        <li><a href="#remove-member-from-community">Remove Member</a></li>                               
                         
                         <li class="tab-separator">Suite & Case Section</li>
                         <li><a href="#suite-changed">Test Suite Changed</a></li>
@@ -804,6 +805,58 @@ function create_email_management_page()
                         </tbody>
                     </table>
                 </div>
+                <div id="remove-member-from-community">
+                <?php
+                    $remove_member_email_title = get_option('remove_member_email_title');
+                    $remove_member_email_content = get_option('remove_member_email_content');
+                    $remove_member_admin_email_title = get_option('remove_member_admin_email_title');
+                    $remove_member_admin_email_content = get_option('remove_member_admin_email_content');
+                    
+                ?>
+                    <h3>Remove Member From Community</h3>
+                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="remove_member_email_title" id="remove_member_email_title" value="<?php echo $remove_member_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($remove_member_email_content, 'remove_member_email_content', array('media_buttons' => false)) ?>     
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="remove_member_admin_email_title" id="remove_member_admin_email_title" value="<?php echo $remove_member_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($remove_member_admin_email_content, 'remove_member_admin_email_content', array('media_buttons' => false)) ?>     
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
                 <div id="forgot-password">
                 <?php
                     $forgot_password_email_title = get_option('forgot_password_email_title');
@@ -1244,6 +1297,15 @@ function save_email_templates()
           update_option('membership_request_rejected_admin_email_title', $membership_request_rejected_admin_email_title);          
           $membership_request_rejected_admin_email_content = stripslashes_deep($_POST['membership_request_rejected_admin_email_content']);
           update_option('membership_request_rejected_admin_email_content', $membership_request_rejected_admin_email_content);
+          
+          $remove_member_email_title = htmlentities(stripslashes_deep($_POST['remove_member_email_title']));
+          update_option('remove_member_email_title', $remove_member_email_title);          
+          $remove_member_email_content = stripslashes_deep($_POST['remove_member_email_content']);
+          update_option('remove_member_email_content', $remove_member_email_content);
+          $remove_member_admin_email_title = htmlentities(stripslashes_deep($_POST['remove_member_admin_email_title']));
+          update_option('remove_member_admin_email_title', $remove_member_admin_email_title);          
+          $remove_member_admin_email_content = stripslashes_deep($_POST['remove_member_admin_email_content']);
+          update_option('remove_member_admin_email_content', $remove_member_admin_email_content);
           
           
           

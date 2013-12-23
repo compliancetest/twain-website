@@ -369,14 +369,27 @@ function cp_groups_screen_group_admin_manage_members()
                     if ( !groups_remove_member( $userID, $bp->groups->current_group->id ) )
                         $failure[] = cp_get_user_fullname($userID);
                         
-                    else
+                    else{
                         $success[] = cp_get_user_fullname($userID);                    
+                        //Send Email
+                        $user = get_userdata($userID);
+                        $emailData = array(
+                            '[community]' => bp_get_group_name($bp->groups->current_group),
+                            '[community_url]' => bp_get_group_permalink($bp->groups->current_group),
+                            '[name]' => cp_get_user_fullname($user_id),
+                            '[email]' => $user->user_email,
+                            '[username]' => $user->user_login
+                        );
+                        cp_send_email(array('name' => $emailData['name'], 'email' => $emailData['email']), 'remove_member', $emailData);
+                        cp_send_email_to_community_admin($bp->groups->current_group->id, 'remove_member_admin', $emailData);
+                    }
 
                     do_action( 'groups_removed_member', $userID, $bp->groups->current_group->id );
                 }
                 //Set Error Message
-                if(count($success) > 0)
-                    addMessage('The user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . ' removed successfully.');
+                if(count($success) > 0){
+                    addMessage('The user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . ' removed successfully.');                    
+                }
                 if(count($failure) > 0)
                     addMessage('There was an error removing the user' . (count($success) > 1 ? 's ' :' ') . implode(', ', $success) . " from the group", 'error');                
                 
