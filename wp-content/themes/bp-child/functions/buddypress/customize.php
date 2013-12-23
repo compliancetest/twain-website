@@ -380,7 +380,8 @@ function cp_groups_screen_group_admin_manage_members()
                             '[email]' => $user->user_email,
                             '[username]' => $user->user_login
                         );
-                        cp_send_email(array('name' => $emailData['name'], 'email' => $emailData['email']), 'remove_member', $emailData);
+                        
+                        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'remove_member', $emailData);
                         cp_send_email_to_community_admin($bp->groups->current_group->id, 'remove_member_admin', $emailData);
                     }
 
