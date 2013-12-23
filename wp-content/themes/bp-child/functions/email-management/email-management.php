@@ -675,6 +675,9 @@ function create_email_management_page()
                 <?php
                     $membership_request_approved_email_title = get_option('membership_request_approved_email_title');
                     $membership_request_approved_email_content = get_option('membership_request_approved_email_content');
+                    $membership_request_approved_admin_email_title = get_option('membership_request_approved_admin_email_title');
+                    $membership_request_approved_admin_email_content = get_option('membership_request_approved_admin_email_content');
+                    
                 ?>
                     <h3>Membership Request Approved</h3>
                     <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
@@ -698,12 +701,34 @@ function create_email_management_page()
                                 </td>
                             </tr>
                         </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="membership_request_approved_admin_email_title" id="membership_request_approved_admin_email_title" value="<?php echo $membership_request_approved_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($membership_request_approved_admin_email_content, 'membership_request_approved_admin_email_content', array('media_buttons' => false)) ?>     
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div id="membership-request-rejected">
                 <?php
                     $membership_request_rejected_email_title = get_option('membership_request_rejected_email_title');
                     $membership_request_rejected_email_content = get_option('membership_request_rejected_email_content');
+                    $membership_request_rejected_admin_email_title = get_option('membership_request_rejected_admin_email_title');
+                    $membership_request_rejected_admin_email_content = get_option('membership_request_rejected_admin_email_content');
+                    
                 ?>
                     <h3>Membership Request Rejected</h3>
                     <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
@@ -727,6 +752,26 @@ function create_email_management_page()
                                 </td>
                             </tr>
                         </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="membership_request_rejected_admin_email_title" id="membership_request_rejected_admin_email_title" value="<?php echo $membership_request_rejected_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($membership_request_rejected_admin_email_content, 'membership_request_rejected_admin_email_content', array('media_buttons' => false)) ?>     
+                                </td>
+                            </tr>
+                        </tbody>
+                        
                     </table>
                 </div>
                 
@@ -1124,8 +1169,7 @@ function create_email_management_page()
       </form>
       <script type="text/javascript">
             jQuery(document).ready(function(){
-                jQuery('#emails').tabs({"active": "<?php echo isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 0?>"});
-                    
+                jQuery('#emails').tabs({"active": "<?php echo isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 0?>"});                    
             })
             function saveEmailTemplates()
             {
@@ -1186,11 +1230,20 @@ function save_email_templates()
           update_option('membership_request_approved_email_title', $membership_request_approved_email_title);          
           $membership_request_approved_email_content = stripslashes_deep($_POST['membership_request_approved_email_content']);
           update_option('membership_request_approved_email_content', $membership_request_approved_email_content);
+          $membership_request_approved_admin_email_title = htmlentities(stripslashes_deep($_POST['membership_request_approved_admin_email_title']));
+          update_option('membership_request_approved_admin_email_title', $membership_request_approved_admin_email_title);          
+          $membership_request_approved_admin_email_content = stripslashes_deep($_POST['membership_request_approved_admin_email_content']);
+          update_option('membership_request_approved_admin_email_content', $membership_request_approved_admin_email_content);
+          
           
           $membership_request_rejected_email_title = htmlentities(stripslashes_deep($_POST['membership_request_rejected_email_title']));
           update_option('membership_request_rejected_email_title', $membership_request_rejected_email_title);          
           $membership_request_rejected_email_content = stripslashes_deep($_POST['membership_request_rejected_email_content']);
           update_option('membership_request_rejected_email_content', $membership_request_rejected_email_content);
+          $membership_request_rejected_admin_email_title = htmlentities(stripslashes_deep($_POST['membership_request_rejected_admin_email_title']));
+          update_option('membership_request_rejected_admin_email_title', $membership_request_rejected_admin_email_title);          
+          $membership_request_rejected_admin_email_content = stripslashes_deep($_POST['membership_request_rejected_admin_email_content']);
+          update_option('membership_request_rejected_admin_email_content', $membership_request_rejected_admin_email_content);
           
           
           
@@ -1412,6 +1465,30 @@ function cp_send_email_to_admin($template_name, $data = array())
     cp_send_email($to, $template_name, $data);
 }
 
+function cp_send_email_to_community_admin($communities, $template_name, $data = array())
+{
+    global $bp, $wpdb;
+    
+    //Getting Community Admins
+    if(is_array($communities))
+        $query = "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id IN (" . implode(", ", $communities) . ") AND p.is_admin = 1 AND p.is_banned = 0";
+    else
+        $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND p.is_admin = 1 AND p.is_banned = 0", $communities );
+    
+    $users = $wpdb->get_results($query);
+    
+    $to = array();
+    foreach($users as $u)
+    {           
+        $fname = get_user_meta($u->ID, 'first_name', true);
+        $lname = get_user_meta($u->ID, 'last_name', true);
+        $to[] = array('name' => $fname . " " . $lname, 'email' => $u->user_email);
+    }    
+    
+    cp_send_email($to, $template_name, $data);
+}
+
+
 function cp_send_email_to_support($communities, $template_name, $data = array())
 {
     global $bp, $wpdb;
@@ -1420,7 +1497,7 @@ function cp_send_email_to_support($communities, $template_name, $data = array())
     if(is_array($communities))
         $query = "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id IN (" . implode(", ", $communities) . ") AND p.is_mod = 1 AND p.is_banned = 0";
     else
-        $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND p.is_mod = 1 AND p.is_banned = 0", $group_id );
+        $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND p.is_mod = 1 AND p.is_banned = 0", $communities );
     
     $users = $wpdb->get_results($query);
     

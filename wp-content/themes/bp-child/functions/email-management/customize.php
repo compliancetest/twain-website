@@ -83,10 +83,13 @@ add_filter('groups_notification_membership_request_completed_message', 'cp_group
 function cp_groups_notification_membership_request_completed_message($message, $group, $group_link, $settings_link)
 {
     $user_id = $_SESSION['membership_request_approved_user_id'];
-    if(strpos($message, 'accepted') !== false)
+    if(strpos($message, 'accepted') !== false){
         $message = get_option('membership_request_approved_email_content');
-    else
+        $_SESSION['membership_request_completed_type'] = 'approved';
+    }else{
         $message = get_option('membership_request_rejected_email_content');
+        $_SESSION['membership_request_completed_type'] = 'rejected';
+    }
     $emailData = array(
         '[community]' => bp_get_group_name($group),
         '[community_url]' => $group_link,
@@ -98,6 +101,26 @@ function cp_groups_notification_membership_request_completed_message($message, $
     $message = apply_filters('the_content', $message);
     return $message;
 }
+//Send Approve/Reject Email to Admin
+add_action('bp_groups_sent_membership_approved_email', 'cp_groups_sent_membership_approved_email_to_admin', 100, 4);
+function cp_groups_sent_membership_approved_email_to_admin($requesting_user_id, $subject, $message, $group_id)
+{
+    $user = get_userdata($requesting_user_id);
+    
+    $group = groups_get_group(array('group_id' => $group_id));
+    
+    $emailData = array(
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => bp_get_group_permalink($group),
+        '[name]' => $user->first_name . " " . $user->last_name,
+        '[email]' => $user->user_email,
+        '[username]' => $user->user_login
+    );
+    
+    cp_send_email_to_community_admin($group_id, $_SESSION['membership_request_completed_type'] == 'approved' ? 'membership_request_approved_admin' : 'membership_request_rejected_admin', $emailData);
+    
+}
+
 
 add_action('groups_leave_group', 'cp_send_leave_community_notification', 100, 2);
 function cp_send_leave_community_notification($group_id, $user_id)
