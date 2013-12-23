@@ -376,7 +376,7 @@ function cp_groups_screen_group_admin_manage_members()
                         $emailData = array(
                             '[community]' => bp_get_group_name($bp->groups->current_group),
                             '[community_url]' => bp_get_group_permalink($bp->groups->current_group),
-                            '[name]' => cp_get_user_fullname($user_id),
+                            '[name]' => $user->first_name . " " . $user->last_name,
                             '[email]' => $user->user_email,
                             '[username]' => $user->user_login
                         );
