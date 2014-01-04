@@ -431,7 +431,7 @@ function getUserAllCustomerESBIDs($user_id = null, $exclude_free_charge = false)
     }
     
     if($exclude_free_charge)
-        $query  .= " AND p.customer_id > 0";
+        $query  .= " AND p.card_id > 0";
     
     $ids = $wpdb->get_col($query);
     

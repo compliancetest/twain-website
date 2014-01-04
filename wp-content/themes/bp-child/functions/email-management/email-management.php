@@ -149,7 +149,7 @@ function create_email_management_page()
                         <li><a href="#ticket-created">Ticket Created</a></li>                    
                         <li><a href="#ticket-updated">Ticket Updated</a></li>                    
                         <li><a href="#ticket-started">Ticket Started</a></li>                    
-                        <li><a href="#ticket-solved">Ticket Solved</a></li>                    
+                        <li><a href="#ticket-solved">Ticket Resolved</a></li>                    
                         <li><a href="#ticket-closed">Ticket Closed</a></li>                    
                     </ul>
                 </div>

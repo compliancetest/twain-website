@@ -127,7 +127,7 @@ if($filterCategory)
                                 <?php 
                                     if($ticket->status_id == TICKET_STATUS_RESOLVED)
                                     {
-                                        echo "<span class='ticket-status-solved-label'></span>";
+                                        echo "<span class='ticket-status-resolved'></span>";
                                     }else{
                                         echo "<span class='ticket-priority ticket-priority-" . sanitize_title($ticket->priority_title) . "'></span>";
                                     }
@@ -136,7 +136,11 @@ if($filterCategory)
                             </div>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
                             <div class="td td-ticket-type"><?php echo $ticket->category_title ?></div>
-                            <div class="td td-ticket-status tocenter"><?php echo $ticket->status_title ?></div>                            
+                            <div class="td td-ticket-status tocenter">
+                                <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">
+                                <?php echo $ticket->status_title ?>
+                                </span>
+                            </div>                            
                             <div class="td td-ticket-updated"><?php echo formatDate($ticket->last_updated, 'Y-m-d H:i') ?></div>
                             <div class="clear"></div>
                         </div>

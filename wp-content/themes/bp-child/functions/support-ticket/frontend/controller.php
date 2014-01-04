@@ -435,6 +435,41 @@ function sendTicketMessage()
         'created_date' => date("Y-m-d H:i:s")
     );
     
+    $status_changed = false;
+    $new_status = null;
+    
+    if(isset($_POST['status_change']))
+    {
+        if($_POST['status_change'] == 'in_progress' && $ticketDetail->status_id != TICKET_STATUS_IN_PROGRESS)
+        {
+            $messageData['message'] = '<i>Ticket status been updated to <b>In Progress</b></i>' . "\n\r\n\r" . $message;             
+            $status_changed = true;
+            $new_status = TICKET_STATUS_IN_PROGRESS;
+        }else if($_POST['status_change'] == 'feedback' && $ticketDetail->status_id != TICKET_STATUS_FEEDBACK){
+            $messageData['message']  = '<i>Ticket status been updated to <b>Feedback</b></i>' . "\n\r\n\r" . $message ; 
+            $status_changed = true;
+            $new_status = TICKET_STATUS_FEEDBACK;
+        }else if($_POST['status_change'] == 'resolved' && $ticketDetail->status_id != TICKET_STATUS_RESOLVED){
+            $messageData['message']  = '<i>Ticket status been updated to <b>Resolved</b></i>' . "\n\r\n\r" . $message ; 
+            $status_changed = true;
+            $new_status = TICKET_STATUS_RESOLVED;
+        }else if($_POST['status_change'] == 'closed' && $ticketDetail->status_id != TICKET_STATUS_CLOSED){
+            $messageData['message']  = '<i>Ticket status been updated to <b>closed</b></i>' . "\n\r\n\r" . $message ; 
+            $status_changed = true;
+            $new_status = TICKET_STATUS_CLOSED;
+        }
+    }
+    
+    if(isset($_POST['resolved']) && $_POST['resolved'])
+    {
+        $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b></i>' . "\n\r\n\r" . $message ; 
+        $status_changed = true;
+        $new_status = TICKET_STATUS_RESOLVED;
+        break;
+    }
+    
+    
+    
     if(!$wpdb->insert(TABLE_TICKET_MESSAGES, $messageData))
     {
         addMessage($wpdb->last_error, "error");        
@@ -485,9 +520,10 @@ function sendTicketMessage()
         
         //Update New Message Count
         if($ticketDetail->customer_id != $user_id)
-            $query = "UPDATE " . TABLE_TICKETS . " SET `customer_new_messages`=`customer_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . TABLE_TICKETS . " SET `customer_new_messages`=`customer_new_messages` + 1, `last_updated`='" . date("Y-m-d H:i:s") . "', last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
         else
-            $query = "UPDATE " . TABLE_TICKETS . " SET `support_new_messages`=`support_new_messages` + 1, `last_updated`=" . date("Y-m-d H:i:s") . ", last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
+            $query = "UPDATE " . TABLE_TICKETS . " SET `support_new_messages`=`support_new_messages` + 1, `last_updated`='" . date("Y-m-d H:i:s") . "', last_message_id=" . $messageID . " WHERE id=" . $ticketDetail->id;
+            
         $wpdb->query($query);
         
         ///Send Email Notification
@@ -500,12 +536,21 @@ function sendTicketMessage()
             sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }
         
-        if(isset($_POST['resolved']) && $_POST['resolved'])
+        if($status_changed)
         {
-            //Change Ticket Status
-            $wpdb->update(TABLE_TICKETS, array('solved_date' => date("Y-m-d H:i:s"), 'status_id' => TICKET_STATUS_RESOLVED), array('id' => $ticketDetail->id));
-            $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticketDetail->id, 'status_id' => TICKET_STATUS_RESOLVED, 'created_date' => date("Y-m-d H:i:s")));
-            sendTicketMessage();
+            $wpdb->query("UPDATE " . TABLE_TICKETS . " SET status_id=" . $new_status . " WHERE id=" . $ticketDetail->id);
+            $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticketDetail->id, 'status_id' => $new_status, 'created_date' => date("Y-m-d H:i:s")));
+            
+            if($new_status == TICKET_STATUS_RESOLVED)
+            {
+                //Send Notification of status resolved to the user 
+                sendTicketEmail("ticket_solved", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+                sendTicketEmail("ticket_solved_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            }else if($new_status == TICKET_STATUS_CLOSED){
+                //Send Notification of status resolved to the user 
+                sendTicketEmail("ticket_closed", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+                sendTicketEmail("ticket_closed_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            }
         }
         
         addMessage("Your ticket has been updated.", "success");

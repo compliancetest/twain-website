@@ -6767,7 +6767,18 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     background: -ms-linear-gradient(top, #f00e0e, #c61d1d);
     background: -o-linear-gradient(top, #f00e0e, #c61d1d);
 }
-
+.ticket-status-resolved{
+    background: url(../images/check_icon_g.png) no-repeat;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    position: relative;
+    top: 2px
+}
+.ticket-status-resolved-label{
+    color: #369817;
+    text-shadow: 0 1px 1px rgba(255,255,255, 0.5);
+}
 #tickets_list .has-new .td{
     font-weight: bold !important;
 }
@@ -6777,6 +6788,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #tickets_table .ticket-priority{
     width: 10px;
     height: 10px;
+    position: relative;
+    top: 2px;
 }
 
 #my_tickets .back-to-supports{
@@ -6873,7 +6886,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 #change-term-contr .field-row textarea{
     float: left;
-    width: 650px;
+    width: 648px;
 }
 
 #change-term-contr .btn-row{

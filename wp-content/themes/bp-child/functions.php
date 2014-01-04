@@ -802,11 +802,17 @@ function cp_get_group_permalink_by_id($group_id)
 
 function cp_checked($value1, $value2)
 {
-    return $value1 == $value2 || in_array($value1, $value2) ? "checked='checked'" : "";
+    if(is_array($value2))        
+        return in_array($value1, $value2) ? "checked='checked'" : "";
+    else
+        return $value1 == $value2 ? "checked='checked'" : "";
 }
 function cp_selected($value1, $value2)
 {
-    return $value1 == $value2 ? "selected='selected'" : "";
+    if(is_array($value2))        
+        return in_array($value1, $value2) ? "selected='selected'" : "";
+    else
+        return $value1 == $value2 ? "selected='selected'" : "";
 }
 
 //Add rewrite rule

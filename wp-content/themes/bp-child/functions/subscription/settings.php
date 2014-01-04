@@ -146,11 +146,23 @@ function get_eway_pre_auth_url()
         return 'https://www.eway.com.au/gateway_cvn/xmlauth.asp';
     }else{
         return 'https://www.eway.com.au/gateway_cvn/xmltest/authtestpage.asp';        
+    }
+    
+}
+
+function get_eway_pre_auth_void_url()
+{
+    if(get_option('eway_payment_mode') == 'live')
+    {
+        return 'https://www.eway.com.au/gateway/xmlauthvoid.asp';
+    }else{
+        return 'https://www.eway.com.au/gateway/xmltest/authvoidtestpage.asp';        
         /*https://www.eway.com.au/gateway/xmltest/authcompletetestpage.asp
         https://www.eway.com.au/gateway/xmltest/authvoidtestpage.asp*/
     }
     
 }
+
 
 
 

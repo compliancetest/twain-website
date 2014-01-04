@@ -281,6 +281,35 @@ function cp_user_payment_save()
         {
             return 'Card Validation Error: ' . $xmlObj->ewayTrxnError;
         }
+        
+        //Authorisation Void Request
+
+        $xmlData = '<ewaygateway> 
+        <ewayCustomerID>' . $customerID . '</ewayCustomerID> 
+        <ewayAuthTrxnNumber>' . $xmlObj->ewayTrxnNumber . '</ewayAuthTrxnNumber> 
+        <ewayTotalAmount>10</ewayTotalAmount> 
+        <ewayOption1></ewayOption1> 
+        <ewayOption2></ewayOption2> 
+        <ewayOption3></ewayOption3> 
+        </ewaygateway>';
+        curl_close($ch);
+        
+        $preAuthVoidServiceURL = get_eway_pre_auth_void_url();        
+        
+        $ch = curl_init($preAuthVoidServiceURL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+        curl_setopt($ch, CURLOPT_POST, 1); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlData); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/xml")); 
+        
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);  
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);  
+        
+        curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');        
+        
+        $response = curl_exec($ch);    
+        
+        
     } else { 
         return 'Curl Error:' . curl_error($ch);
     }

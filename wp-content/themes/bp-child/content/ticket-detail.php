@@ -13,6 +13,9 @@ $user_id = get_current_user_id();
     <p>Ticket not found. The ticket id is not correct or not your ticket.</p>
 </div>
 <?php else: ?>
+<?php
+    makeTicketRead($ticket_id, $ticket->customer_id == $user_id ? 'customer' : 'support');
+?>
 <div class="column ticket-detail"> 
     <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
     <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar"><?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb&width=77&height=77' ); ?></a>
@@ -32,7 +35,8 @@ $user_id = get_current_user_id();
         <p class="ticket-info">
             <span><label>Requested Date:</label> <b><?php echo formatDate($ticket->created_date, 'F d, Y h:i A'); ?></b></span>             
             <span><label>Type: </label> <b><?php echo $ticket->category_title ?></b></span>
-            <span><label>Status: </label> <b><?php echo $ticket->status_title ?></b></span>            
+            <span><label>Status: </label> 
+            <b class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label"><?php echo $ticket->status_title ?></b></span>            
         </p>    
     </div>
     <div class="clear"></div>
@@ -136,7 +140,29 @@ $user_id = get_current_user_id();
                                 <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>                                
                             </div>
                             <div class="right">
+                                <?php
+                                    if($ticket->customer_id == $user_id ):
+                                        if($ticket->status_id != TICKET_STATUS_RESOLVED && $ticket->status_id != TICKET_STATUS_CLOSED):
+                                ?>
                                 <label>Please consider this request resolved. <input type="checkbox" name="resolved" value="1" /></label><br />
+                                <?php
+                                        endif;
+                                    else: 
+                                ?>
+                                <div>
+                                    <b>Update Status:</b>                                     
+                                    <?php if($ticket->status_id != TICKET_STATUS_RESOLVED && $ticket->status_id != TICKET_STATUS_CLOSED): ?>
+                                    <label class="left5"><input type="radio" name="status_change" value="in_progress" autocomplete="off" <?php echo cp_checked($ticket->status_id, TICKET_STATUS_IN_PROGRESS)?> /> In Progress</label>
+                                    <label class="left5"><input type="radio" name="status_change" value="feedback" autocomplete="off" <?php echo cp_checked($ticket->status_id, TICKET_STATUS_FEEDBACK)?> /> Feedback</label>                                    
+                                    <label class="left5"><input type="radio" name="status_change" value="resolved" autocomplete="off"  <?php echo cp_checked($ticket->status_id, TICKET_STATUS_RESOLVED)?> /> Resolved</label>
+                                    <?php endif; ?>
+                                    <?php if($ticket->status_id != TICKET_STATUS_CLOSED): ?>
+                                    <label class="left5"><input type="radio" name="status_change" value="closed" autocomplete="off" <?php echo cp_checked($ticket->status_id, TICKET_STATUS_CLOSED)?> /> Closed</label>
+                                    <?php endif; ?>
+                                </div>
+                                <?php
+                                    endif;
+                                ?>
                                 <a href="#" class="action-btn process-btn submit-btn right"><span class="p"></span><span class="t">Send</span></a>
                             </div>
                         </div>
