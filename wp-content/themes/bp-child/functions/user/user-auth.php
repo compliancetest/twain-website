@@ -36,8 +36,12 @@ function compliancetest_create_new_user(){
     global $wpdb;
     
     //Check Captcha
-    if($_POST['captcha'] != $_SESSION['captcha'])
-    {
+    $resp = recaptcha_check_answer (RECAPTCHA_PRIVATE_KEY,
+                                    $_SERVER["REMOTE_ADDR"],
+                                    $_POST["recaptcha_challenge_field"],
+                                    $_POST["recaptcha_response_field"]);
+
+    if (!$resp->is_valid) {
         echo 'captcha_error';
         exit;
     }
@@ -377,13 +381,10 @@ if(!is_user_logged_in())
                                     <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
                                 </div>
                                 <div class="clear"></div>   
-
-                                <div class="field">
-                                    <label for="captcha_reg">Stop Spam!</label> <br />
-                                    <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/captcha.php" class="left"/>
-                                    <input type="text" class="width60P left" title="" name="captcha" id="captcha_reg">
+                                <div class="field captcha-field">
+                                    <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY); ?>
                                 </div>
-                                <div class="field top23">        
+                                <div class="field width90P">        
                                     <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms & Conditions.</a></label>
                                 </div>
                                 <div class="clear"></div>

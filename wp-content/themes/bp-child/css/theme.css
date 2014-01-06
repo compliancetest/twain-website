@@ -3162,7 +3162,7 @@ p.copyright{
     height: 33px;
     width: 255px;
     box-shadow: none;
-    background: #ffffff url(../images/mail_icon.jpg) center left no-repeat;
+    background: #ffffff url(../images/mail_icon.jpg) center left no-repeat !important;
     padding: 3px 3px 3px 40px;
 
 }
@@ -3356,7 +3356,16 @@ p.copyright{
     margin-top:auto;
     margin-right: 5px;
 }
+#reg .captcha-field{
+    width: 90%;
+    padding: 10px 0;
+}
 
+#reg .captcha-field input[type='text']{
+    font-family: helvetica, sans-serif;
+    font-style: normal;
+    border-radius: 0 !important;
+}
 .loader, .loader2{
     display: none;
     clear: both;

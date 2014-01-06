@@ -103,7 +103,7 @@
             var contact_phone = $("#contact_phone_id").val();
             var user_pass = $("#user_pass_id").val();
             var user_pass_confirm = $("#user_pass_confirm_id").val();
-            var captcha_reg = $("#captcha_reg").val();
+            var captcha_reg = $("#recaptcha_response_field").val();
             var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             var noError = true;
             
@@ -143,8 +143,10 @@
                                     location.reload();
                                 },4000);                                
                             } else if(data == 'captcha_error') {
+                                jQuery('#recaptcha_reload').click();
                                 msgObj.removeClass('success').addClass('error').html('Captcha not correct!').fadeIn('fast');
                             } else {
+                                jQuery('#recaptcha_reload').click();
                                 msgObj.removeClass('success').addClass('error').html(data).fadeIn('fast');
                             }
                         }
@@ -153,6 +155,7 @@
                 }
                      
             }else{
+                msgObj.hide();
                 msgObj.removeClass('success').addClass('error').html('Please fill in all fields!').fadeIn('fast');
                 return false;
             }

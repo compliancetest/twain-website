@@ -9,6 +9,13 @@ if(!defined('CHILD_TEMPLATE_DIRECTORY'))
 if(!defined('GOOGLE_API_KEY'))
     define('GOOGLE_API_KEY', 'AIzaSyBwGPBjQXOTbPlzPGIFF7QHwX6VdH4mufE' );
 
+if(!defined('RECAPTCHA_PUBLIC_KEY'))
+    define('RECAPTCHA_PUBLIC_KEY', '6Le5nOwSAAAAAPCrPj1eGVtCG_enwgqyMiexsUbW');
+
+if(!defined('RECAPTCHA_PRIVATE_KEY'))
+    define('RECAPTCHA_PRIVATE_KEY', '6Le5nOwSAAAAAO3fc0c7BsJyZS277HIbUvQyBt3S');
+
+
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
     define('DEFAULT_MAILCHIMP_LIST_ID', '5af09ce467');
     
@@ -21,6 +28,9 @@ function cp_session_start()
 }
 
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
+
+//Include Recaptcha library
+require_once(THE_FUNCTION . '/recaptchalib.php');
 
 require_once(THE_FUNCTION . '/esb/esb.php');
 
