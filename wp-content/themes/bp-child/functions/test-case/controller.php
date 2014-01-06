@@ -369,10 +369,11 @@ function saveCase()
             addMessage('There was an error while updating the test case.', true);
             return;
         }
+        $testCaseId = get_post_meta($id, 'test_case_id', true);
     }
     
     $esb = new ManageESB();
-    $esb->saveTestCaseInfo($id, $case_title, $_POST['outcome_type'], $_POST['message_count']);        
+    $esb->saveTestCaseInfo($id, $testCaseId . "_V" . implode(".", $versions), $_POST['outcome_type'], $_POST['message_count']);        
     
     delete_post_meta($id, 'test_suite');
     delete_post_meta($id, 'conformance_level');

@@ -151,7 +151,15 @@ if($filterCustomer){
                             <option value="">- All -</option>
                           <?php foreach($tCases as $c){ ?>
                             <option value="<?php echo !$c->ID ? 0 : $c->ID?>" <?php echo $filterCase != "" && $c->ID == intval($filterCase) ? "selected='selected'" : "" ?>>
-                                <?php echo $c->NAME == 'DEFAULT' ? 'Not Assigned' : $c->NAME ?>
+                                <?php 
+                                    if($c->NAME == 'DEFAULT')
+                                    {
+                                        echo 'Not Assigned';
+                                    }else{
+                                        echo str_replace("_V", " v", $c->NAME);
+                                    }
+                                    
+                                ?>
                             </option>
                           <?php } ?>
                         </select>
