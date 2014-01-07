@@ -173,6 +173,7 @@ function cp_user_payment_edit()
     }
     
     $result['nickname'] = $card->nickname;
+    $result['email'] = $card->email;
     
     echo json_encode($result);
     exit;
@@ -194,6 +195,7 @@ function cp_user_payment_save()
     
     $card_number = str_replace(' ', '', $_POST['card_number']);
     $nickname = trim($_POST['nickname']);
+    $email = trim($_POST['email']);
     $name_on_card = trim($_POST['name_on_card']);
     $card_expiry = trim($_POST['card_expiry']);
     $card_cvc = trim($_POST['card_cvc']);
@@ -212,6 +214,17 @@ function cp_user_payment_save()
     {
         return 'Please enter a nickname of this card!';
     }
+    
+    $email_regex = '/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/'; 
+    
+    if(!$email)
+    {
+        return 'Please enter the email to receive invoices!';
+    }else if(!preg_match($email_regex, $email)){
+        echo 'Please enter a valid email address';
+        exit;
+    }
+    
     //Card Number
     if($card_number == '')
     {
@@ -247,7 +260,7 @@ function cp_user_payment_save()
                 <ewayTotalAmount>10</ewayTotalAmount> 
                 <ewayCustomerFirstName>' . $current_user->first_name . '</ewayCustomerFirstName> 
                 <ewayCustomerLastName>' . $current_user->last_name . '</ewayCustomerLastName> 
-                <ewayCustomerEmail>' . $current_user->user_email . '</ewayCustomerEmail> 
+                <ewayCustomerEmail>' . $email . '</ewayCustomerEmail> 
                 <ewayCustomerAddress></ewayCustomerAddress> 
                 <ewayCustomerPostcode></ewayCustomerPostcode>
                 <ewayCustomerInvoiceDescription></ewayCustomerInvoiceDescription> 
@@ -342,7 +355,7 @@ function cp_user_payment_save()
             'man:Company' => '',
             'man:PostCode' => '',
             'man:Country' => 'au',
-            'man:Email' => $user->user_email,
+            'man:Email' => $email,
             'man:Fax' => '',
             'man:Phone' => '',
             'man:Mobile' => '',
@@ -367,6 +380,7 @@ function cp_user_payment_save()
             $query_result = $wpdb->insert($wpdb->prefix . "users_cards", array(
                 'user_id' => $user_id,
                 'nickname' => $nickname,
+                'email' => $email,
                 'card_number' => encrypt_card_number($card_number),
                 'customer_id' => $result,                
                 'status' => 'Active',                
@@ -392,7 +406,7 @@ function cp_user_payment_save()
             'man:Company' => '',
             'man:PostCode' => '',
             'man:Country' => 'au',
-            'man:Email' => $user->user_email,
+            'man:Email' => $email,
             'man:Fax' => '',
             'man:Phone' => '',
             'man:Mobile' => '',
@@ -409,7 +423,7 @@ function cp_user_payment_save()
         $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
         if($result == 'true')
         {
-            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'status' => 'Active'), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active'), array('id' => $card->id));
             
             $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
             $subscriptions = $wpdb->get_results($query, ARRAY_A);

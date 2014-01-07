@@ -5764,6 +5764,10 @@ a.suite-subscript-link:hover{
     width: 220px;
     float: left;
 }
+#subscribe-box .field-row .desc{
+    float: left;
+    padding-left: 115px;
+}
 #subscribe-box .field-row #card_cvc{
     width: 50px;
 }

@@ -493,6 +493,15 @@ Template Name Posts: Test Suite
                     </div>                
                     <div class="clear"></div>
                 </div>
+                <div class="field-row">
+                    <div class="grid-cell">
+                        <label>Email</label>
+                        <input type="text" name="email" id="email" value="<?php echo $current_user->user_email ?>" class="input" maxlength="50" /> 
+                        <br />
+                        <span class="desc">(Invoices will be sent to this email.)</span>
+                    </div>                
+                    <div class="clear"></div>
+                </div>
                 
                 <div class="field-row">
                     <div class="grid-cell">
@@ -620,6 +629,13 @@ jQuery(document).ready(function($) {
             return false;
         }
         
+        //Check Email Address Validation
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        if(!emailReg.test(jQuery('#subscribe-box #email').val())){  
+            jQuery('#subscribe-box #email').addClass('input-error');
+            jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">Please enter valid email address.</div>');
+            return false;
+        }
         jQuery('#subscribe-box .loading').show();
         
         jQuery.ajax({

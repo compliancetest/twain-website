@@ -271,7 +271,8 @@
             $('#cards-list').hide();
             $('#edit-card-form').fadeIn('fast');
             $('#edit-card-form #id').val('');
-            $('#edit-card-form input[type="text"]').val('');
+            $('#edit-card-form input[type="text"]').val('');            
+            $('#edit-card-form #email').val($('#edit-card-form #email').attr('data-default'));
             $('#my_payment').addClass('grid-box-editing');
             $('#my_payment').find('.message').remove();
             return false;
@@ -292,6 +293,7 @@
                     form.find('#card_number').val(rsp.CCNumber);
                     form.find('#name_on_card').val(rsp.CCName);
                     form.find('#card_expiry').val(rsp.CCExpiryMonth + "/" + rsp.CCExpiryYear);
+                    form.find('#email').val(rsp.email);
                     form.find('#card_cvc').val(rsp.CCCvn);
                     form.find('#id').val(link.attr('data-id'));
                     form.find('.cnumber-desc').show();
