@@ -1,5 +1,6 @@
 //$(document).ready(function() {
 jQuery(document).ready(function($) {
+
 	///////////////////////////////////////////////////////
 	//DOCUMENT METRICS
 	///////////////////////////////////////////////////////
@@ -472,6 +473,9 @@ jQuery(document).ready(function($) {
     jQuery('.simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
     })
+    
+    
+    
 });
 
 function customizeFileTag()

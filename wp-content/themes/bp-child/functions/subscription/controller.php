@@ -76,7 +76,7 @@ function process_eway_payment()
     
     $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
     
-    $result = processEwayPayment($card->customer_id, $paymentAmount);
+    $result = processEwayPayment($card->customer_id, $paymentAmount, 'Subscription to ' . $suite->title . ' test suite');
     
     if($result['ewayTrxnStatus'] == 'True')
     {

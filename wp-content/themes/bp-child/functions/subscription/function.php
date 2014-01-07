@@ -10,7 +10,7 @@
 * @param Int $customer_id
 * @param Int $amount
 */
-function processEwayPayment($eway_profile_id, $amount)
+function processEwayPayment($eway_profile_id, $amount, $invoiceDescription = '')
 {
     $webserviceURL = get_eway_token_webservice_url();
     $customerID = get_eway_customer_id();
@@ -35,7 +35,7 @@ function processEwayPayment($eway_profile_id, $amount)
         'man:amount' => $amount * 100,
 //            'man:cvn' => $card->cvn,
 //        'man:invoiceReference' => '',
-        'man:invoiceDescription' => ''
+        'man:invoiceDescription' => $invoiceDescription
     );
     $soapaction = 'https://www.eway.com.au/gateway/managedpayment/ProcessPayment';
     $result = $client->call('man:ProcessPayment', $requestbody, '', $soapaction);
