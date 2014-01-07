@@ -202,7 +202,7 @@ Template Name Posts: Test Suite
             ?>
                 <div class="message success">
                     You have already purchased a subscription to this test suite.
-                    If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                    If you want to unsubscribe it, please click <a href="javascript: void(0)" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
                 </div>
                 <?php elseif($subscription->status == 'InArrears'): ?>
                 <div class="message notice">
