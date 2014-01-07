@@ -3,14 +3,14 @@
 * Manage Subscription Settings
 */
 
-add_action('admin_menu', 'add_eway_options_page');
-function add_eway_options_page()
+add_action('admin_menu', 'add_compliancetest_settings_page');
+function add_compliancetest_settings_page()
 {
-    add_options_page('Payment Settings', 'Payment Settings', 'administrator', 'payment-settings', 'create_payment_settings_page');
+    add_options_page('ComplianceTest Settings', 'ComplianceTest Settings', 'administrator', 'compliancetest-settings', 'create_compliancetest_settings_page');
     
     add_action('admin_init', 'register_eway_settings');
 }
-function create_payment_settings_page()
+function create_compliancetest_settings_page()
 {
     if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-eway-options'))
     {
@@ -27,6 +27,11 @@ function create_payment_settings_page()
         //Save Options
         update_option('inarrears_count', $_POST['inarrears_count']);
         update_option('frozen_count', $_POST['frozen_count']);
+        
+    }else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-recaptcha-settings')){
+        //Save Options
+        update_option('recaptcha_public_key', $_POST['recaptcha_public_key']);
+        update_option('recaptcha_private_key', $_POST['recaptcha_private_key']);
         
     }
 ?>
@@ -89,6 +94,22 @@ function create_payment_settings_page()
         <?php submit_button()   ?>
         <?php wp_nonce_field('save-subscription-settings'); ?>
     </form>  
+    <hr />
+    <h2>Recaptcha Settings</h2>        
+    <form method="post" action="">      
+        <table cellpadding="5">
+            <tr>
+                <td><label><b>Public Key:</b></label></td>
+                <td><input type="text" name="recaptcha_public_key" id="recaptcha_public_key" value="<?php echo get_option('recaptcha_public_key')?>" size="50" autocomplete="off" /></td>
+            </tr>
+            <tr>
+                <td><label><b>Private Key:</b></label></td>
+                <td><input type="text" name="recaptcha_private_key" id="recaptcha_private_key" value="<?php echo get_option('recaptcha_private_key')?>" size="50" autocomplete="off" /></td>
+            </tr>
+        </table>      
+        <?php submit_button()   ?>
+        <?php wp_nonce_field('save-recaptcha-settings'); ?>
+    </form>  
 </div>
 <?php   
 }
@@ -105,6 +126,8 @@ function register_eway_settings()
     register_setting('eway-settings', 'eway_sandbox_user_pwd');        
     register_setting('subscription-settings', 'inarrears_count');        
     register_setting('subscription-settings', 'frozen_count');        
+    register_setting('recaptcha-settings', 'recaptcha_public_key');        
+    register_setting('recaptcha-settings', 'recaptcha_private_key');        
 }
 
 function get_eway_payment_url()

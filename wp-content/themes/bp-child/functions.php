@@ -10,10 +10,10 @@ if(!defined('GOOGLE_API_KEY'))
     define('GOOGLE_API_KEY', 'AIzaSyBwGPBjQXOTbPlzPGIFF7QHwX6VdH4mufE' );
 
 if(!defined('RECAPTCHA_PUBLIC_KEY'))
-    define('RECAPTCHA_PUBLIC_KEY', '6Le5nOwSAAAAAPCrPj1eGVtCG_enwgqyMiexsUbW');
+    define('RECAPTCHA_PUBLIC_KEY', get_option('recaptcha_public_key'));
 
 if(!defined('RECAPTCHA_PRIVATE_KEY'))
-    define('RECAPTCHA_PRIVATE_KEY', '6Le5nOwSAAAAAO3fc0c7BsJyZS277HIbUvQyBt3S');
+    define('RECAPTCHA_PRIVATE_KEY', get_option('recaptcha_private_key'));
 
 
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
@@ -33,6 +33,9 @@ define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 require_once(THE_FUNCTION . '/recaptchalib.php');
 
 require_once(THE_FUNCTION . '/esb/esb.php');
+
+//Site Settings Page
+require_once(THE_FUNCTION . '/settings.php');
 
 //Include change role names
 require_once(THE_FUNCTION . '/role-customize.php');
@@ -93,7 +96,6 @@ require_once(THE_FUNCTION . '/login-redirect.php');
 
 //Manage Subscription
 require_once(THE_FUNCTION . '/subscription/class.subscription.php');
-require_once(THE_FUNCTION . '/subscription/settings.php');
 require_once(THE_FUNCTION . '/subscription/controller.php');
 require_once(THE_FUNCTION . '/subscription/function.php');
 
