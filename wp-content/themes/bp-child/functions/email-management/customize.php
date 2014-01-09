@@ -29,14 +29,21 @@ function cp_set_mail_content_type_to_html($content_type)
 add_filter('groups_notification_new_membership_request_to', 'cp_groups_notification_new_membership_request_to', 100, 1);
 function cp_groups_notification_new_membership_request_to($to)
 {    
-    $toData = get_user_by_email($to);    
     return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
 }
-add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 2);
-function cp_groups_notification_new_membership_request_subject($subject, $group)
+add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 3);
+function cp_groups_notification_new_membership_request_subject($subject, $group, $requesting_user_id)
 {
     $subject = get_option('membership_request_received_admin_email_title');
-    $subject = str_replace('[community]', bp_get_group_name($group), $subject);
+    $user = get_userdata($requesting_user_id);
+    $emailData = array(
+        '[name]' => $user->first_name .  " " . $user->last_name,
+        '[env]' => get_option('env'),
+        '[website_url]' => get_site_url(),        
+        '[community]' => bp_get_group_name($group)
+    );
+    $subject = str_replace(array_keys($emailData), array_values($emailData), $subject);
+    
     return $subject;
 }
 
@@ -49,6 +56,8 @@ function cp_groups_notification_new_membership_request_message($message, $group,
     $emailData = array(
         '[community]' => bp_get_group_name($group),
         '[community_url]' => bp_get_group_permalink($group),
+        '[env]' => get_option('env'),
+        '[website_url]' => get_site_url(),
         '[name]' => cp_get_user_fullname($requesting_user_id),
         '[email]' => $user->user_email,
         '[username]' => $user->user_login
@@ -75,7 +84,18 @@ function cp_groups_notification_membership_request_completed_subject($subject, $
         $subject = get_option('membership_request_approved_email_title');
     else
         $subject = get_option('membership_request_rejected_email_title');
-    $subject = str_replace('[community]', bp_get_group_name($group), $subject);
+    
+    $user_id = $_SESSION['membership_request_approved_user_id'];
+    
+    $emailData = array(
+        '[name]' => cp_get_user_fullname($user_id),
+        '[env]' => get_option('env'),
+        '[website_url]' => get_site_url(),
+        '[community]' => bp_get_group_name($group)
+    );
+    
+    $subject = str_replace(array_keys($emailData), array_values($emailData), $subject);
+    
     return $subject;
 }
 
@@ -95,6 +115,8 @@ function cp_groups_notification_membership_request_completed_message($message, $
         '[community_url]' => $group_link,
         '[name]' => cp_get_user_fullname($user_id),
         '[email]' => $user->user_email,
+        '[env]' => get_option('env'),
+        '[website_url]' => get_site_url(),
         '[username]' => $user->user_login
     );
     $message = str_replace(array_keys($emailData), array_values($emailData), $message);
@@ -114,6 +136,8 @@ function cp_groups_sent_membership_approved_email_to_admin($requesting_user_id, 
         '[community_url]' => bp_get_group_permalink($group),
         '[name]' => $user->first_name . " " . $user->last_name,
         '[email]' => $user->user_email,
+        '[env]' => get_option('env'),
+        '[website_url]' => get_site_url(),
         '[username]' => $user->user_login
     );
     

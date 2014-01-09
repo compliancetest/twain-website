@@ -106,6 +106,7 @@ function create_email_management_page()
                 <p style="float: left;">
                     <label><b>Support Name:</b> <input type="text" name="support_name" id="support_name" value="<?php echo get_option('support_name')?>" size="30" /></label>
                     <label style="margin-left: 20px"><b>Support Email:</b> <input type="text" name="support_email" id="support_email" value="<?php echo get_option('support_email')?>" size="30" /></label>
+                    <label style="margin-left: 20px"><b>Env:</b> <input type="text" name="env" id="env" value="<?php echo get_option('env')?>" size="30" /></label>
                 </p>
                 <div style="float: right">
                     <input type="submit" value="Save Changes" name="email-templates" class="button-primary" />                    
@@ -1245,6 +1246,7 @@ function save_email_templates()
         
           update_option('support_name', $_POST['support_name']);          
           update_option('support_email', $_POST['support_email']);          
+          update_option('env', $_POST['env']);          
         
           $new_user_email_title = htmlentities(stripslashes_deep($_POST['new_user_email_title']));          
           update_option('new_user_email_title', $new_user_email_title);          
@@ -1479,6 +1481,10 @@ function cp_send_email($to, $template_name, $data = array())
     {
         return false;
     }
+    
+    //Add [env] and [website_url] shortcodes
+    $data['[website_url]'] = get_site_url();
+    $data['[env]'] = get_option('env');
     
     $shortCodes = array_keys($data);
     $values = array_values($data);
