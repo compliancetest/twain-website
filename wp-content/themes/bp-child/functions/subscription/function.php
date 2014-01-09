@@ -131,7 +131,8 @@ function render_unsubscription_popup($return = null)
         <form name="unsubscribe-form" action="" method="post">
             <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
             <div class="popup-box-content grid-box-body">    
-                <p>Are you sure that you want to unsubscribe?<br >If your subscription is active, it will not be removed until the end of the month, and you can continue to test as normal until then.</p>        
+                <p>Are you sure that you want to unsubscribe?</p>
+                <p>If your subscription is active, it will not be removed until the end of the month, and you can continue to test as normal until then.</p>        
                 <p>If you want the subscription removed immediately, please select the checkbox below.</p>
             </div>
             <div class="popup-box-footer radius6 noradiustop">              
