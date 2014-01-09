@@ -14,7 +14,7 @@ if(!defined('ABSPATH'))
             <h5 class="left">My Payment Methods</h5>
             <?php if($user_status != 3){?>                            
                 <a class="gbh-btn gbh-btn-add right" id="add-payment-method" href="javascript: void(0);">Add<span class="simple_tooltip radius6">Add Payment Method<span></span></span></a>
-                <a href="javascript: void(0);" class="gbh-btn gbh-btn-view-stats has-tooltip right">View<span class="simple_tooltip radius6">View Statement<span></span></span></a>
+                <!--<a href="javascript: void(0);" class="gbh-btn gbh-btn-view-stats has-tooltip right">View<span class="simple_tooltip radius6">View Statement<span></span></span></a>-->
             <?php }?>
             <div class="clear"></div>
         </div>

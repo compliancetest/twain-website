@@ -214,6 +214,9 @@ input[type="submit"], input[type="reset"], input[type="button"], textarea, .butt
     -moz-border-radius: 4px;
     -o-border-radius: 3px;
 }
+.input-readonly{
+    background: #eaeaea;
+}
 	
 input[type="search_button"], input[type="submit"], input[type="reset"], input[type="button"], .button {
 	cursor: pointer;
@@ -1754,7 +1757,9 @@ tr {
 .unsubscribe-btn span.p{
     background-position: 0 -1205px;
 }
-
+.blue-plus-btn span.p{
+    background-position: 0 -128px;
+}
 
 .certify-grey-btn,        
 .grey-edit-btn,        
@@ -1800,6 +1805,7 @@ tr {
 }
 
 .harness-detail-btn,
+.blue-plus-btn,
 .file-btn,
 .edit-btn{
     border-color: #3577ad;
@@ -1821,6 +1827,7 @@ tr {
     padding-left: 3px;
 }
 .file-btn:hover,
+.blue-plus-btn:hover,
 .harness-detail-btn:hover,
 .edit-btn:hover{
     background: #288ce2;

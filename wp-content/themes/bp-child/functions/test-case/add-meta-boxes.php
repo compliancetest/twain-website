@@ -3,6 +3,18 @@
 * Add Metaboxes
 */
 
+//Customize The title column
+add_filter( 'get_edit_post_link', 'cp_customize_suite_case_edit_link', 20, 3 );
+function cp_customize_suite_case_edit_link($url, $post_id, $context)
+{
+    if(get_post_type($post_id) == 'test-case')  
+        return get_option('site_url') . '/edit-test-case?id=' . $post_id;
+    else if(get_post_type($post_id) == 'test-suite')  
+        return get_option('site_url') . '/edit-test-suite?id=' . $post_id;    
+    else 
+        return $url;
+}
+
 
 //MetaBoxes For Test Cases
 add_action('admin_init', 'add_test_cases_metaboxes');

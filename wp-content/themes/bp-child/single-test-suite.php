@@ -630,7 +630,7 @@ jQuery(document).ready(function($) {
         }
         
         //Check Email Address Validation
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailReg = /^([\w-+\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         if(!emailReg.test(jQuery('#subscribe-box #email').val())){  
             jQuery('#subscribe-box #email').addClass('input-error');
             jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">Please enter valid email address.</div>');

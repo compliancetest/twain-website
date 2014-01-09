@@ -104,24 +104,27 @@
             var user_pass = $("#user_pass_id").val();
             var user_pass_confirm = $("#user_pass_confirm_id").val();
             var captcha_reg = $("#recaptcha_response_field").val();
-            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+            var emailReg = /^([\w-+\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             var noError = true;
             
             var msgObj = $('#registration-popup #reg .message');
             if(firstname && lastname && email && user && organisation && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
                 
                 if (user_pass != user_pass_confirm){
+                    msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('Passwords don\'t match!').fadeIn('fast');
                     return false;
                     noError = false;
                 }
                 if(!emailReg.test(email)){  
+                    msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('Please enter a valid e-mail address!').fadeIn('fast');
                     noError = false;
                     return false;
                 }
                 
                 if (!$('#acc_tc_id').is(':checked')) {
+                    msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('You must agree to our Terms & Conditions first!').fadeIn('fast');
                     return false;
                     noError = false;

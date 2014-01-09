@@ -5521,19 +5521,43 @@ a.suite-subscript-link:hover{
 .edit-item-wrapper .field-row .version-cell{
     width: 320px;
 }
-.edit-item-wrapper .field-row .version-cell span{    
-    
-    
+.edit-item-wrapper .field-row .version-cell > span{    
+    float: left;    
+    width: 105px;
 }
 .edit-item-wrapper .field-row .version-cell span b{
-    display: inline-block;
+    float: left;
     font-weight: normal;
-    width: 30px;
+    line-height: 28px;
 }
 .edit-item-wrapper .field-row .version-cell .input{
-    width: 55px;
-    margin: 0 10px 0 5px;
+    width: 30px;
+    margin: 0 0 0 3px;
+    text-align: center;
+    padding: 4px;
+    float: left;
 }
+.edit-item-wrapper .field-row .version-cell .action-btn{
+    margin:1px 10px 0 2px;
+} 
+.edit-item-wrapper .field-row .version-cell .version-updated{
+    width: 11px;
+    height: 10px;
+    display: block;
+    float: left;
+    background: url(../images/version-updated.png);
+    margin: 7px 3px 0;
+}
+.edit-item-wrapper .field-row .version-cell .version-cancel{
+    width: 10px;
+    height: 11px;
+    display: block;
+    float: left;
+    background: url(../images/version-cancel.png);
+    margin: 7px 0;
+}
+
+
 #choose-conf-level-box .field-row,
 #test-data-box .field-row,
 #test-execution-box .field-row,

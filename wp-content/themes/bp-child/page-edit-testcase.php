@@ -100,9 +100,21 @@ get_header();
                        </div>      
                        <div class="grid-cell version-cell">
                            <label for="version">Version: </label>
-                           <span><b>Major</b> <input type="text" id="version_major" name="version_major" class="input" value="<?php echo $case->version_major?>" /></span>
-                           <span><b>Minor</b> <input type="text" id="version_minor" name="version_minor" class="input" value="<?php echo $case->version_minor?>" /></span>
-                           <span><b>Patch</b> <input type="text" id="version_patch" name="version_patch" class="input" value="<?php echo $case->version_patch?>" /></span>
+                           <span>
+                               <b>Major:</b> 
+                               <input type="text" id="version_major" name="version_major" class="input input-readonly" readonly="readonly" value="<?php echo $case->version_major?>" data-default="<?php echo $case->version_major?>" />                               
+                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                           </span>
+                           <span>
+                               <b>Minor:</b>
+                               <input type="text" id="version_minor" name="version_minor" class="input input-readonly" readonly="readonly" value="<?php echo $case->version_minor?>" data-default="<?php echo $case->version_minor?>" />
+                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                           </span>
+                           <span>
+                               <b>Patch:</b> <input type="text" id="version_patch" name="version_patch" class="input input-readonly" readonly="readonly" value="<?php echo $case->version_patch?>" data-default="<?php echo $case->version_patch?>" />
+                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                           </span>
+                           <div class="clear"></div>
                        </div>                                                                     
                        <div class="clear"></div>
                    </div>
@@ -641,6 +653,31 @@ jQuery(document).ready(function(){
                 jQuery('#edit_test_case_wrapper .grid-box-footer').append('<div class="message error">' + err.responseText + "</div>");
             }
         })
+        return false;
+    })
+    
+    //Manage Version
+    jQuery('.version-cell .action-btn').click(function(){
+        var prev = jQuery(this).prev();
+        prev.val( parseInt(prev.val()) + 1 );
+        if(prev.attr('id') == 'version_major')
+        {
+            jQuery('#version_minor').val(0);
+            jQuery('#version_patch').val(0);
+        }else if(prev.attr('id') == 'version_minor'){
+            jQuery('#version_patch').val(0);
+        }
+        jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel"></a>');
+        jQuery('.version-cell .action-btn').hide();
+        return false;
+    })
+    
+    jQuery('.version-cell').on('click', '.version-cancel', function(){
+        jQuery('.version-cell .version-updated, .version-cell .version-cancel').remove();
+        jQuery('.version-cell .action-btn').show();
+        jQuery('#version_major').val(jQuery('#version_major').attr('data-default'));
+        jQuery('#version_minor').val(jQuery('#version_minor').attr('data-default'));
+        jQuery('#version_patch').val(jQuery('#version_patch').attr('data-default'));
         return false;
     })
 });
