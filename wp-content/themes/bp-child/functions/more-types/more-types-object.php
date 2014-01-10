@@ -223,7 +223,7 @@ class more_types_object extends more_plugins_object_sputnik_8 {
   			unset($options['taxonomies']);
 			unset($options['boxes']);
 			unset($options['template']);
-            
+
 			// Regiester the post type
 			register_post_type($name, $options);
 			

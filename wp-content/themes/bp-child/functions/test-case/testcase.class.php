@@ -67,7 +67,12 @@ class TestCase
         if($id !== null)   
             $this->id = $id;
         
-        if(!$this->id)
+        //Set Default Values
+        $this->status = 'Draft';
+        $this->version_major = 0;
+        $this->version_minor = 0;
+        $this->version_patch = 0; 
+        if(!$this->id)   
             return;
             
         $this->name = get_the_title($this->id);
@@ -127,13 +132,15 @@ class TestCase
         $stepResults = cp_get_post_meta($this->id, 'step_expected', true);
         
         $result = array();
-        foreach($stepActions as $i=>$action)
+        if($stepActions)
         {
-            if(!$action)
-                continue;
-            $result[] = array('action' => $action, 'result' => $stepResults[$i]);
+            foreach($stepActions as $i=>$action)
+            {
+                if(!$action)
+                    continue;
+                $result[] = array('action' => $action, 'result' => $stepResults[$i]);
+            }
         }
-        
         $this->testSteps = $result;
         
         return $result;
@@ -145,13 +152,15 @@ class TestCase
         $dataValues = cp_get_post_meta($this->id, 'property_value_data', true);
         
         $result = array();
-        foreach($dataNames as $i=>$name)
+        if($dataNames)
         {
-            if(!$name)
-                continue;
-            $result[] = array('name' => $name, 'value' => $dataValues[$i]);
+            foreach($dataNames as $i=>$name)
+            {
+                if(!$name)
+                    continue;
+                $result[] = array('name' => $name, 'value' => $dataValues[$i]);
+            }
         }
-        
         $this->testData = $result;
         
         return $result;
@@ -206,11 +215,14 @@ class TestCase
         $dataValues = cp_get_post_meta($this->id, 'property_value_exec', true);
         
         $result = array();
-        foreach($dataNames as $i=>$name)
+        if($dataNames)
         {
-            if(!$name)
-                continue;
-            $result[] = array('name' => $name, 'value' => $dataValues[$i]);
+            foreach($dataNames as $i=>$name)
+            {
+                if(!$name)
+                    continue;
+                $result[] = array('name' => $name, 'value' => $dataValues[$i]);
+            }
         }
         
         $this->testExecutionData = $result;

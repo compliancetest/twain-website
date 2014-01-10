@@ -387,6 +387,14 @@ function saveCase()
 
     cp_update_post_meta($id, 'published', $_POST['published']);
     
+    if($_POST['version_major'] == 0 && $_POST['test_case_status'] == 'Active')
+    {
+        //Change Verion to 1.0.0
+        $_POST['version_major'] = 1;
+        $_POST['version_minor'] = 0;
+        $_POST['version_patch'] = 0;
+    }
+    
     cp_update_post_meta($id, 'version_major', $_POST['version_major']);
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
@@ -461,3 +469,10 @@ function saveCase()
     exit;
 }
 
+function create_revision_of_test_case($case_id)
+{
+    global $wpdb;
+    
+    //Compare new case and the old
+    
+}
