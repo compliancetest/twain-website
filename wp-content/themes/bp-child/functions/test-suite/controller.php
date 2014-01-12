@@ -350,21 +350,22 @@ function saveSuite()
         );
     }
     
+    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $id);
+    $rid = $wpdb->get_var($query);
+    if(!$rid)
+    {
+        $wpdb->insert($wpdb->prefix . "test_suites", 
+                        array('suite_id' => $id, 
+                              'suite_title' => $_POST['ts_name'], 
+                              'version_major' => $_POST['ts_version_major'], 
+                              'version_minor' => $_POST['ts_version_minor'], 
+                              'version_patch' => $_POST['ts_version_patch'])
+                     );
+    }
+    
     //Save Test Suite to wp_test_suites table
     if($version_updated)
     {
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $id);
-        $rid = $wpdb->get_var($query);
-        if(!$rid)
-        {
-            $wpdb->insert($wpdb->prefix . "test_suites", 
-                            array('suite_id' => $id, 
-                                  'suite_title' => $_POST['ts_name'], 
-                                  'version_major' => $_POST['ts_version_major'], 
-                                  'version_minor' => $_POST['ts_version_minor'], 
-                                  'version_patch' => $_POST['ts_version_patch'])
-                         );
-        }
         
         //Hide Major version 0
         if(intval($suite->version_major) == 0)
