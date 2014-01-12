@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: ComplianceTest BuddyPress\n"
 "Report-Msgid-Bugs-To: http://wppolyglots.wordpress.com\n"
 "POT-Creation-Date: 2013-05-15 18:35:23+00:00\n"
-"PO-Revision-Date: 2013-11-09 16:15+0200\n"
+"PO-Revision-Date: 2014-01-12 16:50+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: ComplianceTest team <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3214,7 +3214,7 @@ msgstr ""
 #: bp-templates/bp-legacy/buddypress/groups/single/admin.php:205
 #: bp-themes/bp-default/groups/single/admin.php:205
 msgid "Moderators"
-msgstr ""
+msgstr "Support"
 
 #: bp-groups/bp-groups-admin.php:765
 msgid "Banned Users"
@@ -3241,7 +3241,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-admin.php:800
 msgid "Moderator"
-msgstr ""
+msgstr "Support"
 
 #: bp-groups/bp-groups-admin.php:801
 msgid "Member"
@@ -3571,7 +3571,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-notifications.php:169
 msgid "a moderator"
-msgstr ""
+msgstr "a support"
 
 #: bp-groups/bp-groups-notifications.php:187
 msgid "You have been promoted in the group: \"%s\""
@@ -3844,7 +3844,7 @@ msgstr "Community information is updated"
 
 #: bp-groups/bp-groups-screens.php:914
 msgid "You are promoted to a group administrator or moderator"
-msgstr "You are promoted to a community administrator or moderator"
+msgstr "You are promoted to a community administrator or support"
 
 #: bp-groups/bp-groups-screens.php:920
 msgid "A member requests to join a private group for which you are an admin"
@@ -3946,7 +3946,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:1305
 msgid "This group has no moderators"
-msgstr "This community has no moderators"
+msgstr "This community has no support"
 
 #: bp-groups/bp-groups-template.php:1730 bp-groups/bp-groups-template.php:1731
 #: bp-templates/bp-legacy/buddypress-functions.php:987
@@ -4014,7 +4014,7 @@ msgstr ""
 
 #: bp-groups/bp-groups-template.php:2502 bp-groups/bp-groups-template.php:2532
 msgid "Moderator Of"
-msgstr ""
+msgstr "Support Of"
 
 #: bp-groups/bp-groups-template.php:2590
 msgid "No Group Avatar"

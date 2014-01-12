@@ -49,7 +49,7 @@ if(!defined('ABSPATH'))
                             if($member->is_admin)
                                 echo '<span class="group-admin">Admin</span>';
                             else if($member->is_mod)
-                                echo '<span class="group-moderator">Moderator</span>';
+                                echo '<span class="group-support">Support</span>';
                             else 
                                 echo '<span class="group-member">Member</span>';
                         ?>
