@@ -170,3 +170,74 @@ function cp_send_leave_community_notification($group_id, $user_id)
     
     return true;
 }
+
+//Member Promoted Email Customize
+function cp_groups_notification_promoted_member( $user_id, $group_id ) {
+
+    if ( groups_is_user_admin( $user_id, $group_id ) ) {
+        $promoted_to = __( 'an administrator', 'buddypress' );
+    } else {
+        $promoted_to = __( 'a moderator', 'buddypress' );
+    }
+
+    // Post a screen notification first.
+    bp_core_add_notification( $group_id, $user_id, 'groups', $type );
+
+    if ( 'no' == bp_get_user_meta( $user_id, 'notification_groups_admin_promotion', true ) )
+        return false;
+
+    $group         = groups_get_group( array( 'group_id' => $group_id ) );
+    $ud            = bp_core_get_core_userdata($user_id);
+    $group_link    = bp_get_group_permalink( $group );
+    $settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
+    $settings_link = bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/';
+
+    $emailData = array(
+        '[name]' => cp_get_user_fullname($user_id),
+        '[email]' => $ud->user_email,
+        '[website_url]' => get_site_url(),
+        '[env]' => get_option('env'),
+        '[username]' => $ud->user_login,
+        '[community]' => bp_get_group_name($group),
+        '[community_url]' => bp_get_group_permalink($group),
+        '[settings_link]' => $settings_link,
+        '[member_type]' => $promoted_to,
+    );
+
+
+    // Set up and send the message
+    $to       = $ud->user_email;
+    $subject = get_option('member_promoted_email_title');
+    $message = get_option('member_promoted_email_content');
+
+    /* Send the message */
+    $to      = apply_filters( 'groups_notification_promoted_member_to', $to );
+    $subject = str_replace(array_keys($emailData), array_values($emailData), $subject);
+
+    $message = str_replace(array_keys($emailData), array_values($emailData), $message);
+    $message = apply_filters('the_content', $message);
+
+    wp_mail( $to, $subject, $message );
+
+
+    // Send notifications to community admins
+    $admin_subject = get_option('member_promoted_admin_email_title');
+    $admin_message = get_option('member_promoted_admin_email_content');
+
+    /* Send the message */
+    $admin_subject = str_replace(array_keys($emailData), array_values($emailData), $admin_subject);
+
+    $admin_message = str_replace(array_keys($emailData), array_values($emailData), $admin_message);
+    $admin_message = apply_filters('the_content', $admin_message);
+
+    $admins = groups_get_group_admins($group_id);
+    foreach($admins as $admin)
+    {
+        $au = get_userdata($admin->user_id);
+        wp_mail($au->user_email, $admin_subject, $admin_message );
+    }
+
+    do_action( 'bp_groups_sent_promoted_email', $user_id, $subject, $message, $group_id );
+}
+remove_action( 'groups_promoted_member', 'groups_notification_promoted_member' );
+add_action( 'groups_promoted_member', 'cp_groups_notification_promoted_member', 10, 2 );
