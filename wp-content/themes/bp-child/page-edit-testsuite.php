@@ -213,11 +213,11 @@ if(!$suite->community_id)
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Conformance Level Code:</label>
-                           <input type="text" class="input" name="lvl_code[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" />
+                           <input type="text" class="input" name="lvl_code[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" readonly="readonly" />
                        </div>
                        <div class="grid-cell">
                            <label>Conformance Level Description:</label>
-                           <textarea cols="" rows="" class="textarea" name="lvl_desc[]"><?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION?></textarea>
+                           <textarea cols="" rows="" class="textarea" name="lvl_desc[]" readonly="readonly"><?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION?></textarea>
                        </div>
                        <div class="grid-cell">
                            <label>&nbsp;</label>                           
