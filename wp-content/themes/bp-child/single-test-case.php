@@ -80,13 +80,16 @@ $case->load();
 						<div class="grid_cell width30P left">
 							<p>Conformance Level: <span>
                             <?php                                  
+                                $lArr = array();
                                 foreach($case->conformanceLevel as $level)
                                 {
                                     if(strpos($level, "::" . $test_suite_id . "::") !== false )
                                     {
-                                        echo str_replace("::" . $test_suite_id . "::", "", $level);
+                                        $lArr[] = str_replace("::" . $test_suite_id . "::", "", $level);
                                     }
                                 }
+                                sort($lArr);
+                                echo implode(", ", $lArr);
                             ?>
                             </span></p>
 						</div>

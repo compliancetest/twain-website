@@ -412,7 +412,10 @@ function saveCase()
     {
         add_post_meta($id, 'test_suite', $sid);   
         if(isset($_POST['conformance_level' . $sid]))     
-            add_post_meta($id, 'conformance_level', "::" . $sid . "::" . $_POST['conformance_level' . $sid]);
+        {
+            foreach($_POST['conformance_level' . $sid] as $level)
+                add_post_meta($id, 'conformance_level', "::" . $sid . "::" . $level);
+        }
     }
 
     cp_update_post_meta($id, 'published', $_POST['published']);

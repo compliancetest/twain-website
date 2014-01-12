@@ -169,7 +169,7 @@ get_header();
                        <?php foreach($levels as $row){ ?>
                        <div class="field-row">
                            <div class="grid-cell radio-cell">
-                               <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array("::" . $sid . "::" . $row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                               <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array("::" . $sid . "::" . $row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
                            <div class="grid-cell width60P">
                                <?php echo $row['desc']?>

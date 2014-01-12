@@ -410,13 +410,16 @@ Template Name Posts: Test Suite
                             <div class="grid_cell nopaddingtop width5P toleft tocenter">
                                 <?php 
                                     $levels = get_post_meta($row->ID ,'conformance_level');
+                                    $lArr = array();
                                     foreach($levels as $level)
                                     {
                                         if(strpos($level, "::" . $suite->id . "::") !== false )
                                         {
-                                            echo str_replace("::" . $suite->id . "::", "", $level);
+                                            $lArr[] = str_replace("::" . $suite->id . "::", "", $level);
                                         }
                                     }
+                                    sort($lArr);
+                                    echo implode(", ", $lArr);
                                 ?>
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter">
