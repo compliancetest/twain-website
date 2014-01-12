@@ -70,16 +70,16 @@ get_header();
                <div class="column">
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label>Name:</label>
+                           <label for="test_case_id">Name:</label>
                            <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" <?php echo !$isNew ? 'readonly="readonly"' : ''?> />
                        </div>           
                         
                        <div class="grid-cell">
-                           <label>Published:</label>
+                           <label for="published">Issued:</label>
                            <input type="text" name="published" id="published" value="<?php echo $case->publishedDate?>" class="input datepicker" />
                        </div>                   
                        <div class="grid-cell">
-                           <label>Execution Sequence Number:</label>
+                           <label for="sequence_number">Execution Sequence Number:</label>
                            <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />                           
                        </div> 
                        <div class="clear"></div>

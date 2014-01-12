@@ -50,7 +50,7 @@ $case->load();
         <tr>
             <td class="td-label">Info:</td>
             <td>Version: <b><?php echo $case->version; ?></b></td>
-            <td>Published: <b>
+            <td>Issued: <b>
                                 <?php 
                                     echo formatDate($case->publishedDate);
                                 ?>

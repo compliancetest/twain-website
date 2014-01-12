@@ -307,7 +307,7 @@ Template Name Posts: Test Suite
                         <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
 						<div class="grid_cell nopaddingtop width8P toleft single_line">Test Case</div>
 						<!--<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>-->
-						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Published</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Issued</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Harness<br/>Role(s)</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
