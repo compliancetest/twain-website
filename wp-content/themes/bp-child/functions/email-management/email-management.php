@@ -164,7 +164,7 @@ function create_email_management_page()
                         
                     ?>       
                     <h3>User Registered</h3>
-                    <p><b>Short Codes:</b> [name], [username], [email], [password], [link]</p>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [password], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -212,7 +212,7 @@ function create_email_management_page()
                         $verify_email_content = get_option('verify_email_content');                
                     ?>                
                     <h3>Re-send Verification Email</h3>    
-                    <p><b>Short Codes:</b> [name],[username], [email], [link]</p>
+                    <p><b>Short Codes:</b> [name],[username], [email], [website_url], [env], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -243,7 +243,7 @@ function create_email_management_page()
                         $user_verify_success_admin_email_content = get_option('user_verify_success_admin_email_content');                        
                     ?>   
                     <h3>User Verification Success</h3>                 
-                    <p><b>Short Codes:</b> [name], [email], [username]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -294,7 +294,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
                     <h3>Purchase Subscription</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -345,7 +345,7 @@ function create_email_management_page()
                     $unsubscribing_admin_email_content = get_option('unsubscribing_admin_email_content');
                     ?>
                     <h3>Unsubscribe</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -396,7 +396,7 @@ function create_email_management_page()
                     $cancel_subscription_admin_email_content = get_option('cancel_subscription_admin_email_content');
                     ?>
                     <h3>Subscription Cancelled</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -447,7 +447,7 @@ function create_email_management_page()
                     $active_subscription_admin_email_content = get_option('active_subscription_admin_email_content');
                     ?>
                     <h3>Subscription is Active From InArrears</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -498,7 +498,7 @@ function create_email_management_page()
                     $active_subscription2_admin_email_content = get_option('active_subscription2_admin_email_content');
                     ?>
                     <h3>Subscription is Active from Frozen</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -549,7 +549,7 @@ function create_email_management_page()
                     $inarrears_subscription_admin_email_content = get_option('inarrears_subscription_admin_email_content');
                     ?>
                     <h3>Subscription is in arrears</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -600,7 +600,7 @@ function create_email_management_page()
                     $frozen_subscription_admin_email_content = get_option('frozen_subscription_admin_email_content');
                     ?>
                     <h3>Subscription is frozen</h3>
-                    <p><b>Short Codes:</b> [name], [email], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -650,7 +650,7 @@ function create_email_management_page()
                     $membership_request_received_admin_email_content = get_option('membership_request_received_admin_email_content');
                 ?>
                     <h3>Membership Request Received</h3>
-                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -682,7 +682,7 @@ function create_email_management_page()
                     
                 ?>
                     <h3>Membership Request Approved</h3>
-                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -733,7 +733,7 @@ function create_email_management_page()
                     
                 ?>
                     <h3>Membership Request Rejected</h3>
-                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -783,7 +783,7 @@ function create_email_management_page()
                     $member_leave_community_admin_email_content = get_option('member_leave_community_admin_email_content');
                 ?>
                     <h3>Member Leave Community</h3>
-                    <p><b>Short Codes:</b> [name], [email], [community], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -815,7 +815,7 @@ function create_email_management_page()
                     
                 ?>
                     <h3>Remove Member From Community</h3>
-                    <p><b>Short Codes:</b> [name], [email], [username], [community], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [community], [community_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -864,7 +864,7 @@ function create_email_management_page()
                     $forgot_password_email_content = get_option('forgot_password_email_content');
                 ?>
                     <h3>Forgot Password</h3>
-                    <p><b>Short Codes:</b> [name], [email], [username], [link]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -895,7 +895,7 @@ function create_email_management_page()
                     $password_changed_admin_email_content = get_option('password_changed_admin_email_content');
                     ?>
                     <h3>Password Changed</h3>
-                    <p><b>Short Codes:</b> [name], [email], [username]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -944,7 +944,7 @@ function create_email_management_page()
                     $suite_changed_email_content = get_option('suite_changed_email_content');
                     ?>
                     <h3>Test Suite Changed</h3>
-                    <p><b>Short Codes:</b> [name], [community], [community_url], [suite_name], [suite_url], [editor_name]</p>
+                    <p><b>Short Codes:</b> [name], [website_url], [env], [community], [community_url], [suite_name], [suite_url], [editor_name]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -974,7 +974,7 @@ function create_email_management_page()
                     $case_changed_email_content = get_option('case_changed_email_content');
                     ?>
                     <h3>Test Case Changed</h3>
-                    <p><b>Short Codes:</b> [name], [suite_name], [suite_url], [case_name], [case_url], [editor_name]</p>
+                    <p><b>Short Codes:</b> [name], [website_url], [env], [suite_name], [suite_url], [case_name], [case_url], [editor_name]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1007,7 +1007,7 @@ function create_email_management_page()
                     $ticket_created_support_email_content = get_option('ticket_created_support_email_content');                    
                     ?>           
                     <h3>Ticket Created</h3>         
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1060,7 +1060,7 @@ function create_email_management_page()
                     
                     ?>
                     <h3>Ticket Updated</h3>
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email], [message_content]</p>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email], [message_content]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1111,7 +1111,7 @@ function create_email_management_page()
                     
                     ?>
                     <h3>Ticket Started</h3>
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1144,7 +1144,7 @@ function create_email_management_page()
                     
                     ?>
                     <h3>Ticket Resolved</h3>
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount], [message_content]</p>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount], [message_content]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1193,7 +1193,7 @@ function create_email_management_page()
                     $ticket_closed_email_content = get_option('ticket_closed_email_content');
                     ?>
                     <h3>Ticket Closed</h3>
-                    <p><b>Short Codes:</b> [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
