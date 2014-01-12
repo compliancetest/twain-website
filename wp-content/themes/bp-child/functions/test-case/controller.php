@@ -100,9 +100,14 @@ function process_testcase_actions()
 
 function deleteCase()
 {
+    global $wpdb;
+    
     $id = $_REQUEST['id'];
     
     $post = get_post($id);
+    
+    $testCaseId = get_post_meta($id, 'test_case_id', true);
+    $majorVersion = get_post_meta($id, 'version_major', true);
     
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
     
@@ -130,6 +135,10 @@ function deleteCase()
     //Remove Data From Backend
     $esb = new ManageESB();
     $esb->deleteTestCaseNameIDMap($id);
+    
+    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));
+    
+    cp_sort_test_cases($testCaseId, $majorVersion);
     
     addMessage("The test case was deleted.");
     wp_redirect($return);
@@ -167,7 +176,7 @@ function getTestSuiteInfoForCase()
            <?php foreach($levels as $row){ ?>
            <div class="field-row">
                <div class="grid-cell radio-cell">
-                   <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array($row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                   <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array("::" . $sid . "::" . $row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                </div>
                <div class="grid-cell width60P">
                    <?php echo $row['desc']?>
@@ -281,6 +290,10 @@ function saveCase()
     require_once(ABSPATH . "/wp-admin/includes/post.php");
        
     $id = $_POST['id'];
+    
+    $case = new TestCase($id);
+    $case->load();
+    
     if(!$id)
         $isNew = true;
     else
@@ -310,13 +323,25 @@ function saveCase()
     if(!$community_id || (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
         echo json_encode(array('status' => 'error', 'message' => 'Permission Denied!'));
-//        wp_redirect(get_site_url());
         exit;
     }
     
-//    if($_POST['version_major'])
+    if($_POST['version_major'] == 0 && $_POST['test_case_status'] == 'Active')
+    {
+        //Change Verion to 1.0.0
+        $_POST['version_major'] = 1;
+        $_POST['version_minor'] = 0;
+        $_POST['version_patch'] = 0;
+    }
+    
+    //Check Version Updated or not
+    $version_updated = false;
+    if( intval($case->version_major) != intval($_POST['version_major']) || intval($case->version_minor) != intval($_POST['version_minor']) || intval($case->version_patch) != intval($_POST['version_patch']) )
+    {
+        $version_updated =  true;
+    }
+    
     $versions[] = !$_POST['version_major'] ? 0 : $_POST['version_major'];
-//    if($_POST['version_minor'])
     $versions[] = !$_POST['version_minor'] ? 0 : $_POST['version_minor'];
     
     if($_POST['version_patch'])
@@ -325,10 +350,10 @@ function saveCase()
     $version = " v" . implode(".", $versions);
     
     
-    if($isNew)
+    if($isNew || $version_updated)
     {
         //Check Test Case ID
-        $testCaseId = $_POST['test_case_id'];
+        $testCaseId = $isNew ? $_POST['test_case_id'] : $case->testCaseID;
         //Remove Space From the Test Case ID
         $testCaseId = str_replace(' ', '', $testCaseId);
         
@@ -347,18 +372,23 @@ function saveCase()
             echo json_encode(array('status' => 'error', 'message' => $id->get_error_message()));
 //            addMessage($id->get_error_message(), 'error');            
             return;
-        }    
-        if($isNew)
-            cp_update_post_meta($id, 'test_case_id', $testCaseId);        
+        }   
+        
+        cp_update_post_meta($id, 'test_case_id', $testCaseId);        
+         
+        if($isNew){
+            
+            cp_update_post_meta($id, 'hide_case', 0);
+        }
         
     }else{
         $case_title = get_post_meta($id, "test_case_id", true) . $version;
-        $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s ANd ID != %d", $case_title, 'test-case', $id) );
+        /*$pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s ANd ID != %d", $case_title, 'test-case', $id) );
         if($pTestCase)
         {
             echo json_encode(array('status' => 'error', 'message' => 'The test case id with the version already exists!'));
             exit;
-        }
+        }*/
         $post = get_post($id);
         $case_name = wp_unique_post_slug(sanitize_title($case_title), $id, $post->post_status, $post->post_type, $post->post_parent);
         
@@ -382,18 +412,10 @@ function saveCase()
     {
         add_post_meta($id, 'test_suite', $sid);   
         if(isset($_POST['conformance_level' . $sid]))     
-            add_post_meta($id, 'conformance_level', $_POST['conformance_level' . $sid]);
+            add_post_meta($id, 'conformance_level', "::" . $sid . "::" . $_POST['conformance_level' . $sid]);
     }
 
     cp_update_post_meta($id, 'published', $_POST['published']);
-    
-    if($_POST['version_major'] == 0 && $_POST['test_case_status'] == 'Active')
-    {
-        //Change Verion to 1.0.0
-        $_POST['version_major'] = 1;
-        $_POST['version_minor'] = 0;
-        $_POST['version_patch'] = 0;
-    }
     
     cp_update_post_meta($id, 'version_major', $_POST['version_major']);
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
@@ -440,6 +462,43 @@ function saveCase()
     
     cp_update_post_meta($id, 'sequence_number', $_POST['sequence_number']);
     
+    //Save Test Case to wp_test_cases table    
+    $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE case_id=%d", $id);
+    $rid = $wpdb->get_var($query);
+    if(!$rid)
+    {
+        $wpdb->insert($wpdb->prefix . "test_cases", 
+                        array('case_id' => $id, 
+                              'case_name' => $testCaseId, 
+                              'version_major' => $_POST['version_major'], 
+                              'version_minor' => $_POST['version_minor'], 
+                              'version_patch' => $_POST['version_patch'])
+                     );
+        cp_sort_test_cases($testCaseId, $_POST['version_major']);
+    }
+    
+    //Hide Major version 0
+    if(intval($suite->version_major) == 0)
+    {
+        cp_update_post_meta($suite->id, 'hide_case', 1);
+    }
+    if($version_updated)
+    {
+        cp_sort_test_cases($testCaseId, $_POST['version_major']);
+        
+        //If the major version is updated, change new test case conf leve to default
+        if($case->version_major != $_POST['version_major'])
+        {
+            delete_post_meta($id, 'conformance_level');
+            foreach($suiteID as $sid)
+            {                
+                add_post_meta($id, 'conformance_level', "::" . $sid . "::" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE);
+            }
+        }/*else{
+            cp_update_post_meta($case->id, 'conformance_level', array(TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE));
+        }*/
+    }
+        
     addMessage('Test Case was saved successfully!');
 //    wp_redirect(get_permalink($id));
 
@@ -469,10 +528,15 @@ function saveCase()
     exit;
 }
 
-function create_revision_of_test_case($case_id)
+//Hide all versions except the latest one
+function cp_sort_test_cases($title, $version_major)
 {
     global $wpdb;
     
-    //Compare new case and the old
-    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_cases WHERE case_name = %s AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $title, $version_major);
+    $cases = $wpdb->get_results($query);
+    foreach($cases as $i=>$s)
+    {
+        update_post_meta($s->case_id, 'hide_case', $i > 0 ? 1 : 0);
+    }
 }

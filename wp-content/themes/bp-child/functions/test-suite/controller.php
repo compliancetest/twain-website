@@ -155,6 +155,21 @@ function saveSuite()
         exit;
     }
     
+    //If the major version is 0 and status is Active, set the version to 1.0.0
+    if(intval($_POST['ts_version_major']) == 0 && $_POST['ts_status'] == 'Active')
+    {
+        $_POST['ts_version_major'] = 1;
+        $_POST['ts_version_minor'] = 0;
+        $_POST['ts_version_patch'] = 0;
+    }
+    
+    //Check Version Updated or not
+    $version_updated = false;
+    if( intval($suite->version_major) != intval($_POST['ts_version_major']) || intval($suite->version_minor) != intval($_POST['ts_version_minor']) || intval($suite->version_patch) != intval($_POST['ts_version_patch']) )
+    {
+        $version_updated =  true;
+    }
+    
     $versions = array();
     $versions[] = !$_POST['ts_version_major'] ? 0 : $_POST['ts_version_major'];
 //    if($_POST['ts_version_minor'])
@@ -167,7 +182,7 @@ function saveSuite()
     
     $post_title = $_POST['ts_name'] . " v" . $version;
     
-    if(!$id) //Create New Suite
+    if( !$id || $version_updated ) //Create New Suite
     {
         //Update Test Suite Title and Excerpt
         $id = wp_insert_post(array('post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
@@ -176,6 +191,9 @@ function saveSuite()
             addMessage($id->get_error_message(), 'error');            
             return;
         }
+        
+        if(!$version_updated)
+            cp_update_post_meta($id, 'hide_suite', 0);
         
     }else{  //Update Suite
         $post_name = sanitize_title($post_title);
@@ -275,43 +293,6 @@ function saveSuite()
     //Subscription Price
     cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
     
-    
-    if(isset($_POST['variable_names']))
-    {
-        $variableNames = $_POST['variable_names'];    
-        $variableDescs = $_POST['variable_descriptions'];    
-        $variableDefaults = $_POST['variable_defaults'];    
-        $variableIDs = $_POST['variable_ids'];
-        
-        //Delete removed values
-        $wpdb->query("DELETE FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=" . $id . " AND id NOT IN ('" . implode("', '", $variableIDs) . "')");       
-        
-        for($i = 0; $i < count($variableNames); $i++)
-        {
-            if(!$variableIDs[$i])
-            {
-                $wpdb->insert($wpdb->prefix . "suites_template_variables", 
-                    array('suite_id' => $id, 
-                          'variable_name' => $variableNames[$i], 
-                          'variable_description' => $variableDescs[$i],
-                          'variable_default' => $variableDefaults[$i])
-                );
-            }else{
-                $wpdb->update($wpdb->prefix . "suites_template_variables", 
-                    array('suite_id' => $id, 
-                          'variable_name' => $variableNames[$i], 
-                          'variable_description' => $variableDescs[$i],
-                          'variable_default' => $variableDefaults[$i]),
-                    array('id' => $variableIDs[$i])                    
-                );
-            }
-        }
-    }else{
-        //Remove Old Template Variables
-        $wpdb->query("DELETE FROM " . $wpdb->prefix . "suites_template_variables WHERE suite_id=" . $id);       
-    }
-    
-    
     //Save Spec Documents        
     $docs_names = $_POST['doc_name'];
     $docs_descs = $_POST['doc_desc'];
@@ -336,14 +317,16 @@ function saveSuite()
             'size' => $docs_files['size'][$idx],
             'type' => $docs_files['type'][$idx],
         );
-        
+        $doc_file_path = '';
         $dest = '';
         if(!$doc_name && !$doc_loc && $doc_file['error'] != UPLOAD_ERR_OK)
             continue;
         if (!$doc_loc && $doc_file['error'] == UPLOAD_ERR_OK) {
             $uploaded = wp_handle_upload($doc_file, array('test_form' => false));
-            if($uploaded)
+            if($uploaded){
                 $doc_loc = $uploaded['url'];            
+                $doc_file_path = $uploaded['file'];
+            }
         }
         $wpdb->insert(
             $wpdb->prefix.'ts_options_documents', 
@@ -353,7 +336,7 @@ function saveSuite()
                 'doc_desc' => $doc_desc,
                 'doc_loc_url' => $doc_loc,
                 'doc_file_name'=> $doc_file['name'],
-                'doc_file_path' => $dest
+                'doc_file_path' => $doc_file_path
                 
             ), 
             array( 
@@ -365,6 +348,30 @@ function saveSuite()
                 '%s'
             )
         );
+    }
+    
+    //Save Test Suite to wp_test_suites table
+    if($version_updated)
+    {
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $id);
+        $rid = $wpdb->get_var($query);
+        if(!$rid)
+        {
+            $wpdb->insert($wpdb->prefix . "test_suites", 
+                            array('suite_id' => $id, 
+                                  'suite_title' => $_POST['ts_name'], 
+                                  'version_major' => $_POST['ts_version_major'], 
+                                  'version_minor' => $_POST['ts_version_minor'], 
+                                  'version_patch' => $_POST['ts_version_patch'])
+                         );
+        }
+        
+        //Hide Major version 0
+        if(intval($suite->version_major) == 0)
+        {
+            cp_update_post_meta($suite->id, 'hide_suite', 1);
+        }
+        cp_sort_test_suites($_POST['ts_name'], $_POST['ts_version_major']);
     }
     
     //Send Notification Email
@@ -399,4 +406,17 @@ function saveSuite()
     addMessage('Test Suite was saved successfully!');
     wp_redirect(get_permalink($id));
     exit;
+}
+
+//Hide all versions except the latest one
+function cp_sort_test_suites($title, $version_major)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $title, $version_major);
+    $suites = $wpdb->get_results($query);
+    foreach($suites as $i=>$s)
+    {
+        update_post_meta($s->suite_id, 'hide_suite', $i > 0 ? 1 : 0);
+    }
 }

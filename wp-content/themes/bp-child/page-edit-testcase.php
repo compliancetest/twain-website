@@ -23,7 +23,7 @@ else
     $isNew = false;
 
 
-$testsuites = $case->getAvailableTestSuites();
+$testsuites = $case->getAvailableTestSuites(isset($_GET['suite_id']) ? $_GET['suite_id'] : null );
 
 if(isset($_GET['suite_id']))
 {
@@ -102,16 +102,16 @@ get_header();
                            <label for="version">Version: </label>
                            <span>
                                <b>Major:</b> 
-                               <input type="text" id="version_major" name="version_major" class="input input-readonly" readonly="readonly" value="<?php echo $case->version_major?>" data-default="<?php echo $case->version_major?>" />                               
+                               <input type="text" id="version_major" name="version_major" class="input input-readonly"  value="<?php echo $case->version_major?>" data-default="<?php echo $case->version_major?>" />                               
                                <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
                            </span>
                            <span>
                                <b>Minor:</b>
-                               <input type="text" id="version_minor" name="version_minor" class="input input-readonly" readonly="readonly" value="<?php echo $case->version_minor?>" data-default="<?php echo $case->version_minor?>" />
+                               <input type="text" id="version_minor" name="version_minor" class="input input-readonly"  value="<?php echo $case->version_minor?>" data-default="<?php echo $case->version_minor?>" />
                                <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
                            </span>
                            <span>
-                               <b>Patch:</b> <input type="text" id="version_patch" name="version_patch" class="input input-readonly" readonly="readonly" value="<?php echo $case->version_patch?>" data-default="<?php echo $case->version_patch?>" />
+                               <b>Patch:</b> <input type="text" id="version_patch" name="version_patch" class="input input-readonly"  value="<?php echo $case->version_patch?>" data-default="<?php echo $case->version_patch?>" />
                                <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
                            </span>
                            <div class="clear"></div>
@@ -169,7 +169,7 @@ get_header();
                        <?php foreach($levels as $row){ ?>
                        <div class="field-row">
                            <div class="grid-cell radio-cell">
-                               <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array($row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                               <label><input type="radio" name="conformance_level<?php echo $sid?>" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array("::" . $sid . "::" . $row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
                            <div class="grid-cell width60P">
                                <?php echo $row['desc']?>

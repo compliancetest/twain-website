@@ -21,7 +21,14 @@ $posts_per_page = 10;
 $args = array(
         'post_type' => $post_type,         
         'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and')
+        'tax_query' => array('relation' => 'and'),
+        'meta_query' => array(
+                            array(
+                                'key' => 'hide_suite',
+                                'value' => 0,
+                                'compare' => '='
+                            )
+                        )
 );
 
 //Getting Search Query

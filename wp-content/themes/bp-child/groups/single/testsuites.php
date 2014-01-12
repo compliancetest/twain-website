@@ -18,6 +18,14 @@ $args = array(
         )
     );
 
+if(!groups_is_user_admin(get_current_user_id(), bp_get_group_id())){
+    $args['meta_query'][] =  array(
+                'key' => 'hide_suite',
+                'value' => 0,
+                'compare' => '='
+            );
+}
+
 //Getting Filter Params
 $filterType = getFilterParam('type');
 $filterIssuer = getFilterParam('issuer');
@@ -42,6 +50,7 @@ foreach($filterStatus as $v)
 }
 
 $testsuites = get_posts( $args );
+
 $roles = array();
 ?>
 <div id="testsuites-container" class="tab-content white_bcg">

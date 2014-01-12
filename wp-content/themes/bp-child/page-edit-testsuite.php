@@ -30,7 +30,7 @@ if(!$suite->community_id)
     <div class="column fifth left nopaddingleft nopaddingright sidebar">
         <?php get_sidebar('dashboard'); ?>
     </div>        
-    <div class="column four_fifths right container"> 
+    <div class="column four_fifths right container relative"> 
       <form name="suiteForm" id="suiteForm" action="" method="post" enctype="multipart/form-data">
         <?php if(!$suite->id){ ?>
         <h2>Add New Test Suite</h2>
@@ -134,9 +134,18 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell version-cell">
                            <label for="ts_name">Version: </label>
-                           <span><b>Major</b> <input type="text" id="ts_version_major" name="ts_version_major" class="input" value="<?php echo $suite->version_major?>" /></span>
-                           <span><b>Minor</b> <input type="text" id="ts_version_minor" name="ts_version_minor" class="input" value="<?php echo $suite->version_minor?>" /></span>
-                           <span><b>Patch</b> <input type="text" id="ts_version_patch" name="ts_version_patch" class="input" value="<?php echo $suite->version_patch?>" /></span>
+                           <span>
+                               <b>Major</b> <input type="text" id="ts_version_major" name="ts_version_major" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_major?>" data-default="<?php echo $suite->version_major?>" />
+                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                           </span>
+                           <span>
+                               <b>Minor</b> <input type="text" id="ts_version_minor" name="ts_version_minor" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_minor?>" data-default="<?php echo $suite->version_minor?>" />
+                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                           </span>
+                           <span>
+                               <b>Patch</b> <input type="text" id="ts_version_patch" name="ts_version_patch" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_patch?>" data-default="<?php echo $suite->version_patch?>" />
+                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                           </span>
                        </div>
                        <div class="clear"></div>
                    </div>    
@@ -200,8 +209,26 @@ if(!$suite->community_id)
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
-               <div class="column">               
+               <div class="column">   
+                   <div class="field-row">
+                       <div class="grid-cell">
+                           <label>Conformance Level Code:</label>
+                           <input type="text" class="input" name="lvl_code[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Conformance Level Description:</label>
+                           <textarea cols="" rows="" class="textarea" name="lvl_desc[]"><?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION?></textarea>
+                       </div>
+                       <div class="grid-cell">
+                           <label>&nbsp;</label>                           
+                       </div>
+                       <div class="clear"></div>
+                   </div>            
                <?php foreach($suite->conformanceLevel as $row){ ?>
+                   <?php 
+                       if($row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) 
+                           continue;
+                   ?>
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Conformance Level Code:</label>
@@ -442,11 +469,14 @@ if(!$suite->community_id)
                            <label>Document Name:</label>
                            <input type="text" class="input" name="doc_name[]" value="<?php echo $row->doc_name?>" />
                        </div>
-                       <div class="grid-cell">
+                       <div class="grid-cell width60P">
                            <label>Document Description:</label>
                            <textarea cols="" rows="" name="doc_desc[]" class="textarea"><?php echo $row->doc_desc?></textarea>
                            <label>Document Location:</label>
                            <input type="text" class="input medium-input" name="doc_loc[]" value="<?php echo $row->doc_loc_url?>" />
+                           <label>Or Upload Document:</label>
+                           <input type="file" class="input" name="doc_file[]" value="" />                           
+                           <div class="clear"></div>
                        </div>
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -461,12 +491,12 @@ if(!$suite->community_id)
                            <label>Document Name:</label>
                            <input type="text" class="input" name="doc_name[]" value="" />
                        </div>
-                       <div class="grid-cell">
+                       <div class="grid-cell width60P">
                            <label>Document Description:</label>
                            <textarea cols="" rows="" name="doc_desc[]" class="textarea"></textarea>
                            <label>Document Location:</label>
                            <input type="text" class="input medium-input" name="doc_loc[]" value="" />
-                           <label>Or Upload Document</label>
+                           <label>Or Upload Document:</label>
                            <input type="file" class="input" name="doc_file[]" value="" />
                        </div>
                        <div class="grid-cell">
@@ -525,6 +555,7 @@ if(!$suite->community_id)
        <?php
            wp_nonce_field('save-suite');
        ?>
+       <div class="loading loading-with-text" id="saving-wrapper"><div><b>SAVING YOUR DATA</b><span>Please wait...</span></div></div>
      </form>
     </div>
     <div class="clear space25"></div>
@@ -597,12 +628,12 @@ if(!$suite->community_id)
                            '<label>Document Name:</label>' + 
                            '<input type="text" class="input" name="doc_name[]" value="" />' +
                        '</div>' +
-                       '<div class="grid-cell">' +
+                       '<div class="grid-cell width60P">' +
                            '<label>Document Description:</label>' +
                            '<textarea cols="" rows="" name="doc_desc[]" class="textarea"></textarea>' +
                            '<label>Document Location:</label>' +
                            '<input type="text" class="input medium-input" name="doc_loc[]" value="" />' +
-                           '<label>Or Upload Document</label>' +
+                           '<label>Or Upload Document:</label>' +
                            '<input type="file" class="input" name="doc_file[]" value="" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
@@ -611,6 +642,7 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="clear"></div>' +
                    '</div>');
+            customizeFileTag();
             return false;
         })
 
@@ -688,9 +720,37 @@ if(!$suite->community_id)
                 return false;
             }
             jQuery('#brother-suites').remove();
+            //Show Loading box
+            jQuery('#saving-wrapper').show();
         })
         
         jQuery('#community-box .grid-box-body, #suite-type-box .grid-box-body').height(Math.max(jQuery('#community-box .grid-box-body').height(), jQuery('#suite-type-box .grid-box-body').height()));
+        //Manage Version
+        jQuery('.version-cell .action-btn').click(function(){
+            var prev = jQuery(this).prev();
+            if(!prev.val())
+                prev.val(0);
+            prev.val( parseInt(prev.val()) + 1 );
+            if(prev.attr('id') == 'ts_version_major')
+            {
+                jQuery('#ts_version_minor').val(0);
+                jQuery('#ts_version_patch').val(0);
+            }else if(prev.attr('id') == 'ts_version_minor'){
+                jQuery('#ts_version_patch').val(0);
+            }
+            jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel"></a>');
+            jQuery('.version-cell .action-btn').hide();
+            return false;
+        })
+        
+        jQuery('.version-cell').on('click', '.version-cancel', function(){
+            jQuery('.version-cell .version-updated, .version-cell .version-cancel').remove();
+            jQuery('.version-cell .action-btn').show();
+            jQuery('#ts_version_major').val(jQuery('#ts_version_major').attr('data-default'));
+            jQuery('#ts_version_minor').val(jQuery('#ts_version_minor').attr('data-default'));
+            jQuery('#ts_version_patch').val(jQuery('#ts_version_patch').attr('data-default'));
+            return false;
+        })
     })
 </script>
 <?php

@@ -3,6 +3,12 @@
 * Test Suite Class
 */
 
+if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE'))
+    define('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE', 'Default');
+if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION'))
+    define('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION', 'All test cases created via this test suite are automaticaly associated with this conformance level. This association cannot be deleted.');
+
+
 class TestSuite
 {
     var $id = null;
@@ -45,10 +51,19 @@ class TestSuite
     
     var $type = array();
     
+    var $isRevision = false;
+    
     public function __construct($id = null)
     {        
         if($id !== null)   
             $this->id = $id;        
+        
+        //Init Values
+        $this->version_major = 0;
+        $this->version_minor = 0;
+        $this->version_patch = 0;
+        $this->status = 'Draft';
+        $this->isRevision = false;
     }
     
     public function load($id = null)
@@ -64,7 +79,11 @@ class TestSuite
         $this->identifier = $this->loadSingleValue('ts_identifier');
         $this->issueDate = $this->loadSingleValue('ts_issue_date');
         $this->issuer = $this->loadSingleValue('ts_issuer');
+        
         $this->status = $this->loadSingleValue('ts_status');
+        if(!$this->status)
+            $this->status = 'Draft'; //Draft is default status
+        
         $this->revisionDescription = $this->loadSingleValue('ts_revision_description');
         $this->description = $this->loadSingleValue('ts_description');
         
@@ -74,6 +93,7 @@ class TestSuite
         
         $this->version_major = !$this->version_major ? 0 : $this->version_major;
         $this->version_minor = !$this->version_minor ? 0 : $this->version_minor;
+        $this->version_patch = !$this->version_patch ? 0 : $this->version_patch;
         
         $versions = array();
         $versions[] = $this->version_major;
@@ -102,6 +122,8 @@ class TestSuite
         $this->title = $p->post_title;
         
         $this->excerpt = $p->post_excerpt;
+        
+        $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;
     }
     
     public function loadTypes()

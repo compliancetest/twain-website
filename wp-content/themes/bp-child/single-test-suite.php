@@ -2,22 +2,31 @@
 /*
 Template Name Posts: Test Suite
 */
-  
-  get_header();
 
 	$suiteID = get_the_ID();
 	
     $suite = new TestSuite($suiteID);
     $suite->load();
     
-	$current_group_id = get_post_meta($suiteID, 'community_id', true);
-	
     $user_id = get_current_user_id();
     
 	global $bp;
     
-	$group = groups_get_group( array( 'group_id' => $current_group_id ) );
+	$group = groups_get_group( array( 'group_id' => $suite->community_id ) );
+
+    //If this is the revision, only the community admin can see it.
+    if($suite->isRevision && !groups_is_user_admin($user_id, $suite->community_id))
+    {
+        addMessage("Sorry, you are not allowed to see the test suite", "error");
+        wp_redirect(bp_get_group_permalink($group));
+        exit;
+    }
     
+    //Store Test Suite ID
+    $_SESSION['test_suite_id'] = $suiteID;
+    
+  get_header();
+      
 ?>
 	<div class="content container">
 		<div class="infos">
@@ -136,6 +145,8 @@ Template Name Posts: Test Suite
                         
                         <?php    
                         foreach($suite->conformanceLevel as $i => $row){
+                            if(!groups_is_user_admin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                continue;
                         ?>
                             <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
                             <div class="grid_cell width90P">
@@ -273,7 +284,9 @@ Template Name Posts: Test Suite
                             <select name="conformance" class="change_ts">
                               <option value="">- Conformance Level -</option>
                               <?php 
-                              foreach($suite->conformanceLevel as $r){
+                              foreach($suite->conformanceLevel as $r){                                  
+                                  if(!groups_is_user_admin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                      continue;
                                   echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r['code'].'" >'.$r['code'].'</option>';
                               }
                               ?>
@@ -330,13 +343,27 @@ Template Name Posts: Test Suite
                     //Add Test Suite ID
                     $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
                     
+                    if(!groups_is_user_admin(get_current_user_id(), $suite->community_id)){
+                        $args['meta_query'][] = array(
+                                                    'key' => 'hide_case',
+                                                    'value' => 0,
+                                                    'compare' => '='
+                                                );
+                        $args['meta_query'][] = array(
+                                                    'key' => 'conformance_level',
+                                                    'value' => "::" . $suite->id . "::" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                                                    'compare' => '!='
+                                                );
+                        
+                    }
+                    
                     if($selectedRole){
                         $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');
                         $params[] = 'tester_role=' . urlencode($selectedRole);
                     }
                     
                     if($selectedConfLevel){
-                        $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $selectedConfLevel, 'compare' => '=');
+                        $args['meta_query'][] = array('key' => 'conformance_level', 'value' => "::" . $suite->id . "::" . $selectedConfLevel, 'compare' => '=');
                         $params[] = 'conformance=' . urlencode($selectedConfLevel);
                     }
                     
@@ -381,7 +408,16 @@ Template Name Posts: Test Suite
                                 <?php echo get_post_meta($row->ID ,'choose_initiator', true)?>
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter">
-                                <?php echo get_post_meta($row->ID ,'conformance_level', true)?>
+                                <?php 
+                                    $levels = get_post_meta($row->ID ,'conformance_level');
+                                    foreach($levels as $level)
+                                    {
+                                        if(strpos($level, "::" . $suite->id . "::") !== false )
+                                        {
+                                            echo str_replace("::" . $suite->id . "::", "", $level);
+                                        }
+                                    }
+                                ?>
                             </div>
                             <div class="grid_cell nopaddingtop width8P toleft tocenter">
                                 <?php echo get_post_meta($row->ID ,'outcome_type', true)?>

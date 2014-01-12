@@ -60,6 +60,8 @@ class TestCase
     {        
         if($id !== null)   
             $this->id = $id;        
+        
+        $this->conformanceLevel = array('code' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE, 'desc' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION);
     }
     
     public function load($id = null)
@@ -241,10 +243,11 @@ class TestCase
     }
     
     
-    public function getAvailableTestSuites()
+    public function getAvailableTestSuites($current_id = null)
     {
                 
         $groups = getUserAdminGroups(get_current_user_id());
+        
         if(!$groups)
             return array();
         
@@ -258,11 +261,25 @@ class TestCase
             )
         );
         
-        foreach($groups as $group)
+        if($current_id)
+            $current_group = get_post_meta($current_id, "community_id", true);
+        else
+            $current_group = null;
+        
+        if(!$current_group)
         {
+            foreach($groups as $group)
+            {
+                $args['meta_quer'][] = array(
+                        'key' => 'community_id',
+                        'value' => $group->id,
+                        'compare' => '='
+                );
+            }
+        }else{
             $args['meta_quer'][] = array(
                     'key' => 'community_id',
-                    'value' => $group->id,
+                    'value' => $current_group,
                     'compare' => '='
             );
         }

@@ -1,4 +1,8 @@
 <?php
+//Session Start
+if(!session_id())
+    session_start();
+
 //Define Site Constants
 if(!defined('MESSAGE_KEY'))
     define('MESSAGE_KEY', 'cp_messages');
@@ -18,7 +22,7 @@ if(!defined('RECAPTCHA_PRIVATE_KEY'))
 
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
     define('DEFAULT_MAILCHIMP_LIST_ID', '5af09ce467');
-    
+
 //Session Start
 add_action('init', 'cp_session_start');
 function cp_session_start() 
