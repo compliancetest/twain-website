@@ -247,7 +247,7 @@ class TestSuite
         {
             if(!is_array($level))
                 $level = array($level);
-            $args['meta_query'][] = array('key' => 'conformance_level', 'value' => $level, 'compare'=> 'IN');
+            $args['meta_query'][] = array('key' => 'conformance_level', 'value' => "::" . $this->id . "::" . $level, 'compare'=> 'IN');
         }
         
         if(!empty($role))

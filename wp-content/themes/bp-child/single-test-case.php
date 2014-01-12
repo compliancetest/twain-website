@@ -83,6 +83,7 @@ $case->load();
                                 $lArr = array();
                                 foreach($case->conformanceLevel as $level)
                                 {
+                                    
                                     if(strpos($level, "::" . $test_suite_id . "::") !== false )
                                     {
                                         $lArr[] = str_replace("::" . $test_suite_id . "::", "", $level);

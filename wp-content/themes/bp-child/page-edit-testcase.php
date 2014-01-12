@@ -161,6 +161,7 @@ get_header();
            <div class="grid-box-body">               
                <div class="column">               
                    <?php foreach($case->testSuite as $sid){ ?>
+                      <div class="conf-level-suite-box">
                        <p><b><?php echo get_the_title($sid)?></b></p>
                        <?php
                            $suiteObj = new TestSuite($sid);
@@ -177,6 +178,7 @@ get_header();
                            <div class="clear"></div>
                        </div>
                        <?php } ?>                   
+                      </div> 
                    <?php } ?>                   
                </div>
            </div>
@@ -680,6 +682,18 @@ jQuery(document).ready(function(){
         jQuery('#version_patch').val(jQuery('#version_patch').attr('data-default'));
         return false;
     })
+    
+//    jQuery('.conf-level-suite-box').on('click', 'input[type="checkbox"]', function(){
+//        if(this.value == '<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>')
+//        {
+//            if(this.checked)
+//            {
+//                jQuery(this).parent().parent().parent().parent().find('input[type="checkbox"]').not(this).prop('checked', false);
+//            }
+//        }else if($this.checked){
+//            jQuery(this).parent().parent().parent().parent().find('input[value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>"]').prop('checked',false);
+//        }
+//    })
 });
 </script>
 <?php
