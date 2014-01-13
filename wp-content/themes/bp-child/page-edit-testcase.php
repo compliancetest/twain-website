@@ -22,8 +22,10 @@ if(!$case->id)
 else
     $isNew = false;
 
-
-$testsuites = $case->getAvailableTestSuites(isset($_GET['suite_id']) ? $_GET['suite_id'] : null );
+if($isNew)
+    $testsuites = $case->getAvailableTestSuites(isset($_GET['suite_id']) ? $_GET['suite_id'] : null );
+else
+    $testsuites = $case->getAvailableTestSuites($case->testSuite[0]);
 
 if(isset($_GET['suite_id']))
 {
@@ -43,7 +45,10 @@ if(!$case->testSuite && $isNew && count($testsuites) > 0)
 $suiteRoles = $case->getAvailableRoles();
 $suiteInitMessages = $case->getAvailableInitMessages();
 
-
+if(!$isNew)
+    $newVersionExist = isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor, $case->version_patch);
+else
+    $newVersionExist = false;
 get_header();
 
 
@@ -103,18 +108,24 @@ get_header();
                            <span>
                                <b>Major:</b> 
                                <input type="text" id="version_major" name="version_major" class="input input-readonly"  value="<?php echo $case->version_major?>" data-default="<?php echo $case->version_major?>" />                               
-                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               </a>
                            </span>
                            <span>
                                <b>Minor:</b>
                                <input type="text" id="version_minor" name="version_minor" class="input input-readonly"  value="<?php echo $case->version_minor?>" data-default="<?php echo $case->version_minor?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               </a>
                            </span>
                            <span>
                                <b>Patch:</b> <input type="text" id="version_patch" name="version_patch" class="input input-readonly"  value="<?php echo $case->version_patch?>" data-default="<?php echo $case->version_patch?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               </a>
                            </span>
-                           <div class="clear"></div>
+                           <div class="clear"></div>                           
                        </div>                                                                     
                        <div class="clear"></div>
                    </div>
@@ -160,17 +171,32 @@ get_header();
            </div>
            <div class="grid-box-body">               
                <div class="column">               
-                   <?php foreach($case->testSuite as $sid){ ?>
+                   <?php 
+                   
+                   foreach($case->testSuite as $sid){ ?>
                       <div class="conf-level-suite-box">
                        <p><b><?php echo get_the_title($sid)?></b></p>
                        <?php
                            $suiteObj = new TestSuite($sid);
                            $levels = $suiteObj->loadConformanceLevel();
                        ?>
-                       <?php foreach($levels as $row){ ?>
                        <div class="field-row">
                            <div class="grid-cell radio-cell">
-                               <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo $row['code']?>" <?php echo $case->conformanceLevel && in_array("::" . $sid . "::" . $row['code'], $case->conformanceLevel) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                               <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" class="default-level" checked="checked" /> <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?></label>
+                           </div>
+                           <div class="grid-cell width60P">
+                               <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION?>
+                           </div>
+                           <div class="clear"></div>
+                       </div>
+                       <?php foreach($levels as $row){ ?>
+                       <?php
+                           if($row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                               continue;
+                       ?>
+                       <div class="field-row">
+                           <div class="grid-cell radio-cell">
+                               <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo $row['code']?>" <?php echo isset($case->conformanceLevel[$sid]) && in_array($row['code'], $case->conformanceLevel[$sid]) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
                            <div class="grid-cell width60P">
                                <?php echo $row['desc']?>
@@ -660,6 +686,7 @@ jQuery(document).ready(function(){
     
     //Manage Version
     jQuery('.version-cell .action-btn').click(function(){
+     <?php if(!$newVersionExist){?>
         var prev = jQuery(this).prev();
         prev.val( parseInt(prev.val()) + 1 );
         if(prev.attr('id') == 'version_major')
@@ -669,8 +696,9 @@ jQuery(document).ready(function(){
         }else if(prev.attr('id') == 'version_minor'){
             jQuery('#version_patch').val(0);
         }
-        jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel"></a>');
+        jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
         jQuery('.version-cell .action-btn').hide();
+     <?php } ?>
         return false;
     })
     
@@ -683,17 +711,9 @@ jQuery(document).ready(function(){
         return false;
     })
     
-//    jQuery('.conf-level-suite-box').on('click', 'input[type="checkbox"]', function(){
-//        if(this.value == '<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>')
-//        {
-//            if(this.checked)
-//            {
-//                jQuery(this).parent().parent().parent().parent().find('input[type="checkbox"]').not(this).prop('checked', false);
-//            }
-//        }else if($this.checked){
-//            jQuery(this).parent().parent().parent().parent().find('input[value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>"]').prop('checked',false);
-//        }
-//    })
+    jQuery('.conf-level-suite-box').on('click', 'input.default-level', function(){
+        this.checked = true;
+    })
 });
 </script>
 <?php

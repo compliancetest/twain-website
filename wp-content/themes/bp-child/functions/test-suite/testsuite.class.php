@@ -73,8 +73,14 @@ class TestSuite
         
         if(!$this->id)
             return;
+            
         //Load Informations
         $this->community_id = $this->loadSingleValue('community_id');
+        if(!$this->community_id)
+        {
+            $this->id = null;
+            return;
+        }
         $this->name = $this->loadSingleValue('ts_name');
         $this->identifier = $this->loadSingleValue('ts_identifier');
         $this->issueDate = $this->loadSingleValue('ts_issue_date');

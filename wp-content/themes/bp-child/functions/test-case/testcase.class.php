@@ -81,7 +81,6 @@ class TestCase
         $this->sequenceNumber = $this->loadSingleValue('sequence_number');
         $this->testSuite = $this->loadValues('test_suite');
         
-        $this->conformanceLevel = $this->loadValues('conformance_level');
         $this->testerRole = $this->loadSingleValue('choose_tester_role');
         $this->harnessRole = $this->loadSingleValue('choose_harness_role');
         $this->Initiator = $this->loadSingleValue('choose_initiator');
@@ -118,6 +117,8 @@ class TestCase
         $this->testPattern = $this->loadSingleValue('message_count');
         $this->status = $this->loadSingleValue('test_case_status');
         
+        $this->loadConformanceLevel();
+        
         $this->loadTestSteps();
         $this->loadTestData();
         $this->loadTestExecutionData();
@@ -125,6 +126,25 @@ class TestCase
         $this->loadProfileInstances();
         
         $this->title = get_the_title($this->id);
+        
+    }
+    
+    public function loadConformanceLevel()
+    {
+        if(!$this->testSuite)
+        {
+            $this->testSuite = $this->loadValues('test_suite');
+        }
+        $this->conformanceLevel = array();
+        
+        if(is_array($this->testSuite))
+        {
+            foreach($this->testSuite as $sid)    
+            {
+                $this->conformanceLevel[$sid] = $this->loadValues('conformance_level_' . $sid);
+            }
+        }        
+        return;
         
     }
     
@@ -270,20 +290,19 @@ class TestCase
         {
             foreach($groups as $group)
             {
-                $args['meta_quer'][] = array(
+                $args['meta_query'][] = array(
                         'key' => 'community_id',
                         'value' => $group->id,
                         'compare' => '='
                 );
             }
         }else{
-            $args['meta_quer'][] = array(
+            $args['meta_query'][] = array(
                     'key' => 'community_id',
                     'value' => $current_group,
                     'compare' => '='
             );
         }
-        
         
         $testsuites = get_posts( $args );
         

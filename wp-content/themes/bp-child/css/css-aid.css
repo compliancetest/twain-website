@@ -1870,6 +1870,20 @@ tr {
 .blue-delete-btn span.p{
     background-position: 2px -574px;
 }
+.disabled-btn,
+.disabled-btn:hover{        
+    border-color: #9f9f9f;
+    background: #8a8a8a;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#a5a5a5), to(#7a7979));
+    background: -webkit-linear-gradient(top, #a5a5a5, #7a7979);
+    background: -moz-linear-gradient(top, #a5a5a5, #7a7979);
+    background: -ms-linear-gradient(top, #a5a5a5, #7a7979);
+    background: -o-linear-gradient(top, #a5a5a5, #7a7979);
+/*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#9f9f9f',GradientType=0 );     */
+    box-shadow: 0 1px 0 0 #b8b8b8 inset;
+    -moz-box-shadow: 0 1px 0 0 #b8b8b8 inset;
+    -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset; 
+}
 
 .icon-btn span.p{
     width: 12px;

@@ -189,7 +189,7 @@ $roles = array();
     <?php } ?>
     <?php if(groups_is_user_admin(get_current_user_id(), bp_get_group_id())){ ?>
     <div class="column">
-    <a href="/add-new-test-suite" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
+    <a href="/add-new-test-suite?community_id=<?php echo bp_get_group_id()?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
     <div class="clear"></div>
     </div>
     <?php } ?>

@@ -8,6 +8,8 @@ if(!isset($_REQUEST['is_ajax']))
     get_header();
 }
 $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
+$community_id = get_post_meta($test_suite_id, "community_id", true);
+
 
 $case = new TestCase(get_the_ID());
 $case->load();
@@ -81,12 +83,12 @@ $case->load();
 							<p>Conformance Level: <span>
                             <?php                                  
                                 $lArr = array();
-                                foreach($case->conformanceLevel as $level)
+                                foreach($case->conformanceLevel[$test_suite_id] as $level)
                                 {
                                     
-                                    if(strpos($level, "::" . $test_suite_id . "::") !== false )
+                                    if(groups_is_user_admin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE )
                                     {
-                                        $lArr[] = str_replace("::" . $test_suite_id . "::", "", $level);
+                                        $lArr[] = $level;
                                     }
                                 }
                                 sort($lArr);

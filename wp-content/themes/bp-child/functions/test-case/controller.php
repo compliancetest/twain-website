@@ -334,6 +334,14 @@ function saveCase()
         $_POST['version_patch'] = 0;
     }
     
+    //If this is not latest version, the version should not be udpated
+    if(!$isNew && isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor, $case->version_patch))
+    {
+        $_POST['version_major'] = $case->version_major;
+        $_POST['version_minor'] = $case->version_minor;
+        $_POST['version_patch'] = $case->version_patch;
+    }
+    
     //Check Version Updated or not
     $version_updated = false;
     if( intval($case->version_major) != intval($_POST['version_major']) || intval($case->version_minor) != intval($_POST['version_minor']) || intval($case->version_patch) != intval($_POST['version_patch']) )
@@ -366,11 +374,16 @@ function saveCase()
             exit;
         }
         
+        if($isNew && isNewVersionExist($testCaseId, $_POST['version_major'], $_POST['version_minor'], $_POST['version_patch']))
+        {
+            echo json_encode(array('status' => 'error', 'message' => 'Later version already exists!'));
+            exit;
+        }
+        
         $id = wp_insert_post(array('post_title' => $case_title, 'post_type'=>'test-case', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             echo json_encode(array('status' => 'error', 'message' => $id->get_error_message()));
-//            addMessage($id->get_error_message(), 'error');            
             return;
         }   
         
@@ -406,15 +419,16 @@ function saveCase()
     $esb->saveTestCaseInfo($id, $testCaseId . "_V" . implode(".", $versions), $_POST['outcome_type'], $_POST['message_count']);        
     
     delete_post_meta($id, 'test_suite');
-    delete_post_meta($id, 'conformance_level');
+    
     //update post metas
     foreach($suiteID as $sid)
-    {
+    {        
         add_post_meta($id, 'test_suite', $sid);   
+        delete_post_meta($id, 'conformance_level_' . $sid);
         if(isset($_POST['conformance_level' . $sid]))     
         {
             foreach($_POST['conformance_level' . $sid] as $level)
-                add_post_meta($id, 'conformance_level', "::" . $sid . "::" . $level);
+                add_post_meta($id, 'conformance_level_' . $sid, $level);
         }
     }
 
@@ -489,17 +503,15 @@ function saveCase()
     {
         cp_sort_test_cases($testCaseId, $_POST['version_major']);
         
-        //If the major version is updated, change new test case conf leve to default
+        //If the major version is updated, change new test case conf leave to default
         if($case->version_major != $_POST['version_major'])
         {
-            delete_post_meta($id, 'conformance_level');
+            /*delete_post_meta($id, 'conformance_level_');
             foreach($suiteID as $sid)
             {                
-                add_post_meta($id, 'conformance_level', "::" . $sid . "::" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE);
-            }
-        }/*else{
-            cp_update_post_meta($case->id, 'conformance_level', array(TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE));
-        }*/
+                add_post_meta($id, 'conformance_level_' . $sid, TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE);
+            }*/
+        }
     }
         
     addMessage('Test Case was saved successfully!');
@@ -542,4 +554,19 @@ function cp_sort_test_cases($title, $version_major)
     {
         update_post_meta($s->case_id, 'hide_case', $i > 0 ? 1 : 0);
     }
+}
+
+function isNewVersionExist($title, $version_major, $version_minor, $version_patch)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE case_name = %s AND 
+                            (version_major > %d OR 
+                              (version_major=%d AND version_minor > %d) OR 
+                              (version_major=%d ANd version_minor=%d AND version_patch > %d))", $title, $version_major, $version_major, $version_minor, $version_major, $version_minor, $version_patch);
+                              
+    if($wpdb->get_var($query))
+        return true;
+    else 
+        return false;
 }

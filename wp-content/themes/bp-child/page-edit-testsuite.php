@@ -20,10 +20,17 @@ if($suiteID)
     $suite->load();
 
 get_header();
-
 $groups = getUserAdminGroups(get_current_user_id());
+
+$newVersionExist = false;
+
+if($suite->id)    
+{
+    $newVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major, $suite->version_minor, $suite->version_patch);
+}
+
 if(!$suite->community_id)
-    $suite->community_id = $groups[0]->id;
+    $suite->community_id = isset($_GET['community_id']) ? $_GET['community_id'] : $groups[0]->id;
 ?>
 <div class="content edit-item-wrapper" id="edit_test_suite_wrapper">
     <div class="space25"></div>
@@ -136,15 +143,21 @@ if(!$suite->community_id)
                            <label for="ts_name">Version: </label>
                            <span>
                                <b>Major</b> <input type="text" id="ts_version_major" name="ts_version_major" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_major?>" data-default="<?php echo $suite->version_major?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               </a>
                            </span>
                            <span>
                                <b>Minor</b> <input type="text" id="ts_version_minor" name="ts_version_minor" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_minor?>" data-default="<?php echo $suite->version_minor?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               </a>
                            </span>
                            <span>
                                <b>Patch</b> <input type="text" id="ts_version_patch" name="ts_version_patch" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_patch?>" data-default="<?php echo $suite->version_patch?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn"><span class="p"></span></a>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               </a>
                            </span>
                        </div>
                        <div class="clear"></div>
@@ -711,22 +724,10 @@ if(!$suite->community_id)
             })
         })
         
-        jQuery('#suiteForm').submit(function(){
-            if(jQuery('#ts_name').val() == '')
-            {
-                jQuery('#suite-info-box').find('.message').remove();
-                jQuery('#suite-info-box .column').prepend('<div class="message error">Test Suite name should not be empty!</div>');
-                jQuery('#ts_name').focus();
-                return false;
-            }
-            jQuery('#brother-suites').remove();
-            //Show Loading box
-            jQuery('#saving-wrapper').show();
-        })
-        
         jQuery('#community-box .grid-box-body, #suite-type-box .grid-box-body').height(Math.max(jQuery('#community-box .grid-box-body').height(), jQuery('#suite-type-box .grid-box-body').height()));
         //Manage Version
         jQuery('.version-cell .action-btn').click(function(){
+         <?php if(!$newVersionExist){ ?>
             var prev = jQuery(this).prev();
             if(!prev.val())
                 prev.val(0);
@@ -738,8 +739,9 @@ if(!$suite->community_id)
             }else if(prev.attr('id') == 'ts_version_minor'){
                 jQuery('#ts_version_patch').val(0);
             }
-            jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel"></a>');
+            jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
             jQuery('.version-cell .action-btn').hide();
+         <?php } ?>
             return false;
         })
         
@@ -751,6 +753,33 @@ if(!$suite->community_id)
             jQuery('#ts_version_patch').val(jQuery('#ts_version_patch').attr('data-default'));
             return false;
         })
+        
+        //Form Validation
+        jQuery('#suiteForm').submit(function(){
+            //Title should not be empty
+            if(jQuery('#ts_name').val() == '')
+            {
+                jQuery('#suite-info-box').find('.message').remove();
+                jQuery('#suite-info-box .column').append('<div class="message error">Test Suite title should not be empty!</div>');
+                jQuery('#ts_name').focus();
+                return false;
+            }
+            
+            //Check test suite name
+            var nameReg = /^[a-z0-9-.]+$/;
+            if(!nameReg.test(jQuery('#ts_identifier').val()))
+            {
+                jQuery('#suite-info-box').find('.message').remove();
+                jQuery('#suite-info-box .column').append('<div class="message error">Names must consist of only lower case letters, numbers, dots and dashes [a-z0-9-.]+</div>');
+                jQuery('#ts_identifier').focus();
+                return false;
+            }
+            
+            jQuery('#brother-suites').remove();
+            //Show Loading box
+            jQuery('#saving-wrapper').show();
+        })
+        
     })
 </script>
 <?php

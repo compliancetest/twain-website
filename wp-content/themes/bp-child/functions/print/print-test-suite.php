@@ -100,7 +100,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         <div class="clear"></div>
     </div>
     <div class="block">
-        <h5 style="float: left; width: 33%;">Comformance Levels:</h5>
+        <h5 style="float: left; width: 33%;">Conformance Levels:</h5>
         <div style="float: left; width: 67%;">
              <?php    
             foreach($suite->conformanceLevel as $i => $row){

@@ -3,6 +3,20 @@
 Template Name Posts: Test Suite
 */
 
+if(isset($_GET['fix_conf_level']))
+{
+    global $wpdb;
+    $query = "SELECT * FROM wp_postmeta WHERE meta_key='conformance_level'";
+    $metas = $wpdb->get_results($query);
+    foreach($metas as $row)
+    {
+        $levels = explode("::", $row->meta_value);
+        $wpdb->update("wp_postmeta", array('meta_key' => 'conformance_level_' . $levels[1], 'meta_value' => $levels[2]), array('meta_id' => $row->meta_id));
+    }
+    exit;
+}
+
+
 	$suiteID = get_the_ID();
 	
     $suite = new TestSuite($suiteID);
@@ -83,7 +97,7 @@ Template Name Posts: Test Suite
 						<a href="javascript: void(0)" rel="tabs_sv2">Specification Documents</a>
 					</li>
 					<li class="">
-                        <a href="javascript: void(0)" rel="tabs_sv3">Comformance Levels</a>
+                        <a href="javascript: void(0)" rel="tabs_sv3">Conformance Levels</a>
                     </li>
                     
                     <li class="">
@@ -348,14 +362,15 @@ Template Name Posts: Test Suite
                                                     'key' => 'hide_case',
                                                     'value' => 0,
                                                     'compare' => '='
-                                                );
+                                                ); 
                         $args['meta_query'][] = array(
-                                                    'key' => 'conformance_level',
-                                                    'value' => "::" . $suite->id . "::" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                                                    'key' => 'conformance_level_' . $suite->id,
+                                                    'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
                                                     'compare' => '!='
-                                                );
-                        
+                                                );  
+                          
                     }
+                                       
                     
                     if($selectedRole){
                         $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');
@@ -409,14 +424,14 @@ Template Name Posts: Test Suite
                             </div>
                             <div class="grid_cell nopaddingtop width5P toleft tocenter">
                                 <?php 
-                                    $levels = get_post_meta($row->ID ,'conformance_level');
+                                    $levels = get_post_meta($row->ID ,'conformance_level_' . $suite->id);
                                     $lArr = array();
+                                    
                                     foreach($levels as $level)
                                     {
-                                        if(strpos($level, "::" . $suite->id . "::") !== false )
-                                        {
-                                            $lArr[] = str_replace("::" . $suite->id . "::", "", $level);
-                                        }
+                                        if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                            continue;
+                                        $lArr[] = $level;
                                     }
                                     sort($lArr);
                                     echo implode(", ", $lArr);

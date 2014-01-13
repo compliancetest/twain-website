@@ -3,12 +3,26 @@
 * Process Actions
 */
 
-add_action('after_delete_post', 'remove_suite_name_id_map', 10, 1);
+add_action('before_delete_post', 'remove_suite_name_id_map', 10, 1);
 function remove_suite_name_id_map($postid)
 {
-    $esb = new ManageESB();
-    $esb->deleteTestSuiteNameIDMap($postid);
+    global $wpdb;
     
+    $post = get_post($postid);
+    
+    if($post->post_type == 'test-suite')
+    {    
+        $esb = new ManageESB();
+        $esb->deleteTestSuiteNameIDMap($postid);
+        
+        //Delete Conformance Level    
+        $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'conformance_level_' . $postid));
+        $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
+        cp_sort_test_suites(get_post_meta($postid, 'ts_name', true), get_post_meta($postid, 'ts_version_major', true));
+        /*
+        echo get_post_meta($postid, 'ts_name', true) . ":";
+        echo get_post_meta($postid, 'ts_version_major', true);exit;*/
+    }
 }
 
 add_action('init', 'process_testsuite_actions', 100);
@@ -163,6 +177,13 @@ function saveSuite()
         $_POST['ts_version_patch'] = 0;
     }
     
+    if(!$isNew && isNewVersionExist($suite->name, $suite->version_major, $suite->version_minor, $suite->version_patch))
+    {
+        $_POST['ts_version_major'] = $suite->version_major;
+        $_POST['ts_version_minor'] = $suite->version_minor;
+        $_POST['ts_version_patch'] = $suite->version_patch;
+    }
+    
     //Check Version Updated or not
     $version_updated = false;
     if( intval($suite->version_major) != intval($_POST['ts_version_major']) || intval($suite->version_minor) != intval($_POST['ts_version_minor']) || intval($suite->version_patch) != intval($_POST['ts_version_patch']) )
@@ -182,7 +203,7 @@ function saveSuite()
     
     $post_title = $_POST['ts_name'] . " v" . $version;
     
-    if( !$id || $version_updated ) //Create New Suite
+    if( $isNew || $version_updated ) //Create New Suite
     {
         //Update Test Suite Title and Excerpt
         $id = wp_insert_post(array('post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_type'=>'test-suite', 'post_status' => 'publish'), true);
@@ -192,9 +213,10 @@ function saveSuite()
             return;
         }
         
-        if(!$version_updated)
+        if(!$version_updated){
             cp_update_post_meta($id, 'hide_suite', 0);
-        
+        }
+                
     }else{  //Update Suite
         $post_name = sanitize_title($post_title);
         $post = get_post($id);
@@ -219,7 +241,8 @@ function saveSuite()
     
     $r = wp_set_post_terms($id, $suiteTypes, 'test_suite_type');
     
-    $identifier = sanitize_title($_POST['ts_identifier']);
+//    $identifier = sanitize_title($_POST['ts_identifier']);
+    $identifier = $_POST['ts_identifier'];
     
     //Update Post Metas
     cp_update_post_meta($id, 'ts_name', $_POST['ts_name']);
@@ -373,6 +396,16 @@ function saveSuite()
             cp_update_post_meta($suite->id, 'hide_suite', 1);
         }
         cp_sort_test_suites($_POST['ts_name'], $_POST['ts_version_major']);
+        
+        //Associate all test case that are linked to the old version to the new one with Default conformance level
+        $query = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key='conformance_level_" . $suite->id . "'";
+        $rows = $wpdb->get_results($query);
+        foreach($rows as $row)
+        {
+            $wpdb->insert($wpdb->postmeta, array('post_id'=> $row->post_id, 'meta_key' => 'conformance_level_' . $id, 'meta_value' => $row->meta_value));
+            $wpdb->insert($wpdb->postmeta, array('post_id'=> $row->post_id, 'meta_key' => 'test_suite', 'meta_value' => $id));
+        }
+        
     }
     
     //Send Notification Email
@@ -420,4 +453,19 @@ function cp_sort_test_suites($title, $version_major)
     {
         update_post_meta($s->suite_id, 'hide_suite', $i > 0 ? 1 : 0);
     }
+}
+
+function isNewSuiteVersionExist($title, $version_major, $version_minor, $version_patch)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND 
+                            (version_major > %d OR 
+                              (version_major=%d AND version_minor > %d) OR 
+                              (version_major=%d ANd version_minor=%d AND version_patch > %d))", $title, $version_major, $version_major, $version_minor, $version_major, $version_minor, $version_patch);
+                              
+    if($wpdb->get_var($query))
+        return true;
+    else 
+        return false;
 }
