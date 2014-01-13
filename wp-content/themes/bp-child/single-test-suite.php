@@ -3,20 +3,6 @@
 Template Name Posts: Test Suite
 */
 
-if(isset($_GET['fix_conf_level']))
-{
-    global $wpdb;
-    $query = "SELECT * FROM wp_postmeta WHERE meta_key='conformance_level'";
-    $metas = $wpdb->get_results($query);
-    foreach($metas as $row)
-    {
-        $levels = explode("::", $row->meta_value);
-        $wpdb->update("wp_postmeta", array('meta_key' => 'conformance_level_' . $levels[1], 'meta_value' => $levels[2]), array('meta_id' => $row->meta_id));
-    }
-    exit;
-}
-
-
 	$suiteID = get_the_ID();
 	
     $suite = new TestSuite($suiteID);
