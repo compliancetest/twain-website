@@ -22,11 +22,15 @@ if($suiteID)
 get_header();
 $groups = getUserAdminGroups(get_current_user_id());
 
-$newVersionExist = false;
-
 if($suite->id)    
 {
-    $newVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major, $suite->version_minor, $suite->version_patch);
+    $newMajorVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major);
+    $newMinorVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major, $suite->version_minor);
+    $newPatchVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major, $suite->version_minor, $suite->version_patch);
+}else{
+    $newMajorVersionExist = false;    
+    $newMinorVersionExist = false;    
+    $newPatchVersionExist = false;    
 }
 
 if(!$suite->community_id)
@@ -143,20 +147,20 @@ if(!$suite->community_id)
                            <label for="ts_name">Version: </label>
                            <span>
                                <b>Major</b> <input type="text" id="ts_version_major" name="ts_version_major" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_major?>" data-default="<?php echo $suite->version_major?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
-                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newMajorVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newMajorVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
                                </a>
                            </span>
                            <span>
                                <b>Minor</b> <input type="text" id="ts_version_minor" name="ts_version_minor" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_minor?>" data-default="<?php echo $suite->version_minor?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
-                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newMinorVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newMinorVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
                                </a>
                            </span>
                            <span>
                                <b>Patch</b> <input type="text" id="ts_version_patch" name="ts_version_patch" class="input input-readonly" readonly="readonly" value="<?php echo $suite->version_patch?>" data-default="<?php echo $suite->version_patch?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
-                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newPatchVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newPatchVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
                                </a>
                            </span>
                        </div>
@@ -727,7 +731,8 @@ if(!$suite->community_id)
         jQuery('#community-box .grid-box-body, #suite-type-box .grid-box-body').height(Math.max(jQuery('#community-box .grid-box-body').height(), jQuery('#suite-type-box .grid-box-body').height()));
         //Manage Version
         jQuery('.version-cell .action-btn').click(function(){
-         <?php if(!$newVersionExist){ ?>
+            if(jQuery(this).hasClass('disabled-btn'))
+                return false;
             var prev = jQuery(this).prev();
             if(!prev.val())
                 prev.val(0);
@@ -739,9 +744,8 @@ if(!$suite->community_id)
             }else if(prev.attr('id') == 'ts_version_minor'){
                 jQuery('#ts_version_patch').val(0);
             }
-            jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
+            jQuery(this).before('<a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
             jQuery('.version-cell .action-btn').hide();
-         <?php } ?>
             return false;
         })
         
@@ -766,11 +770,11 @@ if(!$suite->community_id)
             }
             
             //Check test suite name
-            var nameReg = /^[a-z0-9-.]+$/;
+            var nameReg = /^[A-Za-z0-9-.]+$/;
             if(!nameReg.test(jQuery('#ts_identifier').val()))
             {
                 jQuery('#suite-info-box').find('.message').remove();
-                jQuery('#suite-info-box .column').append('<div class="message error">Names must consist of only lower case letters, numbers, dots and dashes [a-z0-9-.]+</div>');
+                jQuery('#suite-info-box .column').append('<div class="message error">Names must consist of only letters, numbers, dots and dashes [A-Za-z0-9-.]+</div>');
                 jQuery('#ts_identifier').focus();
                 return false;
             }

@@ -306,9 +306,17 @@ function saveSuite()
     cp_update_post_meta($id, 'ts', $ts);
     cp_update_post_meta($id, 'ts_desc', $ts_desc);
     
+    $lvl_code = array();
+    $lvl_desc = array() ;
     //Save Conformance Level
-    $lvl_code = $_POST['lvl_code'];
-    $lvl_desc = $_POST['lvl_desc'] ;
+    foreach($_POST['lvl_code'] as $i=> $code)
+    {
+        if(!trim($code))
+            continue;
+        $lvl_code[] = $code;
+        $lvl_desc[] = $_POST['lvl_desc'][$i];
+    }
+    
     
     cp_update_post_meta($id, 'lvl_code', $lvl_code);
     cp_update_post_meta($id, 'lvl_desc', $lvl_desc);
@@ -386,6 +394,17 @@ function saveSuite()
                      );
     }
     
+    if(!$isNew && $suite->name != $_POST['ts_name'])
+    {
+        suiteTitleUpdated($suite->name, $_POST['ts_name']);
+    }
+    
+    //If Name is updated, apply it to all versions
+    if(!$isNew && $suite->identifier != $identifier)
+    {
+        suiteNameUpdated($suite->identifier, $identifier);
+    }
+    
     //Save Test Suite to wp_test_suites table
     if($version_updated)
     {
@@ -455,17 +474,69 @@ function cp_sort_test_suites($title, $version_major)
     }
 }
 
-function isNewSuiteVersionExist($title, $version_major, $version_minor, $version_patch)
+function isNewSuiteVersionExist($title, $version_major, $version_minor = null, $version_patch = null)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND 
-                            (version_major > %d OR 
-                              (version_major=%d AND version_minor > %d) OR 
-                              (version_major=%d ANd version_minor=%d AND version_patch > %d))", $title, $version_major, $version_major, $version_minor, $version_major, $version_minor, $version_patch);
+    if($version_minor === null && $version_patch === null)
+    {
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND 
+                                 version_major > %d", $title, $version_major);
                               
+    }else if($version_patch === null){
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND                             
+                                 version_major=%d AND version_minor > %d", $title, $version_major, $version_minor);
+                              
+    }else{
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND 
+                                 version_major=%d ANd version_minor=%d AND version_patch > %d", $title, $version_major, $version_minor, $version_patch);
+                                  
+    }
+    
     if($wpdb->get_var($query))
         return true;
     else 
         return false;
+}
+
+function suiteTitleUpdated($old, $new)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_suites WHERE suite_title=%s", $old);
+    $suites = $wpdb->get_results($query);
+    
+    foreach($suites as $row)
+    {
+        $versions = array();
+        $versions[] = $row->version_major;
+        $versions[] = $row->version_minor;
+        
+        if($row->version_patch)
+            $versions[] = $row->version_patch;
+        
+        $version = implode(".", $versions);
+        
+        $post_title = $new . " v" . $version;
+        $post_name = sanitize_title($post_title);
+        $post = get_post($row->suite_id);
+        //Update Post Name
+        $post_name = wp_unique_post_slug($post_name, $row->suite_id, $post->post_status, $post->post_type, $post->post_parent);
+        
+        $guid = get_sample_permalink($post->ID, $post_title, $post_name);
+        
+        wp_update_post(array('ID' => $post->ID, 'post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])));
+        $wpdb->update($wpdb->prefix . "test_suites", array('suite_title' => $new), array('suite_id' => $row->suite_id));
+        cp_update_post_meta($post->ID, 'ts_name', $new);
+    }
+    
+}
+
+function suiteNameUpdated($old, $new)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("UPDATE " . $wpdb->postmeta . " SET meta_value=%s WHERE meta_key='ts_identifier' AND meta_value=%s", $new, $old);        
+    $wpdb->query($query);    
+    
 }

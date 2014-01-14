@@ -45,10 +45,15 @@ if(!$case->testSuite && $isNew && count($testsuites) > 0)
 $suiteRoles = $case->getAvailableRoles();
 $suiteInitMessages = $case->getAvailableInitMessages();
 
-if(!$isNew)
-    $newVersionExist = isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor, $case->version_patch);
-else
-    $newVersionExist = false;
+if(!$isNew){
+    $newMajorVersionExist = isNewVersionExist($case->testCaseID, $case->version_major);
+    $newMinorVersionExist = isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor);
+    $newPatchVersionExist = isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor, $case->version_patch);
+}else{
+    $newMajorVersionExist = false;
+    $newMinorVersionExist = false;
+    $newPatchVersionExist = false;
+}
 get_header();
 
 
@@ -76,7 +81,7 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label for="test_case_id">Name:</label>
-                           <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" <?php echo !$isNew ? 'readonly="readonly"' : ''?> />
+                           <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" />
                        </div>           
                         
                        <div class="grid-cell">
@@ -108,21 +113,21 @@ get_header();
                            <span>
                                <b>Major:</b> 
                                <input type="text" id="version_major" name="version_major" class="input input-readonly"  value="<?php echo $case->version_major?>" data-default="<?php echo $case->version_major?>" />                               
-                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
-                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newMajorVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newMajorVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
                                </a>
                            </span>
                            <span>
                                <b>Minor:</b>
                                <input type="text" id="version_minor" name="version_minor" class="input input-readonly"  value="<?php echo $case->version_minor?>" data-default="<?php echo $case->version_minor?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
-                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newMinorVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newMinorVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
                                </a>
                            </span>
                            <span>
                                <b>Patch:</b> <input type="text" id="version_patch" name="version_patch" class="input input-readonly"  value="<?php echo $case->version_patch?>" data-default="<?php echo $case->version_patch?>" />
-                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
-                                   <?php if($newVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
+                               <a href="#" class="action-btn icon-btn blue-plus-btn <?php if($newPatchVersionExist){?>disabled-btn has-tooltip<?php } ?>"><span class="p"></span>
+                                   <?php if($newPatchVersionExist){?><span class="simple_tooltip"><span></span>Later version already exists.</span><?php } ?>
                                </a>
                            </span>
                            <div class="clear"></div>                           
@@ -660,6 +665,14 @@ jQuery(document).ready(function(){
     })
     
     jQuery('#caseForm').submit(function(){                
+        var nameReg = /^[A-Za-z0-9-.]+$/;
+        if(!nameReg.test(jQuery('#test_case_id').val()))
+        {
+            jQuery('#edit_test_case_wrapper').find('.message').remove();
+            jQuery('#edit_test_case_wrapper .grid-box-footer').append('<div class="message error">Names must consist of only letters, numbers, dots and dashes [A-Za-z0-9-.]+</div>');
+            return false;
+        }
+        
         jQuery('#saving-wrapper').show();
         jQuery('#edit_test_case_wrapper .grid-box-footer .message').remove();
         jQuery.ajax({
@@ -686,7 +699,8 @@ jQuery(document).ready(function(){
     
     //Manage Version
     jQuery('.version-cell .action-btn').click(function(){
-     <?php if(!$newVersionExist){?>
+        if(jQuery(this).hasClass('disabled-btn'))
+            return false;
         var prev = jQuery(this).prev();
         prev.val( parseInt(prev.val()) + 1 );
         if(prev.attr('id') == 'version_major')
@@ -696,9 +710,8 @@ jQuery(document).ready(function(){
         }else if(prev.attr('id') == 'version_minor'){
             jQuery('#version_patch').val(0);
         }
-        jQuery(this).before('<span class="version-updated"></span><a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
+        jQuery(this).before('<a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
         jQuery('.version-cell .action-btn').hide();
-     <?php } ?>
         return false;
     })
     
