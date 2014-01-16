@@ -2312,6 +2312,11 @@ bottom: -6px;
 #test_suites_tab_grid .grid_cell h5{
     line-height: 1.2em;
 }
+#test_suites_tab_grid .grid_body .action_cell{
+    position: absolute;
+    top: 35px;
+    right: 16px;
+}
 #buddypress h2{
     color: #666666 !important;
     font-weight: bold;

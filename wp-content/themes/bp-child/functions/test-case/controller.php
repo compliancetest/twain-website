@@ -514,17 +514,19 @@ function saveCase()
     }
     if($version_updated)
     {
-        cp_sort_test_cases($testCaseId, $_POST['version_major']);
-        
-        //If the major version is updated, change new test case conf leave to default
-        if($case->version_major != $_POST['version_major'])
+        //If the major version is updated, remove the association to the old test suite versions
+        if($case->version_major != $_POST['version_major'] && isset($_SESSION['test_suite_id']))
         {
-            /*delete_post_meta($id, 'conformance_level_');
-            foreach($suiteID as $sid)
-            {                
-                add_post_meta($id, 'conformance_level_' . $sid, TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE);
-            }*/
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_title=%s AND version_major < %d", 
+                                    get_post_meta($_SESSION['test_suite_id'], 'ts_name', true), get_post_meta($_SESSION['test_suite_id'], 'ts_version_major', true));
+            $rows = $wpdb->get_results($query);
+            foreach($rows as $row){
+                delete_post_meta($id, 'conformance_level_' . $row->suite_id);
+                delete_post_meta($id, 'test_suite', $row->suite_id);
+            }
         }
+        
+        cp_sort_test_cases($testCaseId, $_POST['version_major']);
     }
         
     addMessage('Test Case was saved successfully!');

@@ -17,18 +17,18 @@ function remove_suite_name_id_map($postid)
         
         //Delete Conformance Level    
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'conformance_level_' . $postid));
+        
         $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
+        
         cp_sort_test_suites(get_post_meta($postid, 'ts_name', true), get_post_meta($postid, 'ts_version_major', true));
-        /*
-        echo get_post_meta($postid, 'ts_name', true) . ":";
-        echo get_post_meta($postid, 'ts_version_major', true);exit;*/
+        
     }
 }
 
 add_action('init', 'process_testsuite_actions', 100);
 function process_testsuite_actions()
 {
-    $action = isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : null;
+    $action = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : null;
     if(wp_verify_nonce($action, 'get-brother-suites-and-profile-types'))
     {        
         getBrotherSuitesAndProfileTypes();
@@ -43,17 +43,21 @@ function process_testsuite_actions()
             echo 'success';
         }
         exit;
-    }else if(wp_verify_nonce($action, 'trash_testcase')){
-        if(!can_edit_suite($_POST['suite_id']))
-        {
-            echo 'Permission Denied!';
-        }else{
-            wp_trash_post($_POST['case_id']);
-            echo 'success';
-        }
-        exit;
     }else if(wp_verify_nonce($action, 'delete-suite')){
-        
+        if(!$_REQUEST['suite_id'])
+        {
+            addMessage('Invalid Request!', 'error');
+        }else{
+            if(!can_delete_suite($_REQUEST['suite_id']))
+            {
+                addMessage('Permission Denied!', 'error');
+            }else{
+                wp_delete_post($_REQUEST['suite_id']);                
+                addMessage('The test suite was removed successfully.', 'error');                
+            }            
+        }    
+        wp_redirect(base64_decode($_REQUEST['return']));
+        exit;    
     }
     
     
