@@ -415,7 +415,7 @@ function check_exp_date($month, $year) {
     }
 }
 
-//Renaming Buddypress Documents to "WIKI"
+//Renaming Buddypress Documents to "Articles"
 
 function edit_admin_menus() {  
     global $menu;  
@@ -423,14 +423,14 @@ function edit_admin_menus() {
     foreach($menu as $i=>$m)   
     {
         if($m[0] == 'BuddyPress Docs')
-            $menu[$i][0] = 'Wiki';
+            $menu[$i][0] = 'Articles';
         if($m[0] == 'Groups')
             $menu[$i][0] = 'Communities';
         
     }
     
-    $submenu['edit.php?post_type=bp_doc'][5][0] = 'All Wikis';     
-    $submenu['edit.php?post_type=bp_doc'][10][0] = 'Add New Wiki';  
+    $submenu['edit.php?post_type=bp_doc'][5][0] = 'All Articles';
+    $submenu['edit.php?post_type=bp_doc'][10][0] = 'Add New Article';
 
 }  
 add_action( 'admin_menu', 'edit_admin_menus' );  

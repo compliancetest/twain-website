@@ -8,20 +8,20 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-11-10 17:23+0800\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-01-16 12:08+0200\n"
+"Last-Translator: Ilya Nemykin <ilhanhtml@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: Poedit 1.5.7\n"
 
 #: bp-docs.php:256
 msgctxt "post type general name"
 msgid "BuddyPress Docs"
-msgstr "ComplicaneTest  Wikis"
+msgstr "ComplicaneTest  Articles"
 
 #: bp-docs.php:257
 msgctxt "post type singular name"
 msgid "Doc"
-msgstr "Wiki"
+msgstr "Article"
 
 #: bp-docs.php:258
 msgctxt "add new"
@@ -30,29 +30,29 @@ msgstr ""
 
 #: bp-docs.php:259
 msgid "Add New Doc"
-msgstr "Add New Wiki"
+msgstr "Add New Article"
 
 #: bp-docs.php:260
 msgid "Edit Doc"
-msgstr "Edit Wiki"
+msgstr "Edit Article"
 
 #: bp-docs.php:261 includes/integration-groups.php:746
 #: includes/integration-groups.php:1268
 #: includes/templates/docs/docs-header.php:36
 msgid "New Doc"
-msgstr "New Wiki"
+msgstr "New Article"
 
 #: bp-docs.php:262
 msgid "View Doc"
-msgstr "View Wiki"
+msgstr "View Article"
 
 #: bp-docs.php:263
 msgid "Search Docs"
-msgstr "Search Wikis"
+msgstr "Search Articles"
 
 #: bp-docs.php:264
 msgid "No Docs found"
-msgstr "No Wikis found"
+msgstr "No Articles found"
 
 #: bp-docs.php:265
 msgid "No Docs found in Trash"
@@ -61,7 +61,7 @@ msgstr "No Docs found in Trash"
 #: bp-docs.php:272 includes/component.php:39
 #: includes/integration-groups.php:1063
 msgid "BuddyPress Docs"
-msgstr "ComplianceTest  Wikis"
+msgstr "ComplianceTest  Articles"
 
 #: bp-docs.php:291
 msgid "Associated Items"
@@ -73,19 +73,19 @@ msgstr ""
 
 #: bp-docs.php:486
 msgid "You are not allowed to read that Doc."
-msgstr "You are not allowed to read that Wiki."
+msgstr "You are not allowed to read that Articles."
 
 #: bp-docs.php:490
 msgid "You are not allowed to create Docs."
-msgstr "You are not allowed to create Wiki."
+msgstr "You are not allowed to create Articles."
 
 #: bp-docs.php:494
 msgid "You are not allowed to edit that Doc."
-msgstr "You are not allowed to edit that Wiki."
+msgstr "You are not allowed to edit that Articles."
 
 #: bp-docs.php:498
 msgid "You are not allowed to view that Doc's history."
-msgstr "You are not allowed to view that Wiki's history."
+msgstr "You are not allowed to view that Articles history."
 
 #: includes/addon-hierarchy.php:110
 msgid "Parent: "
@@ -97,7 +97,7 @@ msgstr ""
 
 #: includes/addon-history.php:117
 msgid "You have successfully restored the Doc to the revision from %s."
-msgstr "You do not have permission to create a Wiki in this community."
+msgstr "You do not have permission to create an Article in this community."
 
 #: includes/addon-history.php:165
 msgid "Compare Revisions of &#8220;%1$s&#8221;"
@@ -155,11 +155,11 @@ msgstr ""
 
 #: includes/addon-taxonomy.php:87
 msgid "Docs Tags"
-msgstr "Wikis Tags"
+msgstr "Articles Tags"
 
 #: includes/addon-taxonomy.php:88
 msgid "Docs Tag"
-msgstr "Wikis Tag"
+msgstr "Articles Tag"
 
 #: includes/addon-taxonomy.php:225
 msgid "Tags: %s"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: includes/addon-taxonomy.php:409
 msgid "You are viewing docs with the following tags: %s"
-msgstr "You are viewing wikis with the following tags: %s"
+msgstr "You are viewing articles with the following tags: %s"
 
 #: includes/addon-taxonomy.php:418
 msgid "Tag"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: includes/addon-taxonomy.php:528
 msgid "Docs tagged %s"
-msgstr "Wikis tagged"
+msgstr "Articles tagged"
 
 #: includes/addon-taxonomy.php:587
 msgid "Most Used"
@@ -241,13 +241,13 @@ msgstr ""
 
 #: includes/component.php:157
 msgid "Search Docs..."
-msgstr "Search Wikis"
+msgstr "Search Articles"
 
 #: includes/component.php:190 includes/component.php:296
 #: includes/integration-groups.php:740 includes/integration-groups.php:810
 #: includes/integration-groups.php:880
 msgid "Docs"
-msgstr "Wikis"
+msgstr "Articles"
 
 #: includes/component.php:203 includes/component.php:311
 #: includes/templatetags.php:1272
@@ -261,15 +261,15 @@ msgstr ""
 
 #: includes/component.php:217 includes/templatetags.php:1297
 msgid "Create New Doc"
-msgstr "Create New Wiki"
+msgstr "Create New Article"
 
 #: includes/component.php:308
 msgid "My Docs "
-msgstr "My Wikis"
+msgstr "My Articles"
 
 #: includes/component.php:308
 msgid "%s&#8217;s Docs"
-msgstr "%s&#8217;s Wikis"
+msgstr "%s&#8217;s Articles"
 
 #: includes/component.php:311
 msgid "Started By %s"
@@ -284,20 +284,20 @@ msgid ""
 "This doc is currently being edited by %s. To prevent overwrites, you cannot "
 "edit until that user has finished. Please try again in a few minutes."
 msgstr ""
-"This wiki is currently being edited by %s. To prevent overwrites, you cannot "
-"edit until that user has finished. Please try again in a few minutes."
+"This article is currently being edited by %s. To prevent overwrites, you "
+"cannot edit until that user has finished. Please try again in a few minutes."
 
 #: includes/component.php:422
 msgid "You do not have permission to edit the doc."
-msgstr "You do not have permission to edit the wiki."
+msgstr "You do not have permission to edit the articles."
 
 #: includes/component.php:438
 msgid "You do not have permission to create a Doc in this group."
-msgstr "You do not have permission to create a Wiki in this community."
+msgstr "You do not have permission to create a Articles in this community."
 
 #: includes/component.php:454
 msgid "You do not have permission to view this Doc's history."
-msgstr "You do not have permission to view this Wiki's history."
+msgstr "You do not have permission to view this articles history."
 
 #: includes/component.php:478
 msgid "Lock successfully removed"
@@ -305,39 +305,39 @@ msgstr ""
 
 #: includes/component.php:503
 msgid "Doc successfully deleted!"
-msgstr "Wiki successfully deleted!"
+msgstr "Article successfully deleted!"
 
 #: includes/component.php:505
 msgid "Could not delete doc."
-msgstr "Could not delete wiki."
+msgstr "Could not delete article."
 
 #: includes/component.php:508
 msgid "You do not have permission to delete that doc."
-msgstr "You do not have permission to delete that wiki."
+msgstr "You do not have permission to delete that article."
 
 #: includes/component.php:640
 msgid "%1$s commented on the doc %2$s"
-msgstr "%1$s commented on the wiki %2$s"
+msgstr "%1$s commented on the article %2$s"
 
 #: includes/component.php:736
 msgid "Show New Docs"
-msgstr "Show New Wikis"
+msgstr "Show New Articles"
 
 #: includes/component.php:737
 msgid "Show Doc Edits"
-msgstr "Show Wiki Edits"
+msgstr "Show Article Edits"
 
 #: includes/component.php:738
 msgid "Show Doc Comments"
-msgstr "Show Wiki Comments"
+msgstr "Show Article Comments"
 
 #: includes/component.php:805
 msgid "%1$s created the doc %2$s"
-msgstr "%1$s created the wiki %2$s"
+msgstr "%1$s created the article %2$s"
 
 #: includes/component.php:807
 msgid "%1$s edited the doc %2$s"
-msgstr "%1$s edited the wiki %2$s"
+msgstr "%1$s edited the article %2$s"
 
 #: includes/component.php:1037 includes/component.php:1049
 msgid "Search"
@@ -357,7 +357,7 @@ msgstr ""
 
 #: includes/functions.php:160
 msgid "Docs associated with the %1$s %2$s"
-msgstr "Wikis associated with the %1$s %2$s"
+msgstr "Articles associated with the %1$s %2$s"
 
 #: includes/functions.php:480 includes/templatetags.php:1363
 msgid "Logged-in Users"
@@ -365,7 +365,7 @@ msgstr ""
 
 #: includes/functions.php:485 includes/templatetags.php:1365
 msgid "The Doc author only"
-msgstr "The Wiki author only"
+msgstr "The Article author only"
 
 #: includes/functions.php:493 includes/templatetags.php:1362
 msgid "Anyone"
@@ -381,15 +381,15 @@ msgstr ""
 
 #: includes/integration-groups.php:506
 msgid "%1$s created the doc %2$s in the group %3$s"
-msgstr "%1$s created the wiki %2$s in the community %3$s"
+msgstr "%1$s created the article %2$s in the community %3$s"
 
 #: includes/integration-groups.php:508
 msgid "%1$s edited the doc %2$s in the group %3$s"
-msgstr "%1$s edited the wiki %2$s in the community %3$s"
+msgstr "%1$s edited the article %2$s in the community %3$s"
 
 #: includes/integration-groups.php:535
 msgid "%1$s commented on the doc %2$s in the group %3$s"
-msgstr "%1$s commented on the wiki %2$s in the community %3$s"
+msgstr "%1$s commented on the article %2$s in the community %3$s"
 
 #: includes/integration-groups.php:609
 msgid "Group"
@@ -407,11 +407,11 @@ msgstr ""
 
 #: includes/integration-groups.php:795
 msgid "BuddyPress Docs group tab name:"
-msgstr "ComplianceTest Wikis community tab name:"
+msgstr "ComplianceTest Articles community tab name:"
 
 #: includes/integration-groups.php:822
 msgid "BuddyPress Docs Settings"
-msgstr "ComplianceTest Wikis Settings"
+msgstr "ComplianceTest Articles Settings"
 
 #: includes/integration-groups.php:825
 msgid "Group Tab Name"
@@ -436,15 +436,15 @@ msgid ""
 "to co-author and co-edit documents with your fellow group members, which you "
 "can then sort and tag in a way that helps your group to get work done."
 msgstr ""
-"ComplianceTest Wiki is a powerful tool for collaboration with members of "
-"your group. A cross between document editor and wiki, ComplianceTest Wiki "
-"allows you to co-author and co-edit documents with your fellow community "
-"members, which you can then sort and tag in a way that helps your community "
-"to get work done."
+"ComplianceTest Articles is a powerful tool for collaboration with members of "
+"your group. A cross between document editor and articles, ComplianceTest "
+"Articles allows you to co-author and co-edit documents with your fellow "
+"community members, which you can then sort and tag in a way that helps your "
+"community to get work done."
 
 #: includes/integration-groups.php:1068
 msgid "Enable BuddyPress Docs for this group"
-msgstr "Enable Wiki for this community"
+msgstr "Enable Articles for this community"
 
 #: includes/integration-groups.php:1072
 msgid "Options"
@@ -452,7 +452,7 @@ msgstr ""
 
 #: includes/integration-groups.php:1077
 msgid "Minimum role to create new Docs:"
-msgstr "Minimum role to create new Wiki:"
+msgstr "Minimum role to create new Articles:"
 
 #: includes/integration-groups.php:1082
 msgid "Group admin"
@@ -468,7 +468,7 @@ msgstr "Community member"
 
 #: includes/integration-groups.php:1265
 msgid "View Docs"
-msgstr "View Wiki"
+msgstr "View Articles"
 
 #: includes/query-builder.php:402
 msgid "Unknown error. Please try again."
@@ -476,7 +476,7 @@ msgstr ""
 
 #: includes/query-builder.php:422
 msgid "You are not allowed to associate a Doc with that group."
-msgstr "You are not allowed to associate a Wiki with that community."
+msgstr "You are not allowed to associate a Article with that community."
 
 #: includes/query-builder.php:432
 msgid "Both the title and the content fields are required."
@@ -484,15 +484,15 @@ msgstr ""
 
 #: includes/query-builder.php:462
 msgid "There was an error when creating the doc."
-msgstr "There was an error when creating the wiki."
+msgstr "There was an error when creating the article."
 
 #: includes/query-builder.php:471
 msgid "Doc successfully created!"
-msgstr "Wiki successfully created!"
+msgstr "Article successfully created!"
 
 #: includes/query-builder.php:491
 msgid "There was an error when saving the doc."
-msgstr "There was an error when saving the wiki."
+msgstr "There was an error when saving the article."
 
 #: includes/query-builder.php:500
 msgid ""
@@ -501,20 +501,20 @@ msgid ""
 "the Edit button to return to Edit mode."
 msgstr ""
 "You idled a bit too long while in Edit mode. In order to allow others to "
-"edit the wiki you were working on, your changes have been autosaved. Click "
-"the Edit button to return to Edit mode."
+"edit the article you were working on, your changes have been autosaved. "
+"Click the Edit button to return to Edit mode."
 
 #: includes/query-builder.php:503
 msgid "Doc successfully edited!"
-msgstr "Wiki successfully edited!"
+msgstr "Article successfully edited!"
 
 #: includes/query-builder.php:534
 msgid ""
 "Your Doc was successfully saved, but some of your access settings have been "
 "changed to match the Doc's permissions."
 msgstr ""
-"Your Wiki was successfully saved, but some of your access settings have been "
-"changed to match the Wiki's permissions."
+"Your Article was successfully saved, but some of your access settings have "
+"been changed to match the Article's permissions."
 
 #: includes/templates/docs/docs-header.php:21 includes/templatetags.php:900
 msgid "Read"
@@ -535,20 +535,20 @@ msgstr ""
 
 #: includes/templates/docs/docs-loop.php:80
 msgid "Viewing %1$s-%2$s of %3$s docs"
-msgstr "Viewing %1$s-%2$s of %3$s wikis"
+msgstr "Viewing %1$s-%2$s of %3$s articles"
 
 #: includes/templates/docs/docs-loop.php:91
 msgid "There are no docs for this view. Why not <a href=\"%s\">create one</a>?"
 msgstr ""
-"There are no wikis for this view. Why not <a href=\"%s\">create one</a>?"
+"There are no articles for this view. Why not <a href=\"%s\">create one</a>?"
 
 #: includes/templates/docs/docs-loop.php:93
 msgid "There are no docs for this view."
-msgstr "There are no wikis for this view."
+msgstr "There are no articles for this view."
 
 #: includes/templates/docs/index.php:23 includes/theme-bridge.php:165
 msgid "Docs Directory"
-msgstr "Wikis Directory"
+msgstr "Articles Directory"
 
 #: includes/templates/docs/single/comments.php:27
 msgid "Discussion (%d)"
@@ -556,15 +556,15 @@ msgstr ""
 
 #: includes/templates/docs/single/comments.php:49
 msgid "There are no comments for this doc yet."
-msgstr "There are no comments for this wiki yet."
+msgstr "There are no comments for this articles yet."
 
 #: includes/templates/docs/single/comments.php:58
 msgid "Comment display has been disabled on this doc."
-msgstr "Comment display has been disabled on this wiki."
+msgstr "Comment display has been disabled on this article."
 
 #: includes/templates/docs/single/comments.php:67
 msgid "Comment posting has been disabled on this doc."
-msgstr "Comment posting has been disabled on this wiki."
+msgstr "Comment posting has been disabled on this article."
 
 #: includes/templates/docs/single/edit.php:23
 msgid "You have been idle for <span id=\"idle-warning-time\"></span>"
@@ -589,7 +589,7 @@ msgstr ""
 #: includes/templates/docs/single/edit.php:103
 msgid "Tags are words or phrases that help to describe and organize your Docs."
 msgstr ""
-"Tags are words or phrases that help to describe and organize your Wikis."
+"Tags are words or phrases that help to describe and organize your Articles."
 
 #: includes/templates/docs/single/edit.php:104
 msgid ""
@@ -603,7 +603,7 @@ msgstr ""
 
 #: includes/templates/docs/single/edit.php:124
 msgid "Select a parent for this Doc."
-msgstr "Select a parent for this Wiki."
+msgstr "Select a parent for this Article."
 
 #: includes/templates/docs/single/edit.php:126
 msgid ""
@@ -611,9 +611,9 @@ msgid ""
 "appear at the bottom of this Doc, and a link to this Doc will appear at the "
 "bottom of the parent."
 msgstr ""
-"(Optional) Assigning a parent Wiki means that a link to the parent will "
-"appear at the bottom of this Wiki, and a link to this Wiki will appear at "
-"the bottom of the parent."
+"(Optional) Assigning a parent Article means that a link to the parent will "
+"appear at the bottom of this Article, and a link to this Articles will "
+"appear at the bottom of the parent."
 
 #: includes/templates/docs/single/edit.php:147
 msgid "Save"
@@ -640,10 +640,10 @@ msgid ""
 "others can access the doc."
 msgstr ""
 "In order to prevent overwriting content, only one person can edit a given "
-"wiki at a time. For that reason, you must periodically ensure the system "
+"article at a time. For that reason, you must periodically ensure the system "
 "that you're still actively editing. If you are idle for more than 30 "
 "minutes, your changes will be auto-saved, and you'll be sent out of Edit "
-"mode so that others can access the wiki."
+"mode so that others can access the article."
 
 #: includes/templates/docs/single/edit.php:184
 msgid "I'm still editing!"
@@ -689,8 +689,8 @@ msgid ""
 "This doc is currently being edited by %1$s. In order to prevent edit "
 "conflicts, only one user can edit a doc at a time."
 msgstr ""
-"This wiki is currently being edited by %1$s. In order to prevent edit "
-"conflicts, only one user can edit a wiki at a time."
+"This article is currently being edited by %1$s. In order to prevent edit "
+"conflicts, only one user can edit a article at a time."
 
 #: includes/templates/docs/single/index.php:12
 msgid ""
@@ -708,13 +708,14 @@ msgstr ""
 
 #: includes/templatetags.php:191
 msgid "You are viewing <strong>all</strong> docs."
-msgstr "You are viewing <strong>all</strong> wikis."
+msgstr "You are viewing <strong>all</strong> articles."
 
 #: includes/templatetags.php:200
 msgid ""
 "<strong><a href=\"%s\" title=\"View All Docs\">View All Docs</a></strong>"
 msgstr ""
-"<strong><a href=\"%s\" title=\"View All Wikis\">View All Wikis</a></strong>"
+"<strong><a href=\"%s\" title=\"View All Articles\">View All Articles</a></"
+"strong>"
 
 #: includes/templatetags.php:210
 msgid "Filter by: %s"
@@ -722,18 +723,18 @@ msgstr ""
 
 #: includes/templatetags.php:287
 msgid "You are searching for docs containing the term <em>%s</em>"
-msgstr "You are searching for wikis containing the term <em>%s</em>"
+msgstr "You are searching for articles containing the term <em>%s</em>"
 
 #: includes/templatetags.php:731
 msgid "Which group should this Doc be associated with?"
-msgstr "Which community should this Wiki be associated with?"
+msgstr "Which community should this Article be associated with?"
 
 #: includes/templatetags.php:732
 msgid ""
 "(Optional) Note that the Access settings available for this Doc may be "
 "limited by the privacy settings of the group you choose."
 msgstr ""
-"(Optional) Note that the Access settings available for this Wiki may be "
+"(Optional) Note that the Access settings available for this Article may be "
 "limited by the privacy settings of the community you choose."
 
 #: includes/templatetags.php:737
@@ -762,23 +763,23 @@ msgstr "Hidden Community"
 
 #: includes/templatetags.php:835
 msgid "Who can read this doc?"
-msgstr "Who can read this wiki?"
+msgstr "Who can read this article?"
 
 #: includes/templatetags.php:839
 msgid "Who can edit this doc?"
-msgstr "Who can edit this wiki?"
+msgstr "Who can edit this article?"
 
 #: includes/templatetags.php:843
 msgid "Who can read comments on this doc?"
-msgstr "Who can read comments on this wiki? "
+msgstr "Who can read comments on this article? "
 
 #: includes/templatetags.php:847
 msgid "Who can post comments on this doc?"
-msgstr "Who can post comments on this wiki?"
+msgstr "Who can post comments on this article?"
 
 #: includes/templatetags.php:851
 msgid "Who can view the history of this doc?"
-msgstr "Who can view the history of this wiki?"
+msgstr "Who can view the history of this article?"
 
 #: includes/templatetags.php:1102
 msgid "&laquo;"
@@ -790,19 +791,19 @@ msgstr ""
 
 #: includes/templatetags.php:1266
 msgid "All Docs"
-msgstr "All Wikis"
+msgstr "All Articles"
 
 #: includes/templatetags.php:1270
 msgid "%s's Docs"
-msgstr "%s's Wikis"
+msgstr "%s's Articles"
 
 #: includes/templatetags.php:1276
 msgid "My Groups"
-msgstr "My Wikis"
+msgstr "My Articles"
 
 #: includes/templatetags.php:1348
 msgid "Group: "
-msgstr "Wiki: "
+msgstr "Article: "
 
 #: includes/templatetags.php:1350
 msgid " %s"
@@ -826,15 +827,15 @@ msgstr "Admins and mods of the community %s"
 
 #: includes/templatetags.php:1375
 msgid "The Doc author only (that's you!)"
-msgstr "The Wiki author only (that's you!)"
+msgstr "The Article author only (that's you!)"
 
 #: includes/templatetags.php:1382
 msgid "This Doc can be read by: <strong>%s</strong>"
-msgstr "This Wiki can be read by: <strong>%s</strong>"
+msgstr "This Article can be read by: <strong>%s</strong>"
 
 #: includes/templatetags.php:1386
 msgid "This Doc can be edited by: <strong>%s</strong>"
-msgstr "This Wiki can be edited by: <strong>%s</strong>"
+msgstr "This Article can be edited by: <strong>%s</strong>"
 
 #: includes/templatetags.php:1390
 msgid "Comments are visible to: <strong>%s</strong>"
@@ -878,7 +879,7 @@ msgstr ""
 
 #: includes/theme-bridge.php:223
 msgid "Create a Doc"
-msgstr "Create a Wiki"
+msgstr "Create a Article"
 
 #: includes/upgrade.php:40
 msgid "Upgrade complete!"
@@ -889,8 +890,8 @@ msgid ""
 "Thanks for updating BuddyPress Docs. We need to run a few quick operations "
 "before your new Docs is ready to use."
 msgstr ""
-"Thanks for updating ComplianceTest Wiki. We need to run a few quick "
-"operations before your new Wiki is ready to use."
+"Thanks for updating ComplianceTest Article. We need to run a few quick "
+"operations before your new Article is ready to use."
 
 #: includes/upgrade.php:62
 msgid "Click here to start the upgrade."
@@ -918,12 +919,12 @@ msgstr ""
 
 #: includes/upgrade.php:243
 msgid "Docs associated with the group %s"
-msgstr "Wiki associated with the community %s"
+msgstr "Articles associated with the community %s"
 
 #: includes/upgrade.php:258
 msgid "Group terms migrated. Now migrating Doc access terms...."
-msgstr "Community terms migrated. Now migrating Wiki access terms...."
+msgstr "Community terms migrated. Now migrating Articles access terms...."
 
 #: includes/upgrade.php:306
 msgid "Migrated %s of %s Docs. Migrating...."
-msgstr "Migrated %s of %s Wikis. Migrating...."
+msgstr "Migrated %s of %s Articles. Migrating...."

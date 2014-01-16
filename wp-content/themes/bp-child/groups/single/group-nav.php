@@ -22,7 +22,7 @@
     <li class="<?php echo (bp_current_action() == 'wiki') ? 'active' : ''?>">
         <a href="<?php echo bp_get_group_permalink();?>wiki" rel="wiki-container" class="<?php echo (bp_current_action() == 'wiki') ? 'selected' : ''?>">
             <span class="left icon" id="icon_wiki"></span>
-            <span class="right text">WIKI</span>
+            <span class="right text">ARTICLES</span>
             <span class="tabactive"></span>
             <span class="clear"></span>
         </a>
