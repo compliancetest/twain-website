@@ -175,9 +175,9 @@ function cp_send_leave_community_notification($group_id, $user_id)
 function cp_groups_notification_promoted_member( $user_id, $group_id ) {
 
     if ( groups_is_user_admin( $user_id, $group_id ) ) {
-        $promoted_to = __( 'an administrator', 'buddypress' );
+        $promoted_to = __( 'administrator', 'buddypress' );
     } else {
-        $promoted_to = __( 'a moderator', 'buddypress' );
+        $promoted_to = __( 'support', 'buddypress' );
     }
 
     // Post a screen notification first.
