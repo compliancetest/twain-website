@@ -159,7 +159,6 @@ get_header();
                            <?php foreach($testsuites as $row){ ?>
                            <label class="bottom8"><input type="checkbox" name="suite_id[]" id="suite_id<?php echo $row->ID?>" value="<?php echo $row->ID?>" <?php echo in_array($row->ID, $case->testSuite) ? 'checked="checked"' : ''?>> <?php echo apply_filters('the_title', $row->post_title)?></label>
                            <?php } ?>
-
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -178,9 +177,9 @@ get_header();
                <div class="column">               
                    <?php 
                    
-                   foreach($case->testSuite as $sid){ ?>
+                   foreach($case->testSuite as $idx=>$sid){ ?>
                       <div class="conf-level-suite-box">
-                       <p><b><?php echo get_the_title($sid)?></b></p>
+                       <p <?php if($idx > 0){?>style="border-top: solid 2px #e3e3e3; padding: 10px 0 5px; margin-top: 15px;"<?php } ?>><b><?php echo get_the_title($sid)?></b></p>
                        <?php
                            $suiteObj = new TestSuite($sid);
                            $levels = $suiteObj->loadConformanceLevel();

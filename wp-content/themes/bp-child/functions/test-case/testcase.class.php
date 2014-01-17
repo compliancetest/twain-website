@@ -274,6 +274,8 @@ class TestCase
         $args = array(
             'post_type' => 'test-suite', 
             'posts_per_page' => -1,
+            'orderby' => 'title', 
+            'order' => 'ASC',
             'post__not_in' => array($this->id),
             'meta_query' => array(
                 'relation' => 'or'
