@@ -29,7 +29,7 @@ function saveProfileType()
     }
     
     $schemaObj = json_decode($content);
-    if(!$schemaObj)
+    if(!$schemaObj || !isset($schemaObj->title) || !$schemaObj->title)
     {
         addMessage('Sorry, the entered schema is not valid structure.', 'error');
         return false;
