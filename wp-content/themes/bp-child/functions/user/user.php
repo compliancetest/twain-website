@@ -152,7 +152,7 @@ function getCustomerCardDetailById($customer_id)
 }
 
 //Add Js File
-add_action('wp_head', 'add_user_script');
+add_action('wp_enqueue_scripts', 'add_user_script');
 function add_user_script()
 {
     $actions_depends = array('jquery');
