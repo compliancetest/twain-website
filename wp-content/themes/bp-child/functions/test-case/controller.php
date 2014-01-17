@@ -507,16 +507,17 @@ function saveCase()
         cp_sort_test_cases($testCaseId, $_POST['version_major']);
     }
     
-    //Hide Major version 0
-    if(intval($suite->version_major) == 0)
-    {
-        cp_update_post_meta($suite->id, 'hide_case', 1);
-    }
     if($version_updated)
     {
         //If the major version is updated, remove the association to the old test suite versions
         if($case->version_major != $_POST['version_major'] && isset($_SESSION['test_suite_id']))
         {
+            //Hide Major version 0
+            if(intval($suite->version_major) == 0)
+            {
+                cp_update_post_meta($suite->id, 'hide_case', 1);
+            }
+            
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_title=%s AND version_major < %d", 
                                     get_post_meta($_SESSION['test_suite_id'], 'ts_name', true), get_post_meta($_SESSION['test_suite_id'], 'ts_version_major', true));
             $rows = $wpdb->get_results($query);
@@ -524,6 +525,7 @@ function saveCase()
                 delete_post_meta($id, 'conformance_level_' . $row->suite_id);
                 delete_post_meta($id, 'test_suite', $row->suite_id);
             }
+            
         }
         
         cp_sort_test_cases($testCaseId, $_POST['version_major']);
