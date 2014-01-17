@@ -15,6 +15,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                 <div class="grid-list-cell width15P">Profile Purpose</div>                
                 <div class="grid-list-cell width15P tocenter">Profile Type</div>                
                 <div class="grid-list-cell width15P tocenter">Created Date</div>                
+                <div class="grid-list-cell width10P tocenter">Action</div>                
                 <div class="clear"></div>
             </div>                          
             <?php                    
