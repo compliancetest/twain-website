@@ -60,10 +60,11 @@ $roles = array();
             <div class="grid_head grid_head_border">
                 <div class="padding10 nopaddingtop">
                     <div class="grid_cell nopaddingtop width40P">Name</div>                    
-                    <div class="grid_cell nopaddingtop width20P tocenter">Date</div>
+                    <div class="grid_cell nopaddingtop width10P tocenter">Date</div>
                     <div class="grid_cell nopaddingtop width15P tocenter">Status</div>
                     <div class="grid_cell nopaddingtop width15P tocenter">Products</div>
                     <div class="grid_cell nopaddingtop width10P tocenter two-lines">Notify Changes</div>
+                    <div class="grid_cell nopaddingtop width10P tocenter">Action</div>
                     <div class="clear"></div>
                 </div>
             </div>
@@ -82,7 +83,7 @@ $roles = array();
                     <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
                     <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
                 </div>                
-                <div class="grid_cell width20P tocenter">
+                <div class="grid_cell width10P tocenter">
                 <?php
                     $issueDate = get_post_meta($row->ID, 'ts_issue_date', true);
                     echo date('M Y', strtotime($issueDate));
@@ -100,13 +101,16 @@ $roles = array();
                 <div class="grid_cell width10P tocenter notify-changes">
                     <input type="checkbox" name="notify_changes<?php echo $row->ID?>" value="<?php echo $row->ID?>" <?php if(get_user_meta(get_current_user_id(), 'notify_suite_changes' . $row->ID, true)){?> checked="checked" <?php }?> />
                     <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/loading-small.gif" alt="" style="display: none;" />
-                </div>              
-                <?php if(groups_is_user_admin(get_current_user_id(), bp_get_group_id())){ ?>
-                <div class="grid_cell action_cell">
-                    <a href="/edit-test-suite?id=<?php echo $row->ID?>" class="action-btn edit-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Suite<span></span></span></a>
+                </div>                              
+                <div class="grid_cell width10P tocenter">
+                    <?php if(groups_is_user_admin(get_current_user_id(), bp_get_group_id())){ ?>
+                    <a href="/edit-test-suite?id=<?php echo $row->ID?>" class="action-btn edit-btn icon-btn has-tooltip left10"><span class="p"></span><span class="simple_tooltip">Edit Suite<span></span></span></a>
                     <a href="?suite_id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-suite')?>&return=<?php echo base64_encode(bp_get_group_permalink($group))?>" class="action-btn delete-btn icon-btn has-tooltip left5" onclick="return confirm('Are you sure to delete this test suite?')"><span class="p"></span><span class="simple_tooltip">Delete Suite<span></span></span></a>
+                    <?php }else{ ?>
+                    -
+                    <?php } ?>
                 </div>
-                <?php } ?>
+                
                 <div class="clear"></div>
             </div>
             <?php
