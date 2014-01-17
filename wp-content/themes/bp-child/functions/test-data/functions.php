@@ -50,14 +50,20 @@ function getCustomerProfileInstances($user_id = null)
     
 }
 
-function getUserLastUsedProfileType($type = 'harness', $user_id = null)
+function getUserLastUsedProfileType($type = 'harness', $community_id = null, $user_id = null)
 {
     global $wpdb;
     
     if(!$user_id)
         $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT type_id FROM " . $wpdb->prefix . "community_profile_instances WHERE creator_id=%d AND type=%s ORDER BY created_date DESC", $user_id, $type);
+    $query = $wpdb->prepare("SELECT type_id FROM " . $wpdb->prefix . "community_profile_instances WHERE creator_id=%d AND type=%s", $user_id, $type);
+    
+    if($community_id != null)
+        $query .= $wpdb->prepare(" AND community_id=%d", $community_id);
+        
+    $query .= ' ORDER BY created_date DESC';
+    
     $type = $wpdb->get_var($query);
     
     return $type;

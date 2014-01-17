@@ -112,9 +112,10 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
 <?php if($is_group_admin){ ?>
 <?php 
     $profileTypes = getCommunityProfileTypes(bp_get_group_id());    
-    $lastTypeID = getUserLastUsedProfileType('harness');
+    $lastTypeID = getUserLastUsedProfileType('harness', bp_get_group_id());
     
     $lastType = null;
+    
 ?>
 <div class="popup-box" id="edit-profile-box" style="display: none; width: 500px;">
     <form name="editProfileForm" id="editProfileForm" action="">
@@ -137,7 +138,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
                             $lastType = $p;
                         }else if(!$lastType && $p->id == $lastTypeID){
                             $lastType = $p;
-                        }                        
+                        }                                  
                     ?>
                     <option value="<?php echo $p->id?>" <?php echo $lastType && $lastType->id == $p->id ? "selected='selected'" : "" ?>>
                         <?php 
