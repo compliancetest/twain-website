@@ -573,7 +573,6 @@ function cp_sort_test_cases($title, $version_major)
     {
         update_post_meta($s->case_id, 'hide_case', $i > 0 ? 1 : 0);
     }
-    echo $query;
 }
 
 function isNewVersionExist($title, $version_major, $version_minor = null, $version_patch = null)
