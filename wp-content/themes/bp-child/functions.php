@@ -211,7 +211,7 @@ function initialize_widgets() {
 
 /****************************************************************** HEADER & FOOTER ****************************************************************/
 
-add_action('wp_head', 'add_header_scripts');
+add_action('wp_enqueue_scripts', 'add_header_scripts');
 
 function add_header_scripts()
 {   
