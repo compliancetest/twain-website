@@ -165,8 +165,9 @@ function getTestSuiteInfoForCase()
         $confLevelHTML = '';
         ob_start();
         ?>
-        <?php foreach($case->testSuite as $sid){ ?>
-           <p><b><?php echo get_the_title($sid)?></b></p>
+        <?php foreach($case->testSuite as $idx=> $sid){ ?>
+        <div class="conf-level-suite-box">
+           <p <?php if($idx > 0){?>style="border-top: solid 2px #e3e3e3; padding: 10px 0 5px; margin-top: 15px;"<?php } ?>><b><?php echo get_the_title($sid)?></b></p>
            <?php
                $suiteObj = new TestSuite($sid);
                $levels = $suiteObj->loadConformanceLevel();
@@ -195,6 +196,7 @@ function getTestSuiteInfoForCase()
                    <div class="clear"></div>
                </div>
                <?php } ?>                   
+           </div>
         <?php } ?>     
         <?php
         $confLevelHTML = ob_get_clean();
@@ -571,6 +573,7 @@ function cp_sort_test_cases($title, $version_major)
     {
         update_post_meta($s->case_id, 'hide_case', $i > 0 ? 1 : 0);
     }
+    echo $query;
 }
 
 function isNewVersionExist($title, $version_major, $version_minor = null, $version_patch = null)

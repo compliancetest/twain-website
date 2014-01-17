@@ -175,18 +175,21 @@ get_header();
            </div>
            <div class="grid-box-body">               
                <div class="column">               
-                   <?php 
-                   
-                   foreach($case->testSuite as $idx=>$sid){ ?>
+                   <?php                    
+                   $isFirst = true;
+                   foreach($testsuites as $crow){ 
+                       if(!in_array($crow->ID, $case->testSuite))
+                        continue;
+                   ?>
                       <div class="conf-level-suite-box">
-                       <p <?php if($idx > 0){?>style="border-top: solid 2px #e3e3e3; padding: 10px 0 5px; margin-top: 15px;"<?php } ?>><b><?php echo get_the_title($sid)?></b></p>
+                       <p <?php if(!$isFirst){?>style="border-top: solid 2px #e3e3e3; padding: 10px 0 5px; margin-top: 15px;"<?php } ?>><b><?php echo get_the_title($crow->ID)?></b></p>
                        <?php
-                           $suiteObj = new TestSuite($sid);
+                           $suiteObj = new TestSuite($crow->ID);
                            $levels = $suiteObj->loadConformanceLevel();
                        ?>
                        <div class="field-row">
                            <div class="grid-cell radio-cell">
-                               <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" class="default-level" checked="checked" /> <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?></label>
+                               <label><input type="checkbox" name="conformance_level<?php echo $crow->ID?>[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" class="default-level" checked="checked" /> <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?></label>
                            </div>
                            <div class="grid-cell width60P">
                                <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION?>
@@ -200,7 +203,7 @@ get_header();
                        ?>
                        <div class="field-row">
                            <div class="grid-cell radio-cell">
-                               <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo $row['code']?>" <?php echo isset($case->conformanceLevel[$sid]) && in_array($row['code'], $case->conformanceLevel[$sid]) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                               <label><input type="checkbox" name="conformance_level<?php echo $crow->ID?>[]" value="<?php echo $row['code']?>" <?php echo isset($case->conformanceLevel[$crow->ID]) && in_array($row['code'], $case->conformanceLevel[$crow->ID]) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
                            <div class="grid-cell width60P">
                                <?php echo $row['desc']?>
@@ -209,7 +212,10 @@ get_header();
                        </div>
                        <?php } ?>                   
                       </div> 
-                   <?php } ?>                   
+                   <?php 
+                       $isFirst = false;
+                   } 
+                   ?>                   
                </div>
            </div>
         </div>   
@@ -650,7 +656,9 @@ jQuery(document).ready(function(){
                 {
                     jQuery('#choose-conf-level-box .column').html('');
                     jQuery('#choose-conf-level-box .column').append(jQuery(rsp).find('conflevel').text());
-                    
+                    jQuery('.conf-level-suite-box input.default-level').on('click', function(){
+                        this.checked = true;
+                    })
                     jQuery('#choose-roles-box .grid-cell:lt(2)').remove();
                     jQuery('#choose-roles-box .column .field-row').prepend(jQuery(rsp).find('roles').text());
                     
