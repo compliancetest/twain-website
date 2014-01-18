@@ -5518,6 +5518,7 @@ a.suite-subscript-link:hover{
 .edit-item-wrapper .field-row .status-cell input{
     position: relative;
     top: 2px;
+    padding: 0;
 }
 .edit-item-wrapper .field-row .version-cell{
     width: 320px;
