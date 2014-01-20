@@ -39,7 +39,7 @@
                                 get_currentuserinfo();
                             ?>
                             <div id="top_loged_wellcome">
-                                <?php echo get_avatar($current_user->user_email, 28);  ?>
+                                <?php echo get_avatar($current_user->user_email, 32);  ?>
                                 <div class="right toright">
                                     Welcome
                                     <h5 class="dark_gray_txt"><?php echo cp_get_user_display_name($current_user) ;?></h5>
@@ -54,8 +54,52 @@
                                     }*/
                                     ?>
                                     <ul>
-                                        <li><a href="<?php echo home_url();?>/my-profile/">Dashboard</a></li>
-                                        <li><a href="<?php echo wp_logout_url( $logout_redirect ); ?>">Logout</a></li>
+                                        <li class="dropdown">
+                                            <a href="javascript:void(0)" class="blue-btn action-btn icon-btn dashboard-btn">
+                                                <span class="p"></span>
+                                                <span class="t">Dashboard</span>
+                                            </a>
+                                            <ul class="dropdown-menu dashboard-dropdown-menu">
+                                                <li class="dropdown-submenu">
+                                                    <a class="menu-communities" href="#">Communities</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Community 1</a></li>
+                                                        <li><a href="#">Community 2</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown-submenu">
+                                                    <a class="menu-test-suites" href="#">Test Suites</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Super Stream Contributions Test Suite v1.0</a></li>
+                                                        <li><a href="#">ebMS3 Core Features Test Suite v2.0</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a class="menu-test-data" href="#">Test Data</a>
+                                                </li>
+                                                <li>
+                                                    <a class="menu-products" href="#">Products</a>
+                                                </li>
+                                                <li>
+                                                    <a class="menu-coverage" href="#">Coverage</a>
+                                                </li>
+                                                <li>
+                                                    <a class="menu-transactions" href="#">Transactions</a>
+                                                </li>
+                                                <li>
+                                                    <a class="menu-support" href="#">Support</a>
+                                                </li>
+                                                <li>
+                                                    <a class="menu-profile" href="#">Profile</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo wp_logout_url( $logout_redirect ); ?>" class="red-btn action-btn icon-btn logout-btn">
+                                                <span class="p"></span>
+                                                <span class="t">Logout</span>                                                
+                                            </a>
+                                        </li>
                                     </ul>
                                     <div class="clear"></div>
                                 </div>
