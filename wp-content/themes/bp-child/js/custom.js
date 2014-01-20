@@ -474,8 +474,21 @@ jQuery(document).ready(function($) {
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
     })
     
+    // Dropdown Menus
+    jQuery('.dropdown > a').click(function(){
+        jQuery(this).parent().toggleClass('open');
+    });
     
+    jQuery('.dropdown-menu li').hover(function(){
+        jQuery(this).find('> a').addClass('over');
+    }, function(){
+        jQuery(this).find('> a').removeClass('over');
+    });
     
+    jQuery('.dropdown-menu').each(function(){
+        jQuery(this).find('>:first-child').addClass('first')
+        jQuery(this).find('>:last-child').addClass('last')
+    });    
 });
 
 function customizeFileTag()
