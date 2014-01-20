@@ -162,6 +162,8 @@ function getTestSuiteInfoForCase()
         $suiteRoles = $case->getAvailableRoles();
         $suiteInitMessages = $case->getAvailableInitMessages();
         
+        
+        
         $confLevelHTML = '';
         ob_start();
         ?>
@@ -201,6 +203,35 @@ function getTestSuiteInfoForCase()
         <?php
         $confLevelHTML = ob_get_clean();
         ob_end_clean();
+        
+        ob_start();
+        foreach($case->testSuite as $idx=> $sid){
+            ?>
+            <div class="scenario-box">
+               <p <?php if($idx > 0){?>style="border-top: solid 2px #e3e3e3; padding: 10px 0 5px; margin-top: 15px;"<?php } ?>><b><?php echo get_the_title($sid)?></b></p>
+               <?php
+                   $suiteObj = new TestSuite($sid);
+                   $scenarios = $suiteObj->loadScenarios();
+                   
+                   foreach($scenarios as $row){ 
+               ?>
+               <div class="field-row">
+                   <div class="grid-cell radio-cell">
+                       <label><input type="radio" name="scenario_<?php echo $sid?>" value="<?php echo $row['id']?>" <?php echo $case->scenario[$sid] == $row['id'] ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                   </div>
+                   <div class="grid-cell width60P">
+                       <?php echo $row['desc']?>
+                   </div>
+                   <div class="clear"></div>
+               </div>
+               <?php } ?>                   
+              </div> 
+            <?php
+        }
+        $scenarioHTML = ob_get_clean();
+        ob_end_clean();
+        
+        
         ob_start();
         $rolesHTML = '';
         ?>
@@ -223,7 +254,7 @@ function getTestSuiteInfoForCase()
                <?php } ?>
            </select>
        </div>
-        <?php
+        <?php        
         $rolesHTML = ob_get_clean();
         ob_end_clean();
         ob_start();
@@ -286,6 +317,7 @@ function getTestSuiteInfoForCase()
         echo '<result>';
         echo '<status>success</status>';
         echo '<conflevel><![CDATA[' . $confLevelHTML . ']]></conflevel>';
+        echo '<scenario><![CDATA[' . $scenarioHTML . ']]></scenario>';
         echo '<roles><![CDATA[' . $rolesHTML . ']]></roles>';
         echo '<initmsg><![CDATA[' . $initMsgHTML . ']]></initmsg>';
         echo '<profiles><![CDATA[' . $profilesHTML . ']]></profiles>';
@@ -445,7 +477,12 @@ function saveCase()
             foreach($_POST['conformance_level' . $sid] as $level)
                 add_post_meta($id, 'conformance_level_' . $sid, $level);
         }
+        
+        //Update Scenario
+        delete_post_meta($id, 'scenario_' . $sid);
+        update_post_meta($id, 'scenario_' . $sid, $_POST['scenario_' . $sid]);
     }
+    
     cp_update_post_meta($id, 'test_case_id', $testCaseId);   
     cp_update_post_meta($id, 'published', $_POST['published']);
     
@@ -492,7 +529,7 @@ function saveCase()
     $property_value_exec = $_POST['property_value_exec']; 
     cp_update_post_meta($id, 'property_value_exec', $property_value_exec);
     
-    cp_update_post_meta($id, 'sequence_number', $_POST['sequence_number']);
+//    cp_update_post_meta($id, 'sequence_number', $_POST['sequence_number']);
     
     //Save Test Case to wp_test_cases table    
     $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE case_id=%d", $id);
@@ -636,3 +673,34 @@ function caseNameUpdated($old, $new)
     }
     
 }
+
+function add_scenario_join_query($join, $object)
+{
+    global $wpdb, $post;
+    
+    $join .= " INNER JOIN {$wpdb->postmeta} AS scenario_meta ON scenario_meta.post_id={$wpdb->posts}.ID AND scenario_meta.meta_key='scenario_" . $post->ID . "' ";
+    $join .= " INNER JOIN {$wpdb->prefix}test_suites_scenarios AS scenario ON scenario_meta.meta_value=scenario.id ";
+    
+    return $join;
+}
+
+function add_scenario_orderby_query($orderby, $object)
+{
+    global $wpdb, $post;
+    
+    $orderby = " scenario.sequence ASC, " . $orderby;
+    
+    return $orderby;
+}
+
+function add_scenario_fields_query($fields, $object)
+{
+    global $wpdb, $post;
+    
+    if($fields)
+        $fields .= ", ";
+    $fields .= " scenario.code AS scenarioCode, scenario.description as scenarioDescription, scenario.id as scenarioId ";
+    
+    return $fields;
+}
+

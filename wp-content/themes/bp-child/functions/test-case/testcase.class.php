@@ -4,7 +4,7 @@ class TestCase
 {
     var $id = null;
     
-    var $sequenceNumber = null;
+//    var $sequenceNumber = null;
     
     var $title = '';
     
@@ -56,6 +56,8 @@ class TestCase
     
     var $status = '';
     
+    var $scenario = '';
+    
     public function __construct($id = null)
     {        
         if($id !== null)   
@@ -78,7 +80,7 @@ class TestCase
             return;
             
         $this->name = get_the_title($this->id);
-        $this->sequenceNumber = $this->loadSingleValue('sequence_number');
+//        $this->sequenceNumber = $this->loadSingleValue('sequence_number');
         $this->testSuite = $this->loadValues('test_suite');
         
         $this->testerRole = $this->loadSingleValue('choose_tester_role');
@@ -124,6 +126,7 @@ class TestCase
         $this->loadTestExecutionData();
         $this->loadMessageTemplates();
         $this->loadProfileInstances();
+        $this->loadScenario();
         
         $this->title = get_the_title($this->id);
         
@@ -147,6 +150,28 @@ class TestCase
         return;
         
     }
+    
+    public function loadScenario()
+    {
+        if(!$this->testSuite)
+        {
+            $this->testSuite = $this->loadValues('test_suite');
+        }
+        $this->scenario = array();
+        
+        if(is_array($this->testSuite))
+        {
+            foreach($this->testSuite as $sid)    
+            {
+                $this->scenario[$sid] = $this->loadSingleValue('scenario_' . $sid);
+            }
+        }       
+        
+        return;
+        
+    }
+    
+    
     
     public function loadTestSteps()
     {
@@ -391,6 +416,20 @@ class TestCase
         }
         
         return $instances;
+    }
+    
+    public function getScenario($suite_id)
+    {
+        global $wpdb;
+        
+        $sid = isset($this->scenario[$suite_id]) ? $this->scenario[$suite_id] : null;
+        if(!$sid)
+            return '';
+        
+        $query = $wpdb->prepare("SELECT code FROM {$wpdb->prefix}test_suites_scenarios WHERE id=%d", $sid);
+        $scode = $wpdb->get_var($query);
+        
+        return $scode;
     }
     
 }

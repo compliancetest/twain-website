@@ -80,8 +80,8 @@ $case->load();
 					<div class="grid_row white_bcg noborderbottom">
 						<div class="grid_cell width10P left size13 bold dark_blue_txt">Properties:</div>
 						<div class="grid_cell width30P left">
-							<p>Conformance Level: <span>
-                            <?php                                  
+							<p>Conformance Levels: <span>
+                            <?php
                                 $lArr = array();
                                 foreach($case->conformanceLevel[$test_suite_id] as $level)
                                 {
@@ -96,13 +96,17 @@ $case->load();
                             ?>
                             </span></p>
 						</div>
-						<div class="grid_cell width30P left">
+						<div class="grid_cell width20P left">
+                            <p>Scenario: <span><?php echo $case->getScenario($test_suite_id); ?></span></p>
+                        </div>
+                        <div class="grid_cell width18P left">
 							<p>Outcome Type: <span><?php echo $case->outcomeType; ?></span></p>
 						</div>
-						<div class="grid_cell width15P left">
+						<div class="grid_cell width12P left">
 							<p>Test Pattern: <span><a href="/help-faq/test-patterns/"><?php echo $case->testPattern; ?></a></span></p>
 						</div>
-						<div class="grid_cell width15P left">	
+                        
+						<div class="grid_cell width10P left">	
 							<p>Bulk: <span><?php echo $case->bulk; ?></span></p>
 						</div>
 						<div class="clear"></div>

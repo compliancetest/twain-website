@@ -20,6 +20,9 @@ function remove_suite_name_id_map($postid)
         
         $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
         
+        //Delete Scenarios
+        $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
+        
         cp_sort_test_suites(get_post_meta($postid, 'ts_name', true), get_post_meta($postid, 'ts_version_major', true));
         
     }
@@ -328,6 +331,28 @@ function saveSuite()
     //Subscription Price
     cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
     
+    //Save Scenarios
+    //Removed deleted scenarios
+    if(!isset($_POST['scenario_id']))
+    {
+        $_POST['scenario_id'] = array();
+        $_POST['scenario_code'] = array();
+    }
+    $query = "DELETE FROM {$wpdb->prefix}test_suites_scenarios WHERE suite_id=" . $id . " AND id NOT IN ('" . implode("', '", $_POST['scenario_id']) . "')";    
+    $wpdb->query($query);
+    
+    foreach($_POST['scenario_code'] as $idx => $code)
+    {
+        if(!$code)
+            continue;
+        if(!$_POST['scenario_id'][$idx])                
+        {
+            $wpdb->insert($wpdb->prefix . "test_suites_scenarios", array('suite_id' =>  $id, 'code' => $_POST['scenario_code'][$idx], 'description' => $_POST['scenario_desc'][$idx], 'sequence' => $_POST['scenario_sequence'][$idx]));
+        }else{
+            $wpdb->update($wpdb->prefix . "test_suites_scenarios", array('suite_id' =>  $id, 'code' => $_POST['scenario_code'][$idx], 'description' => $_POST['scenario_desc'][$idx], 'sequence' => $_POST['scenario_sequence'][$idx]), array('id' => $_POST['scenario_id'][$idx]));
+        }
+    }
+    
     //Save Spec Documents        
     $docs_names = $_POST['doc_name'];
     $docs_descs = $_POST['doc_desc'];
@@ -543,4 +568,28 @@ function suiteNameUpdated($old, $new)
     $query = $wpdb->prepare("UPDATE " . $wpdb->postmeta . " SET meta_value=%s WHERE meta_key='ts_identifier' AND meta_value=%s", $new, $old);        
     $wpdb->query($query);    
     
+}
+
+
+if(isset($_GET['fix_case_scenario']))
+{
+    global $wpdb;
+    
+    //Getting Default Levels
+    $query = "SELECT suite_id, id FROM wp_test_suites_scenarios WHERE `code`='" . TEST_SUITE_DEFAULT_SCENARIO_CODE . "'";
+    $rows = $wpdb->get_results($query);
+    $dScenarios = array();
+    foreach($rows as $row)
+        $dScenarios[$row->suite_id] = $row->id;
+    
+    $query = "SELECT * FROM {$wpdb->postmeta} WHERE meta_key='test_suite' order by post_id";
+    $rows =  $wpdb->get_results($query);
+    
+    foreach($rows as $row)
+    {
+        if(!$dScenarios[$row->meta_value])
+            continue;
+        $wpdb->insert($wpdb->postmeta, array('post_id' => $row->post_id, 'meta_key' => 'scenario_' . $row->meta_value, 'meta_value' => $dScenarios[$row->meta_value]));
+    }
+    exit;
 }

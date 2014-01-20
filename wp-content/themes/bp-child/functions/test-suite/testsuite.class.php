@@ -8,6 +8,12 @@ if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE'))
 if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION'))
     define('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION', 'All test cases created via this test suite are automaticaly associated with this conformance level. This association cannot be deleted.');
 
+if(!defined('TEST_SUITE_DEFAULT_SCENARIO_CODE'))
+    define('TEST_SUITE_DEFAULT_SCENARIO_CODE', 'Default');
+if(!defined('TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION'))
+    define('TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION', 'All test cases created via this test suite are initially associated with this scenario. In general, test cases will be associated with test suite specific scenarios, so it will usually be the case that no test cases are associated with the this scenario.');
+
+
 
 class TestSuite
 {
@@ -52,6 +58,8 @@ class TestSuite
     var $type = array();
     
     var $isRevision = false;
+    
+    var $scenarios = array();
     
     public function __construct($id = null)
     {        
@@ -122,6 +130,7 @@ class TestSuite
         $this->loadSpecDocuments();
         $this->loadTypes();        
         $this->loadProfileTypes();
+        $this->loadScenarios();
         
         $p = get_post($this->id);
         
@@ -253,7 +262,7 @@ class TestSuite
         {
             if(!is_array($level))
                 $level = array($level);
-            $args['meta_query'][] = array('key' => 'conformance_level', 'value' => "::" . $this->id . "::" . $level, 'compare'=> 'IN');
+            $args['meta_query'][] = array('key' => 'conformance_level_' . $this->id, 'value' => $level, 'compare'=> 'IN');
         }
         
         if(!empty($role))
@@ -332,5 +341,15 @@ class TestSuite
         $types = get_terms('test_suite_type', array('hide_empty' => false));
         
         return $types;
+    }
+    
+    public function loadScenarios()
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_suites_scenarios WHERE suite_id=%d ORDER BY sequence", $this->id);        
+        $this->scenarios = $wpdb->get_results($query, ARRAY_A);
+        
+        return $this->scenarios;
     }
 }

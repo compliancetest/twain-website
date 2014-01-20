@@ -304,6 +304,7 @@ Template Name Posts: Test Suite
 			</div>
 				<div class="grid_head blue_grid special_grid_big">
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
+                        <div class="grid_cell nopaddingtop width27P toleft single_line">Test Scenario</div>
                         <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
 						<div class="grid_cell nopaddingtop width8P toleft single_line">Test Case</div>
 						<!--<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Version</div>-->
@@ -311,12 +312,12 @@ Template Name Posts: Test Suite
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Harness<br/>Role(s)</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Initiator</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Level</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Levels</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
 						<div class="grid_cell nopaddingtop width10P toleft tocenter">Initiating<br/>Message</div>
-						<div class="grid_cell nopaddingtop width27P toleft single_line">Test Intent Description</div>
+<!--						<div class="grid_cell nopaddingtop width27P toleft single_line">Test Intent Description</div>-->
 						<div class="grid_cell nopaddingtop width5P toleft single_line">Actions</div>
 						<div class="clear"></div>	
 					</div>
@@ -332,9 +333,8 @@ Template Name Posts: Test Suite
 				    //Getting Test Cases
                     $args = array(
                             'post_type' => 'test-case',         
-                            'posts_per_page' => $posts_per_page,
-                            'meta_key'  => 'sequence_number',
-                            'orderby'  => 'meta_value_num',
+                            'posts_per_page' => $posts_per_page,                            
+                            'orderby'  => 'title',
                             'order'     => 'ASC',                            
                             'paged' => $page,
                             'meta_query' => array('relation' => 'and')
@@ -369,98 +369,137 @@ Template Name Posts: Test Suite
                     }
                     
                     $get_query = new WP_Query($args);
+                    
+                    //Add Order by Scenaro 
+                    $get_query->set('suppress_filters', false);
+                    add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
+                    add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
+                    add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
                     $testCases = $get_query->get_posts();
                     
+                    //Remove Filters
+                    remove_filter('posts_join_paged', 'add_scenario_join_query');
+                    remove_filter('posts_orderby', 'add_scenario_orderby_query');
+                    remove_filter('posts_fields_request', 'add_scenario_fields_query');
+                    
+                    //Classify the results by Scenario
+                    $results = array();
                     foreach($testCases as $row)
                     {
-                        $majorVersion = get_post_meta($row->ID, 'version_major', true);
-                        $minorVersion = get_post_meta($row->ID, 'version_minor', true);
-                        $patchVersion = get_post_meta($row->ID, 'version_patch', true);
-                        $versions = array();
-                        if($majorVersion)
-                            $versions[] = $majorVersion;
-                        if($minorVersion)
-                            $versions[] = $minorVersion;
-                        if($patchVersion)
-                            $versions[] = $patchVersion;
-                        
-                        $version = implode(".", $versions);
-                        $caseStatus = get_post_meta($row->ID ,'test_case_status', true);
-                        ?>
-                        <div class="grid_row white_bcg tocenter testcase_line ">
-                            <div class="grid_cell nopaddingtop width2P tocenter relative">
-                                <span class="status_btn status_circle has-tooltip status_<?php echo sanitize_title($caseStatus)?>">
-                                    <?php echo substr($caseStatus == 'Deprecated' ? "C" : $caseStatus, 0, 1)
-                                ?><span class="simple_tooltip"><?php echo $caseStatus?><span></span></span></span>                                
+                        if(!isset($results[$row->scenarioId]))
+                            $results[$row->scenarioId] = array();
+                        $results[$row->scenarioId][] = $row;
+                    }
+                    $first = true;
+                    foreach($results as $scId => $testCases)
+                    {
+                        if(!$testCases)
+                            continue;
+                        ?>                        
+                        <div class="test-scenario-row relative" <?php if(!$first){?>style="border-top: solid 2px #d7d7d7"<?php } ?>>
+                            <div class="scenario-cell nopaddingtop width27P left">
+                                <div style="padding: 15px 10px; border-right: solid 1px #d7d7d7; border-radius: 0;">
+                                <?php echo $testCases[0]->scenarioDescription?>
+                                </div>
                             </div>
-                            <div class="grid_cell nopaddingtop width8P toleft ">
-                                <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
-                            </div>
-                            <div class="grid_cell nopaddingtop width8P toleft tocenter ">
-                                <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width8P toleft tocenter">
-                                <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width8P toleft tocenter">
-                                <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                <?php echo get_post_meta($row->ID ,'choose_initiator', true)?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter">
-                                <?php 
-                                    $levels = get_post_meta($row->ID ,'conformance_level_' . $suite->id);
-                                    $lArr = array();
-                                    
-                                    foreach($levels as $level)
-                                    {
-                                        if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
-                                            continue;
-                                        $lArr[] = $level;
-                                    }
-                                    sort($lArr);
-                                    echo implode(", ", $lArr);
-                                ?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width8P toleft tocenter">
-                                <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter">
-                                <?php echo get_post_meta($row->ID ,'message_count', true)?>
-                            </div>
-                            <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                <?php echo get_post_meta($row->ID ,'bulk', true)?>
-                            </div>-->
-                            <div class="grid_cell nopaddingtop width10P toleft tocenter">
-                                <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
-                            </div>
-                            <div class="grid_cell nopaddingtop width27P toleft">
-                            <?php 
-                                $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
-                                if(strlen($intentDesc) > 150)
-                                    echo substr($intentDesc, 0, 150) . "...";
-                                else
-                                    echo $intentDesc;
-                            ?>
-                            </div>                            
-                            <div class="grid_cell nopaddingtop width5P toleft tocenter grid_action_cell">
-                                <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
-                                <?php if(can_edit_test_case($row->ID)){ ?>
-                                <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Case<span></span></span></a>
-                                <?php } ?>
-                                <?php if(can_delete_test_case($row->ID)){ ?>
-                                <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn delete-btn has-tooltip" onclick="return confirm('Are you sure to delete this test case?')"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
-                                <?php } ?>
-                                <?php }else{ ?>
-                                -
-                                <?php } ?>
-                                <div class="clear"></div>                                                                        
-                            </div>
+                            <div class="right" style="width: 73%;">
+                        <?php
+                        foreach($testCases as $row){
+                            $majorVersion = get_post_meta($row->ID, 'version_major', true);
+                            $minorVersion = get_post_meta($row->ID, 'version_minor', true);
+                            $patchVersion = get_post_meta($row->ID, 'version_patch', true);
+                            $versions = array();
+                            if($majorVersion)
+                                $versions[] = $majorVersion;
+                            if($minorVersion)
+                                $versions[] = $minorVersion;
+                            if($patchVersion)
+                                $versions[] = $patchVersion;
                             
-                            <div class="clear"></div>
-                        </div>
+                            $version = implode(".", $versions);
+                            $caseStatus = get_post_meta($row->ID ,'test_case_status', true);
+                            ?>
+                            <div class="grid_row white_bcg tocenter testcase_line ">
+                                <div class="grid_cell nopaddingtop tocenter relative" style="width: 2.2%;">
+                                    <span class="status_btn status_circle has-tooltip status_<?php echo sanitize_title($caseStatus)?>">
+                                        <?php echo substr($caseStatus == 'Deprecated' ? "C" : $caseStatus, 0, 1)
+                                    ?><span class="simple_tooltip"><?php echo $caseStatus?><span></span></span></span>                                
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft " style="width: 11%;">
+                                    <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft tocenter " style="width: 11%;">
+                                    <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft tocenter" style="width: 11%">
+                                    <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft tocenter" style="width: 11%">
+                                    <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
+                                </div>
+                                <div class="grid_cell nopaddingtop  toleft tocenter " style="width: 7%;">
+                                    <?php echo get_post_meta($row->ID ,'choose_initiator', true)?>
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft tocenter" style="width: 7%">
+                                    <?php 
+                                        $levels = get_post_meta($row->ID ,'conformance_level_' . $suite->id);
+                                        $lArr = array();
+                                        
+                                        foreach($levels as $level)
+                                        {
+                                            if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                                continue;
+                                            $lArr[] = $level;
+                                        }
+                                        sort($lArr);
+                                        echo implode(", ", $lArr);
+                                    ?>
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft tocenter" style="width: 11%;">
+                                    <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
+                                </div>
+                                <div class="grid_cell nopaddingtop toleft tocenter" style="width: 7%;">
+                                    <?php echo get_post_meta($row->ID ,'message_count', true)?>
+                                </div>
+                                <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
+                                    <?php echo get_post_meta($row->ID ,'bulk', true)?>
+                                </div>-->
+                                <div class="grid_cell nopaddingtop toleft tocenter" style="width: 14%;">
+                                    <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
+                                </div>
+                                <!--<div class="grid_cell nopaddingtop width27P toleft">
+                                <?php 
+                                    /*$intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
+                                    if(strlen($intentDesc) > 150)
+                                        echo substr($intentDesc, 0, 150) . "...";
+                                    else
+                                        echo $intentDesc;*/
+                                ?>
+                                </div>            -->                
+                                <div class="grid_cell nopaddingtop toleft tocenter grid_action_cell" style="width: 7%;">
+                                    <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
+                                    <?php if(can_edit_test_case($row->ID)){ ?>
+                                    <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Case<span></span></span></a>
+                                    <?php } ?>
+                                    <?php if(can_delete_test_case($row->ID)){ ?>
+                                    <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn delete-btn has-tooltip" onclick="return confirm('Are you sure to delete this test case?')"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
+                                    <?php } ?>
+                                    <?php }else{ ?>
+                                    -
+                                    <?php } ?>
+                                    <div class="clear"></div>                                                                        
+                                </div>
+                                
+                                <div class="clear"></div>
+                            </div><!-- End Test Case -->
                 <?php                        
+                        }
+                        $first = false;
+                        ?>
+                            </div>
+                            <div class="clear"></div>
+                        </div><!-- End Test Scenario -->
+                        <?php
                     }
 				?>				
                 <?php
@@ -722,6 +761,10 @@ jQuery(document).ready(function($) {
                 }
             }
         })
+    })
+    
+    $('.test-scenario-row .scenario-cell').each(function(){
+        $(this).find('div').height($(this).parent().height() - 30);
     })
 });
 </script>

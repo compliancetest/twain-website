@@ -81,17 +81,17 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label for="test_case_id">Name:</label>
-                           <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input" />
+                           <input type="text" name="test_case_id" id="test_case_id" value="<?php echo $case->testCaseID?>" class="input medium-input" />
                        </div>           
                         
                        <div class="grid-cell">
                            <label for="published">Issued:</label>
                            <input type="text" name="published" id="published" value="<?php echo $case->publishedDate?>" class="input datepicker" />
                        </div>                   
-                       <div class="grid-cell">
+                       <!--<div class="grid-cell">
                            <label for="sequence_number">Execution Sequence Number:</label>
                            <input type="text" name="sequence_number" id="sequence_number" value="<?php echo $case->sequenceNumber?>" class="input" />                           
-                       </div> 
+                       </div> -->
                        <div class="clear"></div>
                    </div>               
                    <div class="field-row">
@@ -170,7 +170,7 @@ get_header();
         <div class="grid-box grid-box-expandable grid-box-opened" id="choose-conf-level-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Choose Conformance Level</h5>
+               <h5 class="left">Choose Conformance Levels</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">               
@@ -204,6 +204,48 @@ get_header();
                        <div class="field-row">
                            <div class="grid-cell radio-cell">
                                <label><input type="checkbox" name="conformance_level<?php echo $crow->ID?>[]" value="<?php echo $row['code']?>" <?php echo isset($case->conformanceLevel[$crow->ID]) && in_array($row['code'], $case->conformanceLevel[$crow->ID]) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
+                           </div>
+                           <div class="grid-cell width60P">
+                               <?php echo $row['desc']?>
+                           </div>
+                           <div class="clear"></div>
+                       </div>
+                       <?php } ?>                   
+                      </div> 
+                   <?php 
+                       $isFirst = false;
+                   } 
+                   ?>                   
+               </div>
+           </div>
+        </div>   
+        <div class="space25"></div>
+        
+        <div class="grid-box grid-box-expandable grid-box-opened" id="choose-scenarios-box">
+           <div class="grid-box-header">
+               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+               <h5 class="left">Choose Scenarios</h5>
+               <div class="clear"></div>
+           </div>
+           <div class="grid-box-body">               
+               <div class="column">               
+                   <?php                    
+                   $isFirst = true; 
+                   foreach($testsuites as $crow){ 
+                       if(!in_array($crow->ID, $case->testSuite))
+                        continue;
+                   ?>
+                      <div class="scenario-box">
+                       <p <?php if(!$isFirst){?>style="border-top: solid 2px #e3e3e3; padding: 10px 0 5px; margin-top: 15px;"<?php } ?>><b><?php echo get_the_title($crow->ID)?></b></p>
+                       <?php
+                           $suiteObj = new TestSuite($crow->ID);
+                           $scenarios = $suiteObj->loadScenarios();
+                           
+                           foreach($scenarios as $row){ 
+                       ?>
+                       <div class="field-row">
+                           <div class="grid-cell radio-cell">
+                               <label><input type="radio" name="scenario_<?php echo $crow->ID?>" value="<?php echo $row['id']?>" <?php echo $case->scenario[$crow->ID] == $row['id'] ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
                            <div class="grid-cell width60P">
                                <?php echo $row['desc']?>
@@ -637,18 +679,19 @@ jQuery(document).ready(function(){
             jQuery('#choose-roles-box select').each(function(){
                 jQuery(this).find('option:gt(0)').remove();
             })
+            jQuery('#choose-scenarios-box .column').html('');
             jQuery('#choose-init-msg-box  select option:gt(0)').remove();
             jQuery('#profile-instances').html('');            
             return false;
         }
-        jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1').show();
+        jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1, #choose-scenarios-box .loading1').show();
         jQuery.ajax({
             url: '<?php echo get_site_url()?>',
             data: jQuery('input[name="suite_id[]"]:checked').serialize() + '&_wpnonce=<?php echo wp_create_nonce('get-suite-info-for-case')?>&id=<?php echo $case->id?>',
             type: 'POST',
             dataType: 'xml',
             complete: function(){
-                jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1').hide();
+                jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1, #choose-scenarios-box .loading1').hide();
             },
             success: function(rsp)
             {
@@ -661,6 +704,9 @@ jQuery(document).ready(function(){
                     })
                     jQuery('#choose-roles-box .grid-cell:lt(2)').remove();
                     jQuery('#choose-roles-box .column .field-row').prepend(jQuery(rsp).find('roles').text());
+                    
+                    jQuery('#choose-scenarios-box .column').html('');
+                    jQuery('#choose-scenarios-box .column').append(jQuery(rsp).find('scenario').text());
                     
                     jQuery('#choose-init-msg-box select[name="choose_init_message"]').replaceWith(jQuery(rsp).find('initmsg').text());
                     jQuery('#profile-instances').html(jQuery(rsp).find('profiles').text());

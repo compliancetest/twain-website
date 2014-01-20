@@ -222,7 +222,7 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="conf-level-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Conformance Level</h5>
+               <h5 class="left">Conformance Levels</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -289,6 +289,75 @@ if(!$suite->community_id)
                
            </div>
        </div>
+       
+       <div class="space20"></div>
+       <div class="grid-box grid-box-expandable grid-box-opened" id="scenarios-box">
+           <div class="grid-box-header">
+               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+               <h5 class="left">Scenarios</h5>
+               <div class="clear"></div>
+           </div>
+           <div class="grid-box-body">
+               <div class="column">   
+                   <?php foreach($suite->scenarios as $row){ ?>
+                   <div class="field-row">
+                       <div class="grid-cell width20P">
+                           <label>Code:</label>
+                           <input type="hidden" name="scenario_id[]" value="<?php echo $row['id']?>" />
+                           <input type="text" class="input width98P" name="scenario_code[]" value="<?php echo $row['code']?>" 
+                                <?php if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>readonly="readonly"<?php } ?> />
+                       </div>
+                       <div class="grid-cell width55P">
+                           <label>Description:</label>
+                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]" 
+                                <?php if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>readonly="readonly"<?php } ?>><?php echo $row['description']?></textarea>
+                       </div>
+                       <div class="grid-cell width8P tocenter">
+                           <label>Sequence:</label>
+                           <input type="text" class="input width50P" name="scenario_sequence[]" value="<?php echo $row['sequence']?>" 
+                                <?php if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>readonly="readonly"<?php } ?> />
+                       </div>                       
+                       <div class="grid-cell">
+                           <label>&nbsp;</label>            
+                           <?php if($row['code'] != TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>
+                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>               
+                           <?php } ?>
+                       </div>
+                       <div class="clear"></div>
+                   </div>      
+                   <?php } ?>
+                   <?php if(!$suite->scenarios): ?>
+                   <div class="field-row">
+                       <div class="grid-cell width20P">
+                           <label>Code:</label>
+                           <input type="hidden" name="scenario_id[]" value="" />
+                           <input type="text" class="input width98P" name="scenario_code[]" value="<?php echo TEST_SUITE_DEFAULT_SCENARIO_CODE?>" readonly="readonly" />
+                       </div>
+                       <div class="grid-cell width55P">
+                           <label>Description:</label>
+                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]" readonly="readonly"><?php echo TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION?></textarea>
+                       </div>
+                       <div class="grid-cell width8P tocenter">
+                           <label>Sequence:</label>
+                           <input type="text" class="input width50P" name="scenario_sequence[]" value="1" readonly="readonly" />
+                       </div>                       
+                       <div class="grid-cell">
+                           <label>&nbsp;</label>  
+                       </div>
+                       <div class="clear"></div>
+                   </div>      
+                   <?php endif; ?>
+                   
+                   <div class="btn-row">
+                       <div class="grid-cell">
+                           <a href="#" class="action-btn add-new-btn" id="add-scenario"><span class="p"></span><span class="t">New Scenario</span></a>                       
+                       </div>
+                       <div class="clear"></div>
+                   </div>
+               </div>
+           </div>
+       </div>
+       
        <div class="space20"></div>
        <div class="grid-box grid-box-expandable grid-box-opened" id="test-data-profiles-box">
            <div class="grid-box-header">
@@ -662,7 +731,45 @@ if(!$suite->community_id)
             customizeFileTag();
             return false;
         })
-
+        jQuery('#add-scenario').click(function(){
+            jQuery('#scenarios-box .btn-row').before('<div class="field-row">' + 
+                       '<div class="grid-cell width20P">' + 
+                           '<label>Code:</label>' + 
+                           '<input type="hidden" name="scenario_id[]" value="" />' +
+                           '<input type="text" class="input width98P" name="scenario_code[]" value="" />' +
+                       '</div>' +
+                       '<div class="grid-cell width55P">' +
+                           '<label>Description:</label>' +
+                           '<textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"></textarea>' +
+                       '</div>' +
+                       '<div class="grid-cell width8P tocenter">' +
+                           '<label>Sequence:</label>' +
+                           '<input type="text" class="input width50P" name="scenario_sequence[]" value="" />' +
+                       '</div>' +
+                       '<div class="grid-cell">' +
+                           '<label>&nbsp;</label>' + 
+                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                       '</div>' +
+                       '<div class="clear"></div>' +
+                   '</div>');
+            sortScenarios();
+            return false;
+        })
+        jQuery('#scenarios-box').on('click', '.blue-delete-btn', function(){
+            jQuery(this).parents('.field-row').fadeOut('fast', function(){
+                jQuery(this).remove();                
+                sortScenarios();
+            });            
+            return false;
+        })
+        
+        function sortScenarios()
+        {
+            jQuery('#scenarios-box .field-row').each(function(idx){
+                jQuery(this).find('input[name="scenario_sequence[]"]').val(idx + 1);
+            })
+        }
+        
         //Delete
         jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box, #template-variables-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
@@ -670,6 +777,7 @@ if(!$suite->community_id)
             })
             return false;
         })
+        
         jQuery('#test-cases-box .blue-delete-btn').click(function(){
             var the_id = jQuery(this).attr('data-id');
             var the_action = jQuery(this).attr('data-action');
