@@ -727,3 +727,10 @@ body div.bbp-template-notice.error p{
     line-height: inherit;
     color: #fff;
 }
+
+/*** 
+* Widen the test suite page
+*/
+.single-test-suite #container .content{
+    width: 1200px;
+}
