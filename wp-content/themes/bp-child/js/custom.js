@@ -477,11 +477,12 @@ jQuery(document).ready(function($) {
         if (jQuery(this).find('.simple_tooltip').length == 0) {
             tooltip_obj = '<span class="simple_tooltip radius6">' + jQuery(this).attr('title') + '<span></span></span>';
             jQuery(this).append(tooltip_obj);
+            jQuery(this).attr('title', '');
         }
     });
     
     jQuery('.simple_tooltip').each(function(){
-        jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
+        jQuery(this).css({'top': -1 * jQuery(this).height() - 6});
     });
     
     // Dropdown Menus
