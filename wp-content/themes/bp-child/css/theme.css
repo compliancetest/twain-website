@@ -307,6 +307,10 @@ a:hover {
                 content: " ";
             }
             
+            #top_loged_actions .dropdown-submenu > .dropdown-menu li.action-link {
+                border-top: 2px solid #666;
+            }
+            
         
 /*
 #inputs input[type="text"] {
