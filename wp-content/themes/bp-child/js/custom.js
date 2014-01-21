@@ -424,7 +424,8 @@ jQuery(document).ready(function($) {
         jQuery('input.datepicker').datepicker({
             showOn: "both",
             buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
-            buttonImageOnly: true
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
         })
     }
     
