@@ -63,7 +63,7 @@ if($filterCategory)
                     
     <div class="clear"></div>
 </div>
-<div id="tickets_list" class="padding10">
+<div id="tickets_list" class="column">
     <a href="<?php echo get_site_url()?>?ct-ticket-action=<?php echo wp_create_nonce('show-submit-form')?>" class="action-btn process-btn submit-btn" id="submit-ticket-btn"><span class="p"></span><span class="t">SUBMIT A REQUEST</span></a>
     <div class="ticket-priorities right">
         <?php
