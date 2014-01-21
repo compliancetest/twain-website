@@ -7176,3 +7176,12 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .menu-profile.current_page_item .menu-icon {
     background-position: 5px -513px;
 }
+.table-bottom-btn {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    -webkit-top-left-radius: 0;
+    -webkit-top-right-radius: 0;
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    margin-top: -1px;
+}
