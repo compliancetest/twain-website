@@ -475,10 +475,10 @@ jQuery(document).ready(function($) {
     })
     
     // Dropdown Menus
-    jQuery('.dropdown > a').hover(function(){
-        jQuery(this).parent().addClass('open');
+    jQuery('.dropdown').hover(function(){
+        jQuery(this).addClass('open');
     }, function(){
-        jQuery(this).parent().removeClass('open');
+        jQuery(this).removeClass('open');
     });
     
     jQuery('.dropdown-menu li').hover(function(){
