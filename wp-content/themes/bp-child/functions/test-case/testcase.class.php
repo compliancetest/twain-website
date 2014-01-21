@@ -426,10 +426,10 @@ class TestCase
         if(!$sid)
             return '';
         
-        $query = $wpdb->prepare("SELECT code FROM {$wpdb->prefix}test_suites_scenarios WHERE id=%d", $sid);
-        $scode = $wpdb->get_var($query);
+        $query = $wpdb->prepare("SELECT code, description FROM {$wpdb->prefix}test_suites_scenarios WHERE id=%d", $sid);
+        $row = $wpdb->get_row($query);
         
-        return $scode;
+        return $row;
     }
     
 }
