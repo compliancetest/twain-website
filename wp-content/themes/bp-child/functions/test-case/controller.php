@@ -195,7 +195,7 @@ function getTestSuiteInfoForCase()
                    <div class="grid-cell radio-cell">
                        <label><input type="checkbox" name="conformance_level<?php echo $sid?>[]" value="<?php echo $row['code']?>" <?php echo isset($case->conformanceLevel[$sid]) && in_array($row['code'], $case->conformanceLevel[$sid]) ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                    </div>
-                   <div class="grid-cell width60P">
+                   <div class="grid-cell width70P">
                        <?php echo $row['desc']?>
                    </div>
                    <div class="clear"></div>
@@ -744,8 +744,8 @@ function confirmDeletingCase()
             </form>    
         </div>
         <div class="popup-box-footer radius6 noradiustop">                                                        
-            <a href="javascript: void(0)" class="action-btn process-btn" onclick="processDeleteCase('<?php echo $id?>')"><span class="p"></span><span class="t">YES</span></a>
-            <a href="javascript: void(0)" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
+            <a href="javascript: void(0)" class="action-btn process-btn" onclick="processDeleteCase('<?php echo $id?>')"><span class="p"></span><span class="t">Confirm</span></a>
+            <a href="javascript: void(0)" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>                    
             <div class="clear"></div>
             <div class="message error" style="display: none;">Please aggree the License Agreement.</div>
         </div>

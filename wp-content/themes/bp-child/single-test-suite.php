@@ -60,12 +60,11 @@ Template Name Posts: Test Suite
 							<div class="clear"></div>
 						</div>
 					</div>
-					<div class="space15"></div>					
-					<div class="grids noborder nobackground">
-					<p class="nomarginbottom"><?php echo $suite->description ?> </p>
-					</div>
+					<div class="space15"></div>										
 				</div>
-				
+				<div class="grids noborder nobackground">
+                    <?php echo apply_filters('the_content', $suite->description) ?>
+                </div>
 				<div class="clear"></div>
 						
 		</div> <!--end infos-->

@@ -188,7 +188,7 @@ get_header();
                            <div class="grid-cell radio-cell">
                                <label><input type="checkbox" name="conformance_level<?php echo $crow->ID?>[]" value="<?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?>" class="default-level" checked="checked" /> <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE?></label>
                            </div>
-                           <div class="grid-cell width60P">
+                           <div class="grid-cell width70P">
                                <?php echo TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION?>
                            </div>
                            <div class="clear"></div>
@@ -543,11 +543,11 @@ get_header();
                     <div class="field-row">
                        <div class="grid-cell">
                            <label>Action:</label>
-                           <textarea name="step_action[]" class="textarea width280"><?php echo $row['action']?></textarea>
+                           <textarea name="step_action[]" class="textarea width350"><?php echo $row['action']?></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>Expected Result:</label>
-                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width350"><?php echo $row['result']?></textarea>
+                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width400"><?php echo $row['result']?></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -560,11 +560,11 @@ get_header();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Action:</label>
-                           <textarea name="step_action[]" class="textarea width280"></textarea>
+                           <textarea name="step_action[]" class="textarea width350"></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>Expected Result:</label>
-                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width350"></textarea>
+                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width400"></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -654,11 +654,11 @@ jQuery(document).ready(function(){
         jQuery('#test-step-box .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' + 
                            '<label>Action:</label>' +
-                           '<textarea name="step_action[]" class="textarea width280"></textarea>' +
+                           '<textarea name="step_action[]" class="textarea width350"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>Expected Result:</label>' +
-                           '<textarea name="step_expected[]" class="textarea width350"></textarea>' +
+                           '<textarea name="step_expected[]" class="textarea width400"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' +

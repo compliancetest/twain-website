@@ -5519,27 +5519,27 @@ a.suite-subscript-link:hover{
 }
 /*** Test Suite Edit Page ***/
 .grid-box-body .field-row .input{
-    width: 200px;
+    width: 278px;
 }    
 .grid-box-body .field-row .select{
-    width: 200px;
+    width: 278px;
     font-size: 12px;
     color: #666;
 }    
 .grid-box-body .field-row .medium-input{
-    width: 430px;
+    width: 555px;
 }    
 .grid-box-body .field-row .half-width{
-    width: 320px;
+    width: 440px;
 }
 
 .grid-box-body .field-row .textarea{
-    width: 430px;
+    width: 555px;
     min-height: 75px;
     resize: vertical;
 }    
 .grid-box-body .field-row .large-textarea{
-    width: 675px;
+    width: 905px;
 }
 .edit-item-wrapper .field-row .grid-cell:first-child{
     padding-left: 0;
@@ -5559,7 +5559,7 @@ a.suite-subscript-link:hover{
     margin-bottom: 5px;
 }
 .edit-item-wrapper .field-row .status-cell{
-    width: 320px;
+    width: 440px;
     line-height: 22px;
 }
 .edit-item-wrapper .field-row .status-cell label{
@@ -5625,7 +5625,13 @@ a.suite-subscript-link:hover{
     background: url(../images/version-cancel.png);
     margin: 7px 5px;
 }
-
+.edit-item-wrapper .wp-editor-container{
+    border: solid 1px #cbcbcb;    
+    
+}
+.edit-item-wrapper .wp-switch-editor{
+    border-color: #cbcbcb;
+}
 
 #choose-conf-level-box .field-row,
 #test-data-box .field-row,
@@ -5645,7 +5651,7 @@ a.suite-subscript-link:hover{
     margin-bottom: 0;    
 }
 #test-cases-box .field-row .grid-cell{
-    width: 220px;
+    width: 23%;
     padding: 2px 3px !important;
     border: solid 1px #cbcbcb;
     border-radius: 3px;

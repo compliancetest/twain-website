@@ -166,8 +166,8 @@ if(!$suite->community_id)
                    <div class="field-row">                       
                        <div class="grid-cell width95P">
                            <label for="ts_identifier">Description: </label>
-                           <?php wp_editor($suite->description, 'ts_description', array('textarea_name' => 'ts_description', 'media_buttons' => false)); ?>
-                           <!--<textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php //echo $suite->description ?></textarea>-->
+                           <?php //wp_editor($suite->description, 'ts_description', array('textarea_name' => 'ts_description', 'media_buttons' => false)); ?>
+                           <textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php //echo $suite->description ?></textarea>
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -300,7 +300,7 @@ if(!$suite->community_id)
            <div class="grid-box-body">
                <div class="column">   
                    <div class="field-row">
-                       <div class="grid-cell width20P">
+                       <div class="grid-cell width22P">
                            <label>Code:</label>
                            <?php if(!$suite->scenarios): ?>
                            <input type="hidden" name="scenario_id[]" value="" />
@@ -338,15 +338,15 @@ if(!$suite->community_id)
                        $lastScenarioID = max($row['id'], $lastScenarioID);
                    ?>
                    <div class="field-row">
-                       <div class="grid-cell width20P">
+                       <div class="grid-cell width22P">
                            <label>Code:</label>
                            <input type="hidden" name="scenario_id[]" value="<?php echo $row['id']?>" />
                            <input type="text" class="input width98P" name="scenario_code[]" value="<?php echo $row['code']?>" />
                        </div>
                        <div class="grid-cell width55P">
                            <label>Description:</label>
-                           <?php wp_editor($row['description'], 'scenario_desc' . $row['id'], array('textarea_name' => 'scenario_desc[]', 'media_buttons' => false, 'editor_height' => 300)); ?>
-                           <!--<textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"><?php echo $row['description']?></textarea>-->
+                           <?php //wp_editor($row['description'], 'scenario_desc' . $row['id'], array('textarea_name' => 'scenario_desc[]', 'media_buttons' => false, 'editor_height' => 300)); ?>
+                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"><?php echo $row['description']?></textarea>
                        </div>
                        <div class="grid-cell width8P tocenter">
                            <label>Sequence:</label>
@@ -745,9 +745,10 @@ if(!$suite->community_id)
         //Getting Last ID
         var lastScenarioID = parseInt('<?php echo $lastTypeID?>');
         jQuery('#add-scenario').click(function(){
+            
             lastScenarioID += 10;
             jQuery('#scenarios-box .btn-row').before('<div class="field-row">' + 
-                       '<div class="grid-cell width20P">' + 
+                       '<div class="grid-cell width22P">' + 
                            '<label>Code:</label>' + 
                            '<input type="hidden" name="scenario_id[]" value="" />' +
                            '<input type="text" class="input width98P" name="scenario_code[]" value="" />' +
@@ -767,14 +768,7 @@ if(!$suite->community_id)
                        '<div class="clear"></div>' +
                    '</div>');
             sortScenarios();
-            
-            
-            tinyMCE.init({
-                skin : "wp_theme",
-                mode : "exact",
-                elements : "scenario_desc" + lastScenarioID,
-                theme: "advanced"
-            });
+                        
             return false;
         });
         
