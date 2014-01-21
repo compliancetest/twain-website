@@ -722,7 +722,7 @@ function confirmDeletingCase()
         <div class="popup-box-header radius6 noradiusbottom">Delete Test Case</div>
         <div class="popup-box-content">
             <form method="post" action="">                        
-                <p>Warning: This test case is currently included in the below test suites. 
+                <p>Warning: This test case is currently included in the following test suites; 
                 <br />
                 <br />
                 <?php 
