@@ -316,7 +316,7 @@ Template Name Posts: Test Suite
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Initiating<br/>Message</div>
 						<div class="grid_cell nopaddingtop width17P toleft single_line">Test Intent Description</div>
-                        <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
+                        <?php if(can_edit_suite($suite->id)){ ?>
 						<div class="grid_cell nopaddingtop width4P toleft single_line">Actions</div>
                         <?php } ?>
 						<div class="clear"></div>	
