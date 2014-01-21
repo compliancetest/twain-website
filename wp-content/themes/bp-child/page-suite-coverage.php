@@ -15,10 +15,10 @@ $mysuites = getUserSubscribedSuites();
 $esb = new ManageESB();
 ?>
 <div class="content" id="test_suite_coverage">
-	<div class="column fifth left nopaddingleft nopaddingright sidebar">
-		<?php get_sidebar('dashboard'); ?>
-	</div>
-	<div class="four_fifths right container">
+	<div class="dashboard-tabs">
+        <?php get_sidebar('dashboard'); ?>
+    </div>
+	<div class="container">
         <div class="column">            
             <div class="page-description">
             <?php if (have_posts()) while (have_posts()) : the_post(); 
