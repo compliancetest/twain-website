@@ -86,7 +86,7 @@
                                                             } 
                                                         }
                                                     ?>
-                                                        <li class="action-link"><a href="<?php echo home_url(); ?>/communities">Add</a></li>
+                                                        <li class="action-link"><a href="<?php echo home_url(); ?>/communities">+ Add</a></li>
                                                     </ul>
                                                 </li>
                                             <?php } elseif ($class == 'menu-test-suites') { ?>
@@ -105,7 +105,7 @@
                                                             }
                                                         }
                                                     ?>
-                                                        <li class="action-link"><a href="<?php echo home_url(); ?>/test-suites">Add</a></li>
+                                                        <li class="action-link"><a href="<?php echo home_url(); ?>/test-suites">+ Add</a></li>
                                                     </ul>                                                    
                                                 </li>
                                             <?php } else { ?>
