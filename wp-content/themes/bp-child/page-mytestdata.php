@@ -15,12 +15,6 @@ get_header();
         <?php get_sidebar('dashboard'); ?>
     </div>
     <div class="container">
-        <?php $description = get_post_meta($post->ID, 'description', true);?>
-        <?php if($description): ?>
-        <div class="page-title-block column">
-            <?php echo $description;?>
-        </div>
-        <?php endif; ?>
         <div class="column">
             <div class="grid-box table-box" id="my_test_data_profiles">
                 <div class="grid-box-body">
@@ -109,6 +103,7 @@ get_header();
             <a href="#need-subscription-box" rel="custom-popup" cp-type="inline" class="action-btn add-new-btn">
                 <span class="p"></span>
                 <span class="t">Add</span>
+                <span class="simple_tooltip radius6">Add Test Data<span></span></span>
             </a>
             <div class="space20"></div>
         </div>
