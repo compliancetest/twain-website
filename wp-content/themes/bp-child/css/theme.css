@@ -4532,8 +4532,11 @@ min-height: 70px;
     width: 120px;
     margin-left: -55px;
 }
+#my_subscriptions .td-community{
+    width: 120px;
+}
 #my_subscriptions .td-suite{
-    width: 660px;
+    width: 519px;
 }
 #my_subscriptions .td-fee{
     width: 65px;
