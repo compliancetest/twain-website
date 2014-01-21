@@ -37,12 +37,12 @@ if(!defined('ABSPATH'))
 
                     <?php wp_nonce_field( 'bp_avatar_cropstore' ); ?>
                 <?php }else{?> <!-- Upload Avatar -->
-                    <div class="grid-cell width40P">
+                    <div class="grid-cell width30P">
                         <a href="<?php bp_loggedin_user_link(); ?>">                                    
                             <?php bp_loggedin_user_avatar( 'type=full' ); ?>
                         </a>
                     </div>
-                    <div class="grid-cell width60P">
+                    <div class="grid-cell width70P">
                         <p>Your avatar will be used on your profile and throughout the site.</p>
                         <?php if($user_status != 3){?>            
                         <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
