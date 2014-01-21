@@ -38,10 +38,7 @@ if(!$suite->community_id)
 ?>
 <div class="content edit-item-wrapper" id="edit_test_suite_wrapper">
     <div class="space25"></div>
-    <div class="column fifth left nopaddingleft nopaddingright sidebar">
-        <?php get_sidebar('dashboard'); ?>
-    </div>        
-    <div class="column four_fifths right container relative"> 
+    <div class="column container"> 
       <form name="suiteForm" id="suiteForm" action="" method="post" enctype="multipart/form-data">
         <?php if(!$suite->id){ ?>
         <h2>Add New Test Suite</h2>
@@ -167,9 +164,10 @@ if(!$suite->community_id)
                        <div class="clear"></div>
                    </div>    
                    <div class="field-row">                       
-                       <div class="grid-cell">
+                       <div class="grid-cell width95P">
                            <label for="ts_identifier">Description: </label>
-                           <textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php echo $suite->description?></textarea>
+                           <?php wp_editor($suite->description, 'ts_description', array('textarea_name' => 'ts_description', 'media_buttons' => false)); ?>
+                           <!--<textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php //echo $suite->description ?></textarea>-->
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -289,7 +287,9 @@ if(!$suite->community_id)
                
            </div>
        </div>
-       
+       <?php
+           $lastScenarioID = 1;
+       ?>
        <div class="space20"></div>
        <div class="grid-box grid-box-expandable grid-box-opened" id="scenarios-box">
            <div class="grid-box-header">
@@ -334,6 +334,8 @@ if(!$suite->community_id)
                    <?php 
                        if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE)
                             continue;    
+                            
+                       $lastScenarioID = max($row['id'], $lastScenarioID);
                    ?>
                    <div class="field-row">
                        <div class="grid-cell width20P">
@@ -343,7 +345,8 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell width55P">
                            <label>Description:</label>
-                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"><?php echo $row['description']?></textarea>
+                           <?php wp_editor($row['description'], 'scenario_desc' . $row['id'], array('textarea_name' => 'scenario_desc[]', 'media_buttons' => false, 'editor_height' => 300)); ?>
+                           <!--<textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"><?php echo $row['description']?></textarea>-->
                        </div>
                        <div class="grid-cell width8P tocenter">
                            <label>Sequence:</label>
@@ -739,7 +742,10 @@ if(!$suite->community_id)
             customizeFileTag();
             return false;
         })
+        //Getting Last ID
+        var lastScenarioID = parseInt('<?php echo $lastTypeID?>');
         jQuery('#add-scenario').click(function(){
+            lastScenarioID += 10;
             jQuery('#scenarios-box .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell width20P">' + 
                            '<label>Code:</label>' + 
@@ -748,7 +754,7 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="grid-cell width55P">' +
                            '<label>Description:</label>' +
-                           '<textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"></textarea>' +
+                           '<textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]" id="scenario_desc' + lastScenarioID + '"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell width8P tocenter">' +
                            '<label>Sequence:</label>' +
@@ -761,15 +767,24 @@ if(!$suite->community_id)
                        '<div class="clear"></div>' +
                    '</div>');
             sortScenarios();
+            
+            
+            tinyMCE.init({
+                skin : "wp_theme",
+                mode : "exact",
+                elements : "scenario_desc" + lastScenarioID,
+                theme: "advanced"
+            });
             return false;
-        })
+        });
+        
         jQuery('#scenarios-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
                 sortScenarios();
             });            
             return false;
-        })
+        });
         
         function sortScenarios()
         {
