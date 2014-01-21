@@ -60,8 +60,17 @@
                                                 <span class="t">Dashboard</span>
                                             </a>
                                             <ul class="dropdown-menu dashboard-dropdown-menu">
+                                            <?php
+                                                $menu = wp_get_nav_menu_object('dashboard_menu');
+                                                $menu_items = wp_get_nav_menu_items($menu->term_id);
+                                                foreach ((array)$menu_items as $key => $menu_item ) {
+                                                    $title = $menu_item->title;
+                                                    $url = $menu_item->url;
+                                                    $class = implode(' ', $menu_item->classes);
+                                            ?>
+                                            <?php if ($class == 'menu-communities') { ?>
                                                 <li class="dropdown-submenu">
-                                                    <a class="menu-communities" href="#">Communities</a>
+                                                    <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
                                                     <?php
                                                         $groups =  groups_get_user_groups($current_user->ID);
                                                         if($groups['total'] > 0)
@@ -79,8 +88,9 @@
                                                     </ul>
                                                     <?php } ?>
                                                 </li>
+                                            <?php } elseif ($class == 'menu-test-suites') { ?>
                                                 <li class="dropdown-submenu">
-                                                    <a class="menu-test-suites" href="#">Test Suites</a>
+                                                    <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
                                                     <?php
                                                         $subscriptions =  getUserSubscriptions(null, true);
                                                         if(count($subscriptions) > 0)
@@ -100,24 +110,12 @@
                                                         }
                                                     ?>
                                                 </li>
+                                            <?php } else { ?>
                                                 <li>
-                                                    <a class="menu-test-data" href="#">Test Data</a>
+                                                    <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
                                                 </li>
-                                                <li>
-                                                    <a class="menu-products" href="#">Products</a>
-                                                </li>
-                                                <li>
-                                                    <a class="menu-coverage" href="#">Coverage</a>
-                                                </li>
-                                                <li>
-                                                    <a class="menu-transactions" href="#">Transactions</a>
-                                                </li>
-                                                <li>
-                                                    <a class="menu-support" href="#">Support</a>
-                                                </li>
-                                                <li>
-                                                    <a class="menu-profile" href="#">Profile</a>
-                                                </li>
+                                            <?php } ?>                                                
+                                            <?php } ?> 
                                             </ul>
                                         </li>
                                         <li>
