@@ -83,7 +83,7 @@ get_header();
                         
                        <div class="grid-cell">
                            <label for="published">Issued:</label>
-                           <input type="text" name="published" id="published" value="<?php echo $case->publishedDate?>" class="input datepicker" />
+                           <input type="text" name="published" id="published" value="<?php echo formatDate($case->publishedDate) ?>" class="input datepicker" />
                        </div>                   
                        <!--<div class="grid-cell">
                            <label for="sequence_number">Execution Sequence Number:</label>
