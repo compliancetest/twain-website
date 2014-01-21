@@ -93,6 +93,9 @@ function process_testcase_actions()
         saveCase();        
     }else if(wp_verify_nonce($action, 'delete-case')){
         deleteCase();        
+    }else if(wp_verify_nonce($action, 'pre-delete-case')){   
+        confirmDeletingCase();
+        exit;
     }
 }
 
@@ -704,3 +707,51 @@ function add_scenario_fields_query($fields, $object)
     return $fields;
 }
 
+
+function confirmDeletingCase()
+{
+    global $wpdb;
+    
+    $id = $_REQUEST['id'];
+    $return = $_REQUEST['return'];
+    
+    $testCase = new TestCase($id);
+    $suites = $testCase->loadValues('test_suite');
+    ?>
+    <div id="deleting-case-confirm-box<?php echo $id?>" class="popup-box deleting-case-confirm-box" style="display: none; width: 450px">                
+        <div class="popup-box-header radius6 noradiusbottom">Delete Test Case</div>
+        <div class="popup-box-content">
+            <form method="post" action="">                        
+                <p>Warning: This test case is currently included in the below test suites. 
+                <br />
+                <br />
+                <?php 
+                    foreach($suites as $sid){
+                
+                ?>
+                    <a href="<?php echo get_permalink($sid)?>"><?php echo get_the_title($sid)?></a><br />
+                <?php
+                    }
+                ?>                            
+                </p>
+                <p>Deleting the test case will remove it from all test suites. Do you wish to proceed?</p>
+                <?php
+                    wp_nonce_field('delete-case');                                  
+                ?>                             
+                <input type="hidden" name="id" value="<?php echo $id?>" />
+                <input type="hidden" name="return" value="<?php echo $return ?>" />
+                <div class="clear"></div>                            
+            </form>    
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                                                        
+            <a href="javascript: void(0)" class="action-btn process-btn" onclick="processDeleteCase('<?php echo $id?>')"><span class="p"></span><span class="t">YES</span></a>
+            <a href="javascript: void(0)" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
+            <div class="clear"></div>
+            <div class="message error" style="display: none;">Please aggree the License Agreement.</div>
+        </div>
+        <div class="loading"></div>
+        <a id="close-popup-community" class="close_btn"></a>                
+    </div>
+    <?php
+    
+}

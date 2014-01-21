@@ -570,7 +570,6 @@ function suiteNameUpdated($old, $new)
     
 }
 
-
 if(isset($_GET['fix_case_scenario']))
 {
     global $wpdb;

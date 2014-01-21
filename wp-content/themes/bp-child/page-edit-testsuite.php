@@ -323,7 +323,7 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell width8P tocenter">
                            <label>Sequence:</label>
-                           <input type="text" class="input width55P" name="scenario_sequence[]" value="9999" readonly="readonly" />
+                           <input type="text" class="input width70P tocenter" name="scenario_sequence[]" value="999" readonly="readonly" />
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>  
@@ -347,7 +347,7 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell width8P tocenter">
                            <label>Sequence:</label>
-                           <input type="text" class="input width55P" name="scenario_sequence[]" value="<?php echo $row['sequence']?>" />
+                           <input type="text" class="input width70P tocenter" name="scenario_sequence[]" value="<?php echo $row['sequence']?>" />
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>            
@@ -752,7 +752,7 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="grid-cell width8P tocenter">' +
                            '<label>Sequence:</label>' +
-                           '<input type="text" class="input width55P" name="scenario_sequence[]" value="" />' +
+                           '<input type="text" class="input width70P tocenter" name="scenario_sequence[]" value="" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' + 

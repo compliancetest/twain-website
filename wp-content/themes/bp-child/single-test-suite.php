@@ -483,7 +483,7 @@ Template Name Posts: Test Suite
                                     <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Case<span></span></span></a>
                                     <?php } ?>
                                     <?php if(can_delete_test_case($row->ID)){ ?>
-                                    <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn delete-btn has-tooltip" onclick="return confirm('Are you sure to delete this test case?')"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
+                                    <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('pre-delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn delete-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-width="500"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
                                     <?php } ?>
                                     <?php }else{ ?>
                                     -
@@ -767,7 +767,15 @@ jQuery(document).ready(function($) {
     $('.test-scenario-row .scenario-cell').each(function(){
         $(this).find('div').height($(this).parent().height() - 30);
     })
+    
+    
 });
+
+function processDeleteCase(id)
+{
+    jQuery('#deleting-case-confirm-box' + id + ' .loading').show();
+    jQuery('#deleting-case-confirm-box' + id + ' form').submit();
+}
 </script>
 <?php
 get_footer();
