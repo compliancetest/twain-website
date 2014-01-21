@@ -13,10 +13,10 @@ $ticket_id = get_query_var('ticket');
 get_header();
 ?>
 <div class="content" id="my_tickets">
-    <div class="column fifth left nopaddingleft nopaddingright sidebar">
+    <div class="dashboard-tabs">
         <?php get_sidebar('dashboard'); ?>
-    </div>        
-    <div class="four_fifths right container">        
+    </div>
+    <div class="container">        
         <?php 
             if(!$ticket_id)
                 include('content/tickets-list.php'); 
