@@ -7098,7 +7098,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: inline-block;
     vertical-align: top;
 }
-.dashboard-tabs .tabs li:hover, 
+.dashboard-tabs .tabs li:hover {
+    background: #FFF;
+} 
 .dashboard-tabs .tabs li.current_page_item {
     background: #2d85cf;
     box-shadow: 0 0 30px -7px #002747 inset;
@@ -7107,7 +7109,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     -o-box-shadow: 0 0 30px -7px #002747 inset;
     border: 1px solid #3577ad;
 }
-.dashboard-tabs .tabs li:hover a span.menu-title, 
 .dashboard-tabs .tabs li.current_page_item a span.menu-title {
     color: #fff;
     text-shadow: 0 1px 0 #002747;
@@ -7136,56 +7137,56 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .menu-communities .menu-icon {
     background-position: 5px -72px;
 }
-.dashboard-tabs .menu-communities:hover .menu-icon,
+
 .dashboard-tabs .menu-communities.current_page_item .menu-icon {
     background-position: 5px -112px;
 }
 .dashboard-tabs .menu-test-suites .menu-icon {
     background-position: 5px -714px;
 }
-.dashboard-tabs .menu-test-suites:hover .menu-icon,
+
 .dashboard-tabs .menu-test-suites.current_page_item .menu-icon {
     background-position: 5px -754px;
 }
 .dashboard-tabs .menu-test-data .menu-icon {
     background-position: 5px -634px;
 }
-.dashboard-tabs .menu-test-data:hover .menu-icon,
+
 .dashboard-tabs .menu-test-data.current_page_item .menu-icon {
     background-position: 5px -674px;
 }
 .dashboard-tabs .menu-products .menu-icon {
     background-position: 5px -394px;
 }
-.dashboard-tabs .menu-products:hover .menu-icon,
+
 .dashboard-tabs .menu-products.current_page_item .menu-icon {
     background-position: 5px -434px;
 }
 .dashboard-tabs .menu-coverage .menu-icon {
-    background-position: 5px -154px;
+    background-position: 5px -153px;
 }
-.dashboard-tabs .menu-coverage:hover .menu-icon,
+
 .dashboard-tabs .menu-coverage.current_page_item .menu-icon {
     background-position: 5px -193px;
 }
 .dashboard-tabs .menu-transactions .menu-icon {
     background-position: 5px -789px;
 }
-.dashboard-tabs .menu-transactions:hover .menu-icon,
+
 .dashboard-tabs .menu-transactions.current_page_item .menu-icon {
     background-position: 5px -830px;
 }
 .dashboard-tabs .menu-support .menu-icon {
     background-position: 5px -554px;
 }
-.dashboard-tabs .menu-support:hover .menu-icon,
+
 .dashboard-tabs .menu-support.current_page_item .menu-icon {
     background-position: 5px -594px;
 }
 .dashboard-tabs .menu-profile .menu-icon {
     background-position: 5px -473px;
 }
-.dashboard-tabs .menu-profile:hover .menu-icon,
+
 .dashboard-tabs .menu-profile.current_page_item .menu-icon {
     background-position: 5px -513px;
 }
