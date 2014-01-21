@@ -25,11 +25,12 @@ get_header();
             <div class="grid-box table-box" id="my_subscriptions">
                 <div class="grid-box-body">
                     <div class="thead tr">
-                       <div class="td td-suite">Test Suite</div>
-                       <div class="td td-fee">Fee</div>
-                       <div class="td td-status tocenter">Status</div>
-                       <div class="td td-action tocenter">Action</div>
-                       <div class="clear"></div>
+                        <div class="td td-community">Community</div>
+                        <div class="td td-suite">Test Suite</div>
+                        <div class="td td-fee">Fee</div>
+                        <div class="td td-status tocenter">Status</div>
+                        <div class="td td-action tocenter">Action</div>
+                        <div class="clear"></div>
                    </div>
                    <div class="tbody">
                    <?php
@@ -45,9 +46,13 @@ get_header();
                        }else{
                            foreach($subscriptions as $row)
                            {
-                               
+                           $community_id = get_post_meta($row->suite_id, 'community_id', true);
+                           $group = groups_get_group(array('group_id' => $community_id));
                    ?>
                         <div class="tr">
+                            <div class="td td-community">
+                                <a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a>
+                            </div>
                             <div class="td td-suite">
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
@@ -106,6 +111,12 @@ get_header();
                    
                 </div>                
             </div>
+            <div class="space10"></div>
+            <a href="<?php echo home_url(); ?>/test-suites" class="action-btn add-new-btn">
+                <span class="p"></span>
+                <span class="t">Add</span>
+            </a>
+            <div class="space20"></div>
         </div>
         <div class="clear"></div>
     </div>
