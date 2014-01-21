@@ -570,7 +570,7 @@ function suiteNameUpdated($old, $new)
     
 }
 
-if(isset($_GET['fix_case_scenario']))
+/*if(isset($_GET['fix_case_scenario']))
 {
     global $wpdb;
     
@@ -591,4 +591,4 @@ if(isset($_GET['fix_case_scenario']))
         $wpdb->insert($wpdb->postmeta, array('post_id' => $row->post_id, 'meta_key' => 'scenario_' . $row->meta_value, 'meta_value' => $dScenarios[$row->meta_value]));
     }
     exit;
-}
+}*/
