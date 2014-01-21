@@ -297,8 +297,7 @@ jQuery(document).ready(function($) {
     
 	/* Search */
 	jQuery('#search_bar #s').focus(function() {
-		jQuery('#s').removeClass('inactive_s');
-		jQuery('#s').addClass('active_s');
+		jQuery('#s').removeClass('inactive_s').addClass('active_s');
 	});
 
 	
@@ -398,8 +397,7 @@ jQuery(document).ready(function($) {
 
 			});
 			if(errors_ts){
-				jQuery('.err_new_suite').text('Please fill in all fields!');
-				jQuery('.err_new_suite').show('slow');
+				jQuery('.err_new_suite').text('Please fill in all fields!').show('slow');
 				return false;
 				}
 				else return true;
@@ -432,7 +430,7 @@ jQuery(document).ready(function($) {
     jQuery('a.submit-btn').click(function(){        
         jQuery(this).parents('form').submit();
         return false;
-    })
+    });
     
     $('body').find('.grid-box-expandable').each(function(){            
         var table = $(this);
@@ -502,7 +500,7 @@ jQuery(document).ready(function($) {
     jQuery('.dropdown-menu').each(function(){
         jQuery(this).find('>:first-child').addClass('first')
         jQuery(this).find('>:last-child').addClass('last')
-    });    
+    });
 });
 
 function customizeFileTag()
