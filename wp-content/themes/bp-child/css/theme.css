@@ -213,7 +213,7 @@ a:hover {
         #top_loged_actions > ul > li {
             display: inline-block;
             margin: 0px 0 0px 7px;
-            padding: 3px 0 5px;
+            padding: 3px 0 4px;
         }
         
             #top_logged_wrap .dashboard-btn .p {
@@ -289,7 +289,7 @@ a:hover {
             }
             #top_loged_actions .dashboard-dropdown-menu {
                 margin-left: -5px;
-                margin-top: -1px;
+                margin-top: 0px;
             }
             #top_loged_actions .dashboard-dropdown-menu:before {
                 display: block;
