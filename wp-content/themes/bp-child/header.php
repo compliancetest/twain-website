@@ -71,44 +71,42 @@
                                             <?php if ($class == 'menu-communities') { ?>
                                                 <li class="dropdown-submenu">
                                                     <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
+                                                    <ul class="dropdown-menu">
                                                     <?php
                                                         $groups =  groups_get_user_groups($current_user->ID);
                                                         if($groups['total'] > 0)
                                                         {
-                                                    ?>
-                                                    <ul class="dropdown-menu">
-                                                    <?php
-                                                        foreach($groups['groups'] as $gID)
-                                                        {
-                                                            $group = groups_get_group(array('group_id'=>$gID));
-                                                            $member = getGroupMemberDetail($gID, $current_user->ID);
+                                                            foreach($groups['groups'] as $gID)
+                                                            {
+                                                                $group = groups_get_group(array('group_id'=>$gID));
+                                                                $member = getGroupMemberDetail($gID, $current_user->ID);
                                                     ?>
                                                         <li><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a></li>
-                                                    <?php } ?>
+                                                    <?php 
+                                                            } 
+                                                        }
+                                                    ?>
+                                                        <li><a href="<?php echo home_url(); ?>/communities">Add</a></li>
                                                     </ul>
-                                                    <?php } ?>
                                                 </li>
                                             <?php } elseif ($class == 'menu-test-suites') { ?>
                                                 <li class="dropdown-submenu">
                                                     <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
+                                                    <ul class="dropdown-menu">
                                                     <?php
                                                         $subscriptions =  getUserSubscriptions(null, true);
                                                         if(count($subscriptions) > 0)
                                                         {
-                                                    ?>
-                                                    <ul class="dropdown-menu">
-                                                        <?php
                                                             foreach($subscriptions as $row) 
                                                             {
                                                         ?>
                                                         <li><a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a></li>
-                                                        <?php
-                                                            }
-                                                        ?>
-                                                    </ul>
                                                     <?php
+                                                            }
                                                         }
                                                     ?>
+                                                        <li><a href="<?php echo home_url(); ?>/test-suites">Add</a></li>
+                                                    </ul>                                                    
                                                 </li>
                                             <?php } else { ?>
                                                 <li>
