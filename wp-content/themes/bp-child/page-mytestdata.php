@@ -35,7 +35,7 @@ get_header();
                    if(!$profileInstances){
                        ?>
                        <div class="tr">
-                           <div class="td td-full">No data found.</div>
+                           <div class="td td-full">You have currently not created any data profiles.</div>
                            <div class="clear"></div>
                        </div>
                        <?php
