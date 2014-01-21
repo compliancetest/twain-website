@@ -74,7 +74,7 @@ get_header();
                 </div>                    
             </div>
             <div class="space10"></div>
-            <a href="<?php echo home_url(); ?>/communities" class="action-btn add-new-btn">
+            <a href="<?php echo home_url(); ?>/communities" class="action-btn add-new-btn has-tooltip">
                 <span class="p"></span>
                 <span class="t">Add</span>
                 <span class="simple_tooltip radius6">Add Community Membership<span></span></span>
