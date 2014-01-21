@@ -482,7 +482,7 @@ jQuery(document).ready(function($) {
     });
     
     jQuery('.simple_tooltip').each(function(){
-        jQuery(this).css({'top': -1 * jQuery(this).height() - 6});
+        jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
     });
     
     // Dropdown Menus
