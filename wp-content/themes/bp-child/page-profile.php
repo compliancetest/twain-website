@@ -36,10 +36,10 @@ get_header();
 ?>
 
 <div class="content" id="my_profile">
-	<div class="column fifth left nopaddingleft nopaddingright sidebar">
-		<?php get_sidebar('dashboard'); ?>
-	</div>		
-	<div class="four_fifths right container">
+	<div class="dashboard-tabs">
+        <?php get_sidebar('dashboard'); ?>
+    </div>
+	<div class="container">
         <div class="column">
         <?php
             if(can_create_group()){
@@ -77,25 +77,6 @@ get_header();
             <div class="space25"></div>
             
             <?php 
-                include(dirname(__FILE__) . '/content/profile-community-membership.php');
-            ?>
-            <div class="clear"></div>            
-            <div class="space25"></div>            
-            
-            <?php 
-                include(dirname(__FILE__) . '/content/profile-subscriptions.php');
-            ?>
-            <div class="clear"></div>            
-            <div class="space25"></div>            
-            
-            <?php 
-                include(dirname(__FILE__) . '/content/profile-testdata-profile.php');
-            ?>
-            <div class="clear"></div>			
-			<div class="space25"></div>            
-			
-            
-			<?php 
                 include(dirname(__FILE__) . '/content/profile-myorganisation.php');
             ?>
 			<div class="clear"></div>
@@ -134,85 +115,9 @@ get_header();
 	</div>
     <div class="clear"></div>
 </div> <!--end content-->
-<div class="popup-box" id="harness-detail-box" style="display: none; width: 450px;">
-    <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>        
-    <form name="harness-form" id="harness-form" action="">
-        <div class="popup-box-content grid-box-body">    
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>P Mode Agreement:</label>
-                    <select name="p_mode_agreement" id="p_mode_agreement" class="select">
-                        <option value="LIGHT">LIGHT</option>
-                        <option value="HIGH-END">HIGH-END</option>
-                    </select>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="harness-endpoint-info">                
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Harness EndPoint:</label>
-                        <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Harness Username:</label>
-                        <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>            
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Harness Password:</label>
-                        <input class="input" type="text" name="harness_password" id="harness_password" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>                 
-            </div>
-            <div class="tester-endpoint-info">
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Tester EndPoint:</label>
-                        <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Tester Username:</label>
-                        <input class="input" type="text" name="tester_username" id="tester_username" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>            
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Tester Password:</label>
-                        <input class="input" type="text" name="tester_password" id="tester_password" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>                 
-            </div>
-            
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">                                    
-            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-            <div class="clear"></div>
-        </div>
-        <div class="loading"></div>
-        <a class="close_btn"></a>
-        <input type="hidden" name="id" id="harness-id" value="" />
-        <?php wp_nonce_field('save-harness', 'cp-action'); ?>
-    </form>
-</div>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
-    fixTdHeight(jQuery('#my_community_memberships'));
-    fixTdHeight(jQuery('#my_subscriptions'));
-    fixTdHeight(jQuery('#my_test_data_profiles'));
     fixTdHeight(jQuery('#cards-list'));
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
