@@ -7085,7 +7085,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .tabs li.current_page_item a {
     padding: 7px 5px;
 }
-.dashboard-tabs .tabs li a span {
+.dashboard-tabs .tabs li a span.menu-title {
     background: url(../images/tab_separator.png) left center no-repeat;
     font-family: 'Oswald', Arial, Helvetica sans-serif;
     padding: 0 5px 0 10px;
@@ -7103,8 +7103,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     -o-box-shadow: 0 0 30px -7px #002747 inset;
     border: 1px solid #3577ad;
 }
-.dashboard-tabs .tabs li:hover a span, 
-.dashboard-tabs .tabs li.current_page_item a span {
+.dashboard-tabs .tabs li:hover a span.menu-title, 
+.dashboard-tabs .tabs li.current_page_item a span.menu-title {
     color: #fff;
     text-shadow: 0 1px 0 #002747;
     -moz-text-shadow: 0 1px 0 #002747;
@@ -7193,4 +7193,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     -moz-border-radius-topleft: 0;
     -moz-border-radius-topright: 0;
     margin-top: -1px;
+}
+.dashboard-tabs .simple_tooltip {
+    display: none !important;
+    margin-left: -36px;
 }
