@@ -353,6 +353,8 @@ jQuery(document).ready(function($) {
 	
 
 	// Dashboard Add New Test Suite 	
+    jQuery('.dashboard-tabs li a').addClass('has-tooltip');
+    
 	jQuery('.add_new_lvl').click(function() {
 			 jQuery('.copy-correct-lvl').append(jQuery('.conformance_level').html());
 			// jQuery('.copy-correct-docs input').val('');
@@ -470,9 +472,17 @@ jQuery(document).ready(function($) {
     
     customizeFileTag();
     
+    jQuery('.has-tooltip').each(function(){
+        var tooltip_obj;
+        if (jQuery(this).find('.simple_tooltip').length == 0) {
+            tooltip_obj = '<span class="simple_tooltip radius6">' + jQuery(this).attr('title') + '<span></span></span>';
+            jQuery(this).append(tooltip_obj);
+        }
+    });
+    
     jQuery('.simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
-    })
+    });
     
     // Dropdown Menus
     jQuery('.dropdown').hover(function(){
