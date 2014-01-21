@@ -79,8 +79,7 @@ get_header();
                    
                 </div>                    
             </div>
-            <div class="space10"></div>
-            <a href="<?php echo home_url(); ?>/communities" class="action-btn add-new-btn">
+            <a href="<?php echo home_url(); ?>/communities" class="action-btn add-new-btn table-bottom-btn right">
                 <span class="p"></span>
                 <span class="t">Add</span>
             </a>
