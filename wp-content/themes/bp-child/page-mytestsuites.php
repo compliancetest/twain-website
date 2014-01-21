@@ -15,12 +15,6 @@ get_header();
         <?php get_sidebar('dashboard'); ?>
     </div>
     <div class="container">
-        <?php $description = get_post_meta($post->ID, 'description', true);?>
-        <?php if($description): ?>
-        <div class="page-title-block column">
-            <?php echo $description;?>
-        </div>
-        <?php endif; ?>
         <div class="column">
             <div class="grid-box table-box" id="my_subscriptions">
                 <div class="grid-box-body">
@@ -112,9 +106,10 @@ get_header();
                 </div>                
             </div>
             <div class="space10"></div>
-            <a href="<?php echo home_url(); ?>/test-suites" class="action-btn add-new-btn">
+            <a href="<?php echo home_url(); ?>/test-suites" class="action-btn add-new-btn has-tooltip">
                 <span class="p"></span>
                 <span class="t">Add</span>
+                <span class="simple_tooltip radius6">Add Test Suite<span></span></span>
             </a>
             <div class="space20"></div>
         </div>
