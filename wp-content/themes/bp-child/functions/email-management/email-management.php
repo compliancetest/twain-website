@@ -295,7 +295,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
                     <h3>Purchase Subscription</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [community_url], [payment_email]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1519,7 +1519,7 @@ function cp_send_email($to, $template_name, $data = array())
         require_once ABSPATH . WPINC . '/class-smtp.php';
         $phpmailer = new PHPMailer( true );
     }
-    
+
     //Clear Values
     $phpmailer->ClearAddresses();
     $phpmailer->ClearAllRecipients();
@@ -1571,8 +1571,8 @@ function cp_send_email($to, $template_name, $data = array())
     $phpmailer->IsHTML(true);
     $phpmailer->Subject = $emailTitle;
     $phpmailer->Body = $emailContent;
-    
-    
+
+
     try{
         return $phpmailer->Send();    
     }catch(Exception $e){

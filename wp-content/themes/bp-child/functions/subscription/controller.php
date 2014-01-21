@@ -27,7 +27,7 @@ function execute_subscription_actions()
 function process_eway_payment()
 {
     global $wpdb, $CPRest;
-        
+
     if(!is_user_logged_in())
     {
         echo "Permission Denied!";
@@ -75,7 +75,7 @@ function process_eway_payment()
     }
     
     $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
-    
+
     $result = processEwayPayment($card->customer_id, $paymentAmount, 'Subscription to ' . $suite->title . ' test suite');
     
     if($result['ewayTrxnStatus'] == 'True')
@@ -126,7 +126,7 @@ function process_eway_payment()
         }
         
         $group = groups_get_group( array('group_id' => $suite->community_id));
-        
+
         //Send Email
         $emailData = array(
             '[name]' => cp_get_user_fullname($user->ID),
@@ -134,11 +134,12 @@ function process_eway_payment()
             '[suite_name]' => $suite->name,
             '[suite_url]' => get_permalink($suite->id),
             '[paid_amount]' => $paymentAmount,
-            '[community_url]' => bp_get_group_permalink($group)
+            '[community_url]' => bp_get_group_permalink($group),
+            '[payment_email]' => $card->email
         );
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
         cp_send_email_to_admin('purchase_subscription_admin', $emailData);
-        
+
         //Create Backend Customer Using SOAP            
         $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
                     <api:user>
@@ -315,7 +316,7 @@ function unsubscribe_purchase()
     }
     
     $user = get_userdata(get_current_user_id());
-    
+
     $pId = $_REQUEST['id'];
     
     $subscription = new CT_Subscription($pId);
