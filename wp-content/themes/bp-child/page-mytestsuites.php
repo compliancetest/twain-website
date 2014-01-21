@@ -38,7 +38,7 @@ get_header();
                        {
                    ?>
                        <div class="tr">
-                           <div class="td td-full">No subscription recorded yet.</div>
+                           <div class="td td-full">You are currently not subscribed to any test suites.</div>
                            <div class="clear"></div>
                        </div> 
                    <?php
