@@ -105,7 +105,8 @@ get_header();
                    
                 </div>             
             </div>
-            <a href="#need-subscription-box" rel="custom-popup" cp-type="inline" class="action-btn add-new-btn table-bottom-btn right">
+            <div class="space10"></div>
+            <a href="#need-subscription-box" rel="custom-popup" cp-type="inline" class="action-btn add-new-btn">
                 <span class="p"></span>
                 <span class="t">Add</span>
             </a>
