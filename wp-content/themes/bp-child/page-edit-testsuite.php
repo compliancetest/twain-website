@@ -299,38 +299,22 @@ if(!$suite->community_id)
            </div>
            <div class="grid-box-body">
                <div class="column">   
-                   <?php foreach($suite->scenarios as $row){ ?>
                    <div class="field-row">
                        <div class="grid-cell width20P">
                            <label>Code:</label>
-                           <input type="hidden" name="scenario_id[]" value="<?php echo $row['id']?>" />
-                           <input type="text" class="input width98P" name="scenario_code[]" value="<?php echo $row['code']?>" 
-                                <?php if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>readonly="readonly"<?php } ?> />
-                       </div>
-                       <div class="grid-cell width55P">
-                           <label>Description:</label>
-                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]" 
-                                <?php if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>readonly="readonly"<?php } ?>><?php echo $row['description']?></textarea>
-                       </div>
-                       <div class="grid-cell width8P tocenter">
-                           <label>Sequence:</label>
-                           <input type="text" class="input width50P" name="scenario_sequence[]" value="<?php echo $row['sequence']?>" 
-                                <?php if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>readonly="readonly"<?php } ?> />
-                       </div>                       
-                       <div class="grid-cell">
-                           <label>&nbsp;</label>            
-                           <?php if($row['code'] != TEST_SUITE_DEFAULT_SCENARIO_CODE){ ?>
-                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>               
-                           <?php } ?>
-                       </div>
-                       <div class="clear"></div>
-                   </div>      
-                   <?php } ?>
-                   <?php if(!$suite->scenarios): ?>
-                   <div class="field-row">
-                       <div class="grid-cell width20P">
-                           <label>Code:</label>
+                           <?php if(!$suite->scenarios): ?>
                            <input type="hidden" name="scenario_id[]" value="" />
+                           <?php else: ?>                           
+                           <?php 
+                             foreach($suite->scenarios as $row){ 
+                               if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE)
+                               {
+                                   echo '<input type="hidden" name="scenario_id[]" value="' . $row['id'] . '" />';
+                                   break;
+                               }
+                             }
+                           ?>
+                           <?php endif; ?>                           
                            <input type="text" class="input width98P" name="scenario_code[]" value="<?php echo TEST_SUITE_DEFAULT_SCENARIO_CODE?>" readonly="readonly" />
                        </div>
                        <div class="grid-cell width55P">
@@ -339,15 +323,39 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell width8P tocenter">
                            <label>Sequence:</label>
-                           <input type="text" class="input width50P" name="scenario_sequence[]" value="1" readonly="readonly" />
+                           <input type="text" class="input width55P" name="scenario_sequence[]" value="9999" readonly="readonly" />
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>  
                        </div>
                        <div class="clear"></div>
                    </div>      
-                   <?php endif; ?>
-                   
+                   <?php foreach($suite->scenarios as $row){ ?>
+                   <?php 
+                       if($row['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE)
+                            continue;    
+                   ?>
+                   <div class="field-row">
+                       <div class="grid-cell width20P">
+                           <label>Code:</label>
+                           <input type="hidden" name="scenario_id[]" value="<?php echo $row['id']?>" />
+                           <input type="text" class="input width98P" name="scenario_code[]" value="<?php echo $row['code']?>" />
+                       </div>
+                       <div class="grid-cell width55P">
+                           <label>Description:</label>
+                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]"><?php echo $row['description']?></textarea>
+                       </div>
+                       <div class="grid-cell width8P tocenter">
+                           <label>Sequence:</label>
+                           <input type="text" class="input width55P" name="scenario_sequence[]" value="<?php echo $row['sequence']?>" />
+                       </div>                       
+                       <div class="grid-cell">
+                           <label>&nbsp;</label>            
+                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>               
+                       </div>
+                       <div class="clear"></div>
+                   </div>      
+                   <?php } ?>
                    <div class="btn-row">
                        <div class="grid-cell">
                            <a href="#" class="action-btn add-new-btn" id="add-scenario"><span class="p"></span><span class="t">New Scenario</span></a>                       
@@ -744,7 +752,7 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="grid-cell width8P tocenter">' +
                            '<label>Sequence:</label>' +
-                           '<input type="text" class="input width50P" name="scenario_sequence[]" value="" />' +
+                           '<input type="text" class="input width55P" name="scenario_sequence[]" value="" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' + 
@@ -765,7 +773,7 @@ if(!$suite->community_id)
         
         function sortScenarios()
         {
-            jQuery('#scenarios-box .field-row').each(function(idx){
+            jQuery('#scenarios-box .field-row:gt(0)').each(function(idx){
                 jQuery(this).find('input[name="scenario_sequence[]"]').val(idx + 1);
             })
         }

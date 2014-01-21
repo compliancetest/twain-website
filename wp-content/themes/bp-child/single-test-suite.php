@@ -399,7 +399,8 @@ Template Name Posts: Test Suite
                         <div class="test-scenario-row relative" <?php if(!$first){?>style="border-top: solid 2px #d7d7d7"<?php } ?>>
                             <div class="scenario-cell nopaddingtop width27P left">
                                 <div style="padding: 15px 10px; border-right: solid 1px #d7d7d7; border-radius: 0;">
-                                <?php echo $testCases[0]->scenarioDescription?>
+                                    <b><?php echo $testCases[0]->scenarioCode?>:</b><br />
+                                    <?php echo $testCases[0]->scenarioDescription?>
                                 </div>
                             </div>
                             <div class="right" style="width: 73%;">
