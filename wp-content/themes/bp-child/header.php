@@ -62,17 +62,43 @@
                                             <ul class="dropdown-menu dashboard-dropdown-menu">
                                                 <li class="dropdown-submenu">
                                                     <a class="menu-communities" href="#">Communities</a>
+                                                    <?php
+                                                        $groups =  groups_get_user_groups($current_user->ID);
+                                                        if($groups['total'] > 0)
+                                                        {
+                                                    ?>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#">Community 1</a></li>
-                                                        <li><a href="#">Community 2</a></li>
+                                                    <?php
+                                                        foreach($groups['groups'] as $gID)
+                                                        {
+                                                            $group = groups_get_group(array('group_id'=>$gID));
+                                                            $member = getGroupMemberDetail($gID, $current_user->ID);
+                                                    ?>
+                                                        <li><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a></li>
+                                                    <?php } ?>
                                                     </ul>
+                                                    <?php } ?>
                                                 </li>
                                                 <li class="dropdown-submenu">
                                                     <a class="menu-test-suites" href="#">Test Suites</a>
+                                                    <?php
+                                                        $subscriptions =  getUserSubscriptions(null, true);
+                                                        if(count($subscriptions) > 0)
+                                                        {
+                                                    ?>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#">Super Stream Contributions Test Suite v1.0</a></li>
-                                                        <li><a href="#">ebMS3 Core Features Test Suite v2.0</a></li>
+                                                        <?php
+                                                            foreach($subscriptions as $row) 
+                                                            {
+                                                        ?>
+                                                        <li><a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a></li>
+                                                        <?php
+                                                            }
+                                                        ?>
                                                     </ul>
+                                                    <?php
+                                                        }
+                                                    ?>
                                                 </li>
                                                 <li>
                                                     <a class="menu-test-data" href="#">Test Data</a>
