@@ -223,7 +223,9 @@ a:hover {
             #top_logged_wrap .logout-btn .p {
                 background-position: 0 -1339px;
             }
-            
+            #top_loged_actions .open .blue-btn {
+                background: #288ce2;
+            }
             #top_loged_actions .menu-communities, 
             #top_loged_actions .menu-test-suites, 
             #top_loged_actions .menu-test-data, 
