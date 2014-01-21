@@ -33,10 +33,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
 ?>
 <div class="content edit-item-wrapper" id="edit_product_service_wrapper">
     <div class="space25"></div>
-    <div class="column fifth left nopaddingleft nopaddingright sidebar">
-        <?php get_sidebar('dashboard'); ?>
-    </div>        
-    <div class="column four_fifths right container"> 
+    <div class="column container"> 
       <form name="psForm" id="psForm" action="" class="validation-form" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
         <h2>Add New Product and Service</h2>
