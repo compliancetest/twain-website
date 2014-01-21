@@ -100,7 +100,7 @@ get_header();
                 </div>             
             </div>
             <div class="space10"></div>
-            <a href="#need-subscription-box" rel="custom-popup" cp-type="inline" class="action-btn add-new-btn">
+            <a href="#need-subscription-box" rel="custom-popup" cp-type="inline" class="action-btn add-new-btn has-tooltip">
                 <span class="p"></span>
                 <span class="t">Add</span>
                 <span class="simple_tooltip radius6">Add Test Data<span></span></span>
