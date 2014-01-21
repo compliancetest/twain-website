@@ -39,7 +39,7 @@ get_header();
                        {
                    ?>
                        <div class="tr">
-                           <div class="td td-full">There is no community that you joined.</div>
+                           <div class="td td-full">You are currently not a member of any communities.</div>
                            <div class="clear"></div>
                        </div> 
                    <?php
@@ -79,6 +79,12 @@ get_header();
                    
                 </div>                    
             </div>
+            <div class="space10"></div>
+            <a href="<?php echo home_url(); ?>/communities" class="action-btn add-new-btn">
+                <span class="p"></span>
+                <span class="t">Add</span>
+            </a>
+            <div class="space20"></div>
         </div>
         <div class="clear"></div>
     </div>
