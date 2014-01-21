@@ -94,10 +94,10 @@ if($filterCustomer){
 
 ?>
 <div class="content" id="my_transaction_log">
-    <div class="column fifth left nopaddingleft nopaddingright sidebar">
+    <div class="dashboard-tabs">
         <?php get_sidebar('dashboard'); ?>
     </div>
-    <div class="four_fifths right container">
+    <div class="container">
         <div class="filter-box column">
             <div class="left right10"><label>Filter By:</label></div>
             <form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
