@@ -4492,7 +4492,7 @@ min-height: 70px;
     display: block;
 }
 #cards-list .td-nickname{
-    width: 106px;
+    width: 226px;
 }
 #cards-list .td-status{
     width: 80px;
@@ -4513,7 +4513,7 @@ min-height: 70px;
     border: solid 1px #b7b7b7;
 }
 #my_community_memberships .td-name{
-    width: 181px;
+    width: 685px;
 }
 #my_community_memberships .td-since{
     width: 65px;
@@ -4533,7 +4533,7 @@ min-height: 70px;
     margin-left: -55px;
 }
 #my_subscriptions .td-suite{
-    width: 156px;
+    width: 660px;
 }
 #my_subscriptions .td-fee{
     width: 65px;
@@ -4577,10 +4577,10 @@ min-height: 70px;
 }
 
 #my_test_data_profiles .td-profile-name{
-    width: 262px;    
+    width: 726px;    
 }
 #my_test_data_profiles .td-profile-type{
-    width: 70px;   
+    width: 110px;   
     text-align: center;
 }
 #my_test_data_profiles .td-action{
@@ -4594,10 +4594,10 @@ min-height: 70px;
 
 /*** My Products Page **/
 #my_products .td-issuer{
-    width: 110px;
+    width: 150px;
 }
 #my_products .td-suite{
-    width: 109px;
+    width: 269px;
 }
 #my_products .td-level{
     width: 60px;
@@ -4662,17 +4662,17 @@ min-height: 70px;
 
 /*** Test Suite Coverage ***/
 #test_suite_coverage .td-product{
-    width: 160px;
+    width: 200px;
 }
 #test_suite_coverage .td-conflevel{
     width: 45px;
 }
 #test_suite_coverage .td-role{
-    width: 91px;
+    width: 120px;
 }
 
 #test_suite_coverage .td-coverage{
-    width: 246px;
+    width: 378px;
 }
 #test_suite_coverage .tbody .td-coverage{
     padding: 7px 10px;
@@ -4875,7 +4875,7 @@ min-height: 70px;
     line-height: 14px;
 }
 
-#my_transaction_log .td-product{ width: 157px; }
+#my_transaction_log .td-product{ width: 250px; }
 #my_transaction_log .td-product a{ float: left; width: 137px; }
 #my_transaction_log .td-product a.view-messages-link{ 
     width: 11px;
@@ -4888,8 +4888,8 @@ min-height: 70px;
 }
 #my_transaction_log .thead .td-chk{ width: 15px; }
 #my_transaction_log .td-chk{ width: 15px; }
-#my_transaction_log .td-case{ width: 70px; }
-#my_transaction_log .td-suite{ width: 124px; }
+#my_transaction_log .td-case{ width: 91px; }
+#my_transaction_log .td-suite{ width: 210px; }
 #my_transaction_log .td-outcome{ width: 60px; }
 #my_transaction_log .td-audit{
     width: 50px;
@@ -6771,7 +6771,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 60px;
 }
 #tickets_list .td-ticket-subject{
-    width: 278px;
+    width: 390px;
 }
 #tickets_list .td-ticket-requested,
 #tickets_list .td-ticket-solved,
@@ -6782,7 +6782,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 75px;
 }
 #tickets_list .td-ticket-type{
-    width: 120px;
+    width: 188px;
 }
 #tickets_list span.new{
     position: absolute;
@@ -7056,4 +7056,120 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     position: relative;
 }
 
+.dashboard-tabs {
+    
+}
+.dashboard-tabs .tabs {
+    
+}
+.dashboard-tabs .tabs li {
+    
+}
+.dashboard-tabs .tabs li.current_page_item {
+    margin-top: 0px;
+}
+.dashboard-tabs .tabs li a {
+}
+.dashboard-tabs .tabs li.current_page_item a {
+    padding: 7px 5px;
+}
+.dashboard-tabs .tabs li a span {
+    background: url(../images/tab_separator.png) left center no-repeat;
+    font-family: 'Oswald', Arial, Helvetica sans-serif;
+    padding: 0 5px 0 10px;
+    font-size: 14px;
+    line-height: 32px;
+    display: inline-block;
+    vertical-align: top;
+}
+.dashboard-tabs .tabs li:hover, 
+.dashboard-tabs .tabs li.current_page_item {
+    background: #2d85cf;
+    box-shadow: 0 0 30px -7px #002747 inset;
+    -moz-box-shadow: 0 0 30px -7px #002747 inset;
+    -webkit-box-shadow: 0 0 30px -7px #002747 inset;
+    -o-box-shadow: 0 0 30px -7px #002747 inset;
+    border: 1px solid #3577ad;
+}
+.dashboard-tabs .tabs li:hover a span, 
+.dashboard-tabs .tabs li.current_page_item a span {
+    color: #fff;
+    text-shadow: 0 1px 0 #002747;
+    -moz-text-shadow: 0 1px 0 #002747;
+    -webkit-text-shadow: 0 1px 0 #002747;
+    -o-text-shadow: 0 1px 0 #002747;
+    background: url(../images/blue_separator.png) left center no-repeat;
+}
+.dashboard-tabs .menu-communities .menu-icon, 
+.dashboard-tabs .menu-test-suites .menu-icon, 
+.dashboard-tabs .menu-test-data .menu-icon, 
+.dashboard-tabs .menu-products .menu-icon, 
+.dashboard-tabs .menu-coverage .menu-icon, 
+.dashboard-tabs .menu-transactions .menu-icon, 
+.dashboard-tabs .menu-support .menu-icon, 
+.dashboard-tabs .menu-profile .menu-icon {
+    background-image: url(../images/ui-icon-sprites.png) !important;
+    background-repeat: no-repeat;  
+    display: inline-block;
+    width: 24px; 
+    height: 24px;
+    margin: 0 3px 0 0;
+    padding: 0px;
+}
 
+.dashboard-tabs .menu-communities .menu-icon {
+    background-position: 5px -72px;
+}
+.dashboard-tabs .menu-communities:hover .menu-icon,
+.dashboard-tabs .menu-communities.current_page_item .menu-icon {
+    background-position: 5px -112px;
+}
+.dashboard-tabs .menu-test-suites .menu-icon {
+    background-position: 5px -714px;
+}
+.dashboard-tabs .menu-test-suites:hover .menu-icon,
+.dashboard-tabs .menu-test-suites.current_page_item .menu-icon {
+    background-position: 5px -754px;
+}
+.dashboard-tabs .menu-test-data .menu-icon {
+    background-position: 5px -634px;
+}
+.dashboard-tabs .menu-test-data:hover .menu-icon,
+.dashboard-tabs .menu-test-data.current_page_item .menu-icon {
+    background-position: 5px -674px;
+}
+.dashboard-tabs .menu-products .menu-icon {
+    background-position: 5px -394px;
+}
+.dashboard-tabs .menu-products:hover .menu-icon,
+.dashboard-tabs .menu-products.current_page_item .menu-icon {
+    background-position: 5px -434px;
+}
+.dashboard-tabs .menu-coverage .menu-icon {
+    background-position: 5px -154px;
+}
+.dashboard-tabs .menu-coverage:hover .menu-icon,
+.dashboard-tabs .menu-coverage.current_page_item .menu-icon {
+    background-position: 5px -193px;
+}
+.dashboard-tabs .menu-transactions .menu-icon {
+    background-position: 5px -789px;
+}
+.dashboard-tabs .menu-transactions:hover .menu-icon,
+.dashboard-tabs .menu-transactions.current_page_item .menu-icon {
+    background-position: 5px -830px;
+}
+.dashboard-tabs .menu-support .menu-icon {
+    background-position: 5px -554px;
+}
+.dashboard-tabs .menu-support:hover .menu-icon,
+.dashboard-tabs .menu-support.current_page_item .menu-icon {
+    background-position: 5px -594px;
+}
+.dashboard-tabs .menu-profile .menu-icon {
+    background-position: 5px -473px;
+}
+.dashboard-tabs .menu-profile:hover .menu-icon,
+.dashboard-tabs .menu-profile.current_page_item .menu-icon {
+    background-position: 5px -513px;
+}
