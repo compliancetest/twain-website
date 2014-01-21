@@ -30,11 +30,11 @@ $products = getUserProductsAndServices();
 get_header();
 ?>
 <div class="content" id="my_products">
-    <div class="column fifth left nopaddingleft nopaddingright sidebar">
+    <div class="dashboard-tabs">
         <?php get_sidebar('dashboard'); ?>
     </div>
     
-    <div class="four_fifths right container"> <!--Temporary -->
+    <div class="container"> <!--Temporary -->
         <div class="column">
            <?php if(can_create_product_and_service()){ ?>
            <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Product or Service</span></a>
