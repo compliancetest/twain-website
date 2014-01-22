@@ -16,17 +16,26 @@ function compliancetest_login()
     
     $user = wp_signon(array('user_login'=>$username, 'user_password' => $pUserPass));
     
+    $result = array();
+    
     if(is_wp_error($user))
     {
-       echo $user->get_error_message(); 
+        $result['status'] = 'fail';
+        $result['message'] = $user->get_error_message();
     }else{
         if($user->user_status == 3)
         {
             addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">link verification</a>).', 'notice');
             wp_logout();    
         }        
-        echo 'success';
+        $result['status'] = 'success';
+        $result['redirect_to'] = get_user_meta($user->ID, 'dashboard_page_url', true);
+        if ($result['redirect_to'] == '') {
+            $result['redirect_to'] = '/my-profile';
+        }
     }        
+    
+    echo json_encode($result);
     exit();
     
 }
