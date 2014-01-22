@@ -4297,8 +4297,7 @@ display:block !important;
     padding: 5px 4px;
 }
 
-.test_cases h5{
-    font-size: 16px;
+.test_cases h4.blue_txt{    
     line-height: 16px;
     margin: 0;
     padding-top: 5px;

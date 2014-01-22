@@ -85,7 +85,7 @@
 ?>
 <div class="grid_row test_cases">
     <div class="grid_cell width45P">
-        <h5 class="blue_txt">Certifications</h5>
+        <h4 class="blue_txt">Certifications</h4>
     </div>
     <div class="grid_cell width30P right selecteds_single">
         <!--<span class="left padding5-10">Filter By: </span>
