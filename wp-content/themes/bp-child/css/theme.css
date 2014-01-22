@@ -7207,3 +7207,11 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 160px;
     top: -25px !important;
 }
+#dashboard-pages {
+    margin-top: 5px;
+    position: relative;
+    display: none;
+}
+.dashboard-pages-dropdown a {
+    font-size: 12px;
+}
