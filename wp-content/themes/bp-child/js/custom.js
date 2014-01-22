@@ -484,8 +484,18 @@ jQuery(document).ready(function($) {
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
     });
     
+    // Browse Dashboard Pages
+    jQuery('#browse-dashboard-pages').click(function(e){
+        e.stopPropagation();
+        jQuery(this).parent().addClass('open');
+    });
+    
+    jQuery('body').click(function(e){
+        jQuery('#browse-dashboard-pages').parent().removeClass('open');
+    });
+    
     // Dropdown Menus
-    jQuery('.dropdown li').each(function(){
+    jQuery('.dropdown-menu li').each(function(){
         if (jQuery(this).find('.dropdown-menu').length > 0) {
             jQuery(this).addClass('dropdown-submenu');
         }
