@@ -5966,13 +5966,6 @@ a.suite-subscript-link:hover{
     position: absolute;
     left: 28px;
 }
-.show-native-style ul{
-    list-style: disc;
-    margin: 0px 0 0 20px;
-    padding: 8px;
-    line-height: 16px;
-    list-style-position: outside !important;
-}
 .cnumber-desc{
     float: right;
     margin-right: 40px;

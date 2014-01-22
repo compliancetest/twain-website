@@ -62,7 +62,7 @@ Template Name Posts: Test Suite
 					</div>
 					<div class="space15"></div>										
 				</div>
-				<div class="grids noborder nobackground show-native-style">
+				<div class="grids noborder nobackground redactor_editor">
                     <?php echo apply_filters('the_content', $suite->description) ?>
                 </div>
 				<div class="clear"></div>
@@ -97,7 +97,7 @@ Template Name Posts: Test Suite
 				
 				<div class="clear"></div>
 				
-				<div class="tab-content white_bcg show-native-style" id="tabs_sv1" style="display: block; ">
+				<div class="tab-content white_bcg redactor_editor" id="tabs_sv1" style="display: block; ">
 					<div class="column">										
 						<div class="grid_cell width10P bold top3">Related To: </div>
 						<div class="grid_cell width90P">
@@ -118,7 +118,7 @@ Template Name Posts: Test Suite
 					<div class="clear"></div>
 				</div> <!--end tab 1-->
 				
-				<div class="tab-content white_bcg show-native-style" id="tabs_sv2" style="display: none; ">
+				<div class="tab-content white_bcg redactor_editor" id="tabs_sv2" style="display: none; ">
 					<div class="column">
 						<?php 						    
 						    foreach($suite->specDocuments as $row){
@@ -397,7 +397,7 @@ Template Name Posts: Test Suite
                             continue;
                         ?>                        
                         <div class="test-scenario-row relative" <?php if(!$first){?>style="border-top: solid 3px #d7d7d7"<?php } ?>>
-                            <div class="scenario-cell nopaddingtop width20P left show-native-style">
+                            <div class="scenario-cell nopaddingtop width20P left redactor_editor">
                                 <div style="padding: 15px 10px; border-right: solid 1px #d7d7d7; border-radius: 0;">
                                     <b><?php echo $testCases[0]->scenarioCode?>:</b><br />
                                     <?php echo $testCases[0]->scenarioDescription?>

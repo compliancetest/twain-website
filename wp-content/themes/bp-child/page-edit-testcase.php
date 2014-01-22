@@ -244,7 +244,7 @@ get_header();
                            <div class="grid-cell radio-cell">
                                <label><input type="radio" name="scenario_<?php echo $crow->ID?>" value="<?php echo $row['id']?>" <?php echo $case->scenario[$crow->ID] == $row['id'] ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
-                           <div class="grid-cell width60P show-native-style">
+                           <div class="grid-cell width60P redactor_editor">
                                <?php echo $row['description']?>
                            </div>
                            <div class="clear"></div>

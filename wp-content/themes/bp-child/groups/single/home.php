@@ -103,7 +103,7 @@
                 <div class="loading loading-with-text radius6"><div><b>SENDING REQUEST</b><p>Please wait...</p></div></div>
                 <a id="close-popup-community" class="close_btn"></a>                
             </div>
-            <div id="community-terms-box" style="display: none" class="popup-box show-native-style">
+            <div id="community-terms-box" style="display: none" class="popup-box redactor_editor">
                 <div class="popup-box-header radius6 noradiusbottom">Terms and Conditions</div>
                 <div class="popup-box-content">
                     <p>
@@ -119,7 +119,7 @@
                     <div class="clear"></div>
                 </div>
             </div>
-            <div class="popup-box show-native-style"  id="community-license-box" style="display: none;">
+            <div class="popup-box redactor_editor"  id="community-license-box" style="display: none;">
                 <div class="popup-box-header radius6 noradiusbottom">License Agreements</div>
                 <div class="popup-box-content">
                     <p>

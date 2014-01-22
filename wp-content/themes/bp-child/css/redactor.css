@@ -1,12 +1,12 @@
-.redactor_box ul{
+.redactor_editor ul{
     list-style: disc;
+    margin: 0px 0 0 20px;
+    padding: 8px;
+    line-height: 16px;
     list-style-position: outside !important;
 }
-.redactor_box {
-	position: relative;
-	overflow: visible;
-	border: 1px solid #ddd;
-	background-color: #fff;
+.redactor_editor {
+	
 }
 
 body .redactor_air {
@@ -73,7 +73,46 @@ body .redactor_box_fullscreen {
 	font-family: Menlo, Monaco, monospace, sans-serif;
 	resize: none;
 }
-
+.redactor_box .redactor_editor,
+.redactor_box .redactor_editor:focus {
+    position: relative;
+    overflow: auto;
+    margin: 0 !important;
+    padding: 10px;
+    padding-bottom: 5px;
+    outline: none;
+    background: none;
+    background: #fff !important;
+    box-shadow: none !important;
+    white-space: normal;
+    
+    position: relative;    
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+.redactor_editor code,
+.redactor_editor pre {
+    font-family: Menlo, Monaco, monospace, sans-serif !important;
+}
+.redactor_editor code {
+    background-color: #d8d7d7 !important;
+}
+.redactor_editor pre {
+    overflow: auto;
+    padding: 1em !important;
+    border: 1px solid #ddd !important;
+    border-radius: 3px !important;
+    background: #f8f8f8 !important;
+    white-space: pre;
+    font-size: 90% !important;
+}
+.redactor_editor hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+/*
 .redactor_editor,
 .redactor_editor:focus,
 .redactor_editor div,
@@ -93,10 +132,7 @@ body .redactor_box_fullscreen {
 	font-family: Arial, Helvetica, Verdana, Tahoma, sans-serif !important;
 }
 
-.redactor_editor code,
-.redactor_editor pre {
-	font-family: Menlo, Monaco, monospace, sans-serif !important;
-}
+
 
 .redactor_editor,
 .redactor_editor:focus,
@@ -109,22 +145,10 @@ body .redactor_box_fullscreen {
 .redactor_editor blockquote,
 .redactor_editor pre {
 	font-size: 15px;
-	line-height: 1.5rem;
+	line-height: 1.5em;
 }
 
-.redactor_editor,
-.redactor_editor:focus {
-	position: relative;
-	overflow: auto;
-	margin: 0 !important;
-	padding: 10px;
-	padding-bottom: 5px;
-	outline: none;
-	background: none;
-	background: #fff !important;
-	box-shadow: none !important;
-	white-space: normal;
-}
+
 .redactor_editor a {
 	color: #15c !important;
 	text-decoration: underline !important;
@@ -202,25 +226,9 @@ body .redactor_box_fullscreen {
 	border-bottom: 2px solid #000 !important;
 	font-weight: bold !important;
 }
-.redactor_editor code {
-	background-color: #d8d7d7 !important;
-}
-.redactor_editor pre {
-	overflow: auto;
-	padding: 1em !important;
-	border: 1px solid #ddd !important;
-	border-radius: 3px !important;
-	background: #f8f8f8 !important;
-	white-space: pre;
-	font-size: 90% !important;
-}
-.redactor_editor hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-}
-.redactor_editor h1,
+
+*/
+/*.redactor_editor h1,
 .redactor_editor h2,
 .redactor_editor h3,
 .redactor_editor h4,
@@ -258,7 +266,7 @@ body .redactor_box_fullscreen {
 .redactor_editor h5 {
 	margin-bottom: 10px;
 	font-size: 1em !important;
-}
+}*/
 
 .redactor_editor.redactor_editor_wym {
 	padding: 10px 7px 0 7px !important;

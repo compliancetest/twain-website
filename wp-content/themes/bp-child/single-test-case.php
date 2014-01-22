@@ -33,7 +33,7 @@ $case->load();
                 <a href="<?php echo addPrintParams(get_permalink(), 'test-case')?>" class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span class="t">PRINT</span></a>
                 <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($test_suite_id)?>"><?php echo get_the_title($test_suite_id) ?></a></span>
                 <div class="clear"></div>
-				<p class="dark_gray_txt show-native-style"><?php echo $case->testIntentDescription ; ?></p>
+				<p class="dark_gray_txt redactor_editor"><?php echo $case->testIntentDescription ; ?></p>
 				<div class="grids noradiusbottom">
 					<div class="grid_row white_bcg noborderbottom">
 						<div class="grid_cell width10P left size13 bold dark_blue_txt">Info:</div>
@@ -113,7 +113,7 @@ $case->load();
                     
                     <div class="grid_row white_bcg noborderbottom">
                         <div class="grid_cell width10P left size13 bold dark_blue_txt">Scenario:</div>
-                        <div class="grid_cell width90P left show-native-style"> 
+                        <div class="grid_cell width90P left redactor_editor"> 
                             <?php 
                                 $scenarioDetail = $case->getScenario($test_suite_id);
                                 echo '<p class="bottom8"><b>' . $scenarioDetail->code . '</b></p>';
@@ -263,7 +263,7 @@ $case->load();
 						<div class="clear"></div>
 					</div>
 				</div>
-				<div class="grids show-native-style">
+				<div class="grids redactor_editor">
 					<?php					
 					foreach($case->testSteps as $key => $row){
 					?>
