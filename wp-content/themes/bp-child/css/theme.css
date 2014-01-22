@@ -6413,14 +6413,14 @@ div.popup-box .loading-with-text{
     border: none;
 }
 #profile-type-list .td-profile-title{
-    width: 252px;
+    width: 230px;
 }
 #profile-type-list .td-profile-instances{
     width: 60px;
     text-align: center;
 }
 #profile-type-list .td-profile-action{
-    width: 60px;
+    width: 82px;
 }
 #profile-type-list .tbody .tr{
     position: relative;
