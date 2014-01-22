@@ -69,7 +69,7 @@
                                                     $class = implode(' ', $menu_item->classes);
                                             ?>
                                             <?php if ($class == 'menu-communities') { ?>
-                                                <li class="dropdown-submenu">
+                                                <li>
                                                     <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
                                                     <ul class="dropdown-menu">
                                                     <?php
@@ -81,7 +81,33 @@
                                                                 $group = groups_get_group(array('group_id'=>$gID));
                                                                 $member = getGroupMemberDetail($gID, $current_user->ID);
                                                     ?>
-                                                        <li><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a></li>
+                                                        <li>
+                                                            <a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <a href="<?php echo bp_get_group_permalink($group)?>">Test Suites</a>
+                                                                    <?php 
+                                                                        $testsuites = getCommunityTestSuites($gID); 
+                                                                        if (count($testsuites) > 0) {
+                                                                    ?>
+                                                                        <ul class="dropdown-menu">
+                                                                            <?php foreach ($testsuites as $row) { ?>
+                                                                            <li><a href="<?php echo get_permalink($row->ID)?>"><?php echo apply_filters('the_title', $row->post_title)?></a></li>
+                                                                            <?php } ?>
+                                                                        </ul>
+                                                                    <?php
+                                                                        }
+                                                                    ?>
+                                                                </li>
+                                                                <li><a href="<?php echo bp_get_group_permalink($group)?>testdata">Test Data</a></li>
+                                                                <li><a href="<?php echo bp_get_group_permalink($group)?>wiki">Articles</a></li>
+                                                                <li><a href="<?php echo bp_get_group_permalink($group)?>forum">Forum</a></li>
+                                                                <li><a href="<?php echo bp_get_group_permalink($group)?>downloads">Downloads</a></li>
+                                                                <?php if(bp_group_is_admin()) { ?>
+                                                                <li><a href="<?php echo bp_get_group_permalink($group)?>admin">Admin</a></li>
+                                                                <?php } ?>
+                                                            </ul>
+                                                        </li>
                                                     <?php 
                                                             } 
                                                         }
@@ -90,7 +116,7 @@
                                                     </ul>
                                                 </li>
                                             <?php } elseif ($class == 'menu-test-suites') { ?>
-                                                <li class="dropdown-submenu">
+                                                <li>
                                                     <a class="<?php echo $class; ?>" href="<?php echo $url; ?>"><?php echo $title; ?></a>
                                                     <ul class="dropdown-menu">
                                                     <?php
