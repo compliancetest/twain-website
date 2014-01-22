@@ -2498,11 +2498,10 @@ table.result-table{
 }
 
 .dropdown-submenu > .dropdown-menu {
-    width: 200px;
     top: 0;
     left: 100%;
     margin-top: 6px;
-    margin-left: -6px;
+    margin-left: -8px;
     -webkit-border-radius: 6px 6px 6px 6px;
      -moz-border-radius: 6px 6px 6px 6px;
           border-radius: 6px 6px 6px 6px;
@@ -2544,6 +2543,14 @@ table.result-table{
 
 .dropdown-submenu:hover > a:after {
   border-left-color: #ffffff;
+}
+
+.dropdown-submenu .dropdown-submenu > a {
+    padding: 8px 20px 8px 10px !important;
+}
+
+.dropdown-submenu .dropdown-submenu > a:after {
+    margin-top: 2px;
 }
 
 .no-wrap {
