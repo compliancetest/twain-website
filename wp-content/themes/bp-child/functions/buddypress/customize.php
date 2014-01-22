@@ -665,6 +665,7 @@ function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $l
     
     return $html;
 }
+
 function cp_directory_groups_search_form() {
 
     $default_search_value = bp_get_search_default_text( 'groups' );
