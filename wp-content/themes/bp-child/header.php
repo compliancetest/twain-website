@@ -59,41 +59,7 @@
                                                 <span class="p"></span>
                                                 <span class="t">Dashboard</span>
                                             </a>
-                                            <?php $pages = getDashboardPages('menu'); ?>
-                                            <ul class="dropdown-menu dashboard-dropdown-menu">
-                                            <?php foreach ($pages as $level1) { ?>
-                                                <li>
-                                                    <a class="<?php echo $level1['class']; ?>" href="<?php echo $level1['url']; ?>"><?php echo $level1['title']; ?></a>
-                                                    <?php if (isset($level1['subpages']) && count($level1['subpages']) > 0) { ?>
-                                                        <ul class="dropdown-menu">
-                                                        <?php foreach ($level1['subpages'] as $level2) { ?>
-                                                            <li class="<?php echo ($level2['title'] == '+ Add') ? ('action-link') : (''); ?>">
-                                                                <a class="<?php echo $level2['class']; ?>" href="<?php echo $level2['url']; ?>"><?php echo $level2['title']; ?></a>
-                                                                <?php if (isset($level2['subpages']) && count($level2['subpages']) > 0) { ?>
-                                                                    <ul class="dropdown-menu">
-                                                                    <?php foreach ($level2['subpages'] as $level3) { ?>
-                                                                        <li>
-                                                                            <a class="<?php echo $level3['class']; ?>" href="<?php echo $level3['url']; ?>"><?php echo $level3['title']; ?></a>
-                                                                            <?php if (isset($level3['subpages']) && count($level3['subpages']) > 0) { ?>
-                                                                                <ul class="dropdown-menu">
-                                                                                <?php foreach ($level3['subpages'] as $level4) { ?>
-                                                                                    <li>
-                                                                                        <a class="<?php echo $level4['class']; ?>" href="<?php echo $level4['url']; ?>"><?php echo $level4['title']; ?></a>
-                                                                                    </li>
-                                                                                <?php } ?>
-                                                                                </ul>
-                                                                            <?php } ?>
-                                                                        </li>
-                                                                    <?php } ?>
-                                                                    </ul>
-                                                                <?php } ?>
-                                                            </li>
-                                                        <?php } ?>
-                                                        </ul>
-                                                    <?php } ?>
-                                                </li>
-                                            <?php } ?>
-                                            </ul>
+                                            <?php echo getDashboardMenuHTML(getDashboardPages('menu'), 'dashboard-dropdown-menu'); ?>
                                         </li>
                                         <li>
                                             <a href="<?php echo wp_logout_url( $logout_redirect ); ?>" class="red-btn action-btn icon-btn logout-btn">
