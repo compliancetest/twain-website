@@ -56,7 +56,7 @@ $downloads = new CP_Downloads_Group_Extension();
                 </div>
                 <div class="grid-list-cell width20P tocenter"><?php echo date('M d, Y', strtotime($file->last_updated)) ?></div>
                 <div class="grid-list-cell width10P">
-                    <?php if(bp_group_is_admin) { ?>
+                    <?php if(bp_group_is_admin()) { ?>
                         <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_get_file')?>&id=<?php echo $file->id?>" class="action-btn blue-edit-btn icon-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Edit</span></a>
                         <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_delete')?>&id=<?php echo $file->id?>" class="action-btn delete-btn icon-btn no-submit" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Delete</span></a>
                     <?php } ?>                        
