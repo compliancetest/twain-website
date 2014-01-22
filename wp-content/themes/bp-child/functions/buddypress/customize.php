@@ -554,3 +554,82 @@ function getCommunityProductsCount($community_id)
     return !$count ? 0 : $count;
 }
 
+// Get Dashboard Pages
+function getDashboardPages($type = 'page')
+{
+    global $current_user;
+    get_currentuserinfo();
+    
+    $pages = array();
+    
+    $menu = wp_get_nav_menu_object('dashboard_menu');
+    $menu_items = wp_get_nav_menu_items($menu->term_id);
+    
+    foreach ((array)$menu_items as $key => $menu_item ) {
+        $title = $menu_item->title;
+        $url = $menu_item->url;
+        $class = implode(' ', $menu_item->classes);
+        
+        $item = array('title' => $title, 'url' => $url, 'class' => $class);
+        
+        if ($class == 'menu-communities') {
+            
+            $item['subpages'] = array();
+            
+            $groups = groups_get_user_groups($current_user->ID);
+            if($groups['total'] > 0)
+            {
+                foreach($groups['groups'] as $gID)
+                {
+                    $group = groups_get_group(array('group_id' => $gID));
+                    $member = getGroupMemberDetail($gID, $current_user->ID);
+                    
+                    $community_url = bp_get_group_permalink($group);
+                    
+                    $item1 = array('title' => bp_get_group_name($group), 'url' => $community_url);
+                    $item2 = array();
+                    $item2[] = array('title' => 'Test Suites', 'url' => $community_url);
+                    $item2[] = array('title' => 'Test Data', 'url' => $community_url.'testdata');
+                    $item2[] = array('title' => 'Articles', 'url' => $community_url.'wiki');
+                    $item2[] = array('title' => 'Forum', 'url' => $community_url.'forum');
+                    $item2[] = array('title' => 'Downloads', 'url' => $community_url.'downloads');
+                    if(bp_group_is_admin()) {
+                        $item2[] = array('title' => 'Test Suites', 'url' => $community_url.'admin');
+                    }
+                    
+                    $testsuites = getCommunityTestSuites($gID); 
+                    if (count($testsuites) > 0) {
+                        $item2[0]['subpages'] = array();
+                        foreach ($testsuites as $row) {
+                            $item2[0]['subpages'][] = array('title' => apply_filters('the_title', $row->post_title), 'url' => get_permalink($row->ID));
+                        }
+                    }
+                    $item1['subpages'] = $item2;
+                    
+                    $item['subpages'][] = $item1;
+                }
+            }
+            if ($type == 'menu') {
+                $item['subpages'][] = array('title' => '+ Add', 'url' => home_url().'/communities');
+            }
+        } elseif ($class == 'menu-test-suites') {
+            
+            $item['subpages'] = array();
+            $subscriptions =  getUserSubscriptions(null, true);           
+            
+            if(count($subscriptions) > 0) {
+                foreach($subscriptions as $row) {     
+                    $item['subpages'][] = array('title' => $row->suite_title, 'url' => get_permalink($row->suite_id));
+                }
+            }
+            
+            if ($type == 'menu') {
+                $item['subpages'][] = array('title' => '+ Add', 'url' => home_url().'/test-suites');
+            }
+        }
+        
+        $pages[] = $item;
+    }
+    
+    return $pages;
+}
