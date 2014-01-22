@@ -594,7 +594,7 @@ function getDashboardPages($type = 'page')
                     $item2[] = array('title' => 'Forum', 'url' => $community_url.'forum');
                     $item2[] = array('title' => 'Downloads', 'url' => $community_url.'downloads');
                     if(bp_group_is_admin()) {
-                        $item2[] = array('title' => 'Test Suites', 'url' => $community_url.'admin');
+                        $item2[] = array('title' => 'Admin', 'url' => $community_url.'admin');
                     }
                     
                     $testsuites = getCommunityTestSuites($gID); 
@@ -632,6 +632,38 @@ function getDashboardPages($type = 'page')
     }
     
     return $pages;
+}
+
+// Get Dashboard Menu HTML
+function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $level = 0)
+{
+    if (!is_array($pages) || count($pages) == 0) {
+        return '';
+    }
+    
+    $html = '<ul class="dropdown-menu '.(($level==0)?($menu_class):('')).'">';
+    
+    foreach ($pages as $page) {
+        
+        $class = isset($page['class']) ? ($page['class']) : ('');
+        $url = $page['url'];
+        $title = $page['title'];
+        $li_class = ($title == '+ Add') ? ('action-link') : ('');
+        
+        $path1 = ($path == '') ? ($title) : ($path . ' > ' . $title);
+        
+        $html .= '<li class="'.$li_class.'"><a class="'.$class.'" href="'.$url.'" data-title="'.$path1.'">'.$title.'</a>';
+        
+        if (isset($page['subpages']) && count($page['subpages']) > 0) {
+            $html .= getDashboardMenuHTML($page['subpages'], '', $path1, $level + 1);
+        }
+        
+        $html .= '</li>';
+    }
+    
+    $html .= '</ul>';
+    
+    return $html;
 }
 function cp_directory_groups_search_form() {
 
