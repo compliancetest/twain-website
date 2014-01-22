@@ -13,7 +13,7 @@ do_action( 'bp_before_group_header' );
 	        </a>
         </div><!-- #item-header-avatar -->
 
-        <div id="item-header-content" class="page-title-content">
+        <div id="item-header-content" class="page-title-content show-native-style">
 	        <h3 class="dark_gray_txt"><?php bp_group_name(); ?></h3>	        
 	        <?php do_action( 'bp_before_group_header_meta' ); ?>
             <?php bp_group_description(); ?>	        
