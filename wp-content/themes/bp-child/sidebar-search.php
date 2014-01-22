@@ -29,3 +29,15 @@ global $filterParams;
     ?>
     <input type="submit" id="search_test_suite_submit" class="search-button" value="" />    
 </form>
+<script>
+    // Search autofocus
+    jQuery(document).ready(function() {
+        var inputSearch = jQuery('#q');
+        var searchTerm = inputSearch.val();
+        if (searchTerm != ''){
+            inputSearch.focus().val('').val(searchTerm);
+        } else {
+            inputSearch.focus();
+        }
+    });
+</script>

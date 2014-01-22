@@ -14,27 +14,29 @@ get_header( 'buddypress' );
 	<?php do_action( 'bp_before_directory_groups_page' ); ?>
     <div id="search_title_block" class="page-title-block column noshadow">
         <?php cp_directory_groups_search_form(); ?>
-        <p class="search_result_label">            
+        <p class="search_result_label">
             <?php if ( bp_has_groups( bp_ajax_querystring( 'groups' ) ) ) : ?>
-                <?php 
+                <?php
                     bp_groups_pagination_count();
-                     
+
                     if ( isset( $_REQUEST['group-filter-box'] ) && !empty( $_REQUEST['group-filter-box'] ) )
                         $term = $_REQUEST['group-filter-box'];
                     elseif ( isset( $_REQUEST['s'] ) && !empty( $_REQUEST['s'] ) )
                         $term = $_REQUEST['s'];
                     else
                         $term = false;
-                    if($term) 
+                    if($term)
                         echo " for \"<b>$term</b>\"";
-                
+
                 ?>
             <?php else: ?>
                 No result found!
             <?php endif; ?>
         </p>
-        <?php if($term) {?>
+        <?php if (!empty( $_REQUEST['s'])):  ?>
             <a href="<?php echo get_permalink()?>" class="action-btn cancel-btn top10" id="clear-search-filter-btn"><span class="p"></span><span class="t">Clear All</span></a>
+        <?php endif; ?>
+        <?php if($term) {?>
             <?php if ( is_user_logged_in() && bp_user_can_create_groups() ) : ?> <a class="action-btn add-new-btn left15 right top10" href="<?php echo trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create' ); ?>"><span class="p"></span><span class="t"><?php _e( 'Create a Group', 'buddypress' ); ?></span></a><?php endif; ?>
         <?php } ?>
         <div class="clear"></div>        
