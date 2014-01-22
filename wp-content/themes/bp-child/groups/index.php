@@ -12,8 +12,8 @@ get_header( 'buddypress' );
 ?>
 <div class="content container">
 	<?php do_action( 'bp_before_directory_groups_page' ); ?>
-    <div id="search_title_block" class="page-title-block column noshadow">                    
-        <?php bp_directory_groups_search_form(); ?>
+    <div id="search_title_block" class="page-title-block column noshadow">
+        <?php cp_directory_groups_search_form(); ?>
         <p class="search_result_label">            
             <?php if ( bp_has_groups( bp_ajax_querystring( 'groups' ) ) ) : ?>
                 <?php 

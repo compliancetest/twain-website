@@ -633,3 +633,27 @@ function getDashboardPages($type = 'page')
     
     return $pages;
 }
+function cp_directory_groups_search_form() {
+
+    $default_search_value = bp_get_search_default_text( 'groups' );
+    $search_value         = !empty( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : $default_search_value; ?>
+
+    <form action="" method="get" id="search-groups-form">
+        <label><input type="text" name="s" id="groups_search" <?php if (!empty( $_REQUEST['s'] )){ ?>value="<?php echo esc_attr( $search_value ); ?>" <?php } else { ?> placeholder="<?php echo esc_attr( $search_value ) ?>" <?php } ?> /></label>
+        <input type="submit" id="groups_search_submit" name="groups_search_submit" value="<?php _e( 'Search', 'buddypress' ) ?>" />
+    </form>
+    <script>
+        // Search autofocus
+        jQuery(document).ready(function() {
+            var inputSearch = jQuery('#groups_search');
+            var searchTerm = inputSearch.val();
+            if (searchTerm != ''){
+                inputSearch.focus().val('').val(searchTerm);
+            } else {
+                inputSearch.focus();
+            }
+        });
+    </script>
+
+<?php
+}
