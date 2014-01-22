@@ -167,7 +167,7 @@ if(!$suite->community_id)
                        <div class="grid-cell width95P">
                            <label for="ts_identifier">Description: </label>
                            <?php //wp_editor($suite->description, 'ts_description', array('textarea_name' => 'ts_description', 'media_buttons' => false)); ?>
-                           <textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php //echo $suite->description ?></textarea>
+                           <textarea cols="" rows="" class="textarea large-textarea" name="ts_description" id="ts_description"><?php echo $suite->description ?></textarea>
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -660,7 +660,7 @@ if(!$suite->community_id)
 </div> <!--end content-->
 
 <script type="text/javascript">
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function($){
         //Add Loading Div
         jQuery('#edit_test_suite_wrapper .grid-box-body').append('<div class="loading1"></div>');
         jQuery('#add-conformance-level').click(function(){
@@ -908,6 +908,10 @@ if(!$suite->community_id)
             //Show Loading box
             jQuery('#saving-wrapper').show();
         })
+        
+        /*$('#ts_description').redactor({
+            focus: true
+        });*/
         
     })
 </script>
