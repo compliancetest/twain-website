@@ -66,6 +66,20 @@ if(!defined('ABSPATH'))
                     </select>
                     <div class="clear"></div>
                 </div>
+                <div class="grid-row field-row">
+                    <div class="grid-cell width30P"><label>Desired First Page</label></div>
+                    <div class="grid-cell width70P">
+                        <div id="dashboard-page-path"><?php echo $dashboard_page_title; ?></div>
+                        <input type="hidden" name="dashboard_page_url" value="<?php echo $dashboard_page_url; ?>">
+                        <input type="hidden" name="dashboard_page_title" value="<?php echo $dashboard_page_title; ?>">
+                        <div id="dashboard-pages">
+                            <a href="javascript:void(0)" class="action-btn blue-btn" id="browse-dashboard-pages"><span class="t">Select Pages</span></a>
+                            <div class="clear"></div>
+                            <?php echo getDashboardMenuHTML(getDashboardPages('page'), 'dashboard-pages-dropdown'); ?>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
                 <div class="grid-row btn-row">
                     <a href="#" class="action-btn process-btn "><span class="p"></span><span class="t">Save</span></a>
                     <a href="#" class="action-btn cancel-btn edit-cancel-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
