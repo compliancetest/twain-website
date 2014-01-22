@@ -50,7 +50,7 @@ $product->load();
 <table class="noborder">
     <tr>
         <td style="line-height: 25px; padding-right: 20px; white-space: nowrap;">
-            Release Date: <b><?php echo date("M Y", strtotime($product->release_date));  ?></b><br />
+            Release Date: <b><?php echo formatDate(strtotime($product->release_date), "M Y");  ?></b><br />
             Product Version: <b><?php echo $product->version; ?></b><br />
             Type: <b><?php echo $product->type; ?></b><br />
             Access URL: <a href="<?php echo $product->accessURL?>"><b><?php echo $product->accessURL; ?></b></a><br />

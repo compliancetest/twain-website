@@ -254,7 +254,7 @@ function saveSuite()
     //Update Post Metas
     cp_update_post_meta($id, 'ts_name', $_POST['ts_name']);
     cp_update_post_meta($id, 'ts_identifier', $identifier);
-    cp_update_post_meta($id, 'ts_issue_date', date('Y-m-d', strtotime($_POST['ts_issue_date'])));
+    cp_update_post_meta($id, 'ts_issue_date', date('Y-m-d H:i:s', getUTCTimeStamp($_POST['ts_issue_date'])));
     cp_update_post_meta($id, 'ts_issuer', $_POST['ts_issuer']);
     cp_update_post_meta($id, 'ts_status', $_POST['ts_status']);
     cp_update_post_meta($id, 'ts_revision_description', $_POST['ts_revision_description']);

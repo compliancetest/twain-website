@@ -487,7 +487,7 @@ function saveCase()
     }
     
     cp_update_post_meta($id, 'test_case_id', $testCaseId);   
-    cp_update_post_meta($id, 'published', $_POST['published']);
+    cp_update_post_meta($id, 'published', date("Y-m-d H:i:s", getUTCTimeStamp($_POST['published'])));
     
     cp_update_post_meta($id, 'version_major', $_POST['version_major']);
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);

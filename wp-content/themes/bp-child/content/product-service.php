@@ -37,7 +37,7 @@
                 <div class="grid_cell width50P product_datails">
                     <p>Release Date: <span class="bold">
                     <?php 
-                        echo date("M Y", strtotime($product->release_date)); // format Nov 2012
+                        echo formatDate($product->release_date, "M Y"); // format Nov 2012
                     ?>
                     </span></p>
                     <p>Product Version: <span class="bold"><?php echo $product->version; ?></span></p>

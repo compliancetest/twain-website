@@ -82,7 +82,7 @@ function saveProductService()
     $esb->addProductNameIDMap($id, $product_id);
     
     update_post_meta($id, 'product_name', $_POST['product_name']);
-    update_post_meta($id, 'product_release_date', date('Y-m-d', strtotime($_POST['product_release_date'])));
+    update_post_meta($id, 'product_release_date', date('Y-m-d H:i:s', getUTCTimeStamp($_POST['product_release_date'])));
     update_post_meta($id, 'product_type', $_POST['product_type']);
     update_post_meta($id, 'product_version', $_POST['product_version']);
     update_post_meta($id, 'product_url', $_POST['product_url']);

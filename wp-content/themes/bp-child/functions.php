@@ -529,6 +529,26 @@ function formatDate($date, $format = 'Y-m-d', $user_id = null)
     return $date->format($format);    
 }
 
+function getUTCTimeStamp($date, $user_id = null)
+{
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    if($user_id && ($timezone = get_user_meta($user_id, 'timezone', true)))
+        $dateTimeZone = new DateTimeZone($timezone);                        
+    else
+        $dateTimeZone = new DateTimeZone('UTC');
+
+    if(is_numeric($date))
+        $date = new DateTime(date("Y-m-d H:i:s", $date), $dateTimeZone);
+    else
+        $date = new DateTime($date, $dateTimeZone);
+    
+    $utc = new DateTimeZone('UTC');                        
+    $date->setTimezone($utc);
+    
+    return $date->getTimestamp();
+}
 
 function encrypt_card_number($num)
 {
