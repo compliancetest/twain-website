@@ -520,6 +520,14 @@ function getCommunityTestSuites($community_id)
         )
     );
     
+    if(!groups_is_user_admin(get_current_user_id(), $community_id)){
+        $args['meta_query'][] =  array(
+                    'key' => 'hide_suite',
+                    'value' => 0,
+                    'compare' => '='
+                );
+    }
+    
     $testsuites = get_posts( $args );
     
     return $testsuites;
