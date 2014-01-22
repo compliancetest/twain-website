@@ -485,6 +485,12 @@ jQuery(document).ready(function($) {
     });
     
     // Dropdown Menus
+    jQuery('.dropdown li').each(function(){
+        if (jQuery(this).find('.dropdown-menu').length > 0) {
+            jQuery(this).addClass('dropdown-submenu');
+        }
+    });
+    
     jQuery('.dropdown').hover(function(){
         jQuery(this).addClass('open');
     }, function(){
