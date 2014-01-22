@@ -226,7 +226,7 @@ function getUserSubscriptions($user_id = null, $all = false)
     else
         $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title FROM " . $wpdb->prefix . "users_purchases AS s LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id WHERE s.user_id=%d AND s.status != 'Frozen'", $user_id);
     $result = $wpdb->get_results($query);
-    echo $query;
+    
     return $result;
     
 }
