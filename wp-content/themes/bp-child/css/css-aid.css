@@ -2545,3 +2545,7 @@ table.result-table{
 .dropdown-submenu:hover > a:after {
   border-left-color: #ffffff;
 }
+
+.no-wrap {
+    white-space: nowrap;
+}
