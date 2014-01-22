@@ -435,7 +435,7 @@ if(!$suite->community_id)
                <div class="column">
                    <?php foreach($suite->relatedSuites as $crow){ ?>
                    <div class="field-row">
-                       <div class="grid-cell">
+                       <div class="grid-cell width30P">
                            <label>Related Suites:</label>
                            <div class="styled_select">
                            <select name="ts[]" class="select">
@@ -446,9 +446,9 @@ if(!$suite->community_id)
                            </select>
                            </div>
                        </div>
-                       <div class="grid-cell">
+                       <div class="grid-cell width60P">
                            <label>Description:</label>
-                           <textarea cols="" rows="" class="textarea" name="ts_desc[]"><?php echo $crow['desc'] ?></textarea>
+                           <textarea cols="" rows="" class="textarea width98P" name="ts_desc[]"><?php echo $crow['desc'] ?></textarea>
                        </div>
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -683,15 +683,15 @@ if(!$suite->community_id)
         });
         jQuery('#add-related-suite').click(function(){
             jQuery('#related-suites-box .btn-row').before('<div class="field-row">' + 
-                       '<div class="grid-cell">' +
+                       '<div class="grid-cell width30P">' +
                            '<label>Related Suites:</label>' +
                            '<div class="styled_select">' +
                            jQuery('#brother-suites').html() +
                            '</div>' +
                        '</div>' +
-                       '<div class="grid-cell">' +
+                       '<div class="grid-cell width60P">' +
                            '<label>Description:</label>' +
-                           '<textarea cols="" rows="" class="textarea" name="ts_desc[]"></textarea>' +
+                           '<textarea cols="" rows="" class="textarea width98P" name="ts_desc[]"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' +
@@ -699,6 +699,7 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="clear"></div>' +
                    '</div>');
+            jQuery('#related-suites-box .btn-row').prev().find('textarea').redactor({air: true, minHeight: 80});
             return false;
         })
         jQuery('#add-new-role').click(function(){
@@ -740,6 +741,7 @@ if(!$suite->community_id)
                        '<div class="clear"></div>' +
                    '</div>');
             customizeFileTag();
+            jQuery('#specs-box .btn-row').prev().find('textarea').redactor({air: true, minHeight: 80});
             return false;
         })
         //Getting Last ID
@@ -913,8 +915,9 @@ if(!$suite->community_id)
             jQuery('#saving-wrapper').show();
         })
         
-        $('#ts_description, #scenarios-box textarea').redactor({
-              air: true
+        $('#ts_description, #scenarios-box textarea, #related-suites-box textarea, #specs-box textarea').redactor({
+              air: true,
+              minHeight: 80
         });
         
     })

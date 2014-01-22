@@ -113,7 +113,7 @@ $case->load();
                     
                     <div class="grid_row white_bcg noborderbottom">
                         <div class="grid_cell width10P left size13 bold dark_blue_txt">Scenario:</div>
-                        <div class="grid_cell width90P left"> 
+                        <div class="grid_cell width90P left show-native-style"> 
                             <?php 
                                 $scenarioDetail = $case->getScenario($test_suite_id);
                                 echo '<p class="bottom8"><b>' . $scenarioDetail->code . '</b></p>';

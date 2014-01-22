@@ -97,7 +97,7 @@ Template Name Posts: Test Suite
 				
 				<div class="clear"></div>
 				
-				<div class="tab-content white_bcg" id="tabs_sv1" style="display: block; ">
+				<div class="tab-content white_bcg show-native-style" id="tabs_sv1" style="display: block; ">
 					<div class="column">										
 						<div class="grid_cell width10P bold top3">Related To: </div>
 						<div class="grid_cell width90P">
@@ -118,7 +118,7 @@ Template Name Posts: Test Suite
 					<div class="clear"></div>
 				</div> <!--end tab 1-->
 				
-				<div class="tab-content white_bcg" id="tabs_sv2" style="display: none; ">
+				<div class="tab-content white_bcg show-native-style" id="tabs_sv2" style="display: none; ">
 					<div class="column">
 						<?php 						    
 						    foreach($suite->specDocuments as $row){

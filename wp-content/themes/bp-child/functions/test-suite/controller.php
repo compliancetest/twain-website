@@ -310,8 +310,8 @@ function saveSuite()
     $ts = $_POST['ts'] ;
     $ts_desc = $_POST['ts_desc'];
 
-    cp_update_post_meta($id, 'ts', $ts);
-    cp_update_post_meta($id, 'ts_desc', $ts_desc);
+    update_post_meta($id, 'ts', $ts);
+    update_post_meta($id, 'ts_desc', $ts_desc);
     
     $lvl_code = array();
     $lvl_desc = array() ;
@@ -325,8 +325,8 @@ function saveSuite()
     }
     
     
-    cp_update_post_meta($id, 'lvl_code', $lvl_code);
-    cp_update_post_meta($id, 'lvl_desc', $lvl_desc);
+    update_post_meta($id, 'lvl_code', $lvl_code);
+    update_post_meta($id, 'lvl_desc', $lvl_desc);
     
     //Subscription Price
     cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
