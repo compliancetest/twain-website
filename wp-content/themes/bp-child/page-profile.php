@@ -14,6 +14,10 @@ if(is_user_logged_in()){
     $uemail = $current_user->user_email;
     $phone = get_user_meta($current_user->ID, 'phone_number', true);
     $timezone = get_user_meta($current_user->ID, 'timezone', true);
+    $dashboard_page_url = get_user_meta($current_user->ID, 'dashboard_page_url', true);
+    $dashboard_page_title = get_user_meta($current_user->ID, 'dashboard_page_title', true);
+    $dashboard_page_url = ($dashboard_page_url == '') ? ('/my-profile') : ($dashboard_page_url);
+    $dashboard_page_title = ($dashboard_page_title == '') ? ('Profile') : ($dashboard_page_title);
     
     $biography = get_user_meta($current_user->ID, 'description', true);
     
