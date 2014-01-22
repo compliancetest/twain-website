@@ -56,6 +56,10 @@ function cp_user_detail_edit()
     //Timezone
     update_user_meta($user_id, 'timezone', htmlentities($_POST['timezone']));
     
+    //Default Dashboard Tab Url
+    update_user_meta($user_id, 'dashboard_page_url', htmlentities($_POST['dashboard_page_url']));
+    update_user_meta($user_id, 'dashboard_page_title', htmlentities($_POST['dashboard_page_title']));
+    
     //Update User Name
     //$uname = explode(' ', $uname);
     wp_update_user( array ('ID' => $user_id, 'first_name' => $first_name, 'last_name' => $last_name, 'display_name' => $first_name /*. " " . $last_name*/)) ;
