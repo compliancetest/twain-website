@@ -62,7 +62,7 @@ Template Name Posts: Test Suite
 					</div>
 					<div class="space15"></div>										
 				</div>
-				<div class="grids noborder nobackground">
+				<div class="grids noborder nobackground show-native-style">
                     <?php echo apply_filters('the_content', $suite->description) ?>
                 </div>
 				<div class="clear"></div>

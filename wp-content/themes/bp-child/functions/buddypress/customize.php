@@ -126,7 +126,7 @@ function groups_screen_group_admin_edit_details_by_ajax()
 {    
     remove_filter( 'bp_get_group_description',             'bp_groups_filter_kses', 1 );
     
-    if ( 'edit-details' != bp_get_group_current_admin_tab() )
+    if ( !function_exists('bp_get_group_current_admin_tab') || 'edit-details' != bp_get_group_current_admin_tab() )
         return false;
     
     if ( bp_is_item_admin() ) {
@@ -166,7 +166,7 @@ function groups_screen_group_admin_edit_details_by_ajax()
 add_action( 'init', 'groups_edit_group_settings_by_ajax' );
 function groups_edit_group_settings_by_ajax()
 {   
-    if ( 'group-settings' != bp_get_group_current_admin_tab() )
+    if ( !function_exists('bp_get_group_current_admin_tab') || 'group-settings' != bp_get_group_current_admin_tab() )
         return false;
     
     if ( bp_is_item_admin() ) {
@@ -275,7 +275,7 @@ function cp_bp_render_message() {
 add_action('init', 'cp_groups_screen_group_admin_manage_members');
 function cp_groups_screen_group_admin_manage_members()
 {
-    if ( 'manage-members' != bp_get_group_current_admin_tab() )
+    if ( !function_exists('bp_get_group_current_admin_tab') || 'manage-members' != bp_get_group_current_admin_tab() )
         return false;
     
     if ( bp_is_item_admin() ) {
@@ -413,7 +413,7 @@ function cp_auto_enable_group_forum()
 {
     global $wpdb;
     
-    if(bp_is_group())
+    if(function_exists('bp_is_group') && bp_is_group())
     {
         $group = groups_get_current_group();
         $query = 'UPDATE ' . $wpdb->prefix . 'bp_groups SET enable_forum=1 WHERE id=' . $group->id;
