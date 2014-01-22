@@ -253,7 +253,7 @@
             </div>
         </div>
         <script type="text/javascript">
-            jQuery(document).ready(function(){                
+            jQuery(document).ready(function($){                
                 jQuery('#add-profile-type-btn').click(function(){
                     jQuery('#profileTypeForm h5').html('Add New Profile Type');
                     jQuery('#profileTypeForm .message').remove();
@@ -313,6 +313,11 @@
                         }
                     })
                     return false;
+                })
+                
+                $('#group_admin_page textarea:visible').redactor({
+                    air:true,
+                    minHeight: 120
                 })
             })
         </script>

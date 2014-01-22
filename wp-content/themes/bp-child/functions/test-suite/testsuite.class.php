@@ -99,7 +99,7 @@ class TestSuite
             $this->status = 'Draft'; //Draft is default status
         
         $this->revisionDescription = $this->loadSingleValue('ts_revision_description');
-        $this->description = $this->loadSingleValue('ts_description');
+        $this->description = $this->loadSingleValue('ts_description', false);
         
         $this->version_major = $this->loadSingleValue('ts_version_major');
         $this->version_minor = $this->loadSingleValue('ts_version_minor');
@@ -299,9 +299,9 @@ class TestSuite
         return $result;
     }
     
-    public function loadSingleValue($key)
+    public function loadSingleValue($key, $use_bbcode = true)
     {
-        return cp_get_post_meta($this->id, $key, true);
+        return cp_get_post_meta($this->id, $key, true, $use_bbcode);
     }
     
     /**

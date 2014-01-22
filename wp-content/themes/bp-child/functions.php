@@ -260,6 +260,14 @@ function add_header_scripts()
         //Ticket Script
         wp_enqueue_script( 'support-ticket', get_stylesheet_directory_uri() . '/functions/support-ticket/support-ticket.js', $actions_depends, '1.0', true );
         wp_enqueue_script( 'testdata', get_stylesheet_directory_uri() . '/functions/test-data/testdata.js', $actions_depends, '1.0', true );
+        
+    }
+    
+    if(is_page('edit-test-suite') || is_page('add-new-test-suite') || is_page('edit-test-case') || is_page('add-new-test-case') || bp_is_group_admin_page())
+    {
+        //Include Redactor WYSIWYG Editor
+        wp_enqueue_script( 'redactor-min', get_stylesheet_directory_uri() . '/js/redactor.js', $actions_depends, '1.0', true );
+        wp_enqueue_style('redactor', get_stylesheet_directory_uri() . '/css/redactor.css');
     }
     
 }
@@ -736,18 +744,24 @@ function cp_update_post_meta($post_id, $meta_key, $meta_value, $prev_value = '')
     return update_post_meta($post_id, $meta_key, $meta_value, $prev_value = '');
 }
 
-function cp_get_post_meta($post_id, $key = '', $single = false)
+function cp_get_post_meta($post_id, $key = '', $single = false, $use_bbcode = true)
 {
     $meta_value = get_post_meta($post_id, $key, $single);
     if(is_array($meta_value)){
         $new_value = array();
         foreach($meta_value as $k=>$v)
         {
-            $new_value[$k] = _convertBBCodeToHTML($v);
+            if($use_bbcode)
+                $new_value[$k] = _convertBBCodeToHTML($v);
+            else
+                $new_value[$k] = $v;
         }
         $meta_value = $new_value;
     }else{
-        $meta_value = _convertBBCodeToHTML($meta_value);
+        if($use_bbcode)
+            $meta_value = _convertBBCodeToHTML($meta_value);
+        else
+            $meta_value = $meta_value;
     }
     
     return $meta_value;

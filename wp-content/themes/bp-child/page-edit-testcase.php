@@ -60,7 +60,7 @@ get_header();
 ?>
 <div class="content edit-item-wrapper" id="edit_test_case_wrapper">
     <div class="space25"></div>
-    <div class="column container"> 
+    <div class="column container relative"> 
       <form name="caseForm" id="caseForm" action="" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
         <h2>Add New Test Case</h2>
@@ -244,8 +244,8 @@ get_header();
                            <div class="grid-cell radio-cell">
                                <label><input type="radio" name="scenario_<?php echo $crow->ID?>" value="<?php echo $row['id']?>" <?php echo $case->scenario[$crow->ID] == $row['id'] ? 'checked="checked"' : ''?> /> <?php echo $row['code']?></label>
                            </div>
-                           <div class="grid-cell width60P">
-                               <?php echo $row['desc']?>
+                           <div class="grid-cell width60P show-native-style">
+                               <?php echo $row['description']?>
                            </div>
                            <div class="clear"></div>
                        </div>
@@ -541,13 +541,13 @@ get_header();
                <div class="column">
                     <?php foreach($case->testSteps as $row){ ?>
                     <div class="field-row">
-                       <div class="grid-cell">
+                       <div class="grid-cell width40P">
                            <label>Action:</label>
-                           <textarea name="step_action[]" class="textarea width350"><?php echo $row['action']?></textarea>
+                           <textarea name="step_action[]" class="textarea width98P"><?php echo $row['action']?></textarea>
                        </div>                       
-                       <div class="grid-cell">
+                       <div class="grid-cell width50P">
                            <label>Expected Result:</label>
-                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width400"><?php echo $row['result']?></textarea>
+                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width98P"><?php echo $row['result']?></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -604,7 +604,7 @@ get_header();
     <div class="clear space25"></div>
 </div>
 <script type="text/javascript">
-jQuery(document).ready(function(){
+jQuery(document).ready(function($){
     //Add Loading Div
     jQuery('#edit_test_case_wrapper .grid-box-body').append('<div class="loading1"></div>');
     //Delete
@@ -652,13 +652,13 @@ jQuery(document).ready(function(){
     })
     jQuery('#add-test-step').click(function(){
         jQuery('#test-step-box .btn-row').before('<div class="field-row">' + 
-                       '<div class="grid-cell">' + 
+                       '<div class="grid-cell width40P">' + 
                            '<label>Action:</label>' +
-                           '<textarea name="step_action[]" class="textarea width350"></textarea>' +
+                           '<textarea name="step_action[]" class="textarea width98P"></textarea>' +
                        '</div>' +
-                       '<div class="grid-cell">' +
+                       '<div class="grid-cell width50P">' +
                            '<label>Expected Result:</label>' +
-                           '<textarea name="step_expected[]" class="textarea width400"></textarea>' +
+                           '<textarea name="step_expected[]" class="textarea width98P"></textarea>' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' +
@@ -666,6 +666,11 @@ jQuery(document).ready(function(){
                        '</div>' +
                        '<div class="clear"></div>' +
                    '</div>');
+        $('#test-step-box .btn-row').prev().find('textarea').redactor({
+            air: true,
+            minHeight: 100,
+            maxHeight: 100
+        })
         return false;
     })
     
@@ -777,6 +782,18 @@ jQuery(document).ready(function(){
     jQuery('.conf-level-suite-box').on('click', 'input.default-level', function(){
         this.checked = true;
     })
+    
+    $('#test_intent_description').redactor({
+        air: true,
+        minHeight: 120
+    })
+    
+    $('#test-step-box textarea').redactor({
+        air: true,
+        minHeight: 100,
+        maxHeight: 100
+    })
+    
 });
 </script>
 <?php

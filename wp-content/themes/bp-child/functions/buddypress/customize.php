@@ -124,6 +124,7 @@ function cp_bp_get_group_join_button_filter($button)
 add_action( 'init', 'groups_screen_group_admin_edit_details_by_ajax' );
 function groups_screen_group_admin_edit_details_by_ajax()
 {    
+    remove_filter( 'bp_get_group_description',             'bp_groups_filter_kses', 1 );
     
     if ( 'edit-details' != bp_get_group_current_admin_tab() )
         return false;
@@ -138,6 +139,10 @@ function groups_screen_group_admin_edit_details_by_ajax()
             if ( !check_admin_referer( 'groups_edit_group_details_by_ajax' ) )
                 return false;
                 
+            //Remove Filter to strip tags of description
+            remove_filter( 'groups_group_description_before_save', 'force_balance_tags' );
+            remove_filter( 'groups_group_description_before_save', 'wp_filter_kses', 1 );
+            
             $result = groups_edit_base_group_details( $_POST['group-id'], $_POST['group-name'], $_POST['group-desc'], (int) $_POST['group-notify-members'] );
             if ( !$result ) {
                 $message =  __( 'There was an error updating group details, please try again.', 'buddypress' );

@@ -493,7 +493,7 @@ function saveCase()
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
     
-    cp_update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
+    update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
     
     cp_update_post_meta($id, 'outcome_type', $_POST['outcome_type']);
     cp_update_post_meta($id, 'bulk', $_POST['bulk']);
@@ -511,9 +511,9 @@ function saveCase()
     cp_update_post_meta($id, 'choose_init_messages',$message_type);
     
     $step_expected = $_POST['step_expected']; 
-    cp_update_post_meta($id, 'step_expected', $step_expected);
+    update_post_meta($id, 'step_expected', $step_expected);
     $step_action = $_POST['step_action']; 
-    cp_update_post_meta($id, 'step_action', $step_action);
+    update_post_meta($id, 'step_action', $step_action);
     
     $property_name_data = $_POST['message_template_name']; 
     cp_update_post_meta($id, 'message_template_name', $property_name_data);

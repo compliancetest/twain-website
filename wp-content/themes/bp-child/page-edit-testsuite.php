@@ -38,7 +38,7 @@ if(!$suite->community_id)
 ?>
 <div class="content edit-item-wrapper" id="edit_test_suite_wrapper">
     <div class="space25"></div>
-    <div class="column container"> 
+    <div class="column container relative"> 
       <form name="suiteForm" id="suiteForm" action="" method="post" enctype="multipart/form-data">
         <?php if(!$suite->id){ ?>
         <h2>Add New Test Suite</h2>
@@ -319,7 +319,7 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell width55P">
                            <label>Description:</label>
-                           <textarea cols="" rows="" class="textarea width98P" name="scenario_desc[]" readonly="readonly"><?php echo TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION?></textarea>
+                           <textarea cols="" rows="" class="textarea width98P default-scenario" name="scenario_desc[]" readonly="readonly"><?php echo TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION?></textarea>
                        </div>
                        <div class="grid-cell width8P tocenter">
                            <label>Sequence:</label>
@@ -767,6 +767,10 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="clear"></div>' +
                    '</div>');
+            jQuery('#scenarios-box .btn-row').prev().find('textarea').redactor({
+                air: true
+            });
+            
             sortScenarios();
                         
             return false;
@@ -788,7 +792,7 @@ if(!$suite->community_id)
         }
         
         //Delete
-        jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box, #template-variables-box').on('click', '.blue-delete-btn', function(){
+        jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
             })
@@ -909,9 +913,9 @@ if(!$suite->community_id)
             jQuery('#saving-wrapper').show();
         })
         
-        /*$('#ts_description').redactor({
-            focus: true
-        });*/
+        $('#ts_description, #scenarios-box textarea').redactor({
+              air: true
+        });
         
     })
 </script>
