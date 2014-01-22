@@ -398,7 +398,7 @@ function downloadProfileType()
 {
     global $wpdb;
     
-    $id = $_REQUEST['id'];
+    $id = $_REQUEST['type_id'];
     
     $user_id = get_current_user_id();
     
