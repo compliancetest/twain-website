@@ -38,13 +38,15 @@
                 url: "/",
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
+                dataType: 'json',
                 success: function(rsp)
                 {
                     $('#top_access .loading1').hide();
-                    if(rsp == 'success') //Login Success
+                    if(rsp['status'] == 'success') //Login Success
                     {
                         //Goto Profile Page
-                        document.location.href = form.find('input[name="redirect_to"]').val();
+                        //document.location.href = form.find('input[name="redirect_to"]').val();
+                        document.location.href = rsp['redirect_to'];
                     }else{ //Error                    
                         //Show Error Message
                         $('#header_login_error_msg').html('<span></span>Wrong username or password, please try again!');
@@ -74,12 +76,14 @@
                 url: "/",
                 type: 'post', 
                 data: form.serialize() + '&cp-action=login',
+                dataType: 'json',
                 success: function(rsp)
                 {
-                    if(rsp == 'success') //Login Success
+                    if(rsp['status'] == 'success') //Login Success
                     {
                         //Goto Profile Page
-                        document.location.href = form.find('input[name="redirect_to"]').val();
+                        //document.location.href = form.find('input[name="redirect_to"]').val();
+                        document.location.href = rsp['redirect_to'];
                     }else{ //Error                    
                         //Show Error Message
                         msgObj.removeClass('success').addClass('error').html('Wrong username or password, please try again!').fadeIn('fast');
@@ -213,8 +217,22 @@
             }
 
             $("#timezone").val(timezoneText.attr('data-value'));
-           timezoneText.hide();
-           $("#timezone").show();
+            timezoneText.hide();
+            $("#timezone").show();
+            $("#dashboard-pages").show();
+            
+            $('#dashboard-page-path').data('title', $('#dashboard-page-path').html());
+            $('input[name=dashboard_page_url]').data('title', $('input[name=dashboard_page_url]').val());
+            $('input[name=dashboard_page_title]').data('title', $('input[name=dashboard_page_title]').val());
+            
+            $('#dashboard-pages .dashboard-pages-dropdown a').click(function(){
+                $('input[name=dashboard_page_url]').val($(this).attr('href'));
+                $('input[name=dashboard_page_title]').val($(this).data('title'));
+                $('#dashboard-page-path').html($(this).data('title'));
+                $('#dashboard-pages').removeClass('open');
+                
+                return false;
+            });
 
            return false;
         });
@@ -237,6 +255,11 @@
 
             $("#timezone").hide();
             $(".timezone-text").show();
+            $("#dashboard-pages").hide();
+            
+            $('#dashboard-page-path').html($('#dashboard-page-path').data('title'));
+            $('input[name=dashboard_page_url]').val($('input[name=dashboard_page_url]').data('title'));
+            $('input[name=dashboard_page_title]').val($('input[name=dashboard_page_title]').data('title'));
 
             return false;
         });
