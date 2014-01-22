@@ -27,16 +27,6 @@ add_action( 'bp_screens', 'groups_directory_groups_setup', 2 );
 
 function groups_screen_my_groups() {
 
-	$bp = buddypress();
-
-	// Delete group request notifications for the user
-	if ( isset( $_GET['n'] ) ) {
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'membership_request_accepted' );
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'membership_request_rejected' );
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'member_promoted_to_mod'      );
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'member_promoted_to_admin'    );
-	}
-
 	do_action( 'groups_screen_my_groups' );
 
 	bp_core_load_template( apply_filters( 'groups_template_my_groups', 'members/single/home' ) );
@@ -65,7 +55,13 @@ function groups_screen_group_invites() {
 			) );
 		}
 
-		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . bp_current_action() ) );
+		if ( isset( $_GET['redirect_to'] ) ) {
+			$redirect_to = urldecode( $_GET['redirect_to'] );
+		} else {
+			$redirect_to = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . bp_current_action() );
+		}
+
+		bp_core_redirect( $redirect_to );
 
 	} else if ( bp_is_action_variable( 'reject' ) && is_numeric( $group_id ) ) {
 		// Check the nonce
@@ -78,11 +74,14 @@ function groups_screen_group_invites() {
 			bp_core_add_message( __( 'Group invite rejected', 'buddypress' ) );
 		}
 
-		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . bp_current_action() ) );
-	}
+		if ( isset( $_GET['redirect_to'] ) ) {
+			$redirect_to = urldecode( $_GET['redirect_to'] );
+		} else {
+			$redirect_to = trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . bp_current_action() );
+		}
 
-	// Remove notifications
-	bp_core_delete_notifications_by_type( bp_loggedin_user_id(), 'groups', 'group_invite' );
+		bp_core_redirect( $redirect_to );
+	}
 
 	do_action( 'groups_screen_group_invites', $group_id );
 
@@ -91,16 +90,8 @@ function groups_screen_group_invites() {
 
 function groups_screen_group_home() {
 
-	if ( ! bp_is_single_item() )
+	if ( ! bp_is_single_item() ) {
 		return false;
-
-	$bp = buddypress();
-
-	if ( isset( $_GET['n'] ) ) {
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'membership_request_accepted' );
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'membership_request_rejected' );
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'member_promoted_to_mod'      );
-		bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'member_promoted_to_admin'    );
 	}
 
 	do_action( 'groups_screen_group_home' );
@@ -466,7 +457,16 @@ function groups_screen_group_request_membership() {
 
 	if ( 'private' != $bp->groups->current_group->status )
 		return false;
-	
+
+	// If the user is already invited, accept invitation
+	if ( groups_check_user_has_invite( bp_loggedin_user_id(), $bp->groups->current_group->id ) ) {
+		if ( groups_accept_invite( bp_loggedin_user_id(), $bp->groups->current_group->id ) )
+			bp_core_add_message( __( 'Group invite accepted', 'buddypress' ) );
+		else
+			bp_core_add_message( __( 'There was an error accepting the group invitation, please try again.', 'buddypress' ), 'error' );
+		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) );
+	}
+
 	// If the user has submitted a request, send it.
 	if ( isset( $_POST['group-request-send']) ) {
 
@@ -523,7 +523,9 @@ function groups_screen_group_admin_edit_details() {
 			if ( !check_admin_referer( 'groups_edit_group_details' ) )
 				return false;
 
-			if ( !groups_edit_base_group_details( $_POST['group-id'], $_POST['group-name'], $_POST['group-desc'], (int) $_POST['group-notify-members'] ) ) {
+			$group_notify_members = isset( $_POST['group-notify-members'] ) ? (int) $_POST['group-notify-members'] : 0;
+
+			if ( !groups_edit_base_group_details( $_POST['group-id'], $_POST['group-name'], $_POST['group-desc'], $group_notify_members ) ) {
 				bp_core_add_message( __( 'There was an error updating group details, please try again.', 'buddypress' ), 'error' );
 			} else {
 				bp_core_add_message( __( 'Group details were successfully updated.', 'buddypress' ) );
@@ -561,7 +563,7 @@ function groups_screen_group_admin_settings() {
 
 		// Checked against a whitelist for security
 		$allowed_invite_status = apply_filters( 'groups_allowed_invite_status', array( 'members', 'mods', 'admins' ) );
-		$invite_status	       = in_array( $_POST['group-invite-status'], (array) $allowed_invite_status ) ? $_POST['group-invite-status'] : 'members';
+		$invite_status	       = isset( $_POST['group-invite-status'] ) && in_array( $_POST['group-invite-status'], (array) $allowed_invite_status ) ? $_POST['group-invite-status'] : 'members';
 
 		// Check the nonce
 		if ( !check_admin_referer( 'groups_edit_group_settings' ) )
@@ -781,19 +783,18 @@ function groups_screen_group_admin_manage_members() {
 add_action( 'bp_screens', 'groups_screen_group_admin_manage_members' );
 
 function groups_screen_group_admin_requests() {
-	global $bp;
+	$bp = buddypress();
 
-	if ( 'membership-requests' != bp_get_group_current_admin_tab() )
+	if ( 'membership-requests' != bp_get_group_current_admin_tab() ) {
 		return false;
+	}
 
-	if ( ! bp_is_item_admin() || ( 'public' == $bp->groups->current_group->status ) )
+	if ( ! bp_is_item_admin() || ( 'public' == $bp->groups->current_group->status ) ) {
 		return false;
+	}
 
-	// Remove any screen notifications
-	bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->groups->id, 'new_membership_request' );
-
-	$request_action = (string)bp_action_variable( 1 );
-	$membership_id  = (int)bp_action_variable( 2 );
+	$request_action = (string) bp_action_variable( 1 );
+	$membership_id  = (int) bp_action_variable( 2 );
 
 	if ( !empty( $request_action ) && !empty( $membership_id ) ) {
 		if ( 'accept' == $request_action && is_numeric( $membership_id ) ) {
@@ -969,16 +970,19 @@ class BP_Groups_Theme_Compat {
 
 			do_action( 'groups_directory_groups_setup' );
 
+			add_filter( 'bp_get_buddypress_template',                array( $this, 'directory_template_hierarchy' ) );
 			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'directory_dummy_post' ) );
 			add_filter( 'bp_replace_the_content',                    array( $this, 'directory_content'    ) );
 
 		// Creating a group
 		} elseif ( bp_is_groups_component() && bp_is_current_action( 'create' ) ) {
+			add_filter( 'bp_get_buddypress_template',                array( $this, 'create_template_hierarchy' ) );
 			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'create_dummy_post' ) );
 			add_filter( 'bp_replace_the_content',                    array( $this, 'create_content'    ) );
 
-		// Group admin
+		// Group page
 		} elseif ( bp_is_single_item() ) {
+			add_filter( 'bp_get_buddypress_template',                array( $this, 'single_template_hierarchy' ) );
 			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'single_dummy_post' ) );
 			add_filter( 'bp_replace_the_content',                    array( $this, 'single_content'    ) );
 
@@ -986,6 +990,29 @@ class BP_Groups_Theme_Compat {
 	}
 
 	/** Directory *************************************************************/
+
+	/**
+	 * Add template hierarchy to theme compat for the group directory page.
+	 *
+	 * This is to mirror how WordPress has {@link https://codex.wordpress.org/Template_Hierarchy template hierarchy}.
+	 *
+	 * @since BuddyPress (1.8)
+	 *
+	 * @param string $templates The templates from bp_get_theme_compat_templates()
+	 * @return array $templates Array of custom templates to look for.
+	 */
+	public function directory_template_hierarchy( $templates ) {
+		// Setup our templates based on priority
+		$new_templates = apply_filters( 'bp_template_hierarchy_groups_directory', array(
+			'groups/index-directory.php'
+		) );
+
+		// Merge new templates with existing stack
+		// @see bp_get_theme_compat_templates()
+		$templates = array_merge( (array) $new_templates, $templates );
+
+		return $templates;
+	}
 
 	/**
 	 * Update the global $post with directory data
@@ -1020,10 +1047,33 @@ class BP_Groups_Theme_Compat {
 	 * @since BuddyPress (1.7)
 	 */
 	public function directory_content() {
-		bp_buffer_template_part( 'groups/index' );
+		return bp_buffer_template_part( 'groups/index', null, false );
 	}
 
 	/** Create ****************************************************************/
+
+	/**
+	 * Add custom template hierarchy to theme compat for the group create page.
+	 *
+	 * This is to mirror how WordPress has {@link https://codex.wordpress.org/Template_Hierarchy template hierarchy}.
+	 *
+	 * @since BuddyPress (1.8)
+	 *
+	 * @param string $templates The templates from bp_get_theme_compat_templates()
+	 * @return array $templates Array of custom templates to look for.
+	 */
+	public function create_template_hierarchy( $templates ) {
+		// Setup our templates based on priority
+		$new_templates = apply_filters( 'bp_template_hierarchy_groups_create', array(
+			'groups/index-create.php'
+		) );
+
+		// Merge new templates with existing stack
+		// @see bp_get_theme_compat_templates()
+		$templates = array_merge( $new_templates, $templates );
+
+		return $templates;
+	}
 
 	/**
 	 * Update the global $post with create screen data
@@ -1058,10 +1108,40 @@ class BP_Groups_Theme_Compat {
 	 * @since BuddyPress (1.7)
 	 */
 	public function create_content() {
-		bp_buffer_template_part( 'groups/create' );
+		return bp_buffer_template_part( 'groups/create', null, false );
 	}
 
 	/** Single ****************************************************************/
+
+	/**
+	 * Add custom template hierarchy to theme compat for group pages. 
+	 *
+	 * This is to mirror how WordPress has {@link https://codex.wordpress.org/Template_Hierarchy template hierarchy}.
+	 *
+	 * @since BuddyPress (1.8)
+	 *
+	 * @param string $templates The templates from bp_get_theme_compat_templates()
+	 * @return array $templates Array of custom templates to look for.
+	 */
+	public function single_template_hierarchy( $templates ) {
+		// Setup some variables we're going to reference in our custom templates
+		$group = groups_get_current_group();
+
+		// Setup our templates based on priority
+		$new_templates = apply_filters( 'bp_template_hierarchy_groups_single_item', array(
+			'groups/single/index-id-'     . sanitize_file_name( bp_get_current_group_id() )   . '.php',
+			'groups/single/index-slug-'   . sanitize_file_name( bp_get_current_group_slug() ) . '.php',
+			'groups/single/index-action-' . sanitize_file_name( bp_current_action() )         . '.php',
+			'groups/single/index-status-' . sanitize_file_name( $group->status )              . '.php',
+			'groups/single/index.php'
+		) );
+
+		// Merge new templates with existing stack
+		// @see bp_get_theme_compat_templates()
+		$templates = array_merge( (array) $new_templates, $templates );
+
+		return $templates;
+	}
 
 	/**
 	 * Update the global $post with single group data
@@ -1088,7 +1168,7 @@ class BP_Groups_Theme_Compat {
 	 * @since BuddyPress (1.7)
 	 */
 	public function single_content() {
-		bp_buffer_template_part( 'groups/single/home' );
+		return bp_buffer_template_part( 'groups/single/home', null, false );
 	}
 }
 new BP_Groups_Theme_Compat();

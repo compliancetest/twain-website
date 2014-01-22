@@ -54,7 +54,8 @@ class BP_Docs_Query {
 			'orderby'	 => 'modified',  // 'modified', 'title', 'author', 'created'
 			'paged'		 => 1,
 			'posts_per_page' => 10,
-			'search_terms'   => ''
+			'search_terms'   => '',
+			'status'         => 'publish',
 		);
 		$r = wp_parse_args( $args, $defaults );
 
@@ -217,6 +218,12 @@ class BP_Docs_Query {
 				$wp_query_args['author'] = implode( ',', wp_parse_id_list( $this->query_args['author_id'] ) );
 			}
 
+			// If this is the user's "started by me" library, we'll include trashed posts
+			// Any edit to a trashed post restores it to status 'publish'
+			if ( ! empty( $this->query_args['author_id'] ) && $this->query_args['author_id'] == get_current_user_id()  ) {
+				$wp_query_args['post_status'] = array( 'publish', 'trash' );
+			}
+
 			// If an edited_by_id param has been passed, get a set
 			// of post ids that have revisions authored by that user
 			if ( ! empty( $this->query_args['edited_by_id'] ) ) {
@@ -227,8 +234,7 @@ class BP_Docs_Query {
 
 			// Set the taxonomy query. Filtered so that plugins can alter the query
 			// Filtering by groups also happens in this way
-			$wp_query_args['tax_query'] = apply_filters(
-                        'bp_docs_tax_query', $wp_query_args['tax_query'], $this );
+			$wp_query_args['tax_query'] = apply_filters( 'bp_docs_tax_query', $wp_query_args['tax_query'], $this );
 
 			if ( !empty( $this->query_args['parent_id'] ) ) {
 				$wp_query_args['post_parent'] = $this->query_args['parent_id'];
@@ -238,8 +244,7 @@ class BP_Docs_Query {
 		// Filter these arguments just before they're sent to WP_Query
 		// Devs: This allows you to send any custom parameter you'd like, and modify the
 		// query appropriately
-		$wp_query_args = apply_filters( 'bp_docs_pre_query_args',
-                $wp_query_args, $this );
+		$wp_query_args = apply_filters( 'bp_docs_pre_query_args', $wp_query_args, $this );
 
 		$this->query = new WP_Query( $wp_query_args );
 
@@ -258,14 +263,28 @@ class BP_Docs_Query {
 			// @todo - Not sure how this will scale
 			$posts = get_posts( array(
 				'author'                 => $editor_id,
-				'post_status'            => 'inherit',
-				'post_type'              => 'revision',
+				'post_status'            => array( 'inherit', 'publish' ),
+				'post_type'              => array( 'revision', bp_docs_get_post_type_name() ),
 				'posts_per_page'         => -1,
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
 			) );
 
-			$post_ids = array_merge( $post_ids, array_unique( wp_list_pluck( $posts, 'post_parent' ) ) );
+			$this_author_post_ids = array();
+			foreach ( $posts as $post ) {
+				if ( 'revision' === $post->post_type ) {
+					$this_author_post_ids[] = $post->post_parent;
+				} else {
+					$this_author_post_ids[] = $post->ID;
+				}
+			}
+			$post_ids = array_merge( $post_ids, $this_author_post_ids );
+		}
+
+		// If the list is empty (the users haven't edited any Docs yet)
+		// force 0 so that no items are shown
+		if ( empty( $post_ids ) ) {
+			$post_ids = array( 0 );
 		}
 
 		// @todo Might be faster to let the dupes through and let MySQL optimize
@@ -427,17 +446,16 @@ class BP_Docs_Query {
 			}
 		}
 
-		if ( empty( $_POST['doc']['title'] ) || empty( $doc_content ) ) {
-			// Both the title and the content fields are required
-			$result['message'] = __( 'Both the title and the content fields are required.', 'bp-docs' );
-			$result['redirect'] = $this->current_view;
+		if ( empty( $_POST['doc']['title'] ) ) {
+			// The title field is required
+			$result['message'] = __( 'The title field is required.', 'bp-docs' );
+			$result['redirect'] = ! empty( $this->doc_slug ) ? 'edit' : 'create';
 		} else {
-			// If both the title and content fields are filled in, we can proceed
 			$defaults = array(
 				'post_type'    => $this->post_type_name,
 				'post_title'   => $_POST['doc']['title'],
 				'post_name'    => isset( $_POST['doc']['permalink'] ) ? sanitize_title( $_POST['doc']['permalink'] ) : sanitize_title( $_POST['doc']['title'] ),
-				'post_content' => stripslashes( sanitize_post_field( 'post_content', $doc_content, 0, 'db' ) ),
+				'post_content' => sanitize_post_field( 'post_content', $doc_content, 0, 'db' ),
 				'post_status'  => 'publish'
 			);
 
@@ -554,7 +572,7 @@ class BP_Docs_Query {
 
 		$message_type = $result['redirect'] == 'single' ? 'success' : 'error';
 
-		$redirect_url = trailingslashit( bp_get_root_domain() . '/' . BP_DOCS_SLUG );
+		$redirect_url = trailingslashit( bp_get_root_domain() . '/' . bp_docs_get_docs_slug() );
 
 		if ( $result['redirect'] == 'single' ) {
 			$redirect_url .= $this->doc_slug;

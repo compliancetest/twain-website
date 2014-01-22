@@ -1,7 +1,11 @@
 <?php
 
 /**
- * BuddyPress Activity Screens
+ * BuddyPress Activity Screens.
+ *
+ * The functions in this file detect, with each page load, whether an Activity
+ * component page is being requested. If so, it parses any necessary data from
+ * the URL, and tells BuddyPress to load the appropriate template.
  *
  * @package BuddyPress
  * @subpackage ActivityScreens
@@ -11,7 +15,7 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Activity screen index
+ * Load the Activity directory.
  *
  * @since BuddyPress (1.5)
  *
@@ -19,9 +23,9 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @uses bp_is_activity_component()
  * @uses bp_current_action()
  * @uses bp_update_is_directory()
- * @uses do_action() To call the 'bp_activity_screen_index' hook
+ * @uses do_action() To call the 'bp_activity_screen_index' hook.
  * @uses bp_core_load_template()
- * @uses apply_filters() To call the 'bp_activity_screen_index' hook
+ * @uses apply_filters() To call the 'bp_activity_screen_index' hook.
  */
 function bp_activity_screen_index() {
 	if ( !bp_displayed_user_id() && bp_is_activity_component() && !bp_current_action() ) {
@@ -35,13 +39,13 @@ function bp_activity_screen_index() {
 add_action( 'bp_screens', 'bp_activity_screen_index' );
 
 /**
- * Activity screen 'my activity' index
+ * Load the 'My Activity' page.
  *
  * @since BuddyPress (1.0)
  *
- * @uses do_action() To call the 'bp_activity_screen_my_activity' hook
+ * @uses do_action() To call the 'bp_activity_screen_my_activity' hook.
  * @uses bp_core_load_template()
- * @uses apply_filters() To call the 'bp_activity_template_my_activity' hook
+ * @uses apply_filters() To call the 'bp_activity_template_my_activity' hook.
  */
 function bp_activity_screen_my_activity() {
 	do_action( 'bp_activity_screen_my_activity' );
@@ -49,16 +53,16 @@ function bp_activity_screen_my_activity() {
 }
 
 /**
- * Activity screen 'friends' index
+ * Load the 'My Friends' activity page.
  *
  * @since BuddyPress (1.0)
  *
  * @uses bp_is_active()
  * @uses bp_update_is_item_admin()
  * @uses bp_current_user_can()
- * @uses do_action() To call the 'bp_activity_screen_friends' hook
+ * @uses do_action() To call the 'bp_activity_screen_friends' hook.
  * @uses bp_core_load_template()
- * @uses apply_filters() To call the 'bp_activity_template_friends_activity' hook
+ * @uses apply_filters() To call the 'bp_activity_template_friends_activity' hook.
  */
 function bp_activity_screen_friends() {
 	if ( !bp_is_active( 'friends' ) )
@@ -70,7 +74,7 @@ function bp_activity_screen_friends() {
 }
 
 /**
- * Activity screen 'groups' index
+ * Load the 'My Groups' activity page.
  *
  * @since BuddyPress (1.2)
  *
@@ -91,7 +95,7 @@ function bp_activity_screen_groups() {
 }
 
 /**
- * Activity screen 'favorites' index
+ * Load the 'Favorites' activity page.
  *
  * @since BuddyPress (1.2)
  *
@@ -108,7 +112,7 @@ function bp_activity_screen_favorites() {
 }
 
 /**
- * Activity screen 'mentions' index
+ * Load the 'Mentions' activity page.
  *
  * @since BuddyPress (1.2)
  *
@@ -125,25 +129,7 @@ function bp_activity_screen_mentions() {
 }
 
 /**
- * Removes activity notifications from the notification menu when a user clicks on them and
- * is taken to a specific screen.
- *
- * @since BuddyPress (1.5)
- *
- * @global object $bp BuddyPress global settings
- * @uses bp_core_delete_notifications_by_type()
- */
-function bp_activity_remove_screen_notifications() {
-	global $bp;
-
-	bp_core_delete_notifications_by_type( bp_loggedin_user_id(), $bp->activity->id, 'new_at_mention' );
-}
-add_action( 'bp_activity_screen_my_activity',               'bp_activity_remove_screen_notifications' );
-add_action( 'bp_activity_screen_single_activity_permalink', 'bp_activity_remove_screen_notifications' );
-add_action( 'bp_activity_screen_mentions',                  'bp_activity_remove_screen_notifications' );
-
-/**
- * Reset the logged-in user's new mentions data when he visits his mentions screen
+ * Reset the logged-in user's new mentions data when he visits his mentions screen.
  *
  * @since BuddyPress (1.5)
  *
@@ -158,7 +144,7 @@ function bp_activity_reset_my_new_mentions() {
 add_action( 'bp_activity_screen_mentions', 'bp_activity_reset_my_new_mentions' );
 
 /**
- * Reset the logged-in user's new mentions data when he visits his mentions screen
+ * Load the page for a single activity item.
  *
  * @since BuddyPress (1.2)
  *
@@ -255,21 +241,27 @@ function bp_activity_screen_single_activity_permalink() {
 add_action( 'bp_screens', 'bp_activity_screen_single_activity_permalink' );
 
 /**
- * Add activity notifications settings to the notifications settings page
+ * Add activity notifications settings to the notifications settings page.
  *
  * @since BuddyPress (1.2)
  *
  * @uses bp_get_user_meta()
  * @uses bp_core_get_username()
- * @uses do_action() To call the 'bp_activity_screen_notification_settings' hook
+ * @uses do_action() To call the 'bp_activity_screen_notification_settings' hook.
  */
 function bp_activity_screen_notification_settings() {
 
-	if ( !$mention = bp_get_user_meta( bp_displayed_user_id(), 'notification_activity_new_mention', true ) )
-		$mention = 'yes';
+	if ( bp_activity_do_mentions() ) {
+		if ( ! $mention = bp_get_user_meta( bp_displayed_user_id(), 'notification_activity_new_mention', true ) ) {
+			$mention = 'yes';
+		}
+	}
 
-	if ( !$reply = bp_get_user_meta( bp_displayed_user_id(), 'notification_activity_new_reply', true ) )
-		$reply = 'yes'; ?>
+	if ( ! $reply = bp_get_user_meta( bp_displayed_user_id(), 'notification_activity_new_reply', true ) ) {
+		$reply = 'yes';
+	}
+
+	?>
 
 	<table class="notification-settings" id="activity-notification-settings">
 		<thead>
@@ -282,12 +274,15 @@ function bp_activity_screen_notification_settings() {
 		</thead>
 
 		<tbody>
-			<tr id="activity-notification-settings-mentions">
-				<td>&nbsp;</td>
-				<td><?php printf( __( 'A member mentions you in an update using "@%s"', 'buddypress' ), bp_core_get_username( bp_displayed_user_id() ) ) ?></td>
-				<td class="yes"><input type="radio" name="notifications[notification_activity_new_mention]" value="yes" <?php checked( $mention, 'yes', true ) ?>/></td>
-				<td class="no"><input type="radio" name="notifications[notification_activity_new_mention]" value="no" <?php checked( $mention, 'no', true ) ?>/></td>
-			</tr>
+			<?php if ( bp_activity_do_mentions() ) : ?>
+				<tr id="activity-notification-settings-mentions">
+					<td>&nbsp;</td>
+					<td><?php printf( __( 'A member mentions you in an update using "@%s"', 'buddypress' ), bp_core_get_username( bp_displayed_user_id() ) ) ?></td>
+					<td class="yes"><input type="radio" name="notifications[notification_activity_new_mention]" value="yes" <?php checked( $mention, 'yes', true ) ?>/></td>
+					<td class="no"><input type="radio" name="notifications[notification_activity_new_mention]" value="no" <?php checked( $mention, 'no', true ) ?>/></td>
+				</tr>
+			<?php endif; ?>
+
 			<tr id="activity-notification-settings-replies">
 				<td>&nbsp;</td>
 				<td><?php _e( "A member replies to an update or comment you've posted", 'buddypress' ) ?></td>
@@ -306,17 +301,17 @@ add_action( 'bp_notification_settings', 'bp_activity_screen_notification_setting
 /** Theme Compatability *******************************************************/
 
 /**
- * The main theme compat class for BuddyPress Activity
+ * The main theme compat class for BuddyPress Activity.
  *
  * This class sets up the necessary theme compatability actions to safely output
- * group template parts to the_title and the_content areas of a theme.
+ * activity template parts to the_title and the_content areas of a theme.
  *
  * @since BuddyPress (1.7)
  */
 class BP_Activity_Theme_Compat {
 
 	/**
-	 * Setup the activity component theme compatibility
+	 * Set up the activity component theme compatibility.
 	 *
 	 * @since BuddyPress (1.7)
 	 */
@@ -325,7 +320,7 @@ class BP_Activity_Theme_Compat {
 	}
 
 	/**
-	 * Are we looking at something that needs activity theme compatability?
+	 * Set up the theme compatibility hooks, if we're looking at an activity page.
 	 *
 	 * @since BuddyPress (1.7)
 	 */
@@ -341,11 +336,13 @@ class BP_Activity_Theme_Compat {
 
 			do_action( 'bp_activity_screen_index' );
 
+			add_filter( 'bp_get_buddypress_template',                array( $this, 'directory_template_hierarchy' ) );
 			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'directory_dummy_post' ) );
 			add_filter( 'bp_replace_the_content',                    array( $this, 'directory_content'    ) );
 
 		// Single activity
 		} elseif ( bp_is_single_activity() ) {
+			add_filter( 'bp_get_buddypress_template',                array( $this, 'single_template_hierarchy' ) );
 			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'single_dummy_post' ) );
 			add_filter( 'bp_replace_the_content',                    array( $this, 'single_dummy_content'    ) );
 		}
@@ -354,7 +351,30 @@ class BP_Activity_Theme_Compat {
 	/** Directory *************************************************************/
 
 	/**
-	 * Update the global $post with directory data
+	 * Add template hierarchy to theme compat for the activity directory page.
+	 *
+	 * This is to mirror how WordPress has {@link https://codex.wordpress.org/Template_Hierarchy template hierarchy}.
+	 *
+	 * @since BuddyPress (1.8)
+	 *
+	 * @param string $templates The templates from bp_get_theme_compat_templates().
+	 * @return array $templates Array of custom templates to look for.
+	 */
+	public function directory_template_hierarchy( $templates ) {
+		// Setup our templates based on priority
+		$new_templates = apply_filters( 'bp_template_hierarchy_activity_directory', array(
+			'activity/index-directory.php'
+		) );
+
+		// Merge new templates with existing stack
+		// @see bp_get_theme_compat_templates()
+		$templates = array_merge( (array) $new_templates, $templates );
+
+		return $templates;
+	}
+
+	/**
+	 * Update the global $post with directory data.
 	 *
 	 * @since BuddyPress (1.7)
 	 */
@@ -373,18 +393,41 @@ class BP_Activity_Theme_Compat {
 	}
 
 	/**
-	 * Filter the_content with the groups index template part
+	 * Filter the_content with the groups index template part.
 	 *
 	 * @since BuddyPress (1.7)
 	 */
 	public function directory_content() {
-		bp_buffer_template_part( 'activity/index' );
+		return bp_buffer_template_part( 'activity/index', null, false );
 	}
 
 	/** Single ****************************************************************/
 
 	/**
-	 * Update the global $post with the displayed user's data
+	 * Add custom template hierarchy to theme compat for activity permalink pages.
+	 *
+	 * This is to mirror how WordPress has {@link https://codex.wordpress.org/Template_Hierarchy template hierarchy}.
+	 *
+	 * @since BuddyPress (1.8)
+	 *
+	 * @param string $templates The templates from bp_get_theme_compat_templates().
+	 * @return array $templates Array of custom templates to look for.
+	 */
+	public function single_template_hierarchy( $templates ) {
+		// Setup our templates based on priority
+		$new_templates = apply_filters( 'bp_template_hierarchy_activity_single_item', array(
+			'activity/single/index.php'
+		) );
+
+		// Merge new templates with existing stack
+		// @see bp_get_theme_compat_templates()
+		$templates = array_merge( (array) $new_templates, $templates );
+
+		return $templates;
+	}
+
+	/**
+	 * Update the global $post with the displayed user's data.
 	 *
 	 * @since BuddyPress (1.7)
 	 */
@@ -403,12 +446,12 @@ class BP_Activity_Theme_Compat {
 	}
 
 	/**
-	 * Filter the_content with the members' activity permalink template part
+	 * Filter the_content with the members' activity permalink template part.
 	 *
 	 * @since BuddyPress (1.7)
 	 */
 	public function single_dummy_content() {
-		bp_buffer_template_part( 'activity/single/home' );
+		return bp_buffer_template_part( 'activity/single/home', null, false );
 	}
 }
 new BP_Activity_Theme_Compat();

@@ -3,8 +3,8 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, docs, wiki, documents, collaboration
 Requires at least: WordPress 3.3, BuddyPress 1.5
-Tested up to: WordPress 3.5.1, BuddyPress 1.8
-Stable tag: 1.4.4
+Tested up to: WordPress 3.8, BuddyPress 1.9
+Stable tag: 1.5.6
  
 Adds collaborative Docs to BuddyPress.
 
@@ -32,6 +32,53 @@ This plugin is in active development. For feature requests and bug reports, visi
 1. Sit back and watch the jack roll in
 
 == Changelog ==
+
+= 1.5.6 =
+* Allow current filter to be toggled by reclicking filter name
+* Fix bug in "Edited by Me" logic when user has not edited any Docs
+* Show deleted Docs on Started By Me tab, so they can be easily restored
+* Improved interface for Tags directory filter when many tags are present
+* Prevent logged-out user from accessing Create page
+* Improved compatibility with BuddyPress 1.9
+
+= 1.5.5 =
+* Fix bug with permalinks in groups, introduced in change to is_singular()
+
+= 1.5.4 =
+* Fix bug with WP 3.7 that caused single Docs to 404 when Permalinks were set to Page Name.
+
+= 1.5.3 =
+* More compatibility with WordPress 3.7
+
+= 1.5.2 =
+* Compatibility with WordPress 3.7
+
+= 1.5.1 =
+* Fix bug that prevented settings from being populated in some cases, resulting in improper permissions
+* Fix debug warnings on Settings page
+* Fix bug with Settings page when BP_DOCS_SLUG is set in wp-config.php
+
+= 1.5 =
+* New standalone Settings panel, under Dashboard > BuddyPress Docs
+* Main Docs slug can now be changed via the admin
+* Fix bug that prevented the activity action from being modified for the associated group
+* Fix bug that prevented activity from appearing in group activity streams
+* Fix bug that prevented attachment uploads on group Doc creation pages
+* Recast "minimum role to create Doc in group" in terms of group association
+* Fix some textdomain errors
+* Fix incorrect form action for "has-attachment" filter in some cases
+* Fix My Groups view
+* Add Directory Excerpt Length admin option
+* Fix "admins and mods of..." permissions setting and prevent non-admin-mods from locking themselves out of Docs
+* More accurate list of items on "Edited by..." tab
+* Improve the way attachment URLs are built
+* Allow Docs with empty content field
+* Add hooks to templates
+* Improved compatibility with PHP 5.4+
+
+= 1.4.5 =
+* Fixes bug in access filter for "logged-in users" setting
+* Removes stripslashes() on post content, which was causing problems with LaTeX plugins
 
 = 1.4.4 =
 * Fixes recursion problem that caused fatal errors when filtering by has-attachment on some setups

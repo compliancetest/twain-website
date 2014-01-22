@@ -20,7 +20,7 @@
 		</div>
 	</div><!-- #item-nav -->
 
-	<div id="item-body">
+	<div id="item-body" role="main">
 
 		<?php do_action( 'bp_before_member_body' );
 
@@ -44,6 +44,9 @@
 
 		elseif ( bp_is_user_forums() ) :
 			bp_get_template_part( 'members/single/forums'   );
+
+		elseif ( bp_is_user_notifications() ) :
+			bp_get_template_part( 'members/single/notifications' );
 
 		elseif ( bp_is_user_settings() ) :
 			bp_get_template_part( 'members/single/settings' );

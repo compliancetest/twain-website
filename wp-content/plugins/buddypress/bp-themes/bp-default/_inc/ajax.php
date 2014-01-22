@@ -126,6 +126,12 @@ function bp_dtheme_ajax_querystring( $query_string, $object ) {
 	if ( ! empty( $_POST['page'] ) && '-1' != $_POST['page'] )
 		$qs[] = 'page=' . absint( $_POST['page'] );
 
+	// exludes activity just posted and avoids duplicate ids
+	if ( ! empty( $_POST['exclude_just_posted'] ) ) {
+		$just_posted = wp_parse_id_list( $_POST['exclude_just_posted'] );
+		$qs[] = 'exclude=' . implode( ',', $just_posted );
+	}
+
 	$object_search_text = bp_get_search_default_text( $object );
  	if ( ! empty( $_POST['search_terms'] ) && $object_search_text != $_POST['search_terms'] && 'false' != $_POST['search_terms'] && 'undefined' != $_POST['search_terms'] )
 		$qs[] = 'search_terms=' . $_POST['search_terms'];
@@ -168,18 +174,25 @@ function bp_dtheme_object_template_loader() {
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
 		return;
 
+	// Bail if no object passed
+	if ( empty( $_POST['object'] ) )
+		return;
+
+	// Sanitize the object
+	$object = sanitize_title( $_POST['object'] );
+
+	// Bail if object is not an active component
+	if ( ! bp_is_active( $object ) )
+		return;
+
  	/**
 	 * AJAX requests happen too early to be seen by bp_update_is_directory()
 	 * so we do it manually here to ensure templates load with the correct
 	 * context. Without this check, templates will load the 'single' version
 	 * of themselves rather than the directory version.
 	 */
-
 	if ( ! bp_current_action() )
 		bp_update_is_directory( true, bp_current_component() );
-
-	// Sanitize the post object
-	$object = esc_attr( $_POST['object'] );
 
 	// Locate the object template
 	locate_template( array( "$object/$object-loop.php" ), true );
@@ -536,7 +549,6 @@ function bp_dtheme_get_single_activity_content() {
 /**
  * Invites a friend to join a group via a POST request.
  *
- * @return unknown
  * @since BuddyPress (1.2)
  * @todo Audit return types
  */
@@ -556,9 +568,25 @@ function bp_dtheme_ajax_invite_user() {
 	if ( ! friends_check_friendship( bp_loggedin_user_id(), $_POST['friend_id'] ) )
 		return;
 
+	$group_id = (int) $_POST['group_id'];
+	$friend_id = (int) $_POST['friend_id'];
+
 	if ( 'invite' == $_POST['friend_action'] ) {
-		if ( ! groups_invite_user( array( 'user_id' => $_POST['friend_id'], 'group_id' => $_POST['group_id'] ) ) )
+		$group = groups_get_group( $group_id );
+
+		// Users who have previously requested membership do not need
+		// another invitation created for them
+		if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
+			$user_status = 'is_pending';
+
+		// Create the user invitation
+		} else if ( groups_invite_user( array( 'user_id' => $friend_id, 'group_id' => $group_id ) ) ) {
+			$user_status = 'is_invited';
+
+		// Miscellaneous failure
+		} else {
 			return;
+		}
 
 		$user = new BP_Core_User( $_POST['friend_id'] );
 
@@ -569,12 +597,25 @@ function bp_dtheme_ajax_invite_user() {
 		echo '<div class="action">
 				<a class="button remove" href="' . wp_nonce_url( bp_loggedin_user_domain() . bp_get_groups_slug() . '/' . $_POST['group_id'] . '/invites/remove/' . $user->id, 'groups_invite_uninvite_user' ) . '" id="uid-' . esc_attr( $user->id ) . '">' . __( 'Remove Invite', 'buddypress' ) . '</a>
 			  </div>';
+
+		if ( 'is_pending' == $user_status ) {
+			echo '<p class="description">' . sprintf( __( '%s has previously requested to join this group. Sending an invitation will automatically add the member to the group.', 'buddypress' ), $user->user_link ) . '</p>';
+		}
+
 		echo '</li>';
 		exit;
 
 	} elseif ( 'uninvite' == $_POST['friend_action'] ) {
-		if ( ! groups_uninvite_user( $_POST['friend_id'], $_POST['group_id'] ) )
+		// Users who have previously requested membership should not
+		// have their requests deleted on the "uninvite" action
+		if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
 			return;
+		}
+
+		// Remove the unsent invitation
+		if ( ! groups_uninvite_user( $friend_id, $group_id ) ) {
+			return;
+		}
 
 		exit;
 
@@ -700,16 +741,31 @@ function bp_dtheme_ajax_joinleave_group() {
 			if ( ! groups_join_group( $group->id ) ) {
 				_e( 'Error joining group', 'buddypress' );
 			} else {
-				echo '<a id="group-' . esc_attr( $group->id ) . '" class="group-button popup button button_medium button_red white_txt radius6 leave-group" rel="leave" title="' . __( 'Leave Group', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'leave-group', 'groups_leave_group' ) . '">' . __( 'Leave Group', 'buddypress' ) . '</a>';
+				echo '<a id="group-' . esc_attr( $group->id ) . '" class="leave-group" rel="leave" title="' . __( 'Leave Group', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'leave-group', 'groups_leave_group' ) . '">' . __( 'Leave Group', 'buddypress' ) . '</a>';
 			}
 
 		} elseif ( 'private' == $group->status ) {
-			check_ajax_referer( 'groups_request_membership' );
 
-			if ( ! groups_send_membership_request( bp_loggedin_user_id(), $group->id ) ) {
-				_e( 'Error requesting membership', 'buddypress' );
+			// If the user has already been invited, then this is
+			// an Accept Invitation button
+			if ( groups_check_user_has_invite( bp_loggedin_user_id(), $group->id ) ) {
+				check_ajax_referer( 'groups_accept_invite' );
+
+				if ( ! groups_accept_invite( bp_loggedin_user_id(), $group->id ) ) {
+					_e( 'Error requesting membership', 'buddypress' );
+				} else {
+					echo '<a id="group-' . esc_attr( $group->id ) . '" class="leave-group" rel="leave" title="' . __( 'Leave Group', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'leave-group', 'groups_leave_group' ) . '">' . __( 'Leave Group', 'buddypress' ) . '</a>';
+				}
+
+			// Otherwise, it's a Request Membership button
 			} else {
-				echo '<a id="group-' . esc_attr( $group->id ) . '" class="group-button pending membership-requested button button_medium status_deprecated white_txt radius6" rel="membership-requested" title="' . __( 'Membership Requested', 'buddypress' ) . '" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Request Sent', 'buddypress' ) . '</a>';
+				check_ajax_referer( 'groups_request_membership' );
+
+				if ( ! groups_send_membership_request( bp_loggedin_user_id(), $group->id ) ) {
+					_e( 'Error requesting membership', 'buddypress' );
+				} else {
+					echo '<a id="group-' . esc_attr( $group->id ) . '" class="membership-requested" rel="membership-requested" title="' . __( 'Membership Requested', 'buddypress' ) . '" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Membership Requested', 'buddypress' ) . '</a>';
+				}
 			}
 		}
 
@@ -719,9 +775,9 @@ function bp_dtheme_ajax_joinleave_group() {
 		if ( ! groups_leave_group( $group->id ) ) {
 			_e( 'Error leaving group', 'buddypress' );
 		} elseif ( 'public' == $group->status ) {
-			echo '<a id="group-' . esc_attr( $group->id ) . '" class="group-button popup button button_medium button_red white_txt radius6 join-group" rel="join" title="' . __( 'Join Group', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'join', 'groups_join_group' ) . '">' . __( 'Join Group', 'buddypress' ) . '</a>';
+			echo '<a id="group-' . esc_attr( $group->id ) . '" class="join-group" rel="join" title="' . __( 'Join Group', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'join', 'groups_join_group' ) . '">' . __( 'Join Group', 'buddypress' ) . '</a>';
 		} elseif ( 'private' == $group->status ) {
-			echo '<a id="group-' . esc_attr( $group->id ) . '" class="group-button request-membership popup button button_medium button_red white_txt radius6" rel="join" title="' . __( 'Request Membership', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'request-membership', 'groups_send_membership_request' ) . '">' . __( 'Join Community', 'buddypress' ) . '</a>';
+			echo '<a id="group-' . esc_attr( $group->id ) . '" class="request-membership" rel="join" title="' . __( 'Request Membership', 'buddypress' ) . '" href="' . wp_nonce_url( bp_get_group_permalink( $group ) . 'request-membership', 'groups_send_membership_request' ) . '">' . __( 'Request Membership', 'buddypress' ) . '</a>';
 		}
 	}
 
@@ -926,7 +982,8 @@ function bp_dtheme_ajax_messages_autocomplete_results() {
 			}
 
 			if ( bp_is_username_compatibility_mode() ) {
-				$username = $ud->user_login;
+				// Sanitize for spaces
+				$username = urlencode( $ud->user_login );
 			} else {
 				$username = $ud->user_nicename;
 			}

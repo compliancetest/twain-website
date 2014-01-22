@@ -5,16 +5,6 @@ class BP_Docs {
 	var $associated_item_tax_name;
 
 	/**
-	 * PHP 4 constructor
-	 *
-	 * @package BuddyPress Docs
-	 * @since 1.0-beta
-	 */
-	function bp_docs() {
-		$this->__construct();
-	}
-
-	/**
 	 * PHP 5 constructor
 	 *
 	 * @package BuddyPress Docs
@@ -62,6 +52,16 @@ class BP_Docs {
 		add_action( 'template_redirect', array( $this, 'protect_doc_access' ) );
 
 		add_action( 'admin_init', array( $this, 'flush_rewrite_rules' ) );
+	}
+
+	/**
+	 * PHP 4 constructor
+	 *
+	 * @package BuddyPress Docs
+	 * @since 1.0-beta
+	 */
+	function bp_docs() {
+		$this->__construct();
 	}
 
 	/**
@@ -185,10 +185,6 @@ class BP_Docs {
 		if ( !defined( 'BP_DOCS_INCLUDES_PATH_ABS' ) )
 			define( 'BP_DOCS_INCLUDES_PATH_ABS', str_replace( ABSPATH, '', BP_DOCS_INCLUDES_PATH ) );
 
-		// The main slug
-		if ( !defined( 'BP_DOCS_SLUG' ) )
-			define( 'BP_DOCS_SLUG', 'docs' );
-
 		// The slug used when viewing a doc category
 		if ( !defined( 'BP_DOCS_CATEGORY_SLUG' ) )
 			define( 'BP_DOCS_CATEGORY_SLUG', 'category' );
@@ -212,6 +208,10 @@ class BP_Docs {
 		// The slug used when deleting a doc
 		if ( !defined( 'BP_DOCS_DELETE_SLUG' ) )
 			define( 'BP_DOCS_DELETE_SLUG', 'delete' );
+
+		// The slug used when deleting a doc
+		if ( !defined( 'BP_DOCS_UNTRASH_SLUG' ) )
+			define( 'BP_DOCS_UNTRASH_SLUG', 'untrash' );
 
 		// The slug used for the Started section of My Docs
 		if ( !defined( 'BP_DOCS_STARTED_SLUG' ) )
@@ -279,10 +279,10 @@ class BP_Docs {
 			'show_ui'      => $this->show_cpt_ui(),
 			'hierarchical' => true,
 			'supports'     => array( 'title', 'editor', 'revisions', 'excerpt', 'comments', 'author' ),
-			'query_var'    => false,
+			'query_var'    => true,
 			'has_archive'  => true,
 			'rewrite'      => array(
-				'slug'       => bp_docs_get_slug(),
+				'slug'       => bp_docs_get_docs_slug(),
 				'with_front' => false
 			)
 		) );
@@ -341,7 +341,7 @@ class BP_Docs {
 		// Don't load the History component if post revisions are disabled
 		if ( defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
 			require_once( BP_DOCS_INCLUDES_PATH . 'addon-history.php' );
-			$this->history =& new BP_Docs_History;
+			$this->history = new BP_Docs_History;
 		}
 
 		// Load the wikitext addon
@@ -360,6 +360,7 @@ class BP_Docs {
 		add_rewrite_tag( '%%' . BP_DOCS_EDIT_SLUG      . '%%', '([1]{1,})' );
 		add_rewrite_tag( '%%' . BP_DOCS_HISTORY_SLUG   . '%%', '([1]{1,})' );
 		add_rewrite_tag( '%%' . BP_DOCS_DELETE_SLUG    . '%%', '([1]{1,})' );
+		add_rewrite_tag( '%%' . BP_DOCS_UNTRASH_SLUG    . '%%', '([1]{1,})' );
 		add_rewrite_tag( '%%' . BP_DOCS_CREATE_SLUG    . '%%', '([1]{1,})' );
 		add_rewrite_tag( '%%' . BP_DOCS_MY_GROUPS_SLUG . '%%', '([1]{1,})' );
 	}
@@ -376,11 +377,11 @@ class BP_Docs {
 			 */
 
 			// Create
-			BP_DOCS_SLUG . '/' . BP_DOCS_CREATE_SLUG . '/?$' =>
+			bp_docs_get_docs_slug() . '/' . BP_DOCS_CREATE_SLUG . '/?$' =>
 				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_CREATE_SLUG . '=1',
 
 			// My Groups
-			BP_DOCS_SLUG . '/' . BP_DOCS_MY_GROUPS_SLUG . '/?$' =>
+			bp_docs_get_docs_slug() . '/' . BP_DOCS_MY_GROUPS_SLUG . '/?$' =>
 				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_MY_GROUPS_SLUG . '=1',
 
 			/**
@@ -388,17 +389,20 @@ class BP_Docs {
 			 */
 
 			// Edit
-			BP_DOCS_SLUG . '/([^/]+)/' . BP_DOCS_EDIT_SLUG . '/?$' =>
+			bp_docs_get_docs_slug() . '/([^/]+)/' . BP_DOCS_EDIT_SLUG . '/?$' =>
 				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_EDIT_SLUG . '=1',
 
 			// History
-			BP_DOCS_SLUG . '/([^/]+)/' . BP_DOCS_HISTORY_SLUG . '/?$' =>
+			bp_docs_get_docs_slug() . '/([^/]+)/' . BP_DOCS_HISTORY_SLUG . '/?$' =>
 				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_HISTORY_SLUG . '=1',
 
 			// Delete
-			BP_DOCS_SLUG . '/([^/]+)/' . BP_DOCS_DELETE_SLUG . '/?$' =>
-				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_HISTORY_SLUG . '=1'
+			bp_docs_get_docs_slug() . '/([^/]+)/' . BP_DOCS_DELETE_SLUG . '/?$' =>
+				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_HISTORY_SLUG . '=1',
 
+			// Untrash
+			bp_docs_get_docs_slug() . '/([^/]+)/' . BP_DOCS_UNTRASH_SLUG . '/?$' =>
+				'index.php?post_type=' . $this->post_type_name . '&name=' . $wp_rewrite->preg_index( 1 ) . '&' . BP_DOCS_UNTRASH_SLUG . '=1',
 
 		);
 
@@ -454,6 +458,64 @@ class BP_Docs {
 		if ( $posts_query->get( BP_DOCS_MY_GROUPS_SLUG ) ) {
 			$posts_query->is_404 = false;
 		}
+
+		// For single Doc views, allow access to 'deleted' items
+		// that the current user is the admin of
+		if ( $posts_query->is_single && bp_docs_get_post_type_name() === $posts_query->get( 'post_type' ) ) {
+
+			$doc_slug = $posts_query->get( 'name' );
+
+			// Direct query, because barf
+			global $wpdb;
+			$author_id = $wpdb->get_var( $wpdb->prepare(
+				"SELECT post_author FROM {$wpdb->posts} WHERE post_type = %s AND post_name = %s",
+				bp_docs_get_post_type_name(),
+				$doc_slug
+			) );
+
+			// Post author or mod can visit it
+			if ( $author_id && ( $author_id == get_current_user_id() || current_user_can( 'bp_moderate' ) ) ) {
+				$posts_query->set( 'post_status', array( 'publish', 'trash' ) );
+
+				// Make the 'trash' post status public
+				add_filter( 'posts_request', array( $this, 'make_trash_public' ) );
+
+				// ... and undo that when we're done
+				add_filter( 'the_posts', array( $this, 'remove_make_trash_public' ) );
+			}
+		}
+	}
+
+	/**
+	 * Make the 'trash' post status public.
+	 *
+	 * This is an unavoidable hack for cases where we want a trashed doc
+	 * to be visitable by the post author or by an admin.
+	 *
+	 * Access is public because it needs to be accessible by
+	 * call_user_func(), but should *not* be called directly.
+	 *
+	 * @since BuddyPress 1.5.5
+	 *
+	 * @param $request Passthrough.
+	 */
+	public function make_trash_public( $request ) {
+		global $wp_post_statuses;
+		$wp_post_statuses['trash']->public = true;
+		return $request;
+	}
+
+	/**
+	 * Reverse the public-trash hack applied in self::make_trash_public()
+	 *
+	 * @since BuddyPress 1.5.5
+	 *
+	 * @param $posts Passthrough.
+	 */
+	public function remove_make_trash_public( $posts ) {
+		global $wp_post_statuses;
+		$wp_post_statuses['trash']->public = false;
+		return $posts;
 	}
 
 	/**
@@ -522,19 +584,17 @@ class BP_Docs {
 		// Check to see whether our rules have been registered yet, by
 		// finding a Docs rule and then comparing it to the registered rules
 		foreach ( $wp_rewrite->extra_rules_top as $rewrite => $rule ) {
-			if ( 0 === strpos( $rewrite, bp_docs_get_slug() ) ) {
+			if ( 0 === strpos( $rewrite, bp_docs_get_docs_slug() ) ) {
+				$test_rewrite = $rewrite;
 				$test_rule = $rule;
+				break;
 			}
 		}
 		$registered_rules = get_option( 'rewrite_rules' );
 
-		if ( is_array( $registered_rules ) && ! in_array( $test_rule, $registered_rules ) ) {
+		if ( is_array( $registered_rules ) && ( ! isset( $registered_rules[ $test_rewrite ] ) || $test_rule !== $registered_rules[ $test_rewrite ] ) ) {
 			flush_rewrite_rules();
 		}
-	}
-
-	function activation() {
-		error_log('activating');
 	}
 
 	/**
@@ -549,5 +609,3 @@ class BP_Docs {
 		$bp->bp_docs = new BP_Docs_Component;
 	}
 }
-
-?>

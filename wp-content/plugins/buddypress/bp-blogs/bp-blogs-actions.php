@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BuddyPress Blogs Actions
+ * BuddyPress Blogs Actions.
  *
  * @package BuddyPress
  * @subpackage BlogsActions
@@ -11,11 +11,9 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Redirect to a random blog in the multisite network
+ * Redirect to a random blog in the multisite network.
  *
- * @since BuddyPress (1.0)
- * @package BuddyPress
- * @subpackage BlogsActions
+ * @since BuddyPress (1.0.0)
  */
 function bp_blogs_redirect_to_random_blog() {
 
@@ -26,7 +24,7 @@ function bp_blogs_redirect_to_random_blog() {
 	// Multisite is active so find a random blog
 	if ( is_multisite() ) {
 		$blog = bp_blogs_get_random_blogs( 1, 1 );
-		bp_core_redirect( get_site_url( $blog['blogs'][0]->blog_id ) );
+		bp_core_redirect( get_home_url( $blog['blogs'][0]->blog_id ) );
 
 	// No multisite and still called, always redirect to root
 	} else {

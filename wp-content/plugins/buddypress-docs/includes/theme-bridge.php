@@ -42,7 +42,7 @@ function bp_docs_template_include( $template = '' ) {
 		return $template;
 	}
 
-	$do_theme_compat = class_exists( 'BP_Theme_Compat' ) && apply_filters( 'bp_docs_do_theme_compat', true, $template );
+	$do_theme_compat = bp_docs_do_theme_compat();
 
 	if ( $do_theme_compat ) {
 
@@ -64,6 +64,20 @@ function bp_docs_template_include( $template = '' ) {
 	return apply_filters( 'bp_docs_template_include', $template );
 }
 add_filter( 'template_include', 'bp_docs_template_include', 6 );
+
+/**
+ * Should we do theme compatibility?
+ *
+ * Do it whenever it's available in BuddyPress (whether enabled or not for the
+ * theme more generally)
+ *
+ * @since 1.5.6
+ *
+ * @return bool
+ */
+function bp_docs_do_theme_compat() {
+	return class_exists( 'BP_Theme_Compat' ) && apply_filters( 'bp_docs_do_theme_compat', true, $template );
+}
 
 /**
  * Theme Compat
@@ -96,7 +110,9 @@ class BP_Docs_Theme_Compat {
 
 		add_filter( 'bp_get_buddypress_template', array( $this, 'query_templates' ) );
 
-		if ( bp_docs_is_global_directory() ) {
+		add_filter( 'bp_use_theme_compat_with_current_theme', 'bp_docs_do_theme_compat' );
+
+		if ( bp_docs_is_global_directory() || bp_docs_is_mygroups_directory() ) {
 
 			bp_update_is_directory( true, 'docs' );
 			do_action( 'bp_docs_screen_index' );
@@ -162,7 +178,7 @@ class BP_Docs_Theme_Compat {
 	public function directory_dummy_post() {
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
-			'post_title'     => __( 'Docs Directory', 'buddypress' ),
+			'post_title'     => __( 'Docs Directory', 'bp-docs' ),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
@@ -220,7 +236,7 @@ class BP_Docs_Theme_Compat {
 	public function create_dummy_post() {
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
-			'post_title'     => __( 'Create a Doc', 'buddypress' ),
+			'post_title'     => __( 'Create a Doc', 'bp-docs' ),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
