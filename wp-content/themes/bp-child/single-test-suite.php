@@ -650,10 +650,10 @@ Template Name Posts: Test Suite
 <div class="popup-box" id="payment-success-box" style="display: none;">
     <div class="popup-box-header radius6 noradiusbottom">Success!</div>        
         <div class="popup-box-content grid-box-body">    
-            <p>Thank you for purchasing a subscription to <?php echo $suite->name?>. <br />You payment has been successfully processed.  Please refer to your dashboard page for test harness access credentials and further configuration.</p>
+            <p>Thank you for purchasing a subscription to <?php echo $suite->name?>. <br />You payment has been successfully processed. Please refer to your Test Suites dashboard page for test harness access credentials and further configuration.</p>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                        
-            <a href="/my-profile" class="action-btn continue-btn"><span class="p"></span><span class="t">Goto My Dashbaord</span></a>
+            <a href="/my-test-suites" class="action-btn continue-btn"><span class="p"></span><span class="t">Goto My Dashboard</span></a>
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
             <div class="clear"></div>
         </div>
