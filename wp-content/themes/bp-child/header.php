@@ -33,7 +33,7 @@
                  <?php     
                  if ( is_user_logged_in() ) { 
                         ?>
-                        <div class="column fifth right no-marginbottom" id="top_logged_wrap">
+                        <div class="column third right no-marginbottom" id="top_logged_wrap">
                             <?php 
                                 global $current_user;
                                 get_currentuserinfo();
