@@ -7,7 +7,7 @@
             ?>
         <?php elseif ( bp_docs_is_doc_create() ) : ?>
 
-	        <h2><?php _e( 'New Doc', 'bp-docs' ); ?></h2>
+	        <h2><?php _e( 'Create New Article', 'bp-docs' ); ?></h2>
 
         <?php endif ?>
     </div>
