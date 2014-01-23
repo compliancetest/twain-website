@@ -126,13 +126,16 @@ function create_email_management_page()
                         
                         <li class="tab-separator">Subscription Section</li>
                         <li><a href="#purchase-subscription">Purchase</a></li>       
+                        <li><a href="#purchase-free-subscription">Free Subscribe</a></li>
                         <li><a href="#unsubscribe-subscription">Unsubscribe</a></li>
-                        <li><a href="#inarrears-subscription">Active -> InArrears</a></li>                        
+                        <li><a href="#unsubscribe-free-subscription">Unsubscribe Free Subscription</a></li>
+                        <li><a href="#inarrears-subscription">Active -> InArrears</a></li>
                         <li><a href="#frozen-subscription">InArrears -> Frozen</a></li>
                         <li><a href="#active-subscription">InArrears -> Active</a></li>
                         <li><a href="#active-subscription2">Frozen -> Active</a></li>
-                        <li><a href="#cancel-subscription">Cancel</a></li>       
-                        
+                        <li><a href="#cancel-subscription">Cancel Paid Subscription</a></li>
+                        <li><a href="#cancel-free-subscription">Cancel Free Subscription</a></li>
+
                         
                         <li class="tab-separator">Membership Section</li>
                         <li><a href="#membership-request-received">Membership Request Received</a></li>       
@@ -338,6 +341,57 @@ function create_email_management_page()
                         
                     </table>
                 </div>
+                <div id="purchase-free-subscription">
+                    <?php
+                    $purchase_free_subscription_email_title = get_option('purchase_free_subscription_email_title');
+                    $purchase_free_subscription_email_content = get_option('purchase_free_subscription_email_content');
+                    $purchase_free_subscription_admin_email_title = get_option('purchase_free_subscription_admin_email_title');
+                    $purchase_free_subscription_admin_email_content = get_option('purchase_free_subscription_admin_email_content');
+                    ?>
+                    <h3>Purchase Free Subscription</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [community_url]</p>
+                    <table class="widefat">
+                        <thead>
+                        <tr>
+                            <th colspan="2">For User</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="purchase_free_subscription_email_title" id="purchase_free_subscription_email_title" value="<?php echo $purchase_free_subscription_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($purchase_free_subscription_email_content, 'purchase_free_subscription_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <thead>
+                        <tr>
+                            <th colspan="2">For Admin</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="purchase_free_subscription_admin_email_title" id="purchase_free_subscription_admin_email_title" value="<?php echo $purchase_free_subscription_admin_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($purchase_free_subscription_admin_email_content, 'purchase_free_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
                 <div id="unsubscribe-subscription">
                     <?php
                     $unsubscribing_email_title = get_option('unsubscribing_email_title');
@@ -389,6 +443,60 @@ function create_email_management_page()
                         
                     </table>
                 </div>
+
+                <div id="unsubscribe-free-subscription">
+                    <?php
+                    $unsubscribing_free_email_title = get_option('unsubscribing_free_email_title');
+                    $unsubscribing_free_email_content = get_option('unsubscribing_free_email_content');
+                    $unsubscribing_free_admin_email_title = get_option('unsubscribing_free_admin_email_title');
+                    $unsubscribing_free_admin_email_content = get_option('unsubscribing_free_admin_email_content');
+                    ?>
+                    <h3>Free Unsubscribe</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
+                    <table class="widefat">
+                        <thead>
+                        <tr>
+                            <th colspan="2">For User</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="unsubscribing_free_email_title" id="unsubscribing_free_email_title" value="<?php echo $unsubscribing_free_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($unsubscribing_free_email_content, 'unsubscribing_free_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <thead>
+                        <tr>
+                            <th colspan="2">For Admin</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="unsubscribing_free_admin_email_title" id="unsubscribing_free_admin_email_title" value="<?php echo $unsubscribing_free_admin_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($unsubscribing_free_admin_email_content, 'unsubscribing_free_admin_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+
                 <div id="cancel-subscription">
                     <?php
                     $cancel_subscription_email_title = get_option('cancel_subscription_email_title');
@@ -440,6 +548,60 @@ function create_email_management_page()
                         
                     </table>
                 </div>
+
+                <div id="cancel-free-subscription">
+                    <?php
+                    $cancel_free_subscription_email_title = get_option('cancel_free_subscription_email_title');
+                    $cancel_free_subscription_email_content = get_option('cancel_free_subscription_email_content');
+                    $cancel_free_subscription_admin_email_title = get_option('cancel_free_subscription_admin_email_title');
+                    $cancel_free_subscription_admin_email_content = get_option('cancel_free_subscription_admin_email_content');
+                    ?>
+                    <h3>Subscription Cancelled</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
+                    <table class="widefat">
+                        <thead>
+                        <tr>
+                            <th colspan="2">For User</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="cancel_free_subscription_email_title" id="cancel_free_subscription_email_title" value="<?php echo $cancel_free_subscription_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($cancel_free_subscription_email_content, 'cancel_free_subscription_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <thead>
+                        <tr>
+                            <th colspan="2">For Admin</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="cancel_free_subscription_admin_email_title" id="cancel_free_subscription_admin_email_title" value="<?php echo $cancel_free_subscription_admin_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($cancel_free_subscription_admin_email_content, 'cancel_free_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+
                 <div id="active-subscription">
                     <?php
                     $active_subscription_email_title = get_option('active_subscription_email_title');
@@ -1332,6 +1494,15 @@ function save_email_templates()
           $purchase_subscription_admin_email_content = stripslashes_deep($_POST['purchase_subscription_admin_email_content']);          
           update_option('purchase_subscription_admin_email_content', $purchase_subscription_admin_email_content);
           
+          $purchase_free_subscription_email_title = htmlentities(stripslashes_deep($_POST['purchase_free_subscription_email_title']));
+          update_option('purchase_free_subscription_email_title', $purchase_free_subscription_email_title);
+          $purchase_free_subscription_email_content = stripslashes_deep($_POST['purchase_free_subscription_email_content']);
+          update_option('purchase_free_subscription_email_content', $purchase_free_subscription_email_content);
+          $purchase_free_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['purchase_free_subscription_admin_email_title']));
+          update_option('purchase_free_subscription_admin_email_title', $purchase_free_subscription_admin_email_title);
+          $purchase_free_subscription_admin_email_content = stripslashes_deep($_POST['purchase_free_subscription_admin_email_content']);
+          update_option('purchase_free_subscription_admin_email_content', $purchase_free_subscription_admin_email_content);
+
           $membership_request_received_admin_email_title = htmlentities(stripslashes_deep($_POST['membership_request_received_admin_email_title']));
           update_option('membership_request_received_admin_email_title', $membership_request_received_admin_email_title);          
           $membership_request_received_admin_email_content = stripslashes_deep($_POST['membership_request_received_admin_email_content']);
@@ -1389,7 +1560,16 @@ function save_email_templates()
           $cancel_subscription_admin_email_content = stripslashes_deep($_POST['cancel_subscription_admin_email_content']);          
           update_option('cancel_subscription_admin_email_content', $cancel_subscription_admin_email_content);
           
-          $unsubscribing_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_email_title']));          
+          $cancel_free_subscription_email_title = htmlentities(stripslashes_deep($_POST['cancel_free_subscription_email_title']));
+          update_option('cancel_free_subscription_email_title', $cancel_free_subscription_email_title);
+          $cancel_free_subscription_email_content = stripslashes_deep($_POST['cancel_free_subscription_email_content']);
+          update_option('cancel_free_subscription_email_content', $cancel_free_subscription_email_content);
+          $cancel_free_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['cancel_free_subscription_admin_email_title']));
+          update_option('cancel_free_subscription_admin_email_title', $cancel_free_subscription_admin_email_title);
+          $cancel_free_subscription_admin_email_content = stripslashes_deep($_POST['cancel_free_subscription_admin_email_content']);
+          update_option('cancel_free_subscription_admin_email_content', $cancel_free_subscription_admin_email_content);
+
+          $unsubscribing_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_email_title']));
           update_option('unsubscribing_email_title', $unsubscribing_email_title);          
           $unsubscribing_email_content = stripslashes_deep($_POST['unsubscribing_email_content']);          
           update_option('unsubscribing_email_content', $unsubscribing_email_content);          
@@ -1398,7 +1578,16 @@ function save_email_templates()
           $unsubscribing_admin_email_content = stripslashes_deep($_POST['unsubscribing_admin_email_content']);          
           update_option('unsubscribing_admin_email_content', $unsubscribing_admin_email_content);
           
-          $inarrears_subscription_email_title = htmlentities(stripslashes_deep($_POST['inarrears_subscription_email_title']));          
+          $unsubscribing_free_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_free_email_title']));
+          update_option('unsubscribing_free_email_title', $unsubscribing_free_email_title);
+          $unsubscribing_free_email_content = stripslashes_deep($_POST['unsubscribing_free_email_content']);
+          update_option('unsubscribing_free_email_content', $unsubscribing_free_email_content);
+          $unsubscribing_free_admin_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_free_admin_email_title']));
+          update_option('unsubscribing_free_admin_email_title', $unsubscribing_free_admin_email_title);
+          $unsubscribing_free_admin_email_content = stripslashes_deep($_POST['unsubscribing_free_admin_email_content']);
+          update_option('unsubscribing_free_admin_email_content', $unsubscribing_free_admin_email_content);
+
+          $inarrears_subscription_email_title = htmlentities(stripslashes_deep($_POST['inarrears_subscription_email_title']));
           update_option('inarrears_subscription_email_title', $inarrears_subscription_email_title);          
           $inarrears_subscription_email_content = stripslashes_deep($_POST['inarrears_subscription_email_content']);          
           update_option('inarrears_subscription_email_content', $inarrears_subscription_email_content);          

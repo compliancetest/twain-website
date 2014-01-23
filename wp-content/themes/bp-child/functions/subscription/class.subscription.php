@@ -83,7 +83,7 @@ class CT_Subscription
     * Update the subscription to Unsubscribing Status
     * 
     */
-    function cancel()
+    function cancel($email_template)
     {
         global $wpdb;
         if($this->id)
@@ -106,8 +106,8 @@ class CT_Subscription
                 '[suite_url]' => get_permalink($this->suite_id),
             );
             
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
-            cp_send_email_to_admin('unsubscribing_admin', $emailData);            
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $email_template, $emailData);
+            cp_send_email_to_admin($email_template.'_admin', $emailData);
         }
     }
     
@@ -207,9 +207,15 @@ class CT_Subscription
             '[suite_url]' => get_permalink($this->suite_id),
             '[paid_amount]' => $this->price
         );
-        
-        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
-        cp_send_email_to_admin('cancel_subscription_admin', $emailData);            
+
+        if ($this->price!=0)
+        {
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
+            cp_send_email_to_admin('cancel_subscription_admin', $emailData);
+        }else{
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_free_subscription', $emailData);
+            cp_send_email_to_admin('cancel_free_subscription_admin', $emailData);
+        }
     }
     
     /**

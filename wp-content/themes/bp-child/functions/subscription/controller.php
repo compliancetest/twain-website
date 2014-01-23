@@ -269,8 +269,8 @@ function free_charge()
                 '[paid_amount]' => $suite->monthlySubscriptionPrice,
                 '[community_url]' => bp_get_group_permalink($group)
             );
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-            cp_send_email_to_admin('purchase_subscription_admin', $emailData);
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_free_subscription', $emailData);
+            cp_send_email_to_admin('purchase_free_subscription_admin', $emailData);
             
             //Save Billing Data to Database
             $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
@@ -327,16 +327,30 @@ function unsubscribe_purchase()
         wp_redirect($return);
         exit;
     }
-    
+
     if($subscription->status != 'Active' || isset($_POST['delete-now']))
     {
-        //Unsubscribe the purchasement now
-        removeSubscription($subscription);
+        if ($subscription->price != 0)
+        {
+            //Unsubscribe the purchasement now
+            removeSubscription($subscription,'unsubscribing');
+        }else{
+            //Unsubscribe free subscription now
+            removeSubscription($subscription, 'unsubscribing_free');
+        }
     }else{
-        //Just Update the Status to Unsubscribing        
-        $subscription->cancel();
-        
-        addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
+        if ($subscription->price != 0)
+        {
+            //Just Update the Status to Unsubscribing
+            $subscription->cancel('unsubscribing');
+
+            addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
+        }else{
+            //Just Update the Status to Unsubscribing for unpaid subscription
+            $subscription->cancel('unsubscribing_free');
+
+            addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
+        }
     }
     
     wp_redirect($return);
