@@ -3,7 +3,12 @@
 * Doc Tab Nav
 */
 ?>
+
 <?php if ( bp_docs_is_existing_doc() ) : ?>
+<?php 
+    $doc_id = is_single() ? get_the_ID() : 0;
+    $group_id = bp_docs_get_associated_group_id( $doc_id ); 
+?>
 <div id="item-nav">
     <div class="item-list-tabs no-ajax" id="object-nav" role="navigation">
         <ul class="tabs no-ajax">
@@ -15,7 +20,7 @@
                     <span class="clear"></span>
                 </a>
             </li>  
-            <?php if ( bp_docs_current_user_can( 'edit' ) ) : ?>
+            <?php if ( bp_docs_current_user_can( 'edit' ) && groups_is_user_admin(get_current_user_id(), $group_id) ) : ?>
                 <li<?php if ( bp_docs_is_doc_edit() ) : ?> class="active"<?php endif ?>>
                     <a href="<?php bp_docs_doc_edit_link() ?>"<?php if ( bp_docs_is_doc_edit() ) : ?> class="selected"<?php endif ?>>                                    
                         <span class="left icon" id="icon_edit"></span>
