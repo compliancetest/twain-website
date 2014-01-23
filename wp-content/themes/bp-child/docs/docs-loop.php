@@ -50,10 +50,10 @@
                     <a href="<?php echo bp_core_get_user_domain( get_the_author_meta( 'ID' ) ) ?>" title="<?php echo bp_core_get_user_displayname( get_the_author_meta( 'ID' ) ) ?>"><?php echo cp_get_user_display_name( get_the_author_meta( 'ID' ) ) ?></a>
                 </div>
                 <div class="grid-list-cell created-date-cell<?php bp_docs_is_current_orderby_class( 'created' ) ?>">
-                    <?php echo get_the_date() ?>
+                    <?php echo formatDate(get_the_date()); ?>
                 </div>
                 <div class="grid-list-cell edited-date-cell<?php bp_docs_is_current_orderby_class( 'modified' ) ?>">
-                    <?php echo get_the_modified_date() ?>
+                    <?php echo formatDate(get_the_modified_date()); ?>
                 </div>
                 <div class="grid-list-cell action-cell">
                     <div class="quick_actions radius3">

@@ -86,7 +86,7 @@ $roles = array();
                 <div class="grid_cell width10P tocenter">
                 <?php
                     $issueDate = get_post_meta($row->ID, 'ts_issue_date', true);
-                    echo date('M Y', strtotime($issueDate));
+                    echo formatDate($issueDate);
                 ?>
                 </div>
                 <div class="grid_cell width15P tocenter">

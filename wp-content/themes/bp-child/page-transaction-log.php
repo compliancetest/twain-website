@@ -177,7 +177,7 @@ if($filterCustomer){
                 </div>
                 <div class="last-div left">
                     <label>&nbsp;Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo $filterDate?>" />
+                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo formatDate($filterDate); ?>" />
                     <?php if($tCustomers){ ?>
                     <div class="space10"></div>
                     <label>&nbsp;Customer <?php if($filterCustomer){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
