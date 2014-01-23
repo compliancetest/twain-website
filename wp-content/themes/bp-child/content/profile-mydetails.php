@@ -73,7 +73,10 @@ if(!defined('ABSPATH'))
                         <input type="hidden" name="dashboard_page_url" value="<?php echo $dashboard_page_url; ?>">
                         <input type="hidden" name="dashboard_page_title" value="<?php echo $dashboard_page_title; ?>">
                         <div id="dashboard-pages">
-                            <a href="javascript:void(0)" class="action-btn blue-btn" id="browse-dashboard-pages"><span class="t">Select Pages</span></a>
+                            <a href="javascript:void(0)" class="action-btn file-btn has-tooltip" id="browse-dashboard-pages">
+                                <span class="p"></span><span class="t">Select Pages</span>
+                                <span class="simple_tooltip radius6 no-wrap">Browse Pages<span></span></span>
+                            </a>
                             <div class="clear"></div>
                             <?php echo getDashboardMenuHTML(getDashboardPages('page'), 'dashboard-pages-dropdown'); ?>
                         </div>
