@@ -163,11 +163,11 @@ function process_eway_payment()
         
         if(!$result || !$resultDoc->loadXML($result))
         {
-            echo 'Your payment was processed successfully, but there was a problem creating your test credentials. Please try again later by updating your test harness access details in the "My Test Suite Subscriptions" section of the dashboard.';
+            echo 'Your payment was processed successfully, but there was a problem creating your test credentials. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.';
         }else{                
             if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
             {
-                echo 'Your payment was processed successfully, but there was a problem creating your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "My Test Suite Subscriptions" section of the dashboard.';
+                echo 'Your payment was processed successfully, but there was a problem creating your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.';
             }else{            
                 $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));
                 echo 'success';
@@ -254,11 +254,11 @@ function free_charge()
     
     if(!$result || !$resultDoc->loadXML($result))
     {
-        addMessage('There was a problem creating your test credentials. Please try again later by updating your test harness access details in the "My Test Suite Subscriptions" section of the dashboard.', 'error');                        
+        addMessage('There was a problem creating your test credentials. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', 'error');
     }else{
         if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
         {
-            addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "My Test Suite Subscriptions" section of the dashboard.', "error");                
+            addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', "error");
         }else{            
             //Send Email
             $emailData = array(
