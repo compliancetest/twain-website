@@ -752,8 +752,7 @@ jQuery(document).ready(function($) {
                 jQuery('#unsubscription-confirm-box #subscription-id').val(id);
                 if(status != 'Active')
                 {
-                    jQuery('#unsubscription-confirm-box #delete-now').prop('checked', true);
-                    jQuery('#unsubscription-confirm-box #delete-now').prop('disabled', true);
+                    jQuery('#unsubscription-confirm-box #delete-now').prop('checked', true).prop('disabled', true);
                 }else{
                     jQuery('#unsubscription-confirm-box #delete-now').prop('checked', false);
                 }

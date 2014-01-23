@@ -306,7 +306,7 @@ function unsubscribe_purchase()
 {
     global $wpdb, $CPRest;
     
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : '/my-profile';
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : '/my-test-suites';
     
     if(!is_user_logged_in())
     {
