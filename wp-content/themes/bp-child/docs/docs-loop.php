@@ -7,6 +7,12 @@
     </div>
 
     <?php bp_docs_inline_toggle_js() ?>
+    
+    <?php 
+        $doc_id = is_single() ? get_the_ID() : 0;
+        $group_id = bp_docs_get_associated_group_id( $doc_id ); 
+        $group = groups_get_group( 'group_id=' . $group_id );
+    ?>
 
     <?php if ( bp_docs_has_docs() ) : ?>
         <div class="grid-list" id='doc-list'>
@@ -63,7 +69,7 @@
                                     <span class="simple_tooltip radius6">Read<span></span></span>
                                 </a>
                             </li>
-                            <?php if ( bp_docs_current_user_can( 'edit', get_the_ID() ) ) { ?>
+                            <?php if ( bp_docs_current_user_can( 'edit', get_the_ID() ) && groups_is_user_admin(get_current_user_id(), bp_get_current_group_id()) ) { ?>
                             <li>
                                 <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG ?>" class="edit-wiki">
                                     <span class="simple_tooltip radius6">Edit<span></span></span>
@@ -110,12 +116,11 @@
                 <div class="clear"></div>
             </div>        
         </div>	  
-        
 
     <?php else: ?>
             
             <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
-
+            
             <?php if (bp_docs_current_user_can('create') && groups_is_user_admin(get_current_user_id(), bp_get_group_id())): ?>
             <a href="<?php echo bp_docs_get_create_link(); ?>" class="action-btn add-new-btn has-tooltip">
                 <span class="p"></span><span class="t">Add</span>
