@@ -1737,6 +1737,7 @@ tr {
     background-position: 0 -1049px;
 }
 
+.back-btn,
 .cancel-btn,
 .unsubscribe-btn,
 .delete-btn,
@@ -1753,13 +1754,17 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #b8b8b8 inset;
     -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
-.cancel-btn span.p{
+.back-btn span.p {
+    background-position: 0 -1378px;
+}
+.cancel-btn span.p {
     background-position: 0 -1098px;
 }
 
 .delete-grey-btn span.p{
     background-position: 0 1px;
 }
+.back-btn:hover,
 .unsubscribe-btn:hover,
 .delete-btn:hover,
 .delete-grey-btn:hover,
