@@ -346,9 +346,8 @@ body .redactor_box_fullscreen {
 	height: 0;
 	content: ".";
 }
-.redactor_box .redactor_toolbar {
-	border: none;
-	border-bottom: 1px solid #b8b8b8;
+.redactor_box .redactor_toolbar {	
+    border: 1px solid #cacaca;	
 }
 .redactor_toolbar.toolbar_fixed_box {
 	border: 1px solid #ddd;
@@ -363,6 +362,7 @@ body .redactor_air .redactor_toolbar {
 	padding: 1px 0 3px 1px;
 	outline: none;
 	list-style: none !important;
+    background: none !important;
 }
 .redactor_toolbar li.redactor_separator {
 	float: left;
