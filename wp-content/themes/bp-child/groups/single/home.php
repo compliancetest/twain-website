@@ -75,7 +75,7 @@
                  global $groups_template;
                     
             ?>
-            <div id="community_registration" style="display: none;" class="popup-box">                
+            <div id="community-registration<?php bp_group_id()?>" style="display: none;" class="community-registration-box popup-box" data-id="<?php bp_group_id()?>">                
                 <div class="popup-box-header radius6 noradiusbottom">Community Registration</div>
                 <div class="popup-box-content">
                     <form method="post" action="<?php echo wp_nonce_url( bp_get_group_permalink( ) . 'request-membership', 'groups_request_membership' )?>" id="join-community-form" data-group-id="<?php echo $groups_template->group->id?>">
@@ -83,10 +83,10 @@
                             <p>You need to join the community of interest in order to view Test Cases and Participate in the Forum</p>
                         </div>
                         <div class="top10">
-                            <input type="checkbox" name="agree_terms" value="agree" id="agree_community_terms"> I agree with <a href="#community-terms-box" rel="custom-popup" class="normal" id="show-community-terms">Terms & Conditions</a>
+                            <input type="checkbox" name="agree_terms" value="agree" id="agree_community_terms"> I agree with <a href="#community-terms-box<?php bp_group_id()?>" rel="custom-popup" class="normal" id="show-community-terms">Terms & Conditions</a>
                             <div class="clear"></div>
                             <div class="space5"></div>
-                            <input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license"> I agree with <a href="#community-license-box" rel="custom-popup" id="show-community-license" class="normal">License Agreement</a>
+                            <input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license"> I agree with <a href="#community-license-box<?php bp_group_id()?>" rel="custom-popup" id="show-community-license" class="normal">License Agreement</a>
                             <div class="clear"></div>
                             <div class="space5"></div>
                             <div class="err_request"></div>
@@ -95,15 +95,15 @@
                     </form>    
                 </div>
                 <div class="popup-box-footer radius6 noradiustop">                                                        
-                    <a href="javascript: void(0)" class="action-btn process-btn"><span class="p"></span><span class="t">REGISTER</span></a>
-                    <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
+                    <a href="javascript: void(0)" class="action-btn process-btn" data-id="<?php bp_group_id()?>"><span class="p"></span><span class="t">REGISTER</span></a>
+                    <a href="javascript: void(0)" class="action-btn cancel-btn close-popup-btn" data-id="<?php bp_group_id()?>"><span class="p"></span><span class="t">CANCEL</span></a>                    
                     <div class="clear"></div>
                     <div class="message" style="display: none;">Please aggree the Terms & Conditions and License Agreement.</div>
                 </div>
                 <div class="loading loading-with-text radius6"><div><b>SENDING REQUEST</b><p>Please wait...</p></div></div>
                 <a id="close-popup-community" class="close_btn"></a>                
             </div>
-            <div id="community-terms-box" style="display: none" class="popup-box redactor_editor">
+            <div id="community-terms-box<?php bp_group_id()?>" style="display: none" class="community-terms-box popup-box redactor_editor">
                 <div class="popup-box-header radius6 noradiusbottom">Terms and Conditions</div>
                 <div class="popup-box-content">
                     <p>
@@ -113,13 +113,13 @@
                     ?>
                     </p>
                 </div>
-                <div class="popup-box-footer radius6 noradiustop">                        
-                    <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>
-                    <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">AGREE</span></a>
+                <div class="popup-box-footer radius6 noradiustop">                                            
+                    <a href="#" class="action-btn process-btn" data-id="<?php bp_group_id()?>"><span class="p"></span><span class="t">AGREE</span></a>
+                    <a href="#" class="action-btn cancel-btn" data-id="<?php bp_group_id()?>"><span class="p"></span><span class="t">CANCEL</span></a>
                     <div class="clear"></div>
                 </div>
             </div>
-            <div class="popup-box redactor_editor"  id="community-license-box" style="display: none;">
+            <div id="community-license-box<?php bp_group_id()?>" class="popup-box redactor_editor community-license-box" style="display: none;">
                 <div class="popup-box-header radius6 noradiusbottom">License Agreements</div>
                 <div class="popup-box-content">
                     <p>
@@ -130,8 +130,8 @@
                     </p>
                 </div>
                 <div class="popup-box-footer radius6 noradiustop">                        
-                    <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                    <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Agree</span></a>
+                    <a href="#" class="action-btn process-btn" data-id="<?php bp_group_id()?>"><span class="p"></span><span class="t">AGREE</span></a>
+                    <a href="#" class="action-btn cancel-btn" data-id="<?php bp_group_id()?>"><span class="p"></span><span class="t">CANCEL</span></a>                    
                     <div class="clear"></div>
                 </div>
             </div>

@@ -216,9 +216,11 @@
     margin-bottom: 5px;
 }
 
-
-#community-terms-box,
-#community-license-box{
+.community-registration-box{
+    width: 305px;
+}
+.community-terms-box,
+.community-license-box{
     width: 500px;
 }
 

@@ -94,15 +94,15 @@ function cp_bp_get_group_join_button_filter($button)
     if(is_user_logged_in())
     {
         if($button['id'] == 'request_membership' || $button['id'] == 'join_group'){        
-            $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
+            $button['link_class'] .= " popup button button_medium button_red white_txt radius6 join-community-button";    
             $button['link_text'] = "Join Community";
-            $button['link_title'] = "Join Community";            
+            $button['link_title'] = "Join Community";                        
         }else if($button['id'] == 'leave_group'){
-            $button['link_class'] .= " popup button button_medium button_red white_txt radius6";    
+            $button['link_class'] .= " popup button button_medium button_red white_txt radius6 leave-community-button";    
             $button['link_text'] = "Leave Community";
             $button['link_title'] = "Leave Community";
         }else if($button['id'] == 'membership_requested'){
-            $button['link_class'] .= " button button_medium status_deprecated white_txt radius6";    
+            $button['link_class'] .= " button button_medium status_deprecated white_txt radius6 leave-community-button";    
             $button['link_text'] = "Request Sent";
             $button['link_title'] = "Request Sent";
             $button['link_href'] = "#";
