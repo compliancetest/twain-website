@@ -65,7 +65,7 @@
                             </li>
                             <?php if ( bp_docs_current_user_can( 'edit', get_the_ID() ) ) { ?>
                             <li>
-                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG?>" class="edit-wiki">
+                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG . '?group=' . bp_get_current_group_slug()?>" class="edit-wiki">
                                     <span class="simple_tooltip radius6">Edit<span></span></span>
                                 </a>
                             </li>
