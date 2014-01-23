@@ -45,7 +45,7 @@
     </div>
 </div>
 <?php endif; ?>
-<a href="<?php echo bp_get_group_permalink(groups_get_group(array("group_id" =>$selected_group_id))) . 'wiki'; ?>" class="right action-btn back-btn has-tooltip" style="margin-top: -35px;">
+<a href="<?php echo bp_get_group_permalink(groups_get_group(array('group_id' => $group_id))) . 'wiki'; ?>" class="right action-btn back-btn has-tooltip" style="margin-top: -35px;">
     <span class="p"></span>
     <span class="t">Back</span>
     <span class="simple_tooltip radius6">Back to Articles<span></span></span>
