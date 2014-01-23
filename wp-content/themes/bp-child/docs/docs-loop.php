@@ -93,7 +93,7 @@
                 <div class="grid-list-cell width100P">
                     <div id="bp-docs-pagination" class="width80P left">
                         <div id="bp-docs-pagination-count">
-                            <?php printf( __( 'Viewing %1$s-%2$s of %3$s docs', 'bp-docs' ), bp_docs_get_current_docs_start(), bp_docs_get_current_docs_end(), bp_docs_get_total_docs_num() ) ?>
+                            <?php printf( __( 'Viewing %1$s-%2$s of %3$s articles', 'bp-docs' ), bp_docs_get_current_docs_start(), bp_docs_get_current_docs_end(), bp_docs_get_total_docs_num() ) ?>
                         </div>
 
                         <div id="bp-docs-paginate-links">
@@ -101,8 +101,8 @@
                         </div>
                     </div>
                     <div class="right width15P">
-                        <?php if ( bp_docs_current_user_can( 'create' ) && (!bp_is_group() || groups_is_user_member(get_current_user_id(), bp_get_current_group_id())) ) : ?>                        
-                        <a href="<?php echo bp_docs_get_create_link()?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">Create New Wiki</span></a>
+                        <?php if ( bp_docs_current_user_can( 'create' ) && (!bp_is_group() || groups_is_user_admin(get_current_user_id(), bp_get_current_group_id())) ) : ?>                        
+                        <a href="<?php echo bp_docs_get_create_link()?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">Create New Article</span></a>
                         <?php endif; ?>
                     </div>
                     <div class="clear"></div>
@@ -113,14 +113,19 @@
         
 
     <?php else: ?>
+            
+            <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
 
-            <?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
-                    <p class="no-docs"><?php printf( __( 'There are no docs for this view. Why not <a href="%s">create one</a>?', 'bp-docs' ), bp_docs_get_create_link() ) ?>
-	    <?php else : ?>
-		    <p class="no-docs"><?php _e( 'There are no docs for this view.', 'bp-docs' ) ?></p>
-            <?php endif ?>
+            <?php if (bp_docs_current_user_can('create') && groups_is_user_admin(get_current_user_id(), bp_get_group_id())): ?>
+            <a href="<?php echo bp_docs_get_create_link(); ?>" class="action-btn add-new-btn has-tooltip">
+                <span class="p"></span><span class="t">Add</span>
+                <span class="simple_tooltip radius6">Add Article<span></span></span>
+            </a>
+            <?php endif; ?>
 
     <?php endif ?>
+    
+        <div class="clear"></div>
     
     </div>
 </div><!-- /#buddypress -->
