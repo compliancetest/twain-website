@@ -194,17 +194,19 @@
 			                <input type="hidden" name="doc-edit-submit" id="doc-edit-submit" value="<?php _e( 'Save', 'bp-docs' ) ?>"> 
                             <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Save</span></a>
                             <?php
+                                $cancel_url = bp_docs_get_doc_link();
                                 $selected_group_slug = isset( $_GET['group'] ) ? $_GET['group'] : '';
+                                if ($selected_group_slug != '') {
+                                    // Support for BP Group Hierarchy
+                                    if ( false !== $slash = strrpos( $selected_group_slug, '/' ) ) {
+                                        $selected_group_slug = substr( $selected_group_slug, $slash + 1 );
+                                    }
 
-                                // Support for BP Group Hierarchy
-                                if ( false !== $slash = strrpos( $selected_group_slug, '/' ) ) {
-                                    $selected_group_slug = substr( $selected_group_slug, $slash + 1 );
+                                    $selected_group_id = BP_Groups_Group::get_id_from_slug( $selected_group_slug );
+                                    $cancel_url = bp_get_group_permalink(groups_get_group(array("group_id" =>$selected_group_id))) . 'wiki';
                                 }
-
-                                $selected_group_id = BP_Groups_Group::get_id_from_slug( $selected_group_slug );
-                                
                             ?>
-                            <a href="<?php echo bp_group_permalink(groups_get_group(array("group_id" =>$selected_group_id))) ?>wiki" class="action-btn cancel-btn left10"><span class="p"></span><span class="t"><?php _e( 'Cancel', 'bp-docs' ); ?></span></a>
+                            <a href="<?php echo $cancel_url ?>" class="action-btn cancel-btn left10"><span class="p"></span><span class="t"><?php _e( 'Cancel', 'bp-docs' ); ?></span></a>
 
 			                <?php if ( bp_docs_is_existing_doc() ) : ?>
 				                <?php if ( bp_docs_current_user_can( 'manage' ) ) : ?><a class="delete-doc-button confirm action-btn delete-btn" href="<?php bp_docs_delete_doc_link() ?>"><span class="p"></span><span class="t"><?php _e( 'Delete', 'bp-docs' ) ?></span></a><?php endif ?>
