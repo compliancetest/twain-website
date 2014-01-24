@@ -297,7 +297,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_title = get_option('purchase_subscription_admin_email_title');
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
-                    <h3>Purchase Subscription</h3>
+                    <h3>Purchase Paid Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [community_url], [payment_email]</p>
                     <table class="widefat">
                         <thead>
@@ -399,7 +399,7 @@ function create_email_management_page()
                     $unsubscribing_admin_email_title = get_option('unsubscribing_admin_email_title');
                     $unsubscribing_admin_email_content = get_option('unsubscribing_admin_email_content');
                     ?>
-                    <h3>Unsubscribe</h3>
+                    <h3>Unsubscribe Paid Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
                     <table class="widefat">
                         <thead>
@@ -451,7 +451,7 @@ function create_email_management_page()
                     $unsubscribing_free_admin_email_title = get_option('unsubscribing_free_admin_email_title');
                     $unsubscribing_free_admin_email_content = get_option('unsubscribing_free_admin_email_content');
                     ?>
-                    <h3>Free Unsubscribe</h3>
+                    <h3>Unsubscribe Free Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
                     <table class="widefat">
                         <thead>
@@ -504,7 +504,7 @@ function create_email_management_page()
                     $cancel_subscription_admin_email_title = get_option('cancel_subscription_admin_email_title');
                     $cancel_subscription_admin_email_content = get_option('cancel_subscription_admin_email_content');
                     ?>
-                    <h3>Subscription Cancelled</h3>
+                    <h3>Cancel Paid Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
@@ -556,7 +556,7 @@ function create_email_management_page()
                     $cancel_free_subscription_admin_email_title = get_option('cancel_free_subscription_admin_email_title');
                     $cancel_free_subscription_admin_email_content = get_option('cancel_free_subscription_admin_email_content');
                     ?>
-                    <h3>Subscription Cancelled</h3>
+                    <h3>Cancel Free Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
                     <table class="widefat">
                         <thead>
