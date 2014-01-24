@@ -59,18 +59,19 @@
                                    <?php endif ?>
                                    <div class="field-row">
                                         <div id="doc-content-textarea">
-                                            <label id="content-label" for="doc_content"><?php _e( 'Content', 'bp-docs' ) ?></label>
+                                            <label id="content-label1" for="doc_content"><?php _e( 'Content', 'bp-docs' ) ?></label>
                                             <div id="editor-toolbar">
                                             <?php
-                                                if ( function_exists( 'wp_editor' ) ) {
+                                                /*if ( function_exists( 'wp_editor' ) ) {
                                                     wp_editor( bp_docs_get_edit_doc_content(), 'doc_content', array(
                                                         'media_buttons' => false,
                                                         'dfw'        => false
                                                     ) );
                                                 } else {
                                                     the_editor( bp_docs_get_edit_doc_content(), 'doc_content', 'doc[title]', false );
-                                                }
+                                                }*/
                                             ?>
+                                            <textarea name="doc_content" class="redactor_area"><?php echo bp_docs_get_edit_doc_content(); ?></textarea>
                                             </div>
                                         </div>
                                    </div>
