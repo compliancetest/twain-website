@@ -125,14 +125,14 @@ function create_email_management_page()
                         <li><a href="#password-changed">Password Changed</a></li>
                         
                         <li class="tab-separator">Subscription Section</li>
-                        <li><a href="#purchase-subscription">Purchase</a></li>       
-                        <li><a href="#purchase-free-subscription">Free Subscribe</a></li>
-                        <li><a href="#unsubscribe-subscription">Unsubscribe</a></li>
-                        <li><a href="#unsubscribe-free-subscription">Unsubscribe Free Subscription</a></li>
+                        <li><a href="#purchase-subscription">Purchase Paid Subscription</a></li>
+                        <li><a href="#purchase-free-subscription">Purchase Free Subscription</a></li>
                         <li><a href="#inarrears-subscription">Active -> InArrears</a></li>
                         <li><a href="#frozen-subscription">InArrears -> Frozen</a></li>
                         <li><a href="#active-subscription">InArrears -> Active</a></li>
                         <li><a href="#active-subscription2">Frozen -> Active</a></li>
+                        <li><a href="#unsubscribe-subscription">Unsubscribe Paid Subscription</a></li>
+                        <li><a href="#unsubscribe-free-subscription">Unsubscribe Free Subscription</a></li>
                         <li><a href="#cancel-subscription">Cancel Paid Subscription</a></li>
                         <li><a href="#cancel-free-subscription">Cancel Free Subscription</a></li>
 
