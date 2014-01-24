@@ -517,6 +517,12 @@ jQuery(document).ready(function($) {
         jQuery(this).find('>:first-child').addClass('first')
         jQuery(this).find('>:last-child').addClass('last')
     });
+    
+    // Redactor Textarea
+    jQuery('textarea.redactor_area').redactor({
+          air: true,
+          minHeight: 80
+    });
 });
 
 function customizeFileTag()
