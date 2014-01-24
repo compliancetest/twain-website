@@ -96,7 +96,10 @@
                             <div class="space20"></div>            
 		                <?php endif ?>
 		                <div id="doc-meta">
-			                <?php if ( bp_is_active( 'groups' ) && bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_associated_group', true ) ) : ?>
+			                <?php 
+                                //if ( bp_is_active( 'groups' ) && bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_associated_group', true ) ) : 
+                                if ( bp_is_active( 'groups' ) && apply_filters( 'bp_docs_allow_associated_group', true ) ) : 
+                            ?>
                                 <div class="grid-box grid-box-expandable grid-box-opened">
                                    <div class="grid-box-header">
 <!--                                       <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>-->
@@ -116,7 +119,10 @@
 				                <div class="space20"></div>
 			                <?php endif ?>
 			                
-                            <?php if ( bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_access_settings', true ) ) : ?>
+                            <?php 
+                                //if ( bp_docs_current_user_can( 'manage' ) && apply_filters( 'bp_docs_allow_access_settings', true ) ) : 
+                                if ( apply_filters( 'bp_docs_allow_access_settings', true ) ) : 
+                            ?>
 				                <div class="grid-box grid-box-expandable grid-box-opened" <?php if(!bp_current_user_can( 'bp_moderate' )){ ?> style="display: none" <?php } ?>>
                                    <div class="grid-box-header">
 <!--                                       <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>-->
