@@ -666,6 +666,24 @@ function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $l
     return $html;
 }
 
+function cp_docs_current_user_can($user_can, $action) {
+    
+    $group_id = bp_get_group_id();
+    
+    if ( ! $group_id ) {
+        $doc_id = is_single() ? get_the_ID() : 0;
+        $group_id = bp_docs_get_associated_group_id( $doc_id );
+    }
+    
+    if ($user_can) {
+        if ($action == 'edit') {
+            $user_can = groups_is_user_admin(get_current_user_id(), $group_id);
+        }
+    }
+    return $user_can;
+}
+add_filter('bp_docs_current_user_can', 'cp_docs_current_user_can', 10, 2);
+
 function cp_directory_groups_search_form() {
 
     $default_search_value = bp_get_search_default_text( 'groups' );
