@@ -516,8 +516,23 @@ function optionsframework_options() {
         'desc'  =>  'Phone Number',
         'type'  =>  'text'
     );
-    
-    
+
+    $options[] = array(
+        'name'  => __('404 Page Settings'),
+        'type'  =>  'heading'
+    );
+
+    $options[] = array(
+        'id'    =>  '404_title',
+        'type'  =>  'text',
+        'desc'  => 'Title'
+    );
+    $options[] = array(
+        'id'    =>  '404_description',
+        'desc'  =>  'Description',
+        'type'  =>  'textarea'
+    );
+
 	return $options;
 }
 
