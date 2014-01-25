@@ -262,6 +262,11 @@ get_header( 'buddypress' ); ?>
 				        <?php endif; ?>
 
 				        <?php do_action( 'groups_custom_create_steps' ); // Allow plugins to add custom group creation steps ?>
+                        
+                        <script type="text/javascript">
+                        jQuery("select[name='bp-docs[can-create]'] option:eq(2)").remove();
+                        jQuery("select[name='bp-docs[can-create]'] option:eq(1)").remove();
+                        </script>
 
 				        <?php do_action( 'bp_before_group_creation_step_buttons' ); ?>
 
