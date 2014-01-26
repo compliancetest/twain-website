@@ -1165,7 +1165,7 @@ tr {
     padding: 17px 0 0;
 }
 
-.message {    
+.message {
 	padding: 11px 20px 11px 45px;	
 	border-style: solid;
     border-width: 1px;
@@ -1978,6 +1978,11 @@ tr {
 }
 .action-btn.has-tooltip .simple_tooltip{
     margin-left: -45px;
+}
+.back-button.has-tooltip .simple_tooltip{
+    width: 120px;
+    left: 50%;
+    margin-left: -64px;
 }
 
 /**

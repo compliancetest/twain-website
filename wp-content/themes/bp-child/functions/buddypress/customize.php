@@ -236,7 +236,7 @@ function hook_buddypress_action_messages()
 
 
 //Hook Buddypress message render action
-add_action('bp_actions', 'cp_bp_message_setup', 10);
+add_action('bp_actions', 'cp_bp_message_setup', 4);
 
 function cp_bp_message_setup()
 {    
@@ -707,4 +707,10 @@ function cp_directory_groups_search_form() {
     </script>
 
 <?php
+}
+
+//Make default Community Invitations only for admins
+add_filter('bp_group_invite_status_fallback', 'cp_group_invite_status_fallback');
+function cp_group_invite_status_fallback(){
+    return 'admins';
 }

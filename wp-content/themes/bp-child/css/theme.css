@@ -2479,15 +2479,17 @@ line-height:20px;
 
 #group-creation-create{
     margin-top: 20px;
-    padding: 0px 10px;
+    padding: 0 10px;
     height: 29px;
+    line-height: 29px;
     text-shadow: 0px 1px 1px #124D00;
 }
 
 #group-creation-previous{
     margin-top: 20px;
-    padding: 0px 10px;
+    padding: 0 10px;
     height: 29px;
+    line-height: 29px;
     margin-right: 20px;
     text-shadow: none;
     text-shadow: 0px 1px 1px #7B1413;

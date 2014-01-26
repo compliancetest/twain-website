@@ -31,7 +31,7 @@ get_header( 'buddypress' ); ?>
 				        </ul>
                         <div class="clear"></div>
 			        </div>
-			        <?php do_action( 'template_notices' ); ?>
+			        <?php // do_action( 'template_notices' ); ?>
 
 			        <div class="item-body tab-content white_bcg padding10" id="group-create-body">
 
@@ -277,7 +277,10 @@ get_header( 'buddypress' ); ?>
 						        <?php /* Previous Button */ ?>
 						        <?php if ( !bp_is_first_group_creation_step() ) : ?>
 
-							        <input type="button" class="action-btn process-btn" value="<?php _e( 'Back to Previous Step', 'buddypress' ); ?>" id="group-creation-previous" name="previous" onclick="location.href='<?php bp_group_creation_previous_link(); ?>'" />
+                                    <a href="<?php bp_group_creation_previous_link(); ?>" type="button" class="action-btn process-btn back-button has-tooltip" id="group-creation-previous" name="previous" onclick="location.href='<?php bp_group_creation_previous_link(); ?>'">
+                                        <?php _e( 'Back', 'buddypress' ); ?>
+                                        <span class="simple_tooltip"><?php _e( 'Back to Previous Step', 'buddypress' ); ?><span></span></span>
+                                    </a>
 
 						        <?php endif; ?>
 
@@ -298,7 +301,7 @@ get_header( 'buddypress' ); ?>
 						        <?php /* Finish Button */ ?>
 						        <?php if ( bp_is_last_group_creation_step() ) : ?>
 
-							        <input type="submit" class="action-btn process-btn" value="<?php _e( 'Finish', 'buddypress' ); ?>" id="group-creation-finish" name="save" />
+							        <input type="submit" class="action-btn process-btn" value="<?php _e( 'Confirm', 'compliancetest' ); ?>" id="group-creation-finish" name="save" />
 
 						        <?php endif; ?>
                                 <div class="clear"></div>
