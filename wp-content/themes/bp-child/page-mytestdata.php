@@ -9,6 +9,8 @@ if(!is_user_logged_in()){
     exit;
 }
 get_header();
+$profileInstances = getCustomerProfileInstances();
+$subscriptions =  getUserSubscriptions(null, true);
 ?>
 <div class="content" id="my_testdata">
     <div class="dashboard-tabs">
@@ -100,7 +102,11 @@ get_header();
                 </div>             
             </div>
             <div class="space10"></div>
-            <a href="#need-subscription-box" rel="custom-popup" cp-type="inline" class="action-btn add-new-btn has-tooltip">
+            <?php if(count($subscriptions) > 0) { ?>
+                <a class="action-btn add-new-btn has-tooltip" id="add-new-test-data-link" href="#edit-profile-box">
+            <?php } else { ?>
+                <a class="action-btn add-new-btn has-tooltip" href="#need-subscription-box" rel="custom-popup" cp-type="inline" >
+            <?php } ?>
                 <span class="p"></span>
                 <span class="t">Add</span>
                 <span class="simple_tooltip radius6">Add Test Data<span></span></span>
