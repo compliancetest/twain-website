@@ -112,6 +112,24 @@ body .redactor_box_fullscreen {
   border: 0;
   border-top: 1px solid #ccc;
 }
+.redactor_editor h1,
+.redactor_editor h2,
+.redactor_editor h3,
+.redactor_editor h4,
+.redactor_editor h5,
+.redactor_editor h6 {
+    margin: 0 0 8px 0 !important;
+    font-weight: 600 !important;
+    padding: 0px !important;
+}
+.redactor_editor h1 {
+    font-weight: normal !important;
+}
+.redactor_editor ul li {
+    background: none;
+    padding: 0px;
+    margin: 0px;
+}
 /*
 .redactor_editor,
 .redactor_editor:focus,
