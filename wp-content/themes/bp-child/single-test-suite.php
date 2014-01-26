@@ -364,12 +364,12 @@ Template Name Posts: Test Suite
                     }
                     
                     if($selectedConfLevel){
-                        $args['meta_query'][] = array('key' => 'conformance_level', 'value' => "::" . $suite->id . "::" . $selectedConfLevel, 'compare' => '=');
+                        $args['meta_query'][] = array('key' => 'conformance_level_'. $suite->id, 'value' => $selectedConfLevel,'compare' => '=');
                         $params[] = 'conformance=' . urlencode($selectedConfLevel);
                     }
                     
                     $get_query = new WP_Query($args);
-                    
+
                     //Add Order by Scenaro 
                     $get_query->set('suppress_filters', false);
                     add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
