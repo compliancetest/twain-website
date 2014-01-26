@@ -7220,8 +7220,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 
 .test-pattern-icon{
     background: url("../images/test-patterns.png") no-repeat 0 0;
-    width: 52px;
-    height: 44px;
+    width: 29px;
+    height: 32px;
     display: block;
     margin: 0 auto;
     vertical-align: middle;
@@ -7238,26 +7238,24 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 .test-pattern-1{
     background-position: 0 0;
-    height: 37px;
 }
 .test-pattern-2{
-    background-position: 0 -37px;
-    height: 37px;
+    background-position: 0 -32px;
 }
 .test-pattern-3{
-    background-position: 0 -74px;
+    background-position: 0 -64px;
 }
 .test-pattern-4{
-    background-position: 0 -118px;
+    background-position: 0 -96px;
 }
 .test-pattern-5{
-    background-position: 0 -162px;
+    background-position: 0 -128px;
 }
 .test-pattern-6{
-    background-position: 0 -206px;
+    background-position: 0 -160px;
 }
 .test-pattern-7{
-    background-position: 0 -250px;
+    background-position: 0 -192px;
     height: 52px;
 }
 .infos .test-pattern{
