@@ -18,7 +18,9 @@
                     </div>
                     <div class="space15"></div>
                 <?php endif ?>
-		        <?php bp_docs_the_content() ?>
+                <div class="redactor_editor">
+		            <?php bp_docs_the_content() ?>
+                </div>
                 
                 <?php if ( bp_docs_doc_has_attachments() ) : ?>
                     <div class="doc-attachments">
