@@ -7215,3 +7215,58 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #browse-dashboard-pages .simple_tooltip {
     top: -28px !important;
 }
+
+.test-pattern-icon{
+    background: url("../images/test-patterns.png") no-repeat 0 0;
+    width: 52px;
+    height: 44px;
+    display: block;
+    margin: 0 auto;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 0;
+    position: relative;
+}
+.test-pattern-icon .simple_tooltip{
+    margin: 7px auto 0 auto;
+    position: absolute;
+    width: auto;
+    left: 50%;
+    white-space: nowrap;
+}
+.test-pattern-1{
+    background-position: 0 0;
+    height: 37px;
+}
+.test-pattern-2{
+    background-position: 0 -37px;
+    height: 37px;
+}
+.test-pattern-1 .simple_tooltip, .test-pattern-2 .simple_tooltip{
+    margin-top: 0;
+}
+.test-pattern-3{
+    background-position: 0 -74px;
+}
+.test-pattern-4{
+    background-position: 0 -118px;
+}
+.test-pattern-5{
+    background-position: 0 -162px;
+}
+.test-pattern-6{
+    background-position: 0 -206px;
+}
+.test-pattern-7{
+    background-position: 0 -250px;
+    height: 52px;
+}
+.infos .test-pattern{
+    float: left;
+}
+.infos .test-pattern p{
+    float: left;
+}
+.infos .test-pattern .test-pattern-icon{
+    float: left;
+}

@@ -95,6 +95,10 @@ require_once(THE_FUNCTION . '/compliance-claim/controller.php');
 require_once(THE_FUNCTION . '/test-plan/class.plan.php');
 require_once(THE_FUNCTION . '/test-plan/controller.php');
 
+//Test Patterns
+require_once(THE_FUNCTION . '/test-patterns/test-patterns.php');
+
+
 //Manage Login URLs
 require_once(THE_FUNCTION . '/login-redirect.php');
 

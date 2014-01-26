@@ -523,8 +523,14 @@ get_header();
                        
                        <div class="grid-cell">
                            <label>Test Pattern:</label>
-                           <input type="text" name="message_count" value="<?php echo $case->testPattern?>" class="input" />
-                       </div>                     
+                           <select name="message_count" id="message_count" class="select">
+                               <?php $test_patterns = get_test_patterns_number(); ?>
+                               <?php foreach ( $test_patterns as $test_pattern ) : setup_postdata( $test_pattern ); ?>
+                                   <?php $test_pattern_number = cp_get_post_meta($test_pattern->ID, 'test_pattern_number', true); ?>
+                                   <option value="<?php echo $test_pattern_number; ?>" <?php if($test_pattern_number== $case->testPattern){?>selected="selected" <?php } ?>><?php echo get_the_title($test_pattern->ID); ?></option>
+                               <?php endforeach; ?>
+                           </select>
+                       </div>
                        <div class="clear"></div>
                    </div>                                    
                </div>

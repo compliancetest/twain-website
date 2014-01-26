@@ -460,7 +460,10 @@ Template Name Posts: Test Suite
                                     <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
                                 </div>
                                 <div class="grid_cell nopaddingtop toleft tocenter width6P">
-                                    <?php echo get_post_meta($row->ID ,'message_count', true)?>
+                                    <?php $test_pattern_number = get_post_meta($row->ID ,'message_count', true) ?>
+                                    <div class="test-pattern-icon test-pattern-<?php echo $test_pattern_number; ?> has-tooltip">
+                                        <span class="simple_tooltip"><?php echo get_option('test_pattern' . $test_pattern_number . '_title'); ?><span></span></span>
+                                    </div>
                                 </div>
                                 <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
                                     <?php echo get_post_meta($row->ID ,'bulk', true)?>
@@ -759,11 +762,15 @@ jQuery(document).ready(function($) {
             }
         })
     })
-    
+
+    jQuery('.test-pattern-icon .simple_tooltip').each(function(){
+        jQuery(this).css("margin-left", '-' + jQuery(this).width()/2-5 + "px" );
+    });
+
     $('.test-scenario-row .scenario-cell').each(function(){
         $(this).find('div').height($(this).parent().height() - 30);
     })
-    
+
     
 });
 

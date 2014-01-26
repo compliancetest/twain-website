@@ -100,7 +100,12 @@ $case->load();
 							<p>Outcome Type: <span><?php echo $case->outcomeType; ?></span></p>
 						</div>
 						<div class="grid_cell width15P left">
-							<p>Test Pattern: <span><a href="/help-faq/test-patterns/"><?php echo $case->testPattern; ?></a></span></p>
+							<div class="test-pattern">
+                                <p>Test Pattern:</p>
+                            <a href="/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $case->testPattern; ?> has-tooltip">
+                                <span class="simple_tooltip"><?php echo get_option('test_pattern' . $case->testPattern . '_title'); ?><span></span></span>
+                            </a>
+                            </div>
 						</div>
                         
 						<div class="grid_cell width15P left">	
@@ -282,13 +287,22 @@ $case->load();
 		</div><!--end column-->
 		
 		<div class="clear"></div>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            jQuery('.test-pattern-icon .simple_tooltip').each(function(){
+                jQuery(this).css("margin-left", '-' + jQuery(this).width()/2-5 + "px" );
+            });
+
+        });
+    </script>
+
 <?php 
 if(!isset($_REQUEST['is_ajax']))
 {
 ?>
 		<div class="space15"></div>
 	</div> <!--end content container-->
-<?php
+    <?php
 
 get_footer();
 }else{
