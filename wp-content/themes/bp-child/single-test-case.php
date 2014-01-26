@@ -101,10 +101,9 @@ $case->load();
 						</div>
 						<div class="grid_cell width15P left">
 							<div class="test-pattern">
+                                <?php $test_patterns_description = get_test_patterns_description($case->testPattern); ?>
                                 <p>Test Pattern:</p>
-                            <a href="/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $case->testPattern; ?> has-tooltip">
-                                <span class="simple_tooltip"><?php echo get_option('test_pattern' . $case->testPattern . '_title'); ?><span></span></span>
-                            </a>
+                                <a href="/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $case->testPattern; ?> has-tooltip"><span class="simple_tooltip"><?php echo $test_patterns_description ;?><span></span></span></a>
                             </div>
 						</div>
                         

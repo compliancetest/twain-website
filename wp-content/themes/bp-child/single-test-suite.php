@@ -461,8 +461,9 @@ Template Name Posts: Test Suite
                                 </div>
                                 <div class="grid_cell nopaddingtop toleft tocenter width6P">
                                     <?php $test_pattern_number = get_post_meta($row->ID ,'message_count', true) ?>
+                                    <?php $test_patterns_description = get_test_patterns_description($test_pattern_number); ?>
                                     <div class="test-pattern-icon test-pattern-<?php echo $test_pattern_number; ?> has-tooltip">
-                                        <span class="simple_tooltip"><?php echo get_option('test_pattern' . $test_pattern_number . '_title'); ?><span></span></span>
+                                        <span class="simple_tooltip"><?php echo $test_patterns_description ;?><span></span></span>
                                     </div>
                                 </div>
                                 <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">

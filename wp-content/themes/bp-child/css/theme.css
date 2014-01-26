@@ -7228,11 +7228,11 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     position: relative;
 }
 .test-pattern-icon .simple_tooltip{
-    margin: 7px auto 0 auto;
     position: absolute;
-    width: auto;
+    width: 250px;
     left: 50%;
-    white-space: nowrap;
+    margin: 0 0 0 -125px;
+    font-weight: normal;
 }
 .test-pattern-1{
     background-position: 0 0;
@@ -7241,9 +7241,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .test-pattern-2{
     background-position: 0 -37px;
     height: 37px;
-}
-.test-pattern-1 .simple_tooltip, .test-pattern-2 .simple_tooltip{
-    margin-top: 0;
 }
 .test-pattern-3{
     background-position: 0 -74px;

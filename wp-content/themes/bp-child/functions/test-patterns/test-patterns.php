@@ -98,6 +98,7 @@ function add_new_test_pattern_columns($test_pattern_columns) {
 
     $new_columns['pattern_number'] = __('№');
     $new_columns['title'] = __('Test Pattern Title');
+    $new_columns['pattern_description'] = __('Test Pattern Description');
 
     return $new_columns;
 }
@@ -109,9 +110,13 @@ function manage_test_pattern_columns($column_name, $post_id) {
             echo $test_pattern_number = cp_get_post_meta($post_id, 'test_pattern_number', true);
             break;
 
+        case 'pattern_description':
+            echo $test_pattern_description = cp_get_post_meta($post_id, 'test_pattern_description', true);
+            break;
+
         default:
             break;
-    } // end switch
+    }
 }
 add_action('manage_test-pattern_posts_custom_column', 'manage_test_pattern_columns', 10, 2);
 
@@ -144,6 +149,36 @@ function test_pattern_number_column_orderby( $vars ) {
 }
 add_filter( 'request', 'test_pattern_number_column_orderby' );
 
+//Add default sotring
+add_action( 'load-edit.php', 'my_edit_test_pattern_load' );
+
+function my_edit_test_pattern_load() {
+    add_filter( 'request', 'my_sort_test_pattern' );
+}
+
+/* Sorts the movies. */
+function my_sort_test_pattern( $vars ) {
+    /* Check if we're viewing the 'movie' post type. */
+    if ( isset( $vars['post_type'] ) && 'test-pattern' == $vars['post_type'] ) {
+
+        /* Check if 'orderby' is set to 'pattern_number'. */
+        if ( !isset( $vars['orderby'] )) {
+
+            /* Merge the query vars with our custom variables. */
+            $vars = array_merge(
+                $vars,
+                array(
+                    'meta_key' => 'test_pattern_number',
+                    'orderby' => 'meta_value_num',
+                    'order' => 'ASC'
+                )
+            );
+        }
+    }
+
+    return $vars;
+}
+
 //Get all Test Patterns
 function get_test_patterns_number(){
    $args = array(
@@ -152,9 +187,38 @@ function get_test_patterns_number(){
        'posts_per_page'   => -1,
        'meta_key' => 'test_pattern_number',
        'orderby' => 'meta_value',
-       'order'            => 'ASC',
+       'order'   => 'ASC',
    );
    $test_patterns = get_posts( $args );
 
    return $test_patterns;
+}
+
+//Get all Test Patterns
+function get_test_patterns_description($test_pattern_number){
+    $post_id = get_post_id_by_meta_key_and_value('test_pattern_number',$test_pattern_number);
+
+    $test_patterns_description = get_post_meta($post_id,'test_pattern_description', true);
+
+   return $test_patterns_description;
+}
+
+/**
+ * Get post id from meta key and value
+ * @param string $key
+ * @param mixed $value
+ * @return int|bool
+ */
+function get_post_id_by_meta_key_and_value($key, $value) {
+    global $wpdb;
+    $meta = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='".$wpdb->escape($key)."' AND meta_value='".$wpdb->escape($value)."'");
+    if (is_array($meta) && !empty($meta) && isset($meta[0])) {
+        $meta = $meta[0];
+    }
+    if (is_object($meta)) {
+        return $meta->post_id;
+    }
+    else {
+        return false;
+    }
 }
