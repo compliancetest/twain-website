@@ -32,6 +32,9 @@
                 <div class="grid-list-cell edited-date-cell<?php bp_docs_is_current_orderby_class( 'modified' ) ?>">
                     <a href="<?php bp_docs_order_by_link( 'modified' ) ?>"><?php _e( 'Last Edited', 'bp-docs' ); ?></a>
                 </div>
+                <div class="grid-list-cell action-cell">
+                    Action
+                </div>
                 <div class="clear"></div>
             </div>
             <?php while ( bp_docs_has_docs() ) : bp_docs_the_doc() ?>
@@ -62,34 +65,35 @@
                     <?php echo formatDate(get_the_modified_date()); ?>
                 </div>
                 <div class="grid-list-cell action-cell">
-                    <div class="quick_actions radius3">
-                        <ul>
-                            <li>
-                                <a href="<?php echo bp_docs_get_doc_link() ?>" class="read-wiki">
-                                    <span class="simple_tooltip radius6">Read<span></span></span>
-                                </a>
-                            </li>
-                            <?php if ( bp_docs_current_user_can( 'edit', get_the_ID() ) && groups_is_user_admin(get_current_user_id(), bp_get_current_group_id()) ) { ?>
-                            <li>
-                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG ?>" class="edit-wiki">
-                                    <span class="simple_tooltip radius6">Edit<span></span></span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                            <?php
-                            if ( bp_docs_current_user_can( 'view_history', get_the_ID() ) && defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
-                            ?>                      
-                            <li>
-                                <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>" class="history-wiki">
-                                    <span class="simple_tooltip radius6">History<span></span></span>
-                                </a>
-                            </li>          
-                            <?php
-                            }
-                            ?>
-                        </ul>
-                        <div class="clear"></div>
-                    </div>
+                    
+                    <a href="<?php echo bp_docs_get_doc_link() ?>" class="action-btn icon-btn view-btn has-tooltip">
+                        <span class="p"></span>
+                        <span class="simple_tooltip radius6">Read Article<span></span></span>
+                    </a>
+                    
+                    <?php if ( bp_docs_current_user_can( 'edit', get_the_ID() ) && groups_is_user_admin(get_current_user_id(), bp_get_current_group_id()) ) { ?>
+                    
+                        <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG ?>" class="action-btn icon-btn edit-btn left10 has-tooltip">
+                            <span class="p"></span>
+                            <span class="simple_tooltip radius6">Edit Article<span></span></span>
+                        </a>
+                    
+                    <?php } ?>
+                    <?php
+                    if ( bp_docs_current_user_can( 'view_history', get_the_ID() ) && defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
+                    ?>                      
+                    
+                        <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>" class="action-btn icon-btn history-btn left10 has-tooltip">
+                            <span class="p"></span>
+                            <span class="simple_tooltip radius6">History of Article<span></span></span>
+                        </a>
+                    
+                    <?php
+                    }
+                    ?>
+                
+                    <div class="clear"></div>
+                    
                 </div>
                 
                 <div class="clear"></div>
