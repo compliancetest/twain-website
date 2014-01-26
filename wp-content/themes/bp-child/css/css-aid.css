@@ -1844,6 +1844,8 @@ tr {
 .red-btn:hover {
     background: #D84F4F;
 }
+.view-btn,
+.history-btn,
 .blue-btn,
 .harness-detail-btn,
 .blue-plus-btn,
@@ -1867,6 +1869,20 @@ tr {
 .edit-btn span.t{
     padding-left: 3px;
 }
+.view-btn span.p{
+    background-position: 0 -1482px;
+}
+.view-btn span.t{
+    padding-left: 3px;
+}
+.history-btn span.p{
+    background-position: 0 -1538px;
+}
+.history-btn span.t{
+    padding-left: 3px;
+}
+.history-btn:hover,
+.view-btn:hover,
 .blue-btn:hover,
 .file-btn:hover,
 .blue-plus-btn:hover,
