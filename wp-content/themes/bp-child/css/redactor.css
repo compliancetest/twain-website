@@ -130,6 +130,9 @@ body .redactor_box_fullscreen {
     padding: 0px;
     margin: 0px;
 }
+.redactor_editor blockquote {
+    color: #666;
+}
 /*
 .redactor_editor,
 .redactor_editor:focus,
