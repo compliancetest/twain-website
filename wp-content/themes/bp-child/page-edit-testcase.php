@@ -446,6 +446,7 @@ get_header();
            </div>
            <div class="grid-box-body">
                <div class="column">
+                   <?php if (!empty($case->protocolBinding) || !empty($case->testEndpointURL)): ?>
                    <div class="field-row">                                   
                        <div class="grid-cell">
                            <label>Protocol Binding:</label>
@@ -456,7 +457,8 @@ get_header();
                            <input type="text" name="test_url" value="<?php echo $case->testEndpointURL?>" class="input medium-input" />
                        </div>                     
                        <div class="clear"></div>
-                   </div>               
+                   </div>
+                   <?php endif; ?>
                    <?php foreach($case->testExecutionData as $row){ ?>
                    <div class="field-row">
                        <div class="grid-cell">
