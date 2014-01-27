@@ -2485,32 +2485,19 @@ line-height:20px;
     text-shadow: 0px 1px 1px #124D00;
 }
 
-#group-creation-previous{
-    margin-top: 20px;
-    padding: 0 10px;
-    height: 29px;
-    line-height: 29px;
-    margin-right: 20px;
-    text-shadow: none;
-    text-shadow: 0px 1px 1px #7B1413;
-}
-
-#group-creation-next{
-    margin-top: 20px;
-    padding: 0px 10px;
-    height: 29px;
-    font-weight: bold !important;
-    text-shadow: 0px 1px 1px #124D00;
-}
-
 .item-body h4{
-font-size: 17px;
-font-weight: bold;
-padding-top: 17px;
-margin-bottom: 2px;
-line-height: 24px;
+    font-size: 17px;
+    font-weight: bold;
+    padding-top: 17px;
+    margin-bottom: 2px;
+    line-height: 24px;
 }
-
+#previous-next .action-btn{
+    margin: 10px 0 0 10px;
+}
+#previous-next .action-btn:first-child{
+    margin-left: 0;
+}
 #upload{
     padding: 0px 10px;
     height: 24px;
@@ -2547,20 +2534,12 @@ table {
 }
 
 #avatar-crop-submit{
-padding: 0px 10px;
-height: 24px;
-font-weight: bold !important;
-text-shadow: 0px 1px 1px #124D00;
-font-size: 11px;
-top: 10px;
-}
-
-#group-creation-finish{
-margin-top: 20px;
-padding: 0px 10px;
-height: 29px;
-font-weight: bold !important;
-text-shadow: 0px 1px 1px #124D00;
+    padding: 0px 10px;
+    height: 24px;
+    font-weight: bold !important;
+    text-shadow: 0px 1px 1px #124D00;
+    font-size: 11px;
+    top: 10px;
 }
 
 .group-docs-options select{

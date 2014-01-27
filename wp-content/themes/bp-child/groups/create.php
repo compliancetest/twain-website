@@ -277,8 +277,9 @@ get_header( 'buddypress' ); ?>
 						        <?php /* Previous Button */ ?>
 						        <?php if ( !bp_is_first_group_creation_step() ) : ?>
 
-                                    <a href="<?php bp_group_creation_previous_link(); ?>" type="button" class="action-btn process-btn back-button has-tooltip" id="group-creation-previous" name="previous" onclick="location.href='<?php bp_group_creation_previous_link(); ?>'">
-                                        <?php _e( 'Back', 'buddypress' ); ?>
+                                    <a href="<?php bp_group_creation_previous_link(); ?>" type="button" class="action-btn back-btn has-tooltip" id="group-creation-previous" name="previous" onclick="location.href='<?php bp_group_creation_previous_link(); ?>'">
+                                        <span class="p"></span>
+                                        <span class="t"><?php _e( 'Back', 'compliancetest' ); ?></span>
                                         <span class="simple_tooltip"><?php _e( 'Back to Previous Step', 'buddypress' ); ?><span></span></span>
                                     </a>
 
@@ -286,8 +287,10 @@ get_header( 'buddypress' ); ?>
 
 						        <?php /* Next Button */ ?>
 						        <?php if ( !bp_is_last_group_creation_step() && !bp_is_first_group_creation_step() ) : ?>
-
-							        <input type="submit" class="action-btn process-btn" value="<?php _e( 'Next Step', 'buddypress' ); ?>" id="group-creation-next" name="save" />
+                                    <button type="submit" class="action-btn next-btn" id="group-creation-next" name="save">
+                                        <span class="p"></span>
+                                        <span class="t"><?php _e( 'Next', 'compliancetest' ); ?></span>
+                                    </button>
 
 						        <?php endif;?>
 
@@ -300,8 +303,10 @@ get_header( 'buddypress' ); ?>
 
 						        <?php /* Finish Button */ ?>
 						        <?php if ( bp_is_last_group_creation_step() ) : ?>
-
-							        <input type="submit" class="action-btn process-btn" value="<?php _e( 'Confirm', 'compliancetest' ); ?>" id="group-creation-finish" name="save" />
+                                    <button type="submit" class="action-btn process-btn" id="group-creation-finish" name="save">
+                                        <span class="p"></span>
+                                        <span class="t"><?php _e( 'Confirm', 'compliancetest' ); ?></span>
+                                    </button>
 
 						        <?php endif; ?>
                                 <div class="clear"></div>

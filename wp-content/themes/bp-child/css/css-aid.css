@@ -53,6 +53,10 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus {
 }
 ::selection { background: #C9D7DF; color: #2A5B79; }
 
+button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
 
 
 /*************** STRUCTURAL ELEMENTS ******************/
@@ -1655,7 +1659,10 @@ tr {
     border-width: 1px;
     color: #fff !important;
     font-family: 'Open Sans', Arial;
-    font-size: 11px;    
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 11px;
     display: block;
     height: 22px;
     line-height: 22px;
@@ -1665,6 +1672,7 @@ tr {
     -webkit-border-radius: 3px;
     text-decoration: none !important;
     float: left;
+    cursor: pointer;
 }
 .action-btn span.p{
     display: block;
@@ -1673,6 +1681,7 @@ tr {
     background-repeat: no-repeat;
     width: 20px;    
     height: 100%;
+    min-height: 21px;
     margin: 0;
 }
 .action-btn span.t{    
@@ -1737,6 +1746,7 @@ tr {
     background-position: 0 -1049px;
 }
 
+.next-btn,
 .back-btn,
 .cancel-btn,
 .unsubscribe-btn,
@@ -1754,16 +1764,28 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #b8b8b8 inset;
     -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
+.next-btn,
+.back-btn{
+    width: 68px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .back-btn span.p {
     background-position: 0 -1378px;
 }
 .cancel-btn span.p {
     background-position: 0 -1098px;
 }
+.next-btn span.p {
+    background-position: 0 -1615px;
+}
 
 .delete-grey-btn span.p{
     background-position: 0 1px;
 }
+.next-btn:hover,
 .back-btn:hover,
 .unsubscribe-btn:hover,
 .delete-btn:hover,
@@ -1979,7 +2001,7 @@ tr {
 .action-btn.has-tooltip .simple_tooltip{
     margin-left: -45px;
 }
-.back-button.has-tooltip .simple_tooltip{
+.back-btn.has-tooltip .simple_tooltip{
     width: 120px;
     left: 50%;
     margin-left: -64px;
