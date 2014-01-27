@@ -23,8 +23,8 @@ function checkCurrentUserCapability()
             return true;
         
         $suiteID = _get_current_test_suite(get_the_ID());
-        
-        
+
+
         if(is_user_logged_in())
         {
             //Get Test Suite Id
@@ -44,8 +44,9 @@ function checkCurrentUserCapability()
                 }
             }        
         }else{
-            $groupID = get_post_meta($suiteID[0], 'community_id', true);
-            $group = groups_get_group(array('group_id' => $groupID)); 
+            addMessage('You must register view this page.', 'notice');
+            wp_redirect(home_url());
+            exit;
         }
         addMessage('You must join the community to view Test Case details. Go to the <a href="' . bp_get_group_permalink($group) . '">Community Home Page</a> to join', 'notice');
         wp_redirect($redirect);
