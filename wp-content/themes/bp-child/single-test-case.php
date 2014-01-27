@@ -140,24 +140,27 @@ $case->load();
 						<div class="clear"></div>
 					</div>
 				</div>
-				<div class="grids noradiusbottom">
+                <?php if (!empty($case->testEndpointURL) || !empty($case->protocolBinding) ): ?>
+
+                    <div class="grids noradiusbottom">
 					<div class="grid_row white_bcg nopaddingbottom noborderbottom">
-						<div class="grid_cell width15P left size13 bold">Test trigger endpoint URL:</div>
-						<div class="grid_cell width80P left"><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></div>
+						<div class="grid_cell width20P left size13 bold">Test trigger endpoint URL:</div>
+						<div class="grid_cell width75P left"><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></div>
 						<div class="clear"></div>
 					</div>
 					
 					<div class="grid_row white_bcg nopaddingbottom noborderbottom">
-						<div class="grid_cell width15P left size13 bold">Protocol Binding:</div>
-						<div class="grid_cell width80P left"><?php echo $case->protocolBinding ; ?></div>
+						<div class="grid_cell width20P left size13 bold">Protocol Binding:</div>
+						<div class="grid_cell width75P left"><?php echo $case->protocolBinding ; ?></div>
 						<div class="clear"></div>
 					</div>
+                <?php endif; ?>
 					<?php
 					foreach($case->testExecutionData as $key => $row){
                     ?>
 						<div class="grid_row white_bcg nopaddingbottom noborderbottom <?php if($key == (count($case->testExecutionData)-1)) {echo "paddingbottom10";} ?>">
-							<div class="grid_cell width15P left size13 bold"><?php  echo $row['name'].':';?></div>
-							<div class="grid_cell width80P left">
+							<div class="grid_cell width20P left size13 bold"><?php  echo $row['name'].':';?></div>
+							<div class="grid_cell width75P left">
                                 <?php if(strpos($row['value'], 'http://') !== false || strpos($row['value'], 'https://') !== false){ ?>
                                 <a href="<?php echo $row['value']; ?>" class="blue_txt"><?php echo $row['value']; ?></a>
                                 <?php }else{ ?>

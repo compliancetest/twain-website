@@ -98,6 +98,7 @@ $case->load();
     <br />
     <h5>Test Execution</h5>
     <table>
+        <?php if (!empty($case->testEndpointURL) || !empty($case->protocolBinding) ): ?>
         <tr>
             <td><b>Test trigger endpoint URL:</b></td>
             <td><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></td>
@@ -106,6 +107,7 @@ $case->load();
             <td><b>Protocol Binding:</b></td>
             <td><?php echo $case->protocolBinding ; ?></td>
         </tr>
+        <?php endif; ?>
         <?php
         foreach($case->testExecutionData as $key => $row){
         ?>
