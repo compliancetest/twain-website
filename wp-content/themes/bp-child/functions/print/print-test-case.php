@@ -81,6 +81,17 @@ $case->load();
             <td>Test Pattern: <b><a href="<?php echo get_site_url() ?>/help-faq/test-patterns/"><?php echo $case->testPattern; ?></a></b></td>
             <td>Bulk: <b><?php echo $case->bulk; ?></b></td>
         </tr>
+        <tr>
+            <td class="td-label">Scenario:</td>
+            <td colspan="4">
+                <?php
+                $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
+                $scenarioDetail = $case->getScenario($test_suite_id);
+                echo '<b>' . $scenarioDetail->code . '</b>';
+                echo $scenarioDetail->description;
+                ?>
+            </td>
+        </tr>
         
     </table>
     <br />
@@ -88,7 +99,7 @@ $case->load();
     <h5>Test Execution</h5>
     <table>
         <tr>
-            <td><b>Test endpoint URL:</b></td>
+            <td><b>Test trigger endpoint URL:</b></td>
             <td><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></td>
         </tr>
         <tr>

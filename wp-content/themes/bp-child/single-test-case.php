@@ -142,7 +142,7 @@ $case->load();
 				</div>
 				<div class="grids noradiusbottom">
 					<div class="grid_row white_bcg nopaddingbottom noborderbottom">
-						<div class="grid_cell width15P left size13 bold">Test endpoint URL:</div>
+						<div class="grid_cell width15P left size13 bold">Test trigger endpoint URL:</div>
 						<div class="grid_cell width80P left"><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></div>
 						<div class="clear"></div>
 					</div>

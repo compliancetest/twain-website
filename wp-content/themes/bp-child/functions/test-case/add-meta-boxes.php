@@ -254,7 +254,7 @@ function test_case_test_execution_metabox_html(){
     $current_property_value_exec= cp_get_post_meta($post->ID, 'property_value_exec', true);
     echo '<input type="hidden" name="custom_test_execution" value="', wp_create_nonce(basename(__FILE__)), '" />';
     ?>
-    <label for="test_url"><b>Test endpoint URL:</b></label> <br />
+    <label for="test_url"><b>Test trigger endpoint URL:</b></label> <br />
     <input type="text" name="test_url" value="<?php echo $test_url; ?>" size="30" class="mf_text"/> 
     <br />
     <label for="protocol_binding2"><b>Protocol Binding:</b></label> <br />
@@ -522,7 +522,7 @@ function save_test_case_on_admin($post_id)
     //Save Test Execution
     $test_url = $_POST['test_url']; 
     cp_update_post_meta($post_id, 'test_url', $test_url);
-    $protocol_binding2 = $_POST['protocol_binding2']; 
+    $protocol_binding2 = $_POST['protocol_binding2'];
     cp_update_post_meta($post_id, 'protocol_binding2', $protocol_binding2);
     
     $property_name_exec = $_POST['property_name_exec']; 

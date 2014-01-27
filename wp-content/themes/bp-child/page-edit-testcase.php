@@ -453,7 +453,7 @@ get_header();
                            <input type="text" name="protocol_binding2" value="<?php echo $case->protocolBinding?>" class="input" />
                        </div>             
                        <div class="grid-cell">
-                           <label>Test endpoint URL:</label>
+                           <label>Test trigger endpoint URL:</label>
                            <input type="text" name="test_url" value="<?php echo $case->testEndpointURL?>" class="input medium-input" />
                        </div>                     
                        <div class="clear"></div>

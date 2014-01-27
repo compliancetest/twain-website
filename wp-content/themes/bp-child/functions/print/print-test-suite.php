@@ -144,6 +144,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     <table width="100%">
         <thead>
             <tr>
+                <th>Test Scenario</th>
                 <th>Test Case ID</th>
                 <th>Issued</th>
                 <th>Tester Role</th>
@@ -179,6 +180,10 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 {
                     ?>
                     <tr>
+                        <td>
+                            <b><?php echo $testCases[0]->scenarioCode?>:</b><br />
+                            <?php echo $testCases[0]->scenarioDescription?>
+                        </td>
                         <td>
                             <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
                             <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span>
