@@ -140,21 +140,21 @@ $case->load();
 						<div class="clear"></div>
 					</div>
 				</div>
-                <?php if (!empty($case->testEndpointURL) || !empty($case->protocolBinding) ): ?>
 
-                    <div class="grids noradiusbottom">
-					<div class="grid_row white_bcg nopaddingbottom noborderbottom">
-						<div class="grid_cell width20P left size13 bold">Test trigger endpoint URL:</div>
-						<div class="grid_cell width75P left"><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></div>
-						<div class="clear"></div>
-					</div>
-					
-					<div class="grid_row white_bcg nopaddingbottom noborderbottom">
-						<div class="grid_cell width20P left size13 bold">Protocol Binding:</div>
-						<div class="grid_cell width75P left"><?php echo $case->protocolBinding ; ?></div>
-						<div class="clear"></div>
-					</div>
-                <?php endif; ?>
+                <div class="grids noradiusbottom">
+                    <?php if (!empty($case->testEndpointURL) || !empty($case->protocolBinding) ): ?>
+                        <div class="grid_row white_bcg nopaddingbottom noborderbottom">
+                            <div class="grid_cell width20P left size13 bold">Test trigger endpoint URL:</div>
+                            <div class="grid_cell width75P left"><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="grid_row white_bcg nopaddingbottom noborderbottom">
+                            <div class="grid_cell width20P left size13 bold">Protocol Binding:</div>
+                            <div class="grid_cell width75P left"><?php echo $case->protocolBinding ; ?></div>
+                            <div class="clear"></div>
+                        </div>
+                    <?php endif; ?>
 					<?php
 					foreach($case->testExecutionData as $key => $row){
                     ?>
