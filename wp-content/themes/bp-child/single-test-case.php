@@ -103,7 +103,7 @@ $case->load();
 							<div class="test-pattern">
                                 <?php $test_patterns_description = get_test_patterns_description($case->testPattern); ?>
                                 <p>Test Pattern:</p>
-                                <a href="/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $case->testPattern; ?> has-tooltip"><span class="simple_tooltip"><?php echo $test_patterns_description ;?><span></span></span></a>
+                                <a href="<?php echo get_site_url() ?>/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $case->testPattern; ?> has-tooltip"><span class="simple_tooltip"><?php echo $test_patterns_description ;?><span></span></span></a>
                             </div>
 						</div>
                         
