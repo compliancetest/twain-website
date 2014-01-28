@@ -231,7 +231,7 @@ function cp_save_transaction_log()
                 $testCaseId = $case_name . "_V" . implode(".", $versions);
                 
                 $xmlData = '<api:calculateTestCaseOutcomeRequest xmlns:api="http://compliancetest.net/api">
-                              <api:testCaseId>' . $case_name . '</api:testCaseId>
+                              <api:testCaseId>' . $testCaseId . '</api:testCaseId>
                               <api:conversationId>' . $row->CONVERSATION_ID . '</api:conversationId>
                             </api:calculateTestCaseOutcomeRequest>';
                 $result = $rest->doMetadataAPI("testcase/outcome", $xmlData);                
