@@ -293,7 +293,7 @@ $case->load();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="grid_cell width20P left5P">
+                            <div class="grid_cell width20P left5P actions-column">
                                 <a href="#">XML</a> | <a href="#">HTML</a>
                             </div>
                             <div class="clear"></div>

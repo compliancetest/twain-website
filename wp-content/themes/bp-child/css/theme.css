@@ -7247,5 +7247,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     float: left;
 }
 .message-sample .select{
-    width: 150px;
+    width: 210px;
+}
+
+.message-sample .actions-column{
+    line-height: 24px;
 }
