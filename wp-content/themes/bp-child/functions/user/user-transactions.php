@@ -211,8 +211,27 @@ function cp_save_transaction_log()
             //Recalculate Test Outcome
             if($row->TEST_CASE_DB_ID != $caseDBId && $caseDBId)
             {
+                //Getting Versions
+                $version_major = get_post_meta($caseDBId, 'version_major', true);
+                $version_minor = get_post_meta($caseDBId, 'version_minor', true);
+                $version_patch = get_post_meta($caseDBId, 'version_patch', true);
+                
+                $versions = array();
+        
+                $versions[] = $this->version_major;    
+                $versions[] = $this->version_minor;
+                
+                if($this->version_patch)
+                    $versions[] = $this->version_patch;
+                
+                $this->version = implode(".", $versions);
+                
+                $case_name = get_post_meta($caseDBId, 'test_case_id', true);
+                
+                $testCaseId = $case_name . "_V" . implode(".", $versions);
+                
                 $xmlData = '<api:calculateTestCaseOutcomeRequest xmlns:api="http://compliancetest.net/api">
-                              <api:testCaseId>' . get_post_meta($caseDBId, 'test_case_id', true) . '</api:testCaseId>
+                              <api:testCaseId>' . $case_name . '</api:testCaseId>
                               <api:conversationId>' . $row->CONVERSATION_ID . '</api:conversationId>
                             </api:calculateTestCaseOutcomeRequest>';
                 $result = $rest->doMetadataAPI("testcase/outcome", $xmlData);                
