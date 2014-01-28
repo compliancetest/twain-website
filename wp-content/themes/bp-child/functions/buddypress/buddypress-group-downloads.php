@@ -6,9 +6,10 @@ if ( class_exists( 'BP_Group_Extension' ) )
         function __construct() {
             $this->name = 'Buddypress Group Downloads';
             $this->slug = 'downloads';
- 
+
             $this->create_step_position = 21;
-            $this->nav_item_position = 31;            
+            $this->nav_item_position = 31;
+
         }
         
         function edit_screen() {
@@ -248,6 +249,14 @@ if ( class_exists( 'BP_Group_Extension' ) )
     add_action("init", 'manageGroupDownloadsAction');
     function manageGroupDownloadsAction()
     {
+
+        //@todo Refactor this block
+        if(($_REQUEST["action"]=="bpnoaccess") && !is_user_logged_in()){
+            addMessage('You must signup to view the page requested.', 'notice');
+            wp_redirect(home_url());
+            exit;
+        }
+
         $group = groups_get_current_group();
         
         if(is_user_logged_in() && bp_group_is_member($group))
