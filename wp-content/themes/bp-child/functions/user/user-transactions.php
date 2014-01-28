@@ -218,13 +218,11 @@ function cp_save_transaction_log()
                 
                 $versions = array();
         
-                $versions[] = $this->version_major;    
-                $versions[] = $this->version_minor;
+                $versions[] = $version_major;    
+                $versions[] = $version_minor;
                 
-                if($this->version_patch)
-                    $versions[] = $this->version_patch;
-                
-                $this->version = implode(".", $versions);
+                if($version_patch)
+                    $versions[] = $version_patch;
                 
                 $case_name = get_post_meta($caseDBId, 'test_case_id', true);
                 
