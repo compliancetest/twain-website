@@ -296,9 +296,7 @@ $case->load();
                         <div class="clear"></div>
                     </div>
                 </div>
-                <pre>
-                    <?php // var_dump($profileInstances); ?>
-                </pre>
+
                 <div class="grids message-sample">
                         <div class="grid_row white_bcg padding5-10">
                             <div class="grid_cell width20P">
