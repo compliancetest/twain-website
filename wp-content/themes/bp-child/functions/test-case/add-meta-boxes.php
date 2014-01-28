@@ -254,7 +254,7 @@ function test_case_test_execution_metabox_html(){
     $current_property_value_exec= cp_get_post_meta($post->ID, 'property_value_exec', true);
     echo '<input type="hidden" name="custom_test_execution" value="', wp_create_nonce(basename(__FILE__)), '" />';
     ?>
-    <label for="test_url"><b>Test trigger endpoint URL:</b></label> <br />
+    <label for="test_url"><b>Test trigger URL:</b></label> <br />
     <input type="text" name="test_url" value="<?php echo $test_url; ?>" size="30" class="mf_text"/> 
     <br />
     <label for="protocol_binding2"><b>Protocol Binding:</b></label> <br />

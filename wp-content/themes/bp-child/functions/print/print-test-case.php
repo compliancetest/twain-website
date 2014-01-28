@@ -100,7 +100,7 @@ $case->load();
     <table>
         <?php if (!empty($case->testEndpointURL) || !empty($case->protocolBinding) ): ?>
         <tr>
-            <td><b>Test trigger endpoint URL:</b></td>
+            <td><b>Test trigger URL:</b></td>
             <td><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></td>
         </tr>
         <tr>

@@ -446,19 +446,17 @@ get_header();
            </div>
            <div class="grid-box-body">
                <div class="column">
-                   <?php if (!empty($case->protocolBinding) || !empty($case->testEndpointURL)): ?>
-                   <div class="field-row">                                   
+                   <div class="field-row">
                        <div class="grid-cell">
                            <label>Protocol Binding:</label>
                            <input type="text" name="protocol_binding2" value="<?php echo $case->protocolBinding?>" class="input" />
                        </div>             
                        <div class="grid-cell">
-                           <label>Test trigger endpoint URL:</label>
+                           <label>Test trigger URL:</label>
                            <input type="text" name="test_url" value="<?php echo $case->testEndpointURL?>" class="input medium-input" />
                        </div>                     
                        <div class="clear"></div>
                    </div>
-                   <?php endif; ?>
                    <?php foreach($case->testExecutionData as $row){ ?>
                    <div class="field-row">
                        <div class="grid-cell">
