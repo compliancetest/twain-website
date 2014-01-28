@@ -176,9 +176,9 @@ $case->load();
 						
 			</div>
 			
-			<div class="clear"></div>
-            <div class="space7"></div>
-            <div class="grid_cell width100P toleft"> 
+            <div class="clear"></div>
+			<div class="space7"></div>
+            <div class="grid_cell width100P toleft">
                 <div class="grid_head lighter_gray_bcg2 related">
                     <div class="grid_row nopaddingbottom nopaddingtop">
                         <div class="grid_cell width100P size14 normal shadowwhite">Message Templates</div>
@@ -188,27 +188,27 @@ $case->load();
                 <div class="grids noradiusbottom">
                     <?php
                     foreach($case->messageTemplates as $key => $row){
-                    ?>
+                        ?>
                         <div class="grid_row white_bcg nopaddingbottom noborderbottom <?php if($key == (count($case->messageTemplates)-1)) {echo "paddingbottom10";} ?>">
                             <div class="grid_cell width15P left size13 bold"><?php  echo $row['name'].':';?></div>
                             <div class="grid_cell width80P left">
                                 <?php if(strpos($row['url'], 'http://') !== false || strpos($row['url'], 'https://') !== false){ ?>
-                                <a href="<?php echo $row['url']; ?>" class="blue_txt"><?php echo $row['url']; ?></a>
+                                    <a href="<?php echo $row['url']; ?>" class="blue_txt"><?php echo $row['url']; ?></a>
                                 <?php }else{ ?>
-                                <?php echo $row['url']?>
+                                    <?php echo $row['url']?>
                                 <?php } ?>
                             </div>
                             <div class="clear"></div>
-                        </div>    
-                    <?php    
+                        </div>
+                    <?php
                     } ?>
 
                 </div>
             </div>
-            
+
             <div class="clear"></div>
-			<div class="space7"></div>
-			<div class="grid_cell width100P toleft"> 
+            <div class="space7"></div>
+			<div class="grid_cell width100P toleft">
                 <div class="grid_head lighter_gray_bcg2 related">
                     <div class="grid_row nopaddingbottom nopaddingtop">
                         <div class="grid_cell width100P size14 normal shadowwhite">Test Data Profiles</div>
@@ -250,6 +250,56 @@ $case->load();
                     } ?>
                 </div>
                         
+            </div>
+            <div class="clear"></div>
+            <div class="space7"></div>
+			<div class="grid_cell width100P toleft">
+                <div class="grid_head lighter_gray_bcg2 related">
+                    <div class="grid_row nopaddingbottom nopaddingtop">
+                        <div class="grid_cell width100P size14 normal shadowwhite">Message Sample</div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="grid_head">
+                    <div class="grid_row padding5-10">
+                        <div class="grid_cell width20P">Template</div>
+                        <div class="grid_cell width20P left5P">Tester Profile</div>
+                        <div class="grid_cell width20P left5P">Harness Profile</div>
+                        <div class="grid_cell width20P left5P">Action</div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+
+                <div class="grids message-sample">
+                        <div class="grid_row white_bcg padding5-10">
+                            <div class="grid_cell width20P">
+                                <select class="select">
+                                    <?php foreach($case->messageTemplates as $key => $row): ?>
+                                    <option value=""><?php  echo $row['name'];?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="grid_cell width20P left5P">
+                                <select class="select">
+                                    <?php foreach($profileInstances as $instance): ?>
+                                        <option value=""><?php echo $instance->profile_name; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="grid_cell width20P left5P">
+                                <select class="select">
+                                    <?php foreach($profileInstances as $instance): ?>
+                                        <option value=""><?php echo $instance->profile_name; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="grid_cell width20P left5P">
+                                <a href="#">XML</a> | <a href="#">HTML</a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                </div>
+
             </div>
 			<div class="clear"></div>
 			<div class="space15"></div>

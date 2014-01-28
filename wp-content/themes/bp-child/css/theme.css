@@ -7246,3 +7246,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .infos .test-pattern .test-pattern-icon{
     float: left;
 }
+.message-sample .select{
+    width: 150px;
+}
