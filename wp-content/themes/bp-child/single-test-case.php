@@ -280,6 +280,7 @@ $case->load();
             </div>
             <div class="clear"></div>
             <div class="space7"></div>
+            <?php if ($profileInstances): ?>
 			<div class="grid_cell width100P toleft">
                 <div class="grid_head lighter_gray_bcg2 related">
                     <div class="grid_row nopaddingbottom nopaddingtop">
@@ -354,10 +355,11 @@ $case->load();
                             <div class="clear"></div>
                         </div>
                 </div>
-
             </div>
 			<div class="clear"></div>
 			<div class="space15"></div>
+            <?php endif; ?>
+
 			<!-- Steps -->
 			
 			<div class="grid_cell width100P toleft"> 
