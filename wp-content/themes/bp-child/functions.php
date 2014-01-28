@@ -135,6 +135,8 @@ require_once(THE_FUNCTION . "/external-actions.php");
 
 require_once(THE_FUNCTION . "/tools.php");
 
+require_once(THE_FUNCTION . "/tmp_functions.php");
+
 /* 
  * Loads the Options Panel
  *
