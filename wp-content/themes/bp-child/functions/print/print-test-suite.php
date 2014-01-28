@@ -144,7 +144,6 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     <table width="100%">
         <thead>
             <tr>
-                <th>Test Scenario</th>
                 <th>Test Case ID</th>
                 <th>Issued</th>
                 <th>Tester Role</th>
@@ -175,21 +174,16 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
       
                 $get_query = new WP_Query($args);
                 $testCases = $get_query->get_posts();
-                
+
                 foreach($testCases as $row)
                 {
                     ?>
                     <tr>
                         <td>
-                            <b><?php echo $testCases[0]->scenarioCode?>:</b><br />
-                            <?php echo $testCases[0]->scenarioDescription?>
-                        </td>
-                        <td>
                             <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
-                            <br /><span class="version"><?php echo get_post_meta($row->ID ,'version', true)?></span>
                         </td>
                         <td>
-                            <?php echo get_post_meta($row->ID ,'published', true)?>
+                            <?php echo formatDate(get_post_meta($row->ID ,'published', true));?>
                         </td>
                         <td>
                             <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>

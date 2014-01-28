@@ -87,7 +87,7 @@ $case->load();
                 <?php
                 $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
                 $scenarioDetail = $case->getScenario($test_suite_id);
-                echo '<b>' . $scenarioDetail->code . '</b>';
+                echo '<b>' . $scenarioDetail->code . ': </b>';
                 echo $scenarioDetail->description;
                 ?>
             </td>
