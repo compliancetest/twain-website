@@ -44,7 +44,7 @@ function checkCurrentUserCapability()
                 }
             }        
         }else{
-            addMessage('You must register view this page.', 'notice');
+            addMessage('You must signup to view the page requested.', 'notice');
             wp_redirect(home_url());
             exit;
         }
