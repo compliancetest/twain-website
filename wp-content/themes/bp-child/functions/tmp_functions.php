@@ -57,7 +57,36 @@ if(is_super_admin())
     
 }
 if(isset($_GET['download_profile_type']))
+{
+    header('content-type: text/json');
+    global $wpdb;
+    
+    $id = $_REQUEST['type_id'];
+    
+    $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d", $id);
+    $row = $wpdb->get_row($query);
+    
+    if(!$row)
     {
-        downloadProfileType();
-        exit;
+        addMessage('Invalid Request!', 'error');
+        return;
     }
+    
+    $filename = sanitize_file_name($row->title);
+    
+    $schema = base64_decode($row->schema);
+    $schema_json = json_decode($schema);
+    if($schema_json->Version)
+    {
+        $version = array();
+        foreach(get_object_vars($schema_json->Version) as $k=>$v)      
+        {
+            $version[] = $v;
+        }
+        $filename .= '_v' . implode(".", $version);
+    }
+    echo $schema;
+    exit;
+}
