@@ -233,7 +233,20 @@ $case->load();
                     ?>
                             <div class="grid_row white_bcg padding5-10">
                                 <div class="grid_cell width15P">
-                                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a>
+                                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
+                                        <?php echo $instance->profile_name?>
+                                        <?php
+                                        if($instanceObj->Profile->Version)
+                                        {
+                                            $version = array();
+                                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                            {
+                                                $version[] = $v;
+                                            }
+                                            echo " v" . implode(".", $version);
+                                        }
+                                        ?>
+                                    </a>
                                 </div>
                                 <div class="grid_cell width15P left5P">
                                     <?php echo $instanceObj->Profile->Purpose?>
@@ -269,7 +282,9 @@ $case->load();
                         <div class="clear"></div>
                     </div>
                 </div>
-
+                <pre>
+                    <?php // var_dump($profileInstances); ?>
+                </pre>
                 <div class="grids message-sample">
                         <div class="grid_row white_bcg padding5-10">
                             <div class="grid_cell width20P">
@@ -282,14 +297,42 @@ $case->load();
                             <div class="grid_cell width20P left5P">
                                 <select class="select">
                                     <?php foreach($profileInstances as $instance): ?>
-                                        <option value=""><?php echo $instance->profile_name; ?></option>
+                                        <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
+                                        <option value="">
+                                            <?php echo $instance->profile_name; ?>
+                                            <?php
+                                            if($instanceObj->Profile->Version)
+                                            {
+                                                $version = array();
+                                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                                {
+                                                    $version[] = $v;
+                                                }
+                                                echo " v" . implode(".", $version);
+                                            }
+                                            ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="grid_cell width20P left5P">
                                 <select class="select">
                                     <?php foreach($profileInstances as $instance): ?>
-                                        <option value=""><?php echo $instance->profile_name; ?></option>
+                                        <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
+                                        <option value="">
+                                            <?php echo $instance->profile_name; ?>
+                                            <?php
+                                            if($instanceObj->Profile->Version)
+                                            {
+                                                $version = array();
+                                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                                {
+                                                    $version[] = $v;
+                                                }
+                                                echo " v" . implode(".", $version);
+                                            }
+                                            ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
