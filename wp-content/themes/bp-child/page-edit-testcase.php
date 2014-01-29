@@ -422,7 +422,21 @@ get_header();
                                <label><?php echo $instanceObj->Profile->Purpose?></label>
                            </div>
                            <div class="grid-cell width15P">
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a> 
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">
+                                   <?php echo $instance->profile_type_title; ?>
+                                   <?php
+                                   $pJSON = json_decode(base64_decode($instance->schema));
+                                   if($pJSON->Version)
+                                   {
+                                       $version = array();
+                                       foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                                       {
+                                           $version[] = $v;
+                                       }
+                                       echo " v" . implode(".", $version);
+                                   }
+                                   ?>
+                               </a>
                            </div>
                            <div class="grid-cell width45P">
                                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $instance->token?>" class="input width100P" />
