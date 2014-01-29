@@ -4,6 +4,9 @@
 */
 $case = new TestCase(get_the_ID());
 $case->load();
+$test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
+$community_id = get_post_meta($test_suite_id, "community_id", true);
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -43,7 +46,7 @@ $case->load();
     </style>
     
     <h3 style="float: left">Test case ID: <a href="<?php echo get_permalink()?>"><?php echo $case->testCaseID ; ?></a></h3>
-    <h5 style="float: right; line-height: 24px">(Test Suite: <a href="<?php echo get_permalink($case->testSuite)?>"><?php echo get_the_title($case->testSuite) ?></a>)</h5>
+    <h5 style="float: right; line-height: 24px">(Test Suite: <a href="<?php echo get_permalink($test_suite_id)?>"><?php echo get_the_title($test_suite_id) ?></a>)</h5>
     <div class="clear"></div>
     
     <table class="noborder" style="width: 100%">
@@ -71,7 +74,23 @@ $case->load();
         </tr>
         <tr>
             <td class="td-label">Properties:</td>
-            <td>Conformance Level: <b><?php echo $case->conformanceLevel; ?></b></td>
+            <td>Conformance Level:
+                <b>
+                            <?php
+                            $lArr = array();
+                            foreach($case->conformanceLevel[$test_suite_id] as $level)
+                            {
+
+                                if(groups_is_user_admin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE )
+                                {
+                                    $lArr[] = $level;
+                                }
+                            }
+                            sort($lArr);
+                            echo implode(", ", $lArr);
+                            ?>
+
+            </td>
             <td>Outcome Type: <b>
                                 <?php 
                                     echo $case->outcomeType;
@@ -127,27 +146,63 @@ $case->load();
     </table>
     <br />
     <br />
-    <h5>Test Data</h5>
+    <?php $profileInstances = $case->getProfileInstanceRows(); ?>
+    <?php if($profileInstances): ?>
+    <h5>Test Data Profiles</h5>
     <table>
+        <tr>
+            <td>Name</td>
+            <td>Purpose</td>
+            <td>Type</td>
+            <td>URL</td>
+        </tr>
         <?php
-        foreach($case->testData as $key => $row){
-        ?>
+
+        $profileInstances = $case->getProfileInstanceRows();
+        foreach($profileInstances as $instance){
+            $instanceObj = json_decode(base64_decode($instance->content));
+            ?>
             <tr>
-                <td><b><?php  echo $row['name'].':';?></b></td>
                 <td>
-                    <?php if(strpos($row['value'], 'http://') !== false || strpos($row['value'], 'https://') !== false){ ?>
-                    <a href="<?php echo $row['value']; ?>" class="blue_txt"><?php echo $row['value']; ?></a>
-                    <?php }else{ ?>
-                    <?php echo $row['value']?>
-                    <?php } ?>
+                    <?php echo $instance->profile_name?>
+                    <?php
+                    if($instanceObj->Profile->Version)
+                    {
+                        $version = array();
+                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                        {
+                            $version[] = $v;
+                        }
+                        echo " v" . implode(".", $version);
+                    }
+                    ?>
                 </td>
+                <td>
+                    <?php echo $instanceObj->Profile->Purpose?>
+                </td>
+                <td>
+                    <?php echo $instance->profile_type_title; ?>
+                    <?php
+                    $pJSON = json_decode(base64_decode($instance->schema));
+                    if($pJSON->Version)
+                    {
+                        $version = array();
+                        foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                        {
+                            $version[] = $v;
+                        }
+                        echo " v" . implode(".", $version);
+                    }
+                    ?>
+                </td>
+                <td><?php echo get_site_url()?>/get-profile?id=<?php echo $instance->token?></td>
             </tr>
-        <?php    
-        } 
-        ?>
+        <?php
+        } ?>
     </table>
     <br />
     <br />
+    <?php endif; ?>
     <h5>Test Steps</h5>
     <table>
         <thead>

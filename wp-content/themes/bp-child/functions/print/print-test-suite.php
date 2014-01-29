@@ -191,19 +191,12 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 $get_query = new WP_Query($args);
 
                 $testCases = $get_query->get_posts();
-                $first = false;
-                $rows_count = count($testCases);
+                $i = 0;
                 foreach($testCases as $row)
                 {
                     ?>
                     <tr>
-                        <?php if (!$first): ?>
-                        <td rowspan="<?php echo $rows_count; ?>" style="vertical-align: top; width: 10%;">
-                            <b><?php echo $testCases[0]->scenarioCode?>:</b><br />
-                            <?php echo $testCases[0]->scenarioDescription?>
-                        </td>
-                        <?php endif; ?>
-                        <?php $first = true; ?>
+                        <td><?php echo $testCases[$i]->scenarioCode?></td>
                         <td><a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a></td>
                         <td><?php echo formatDate(get_post_meta($row->ID ,'published', true))?></td>
                         <td><?php echo get_post_meta($row->ID ,'choose_tester_role', true)?></td>
@@ -239,6 +232,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                         </td>
                     </tr>
             <?php
+                    $i++;
                 }
             ?>
             <?php
