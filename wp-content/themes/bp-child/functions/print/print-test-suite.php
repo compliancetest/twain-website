@@ -44,9 +44,9 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     </style>
      
     <?php if (has_post_thumbnail()) { ?>
-    <div style="float: left">                    
+    <div style="float: left">
         <?php echo the_post_thumbnail('post-thumb', array('class' => 'sbr')); ?>                    
-    </div> 
+    </div>
     <?php } ?>
     
     <h2 style="text-align: center; margin-bottom: 20px;"><a href="<?php echo get_permalink()?>"><?php the_title(); ?></a></h2>
@@ -144,6 +144,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     <table width="100%">
         <thead>
             <tr>
+                <th>Test Scenario</th>
                 <th>Test Case ID</th>
                 <th>Issued</th>
                 <th>Tester Role</th>
@@ -158,10 +159,10 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
             </tr>
         </thead>
         <tbody>
-            <?php 
+            <?php
                 //Getting Test Cases
                 $args = $args = array(
-                        'post_type' => 'test-case',         
+                        'post_type' => 'test-case',
                         'posts_per_page' => -1,
                         'order_by'  => 'meta_value title',
                         'order'     => 'ASC',
@@ -171,57 +172,75 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 $params = array();
                 //Add Test Suite ID
                 $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
-      
+
+
                 $get_query = new WP_Query($args);
+
+                //Add Order by Scenaro
+                $get_query->set('suppress_filters', false);
+                add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
+                add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
+                add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
                 $testCases = $get_query->get_posts();
 
+                //Remove Filters
+                remove_filter('posts_join_paged', 'add_scenario_join_query');
+                remove_filter('posts_orderby', 'add_scenario_orderby_query');
+                remove_filter('posts_fields_request', 'add_scenario_fields_query');
+
+                $get_query = new WP_Query($args);
+
+                $testCases = $get_query->get_posts();
+                $first = false;
+                $rows_count = count($testCases);
                 foreach($testCases as $row)
                 {
                     ?>
                     <tr>
-                        <td>
-                            <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
+                        <?php if (!$first): ?>
+                        <td rowspan="<?php echo $rows_count; ?>" style="vertical-align: top; width: 10%;">
+                            <b><?php echo $testCases[0]->scenarioCode?>:</b><br />
+                            <?php echo $testCases[0]->scenarioDescription?>
                         </td>
+                        <?php endif; ?>
+                        <?php $first = true; ?>
+                        <td><a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a></td>
+                        <td><?php echo formatDate(get_post_meta($row->ID ,'published', true))?></td>
+                        <td><?php echo get_post_meta($row->ID ,'choose_tester_role', true)?></td>
+                        <td><?php echo get_post_meta($row->ID ,'choose_harness_role', true)?></td>
+                        <td><?php echo get_post_meta($row->ID ,'choose_initiator', true)?></td>
                         <td>
-                            <?php echo formatDate(get_post_meta($row->ID ,'published', true));?>
+                            <?php
+                            $levels = get_post_meta($row->ID ,'conformance_level_' . $suite->id);
+                            $lArr = array();
+
+                            foreach($levels as $level)
+                            {
+                                if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                    continue;
+                                $lArr[] = $level;
+                            }
+                            sort($lArr);
+                            echo implode(", ", $lArr);
+                            ?>
                         </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'choose_initiator', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'conformance_level', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'message_count', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'bulk', true)?>
-                        </td>
-                        <td>
-                            <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
-                        </td>
+                        <td><?php echo get_post_meta($row->ID ,'outcome_type', true)?></td>
+                        <td><?php echo get_post_meta($row->ID ,'message_count', true)?></td>
+                        <td><?php echo get_post_meta($row->ID ,'bulk', true)?></td>
+                        <td><?php echo get_post_meta($row->ID ,'choose_init_messages', true)?></td>
                         <td style="min-width: 150px">
-                        <?php 
+                        <?php
                             $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
                             if(strlen($intentDesc) > 150)
                                 echo substr($intentDesc, 0, 150) . "...";
                             else
                                 echo $intentDesc;
                         ?>
-                        </td>                                                    
+                        </td>
                     </tr>
-            <?php                        
+            <?php
                 }
-            ?>                
+            ?>
             <?php
                 if(!$testCases){
                     ?>
