@@ -31,7 +31,7 @@
                 <a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
                 <?php
                     //Show this banner only on the test site
-                    if(strpos('test.compliancetest.net', get_option('site_url')) !== false){
+                    if(strpos('test.compliancetest.net', get_site_url()) !== false){
                 ?>
                 <div style="float: left; width: 300px;font-size: 16px;font-weight: bold;line-height: 1.3em;padding: 20px 0 0 70px">Development Site Only - Customers please use <a href="http://www.compliancetest.net">www.compliancetest.net</a></div>
                 <?php
