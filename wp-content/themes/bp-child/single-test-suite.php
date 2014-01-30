@@ -4,7 +4,7 @@ Template Name Posts: Test Suite
 */
 
 	$suiteID = get_the_ID();
-	
+
     $suite = new TestSuite($suiteID);
     $suite->load();
     
@@ -75,52 +75,76 @@ Template Name Posts: Test Suite
 		    <!-- tabs -->
 			<div class="tabs-contr">
 				<ul class="tab-nav">
-					<li class="active">
-						<a href="javascript: void(0)" rel="tabs_sv1">Related Compliance Suites</a>
-					</li>
-					<li class="">
-						<a href="javascript: void(0)" rel="tabs_sv2">Specification Documents</a>
-					</li>
-					<li class="">
-                        <a href="javascript: void(0)" rel="tabs_sv3">Conformance Levels</a>
-                    </li>
-                    
-                    <li class="">
-                        <a href="javascript: void(0)" rel="tabs_sv4">Test Suite Roles</a>
-                    </li>
-                    
-                    <li class="">
-						<a href="javascript: void(0)" rel="tabs_sv5">Test Data Profiles</a>
-					</li>
-                    
+                    <li class="active"><a href="javascript: void(0)" rel="tabs_sv1">Test Suite Roles</a></li>
+                    <li><a href="javascript: void(0)" rel="tabs_sv2">Conformance Levels</a><li>
+                    <li><a href="javascript: void(0)" rel="tabs_sv3">Profile Types</a></li>
+                    <li><a href="javascript: void(0)" rel="tabs_sv4">Specification Documents</a></li>
+                    <li><a href="javascript: void(0)" rel="tabs_sv5">Related Compliance Suites</a></li>
+
 				</ul>
 				
 				<div class="clear"></div>
-				
-				<div class="tab-content white_bcg redactor_editor" id="tabs_sv1" style="display: block; ">
-					<div class="column">										
-						<div class="grid_cell width10P bold top3">Related To: </div>
-						<div class="grid_cell width90P">
-						<?php 						
-							foreach($suite->relatedSuites as $row){
-						?>
-                        <div>
-                            <a href="<?php echo get_permalink($row['id'])?>"><?php echo get_post_meta($row['id'], 'ts_name', true)?></a><br />
-                            <?php echo $row['desc']?>
-                            <div class="space7"></div>
-                        </div>
+
+                <div class="tab-content white_bcg" id="tabs_sv1" style="display: block; ">
+                    <div class="column padding15-20">
+
                         <?php
-							} 
+                        foreach($suite->roles as $idx=>$row){
+
+                            ?>
+                            <div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
+                            <div class="grid_cell width70P">
+                                <?php echo $row['desc']; ?>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="grey-border-bottom <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'displaynone';} ?>"></div>
+                        <?php
+
+                        }
                         ?>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<div class="clear"></div>
-				</div> <!--end tab 1-->
-				
-				<div class="tab-content white_bcg redactor_editor" id="tabs_sv2" style="display: none; ">
+                    </div>
+                    <div class="clear"></div>
+                </div><!--end tab 1-->
+
+                <div class="tab-content white_bcg" id="tabs_sv2" style="display: none; ">
+                    <div class="column padding15-20">
+
+                        <?php
+                        foreach($suite->conformanceLevel as $i => $row){
+                            if(!groups_is_user_admin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                continue;
+                            ?>
+                            <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
+                            <div class="grid_cell width90P">
+                                <?php echo $row['desc']; ?>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="grey-border-bottom <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'displaynone';} ?>"></div>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                    <div class="clear"></div>
+                </div><!--end tab 2-->
+
+                <div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
+                    <div class="column padding15-20">
+                        <?php
+                        $profileTypes = $suite->getProfileTypesRows();
+
+                        foreach($profileTypes as $profileType){ ?>
+                            <div class="grid-cell width100P">
+                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profileType->title?></a>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                    <div class="clear"></div>
+                </div><!--end tab 3-->
+
+				<div class="tab-content white_bcg redactor_editor" id="tabs_sv4" style="display: none; ">
 					<div class="column">
-						<?php 						    
+						<?php
 						    foreach($suite->specDocuments as $row){
 							    $doc_name = $row->doc_name;
 							    $doc_desc = $row->doc_desc;
@@ -130,74 +154,41 @@ Template Name Posts: Test Suite
                             ?>
                             <div class="grid_cell width100P">
                                 <a href="<?php echo $row->doc_loc_url?>" target="_blank" class="underline blue_txt file"><?php echo $row->doc_name?></a>
-                                <div class="paddingleft20"><?php echo $row->doc_desc?></div>                                
+                                <div class="paddingleft20"><?php echo $row->doc_desc?></div>
                             </div>
                             <div class="clear"></div>
                             <?php
 						    }
 						?>
 					</div>
-				</div> <!--end tab 2-->
-				
-				<div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
-                    <div class="column padding15-20">
-                        
-                        <?php    
-                        foreach($suite->conformanceLevel as $i => $row){
-                            if(!groups_is_user_admin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
-                                continue;
-                        ?>
-                            <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
-                            <div class="grid_cell width90P">
-                                <?php echo $row['desc']; ?>
-                            </div>
-                            <div class="clear"></div> 
-                            <div class="grey-border-bottom <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'displaynone';} ?>"></div>                                                                    
-                        <?php                                        
-                        }
-                        ?>
-                    </div>
-                    <div class="clear"></div>
-                </div><!--end tab 3-->
-                
-                <div class="tab-content white_bcg" id="tabs_sv4" style="display: none; ">
-                    <div class="column padding15-20">
-                        
-                        <?php
-                            foreach($suite->roles as $idx=>$row){
-                            
-                            ?>        
-                                        <div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
-                                        <div class="grid_cell width70P">
-                                            <?php echo $row['desc']; ?>
-                                        </div>
-                                        <div class="clear"></div> 
-                                        <div class="grey-border-bottom <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'displaynone';} ?>"></div>                                                                    
+				</div> <!--end tab 4-->
+
+                <div class="tab-content white_bcg redactor_editor" id="tabs_sv5" style="display: none; ">
+                    <div class="column">
+                        <div class="grid_cell width10P bold top3">Related To: </div>
+                        <div class="grid_cell width90P">
                             <?php
-                            
+                            foreach($suite->relatedSuites as $row){
+                                ?>
+                                <div>
+                                    <a href="<?php echo get_permalink($row['id'])?>"><?php echo get_post_meta($row['id'], 'ts_name', true)?></a><br />
+                                    <?php echo $row['desc']?>
+                                    <div class="space7"></div>
+                                </div>
+                            <?php
                             }
-                        ?>
+                            ?>
+                        </div>
+                        <div class="clear"></div>
                     </div>
                     <div class="clear"></div>
-                </div><!--end tab 3-->
-                
-                <div class="tab-content white_bcg" id="tabs_sv5" style="display: none; ">
-					<div class="column padding15-20">
-						<?php                    
-                       $profileTypes = $suite->getProfileTypesRows();
-                       foreach($profileTypes as $profileType){ ?>
-                       
-                           <div class="grid-cell width100P">
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profileType->title?></a>
-                           </div>      
-                       <?php } ?>  
-						
-					</div>
-					<div class="clear"></div>
-				</div><!--end tab 3-->
-				
-                
-			</div>
+                </div> <!--end tab 5-->
+
+
+
+
+
+            </div>
 			<!--end tabs-->
             <div class="space15"></div>
             <?php 

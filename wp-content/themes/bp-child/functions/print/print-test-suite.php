@@ -63,6 +63,67 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         <?php echo $suite->description ?>
     </p>
     <div class="block">
+        <h5 style="float: left; width: 33%;">Test Suite Roles:</h5>
+        <div style="float: left; width: 67%;">
+            <?php
+            foreach($suite->roles as $idx=>$row){
+
+                ?>
+                <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
+                    <b style="float: left; width: 20%;"><?php echo $row['name']; ?></b>
+                        <span style="float: left; width: 80%;">
+                            <?php echo $row['desc']; ?>
+                        </span>
+                    <br class="clear" />
+                </p>
+            <?php
+
+            }
+            ?>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="block">
+        <h5 style="float: left; width: 33%;">Conformance Levels:</h5>
+        <div style="float: left; width: 67%;">
+            <?php
+            foreach($suite->conformanceLevel as $i => $row){
+                ?>
+                <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
+                    <b style="float: left; width: 20%;"><?php echo $row['code']; ?></b>
+                    <span style="float: left; width: 80%;">
+                        <?php echo $row['desc']; ?>
+                    </span>
+                    <br class="clear" />
+                </p>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="block">
+        <h5 style="float: left; width: 33%;">Specification Documents &amp; Materials:</h5>
+        <div style="float: left; width: 67%;">
+            <?php
+            foreach($suite->specDocuments as $row){
+                $doc_name = $row->doc_name;
+                $doc_desc = $row->doc_desc;
+                $doc_loc = $row->doc_loc_url;
+                $doc_file_name = $row->doc_file_name;
+                $doc_file_url = $row->doc_loc_url;
+                ?>
+                <p style="margin: 0 0 5px">
+                    <a href="<?php echo $row->doc_loc_url?>" target="_blank" class="underline blue_txt file"><?php echo $row->doc_name?></a>
+                    <br /><?php echo $row->doc_desc?>
+                </p>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="block">
         <h5 style="float: left; width: 33%;">Related Compliance Suites:</h5>
         <div style="float: left; width: 67%;">
             <?php                         
@@ -78,68 +139,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         </div>
         <div class="clear"></div>
     </div>
-    <div class="block">
-        <h5 style="float: left; width: 33%;">Specification Documents &amp; Materials:</h5>
-        <div style="float: left; width: 67%;">
-            <?php                             
-            foreach($suite->specDocuments as $row){
-                $doc_name = $row->doc_name;
-                $doc_desc = $row->doc_desc;
-                $doc_loc = $row->doc_loc_url;
-                $doc_file_name = $row->doc_file_name;
-                $doc_file_url = $row->doc_loc_url;
-            ?>
-            <p style="margin: 0 0 5px">
-                <a href="<?php echo $row->doc_loc_url?>" target="_blank" class="underline blue_txt file"><?php echo $row->doc_name?></a>
-                <br /><?php echo $row->doc_desc?>
-            </p>
-            <?php
-            }
-        ?>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <div class="block">
-        <h5 style="float: left; width: 33%;">Conformance Levels:</h5>
-        <div style="float: left; width: 67%;">
-             <?php    
-            foreach($suite->conformanceLevel as $i => $row){
-            ?>
-                <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
-                    <b style="float: left; width: 20%;"><?php echo $row['code']; ?></b>
-                    <span style="float: left; width: 80%;">
-                        <?php echo $row['desc']; ?>
-                    </span>                                                                        
-                    <br class="clear" />
-                </p>
-            <?php                                        
-            }
-            ?>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <div class="block">
-        <h5 style="float: left; width: 33%;">Test Suite Roles:</h5>
-        <div style="float: left; width: 67%;">
-            <?php
-                foreach($suite->roles as $idx=>$row){
-                
-                ?>        
-                    <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
-                        <b style="float: left; width: 20%;"><?php echo $row['name']; ?></b>
-                        <span style="float: left; width: 80%;">
-                            <?php echo $row['desc']; ?>
-                        </span>
-                        <br class="clear" />
-                    </p>
-                <?php
-                
-                }
-            ?>
-        </div>
-        <div class="clear"></div>
-    </div>
-    
+
     <h4 style="border-top: solid 1px #999; padding: 20px 0 10px;">Test Cases</h4>
     <table width="100%">
         <thead>
