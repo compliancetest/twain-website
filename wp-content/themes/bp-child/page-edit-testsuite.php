@@ -743,13 +743,15 @@ if(!$suite->community_id)
             customizeFileTag();
             jQuery('#specs-box .btn-row').prev().find('textarea').redactor({air: true, minHeight: 80});
             return false;
-        })
+        });
         //Getting Last ID
         var lastScenarioID = parseInt('<?php echo $lastTypeID?>');
+        var lastScenariosSequence;
         jQuery('#add-scenario').click(function(){
-            
             lastScenarioID += 10;
-            jQuery('#scenarios-box .btn-row').before('<div class="field-row">' + 
+            lastScenariosSequence = parseInt(jQuery('#scenarios-box .field-row').last().find('input[name="scenario_sequence[]"]').val()) + 1;
+            console.log(lastScenariosSequence);
+            jQuery('#scenarios-box .btn-row').before('<div class="field-row added-field-row">' +
                        '<div class="grid-cell width22P">' + 
                            '<label>Code:</label>' + 
                            '<input type="hidden" name="scenario_id[]" value="" />' +
@@ -761,7 +763,7 @@ if(!$suite->community_id)
                        '</div>' +
                        '<div class="grid-cell width8P tocenter">' +
                            '<label>Sequence:</label>' +
-                           '<input type="text" class="input width70P tocenter" name="scenario_sequence[]" value="" />' +
+                           '<input type="text" class="input width70P tocenter" name="scenario_sequence[]" value="' + (parseInt(jQuery('#scenarios-box .field-row').last().find('input[name="scenario_sequence[]"]').val()) + 1) + '" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' + 
@@ -772,8 +774,8 @@ if(!$suite->community_id)
             jQuery('#scenarios-box .btn-row').prev().find('textarea').redactor({
                 air: true
             });
-            
-            sortScenarios();
+
+//            sortScenarios();
                         
             return false;
         });
@@ -781,25 +783,36 @@ if(!$suite->community_id)
         jQuery('#scenarios-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
-                sortScenarios();
+//                sortScenarios();
             });            
             return false;
         });
         
         function sortScenarios()
         {
-            jQuery('#scenarios-box .field-row:gt(0)').each(function(idx){
+            jQuery('#scenarios-box .field-row.added-field-row:gt(0)').each(function(idx){
                 jQuery(this).find('input[name="scenario_sequence[]"]').val(idx + 1);
             })
         }
         
+        var scenariosSequenceNumber = function()
+        {
+            var lastScenario;
+            var newSequenceNumber;
+            lastScenario = jQuery('#scenarios-box .field-row').last().find('input[name="scenario_sequence[]"]').val();
+            console.log('lastScenario: ' + lastScenario);
+            newSequenceNumber = parseInt(lastScenario) + 1;
+            console.log('newSequenceNumber: ' + newSequenceNumber);
+            return newSequenceNumber;
+        }
+
         //Delete
         jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
-            })
+            });
             return false;
-        })
+        });
         
         jQuery('#test-cases-box .blue-delete-btn').click(function(){
             var the_id = jQuery(this).attr('data-id');
