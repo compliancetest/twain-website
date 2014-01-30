@@ -749,8 +749,6 @@ if(!$suite->community_id)
         var lastScenariosSequence;
         jQuery('#add-scenario').click(function(){
             lastScenarioID += 10;
-            lastScenariosSequence = parseInt(jQuery('#scenarios-box .field-row').last().find('input[name="scenario_sequence[]"]').val()) + 1;
-            console.log(lastScenariosSequence);
             jQuery('#scenarios-box .btn-row').before('<div class="field-row added-field-row">' +
                        '<div class="grid-cell width22P">' + 
                            '<label>Code:</label>' + 
@@ -795,17 +793,6 @@ if(!$suite->community_id)
             })
         }
         
-        var scenariosSequenceNumber = function()
-        {
-            var lastScenario;
-            var newSequenceNumber;
-            lastScenario = jQuery('#scenarios-box .field-row').last().find('input[name="scenario_sequence[]"]').val();
-            console.log('lastScenario: ' + lastScenario);
-            newSequenceNumber = parseInt(lastScenario) + 1;
-            console.log('newSequenceNumber: ' + newSequenceNumber);
-            return newSequenceNumber;
-        }
-
         //Delete
         jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
