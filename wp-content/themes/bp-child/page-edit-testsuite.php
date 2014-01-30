@@ -113,7 +113,7 @@ if(!$suite->community_id)
                    </div>
                    <div class="field-row">                       
                        <div class="grid-cell">
-                           <label for="ts_issue_date">Issued: </label>
+                           <label for="ts_issue_date">Published: </label>
                            <input type="text" id="ts_issue_date" name="ts_issue_date" class="input datepicker" value="<?php echo formatDate($suite->issueDate)?>" />
                        </div> 
                        <div class="grid-cell">

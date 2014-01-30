@@ -146,7 +146,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
             <tr>
                 <th>Test Scenario</th>
                 <th>Test Case ID</th>
-                <th>Issued</th>
+                <th>Published</th>
                 <th>Tester Role</th>
                 <th>Harnes Role(s)</th>
                 <th>Initiator</th>

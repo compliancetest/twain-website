@@ -52,7 +52,7 @@ Template Name Posts: Test Suite
 						<div class="grid_row white_bcg noborderbottom">
 							<div class="grid_cell width100P left">
 								Version: <span><?php echo $suite->version; ?></span>
-								Issued: <span><?php echo formatDate($suite->issueDate); ?></span>
+                                Published: <span><?php echo formatDate($suite->issueDate); ?></span>
 								Issuer: <a href="<?php echo bp_get_group_permalink($group);; ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
 								Status: <span class="status_btn status_<?php echo sanitize_title($suite->status)?>"><?php echo $suite->status?></span>
 								Revision: <span><?php echo $suite->revisionDescription; ?></span> 								
@@ -297,7 +297,7 @@ Template Name Posts: Test Suite
                         <div class="grid_cell nopaddingtop width20P toleft single_line">Test Scenario</div>
                         <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
 						<div class="grid_cell nopaddingtop width8P toleft single_line">Test Case</div>
-						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Issued</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Published</div>
 						<div class="grid_cell nopaddingtop width6P toleft tocenter">Tester<br/>Role</div>
 						<div class="grid_cell nopaddingtop width6P toleft tocenter">Harness<br/>Role(s)</div>
 						<div class="grid_cell nopaddingtop width6P toleft tocenter single_line">Initiator</div>

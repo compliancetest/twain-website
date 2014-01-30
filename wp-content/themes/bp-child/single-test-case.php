@@ -41,7 +41,7 @@ $case->load();
 							<p>ID: <span><?php echo $case->testCaseID?>_V<?php echo $case->version; ?></span></p>
 						</div>
 						<div class="grid_cell width20P left">
-                            <p>Issued: <span>
+                            <p>Published: <span>
                                 <?php 
                                     echo formatDate($case->publishedDate);
                                 ?>

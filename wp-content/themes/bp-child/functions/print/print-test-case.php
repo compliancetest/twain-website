@@ -53,7 +53,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
         <tr>
             <td class="td-label">Info:</td>
             <td>Version: <b><?php echo $case->version; ?></b></td>
-            <td>Issued: <b>
+            <td>Published: <b>
                                 <?php 
                                     echo formatDate($case->publishedDate);
                                 ?>
