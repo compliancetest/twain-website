@@ -1691,6 +1691,12 @@ tr {
     text-shadow: 0 -1px 0 #777778; /**For Old Browser **/
     text-shadow: 0 -1px 0 rgba(0,0,0, 0.35);
 }
+.inline-btn{
+    display:inline-block;
+    float:none;
+    vertical-align:middle;
+}
+
 .green-btn{
     color: #fff;
     font-family: 'Open Sans', Arial;

@@ -7253,3 +7253,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .message-sample .actions-column{
     line-height: 24px;
 }
+#bbpress-forums #bbp-search-form #bbp_search{
+    vertical-align:middle;
+}
