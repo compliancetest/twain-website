@@ -61,6 +61,9 @@ class TestSuite
     
     var $scenarios = array();
     
+    //This will be same for all versions
+    var $familyMark = null;
+    
     public function __construct($id = null)
     {        
         if($id !== null)   
@@ -132,6 +135,8 @@ class TestSuite
         $this->loadProfileTypes();
         $this->loadScenarios();
         
+        $this->loadfamilyMark();
+        
         $p = get_post($this->id);
         
         $this->title = $p->post_title;
@@ -139,6 +144,16 @@ class TestSuite
         $this->excerpt = $p->post_excerpt;
         
         $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;
+    }
+    
+    public function loadfamilyMark()
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $this->id);
+        $this->familyMark = $wpdb->get_var($query);
+        
+        return $this->familyMark;
     }
     
     public function loadTypes()

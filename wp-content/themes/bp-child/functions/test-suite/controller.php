@@ -15,15 +15,20 @@ function remove_suite_name_id_map($postid)
         $esb = new ManageESB();
         $esb->deleteTestSuiteNameIDMap($postid);
         
+        $suite = new TestSuite($postid);
+        $familyMark = $suite->loadfamilyMark();
+        
         //Delete Conformance Level    
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'conformance_level_' . $postid));
+        //Delete Scenarios
+        $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'scenario_' . $postid));
         
         $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
         
         //Delete Scenarios
         $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
         
-        cp_sort_test_suites(get_post_meta($postid, 'ts_name', true), get_post_meta($postid, 'ts_version_major', true));
+        cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
         
     }
 }
@@ -56,7 +61,7 @@ function process_testsuite_actions()
                 addMessage('Permission Denied!', 'error');
             }else{
                 wp_delete_post($_REQUEST['suite_id']);                
-                addMessage('The test suite was removed successfully.', 'error');                
+                addMessage('The test suite was removed successfully.');                
             }            
         }    
         wp_redirect(base64_decode($_REQUEST['return']));
@@ -184,7 +189,7 @@ function saveSuite()
         $_POST['ts_version_patch'] = 0;
     }
     
-    if(!$isNew && isNewVersionExist($suite->name, $suite->version_major, $suite->version_minor, $suite->version_patch))
+    if(!$isNew && isNewSuiteVersionExist($suite->familyMark, $suite->version_major, $suite->version_minor, $suite->version_patch))
     {
         $_POST['ts_version_major'] = $suite->version_major;
         $_POST['ts_version_minor'] = $suite->version_minor;
@@ -410,22 +415,31 @@ function saveSuite()
         );
     }
     
-    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $id);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $id);
     $rid = $wpdb->get_var($query);
     if(!$rid)
     {
+        //Calculate Bother Mark
+        if(!$version_updated){
+            $family_mark = $id;
+        }else{
+            $family_mark = $wpdb->get_var("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=" . $suite->id);
+        }
+        
         $wpdb->insert($wpdb->prefix . "test_suites", 
                         array('suite_id' => $id, 
                               'suite_title' => $_POST['ts_name'], 
                               'version_major' => $_POST['ts_version_major'], 
                               'version_minor' => $_POST['ts_version_minor'], 
-                              'version_patch' => $_POST['ts_version_patch'])
+                              'version_patch' => $_POST['ts_version_patch'],
+                              'family_mark' => $family_mark
+                              )
                      );
     }
     
     if(!$isNew && $suite->name != $_POST['ts_name'])
     {
-        suiteTitleUpdated($suite->name, $_POST['ts_name']);
+        suiteTitleUpdated($suite->familyMark, $_POST['ts_name']);
     }
     
     //If Name is updated, apply it to all versions
@@ -443,7 +457,7 @@ function saveSuite()
         {
             cp_update_post_meta($suite->id, 'hide_suite', 1);
         }
-        cp_sort_test_suites($_POST['ts_name'], $_POST['ts_version_major']);
+        cp_sort_test_suites($suite->familyMark, $_POST['ts_version_major']);
         
         //Associate all test case that are linked to the old version to the new one with Default conformance level
         $query = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key='conformance_level_" . $suite->id . "'";
@@ -451,9 +465,17 @@ function saveSuite()
         foreach($rows as $row)
         {
             $wpdb->insert($wpdb->postmeta, array('post_id'=> $row->post_id, 'meta_key' => 'conformance_level_' . $id, 'meta_value' => $row->meta_value));
-            $wpdb->insert($wpdb->postmeta, array('post_id'=> $row->post_id, 'meta_key' => 'test_suite', 'meta_value' => $id));
+            $wpdb->insert($wpdb->postmeta, array('post_id'=> $row->post_id, 'meta_key' => 'test_suite', 'meta_value' => $id));            
+        }
+        $query = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key='scenario_" . $suite->id . "'";
+        $rows = $wpdb->get_results($query);
+        foreach($rows as $row)
+        {
+            $wpdb->insert($wpdb->postmeta, array('post_id'=> $row->post_id, 'meta_key' => 'scenario_' . $id, 'meta_value' => $row->meta_value));
         }
         
+        //Update Subscrition
+        updateSubscribedSuiteId($suite->familyMark);
     }
     
     //Send Notification Email
@@ -491,11 +513,11 @@ function saveSuite()
 }
 
 //Hide all versions except the latest one
-function cp_sort_test_suites($title, $version_major)
+function cp_sort_test_suites($familyMark, $version_major)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $title, $version_major);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $familyMark, $version_major);
     $suites = $wpdb->get_results($query);
     foreach($suites as $i=>$s)
     {
@@ -503,22 +525,22 @@ function cp_sort_test_suites($title, $version_major)
     }
 }
 
-function isNewSuiteVersionExist($title, $version_major, $version_minor = null, $version_patch = null)
+function isNewSuiteVersionExist($familyMark, $version_major, $version_minor = null, $version_patch = null)
 {
     global $wpdb;
     
     if($version_minor === null && $version_patch === null)
     {
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND 
-                                 version_major > %d", $title, $version_major);
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND 
+                                 version_major > %d", $familyMark, $version_major);
                               
     }else if($version_patch === null){
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND                             
-                                 version_major=%d AND version_minor > %d", $title, $version_major, $version_minor);
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND                             
+                                 version_major=%d AND version_minor > %d", $familyMark, $version_major, $version_minor);
                               
     }else{
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND 
-                                 version_major=%d ANd version_minor=%d AND version_patch > %d", $title, $version_major, $version_minor, $version_patch);
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND 
+                                 version_major=%d ANd version_minor=%d AND version_patch > %d", $familyMark, $version_major, $version_minor, $version_patch);
                                   
     }
     
@@ -528,11 +550,11 @@ function isNewSuiteVersionExist($title, $version_major, $version_minor = null, $
         return false;
 }
 
-function suiteTitleUpdated($old, $new)
+function suiteTitleUpdated($family_mark, $new)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_suites WHERE suite_title=%s", $old);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_suites WHERE family_mark=%d", $family_mark);
     $suites = $wpdb->get_results($query);
     
     foreach($suites as $row)
@@ -570,25 +592,25 @@ function suiteNameUpdated($old, $new)
     
 }
 
-/*if(isset($_GET['fix_case_scenario']))
+/**
+* Update subscribed suite id by the latest version in the same family
+* 
+* @param mixed $familyMark
+*/
+function updateSubscribedSuiteId($familyMark)
 {
     global $wpdb;
     
-    //Getting Default Levels
-    $query = "SELECT suite_id, id FROM wp_test_suites_scenarios WHERE `code`='" . TEST_SUITE_DEFAULT_SCENARIO_CODE . "'";
-    $rows = $wpdb->get_results($query);
-    $dScenarios = array();
-    foreach($rows as $row)
-        $dScenarios[$row->suite_id] = $row->id;
+    //find Subscribed suite id in the family
+    $query = $wpdb->prepare("SELECT sp.* FROM {$wpdb->prefix}users_purchases AS s INNER JOIN {$wpdb->prefix}test_suites as st ON sp.suite_id=st.suite_id WHERE st.family_mark=%d", $familyMark);
+    $row = $wpdb->get_row($query);
     
-    $query = "SELECT * FROM {$wpdb->postmeta} WHERE meta_key='test_suite' order by post_id";
-    $rows =  $wpdb->get_results($query);
-    
-    foreach($rows as $row)
+    if($row)
     {
-        if(!$dScenarios[$row->meta_value])
-            continue;
-        $wpdb->insert($wpdb->postmeta, array('post_id' => $row->post_id, 'meta_key' => 'scenario_' . $row->meta_value, 'meta_value' => $dScenarios[$row->meta_value]));
+        //Getting Latest Version in the family
+        $query = $wpdb->prefix("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $familyMark);
+        $latestId =  $wpdb->get_var($query);
+        
+        $wpdb->update($wpdb->prefix . "users_purchases", array("suite_id" => $latestId), array('id' => $row->id));
     }
-    exit;
-}*/
+}

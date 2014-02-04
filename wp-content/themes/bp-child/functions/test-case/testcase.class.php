@@ -58,6 +58,9 @@ class TestCase
     
     var $scenario = '';
     
+    var $familyMark = null;
+    
+    
     public function __construct($id = null)
     {        
         if($id !== null)   
@@ -128,8 +131,20 @@ class TestCase
         $this->loadProfileInstances();
         $this->loadScenario();
         
+        $this->loadfamilyMark();
+        
         $this->title = get_the_title($this->id);
         
+    }
+    
+    public function loadfamilyMark()
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_cases WHERE case_id=%d", $this->id);
+        $this->familyMark = $wpdb->get_var($query);
+        
+        return $this->familyMark;
     }
     
     public function loadConformanceLevel()

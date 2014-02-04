@@ -24,9 +24,9 @@ $groups = getUserAdminGroups(get_current_user_id());
 
 if($suite->id)    
 {
-    $newMajorVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major);
-    $newMinorVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major, $suite->version_minor);
-    $newPatchVersionExist = isNewSuiteVersionExist($suite->name, $suite->version_major, $suite->version_minor, $suite->version_patch);
+    $newMajorVersionExist = isNewSuiteVersionExist($suite->familyMark, $suite->version_major);
+    $newMinorVersionExist = isNewSuiteVersionExist($suite->familyMark, $suite->version_major, $suite->version_minor);
+    $newPatchVersionExist = isNewSuiteVersionExist($suite->familyMark, $suite->version_major, $suite->version_minor, $suite->version_patch);
 }else{
     $newMajorVersionExist = false;    
     $newMinorVersionExist = false;    
@@ -102,8 +102,7 @@ if(!$suite->community_id)
                    <div class="field-row">
                        <div class="grid-cell">
                            <label for="ts_name">Title: </label>
-                           <input type="text" id="ts_name" name="ts_name" class="input required half-width" value="<?php echo $suite->name?>" />
-                           
+                           <input type="text" id="ts_name" name="ts_name" class="input required half-width" value="<?php echo $suite->name?>" />                           
                        </div>
                        <div class="grid-cell">
                            <label for="ts_identifier">Name: </label>

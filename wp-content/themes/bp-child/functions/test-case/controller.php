@@ -126,6 +126,9 @@ function deleteCase()
         exit;
     }
     
+    $case = new TestCase($id);
+    $familyMark = $case->loadfamilyMark();
+    
     if(!wp_delete_post($id, true))
     {
         addMessage("There was an error while deleting the test case.", "error");
@@ -139,7 +142,7 @@ function deleteCase()
     
     $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));
     
-    cp_sort_test_cases($testCaseId, $majorVersion);
+    cp_sort_test_cases($familyMark, $majorVersion);
     
     addMessage("The test case was deleted.");
     wp_redirect($return);
@@ -414,17 +417,14 @@ function saveCase()
         
         $case_title = $testCaseId . $version;
         
-        $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s", $case_title, 'test-case') );
-        if($pTestCase)
+        if($isNew)
         {
-            echo json_encode(array('status' => 'error', 'message' => 'The test case id with the version already exists!'));
-            exit;
-        }
-        
-        if($isNew && isNewVersionExist($testCaseId, $_POST['version_major'], $_POST['version_minor'], $_POST['version_patch']))
-        {
-            echo json_encode(array('status' => 'error', 'message' => 'Later version already exists!'));
-            exit;
+            $pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s", $case_title, 'test-case') );
+            if($pTestCase)
+            {
+                echo json_encode(array('status' => 'error', 'message' => 'The test case id with the version already exists!'));
+                exit;
+            }            
         }
         
         $id = wp_insert_post(array('post_title' => $case_title, 'post_type'=>'test-case', 'post_status' => 'publish'), true);
@@ -434,19 +434,12 @@ function saveCase()
             return;
         }   
          
-        if($isNew){
-            
+        if($isNew){            
             cp_update_post_meta($id, 'hide_case', 0);
-        }
-        
+        }        
     }else{
         $case_title = $testCaseId . $version;
-        /*$pTestCase = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type=%s ANd ID != %d", $case_title, 'test-case', $id) );
-        if($pTestCase)
-        {
-            echo json_encode(array('status' => 'error', 'message' => 'The test case id with the version already exists!'));
-            exit;
-        }*/
+        
         $post = get_post($id);
         $case_name = wp_unique_post_slug(sanitize_title($case_title), $id, $post->post_status, $post->post_type, $post->post_parent);
         
@@ -462,7 +455,7 @@ function saveCase()
     
     if(!$isNew && $case->testCaseID != $testCaseId)
     {
-        caseNameUpdated($case->testCaseID, $testCaseId);
+        caseNameUpdated($case->familyMark, $testCaseId);
     }
     
     $esb = new ManageESB();
@@ -539,12 +532,19 @@ function saveCase()
     $rid = $wpdb->get_var($query);
     if(!$rid)
     {
+        if($version_updated)
+        {
+            $familyMark = $wpdb->get_var("SELECT family_mark FROM {$wpdb->prefix}test_cases WHERE case_id=" . $case->id);
+        }else{
+            $familyMark = $id;
+        }
         $wpdb->insert($wpdb->prefix . "test_cases", 
                         array('case_id' => $id, 
                               'case_name' => $testCaseId, 
                               'version_major' => $_POST['version_major'], 
                               'version_minor' => $_POST['version_minor'], 
-                              'version_patch' => $_POST['version_patch'])
+                              'version_patch' => $_POST['version_patch'],
+                              'family_mark' => $familyMark)
                      );
         cp_sort_test_cases($testCaseId, $_POST['version_major']);
     }
@@ -603,11 +603,11 @@ function saveCase()
 }
 
 //Hide all versions except the latest one
-function cp_sort_test_cases($title, $version_major)
+function cp_sort_test_cases($familyMark, $version_major)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_cases WHERE case_name = %s AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $title, $version_major);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_cases WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $familyMark, $version_major);
     $cases = $wpdb->get_results($query);
     foreach($cases as $i=>$s)
     {
@@ -615,20 +615,20 @@ function cp_sort_test_cases($title, $version_major)
     }
 }
 
-function isNewVersionExist($title, $version_major, $version_minor = null, $version_patch = null)
+function isNewVersionExist($familyMark, $version_major, $version_minor = null, $version_patch = null)
 {
     global $wpdb;
     
     if($version_minor === null && $version_patch === null)
     {
-        $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE case_name = %s AND 
-                            version_major > %d", $title, $version_major, $version_major);
+        $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE family_mark = %d AND 
+                            version_major > %d", $familyMark, $version_major, $version_major);
     }else if($version_patch === null){
-        $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE case_name = %s AND 
-                              version_major=%d AND version_minor > %d", $title, $version_major, $version_minor);
+        $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE family_mark = %d AND 
+                              version_major=%d AND version_minor > %d", $familyMark, $version_major, $version_minor);
     }else{
-        $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE case_name = %s AND                             
-                              version_major=%d ANd version_minor=%d AND version_patch > %d", $title, $version_major, $version_minor,$version_patch);
+        $query = $wpdb->prepare("SELECT case_id FROM {$wpdb->prefix}test_cases WHERE family_mark = %d AND                             
+                              version_major=%d ANd version_minor=%d AND version_patch > %d", $familyMark, $version_major, $version_minor,$version_patch);
     }
     
                               
@@ -638,11 +638,11 @@ function isNewVersionExist($title, $version_major, $version_minor = null, $versi
         return false;
 }
 
-function caseNameUpdated($old, $new)
+function caseNameUpdated($familyMark, $new)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE case_name=%s", $old);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE familyMark=%d", $familyMark);
     $suites = $wpdb->get_results($query);
     
     $esb = new ManageESB();

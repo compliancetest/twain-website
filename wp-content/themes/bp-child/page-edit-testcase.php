@@ -46,9 +46,9 @@ $suiteRoles = $case->getAvailableRoles();
 $suiteInitMessages = $case->getAvailableInitMessages();
 
 if(!$isNew){
-    $newMajorVersionExist = isNewVersionExist($case->testCaseID, $case->version_major);
-    $newMinorVersionExist = isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor);
-    $newPatchVersionExist = isNewVersionExist($case->testCaseID, $case->version_major, $case->version_minor, $case->version_patch);
+    $newMajorVersionExist = isNewVersionExist($case->familyMark, $case->version_major);
+    $newMinorVersionExist = isNewVersionExist($case->familyMark, $case->version_major, $case->version_minor);
+    $newPatchVersionExist = isNewVersionExist($case->familyMark, $case->version_major, $case->version_minor, $case->version_patch);
 }else{
     $newMajorVersionExist = false;
     $newMinorVersionExist = false;
@@ -132,7 +132,7 @@ get_header();
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">                                                     
-                       <div class="grid-cell">
+                       <div class="grid-cell width100P">
                            <label>Description:</label>
                            <textarea name="test_intent_description" id="test_intent_description" class="textarea large-textarea"><?php echo $case->testIntentDescription?></textarea>
                        </div>                                          
@@ -578,13 +578,13 @@ get_header();
                    <?php } ?>
                    <?php if($isNew){ ?>
                    <div class="field-row">
-                       <div class="grid-cell">
+                       <div class="grid-cell width40P">
                            <label>Action:</label>
-                           <textarea name="step_action[]" class="textarea width350"></textarea>
+                           <textarea name="step_action[]" class="textarea width98P"></textarea>
                        </div>                       
-                       <div class="grid-cell">
+                       <div class="grid-cell width50P">
                            <label>Expected Result:</label>
-                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width400"></textarea>
+                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width98P"></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
