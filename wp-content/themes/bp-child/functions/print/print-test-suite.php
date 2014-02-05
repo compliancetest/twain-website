@@ -52,7 +52,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     <h2 style="text-align: center; margin-bottom: 20px;"><a href="<?php echo get_permalink()?>"><?php the_title(); ?></a></h2>
     <div class="clear"></div>
     <div>
-        <span style="">Version: <b><?php echo $suite->version; ?></b></span>
+        <span style="">ID: <b><?php echo $suite->id; ?></b></span>
         <span style="margin-left: 10px;">Issue Date: <b><?php echo formatDate($suite->issueDate); ?></b></span>
         <span style="margin-left: 10px;">Issuer: <a href="<?php echo bp_get_group_permalink($group);; ?>"><b class="blue_txt"><?php echo $suite->issuer; ?></b></a></span>
         <span style="margin-left: 10px;">Status: <b class="green_txt"><?php echo $suite->status; ?></b> </span>
