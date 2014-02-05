@@ -928,3 +928,29 @@ function cp_get_user_avatar($user_id, $args = '')
 
     return apply_filters( 'bp_get_loggedin_user_avatar', bp_core_fetch_avatar( array( 'item_id' => $user_id, 'type' => $type, 'width' => $width, 'height' => $height, 'html' => $html, 'alt' => $alt ) ) );
 }
+
+
+/*
+ * Search only a specific forum
+ */
+function cp_bbp_filter_search_results( $r ){
+
+    //Get the submitted forum ID (from the hidden field added in step 2)
+    $forum_id = sanitize_title_for_query( $_GET['bbp_search_forum_id'] );
+
+    //If the forum ID exits, filter the query
+    if( $forum_id && is_numeric( $forum_id ) ){
+
+        $r['meta_query'] = array(
+            array(
+                'key' => '_bbp_forum_id',
+                'value' => $forum_id,
+                'compare' => '=',
+            )
+        );
+
+    }
+
+    return $r;
+}
+add_filter( 'bbp_after_has_search_results_parse_args' , 'cp_bbp_filter_search_results' );
