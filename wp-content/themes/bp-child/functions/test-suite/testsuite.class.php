@@ -6,7 +6,7 @@
 if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE'))
     define('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE', 'Default');
 if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION'))
-    define('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION', 'All test cases created via this test suite are automaticaly associated with this conformance level. This association cannot be deleted.');
+    define('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION', 'All test cases created via this test suite are automatically associated with this conformance level. This association cannot be deleted.');
 
 if(!defined('TEST_SUITE_DEFAULT_SCENARIO_CODE'))
     define('TEST_SUITE_DEFAULT_SCENARIO_CODE', 'Default');
