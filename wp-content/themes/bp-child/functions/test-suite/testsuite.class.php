@@ -64,6 +64,8 @@ class TestSuite
     //This will be same for all versions
     var $familyMark = null;
     
+    var $messageTemplates = array();
+    
     public function __construct($id = null)
     {        
         if($id !== null)   
@@ -134,6 +136,7 @@ class TestSuite
         $this->loadTypes();        
         $this->loadProfileTypes();
         $this->loadScenarios();
+        $this->loadMessageTemplates();
         
         $this->loadfamilyMark();
         
@@ -154,6 +157,25 @@ class TestSuite
         $this->familyMark = $wpdb->get_var($query);
         
         return $this->familyMark;
+    }
+    
+    public function loadMessageTemplates()
+    {
+        $dataNames = cp_get_post_meta($this->id, 'message_template_name', true);
+        $dataValues = cp_get_post_meta($this->id, 'message_template_url', true);
+        
+        $result = array();
+        if($dataNames){
+            foreach($dataNames as $i=>$name)
+            {
+                if(!$name)
+                    continue;
+                $result[] = array('name' => $name, 'url' => $dataValues[$i]);
+            }
+        }
+        $this->messageTemplates = $result;
+        
+        return $result;
     }
     
     public function loadTypes()

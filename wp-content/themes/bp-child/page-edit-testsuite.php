@@ -372,11 +372,55 @@ if(!$suite->community_id)
        <div class="grid-box grid-box-expandable grid-box-opened" id="test-data-profiles-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Test Data Profiles</h5>
+               <h5 class="left">Test Data</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
                <div class="column">
+                   <div id="suite-template-data">
+                       <h6><b>Message Templates</b></h6>
+                       <?php foreach($suite->messageTemplates as $row){ ?>
+                       <div class="field-row">
+                           <div class="grid-cell">
+                               <label>Template Title:</label>
+                               <input type="text" name="message_template_name[]" value="<?php echo $row['name']?>" class="input" />
+                           </div> 
+                           <div class="grid-cell">
+                               <label>Template URL:</label>
+                               <input type="text" name="message_template_url[]" value="<?php echo $row['url']?>" class="input medium-input" />
+                           </div>                   
+                           <div class="grid-cell">
+                               <label>&nbsp;</label>
+                               <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           </div>                                     
+                           <div class="clear"></div>
+                       </div> 
+                       <?php } ?>
+                       <?php if(!$suite->id){ ?>
+                       <div class="field-row">
+                           <div class="grid-cell">
+                               <label>Template Name:</label>
+                               <input type="text" name="message_template_name[]" value="" class="input" />
+                           </div> 
+                           <div class="grid-cell">
+                               <label>Template URL:</label>
+                               <input type="text" name="message_template_url[]" value="" class="input medium-input" />
+                           </div>                   
+                           <div class="grid-cell">
+                               <label>&nbsp;</label>
+                               <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           </div>                                     
+                           <div class="clear"></div>
+                       </div>
+                       <?php } ?>
+                       <div class="btn-row">
+                           <div class="grid-cell">
+                               <a href="#" class="action-btn add-new-btn" id="add-message-template"><span class="p"></span><span class="t">New Template</span></a>                       
+                           </div>
+                           <div class="clear"></div>
+                       </div>
+                   </div>
+                   <h6><b>Profile Type</b></h6>
                    <div class="field-row noborder" id="suite_profile_types">
                    <?php                    
                    $profileTypes = getCommunityProfileTypes($suite->community_id);
@@ -743,6 +787,26 @@ if(!$suite->community_id)
             jQuery('#specs-box .btn-row').prev().find('textarea').redactor({air: true, minHeight: 80});
             return false;
         });
+        
+        jQuery('#add-message-template').click(function(){
+            jQuery('#suite-template-data .btn-row').before('<div class="field-row">' + 
+                           '<div class="grid-cell">' + 
+                               '<label>Template Title:</label>' +
+                               '<input type="text" name="message_template_name[]" value="" class="input" />' +
+                           '</div>' +
+                           '<div class="grid-cell">' +
+                               '<label>Template URL:</label>' +
+                               '<input type="text" name="message_template_url[]" value="" class="input medium-input" />' +
+                           '</div>' +
+                           '<div class="grid-cell">' +
+                               '<label>&nbsp;</label>' +
+                               '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                           '</div>' +
+                           '<div class="clear"></div>' +
+                       '</div>');
+            return false;
+        })
+        
         //Getting Last ID
         var lastScenarioID = parseInt('<?php echo $lastTypeID?>');
         var lastScenariosSequence;
@@ -793,7 +857,7 @@ if(!$suite->community_id)
         }
         
         //Delete
-        jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box').on('click', '.blue-delete-btn', function(){
+        jQuery('#conf-level-box, #related-suites-box, #roles-box, #specs-box, #test-data-profiles-box').on('click', '.blue-delete-btn', function(){
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
             });

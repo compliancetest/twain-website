@@ -332,40 +332,40 @@ get_header();
                <div class="column">
                    <div id="case-template-data">
                        <h6><B>Message Templates</b></h6>
-                       <?php foreach($case->messageTemplates as $row){ ?>
                        <div class="field-row">
-                           <div class="grid-cell">
-                               <label>Template Name:</label>
-                               <input type="text" name="message_template_name[]" value="<?php echo $row['name']?>" class="input" />
-                           </div> 
-                           <div class="grid-cell">
-                               <label>Template URL:</label>
-                               <input type="text" name="message_template_url[]" value="<?php echo $row['url']?>" class="input medium-input" />
-                           </div>                   
-                           <div class="grid-cell">
-                               <label>&nbsp;</label>
-                               <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                           </div>                                     
+                           <div class="grid-cell width35P">
+                               <label>Template Title</label>
+                           </div>
+                           <div class="grid-cell width45P">
+                               <label>Template URL</label>
+                           </div>
                            <div class="clear"></div>
-                       </div> 
-                       <?php } ?>
-                       <?php if($isNew){ ?>
-                       <div class="field-row">
-                           <div class="grid-cell">
-                               <label>Template Name:</label>
-                               <input type="text" name="message_template_name[]" value="" class="input" />
-                           </div> 
-                           <div class="grid-cell">
-                               <label>Template URL:</label>
-                               <input type="text" name="message_template_url[]" value="" class="input medium-input" />
-                           </div>                   
-                           <div class="grid-cell">
-                               <label>&nbsp;</label>
-                               <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                           </div>                                     
+                       </div>
+                       <?php
+                           $suiteTemplates = $case->getAvailableMessageTemplates();
+                           
+                           foreach($suiteTemplates as $idx=>$row){                               
+                               $checked = false;
+                               foreach($case->messageTemplates as $crow)
+                               {
+                                   if($crow['name'] == $row['name'] && $crow['url'] == $row['url'])
+                                   {
+                                       $checked = true;
+                                       break;
+                                   }
+                               }
+                       ?>
+                       <div class="field-row">                           
+                           <div class="grid-cell width35P">                               
+                               <input type="checkbox" name="message_template_id[]" value="<?php echo $idx?>" <?php echo $checked ? 'checked="checked"' : '' ?> />
+                               <input type="text" name="message_template_name<?php echo $idx?>" value="<?php echo $row['name']?>" class="input" readonly="readonly" />
+                           </div>
+                           <div class="grid-cell width55P">
+                               <input type="text" name="message_template_url<?php echo $idx?>" value="<?php echo $row['url']?>" class="input medium-input" readonly="readonly" />
+                           </div>
                            <div class="clear"></div>
-                       </div> 
-                       <?php } ?>                       
+                       </div>
+                       <?php } ?>                 
                        <div class="btn-row">
                            <div class="grid-cell">
                                <a href="#" class="action-btn add-new-btn" id="add-message-template"><span class="p"></span><span class="t">New Template</span></a>                       
@@ -637,7 +637,7 @@ jQuery(document).ready(function($){
     jQuery('#add-message-template').click(function(){
         jQuery('#case-template-data .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' + 
-                           '<label>Template Name:</label>' +
+                           '<label>Template Title:</label>' +
                            '<input type="text" name="message_template_name[]" value="" class="input" />' +
                        '</div>' +
                        '<div class="grid-cell">' +

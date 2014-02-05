@@ -80,6 +80,7 @@ Template Name Posts: Test Suite
                     <li><a href="javascript: void(0)" rel="tabs_sv3">Profile Types</a></li>
                     <li><a href="javascript: void(0)" rel="tabs_sv4">Specification Documents</a></li>
                     <li><a href="javascript: void(0)" rel="tabs_sv5">Related Compliance Suites</a></li>
+                    <li><a href="javascript: void(0)" rel="tabs_sv6">Message Templates</a></li>
 
 				</ul>
 				
@@ -183,10 +184,28 @@ Template Name Posts: Test Suite
                     </div>
                     <div class="clear"></div>
                 </div> <!--end tab 5-->
+                
+                <div class="tab-content white_bcg redactor_editor" id="tabs_sv6" style="display: none; ">
+                    <div class="column padding15-20">
 
+                        <?php
+                        foreach($suite->messageTemplates as $idx=>$row){
 
+                            ?>
+                            <div class="grid_cell width20P <?php if ($idx == ((count($suite->messageTemplates)) -1 )) { echo 'top0bottom5';} ?>"><b><?php echo $row['name']; ?></b></div>
+                            <div class="grid_cell width75P">
+                                <?php echo $row['url']; ?>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="grey-border-bottom <?php if ($idx == ((count($suite->messageTemplates)) -1 )) { echo 'displaynone';} ?>"></div>
+                        <?php
 
-
+                        }
+                        ?>
+                    </div>
+                    <div class="clear"></div>
+                </div> <!--end tab 6-->
+                
 
             </div>
 			<!--end tabs-->

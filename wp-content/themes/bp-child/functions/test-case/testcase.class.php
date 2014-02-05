@@ -433,6 +433,34 @@ class TestCase
         return $instances;
     }
     
+    public function getAvailableMessageTemplates()
+    {
+        global $wpdb;
+                
+        $templates = array();
+        
+        foreach($this->testSuite as $sid)
+        {
+            $dataNames = cp_get_post_meta($sid, 'message_template_name', true);
+            $dataValues = cp_get_post_meta($sid, 'message_template_url', true);
+            
+            
+            if($dataNames){
+                foreach($dataNames as $i=>$name)
+                {
+                    if(!$name)
+                        continue;
+                    $templates[] = array('name' => $name, 'url' => $dataValues[$i]);
+                }
+            }
+            
+        }
+        
+        $templates = array_unique($templates, SORT_REGULAR);
+        
+        return $templates;
+    }
+    
     public function getScenario($suite_id)
     {
         global $wpdb;

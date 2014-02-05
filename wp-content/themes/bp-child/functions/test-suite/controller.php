@@ -268,6 +268,11 @@ function saveSuite()
     cp_update_post_meta($id, 'ts_version_patch', $_POST['ts_version_patch']);
     update_post_meta($id, 'ts_description', $_POST['ts_description']);
     
+    $property_name_data = $_POST['message_template_name']; 
+    cp_update_post_meta($id, 'message_template_name', $property_name_data);
+    $property_value_data = $_POST['message_template_url']; 
+    cp_update_post_meta($id, 'message_template_url', $property_value_data);
+    
     cp_update_post_meta($id, 'ts_profile_types', cp_implode($_POST['ts_profile_types']));
     
     //Remove the assigned group

@@ -6755,6 +6755,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     float: left;
     line-height: 26px;
 }
+#suite-template-data,
 #case-template-data{
     border-bottom: solid 1px #cbcbcb;
     padding-bottom: 15px;

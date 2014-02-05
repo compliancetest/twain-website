@@ -508,10 +508,19 @@ function saveCase()
     $step_action = $_POST['step_action']; 
     update_post_meta($id, 'step_action', $step_action);
     
-    $property_name_data = $_POST['message_template_name']; 
-    cp_update_post_meta($id, 'message_template_name', $property_name_data);
-    $property_value_data = $_POST['message_template_url']; 
-    cp_update_post_meta($id, 'message_template_url', $property_value_data);
+    //Save Message Template
+    $template_name = array();
+    $template_url = array();
+    if(isset($_POST['message_template_id']))
+    {
+        foreach($_POST['message_template_id'] as $idx)
+        {
+            $template_name[] = $_POST['message_template_name' . $idx];
+            $template_url[] = $_POST['message_template_url' . $idx];
+        }
+    }
+    cp_update_post_meta($id, 'message_template_name', $template_name);
+    cp_update_post_meta($id, 'message_template_url', $template_url);
     
     cp_update_post_meta($id, 'profile_instances', cp_implode($_POST['profile_instances']));
     
