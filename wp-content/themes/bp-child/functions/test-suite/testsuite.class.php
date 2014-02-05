@@ -11,7 +11,7 @@ if(!defined('TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_DESCRIPTION'))
 if(!defined('TEST_SUITE_DEFAULT_SCENARIO_CODE'))
     define('TEST_SUITE_DEFAULT_SCENARIO_CODE', 'Default');
 if(!defined('TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION'))
-    define('TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION', 'All test cases created via this test suite are initially associated with this scenario. In general, test cases will be associated with test suite specific scenarios, so it will usually be the case that no test cases are associated with the this scenario.');
+    define('TEST_SUITE_DEFAULT_SCENARIO_DESCRIPTION', 'All test cases created via this test suite are initially associated with this scenario. In general, test cases will be associated with test suite specific scenarios, so it will usually be the case that no test cases are associated with this scenario.');
 
 
 
