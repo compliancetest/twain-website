@@ -71,6 +71,8 @@ class TestCase
     
     public function load($id = null)
     {
+        global $wpdb;
+        
         if($id !== null)   
             $this->id = $id;
         
@@ -81,6 +83,17 @@ class TestCase
         $this->version_patch = 0; 
         if(!$this->id)   
             return;
+        
+        //Check ID validation
+        $query = $wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE ID=%d AND post_status='publish' AND post_type='test-case'", $this->id);
+        $tID = $wpdb->get_var($query);
+        
+        if(!$tID)
+        {
+            $this->id = null;
+            return;
+        }
+        
             
         $this->name = get_the_title($this->id);
 //        $this->sequenceNumber = $this->loadSingleValue('sequence_number');

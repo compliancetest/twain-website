@@ -67,7 +67,7 @@ function sendMessage()
                                 <api:testCaseId>' . $caseObj->testCaseID . "_V" . $caseObj->version . '</api:testCaseId>                                
                                 <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
                                 <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>
-                                <api:messageTemplate  templateName="' . $template . '">
+                                <api:messageTemplate  templateURI="' . $template . '">
                                     <api:profile namespace="Tester">' ; 
             //Getting Tester Profiles
             $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id IN (" . implode(", ", $wpdb->escape($tester_profiles)) . ")";
