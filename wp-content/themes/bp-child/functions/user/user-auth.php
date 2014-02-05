@@ -76,6 +76,7 @@ function compliancetest_create_new_user(){
             '[username]' => $_POST['user_login'],
             '[email]' => $_POST['user_email'],
             '[password]' => $_POST['user_pass'],
+            '[organisation]' => $_POST['organisation'],
             '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
         );
 

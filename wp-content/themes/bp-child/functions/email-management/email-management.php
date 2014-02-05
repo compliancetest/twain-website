@@ -168,7 +168,7 @@ function create_email_management_page()
                         
                     ?>       
                     <h3>User Registered</h3>
-                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [password], [link]</p>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [password], [link], [organisation]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -813,7 +813,7 @@ function create_email_management_page()
                     $membership_request_received_admin_email_content = get_option('membership_request_received_admin_email_content');
                 ?>
                     <h3>Membership Request Received</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [community], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username], [community], [community_url], [organisation]</p>
                     <table class="widefat">
                         <thead>
                             <tr>

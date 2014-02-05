@@ -52,6 +52,7 @@ function cp_groups_notification_new_membership_request_message($message, $group,
 {    
     
     $user = get_userdata($requesting_user_id);
+    $user_organisation = get_user_meta ($requesting_user_id, 'user_organisation', true);
     $message = get_option('membership_request_received_admin_email_content');
     $emailData = array(
         '[community]' => bp_get_group_name($group),
@@ -60,7 +61,8 @@ function cp_groups_notification_new_membership_request_message($message, $group,
         '[website_url]' => get_site_url(),
         '[name]' => cp_get_user_fullname($requesting_user_id),
         '[email]' => $user->user_email,
-        '[username]' => $user->user_login
+        '[username]' => $user->user_login,
+        '[organisation]' => $user_organisation
     );
     
     $message = str_replace(array_keys($emailData), array_values($emailData), $message);
