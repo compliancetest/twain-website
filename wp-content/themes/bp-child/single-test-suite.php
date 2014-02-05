@@ -78,10 +78,9 @@ Template Name Posts: Test Suite
                     <li class="active"><a href="javascript: void(0)" rel="tabs_sv1">Test Suite Roles</a></li>
                     <li><a href="javascript: void(0)" rel="tabs_sv2">Conformance Levels</a><li>
                     <li><a href="javascript: void(0)" rel="tabs_sv3">Profile Types</a></li>
+                    <li><a href="javascript: void(0)" rel="tabs_sv6">Message Templates</a></li>
                     <li><a href="javascript: void(0)" rel="tabs_sv4">Specification Documents</a></li>
                     <li><a href="javascript: void(0)" rel="tabs_sv5">Related Compliance Suites</a></li>
-                    <li><a href="javascript: void(0)" rel="tabs_sv6">Message Templates</a></li>
-
 				</ul>
 				
 				<div class="clear"></div>
