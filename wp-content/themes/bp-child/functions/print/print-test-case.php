@@ -25,8 +25,8 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
         h3{font-size: 18px; margin:0 0 15px;}
         h4{font-size: 16px;  margin:0 0 10px;}
         h5{font-size: 14px;  margin:0 0 8px;}
-        table{border: solid 1px #999; border-collapse: collapse; vertical-align: top; width: 100%}
-        th{text-align: left; font-weight: bolid; border: solid 1px #999; padding: 5px;}
+        table{border: solid 1px #999; border-collapse: collapse; vertical-align: top; width: 100%;}
+        th{text-align: left; font-weight: bold; border: solid 1px #999; padding: 5px;}
         td{border: solid 1px #999;  padding: 5px; vertical-align: top;}
         .clear{
             clear: both;
@@ -45,7 +45,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
         }
     </style>
     
-    <h3 style="float: left">Test case ID: <a href="<?php echo get_permalink()?>"><?php echo $case->testCaseID ; ?></a></h3>
+    <h3 style="float: left">Test case ID: <a href="<?php echo get_permalink()?>"><?php echo $case->testCaseID ; ?> v<?php echo $case->version; ?></a></h3>
     <h5 style="float: right; line-height: 24px">(Test Suite: <a href="<?php echo get_permalink($test_suite_id)?>"><?php echo get_the_title($test_suite_id) ?></a>)</h5>
     <div class="clear"></div>
     

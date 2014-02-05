@@ -32,7 +32,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         h4{font-size: 16px;  margin:0 0 10px;}
         h5{font-size: 14px;  margin:0 0 8px;}
         table{border: solid 1px #999; border-collapse: collapse; vertical-align: top;}
-        th{text-align: left; font-weight: bolid; border: solid 1px #999; padding: 5px;}
+        th{text-align: left; font-weight: bold; border: solid 1px #999; padding: 5px;}
         td{border: solid 1px #999;  padding: 5px;}
         .clear{
             clear: both;
@@ -123,6 +123,28 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         </div>
         <div class="clear"></div>
     </div>
+    <div class="block">
+        <h5 style="float: left; width: 33%;">Scenarios:</h5>
+        <div style="float: left; width: 67%;">
+            <?php
+            foreach($suite->scenarios as $row){
+                $scenario_name = $row['code'];
+                $scenario_desc = strip_tags($row['description']);
+                ?>
+                <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
+                    <b style="float: left; width: 20%;"><?php echo $scenario_name; ?></b>
+                    <span style="float: left; width: 80%;">
+                        <?php echo $scenario_desc;?>
+                    </span>
+                    <br class="clear" />
+                </p>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="clear"></div>
+    </div>
+
     <div class="block">
         <h5 style="float: left; width: 33%;">Related Compliance Suites:</h5>
         <div style="float: left; width: 67%;">
