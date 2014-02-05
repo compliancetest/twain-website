@@ -386,7 +386,7 @@ if(!$suite->community_id)
                                <input type="text" name="message_template_name[]" value="<?php echo $row['name']?>" class="input" />
                            </div> 
                            <div class="grid-cell">
-                               <label>Template URL:</label>
+                               <label>Template URI:</label>
                                <input type="text" name="message_template_url[]" value="<?php echo $row['url']?>" class="input medium-input" />
                            </div>                   
                            <div class="grid-cell">
@@ -403,7 +403,7 @@ if(!$suite->community_id)
                                <input type="text" name="message_template_name[]" value="" class="input" />
                            </div> 
                            <div class="grid-cell">
-                               <label>Template URL:</label>
+                               <label>Template URI:</label>
                                <input type="text" name="message_template_url[]" value="" class="input medium-input" />
                            </div>                   
                            <div class="grid-cell">
@@ -795,7 +795,7 @@ if(!$suite->community_id)
                                '<input type="text" name="message_template_name[]" value="" class="input" />' +
                            '</div>' +
                            '<div class="grid-cell">' +
-                               '<label>Template URL:</label>' +
+                               '<label>Template URI:</label>' +
                                '<input type="text" name="message_template_url[]" value="" class="input medium-input" />' +
                            '</div>' +
                            '<div class="grid-cell">' +

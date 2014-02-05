@@ -337,7 +337,7 @@ get_header();
                                <label>Template Title</label>
                            </div>
                            <div class="grid-cell width45P">
-                               <label>Template URL</label>
+                               <label>Template URI</label>
                            </div>
                            <div class="clear"></div>
                        </div>
