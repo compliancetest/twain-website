@@ -50,7 +50,6 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     <?php } ?>
     
     <h2 style="text-align: center; margin-bottom: 20px;"><a href="<?php echo get_permalink()?>"><?php the_title(); ?></a></h2>
-    <a href="<?php echo bp_get_group_permalink($group); ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Community Home Page</span></a> 
     <div class="clear"></div>
     <div>
         <span style="">Version: <b><?php echo $suite->version; ?></b></span>

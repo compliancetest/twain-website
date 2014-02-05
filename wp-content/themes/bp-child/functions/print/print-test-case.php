@@ -74,7 +74,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
         </tr>
         <tr>
             <td class="td-label">Properties:</td>
-            <td>Conformance Level:
+            <td>Conformance Levels:
                 <b>
                             <?php
                             $lArr = array();
