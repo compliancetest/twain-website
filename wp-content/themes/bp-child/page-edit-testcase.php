@@ -365,13 +365,7 @@ get_header();
                            </div>
                            <div class="clear"></div>
                        </div>
-                       <?php } ?>                 
-                       <div class="btn-row">
-                           <div class="grid-cell">
-                               <a href="#" class="action-btn add-new-btn" id="add-message-template"><span class="p"></span><span class="t">New Template</span></a>                       
-                           </div>
-                           <div class="clear"></div>
-                       </div>
+                       <?php } ?>
                    </div>
                    
                    <h6><B>Profile Data</b></h6>      
@@ -633,25 +627,7 @@ jQuery(document).ready(function($){
             jQuery(this).remove();                
         })
         return false;
-    })        
-    jQuery('#add-message-template').click(function(){
-        jQuery('#case-template-data .btn-row').before('<div class="field-row">' + 
-                       '<div class="grid-cell">' + 
-                           '<label>Template Title:</label>' +
-                           '<input type="text" name="message_template_name[]" value="" class="input" />' +
-                       '</div>' +
-                       '<div class="grid-cell">' +
-                           '<label>Template URL:</label>' +
-                           '<input type="text" name="message_template_url[]" value="" class="input medium-input" />' +
-                       '</div>' +
-                       '<div class="grid-cell">' +
-                           '<label>&nbsp;</label>' +
-                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
-                       '</div>' +
-                       '<div class="clear"></div>' +
-                   '</div>');
-        return false;
-    })
+    })            
     jQuery('#add-test-exec-data').click(function(){
         jQuery('#test-execution-box .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' + 

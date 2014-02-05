@@ -5629,6 +5629,7 @@ a.suite-subscript-link:hover{
     border-bottom: solid 1px #e3e3e3;
     margin-bottom: 10px;
 }
+#test-data-box .field-row:last-child,
 #choose-conf-level-box .field-row:last-child,
 #choose-scenarios-box .field-row:last-child{
     border-bottom: none;
