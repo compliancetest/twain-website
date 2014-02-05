@@ -172,7 +172,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 <th>Tester Role</th>
                 <th>Harnes Role(s)</th>
                 <th>Initiator</th>
-                <th>Conf Leve</th>
+                <th>Conf Level</th>
                 <th>Outcome Type</th>
                 <th>Test Pattern</th>
                 <th>Bulk</th>
