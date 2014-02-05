@@ -280,7 +280,7 @@ $case->load();
             </div>
             <div class="clear"></div>
             <div class="space7"></div>
-            <?php if ($profileInstances): ?>
+            <?php if ($case->messageTemplates && $profileInstances): ?>
 			<div class="grid_cell width100P toleft">
                 <div class="grid_head lighter_gray_bcg2 related">
                     <div class="grid_row nopaddingbottom nopaddingtop">
@@ -301,17 +301,17 @@ $case->load();
                 <div class="grids message-sample">
                         <div class="grid_row white_bcg padding5-10">
                             <div class="grid_cell width20P">
-                                <select class="select">
+                                <select class="select" id="message-template">
                                     <?php foreach($case->messageTemplates as $key => $row): ?>
-                                    <option value=""><?php  echo $row['name'];?></option>
+                                    <option value="<?php echo base64_encode($row['url']) ?>"><?php  echo $row['name'];?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="grid_cell width20P left5P">
-                                <select class="select">
+                                <select class="select" id="tester-profile">
                                     <?php foreach($profileInstances as $instance): ?>
                                         <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
-                                        <option value="">
+                                        <option value="<?php echo $instance->id ?>">
                                             <?php echo $instance->profile_name; ?>
                                             <?php
                                             if($instanceObj->Profile->Version)
@@ -329,10 +329,10 @@ $case->load();
                                 </select>
                             </div>
                             <div class="grid_cell width20P left5P">
-                                <select class="select">
+                                <select class="select" id="harness-profile">
                                     <?php foreach($profileInstances as $instance): ?>
                                         <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
-                                        <option value="">
+                                        <option value="<?php echo $instance->id?>">
                                             <?php echo $instance->profile_name; ?>
                                             <?php
                                             if($instanceObj->Profile->Version)
@@ -350,7 +350,7 @@ $case->load();
                                 </select>
                             </div>
                             <div class="grid_cell width20P left5P actions-column">
-                                <a href="#">XML</a> | <a href="#">HTML</a>
+                                <a href="/view-message-template?mode=xml" target="_blank" class="view-message-template" data-mode="xml">XML</a> | <a href="/view-message-template?mode=html" target="_blank" class="view-message-template" data-mode="html">HTML</a>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -401,7 +401,17 @@ $case->load();
             jQuery('.test-pattern-icon .simple_tooltip').each(function(){
                 jQuery(this).css("margin-left", '-' + jQuery(this).width()/2-5 + "px" );
             });
-
+            
+            $('a.view-message-template').click(function(){                
+                var template = $('select#message-template').val();
+                var tester = $('select#tester-profile').val();
+                var harness = $('select#harness-profile').val();
+                var mode = $(this).attr('data-mode');
+                
+                var link = '/view-message-template?id=<?php echo $case->id?>&mode=' + mode + '&tester-profile=' + tester + '&harness-profile=' + harness + '&template=' + template;
+                $(this).attr('href', link);
+                
+            })
         });
     </script>
 
