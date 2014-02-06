@@ -258,9 +258,9 @@ if($filterCustomer){
                                    
                                </div>
                                <div class="td td-suite">
-                                    <?php if($row->TEST_SUITE_ID){ ?>
-                                    <a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 10)?></a>
-                                    <?php }else if(!$row->TEST_SUITE_ID && $row->TEST_CASE_WP_ID){ ?>
+                                    <?php if($row->TEST_SUITE_WP_ID){ ?>
+                                    <a href="<?php echo get_permalink($row->TEST_SUITE_WP_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 10)?></a>
+                                    <?php }else if(!$row->TEST_SUITE_WP_ID && $row->TEST_CASE_WP_ID){ ?>
                                     <?php 
                                         $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite'); 
                                         if($tSuiteId && count($tSuiteId) == 1)

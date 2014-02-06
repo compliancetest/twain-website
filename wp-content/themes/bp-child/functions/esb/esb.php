@@ -38,16 +38,17 @@ class ManageESB
     
     public function getCaseStatus($esb_user_id, $suite_id = null, $product_id = null, $case_id = null)
     {
-        if($suite_id != null)
-            $this->addTestSuiteIDToLog($suite_id);
+        /*if($suite_id != null)
+            $this->addTestSuiteIDToLog($suite_id);*/
         
-        $query = ManageESB::$esbdb->prepare("SELECT m.TEST_SUITE_ID, p.ID AS PRODUCT_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
+        $query = ManageESB::$esbdb->prepare("SELECT s.TEST_SUITE_WP_ID, p.ID AS PRODUCT_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
                                             "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                                             "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=m.PRODUCT_ID " .
+                                            "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=m.TEST_SUITE_CONFIGURATION_ID " .
                                             "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1 AND m.CUSTOMER_ID=%d", $esb_user_id);
         
         if($suite_id != null)
-            $query .= ManageESB::$esbdb->prepare(" AND m.TEST_SUITE_ID=%d", $suite_id);
+            $query .= ManageESB::$esbdb->prepare(" AND s.TEST_SUITE_WP_ID=%d", $suite_id);
         
         if($product_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND m.PRODUCT_ID=%d", $product_id);
@@ -64,26 +65,26 @@ class ManageESB
         
         foreach($rows as $row)
         {
-            if(!isset($result[$row->TEST_SUITE_ID]))
-                $result[$row->TEST_SUITE_ID] = array();
+            if(!isset($result[$row->TEST_SUITE_WP_ID]))
+                $result[$row->TEST_SUITE_WP_ID] = array();
             
-            if(!isset($result[$row->TEST_SUITE_ID][$row->PRODUCT_ID]))
-                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID] = array();
+            if(!isset($result[$row->TEST_SUITE_WP_ID][$row->PRODUCT_ID]))
+                $result[$row->TEST_SUITE_WP_ID][$row->PRODUCT_ID] = array();
             
             if(!$row->TEST_OUTCOME_CODE)
                 continue;
 //                $row->TEST_OUTCOME = $this->getTestOutcomeStatus($row->TEST_CASE_DB_ID, get_post_meta($row->TEST_CASE_DB_ID, 'outcome_type', true));
             
             if($row->TEST_OUTCOME_CODE == 'PASS')
-                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'pass';
+                $result[$row->TEST_SUITE_WP_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'pass';
             else if($row->TEST_OUTCOME_CODE == 'FAIL')
-                $result[$row->TEST_SUITE_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'fail';
+                $result[$row->TEST_SUITE_WP_ID][$row->PRODUCT_ID][$row->TEST_CASE_DB_ID] = 'fail';
         }
         
         return $result;
     }
     
-    public function addTestSuiteIDToLog($suite_id)
+/*    public function addTestSuiteIDToLog($suite_id)
     {
         $suiteObj = new TestSuite($suite_id);
         $testCases = $suiteObj->loadTestCases();
@@ -102,7 +103,7 @@ class ManageESB
             ManageESB::$esbdb->query($query);
         }
         
-    }
+    }*/
     
     public function  getTransactionLogByID($id = null, $user_id = null)
     {
@@ -125,9 +126,9 @@ class ManageESB
             $customer_id = " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
         }        
         
-        $query = "SELECT c.*, tc.TEST_CASE_WP_ID AS TEST_CASE_DB_ID, s.TEST_SUITE_TITLE as TEST_SUITE_NAME,ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
+        $query = "SELECT c.*, tc.TEST_CASE_WP_ID AS TEST_CASE_DB_ID, s.TEST_SUITE_TITLE, s.TEST_SUITE_WP_ID, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL FROM " . $this->table_conversation_metadata . " AS c " .
                  "LEFT JOIN " . $this->table_test_case_configuration . " AS tc ON tc.ID=c.TEST_CASE_CONFIGURATION_ID " .
-                 "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                 "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_CONFIGURATION_ID " .
                  "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
                  "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID " .
                  "WHERE 1 " . $customerWhere;                
@@ -143,7 +144,6 @@ class ManageESB
                 $query .= ManageESB::$esbdb->prepare(" AND c.ID=%d", $id);
             }
         }
-        
         
         $rows = ManageESB::$esbdb->get_results($query);
         
@@ -230,9 +230,9 @@ class ManageESB
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
-                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+                $where[] = " IFNULL(s.TEST_SUITE_WP_ID, '') = ''";
             else if($suite_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+                $where[] = ManageESB::$esbdb->prepare(" s.TEST_SUITE_WP_ID=%d", $suite_id);
         }
             
         if($case_id !== "" && $case_id !== null)
@@ -272,7 +272,7 @@ class ManageESB
                     $orderQuery .= ' ORDER BY TEST_CASE_ID ' . $order;
                     break;
                 case 'suite':
-                    $orderQuery .= ' ORDER BY TEST_SUITE_NAME ' . $order;
+                    $orderQuery .= ' ORDER BY TEST_SUITE_TITLE ' . $order;
                     break;
                 case 'test_outcome':
                     $orderQuery .= ' ORDER BY TEST_OUTCOME_LABEL ' . $order;
@@ -314,12 +314,13 @@ class ManageESB
                         cm.TEST_CASE_WP_ID, 
                         cm.TEST_CASE_ID, 
                         p.ID as PRODUCT_WP_ID,
-                        s.TEST_SUITE_TITLE as TEST_SUITE_NAME, 
+                        s.TEST_SUITE_TITLE, 
+                        s.TEST_SUITE_WP_ID, 
                         ts.TEST_OUTCOME_CODE, 
                         ts.TEST_OUTCOME_LABEL 
                      FROM " . $this->table_conversation_metadata . " AS c " .
                      "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
-                     "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                     "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
@@ -335,12 +336,13 @@ class ManageESB
                         cm.TEST_CASE_ID, 
                         cm.TEST_CASE_WP_ID, 
                         p.ID as PRODUCT_WP_ID,
-                        s.TEST_SUITE_TITLE as TEST_SUITE_NAME, 
+                        s.TEST_SUITE_TITLE, 
+                        s.TEST_SUITE_WP_ID, 
                         ts.TEST_OUTCOME_CODE, 
                         ts.TEST_OUTCOME_LABEL 
                      FROM " . $this->table_conversation_metadata . " AS c " .
                      "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
-                     "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_ID " .
+                     "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_product_name_id_map . " AS p ON p.NAME=c.PRODUCT_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
             if($has_message_query > 0) 
@@ -409,6 +411,7 @@ class ManageESB
                     DISTINCT(c.PRODUCT_ID)
                   FROM " . $this->table_conversation_metadata . " AS c 
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS sm ON c.TEST_SUITE_CONFIGURATION_ID=sm.ID 
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
         
         $where = array();
@@ -426,9 +429,9 @@ class ManageESB
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
-                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+                $where[] = " IFNULL(sm.TEST_SUITE_WP_ID, '') = ''";
             else if($suite_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+                $where[] = ManageESB::$esbdb->prepare(" sm.TEST_SUITE_WP_ID=%d", $suite_id);
         }
             
         if($case_id !== "" && $case_id !== null)
@@ -479,9 +482,9 @@ class ManageESB
         $where = array();
         
         $query = "SELECT 
-                    DISTINCT(IFNULL(c.TEST_SUITE_ID, '')) as ID, tm.TEST_SUITE_TITLE AS NAME
+                    DISTINCT(IFNULL(c.TEST_SUITE_CONFIGURATION_ID, '')) as TC_ID, tm.TEST_SUITE_TITLE AS NAME, tm.TEST_SUITE_WP_ID as ID
                   FROM " . $this->table_conversation_metadata . " AS c 
-                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.id = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
@@ -552,7 +555,7 @@ class ManageESB
         $query = "SELECT 
                     DISTINCT(cm.TEST_CASE_ID) as NAME, cm.TEST_CASE_WP_ID as ID
                   FROM " . $this->table_conversation_metadata . " AS c 
-                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
@@ -576,9 +579,9 @@ class ManageESB
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
-                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+                $where[] = " IFNULL(tm.TEST_SUITE_WP_ID, '') = ''";
             else if($suite_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+                $where[] = ManageESB::$esbdb->prepare(" tm.TEST_SUITE_WP_ID=%d", $suite_id);
         }
             
         if($date != null)
@@ -627,7 +630,7 @@ class ManageESB
         $query = "SELECT 
                     DISTINCT(m.SERVICE)
                   FROM " . $this->table_conversation_metadata . " AS c 
-                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
@@ -651,9 +654,9 @@ class ManageESB
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
-                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+                $where[] = " IFNULL(tm.TEST_SUITE_WP_ID, '') = ''";
             else if($suite_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+                $where[] = ManageESB::$esbdb->prepare(" tm.TEST_SUITE_WP_ID=%d", $suite_id);
         }
         
         if($case_id !== "" && $case_id !== null)
@@ -704,7 +707,7 @@ class ManageESB
         $query = "SELECT 
                     DISTINCT(m.ACTION)
                   FROM " . $this->table_conversation_metadata . " AS c 
-                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
@@ -728,9 +731,9 @@ class ManageESB
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
-                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+                $where[] = " IFNULL(tm.TEST_SUITE_WP_ID, '') = ''";
             else if($suite_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+                $where[] = ManageESB::$esbdb->prepare(" tm.TEST_SUITE_WP_ID=%d", $suite_id);
         }
         
         if($case_id !== "" && $case_id !== null)
@@ -780,7 +783,7 @@ class ManageESB
         $query = "SELECT 
                     DISTINCT(m.FROM_PARTY_ID), m.TO_PARTY_ID
                   FROM " . $this->table_conversation_metadata . " AS c 
-                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
@@ -804,9 +807,9 @@ class ManageESB
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
-                $where[] = " IFNULL(c.TEST_SUITE_ID, '') = ''";
+                $where[] = " IFNULL(tm.TEST_SUITE_WP_ID, '') = ''";
             else if($suite_id != null)
-                $where[] = ManageESB::$esbdb->prepare(" c.TEST_SUITE_ID=%d", $suite_id);
+                $where[] = ManageESB::$esbdb->prepare(" tm.TEST_SUITE_WP_ID=%d", $suite_id);
         }
         
         if($case_id !== "" && $case_id !== null)
@@ -974,7 +977,10 @@ class ManageESB
     
     public function updateTestSuiteID($id, $suiteID)
     {
-        ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_SUITE_ID'=>$suiteID), array('ID' => $id));
+        //Getting Configuration ID        
+        $cID = $this->getTestSuiteConfigurationID($suiteID);
+        
+        ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_SUITE_CONFIGURATION_ID'=>$cID), array('ID' => $id));
     }
     
     public function updateTestOutcome($id, $outcome)
@@ -1052,6 +1058,14 @@ class ManageESB
     public function getTestCaseConfigurationID($case_id)
     {
         $query = "SELECT ID FROM " . $this->table_test_case_configuration . " WHERE TEST_CASE_WP_ID=" . $case_id;
+        $id = ManageESB::$esbdb->get_var($query);
+        
+        return $id;
+    }
+    
+    public function getTestSuiteConfigurationID($suite_id)
+    {
+        $query = "SELECT ID FROM " . $this->table_test_suite_configuration . " WHERE TEST_SUITE_WP_ID=" . $suite_id;
         $id = ManageESB::$esbdb->get_var($query);
         
         return $id;

@@ -69,7 +69,7 @@ function cp_edit_transaction_log(){
                                </select>
                                <?php             
                            }else{
-                               ?><a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_NAME, 12)?></a><?php
+                               ?><a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 12)?></a><?php
                            }
                        }                       
                    ?>
@@ -203,8 +203,9 @@ function cp_save_transaction_log()
             $esb = new ManageESB();
             
             $case_conf_id = $esb->getTestCaseConfigurationID($caseDBId);
+            $suite_conf_id = $esb->getTestSuiteConfigurationID($suiteId);
             
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_CONFIGURATION_ID=%d, TEST_SUITE_ID=%s, PRODUCT_ID=%s, PRODUCT_NAME=%s, AUDIT_RECORD=%d WHERE ID=%d", $case_conf_id, $suiteId, $productId, $productName, $audit, $row->ID);
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_CONFIGURATION_ID=%d, TEST_SUITE_CONFIGURATION_ID=%d, PRODUCT_ID=%s, PRODUCT_NAME=%s, AUDIT_RECORD=%d WHERE ID=%d", $case_conf_id, $suite_conf_id, $productId, $productName, $audit, $row->ID);
             
             ManageESB::$esbdb->query($query);
             
