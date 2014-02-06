@@ -428,7 +428,22 @@ if(!$suite->community_id)
                    
                        <div class="grid-cell width50P nopadding">                           
                                <input type="checkbox" class="checkbox-input" name="ts_profile_types[]" value="<?php echo $row->id?>" <?php echo in_array($row->id, $suite->profileTypes) ? 'checked="checked"' : ""?> />
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $row->id?>" rel="custom-popup" cp-type="ajax"><?php echo $row->title?></a>
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $row->id?>" rel="custom-popup" cp-type="ajax">
+                                   <?php echo $row->title?>
+                                   <?php
+                                   $pJSON = json_decode(base64_decode($row->schema));
+                                   if($pJSON->Version)
+                                   {
+                                       $version = array();
+                                       foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                                       {
+                                           $version[] = $v;
+                                       }
+                                       echo " v" . implode(".", $version);
+                                   }
+                                   ?>
+
+                               </a>
                        </div>                       
                    <?php } ?>  
                    <div class="clear"></div>                   
