@@ -36,11 +36,13 @@ function cp_groups_notification_new_membership_request_subject($subject, $group,
 {
     $subject = get_option('membership_request_received_admin_email_title');
     $user = get_userdata($requesting_user_id);
+    $user_organisation = get_user_meta ($requesting_user_id, 'user_organisation', true);
     $emailData = array(
         '[name]' => $user->first_name .  " " . $user->last_name,
         '[env]' => get_option('env'),
         '[website_url]' => get_site_url(),        
-        '[community]' => bp_get_group_name($group)
+        '[community]' => bp_get_group_name($group),
+        '[organisation]' => $user_organisation
     );
     $subject = str_replace(array_keys($emailData), array_values($emailData), $subject);
     
