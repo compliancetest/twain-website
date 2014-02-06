@@ -5170,6 +5170,10 @@ min-height: 70px;
 }
 
 /*** Forum ***/
+.bbp-search .bbp-breadcrumb{
+    display: none;
+}
+
 .bbp-search-form{
     float: right;
     margin-top: 5px;
