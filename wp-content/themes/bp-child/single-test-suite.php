@@ -134,7 +134,21 @@ Template Name Posts: Test Suite
 
                         foreach($profileTypes as $profileType){ ?>
                             <div class="grid-cell width100P">
-                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profileType->title?></a>
+                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax">
+                                    <?php echo $profileType->title?>
+                                    <?php
+                                        $pJSON = json_decode(base64_decode($profileType->schema));
+                                        if($pJSON->Version)
+                                        {
+                                            $version = array();
+                                            foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                                            {
+                                                $version[] = $v;
+                                            }
+                                            echo " v" . implode(".", $version);
+                                        }
+                                    ?>
+                                </a>
                             </div>
                         <?php } ?>
 
