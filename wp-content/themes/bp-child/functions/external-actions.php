@@ -53,6 +53,31 @@ function process_external_actions()
         }
         
         exit;
+    }else if($action == 'add-users-to-mailchimp3'){ //Add the community members to the selected List
+        $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+        $mailChimpList = new Mailchimp_Lists($mailChimp);
+        
+        $community_id = $_GET['id'];
+        
+        $list_id = groups_get_groupmeta($community_id, 'community_mailchimp_list_id');
+        echo "<b>Members</b><br />";
+        //Getting Memebers
+        $members = groups_get_group_members($community_id);
+        if($members){
+            foreach($members['members'] as $member)
+            {
+                $user = get_userdata($member->user_id);                          
+                try{
+                    echo $user->user_email ."<br />";
+                    $result = $mailChimpList->subscribe($list_id, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name), 'html', false);        
+                }catch(Exception $e){
+                    
+                }
+            }
+        }
+        
+        
+        exit;
     }else if($action == 'recurring-payment'){
         require_once(THE_FUNCTION . '/soap/nusoap.php');
         
