@@ -14,6 +14,8 @@ function process_external_actions()
         $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
         $mailChimpList = new Mailchimp_Lists($mailChimp);
         
+        echo "<b>Users</b><br />";
+        
         $query = "SELECT * FROM $wpdb->users WHERE user_status=0";
         $rows = $wpdb->get_results($query);
         foreach($rows as $user) 
@@ -51,7 +53,7 @@ function process_external_actions()
                 }
             }
         }
-        
+        echo "<br /><br />Process finished, please close this window.";
         exit;
     }else if($action == 'add-users-to-mailchimp3'){ //Add the community members to the selected List
         $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
