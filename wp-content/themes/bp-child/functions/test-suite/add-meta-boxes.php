@@ -434,7 +434,7 @@ function save_test_suite_on_admin($post_id)
     $post_title = $_POST['ts_name'] . " v" . $version;
     
     $esb = new ManageESB();
-    $esb->addTestSuiteNameIDMap($post_id, $post_title);
+//    $esb->addTestSuiteNameIDMap($post_id, $post_title);
     
     $post_name = sanitize_title($post_title);
     //Update Post Name

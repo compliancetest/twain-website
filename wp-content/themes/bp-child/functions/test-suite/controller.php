@@ -245,9 +245,6 @@ function saveSuite()
         
     }
     
-    $esb = new ManageESB();
-    $esb->addTestSuiteNameIDMap($id, $post_title);
-    
     //Save Types
     $suiteTypes = isset($_POST['test_suite_type']) ? $_POST['test_suite_type'] : array();
     
@@ -258,6 +255,10 @@ function saveSuite()
     
     //Update Post Metas
     cp_update_post_meta($id, 'ts_name', $_POST['ts_name']);
+    
+    $esb = new ManageESB();
+    $esb->saveTestSuiteInfo($id, $identifier . "_V" . $version, $post_title);    
+    
     cp_update_post_meta($id, 'ts_identifier', $identifier);
     cp_update_post_meta($id, 'ts_issue_date', date('Y-m-d H:i:s', getUTCTimeStamp($_POST['ts_issue_date'])));
     cp_update_post_meta($id, 'ts_issuer', $_POST['ts_issuer']);
@@ -450,7 +451,7 @@ function saveSuite()
     //If Name is updated, apply it to all versions
     if(!$isNew && $suite->identifier != $identifier)
     {
-        suiteNameUpdated($suite->identifier, $identifier);
+        suiteNameUpdated($suite->identifier, $identifier, $suite->familyMark);
     }
     
     //Save Test Suite to wp_test_suites table
@@ -562,6 +563,8 @@ function suiteTitleUpdated($family_mark, $new)
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_suites WHERE family_mark=%d", $family_mark);
     $suites = $wpdb->get_results($query);
     
+    $esb = new ManageESB();
+    
     foreach($suites as $row)
     {
         $versions = array();
@@ -584,17 +587,41 @@ function suiteTitleUpdated($family_mark, $new)
         wp_update_post(array('ID' => $post->ID, 'post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])));
         $wpdb->update($wpdb->prefix . "test_suites", array('suite_title' => $new), array('suite_id' => $row->suite_id));
         cp_update_post_meta($post->ID, 'ts_name', $new);
+        
+        //Update ESB Table
+        $esb->saveTestSuiteInfo($post->ID, get_post_meta($post->ID, 'ts_identifier', true) . '_V' . $version, $post_title);
     }
     
 }
 
-function suiteNameUpdated($old, $new)
+function suiteNameUpdated($old, $new, $family_mark)
 {
     global $wpdb;
     
     $query = $wpdb->prepare("UPDATE " . $wpdb->postmeta . " SET meta_value=%s WHERE meta_key='ts_identifier' AND meta_value=%s", $new, $old);        
     $wpdb->query($query);    
     
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_suites WHERE family_mark=%d", $family_mark);
+    $suites = $wpdb->get_results($query);
+    
+    $esb = new ManageESB();
+    
+    foreach($suites as $row)
+    {
+        $versions = array();
+        $versions[] = $row->version_major;
+        $versions[] = $row->version_minor;
+        
+        if($row->version_patch)
+            $versions[] = $row->version_patch;
+        
+        $version = implode(".", $versions);
+        
+        $post = get_post($row->suite_id);
+        $post_title = $post->post_title;
+        
+        $esb->saveTestSuiteInfo($post->ID, get_post_meta($post->ID, 'ts_identifier', true) . '_V' . $version, $post_title);
+    }
 }
 
 /**
