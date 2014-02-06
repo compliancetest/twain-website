@@ -14,6 +14,12 @@ function process_external_actions()
         $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
         $mailChimpList = new Mailchimp_Lists($mailChimp);
         
+        $subscribers = $mailChimpList->members(DEFAULT_MAILCHIMP_LIST_ID);  
+        foreach($subscribers['data'] as $srow)
+        {
+            $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $srow['email']));
+        }
+        
         echo "<b>Users</b><br />";
         
         $query = "SELECT * FROM $wpdb->users WHERE user_status=0";
@@ -27,6 +33,8 @@ function process_external_actions()
                 
             }                   
         }
+        
+        echo "<br /><br />Process finished, please close this window.";
         
         exit;
     }else if($action == 'add-users-to-mailchimp2'){ //Add Members to Subscription List
