@@ -34,6 +34,12 @@ function create_compliancetest_settings_page()
         update_option('recaptcha_private_key', $_POST['recaptcha_private_key']);
         
     }
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-mailchimp-all-list-settings')){
+        //Save Options
+        update_option('mailchimp_all_list_id', $_POST['mailchimp_all_list_id']);
+        
+    }
+    
 ?>
 <div id="eway-options-wrap">    
     <div class="icon32" id="icon-tools"> <br /> </div>    
@@ -110,6 +116,27 @@ function create_compliancetest_settings_page()
         <?php submit_button()   ?>
         <?php wp_nonce_field('save-recaptcha-settings'); ?>
     </form>  
+    <hr />
+    <h2>Mailchimp List for Registered Users</h2>
+    <?php
+        $mailchimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+        $mailchimp_list = new mailchimp_lists($mailchimp);
+        $lists = $mailchimp_list->getList();
+        
+        ?>
+        <form method="post" action="">      
+        <?php
+        foreach($lists['data'] as $list)
+        {
+            ?><p><input type="radio" name="mailchimp_all_list_id" value="<?php echo $list['id']?>" <?php echo $list['id'] == get_option('mailchimp_all_list_id') ? 'checked="checked"' : ''?> /> <label><?php echo $list['name']?></label></p><?php
+        }
+        ?>
+            <?php submit_button()   ?>
+            <?php wp_nonce_field('save-mailchimp-all-list-settings'); ?>
+        </form>  
+    <?php
+    ?>
+    
 </div>
 <?php   
 }

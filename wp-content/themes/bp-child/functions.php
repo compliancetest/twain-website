@@ -21,7 +21,7 @@ if(!defined('RECAPTCHA_PRIVATE_KEY'))
 
 
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
-    define('DEFAULT_MAILCHIMP_LIST_ID', '5af09ce467');
+    define('DEFAULT_MAILCHIMP_LIST_ID', get_option('mailchimp_all_list_id'));
 
 //Session Start
 add_action('init', 'cp_session_start');

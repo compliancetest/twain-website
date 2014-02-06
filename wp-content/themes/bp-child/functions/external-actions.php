@@ -60,10 +60,31 @@ function process_external_actions()
         $community_id = $_GET['id'];
         
         $list_id = groups_get_groupmeta($community_id, 'community_mailchimp_list_id');
+        
         echo "<b>Members</b><br />";
+        
         //Getting Memebers
-        $members = groups_get_group_members($community_id);
+        $members = groups_get_group_members($community_id);        
+        
+        $subscribers = $mailChimpList->members($list_id);  
+        
         if($members){
+            //Remove Subscribers that leave to the community
+            foreach($subscribers['data'] as $srow)
+            {
+                $isExists = false;
+                foreach($members['members'] as $member)
+                {
+                    if($member->user_email == $srow['email'])
+                    {
+                        $isExists = true;
+                        break;
+                    }
+                }
+                if(!$isExists)
+                    $mailChimpList->unsubscribe($list_id, array('email' => $srow['email']));
+            }
+            
             foreach($members['members'] as $member)
             {
                 $user = get_userdata($member->user_id);                          
@@ -74,9 +95,16 @@ function process_external_actions()
                     
                 }
             }
+            
+        }else{
+            //Remove All Subscribers
+            foreach($subscribers['data'] as $srow)
+            {
+                $mailChimpList->unsubscribe($list_id, array('email' => $srow['email']));
+            }
         }
         
-        
+        echo "<br /><br />Process finished, please close this window.";
         exit;
     }else if($action == 'recurring-payment'){
         require_once(THE_FUNCTION . '/soap/nusoap.php');
