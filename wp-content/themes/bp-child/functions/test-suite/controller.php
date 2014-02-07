@@ -13,7 +13,7 @@ function remove_suite_name_id_map($postid)
     if($post->post_type == 'test-suite')
     {    
         $esb = new ManageESB();
-        $esb->deleteTestSuiteNameIDMap($postid);
+        $esb->deleteTestSuiteInfo($postid);
         
         $suite = new TestSuite($postid);
         $familyMark = $suite->loadfamilyMark();
