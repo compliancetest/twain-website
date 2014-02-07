@@ -428,7 +428,7 @@ function ct_duplicate_data()
                                         $suitesMap[intval($row['ID'])] = $newId;
                                         
                                         //Copy Test Suite Scenarios
-                                        $query = "SELECT * FROM {$wpdb->prefix}test_suites_scenarios WHERE suite_id=" . $suite['ID'];
+                                        $query = "SELECT * FROM {$wpdb->prefix}test_suites_scenarios WHERE suite_id=" . $row['ID'];
                                         $scenarios = $new_wpdb->get_results($query);
                                         
                                         foreach($scenarios as $scenario)
