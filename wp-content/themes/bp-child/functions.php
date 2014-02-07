@@ -954,3 +954,15 @@ function cp_bbp_filter_search_results( $r ){
     return $r;
 }
 add_filter( 'bbp_after_has_search_results_parse_args' , 'cp_bbp_filter_search_results' );
+
+/**
+ * Remove Contact Form 7 scripts + styles unless we're on the contact page
+ */
+add_action( 'wp_enqueue_scripts', 'ac_remove_cf7_scripts' );
+
+function ac_remove_cf7_scripts() {
+    if ( !is_page('contact-us') ) {
+        wp_deregister_style( 'contact-form-7' );
+        wp_deregister_script( 'contact-form-7' );
+    }
+}
