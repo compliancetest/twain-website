@@ -7,7 +7,7 @@ add_action("admin_menu", "ct_custom_tools_menu");
 
 function ct_custom_tools_menu()
 {
-    add_management_page("Copy Data From Destination Site", "Copy Data", "manage_options", "duplicate_data", "ct_duplicate_data");
+    add_management_page("Copy Data From Source Site", "Copy Data", "manage_options", "duplicate_data", "ct_duplicate_data");
 }
 
 function ct_duplicate_data()
@@ -21,7 +21,7 @@ function ct_duplicate_data()
     
     ?>
     <div class="wrap">
-        <h2>Copy Data From the destination site</h2>
+        <h2>Copy Data From the source site</h2>
         <?php
             if(wp_verify_nonce($_REQUEST['action'], 'start-copy-data') || wp_verify_nonce($_REQUEST['action'], 'complete-duplicate-data'))
             {
@@ -33,7 +33,7 @@ function ct_duplicate_data()
                    <form action="" method="post">
                         <input type="hidden" name="page" value="duplicate_data" />
                         <input type="hidden" name="action" value="<?php echo wp_create_nonce('start-copy-data')?>" />
-                        <h3>Destination Database</h3>
+                        <h3>Source Database</h3>
                         <table cellpadding="5">
                             <tr>
                                 <td><b>Host</b></td>
@@ -61,7 +61,7 @@ function ct_duplicate_data()
                    if(wp_verify_nonce($action, 'start-copy-data'))                   
                    {
                        
-                       //Getting Data from the Destination Site
+                       //Getting Data from the Source Site
                        
                        $query = "SELECT * FROM " . $wpdb->prefix . "bp_groups";
                        $sourceCommunities = $wpdb->get_results($query, ARRAY_A);
@@ -84,7 +84,7 @@ function ct_duplicate_data()
                        $products = $new_wpdb->get_results($query, ARRAY_A);
                        ?>
                         <br />
-                        <h3>Select data copied from the destination site</h3>
+                        <h3>Select data copied from the source site</h3>
                         <form action="" method="post" id="copyDataForm">
                             <input type="hidden" name="page" value="duplicate_data" />
                             <input type="hidden" name="action" value="<?php echo wp_create_nonce('complete-duplicate-data')?>" />
@@ -464,7 +464,7 @@ function ct_duplicate_data()
                 <form action="" method="post">
                     <input type="hidden" name="page" value="duplicate_data" />
                     <input type="hidden" name="action" value="<?php echo wp_create_nonce('start-copy-data')?>" />
-                    <h3>Destination Database</h3>
+                    <h3>Source Database</h3>
                     <table cellpadding="5">
                         <tr>
                             <td><b>Host</b></td>
