@@ -106,11 +106,11 @@ function ct_duplicate_data()
                                                 <label><input type="checkbox" name="community_ids[]" value="<?php echo $c['id']?>" /> (ID: #<?php echo $c['id']?>) <?php echo $c['name']?></label>
                                             </td>
                                             <td>
-                                                <label><input type="radio" name="copy_method<?php echo $c['id']?>" value="copy" checked="checked" /> Copy</label>
-                                                <label><input type="radio" name="copy_method<?php echo $c['id']?>" value="update" /> Update</label>
+                                                <label><input type="radio" name="copy_method<?php echo $c['id']?>" value="copy" checked="checked" class="copy_method" /> Copy</label>
+                                                <label><input type="radio" name="copy_method<?php echo $c['id']?>" value="update" class="copy_method" /> Update</label>
                                             </td>
                                             <td>
-                                                <select name="updated_community<?php echo $c['id']?>">
+                                                <select name="updated_community<?php echo $c['id']?>" class="updated_community" disabled="disabled">
                                                     <option>Select Community</option>
                                                     <?php foreach($sourceCommunities as $sc): ?>
                                                     <option value="<?php echo $sc['id']?>"><?php echo $sc['name']?></option>
@@ -124,7 +124,8 @@ function ct_duplicate_data()
                                 
                             </div>
                             <br />
-                            <div class="articles">
+                            
+                            <!--<div class="articles">
                                 <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Test Suites</h4> <a href="#" class="check-all">Select All</a>
                                 <div style="clear:both; font-weight: bold;">(The test cases that are assigned to the test suite will be copied together.)</div>
                                 <table class="widefat" style="width: auto;">
@@ -160,8 +161,7 @@ function ct_duplicate_data()
                                 <table class="widefat" style="width: auto;">
                                     <thead>
                                         <tr>
-                                            <th>Test Case</th>                                            
-<!--                                            <th>Assigned to</th>-->
+                                            <th>Test Case</th>              
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -170,19 +170,13 @@ function ct_duplicate_data()
                                         <td>
                                             <label><input type="checkbox" name="case_ids[]" value="<?php echo $c['ID']?>" /> (ID: #<?php echo $c['ID']?>) <?php echo $c['post_title']?></label>
                                         </td>
-                                        <!--<td>
-                                            <select name="dest_suites<?php echo $c['ID']?>[]" multiple="multiple">
-                                                <?php foreach($sourceSuites as $sc): ?>
-                                                <option value="<?php echo $sc['ID']?>"><?php echo $sc['post_title']?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>-->
                                     </tr> 
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>           
                             </div>
-                            <br />
+                            
+                            <br />-->
                             <div class="articles">
                                 <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Products and Services</h4><a href="#" class="check-all">Select All</a>
                                 <table class="widefat" style="width: auto;">
@@ -220,7 +214,15 @@ function ct_duplicate_data()
                                         $(this).parent().find('input[type="checkbox"]').prop('checked', false);
                                     }
                                     return false;
-                                })
+                                });
+                                $('input.copy_method').click(function(){                                    
+                                    if($(this).val() == 'copy')
+                                    {
+                                        $(this).parent().parent().parent().find('select.updated_community').prop('disabled', true);
+                                    }else{
+                                        $(this).parent().parent().parent().find('select.updated_community').prop('disabled', false);
+                                    }
+                                });
                             })
                         </script>
                        <?php
@@ -350,7 +352,7 @@ function ct_duplicate_data()
                                         $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'terms_and_conditions'));
                                         $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'license_agreements'));
                                         $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'obligation_for_claim'));                                
-                                        $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'notification_email_of_changes'));                                                         foreach($metadata as $mrow)
+                                        $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'notification_email_of_changes'));                                                           foreach($metadata as $mrow)
                                         {
                                             if($mrow['meta_key'] == 'terms_and_conditions' || $mrow['meta_key'] == 'license_agreements' || $mrow['meta_key'] == 'obligation_for_claim' || $mrow['meta_key'] == 'notification_email_of_changes')
                                             {
@@ -360,6 +362,21 @@ function ct_duplicate_data()
                                                 $wpdb->insert($wpdb->prefix . "bp_groups_groupmeta", $mrow);
                                             }
                                         }
+                                        
+                                        //Remove Test Suites and Test Cases
+                                        $query = "SELECT DISTINCT(post_id) FROM {$wpdb->postmeta} WHERE meta_key='community_id' AND meta_value=" . $new_community_id;
+                                        $tSuiteIDs = $wpdb->get_col($query);
+                                        foreach($tSuiteIDs as $sId)
+                                        {
+                                            wp_delete_post($sId);
+                                            //Getting Test Cases
+                                            $query = "SELECT DISTINCT(post_id) FROM {$wpdb->postmeta} WHERE meta_key='test_suite' AND meta_value=" . $sId;    
+                                            $tCaseIDs = $wpdb->get_col($query);
+                                            foreach($tCaseIDs as $cId)
+                                            {
+                                                wp_delete_post($cId);
+                                            }
+                                        }                                        
                                     }else{
                                         //Add New Community
                                         //Insert New Data
