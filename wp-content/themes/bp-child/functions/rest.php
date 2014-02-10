@@ -30,6 +30,18 @@ class CPRest
     var $api_namespace = 'http://esb.test.compliancetest.net:18280/api';
     var $api_namespace2 = 'http://esb.test.compliancetest.net:18280/api';
     
+    public function __construct()
+    {
+        if(get_option('eway_payment_mode') == 'live')
+        {            
+            $this->api_namespace = 'http://esb.compliancetest.net/api';
+            $this->api_namespace2 = 'http://esb.compliancetest.net/api';       
+        }else{
+            $this->api_namespace = 'http://esb.test.compliancetest.net:18280/api';
+            $this->api_namespace2 = 'http://esb.test.compliancetest.net:18280/api';                    
+        }
+    }
+    
     public function doAPI($url, $data, $isPost = true, $isXMLHeader = true)
     {
         $ch = curl_init($url);
@@ -84,6 +96,28 @@ class CPRest
         return $this->doAPI($this->api_namespace . "/metadata/" . $action, $data, $isPost, $isXMLHeader);
     }    
     
-    
+    public function getTemplateList($suiteName, $majorVersion)
+    {
+        $result = $this->doRepositoryAPI('template/list/' . $suiteName . '/V' . $majorVersion, null, false, false);
+        
+        $resultDoc = new DOMDocument();
+        
+        if(!$result || !$resultDoc->loadXML($result))
+        {
+            return array();
+        }
+        
+        $availableTemplates = array();
+        
+        if($resultDoc->getElementsByTagName('template')->length > 0)
+        {
+            for($i = 0; $i < $resultDoc->getElementsByTagName('template')->length; $i++)
+                $availableTemplates[] = $resultDoc->getElementsByTagName('template')->item($i)->nodeValue;
+        }
+        
+        asort($availableTemplates);
+        
+        return $availableTemplates;
+    }
     
 }

@@ -389,4 +389,19 @@ class TestSuite
         
         return $this->scenarios;
     }
+    
+    public function getAvailableTemplates()
+    {
+        global $CPRest;
+        
+        if(!$this->identifier)
+            return array();
+        
+        $availableTemplates = $CPRest->getTemplateList($this->identifier, $this->version_major);
+        
+        $this->availableTemplates = $availableTemplates;
+        
+        return $availableTemplates;
+        
+    }
 }

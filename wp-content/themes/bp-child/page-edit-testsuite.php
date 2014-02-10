@@ -106,7 +106,7 @@ if(!$suite->community_id)
                        </div>
                        <div class="grid-cell">
                            <label for="ts_identifier">Name: </label>
-                           <input type="text" id="ts_identifier" name="ts_identifier" class="input half-width" value="<?php echo $suite->identifier?>" />
+                           <input type="text" id="ts_identifier" name="ts_identifier" class="input half-width" value="<?php echo $suite->identifier?>" onchange="getAvailableTemplates()" />
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -375,6 +375,15 @@ if(!$suite->community_id)
                <h5 class="left">Test Data</h5>
                <div class="clear"></div>
            </div>
+           <?php
+               $availableTemplates = $suite->getAvailableTemplates();
+           ?>
+           <select class="select medium-input availableTemplates" style="display: none;" id="availableTemplates">
+               <option value="">Select a Template</option>
+               <?php foreach($availableTemplates as $t): ?>
+               <option value="<?php echo $t?>"><?php echo $t?></option>
+               <?php endforeach; ?>
+           </select>
            <div class="grid-box-body">
                <div class="column">
                    <div id="suite-template-data">
@@ -387,7 +396,11 @@ if(!$suite->community_id)
                            </div> 
                            <div class="grid-cell">
                                <label>Template URI:</label>
-                               <input type="text" name="message_template_url[]" value="<?php echo $row['url']?>" class="input medium-input" />
+                               <select name="message_template_url[]" class="select medium-input availableTemplates" data-default='<?php echo $row['url']?>'>
+                                   <?php foreach($availableTemplates as $t): ?>
+                                   <option value="<?php echo $t?>" <?php echo $t == $row['url'] ? 'selected="selected"' : '' ?>><?php echo $t?></option>
+                                   <?php endforeach; ?>
+                               </select>                               
                            </div>                   
                            <div class="grid-cell">
                                <label>&nbsp;</label>
@@ -404,7 +417,12 @@ if(!$suite->community_id)
                            </div> 
                            <div class="grid-cell">
                                <label>Template URI:</label>
-                               <input type="text" name="message_template_url[]" value="" class="input medium-input" />
+                               <select name="message_template_url[]" class="select medium-input availableTemplates">
+                                   <option value="">Select a Template</option>
+                                   <?php foreach($availableTemplates as $t): ?>
+                                   <option value="<?php echo $t?>"><?php echo $t?></option>
+                                   <?php endforeach; ?>
+                               </select>                               
                            </div>                   
                            <div class="grid-cell">
                                <label>&nbsp;</label>
@@ -811,7 +829,9 @@ if(!$suite->community_id)
                            '</div>' +
                            '<div class="grid-cell">' +
                                '<label>Template URI:</label>' +
-                               '<input type="text" name="message_template_url[]" value="" class="input medium-input" />' +
+                               '<select name="message_template_url[]" class="select medium-input availableTemplates">' + 
+                               $('#availableTemplates').html() +
+                               '</select>' + 
                            '</div>' +
                            '<div class="grid-cell">' +
                                '<label>&nbsp;</label>' +
@@ -950,6 +970,7 @@ if(!$suite->community_id)
             {
                 jQuery('#ts_version_minor').val(0);
                 jQuery('#ts_version_patch').val(0);
+                getAvailableTemplates();
             }else if(prev.attr('id') == 'ts_version_minor'){
                 jQuery('#ts_version_patch').val(0);
             }
@@ -959,11 +980,19 @@ if(!$suite->community_id)
         })
         
         jQuery('.version-cell').on('click', '.version-cancel', function(){
+            var majorUpdated = false;
+            if(jQuery('#ts_version_major').val() != jQuery('#ts_version_major').attr('data-default'))
+                majorUpdated = true;
+                
             jQuery('.version-cell .version-updated, .version-cell .version-cancel').remove();
             jQuery('.version-cell .action-btn').show();
             jQuery('#ts_version_major').val(jQuery('#ts_version_major').attr('data-default'));
             jQuery('#ts_version_minor').val(jQuery('#ts_version_minor').attr('data-default'));
-            jQuery('#ts_version_patch').val(jQuery('#ts_version_patch').attr('data-default'));
+            jQuery('#ts_version_patch').val(jQuery('#ts_version_patch').attr('data-default'));            
+            
+            if(majorUpdated)
+                getAvailableTemplates();
+                
             return false;
         })
         
@@ -998,6 +1027,42 @@ if(!$suite->community_id)
               minHeight: 80
         });
         
+        $('#ts_identifier').on('change', function(){
+            getAvailableTemplates();
+        })
+        function getAvailableTemplates()
+        {
+            if($('#ts_identifier').val() != '')
+            {
+                $('#test-data-profiles-box .loading1').show();
+                jQuery.ajax({
+                    url: '<?php echo get_site_url()?>',
+                    data: {
+                        'id': '<?php echo $suite->id ?>',
+                        'name': $('#ts_identifier').val(),
+                        'version_major': $('#ts_version_major').val(),
+                        '_wpnonce': '<?php echo wp_create_nonce('get-available-templates')?>'
+                    },
+                    type: 'POST',
+                    dataType: 'html',
+                    complete: function(){
+                        $('#test-data-profiles-box .loading1').hide();
+                    },
+                    success: function(rsp)
+                    {
+                        jQuery('select.availableTemplates').html(rsp);
+                        /*jQuery('select.availableTemplates').each(function(){
+                            if($(this).attr('data-default'))
+                            {
+                                $(this).val($(this).attr('data-default'));
+                            }
+                        })*/
+                        
+                    }
+                })    
+            }
+            
+        }
     })
 </script>
 <?php

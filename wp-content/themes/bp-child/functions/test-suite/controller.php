@@ -66,10 +66,20 @@ function process_testsuite_actions()
         }    
         wp_redirect(base64_decode($_REQUEST['return']));
         exit;    
+    }else if(wp_verify_nonce($action, 'get-available-templates')){
+        global $CPRest;
+        
+        $templateList = $CPRest->getTemplateList($_POST['name'], $_POST['version_major']);
+        echo '<option value="">Select a Template</option>';
+        foreach($templateList as $t)
+            echo '<option value="' . $t . '">' . $t . '</option>';
+        
+        exit;
     }
     
     
 }
+
 
 function deleteTestSuite()
 {
