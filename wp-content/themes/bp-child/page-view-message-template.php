@@ -88,7 +88,7 @@ $data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
                   </api:profile>
             </api:messageTemplate>
         </api:renderTemplateRequest>';
-
+echo $data;
 $result = $CPRest->doMessageAPI('template/render' . $mode == 'html' ? '/html' : '', $data);
 
 $resultDoc = new DOMDocument();
