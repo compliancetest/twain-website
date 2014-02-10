@@ -180,6 +180,30 @@ function bbp_get_caps_for_role( $role = '' ) {
 
 		// Participant/Default
 		case bbp_get_participant_role() :
+            $caps = array(
+
+                // Primary caps
+                'spectate'              => true,
+                'participate'           => true,
+
+                // Forum caps
+                'read_private_forums'   => true,
+                'read_hidden_forums'   => true,
+
+                // Topic caps
+                'publish_topics'        => true,
+                'edit_topics'           => true,
+
+                // Reply caps
+                'publish_replies'       => true,
+                'edit_replies'          => true,
+
+                // Topic tag caps
+                'assign_topic_tags'     => true,
+            );
+
+            break;
+
 		default :
 			$caps = array(
 
