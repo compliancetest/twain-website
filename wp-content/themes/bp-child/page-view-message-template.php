@@ -88,7 +88,8 @@ $data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
                   </api:profile>
             </api:messageTemplate>
         </api:renderTemplateRequest>';
-echo $data;
+        
+
 /*$data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
             <api:messageTemplate  templateURI="SS-CONT/V1/SS-CTR_V1_01a.contribution.simple.ftl">
                   <api:profile namespace="Tester">
