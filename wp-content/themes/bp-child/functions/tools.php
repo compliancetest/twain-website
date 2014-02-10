@@ -582,6 +582,14 @@ function ct_copy_test_case($new_wpdb, $case, $suiteIDMap = null, $scenariosIDMap
                               'family_mark' => $familyMark)
                      );
         cp_sort_test_cases($familyMark, $version_major);
+        
+        $versions = array($version_major, $version_minor);
+        if($version_patch)
+            $versions[] = $version_patch;
+        
+        $esb = new ManageESB();
+        $esb->saveTestCaseInfo($newId, $testCaseId . "_V" . implode(".", $versions), get_post_meta($newId, 'outcome_type', true), get_post_meta($newId, 'message_count', true));
+        
         echo '<b>Test Case: ' . $case['post_title'] . ' has been copied.</b><br />';
     }
     

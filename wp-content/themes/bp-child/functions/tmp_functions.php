@@ -91,6 +91,39 @@ if(is_super_admin())
             
             die('Completed!');
         }
+        if(isset($_GET['fix_test_case_configuration'])){
+            $esb = new ManageESB();
+            
+            //Getting Test Suites
+            $args = array(
+                'post_type' => 'test-case',         
+                'posts_per_page' => -1
+            );
+            
+            $all_posts = new WP_Query($args);
+            $allCases = $all_posts->get_posts();
+            
+            foreach($allCases as $row)
+            {
+                $version_major = get_post_meta($row->ID, 'version_major', true);
+                $version_minor = get_post_meta($row->ID, 'version_minor', true);
+                $version_patch = get_post_meta($row->ID, 'version_patch', true);
+                
+                $versions = array();            
+                $versions[] = !$version_major ? 0 : $version_major;
+                $versions[] = !$version_minor ? 0 : $version_minor;
+                if($version_patch)
+                    $versions[] = $version_patch;
+                
+                $version = implode(".", $versions);
+                
+                $title = $row->post_title;
+                $caseId = get_post_meta($row->ID, 'test_case_id', true) . '_V' . $version;
+                $esb->saveTestCaseInfo($row->ID, $caseId, get_post_meta($newId, 'outcome_type', true), get_post_meta($newId, 'message_count', true));
+            }
+            
+            die('Completed!');
+        }
     }
     
 }

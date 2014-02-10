@@ -1008,7 +1008,7 @@ class ManageESB
     
     public function deleteTestCaseNameIDMap($id)
     {
-        $result = ManageESB::$esbdb->delete($this->table_test_case_configuration, array('ID' => $id));
+        $result = ManageESB::$esbdb->delete($this->table_test_case_configuration, array('TEST_CASE_WP_ID' => $id));
         
         return $result;        
     }
