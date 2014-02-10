@@ -83,7 +83,7 @@ class CPRest
     
     public function doRepositoryAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace . "/repository/" . $action, $isPost, $isXMLHeader);
+        return $this->doAPI($this->api_namespace . "/repository/" . $action, $data, $isPost, $isXMLHeader);
     }
     
     public function doMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
