@@ -112,7 +112,7 @@ class CPRest
         if($resultDoc->getElementsByTagName('template')->length > 0)
         {
             for($i = 0; $i < $resultDoc->getElementsByTagName('template')->length; $i++)
-                $availableTemplates[] = $resultDoc->getElementsByTagName('template')->item($i)->nodeValue;
+                $availableTemplates[] = $suiteName . "/V" . $majorVersion . "/" . $resultDoc->getElementsByTagName('template')->item($i)->nodeValue;
         }
         
         asort($availableTemplates);

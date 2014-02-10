@@ -184,11 +184,16 @@ function loadMessageTemplate()
         if($current_case_id != $row->case_id)
         {
             //Getting Case Message Templates
-            $caseTemplates = getTestCaseTemplates($row->case_id);
+            $caseObj = new TestCase($row->case_id);
+            
+            $caseTemplates = $caseObj->loadMessageTemplates();
             echo '<templates>';
             foreach($caseTemplates as $t)
             {
-                echo '<template>' . $t . '</template>';
+                echo '<template>';
+                echo '<name><![CDATA[' . $t['url'] . ']]></name>';
+                echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
+                echo '</template>';
             }
             echo '</templates>';
             
@@ -296,11 +301,16 @@ function getCaseTemplatesAndProfiles()
         if(get_post_meta($case_id, 'test_suite', true) == $suite_id)
         {
             //Getting Case Message Templates
-            $caseTemplates = getTestCaseTemplates($case_id);
+            $caseObj = new TestCase($case_id);
+            
+            $caseTemplates = $caseObj->loadMessageTemplates();
             echo '<templates>';
             foreach($caseTemplates as $t)
             {
-                echo '<template>' . $t . '</template>';
+                echo '<template>';
+                echo '<name><![CDATA[' . $t['url'] . ']]></name>';
+                echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
+                echo '</template>';
             }
             echo '</templates>';
             
@@ -341,11 +351,16 @@ function getTestCases()
         if($cases)
         {
             //Getting Case Message Templates
-            $caseTemplates = getTestCaseTemplates($cases[0]->ID);
+            $caseObj = new TestCase($cases[0]->ID);
+            
+            $caseTemplates = $caseObj->loadMessageTemplates();
             echo '<templates>';
             foreach($caseTemplates as $t)
             {
-                echo '<template>' . $t . '</template>';
+                echo '<template>';
+                echo '<name><![CDATA[' . $t['url'] . ']]></name>';
+                echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
+                echo '</template>';
             }
             echo '</templates>';
         }
@@ -483,14 +498,14 @@ function showTriggerMessageBox()
             //Getting User Previous Message Templates
             $prevMessages = getUserPreviousMessageTemplates($user_id);            
             
-            $caseTemplates = getTestCaseTemplates($current_case_id);
-            
-            $current_template = !$lastData ? $caseTemplates[0] : $lastData->template;
-            
             //Getting Harness Profiles
             $caseObj = new TestCase($current_case_id);
             $caseObj->loadProfileInstances();
             $harnessProfiles = $caseObj->getProfileInstanceRows();
+            
+            $caseTemplates = $caseObj->loadMessageTemplates();
+            
+            $current_template = !$lastData ? $caseTemplates[0] : $lastData->template;
             
             $testerProfiles = getCustomerProfileInstances();
         ?>
@@ -534,7 +549,7 @@ function showTriggerMessageBox()
                                     <select name="template" id="tm-template" class="select">
                                         <option value="">- Select -</option>
                                         <?php foreach($caseTemplates as $t){ ?>
-                                        <option value="<?php echo $t?>"><?php echo $t?></option>
+                                        <option value="<?php echo $t['url']?>"><?php echo $t['name']?></option>
                                         <?php } ?>
                                     </select>
                                 </div>                    

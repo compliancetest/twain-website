@@ -88,7 +88,7 @@ $data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
                   </api:profile>
             </api:messageTemplate>
         </api:renderTemplateRequest>';
-$data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
+/*$data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
             <api:messageTemplate  templateURI="SS-CONT/V1/SS-CTR_V1_01a.contribution.simple.ftl">
                   <api:profile namespace="Tester">
                         <api:profileURL>https://www.compliancetest.net/get-profile?id=08a139f1ec0e5986adbd16d8295089cf394fa2c7</api:profileURL>
@@ -97,12 +97,14 @@ $data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
                         <api:profileURL>https://www.compliancetest.net/get-profile?id=c4bdc391787963ea8774bd574e8f886ed219eb84</api:profileURL>
                   </api:profile>
             </api:messageTemplate>
-        </api:renderTemplateRequest>';
-$result = $CPRest->doRepositoryAPI('template/render' . $mode == 'html' ? '/html' : '', $data);
-var_dump($result);
+        </api:renderTemplateRequest>';*/
+$action = 'template/render' . ($mode == 'html' ? '/HTML' : '');
+
+$result = $CPRest->doRepositoryAPI($action, $data);
+
 $resultDoc = new DOMDocument();
             
-if($result && !$resultDoc->loadXML($result))
+if($result && $resultDoc->loadXML($result))
 {
     header("Content-type: application/xml");    
 }

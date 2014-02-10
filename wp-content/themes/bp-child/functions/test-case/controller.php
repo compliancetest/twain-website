@@ -319,6 +319,35 @@ function getTestSuiteInfoForCase()
         $profilesHTML = ob_get_clean();
         ob_end_clean();
         
+        //Get Message Template
+        $templatesHTML = '';
+        ob_start();
+        $suiteTemplates = $case->getAvailableMessageTemplates();           
+           foreach($suiteTemplates as $idx=>$row){                               
+                   $checked = false;
+                   foreach($case->messageTemplates as $crow)
+                   {
+                       if($crow['name'] == $row['name'] && $crow['url'] == $row['url'])
+                       {
+                           $checked = true;
+                           break;
+                       }
+                   }
+           ?>
+           <div class="field-row">                           
+               <div class="grid-cell width35P">                               
+                   <input type="checkbox" name="message_template_id[]" value="<?php echo $idx?>" <?php echo $checked ? 'checked="checked"' : '' ?> />
+                   <input type="text" name="message_template_name<?php echo $idx?>" value="<?php echo $row['name']?>" class="input" readonly="readonly" />
+               </div>
+               <div class="grid-cell width55P">
+                   <input type="text" name="message_template_url<?php echo $idx?>" value="<?php echo $row['url']?>" class="input medium-input" readonly="readonly" />
+               </div>
+               <div class="clear"></div>
+           </div>
+           <?php }
+        $templatesHTML = ob_get_clean();
+        ob_end_clean();
+        
         header('content-type: application/xml');
         echo '<result>';
         echo '<status>success</status>';
@@ -327,6 +356,7 @@ function getTestSuiteInfoForCase()
         echo '<roles><![CDATA[' . $rolesHTML . ']]></roles>';
         echo '<initmsg><![CDATA[' . $initMsgHTML . ']]></initmsg>';
         echo '<profiles><![CDATA[' . $profilesHTML . ']]></profiles>';
+        echo '<templates><![CDATA[' . $templatesHTML . ']]></templates>';
         echo '</result>';
        
     }

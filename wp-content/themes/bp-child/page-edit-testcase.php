@@ -679,6 +679,7 @@ jQuery(document).ready(function($){
             })
             jQuery('#choose-scenarios-box .column').html('');
             jQuery('#choose-init-msg-box  select option:gt(0)').remove();
+            jQuery('#case-template-data  .field-row:gt(0)').remove();
             jQuery('#profile-instances').html('');            
             return false;
         }
@@ -710,6 +711,7 @@ jQuery(document).ready(function($){
                     jQuery('#profile-instances').html(jQuery(rsp).find('profiles').text());
                     jQuery("#profile-instances a[rel='custom-popup']").cplightbox();
                     
+                    jQuery('#case-template-data').append(jQuery(rsp).find('templates').text());                    
                 }                
             }
         })
