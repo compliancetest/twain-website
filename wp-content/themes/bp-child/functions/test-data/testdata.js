@@ -56,12 +56,14 @@ jQuery(document).ready(function(){
             $result = tv4.validateMultiple(data.result, profileType);
             if(!$result.valid)
             {
-                var errors = '';
+                var errors = '', errors_value = '';
                 for (var i in $result.errors) {
-                    errors += $result.errors[i].dataPath + '<br/>';
+                    errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
                     errors += $result.errors[i].message + '<br/>';
+                    errors_value += $result.errors[i].dataPath + '\n';
+                    errors_value += $result.errors[i].message + '\n';
                 }
-                jQuery('#editProfileErrorForm #profile-errors').html(errors.replace(new RegExp('<br/>', 'g'), '\n'));
+                jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
                 jQuery('#editProfileErrorForm #profile-error-content').html(errors);
                 jQuery('#editProfileForm').hide();
                 jQuery('#editProfileErrorForm').show();
@@ -199,12 +201,14 @@ jQuery(document).ready(function(){
         $result = tv4.validateMultiple(profileData.value(), profileType);
         if(!$result.valid)
         {
-            var errors = '';
+            var errors = '', errors_value = '';
             for (var i in $result.errors) {
-                errors += $result.errors[i].dataPath + '<br/>';
+                errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
                 errors += $result.errors[i].message + '<br/>';
+                errors_value += $result.errors[i].dataPath + '\n';
+                errors_value += $result.errors[i].message + '\n';
             }
-            jQuery('#editProfileErrorForm #profile-errors').html(errors.replace(new RegExp('<br/>', 'g'), '\n'));
+            jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
             jQuery('#editProfileErrorForm #profile-error-content').html(errors);
             jQuery('#editProfileForm').hide();
             jQuery('#editProfileErrorForm').show();
