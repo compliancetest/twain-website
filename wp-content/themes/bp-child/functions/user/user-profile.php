@@ -65,7 +65,7 @@ function cp_user_detail_edit()
     wp_update_user( array ('ID' => $user_id, 'first_name' => $first_name, 'last_name' => $last_name, 'display_name' => $first_name /*. " " . $last_name*/)) ;
     
     $email_regex = '/^[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/'; 
-    if(!preg_match($email_regex, $email))
+    if(!preg_match($email_regex, $email) || strlen($email) > 50)
     {
         echo 'Please enter a valid email address';
         exit;
