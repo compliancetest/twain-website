@@ -58,9 +58,11 @@ jQuery(document).ready(function(){
             {
                 var errors = '', errors_value = '';
                 for (var i in $result.errors) {
-                    errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
-                    errors += $result.errors[i].message + '<br/>';
-                    errors_value += $result.errors[i].dataPath + '\n';
+                    if ($result.errors[i].dataPath) {
+                        errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
+                        errors_value += $result.errors[i].dataPath + '\n';
+                    }
+                    errors += $result.errors[i].message + '<br/>';                
                     errors_value += $result.errors[i].message + '\n';
                 }
                 jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
@@ -203,9 +205,11 @@ jQuery(document).ready(function(){
         {
             var errors = '', errors_value = '';
             for (var i in $result.errors) {
-                errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
-                errors += $result.errors[i].message + '<br/>';
-                errors_value += $result.errors[i].dataPath + '\n';
+                if ($result.errors[i].dataPath) {
+                    errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
+                    errors_value += $result.errors[i].dataPath + '\n';
+                }
+                errors += $result.errors[i].message + '<br/>';                
                 errors_value += $result.errors[i].message + '\n';
             }
             jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
