@@ -65,7 +65,7 @@ $isValid = false;
 $harnessProfileURL = '';
 foreach($profileInstances as $row)
 {
-    if($row->id == $tester_profile)
+    if($row->id == $harness_profile)
     {
         $isValid = true;
         $harnessProfileURL = get_site_url() . '/get-profile?id=' . $row->token;
