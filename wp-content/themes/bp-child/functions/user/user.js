@@ -506,7 +506,12 @@
             })
             return false;
         })
-    })
+    });
+    
+    $('#edit-card-form #email').keyup(function(){
+        var email = $(this).val();
+        $(this).val(email.substring(0, 49));
+    });
 
 })(jQuery);
 function saveVariableDefaults(obj)
