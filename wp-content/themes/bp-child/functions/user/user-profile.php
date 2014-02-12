@@ -225,7 +225,7 @@ function cp_user_payment_save()
     {
         return 'Please enter the email to receive invoices!';
     }else if(!preg_match($email_regex, $email) || strlen($email) > 50){
-        echo 'Please enter a valid email address';
+        echo 'Please enter a valid email address. Due to payment system limitations, it cannot be more than 50 characters in length.';
         exit;
     }
     
