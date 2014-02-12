@@ -7262,3 +7262,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #bbpress-forums #bbp-search-form #bbp_search{
     vertical-align:middle;
 }
+#profile-error-content {
+    height: 300px; 
+    overflow: auto;
+    line-height: 20px;
+}
