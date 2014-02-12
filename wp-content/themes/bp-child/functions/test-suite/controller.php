@@ -28,6 +28,9 @@ function remove_suite_name_id_map($postid)
         //Delete Scenarios
         $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
         
+        //Delete Subscriptions
+        $wdpb->delete($wpdb->prefix . "users_purchases", array('suite_id' => $postid));
+        
         cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
         
     }
