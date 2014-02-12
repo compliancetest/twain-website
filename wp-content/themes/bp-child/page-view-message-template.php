@@ -106,7 +106,7 @@ $result = $CPRest->doRepositoryAPI($action, $data);
 
 $resultDoc = new DOMDocument();
             
-if($result && $resultDoc->loadXML($result))
+if($result && $resultDoc->loadXML($result) && $mode == 'xml')
 {
     header("Content-type: application/xml");    
 }
