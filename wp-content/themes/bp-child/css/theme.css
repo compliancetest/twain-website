@@ -7267,3 +7267,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     overflow: auto;
     line-height: 20px;
 }
+#profile-error-content br {
+    line-height: 26px;
+}
