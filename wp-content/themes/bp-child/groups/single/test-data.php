@@ -203,7 +203,7 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
             </div>
         </div>
         <div class="popup-box-content grid-box-body noshadow">
-            <div id="profile-error-content" style="height: 300px; overflow: auto;"></div>
+            <div id="profile-error-content"></div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
             <div class="btn-row">
