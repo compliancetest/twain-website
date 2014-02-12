@@ -510,7 +510,9 @@
     
     $(document).on('keyup', '#edit-card-form #email', function(){
         var email = $(this).val();
-        $(this).val(email.substring(0, 49));
+        if (email.length > 50) {
+            $(this).val(email.substring(0, 49));
+        }
     });
 
 })(jQuery);
