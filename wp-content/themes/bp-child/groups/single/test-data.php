@@ -194,5 +194,30 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
         <input type="hidden" id="save-instance-action" value="<?php echo wp_create_nonce('save-harness-instance')?>" />
         <input type="hidden" id="get-profile-ui-action" value="<?php echo wp_create_nonce('get-harness-profile-ui')?>" />
     </form>
+    <form name="editProfileErrorForm" id="editProfileErrorForm" action="" method="post" style="display: none;">
+        <div class="popup-box-header radius6 noradiusbottom">Validation Error(s)</div>        
+        <div class="popup-box-top-nav">            
+            <div class="btn-row">      
+                <h5 class="left nomarginbottom lineheight22px">The profile instance does not match the schema for the selected profile type. Please correct the errors below and try again.</h5>          
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="popup-box-content grid-box-body noshadow">
+            <div id="profile-error-content" style="height: 300px; overflow: auto;"></div>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                            
+            <div class="btn-row">
+                <a href="#" class="action-btn cancel-btn right" id="close-error"><span class="p"></span><span class="t">Close</span></a>
+                <a href="#" class="action-btn blue-btn copy-btn right" id="copy-error"><span class="p"></span><span class="t">Copy</span></a>
+                <a href="#" class="action-btn download-btn right" id="download-error"><span class="p"></span><span class="t">Download</span></a>
+                <div class="clear"></div>
+            </div>
+        </div>                        
+        <a class="close_btn"></a>                        
+        <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
+        <textarea name="profile-errors" id="profile-errors" style="display: none;"></textarea>
+        <input type="hidden" name="profile-name" id="profile-name" value="" />
+        <input type="hidden" name="td-action" id="download-error-action" value="<?php echo wp_create_nonce('download-profile-error')?>" />
+    </form>
 </div>
 <?php } ?>
