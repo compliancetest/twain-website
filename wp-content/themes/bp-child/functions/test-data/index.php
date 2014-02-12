@@ -37,6 +37,8 @@ function cp_process_test_data_actions()
             downloadProfileType();
         }else if(wp_verify_nonce($action, 'download-profile-instance')){
             downloadProfileTypeInstance();
+        }else if(wp_verify_nonce($action, 'download-profile-error')){
+            downloadProfileError();
         }
     }
 }

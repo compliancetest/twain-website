@@ -554,3 +554,19 @@ function viewProfileInstance()
     }
     exit;
 }
+
+function downloadProfileError()
+{
+    $filename = $_REQUEST['profile-name'] . '_validation_errors';
+    $errors = $_REQUEST['profile-errors'];
+    
+    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+    header("Content-Type: Application/octet-stream");
+    header("Content-disposition: attachment; filename=" . $filename . ".log");
+    
+    echo $errors;
+    exit;
+}
