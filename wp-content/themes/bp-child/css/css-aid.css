@@ -1704,6 +1704,7 @@ tr {
 }
 .upload-btn,
 .download-btn,
+.copy-btn,
 .process-btn,
 .continue-btn,
 .mail-btn,
@@ -1729,6 +1730,7 @@ tr {
 .process-btn:hover,
 .upload-btn:hover,
 .download-btn:hover,
+.copy-btn:hover,
 .certify-btn:hover,
 .continue-btn:hover,
 .mail-btn:hover,
@@ -1740,6 +1742,9 @@ tr {
 }
 .download-btn span.p{
     background-position: 0 -1299px;
+}
+.copy-btn span.p{
+    background-position: 0 -1669px;
 }
 
 .add-new-btn span.p{
