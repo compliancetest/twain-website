@@ -508,7 +508,7 @@
         })
     });
     
-    $('#edit-card-form #email').keyup(function(){
+    $(document).on('keyup', '#edit-card-form #email', function(){
         var email = $(this).val();
         $(this).val(email.substring(0, 49));
     });
