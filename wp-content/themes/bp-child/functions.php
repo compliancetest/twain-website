@@ -265,10 +265,9 @@ function add_header_scripts()
     {
         //Ticket Script
         wp_enqueue_script( 'support-ticket', get_stylesheet_directory_uri() . '/functions/support-ticket/support-ticket.js', $actions_depends, '1.0', true );
-        wp_enqueue_script( 'testdata', get_stylesheet_directory_uri() . '/functions/test-data/testdata.js', $actions_depends, '1.0', true );
-        wp_enqueue_script( 'jclip-board', get_stylesheet_directory_uri() . '/functions/test-data/jquery.clipboard.js', $actions_depends, '1.0', true );
-        
+        wp_enqueue_script( 'testdata', get_stylesheet_directory_uri() . '/functions/test-data/testdata.js', $actions_depends, '1.0', true );        
     }
+    
     wp_enqueue_script( 'redactor-min', get_stylesheet_directory_uri() . '/js/redactor.js', $actions_depends, '1.0', true );
     wp_enqueue_style('redactor', get_stylesheet_directory_uri() . '/css/redactor.css');
     
