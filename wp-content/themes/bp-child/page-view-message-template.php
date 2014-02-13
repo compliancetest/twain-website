@@ -105,20 +105,12 @@ $action = 'template/render';// . ($mode == 'html' ? '/HTML' : '');
 $result = $CPRest->doRepositoryAPI($action, $data);
 
 $resultDoc = new DOMDocument();
-header("Content-type: application/xml");
-if($result && $resultDoc->loadXML($result) && $mode=='html'){
-    /*//Perform XSLT transformation
-    $xslt_processor = @xslt_create();
-    $xslt = __DIR__. '/xslt/message-template-render.xsl';
-    echo $xslt;
-    $result = @xslt_process ($xslt_processor, $resultDoc, $xslt);
-    @xslt_free ($xslt_processor);*/
 
+if($result && $resultDoc->loadXML($result) && $mode=='html'){
+    header("Content-type: application/xml");
     $xslt = get_site_url() . '/xslt/message-template-render.xsl';
     echo "<?xml version='1.0' encoding='utf-8'?>";
-    if($mode == 'html'){
-        echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
-    }
+    echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
 }
 elseif ($result && $resultDoc->loadXML($result) && $mode=='xml'){
     header("Content-type: application/xml");

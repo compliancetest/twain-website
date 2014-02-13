@@ -14,7 +14,7 @@
         <!-- Match to the root node -->
         <xsl:output method="html"/>
 
-        <xsl:template match="/">
+        <xsl:template match="/soap:Envelope">
             <!-- Start the html output and put in the heading stuff -->
             <html>
                 <head>
@@ -43,13 +43,13 @@
                                     <p>
                                         <a>
                                             <xsl:attribute name="href">
-                                                <xsl:value-of select="/soap:Envelope/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
+                                                <xsl:value-of select="/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
                                             </xsl:attribute>
-                                            <xsl:value-of select="/soap:Envelope/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
+                                            <xsl:value-of select="/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
                                         </a>
                                     </p>
                                     <!-- Now start a loop for each xbrl context -->
-                                    <xsl:for-each select="/soap:Envelope/soap:Body/xbrli:xbrl/xbrli:context">
+                                    <xsl:for-each select="/soap:Body/xbrli:xbrl/xbrli:context">
                                         <xsl:sort select="@id"/>
                                         <!-- And call the XSL template to create a table of facts for the context. -->
                                         <xsl:call-template name="factTable">
@@ -80,34 +80,34 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/wsse:Security/wsu:Timestamp/wsu:Created)"/>
+                                    <xsl:value-of select="name(/soap:Header/wsse:Security/wsu:Timestamp/wsu:Created)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/wsse:Security/wsu:Timestamp/wsu:Created/text()"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/wsse:Security/wsu:Timestamp/wsu:Expires)"/>
-                                </td>
-                                <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/wsse:Security/wsu:Timestamp/wsu:Expires/text()"/>
+                                    <xsl:value-of select="/soap:Header/wsse:Security/wsu:Timestamp/wsu:Created/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Username)"/>
+                                    <xsl:value-of select="name(/soap:Header/wsse:Security/wsu:Timestamp/wsu:Expires)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Username/text()"/>
+                                    <xsl:value-of select="/soap:Header/wsse:Security/wsu:Timestamp/wsu:Expires/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Password)"/>
+                                    <xsl:value-of select="name(/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Username)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Password/text()"/>
+                                    <xsl:value-of select="/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Username/text()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <xsl:value-of select="name(/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Password)"/>
+                                </td>
+                                <td>
+                                    <xsl:value-of select="/soap:Header/wsse:Security/wsse:UsernameToken/wsse:Password/text()"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -128,18 +128,18 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:Timestamp)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:Timestamp)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:Timestamp/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:Timestamp/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:MessageId)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:MessageId)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:MessageId"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageInfo/ebms:MessageId"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -160,18 +160,18 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:PartyId)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:PartyId)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:PartyId/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:PartyId/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:Role)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:Role)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:Role/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:From/ebms:Role/text()"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -192,18 +192,18 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:PartyId)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:PartyId)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:PartyId/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:PartyId/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:Role)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:Role)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:Role/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PartyInfo/ebms:To/ebms:Role/text()"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -223,34 +223,34 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:AgreementRef)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:AgreementRef)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:AgreementRef/text()"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Service)"/>
-                                </td>
-                                <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Service/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:AgreementRef/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Action)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Service)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Action/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Service/text()"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <xsl:value-of select="name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:ConversationId)"/>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Action)"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:ConversationId/text()"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:Action/text()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <xsl:value-of select="name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:ConversationId)"/>
+                                </td>
+                                <td>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:CollaborationInfo/ebms:ConversationId/text()"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -268,7 +268,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <xsl:for-each select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageProperties/ebms:Property">
+                            <xsl:for-each select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:MessageProperties/ebms:Property">
                                 <tr>
                                     <td>
                                         <xsl:value-of select="concat(name(.), ' (@name=', ./@name, ')')"/>
@@ -296,10 +296,10 @@
                             <tr>
                                 <td>
                                     <xsl:value-of
-                                            select="concat(name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:Schema), ' (@', name(/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:Schema/@location),')')"/>
+                                            select="concat(name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:Schema), ' (@', name(/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:Schema/@location),')')"/>
                                 </td>
                                 <td>
-                                    <xsl:value-of select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:Schema/@location"/>
+                                    <xsl:value-of select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:Schema/@location"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -317,7 +317,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <xsl:for-each select="/soap:Envelope/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:PartProperties/ebms:Property">
+                            <xsl:for-each select="/soap:Header/ebms:Messaging/ebms:UserMessage/ebms:PayloadInfo/ebms:PartInfo/ebms:PartProperties/ebms:Property">
                                 <tr>
                                     <td>
                                         <xsl:value-of select="concat(name(.), ' (@name=', ./@name, ')')"/>
