@@ -241,6 +241,9 @@ jQuery(document).ready(function(){
                 path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
                 copy: function(){ 
                     return jQuery('#editProfileErrorForm #profile-errors').html(); 
+                },
+                afterCopy: function(){
+                    
                 }
             });
             jQuery('#close-error').click(function(){
