@@ -11,7 +11,7 @@ $case->load();
 if(!$case->id)
 {
     echo '<p>Invalid Request!</p>';
-    exit;        
+    exit;
 }
 
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'xml';
@@ -88,7 +88,7 @@ $data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
                   </api:profile>
             </api:messageTemplate>
         </api:renderTemplateRequest>';
-        
+
 
 /*$data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
             <api:messageTemplate  templateURI="SS-CONT/V1/SS-CTR_V1_01a.contribution.simple.ftl">
@@ -100,15 +100,22 @@ $data = '<api:renderTemplateRequest xmlns:api="http://compliancetest.net/api">
                   </api:profile>
             </api:messageTemplate>
         </api:renderTemplateRequest>';*/
-$action = 'template/render' . ($mode == 'html' ? '/HTML' : '');
+$action = 'template/render';// . ($mode == 'html' ? '/HTML' : '');
 
 $result = $CPRest->doRepositoryAPI($action, $data);
 
 $resultDoc = new DOMDocument();
-            
+
 if($result && $resultDoc->loadXML($result) && $mode == 'xml')
 {
-    header("Content-type: application/xml");    
+    header("Content-type: application/xml");
+}
+else if($result && $resultDoc->loadXML($result) && $mode == 'html'){
+    //Perform XSLT transformation
+    $xslt_processor = @xslt_create();
+    $xslt = get_site_url() . '/xslt/message-template-render.xsl';
+    $result = @xslt_process ($xslt_processor, $resultDoc, $xslt);
+    @xslt_free ($xslt_processor);
 }
 
 echo $result;
