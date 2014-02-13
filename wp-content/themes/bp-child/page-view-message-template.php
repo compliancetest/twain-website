@@ -106,16 +106,16 @@ $result = $CPRest->doRepositoryAPI($action, $data);
 
 $resultDoc = new DOMDocument();
 
-if($result && $resultDoc->loadXML($result) && $mode == 'xml')
-{
-    header("Content-type: application/xml");
-}
-else if($result && $resultDoc->loadXML($result) && $mode == 'html'){
+if($result && $resultDoc->loadXML($result) && $mode=='html'){
     //Perform XSLT transformation
     $xslt_processor = @xslt_create();
-    $xslt = get_site_url() . '/xslt/message-template-render.xsl';
+    $xslt = __DIR__. '/xslt/message-template-render.xsl';
+    echo $xslt;
     $result = @xslt_process ($xslt_processor, $resultDoc, $xslt);
     @xslt_free ($xslt_processor);
+}
+elseif ($result && $resultDoc->loadXML($result) && $mode=='xml'){
+    header("Content-type: application/xml");
 }
 
 echo $result;
