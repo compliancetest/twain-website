@@ -81,8 +81,8 @@ jQuery(document).ready(function(){
                     });*/
                     jQuery('#editProfileErrorForm').submit();
                 });
-                jQuery('#copy-error').clipboard({
-                    path: '/wp-content/themes/bp-child/functions/test-data/jquery.clipboard.swf',
+                jQuery('#copy-error').zclip({
+                    path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
                     copy: function(){ 
                         return jQuery('#editProfileErrorForm #profile-errors').html(); 
                     }
