@@ -95,16 +95,12 @@ $action = 'template/render'; // . ($mode == 'html' ? '/HTML' : '');
 $result = $CPRest->doRepositoryAPI($action, $data);
 
 $resultDoc = new DOMDocument();
-$output = $result;
-if ($result == 'ERROR') {
-    header("Content-type: text/html");
-    $output = '<html><head><title>Sorry!</title><link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700" rel="stylesheet" type="text/css"/><link href="https://www.compliancetest.net/wp-content/themes/bp-child/css/xslt.css" type="text/css" rel="stylesheet"/></head><body><div id="wrapper"><div id="header-wrapper"><div class="content"><a href="https://www.compliancetest.net" class="logo left"><img src="https://www.compliancetest.net/wp-content/uploads/2013/03/logo.png"/></a></div></div><div id="menu-wrapper"></div><div id="content-wrapper"><div class="content"><div id="content-inner"><h2>An Error Occurred!</h2><p>We\'re sorry, but an error occurred during request execution. Please try again later or contact support.</p></div></div></div></div></body></html>';
-} elseif ($result != 'ERROR' && $resultDoc->loadXML($result) && $mode == 'html') {
+if ($result && $resultDoc->loadHTML($result) && $mode == 'html') {
     header("Content-type: application/xml");
     $xslt = get_site_url() . '/xslt/message-template-render.xsl';
     echo "<?xml version='1.0' encoding='utf-8'?>";
     echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
-} elseif ($result != 'ERROR' && $resultDoc->loadXML($result) && $mode == 'xml') {
+} elseif ($result && $resultDoc->loadXML($result) && $mode == 'xml') {
     header("Content-type: application/xml");
 }
 
