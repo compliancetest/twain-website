@@ -104,5 +104,5 @@ if ($result && $resultDoc->loadHTML($result) && $mode == 'html') {
     header("Content-type: application/xml");
 }
 
-echo $output;
+echo $result;
 
