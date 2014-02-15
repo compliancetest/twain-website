@@ -10,6 +10,7 @@ $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile
 foreach ($results as $row) {
     $content = json_decode(base64_decode($row->content));
     $profile_meta = getProfileMetaData($content);
+    print_r($profile_meta); exit;
     foreach ($profile_meta as $meta_key => $meta_value) {
         $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
             'profile_id' => $row->id,
