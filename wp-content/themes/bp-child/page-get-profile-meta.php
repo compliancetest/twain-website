@@ -22,7 +22,7 @@ foreach ($results as $row) {
     }
 }
 
-function getProfileMetaData($data, $meta_key = '', $level = 0) {
+/*function getProfileMetaData($data, $meta_key = '', $level = 0) {
     $ret = array();
     foreach ($data as $key => $value) {
         if ($level == 0 && !in_array($key, array('Profile', 'Entity', 'Fund')))
@@ -34,4 +34,4 @@ function getProfileMetaData($data, $meta_key = '', $level = 0) {
         $ret = array_merge($ret, getProfileMetaData($value, ($meta_key == '') ? ($key) : ($meta_key.'_'.$key), $level + 1));
     }
     return $ret;
-}
+}*/
