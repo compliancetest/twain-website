@@ -4,6 +4,7 @@
 */
 
 //$query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances WHERE token=%s", $token);<br>
+echo 'OK';
 $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('1'=>'1'), '%d');
 $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile_instances");
 print_r($results);
