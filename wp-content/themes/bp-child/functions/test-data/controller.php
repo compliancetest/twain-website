@@ -322,11 +322,38 @@ function saveProfileInstance($action)
                             'token' => sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id)
                         )
                     );   
-          $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $type_id));
+        $instance_id = $wpdb->insert_id;
+        $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $type_id));
+          
+    }
+    
+    $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$instance_id), '%d');
+    
+    $profile_meta = getProfileMetaData($jsonObject);
+    foreach ($profile_meta as $meta_key => $meta_value) {
+        $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
+            'profile_id' => $instance_id,
+            'meta_key' => $meta_key,
+            'meta_value' => $meta_value,
+        ));
     }
     
     echo '<result><status>success</status></result>';
     exit;
+}
+
+function getProfileMetaData($data, $meta_key = '', $level = 0) {
+    $ret = array();
+    foreach ($data as $key => $value) {
+        if ($level == 0 && !in_array($key, array('Profile', 'Entity', 'Fund')))
+            continue;
+        if (!is_object($value)) {
+            $ret[($meta_key == '') ? ($key) : ($meta_key.'_'.$key)] = $value;
+            continue;
+        }
+        $ret = array_merge($ret, getProfileMetaData($value, ($meta_key == '') ? ($key) : ($meta_key.'_'.$key), $level + 1));
+    }
+    return $ret;
 }
 
 function deleteProfileTypeInstance($action)
