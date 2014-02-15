@@ -6,6 +6,7 @@
 //$query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances WHERE token=%s", $token);<br>
 $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('1'=>'1'), '%d');
 $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile_instances");
+print_r($results);
 
 foreach ($results as $row) {
     $content = json_decode(base64_decode($row->content));
