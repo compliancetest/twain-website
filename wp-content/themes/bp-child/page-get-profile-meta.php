@@ -20,7 +20,7 @@ foreach ($results as $row) {
     }
 }
 
-echo count($results) . ' profiles for searching.'
+echo count($results) . ' profiles for searching.';
 
 /*function getProfileMetaData($data, $meta_key = '', $level = 0) {
     $ret = array();
