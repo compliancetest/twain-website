@@ -50,7 +50,7 @@ function sendMessage()
         echo '<error>Invalid Request!</error>';
     }else{
         //Getting Subscription Ino
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
         $subscription = $wpdb->get_row($query);
         if(!$subscription || get_post_meta($case_id, 'test_suite', true) != $suite_id) //Test Suite And Case Validation
         {
@@ -291,7 +291,7 @@ function getCaseTemplatesAndProfiles()
     $suite_id = $_POST['suite_id'];
     $case_id = $_POST['case_id'];
     
-    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
+    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
     $suite_id = $wpdb->get_var($query);
     
     header('Content-type: application/xml');
@@ -333,7 +333,7 @@ function getTestCases()
     $user_id = get_current_user_id();
     $suite_id = $_POST['suite_id'];
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
     $subscription = $wpdb->get_row($query);
     header('Content-type: application/xml');
     echo '<results>';

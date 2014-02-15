@@ -87,11 +87,10 @@ function is_customer($suite_id = null, $user_id = null)
 //    {
 //        return ture;
 //    }
-    
     if($suite_id == null)
-        $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d and `status` != 'Frozen' GROUP BY id", $user_id);
+        $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d and `status` != 'Frozen' GROUP BY id", $user_id);
     else
-        $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d and `status` != 'Frozen' AND suite_id=%d GROUP BY id", $user_id, $suite_id);
+        $query = $wpdb->prepare("SELECT COUNT(1) FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d and `status` != 'Frozen' AND suite_id=%d GROUP BY id", $user_id, $suite_id);
     
     $c = $wpdb->get_var($query);
     

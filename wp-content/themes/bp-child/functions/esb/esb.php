@@ -164,7 +164,7 @@ class ManageESB
         if($user_id == null)
             $user_id = get_current_user_id();
         
-        $query = "SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_purchases WHERE `status`='Active'";
+        $query = "SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_subscriptions WHERE `status`='Active'";
         
         if($customer_id != null)
             $query .= " AND " . $wpdb->prepare("user_id=%d", $customer_id);
@@ -890,9 +890,7 @@ class ManageESB
         if(!$user_id)
             return null;
         
-        //Getting User Customer IDs
-        /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);*/
+        //Getting User Customer IDs        
         $esbIDs = getUserAllCustomerESBIDs($user_id);
         
         if(!$esbIDs)
@@ -922,9 +920,7 @@ class ManageESB
         if(!$user_id)
             return null;
         
-        //Getting User Customer IDs
-        /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);*/
+        //Getting User Customer IDs        
         $esbIDs = getUserAllCustomerESBIDs($user_id);
         if(!$esbIDs)
             return null;
@@ -957,9 +953,7 @@ class ManageESB
         if(!$user_id)
             return null;
         
-        //Getting User Customer IDs
-        /*$query = $wpdb->prepare("SELECT esb_user_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);
-        $esbIDs = $wpdb->get_col($query);*/
+        //Getting User Customer IDs        
         $esbIDs = getUserAllCustomerESBIDs($user_id);
         
         if(!$esbIDs)

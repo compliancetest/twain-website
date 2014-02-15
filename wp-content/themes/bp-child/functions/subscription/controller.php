@@ -98,26 +98,38 @@ function process_eway_payment()
         );
         
         //Save Billing Data to Database
-        $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
+        $wpdb->insert($wpdb->prefix . "users_purchases", array(
             'user_id' => $user->ID,
-            'suite_id' => $suite->id,
             'price' => $suite->monthlySubscriptionPrice,
             'paid_amount' => $paymentAmount,
             'card_id' => $card->id,
-            'esb_user_id' => 0,
-            'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
-            'harness_username' => $esb_data['harness_username'],
-            'harness_password' => $esb_data['harness_password'],
-            'p_mode_agreement' => $esb_data['p_mode_agreement'],
-            'tester_endpoint_url' => '',
-            'tester_username' => '',
-            'tester_password' => '',
-            'status' => 'Active',
+            'created_date' => date('Y-m-d H:i:s'),
             'expiry_date' => date("Y-m-d", strtotime('first day next month')),
-            'created_date' => date('Y-m-d H:i:s')
+            'status' => 'Active',
+            'inarrears_count' => 0,
+            'frozen_count' => 0
         ));
         
-        $id = $wpdb->insert_id;
+        $purchase_id = $wpdb->insert_id;
+        
+        //Create subscription row
+        $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
+            'user_id' => $user->ID,
+            'suite_id' => $suite->id,
+            'purchase_id' => $purchase_id,
+            'subscribed_date' => date('Y-m-d H:i:s'),
+            'esb_user_id' => 0,
+            'harness_username' => $esb_data['harness_username'],
+            'harness_password' => $esb_data['harness_password'],
+            'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+            'tester_username' => '',
+            'tester_password' => '',
+            'tester_entpoint_url' => '',
+            'p_mode_agreement' => $esb_data['p_mode_agreement'],
+            'status' => 'Active'
+        ));
+        
+        $subscribe_id = $wpdb->insert_id;
         
         //Make this customer a member of the group
         if(!groups_is_user_member($user->ID, $suite->community_id))
@@ -169,7 +181,7 @@ function process_eway_payment()
             {
                 echo 'Your payment was processed successfully, but there was a problem creating your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.';
             }else{            
-                $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));
+                $wpdb->update($wpdb->prefix . "users_subscriptions", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $subscribe_id));
                 echo 'success';
             }
         }

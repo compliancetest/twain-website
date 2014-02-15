@@ -124,6 +124,53 @@ if(is_super_admin())
             
             die('Completed!');
         }
+        
+        if(isset($_GET['fix_purchases'])){
+            
+            //Getting Subscriptions
+            $query = "SELECT * FROM {$wpdb->prefix}users_purchases_backup";
+            $results = $wpdb->get_results($query);
+            
+            foreach($results as $row)
+            {
+                //Create Purchase
+                $wpdb->insert("wp_users_purchases",
+                    array(
+                        'user_id' => $row->user_id,
+                        'price' => $row->price,
+                        'paid_amount' => $row->paid_amount,
+                        'card_id' => $row->card_id,
+                        'created_date' => $row->created_date,
+                        'expiry_date' => $row->expiry_date,
+                        'status' => $row->status,
+                        'inarrears_count' => $row->inarrears_count,
+                        'frozen_count' => $row->frozen_count
+                    )
+                );
+                $purcase_id = $wpdb->insert_id;
+                //Create Subscrption
+                $wpdb->insert("wp_users_subscriptions",
+                    array(
+                        'user_id' => $row->user_id,
+                        'suite_id' => $row->suite_id,
+                        'purchase_id' => $purcase_id,
+                        'subscribed_date' => $row->created_date,
+                        'esb_user_id' => $row->esb_user_id,
+                        'harness_username' => $row->harness_username,
+                        'harness_password' => $row->harness_password,
+                        'harness_endpoint_url' => $row->harness_endpoint_url,
+                        'tester_username' => $row->tester_username,
+                        'tester_password' => $row->tester_password,
+                        'tester_entpoint_url' => $row->tester_entpoint_url,
+                        'p_mode_agreement' => $row->p_mode_agreement,
+                        'status' => $row->status
+                    )
+                );
+            }
+            
+            die('Completed!');
+        }
+        
     }
     
 }
