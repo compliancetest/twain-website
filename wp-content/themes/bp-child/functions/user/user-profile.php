@@ -50,7 +50,7 @@ function cp_user_detail_edit()
     }
 
     //Update Phonenumber
-    update_user_meta($user_id, 'phone_number', $_POST['phone_number']);
+    update_user_meta($user_id, 'phone_number',htmlentities($_POST['phone_number']));
     update_user_meta($user_id, 'description', htmlentities($_POST['biography']));
     
     //Timezone
@@ -485,10 +485,10 @@ function cp_user_organisation_edit()
     
     $user_id = $current_user->ID;
     
-    $user_organisation = $_POST['user_organisation'];
-    $user_organisation_web = $_POST['user_organisation_web'];
-    $user_organisation_desc = $_POST['user_organisation_desc'];
-    $user_organisation_abn = $_POST['user_organisation_abn'];
+    $user_organisation = htmlspecialchars($_POST['user_organisation']);
+    $user_organisation_web = htmlspecialchars($_POST['user_organisation_web']);
+    $user_organisation_desc = htmlspecialchars($_POST['user_organisation_desc']);
+    $user_organisation_abn = htmlspecialchars($_POST['user_organisation_abn']);
     
     update_user_meta($user_id, 'user_organisation', $user_organisation);
     update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
