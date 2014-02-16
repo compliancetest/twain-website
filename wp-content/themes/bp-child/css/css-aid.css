@@ -2615,3 +2615,7 @@ table.result-table{
 .no-wrap {
     white-space: nowrap;
 }
+
+.search_result_block h5{
+    line-height: normal;
+}

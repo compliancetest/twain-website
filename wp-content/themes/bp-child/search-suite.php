@@ -7,7 +7,8 @@
 
 get_header(); 
 
-global $post; 
+global $post;
+global $bp;
 
 $baseURL = get_permalink();
 $params = array();
@@ -105,9 +106,13 @@ foreach($allSuites as $row)
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $args['paged'] = $page;
 $args['posts_per_page'] = $posts_per_page;
+$args['orderby'] = 'meta_value_num title';
+$args['meta_key'] = 'community_id';
+$args['order'] = 'ASC';
 
 $get_posts = new WP_Query($args);
 $testsuites = $get_posts->get_posts();
+
 ?>
 <div class="content container" id="search">      
     <div id="search_title_block" class="page-title-block column noshadow">                    
@@ -132,7 +137,8 @@ $testsuites = $get_posts->get_posts();
             <div class="column padding20-10">
                 <div class="grid dark_gray_txt">
                     <div class="grid_head grid_head_border">                        
-                        <div class="grid_cell nopaddingtop width50P">Name</div>
+                        <div class="grid_cell nopaddingtop width25P">Community</div>
+                        <div class="grid_cell nopaddingtop width25P">Name</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Issuer</div>
                         <div class="grid_cell nopaddingtop width20P tocenter">Date</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Status</div>                        
@@ -148,7 +154,10 @@ $testsuites = $get_posts->get_posts();
                                 $group = groups_get_group( array( 'group_id' => $groupID ) )
                         ?>
                         <div class="grid_row grid_row_border">
-                            <div class="grid_cell width50P">
+                            <div class="grid_cell width25P">
+                                <h5><a href="<?php echo bp_get_group_permalink($group);?>" class="blue_txt"><?php echo apply_filters('the_title', $group->name)?></a></h5>
+                            </div>
+                            <div class="grid_cell width25P">
                                 <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
                                 <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
                             </div>
