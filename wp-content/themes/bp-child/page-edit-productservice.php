@@ -244,7 +244,21 @@ jQuery(document).ready(function(){
                 isValid = false;
                 jQuery(this).addClass('input-error');
             }
-        })
+        });
+
+        //Validate date format
+        if (!isValidDate(jQuery("#product_release_date").val())){
+            isValid = false;
+            jQuery("#product_release_date").addClass('input-error');
+        }
+
+        //Validate product URL
+        if (!isValidUrl(jQuery("#product_url").val())){
+            isValid = false;
+            jQuery("#product_url").addClass('input-error');
+        }
+
+
         return isValid;
         
     });

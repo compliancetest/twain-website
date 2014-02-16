@@ -423,7 +423,8 @@ jQuery(document).ready(function($) {
             showOn: "both",
             buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
             buttonImageOnly: true,
-            dateFormat: 'yy-mm-dd'
+            dateFormat: 'yy-mm-dd',
+            option: "disabled"
         })
     }
     
@@ -617,3 +618,25 @@ function fixTdHeight(table)
     });
 }
 
+function isValidDate(input) {
+    var bits = input.split('-');
+    var d = new Date(bits[0], bits[1] - 1, bits[2]);
+    return d.getFullYear() == bits[0] && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[2]);
+}
+
+function isValidUrl(str) {
+    if (str.length == 0) {
+        return true;
+    }
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    if(!pattern.test(str)) {
+        return false;
+    } else {
+        return true;
+    }
+}

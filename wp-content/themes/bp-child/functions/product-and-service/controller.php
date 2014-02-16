@@ -16,7 +16,7 @@ function saveProductService()
 {
     global $wpdb;
     
-    $id = $_POST['id'];
+    $id = htmlspecialchars($_POST['id']);
     if(!$id)
         $isNew = true;
     else
@@ -31,34 +31,44 @@ function saveProductService()
     
     if($isNew)
     {
-        $id = wp_insert_post(array('post_title' => $_POST['product_name'], 'post_type'=>'product-service', 'post_status' => 'publish'), true);
+        $id = wp_insert_post(array('post_title' => htmlspecialchars($_POST['product_name']), 'post_type'=>'product-service', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             addMessage($id->get_error_message(), 'error');            
             return;
-        }    
+        }
     }else{
-        if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['product_name'], 'post_name' => sanitize_title($_POST['product_name']))))
+        if(!wp_update_post(array('ID' => $id, 'post_title' =>htmlspecialchars($_POST['product_name']), 'post_name' => sanitize_title(htmlspecialchars($_POST['product_name'])))))
         {
             addMessage('There was an error while updating the test suite.', true);
             return;
         }
     }
-        
+
     $product_url = sanitize_url($_POST['product_url']);
-    
+
+    if(!preg_match('^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?^', $product_url)){
+        addMessage('URL not valid', 'error');
+        return;
+    }
+
+    if(!preg_match('@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@', $_POST['product_release_date'])){
+        addMessage('Date not valid', 'error');
+        return;
+    }
+
     //Update Product ID
-    $product_id = $_POST['product_id'];
+    $product_id = htmlspecialchars($_POST['product_id']);
     if(!$product_id)
     {        
         //Generate Product ID
         $productUrlInfo = parse_url($product_url);
         $domain = $productUrlInfo['host'];                
-        $product_slug = sanitize_title($_POST['product_name']);
+        $product_slug = sanitize_title(htmlspecialchars($_POST['product_name']));
         if(!$domain)
-            $product_id .= implode(".", array($product_slug, $_POST['product_version']));        
+            $product_id .= implode(".", array($product_slug, htmlspecialchars($_POST['product_version'])));
         else
-            $product_id .= implode(".", array($domain, $product_slug, $_POST['product_version']));
+            $product_id .= implode(".", array($domain, $product_slug, htmlspecialchars($_POST['product_version'])));
     }
     
     //Check Product ID duplication
@@ -81,16 +91,16 @@ function saveProductService()
     $esb = new ManageESB();
     $esb->addProductNameIDMap($id, $product_id);
     
-    update_post_meta($id, 'product_name', $_POST['product_name']);
-    update_post_meta($id, 'product_release_date', date('Y-m-d H:i:s', getUTCTimeStamp($_POST['product_release_date'])));
-    update_post_meta($id, 'product_type', $_POST['product_type']);
-    update_post_meta($id, 'product_version', $_POST['product_version']);
-    update_post_meta($id, 'product_url', $_POST['product_url']);
-    update_post_meta($id, 'product_description', $_POST['product_description']);
-    update_post_meta($id, 'product_owner', $_POST['product_owner']);
+    update_post_meta($id, 'product_name', htmlspecialchars($_POST['product_name']));
+    update_post_meta($id, 'product_release_date', date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));
+    update_post_meta($id, 'product_type', htmlspecialchars($_POST['product_type']));
+    update_post_meta($id, 'product_version', htmlspecialchars($_POST['product_version']));
+    update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));
+    update_post_meta($id, 'product_description', htmlspecialchars($_POST['product_description']));
+    update_post_meta($id, 'product_owner', htmlspecialchars($_POST['product_owner']));
     
     //Save Related Products
-    $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
+    $related_products = isset($_POST['related-product']) ? htmlspecialchars($_POST['related-product']) : array();
     $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();
     
     //remove old entries
@@ -148,4 +158,3 @@ function deleteProductService()
     wp_redirect($return);
     exit;
 }
-
