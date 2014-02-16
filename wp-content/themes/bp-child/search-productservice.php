@@ -40,18 +40,21 @@ $filterYear = getFilterParam('product_year');
 
 foreach($filterType as $f)
 {
+    $f = htmlspecialchars($f);
     $args['meta_query'][] = array('key' => 'product_type', 'value' => $f, 'compare' => '=');
     $params[] = urlencode('type[]') . '=' . urlencode($f);
     $filterParams['type[]'] = $f;
 }
 foreach($filterOwner as $v)
 {
+    $v = htmlspecialchars($v);
     $args['meta_query'][] = array('key' => 'product_owner', 'value' => $v, 'compare' => '=');
     $params[] = urlencode('owner[]') . '=' . urlencode($v);
     $filterParams['owner[]'] = $v;
 }
 foreach($filterYear as $v)
 {
+    $v = htmlspecialchars($v);
     $args['meta_query'][] = array('key' => 'product_release_date', 'value' => $v . "-", 'compare' => 'LIKE');
     $params[] = urlencode('product_year[]') . '=' . urlencode($v);
     $filterParams['product_year[]'] = $v;
