@@ -33,14 +33,14 @@ $args = array(
 );
 
 //Getting Search Query
-$term = trim(isset($_GET['q']) ? $_GET['q'] : '');
+$term = trim(isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '');
 
 if($term)
     $args['s'] = $term;
 
 if($term)
     $params[] = 'q=' . $term;
-    
+
 //Getting Filter Params
 $filterType = getFilterParam('type');
 $filterIssuer = getFilterParam('issuer');
@@ -49,24 +49,28 @@ $filterStatus = getFilterParam('status');
 
 foreach($filterType as $f)
 {
+    $f = htmlspecialchars($f);
     $args['tax_query'][] = array('taxonomy' => 'test_suite_type', 'field' => 'slug', 'terms' => $f);
     $params[] = urlencode('type[]') . '=' . urlencode($f);
     $filterParams['type[]'] = $f;
 }
 foreach($filterIssuer as $v)
 {
+    $v = htmlspecialchars($v);
     $args['meta_query'][] = array('key' => 'ts_issuer', 'value' => $v, 'compare' => '=');
     $params[] = urlencode('issue_year[]') . '=' . urlencode($v);
     $filterParams['issue_year[]'] = $v;
 }
 foreach($filterYear as $v)
 {
+    $v = htmlspecialchars($v);
     $args['meta_query'][] = array('key' => 'ts_issue_date', 'value' => $v . "-", 'compare' => 'LIKE');
     $params[] = urlencode('year[]') . '=' . urlencode($v);
     $filterParams['year[]'] = $v;
 }
 foreach($filterStatus as $v)
 {
+    $v = htmlspecialchars($v);
     $args['meta_query'][] = array('key' => 'ts_status', 'value' => $v, 'compare' => '=');
     $params[] = urlencode('status[]') . '=' . urlencode($v);
     $filterParams['status[]'] = $v;
