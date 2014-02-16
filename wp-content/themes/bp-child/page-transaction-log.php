@@ -26,25 +26,25 @@ if(is_user_logged_in()){
 }
 get_header();
 
-$filterProduct = isset($_GET['product']) ? $_GET['product'] : null;
-$filterSuite = isset($_GET['suite']) ? $_GET['suite'] : null;
-$filterCase = isset($_GET['case']) ? $_GET['case'] : null;
-$filterService = isset($_GET['service']) ? $_GET['service'] : null;
-$filterAction = isset($_GET['action']) ? $_GET['action'] : null;
-$filterPartyId = isset($_GET['partyid']) ? $_GET['partyid'] : null;
-$filterDate = isset($_GET['date']) ? $_GET['date'] : null;
-$filterCustomer = isset($_GET['customer']) ? $_GET['customer'] : null;
+$filterProduct = isset($_GET['product']) ? htmlspecialchars($_GET['product']) : null;
+$filterSuite = isset($_GET['suite']) ? htmlspecialchars($_GET['suite']) : null;
+$filterCase = isset($_GET['case']) ? htmlspecialchars($_GET['case']) : null;
+$filterService = isset($_GET['service']) ? htmlspecialchars($_GET['service']) : null;
+$filterAction = isset($_GET['action']) ? htmlspecialchars($_GET['action']) : null;
+$filterPartyId = isset($_GET['partyid']) ? htmlspecialchars($_GET['partyid']) : null;
+$filterDate = isset($_GET['date']) ? htmlspecialchars($_GET['date']) : null;
+$filterCustomer = isset($_GET['customer']) ? htmlspecialchars($_GET['customer']) : null;
 
 $esb = new ManageESB();
 
-$limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('transactions');                    
+$limit = isset($_GET['limit']) ? intval(htmlspecialchars($_GET['limit'])) : getItemsPerPage('transactions');
 setItemsPerPage($limit, 'transactions');
 
-$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'date';
+$orderBy = isset($_GET['orderby']) ? htmlspecialchars($_GET['orderby']) : 'date';
 if(!in_array($orderBy, array('product', 'case', 'suite', 'test_outcome', 'audit', 'service', 'action', 'message', 'date', 'from')))
     $orderBy = 'product';
     
-$order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'date' ? 'desc' : 'asc');
+$order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : ($orderBy == 'date' ? 'desc' : 'asc');
 
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
