@@ -134,11 +134,13 @@ function deleteProductService()
     }
     
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
-    
+
+    $redirectUrl = get_site_url() . '/' . $return;
+
     if(!can_delete_product_and_service($product->ID))
     {
         addMessage('Permission Denied!', 'error');
-        wp_redirect($return);
+        wp_redirect($redirectUrl);
         exit;
     }
     
@@ -148,13 +150,13 @@ function deleteProductService()
     if($count > 0)
     {
         addMessage("You can't delete the product/service, because it includes claims.", "error");
-        wp_redirect($return);
+        wp_redirect($redirectUrl);
         exit;
     }
     
     //Delete Product/Service
     wp_trash_post($id);
     addMessage("The product/service was deleted!");
-    wp_redirect($return);
+    wp_redirect($redirectUrl);
     exit;
 }

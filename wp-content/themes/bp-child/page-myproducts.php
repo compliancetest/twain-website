@@ -3,6 +3,9 @@
 * Template Name: My Products
 */
 
+global $post;
+$slug = get_post( $post )->post_name;
+
 if(is_user_logged_in()){
     global $current_user;
     
@@ -50,7 +53,7 @@ get_header();
                    <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
                    <?php } ?>
                    <?php if(can_delete_product_and_service($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-delete right" href="<?php get_permalink()?>?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode(get_permalink()) ?>" onclick="return confirm('Are you sure that you want to delete this product?')">Edit<span class="simple_tooltip radius6">Delete<span></span></span></a>
+                   <a class="gbh-btn gbh-btn-delete right" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode($slug) ?>" onclick="return confirm('Are you sure that you want to delete this product?')">Edit<span class="simple_tooltip radius6">Delete<span></span></span></a>
                    <?php } ?>
                    <div class="clear"></div>
                </div>
@@ -89,7 +92,7 @@ get_header();
                                <div class="td td-audit"><?php //echo $claim->audit?></div>
                                <div class="td td-action">
                                    <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn icon-btn edit-claim-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Claim<span></span></span></a>
-                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn delete-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Delete Claim<span></span></span></a>
+                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode($slug) ?>" class="action-btn delete-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Delete Claim<span></span></span></a>
                                </div>
                                <div class="clear"></div>
                            </div>

@@ -60,7 +60,7 @@ get_header();
                                 ?>
                             </div>
                             <div class="td td-action">
-                                <a href="?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link">
+                                <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link">
                                     <span class="p"></span>
                                     <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
                                 </a>
