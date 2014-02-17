@@ -4,7 +4,7 @@
 */
 
 
-$caseID = isset($_GET['id']) ? $_GET['id'] : null;
+$caseID = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;
 
 if( ($caseID != null && !can_edit_test_case($caseID)) || ($caseID == null && !can_create_test_case()) )
 {
@@ -23,7 +23,7 @@ else
     $isNew = false;
 
 if($isNew)
-    $testsuites = $case->getAvailableTestSuites(isset($_GET['suite_id']) ? $_GET['suite_id'] : null );
+    $testsuites = $case->getAvailableTestSuites(isset($_GET['suite_id']) ? htmlspecialchars($_GET['suite_id']) : null );
 else
     $testsuites = $case->getAvailableTestSuites($case->testSuite[0]);
 
@@ -31,7 +31,7 @@ if(isset($_GET['suite_id']))
 {
     foreach($testsuites as $r)
     {
-        if($r->ID == $_GET['suite_id'])
+        if($r->ID == htmlspecialchars($_GET['suite_id']))
         {
             $case->testSuite = array($r->ID);
             break;

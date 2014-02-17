@@ -3,7 +3,7 @@
  * Template Name: Add/Edit Test Suite
  */
 
-$suiteID = isset($_GET['id']) ? $_GET['id'] : null;
+$suiteID = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;
 
 if( ($suiteID != null && !can_edit_suite($suiteID)) || ($suiteID == null && !can_create_suite()) )
 {
@@ -34,7 +34,7 @@ if($suite->id)
 }
 
 if(!$suite->community_id)
-    $suite->community_id = isset($_GET['community_id']) ? $_GET['community_id'] : $groups[0]->id;
+    $suite->community_id = isset($_GET['community_id']) ? htmlspecialchars($_GET['community_id']) : $groups[0]->id;
 ?>
 <div class="content edit-item-wrapper" id="edit_test_suite_wrapper">
     <div class="space25"></div>
