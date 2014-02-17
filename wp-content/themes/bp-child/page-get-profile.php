@@ -24,7 +24,7 @@ if ($token) {
     $meta_key = getMetaParameter('key');
     $meta_value = getMetaParameter('value');
     if ($user && $password) {
-        $query = $wpdb->prepare("SELECT harness_password, user_id FROM $wpdb->prefix" . "users_purchases WHERE harness_username=%s limit 1", $user);
+        $query = $wpdb->prepare("SELECT harness_password, user_id FROM $wpdb->prefix" . "users_subscriptions WHERE harness_username=%s limit 1", $user);
         $user_row = $wpdb->get_row($query);
         if ($password == $user_row->harness_password) {
             if ($meta_key) {
