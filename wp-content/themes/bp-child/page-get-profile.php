@@ -24,11 +24,11 @@ if ($token) {
     $meta_key = getMetaParameter('key');
     $meta_value = getMetaParameter('value');
     if ($user && $password) {
-        $query = $wpdb->prepare("SELECT harness_password, user_id FROM $wpdb->prefix" . "users_subscriptions WHERE harness_username=%s limit 1", $user);
+        $query = $wpdb->prepare("SELECT harness_password, user_id FROM $wpdb->prefix" . "users_purchases WHERE harness_username=%s limit 1", $user);
         $user_row = $wpdb->get_row($query);
         if ($password == $user_row->harness_password) {
             if ($meta_key) {
-                $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances cpi Left Join $wpdb->prefix" . "community_profile_meta cpm ON cpm.profile_id=cpi.id AND cpm.meta_key=%s AND cpm.meta_value=%s Order By cpm.meta_id desc, cpi.id desc, cpi.type desc Limit 1", $meta_key, $meta_value);
+                $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances cpi Inner Join $wpdb->prefix" . "community_profile_meta cpm ON cpm.profile_id=cpi.id AND cpm.meta_key=%s AND cpm.meta_value=%s Order By cpm.meta_id desc, cpi.id desc, cpi.type desc Limit 1", $meta_key, $meta_value);
             } else {
                 $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances cpi Where creator_id=%s Order By cpi.id desc, cpi.type desc Limit 1", $user_row->user_id);
             }
