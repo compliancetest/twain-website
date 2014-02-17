@@ -226,7 +226,7 @@ Template Name Posts: Test Suite
             <?php 
                 global $wpdb;
                 
-                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite->id);
+                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite->id);
                 $subscription = $wpdb->get_row($query);
                 
             if($subscription){ 
@@ -247,7 +247,7 @@ Template Name Posts: Test Suite
                 </div>
                 <?php elseif($subscription->status == 'Unsubscribing'): ?>
                 <div class="message notice">
-                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month.
+                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
                 </div>
                 <?php endif; ?>
             <?php }else{ ?>  

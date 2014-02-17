@@ -161,7 +161,7 @@ if(is_super_admin())
                         'harness_endpoint_url' => $row->harness_endpoint_url,
                         'tester_username' => $row->tester_username,
                         'tester_password' => $row->tester_password,
-                        'tester_entpoint_url' => $row->tester_entpoint_url,
+                        'tester_endpoint_url' => $row->tester_endpoint_url,
                         'p_mode_agreement' => $row->p_mode_agreement,
                         'status' => $row->status
                     )

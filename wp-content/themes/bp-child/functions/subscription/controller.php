@@ -124,7 +124,7 @@ function process_eway_payment()
             'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
             'tester_username' => '',
             'tester_password' => '',
-            'tester_entpoint_url' => '',
+            'tester_endpoint_url' => '',
             'p_mode_agreement' => $esb_data['p_mode_agreement'],
             'status' => 'Active'
         ));

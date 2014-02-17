@@ -520,7 +520,7 @@ function cp_save_customer_harness_detail()
     
     $user = get_userdata($user_id);
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE id=%d AND user_id=%d", $id, $user_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d AND user_id=%d", $id, $user_id);
     $data = $wpdb->get_row($query);
     
     if(!$data)
@@ -574,7 +574,7 @@ function cp_save_customer_harness_detail()
         }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
             return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
         }else{ //Success
-            $wpdb->update($wpdb->prefix . "users_purchases", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));            
+            $wpdb->update($wpdb->prefix . "users_subscriptions", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));            
         }
     }else{
         //Update Data
@@ -620,11 +620,11 @@ function cp_save_customer_harness_detail()
         $updateArr['tester_password'] = $_POST['tester_password'];
     }
         
-    $wpdb->update($wpdb->prefix . "users_purchases", 
+    $wpdb->update($wpdb->prefix . "users_subscriptions", 
         $updateArr,
         array('id' => $data->id)
     );        
-    
+    echo $wpdb->last_error;
     return "success";
 }
 

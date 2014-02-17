@@ -52,7 +52,10 @@ class CT_Subscription
         
         if($this->id)
         {
-            $query = $wpdb->prepare("SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.id=%d", $this->id);
+            $query = $wpdb->prepare("SELECT s.*, p.price, p.paid_amount, p.card_id, p.created_date, p.expiry_date,p.inarrears_count, p.frozen_count, c.customer_id FROM {$wpdb->prefix}users_subscriptions AS s
+                                     LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id = s.purchased_id
+                                     LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id                                      
+                                     WHERE p.id=%d", $this->id);
             
             $row = $wpdb->get_row($query, ARRAY_A);
             if($row)
@@ -89,7 +92,8 @@ class CT_Subscription
         if($this->id)
         {
             //Update subscription status
-            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Unsubscribing'), array('id' => $this->id));
+            $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Unsubscribing'), array('id' => $this->id));
+//            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Unsubscribing'), array('id' => $this->id));
             
             //Send Email Notification
             $user = get_userdata($this->user_id);
