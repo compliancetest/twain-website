@@ -23,6 +23,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                     <div class="thead tr">
                        <div class="td td-profile-name">Profile Name</div>
                        <div class="td td-profile-type">Type</div>
+                       <div class="td td-profile-lookup">Include In Lookup</div>
                        <div class="td td-action">Action</div>
                        <div class="clear"></div>
                    </div>
@@ -75,6 +76,9 @@ $subscriptions =  getUserSubscriptions(null, true);
                                 ?>
                                </a>                    
                            </div>
+                           <div class="td td-profile-type">
+                                <input type="checkbox" name="lookup" value="<?php echo $instance->id; ?>" <?php echo ($instance->lookup)?('checked'):(''); ?>>
+                           </div>
                            <div class="td td-action">
                                 <?php
                                     if($instance->creator_id == get_current_user_id())
@@ -103,6 +107,7 @@ $subscriptions =  getUserSubscriptions(null, true);
             </div>
             <div class="space10"></div>
             <?php if(count($subscriptions) > 0) { ?>
+                <input type="hidden" id="update-lookup-action" value="<?php echo wp_create_nonce('update-profile-lookup')?>">
                 <a class="action-btn add-new-btn has-tooltip" id="add-new-test-data-link" href="#edit-profile-box">
             <?php } else { ?>
                 <a class="action-btn add-new-btn has-tooltip" href="#need-subscription-box" rel="custom-popup" cp-type="inline" >
