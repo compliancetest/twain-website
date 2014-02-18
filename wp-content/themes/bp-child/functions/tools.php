@@ -507,7 +507,46 @@ function ct_duplicate_data()
                 <?php
             }
             ?>
-            
+        <hr/>
+        <h2>Generate Search Meta Data of Profiles</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('generate-search-meta')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Generate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'generate-search-meta')): ?>
+                    <tr>
+                        <td>
+                            <i>
+                            <?php
+                                $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('1'=>'1'), '%d');
+                                $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile_instances");
+
+                                foreach ($results as $row) {
+                                    $content = json_decode(base64_decode($row->content));
+                                    $profile_meta = getProfileMetaData($content);
+                                    foreach ($profile_meta as $meta_key => $meta_value) {
+                                        $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
+                                            'profile_id' => $row->id,
+                                            'meta_key' => $meta_key,
+                                            'meta_value' => $meta_value,
+                                        ));
+                                    }
+                                }
+
+                                echo 'Generated ' . count($results) . ' profiles\' search meta.';
+                            ?>
+                            </i>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
+                </table>                
+            </form>
+        </div>
     </div>
     <?php
 }
