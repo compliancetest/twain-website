@@ -600,6 +600,8 @@ function downloadProfileError()
 }
 
 function updateProfileLookup() {
+    global $wpdb;
+    
     $id = isset($_REQUEST['id']) ? ($_REQUEST['id']) : (0);
     $status = isset($_REQUEST['status']) ? ($_REQUEST['status']) : (0);
     if ($id) {
