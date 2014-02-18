@@ -677,9 +677,10 @@ Template Name Posts: Test Suite
                     <div class="clear"></div>
                 </div>
                 <div class="field-row notice-txt">
-                    This is Photoshop's version  of Lorem Ipsum. Proin gravida bhavel velit auctor aliquet. Aenean sollicitudin, lorem quis nefertimauctor, nisi elit consequat ipsum.
-                    <br />
-                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/card-icon.png" />
+                    <div class="grid-cell">
+                        <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
+                    </div>
+                    <div class="clear"></div>
                 </div>                
             </div>
             <div class="popup-box-footer radius6 noradiustop">
@@ -759,6 +760,14 @@ jQuery(document).ready(function($) {
             jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">Please enter valid email address.</div>');
             return false;
         }
+        
+        //Check Terms and condition
+        if(!$('#agree_customer_terms').prop('checked'))
+        {
+            jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">You must agree to our Terms & Conditions.</div>');
+            return false;
+        }
+        
         jQuery('#subscribe-box .loading').show();
         
         jQuery.ajax({

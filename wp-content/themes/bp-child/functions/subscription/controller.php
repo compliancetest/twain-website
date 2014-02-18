@@ -153,40 +153,8 @@ function process_eway_payment()
         );
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
         cp_send_email_to_admin('purchase_subscription_admin', $emailData);
-
-        //Create Backend Customer Using SOAP            
-        $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:username>' . $esb_data['harness_username'] . '</api:username>
-                        <api:password>' . $esb_data['harness_password'] . '</api:password>
-                        <api:userGroups>
-                            <api:group>
-                                <api:groupId>' . $suite->community_id . '</api:groupId>
-                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                            </api:group>
-                        </api:userGroups>                       
-                        <api:userPModeAgreement>' . $esb_data['p_mode_agreement'] . '</api:userPModeAgreement>                            
-                        <api:userEndpoint />
-                        <api:userEndpointUsername />
-                        <api:userEndpointPassword />
-                    </api:user>
-                </api:createUserRequest>';
         
-        $result = $CPRest->doUserAPI('user/create', $data);
-        $resultDoc = new DOMDocument();
-        
-        if(!$result || !$resultDoc->loadXML($result))
-        {
-            echo 'Your payment was processed successfully, but there was a problem creating your test credentials. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.';
-        }else{                
-            if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
-            {
-                echo 'Your payment was processed successfully, but there was a problem creating your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.';
-            }else{            
-                $wpdb->update($wpdb->prefix . "users_subscriptions", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $subscribe_id));
-                echo 'success';
-            }
-        }
+        echo 'success';
         
     }else{            
         if(isset($result['ewayTrxnError']))
@@ -243,87 +211,55 @@ function free_charge()
         'harness_password' => cp_generate_password(8)
     );
     
-    //Create Backend Customer Using SOAP            
-    $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:username>' . $esb_data['harness_username'] . '</api:username>
-                        <api:password>' . $esb_data['harness_password'] . '</api:password>
-                        <api:userGroups>
-                            <api:group>
-                                <api:groupId>' . $suite->community_id . '</api:groupId>
-                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                            </api:group>
-                        </api:userGroups>                       
-                        <api:userPModeAgreement>' . $esb_data['p_mode_agreement'] . '</api:userPModeAgreement>                            
-                        <api:userEndpoint />
-                        <api:userEndpointUsername />
-                        <api:userEndpointPassword />
-                    </api:user>
-                </api:createUserRequest>';
     
+    //Save Billing Data to Database
+    $wpdb->insert($wpdb->prefix . "users_purchases", array(
+        'user_id' => $user->ID,
+        'price' => 0,
+        'paid_amount' => 0,
+        'card_id' => 0,
+        'created_date' => date('Y-m-d H:i:s'),
+        'expiry_date' => date("Y-m-d", strtotime('first day next month')),
+        'status' => 'Active',
+        'inarrears_count' => 0,
+        'frozen_count' => 0
+    ));
     
-    $result = $CPRest->doUserAPI('user/create', $data);
+    $purchase_id = $wpdb->insert_id;
     
-    $resultDoc = new DOMDocument();
+    //Create subscription row
+    $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
+        'user_id' => $user->ID,
+        'suite_id' => $suite->id,
+        'purchase_id' => $purchase_id,
+        'subscribed_date' => date('Y-m-d H:i:s'),
+        'esb_user_id' => 0,
+        'harness_username' => $esb_data['harness_username'],
+        'harness_password' => $esb_data['harness_password'],
+        'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+        'tester_username' => '',
+        'tester_password' => '',
+        'tester_endpoint_url' => '',
+        'p_mode_agreement' => $esb_data['p_mode_agreement'],
+        'status' => 'Active'
+    ));
     
-    if(!$result || !$resultDoc->loadXML($result))
-    {
-        addMessage('There was a problem creating your test credentials. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', 'error');
-    }else{
-        if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
-        {
-            addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', "error");
-        }else{            
-            //Save Billing Data to Database
-            $wpdb->insert($wpdb->prefix . "users_purchases", array(
-                'user_id' => $user->ID,
-                'price' => 0,
-                'paid_amount' => 0,
-                'card_id' => 0,
-                'created_date' => date('Y-m-d H:i:s'),
-                'expiry_date' => date("Y-m-d", strtotime('first day next month')),
-                'status' => 'Active',
-                'inarrears_count' => 0,
-                'frozen_count' => 0
-            ));
+    $subscribe_id = $wpdb->insert_id;
+    
+    //Send Email
+    $emailData = array(
+        '[name]' => cp_get_user_fullname($user->ID),
+        '[email]' => $user->user_email,
+        '[suite_name]' => $suite->name,
+        '[suite_url]' => get_permalink($suite->id),
+        '[paid_amount]' => $suite->monthlySubscriptionPrice,
+        '[community_url]' => bp_get_group_permalink($group)
+    );
+    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_free_subscription', $emailData);
+    cp_send_email_to_admin('purchase_free_subscription_admin', $emailData);
+    
+    addMessage("Your subscription has been proceeded successfully");
             
-            $purchase_id = $wpdb->insert_id;
-            
-            //Create subscription row
-            $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
-                'user_id' => $user->ID,
-                'suite_id' => $suite->id,
-                'purchase_id' => $purchase_id,
-                'subscribed_date' => date('Y-m-d H:i:s'),
-                'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
-                'harness_username' => $esb_data['harness_username'],
-                'harness_password' => $esb_data['harness_password'],
-                'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
-                'tester_username' => '',
-                'tester_password' => '',
-                'tester_endpoint_url' => '',
-                'p_mode_agreement' => $esb_data['p_mode_agreement'],
-                'status' => 'Active'
-            ));
-            
-            $subscribe_id = $wpdb->insert_id;
-            
-            //Send Email
-            $emailData = array(
-                '[name]' => cp_get_user_fullname($user->ID),
-                '[email]' => $user->user_email,
-                '[suite_name]' => $suite->name,
-                '[suite_url]' => get_permalink($suite->id),
-                '[paid_amount]' => $suite->monthlySubscriptionPrice,
-                '[community_url]' => bp_get_group_permalink($group)
-            );
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_free_subscription', $emailData);
-            cp_send_email_to_admin('purchase_free_subscription_admin', $emailData);
-            
-            addMessage("Your subscription has been proceeded successfully");
-            
-        }
-    }
     wp_redirect($return);
     exit;
   
@@ -430,73 +366,39 @@ function create_subscription()
         'harness_password' => cp_generate_password(8)
     );
     
-    //Create Backend Customer Using SOAP            
-    $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:username>' . $esb_data['harness_username'] . '</api:username>
-                        <api:password>' . $esb_data['harness_password'] . '</api:password>
-                        <api:userGroups>
-                            <api:group>
-                                <api:groupId>' . $suite->community_id . '</api:groupId>
-                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                            </api:group>
-                        </api:userGroups>                       
-                        <api:userPModeAgreement>' . $esb_data['p_mode_agreement'] . '</api:userPModeAgreement>                            
-                        <api:userEndpoint />
-                        <api:userEndpointUsername />
-                        <api:userEndpointPassword />
-                    </api:user>
-                </api:createUserRequest>';
+    //Create subscription row
+    $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
+        'user_id' => $user->ID,
+        'suite_id' => $suite->id,
+        'purchase_id' => $purchase_id,
+        'subscribed_date' => date('Y-m-d H:i:s'),
+        'esb_user_id' => 0,
+        'harness_username' => $esb_data['harness_username'],
+        'harness_password' => $esb_data['harness_password'],
+        'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+        'tester_username' => '',
+        'tester_password' => '',
+        'tester_endpoint_url' => '',
+        'p_mode_agreement' => $esb_data['p_mode_agreement'],
+        'status' => 'Active'
+    ));
     
+    $subscribe_id = $wpdb->insert_id;
     
-    $result = $CPRest->doUserAPI('user/create', $data);
+    //Send Email
+    $emailData = array(
+        '[name]' => cp_get_user_fullname($user->ID),
+        '[email]' => $user->user_email,
+        '[suite_name]' => $suite->name,
+        '[suite_url]' => get_permalink($suite->id),
+        '[paid_amount]' => $suite->monthlySubscriptionPrice,
+        '[community_url]' => bp_get_group_permalink($group)
+    );
+    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+    cp_send_email_to_admin('purchase_subscription_admin', $emailData);
     
-    $resultDoc = new DOMDocument();
+    addMessage("Your subscription has been proceeded successfully");
     
-    if(!$result || !$resultDoc->loadXML($result))
-    {
-        addMessage('There was a problem creating your test credentials. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', 'error');
-    }else{
-        if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
-        {
-            addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', "error");
-        }else{   
-            
-            //Create subscription row
-            $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
-                'user_id' => $user->ID,
-                'suite_id' => $suite->id,
-                'purchase_id' => $purchase_id,
-                'subscribed_date' => date('Y-m-d H:i:s'),
-                'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
-                'harness_username' => $esb_data['harness_username'],
-                'harness_password' => $esb_data['harness_password'],
-                'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
-                'tester_username' => '',
-                'tester_password' => '',
-                'tester_endpoint_url' => '',
-                'p_mode_agreement' => $esb_data['p_mode_agreement'],
-                'status' => 'Active'
-            ));
-            
-            $subscribe_id = $wpdb->insert_id;
-            
-            //Send Email
-            $emailData = array(
-                '[name]' => cp_get_user_fullname($user->ID),
-                '[email]' => $user->user_email,
-                '[suite_name]' => $suite->name,
-                '[suite_url]' => get_permalink($suite->id),
-                '[paid_amount]' => $suite->monthlySubscriptionPrice,
-                '[community_url]' => bp_get_group_permalink($group)
-            );
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-            cp_send_email_to_admin('purchase_subscription_admin', $emailData);
-            
-            addMessage("Your subscription has been proceeded successfully");
-            
-        }
-    }
     
 }
 

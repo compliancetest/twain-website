@@ -5873,12 +5873,8 @@ a.suite-subscript-link:hover{
     margin-right: 10px;
 }
 #subscribe-box .notice-txt{
-    font-size: 11px;
-    color: #6e747c;
-    font-style: italic;
-    padding: 5px 15px 0 20px;
     border-top: solid 1px #cbcbcb;
-    background: url(../images/lock-icon.png) no-repeat left 8px;
+    padding: 12px 0 0;
 }
 #subscribe-box .notice-txt img{
     margin-top: 10px;
