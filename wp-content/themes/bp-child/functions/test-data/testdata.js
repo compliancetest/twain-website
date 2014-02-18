@@ -352,7 +352,7 @@ jQuery(document).ready(function(){
             url: "/?td-action="  + jQuery('#update-lookup-action').val(),
             data: 'id=' + jQuery(this).val() + '&status=' + ((jQuery(this).attr('checked') == 'checked')?(1):(0)),
             type: 'post',
-            dataType: 'html',
+            dataType: 'json',
             success: function(rsp) {
             }
         });
