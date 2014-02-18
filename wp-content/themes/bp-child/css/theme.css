@@ -4565,9 +4565,13 @@ min-height: 70px;
 }
 
 #my_test_data_profiles .td-profile-name{
-    width: 726px;    
+    width: 595px;    
 }
 #my_test_data_profiles .td-profile-type{
+    width: 110px;   
+    text-align: center;
+}
+#my_test_data_profiles .td-profile-lookup{
     width: 110px;   
     text-align: center;
 }
