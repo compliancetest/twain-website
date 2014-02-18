@@ -39,6 +39,8 @@ function cp_process_test_data_actions()
             downloadProfileTypeInstance();
         }else if(wp_verify_nonce($action, 'download-profile-error')){
             downloadProfileError();
+        }else if(wp_verify_nonce($action, 'update-profile-lookup')){
+            updateProfileLookup();
         }
     }
 }
