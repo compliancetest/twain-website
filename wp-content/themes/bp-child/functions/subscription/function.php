@@ -128,7 +128,7 @@ function render_unsubscription_popup($return = null)
 {
     ?>
     <div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
-        <form name="unsubscribe-form" action="" method="post">
+        <form name="unsubscribe-form" action="/" method="post">
             <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
             <div class="popup-box-content grid-box-body">    
                 <p>Are you sure that you want to unsubscribe?</p>
@@ -155,3 +155,44 @@ function render_unsubscription_popup($return = null)
     <?php
 }
 
+/**
+* Get the count of the subscriptions with the purchase id
+* 
+* @param mixed $purchase_id
+*/
+function getNumSubscriptions($purchase_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT count(1) FROM {$wpdb->prefix}users_subscriptions WHERE purchase_id=%d", $purchase_id);
+    $count = $wpdb->get_var($query);
+    
+    return $count;
+    
+}
+
+/**
+* Check the user purchased a subscription to one of the brother test suites 
+* 
+* @param Int $suite_id
+* 
+* @return Boolean
+*/
+function isPurchasedForOtherVersions($familyMark, $user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+            
+    //Getting Brother Suites    
+    /*$query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $suite_id);
+    $familyMark = $wpdb->get_var($query);*/
+    
+    $query = $wpdb->prepare("SELECT count(DISTINCT(s.id)) FROM {$wpdb->prefix}users_subscriptions AS s
+                             INNER JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id
+                             WHERE ts.family_mark=%d AND s.user_id=%d AND s.status='Active'", $familyMark, $user_id);
+    $count = $wpdb->get_var($query);
+    
+    return !$count ? false : true;
+}

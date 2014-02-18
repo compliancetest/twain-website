@@ -8,6 +8,8 @@ function execute_subscription_actions()
         process_eway_payment();        
     }else if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'free_charge')){
         free_charge();
+    }else if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'create_subscription')){
+        create_subscription();
     }else if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'unsubscribe')){  
         unsubscribe_purchase();
     }else if(isset($_REQUEST['ext-action']) && wp_verify_nonce($_REQUEST['ext-action'], 'check-subscriptions')){
@@ -272,6 +274,40 @@ function free_charge()
         {
             addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', "error");
         }else{            
+            //Save Billing Data to Database
+            $wpdb->insert($wpdb->prefix . "users_purchases", array(
+                'user_id' => $user->ID,
+                'price' => 0,
+                'paid_amount' => 0,
+                'card_id' => 0,
+                'created_date' => date('Y-m-d H:i:s'),
+                'expiry_date' => date("Y-m-d", strtotime('first day next month')),
+                'status' => 'Active',
+                'inarrears_count' => 0,
+                'frozen_count' => 0
+            ));
+            
+            $purchase_id = $wpdb->insert_id;
+            
+            //Create subscription row
+            $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
+                'user_id' => $user->ID,
+                'suite_id' => $suite->id,
+                'purchase_id' => $purchase_id,
+                'subscribed_date' => date('Y-m-d H:i:s'),
+                'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
+                'harness_username' => $esb_data['harness_username'],
+                'harness_password' => $esb_data['harness_password'],
+                'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+                'tester_username' => '',
+                'tester_password' => '',
+                'tester_endpoint_url' => '',
+                'p_mode_agreement' => $esb_data['p_mode_agreement'],
+                'status' => 'Active'
+            ));
+            
+            $subscribe_id = $wpdb->insert_id;
+            
             //Send Email
             $emailData = array(
                 '[name]' => cp_get_user_fullname($user->ID),
@@ -283,27 +319,6 @@ function free_charge()
             );
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_free_subscription', $emailData);
             cp_send_email_to_admin('purchase_free_subscription_admin', $emailData);
-            
-            //Save Billing Data to Database
-            $id = $wpdb->insert($wpdb->prefix . "users_purchases", array(
-                'user_id' => $user->ID,
-                'suite_id' => $suite->id,
-                'price' => 0.0,
-                'card_id' => 0,
-                'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
-                'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
-                'harness_username' => $esb_data['harness_username'],
-                'harness_password' => $esb_data['harness_password'],
-                'p_mode_agreement' => $esb_data['p_mode_agreement'],
-                'tester_endpoint_url' => '',
-                'tester_username' => '',
-                'tester_password' => '',
-                'status' => 'Active',
-                'expiry_date' => date("Y-m-d", strtotime('+1 month')),
-                'created_date' => date('Y-m-d H:i:s')
-            ));
-            
-            $id = $wpdb->insert_id;
             
             addMessage("Your subscription has been proceeded successfully");
             
@@ -333,7 +348,7 @@ function unsubscribe_purchase()
     
     $subscription = new CT_Subscription($pId);
 
-    if(!$subscription->id || $subscription->user_id != $user->ID || $subscription->status == 'Unsubscribing')
+    if(!$subscription->id || $subscription->user_id != $user->ID)
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect($return);
@@ -367,6 +382,122 @@ function unsubscribe_purchase()
     
     wp_redirect($return);
     exit;   
+}
+
+function create_subscription()
+{
+    global $wpdb, $CPRest;
+    
+    $suite_id = $_GET['suite_id'];
+    $user_id = get_current_user_id();
+    
+    $return = !$suite_id ? "/" : get_permalink($suite_id);
+    
+    if(!$user_id || !$suite_id)
+    {
+        addMessage("Invalid Request!", "error");
+        wp_redirect($return);
+        exit;
+    }
+    
+    //Getting Family Mark
+    $suite = new TestSuite($suite_id);
+    $suite->load();
+    
+    $query = $wpdb->prepare("SELECT s.* FROM {$wpdb->prefix}users_subscriptions AS s
+                             INNER JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id
+                             WHERE ts.family_mark=%d AND s.user_id=%d", $suite->familyMark, $user_id);
+    $rows = $wpdb->get_results($query);
+    
+    if(!$rows)
+    {
+        addMessage("Invalid Request!", "error");
+        wp_redirect($return);
+        exit;
+    }
+    
+    $purchase_id = $rows[0]->purchase_id;
+    
+    $group = groups_get_group( array('group_id' => $suite->community_id));
+    
+    $user = get_userdata($user_id);
+    
+    //Create MSH Datas 
+    $esb_data = array(
+        'p_mode_agreement' => 'LIGHT',
+        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/LoggingProxy/mediate', 
+        'harness_username' => $user->user_login . "_" . $suite->id, 
+        'harness_password' => cp_generate_password(8)
+    );
+    
+    //Create Backend Customer Using SOAP            
+    $data = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
+                    <api:user>
+                        <api:username>' . $esb_data['harness_username'] . '</api:username>
+                        <api:password>' . $esb_data['harness_password'] . '</api:password>
+                        <api:userGroups>
+                            <api:group>
+                                <api:groupId>' . $suite->community_id . '</api:groupId>
+                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                            </api:group>
+                        </api:userGroups>                       
+                        <api:userPModeAgreement>' . $esb_data['p_mode_agreement'] . '</api:userPModeAgreement>                            
+                        <api:userEndpoint />
+                        <api:userEndpointUsername />
+                        <api:userEndpointPassword />
+                    </api:user>
+                </api:createUserRequest>';
+    
+    
+    $result = $CPRest->doUserAPI('user/create', $data);
+    
+    $resultDoc = new DOMDocument();
+    
+    if(!$result || !$resultDoc->loadXML($result))
+    {
+        addMessage('There was a problem creating your test credentials. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', 'error');
+    }else{
+        if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
+        {
+            addMessage("There was a problem creating your test credentials: " . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue . '. Please try again later by updating your test harness access details in the "Test Suites" section of the dashboard.', "error");
+        }else{   
+            
+            //Create subscription row
+            $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
+                'user_id' => $user->ID,
+                'suite_id' => $suite->id,
+                'purchase_id' => $purchase_id,
+                'subscribed_date' => date('Y-m-d H:i:s'),
+                'esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue,
+                'harness_username' => $esb_data['harness_username'],
+                'harness_password' => $esb_data['harness_password'],
+                'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+                'tester_username' => '',
+                'tester_password' => '',
+                'tester_endpoint_url' => '',
+                'p_mode_agreement' => $esb_data['p_mode_agreement'],
+                'status' => 'Active'
+            ));
+            
+            $subscribe_id = $wpdb->insert_id;
+            
+            //Send Email
+            $emailData = array(
+                '[name]' => cp_get_user_fullname($user->ID),
+                '[email]' => $user->user_email,
+                '[suite_name]' => $suite->name,
+                '[suite_url]' => get_permalink($suite->id),
+                '[paid_amount]' => $suite->monthlySubscriptionPrice,
+                '[community_url]' => bp_get_group_permalink($group)
+            );
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+            cp_send_email_to_admin('purchase_subscription_admin', $emailData);
+            
+            addMessage("Your subscription has been proceeded successfully");
+            
+        }
+    }
+    
 }
 
 function process_recurring_payment()

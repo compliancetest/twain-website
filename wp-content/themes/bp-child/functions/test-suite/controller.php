@@ -28,11 +28,16 @@ function remove_suite_name_id_map($postid)
         //Delete Scenarios
         $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
         
+        cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
+        cp_update_subscriptions($familyMark, get_post_meta($postid, 'ts_version_major', true));
+        
+        //Delete Subscriptions
+        $wpdb->query("DELETE FROM {$wpdb->prefix}users_subscriptions WHERE suite_id NOT IN (SELECT suite_id FROM {$wpdb->prefix}test_suites)");
+        //Delete Purchases
+        $wpdb->query("DELETE FROM {$wpdb->prefix}users_purchases WHERE id NOT IN (SELECT purchase_id FROM {$wpdb->prefix}users_subscriptions");
+        
         //Delete Subscriptions
         $wpdb->delete($wpdb->prefix . "users_subscriptions", array('suite_id' => $postid));
-        
-        cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
-        
     }
 }
 
@@ -477,6 +482,7 @@ function saveSuite()
             cp_update_post_meta($suite->id, 'hide_suite', 1);
         }
         cp_sort_test_suites($suite->familyMark, $_POST['ts_version_major']);
+        cp_update_subscriptions($suite->familyMark, $_POST['ts_version_major']);
         
         //Associate all test case that are linked to the old version to the new one with Default conformance level
         $query = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key='conformance_level_" . $suite->id . "'";
@@ -542,6 +548,28 @@ function cp_sort_test_suites($familyMark, $version_major)
     {
         update_post_meta($s->suite_id, 'hide_suite', $i > 0 ? 1 : 0);
     }
+}
+
+/**
+* Update the suite id by the latest version in the subscriptions
+* 
+* @param Int $familyMark
+* @param Int $version_major
+*/
+function cp_update_subscriptions($familyMark, $version_major)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $familyMark, $version_major);
+    $ids = $wpdb->get_col($query);
+    
+    if(!$ids)
+        return;
+        
+    $query = "UPDATE {$wpdb->prefix}users_subscriptions SET suite_id={$ids[0]} WHERE suite_id IN (" . implode(", ", $ids) . ")";
+    $wpdb->query($query);
+    
+    return;
 }
 
 function isNewSuiteVersionExist($familyMark, $version_major, $version_minor = null, $version_patch = null)
@@ -658,4 +686,35 @@ function updateSubscribedSuiteId($familyMark)
         
         $wpdb->update($wpdb->prefix . "users_purchases", array("suite_id" => $latestId), array('id' => $row->id));
     }
+}
+
+
+function add_community_join_query($join, $object)
+{
+    global $wpdb, $post;
+    
+    $join .= " INNER JOIN {$wpdb->postmeta} AS community_meta ON community_meta.post_id={$wpdb->posts}.ID AND community_meta.meta_key='community_id' ";
+    $join .= " INNER JOIN {$wpdb->prefix}bp_groups AS groups ON community_meta.meta_value=groups.id ";
+    
+    return $join;
+}
+
+function add_community_orderby_query($orderby, $object)
+{
+    global $wpdb, $post;
+    
+    $orderby = " groups.name ASC, " . $orderby;
+    
+    return $orderby;
+}
+
+function add_community_fields_query($fields, $object)
+{
+    global $wpdb, $post;
+    
+    if($fields)
+        $fields .= ", ";
+    $fields .= " groups.name AS communityName ";
+    
+    return $fields;
 }

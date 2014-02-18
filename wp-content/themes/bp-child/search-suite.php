@@ -110,12 +110,21 @@ foreach($allSuites as $row)
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $args['paged'] = $page;
 $args['posts_per_page'] = $posts_per_page;
-$args['orderby'] = 'meta_value_num title';
-$args['meta_key'] = 'community_id';
-$args['order'] = 'ASC';
 
 $get_posts = new WP_Query($args);
+
+//Add Order by Community
+$all_posts->set('suppress_filters', false);
+add_filter('posts_join_paged', 'add_community_join_query', 100, 2);
+add_filter('posts_orderby', 'add_community_orderby_query', 100, 2);
+add_filter('posts_fields_request', 'add_community_fields_query', 100, 2);
+
 $testsuites = $get_posts->get_posts();
+
+//Remove Filters
+remove_filter('posts_join_paged', 'add_community_join_query');
+remove_filter('posts_orderby', 'add_community_orderby_query');
+remove_filter('posts_fields_request', 'add_community_fields_query');
 
 ?>
 <div class="content container" id="search">      

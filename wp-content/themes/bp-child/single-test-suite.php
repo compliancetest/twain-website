@@ -247,29 +247,48 @@ Template Name Posts: Test Suite
                 </div>
                 <?php elseif($subscription->status == 'Unsubscribing'): ?>
                 <div class="message notice">
-                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
                 </div>
-                <?php endif; ?>
-            <?php }else{ ?>  
-                <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
-                <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
-                <?php }else{ ?>          
-			    <a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
-                <?php } ?>
-                    <span class="price-b">
-                        <span class="l"></span>
-                        <span class="m">
-                        <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
-                        <b style="margin-top: 5px; display: block">Free</b>    
-                        <?php }else{ ?>
-                        <b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month
-                        <?php } ?>
+                <?php endif; 
+            }else{ 
+                //Check this user purchased a subscription to other versions
+                if(isPurchasedForOtherVersions($suite->familyMark))
+                {
+                    ?>
+                    <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("create_subscription")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
+                        <span class="price-b">
+                            <span class="l"></span>
+                            <span class="m"> 
+                            Already<br />Purchased
+                            </span>
+                            <span class="r"></span>
                         </span>
-                        <span class="r"></span>
-                    </span>
-                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                </a>
-            <?php } ?>
+                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                    </a>
+                    <?php
+                }else{                                    
+                    if(!$suite->monthlySubscriptionPrice){ 
+                    ?>                    
+                    <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
+                    <?php }else{ ?>          
+			        <a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
+                    <?php } ?>
+                        <span class="price-b">
+                            <span class="l"></span>
+                            <span class="m">
+                            <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
+                            <b style="margin-top: 5px; display: block">Free</b>    
+                            <?php }else{ ?>
+                            <b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month
+                            <?php } ?>
+                            </span>
+                            <span class="r"></span>
+                        </span>
+                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                    </a>
+                    <?php
+                    } 
+                } ?>
             <div class="clear"></div>
             <div class="space20"></div>
 		</div>
@@ -490,7 +509,7 @@ Template Name Posts: Test Suite
                                     </a>
                                 </div>
                                 <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                    <?php echo get_post_meta($row->ID ,'bulk', true)?>
+                                    <?php echo get_post_meta($row->ID ,'bulk', true) ?>
                                 </div>-->
                                 <div class="grid_cell nopaddingtop toleft tocenter width11P">
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>

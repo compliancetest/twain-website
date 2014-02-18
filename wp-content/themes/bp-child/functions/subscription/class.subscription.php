@@ -19,6 +19,8 @@ class CT_Subscription
     
     var $price = null;
     
+    var $purchase_id = null;
+    
     var $paid_amount = null;
     
     var $customer_id = null;
@@ -53,9 +55,9 @@ class CT_Subscription
         if($this->id)
         {
             $query = $wpdb->prepare("SELECT s.*, p.price, p.paid_amount, p.card_id, p.created_date, p.expiry_date,p.inarrears_count, p.frozen_count, c.customer_id FROM {$wpdb->prefix}users_subscriptions AS s
-                                     LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id = s.purchased_id
+                                     LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id = s.purchase_id
                                      LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id                                      
-                                     WHERE p.id=%d", $this->id);
+                                     WHERE s.id=%d", $this->id);
             
             $row = $wpdb->get_row($query, ARRAY_A);
             if($row)
@@ -93,7 +95,6 @@ class CT_Subscription
         {
             //Update subscription status
             $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Unsubscribing'), array('id' => $this->id));
-//            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Unsubscribing'), array('id' => $this->id));
             
             //Send Email Notification
             $user = get_userdata($this->user_id);
@@ -191,7 +192,12 @@ class CT_Subscription
         global $wpdb;
         
         //Remove subscription
-        $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->id));
+        $wpdb->delete($wpdb->prefix . 'users_subscriptions', array('id' => $this->id));
+        
+        $remainingSubscriptions = getNumSubscriptions($this->purchase_id);
+        if(!$remainingSubscriptions)
+            $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->purchase_id));
+        
         //Remove Test Plans
         $wpdb->delete($wpdb->prefix . 'test_plans', array('suite_id' => $this->suite_id, 'creator_id' => $this->user_id));
         //Remove Compliance Claims

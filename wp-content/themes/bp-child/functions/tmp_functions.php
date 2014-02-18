@@ -11,7 +11,7 @@ if(is_super_admin())
     add_action('init', 'process_tmp_function');
     
     function process_tmp_function(){
-        global $wpdb;
+        global $wpdb, $CPRest;
         
         if(isset($_GET['fix_suite_family_mark']))
         {
@@ -191,6 +191,23 @@ if(is_super_admin())
             echo count($results) . ' profiles for searching.';
             die();
         }
+        
+        if($_GET['remove_esb_account'])
+        {
+            //Remove Backend Account
+            $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
+                        <api:user>
+                            <api:userId>' . $_GET['esb_id'] . '</api:userId>                        
+                        </api:user>
+                    </api:deleteUserRequest>';
+            
+            $result = $CPRest->doUserAPI('user/delete', $data);
+            
+            echo $results;
+            die();
+        }
+        
+        
         
     }
     
