@@ -71,8 +71,9 @@ function process_testsuite_actions()
                 wp_delete_post($_REQUEST['suite_id']);                
                 addMessage('The test suite was removed successfully.');                
             }            
-        }    
-        wp_redirect(base64_decode($_REQUEST['return']));
+        }
+        $redirectUrl = get_site_url() . '/' . base64_decode($_REQUEST['return']);
+        wp_redirect($redirectUrl);
         exit;    
     }else if(wp_verify_nonce($action, 'get-available-templates')){
         global $CPRest;
@@ -96,8 +97,10 @@ function deleteTestSuite()
     $id = $_REQUEST['id'];
     
     $post = get_post($id);
-    
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
+
+    $redirectUrl = get_site_url() . '/' . base64_decode($_REQUEST['return']);
+
+    $return = isset($_REQUEST['return']) ? $redirectUrl : "/";
     
     //Check if it is test suite
     if(!$post || $post->post_type != 'test-suite')

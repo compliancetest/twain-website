@@ -10,8 +10,10 @@ Template Name Posts: Test Suite
     
     $user_id = get_current_user_id();
     
-	global $bp;
-    
+	global $bp, $post;
+
+    $slug = get_post( $post )->post_name;
+
 	$group = groups_get_group( array( 'group_id' => $suite->community_id ) );
 
     //If this is the revision, only the community admin can see it.
@@ -239,15 +241,15 @@ Template Name Posts: Test Suite
                 </div>
                 <?php elseif($subscription->status == 'InArrears'): ?>
                 <div class="message notice">
-                    You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                    You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a href="<?php echo get_site_url(); ?>/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
                 </div>
                 <?php elseif($subscription->status == 'Frozen'): ?>
                 <div class="message error">
-                    You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                    You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
                 </div>
                 <?php elseif($subscription->status == 'Unsubscribing'): ?>
                 <div class="message notice">
-                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode(get_permalink())?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
                 </div>
                 <?php endif; 
             }else{ 
@@ -530,7 +532,7 @@ Template Name Posts: Test Suite
                                     <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Case<span></span></span></a>
                                     <?php } ?>
                                     <?php if(can_delete_test_case($row->ID)){ ?>
-                                    <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('pre-delete-case')?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn icon-btn delete-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-width="500"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
+                                    <a href="?id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('pre-delete-case')?>&return=<?php echo base64_encode($slug) ?>" class="action-btn icon-btn delete-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-width="500"><span class="p"></span><span class="simple_tooltip">Delete Case<span></span></span></a>
                                     <?php } ?>
                                     <div class="clear"></div>                                                                        
                                 </div>

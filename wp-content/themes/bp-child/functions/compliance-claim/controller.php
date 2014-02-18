@@ -31,8 +31,10 @@ function deleteClaim()
     
     $claim = new ComplianceClaim($claimID);
     $claim->load();
-    
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
+
+    $redirectUrl = get_site_url() . '/' . base64_decode($_REQUEST['return']);
+
+    $return = isset($_REQUEST['return']) ? $redirectUrl : "/";
     
     if(!can_delete_compliance_claim($claimID))
     {
