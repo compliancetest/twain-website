@@ -350,7 +350,7 @@ jQuery(document).ready(function(){
     jQuery('.td-profile-type input[type=checkbox]').change(function(){
         jQuery.ajax({
             url: "/?td-action="  + jQuery('#update-lookup-action').val(),
-            data: 'id=' + jQuery(this).val() + '&status=' + ((jQuery(this).attr('checked') == true)?(1):(0)),
+            data: 'id=' + jQuery(this).val() + '&status=' + ((jQuery(this).attr('checked') == 'checked')?(1):(0)),
             type: 'post',
             dataType: 'html',
             success: function(rsp) {
