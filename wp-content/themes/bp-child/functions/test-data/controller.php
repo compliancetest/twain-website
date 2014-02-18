@@ -605,4 +605,6 @@ function updateProfileLookup() {
     if ($id) {
         $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_instances SET `lookup`= %d WHERE id=%d", $status, $id));
     }
+    echo 'success';
+    exit;
 }
