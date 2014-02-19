@@ -410,12 +410,26 @@ function downloadProfileTypeInstance()
         return;
     }
     
+    $filename = $row->profile_name;
+    
+    $content = base64_decode($row->content);
+    $content_json = json_decode($content);
+    if($content_json->Profile->Version)
+    {
+        $version = array();
+        foreach(get_object_vars($content_json->Profile->Version) as $k=>$v)      
+        {
+            $version[] = $v;
+        }
+        $filename .= '_v' . implode(".", $version);
+    }
+    
     header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
     header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
     header("Cache-Control: no-cache, must-revalidate");
     header("Pragma: no-cache");
     header("Content-Type: Application/octet-stream");
-    header("Content-disposition: attachment; filename=" . sanitize_file_name($row->profile_name . ".json"));
+    header("Content-disposition: attachment; filename=" . sanitize_file_name($filename . ".json"));
     
     echo base64_decode($row->content);
     
