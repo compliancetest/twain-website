@@ -23,6 +23,8 @@ $args = array(
         'post_type' => $post_type,         
         'posts_per_page' => -1,
         'tax_query' => array('relation' => 'and'),
+        'orderby' => 'title',
+        'order' => 'asc',
         'meta_query' => array(
                             array(
                                 'key' => 'hide_suite',
