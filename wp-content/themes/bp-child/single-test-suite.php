@@ -275,11 +275,11 @@ Template Name Posts: Test Suite
                     
                     //Getting User Signup Fee
                     $user_fee = get_user_meta($user_id, 'signup_fee', true);
-                    if(isset($user_fee[$suite->id]))
+                    if(isset($user_fee[$suite->id]) && $suite->signupPrice == -1)
                     {
                         $suite->signupPrice = $user_fee[$suite->id];
                     }
-                    echo $suite->signupPrice;
+                    
                     if($suite->signupPrice == 0 && $suite->monthlySubscriptionPrice == 0) ///
                     {
                         $buttonHTML = '<span class="price-b">
