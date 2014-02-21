@@ -704,3 +704,90 @@ function ct_copy_test_suite($new_wpdb, $suite)
 }
     
 
+function ct_fix_whole_test_suites_table()
+{
+    global $wpdb;
+    
+    $args = array(
+            'post_type' => 'test-suite',         
+            'posts_per_page' => -1,
+            'tax_query' => array('relation' => 'and'),
+            'orderby' => 'title',
+            'order' => 'asc'
+    );
+    $all_posts = new WP_Query($args);
+    
+    $testsuites = $all_posts->get_posts();
+    
+    foreach($testsuites as $suite)
+    {
+        $version_major = get_post_meta($suite->ID, 'ts_version_major', true);
+        $version_minor = get_post_meta($suite->ID, 'ts_version_minor', true);
+        $version_patch = get_post_meta($suite->ID, 'ts_version_patch', true);
+        
+        //Getting Family
+        $testSuiteName = get_post_meta($suite->ID, 'ts_name', true);
+        
+        //Update wp_test_cases table
+        $query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_title=%s", $testSuiteName);
+        $familyMark = $wpdb->get_var($query);
+        
+        if(!$familyMark)
+            $familyMark = $suite->ID;
+        
+        $wpdb->insert($wpdb->prefix . "test_suites", 
+                        array('suite_id' => $suite->ID, 
+                              'suite_title' => $testSuiteName, 
+                              'version_major' => $version_major, 
+                              'version_minor' => $version_minor, 
+                              'version_patch' => $version_patch,
+                              'family_mark' => $familyMark)
+                     );
+        cp_sort_test_suites($familyMark, $version_major);
+    }
+}
+
+
+function ct_fix_whole_test_cases_table()
+{
+    global $wpdb;
+    
+    $args = array(
+            'post_type' => 'test-case',         
+            'posts_per_page' => -1,
+            'tax_query' => array('relation' => 'and'),
+            'orderby' => 'title',
+            'order' => 'asc'
+    );
+    $all_posts = new WP_Query($args);
+    
+    $all = $all_posts->get_posts();
+    
+    foreach($all as $case)
+    {
+        $version_major = get_post_meta($case->ID, 'version_major', true);
+        $version_minor = get_post_meta($case->ID, 'version_minor', true);
+        $version_patch = get_post_meta($case->ID, 'version_patch', true);
+        
+        //Getting Family
+        $caseId = get_post_meta($case->ID, 'test_case_id', true);
+        
+        //Update wp_test_cases table
+        $query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_cases WHERE case_name=%s", $caseId);
+        $familyMark = $wpdb->get_var($query);
+        
+        if(!$familyMark)
+            $familyMark = $case->ID;
+        
+        $wpdb->insert($wpdb->prefix . "test_cases", 
+                        array('case_id' => $case->ID, 
+                              'case_name' => $caseId, 
+                              'version_major' => $version_major, 
+                              'version_minor' => $version_minor, 
+                              'version_patch' => $version_patch,
+                              'family_mark' => $familyMark)
+                     );
+        cp_sort_test_cases($familyMark, $version_major);
+    }
+}
+
