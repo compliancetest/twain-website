@@ -96,7 +96,7 @@ function process_eway_payment()
         //Create MSH Datas 
         $esb_data = array(
             'p_mode_agreement' => 'LIGHT',
-            'harness_endpoint_url' => 'http://esb.compliancetest.net/services/LoggingProxy/mediate', 
+            'harness_endpoint_url' => 'http://esb.compliancetest.net/services/Superstream', 
             'harness_username' => $user->user_login . "_" . $suite->id, 
             'harness_password' => cp_generate_password(8)
         );
@@ -208,7 +208,7 @@ function free_charge()
     //Create MSH Datas 
     $esb_data = array(
         'p_mode_agreement' => 'LIGHT',
-        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/LoggingProxy/mediate', 
+        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/Superstream', 
         'harness_username' => $user->user_login . "_" . $suite->id, 
         'harness_password' => cp_generate_password(8)
     );
@@ -364,7 +364,7 @@ function create_subscription()
     //Create MSH Datas 
     $esb_data = array(
         'p_mode_agreement' => 'LIGHT',
-        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/LoggingProxy/mediate', 
+        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/Superstream', 
         'harness_username' => $user->user_login . "_" . $suite->id, 
         'harness_password' => cp_generate_password(8)
     );
