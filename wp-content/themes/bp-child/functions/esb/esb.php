@@ -408,11 +408,12 @@ class ManageESB
         $user_id = get_current_user_id();
         
         $query = "SELECT 
-                    DISTINCT(c.PRODUCT_ID)
+                    DISTINCT(pm.ID)
                   FROM " . $this->table_conversation_metadata . " AS c 
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS sm ON c.TEST_SUITE_CONFIGURATION_ID=sm.ID 
-                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID 
+                  LEFT JOIN " . $this->table_product_name_id_map . " AS pm ON c.PRODUCT_ID=pm.NAME ";
         
         $where = array();
                 
