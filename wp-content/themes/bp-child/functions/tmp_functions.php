@@ -57,7 +57,7 @@ if(is_super_admin())
         //Fix Hide Case
         if(isset($_GET['fix_hide_case']))
         {
-            $query = "SELECT * FROM {$wpdb->prefix}test_cases WHERE ORDER BY family_mark, version_major DESC, version_minor DESC, version_patch DESC";
+            $query = "SELECT * FROM {$wpdb->prefix}test_cases ORDER BY family_mark, version_major DESC, version_minor DESC, version_patch DESC";
             $cases = $wpdb->get_results($query);
             $familyMark = 0; $majorVersion = -1;
             foreach($cases as $i=>$s)
