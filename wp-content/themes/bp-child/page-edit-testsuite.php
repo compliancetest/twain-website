@@ -202,16 +202,25 @@ if(!$suite->community_id)
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
-               <div class="column">
-                   <div class="field-row">
+               <div class="column">    
+                   <div class="field-row">                    
+                       <div class="grid-cell">
+                           <input type="text" id="signup_price" name="signup_price" class="input" value="<?php echo $suite->signupPrice?>" />
+                       </div>
+                       <div class="grid-cell">
+                           <label class="light-desc"><i>Sign-up Price (-1: Negotiate price, 0: Free)</i></label>
+                       </div> 
+                       <div class="clear"></div>
+                   </div>
+                   <div class="field-row">                       
                        <div class="grid-cell">
                            <input type="text" id="monthly_subscription_price" name="monthly_subscription_price" class="input" value="<?php echo $suite->monthlySubscriptionPrice?>" />
                        </div>
                        <div class="grid-cell">
-                           <label class="light-desc"><i>Monthly Subscription Price</i></label>
+                           <label class="light-desc"><i>Monthly Subscription Price (0: Free)</i></label>
                        </div>
                        <div class="clear"></div>
-                   </div>                   
+                   </div>
                </div>
            </div>
        </div>       

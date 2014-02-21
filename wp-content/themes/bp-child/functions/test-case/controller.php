@@ -2,6 +2,8 @@
 add_action('after_delete_post', 'remove_case_name_id_map', 10, 1);
 function remove_case_name_id_map($postid)
 {
+    global $wpdb;
+    
     $esb = new ManageESB();
     $esb->deleteTestCaseNameIDMap($postid);
     

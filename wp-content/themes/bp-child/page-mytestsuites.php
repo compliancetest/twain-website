@@ -53,7 +53,7 @@ get_header();
                             <div class="td td-fee">$<?php 
                                 $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
                                 if($currPrice < $row->price)
-                                    echo ceil($currPrice);
+                                    echo ceil($currPrice); 
                                 else 
                                     echo ceil($row->price);                        
                             ?>/month</div>

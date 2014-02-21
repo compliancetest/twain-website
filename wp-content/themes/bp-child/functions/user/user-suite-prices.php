@@ -1,0 +1,149 @@
+<?php
+/**
+* Manage the Signup-Fee per a users per suite
+*/
+
+add_action("admin_menu", "ct_users_signup_fee_menu");
+
+function ct_users_signup_fee_menu()
+{
+    add_users_page("Manage User Signup Fee", "Signup Fee", "manage_options", "subscription_signup_fee", "ct_manage_users_signup_fee");
+}
+
+function ct_manage_users_signup_fee()
+{
+    require_once('user-suite-list-table.php');
+    
+    if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'save')
+    {
+        $userID = $_REQUEST['id'];
+        $suites = $_POST['suite_id'];
+        $result = array();
+        foreach($suites as $sid)
+        {
+            $sid = intval($sid);
+            if(isset($_POST['set_value' . $sid]) && $_POST['fee' . $sid])
+            {
+               $result[$sid] = $_POST['fee' . $sid];
+            }
+        }
+        update_user_meta($userID, 'signup_fee', $result);
+        $msg = 'Successfully Saved!';
+    }
+    
+    if(isset($_REQUEST['id']) && $_REQUEST['id'])
+    {
+        $userID = $_REQUEST['id'];
+        $userData = get_userdata($userID);
+        $fee = get_user_meta($userID, 'signup_fee', true);
+        if(!$fee)
+            $fee = array();
+        
+        $args = array(
+                'post_type' => 'test-suite',         
+                'posts_per_page' => -1,
+                'tax_query' => array('relation' => 'and'),
+                'orderby' => 'title',
+                'order' => 'asc'
+        );
+        $all_posts = new WP_Query($args);
+        
+        $all_posts->set('suppress_filters', false);
+        add_filter('posts_join_paged', 'add_community_join_query', 100, 2);
+        add_filter('posts_orderby', 'add_community_orderby_query', 100, 2);
+        add_filter('posts_fields_request', 'add_community_fields_query', 100, 2);
+
+        $testsuites = $all_posts->get_posts();
+
+        //Remove Filters
+        remove_filter('posts_join_paged', 'add_community_join_query');
+        remove_filter('posts_orderby', 'add_community_orderby_query');
+        remove_filter('posts_fields_request', 'add_community_fields_query');
+
+        ?>
+        <div class="wrap">
+            <h2>Edit Sign-up Fee for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
+            <?php if(isset($msg)){ ?>
+            <div id="message" class="updated below-h2"><p><?php echo $msg?></p></div>
+            <?php } ?>
+            <a href="users.php?page=subscription_signup_fee">Back to the list</a>
+            <br />
+            <form name="adminform" action="users.php?page=subscription_signup_fee" method="post">
+                <input type="hidden" name="page" value="subscription_signup_fee" />
+                <input type="hidden" name="action" value="save" />
+                <input type="hidden" name="id" value="<?php echo $userID?>" />
+                <p><input type="submit" value="Save" class="button button-primary button-large" /></p>
+                <table border="1" style="" cellpadding="5" id="editFeeTable">
+                    <thead>
+                        <tr>
+                            <th>Community</th>
+                            <th>Suite</th>
+                            <th>Fee</th>
+                            <th>Set Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                        foreach($testsuites as $suite)
+                        {
+                            $group = groups_get_group(array('group_id' => get_post_meta($suite->ID, 'community_id', true)));
+                            ?>
+                            <tr>
+                                <td><?php echo bp_get_group_name($group) ?></td>
+                                <td><?php echo $suite->post_title?></td>
+                                <td><input type="text" name="fee<?php echo $suite->ID?>" value="<?php echo isset($fee[$suite->ID]) ? $fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
+                                <td>
+                                    <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
+                                    <input type="hidden" name="suite_id[]" value="<?php echo $suite->ID?>" />
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    ?>
+                    </tbody>
+                </table>
+                <p><input type="submit" value="Save" class="button button-primary button-large" /></p>
+            </form>
+            <script type="text/javascript">
+                jQuery(document).ready(function($){
+                    $('#editFeeTable tbody tr').each(function(){
+                        var parent = $(this);
+                        parent.find('input[type="checkbox"]').click(function(){
+                            if(this.checked)
+                                parent.find('input[type="text"]').prop('disabled', false);
+                            else
+                                parent.find('input[type="text"]').prop('disabled', true);
+                        })
+                    })
+                })
+            </script>
+        </div>
+        <?php
+    }else{
+        $listTable = new CT_User_Suite_List_Table();
+        $listTable->prepare_items();
+        ?>
+        <div class="wrap">
+            <h2>Users</h2>
+            <form name="adminform" action="users.php?page=subscription_signup_fee" method="post">
+            <?php
+                echo $listTable->display();
+            ?>
+            </form>
+        </div>
+        <?php    
+    }
+}
+
+function ct_edit_users_signup_fee()
+{
+    ?>
+    <div class="wrap">
+        <h2>Users</h2>
+        <?php
+            
+        ?>
+    </div>
+    <?php
+}

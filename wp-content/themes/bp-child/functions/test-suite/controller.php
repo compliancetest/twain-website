@@ -362,6 +362,7 @@ function saveSuite()
     
     //Subscription Price
     cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
+    cp_update_post_meta($id, 'signup_price', $_POST['signup_price']);
     
     //Save Scenarios
     //Removed deleted scenarios

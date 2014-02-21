@@ -61,6 +61,8 @@ class TestSuite
     
     var $scenarios = array();
     
+    var $signupPrice = 0;
+    
     //This will be same for all versions
     var $familyMark = null;
     
@@ -109,6 +111,7 @@ class TestSuite
         $this->version_major = $this->loadSingleValue('ts_version_major');
         $this->version_minor = $this->loadSingleValue('ts_version_minor');
         $this->version_patch = $this->loadSingleValue('ts_version_patch');
+        $this->signupPrice = doubleval($this->loadSingleValue('signup_price'));
         
         $this->version_major = !$this->version_major ? 0 : $this->version_major;
         $this->version_minor = !$this->version_minor ? 0 : $this->version_minor;

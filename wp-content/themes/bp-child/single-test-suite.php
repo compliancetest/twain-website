@@ -268,29 +268,94 @@ Template Name Posts: Test Suite
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                     </a>
                     <?php
-                }else{                                    
-                    if(!$suite->monthlySubscriptionPrice){ 
-                    ?>                    
-                    <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
-                    <?php }else{ ?>          
-			        <a href="<?php echo is_user_logged_in() ? '#subscribe-box' : '#registration-popup'?>" rel="custom-popup" cp-type="inline" class="suite-subscript-link" cp-closeWhenClickOveraly=0>
-                    <?php } ?>
-                        <span class="price-b">
-                            <span class="l"></span>
-                            <span class="m">
-                            <?php if(!$suite->monthlySubscriptionPrice){ ?>                    
-                            <b style="margin-top: 5px; display: block">Free</b>    
-                            <?php }else{ ?>
-                            <b>$<?php echo $suite->monthlySubscriptionPrice?></b><br />per month
-                            <?php } ?>
-                            </span>
-                            <span class="r"></span>
-                        </span>
-                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                    </a>
-                    <?php
-                    } 
-                } ?>
+                }else{                    
+                    //Button HTML
+                    $butttonHTML = '';
+                    $buttonClass = '';
+                    
+                    //Getting User Signup Fee
+                    $user_fee = get_user_meta($user_id, 'signup_fee', true);
+                    if(isset($user_fee[$suite->id]))
+                    {
+                        $suite->signupPrice = $user_fee[$suite->id];
+                    }
+                    echo $suite->signupPrice;
+                    if($suite->signupPrice == 0 && $suite->monthlySubscriptionPrice == 0) ///
+                    {
+                        $buttonHTML = '<span class="price-b">
+                                        <span class="l"></span>
+                                        <span class="m">
+                                            <b style="margin-top: 5px; display: block">Free</b>    
+                                        </span>
+                                        <span class="r"></span>
+                                    </span>';
+                    }else{
+                        $buttonHTML = '<span class="price-b signup-price">
+                                        <span class="l"></span>
+                                        <span class="m">';
+                        if($suite->signupPrice == -1) //Negotiate
+                        {
+                            $buttonHTML .= '<b style="font-size: 19px;">Contact</b><br />for sign-up';
+                        }else if($suite->signupPrice > 0){
+                            $buttonHTML .= '<b>$' . $suite->signupPrice . '</b><br />for sign-up';
+                        }else{ //No Price
+                            $buttonHTML .= '<b>No</b><br />for sign-up';
+                        }
+                        $buttonHTML .= '</span>
+                                        <span class="r"></span>
+                                    </span>';
+                        
+                        $buttonHTML .= '<span class="price-b">
+                                            <span class="l"></span>
+                                            <span class="m">';
+                        if(!$suite->monthlySubscriptionPrice)
+                        {
+                            $buttonHTML .= '<b>No</b><br />per month';
+                        }else{
+                            $buttonHTML .= '<b>$' . $suite->monthlySubscriptionPrice . '</b><br />per month';
+                        }
+                        $buttonHTML .= '</span>
+                                        <span class="r"></span>
+                                    </span>';
+                                    
+                        $buttonClass = ' has-signup-price';
+                    }
+                    
+                    $buttonHTML .= '<span class="text-b"><b>ACCESS</b><br />Test Harness</span>';
+                    
+                    if(!is_user_logged_in())                 
+                    {
+                        ?>
+                        <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
+                            <?php echo $buttonHTML; ?>
+                        </a>
+                        <?php
+                    }else{
+                        if($suite->signupPrice == -1){ //Contact Us
+                        ?>
+                        <a href="/contact-us" class="suite-subscript-link  <?php echo $buttonClass?>">
+                            <?php echo $buttonHTML; ?>
+                        </a>
+                        <?php
+                        }else if($suite->signupPrice > 0){
+                        ?>
+                        <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
+                            <?php echo $buttonHTML; ?>
+                        </a>
+                        <?php    
+                        }else{ //No Price
+                        ?>
+                        <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("free_charge")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link <?php echo $buttonClass?>">
+                            <?php echo $buttonHTML; ?>
+                        </a>
+                        <?php    
+                        }
+                    }                    
+                 
+                }
+                
+            } 
+            ?>
             <div class="clear"></div>
             <div class="space20"></div>
 		</div>

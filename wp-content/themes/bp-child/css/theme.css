@@ -5393,6 +5393,9 @@ a.suite-subscript-link{
     color: #fff;
     padding-left: 115px;
 }
+a.has-signup-price{
+    padding-left: 200px;
+}
 a.suite-subscript-link:hover{
     background: #c92d24;
 }
@@ -5433,6 +5436,13 @@ a.suite-subscript-link:hover{
     padding-top: 16px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
 }
+.has-signup-price .price-b{
+    left: 100px;
+}
+.suite-subscript-link .signup-price{
+    left: 7px;    
+}
+
 .suite-subscript-link b{
     font-size: 24px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);

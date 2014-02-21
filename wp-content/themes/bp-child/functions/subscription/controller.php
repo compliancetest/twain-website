@@ -76,8 +76,10 @@ function process_eway_payment()
         exit;        
     }
     
-    $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
-
+//    $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+    $signup_fee = get_user_meta($user->ID, 'signup_fee', true);
+    $paymentAmount = ($suite->signupPrice == -1 && isset($signup_fee[$suite->id])) ? $signup_fee[$suite->id] : calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+    
     $result = processEwayPayment($card->customer_id, $paymentAmount, 'Subscription to ' . $suite->title . ' test suite');
     
     if($result['ewayTrxnStatus'] == 'True')
@@ -353,6 +355,7 @@ function create_subscription()
     }
     
     $purchase_id = $rows[0]->purchase_id;
+    $status = $rows[0]->status;
     
     $group = groups_get_group( array('group_id' => $suite->community_id));
     
@@ -380,7 +383,7 @@ function create_subscription()
         'tester_password' => '',
         'tester_endpoint_url' => '',
         'p_mode_agreement' => $esb_data['p_mode_agreement'],
-        'status' => 'Active'
+        'status' => $status
     ));
     
     $subscribe_id = $wpdb->insert_id;
