@@ -225,8 +225,18 @@ if(is_super_admin())
             die();
         }
         
-        
-        
+        if(isset($_GET['fix_group_download']))
+        {
+            $downloads = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads");
+            foreach ($downloads as $row) {
+                $data = array();
+                $data['download_file'] = file_get_contents($row->location);
+                $data = stripslashes_deep( $data );
+                
+                $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
+                unlink($row->location);
+            }
+        }        
     }
     
 }
