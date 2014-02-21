@@ -189,7 +189,10 @@ function free_charge()
     $suite = new TestSuite($suite_id);
     $suite->load();
     
-    if($suite->monthlySubscriptionPrice > 0)
+    $signup_fee = get_user_meta($user->ID, 'signup_fee', true);
+    $paymentAmount = ($suite->signupPrice == -1 && isset($signup_fee[$suite->id])) ? $signup_fee[$suite->id] : calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+    
+    if($paymentAmount > 0)
     {
         addMessage("Invalid Request!", "error");
         wp_redirect($return);
