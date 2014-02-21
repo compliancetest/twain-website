@@ -15,23 +15,19 @@ if(is_super_admin())
         
         if(isset($_GET['fix_suite_family_mark']))
         {
-            $query = "SELECT distinct(suite_title), suite_id FROM {$wpdb->prefix}test_suites GROUP BY suite_title ORDER BY suite_id";
-            $rows = $wpdb->get_results($query);
-            foreach($rows as $row)
-            {
-                $wpdb->update($wpdb->prefix . 'test_suites', array('family_mark' => $row->suite_id), array('suite_title' => $row->suite_title));
-            }
+            //Delete Old Cases
+            $query = $wpdb->query("DELETE FROM wp_test_suites");
+            
+            ct_fix_whole_test_suites_table();
             
             die("Done!");                        
         }
         if(isset($_GET['fix_case_family_mark']))
         {
-            $query = "SELECT distinct(case_name), case_id FROM {$wpdb->prefix}test_cases GROUP BY case_name ORDER BY case_id";
-            $rows = $wpdb->get_results($query);
-            foreach($rows as $row)
-            {
-                $wpdb->update($wpdb->prefix . 'test_cases', array('family_mark' => $row->case_id), array('case_name' => $row->case_name));
-            }
+            //Delete Old Cases
+            $query = $wpdb->query("DELETE FROM wp_test_cases");
+            
+            ct_fix_whole_test_cases_table();
             
             die("Done!");                        
         }
