@@ -68,6 +68,8 @@ if(is_super_admin())
                 }else{
                     update_post_meta($s->case_id, 'hide_case', 1);
                 }
+                $familyMark = $s->family_mark;
+                $majorVersion = $s->version_major;
             }
             echo "completed";
             exit;
