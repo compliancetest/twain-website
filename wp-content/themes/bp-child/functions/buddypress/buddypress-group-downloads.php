@@ -65,7 +65,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
         {
             global $wpdb;
             
-            $uploadDir = wp_upload_dir();
+            /*$uploadDir = wp_upload_dir();
             
             $baseDir = $uploadDir['basedir'] . "/downloads";
             if(!is_dir($baseDir)){
@@ -75,7 +75,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             }
             $baseDir = $baseDir . "/" . $group_id;
             if(!is_dir($baseDir))
-                mkdir($baseDir, 0777);
+                mkdir($baseDir, 0777);*/
             
             //Upload Files
             $fileNames = stripslashes_deep($_POST['file_name']);
@@ -98,26 +98,22 @@ if ( class_exists( 'BP_Group_Extension' ) )
                    //Upload File
                    //check file exists or not
                    $fileName = $file['name']; 
-                   while(file_exists($baseDir . '/' . $fileName))
-                   {
-                       $fileName = rand(0, 9999) . $file['name'];
-                   }
-                   if(move_uploaded_file($file['tmp_name'], $baseDir . '/' . $fileName))
-                   {
-                       //Save data
-                       $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
-                            array('group_id'=>$group_id, 
-                                  'name' => !$fileNames[$i] ? $fileName : htmlspecialchars($fileNames[$i]),
-                                  'version' => $fileVersions[$i],
-                                  'description' => htmlspecialchars($fileDescs[$i]), 
-                                  'version_description' => '', 
-                                  'license' => htmlspecialchars($fileLicenses[$i]), 
-                                  'size' => $file['size'], 
-                                  'created_date' => date('Y-m-d H:i:s'), 
-                                  'last_updated' => date('Y-m-d H:i:s'), 
-                                  'location' => $baseDir . '/' . $fileName)
-                        );
-                   }
+                   
+                   //Save data
+                   $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
+                        array('group_id'=>$group_id, 
+                              'name' => !$fileNames[$i] ? $fileName : htmlspecialchars($fileNames[$i]),
+                              'version' => $fileVersions[$i],
+                              'description' => htmlspecialchars($fileDescs[$i]), 
+                              'version_description' => '', 
+                              'license' => htmlspecialchars($fileLicenses[$i]), 
+                              'size' => $file['size'], 
+                              'created_date' => date('Y-m-d H:i:s'), 
+                              'last_updated' => date('Y-m-d H:i:s'), 
+                              'location' => $fileName,
+                              'download_file' => file_get_contents($file['tmp_name']))
+                   );
+                   unlink($file['tmp_name']);
                }
             }
         }
@@ -136,7 +132,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             
             if($row)
             {
-                if(file_exists($row->location))
+                if($row->location)
                 {
                     $info = pathinfo($row->location);
                     $info1 = pathinfo($row->name);
@@ -151,13 +147,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     header("Content-Type: Application/octet-stream");
                     header("Content-disposition: attachment; filename=" . $row->name);
                     
-                    $fp = fopen($row->location, 'r');
-                    while (!feof($fp))
-                    {
-                        echo fread($fp, 65536); 
-                        flush();
-                    }  
-                    fclose($fp); 
+                    echo $row->download_file;
                     exit;
                 }else{
                     addMessage('File not found!', 'error');
@@ -180,8 +170,6 @@ if ( class_exists( 'BP_Group_Extension' ) )
             $row = $wpdb->get_row($query);
             if($row)
             {
-                if(file_exists($row->location))
-                    unlink($row->location);
                 $wpdb->delete($wpdb->prefix . 'bp_groups_downloads', array('id' => $row->id));
                 return true;
             }else{
@@ -197,44 +185,35 @@ if ( class_exists( 'BP_Group_Extension' ) )
             $row = $wpdb->get_row($query);
             if($row)
             {
-                $uploadDir = wp_upload_dir();
-            
-                $baseDir = $uploadDir['basedir'] . "/downloads/" . $group_id;
-                
                 $data = array();
                 $file = $_FILES['file'];
                 if ($file['error'] == UPLOAD_ERR_OK) {
-                    //Upload File
-                    //check file exists or not
-                    $fileName = $file['name'];
-                    while(file_exists($baseDir . '/' . $fileName))
-                    {
-                        $fileName = rand(0, 9999) . $file['name'];
+                    
+                    if(isset($_POST['file_name']) && $_POST['file_name'] != '')
+                        $data['name'] = htmlspecialchars($_POST['file_name']);
+                    else{
+                        $data['name'] = basename($row->location);
                     }
                     
-                    if(move_uploaded_file($file['tmp_name'], $baseDir . '/' . $fileName))
-                    {
-                        //Remove Old One
-                        @unlink($row->location);                        
-                        $data['location'] = $baseDir . '/' . $fileName;
-                    }
+                    $data['description'] = htmlspecialchars($_POST['file_desc']);
+                    $data['version'] = $_POST['file_version'];
+                    $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
+                    $data['license'] = htmlspecialchars($_POST['file_license']);
+                    $data['download_file'] = file_get_contents($file['tmp_name']);
+                    $data['location'] = $file['name'];
+                    $data['size'] = $file['size'];
+                    
+                    $data = stripslashes_deep( $data );
+                    
+                    $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
+                    unlink($file['tmp_name']);
+                    
+                    addMessage('File has been updated successfully!');
+                    return true;
+                } else {
+                    addMessage('Invalid Request!', 'error');
+                    return 'File not found!';
                 }
-               
-                
-                if(isset($_POST['file_name']) && $_POST['file_name'] != '')
-                    $data['name'] = htmlspecialchars($_POST['file_name']);
-                else{
-                    $data['name'] = basename($row->location);
-                }
-                
-                $data['description'] = htmlspecialchars($_POST['file_desc']);
-                $data['version'] = $_POST['file_version'];
-                $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
-                $data['license'] = htmlspecialchars($_POST['file_license']);
-                $data = stripslashes_deep( $data );
-                $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
-                addMessage('File has been updated successfully!');
-                return true;
             }else{
                 addMessage('Invalid Request!', 'error');
                 return 'File not found!';
