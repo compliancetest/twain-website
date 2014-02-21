@@ -190,7 +190,11 @@ function free_charge()
     $suite->load();
     
     $signup_fee = get_user_meta($user->ID, 'signup_fee', true);
-    $paymentAmount = ($suite->signupPrice == -1 && isset($signup_fee[$suite->id])) ? $signup_fee[$suite->id] : calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+    
+    if($suite->signupPrice == -1)
+        $paymentAmount = isset($signup_fee[$suite->id]) ? $signup_fee[$suite->id] : calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+    else 
+        $paymentAmount = $suite->signupPrice;
     
     if($paymentAmount > 0)
     {
