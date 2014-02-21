@@ -679,7 +679,7 @@ function updateSubscribedSuiteId($familyMark)
     global $wpdb;
     
     //find Subscribed suite id in the family
-    $query = $wpdb->prepare("SELECT sp.* FROM {$wpdb->prefix}users_purchases AS s INNER JOIN {$wpdb->prefix}test_suites as st ON sp.suite_id=st.suite_id WHERE st.family_mark=%d", $familyMark);
+    $query = $wpdb->prepare("SELECT sp.* FROM {$wpdb->prefix}users_subscriptions AS sp INNER JOIN {$wpdb->prefix}test_suites as st ON sp.suite_id=st.suite_id WHERE st.family_mark=%d", $familyMark);
     $row = $wpdb->get_row($query);
     
     if($row)
@@ -688,7 +688,7 @@ function updateSubscribedSuiteId($familyMark)
         $query = $wpdb->prefix("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $familyMark);
         $latestId =  $wpdb->get_var($query);
         
-        $wpdb->update($wpdb->prefix . "users_purchases", array("suite_id" => $latestId), array('id' => $row->id));
+        $wpdb->update($wpdb->prefix . "users_subscriptions", array("suite_id" => $latestId), array('id' => $row->id));
     }
 }
 

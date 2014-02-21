@@ -195,10 +195,10 @@ function getUserPurchase($suite_id = null, $user_id = null)
         $user_id = get_current_user_id();
     
     if($suite_id == null){
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d GROUP BY id", $user_id);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d GROUP BY id", $user_id);
         $result = $wpdb->get_results($query);
     }else{
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite_id);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite_id);
         $result = $wpdb->get_row($query);
     }    
     
@@ -242,7 +242,7 @@ function getSubscribersBySuiteId($suite_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT user_id, u.user_email FROM " . $wpdb->prefix . "users_purchases p LEFT JOIN " . $wpdb->users . " AS u ON p.user_id=u.ID WHERE suite_id=%d AND status='Active'", $suite_id);
+    $query = $wpdb->prepare("SELECT user_id, u.user_email FROM " . $wpdb->prefix . "users_subscriptions p LEFT JOIN " . $wpdb->users . " AS u ON p.user_id=u.ID WHERE suite_id=%d AND status='Active'", $suite_id);
     $result = $wpdb->get_results($query);
     
     return $result;
@@ -317,7 +317,7 @@ function getUserAllSuiteIDs($user_id = null)
             
     $suite_ids1 = getAssignedSuiteIds($user_id);
     
-    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_purchases WHERE user_id=%d AND `status`='Active'", $user_id);    
+    $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND `status`='Active'", $user_id);    
     $suite_ids2 = $wpdb->get_col($query);
     
     $result = array_merge($suite_ids1, $suite_ids2);
@@ -375,9 +375,9 @@ function getManagedCustomerWPIDs($user_id = null)
         if(!$suite_ids)
             return null;
             
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
     }else{
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE  p.status='Active'";
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE  p.status='Active'";
     }
     
     $ids = $wpdb->get_col($query);
@@ -404,9 +404,9 @@ function getManagedCustomerESBIDs($user_id = null)
         if(!$suite_ids)
             return null;
             
-        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
     }else{
-        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_purchases AS p WHERE  p.status='Active'";
+        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE  p.status='Active'";
     }
     
     $ids = $wpdb->get_col($query);

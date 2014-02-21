@@ -57,7 +57,7 @@ function getUserSubscribedSuites($user_id = null)
         $user_id = get_current_user_id();
         
     $query = $wpdb->prepare(
-        "SELECT sp.*, p.post_title as `name` FROM " . $wpdb->prefix . "users_purchases AS sp " .
+        "SELECT sp.*, p.post_title as `name` FROM " . $wpdb->prefix . "users_subscriptions AS sp " .
         "LEFT JOIN " . $wpdb->posts . " AS p ON p.ID=sp.suite_id " .
         "WHERE sp.user_id=%d AND p.ID IS NOT NULL", $user_id
     );
