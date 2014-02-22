@@ -276,7 +276,13 @@ Template Name Posts: Test Suite
                     $user_signup_fee = get_user_meta($user_id, 'signup_fee', true);
                     $user_monthly_fee = get_user_meta($user_id, 'monthly_fee', true);
                     
-                    if($suite->signupPrice == -1 && !isset($user_signup_fee[$suite->id]))
+                    //Getting Monthly Fee and Signup Fee                        
+                    if(isset($user_signup_fee[$suite->id]))
+                        $suite->signupPrice = doubleval($user_signup_fee[$suite->id]);
+                    if(isset($user_monthly_fee[$suite->id]))
+                        $suite->monthlySubscriptionPrice = doubleval($user_monthly_fee[$suite->id]);
+                    
+                    if($suite->signupPrice == -1)
                     {
                         $buttonHTML = '<span class="price-b">
                                         <span class="l"></span>
@@ -287,11 +293,7 @@ Template Name Posts: Test Suite
                                     </span>';
                         $buttonClass = ' contact-us-price';
                     }else{
-                        //Getting Monthly Fee and Signup Fee                        
-                        if(isset($user_signup_fee[$suite->id]))
-                            $suite->signupPrice = doubleval($user_signup_fee[$suite->id]);
-                        if(isset($user_monthly_fee[$suite->id]))
-                            $suite->monthlySubscriptionPrice = doubleval($user_monthly_fee[$suite->id]);
+                        
                         //Getting User Signup Fee                    
                         if($suite->signupPrice == 0 && $suite->monthlySubscriptionPrice == 0) ///
                         {
@@ -352,7 +354,7 @@ Template Name Posts: Test Suite
                             <?php echo $buttonHTML; ?>
                         </a>
                         <?php
-                        }else if($suite->signupPrice > 0){
+                        }else if($suite->signupPrice > 0 || $suite->monthlySubscriptionPrice > 0){
                         ?>
                         <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
                             <?php echo $buttonHTML; ?>

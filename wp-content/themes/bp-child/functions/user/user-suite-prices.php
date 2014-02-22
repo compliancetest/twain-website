@@ -12,6 +12,8 @@ function ct_users_signup_fee_menu()
 
 function ct_manage_users_signup_fee()
 {
+    global $wpdb;
+    
     require_once('user-suite-list-table.php');
     
     if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'save')
@@ -70,7 +72,17 @@ function ct_manage_users_signup_fee()
         remove_filter('posts_join_paged', 'add_community_join_query');
         remove_filter('posts_orderby', 'add_community_orderby_query');
         remove_filter('posts_fields_request', 'add_community_fields_query');
-
+        
+        //Getting User Purchases
+        $query = "Select s.*, p.paid_amount FROM {$wpdb->prefix}users_subscriptions s LEFT JOIN {$wpdb->prefix}users_purchases as p ON p.id=s.purchase_id WHERE s.user_id=" . $userID;
+        $results = $wpdb->get_results($query);
+        
+        $purchases = array();
+        foreach($results as $r)
+        {
+            $purchases[$r->suite_id] = $r->paid_amount;
+        }
+        
         ?>
         <div class="wrap">
             <h2>Edit Fee for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
@@ -87,15 +99,25 @@ function ct_manage_users_signup_fee()
                 <table border="1" style="" cellpadding="5" id="editFeeTable">
                     <thead>
                         <tr>
-                            <th>Community</th>
-                            <th>Suite</th>
+                            <th rowspan="2">Community</th>
+                            <th colspan="3">Suite</th>
+                            <th colspan="4">User</th>
+                            <th rowspan="2">Set Value</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
                             <th>Sign-up Fee</th>
                             <th>Monthly Fee</th>
-                            <th>Set Value</th>
+                            <th>Sign-up Fee</th>
+                            <th>Monthly Fee</th>
+                            <th>Purchased<br />Subscription</th>
+                            <th>First Payment Price</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php
+                        
+                        
                         foreach($testsuites as $suite)
                         {
                             $group = groups_get_group(array('group_id' => get_post_meta($suite->ID, 'community_id', true)));
@@ -103,14 +125,34 @@ function ct_manage_users_signup_fee()
                             <tr>
                                 <td><?php echo bp_get_group_name($group) ?></td>
                                 <td><?php echo $suite->post_title?></td>
-                                <td><input type="text" name="signup_fee<?php echo $suite->ID?>" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
-                                     <?php echo isset($signup_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
-                                <td><input type="text" name="monthly_fee<?php echo $suite->ID?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
-                                     <?php echo isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
                                 <td>
-                                    <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($signup_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
-                                    <input type="hidden" name="suite_id[]" value="<?php echo $suite->ID?>" />
+                                    <?php 
+                                        $price = get_post_meta($suite->ID,'signup_price', true);
+                                        if($price > 0)
+                                            echo '$' . $price;
+                                        else 
+                                            echo $price;
+                                    ?>
                                 </td>
+                                <td>
+                                    <?php 
+                                        $price = get_post_meta($suite->ID,'monthly_subscription_price', true);
+                                        if($price > 0)
+                                            echo '$' . $price;
+                                        else 
+                                            $price;
+                                    ?>
+                                </td>
+                                <td><input type="text" name="signup_fee<?php echo $suite->ID?>" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
+                                <td><input type="text" name="monthly_fee<?php echo $suite->ID?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
+                                <td align="center"><?php echo isset($purchases[$suite->ID]) ? 'Yes' : 'No'?></td>
+                                <td align="center"><?php echo isset($purchases[$suite->ID]) ? '$' . $purchases[$suite->ID] : '-'?></td>
+                                <td>
+                                    <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
+                                    <input type="hidden" name="suite_id[]" value="<?php echo $suite->ID?>" />
+                                </td>                                
                             </tr>
                             <?php
                         }

@@ -78,7 +78,14 @@ function process_eway_payment()
     
 //    $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
     $signup_fee = get_user_meta($user->ID, 'signup_fee', true);
-    $paymentAmount = ($suite->signupPrice == -1 && isset($signup_fee[$suite->id])) ? $signup_fee[$suite->id] : calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
+    $monthly_fee = get_user_meta($user->ID, 'monthly_fee', true);
+    
+    if(isset($signup_fee[$suite->id]))
+        $suite->signupPrice = doubleval($signup_fee[$suite->id]);
+    if(isset($monthly_fee[$suite->id]))
+        $suite->monthlySubscriptionPrice = doubleval($monthly_fee[$suite->id]);
+    
+    $paymentAmount = $suite->signupPrice + calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
     
     $result = processEwayPayment($card->customer_id, $paymentAmount, 'Subscription to ' . $suite->title . ' test suite');
     
