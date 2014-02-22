@@ -18,16 +18,23 @@ function ct_manage_users_signup_fee()
     {
         $userID = $_REQUEST['id'];
         $suites = $_POST['suite_id'];
-        $result = array();
+        $result1 = array();
+        $result2 = array();
         foreach($suites as $sid)
         {
             $sid = intval($sid);
-            if(isset($_POST['set_value' . $sid]) && $_POST['fee' . $sid])
+            if(isset($_POST['set_value' . $sid]) && $_POST['signup_fee' . $sid])
             {
-               $result[$sid] = $_POST['fee' . $sid];
+               $result1[$sid] = $_POST['signup_fee' . $sid];               
             }
+            if(isset($_POST['set_value' . $sid]) && $_POST['monthly_fee' . $sid])
+            {
+               $result2[$sid] = $_POST['monthly_fee' . $sid];               
+            }
+            
         }
-        update_user_meta($userID, 'signup_fee', $result);
+        update_user_meta($userID, 'signup_fee', $result1);
+        update_user_meta($userID, 'monthly_fee', $result2);
         $msg = 'Successfully Saved!';
     }
     
@@ -35,9 +42,13 @@ function ct_manage_users_signup_fee()
     {
         $userID = $_REQUEST['id'];
         $userData = get_userdata($userID);
-        $fee = get_user_meta($userID, 'signup_fee', true);
-        if(!$fee)
-            $fee = array();
+        $signup_fee = get_user_meta($userID, 'signup_fee', true);
+        $monthly_fee = get_user_meta($userID, 'monthly_fee', true);
+        if(!$signup_fee)
+            $signup_fee = array();
+        if(!$monthly_fee)
+            $monthly_fee = array();
+        
         
         $args = array(
                 'post_type' => 'test-suite',         
@@ -62,7 +73,7 @@ function ct_manage_users_signup_fee()
 
         ?>
         <div class="wrap">
-            <h2>Edit Sign-up Fee for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
+            <h2>Edit Fee for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
             <?php if(isset($msg)){ ?>
             <div id="message" class="updated below-h2"><p><?php echo $msg?></p></div>
             <?php } ?>
@@ -78,7 +89,8 @@ function ct_manage_users_signup_fee()
                         <tr>
                             <th>Community</th>
                             <th>Suite</th>
-                            <th>Fee</th>
+                            <th>Sign-up Fee</th>
+                            <th>Monthly Fee</th>
                             <th>Set Value</th>
                         </tr>
                     </thead>
@@ -91,10 +103,12 @@ function ct_manage_users_signup_fee()
                             <tr>
                                 <td><?php echo bp_get_group_name($group) ?></td>
                                 <td><?php echo $suite->post_title?></td>
-                                <td><input type="text" name="fee<?php echo $suite->ID?>" value="<?php echo isset($fee[$suite->ID]) ? $fee[$suite->ID] : '' ?>"
-                                     <?php echo isset($fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
+                                <td><input type="text" name="signup_fee<?php echo $suite->ID?>" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($signup_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
+                                <td><input type="text" name="monthly_fee<?php echo $suite->ID?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
                                 <td>
-                                    <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
+                                    <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($signup_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
                                     <input type="hidden" name="suite_id[]" value="<?php echo $suite->ID?>" />
                                 </td>
                             </tr>

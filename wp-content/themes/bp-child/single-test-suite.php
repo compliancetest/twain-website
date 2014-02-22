@@ -273,53 +273,68 @@ Template Name Posts: Test Suite
                     $butttonHTML = '';
                     $buttonClass = '';
                     
-                    //Getting User Signup Fee
-                    $user_fee = get_user_meta($user_id, 'signup_fee', true);
-                    if(isset($user_fee[$suite->id]) && $suite->signupPrice == -1)
-                    {
-                        $suite->signupPrice = $user_fee[$suite->id];
-                    }
+                    $user_signup_fee = get_user_meta($user_id, 'signup_fee', true);
+                    $user_monthly_fee = get_user_meta($user_id, 'monthly_fee', true);
                     
-                    if($suite->signupPrice == 0 && $suite->monthlySubscriptionPrice == 0) ///
+                    if($suite->signupPrice == -1 && !isset($user_signup_fee[$suite->id]))
                     {
                         $buttonHTML = '<span class="price-b">
                                         <span class="l"></span>
                                         <span class="m">
-                                            <b style="margin-top: 5px; display: block">Free</b>    
+                                            <b>Contact Us</b><br />for pricing
                                         </span>
                                         <span class="r"></span>
                                     </span>';
+                        $buttonClass = ' contact-us-price';
                     }else{
-                        $buttonHTML = '<span class="price-b signup-price">
-                                        <span class="l"></span>
-                                        <span class="m">';
-                        if($suite->signupPrice == -1) //Negotiate
+                        //Getting Monthly Fee and Signup Fee                        
+                        if(isset($user_signup_fee[$suite->id]))
+                            $suite->signupPrice = doubleval($user_signup_fee[$suite->id]);
+                        if(isset($user_monthly_fee[$suite->id]))
+                            $suite->monthlySubscriptionPrice = doubleval($user_monthly_fee[$suite->id]);
+                        //Getting User Signup Fee                    
+                        if($suite->signupPrice == 0 && $suite->monthlySubscriptionPrice == 0) ///
                         {
-                            $buttonHTML .= '<b style="font-size: 19px;">Contact</b><br />for sign-up';
-                        }else if($suite->signupPrice > 0){
-                            $buttonHTML .= '<b>$' . $suite->signupPrice . '</b><br />for sign-up';
-                        }else{ //No Price
-                            $buttonHTML .= '<b>No</b><br />for sign-up';
-                        }
-                        $buttonHTML .= '</span>
-                                        <span class="r"></span>
-                                    </span>';
-                        
-                        $buttonHTML .= '<span class="price-b">
+                            $buttonHTML = '<span class="price-b">
+                                            <span class="l"></span>
+                                            <span class="m">
+                                                <b style="margin-top: 5px; display: block">Free</b>    
+                                            </span>
+                                            <span class="r"></span>
+                                        </span>';
+                        }else{
+                            
+                            
+                            $buttonHTML = '<span class="price-b">
+                                                <span class="l"></span>
+                                                <span class="m">';
+                            if(!$suite->monthlySubscriptionPrice)
+                            {
+                                $buttonHTML .= '<b>No</b><br />per month';
+                            }else{
+                                $buttonHTML .= '<b>$' . $suite->monthlySubscriptionPrice . '</b><br />per month';
+                            }
+                            $buttonHTML .= '</span>
+                                            <span class="r"></span>
+                                        </span>';
+                            
+                            $buttonHTML .= '<span class="price-b signup-price">
                                             <span class="l"></span>
                                             <span class="m">';
-                        if(!$suite->monthlySubscriptionPrice)
-                        {
-                            $buttonHTML .= '<b>No</b><br />per month';
-                        }else{
-                            $buttonHTML .= '<b>$' . $suite->monthlySubscriptionPrice . '</b><br />per month';
+                            if($suite->signupPrice > 0){
+                                $buttonHTML .= '<b>$' . $suite->signupPrice . '</b><br />sign-up fee';
+                            }else{ //No Price
+                                $buttonHTML .= '<b>No</b><br />sign-up fee';
+                            }
+                            $buttonHTML .= '</span>
+                                            <span class="r"></span>
+                                        </span>';
+                            
+                            $buttonClass = ' has-signup-price';
                         }
-                        $buttonHTML .= '</span>
-                                        <span class="r"></span>
-                                    </span>';
-                                    
-                        $buttonClass = ' has-signup-price';
+                        
                     }
+                    
                     
                     $buttonHTML .= '<span class="text-b"><b>ACCESS</b><br />Test Harness</span>';
                     
