@@ -109,6 +109,7 @@ if(is_super_admin())
             
             die('Completed!');
         }
+        
         if(isset($_GET['fix_test_case_configuration'])){
             $esb = new ManageESB();
             
@@ -138,6 +139,28 @@ if(is_super_admin())
                 $title = $row->post_title;
                 $caseId = get_post_meta($row->ID, 'test_case_id', true) . '_V' . $version;
                 $esb->saveTestCaseInfo($row->ID, $caseId, get_post_meta($newId, 'outcome_type', true), get_post_meta($newId, 'message_count', true));
+            }
+            
+            die('Completed!');
+        }
+        
+        if(isset($_GET['fix_product_configuration'])){
+            $esb = new ManageESB();
+            
+            //Getting Test Suites
+            $args = array(
+                'post_type' => 'product-service',         
+                'posts_per_page' => -1
+            );
+            
+            $all_posts = new WP_Query($args);
+            $all = $all_posts->get_posts();
+            
+            foreach($all as $row)
+            {
+                $product_id  = get_post_meta($row->ID, 'product_id', true);
+                $product_title = $row->post_title;
+                $esb->saveProductInfo($row->ID, $product_id, $product_title);
             }
             
             die('Completed!');

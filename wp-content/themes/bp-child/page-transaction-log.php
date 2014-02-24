@@ -107,7 +107,7 @@ if($filterCustomer){
                         <select name="product" id="product" autocomplete="off">
                             <option value="">- All -</option>
                           <?php foreach($tProducts as $t){ ?>                           
-                            <option value="<?php echo !$t ? 0 : $t?>" <?php echo $filterProduct != "" && $t == intval($filterProduct) ? "selected='selected'" : "" ?>><?php echo !$t ? "Not assigned" : get_post_meta($t, 'product_name', true) ?></option>
+                            <option value="<?php echo !$t->PRODUCT_WP_ID ? 0 : $t->PRODUCT_WP_ID?>" <?php echo $filterProduct != "" && $t->PRODUCT_WP_ID == intval($filterProduct) ? "selected='selected'" : "" ?>><?php echo !$t->PRODUCT_WP_ID ? "Not assigned" : $t->PRODUCT_TITLE ?></option>
                           <?php } ?>
                         </select>
                         
@@ -177,7 +177,7 @@ if($filterCustomer){
                 </div>
                 <div class="last-div left">
                     <label>&nbsp;Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo formatDate($filterDate); ?>" />
+                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : formatDate($filterDate); ?>" />
                     <?php if($tCustomers){ ?>
                     <div class="space10"></div>
                     <label>&nbsp;Customer <?php if($filterCustomer){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
