@@ -64,7 +64,7 @@ class CT_User_Suite_List_Table extends WP_List_Table
         {
             case 'username':
                 return get_avatar($item->ID, 32) . '<strong>' . $item->user_login . '</strong>' . $this->row_actions(array(
-                    "<a href='users.php?page=subscription_signup_fee&action=edit&id=" . $item->ID . "'>Edit</a>"
+                    "<a href='users.php?page=user_fee_overrides&action=edit&id=" . $item->ID . "'>Edit</a>"
                     
                 ));
             case 'name':

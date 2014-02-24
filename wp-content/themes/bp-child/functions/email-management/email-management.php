@@ -127,6 +127,7 @@ function create_email_management_page()
                         <li class="tab-separator">Subscription Section</li>
                         <li><a href="#purchase-subscription">Purchase Paid Subscription</a></li>
                         <li><a href="#purchase-free-subscription">Purchase Free Subscription</a></li>
+                        <li><a href="#purchase-signup-fee-only-subscription">Purchase Sign-up Fee Only<br />Subscription</a></li>
                         <li><a href="#inarrears-subscription">Active -> InArrears</a></li>
                         <li><a href="#frozen-subscription">InArrears -> Frozen</a></li>
                         <li><a href="#active-subscription">InArrears -> Active</a></li>
@@ -386,6 +387,57 @@ function create_email_management_page()
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
                                 <?php wp_editor($purchase_free_subscription_admin_email_content, 'purchase_free_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+                <div id="purchase-signup-fee-only-subscription">
+                    <?php
+                    $purchase_signup_fee_only_subscription_email_title = get_option('purchase_signup_fee_only_subscription_email_title');
+                    $purchase_signup_fee_only_subscription_email_content = get_option('purchase_signup_fee_only_subscription_email_content');
+                    $purchase_signup_fee_only_subscription_admin_email_title = get_option('purchase_signup_fee_only_subscription_admin_email_title');
+                    $purchase_signup_fee_only_subscription_admin_email_content = get_option('purchase_signup_fee_only_subscription_admin_email_content');
+                    ?>
+                    <h3>Purchase Free Subscription</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [community_url]</p>
+                    <table class="widefat">
+                        <thead>
+                        <tr>
+                            <th colspan="2">For User</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="purchase_signup_fee_only_subscription_email_title" id="purchase_signup_fee_only_subscription_email_title" value="<?php echo $purchase_signup_fee_only_subscription_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($purchase_signup_fee_only_subscription_email_content, 'purchase_signup_fee_only_subscription_email_content', array('media_buttons' => false)) ?>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <thead>
+                        <tr>
+                            <th colspan="2">For Admin</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tdlabel"><b>Title</b></td>
+                            <td>
+                                <input type="text" size="50" name="purchase_signup_fee_only_subscription_admin_email_title" id="purchase_signup_fee_only_subscription_admin_email_title" value="<?php echo $purchase_signup_fee_only_subscription_admin_email_title?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel"><b>Content</b></td>
+                            <td>
+                                <?php wp_editor($purchase_signup_fee_only_subscription_admin_email_content, 'purchase_signup_fee_only_subscription_admin_email_content', array('media_buttons' => false)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -1502,6 +1554,15 @@ function save_email_templates()
           update_option('purchase_free_subscription_admin_email_title', $purchase_free_subscription_admin_email_title);
           $purchase_free_subscription_admin_email_content = stripslashes_deep($_POST['purchase_free_subscription_admin_email_content']);
           update_option('purchase_free_subscription_admin_email_content', $purchase_free_subscription_admin_email_content);
+
+          $purchase_signup_fee_only_subscription_email_title = htmlentities(stripslashes_deep($_POST['purchase_signup_fee_only_subscription_email_title']));
+          update_option('purchase_signup_fee_only_subscription_email_title', $purchase_signup_fee_only_subscription_email_title);
+          $purchase_signup_fee_only_subscription_email_content = stripslashes_deep($_POST['purchase_signup_fee_only_subscription_email_content']);
+          update_option('purchase_signup_fee_only_subscription_email_content', $purchase_signup_fee_only_subscription_email_content);
+          $purchase_signup_fee_only_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['purchase_signup_fee_only_subscription_admin_email_title']));
+          update_option('purchase_signup_fee_only_subscription_admin_email_title', $purchase_signup_fee_only_subscription_admin_email_title);
+          $purchase_signup_fee_only_subscription_admin_email_content = stripslashes_deep($_POST['purchase_signup_fee_only_subscription_admin_email_content']);
+          update_option('purchase_signup_fee_only_subscription_admin_email_content', $purchase_signup_fee_only_subscription_admin_email_content);
 
           $membership_request_received_admin_email_title = htmlentities(stripslashes_deep($_POST['membership_request_received_admin_email_title']));
           update_option('membership_request_received_admin_email_title', $membership_request_received_admin_email_title);          

@@ -5436,9 +5436,7 @@ a.suite-subscript-link:hover{
     padding-top: 16px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
 }
-.has-signup-price .price-b{
-    left: 100px;
-}
+
 .contact-us-price{
     
 }
@@ -5453,9 +5451,11 @@ a.contact-us-price{
 }
 
 .suite-subscript-link .signup-price{
-    left: 7px;    
+    left: 100px;    
 }
-
+.suite-subscript-link .signup-price b{
+    font-size: 20px;
+}
 .suite-subscript-link b{
     font-size: 24px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);

@@ -7,10 +7,10 @@ add_action("admin_menu", "ct_users_signup_fee_menu");
 
 function ct_users_signup_fee_menu()
 {
-    add_users_page("Manage User Signup Fee", "Signup Fee", "manage_options", "subscription_signup_fee", "ct_manage_users_signup_fee");
+    add_users_page("Manage User Fee Overrides", "Fee Overrides", "manage_options", "user_fee_overrides", "ct_manage_fee_overrides");
 }
 
-function ct_manage_users_signup_fee()
+function ct_manage_fee_overrides()
 {
     global $wpdb;
     
@@ -25,11 +25,11 @@ function ct_manage_users_signup_fee()
         foreach($suites as $sid)
         {
             $sid = intval($sid);
-            if(isset($_POST['set_value' . $sid]) && $_POST['signup_fee' . $sid])
+            if(isset($_POST['set_value' . $sid]) && $_POST['signup_fee' . $sid] != '')
             {
                $result1[$sid] = $_POST['signup_fee' . $sid];               
             }
-            if(isset($_POST['set_value' . $sid]) && $_POST['monthly_fee' . $sid])
+            if(isset($_POST['set_value' . $sid]) && $_POST['monthly_fee' . $sid] != '')
             {
                $result2[$sid] = $_POST['monthly_fee' . $sid];               
             }
@@ -85,14 +85,14 @@ function ct_manage_users_signup_fee()
         
         ?>
         <div class="wrap">
-            <h2>Edit Fee for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
+            <h2>Edit Fees for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
             <?php if(isset($msg)){ ?>
             <div id="message" class="updated below-h2"><p><?php echo $msg?></p></div>
             <?php } ?>
-            <a href="users.php?page=subscription_signup_fee">Back to the list</a>
+            <a href="users.php?page=user_fee_overrides">Back to the list</a>
             <br />
-            <form name="adminform" action="users.php?page=subscription_signup_fee" method="post">
-                <input type="hidden" name="page" value="subscription_signup_fee" />
+            <form name="adminform" action="users.php?page=user_fee_overrides" method="post">
+                <input type="hidden" name="page" value="user_fee_overrides" />
                 <input type="hidden" name="action" value="save" />
                 <input type="hidden" name="id" value="<?php echo $userID?>" />
                 <p><input type="submit" value="Save" class="button button-primary button-large" /></p>
@@ -111,7 +111,7 @@ function ct_manage_users_signup_fee()
                             <th>Sign-up Fee</th>
                             <th>Monthly Fee</th>
                             <th>Purchased<br />Subscription</th>
-                            <th>First Payment Price</th>
+                            <th>First Monthly Fee</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -182,7 +182,7 @@ function ct_manage_users_signup_fee()
         ?>
         <div class="wrap">
             <h2>Users</h2>
-            <form name="adminform" action="users.php?page=subscription_signup_fee" method="post">
+            <form name="adminform" action="users.php?page=user_fee_overrides" method="post">
             <?php
                 echo $listTable->display();
             ?>
