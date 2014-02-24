@@ -445,6 +445,7 @@ function downloadProfileType()
     $user_id = get_current_user_id();
     
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d", $id);
+    echo $query; exit;
     $row = $wpdb->get_row($query);
     
     if(!$row)
