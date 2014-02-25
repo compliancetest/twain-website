@@ -157,11 +157,22 @@ function process_eway_payment()
             '[suite_name]' => $suite->name,
             '[suite_url]' => get_permalink($suite->id),
             '[paid_amount]' => $paymentAmount,
+            '[signup_fee]' => $suite->signupPrice,
+            '[monthly_fee]' => $suite->monthlySubscriptionPrice,
             '[community_url]' => bp_get_group_permalink($group),
             '[payment_email]' => $card->email
         );
-        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-        cp_send_email_to_admin('purchase_subscription_admin', $emailData);
+        
+        if($suite->monthlySubscriptionPrice == 0)
+        {
+            //Send Signup Fee Only Subscription Email    
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+            cp_send_email_to_admin('purchase_subscription_admin', $emailData);        
+        }else{
+            //Send General Subscription Email   
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+            cp_send_email_to_admin('purchase_subscription_admin', $emailData);        
+        }
         
         echo 'success';
         

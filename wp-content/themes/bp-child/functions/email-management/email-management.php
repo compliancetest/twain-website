@@ -133,8 +133,10 @@ function create_email_management_page()
                         <li><a href="#active-subscription">InArrears -> Active</a></li>
                         <li><a href="#active-subscription2">Frozen -> Active</a></li>
                         <li><a href="#unsubscribe-subscription">Unsubscribe Paid Subscription</a></li>
+                        <li><a href="#unsubscribe-signup-fee-only-subscription">Unsubscribe Sign-up Fee Only<br />Subscription</a></li>
                         <li><a href="#unsubscribe-free-subscription">Unsubscribe Free Subscription</a></li>
                         <li><a href="#cancel-subscription">Cancel Paid Subscription</a></li>
+                        <li><a href="#cancel-signup-fee-only-subscription">Cancel Sign-up Fee Only<br />Subscription</a></li>
                         <li><a href="#cancel-free-subscription">Cancel Free Subscription</a></li>
 
                         
@@ -299,7 +301,7 @@ function create_email_management_page()
                     $purchase_subscription_admin_email_content = get_option('purchase_subscription_admin_email_content');
                     ?>
                     <h3>Purchase Paid Subscription</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [community_url], [payment_email]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [signup_fee], [monthly_fee], [community_url], [payment_email]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -401,7 +403,7 @@ function create_email_management_page()
                     $purchase_signup_fee_only_subscription_admin_email_content = get_option('purchase_signup_fee_only_subscription_admin_email_content');
                     ?>
                     <h3>Purchase Free Subscription</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [community_url]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [signup_fee], [monthly_fee], [community_url], [payment_email]</p>
                     <table class="widefat">
                         <thead>
                         <tr>
@@ -495,7 +497,58 @@ function create_email_management_page()
                         
                     </table>
                 </div>
-
+                <div id="unsubscribe-signup-fee-only-subscription">
+                    <?php
+                    $unsubscribing_signup_fee_only_email_title = get_option('unsubscribing_signup_fee_only_email_title');
+                    $unsubscribing_signup_fee_only_email_content = get_option('unsubscribing_signup_fee_only_email_content');
+                    $unsubscribing_signup_fee_only_admin_email_title = get_option('unsubscribing_signup_fee_only_admin_email_title');
+                    $unsubscribing_signup_fee_only_admin_email_content = get_option('unsubscribing_signup_fee_only_admin_email_content');
+                    ?>
+                    <h3>Unsubscribe Paid Subscription</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="unsubscribing_signup_fee_only_email_title" id="unsubscribing_signup_fee_only_email_title" value="<?php echo $unsubscribing_signup_fee_only_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($unsubscribing_signup_fee_only_email_content, 'unsubscribing_signup_fee_only_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="unsubscribing_signup_fee_only_admin_email_title" id="unsubscribing_signup_fee_only_admin_email_title" value="<?php echo $unsubscribing_signup_fee_only_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($unsubscribing_signup_fee_only_admin_email_content, 'unsubscribing_signup_fee_only_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
                 <div id="unsubscribe-free-subscription">
                     <?php
                     $unsubscribing_free_email_title = get_option('unsubscribing_free_email_title');
@@ -594,6 +647,58 @@ function create_email_management_page()
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
                                     <?php wp_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+
+                <div id="cancel-signup-fee-only-subscription">
+                    <?php
+                    $cancel_signup_fee_only_subscription_email_title = get_option('cancel_signup_fee_only_subscription_email_title');
+                    $cancel_signup_fee_only_subscription_email_content = get_option('cancel_signup_fee_only_subscription_email_content');
+                    $cancel_signup_fee_only_subscription_admin_email_title = get_option('cancel_signup_fee_only_subscription_admin_email_title');
+                    $cancel_signup_fee_only_subscription_admin_email_content = get_option('cancel_signup_fee_only_subscription_admin_email_content');
+                    ?>
+                    <h3>Cancel Paid Subscription</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="cancel_signup_fee_only_subscription_email_title" id="cancel_signup_fee_only_subscription_email_title" value="<?php echo $cancel_signup_fee_only_subscription_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($cancel_signup_fee_only_subscription_email_content, 'cancel_signup_fee_only_subscription_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="cancel_signup_fee_only_subscription_admin_email_title" id="cancel_signup_fee_only_subscription_admin_email_title" value="<?php echo $cancel_signup_fee_only_subscription_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($cancel_signup_fee_only_subscription_admin_email_content, 'cancel_signup_fee_only_subscription_admin_email_content', array('media_buttons' => false)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1621,6 +1726,15 @@ function save_email_templates()
           $cancel_subscription_admin_email_content = stripslashes_deep($_POST['cancel_subscription_admin_email_content']);          
           update_option('cancel_subscription_admin_email_content', $cancel_subscription_admin_email_content);
           
+          $cancel_signup_fee_only_subscription_email_title = htmlentities(stripslashes_deep($_POST['cancel_signup_fee_only_subscription_email_title']));          
+          update_option('cancel_signup_fee_only_subscription_email_title', $cancel_signup_fee_only_subscription_email_title);          
+          $cancel_signup_fee_only_subscription_email_content = stripslashes_deep($_POST['cancel_signup_fee_only_subscription_email_content']);          
+          update_option('cancel_signup_fee_only_subscription_email_content', $cancel_signup_fee_only_subscription_email_content);          
+          $cancel_signup_fee_only_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['cancel_signup_fee_only_subscription_admin_email_title']));          
+          update_option('cancel_signup_fee_only_subscription_admin_email_title', $cancel_signup_fee_only_subscription_admin_email_title);          
+          $cancel_signup_fee_only_subscription_admin_email_content = stripslashes_deep($_POST['cancel_signup_fee_only_subscription_admin_email_content']);          
+          update_option('cancel_signup_fee_only_subscription_admin_email_content', $cancel_signup_fee_only_subscription_admin_email_content);
+          
           $cancel_free_subscription_email_title = htmlentities(stripslashes_deep($_POST['cancel_free_subscription_email_title']));
           update_option('cancel_free_subscription_email_title', $cancel_free_subscription_email_title);
           $cancel_free_subscription_email_content = stripslashes_deep($_POST['cancel_free_subscription_email_content']);
@@ -1638,6 +1752,15 @@ function save_email_templates()
           update_option('unsubscribing_admin_email_title', $unsubscribing_admin_email_title);          
           $unsubscribing_admin_email_content = stripslashes_deep($_POST['unsubscribing_admin_email_content']);          
           update_option('unsubscribing_admin_email_content', $unsubscribing_admin_email_content);
+          
+          $unsubscribing_signup_fee_only_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_signup_fee_only_email_title']));
+          update_option('unsubscribing_signup_fee_only_email_title', $unsubscribing_signup_fee_only_email_title);          
+          $unsubscribing_signup_fee_only_email_content = stripslashes_deep($_POST['unsubscribing_signup_fee_only_email_content']);          
+          update_option('unsubscribing_signup_fee_only_email_content', $unsubscribing_signup_fee_only_email_content);          
+          $unsubscribing_signup_fee_only_admin_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_signup_fee_only_admin_email_title']));          
+          update_option('unsubscribing_signup_fee_only_admin_email_title', $unsubscribing_signup_fee_only_admin_email_title);          
+          $unsubscribing_signup_fee_only_admin_email_content = stripslashes_deep($_POST['unsubscribing_signup_fee_only_admin_email_content']);          
+          update_option('unsubscribing_signup_fee_only_admin_email_content', $unsubscribing_signup_fee_only_admin_email_content);
           
           $unsubscribing_free_email_title = htmlentities(stripslashes_deep($_POST['unsubscribing_free_email_title']));
           update_option('unsubscribing_free_email_title', $unsubscribing_free_email_title);
