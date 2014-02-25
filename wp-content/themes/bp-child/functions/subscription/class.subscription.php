@@ -108,6 +108,7 @@ class CT_Subscription
                 '[name]' => cp_get_user_fullname($user->ID),
                 '[email]' => $user->user_email,
                 '[suite_name]' => get_the_title($this->suite_id),
+                '[paid_amount]' => $this->paid_amount,
                 '[suite_url]' => get_permalink($this->suite_id),
             );
             

@@ -320,19 +320,32 @@ function unsubscribe_purchase()
 
     if($subscription->status != 'Active' || isset($_POST['delete-now']))
     {
-        if ($subscription->price != 0)
+        if ($subscription->paid_amount != 0)
         {
-            //Unsubscribe the purchasement now
-            removeSubscription($subscription,'unsubscribing');
+            if($subscription->price == 0) //Remove Signup Fee Only Subscription
+            {
+                //Unsubscribe the purchasement now
+                removeSubscription($subscription,'unsubscribing_signup_fee_only');    
+            }else{ //Remove General Subscription
+                //Unsubscribe the purchasement now
+                removeSubscription($subscription,'unsubscribing');
+            }
+            
         }else{
             //Unsubscribe free subscription now
             removeSubscription($subscription, 'unsubscribing_free');
         }
     }else{
-        if ($subscription->price != 0)
+        if ($subscription->paid_amount != 0)
         {
-            //Just Update the Status to Unsubscribing
-            $subscription->cancel('unsubscribing');
+            if($subscription->price == 0) //Cancel Signup Fee only Subscription
+            {
+                //Just Update the Status to Unsubscribing
+                $subscription->cancel('unsubscribing_signup_fee_only');
+            }else{ //Cancel General Subscription
+                //Just Update the Status to Unsubscribing
+                $subscription->cancel('unsubscribing');    
+            }
 
             addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
         }else{
