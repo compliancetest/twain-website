@@ -74,13 +74,13 @@ function ct_manage_fee_overrides()
         remove_filter('posts_fields_request', 'add_community_fields_query');
         
         //Getting User Purchases
-        $query = "Select s.*, p.paid_amount FROM {$wpdb->prefix}users_subscriptions s LEFT JOIN {$wpdb->prefix}users_purchases as p ON p.id=s.purchase_id WHERE s.user_id=" . $userID;
+        $query = "Select s.*, p.paid_amount, p.price FROM {$wpdb->prefix}users_subscriptions s LEFT JOIN {$wpdb->prefix}users_purchases as p ON p.id=s.purchase_id WHERE s.user_id=" . $userID;
         $results = $wpdb->get_results($query);
         
         $purchases = array();
         foreach($results as $r)
         {
-            $purchases[$r->suite_id] = $r->paid_amount;
+            $purchases[$r->suite_id] = $r->price;
         }
         
         ?>
