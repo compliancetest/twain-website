@@ -183,11 +183,18 @@ function createUIFromProfileType($action)
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;    
         }else{
-            echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>' . base64_decode($instance_row->content) . '</data></result>';    
+            echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>' . updateSpecialChars(base64_decode($instance_row->content)) . '</data></result>';    
         }
     }
     
     exit;
+}
+
+function updateSpecialChars($content) 
+{
+    $content = str_replace('&amp;', '&', $content);
+    $content = str_replace('&', '&amp;', $content);
+    return $content;
 }
 
 function saveProfileInstance($action)
