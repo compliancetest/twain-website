@@ -36,8 +36,6 @@ function remove_suite_name_id_map($postid)
         //Delete Purchases
         $wpdb->query("DELETE FROM {$wpdb->prefix}users_purchases WHERE id NOT IN (SELECT purchase_id FROM {$wpdb->prefix}users_subscriptions");
         
-        //Delete Subscriptions
-        $wpdb->delete($wpdb->prefix . "users_subscriptions", array('suite_id' => $postid));
     }
 }
 
