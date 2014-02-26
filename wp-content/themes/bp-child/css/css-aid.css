@@ -2422,7 +2422,7 @@ table.result-table{
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 160px;
+  width: 160px;
   padding: 0;
   margin: 2px 0 0;
   list-style: none;
@@ -2610,6 +2610,34 @@ table.result-table{
 
 .dropdown-submenu .dropdown-submenu > a:after {
     margin-top: 2px;
+}
+
+.leftmenu {
+}
+.leftmenu .dropdown-submenu > a:after {
+    display: none;
+}
+.leftmenu .dropdown-submenu > a:before {
+    display: block;
+    float: left;
+    width: 0;
+    height: 0;
+    margin-top: 5px;
+    margin-left: -10px;
+    border-color: transparent;
+    border-right-color: #cccccc;
+    border-style: solid;
+    border-width: 5px 5px 5px 0px;
+    content: " ";
+}
+.leftmenu .dropdown-menu li > a {
+    text-align: right;
+}
+.leftmenu .dropdown-submenu .dropdown-submenu > a {
+    padding: 8px 10px 8px 20px !important
+}
+.leftmenu .dropdown-submenu > .dropdown-menu {
+    left: -148px;
 }
 
 .no-wrap {
