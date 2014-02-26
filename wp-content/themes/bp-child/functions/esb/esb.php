@@ -533,6 +533,8 @@ class ManageESB
         if($where)
             $query .= " WHERE " . implode(" AND ", $where);
         
+        $query .= " ORDER BY NAME";
+        
         $rows = ManageESB::$esbdb->get_results($query);
         
         return $rows;
