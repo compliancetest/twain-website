@@ -173,7 +173,7 @@ function process_external_actions()
             $suite_name = get_post_meta($row->suite_id, 'ts_name', true);
             //Send Payment
             $current_price = get_post_meta($row->suite_id, 'monthly_subscription_price', true);
-            $price = $current_price < $row->price ? $current_price : $row->price;
+            $price = $current_price < $row->monthly_fee ? $current_price : $row->monthly_fee;
             
         
             $client = new nusoap_client($webserviceURL, false);

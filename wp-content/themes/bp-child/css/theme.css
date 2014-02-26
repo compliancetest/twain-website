@@ -4788,10 +4788,10 @@ min-height: 70px;
     padding-right: 15px;
 }
 .filter-box select{
-    width: 160px;
+    width: 200px;
 }
 .filter-box .datepicker{
-    width: 110px;
+    width: 180px;
     
 }
 #my_transaction_log .has-tooltip .simple_tooltip{
@@ -4867,7 +4867,7 @@ min-height: 70px;
     line-height: 14px;
 }
 
-#my_transaction_log .td-product{ width: 250px; }
+#my_transaction_log .td-product{ width: 200px; }
 #my_transaction_log .td-product a{ float: left; width: 137px; }
 #my_transaction_log .td-product a.view-messages-link{ 
     width: 11px;
@@ -4880,28 +4880,28 @@ min-height: 70px;
 }
 #my_transaction_log .thead .td-chk{ width: 15px; }
 #my_transaction_log .td-chk{ width: 15px; }
-#my_transaction_log .td-case{ width: 91px; }
-#my_transaction_log .td-suite{ width: 210px; }
+#my_transaction_log .td-case{ width: 151px; }
+#my_transaction_log .td-suite{ width: 180px; }
 #my_transaction_log .td-outcome{ width: 60px; }
 #my_transaction_log .td-audit{
     width: 50px;
 }
 #my_transaction_log .td-convsn{
-    width: 145px;
+    width: 165px;
 }
 #my_transaction_log .td-date{
     width: 70px;
 }
 #my_transaction_log .td-from{
-    width: 70px;
+    width: 90px;
     text-align: center;
 }
 #my_transaction_log .td-to{
-    width: 70px;
+    width: 90px;
     text-align: center;
 }
 #my_transaction_log .td-service{
-    width: 111px;    
+    width: 256px;    
 }
 #my_transaction_log .td-action{
     width: 205px;
@@ -4910,7 +4910,7 @@ min-height: 70px;
     width: 80px;
 }
 #my_transaction_log .td-message-date{
-    width: 55px;
+    width: 70px;
     text-align: center;
 }
 #my_transaction_log .td-message-view{

@@ -80,7 +80,7 @@ function ct_manage_fee_overrides()
         $purchases = array();
         foreach($results as $r)
         {
-            $purchases[$r->suite_id] = $r->price;
+            $purchases[$r->suite_id] = $r->monthly_fee;
         }
         
         ?>

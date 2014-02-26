@@ -76,7 +76,6 @@ function process_eway_payment()
         exit;        
     }
     
-//    $paymentAmount = calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
     $signup_fee = get_user_meta($user->ID, 'signup_fee', true);
     $monthly_fee = get_user_meta($user->ID, 'monthly_fee', true);
     
@@ -111,7 +110,8 @@ function process_eway_payment()
         //Save Billing Data to Database
         $wpdb->insert($wpdb->prefix . "users_purchases", array(
             'user_id' => $user->ID,
-            'price' => $suite->monthlySubscriptionPrice,
+            'monthly_fee' => $suite->monthlySubscriptionPrice,
+            'signup_fee' => $suite->signupPrice,
             'paid_amount' => $paymentAmount,
             'card_id' => $card->id,
             'created_date' => date('Y-m-d H:i:s'),
@@ -242,7 +242,8 @@ function free_charge()
     //Save Billing Data to Database
     $wpdb->insert($wpdb->prefix . "users_purchases", array(
         'user_id' => $user->ID,
-        'price' => 0,
+        'monthly_fee' => 0,
+        'signup_fee' => 0,
         'paid_amount' => 0,
         'card_id' => 0,
         'created_date' => date('Y-m-d H:i:s'),
@@ -322,7 +323,7 @@ function unsubscribe_purchase()
     {
         if ($subscription->paid_amount != 0)
         {
-            if($subscription->price == 0) //Remove Signup Fee Only Subscription
+            if($subscription->monthly_fee == 0) //Remove Signup Fee Only Subscription
             {
                 //Unsubscribe the purchasement now
                 removeSubscription($subscription,'unsubscribing_signup_fee_only');    
@@ -338,7 +339,7 @@ function unsubscribe_purchase()
     }else{
         if ($subscription->paid_amount != 0)
         {
-            if($subscription->price == 0) //Cancel Signup Fee only Subscription
+            if($subscription->monthly_fee == 0) //Cancel Signup Fee only Subscription
             {
                 //Just Update the Status to Unsubscribing
                 $subscription->cancel('unsubscribing_signup_fee_only');
@@ -453,10 +454,10 @@ function process_recurring_payment()
     {
         //Monthly Billing
         $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
-        if($row['price'] < $currentPrice)
-            $row['price'] = $currentPrice;
+        if($row['monthly_fee'] < $currentPrice)
+            $row['monthly_fee'] = $currentPrice;
         
-        $result = processEwayPayment($row['customer_id'], $row['price']);
+        $result = processEwayPayment($row['customer_id'], $row['monthly_fee']);
         
         $subscription = new CT_Subscription();
         $subscription->bind($row);
@@ -468,7 +469,7 @@ function process_recurring_payment()
                 "user_id" => $row['user_id'],
                 "suite_id" => $row['suite_id'],
                 "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $row['price'],
+                "amount" => $row['monthly_fee'],
                 "auth_code" => $result['ewayAuthCode'],
                 "created_date" => date("Y-m-d H:i:s")
             ));
@@ -494,10 +495,10 @@ function process_suspended_subscriptions()
     {
         //Monthly Billing
         $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
-        if($row['price'] < $currentPrice)
-            $row['price'] = $currentPrice;
+        if($row['monthly_fee'] < $currentPrice)
+            $row['monthly_fee'] = $currentPrice;
         
-        $result = processEwayPayment($row['customer_id'], $row['price']);
+        $result = processEwayPayment($row['customer_id'], $row['monthly_fee']);
         
         $subscription = new CT_Subscription();
         $subscription->bind($row);
@@ -509,7 +510,7 @@ function process_suspended_subscriptions()
                 "user_id" => $row['user_id'],
                 "suite_id" => $row['suite_id'],
                 "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $row['price'],
+                "amount" => $row['monthly_fee'],
                 "auth_code" => $result['ewayAuthCode'],
                 "created_date" => date("Y-m-d H:i:s")
             ));

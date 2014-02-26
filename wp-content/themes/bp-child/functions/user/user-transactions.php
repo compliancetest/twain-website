@@ -36,7 +36,7 @@ function cp_edit_transaction_log(){
                <div class="td td-product">                               
                    <select name="product<?php echo $row->ID?>" class="select">
                       <?php foreach($products as $p){?>
-                      <option value="<?php echo $p->ID?>" <?php echo $row->PRODUCT_ID == $p->ID ? 'selected="selected"' : ''?>><?php echo get_post_meta($p->ID, 'product_name', true)?></option>
+                      <option value="<?php echo $p->ID?>" <?php echo $row->PRODUCT_WP_ID == $p->ID ? 'selected="selected"' : ''?>><?php echo get_post_meta($p->ID, 'product_name', true)?></option>
                       <?php } ?>
                    </select>       
                </div>
@@ -406,6 +406,8 @@ function getUserSubscribedCases($user_id = null)
         
         $query .= " AND pm.meta_value IN (" . implode(", ", $suite_ids) . ")";
     }
+    
+    $query .= " ORDER BY post_title";
     
     $rows = $wpdb->get_results($query);
     

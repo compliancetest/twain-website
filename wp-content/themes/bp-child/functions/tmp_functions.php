@@ -178,7 +178,7 @@ if(is_super_admin())
                 $wpdb->insert("wp_users_purchases",
                     array(
                         'user_id' => $row->user_id,
-                        'price' => $row->price,
+                        'monthly_fee' => $row->monthly_fee,
                         'paid_amount' => $row->paid_amount,
                         'card_id' => $row->card_id,
                         'created_date' => $row->created_date,

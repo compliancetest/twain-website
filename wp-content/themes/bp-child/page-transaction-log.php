@@ -181,7 +181,7 @@ if($filterCustomer){
                     <?php if($tCustomers){ ?>
                     <div class="space10"></div>
                     <label>&nbsp;Customer <?php if($filterCustomer){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="customer" id="customer" class="select" style="width: 130px;">
+                    <select name="customer" id="customer" class="select">
                         <option value="">- All -</option>
                         <?php foreach($tCustomers as $c){ ?>
                         <option value="<?php echo $c->CUSTOMER_ID?>" <?php echo cp_selected($c->CUSTOMER_ID, $filterCustomer)?>><?php echo $c->CUSTOMER_NAME?></option>
@@ -253,13 +253,13 @@ if($filterCustomer){
                                     <?php if(!$row->TEST_CASE_WP_ID) {?>
                                     Not Assigned
                                     <?php }else{ ?>
-                                    <a href="<?php echo get_permalink($row->TEST_CASE_WP_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 10)?></a>
+                                    <a href="<?php echo get_permalink($row->TEST_CASE_WP_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 22)?></a>
                                     <?php } ?>
                                    
                                </div>
                                <div class="td td-suite">
                                     <?php if($row->TEST_SUITE_WP_ID){ ?>
-                                    <a href="<?php echo get_permalink($row->TEST_SUITE_WP_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 10)?></a>
+                                    <a href="<?php echo get_permalink($row->TEST_SUITE_WP_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 25)?></a>
                                     <?php }else if(!$row->TEST_SUITE_WP_ID && $row->TEST_CASE_WP_ID){ ?>
                                     <?php 
                                         $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite'); 
@@ -305,9 +305,9 @@ if($filterCustomer){
                                            <div class="tbody">
                                              <?php foreach($messages[$row->ID] as $message) {?>
                                                <div class="tr">
-                                                   <div class="td td-from"><?php echo cp_wrap($message->FROM_PARTY_ID, 11) ?></div>
-                                                   <div class="td td-to"><?php echo cp_wrap($message->TO_PARTY_ID, 11)?></div>
-                                                   <div class="td td-service"><?php echo cp_wrap($message->SERVICE, 21) ?></div>
+                                                   <div class="td td-from"><?php echo cp_wrap($message->FROM_PARTY_ID, 15) ?></div>
+                                                   <div class="td td-to"><?php echo cp_wrap($message->TO_PARTY_ID, 15)?></div>
+                                                   <div class="td td-service"><?php echo cp_wrap($message->SERVICE, 48) ?></div>
                                                    <div class="td td-action"><?php echo $message->ACTION ?></div>
                                                    <div class="td td-message-outcome tocenter">
                                                        <?php if($message->MESSAGE_OUTCOME_CODE){ ?>

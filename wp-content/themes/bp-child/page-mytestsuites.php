@@ -52,10 +52,10 @@ get_header();
                             </div>
                             <div class="td td-fee">$<?php 
                                 $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
-                                if($currPrice < $row->price)
+                                if($currPrice < $row->monthly_fee)
                                     echo ceil($currPrice); 
                                 else 
-                                    echo ceil($row->price);                        
+                                    echo ceil($row->monthly_fee);                        
                             ?>/month</div>
                             <div class="td td-status">
                                 <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">

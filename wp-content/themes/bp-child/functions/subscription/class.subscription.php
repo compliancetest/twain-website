@@ -17,7 +17,9 @@ class CT_Subscription
     
     var $created_date = null;
     
-    var $price = null;
+    var $monthly_fee = null;
+    
+    var $singup_fee = null;
     
     var $purchase_id = null;
     
@@ -54,7 +56,7 @@ class CT_Subscription
         
         if($this->id)
         {
-            $query = $wpdb->prepare("SELECT s.*, p.price, p.paid_amount, p.card_id, p.created_date, p.expiry_date,p.inarrears_count, p.frozen_count, c.customer_id FROM {$wpdb->prefix}users_subscriptions AS s
+            $query = $wpdb->prepare("SELECT s.*, p.monthly_fee, p.signup_fee, p.paid_amount, p.card_id, p.created_date, p.expiry_date,p.inarrears_count, p.frozen_count, c.customer_id FROM {$wpdb->prefix}users_subscriptions AS s
                                      LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id = s.purchase_id
                                      LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id                                      
                                      WHERE s.id=%d", $this->id);
@@ -135,8 +137,8 @@ class CT_Subscription
             $user = get_userdata($this->user_id);
         
             $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-            if($this->price > $cur_suite_price)
-                $this->price = $cur_suite_price;
+            if($this->monthly_fee > $cur_suite_price)
+                $this->monthly_fee = $cur_suite_price;
             
             //Send Mail
             $emailData = array(
@@ -144,7 +146,7 @@ class CT_Subscription
                 '[email]' => $user->user_email,
                 '[suite_name]' => get_the_title($this->suite_id),
                 '[suite_url]' => get_permalink($this->suite_id),
-                '[paid_amount]' => $this->price
+                '[paid_amount]' => $this->monthly_fee
             );
             
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'inarrears_subscription', $emailData);
@@ -167,8 +169,8 @@ class CT_Subscription
             $user = get_userdata($this->user_id);
             //Send Mail
             $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-            if($this->price > $cur_suite_price)
-                $this->price = $cur_suite_price;
+            if($this->monthly_fee > $cur_suite_price)
+                $this->monthly_fee = $cur_suite_price;
             
             //Send Mail
             $emailData = array(
@@ -176,7 +178,7 @@ class CT_Subscription
                 '[email]' => $user->user_email,
                 '[suite_name]' => get_the_title($this->suite_id),
                 '[suite_url]' => get_permalink($this->suite_id),
-                '[paid_amount]' => $this->price
+                '[paid_amount]' => $this->monthly_fee
             );
             
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'frozen_subscription', $emailData);
@@ -207,8 +209,8 @@ class CT_Subscription
         $user = get_userdata($this->user_id);
         
         $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-        if($this->price > $cur_suite_price)
-            $this->price = $cur_suite_price;
+        if($this->monthly_fee > $cur_suite_price)
+            $this->monthly_fee = $cur_suite_price;
         
         //Send Mail
         $emailData = array(
@@ -216,10 +218,10 @@ class CT_Subscription
             '[email]' => $user->user_email,
             '[suite_name]' => get_the_title($this->suite_id),
             '[suite_url]' => get_permalink($this->suite_id),
-            '[paid_amount]' => $this->price
+            '[paid_amount]' => $this->monthly_fee
         );
 
-        if ($this->price!=0)
+        if ($this->monthly_fee!=0)
         {
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
             cp_send_email_to_admin('cancel_subscription_admin', $emailData);
@@ -243,8 +245,8 @@ class CT_Subscription
         $user = get_userdata($this->user_id);
         
         $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-        if($this->price > $cur_suite_price)
-            $this->price = $cur_suite_price;
+        if($this->monthly_fee > $cur_suite_price)
+            $this->monthly_fee = $cur_suite_price;
         
         //Send Mail
         $emailData = array(
@@ -252,7 +254,7 @@ class CT_Subscription
             '[email]' => $user->user_email,
             '[suite_name]' => get_the_title($this->suite_id),
             '[suite_url]' => get_permalink($this->suite_id),
-            '[paid_amount]' => $this->price
+            '[paid_amount]' => $this->monthly_fee
         );
         
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $this->status == 'InArrears' ? 'active_subscription' : 'active_subscription2', $emailData);

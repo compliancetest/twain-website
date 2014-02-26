@@ -266,7 +266,7 @@ class ManageESB
             switch($orderby)
             {
                 case 'product':
-                    $orderQuery .= ' ORDER BY PRODUCT_NAME ' . $order . ', c.PRODUCT_ID ' . $order;
+                    $orderQuery .= ' ORDER BY PRODUCT_TITLE ' . $order . ', c.PRODUCT_ID ' . $order;
                     break;
                 case 'case':
                     $orderQuery .= ' ORDER BY TEST_CASE_ID ' . $order;
@@ -314,6 +314,7 @@ class ManageESB
                         cm.TEST_CASE_WP_ID, 
                         cm.TEST_CASE_ID, 
                         p.PRODUCT_WP_ID,
+                        p.PRODUCT_TITLE,
                         s.TEST_SUITE_TITLE, 
                         s.TEST_SUITE_WP_ID, 
                         ts.TEST_OUTCOME_CODE, 
@@ -336,6 +337,7 @@ class ManageESB
                         cm.TEST_CASE_ID, 
                         cm.TEST_CASE_WP_ID, 
                         p.PRODUCT_WP_ID,
+                        p.PRODUCT_TITLE,
                         s.TEST_SUITE_TITLE, 
                         s.TEST_SUITE_WP_ID, 
                         ts.TEST_OUTCOME_CODE, 
@@ -607,6 +609,8 @@ class ManageESB
         
         if($where)
             $query .= " WHERE " . implode(" AND ", $where);
+        
+        $query .= " ORDER BY NAME ASC";
         
         $rows = ManageESB::$esbdb->get_results($query);
         
