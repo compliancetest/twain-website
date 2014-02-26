@@ -51,7 +51,13 @@ get_header();
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
                             <div class="td td-fee">$<?php 
+                                
                                 $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
+                                $monthlyFees = get_user_meta(get_current_user_id(), 'monthly_fee', true);
+                                
+                                if(isset($monthlyFees[$row->suite_id]))
+                                    $currPrice = $monthlyFees[$row->suite_id];
+                                
                                 if($currPrice < $row->monthly_fee)
                                     echo ceil($currPrice); 
                                 else 
