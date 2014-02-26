@@ -312,7 +312,68 @@ a:hover {
                 border-top: 2px solid #666;
             }
             
-        
+            #top_loged_actions .leftmenu .menu-communities, 
+            #top_loged_actions .leftmenu .menu-test-suites, 
+            #top_loged_actions .leftmenu .menu-test-data, 
+            #top_loged_actions .leftmenu .menu-products, 
+            #top_loged_actions .leftmenu .menu-coverage, 
+            #top_loged_actions .leftmenu .menu-transactions, 
+            #top_loged_actions .leftmenu .menu-support, 
+            #top_loged_actions .leftmenu .menu-profile {
+                background-image: url(../images/ui-icon-sprites.png);
+                background-repeat: no-repeat;
+                padding: 6px 34px 6px 20px;
+            }
+            #top_loged_actions .leftmenu .menu-communities {
+                background-position: 136px -72px;
+            }
+            #top_loged_actions .leftmenu .menu-communities:hover,
+            #top_loged_actions .leftmenu .menu-communities.over {
+                background-position: 136px -112px;
+            }
+            #top_loged_actions .leftmenu .menu-test-suites {
+                background-position: 136px -714px;
+            }
+            #top_loged_actions .leftmenu .menu-test-suites:hover,
+            #top_loged_actions .leftmenu .menu-test-suites.over {
+                background-position: 136px -754px;
+            }
+            #top_loged_actions .leftmenu .menu-test-data {
+                background-position: 136px -634px;
+            }
+            #top_loged_actions .leftmenu .menu-test-data:hover {
+                background-position: 136px -674px;
+            }
+            #top_loged_actions .leftmenu .menu-products {
+                background-position: 136px -394px;
+            }
+            #top_loged_actions .leftmenu .menu-products:hover {
+                background-position: 136px -434px;
+            }
+            #top_loged_actions .leftmenu .menu-coverage {
+                background-position: 136px -154px;
+            }
+            #top_loged_actions .leftmenu .menu-coverage:hover {
+                background-position: 136px -194px;
+            }
+            #top_loged_actions .leftmenu .menu-transactions {
+                background-position: 136px -792px;
+            }
+            #top_loged_actions .leftmenu .menu-transactions:hover {
+                background-position: 136px -832px;
+            }
+            #top_loged_actions .leftmenu .menu-support {
+                background-position: 136px -554px;
+            }
+            #top_loged_actions .leftmenu .menu-support:hover {
+                background-position: 136px -594px;
+            }
+            #top_loged_actions .leftmenu .menu-profile {
+                background-position: 136px -474px;
+            }
+            #top_loged_actions .leftmenu .menu-profile:hover {
+                background-position: 136px -514px;
+            }
 /*
 #inputs input[type="text"] {
     font-size: 12px;
