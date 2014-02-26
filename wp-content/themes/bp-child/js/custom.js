@@ -496,7 +496,7 @@ jQuery(document).ready(function($) {
     });
     
     // Dropdown Menus
-    if (jQuery('#wrapper').width() - 1000 < 1000) {
+    if (jQuery('#wrapper').width() - 1000 < 800) {
         jQuery('#top_loged_actions .dropdown').addClass('leftmenu');
     }
     jQuery('.dropdown-menu li').each(function(){
