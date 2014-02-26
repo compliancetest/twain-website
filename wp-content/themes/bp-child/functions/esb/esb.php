@@ -487,7 +487,7 @@ class ManageESB
         $where = array();
         
         $query = "SELECT 
-                    DISTINCT(IFNULL(c.TEST_SUITE_CONFIGURATION_ID, '')) as TC_ID, tm.TEST_SUITE_TITLE AS NAME, tm.TEST_SUITE_WP_ID as ID
+                    DISTINCT(IFNULL(c.TEST_SUITE_CONFIGURATION_ID, 0)) as TC_ID, tm.TEST_SUITE_TITLE AS NAME, tm.TEST_SUITE_WP_ID as ID
                   FROM " . $this->table_conversation_metadata . " AS c 
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS tm ON tm.ID = c.TEST_SUITE_CONFIGURATION_ID
