@@ -685,7 +685,7 @@ function updateSubscribedSuiteId($familyMark)
     if($row)
     {
         //Getting Latest Version in the family
-        $query = $wpdb->prefix("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $familyMark);
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $familyMark);
         $latestId =  $wpdb->get_var($query);
         
         $wpdb->update($wpdb->prefix . "users_subscriptions", array("suite_id" => $latestId), array('id' => $row->id));
