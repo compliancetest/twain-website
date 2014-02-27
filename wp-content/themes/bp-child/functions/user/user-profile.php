@@ -517,6 +517,155 @@ function cp_get_user_fullname($user_id)
     
 }
 
+function cp_get_customer_harness_detail()
+{
+    global $wpdb, $CPRest;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE id=%d", $_REQUEST['id']);
+    $row = $wpdb->get_row($query);
+    
+    $user_id = get_current_user_id();
+    
+    $user = get_userdata($user_id);
+    
+    if(!$row): 
+    ?>
+        <div class="popup-box" id="harness-detail-box<?php echo $_REQUEST['id']?>" style="display: none; width: 450px;">
+            <div class="popup-box-header radius6 noradiusbottom">Invalid Request!</div>     
+            <div class="popup-box-content grid-box-body">    
+                <p class="message error">Your request is not correct. Please try again.</p>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">                                                
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <div class="clear"></div>
+            </div>
+        </div>
+    <?php else: ?>
+    <?php
+        $esbError = false;
+        if(!$row->esb_user_id)
+        {
+            //create esb account
+            $community_id = cp_get_post_meta($row->suite_id, 'community_id', true);    
+            $group = groups_get_group( array('group_id' => $community_id));
+            
+            $xmlData = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
+                            <api:user>
+                                <api:username>' . $user->user_login . "_" . $row->suite_id . '</api:username>
+                                <api:password>' . $row->harness_password . '</api:password>
+                                <api:userGroups>
+                                    <api:group>
+                                        <api:groupId>' . $community_id . '</api:groupId>
+                                        <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
+                                    </api:group>
+                                </api:userGroups>                       
+                                <api:userPModeAgreement>' . $row->p_mode_agreement . '</api:userPModeAgreement>                            
+                                <api:userEndpoint>' . $row->tester_endpoint_url . '</api:userEndpoint>
+                                <api:userEndpointUsername>' . $row->tester_username . '</api:userEndpointUsername>
+                                <api:userEndpointPassword>' . $row->tester_password . '</api:userEndpointPassword>
+                            </api:user>
+                        </api:createUserRequest>';
+            
+            $result = $CPRest->doUserAPI('user/create', $xmlData);
+            
+            $resultDoc = new DOMDocument();
+            
+            if(!$resultDoc || !$resultDoc->loadXML($result))
+            {
+                $esbError = "There was a problem managing your test credentials. Please try again later.";
+            }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
+                $esbError = $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
+            }else{ //Success
+                $wpdb->update($wpdb->prefix . "users_subscriptions", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $row->id));            
+            }
+        }
+    ?>
+        <div class="popup-box" id="harness-detail-box<?php echo $_REQUEST['id']?>" style="display: none; width: 450px;">
+            <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>    
+            <?php if(!$esbError): ?>
+            <form name="harness-form" id="harness-form" action="">
+                <div class="popup-box-content grid-box-body">    
+                    <div class="field-row">
+                        <div class="grid-cell">
+                            <label>P Mode Agreement:</label>
+                            <select name="p_mode_agreement" id="p_mode_agreement" class="select">
+                                <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
+                                <option value="HIGH-END" <?php echo $row->p_mode_agreement == 'HIGH-END' ? 'selected="selected"' : ''?>>HIGH-END</option>
+                            </select>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="harness-endpoint-info">                
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Harness EndPoint:</label>
+                                <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="<?php echo $row->harness_endpoint_url?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Harness Username:</label>
+                                <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="<?php echo $row->harness_username?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>            
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Harness Password:</label>
+                                <input class="input" type="text" name="harness_password" id="harness_password" value="<?php echo $row->harness_password?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>                 
+                    </div>
+                    <div class="tester-endpoint-info" <?php echo $row->p_mode_agreement == 'LIGHT' ? 'style="display: none"' : '' ?>>
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Tester EndPoint:</label>
+                                <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="<?php echo $row->tester_endpoint_url?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Tester Username:</label>
+                                <input class="input" type="text" name="tester_username" id="tester_username" value="<?php echo $row->tester_username?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>            
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Tester Password:</label>
+                                <input class="input" type="text" name="tester_password" id="tester_password" value="<?php echo $row->tester_password?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>                 
+                    </div>
+                </div>
+                <div class="popup-box-footer radius6 noradiustop">                                    
+                    <a href="javascript: void(0)" class="action-btn process-btn submit-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">SAVE</span></a>            
+                    <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                    <div class="clear"></div>
+                </div>
+                <div class="loading"></div>
+                <a class="close_btn"></a>
+                <input type="hidden" name="id" id="harness-id" value="<?php echo $row->id?>" />
+                <?php wp_nonce_field('save-harness', 'cp-action'); ?>
+            </form>
+            <?php else: ?>
+            <div class="popup-box-content grid-box-body">    
+                <p class="message error"><?php echo $esbError; ?></p>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">                                                
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                <div class="clear"></div>
+            </div>
+            <?php endif; ?>
+        </div>
+    <?php 
+    endif; 
+}
+
 function cp_save_customer_harness_detail()
 {
     global $wpdb, $CPRest;

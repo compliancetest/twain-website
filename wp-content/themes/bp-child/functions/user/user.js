@@ -418,26 +418,6 @@
             return false;
         })
 
-        $("#my_subscriptions .harness-detail-link").each(function(){
-            var id = $(this).attr('data-id');
-            $(this).cplightbox({
-                type: 'inline',
-                href: '#harness-detail-box',
-                onStart: function(){
-                    $('#harness-detail-box .message').remove();
-                    $('#harness-id').val(id);
-                    $('#harness-detail-box input[type="text"], #harness-detail-box select').each(function(){
-                        $(this).val($('#' + $(this).attr('id') + id).val());
-                    })
-                    if($('#p_mode_agreement' + id).val() == 'LIGHT')
-                    {
-                        $('#harness-form .tester-endpoint-info').hide();
-                    }else{
-                        $('#harness-form .tester-endpoint-info').show();
-                    }
-                }
-            })
-        })
         
         $('#my_subscriptions .unsubscribe-btn').each(function(){
             var status = $(this).attr('data-status');
@@ -462,8 +442,7 @@
         $("#unsubscription-confirm-box form").submit(function(){
             $(this).find('.loading').show();
         })
-
-        $('#harness-form #p_mode_agreement').change(function(){
+        $(document).on('change', '#p_mode_agreement', function(){
             if($(this).val() == 'LIGHT')
             {
                 $('#harness-form .tester-endpoint-info').hide();
@@ -471,42 +450,10 @@
                 $('#harness-form .tester-endpoint-info').show();
             }
         })
-        $('#harness-form').submit(function(){
-            $('#harness-detail-box .loading').show();
-            $('#harness-detail-box .message').remove();
-
-            $.ajax({
-                url: '/',
-                data: $('#harness-form').serialize(),
-                type: 'post',
-                success: function(rsp){
-                    $('#harness-detail-box .loading').hide();
-                    if(rsp == 'success')
-                    {
-                        $('#harness-detail-box .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');
-                        var id = $('#harness-form #harness-id').val();
-                        $('#p_mode_agreement' + id).val($('#harness-detail-box #p_mode_agreement').val());
-                        $('#harness_endpoint_url' + id).val($('#harness-detail-box #harness_endpoint_url').val());
-                        $('#harness_username' + id).val($('#harness-detail-box #harness_username').val());
-                        $('#harness_password' + id).val($('#harness-detail-box #harness_password').val());
-                        if($('#harness-detail-box #p_mode_agreement').val() == 'HIGH-END')
-                        {
-                            $('#tester_endpoint_url' + id).val($('#harness-detail-box #tester_endpoint_url').val());
-                            $('#tester_username' + id).val($('#harness-detail-box #tester_username').val());
-                            $('#tester_password' + id).val($('#harness-detail-box #tester_password').val());
-                        }
-                    }else{
-                        $('#harness-detail-box .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
-                    }
-                },
-                error: function(err){
-                    $('#harness-detail-box .loading').hide();
-                    $('#harness-detail-box .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
-                }
-            })
-            return false;
-        })
+        
     });
+    
+
     
     $(document).on('keyup', '#edit-card-form #email', function(){
         var email = $(this).val();
@@ -516,6 +463,31 @@
     });
 
 })(jQuery);
+function saveHarnessDetails(id)
+{
+    jQuery('#harness-detail-box' + id + ' .loading').show();
+    jQuery('#harness-detail-box' + id + ' .message').remove();
+
+    jQuery.ajax({
+        url: '/',
+        data: jQuery('#harness-form').serialize(),
+        type: 'post',
+        success: function(rsp){
+            jQuery('#harness-detail-box' + id + ' .loading').hide();
+            if(rsp == 'success')
+            {
+                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');                
+            }else{
+                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
+            }
+        },
+        error: function(err){
+            jQuery('#harness-detail-box' + id + ' .loading').hide();
+            jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
+        }
+    })
+    return false;
+}
 function saveVariableDefaults(obj)
 {
     var parentObj = jQuery(obj).parent().parent();

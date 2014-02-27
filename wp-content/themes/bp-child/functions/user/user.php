@@ -68,6 +68,9 @@ function compliancetest_user_actions()
         $result = cp_save_customer_harness_detail();       
         echo $result;
         exit;
+    }else if(wp_verify_nonce($cpAction, 'get-harness')){
+        cp_get_customer_harness_detail();               
+        exit;
     }else if(wp_verify_nonce($cpAction, 'edit-transaction-log')){
         $result = cp_edit_transaction_log();               
         echo $result;

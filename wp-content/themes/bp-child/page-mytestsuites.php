@@ -87,16 +87,9 @@ get_header();
                                 </span>
                             </div>
                             <div class="td td-action tocenter">
-                                <a href="javascript: void(0)" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
+                                <a href="/?cp-action=<?php echo wp_create_nonce('get-harness')?>&id=<?php echo $row->id?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
                                 <a href="javascript: void(0)" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip" data-status="<?php echo $row->status?>" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
                             </div>
-                            <input type="hidden" id="p_mode_agreement<?php echo $row->id?>" value="<?php echo $row->p_mode_agreement?>" />
-                            <input type="hidden" id="harness_endpoint_url<?php echo $row->id?>" value="<?php echo $row->harness_endpoint_url?>" />
-                            <input type="hidden" id="harness_username<?php echo $row->id?>" value="<?php echo $row->harness_username?>" />
-                            <input type="hidden" id="harness_password<?php echo $row->id?>" value="<?php echo $row->harness_password?>" />
-                            <input type="hidden" id="tester_endpoint_url<?php echo $row->id?>" value="<?php echo $row->tester_endpoint_url?>" />
-                            <input type="hidden" id="tester_username<?php echo $row->id?>" value="<?php echo $row->tester_username?>" />
-                            <input type="hidden" id="tester_password<?php echo $row->id?>" value="<?php echo $row->tester_password?>" />
                             <div class="clear"></div>
                         </div>
                    <?php
@@ -122,79 +115,6 @@ get_header();
     <div class="clear"></div>
 </div> <!--end content-->
 <?php render_unsubscription_popup(); ?>
-<div class="popup-box" id="harness-detail-box" style="display: none; width: 450px;">
-    <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>        
-    <form name="harness-form" id="harness-form" action="">
-        <div class="popup-box-content grid-box-body">    
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>P Mode Agreement:</label>
-                    <select name="p_mode_agreement" id="p_mode_agreement" class="select">
-                        <option value="LIGHT">LIGHT</option>
-                        <option value="HIGH-END">HIGH-END</option>
-                    </select>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="harness-endpoint-info">                
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Harness EndPoint:</label>
-                        <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Harness Username:</label>
-                        <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>            
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Harness Password:</label>
-                        <input class="input" type="text" name="harness_password" id="harness_password" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>                 
-            </div>
-            <div class="tester-endpoint-info">
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Tester EndPoint:</label>
-                        <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Tester Username:</label>
-                        <input class="input" type="text" name="tester_username" id="tester_username" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>            
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Tester Password:</label>
-                        <input class="input" type="text" name="tester_password" id="tester_password" value="" />
-                    </div>
-                    <div class="clear"></div>
-                </div>                 
-            </div>
-            
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">                                    
-            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-            <div class="clear"></div>
-        </div>
-        <div class="loading"></div>
-        <a class="close_btn"></a>
-        <input type="hidden" name="id" id="harness-id" value="" />
-        <?php wp_nonce_field('save-harness', 'cp-action'); ?>
-    </form>
-</div>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
