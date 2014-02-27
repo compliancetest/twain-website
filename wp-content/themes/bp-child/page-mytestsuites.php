@@ -57,15 +57,7 @@ get_header();
                                 <span class="has-tooltip">*<span class="simple_tooltip">Use of all versions of a test suite is covered by a single subscription fee<span></span></span></span>
                               <?php else: ?>
                                 $<?php 
-                                $monthlyFee = $row->monthly_fee;
-                                
-                                $suiteMonthlyFee = doubleval(get_post_meta($row->suite_id, 'monthly_subscription_price', true)); 
-                                $userMonthlyFees = get_user_meta(get_current_user_id(), 'monthly_fee', true);
-                                
-                                if(isset($userMonthlyFees[$row->suite_id]) && $userMonthlyFees[$row->suite_id] != '')
-                                    $monthlyFee = $userMonthlyFees[$row->suite_id];
-                                else if($suiteMonthlyFee < $monthlyFee)
-                                    $monthlyFee = $suiteMonthlyFee;
+                                $monthlyFee = getSubscriptionMonthlyFee($row->id);                                
                                 echo $monthlyFee;
                                 ?>/month
                               <?php endif; ?>                                                                
