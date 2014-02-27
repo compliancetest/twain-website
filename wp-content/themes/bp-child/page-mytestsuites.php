@@ -59,7 +59,7 @@ get_header();
                                 $<?php 
                                 $monthlyFee = $row->monthly_fee;
                                 
-                                $suiteMonthlyFee = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
+                                $suiteMonthlyFee = doubleval(get_post_meta($row->suite_id, 'monthly_subscription_price', true)); 
                                 $userMonthlyFees = get_user_meta(get_current_user_id(), 'monthly_fee', true);
                                 
                                 if(isset($userMonthlyFees[$row->suite_id]) && $userMonthlyFees[$row->suite_id] != '')
