@@ -64,7 +64,7 @@ get_header();
                                 
                                 if(isset($userMonthlyFees[$row->suite_id]) && $userMonthlyFees[$row->suite_id] != '')
                                     $monthlyFee = $userMonthlyFees[$row->suite_id];
-                                else if($suiteMonthlyFee < $firstMonthlyFee)
+                                else if($suiteMonthlyFee < $monthlyFee)
                                     $monthlyFee = $suiteMonthlyFee;
                                 echo $monthlyFee;
                                 ?>/month
