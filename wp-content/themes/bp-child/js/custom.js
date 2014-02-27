@@ -496,6 +496,11 @@ jQuery(document).ready(function($) {
     });
     
     // Dropdown Menus
+    jQuery(window).resize(function(){
+        if (jQuery('#wrapper').width() - 1000 < 800) {
+            jQuery('#top_loged_actions .dropdown').addClass('leftmenu');
+        }
+    });
     if (jQuery('#wrapper').width() - 1000 < 800) {
         jQuery('#top_loged_actions .dropdown').addClass('leftmenu');
     }
