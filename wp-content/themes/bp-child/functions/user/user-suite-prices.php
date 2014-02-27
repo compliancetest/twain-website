@@ -127,7 +127,7 @@ function ct_manage_fee_overrides()
                                 <td><?php echo $suite->post_title?></td>
                                 <td>
                                     <?php 
-                                        $price = get_post_meta($suite->ID,'signup_price', true);
+                                        $price = get_post_meta($suite->ID,'signup_price', true);                                        
                                         if($price > 0)
                                             echo '$' . $price;
                                         else 
@@ -148,7 +148,10 @@ function ct_manage_fee_overrides()
                                 <td><input type="text" name="monthly_fee<?php echo $suite->ID?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
                                      <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
                                 <td align="center"><?php echo isset($purchases[$suite->ID]) ? 'Yes' : 'No'?></td>
-                                <td align="center"><?php echo isset($purchases[$suite->ID]) ? '$' . $purchases[$suite->ID] : '-'?></td>
+                                <!-- First Monthly Fee -->
+                                <td align="center">
+                                    <?php echo isset($purchases[$suite->ID]) ? '$' . $purchases[$suite->ID] : '-'?>
+                                </td>
                                 <td>
                                     <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
                                     <input type="hidden" name="suite_id[]" value="<?php echo $suite->ID?>" />

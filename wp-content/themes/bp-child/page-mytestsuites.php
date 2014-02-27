@@ -38,6 +38,8 @@ get_header();
                        </div> 
                    <?php
                        }else{
+                           $prev_purchase_id = 0;
+                           
                            foreach($subscriptions as $row)
                            {
                            $community_id = get_post_meta($row->suite_id, 'community_id', true);
@@ -50,19 +52,24 @@ get_header();
                             <div class="td td-suite">
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
-                            <div class="td td-fee">$<?php 
+                            <div class="td td-fee tocenter">
+                              <?php if($prev_purchase_id == $row->purchase_id): ?>
+                                <span class="has-tooltip">*<span class="simple_tooltip">Use of all versions of a test suite is covered by a single subscription fee<span></span></span></span>
+                              <?php else: ?>
+                                $<?php 
+                                $monthlyFee = $row->monthly_fee;
                                 
-                                $currPrice = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
-                                $monthlyFees = get_user_meta(get_current_user_id(), 'monthly_fee', true);
+                                $suiteMonthlyFee = get_post_meta($row->suite_id, 'monthly_subscription_price', true); 
+                                $userMonthlyFees = get_user_meta(get_current_user_id(), 'monthly_fee', true);
                                 
-                                if(isset($monthlyFees[$row->suite_id]))
-                                    $currPrice = $monthlyFees[$row->suite_id];
-                                
-                                if($currPrice < $row->monthly_fee)
-                                    echo ceil($currPrice); 
-                                else 
-                                    echo ceil($row->monthly_fee);                        
-                            ?>/month</div>
+                                if(isset($userMonthlyFees[$row->suite_id]) && $userMonthlyFees[$row->suite_id] != '')
+                                    $monthlyFee = $userMonthlyFees[$row->suite_id];
+                                else if($suiteMonthlyFee < $firstMonthlyFee)
+                                    $monthlyFee = $suiteMonthlyFee;
+                                echo $monthlyFee;
+                                ?>/month
+                              <?php endif; ?>                                                                
+                            </div>
                             <div class="td td-status">
                                 <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                     <?php echo $row->status?>
@@ -101,6 +108,7 @@ get_header();
                             <div class="clear"></div>
                         </div>
                    <?php
+                                $prev_purchase_id = $row->purchase_id;
                            }
                        }
                    ?>

@@ -5,13 +5,13 @@ function execute_subscription_actions()
 {
     if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'direct_payment'))
     {
-        process_eway_payment();        
+        purchase_paid_subscription();        
     }else if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'free_charge')){
-        free_charge();
+        purchase_free_subscription();
     }else if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'create_subscription')){
-        create_subscription();
+        purchase_additional_subscription();
     }else if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'unsubscribe')){  
-        unsubscribe_purchase();
+        unsubscribe();
     }else if(isset($_REQUEST['ext-action']) && wp_verify_nonce($_REQUEST['ext-action'], 'check-subscriptions')){
         $inarrearsCount = get_option('inarrears_count');
         $frozenCount = get_option('frozen_count');
@@ -26,7 +26,7 @@ function execute_subscription_actions()
     }
 }
 
-function process_eway_payment()
+function purchase_paid_subscription()
 {
     global $wpdb, $CPRest;
 
@@ -163,13 +163,11 @@ function process_eway_payment()
             '[payment_email]' => $card->email
         );
         
-        if($suite->monthlySubscriptionPrice == 0)
-        {
-            //Send Signup Fee Only Subscription Email    
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-            cp_send_email_to_admin('purchase_subscription_admin', $emailData);        
-        }else{
-            //Send General Subscription Email   
+        if($suite->monthlySubscriptionPrice == 0) //Signup Fee Only Subscription
+        {            
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_signup_fee_only_subscription', $emailData);
+            cp_send_email_to_admin('purchase_signup_fee_only_subscription_admin', $emailData);        
+        }else{ //General Subscription
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
             cp_send_email_to_admin('purchase_subscription_admin', $emailData);        
         }
@@ -187,7 +185,7 @@ function process_eway_payment()
     
 }
 
-function free_charge()
+function purchase_free_subscription()
 {
     global $wpdb, $CPRest;
       
@@ -215,10 +213,7 @@ function free_charge()
     if(isset($monthly_fee[$suite->id]))
         $suite->monthlySubscriptionPrice = doubleval($monthly_fee[$suite->id]);
     
-    if($suite->signupPrice == -1)
-        $paymentAmount = isset($signup_fee[$suite->id]) ? $signup_fee[$suite->id] : calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);
-    else 
-        $paymentAmount = $suite->signupPrice;
+    $paymentAmount = $suite->signupPrice + calculateFirstPaymentAmount($suite->monthlySubscriptionPrice);    
     
     if($paymentAmount > 0)
     {
@@ -285,8 +280,7 @@ function free_charge()
         '[name]' => cp_get_user_fullname($user->ID),
         '[email]' => $user->user_email,
         '[suite_name]' => $suite->name,
-        '[suite_url]' => get_permalink($suite->id),
-        '[paid_amount]' => $suite->monthlySubscriptionPrice,
+        '[suite_url]' => get_permalink($suite->id),        
         '[community_url]' => bp_get_group_permalink($group)
     );
     cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_free_subscription', $emailData);
@@ -299,79 +293,12 @@ function free_charge()
   
 }
 
-function unsubscribe_purchase()
+
+function purchase_additional_subscription()
 {
     global $wpdb, $CPRest;
     
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : '/my-test-suites';
-    
-    if(!is_user_logged_in())
-    {
-        addMessage("Permission Denied!", "error");
-        wp_redirect("/");
-        exit;
-    }
-    
-    $user = get_userdata(get_current_user_id());
-
-    $pId = $_REQUEST['id'];
-    
-    $subscription = new CT_Subscription($pId);
-
-    if(!$subscription->id || $subscription->user_id != $user->ID)
-    {
-        addMessage('Invalid Request!', 'error');
-        wp_redirect($return);
-        exit;
-    }
-
-    if($subscription->status != 'Active' || isset($_POST['delete-now']))
-    {
-        if ($subscription->paid_amount != 0)
-        {
-            if($subscription->monthly_fee == 0) //Remove Signup Fee Only Subscription
-            {
-                //Unsubscribe the purchasement now
-                removeSubscription($subscription,'unsubscribing_signup_fee_only');    
-            }else{ //Remove General Subscription
-                //Unsubscribe the purchasement now
-                removeSubscription($subscription,'unsubscribing');
-            }
-            
-        }else{
-            //Unsubscribe free subscription now
-            removeSubscription($subscription, 'unsubscribing_free');
-        }
-    }else{
-        if ($subscription->paid_amount != 0)
-        {
-            if($subscription->monthly_fee == 0) //Cancel Signup Fee only Subscription
-            {
-                //Just Update the Status to Unsubscribing
-                $subscription->cancel('unsubscribing_signup_fee_only');
-            }else{ //Cancel General Subscription
-                //Just Update the Status to Unsubscribing
-                $subscription->cancel('unsubscribing');    
-            }
-
-            addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
-        }else{
-            //Just Update the Status to Unsubscribing for unpaid subscription
-            $subscription->cancel('unsubscribing_free');
-
-            addMessage("Your request has been sent successfully. Your subscription will be cancelled at the end of this month.");
-        }
-    }
-    
-    wp_redirect($return);
-    exit;   
-}
-
-function create_subscription()
-{
-    global $wpdb, $CPRest;
-    
-    $suite_id = $_GET['suite_id'];
+    $suite_id = intval($_GET['suite_id']);
     $user_id = get_current_user_id();
     
     $return = !$suite_id ? "/" : get_permalink($suite_id);
@@ -387,7 +314,7 @@ function create_subscription()
     $suite = new TestSuite($suite_id);
     $suite->load();
     
-    $query = $wpdb->prepare("SELECT s.* FROM {$wpdb->prefix}users_subscriptions AS s
+    $query = $wpdb->prepare("SELECT s.*, p.paid_amount, p.monthly_fee, p.signup_fee FROM {$wpdb->prefix}users_subscriptions AS s
                              INNER JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id
                              WHERE ts.family_mark=%d AND s.user_id=%d", $suite->familyMark, $user_id);
     $rows = $wpdb->get_results($query);
@@ -398,6 +325,8 @@ function create_subscription()
         wp_redirect($return);
         exit;
     }
+    
+    $purchase = $rows[0];
     
     $purchase_id = $rows[0]->purchase_id;
     $status = $rows[0]->status;
@@ -439,16 +368,64 @@ function create_subscription()
         '[email]' => $user->user_email,
         '[suite_name]' => $suite->name,
         '[suite_url]' => get_permalink($suite->id),
-        '[paid_amount]' => $suite->monthlySubscriptionPrice,
+        '[paid_amount]' => $purchase->paid_amount,
+        '[monthly_fee]' => $purchase->monthly_fee,
+        '[signup_fee]' => $purchase->signup_fee,
         '[community_url]' => bp_get_group_permalink($group)
     );
-    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
-    cp_send_email_to_admin('purchase_subscription_admin', $emailData);
+    
+    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_additional_subscription', $emailData);
+    cp_send_email_to_admin('purchase_additional_subscription_admin', $emailData);
     
     addMessage("Your subscription has been proceeded successfully");
     
     
 }
+
+function unsubscribe()
+{
+    global $wpdb, $CPRest;
+    
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : '/my-test-suites';
+    
+    if(!is_user_logged_in())
+    {
+        addMessage("Permission Denied!", "error");
+        wp_redirect("/");
+        exit;
+    }
+    
+    $user = get_userdata(get_current_user_id());
+
+    $pId = $_REQUEST['id'];
+    
+    $subscription = new CT_Subscription($pId);
+
+    if(!$subscription->id || $subscription->user_id != $user->ID)
+    {
+        addMessage('Invalid Request!', 'error');
+        wp_redirect($return);
+        exit;
+    }
+
+    if($subscription->status != 'Active' || isset($_POST['delete-now']))
+    {
+        //First Cancel Subscription
+        if($subscription->status != 'Unsubscribing')
+        {
+            $subscription->cancel();
+        }
+        
+        //Remove Subscription
+        removeSubscription($subscription);
+    }else{
+        $subscription->cancel();
+    }
+    
+    wp_redirect($return);
+    exit;   
+}
+
 
 function process_recurring_payment()
 {

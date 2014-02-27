@@ -185,14 +185,38 @@ function isPurchasedForOtherVersions($familyMark, $user_id = null)
     if(!$user_id)
         $user_id = get_current_user_id();
             
-    //Getting Brother Suites    
-    /*$query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $suite_id);
-    $familyMark = $wpdb->get_var($query);*/
-    
     $query = $wpdb->prepare("SELECT count(DISTINCT(s.id)) FROM {$wpdb->prefix}users_subscriptions AS s
                              INNER JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id
-                             WHERE ts.family_mark=%d AND s.user_id=%d AND s.status='Active'", $familyMark, $user_id);
+                             WHERE ts.family_mark=%d AND s.user_id=%d AND s.status != 'Unsubscribing'", $familyMark, $user_id);
     $count = $wpdb->get_var($query);
     
     return !$count ? false : true;
+}
+
+/**
+* Get Subscription Monthly Fee
+* 
+* @param Int or CT_Subscription $subscription
+*/
+function getSubscriptionMonthlyFee($subscription, $user_id = null)
+{
+    if(!is_a($subscription, 'CT_Subscription'))
+        $subscription = new CT_Subscription($subscription);
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    
+    $suiteMonthlyFee = doubleval(get_post_meta($subscription->suite_id, 'monthly_subscription_price', true));
+    
+    
+    $monthlyFee = min($suiteMonthlyFee, $subscription->monthly_fee);
+    
+    
+    $userMonthlyFees = get_user_meta($user->ID, 'monthly_fee', true);
+    
+    if(isset($userMonthlyFees[$subscription->suite_id]))
+        $monthlyFee = doubleval($userMonthlyFees[$subscription->suite_id]);
+        
+    return $monthlyFee;
 }

@@ -232,6 +232,9 @@ function getUserSubscriptions($user_id = null, $all = false)
                                  LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id 
                                  LEFT JOIN {$wpdb->prefix}users_purchases AS up ON up.id=s.purchase_id 
                                  WHERE s.user_id=%d AND s.status != 'Frozen'", $user_id);
+    
+    $query .= " ORDER BY suite_title";
+    
     $result = $wpdb->get_results($query);
     
     return $result;

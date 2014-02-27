@@ -19,7 +19,7 @@ class CT_Subscription
     
     var $monthly_fee = null;
     
-    var $singup_fee = null;
+    var $signup_fee = null;
     
     var $purchase_id = null;
     
@@ -93,6 +93,7 @@ class CT_Subscription
     function cancel($email_template)
     {
         global $wpdb;
+        
         if($this->id)
         {
             //Update subscription status
@@ -101,24 +102,40 @@ class CT_Subscription
             //Send Email Notification
             $user = get_userdata($this->user_id);
         
-            //Send Subscription UnSubscribing Mails
-            
+            //Send Subscription UnSubscribing Mails            
             $suite = new TestSuite($this->suite_id);
             $suite->load();
+            
             //Send Mail
             $emailData = array(
                 '[name]' => cp_get_user_fullname($user->ID),
                 '[email]' => $user->user_email,
                 '[suite_name]' => get_the_title($this->suite_id),
                 '[paid_amount]' => $this->paid_amount,
+                '[signup_fee]' => $this->signup_fee,
+                '[monthly_fee]' => $this->monthly_fee,
                 '[suite_url]' => get_permalink($this->suite_id),
             );
+            
+            
+            //Getting Email Template
+            if($subscription->paid_amount != 0)
+            {
+                $monthlyFee = getSubscriptionMonthlyFee($this);
+                if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version
+                {
+                    $email_template = 'cancel_free_subscription';
+                }else{
+                    $email_template = 'cancel_subscription';
+                }
+            }else{
+                $email_template = 'cancel_free_subscription';
+            }
             
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $email_template, $emailData);
             cp_send_email_to_admin($email_template.'_admin', $emailData);
         }
     }
-    
     
     /**
     * Set Subscription status to InArrears 
@@ -221,14 +238,8 @@ class CT_Subscription
             '[paid_amount]' => $this->monthly_fee
         );
 
-        if ($this->monthly_fee!=0)
-        {
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
-            cp_send_email_to_admin('cancel_subscription_admin', $emailData);
-        }else{
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_free_subscription', $emailData);
-            cp_send_email_to_admin('cancel_free_subscription_admin', $emailData);
-        }
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
+        cp_send_email_to_admin('unsubscribing_admin', $emailData);        
     }
     
     /**
