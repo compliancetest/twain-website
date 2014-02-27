@@ -10583,7 +10583,7 @@
 					var schemas = data.schemas();
 					var knownProperties = schemas.knownProperties();
 					
-					var shouldHideUndefined = knownProperties.length - schemas.requiredProperties().length > 5;
+					var shouldHideUndefined = knownProperties.length - schemas.requiredProperties().length > 20;
 					
 					var maxProperties = schemas.maxProperties();
 					var canAdd = (maxProperties == null || maxProperties > schemas.keys().length);
