@@ -101,7 +101,7 @@ function cp_user_detail_edit()
             '[name]' => get_user_meta($user_id, 'first_name', true) . " " . get_user_meta($user_id, 'last_name', true),
             '[username]' => $current_user->user_login,
             '[email]' => $email,
-            '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $verification_code
+            '[link]' => get_site_url() . '?cp-action=user_activation&token=' . $verification_code
         );
 
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'verify', $data);
