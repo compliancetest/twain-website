@@ -15,7 +15,9 @@ $args = array(
                 'value' => $group->id,
                 'compare' => '='
             )
-        )
+        ),
+        'orderby' => 'title',
+        'order' => 'ASC'
     );
 
 if(!groups_is_user_admin(get_current_user_id(), bp_get_group_id())){
