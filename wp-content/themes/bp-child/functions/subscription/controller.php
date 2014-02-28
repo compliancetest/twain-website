@@ -286,9 +286,9 @@ function purchase_free_subscription()
     cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_free_subscription', $emailData);
     cp_send_email_to_admin('purchase_free_subscription_admin', $emailData);
     
-    addMessage("Your subscription has been proceeded successfully");
-            
-    wp_redirect($return);
+//    addMessage("Your subscription has been proceeded successfully");
+    echo 'success';
+//    wp_redirect($return);
     exit;
   
 }
@@ -377,9 +377,11 @@ function purchase_additional_subscription()
     cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_additional_subscription', $emailData);
     cp_send_email_to_admin('purchase_additional_subscription_admin', $emailData);
     
-    addMessage("Your subscription has been proceeded successfully");
+//    addMessage("Your subscription has been proceeded successfully");
     
+    echo 'success';
     
+    exit;
 }
 
 function unsubscribe()

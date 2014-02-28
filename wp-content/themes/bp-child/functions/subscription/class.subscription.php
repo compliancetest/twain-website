@@ -90,7 +90,7 @@ class CT_Subscription
     * Update the subscription to Unsubscribing Status
     * 
     */
-    function cancel($email_template)
+    function cancel()
     {
         global $wpdb;
         
