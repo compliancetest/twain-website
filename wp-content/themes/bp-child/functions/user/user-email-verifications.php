@@ -24,15 +24,17 @@ function ct_manage_email_verifications()
             $userids = array_map( 'intval', (array) $_REQUEST['users'] );
         
         $wpdb->query('UPDATE ' . $wpdb->prefix . 'users SET user_activation_key = \'\', user_status = 0 WHERE ID IN (' . implode(',', $userids) . ')');
-        $msg = 'Successfully Saved!';
+        $msg = 'Successfully Verified!';
     }
-    
-    
+        
     $listTable = new CT_User_Verification_List_Table();
     $listTable->prepare_items();
     ?>
     <div class="wrap">
         <h2>Users</h2>
+        <?php if(isset($msg)){ ?>
+        <div id="message" class="updated below-h2"><p><?php echo $msg?></p></div>
+        <?php } ?>
         <form name="adminform" action="users.php?page=user_email_verifications" method="post">
         <?php
             $listTable->search_box("Search", "search");
