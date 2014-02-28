@@ -1,0 +1,44 @@
+<?php
+/**
+* Manage the Email Verification per a users
+*/
+
+add_action("admin_menu", "ct_users_email_verification_menu");
+
+function ct_users_email_verification_menu()
+{
+    add_users_page("Manage User Email Verifications", "Email Verifications", "manage_options", "user_email_verifications", "ct_manage_email_verifications");
+}
+
+function ct_manage_email_verifications()
+{
+    global $wpdb;
+    
+    require_once('user-verification-list-table.php');
+    
+    if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'verify')
+    {
+        if ( empty($_REQUEST['users']) )
+            $userids = array( intval( $_REQUEST['user'] ) );
+        else
+            $userids = array_map( 'intval', (array) $_REQUEST['users'] );
+        
+        $wpdb->query('UPDATE ' . $wpdb->prefix . 'users SET user_activation_key = \'\', user_status = 0 WHERE ID IN (' . implode(',', $userids) . ')');
+        $msg = 'Successfully Saved!';
+    }
+    
+    
+    $listTable = new CT_User_Verification_List_Table();
+    $listTable->prepare_items();
+    ?>
+    <div class="wrap">
+        <h2>Users</h2>
+        <form name="adminform" action="users.php?page=user_email_verifications" method="post">
+        <?php
+            $listTable->search_box("Search", "search");
+            echo $listTable->display();
+        ?>
+        </form>
+    </div>
+<?php    
+}
