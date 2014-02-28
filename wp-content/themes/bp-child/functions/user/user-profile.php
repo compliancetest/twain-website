@@ -92,6 +92,8 @@ function cp_user_detail_edit()
     $currentEmail = $wpdb->get_var($query);
     if ($currentEmail != $email) 
     {
+        $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_changes WHERE user_id =" . $user_id);
+        
         $verification_code = md5($email);
         $wpdb->insert($wpdb->prefix . 'users_changes', array('user_id'=> $user_id, 'email_changed' => $email, 'verification_code' => $verification_code));
         
