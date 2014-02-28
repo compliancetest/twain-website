@@ -23,7 +23,17 @@ function ct_manage_email_verifications()
         else
             $userids = array_map( 'intval', (array) $_REQUEST['users'] );
         
-        $wpdb->query('UPDATE ' . $wpdb->prefix . 'users SET user_activation_key = \'\', user_status = 0 WHERE ID IN (' . implode(',', $userids) . ')');
+        foreach ($userids as $userid)
+        {
+            $wpdb->update($wpdb->prefix . 'users', array('user_activation_key'=>'', 'user_status'=>0), array('ID'=>$userid));
+            $user_temp = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix . 'users_changes WHERE user_id=' . $userid);
+            
+            if ($user_temp) {
+                $wpdb->update($wpdb->prefix . 'users', array('user_email'=>$user_temp->email_changed), array('ID'=>$userid));
+                $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_changes WHERE user_id =" . $userid);    
+            }
+        }
+        
         $msg = 'Successfully Verified!';
     }
         
