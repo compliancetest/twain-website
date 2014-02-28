@@ -121,7 +121,7 @@ function cp_activate_user()
     
     $current_date = date("Y-m-d h:i:s");
     $activation = $_GET['token'];
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->users . " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID WHERE (user_activation_key = %s)", $activation, $activation);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->users . " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID WHERE (user_activation_key = %s) OR (uc.verification_code = %s)", $activation, $activation);
     $user = $wpdb->get_row($query);
     
     if($user)
