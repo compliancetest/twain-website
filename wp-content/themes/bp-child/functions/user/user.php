@@ -6,6 +6,7 @@ require_once('user-auth.php');
 require_once('user-profile.php');
 require_once('user-transactions.php');
 require_once('user-suite-prices.php');
+require_once('user-email-verifications.php');
 
 
 add_action('init', 'compliancetest_user_actions');
