@@ -232,11 +232,12 @@ Template Name Posts: Test Suite
                 $subscription = $wpdb->get_row($query);
                 
                 $purchasedSubscription = false;
+                $subscriptionType = 'paid';
                 
             if($subscription){ 
                 
                 $purchasedSubscription = true;
-                $subscriptionType = 'paid';
+                
                 
                 if($subscription->status == 'Active'):
             ?>
@@ -263,7 +264,7 @@ Template Name Posts: Test Suite
                 {
                     $subscriptionType = 'additional';
                     ?>
-                    <a href="<?php echo get_permalink()?>?_paymentnonce=<?php echo wp_create_nonce("create_subscription")?>&suite_id=<?php echo $suite->id?>" class="suite-subscript-link">
+                    <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
                         <span class="price-b">
                             <span class="l"></span>
                             <span class="m"> 
@@ -601,13 +602,15 @@ Template Name Posts: Test Suite
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                                 </div>
                                 <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width21P' : 'width24P' ?> toleft">
-                                <?php 
-                                    $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
-                                    if(strlen($intentDesc) > 150)
-                                        echo substr($intentDesc, 0, 150) . "...";
-                                    else
-                                        echo $intentDesc;
-                                ?>
+                                    <div class="right10">
+                                        <?php 
+                                            $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
+                                            /*if(strlen($intentDesc) > 150)
+                                                echo substr($intentDesc, 0, 150) . "...";
+                                            else*/
+                                                echo $intentDesc;
+                                        ?>
+                                    </div>
                                 </div>                            
                                 <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
                                 <div class="grid_cell nopaddingtop toleft tocenter grid_action_cell width4P">
@@ -773,10 +776,11 @@ if(!$purchasedSubscription):
                 <div class="clear"></div>
             </div>                
         </div>        
+        <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('direct_payment')?>" />
         <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional'): ?>      
         <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription</div>     
         <div class="popup-box-content grid-box-body">    
-            <div class="field-row notice-txt">
+            <div class="field-row">
                 <div class="grid-cell">
                     <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
                 </div>

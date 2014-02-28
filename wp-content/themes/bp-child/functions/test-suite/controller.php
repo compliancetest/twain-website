@@ -29,7 +29,15 @@ function remove_suite_name_id_map($postid)
         $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
         
         cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
-        cp_update_subscriptions($familyMark, get_post_meta($postid, 'ts_version_major', true));
+        
+        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", $familyMark, get_post_meta($postid, 'ts_version_major', true));
+        $next_suite_id = $wpdb->get_var($query);
+        
+        if($next_suite_id)
+        {
+            $query = "UPDATE {$wpdb->prefix}users_subscriptions SET suite_id={$next_suite_id} WHERE suite_id={$postid}";        
+            $wpdb->query($query);    
+        }
         
         //Delete Subscriptions
         $wpdb->query("DELETE FROM {$wpdb->prefix}users_subscriptions WHERE suite_id NOT IN (SELECT suite_id FROM {$wpdb->prefix}test_suites)");
@@ -502,7 +510,7 @@ function saveSuite()
         }
         
         //Update Subscrition
-        updateSubscribedSuiteId($suite->familyMark);
+//        updateSubscribedSuiteId($suite->familyMark);
     }
     
     //Send Notification Email
@@ -569,6 +577,7 @@ function cp_update_subscriptions($familyMark, $version_major)
         return;
         
     $query = "UPDATE {$wpdb->prefix}users_subscriptions SET suite_id={$ids[0]} WHERE suite_id IN (" . implode(", ", $ids) . ")";
+    
     $wpdb->query($query);
     
     return;

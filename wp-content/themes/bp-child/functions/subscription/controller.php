@@ -6,9 +6,9 @@ function execute_subscription_actions()
     if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'direct_payment'))
     {
         purchase_paid_subscription();        
-    }else if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'free_charge')){
+    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'free_charge')){
         purchase_free_subscription();
-    }else if(isset($_GET['_paymentnonce']) && wp_verify_nonce($_GET['_paymentnonce'], 'create_subscription')){
+    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'create_subscription')){
         purchase_additional_subscription();
     }else if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'unsubscribe')){  
         unsubscribe();
@@ -189,7 +189,7 @@ function purchase_free_subscription()
 {
     global $wpdb, $CPRest;
       
-    $suite_id = $_GET['suite_id'];
+    $suite_id = $_POST['suite_id'];
     $return = !$suite_id ? "/" : get_permalink($suite_id);
     
     if(!is_user_logged_in())
@@ -298,15 +298,16 @@ function purchase_additional_subscription()
 {
     global $wpdb, $CPRest;
     
-    $suite_id = intval($_GET['suite_id']);
+    $suite_id = intval($_POST['suite_id']);
     $user_id = get_current_user_id();
     
     $return = !$suite_id ? "/" : get_permalink($suite_id);
     
     if(!$user_id || !$suite_id)
     {
-        addMessage("Invalid Request!", "error");
-        wp_redirect($return);
+//        addMessage("Invalid Request!", "error");
+        echo "Invalid Request!";
+//        wp_redirect($return);
         exit;
     }
     
@@ -316,13 +317,15 @@ function purchase_additional_subscription()
     
     $query = $wpdb->prepare("SELECT s.*, p.paid_amount, p.monthly_fee, p.signup_fee FROM {$wpdb->prefix}users_subscriptions AS s
                              INNER JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id
+                             LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id
                              WHERE ts.family_mark=%d AND s.user_id=%d", $suite->familyMark, $user_id);
     $rows = $wpdb->get_results($query);
     
     if(!$rows)
     {
-        addMessage("Invalid Request!", "error");
-        wp_redirect($return);
+        /*addMessage("Invalid Request!", "error");
+        wp_redirect($return);*/
+        echo "Invalid Request!";
         exit;
     }
     
