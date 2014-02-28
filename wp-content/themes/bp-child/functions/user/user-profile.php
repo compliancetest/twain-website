@@ -79,9 +79,31 @@ function cp_user_detail_edit()
         echo 'This email address already exists!';
         exit;
     }
+    $query = $wpdb->prepare("SELECT user_id FROM " . $wpdb->prefix . "users_changes WHERE email_changed=%s AND user_id != %d", $email, $user_id);
+    $uID = $wpdb->get_var($query);
+    if($uID)
+    {
+        echo 'This email address already exists!';
+        exit;
+    }
     
-    //Update Email
-    wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr($email)));
+    //Not Update Email and Save the email address temporary
+    $query = $wpdb->prepare("SELECT user_email FROM " . $wpdb->users . " WHERE ID = %d", $user_id);
+    $currentEmail = $wpdb->get_var($query);
+    if ($currentEmail != $email) 
+    {
+        $verification_code = md5($email);
+        $wpdb->insert($wpdb->prefix . 'users_changes', array('user_id'=> $user_id, 'email_changed' => $email, 'verification_code' => $verification_code));
+        
+        $data = array(
+            '[name]' => get_user_meta($user_id, 'first_name', true) . " " . get_user_meta($user_id, 'last_name', true),
+            '[username]' => $current_user->user_login,
+            '[email]' => $email,
+            '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $verification_code
+        );
+
+        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'verify', $data);
+    }
     
     //Update Password
     $newPass = $_POST['new_pass'];
