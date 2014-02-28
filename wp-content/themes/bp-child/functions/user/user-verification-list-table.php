@@ -18,7 +18,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
     }
 
     function prepare_items() {
-        global $role, $usersearch;
+        global $role, $usersearch, $wpdb;
 
         $usersearch = isset( $_REQUEST['s'] ) ? trim( $_REQUEST['s'] ) : '';
 
@@ -51,9 +51,10 @@ class CT_User_Verification_List_Table extends WP_List_Table {
             
         // Query the user IDs for this page
         $wp_user_search = new WP_User_Query( $args );
-        $wp_user_search->query_where .= ' AND wp_users.user_status=3';
+        $wp_user_search->query_from .= " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID";
+        $wp_user_search->query_where .= ' AND (wp_users.user_status = 3 OR uc.email_changed != \'\')';
         $wp_user_search->query();
-
+        
         $this->items = $wp_user_search->get_results();
         
         $this->set_pagination_args( array(
