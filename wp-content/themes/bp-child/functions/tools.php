@@ -424,6 +424,18 @@ function ct_duplicate_data()
                                         }
                                     }
                                     
+                                    //Delete Old Data
+                                    $wpdb->query("DELETE FROM {$wpdb->prefix}bp_groups_downloads WHERE community_id=" . $new_community_id);
+                                    //Getting Downloads
+                                    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}bp_groups_downloads WHERE group_id=%d", $community['id']); 
+                                    $downloads = $new_wpdb->get_results($query, ARRAY_A);
+                                    foreach($downloads as $drow)
+                                    {
+                                        $drow['id'] = null; unset($drow['id']);
+                                        $drow['group_id'] = $new_community_id;
+                                        $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', $drow);
+                                    }
+                                    
                                     echo '<b>Community: ' . $community['name'] . ' has been copied.</b>';
                                     
                                     //Copy Suites
