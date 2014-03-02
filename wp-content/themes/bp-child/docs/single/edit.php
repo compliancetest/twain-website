@@ -71,7 +71,7 @@
                                                     the_editor( bp_docs_get_edit_doc_content(), 'doc_content', 'doc[title]', false );
                                                 }*/
                                             ?>
-                                            <textarea name="doc_content" class="redactor_area"><?php echo bp_docs_get_edit_doc_content(); ?></textarea>
+                                            <textarea name="doc_content" class="redactor_area_full"><?php echo bp_docs_get_edit_doc_content(); ?></textarea>
                                             </div>
                                         </div>
                                    </div>
