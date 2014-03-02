@@ -401,7 +401,7 @@ function create_email_management_page()
                     $purchase_signup_fee_only_subscription_admin_email_title = get_option('purchase_signup_fee_only_subscription_admin_email_title');
                     $purchase_signup_fee_only_subscription_admin_email_content = get_option('purchase_signup_fee_only_subscription_admin_email_content');
                     ?>
-                    <h3>Purchase Free Subscription</h3>
+                    <h3>Purchase Signup Fee Only Subscription</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [signup_fee], [monthly_fee], [community_url], [payment_email]</p>
                     <table class="widefat">
                         <thead>
