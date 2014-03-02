@@ -42,7 +42,16 @@ if(isset($_GET['suite_id']))
 if(!$case->testSuite && $isNew && count($testsuites) > 0)
     $case->testSuite = array($testsuites[0]->ID);
 
-$suiteRoles = $case->getAvailableRoles();
+$allSuiteRoles = $case->getAvailableRoles();
+$suiteRoles = array();
+
+foreach($allSuiteRoles as $r)
+    $suiteRoles[] = $r['name'];
+    
+asort($suiteRoles);
+
+$suiteRoles = array_unique($suiteRoles);
+
 $suiteInitMessages = $case->getAvailableInitMessages();
 
 if(!$isNew){

@@ -777,6 +777,7 @@ if(!$purchasedSubscription):
             </div>                
         </div>        
         <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('direct_payment')?>" />
+        <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
         <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional'): ?>      
         <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription</div>     
         <div class="popup-box-content grid-box-body">    
@@ -788,9 +789,10 @@ if(!$purchasedSubscription):
             </div> 
         </div>     
         <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce($subscriptionType == 'free' ? 'free_charge' : 'create_subscription')?>" />
+        <div class="loading loading-with-text"><div><b>PROCESSING SUBSCRIPTION</b><span>Please wait...</span></div></div>
         <?php endif; ?>
         
-        <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
+        
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Submit</span></a>
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
