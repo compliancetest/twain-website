@@ -804,10 +804,12 @@ if(!$purchasedSubscription):
 </div>
 <div class="popup-box" id="payment-success-box" style="display: none;">
     <div class="popup-box-header radius6 noradiusbottom">Success!</div>        
-        <div class="popup-box-content grid-box-body">    
-            <p>Thank you for purchasing a subscription to the <?php echo $suite->name?> test suite. 
+        <div class="popup-box-content grid-box-body">                
             <?php if($subscriptionType == 'paid'): ?>
+            <p>Thank you for purchasing a subscription to the <?php echo $suite->name?> test suite. 
             <br />Your payment has been successfully processed.
+            <?php else: ?>
+            <p>Thank you for subscribing to the <?php echo $suite->name?> test suite. 
             <?php endif; ?>
             Please refer to your Test Suites dashboard page for test harness access credentials and further configuration.</p>
         </div>
