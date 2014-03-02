@@ -154,7 +154,7 @@ function purchase_paid_subscription()
         $emailData = array(
             '[name]' => cp_get_user_fullname($user->ID),
             '[email]' => $user->user_email,
-            '[suite_name]' => $suite->name,
+            '[suite_name]' => $suite->title,
             '[suite_url]' => get_permalink($suite->id),
             '[paid_amount]' => $paymentAmount,
             '[signup_fee]' => $suite->signupPrice,
@@ -279,7 +279,7 @@ function purchase_free_subscription()
     $emailData = array(
         '[name]' => cp_get_user_fullname($user->ID),
         '[email]' => $user->user_email,
-        '[suite_name]' => $suite->name,
+        '[suite_name]' => $suite->title,
         '[suite_url]' => get_permalink($suite->id),        
         '[community_url]' => bp_get_group_permalink($group)
     );
@@ -369,7 +369,7 @@ function purchase_additional_subscription()
     $emailData = array(
         '[name]' => cp_get_user_fullname($user->ID),
         '[email]' => $user->user_email,
-        '[suite_name]' => $suite->name,
+        '[suite_name]' => $suite->title,
         '[suite_url]' => get_permalink($suite->id),
         '[paid_amount]' => $purchase->paid_amount,
         '[monthly_fee]' => $purchase->monthly_fee,
