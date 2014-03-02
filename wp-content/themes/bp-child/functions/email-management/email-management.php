@@ -657,7 +657,7 @@ function create_email_management_page()
                     $cancel_additional_subscription_admin_email_title = get_option('cancel_additional_subscription_admin_email_title');
                     $cancel_additional_subscription_admin_email_content = get_option('cancel_additional_subscription_admin_email_content');
                     ?>
-                    <h3>Cancel Paid Subscription</h3>
+                    <h3>Cancel Subscription to Additional Version</h3>
                     <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
                     <table class="widefat">
                         <thead>
