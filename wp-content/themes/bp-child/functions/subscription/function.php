@@ -213,7 +213,7 @@ function getSubscriptionMonthlyFee($subscription, $user_id = null)
     $monthlyFee = min($suiteMonthlyFee, $subscription->monthly_fee);
     
     
-    $userMonthlyFees = get_user_meta($user->ID, 'monthly_fee', true);
+    $userMonthlyFees = get_user_meta($user_id, 'monthly_fee', true);
     
     if(isset($userMonthlyFees[$subscription->suite_id]))
         $monthlyFee = doubleval($userMonthlyFees[$subscription->suite_id]);
