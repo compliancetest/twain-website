@@ -534,6 +534,11 @@ jQuery(document).ready(function($) {
           air: true,
           minHeight: 80
     });
+    jQuery('textarea.redactor_area_full').redactor({
+          
+          minHeight: 80
+    });
+    
 });
 
 function customizeFileTag()
