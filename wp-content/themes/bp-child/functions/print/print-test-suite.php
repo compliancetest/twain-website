@@ -34,6 +34,13 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         table{border: solid 1px #999; border-collapse: collapse; vertical-align: top;}
         th{text-align: left; font-weight: bold; border: solid 1px #999; padding: 5px;}
         td{border: solid 1px #999;  padding: 5px;}
+        .scenario-description ol, .scenario-description ul, .scenario-description p{
+            margin: 0;
+            padding: 0;
+        }
+        .scenario-description ol, .scenario-description ul{
+            margin-left: 20px;
+        }
         .clear{
             clear: both;
         }
@@ -88,6 +95,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
             <?php
             foreach($suite->conformanceLevel as $i => $row){
                 ?>
+                <?php if ($row['code'] != 'Default'): ?>
                 <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
                     <b style="float: left; width: 20%;"><?php echo $row['code']; ?></b>
                     <span style="float: left; width: 80%;">
@@ -95,6 +103,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                     </span>
                     <br class="clear" />
                 </p>
+                <?php endif; ?>
             <?php
             }
             ?>
@@ -124,19 +133,21 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
     </div>
     <div class="block">
         <h5 style="float: left; width: 33%;">Scenarios:</h5>
-        <div style="float: left; width: 67%;">
+        <div style="margin: 0 0 0 33%;">
             <?php
             foreach($suite->scenarios as $row){
                 $scenario_name = $row['code'];
-                $scenario_desc = strip_tags($row['description']);
+                $scenario_desc = $row['description'];
                 ?>
-                <p style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px;">
-                    <b style="float: left; width: 20%;"><?php echo $scenario_name; ?></b>
-                    <span style="float: left; width: 80%;">
+                <?php if ($scenario_name != 'Default'): ?>
+                <div class="scenario-row" style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px; overflow: hidden;">
+                    <div style="float: left; width: 20%;"><b><?php echo $scenario_name; ?></b></div>
+                    <div style="float: left; width: 80%;" class="scenario-description">
                         <?php echo $scenario_desc;?>
-                    </span>
+                    </div>
                     <br class="clear" />
-                </p>
+                </div>
+                <?php endif; ?>
             <?php
             }
             ?>
@@ -182,17 +193,43 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         <tbody>
             <?php
                 //Getting Test Cases
-                $args = $args = array(
-                        'post_type' => 'test-case',
-                        'posts_per_page' => -1,
-                        'order_by'  => 'meta_value title',
-                        'order'     => 'ASC',
-                        'meta_key'  => 'sequence_number',
-                        'tax_query' => array('relation' => 'and')
+            //Getting Test Cases
+                $args = array(
+                    'post_type' => 'test-case',
+                    'posts_per_page' => -1,
+                    'orderby'  => 'title',
+                    'order'     => 'ASC',
+                    'paged' => $page,
+                    'meta_query' => array('relation' => 'and')
                 );
                 $params = array();
                 //Add Test Suite ID
                 $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
+
+                if(!groups_is_user_admin(get_current_user_id(), $suite->community_id)){
+                    $args['meta_query'][] = array(
+                        'key' => 'hide_case',
+                        'value' => 0,
+                        'compare' => '='
+                    );
+                    $args['meta_query'][] = array(
+                        'key' => 'conformance_level_' . $suite->id,
+                        'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                        'compare' => '!='
+                    );
+
+                }
+
+
+                if($selectedRole){
+                    $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');
+                    $params[] = 'tester_role=' . urlencode($selectedRole);
+                }
+
+                if($selectedConfLevel){
+                    $args['meta_query'][] = array('key' => 'conformance_level_'. $suite->id, 'value' => $selectedConfLevel,'compare' => '=');
+                    $params[] = 'conformance=' . urlencode($selectedConfLevel);
+                }
 
 
                 $get_query = new WP_Query($args);

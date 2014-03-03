@@ -44,12 +44,17 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
             vertical-align: top;
         }
     </style>
-    
+
+
     <h3 style="float: left">Test case ID: <a href="<?php echo get_permalink()?>"><?php echo $case->testCaseID ; ?> v<?php echo $case->version; ?></a></h3>
     <h5 style="float: right; line-height: 24px">(Test Suite: <a href="<?php echo get_permalink($test_suite_id)?>"><?php echo get_the_title($test_suite_id) ?></a>)</h5>
     <div class="clear"></div>
-    
+
+    <div></div>
     <table class="noborder" style="width: 100%">
+        <tr>
+            <td colspan="6"><?php echo $case->testIntentDescription ; ?></td>
+        </tr>
         <tr>
             <td class="td-label">Info:</td>
             <td>Version: <b><?php echo $case->version; ?></b></td>
