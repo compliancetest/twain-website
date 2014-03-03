@@ -19,19 +19,24 @@ function ct_manage_fee_overrides()
     if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'save')
     {
         $userID = $_REQUEST['id'];
-        $suites = $_POST['suite_id'];
+        $familyMarks = $_POST['suite_id']; //These are family mark
+        
+        //Getting Test Suites
+        $query = "SELECT suite_id, family_mark FROM {$wpdb->prefix}test_suites where family_mark in (" . implode(", ", $familyMarks) . ")";
+        $suites = $wpdb->get_results($query);
+        
         $result1 = array();
         $result2 = array();
-        foreach($suites as $sid)
+        foreach($suites as $suite)
         {
-            $sid = intval($sid);
-            if(isset($_POST['set_value' . $sid]) && $_POST['signup_fee' . $sid] != '')
+            $sid = intval($suite->suite_id);
+            if(isset($_POST['set_value' . $suite->family_mark]) && $_POST['signup_fee' . $suite->family_mark] != '')
             {
-               $result1[$sid] = $_POST['signup_fee' . $sid];               
+               $result1[$sid] = $_POST['signup_fee' . $suite->family_mark];               
             }
-            if(isset($_POST['set_value' . $sid]) && $_POST['monthly_fee' . $sid] != '')
+            if(isset($_POST['set_value' . $suite->family_mark]) && $_POST['monthly_fee' . $suite->family_mark] != '')
             {
-               $result2[$sid] = $_POST['monthly_fee' . $sid];               
+               $result2[$sid] = $_POST['monthly_fee' . $suite->family_mark];               
             }
             
         }
@@ -65,6 +70,10 @@ function ct_manage_fee_overrides()
         add_filter('posts_join_paged', 'add_community_join_query', 100, 2);
         add_filter('posts_orderby', 'add_community_orderby_query', 100, 2);
         add_filter('posts_fields_request', 'add_community_fields_query', 100, 2);
+        
+        add_filter('posts_join_paged', 'add_suite_family_mark_join_query', 99, 2);
+        add_filter('posts_orderby', 'add_suite_family_mark_orderby_query', 99, 2);
+        add_filter('posts_fields_request', 'add_suite_family_mark_fields_query', 99, 2);
 
         $testsuites = $all_posts->get_posts();
 
@@ -117,10 +126,10 @@ function ct_manage_fee_overrides()
                     <tbody>
                     <?php
                         
-                        
-                        foreach($testsuites as $suite)
+                        foreach($testsuites as $idx=>$suite)
                         {
                             $group = groups_get_group(array('group_id' => get_post_meta($suite->ID, 'community_id', true)));
+                            $familyCounts ++;
                             ?>
                             <tr>
                                 <td><?php echo bp_get_group_name($group) ?></td>
@@ -141,21 +150,44 @@ function ct_manage_fee_overrides()
                                             echo '$' . $price;
                                         else 
                                             $price;
+                                        
                                     ?>
                                 </td>
-                                <td><input type="text" name="signup_fee<?php echo $suite->ID?>" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
-                                     <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
-                                <td><input type="text" name="monthly_fee<?php echo $suite->ID?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
-                                     <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> /></td>
+                                <?php 
+                                    if($idx == 0 || $testsuites[$idx - 1]->family_mark != $suite->family_mark): 
+                                        $familyCounts = 0;
+                                        //Getting Family Count
+                                        for($i=$idx; $i < count($testsuites); $i++)
+                                        {
+                                            if($testsuites[$i]->family_mark == $suite->family_mark)
+                                                $familyCounts++;
+                                            else
+                                                break;
+                                        }
+                                ?>
+                                <td rowspan="<?php echo $familyCounts?>">
+                                    <input type="text" name="signup_fee<?php echo $suite->family_mark?>" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> />
+                                </td>
+                                <td rowspan="<?php echo $familyCounts?>">
+                                    <input type="text" name="monthly_fee<?php echo $suite->family_mark?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
+                                     <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> />
+                                </td>                                    
+                                <?php 
+                                    
+                                    endif; 
+                                ?>
                                 <td align="center"><?php echo isset($purchases[$suite->ID]) ? 'Yes' : 'No'?></td>
                                 <!-- First Monthly Fee -->
                                 <td align="center">
                                     <?php echo isset($purchases[$suite->ID]) ? '$' . $purchases[$suite->ID] : '-'?>
                                 </td>
-                                <td>
-                                    <input type="checkbox" name="set_value<?php echo $suite->ID?>" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
-                                    <input type="hidden" name="suite_id[]" value="<?php echo $suite->ID?>" />
-                                </td>                                
+                                <?php if($idx == 0 || $testsuites[$idx - 1]->family_mark != $suite->family_mark): ?>
+                                <td rowspan="<?php echo $familyCounts?>">
+                                    <input type="checkbox" name="set_value<?php echo $suite->family_mark?>" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
+                                    <input type="hidden" name="suite_id[]" value="<?php echo $suite->family_mark?>" />
+                                </td> 
+                                <?php endif; ?>                                                           
                             </tr>
                             <?php
                         }

@@ -124,7 +124,7 @@ class CT_Subscription
                 $monthlyFee = getSubscriptionMonthlyFee($this);
                 if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version
                 {
-                    $email_template = 'cancel_free_subscription';
+                    $email_template = 'cancel_additional_subscription';
                 }else{
                     $email_template = 'cancel_subscription';
                 }

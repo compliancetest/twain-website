@@ -5482,7 +5482,7 @@ a.suite-subscript-link:hover{
     background: url(../images/blue_box_right.png) no-repeat;
 }
 .suite-subscript-link .price-b .m{
-    height: 45px;
+    height: 47px;
     float: left;
     width: 82px;
     background: #26659a;
@@ -5492,9 +5492,9 @@ a.suite-subscript-link:hover{
     background: -ms-linear-gradient(top, #237fce, #285d89);
     background: -o-linear-gradient(top, #237fce, #285d89);
     white-space: nowrap;
-    font-size: 11px;
-    line-height: 12px;
-    padding-top: 16px;
+    font-size: 15px;
+    line-height: 16px;
+    padding-top: 14px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
 }
 

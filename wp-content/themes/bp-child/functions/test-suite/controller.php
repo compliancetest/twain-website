@@ -729,3 +729,31 @@ function add_community_fields_query($fields, $object)
     
     return $fields;
 }
+
+function add_suite_family_mark_join_query($join, $object)
+{
+    global $wpdb, $post;
+    
+    $join .= " INNER JOIN {$wpdb->prefix}test_suites ON {$wpdb->posts}.ID={$wpdb->prefix}test_suites.suite_id ";
+    
+    return $join;
+}
+
+function add_suite_family_mark_fields_query($fields, $object)
+{
+    global $wpdb, $post;
+    
+    if($fields)
+        $fields .= ", ";
+    $fields .= " {$wpdb->prefix}test_suites.family_mark ";
+    
+    return $fields;    
+}
+function add_suite_family_mark_orderby_query($orderby, $object)
+{
+    global $wpdb, $post;
+    
+    $orderby = " family_mark ASC, " . $orderby;
+    
+    return $orderby;
+}
