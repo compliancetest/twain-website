@@ -416,17 +416,10 @@ function unsubscribe()
     }
 
     if($subscription->status != 'Active' || isset($_POST['delete-now']))
-    {
-        //First Cancel Subscription
-        /*if($subscription->status != 'Unsubscribing')
-        {
-            $subscription->cancel();
-        }*/
-        
-        //Remove Subscription
-        removeSubscription($subscription);
-    }else{
+    {        
         $subscription->cancel();
+    }else{
+        $subscription->unsubscribing();
     }
     
     wp_redirect($return);

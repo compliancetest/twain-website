@@ -85,7 +85,7 @@ function calculateFirstPaymentAmount($monthly_price)
 * 
 * @param CT_Subscription $subscription
 */
-function removeSubscription($subscription)
+function cancelSubscription($subscription)
 {
     global $wpdb, $CPRest;
     

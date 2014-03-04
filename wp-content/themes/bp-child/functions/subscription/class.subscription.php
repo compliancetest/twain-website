@@ -85,12 +85,7 @@ class CT_Subscription
        }
     }
     
-    /**
-    * Cancel Subscription
-    * Update the subscription to Unsubscribing Status
-    * 
-    */
-    function cancel()
+    function unsubscribing()
     {
         global $wpdb;
         
@@ -116,24 +111,54 @@ class CT_Subscription
                 '[monthly_fee]' => $this->monthly_fee,
                 '[suite_url]' => get_permalink($this->suite_id),
             );
-            
-            
-            //Getting Email Template
-            if($subscription->paid_amount != 0)
+
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
+            cp_send_email_to_admin('unsubscribing_admin', $emailData);
+        }
+    }
+    
+    /**
+    * Unsubscribing
+    * Update the subscription to Unsubscribing Status
+    * 
+    */
+    function cancel()
+    {
+        global $wpdb, $CPRest;
+        
+        if($this->id)
+        {
+            $user = get_userdata(get_current_user_id());
+    
+            if(intval($this->esb_user_id) > 0)
             {
-                $monthlyFee = getSubscriptionMonthlyFee($this);
-                if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version
-                {
-                    $email_template = 'cancel_additional_subscription';
-                }else{
-                    $email_template = 'cancel_subscription';
-                }
-            }else{
-                $email_template = 'cancel_free_subscription';
+                //Remove Backend Account
+                $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
+                            <api:user>
+                                <api:userId>' . $this->esb_user_id . '</api:userId>                        
+                            </api:user>
+                        </api:deleteUserRequest>';
+                
+                $result = $CPRest->doUserAPI('user/delete', $data);
+                
+                $resultDoc = new DOMDocument(); 
             }
             
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $email_template, $emailData);
-            cp_send_email_to_admin($email_template.'_admin', $emailData);
+            if(intval($this->esb_user_id) > 0 && (!$result || !$resultDoc->loadXML($result)))
+            {
+                addMessage("There was a problem deleting your test credentials.", "error");
+                
+            }else{
+                if(intval($this->esb_user_id) > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
+                {
+                    addMessage('There was a problem deleting your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue, 'error');
+                }else{                        
+                    //Remove Subscription
+                    $this->delete();            
+                    
+                    addMessage('Your subscription has been cancelled.');
+                }
+            }
         }
     }
     
@@ -230,21 +255,34 @@ class CT_Subscription
         
         $user = get_userdata($this->user_id);
         
-        $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-        if($this->monthly_fee > $cur_suite_price)
-            $this->monthly_fee = $cur_suite_price;
+        $monthlyFee = getSubscriptionMonthlyFee($this);
         
         //Send Mail
         $emailData = array(
-            '[name]' => $user->first_name . " " . $user->last_name,
+            '[name]' => cp_get_user_fullname($user->ID),
             '[email]' => $user->user_email,
             '[suite_name]' => get_the_title($this->suite_id),
+            '[paid_amount]' => $this->paid_amount,
+            '[signup_fee]' => $this->signup_fee,
+            '[monthly_fee]' => $monthlyFee,
             '[suite_url]' => get_permalink($this->suite_id),
-            '[paid_amount]' => $this->monthly_fee
         );
-
-        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
-        cp_send_email_to_admin('unsubscribing_admin', $emailData);        
+        
+        //Getting Email Template
+        if($this->paid_amount != 0)
+        {            
+            if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version
+            {
+                $email_template = 'cancel_additional_subscription';
+            }else{
+                $email_template = 'cancel_subscription';
+            }
+        }else{
+            $email_template = 'cancel_free_subscription';
+        }
+        
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $email_template, $emailData);
+        cp_send_email_to_admin($email_template.'_admin', $emailData);
     }
     
     /**
