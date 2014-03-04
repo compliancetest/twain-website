@@ -216,7 +216,12 @@ class CT_Subscription
         
         $remainingSubscriptions = getNumSubscriptions($this->purchase_id);
         if(!$remainingSubscriptions)
+        {
+            //Remove Purchases
             $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->purchase_id));
+            //Remove transactions
+            $wpdb->delete($wpdb->prefix . 'users_transactions', array('purchase_id' => $this->purchase_id));            
+        }
         
         //Remove Test Plans
         $wpdb->delete($wpdb->prefix . 'test_plans', array('suite_id' => $this->suite_id, 'creator_id' => $this->user_id));
