@@ -255,7 +255,7 @@ class CT_Subscription
         
         $user = get_userdata($this->user_id);
         
-        $monthlyFee = getSubscriptionMonthlyFee($this);
+        $monthlyFee = getSubscriptionMonthlyFee($this, $this->user_id);
         
         //Send Mail
         $emailData = array(
@@ -267,6 +267,9 @@ class CT_Subscription
             '[monthly_fee]' => $monthlyFee,
             '[suite_url]' => get_permalink($this->suite_id),
         );
+        
+        $suite = new TestSuite($this->suite_id);
+        $suite->loadfamilyMark();
         
         //Getting Email Template
         if($this->paid_amount != 0)
