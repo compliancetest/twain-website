@@ -272,16 +272,16 @@ class CT_Subscription
         $suite->loadfamilyMark();
         
         //Getting Email Template
-        if($this->paid_amount != 0)
-        {            
-            if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version
-            {
-                $email_template = 'cancel_additional_subscription';
-            }else{
-                $email_template = 'cancel_subscription';
-            }
+        if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version
+        {
+            $email_template = 'cancel_additional_subscription';
         }else{
-            $email_template = 'cancel_free_subscription';
+            if($this->monthly_fee > 0)
+            {            
+                $email_template = 'cancel_subscription';
+            }else{
+                $email_template = 'cancel_free_subscription';
+            }
         }
         
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $email_template, $emailData);
