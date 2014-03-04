@@ -568,7 +568,7 @@ Template Name Posts: Test Suite
                                     <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
                                 </div>
                                 <div class="grid_cell nopaddingtop  toleft tocenter width7P">
-                                    <?php echo get_post_meta($row->ID ,'choose_initiator', true)?>
+                                    <?php echo ucfirst(get_post_meta($row->ID ,'choose_initiator', true))?>
                                 </div>
                                 <div class="grid_cell nopaddingtop toleft tocenter width6P">
                                     <?php 
