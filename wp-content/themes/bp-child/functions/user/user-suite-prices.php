@@ -56,7 +56,6 @@ function ct_manage_fee_overrides()
         if(!$monthly_fee)
             $monthly_fee = array();
         
-        
         $args = array(
                 'post_type' => 'test-suite',         
                 'posts_per_page' => -1,

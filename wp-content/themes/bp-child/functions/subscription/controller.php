@@ -90,15 +90,7 @@ function purchase_paid_subscription()
     
     if($result['ewayTrxnStatus'] == 'True')
     {
-        //Save Transaction
-        $wpdb->insert($wpdb->prefix . 'users_transactions', array(
-            "user_id" => $user->ID,
-            "suite_id" => $suite->id,
-            "trxn_number" => $result['ewayTrxnNumber'],
-            "amount" => $paymentAmount,
-            "auth_code" => $result['ewayAuthCode'],
-            "created_date" => date("Y-m-d H:i:s")
-        ));
+        
         //Create MSH Datas 
         $esb_data = array(
             'p_mode_agreement' => 'LIGHT',
@@ -122,6 +114,16 @@ function purchase_paid_subscription()
         ));
         
         $purchase_id = $wpdb->insert_id;
+        
+        //Save Transaction
+        $wpdb->insert($wpdb->prefix . 'users_transactions', array(
+            "user_id" => $user->ID,
+            "purchase_id" => $purchase_id,
+            "trxn_number" => $result['ewayTrxnNumber'],
+            "amount" => $paymentAmount,
+            "auth_code" => $result['ewayAuthCode'],
+            "created_date" => date("Y-m-d H:i:s")
+        ));
         
         //Create subscription row
         $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
@@ -441,23 +443,24 @@ function process_recurring_payment()
     foreach($subscriptions as $row)
     {
         //Monthly Billing
-        $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
-        if($row['monthly_fee'] < $currentPrice)
-            $row['monthly_fee'] = $currentPrice;
+        $monthlyFee = getSubscriptionMonthlyFee($row->id, $row->user_id);
         
-        $result = processEwayPayment($row['customer_id'], $row['monthly_fee']);
+        if($monthlyFee > 0)
+        {
+            $result = processEwayPayment($row['customer_id'], $monthlyFee);    
+        }
         
-        $subscription = new CT_Subscription();
-        $subscription->bind($row);
+        
+        
         
         if($result['ewayTrxnStatus'] == 'True')
         {
             //Save Transaction
             $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                 "user_id" => $row['user_id'],
-                "suite_id" => $row['suite_id'],
+                "purchase_id" => $row['purchase_id'],
                 "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $row['monthly_fee'],
+                "amount" => $monthlyFee,
                 "auth_code" => $result['ewayAuthCode'],
                 "created_date" => date("Y-m-d H:i:s")
             ));
@@ -468,7 +471,6 @@ function process_recurring_payment()
             //Set the status to InArrears
             $subscription->inArrears();
         }
-        
     }
     
 }
