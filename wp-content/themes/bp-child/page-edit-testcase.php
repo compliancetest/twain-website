@@ -46,11 +46,12 @@ $allSuiteRoles = $case->getAvailableRoles();
 $suiteRoles = array();
 
 foreach($allSuiteRoles as $r)
-    $suiteRoles[] = $r['name'];
+{
+    if(!in_array($r['name'], $suiteRoles))        
+        $suiteRoles[] = $r['name'];
+}
     
 asort($suiteRoles);
-
-$suiteRoles = array_unique($suiteRoles, 'SORT_STRING');
 
 $suiteInitMessages = $case->getAvailableInitMessages();
 
