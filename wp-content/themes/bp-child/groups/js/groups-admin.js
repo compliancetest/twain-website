@@ -73,6 +73,13 @@
         return false;
     })
     
+    //Settings Box
+    $('#group-article-settings-form').submit(function(){
+        var form = $(this);
+        form.find('.message').remove();
+        form.find('.loading').show();
+    })
+    
     //Manage Members Page
     $('#group-members-form').submit(function(){
         if($('#group-members-form #action').val() == '')    

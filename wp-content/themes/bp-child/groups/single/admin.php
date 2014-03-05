@@ -333,6 +333,9 @@
             <div class="grid-box-body">
                 <div class="column nopaddingbottom">
                     <form name="group-requests-form" id="group-requests-form" action="<?php bp_group_admin_form_action('membership-requests')?>" method="post" enctype="multipart/form-data" role="main">
+                    <?php
+                        global $requests_template;
+                    ?>
                     <?php if(bp_group_has_membership_requests()){ ?>
                     <p class="nomarginbottom">The following persons wants to join the Community:</p>
                     <div class="field-row">
@@ -363,6 +366,20 @@
                             <?php endwhile; ?>
                         </ul>
                     </div>
+                    <?php
+                        if($requests_template->pag_links):
+                    ?>
+                        <div class="pagination-wrapper">
+                            <div class="pagination">
+                            <?php
+                                echo $requests_template->pag_links;                                
+                            ?>
+                            </div>
+                        </div>
+                        <br />
+                    <?php
+                        endif;
+                    ?>
                     <?php }else{ ?>
                         <p><?php _e( 'There are no pending membership requests.', 'buddypress' ); ?></p>
                     <?php } ?>
@@ -383,13 +400,13 @@
                 </div>
                 <div class="clear"></div>
                 <!-- Administrators -->
-                <?php if(bp_has_members( '&include='. bp_group_admin_ids())){?>        
+                <?php global $members_template; ?>
+                <?php if(bp_has_members( 'per_page=10&include='. bp_group_admin_ids())){?>        
                 <div class="field-row">
                     <p><b>Administrator</b></p>
                     <ul id="admins-list" class="member-list">                    
                         <?php while ( bp_members() ) : bp_the_member(); ?>
-                        <?php
-                            global $members_template;
+                        <?php                            
                             $tName = cp_get_user_fullname($members_template->member->ID);
                             $tEmail = bp_get_member_user_email();
                         ?>
@@ -410,6 +427,17 @@
                     </ul>   
                     <div class="clear"></div>             
                 </div>
+                
+                <?php if($members_template->pag_links): ?>
+                <div class="pagination-wrapper">
+                    <div class="pagination">
+                        <?php
+                            echo $members_template->pag_links;
+                        ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
                 <?php } ?>
                 
                 <!-- Moderators -->
@@ -439,22 +467,22 @@
                     </ul>
                     <div class="clear"></div>                
                 </div>
+                <?php if($members_template->pag_links): ?>
+                <div class="pagination-wrapper">
+                    <div class="pagination">
+                        <?php
+                            echo $members_template->pag_links;
+                        ?>
+                    </div>
+                </div>
+                <?php endif; ?>
                 <?php } ?>
             <?php } ?>
                 <!-- Members -->
               <?php if(bp_group_has_members('per_page=15&exclude_banned=false')){ ?>                
                 <div class="field-row">
                     <p><b>Members</b></p>
-                    <?php if(bp_group_member_needs_pagination()){ ?>
-                    <div class="pagination no-ajax">
-                        <div id="member-count" class="pag-count">
-                            <?php bp_group_member_pagination_count(); ?>
-                        </div>
-                        <div id="member-admin-pagination" class="pagination-links">
-                            <?php bp_group_member_admin_pagination(); ?>
-                        </div>
-                    </div>
-                    <?php } ?>       
+                    
                     <ul id="members-list" class="member-list">
                     <?php while ( bp_group_members() ) : bp_group_the_member(); ?>
                         <?php
@@ -479,6 +507,18 @@
                     </ul>         
                     <div class="clear"></div>
                 </div>
+                <?php if(bp_group_member_needs_pagination()){ ?>
+                <div class="pagination-wrapper">
+                    <!--<div id="member-count" class="pag-count">
+                        <?php bp_group_member_pagination_count(); ?>
+                    </div>-->
+                    <div class="pagination no-ajax">                        
+                        <div id="member-admin-pagination" class="pagination-links">
+                            <?php bp_group_member_admin_pagination(); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>       
               <?php }else{ ?>
                 <div class="field-row">
                     <p><b>Members</b></p>
@@ -567,7 +607,7 @@
                         <div class="field-row">
                             <label> 
                                 <input type="radio" name="group-invite-status" value="mods"<?php bp_group_show_invite_status_setting( 'mods' ); ?> /> 
-                                <b><?php _e( 'Community admins and mods only', 'buddypress' ); ?></b>
+                                <b><?php _e( 'Community admins and supports only', 'buddypress' ); ?></b>
                             </label>
                         </div>
                         <div class="field-row">
@@ -587,6 +627,55 @@
                 <?php wp_nonce_field( 'groups_edit_group_settings_by_ajax' ); ?>
                 <input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id(); ?>" />
                 <input type="hidden" name="group-status" id="group-status" value="<?php echo bp_get_group_status(); ?>" />
+            </form>
+        </div>
+        <div class="space20"></div>
+        <!-- Article Settings -->
+        <?php
+            
+            $wiki_settings = groups_get_groupmeta( bp_get_group_id(), 'bp-docs' );
+            
+            $group_wiki_enable = empty( $wiki_settings['group-enable'] ) ? false : true;
+
+            $can_create_wiki = empty( $wiki_settings['can-create'] ) ? false : $wiki_settings['can-create'];
+        ?>
+        <div class="grid-box" id="group_article_settings_box">
+            <form name="group-article-settings-form" id="group-article-settings-form" action="<?php bp_group_admin_form_action('wiki')?>" method="post" enctype="multipart/form-data" role="main">
+                <div class="grid-box-header">
+                    <h5>Community Articles</h5>
+                </div>
+                <div class="grid-box-body">
+                    <div class="column">                   
+                        <div class="field-row">
+                            <label for="bp-docs[group-enable]"> <input type="checkbox" name="bp-docs[group-enable]" id="bp-docs-group-enable" value="1" <?php checked( $group_wiki_enable, true ) ?> /> <?php _e( 'Enable BuddyPress Docs for this group', 'bp-docs' ) ?></label>
+                        </div>
+                        <div id="community-doc-options">
+                            <div class="field-row">
+                                <label for="bp-docs[can-create-admins]"><?php _e( 'Minimum role to associate Article with this community:', 'bp-docs' ) ?></label>
+                            </div>
+                            <div class="field-row">
+                                <select name="bp-docs[can-create]" class="select">
+                                    <option value="admin" <?php selected( $can_create_wiki, 'admin' ) ?>><?php _e( 'Community Admin', 'bp-docs' ) ?></option>
+                                    <option value="mod" <?php selected( $can_create_wiki, 'mod' ) ?>><?php _e( 'Community Support', 'bp-docs' ) ?></option>
+                                    <option value="member" <?php selected( $can_create_wiki, 'member' ) ?>><?php _e( 'Community Member', 'bp-docs' ) ?></option>
+                                </select>                           
+                            </div>              
+                        </div>
+                        
+                    </div>
+                </div>        
+                <div class="grid-box-footer">
+                    <div class="btn-row">
+                        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SAVE</span></a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <?php 
+                    wp_nonce_field( 'groups_edit_save_wiki' );
+                    wp_nonce_field( 'bp_group_extension_wiki_edit', '_bp_group_edit_nonce_wiki' );
+                ?>                
+                <input type="hidden" name="group-id" id="group-id" value="<?php bp_group_id(); ?>" />
+                <input type="hidden" name="save" id="save" value="Save Changes" />
             </form>
         </div>
     </div>
