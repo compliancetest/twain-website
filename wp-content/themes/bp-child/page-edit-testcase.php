@@ -50,7 +50,7 @@ foreach($allSuiteRoles as $r)
     
 asort($suiteRoles);
 
-$suiteRoles = array_unique($suiteRoles);
+$suiteRoles = array_unique($suiteRoles, 'SORT_STRING');
 
 $suiteInitMessages = $case->getAvailableInitMessages();
 
@@ -292,7 +292,7 @@ get_header();
                            <select name="choose_harness_role" class="select">
                                <option>- Select -</option>
                                <?php foreach($suiteRoles as $row) {?>
-                               <option value="<?php echo $row['name']?>" <?php echo $case->harnessRole == $row['name'] ? 'selected="selected"' : ''?>><?php echo $row['name']?></option>
+                               <option value="<?php echo $row?>" <?php echo $case->harnessRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
                                <?php } ?>
                            </select>
                        </div>
