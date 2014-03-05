@@ -169,7 +169,16 @@ function getTestSuiteInfoForCase()
         
         $case->testSuite = $suiteID;
         
-        $suiteRoles = $case->getAvailableRoles();
+        $allSuiteRoles = $case->getAvailableRoles();
+        $suiteRoles = array();
+
+        foreach($allSuiteRoles as $r)
+        {
+            if(!in_array($r['name'], $suiteRoles))        
+                $suiteRoles[] = $r['name'];
+        }
+            
+        asort($suiteRoles);
         $suiteInitMessages = $case->getAvailableInitMessages();
         
         
