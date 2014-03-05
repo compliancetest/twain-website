@@ -96,6 +96,8 @@ class CT_Subscription
             
             //Send Email Notification
             $user = get_userdata($this->user_id);
+            
+            $monthlyFee = getSubscriptionMonthlyFee($this, $this->user_id);
         
             //Send Subscription UnSubscribing Mails            
             $suite = new TestSuite($this->suite_id);
@@ -108,7 +110,7 @@ class CT_Subscription
                 '[suite_name]' => get_the_title($this->suite_id),
                 '[paid_amount]' => $this->paid_amount,
                 '[signup_fee]' => $this->signup_fee,
-                '[monthly_fee]' => $this->monthly_fee,
+                '[monthly_fee]' => $monthlyFee,
                 '[suite_url]' => get_permalink($this->suite_id),
             );
 

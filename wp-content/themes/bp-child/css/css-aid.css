@@ -1814,6 +1814,10 @@ tr {
 
 .unsubscribe-btn span.p{
     background-position: 0 -1205px;
+    width: 13px !important;
+}
+.unsubscribe-btn, .unsubscribe-btn.icon-btn{
+    padding: 0 5px 0 4px;
 }
 .blue-plus-btn span.p{
     background-position: 0 -128px;

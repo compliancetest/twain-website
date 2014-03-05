@@ -5103,6 +5103,7 @@ min-height: 70px;
 #group_avatar_box,
 #group_privacy_box,
 #group_members_box,
+#group_article_settings_box,
 #group_invitations_box{
     width: 438px;    
 }
