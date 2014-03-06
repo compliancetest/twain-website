@@ -1649,8 +1649,8 @@ function create_email_management_page()
                     $forum_new_post_email_title = get_option('forum_new_post_email_title');
                     $forum_new_post_email_content = get_option('forum_new_post_email_content');
                     ?>
-                    <h3>Ticket Closed</h3>
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <h3>Forum New Post</h3>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [writer_name], [content], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1678,8 +1678,8 @@ function create_email_management_page()
                     $forum_reply_post_email_title = get_option('forum_reply_post_email_title');
                     $forum_reply_post_email_content = get_option('forum_reply_post_email_content');
                     ?>
-                    <h3>Ticket Closed</h3>
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <h3>Form Reply Post</h3>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [writer_name], [content], [link]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
