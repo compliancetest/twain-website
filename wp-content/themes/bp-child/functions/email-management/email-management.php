@@ -710,7 +710,7 @@ function create_email_management_page()
                     $active_subscription_admin_email_content = get_option('active_subscription_admin_email_content');
                     ?>
                     <h3>Subscription is Active From InArrears</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -761,7 +761,7 @@ function create_email_management_page()
                     $active_subscription2_admin_email_content = get_option('active_subscription2_admin_email_content');
                     ?>
                     <h3>Subscription is Active from Frozen</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -812,7 +812,7 @@ function create_email_management_page()
                     $inarrears_subscription_admin_email_content = get_option('inarrears_subscription_admin_email_content');
                     ?>
                     <h3>Subscription is in arrears</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -863,7 +863,7 @@ function create_email_management_page()
                     $frozen_subscription_admin_email_content = get_option('frozen_subscription_admin_email_content');
                     ?>
                     <h3>Subscription is frozen</h3>
-                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount]</p>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
