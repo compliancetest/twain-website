@@ -121,7 +121,53 @@ function cp_activate_user()
     
     $current_date = date("Y-m-d h:i:s");
     $activation = $_GET['token'];
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->users . " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID WHERE (user_activation_key = %s) OR (uc.verification_code = %s)", $activation, $activation);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->users . " WHERE user_activation_key = %s", $activation);
+    $user = $wpdb->get_row($query);
+    
+    if($user)
+    {
+        //Integrate User to Mailchimp
+        $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+        $mailChimpList = new Mailchimp_Lists($mailChimp);
+        try{
+            $result = $mailChimpList->subscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $user->user_email), array('FNAME' => get_user_meta($user->ID, "first_name", true), 'LNAME' => get_user_meta($user->ID, "last_name", true)), 'html', false);
+        }catch(Exception $e){
+            
+        }
+        
+        $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0, user_activation_key='' WHERE ID =" . $user->ID);
+        $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
+                      VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/{$user->user_login}/','{$current_date}','0')");
+        
+        $data = array(
+            '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),
+            '[username]' => $user->user_login,
+            '[email]' => $user->user_email,
+        );
+
+        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'user_verify_success', $data);
+        cp_send_email_to_admin('user_verify_success_admin', $data);
+        
+        
+        //Make User Login
+        wp_set_auth_cookie($user->ID);
+        addMessage('You have successfully verified your email address with ComplianceTest.');
+        //redirect
+        wp_redirect(home_url().'/my-profile');              
+        exit;
+    }
+    
+    addMessage('Invalid Request.', 'error');
+}
+
+function cp_activate_email()
+{
+    global $wpdb;
+    
+    
+    $current_date = date("Y-m-d h:i:s");
+    $activation = $_GET['token'];
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->users . " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID WHERE uc.verification_code = %s", $activation);
     $user = $wpdb->get_row($query);
     
     if($user)
@@ -141,18 +187,18 @@ function cp_activate_user()
             $wpdb->query("UPDATE " . $wpdb->users .  " SET user_email='" . $user->email_changed . "' WHERE ID =" . $user->ID);    
             $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_changes WHERE user_id =" . $user->ID);    
         }
-        $wpdb->query("UPDATE " . $wpdb->users .  " SET user_status = 0, user_activation_key='' WHERE ID =" . $user->ID);
+        
         $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
                       VALUES({$user->ID},'xprofile','new_member',' <a href=\"".get_bloginfo('url')."/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','".get_bloginfo('url')."/{$user->user_login}/','{$current_date}','0')");
         
         $data = array(
             '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),
             '[username]' => $user->user_login,
-            '[email]' => $user->user_email,
+            '[email]' => $user->email_changed,
         );
 
-        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'user_verify_success', $data);
-        cp_send_email_to_admin('user_verify_success_admin', $data);
+        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'changed_email_verify_success', $data);
+        cp_send_email_to_admin('changed_email_verify_success_admin', $data);
         
         
         //Make User Login
