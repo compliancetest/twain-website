@@ -432,38 +432,37 @@ function process_recurring_payment()
     global $wpdb;
     
     $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='Active' AND p.expiry_date <= '" . date("Y-m-d") . "'";
-    $subscriptions = $wpdb->get_results($query, ARRAY_A);
+    $subscriptions = $wpdb->get_results($query);
     foreach($subscriptions as $row)
     {
-        //Monthly Billing
-        $monthlyFee = getSubscriptionMonthlyFee($row->id, $row->user_id);
+        $purchase = new CT_Purchase($row->id);
+        $purchase->load();
         
-        if($monthlyFee > 0)
+        if($purchase->monthly_fee > 0)
         {
-            $result = processEwayPayment($row['customer_id'], $monthlyFee);    
+            $result = processEwayPayment($row->customer_id, $purchase->monthly_fee);    
+            if($result['ewayTrxnStatus'] == 'True')
+            {
+                //Save Transaction
+                $wpdb->insert($wpdb->prefix . 'users_transactions', array(
+                    "user_id" => $row->user_id,
+                    "purchase_id" => $row->purchase_id,
+                    "trxn_number" => $result['ewayTrxnNumber'],
+                    "amount" => $purchase->monthly_fee,
+                    "auth_code" => $result['ewayAuthCode'],
+                    "created_date" => date("Y-m-d H:i:s")
+                ));
+                
+            }else{
+                //Set the status to InArrears
+                $purchase->inArrears();
+                continue;
+            }
         }
         
+        //Extend the period of the subscription
+        $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $row['id']));            
         
-        
-        
-        if($result['ewayTrxnStatus'] == 'True')
-        {
-            //Save Transaction
-            $wpdb->insert($wpdb->prefix . 'users_transactions', array(
-                "user_id" => $row['user_id'],
-                "purchase_id" => $row['purchase_id'],
-                "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $monthlyFee,
-                "auth_code" => $result['ewayAuthCode'],
-                "created_date" => date("Y-m-d H:i:s")
-            ));
-            
-            //Extend the period of the subscription
-            $wpdb->update($wpdb->prefix . "users_purchases", array('expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $row['id']));            
-        }else{
-            //Set the status to InArrears
-            $subscription->inArrears();
-        }
     }
     
 }

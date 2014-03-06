@@ -56,7 +56,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        </div>                       
                        <div class="grid-cell has-focus-tooltip">
                            <label>Release Date:</label>  
-                           <input type="text" class="input datepicker required" name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? formatDate(date('Y-m-d')) : formatDate($product->release_date)?>" />
+                           <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? formatDate(date('Y-m-d')) : formatDate($product->release_date)?>" />
                            <span class="focus-tooltip" style="left: 110%"><span></span>Enter the date that this version of your product or service was released to the market.</span>
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
@@ -82,7 +82,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">                                                     
                            <label>Version:</label>                    
-                           <input type="text" class="input" name="product_version" id="product_version" value="<?php echo $product->version?>" />
+                           <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version?>" />
                            <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
                            
                            <label>Product Owner:</label>                    
@@ -174,7 +174,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
            </div>
         </div>                
         <div class="grid-box">
-           <div class="grid-box-footer nobackground noshadow">
+           <div class="grid-box-footer nobackground noshadow">               
                <div class="btn-row nopaddingleft">
                    <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE PRODUCT/SERVICE</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
@@ -191,7 +191,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
     <div class="clear"></div>
 </div>
 <script type="text/javascript">
-jQuery(document).ready(function(){
+jQuery(document).ready(function($){
     jQuery('#add-related-product').click(function(){
         jQuery('#ps-related-box .btn-row').before('<div class="field-row new-row">' + 
                        '<div class="grid-cell width55P">' +
@@ -236,29 +236,46 @@ jQuery(document).ready(function(){
         jQuery(this).parent().append('<span class="msg-required" style="display: none">This field is required.</span>');
     })
     
+    jQuery('#psForm .input').focus(function(){
+        $(this).removeClass('input-error');
+    })
     jQuery('#psForm').submit(function(){
+        $('#psForm .grid-box-footer .message').remove();        
         var isValid = true;
         var errorMsg = '';
+        
         jQuery(this).find('.required').each(function(){
             if(jQuery(this).val() == ''){
                 isValid = false;
                 jQuery(this).addClass('input-error');
             }
         });
-
+        
+        if(!isValid)
+        {
+            $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please complete fields in red.</div>');
+            $('#psForm .grid-box-footer .message').fadeIn('fast');
+            return false;
+        }
+        
         //Validate date format
-        if (!isValidDate(jQuery("#product_release_date").val())){
+        if (jQuery("#product_release_date").val() != '' && !isValidDate(jQuery("#product_release_date").val())){
             isValid = false;
             jQuery("#product_release_date").addClass('input-error');
+            $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please enter valid release date.</div>');
+            $('#psForm .grid-box-footer .message').fadeIn('fast');
+            return false;
         }
-
+        
         //Validate product URL
-        if (!isValidUrl(jQuery("#product_url").val())){
+        if (jQuery("#product_url").val() != '' && !isValidUrl(jQuery("#product_url").val())){
             isValid = false;
             jQuery("#product_url").addClass('input-error');
+            $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please enter valid access url.</div>');
+            $('#psForm .grid-box-footer .message').fadeIn('fast');
+            return false;
         }
-
-
+        
         return isValid;
         
     });

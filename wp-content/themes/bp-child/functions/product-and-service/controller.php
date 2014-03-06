@@ -61,14 +61,9 @@ function saveProductService()
     $product_id = htmlspecialchars($_POST['product_id']);
     if(!$product_id)
     {        
-        //Generate Product ID
-        $productUrlInfo = parse_url($product_url);
-        $domain = $productUrlInfo['host'];                
+        //Generate Product ID        
         $product_slug = sanitize_title(htmlspecialchars($_POST['product_name']));
-        if(!$domain)
-            $product_id .= implode(".", array($product_slug, htmlspecialchars($_POST['product_version'])));
-        else
-            $product_id .= implode(".", array($domain, $product_slug, htmlspecialchars($_POST['product_version'])));
+        $product_id = sanitize_title($_POST['product_owner']) . "." . $product_slug .  ".v" . $_POST['product_version'];
     }
     
     //Check Product ID duplication
@@ -100,7 +95,7 @@ function saveProductService()
     update_post_meta($id, 'product_owner', htmlspecialchars($_POST['product_owner']));
     
     //Save Related Products
-    $related_products = isset($_POST['related-product']) ? htmlspecialchars($_POST['related-product']) : array();
+    $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
     $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();
     
     //remove old entries

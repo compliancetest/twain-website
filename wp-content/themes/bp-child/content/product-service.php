@@ -42,7 +42,16 @@
                     </span></p>
                     <p>Product Version: <span class="bold"><?php echo $product->version; ?></span></p>
                     <p>Type: <span class="bold"><?php echo $product->type; ?></span></p>
-                    <p>Access URL: <a href="<?php echo $product->accessURL?>" class="bold"><?php echo $product->accessURL; ?></a></p>
+                    <p>
+                        Access URL: 
+                        <?php
+                            if($product->accessURL):
+                        ?>
+                            <a href="<?php echo get_valid_full_url($product->accessURL)?>" class="bold"><?php echo $product->accessURL; ?></a>
+                        <?php
+                            endif;
+                        ?>
+                    </p>
                 </div>
                 <div class="grid_cell width50P">
                     <p><?php echo $product->descrition; ?></p>

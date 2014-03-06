@@ -966,3 +966,14 @@ function ac_remove_cf7_scripts() {
         wp_deregister_script( 'contact-form-7' );
     }
 }
+
+
+function get_valid_full_url($url)
+{
+    if(strpos($url, 'http://') === false && strpos($url, 'https://') === false)
+    {
+        $url = "http://" . $url;
+    }
+    
+    return $url;
+}

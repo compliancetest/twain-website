@@ -1761,7 +1761,6 @@ tr {
 .back-btn,
 .cancel-btn,
 .unsubscribe-btn,
-.delete-btn,
 .delete-grey-btn{
     border-color: #9f9f9f;
     background: #8a8a8a;
@@ -1799,17 +1798,12 @@ tr {
 .next-btn:hover,
 .back-btn:hover,
 .unsubscribe-btn:hover,
-.delete-btn:hover,
 .delete-grey-btn:hover,
 .cancel-btn:hover{
     background: #a0a0a0;
 }
 .delete-grey-btn{
     padding: 0 12px !important;
-}
-.delete-btn span.p{
-    background-position: 2px -574px;
-    width: 12px;
 }
 
 .unsubscribe-btn span.p{
@@ -1865,6 +1859,7 @@ tr {
 .grey-edit-btn span.p{
     background-position: 0 -951px;
 }
+.delete-btn,
 .red-btn{
     border-color: #C33A3A;
     background: #f47273;
@@ -1878,8 +1873,12 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #E68080 inset;
     -webkit-box-shadow: 0 1px 0 0 #E68080 inset;
 }
+.delete-btn:hover,
 .red-btn:hover {
     background: #D84F4F;
+}
+.delete-btn span.p{
+    background-position: 2px -574px;
 }
 .view-btn,
 .history-btn,
