@@ -632,7 +632,10 @@ function ct_copy_test_case($new_wpdb, $case, $suiteIDMap = null, $scenariosIDMap
                               'version_patch' => $version_patch,
                               'family_mark' => $familyMark)
                      );
+       echo $familyMark;
+       echo ":" . $version_major;exit;
         cp_sort_test_cases($familyMark, $version_major);
+       
         
         $versions = array($version_major, $version_minor);
         if($version_patch)
