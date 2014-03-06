@@ -372,6 +372,7 @@ function ct_duplicate_data()
                                             //Getting Test Cases
                                             $query = "SELECT DISTINCT(post_id) FROM {$wpdb->postmeta} WHERE meta_key='test_suite' AND meta_value=" . $sId;    
                                             $tCaseIDs = $wpdb->get_col($query);
+                                            print_r($tCaseIDs);exit;
                                             foreach($tCaseIDs as $cId)
                                             {
                                                 wp_delete_post($cId);
