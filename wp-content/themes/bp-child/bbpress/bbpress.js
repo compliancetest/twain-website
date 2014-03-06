@@ -6,5 +6,11 @@ jQuery(document).ready(function($){
         if ($(this).attr('checked') != 'checked') {
             action = 'cp_forum_notify_all_deactive';    
         }
+        $.ajax({
+            url: '?cp-action=' + action,
+            type: 'post',
+            data: 'forum-id=' + $(this).val(),
+            success: function(){}
+        });
     });
 });
