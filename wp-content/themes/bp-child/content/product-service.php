@@ -8,6 +8,11 @@
     <div class="grid_head column">
         <div class="grid_row nopadding">
             <h4 class="left">Product / Service Detalils</h4>
+            <a href="/my-products" class="left action-btn back-btn has-tooltip left15">
+                <span class="p"></span>
+                <span class="t">Back</span>
+                <span class="simple_tooltip radius6" style="top: -27px;">Back to Products<span></span></span>
+            </a>
             <a href="<?php echo addPrintParams(get_permalink(), 'product')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">PRINT</span></a>
         </div>
     </div>
