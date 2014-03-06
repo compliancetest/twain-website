@@ -115,7 +115,6 @@ add_action('bbp_new_topic', 'ct_notify_forum_subscribers', 11 ,4);
 
 function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_data = false, $topic_author = 0 ) 
 {
-     ini_set('display_errors', 1);
 
     /** Validation ************************************************************/
 
@@ -160,11 +159,9 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
             continue;
             
         $user = get_userdata( $user_id );
-        $firstname = get_user_meta($user_id, 'first_name');
-        $lastname = get_user_meta($user_id, 'last_name');
-
+        
         $data = array(
-            '[name]' => $firstname . " " . $lastname,
+            '[name]' => $user->first_name . " " . $user->last_name,
             '[username]' => $user->user_login,
             '[email]' => $user->user_email,
             '[topic_author_name]' => $topic_author_name,
@@ -174,7 +171,7 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
             '[topic_url]' => $topic_url
         );
 
-        cp_send_email(array('name' => $data['name'], 'email' => $data['email']), 'forum_new_post', $data);
+        cp_send_email(array('name' => $user->first_name . " " . $user->last_name, 'email' => $user->user_email), 'forum_new_post', $data);
     }
     
     do_action( 'bbp_post_notify_forum_subscribers', $topic_id, $forum_id, $user_ids );
@@ -184,7 +181,6 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
 
 function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $anonymous_data = false, $reply_author = 0 ) 
 {
-     ini_set('display_errors', 1);
 
     /** Validation ************************************************************/
 
@@ -220,8 +216,6 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
     $reply_author_name = bbp_get_reply_author_display_name( $reply_id );
 
     /** Mail ******************************************************************/
-    
-    do_action( 'bbp_pre_notify_subscribers', $reply_id, $topic_id, $user_ids );
 
     // Remove filters from reply content and topic title to prevent content
     // from being encoded with HTML entities, wrapped in paragraph tags, etc...
@@ -242,11 +236,9 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
             continue;
             
         $user = get_userdata( $user_id );
-        $firstname = get_user_meta($user_id, 'first_name');
-        $lastname = get_user_meta($user_id, 'last_name');
 
         $data = array(
-            '[name]' => $firstname . " " . $lastname,
+            '[name]' => $user->first_name . " " . $user->last_name,
             '[username]' => $user->user_login,
             '[email]' => $user->user_email,
             '[reply_author_name]' => $reply_author_name,
@@ -256,11 +248,9 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
             '[reply_url]' => $reply_url
         );
 
-        cp_send_email(array('name' => $data['name'], 'email' => $data['email']), 'forum_reply_post', $data);
+        cp_send_email(array('name' => $user->first_name . " " . $user->last_name, 'email' => $user->user_email), 'forum_reply_post', $data);
 
     }
-    
-    do_action( 'bbp_post_notify_subscribers', $reply_id, $topic_id, $user_ids );
 
     return true;
 }
