@@ -203,7 +203,7 @@ function cp_activate_email()
         
         //Make User Login
         wp_set_auth_cookie($user->ID);
-        addMessage('You have successfully verified your email address with ComplianceTest.');
+        addMessage('You have successfully verified your changed email address with ComplianceTest.');
         //redirect
         wp_redirect(home_url().'/my-profile');              
         exit;
