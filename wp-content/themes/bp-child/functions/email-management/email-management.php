@@ -160,6 +160,10 @@ function create_email_management_page()
                         <li><a href="#ticket-started">Ticket Started</a></li>                    
                         <li><a href="#ticket-solved">Ticket Resolved</a></li>                    
                         <li><a href="#ticket-closed">Ticket Closed</a></li>                    
+                        
+                        <li class="tab-separator">Forum Section</li>
+                        <li><a href="#forum-new-post">New Forum Post</a></li>
+                        <li><a href="#forum-reply-post">Reply Forum Post</a></li>
                     </ul>
                 </div>
                 <div id="email-templates-wrapper">
@@ -1638,6 +1642,67 @@ function create_email_management_page()
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Begin Forum -->
+                <div id="forum-new-post">
+                    <?php
+                    $forum_new_post_email_title = get_option('forum_new_post_email_title');
+                    $forum_new_post_email_content = get_option('forum_new_post_email_content');
+                    ?>
+                    <h3>Ticket Closed</h3>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="forum_new_post_email_title" id="forum_new_post_email_title" value="<?php echo $forum_new_post_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($forum_new_post_email_content, 'forum_new_post_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="forum-reply-post">
+                    <?php
+                    $forum_reply_post_email_title = get_option('forum_reply_post_email_title');
+                    $forum_reply_post_email_content = get_option('forum_reply_post_email_content');
+                    ?>
+                    <h3>Ticket Closed</h3>
+                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="forum_reply_post_email_title" id="forum_reply_post_email_title" value="<?php echo $forum_reply_post_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($forum_reply_post_email_content, 'forum_reply_post_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Forum -->
                 </div>
             </div>
           </div>
