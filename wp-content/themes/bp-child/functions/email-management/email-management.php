@@ -2000,6 +2000,16 @@ function save_email_templates()
           $ticket_closed_email_content = stripslashes_deep($_POST['ticket_closed_email_content']);          
           update_option('ticket_closed_email_content', $ticket_closed_email_content);
           
+          $forum_new_post_email_title = htmlentities(stripslashes_deep($_POST['forum_new_post_email_title']));          
+          update_option('forum_new_post_email_title', $forum_new_post_email_title);          
+          $forum_new_post_email_content = stripslashes_deep($_POST['forum_new_post_email_content']);          
+          update_option('forum_new_post_email_content', $forum_new_post_email_content);          
+
+          $forum_reply_post_email_title = htmlentities(stripslashes_deep($_POST['forum_reply_post_email_title']));          
+          update_option('forum_reply_post_email_title', $forum_reply_post_email_title);          
+          $forum_reply_post_email_content = stripslashes_deep($_POST['forum_reply_post_email_content']);          
+          update_option('forum_reply_post_email_content', $forum_reply_post_email_content);          
+          
           wp_redirect("/wp-admin/admin.php?page=email-management&tab=" . (!$_REQUEST['tab'] ? 0 : $_REQUEST['tab']));
     }
 }
