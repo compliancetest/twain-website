@@ -8,7 +8,7 @@ function remove_case_name_id_map($postid)
     $esb->deleteTestCaseNameIDMap($postid);
     
     $wpdb->delete($wpdb->prefix . "test_cases", array('case_id'=> $postid));
-    echo $wpdb->last_error;exit;
+    
     
 }
 
