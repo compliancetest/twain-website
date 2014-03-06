@@ -137,6 +137,7 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
     $topic_author_name = bbp_get_topic_author_display_name( $topic_id );
 
     /** Mail ******************************************************************/
+    do_action( 'bbp_pre_notify_forum_subscribers', $topic_id, $forum_id, $user_ids );
 
     // Remove filters from reply content and topic title to prevent content
     // from being encoded with HTML entities, wrapped in paragraph tags, etc...
@@ -173,6 +174,8 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
 
         cp_send_email(array('name' => $data['name'], 'email' => $data['email']), 'forum_new_post', $data);
     }
+    
+    do_action( 'bbp_post_notify_forum_subscribers', $topic_id, $forum_id, $user_ids );
 
     return true;
 }
@@ -213,6 +216,8 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
     $reply_author_name = bbp_get_reply_author_display_name( $reply_id );
 
     /** Mail ******************************************************************/
+    
+    do_action( 'bbp_pre_notify_subscribers', $reply_id, $topic_id, $user_ids );
 
     // Remove filters from reply content and topic title to prevent content
     // from being encoded with HTML entities, wrapped in paragraph tags, etc...
@@ -250,6 +255,8 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
         cp_send_email(array('name' => $data['name'], 'email' => $data['email']), 'forum_reply_post', $data);
 
     }
+    
+    do_action( 'bbp_post_notify_subscribers', $reply_id, $topic_id, $user_ids );
 
     return true;
 }
