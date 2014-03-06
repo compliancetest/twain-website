@@ -137,6 +137,8 @@ require_once(THE_FUNCTION . "/tools.php");
 
 require_once(THE_FUNCTION . "/tmp_functions.php");
 
+require_once(STYLESHEETPATH . '/bbpress/customize.php');
+
 /* 
  * Loads the Options Panel
  *
@@ -234,6 +236,7 @@ function add_header_scripts()
     wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);        
     wp_enqueue_script('print', get_stylesheet_directory_uri().'/js/print.js', $actions_depends);        
     wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends, '1.0', true);
+    wp_enqueue_script('cp-bbpress', get_stylesheet_directory_uri().'/bbpress/bbpress.js', $actions_depends, '1.0', true);
     
     if(is_page('my-transaction-log'))
         wp_enqueue_script('message-trigger', get_stylesheet_directory_uri().'/js/message.js', $actions_depends, '1.0', true);
