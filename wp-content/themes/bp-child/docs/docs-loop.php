@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="right">
-                        <?php if ( bp_docs_current_user_can( 'create' ) && (!bp_is_group() || groups_is_user_admin(get_current_user_id(), bp_get_current_group_id())) ) : ?>
+                        <?php if ( can_create_community_article( bp_get_current_group_id() ) ) : ?>
                         <a href="<?php echo bp_docs_get_create_link()?>" class="action-btn add-new-btn has-tooltip">
                             <span class="p"></span><span class="t">Add</span>
                             <span class="simple_tooltip radius6">Add Article<span></span></span>
@@ -128,7 +128,7 @@
             
             <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
             
-            <?php if (bp_docs_current_user_can('create') && groups_is_user_admin(get_current_user_id(), bp_get_group_id())): ?>
+            <?php if ( can_create_community_article( bp_get_current_group_id()) ): ?>
             <a href="<?php echo bp_docs_get_create_link(); ?>" class="action-btn add-new-btn has-tooltip">
                 <span class="p"></span><span class="t">Add</span>
                 <span class="simple_tooltip radius6">Add Article<span></span></span>

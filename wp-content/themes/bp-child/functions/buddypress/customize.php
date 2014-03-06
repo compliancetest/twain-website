@@ -720,3 +720,67 @@ add_filter('bp_group_invite_status_fallback', 'cp_group_invite_status_fallback')
 function cp_group_invite_status_fallback(){
     return 'admins';
 }
+add_action('bp_init', 'cp_check_group_wiki_permission');
+//Wiki Page Permission Check
+function cp_check_group_wiki_permission()
+{
+    global $bp;
+    
+    if(bp_is_group() && bp_current_action() == 'wiki')
+    {
+        if($bp->bp_docs->current_view != 'list') 
+        {
+            $group = groups_get_group("group_id=" . bp_get_current_group_id());
+            //Redirect to Wiki Page.
+            //All wiki detail pages from Community was disabled
+            wp_redirect(bp_get_group_permalink($group) . "wiki");
+            exit;    
+        }
+    }
+    
+}
+
+add_filter('bp_docs_is_doc_create', 'cp_check_docs_create', 100, 1);
+function cp_check_docs_create($is_doc_create)
+{
+    if($is_doc_create)
+    {
+        //Check group param
+        $group_slug = isset($_REQUEST['group']) ? $_REQUEST['group'] : null;
+        $group_id = groups_get_id($group_slug);
+        if(!$group_id)
+        {
+            //Redirect Homepage
+            wp_redirect('/');
+            exit;
+        }
+        
+        $group = groups_get_group('group_id=' . $group_id);
+        
+        //Check if the user can create article
+        $wiki_settings = groups_get_groupmeta( $group_id, 'bp-docs' );        
+        
+        $group_wiki_enable = empty( $wiki_settings['group-enable'] ) ? false : true;
+        $can_create_wiki = empty( $wiki_settings['can-create'] ) ? false : $wiki_settings['can-create'];
+        
+        if(!$group_wiki_enable)
+        {            
+            //Redirect Homepage
+            wp_redirect(bp_get_group_permalink($group));
+            exit;
+        }
+        
+        $user_id = get_current_user_id();
+        
+        if(!can_create_community_article($group_id, $user_id))
+        {
+            addMessage(__( 'You are not allowed to create Docs.', 'bp-docs' ), "error");
+            //Redirect Homepage
+            wp_redirect(bp_get_group_permalink($group));
+            exit;
+        }
+        
+    }
+    
+    return $is_doc_create;
+}

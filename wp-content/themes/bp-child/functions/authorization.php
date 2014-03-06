@@ -388,3 +388,29 @@ function can_view_profile($profileID)
     
     return false;
 }
+
+function can_create_community_article($community_id, $user_id = null)
+{
+    if(!$user_id)
+        $user_id = get_current_user_id();
+        
+    if(!$user_id)
+        return false;
+        
+    $wiki_settings = groups_get_groupmeta( $community_id, 'bp-docs' );
+            
+    $group_wiki_enable = empty( $wiki_settings['group-enable'] ) ? false : true;
+
+    $can_create_wiki = empty( $wiki_settings['can-create'] ) ? false : $wiki_settings['can-create'];
+    
+    if($can_create_wiki == 'admin' && !groups_is_user_admin($user_id, $community_id))    
+        return false;
+    
+    if($can_create_wiki == 'mod' && (!groups_is_user_mod($user_id, $community_id) || !groups_is_user_admin($user_id, $community_id)))
+        return false;
+    
+    if($can_create_wiki == 'member' && !groups_is_user_member($user_id, $community_id))    
+        return false;
+        
+    return true;
+}
