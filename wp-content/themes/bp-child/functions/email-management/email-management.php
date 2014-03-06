@@ -123,6 +123,8 @@ function create_email_management_page()
                         <li><a href="#verification-success">User Verification Success</a></li>
                         <li><a href="#forgot-password">Forgot Password</a></li>
                         <li><a href="#password-changed">Password Changed</a></li>
+                        <li><a href="#email-changed">Email Address Changed</a></li>
+                        <li><a href="#changed-email-verification-success">Changed Email Address<br/> Verification Success</a></li>
                         
                         <li class="tab-separator">Subscription Section</li>
                         <li><a href="#purchase-subscription">Purchase Paid Subscription</a></li>
@@ -210,6 +212,108 @@ function create_email_management_page()
                                 </td>
                             </tr>
                         </tbody>
+                    </table>
+                </div>
+                <div id="email-changed">
+                    <?php
+                        $email_changed_email_title = get_option('email_changed_email_title');
+                        $email_changed_email_content = get_option('email_changed_email_content');
+                        $email_changed_admin_email_title = get_option('email_changed_admin_email_title');
+                        $email_changed_admin_email_content = get_option('email_changed_admin_email_content');
+                        
+                    ?>       
+                    <h3>Email Address Changed</h3>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [link]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="email_changed_email_title" id="email_changed_email_title" value="<?php echo $email_changed_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>                                    
+                                    <?php wp_editor($email_changed_email_content, 'email_changed_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>                        
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="email_changed_admin_email_title" id="email_changed_admin_email_title" value="<?php echo $email_changed_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($email_changed_admin_email_content, 'email_changed_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="changed-email-verification-success">
+                    <?php
+                        $changed_email_verify_success_email_title = get_option('changed_email_verify_success_email_title');
+                        $changed_email_verify_success_email_content = get_option('changed_email_verify_success_email_content');
+                        $changed_email_verify_success_admin_email_title = get_option('changed_email_verify_success_admin_email_title');
+                        $changed_email_verify_success_admin_email_content = get_option('changed_email_verify_success_admin_email_content');                        
+                    ?>   
+                    <h3>User Verification Success</h3>                 
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [username]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="changed_email_verify_success_email_title" id="changed_email_verify_success_email_title" value="<?php echo $changed_email_verify_success_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>                                    
+                                    <?php wp_editor($changed_email_verify_success_email_content, 'changed_email_verify_success_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="changed_email_verify_success_admin_email_title" id="changed_email_verify_success_admin_email_title" value="<?php echo $changed_email_verify_success_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($changed_email_verify_success_admin_email_content, 'changed_email_verify_success_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
                     </table>
                 </div>
                 <div id="verification-email">
@@ -1574,6 +1678,24 @@ function save_email_templates()
           update_option('new_user_admin_email_title', $new_user_admin_email_title);          
           $new_user_admin_email_content = stripslashes_deep($_POST['new_user_admin_email_content']);          
           update_option('new_user_admin_email_content', $new_user_admin_email_content);
+          
+          $email_changed_email_title = htmlentities(stripslashes_deep($_POST['email_changed_email_title']));          
+          update_option('email_changed_email_title', $email_changed_email_title);          
+          $email_changed_email_content = stripslashes_deep($_POST['email_changed_email_content']);          
+          update_option('email_changed_email_content', $email_changed_email_content);          
+          $email_changed_admin_email_title = htmlentities(stripslashes_deep($_POST['email_changed_admin_email_title']));          
+          update_option('email_changed_admin_email_title', $email_changed_admin_email_title);          
+          $email_changed_admin_email_content = stripslashes_deep($_POST['email_changed_admin_email_content']);          
+          update_option('email_changed_admin_email_content', $email_changed_admin_email_content);
+
+          $changed_email_verify_success_email_title = htmlentities(stripslashes_deep($_POST['changed_email_verify_success_email_title']));          
+          update_option('changed_email_verify_success_email_title', $changed_email_verify_success_email_title);          
+          $changed_email_verify_success_email_content = stripslashes_deep($_POST['changed_email_verify_success_email_content']);          
+          update_option('changed_email_verify_success_email_content', $changed_email_verify_success_email_content);          
+          $changed_email_verify_success_admin_email_title = htmlentities(stripslashes_deep($_POST['changed_email_verify_success_admin_email_title']));          
+          update_option('changed_email_verify_success_admin_email_title', $changed_email_verify_success_admin_email_title);          
+          $changed_email_verify_success_admin_email_content = stripslashes_deep($_POST['changed_email_verify_success_admin_email_content']);          
+          update_option('changed_email_verify_success_admin_email_content', $changed_email_verify_success_admin_email_content);
           
           $user_verify_success_email_title = htmlentities(stripslashes_deep($_POST['user_verify_success_email_title']));          
           update_option('user_verify_success_email_title', $user_verify_success_email_title);          
