@@ -54,6 +54,10 @@
 
 		<?php bbp_single_forum_description(); ?>
         <div class="clear"></div>
+        <p>
+            <input type="checkbox" name="forum_subscription" id="ct_forum_subscription" value="<?php echo bbp_get_forum_id(); ?>">
+            <label for="ct_forum_subscription">Notify me of updates</label>
+        </p>
 		<?php if ( bbp_has_forums() ) : ?>
 
 			<?php bbp_get_template_part( 'loop', 'forums' ); ?>
