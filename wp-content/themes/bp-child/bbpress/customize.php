@@ -96,6 +96,17 @@ function ct_get_forum_subscribers( $forum_id = 0 ) {
     return apply_filters( 'ct_get_forum_subscribers', $users );
 }
 
+function ct_is_forum_subscriber( $forum_id = 0 ) {
+    $user_id = bbp_get_current_user_id();
+    $forum_user_ids = ct_get_forum_subscribers($forum_id);
+    
+    if (!in_array($user_id, $forum_user_ids)) {
+        return false;
+    }
+    
+    return true;
+}
+
 remove_action( 'bbp_new_reply',    'bbp_notify_subscribers', 11);
 remove_action( 'bbp_new_topic',    'bbp_notify_forum_subscribers', 11);
 
