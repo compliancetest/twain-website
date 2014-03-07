@@ -826,3 +826,10 @@ function cp_save_suite_notify_changes()
         delete_user_meta($user_id, 'notify_suite_changes' . $suiteID);
 }
 
+
+function ct_get_user_profile_link($user_id)
+{
+    $user = get_userdata($user_id);
+    
+    return apply_filters( 'bp_get_member_permalink', bp_core_get_user_domain( $user->ID, $user->user_nicename, $user->user_login ) );
+}

@@ -30,9 +30,36 @@ get_header();
 
 $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
 
+if(isset($_SESSION['product_data']))
+{
+    $prevData = $_SESSION['product_data'];
+    //Restore the previous form data
+    $product->name = $prevData['product_name'];
+    $product->release_date = $prevData['product_release_date'];
+    $product->product_id = $prevData['product_id'];
+    $product->type = $prevData['product_type'];
+    $product->accessURL = $prevData['product_url'];
+    $product->version = $prevData['product_version'];
+    $product->owner = $prevData['product_owner'];
+    $product->descrition = $prevData['product_description'];
+    
+    $product->relatedProducts = array();
+    if($prevData['related-product'])
+    {
+        foreach($prevData['related-product'] as $i => $rpid)
+        {
+            $row = new stdClass();
+            $row->related_product_id = $rpid;
+            $row->relationship = $prevData['related-product-relation'][$i];
+            $product->relatedProducts[] = $row;
+        }
+    }
+    
+    $_SESSION['product_data'] = null; unset($_SESSION['product_data']);
+}
+
 ?>
 <div class="content edit-item-wrapper" id="edit_product_service_wrapper">
-    <div class="space25"></div>
     <div class="column container"> 
       <form name="psForm" id="psForm" action="" class="validation-form" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
@@ -70,7 +97,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        <div class="grid-cell has-focus-tooltip">                           
                            <label>Product ID:</label>                    
                            <input type="text" class="input" name="product_id" id="product_id" value="<?php echo $product->product_id?>" />
-                           <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. Or we will generate it by using product name, domain and version. (doman.productname.version)</span>
+                           <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. Or we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})</span>
                        </div>                   
                        <div class="grid-cell has-focus-tooltip">
                            <label>Access URL:</label>     
@@ -134,7 +161,7 @@ $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
                        <div class="clear"></div>
                    </div>
                    <?php } ?>
-                   <?php if($isNew){ ?>
+                   <?php if($isNew && !$product->relatedProducts){ ?>
                    <div class="field-row new-row">
                        <div class="grid-cell width55P">
                            <label>Related Product: </label>
@@ -239,6 +266,8 @@ jQuery(document).ready(function($){
     jQuery('#psForm .input').focus(function(){
         $(this).removeClass('input-error');
     })
+    
+    var forceSubmit = false;
     jQuery('#psForm').submit(function(){
         $('#psForm .grid-box-footer .message').remove();        
         var isValid = true;
@@ -274,6 +303,22 @@ jQuery(document).ready(function($){
             $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please enter valid access url.</div>');
             $('#psForm .grid-box-footer .message').fadeIn('fast');
             return false;
+        }
+        
+        //Product ID Validation
+        if($('#psForm #product_id').val() != '')
+        {
+            var nameReg = /^[a-z0-9-_.]+$/;
+            if(!forceSubmit && !nameReg.test($('#psForm #product_id').val()))
+            {
+                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
+                $('#psForm .grid-box-footer .message').fadeIn('fast');                    
+                forceSubmit = true;
+                setTimeout(function(){
+                    $('#psForm').submit();
+                }, 2000);
+                return false;
+            }
         }
         
         return isValid;

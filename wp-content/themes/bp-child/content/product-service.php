@@ -40,6 +40,9 @@
                 <div class="clear"></div>
                 <div class="grey-border-bottom"></div>
                 <div class="grid_cell width50P product_datails">
+                    <p>
+                        Product Owner: <?php echo $product->owner?>
+                    </p>                    
                     <p>Release Date: <span class="bold">
                     <?php 
                         echo formatDate($product->release_date, "M Y"); // format Nov 2012
@@ -56,6 +59,9 @@
                         <?php
                             endif;
                         ?>
+                    </p>
+                    <p>
+                        Created by: <a href="<?php echo ct_get_user_profile_link($post->post_author) ?>"><?php echo cp_get_user_fullname($post->post_author)?></a>
                     </p>
                 </div>
                 <div class="grid_cell width50P">

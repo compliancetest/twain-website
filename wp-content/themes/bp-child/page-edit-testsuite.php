@@ -36,8 +36,7 @@ if($suite->id)
 if(!$suite->community_id)
     $suite->community_id = isset($_GET['community_id']) ? htmlspecialchars($_GET['community_id']) : $groups[0]->id;
 ?>
-<div class="content edit-item-wrapper" id="edit_test_suite_wrapper">
-    <div class="space25"></div>
+<div class="content edit-item-wrapper" id="edit_test_suite_wrapper">    
     <div class="column container relative"> 
       <form name="suiteForm" id="suiteForm" action="" method="post" enctype="multipart/form-data">
         <?php if(!$suite->id){ ?>

@@ -69,7 +69,6 @@ get_header();
 
 ?>
 <div class="content edit-item-wrapper" id="edit_test_case_wrapper">
-    <div class="space25"></div>
     <div class="column container relative"> 
       <form name="caseForm" id="caseForm" action="" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>

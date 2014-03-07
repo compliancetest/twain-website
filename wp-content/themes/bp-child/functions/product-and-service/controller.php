@@ -16,6 +16,8 @@ function saveProductService()
 {
     global $wpdb;
     
+    $_SESSION['product_data'] = null; unset($_SESSION['product_data']);
+    
     $id = htmlspecialchars($_POST['id']);
     if(!$id)
         $isNew = true;
@@ -26,6 +28,41 @@ function saveProductService()
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect(get_site_url());
+        exit;
+    }
+    
+    //Check Product ID duplication
+    $product_id = htmlspecialchars($_POST['product_id']);
+    if(!$product_id)
+    {        
+        //Generate Product ID        
+        $product_slug = sanitize_title(htmlspecialchars($_POST['product_name']));
+        $product_id = sanitize_title($_POST['product_owner']) . "_" . $product_slug .  "_v" . $_POST['product_version'];
+    }else{
+        //Only allow letters, numbers, dot, line and underline.
+        $product_id_arr = explode(".", $product_id);
+        foreach($product_id_arr as $p_i=>$p_s)
+        {
+            $product_id_arr[$p_i] = sanitize_title($p_s);
+        }
+        $product_id = implode(".", $product_id_arr);
+    }
+    
+    //Check Product ID duplication
+    $query = $wpdb->prepare("SELECT count(distinct(post_id)) FROM $wpdb->postmeta WHERE post_id!=%d AND meta_key='product_id' AND meta_value=%s", $id, $product_id);
+    $count = $wpdb->get_var($query);
+    
+    if($count > 0)
+    {
+        addMessage("Product IDs must be unique across all products configured on ComplianceTest. The Product ID entered is already in use by another product, potentially for another organisation. Please enter a different product ID. We recommend a combination of owner, product name and version, e.g. {owner}_{product name}_{product version}, with spaces replaced with dashes.", "error");
+        
+        $_SESSION['product_data'] = $_POST;
+        
+        if($isNew)            
+            wp_redirect('/add-new-product-and-service');
+        else
+            wp_redirect('/edit-product-and-service/?id=' . $id);
+            
         exit;
     }
     
@@ -57,28 +94,6 @@ function saveProductService()
         return;
     }
 
-    //Update Product ID
-    $product_id = htmlspecialchars($_POST['product_id']);
-    if(!$product_id)
-    {        
-        //Generate Product ID        
-        $product_slug = sanitize_title(htmlspecialchars($_POST['product_name']));
-        $product_id = sanitize_title($_POST['product_owner']) . "." . $product_slug .  ".v" . $_POST['product_version'];
-    }
-    
-    //Check Product ID duplication
-    $query = $wpdb->prepare("SELECT meta_id FROM $wpdb->postmeta WHERE post_id!=%d AND meta_key='product_id' AND meta_value=%s", $id, $product_id);
-    $meta_id = $wpdb->get_var($query);
-    
-    $idx = 2;
-    $t_product_id = $product_id;
-    while($meta_id)
-    {
-        $t_product_id = $product_id . "-" .$idx;
-        $query = $wpdb->prepare("SELECT meta_id FROM $wpdb->postmeta WHERE post_id!=%d AND meta_key='product_id' AND meta_value=%s", $id, $t_product_id);
-        $meta_id = $wpdb->get_var($query);    
-    }
-    $product_id = $t_product_id;
     
     update_post_meta($id, 'product_id', $product_id);
     
