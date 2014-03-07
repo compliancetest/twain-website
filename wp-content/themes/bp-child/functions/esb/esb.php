@@ -355,7 +355,7 @@ class ManageESB
         }        
         
         $rows = ManageESB::$esbdb->get_results($query);
-        echo $query;
+        
         //Getting Messages
         $ids = array();
         foreach($rows as $row)
@@ -987,8 +987,7 @@ class ManageESB
     {
         //Getting Configuration ID        
         $cID = $this->getTestSuiteConfigurationID($suiteID);
-        var_dump($suiteID);
-        var_dump($cID);
+        
         ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_SUITE_CONFIGURATION_ID'=>$cID), array('ID' => $id));
     }
     
