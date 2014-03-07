@@ -335,6 +335,17 @@ function ct_duplicate_data()
                                 //Getting Side Admins
                                 $admins = get_users(array('role' => 'administrator'));
                                 
+                                if(!$communities)
+                                {
+                                    //Remove Trash Posts
+                                    $query = "SELECT ID FROM " . $wpdb->posts . " WHERE post_status='trash' AND (post_type='test-suite' OR post_type='test-case')";
+                                    $trashes = $wpdb->get_col($query);
+                                    foreach($trashes as $t)
+                                    {
+                                        wp_delete_post($t);
+                                    }
+                                }
+                                
                                 foreach($communities as $community)
                                 {
                                     $data = $community;
@@ -352,7 +363,7 @@ function ct_duplicate_data()
                                         $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'terms_and_conditions'));
                                         $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'license_agreements'));
                                         $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'obligation_for_claim'));                                
-                                        $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'notification_email_of_changes'));                                                           foreach($metadata as $mrow)
+                                        $wpdb->delete($wpdb->prefix . "bp_groups_groupmeta", array('group_id' => $new_community_id, 'meta_key' => 'notification_email_of_changes'));                                                         foreach($metadata as $mrow)
                                         {
                                             if($mrow['meta_key'] == 'terms_and_conditions' || $mrow['meta_key'] == 'license_agreements' || $mrow['meta_key'] == 'obligation_for_claim' || $mrow['meta_key'] == 'notification_email_of_changes')
                                             {
@@ -659,6 +670,8 @@ function ct_copy_test_suite($new_wpdb, $suite)
     $suite['ID'] = null;
     unset($suite['ID']);
     
+    $esb = new ManageESB();
+    
     if($newSuiteId = wp_insert_post($suite))
     {
         $suitesMap[$oldSuiteID] = $newSuiteId;
@@ -712,8 +725,15 @@ function ct_copy_test_suite($new_wpdb, $suite)
         {
             $wpdb->insert($wpdb->prefix . 'ts_options_documents', 
                 array('ts_id' => $newSuiteId, 'doc_name' => $doc->doc_name, 'doc_desc' => $doc->doc_desc, 'doc_loc_url' => $doc->doc_loc_url));
-        }
+        }        
+        
+        $version = array($version_major, $version_minor);
+        if($version_patch)
+            $version[]=  $version_patch;
+        
+        $esb->saveTestSuiteInfo($newSuiteId, get_post_meta($newSuiteId, 'ts_identifier', true) . "_V" . implode(".", $version), $suite['post_title']);
     }
+    
     echo '<b>Test Suite: ' . $suite['post_title'] . ' has been copied.</b><br />';
     return $newSuiteId;
 }

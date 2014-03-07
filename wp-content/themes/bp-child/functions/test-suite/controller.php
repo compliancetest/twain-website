@@ -6,7 +6,7 @@
 add_action('before_delete_post', 'remove_suite_name_id_map', 10, 1);
 function remove_suite_name_id_map($postid)
 {
-    global $wpdb;
+    global $wpdb, $CPRest;
     
     $post = get_post($postid);
     
@@ -39,8 +39,25 @@ function remove_suite_name_id_map($postid)
             $wpdb->query($query);    
         }
         
+        //Gettnig Current Subscriptions
+        $query = "SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE suite_id NOT IN (SELECT suite_id FROM {$wpdb->prefix}test_suites)";
+        $tSuites = $wpdb->get_results($query);
+        foreach($tSuites as $s)
+        {
+            //Remove Backend Accounts
+            $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
+                        <api:user>
+                            <api:userId>' . $s->esb_id . '</api:userId>                        
+                        </api:user>
+                    </api:deleteUserRequest>';
+            
+            $result = $CPRest->doUserAPI('user/delete', $data);
+            
+        }
+        
         //Delete Subscriptions
         $wpdb->query("DELETE FROM {$wpdb->prefix}users_subscriptions WHERE suite_id NOT IN (SELECT suite_id FROM {$wpdb->prefix}test_suites)");
+        
         //Delete Purchases
         $wpdb->query("DELETE FROM {$wpdb->prefix}users_purchases WHERE id NOT IN (SELECT purchase_id FROM {$wpdb->prefix}users_subscriptions");
         

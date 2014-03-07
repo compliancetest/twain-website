@@ -49,12 +49,13 @@ get_header();
                <div class="grid-box-header">
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                    <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product)?></b></a></h5>
-                   <?php if(can_edit_product_and_service($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
-                   <?php } ?>
                    <?php if(can_delete_product_and_service($product->ID)){ ?>
                    <a class="gbh-btn gbh-btn-delete right" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode($slug) ?>" onclick="return confirm('Are you sure that you want to delete this product?')">Edit<span class="simple_tooltip radius6">Delete<span></span></span></a>
                    <?php } ?>
+                   <?php if(can_edit_product_and_service($product->ID)){ ?>
+                   <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
+                   <?php } ?>
+                   
                    <div class="clear"></div>
                </div>
                <div class="grid-box-body">

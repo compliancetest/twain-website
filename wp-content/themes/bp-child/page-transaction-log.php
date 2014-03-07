@@ -268,7 +268,7 @@ if($filterCustomer){
                                         {
                                             $esb->updateTestSuiteID($row->ID, $tSuiteId[0]);    
                                             ?>
-                                            <a href="<?php echo get_permalink($tSuiteId[0])?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 10)?></a>
+                                            <a href="<?php echo get_permalink($tSuiteId[0])?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 25)?></a>
                                             <?php
                                         }
                                     } ?>                                   
