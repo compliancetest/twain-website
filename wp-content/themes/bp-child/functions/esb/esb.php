@@ -987,7 +987,7 @@ class ManageESB
     {
         //Getting Configuration ID        
         $cID = $this->getTestSuiteConfigurationID($suiteID);
-        
+        echo $cID;
         ManageESB::$esbdb->update($this->table_conversation_metadata, array('TEST_SUITE_CONFIGURATION_ID'=>$cID), array('ID' => $id));
     }
     
