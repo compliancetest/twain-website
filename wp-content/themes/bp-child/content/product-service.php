@@ -41,7 +41,7 @@
                 <div class="grey-border-bottom"></div>
                 <div class="grid_cell width50P product_datails">
                     <p>
-                        Product Owner: <?php echo $product->owner?>
+                        Product Owner: <span class="bold"><?php echo $product->owner?></span>
                     </p>                    
                     <p>Release Date: <span class="bold">
                     <?php 
