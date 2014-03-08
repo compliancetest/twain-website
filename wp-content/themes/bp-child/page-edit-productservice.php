@@ -308,13 +308,13 @@ jQuery(document).ready(function($){
             return false;
         }
         
-        var productIDReg = /^[a-z0-9-_.]+$/;
+        var productIDReg = /^[a-zA-Z0-9-_.]+$/;
         //Product ID Validation
         if($('#psForm #product_id').val() != '')
         {
             if(!productIDReg.test($('#psForm #product_id').val()))
             {
-                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
+                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-zA-Z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
                 jQuery("#product_id").addClass('input-error');
                 $('#psForm .grid-box-footer .message').fadeIn('fast');                    
                 return false;
@@ -323,7 +323,7 @@ jQuery(document).ready(function($){
             
             if(!forceSubmit && !productIDReg.test($('#psForm #product_owner').val() + "_" + $('#psForm #product_name').val() + "_" + $('#psForm #product_version').val()))
             {
-                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
+                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-zA-Z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
                 $('#psForm .grid-box-footer .message').fadeIn('fast');                    
                 forceSubmit = true;
                 setTimeout(function(){
