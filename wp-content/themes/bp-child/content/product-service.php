@@ -60,9 +60,6 @@
                             endif;
                         ?>
                     </p>
-                    <p>
-                        Created by: <a href="<?php echo ct_get_user_profile_link($post->post_author) ?>"><?php echo cp_get_user_fullname($post->post_author)?></a>
-                    </p>
                 </div>
                 <div class="grid_cell width50P">
                     <p><?php echo $product->descrition; ?></p>

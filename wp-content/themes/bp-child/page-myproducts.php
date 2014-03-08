@@ -49,6 +49,9 @@ get_header();
                <div class="grid-box-header">
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                    <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product)?></b></a></h5>
+                   <?php if(is_admin() || is_super_admin($user_id)): ?>
+                   <span class="left product-author">(<a href="<?php echo ct_get_user_profile_link($product->post_author) ?>"><?php echo cp_get_user_fullname($product->post_author)?></a>)</span>
+                   <?php endif; ?>
                    <?php if(can_delete_product_and_service($product->ID)){ ?>
                    <a class="gbh-btn gbh-btn-delete right delete-product-link" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode($slug) ?>">Delete<span class="simple_tooltip radius6">Delete<span></span></span></a>
                    <?php } ?>

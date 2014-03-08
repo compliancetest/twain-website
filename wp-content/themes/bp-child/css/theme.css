@@ -4681,6 +4681,11 @@ min-height: 70px;
     padding-top: 3px;
     padding-bottom: 3px;
 }
+#my_products .product-author,
+#my_products .product-author a{
+    line-height: 28px;
+    color: #fff;
+}
 .status-certified{
     color: #4aa31e;
 }
