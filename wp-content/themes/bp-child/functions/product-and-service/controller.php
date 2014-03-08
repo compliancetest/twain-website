@@ -82,15 +82,30 @@ function saveProductService()
         }
     }
 
-    $product_url = sanitize_url($_POST['product_url']);
+    if(trim($_POST['product_url']) != '')
+    {
+        $product_url = sanitize_url(trim($_POST['product_url']));
 
-    if(!preg_match('^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?^', $product_url)){
-        addMessage('URL not valid', 'error');
-        return;
+        if(!preg_match('^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?^', $product_url)){
+            addMessage('URL not valid', 'error');
+            $_SESSION['product_data'] = $_POST;
+        
+            if($isNew)            
+                wp_redirect('/add-new-product-and-service');
+            else
+                wp_redirect('/edit-product-and-service/?id=' . $id);
+            return;
+        }
     }
 
     if(!preg_match('@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@', $_POST['product_release_date'])){
         addMessage('Date not valid', 'error');
+        $_SESSION['product_data'] = $_POST;
+        
+        if($isNew)            
+            wp_redirect('/add-new-product-and-service');
+        else
+            wp_redirect('/edit-product-and-service/?id=' . $id);
         return;
     }
 

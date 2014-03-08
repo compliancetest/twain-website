@@ -142,7 +142,7 @@ get_header();
         <div class="popup-box-footer radius6 noradiustop">                   
             <div class="loading loading-with-text radius6"><div><b>DELETING PRODUCT</b><span>Please wait...</span></div></div> 
             <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>                

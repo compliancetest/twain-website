@@ -97,7 +97,7 @@ if(isset($_SESSION['product_data']))
                        <div class="grid-cell has-focus-tooltip">                           
                            <label>Product ID:</label>                    
                            <input type="text" class="input" name="product_id" id="product_id" value="<?php echo $product->product_id?>" />
-                           <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. Or we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})</span>
+                           <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. If a Product ID is not provided, we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})</span>
                        </div>                   
                        <div class="grid-cell has-focus-tooltip">
                            <label>Access URL:</label>     
@@ -107,14 +107,17 @@ if(isset($_SESSION['product_data']))
                        <div class="clear"></div>
                    </div>          
                    <div class="field-row">
-                       <div class="grid-cell has-focus-tooltip">                                                     
-                           <label>Version:</label>                    
-                           <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version?>" />
-                           <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
-                           
-                           <label>Product Owner:</label>                    
-                           <input type="text" class="input required" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
-                           <span class="focus-tooltip"><span></span>Enter the owner of your product or service. It is the same with your organisation name in default.</span>
+                       <div class="grid-cell">      
+                           <div class="has-focus-tooltip">
+                               <label>Version:</label>                    
+                               <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version?>" />
+                               <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
+                           </div>
+                           <div class="has-focus-tooltip">
+                               <label>Product Owner:</label>                    
+                               <input type="text" class="input required" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
+                               <span class="focus-tooltip"><span></span>Enter the owner of your product or service. By default, it is set to the same as the organisation name from your profile.</span>
+                           </div>
                        </div> 
                        <div class="grid-cell has-focus-tooltip">
                             <label>Description:</label>
@@ -305,11 +308,20 @@ jQuery(document).ready(function($){
             return false;
         }
         
+        var productIDReg = /^[a-z0-9-_.]+$/;
         //Product ID Validation
         if($('#psForm #product_id').val() != '')
         {
-            var nameReg = /^[a-z0-9-_.]+$/;
-            if(!forceSubmit && !nameReg.test($('#psForm #product_id').val()))
+            if(!productIDReg.test($('#psForm #product_id').val()))
+            {
+                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
+                jQuery("#product_id").addClass('input-error');
+                $('#psForm .grid-box-footer .message').fadeIn('fast');                    
+                return false;
+            }
+        }else{
+            
+            if(!forceSubmit && !productIDReg.test($('#psForm #product_owner').val() + "_" + $('#psForm #product_name').val() + "_" + $('#psForm #product_version').val()))
             {
                 $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
                 $('#psForm .grid-box-footer .message').fadeIn('fast');                    
@@ -319,6 +331,7 @@ jQuery(document).ready(function($){
                 }, 2000);
                 return false;
             }
+            
         }
         
         return isValid;
