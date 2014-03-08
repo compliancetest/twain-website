@@ -229,7 +229,7 @@ jQuery(document).ready(function($){
                            '<select class="combobox select" name="related-product[]">' +
                                '<option value=""></option>' +
                                <?php foreach($myProducts as $p){ ?>
-                               '<option value="<?php echo $p->ID?>"><?php echo htmlspecialchars(get_post_meta($p->ID, 'product_name', true))?></option>' +
+                               '<option value="<?php echo $p->ID?>"><?php echo htmlentities(get_post_meta($p->ID, 'product_name', true))?></option>' +
                                <?php } ?>
                            '</select>' + 
                        '</div>' + 
