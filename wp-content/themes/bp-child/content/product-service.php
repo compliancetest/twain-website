@@ -102,7 +102,7 @@
 ?>
 <div class="grid_row test_cases">
     <div class="grid_cell width45P">
-        <h4 class="blue_txt">Certifications</h4>
+        <h4 class="blue_txt">Compliance Claims</h4>
     </div>
     <div class="grid_cell width30P right selecteds_single">
         <!--<span class="left padding5-10">Filter By: </span>
@@ -129,12 +129,13 @@
     ?>
         <div class="grid_head">
             <div class="grid_row nopaddingbottom nopaddingtop tocenter">
-                <div class="grid_cell nopaddingtop width20P toleft">Issuer</div>
-                <div class="grid_cell nopaddingtop width30P toleft">Suite</div>
+                <div class="grid_cell nopaddingtop width22P toleft">Claim ID</div>
+                <div class="grid_cell nopaddingtop width10P toleft">Issuer</div>
+                <div class="grid_cell nopaddingtop width20P toleft">Suite</div>
                 <div class="grid_cell nopaddingtop width10P">Role</div>
                 <div class="grid_cell nopaddingtop width10P">Level</div>
-                <div class="grid_cell nopaddingtop width10P">Status</div>
-                <div class="grid_cell nopaddingtop width15P toleft left5P">Date</div>
+                <div class="grid_cell nopaddingtop width15P">Status</div>
+                <div class="grid_cell nopaddingtop width13P toleft">Date</div>
                 <div class="clear"></div>
             </div>
         </div>
@@ -142,20 +143,22 @@
             <?php              
                 foreach($claims as $claim){
                     $group = groups_get_group(array('group_id' => get_post_meta($claim->suite_id, 'community_id', true)));
+                    $claimID = getClaimID($claim->id, $claim->suite_id);
             ?>
                     <div class="grid_row white_bcg tocenter">
-                        <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $claim->issuer?></a></div>
-                        <div class="grid_cell nopaddingtop width30P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
+                        <div class="grid_cell nopaddingtop width22P toleft"><?php echo $claimID?></div>
+                        <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $claim->issuer?></a></div>
+                        <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>
-                        <div class="grid_cell nopaddingtop width10P">
+                        <div class="grid_cell nopaddingtop width15P">
                             <?php if($claim->status == 'Verified'){ ?>
                             <span class="status-certified"><?php echo $claim->status?></span>
                             <?php }else{ ?>
                             <span class="status-unverified"><?php echo $claim->status?></span>
                             <?php } ?>
                         </div>
-                        <div class="grid_cell nopaddingtop width15P toleft left5P"><?php echo formatDate($claim->last_updated)?></div>    
+                        <div class="grid_cell nopaddingtop width13P toleft"><?php echo formatDate($claim->last_updated)?></div>    
                         <div class="clear"></div>
                     </div>
             <?php                            

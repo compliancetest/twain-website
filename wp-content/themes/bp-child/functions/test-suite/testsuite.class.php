@@ -196,6 +196,33 @@ class TestSuite
         return $result;
     }
     
+    
+    public function getSuiteID()
+    {        
+        $this->identifier = $this->loadSingleValue('ts_identifier');
+        
+        $this->version_major = $this->loadSingleValue('ts_version_major');
+        $this->version_minor = $this->loadSingleValue('ts_version_minor');
+        $this->version_patch = $this->loadSingleValue('ts_version_patch');
+        
+        $this->version_major = !$this->version_major ? 0 : $this->version_major;
+        $this->version_minor = !$this->version_minor ? 0 : $this->version_minor;
+        $this->version_patch = !$this->version_patch ? 0 : $this->version_patch;
+        
+        $versions = array();
+        $versions[] = $this->version_major;
+        $versions[] = $this->version_minor;
+        if($this->version_patch)
+            $versions[] = $this->version_patch;
+        
+        
+        $this->version = implode(".", $versions);
+        
+        $this->suiteID = $this->identifier . "_V" . $this->version;
+        
+        return $this->suiteID;
+    }
+    
     public function loadSpecDocuments()
     {
         global $wpdb;

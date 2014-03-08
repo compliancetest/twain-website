@@ -4647,7 +4647,7 @@ min-height: 70px;
 
 /*** My Products Page **/
 #my_products .td-issuer{
-    width: 150px;
+    width: 80px;
 }
 #my_products .td-suite{
     width: 269px;
@@ -4663,10 +4663,10 @@ min-height: 70px;
     width: 68px;
 }
 #my_products .td-date{
-    width: 75px;
+    width: 71px;
 }
-#my_products .td-audit{
-    width: 46px;
+#my_products .td-claim-id{
+    width: 120px;
 }
 #my_products .td-action{
     width: 70px;

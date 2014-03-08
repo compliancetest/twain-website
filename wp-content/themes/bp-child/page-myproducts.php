@@ -63,13 +63,13 @@ get_header();
                </div>
                <div class="grid-box-body">
                    <div class="thead tr">
+                       <div class="td td-claim-id tocenter">Claim ID</div>
                        <div class="td td-issuer">Issuer</div>
                        <div class="td td-suite">Suite</div>
                        <div class="td td-level">Level</div>
                        <div class="td td-role">Role</div>
                        <div class="td td-status">Status</div>
                        <div class="td td-date">Date</div>
-                       <div class="td td-audit">Audit</div>
                        <div class="td td-action">Action</div>
                        <div class="clear"></div>
                    </div>
@@ -85,18 +85,20 @@ get_header();
                            <?php
                        }else{
                            foreach($claims as $claim){
+                               $claimID = getClaimID($claim->id, $claim->suite_id);
                            ?>
                            <div class="tr">
+                               <div class="td td-claim-id toright"><?php echo $claimID ?></div>
                                <div class="td td-issuer"><?php echo $claim->issuer ?></div>
                                <div class="td td-suite"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
                                <div class="td td-level"><?php echo $claim->conformance_level?></div>
                                <div class="td td-role"><?php echo $claim->role?></div>
                                <div class="td td-status status-<?php echo convert_css_name($claim->status) ?>"><?php echo $claim->status?></div>
                                <div class="td td-date"><?php echo formatDate($claim->last_updated)?></div>
-                               <div class="td td-audit"><?php //echo $claim->audit?></div>
-                               <div class="td td-action">
-                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn icon-btn edit-claim-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Claim<span></span></span></a>
-                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode($slug) ?>" class="action-btn delete-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Delete Claim<span></span></span></a>
+                               
+                               <div class="td td-action tocenter">
+                                   <!--<a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn icon-btn edit-claim-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Claim<span></span></span></a>-->
+                                   <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode($slug) ?>" class="action-btn delete-btn icon-btn has-tooltip delete-claim-link"><span class="p"></span><span class="simple_tooltip">Delete Claim<span></span></span></a>
                                </div>
                                <div class="clear"></div>
                            </div>
@@ -147,6 +149,20 @@ get_header();
         </div>
         <a class="close_btn"></a>                
     </div>        
+    <div class="popup-box" id="delete-claim-box" style="display: none; width: 500px">
+        <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+        <div class="popup-box-content"> 
+            Are you sure that you want to delete this compliance claim?
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                   
+            <div class="loading loading-with-text radius6"><div><b>DELETING CLAIM</b><span>Please wait...</span></div></div> 
+            <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>                
+    </div>        
+    
 </div> <!--end content-->
 <script type="text/javascript">
 (function($){
@@ -164,6 +180,21 @@ get_header();
         $('#delete-product-box .process-btn').click(function(){
             $('#delete-product-box .loading').show();
         })
+        
+        $('.delete-claim-link').each(function(){
+            var link = $(this).attr('href');
+            $(this).cplightbox({
+                type: 'inline',
+                href: '#delete-claim-box',
+                onStart: function(){
+                    $('#delete-claim-box .process-btn').attr('href', link);
+                }
+            })
+        })
+        $('#delete-claim-box .process-btn').click(function(){
+            $('#delete-claim-box .loading').show();
+        })
+        
         $('#my_products .grid-box-body .tbody').each(function(){
             $(this).find('.tr').each(function(){
                 var h = Math.max(

@@ -316,3 +316,10 @@ function getTestPlansBySuiteId($suite_id, $user_id)
     return $rows;
 }
 
+function getClaimID($claim_id, $suite_id)
+{
+    $suite = new TestSuite($suite_id);                               
+    $claimID = $suite->getSuiteID() . "_" . str_pad($claim_id, 6,0, STR_PAD_LEFT);
+    
+    return $claimID;
+}
