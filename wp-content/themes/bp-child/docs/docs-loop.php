@@ -126,7 +126,29 @@
 
     <?php else: ?>
             
-            <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
+            <?php
+                //Getting Test Suites
+                $args = array(
+                        'post_type' => 'test-suite', 
+                        'posts_per_page' => -1,
+                        'tax_query' => array('relation' => 'and'),
+                        'meta_query' => array(
+                            array(
+                                'key' => 'community_id',
+                                'value' => $group_id,
+                                'compare' => '='
+                            )
+                        ),
+                        'orderby' => 'title',
+                        'order' => 'ASC'
+                    );
+                $testsuites = get_posts( $args );
+            ?>
+            <?php if (count($testsuites) > 0): ?>
+                <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
+            <?php else: ?>
+                <p class="no-docs">You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.</p>
+            <?php endif; ?>
             
             <?php if ( can_create_community_article( bp_get_current_group_id()) ): ?>
             <a href="<?php echo bp_docs_get_create_link(); ?>" class="action-btn add-new-btn has-tooltip">
