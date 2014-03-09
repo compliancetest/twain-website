@@ -28,8 +28,8 @@ function sendRestAction($url, $data = '')
 
 class CPRest
 {
-    var $api_namespace = 'http://esb.test.compliancetest.net:18280/api';
-    var $api_namespace2 = 'http://esb.test.compliancetest.net:18280/api';
+    var $api_namespace = 'http://esb.test.compliancetest.net:8280/api';
+    var $api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
 
     public function __construct()
     {
@@ -37,8 +37,8 @@ class CPRest
             $this->api_namespace = 'http://esb.compliancetest.net/api';
             $this->api_namespace2 = 'http://esb.compliancetest.net/api';
         } else {
-            $this->api_namespace = 'http://esb.test.compliancetest.net:18280/api';
-            $this->api_namespace2 = 'http://esb.test.compliancetest.net:18280/api';
+            $this->api_namespace = 'http://esb.test.compliancetest.net:8280/api';
+            $this->api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
         }
     }
 
