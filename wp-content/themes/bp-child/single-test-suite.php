@@ -604,10 +604,10 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width21P' : 'width24P' ?> toleft">
                                     <div class="right10">
                                         <?php 
-                                            $intentDesc = get_post_meta($row->ID ,'test_intent_description', true);
-                                            /*if(strlen($intentDesc) > 150)
-                                                echo substr($intentDesc, 0, 150) . "...";
-                                            else*/
+                                            $intentDesc = strip_tags( get_post_meta($row->ID ,'test_intent_description', true) );
+                                            if(strlen($intentDesc) > 150)
+                                                echo wordwrap($intentDesc, 150) . " ... ";
+                                            else
                                                 echo $intentDesc;
                                         ?>
                                     </div>
