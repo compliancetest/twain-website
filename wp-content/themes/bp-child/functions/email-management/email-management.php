@@ -1650,7 +1650,7 @@ function create_email_management_page()
                     $forum_new_post_email_content = get_option('forum_new_post_email_content');
                     ?>
                     <h3>Forum New Post</h3>
-                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [topic_author_name], [topic_title], [topic_content], [blog_name], [topic_url]</p>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [topic_author_name], [topic_title], [topic_content], [community], [topic_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1679,7 +1679,7 @@ function create_email_management_page()
                     $forum_reply_post_email_content = get_option('forum_reply_post_email_content');
                     ?>
                     <h3>Form Reply Post</h3>
-                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [reply_author_name], [topic_title], [reply_content], [blog_name], [reply_url]</p>
+                    <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [reply_author_name], [topic_title], [reply_content], [community], [reply_url]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
