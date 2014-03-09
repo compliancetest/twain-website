@@ -115,7 +115,6 @@ add_action('bbp_new_topic', 'ct_notify_forum_subscribers', 11 ,4);
 
 function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_data = false, $topic_author = 0 ) 
 {
-
     /** Validation ************************************************************/
 
     $topic_id = bbp_get_topic_id( $topic_id );
@@ -150,7 +149,7 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
     $topic_content = strip_tags( bbp_get_topic_content( $topic_id ) );
     $topic_url     = get_permalink( $topic_id );
     $blog_name     = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-    $community_name = bp_group_name();
+    $community_name = bbp_get_forum_title($forum_id);
 
     // Loop through users
     foreach ( (array) $user_ids as $user_id ) {
@@ -228,8 +227,8 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
     $reply_content = strip_tags( bbp_get_reply_content( $reply_id ) );
     $reply_url     = bbp_get_reply_url( $reply_id );
     $blog_name     = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-    $community_name = bp_group_name();
-
+    $community_name = bbp_get_forum_title($forum_id);
+    
     // Loop through users
     foreach ( (array) $user_ids as $user_id ) {
 
