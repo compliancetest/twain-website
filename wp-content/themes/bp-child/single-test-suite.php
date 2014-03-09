@@ -605,8 +605,8 @@ Template Name Posts: Test Suite
                                     <div class="right10">
                                         <?php 
                                             $intentDesc = strip_tags( get_post_meta($row->ID ,'test_intent_description', true) );
-                                            if(strlen($intentDesc) > 150)
-                                                echo wordwrap($intentDesc, 150) . " ... ";
+                                            if(strlen($intentDesc) > 120)
+                                                echo wordwrap($intentDesc, 120) . (wordwrap($intentDesc, 120) > 120 ? " ... " : '');
                                             else
                                                 echo $intentDesc;
                                         ?>
