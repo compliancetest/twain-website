@@ -5,6 +5,24 @@
 
 $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id());
 
+global $groups_template;
+$group = $groups_template->group;
+//Getting Test Suites
+$args = array(
+        'post_type' => 'test-suite', 
+        'posts_per_page' => -1,
+        'tax_query' => array('relation' => 'and'),
+        'meta_query' => array(
+            array(
+                'key' => 'community_id',
+                'value' => $group->id,
+                'compare' => '='
+            )
+        ),
+        'orderby' => 'title',
+        'order' => 'ASC'
+    );
+$testsuites = get_posts( $args );
 ?>
 <div id="testdata-container" class="tab-content white_bcg padding10">    
     <!-- Files List Page -->
@@ -90,7 +108,11 @@ $is_group_admin = groups_is_user_admin(get_current_user_id(), bp_get_group_id())
         ?>
             <div class="grid-list-row">
                 <div class="grid-list-cell tocenter width100P">
-                    No instance created yet
+                    <?php if (count($testsuites) > 0): ?>
+                        No instance created yet
+                    <?php else: ?>
+                        You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.
+                    <?php endif; ?>
                 </div>
                 <div class="clear"></div>
             </div>
