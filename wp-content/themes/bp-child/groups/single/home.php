@@ -42,7 +42,7 @@
                         ?>
                             <div id="testdata-container" class="tab-content column white_bcg" style="display: none;">
                                 <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
-                                <p>You need to join the community to participate in the test data section.</p>
+                                <p>You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button</p>
                                 <?php } ?>                            
                             </div>
                             
@@ -51,12 +51,12 @@
                             </div>
                             <div id="forum-container" class="tab-content column white_bcg" style="display: none;">
                                 <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
-                                <p>You need to join the community to participate in the forum section.</p>
+                                <p>You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button</p>
                                 <?php } ?>                            
                             </div>
                             <div id="downloads-container" class="tab-content column white_bcg" style="display: none;">
                                 <?php if(!is_user_logged_in() || !bp_group_is_member()){ ?>
-                                <p>You need to join the community to participate in the download section.</p>
+                                <p>You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button</p>
                                 <?php } ?>                            
                             </div>
                         <?php
