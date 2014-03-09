@@ -167,7 +167,7 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
             '[topic_author_name]' => $topic_author_name,
             '[topic_title]' => $topic_title,
             '[topic_content]' => $topic_content,
-            '[blog_name]' => $blog_name,
+            '[community]' => $community_name,
             '[topic_url]' => $topic_url
         );
 
@@ -227,6 +227,7 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
     $reply_content = strip_tags( bbp_get_reply_content( $reply_id ) );
     $reply_url     = bbp_get_reply_url( $reply_id );
     $blog_name     = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+    $community_name = bp_group_name();
 
     // Loop through users
     foreach ( (array) $user_ids as $user_id ) {
@@ -244,7 +245,7 @@ function ct_notify_subscribers( $reply_id = 0, $topic_id = 0, $forum_id = 0, $an
             '[reply_author_name]' => $reply_author_name,
             '[topic_title]' => $topic_title,
             '[reply_content]' => $reply_content,
-            '[blog_name]' => $blog_name,
+            '[community]' => $community_name,
             '[reply_url]' => $reply_url
         );
 
