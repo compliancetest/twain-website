@@ -784,3 +784,16 @@ function cp_check_docs_create($is_doc_create)
     
     return $is_doc_create;
 }
+
+add_action('get_header', 'cp_notice_user_on_community');
+function cp_notice_user_on_community()
+{
+    $page_type = get_post_type(get_the_ID());
+    
+    if (bp_is_group() || in_array($page_type, array('page', 'test-suite'))) 
+    {
+        if (!is_user_logged_in()) {
+            addMessage('You must be a registered member of the site to view this content. Registration is free - just go to the ComplianceTest home page and click on the Signup button.', 'notice');
+        }
+    }
+}
