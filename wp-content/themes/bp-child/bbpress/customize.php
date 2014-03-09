@@ -107,8 +107,8 @@ function ct_is_forum_subscriber( $forum_id = 0 ) {
     return true;
 }
 
-//remove_action( 'bbp_new_reply',    'bbp_notify_subscribers', 11);
-//remove_action( 'bbp_new_topic',    'bbp_notify_forum_subscribers', 11);
+remove_action( 'bbp_new_reply',    'bbp_notify_subscribers', 11);
+remove_action( 'bbp_new_topic',    'bbp_notify_forum_subscribers', 11);
 
 add_action('bbp_new_reply', 'ct_notify_subscribers', 11, 5);
 add_action('bbp_new_topic', 'ct_notify_forum_subscribers', 11 ,4);
