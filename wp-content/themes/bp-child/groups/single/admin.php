@@ -4,6 +4,7 @@
     */
 ?>
 <div id="group_admin_page" class="tab-content white_bcg column">
+    <p>You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.</p>
     <div class="half left">
         <!-- Group Details Tab -->
         <div class="grid-box" id="group_details_box">
