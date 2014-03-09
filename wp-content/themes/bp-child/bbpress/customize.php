@@ -138,7 +138,7 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
     $topic_author_name = bbp_get_topic_author_display_name( $topic_id );
 
     /** Mail ******************************************************************/
-    do_action( 'bbp_pre_notify_forum_subscribers', $topic_id, $forum_id, $user_ids );
+    //do_action( 'bbp_pre_notify_forum_subscribers', $topic_id, $forum_id, $user_ids );
 
     // Remove filters from reply content and topic title to prevent content
     // from being encoded with HTML entities, wrapped in paragraph tags, etc...
@@ -150,6 +150,7 @@ function ct_notify_forum_subscribers( $topic_id = 0, $forum_id = 0, $anonymous_d
     $topic_content = strip_tags( bbp_get_topic_content( $topic_id ) );
     $topic_url     = get_permalink( $topic_id );
     $blog_name     = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+    $community_name = bp_group_name();
 
     // Loop through users
     foreach ( (array) $user_ids as $user_id ) {
