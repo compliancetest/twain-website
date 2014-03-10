@@ -132,8 +132,8 @@
                 <div class="grid_cell nopaddingtop width22P toleft">Claim ID</div>
                 <div class="grid_cell nopaddingtop width10P toleft">Issuer</div>
                 <div class="grid_cell nopaddingtop width20P toleft">Suite</div>
-                <div class="grid_cell nopaddingtop width10P">Role</div>
                 <div class="grid_cell nopaddingtop width10P">Level</div>
+                <div class="grid_cell nopaddingtop width10P">Role</div>                
                 <div class="grid_cell nopaddingtop width15P">Status</div>
                 <div class="grid_cell nopaddingtop width13P toleft">Date</div>
                 <div class="clear"></div>
@@ -149,8 +149,8 @@
                         <div class="grid_cell nopaddingtop width22P toleft"><?php echo $claimID?></div>
                         <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $claim->issuer?></a></div>
                         <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
-                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>
+                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>                        
                         <div class="grid_cell nopaddingtop width15P">
                             <?php if($claim->status == 'Verified'){ ?>
                             <span class="status-certified"><?php echo $claim->status?></span>
