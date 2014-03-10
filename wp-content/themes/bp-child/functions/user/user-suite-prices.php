@@ -42,6 +42,12 @@ function ct_manage_fee_overrides()
         }
         update_user_meta($userID, 'signup_fee', $result1);
         update_user_meta($userID, 'monthly_fee', $result2);
+        
+        if($_POST['organisation'])
+        {
+            
+        }
+        
         $msg = 'Successfully Saved!';
     }
     
@@ -202,7 +208,7 @@ function ct_manage_fee_overrides()
                                     <input type="checkbox" name="organisation_user[]" value="<?php echo $suite->ID?>" <?php echo in_array($suite->ID ,$organisation) ? 'checked="checked"' : '' ?>   />
                                 </td>                            
                                 <td>
-                                    <input type="text" name="organisation_count<?php echo $suite->ID?>" value="<?php echo $organisation_count[$suite->ID] ?>"  />
+                                    <input type="text" name="organisation_count<?php echo $suite->ID?>" value="<?php echo isset($organisation_count[$suite->ID]) ? $organisation_count[$suite->ID] : ""?>"  />
                                 </td>                            
                                                          
                             </tr>

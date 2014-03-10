@@ -149,8 +149,9 @@
                         <div class="grid_cell nopaddingtop width22P toleft"><?php echo $claimID?></div>
                         <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $claim->issuer?></a></div>
                         <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
-                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>
-                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>                        
+                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>  
+                        
+                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>                                              
                         <div class="grid_cell nopaddingtop width15P">
                             <?php if($claim->status == 'Verified'){ ?>
                             <span class="status-certified"><?php echo $claim->status?></span>
