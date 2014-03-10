@@ -4,6 +4,9 @@
 * 
 */
 
+if(!defined('HARNESS_ENDPOINT_URL'))
+    define('HARNESS_ENDPOINT_URL', 'https://esb.compliancetest.net/services/Superstream');
+
 /** 
 * Process Eway Payment
 * 

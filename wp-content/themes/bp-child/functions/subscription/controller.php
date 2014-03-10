@@ -94,7 +94,7 @@ function purchase_paid_subscription()
         //Create MSH Datas 
         $esb_data = array(
             'p_mode_agreement' => 'LIGHT',
-            'harness_endpoint_url' => 'http://esb.compliancetest.net/services/Superstream', 
+            'harness_endpoint_url' => HARNESS_ENDPOINT_URL, 
             'harness_username' => "harness" . $user->ID . "_" . $suite->id, 
             'harness_password' => cp_generate_password(8)
         );
@@ -236,7 +236,7 @@ function purchase_free_subscription()
     //Create MSH Datas 
     $esb_data = array(
         'p_mode_agreement' => 'LIGHT',
-        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/Superstream', 
+        'harness_endpoint_url' => HARNESS_ENDPOINT_URL, 
         'harness_username' => "harness" . $user->ID . "_" . $suite->id, 
         'harness_password' => cp_generate_password(8)
     );
@@ -343,7 +343,7 @@ function purchase_additional_subscription()
     //Create MSH Datas 
     $esb_data = array(
         'p_mode_agreement' => 'LIGHT',
-        'harness_endpoint_url' => 'http://esb.compliancetest.net/services/Superstream', 
+        'harness_endpoint_url' => HARNESS_ENDPOINT_URL, 
         'harness_username' => "harness" . $user->ID . "_" . $suite->id, 
         'harness_password' => cp_generate_password(8)
     );
