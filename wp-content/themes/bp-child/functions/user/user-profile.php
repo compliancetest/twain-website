@@ -729,7 +729,7 @@ function cp_save_customer_harness_detail()
     {
         $xmlData = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
                         <api:user>
-                            <api:username>' . $user->user_login . "_" . $data->suite_id . '</api:username>
+                            <api:username>' . "harness" . $user->ID . "_" . $data->suite_id . '</api:username>
                             <api:password>' . $_POST['harness_password'] . '</api:password>
                             <api:userGroups>
                                 <api:group>

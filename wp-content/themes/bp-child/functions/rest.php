@@ -4,17 +4,17 @@
  */
 class CPRest
 {
-    var $api_namespace = 'http://esb.test.compliancetest.net:8280/api';
-    var $api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
+    var $external_api_namespace = 'http://esb.test.compliancetest.net:18280/api';
+    var $internal_api_namespace = 'http://esb.test.compliancetest.net:8280/api';
 
     public function __construct()
     {
         if (get_option('eway_payment_mode') == 'live') {
-            $this->api_namespace = 'http://esb.compliancetest.net/api';
-            $this->api_namespace2 = 'http://esb.compliancetest.net/api';
+            $this->external_api_namespace = 'http://esb.compliancetest.net/api';
+            $this->internal_api_namespace = 'http://esb.compliancetest.net/api';
         } else {
-            $this->api_namespace = 'http://esb.test.compliancetest.net:8280/api';
-            $this->api_namespace2 = 'http://esb.test.compliancetest.net:8280/api';
+            $this->external_api_namespace = 'http://esb.test.compliancetest.net:18280/api';
+            $this->internal_api_namespace = 'http://esb.test.compliancetest.net:8280/api';
         }
     }
 
@@ -50,7 +50,7 @@ class CPRest
      */
     public function doUserAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace . "/users/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->internal_api_namespace . "/users/" . $action, $data, $isPost, $isXMLHeader);
     }
 
     /**
@@ -62,17 +62,17 @@ class CPRest
 
     public function doRepositoryAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace . "/repository/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->external_api_namespace . "/repository/" . $action, $data, $isPost, $isXMLHeader);
     }
 
     public function doMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace2 . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->internal_api_namespace . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
     }
 
     public function doMetadataAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
     {
-        return $this->doAPI($this->api_namespace . "/metadata/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->external_api_namespace . "/metadata/" . $action, $data, $isPost, $isXMLHeader);
     }
 
     public function getTemplateList($suiteName, $majorVersion)
