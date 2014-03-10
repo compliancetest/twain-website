@@ -4,8 +4,8 @@
  */
 class CPRest
 {
-    var $external_api_namespace = 'http://esb.test.compliancetest.net:18280/api';
-    var $internal_api_namespace = 'http://esb.test.compliancetest.net:8280/api';
+    var $external_api_namespace = 'http://esb.test.compliancetest.net:8280/api';
+    var $internal_api_namespace = 'http://esb.test.compliancetest.net:18280/api';
 
     public function __construct()
     {
