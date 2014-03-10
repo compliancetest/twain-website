@@ -51,10 +51,17 @@ function ct_manage_fee_overrides()
         $userData = get_userdata($userID);
         $signup_fee = get_user_meta($userID, 'signup_fee', true);
         $monthly_fee = get_user_meta($userID, 'monthly_fee', true);
+        $organisation = get_user_meta($userID, 'organisation', true);
+        $organisation_count = get_user_meta($userID, 'organisation_count', true);
         if(!$signup_fee)
             $signup_fee = array();
         if(!$monthly_fee)
             $monthly_fee = array();
+        if(!$organisation)
+            $organisation = array();
+        if(!$organisation_count)
+            $organisation_count = array();
+        
         
         $args = array(
                 'post_type' => 'test-suite',         
@@ -109,8 +116,8 @@ function ct_manage_fee_overrides()
                         <tr>
                             <th rowspan="2">Community</th>
                             <th colspan="3">Suite</th>
-                            <th colspan="4">User</th>
-                            <th rowspan="2">Set Value</th>
+                            <th colspan="5">User</th>
+                            <th colspan="3">Organisational Pricing</th>
                         </tr>
                         <tr>
                             <th>Title</th>
@@ -120,6 +127,10 @@ function ct_manage_fee_overrides()
                             <th>Monthly Fee</th>
                             <th>Purchased<br />Subscription</th>
                             <th>First Monthly Fee</th>
+                            <th>Set Value</th>
+                            <th>Organisation User</th>
+                            <th>User Count</th>
+                            <th>Joined Users</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,11 +176,11 @@ function ct_manage_fee_overrides()
                                         }
                                 ?>
                                 <td rowspan="<?php echo $familyCounts?>">
-                                    <input type="text" name="signup_fee<?php echo $suite->family_mark?>" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
+                                    <input type="text" name="signup_fee<?php echo $suite->family_mark?>" class="singup-fee" value="<?php echo isset($signup_fee[$suite->ID]) ? $signup_fee[$suite->ID] : '' ?>"
                                      <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> />
                                 </td>
                                 <td rowspan="<?php echo $familyCounts?>">
-                                    <input type="text" name="monthly_fee<?php echo $suite->family_mark?>" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
+                                    <input type="text" name="monthly_fee<?php echo $suite->family_mark?>" class="monthly-fee" value="<?php echo isset($monthly_fee[$suite->ID]) ? $monthly_fee[$suite->ID] : '' ?>"
                                      <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? '' : 'disabled="disabled"' ?> />
                                 </td>                                    
                                 <?php 
@@ -183,10 +194,17 @@ function ct_manage_fee_overrides()
                                 </td>
                                 <?php if($idx == 0 || $testsuites[$idx - 1]->family_mark != $suite->family_mark): ?>
                                 <td rowspan="<?php echo $familyCounts?>">
-                                    <input type="checkbox" name="set_value<?php echo $suite->family_mark?>" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
+                                    <input type="checkbox" name="set_value<?php echo $suite->family_mark?>" class="set-value-chk" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
                                     <input type="hidden" name="suite_id[]" value="<?php echo $suite->family_mark?>" />
                                 </td> 
-                                <?php endif; ?>                                                           
+                                <?php endif; ?>      
+                                <td>
+                                    <input type="checkbox" name="organisation_user[]" value="<?php echo $suite->ID?>" <?php echo in_array($suite->ID ,$organisation) ? 'checked="checked"' : '' ?>   />
+                                </td>                            
+                                <td>
+                                    <input type="text" name="organisation_count<?php echo $suite->ID?>" value="<?php echo $organisation_count[$suite->ID] ?>"  />
+                                </td>                            
+                                                         
                             </tr>
                             <?php
                         }
@@ -199,11 +217,11 @@ function ct_manage_fee_overrides()
                 jQuery(document).ready(function($){
                     $('#editFeeTable tbody tr').each(function(){
                         var parent = $(this);
-                        parent.find('input[type="checkbox"]').click(function(){
+                        parent.find('input.set-value-chk').click(function(){
                             if(this.checked)
-                                parent.find('input[type="text"]').prop('disabled', false);
+                                parent.find('input.singup-fee, input.monthly-fee').prop('disabled', false);
                             else
-                                parent.find('input[type="text"]').prop('disabled', true);
+                                parent.find('input.signup-fee, input.monthly-fee').prop('disabled', true);
                         })
                     })
                 })
