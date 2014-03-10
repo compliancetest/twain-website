@@ -1058,8 +1058,7 @@ class ManageESB
     public function deleteProductInfo($product_wp_id)
     {
         
-        $result = ManageESB::$esbdb->delete($this->table_product_configuration, array('PRODUCT_WP_ID' => $product_wp_id));
-        
+        $result = ManageESB::$esbdb->delete($this->table_product_configuration, array('PRODUCT_WP_ID' => $product_wp_id));        
         return $result;
     }
     

@@ -1,5 +1,18 @@
 <?php
-
+add_action('before_delete_post', 'ct_delete_product_information', 10, 1);
+function ct_delete_product_information($postid)
+{
+    global $wpdb, $CPRest;
+    
+    $post = get_post($postid);
+    
+    if($post->post_type == 'product-service')
+    {    
+        //Remove Row from Product Configuration
+        $esb = new ManageESB();        
+        $esb->deleteProductInfo($postid);
+    }
+}
 add_action('init', 'process_product_service_actions');
 function process_product_service_actions()
 {
@@ -180,7 +193,7 @@ function deleteProductService()
     }
     
     //Delete Product/Service
-    wp_trash_post($id);
+    wp_delete_post($id);
     addMessage("The product/service was deleted!");
     wp_redirect($redirectUrl);
     exit;
