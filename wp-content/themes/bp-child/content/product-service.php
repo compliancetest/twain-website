@@ -7,7 +7,7 @@
   <?php if(!$isAjax){ ?>
     <div class="grid_head column">
         <div class="grid_row nopadding">
-            <h4 class="left">Product / Service Detalils</h4>
+            <h4 class="left">Product / Service Details</h4>
             <a href="/my-products" class="left action-btn back-btn has-tooltip left15">
                 <span class="p"></span>
                 <span class="t">Back</span>
