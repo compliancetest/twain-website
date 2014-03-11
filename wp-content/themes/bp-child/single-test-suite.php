@@ -275,6 +275,20 @@ Template Name Posts: Test Suite
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                     </a>
                     <?php
+                }else if(getOrganisationPurchaseId($suite->familyMark)){                    
+                    $subscriptionType = 'organisation';
+                    ?>
+                    <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
+                        <span class="price-b">
+                            <span class="l"></span>
+                            <span class="m"> 
+                            Already<br />Purchased
+                            </span>
+                            <span class="r"></span>
+                        </span>
+                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                    </a>
+                    <?php
                 }else{                    
                     //Button HTML
                     $butttonHTML = '';
@@ -776,9 +790,9 @@ if(!$purchasedSubscription):
                 <div class="clear"></div>
             </div>                
         </div>        
-        <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('direct_payment')?>" />
+        <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('paid_subscription')?>" />
         <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
-        <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional'): ?>      
+        <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional' || $subscriptionType == 'organisation'): ?>      
         <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription</div>     
         <div class="popup-box-content grid-box-body">    
             <div class="field-row">
@@ -788,7 +802,14 @@ if(!$purchasedSubscription):
                 <div class="clear"></div>
             </div> 
         </div>     
-        <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce($subscriptionType == 'free' ? 'free_charge' : 'create_subscription')?>" />
+        <?php if($subscriptionType == 'free'): ?>
+            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('free_subscription'); ?>" />
+        <?php elseif($subscriptionType == 'create_subscription'): ?>
+            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('additional_subscription'); ?>" />
+        <?php elseif($subscriptionType == 'organisation'): ?>
+            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('organisation_subscription'); ?>" />
+        <?php endif; ?>
+            
         <div class="loading loading-with-text"><div><b>PROCESSING SUBSCRIPTION</b><span>Please wait...</span></div></div>
         <?php endif; ?>
         

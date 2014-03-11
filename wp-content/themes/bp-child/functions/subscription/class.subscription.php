@@ -238,6 +238,9 @@ class CT_Subscription
     {
         global $wpdb;
         
+        $purchase = new CT_Purchase($this->purchase_id);
+        $purchase->load();
+        
         //Remove subscription
         $wpdb->delete($wpdb->prefix . 'users_subscriptions', array('id' => $this->id));
         
@@ -255,6 +258,19 @@ class CT_Subscription
         //Remove Compliance Claims
         $wpdb->delete($wpdb->prefix . 'compliance_claims', array('suite_id' => $this->suite_id, 'creator_id' => $this->user_id));
         
+        $suite = new TestSuite($this->suite_id);
+        $suite->loadfamilyMark();
+        
+        //Check if Organisation Subscription Data exist
+        $query = "SELECT * FROM {$wpdb->prefix}users_organisation_subscriptions WHERE subscription_id=" . $this->id;
+        $orow = $wpdb->get_row($query);
+        if($orow)
+        {
+            $wpdb->delete($wpdb->prefix . "users_organisation_subscriptions", array('subscription_id=' . $this->id));
+            //Decrease the joined_user
+            $wpdb->query("UPDATE {$wpdb->prefix}users_organisation_pricing SET `joined_count`=`joined_count` - 1 WHERE user_id=" . $purchase->user_id . " AND family_mark=" . $suite->familyMark);
+        }
+        
         $user = get_userdata($this->user_id);
         
         $monthlyFee = getSubscriptionMonthlyFee($this, $this->user_id);
@@ -270,8 +286,7 @@ class CT_Subscription
             '[suite_url]' => get_permalink($this->suite_id),
         );
         
-        $suite = new TestSuite($this->suite_id);
-        $suite->loadfamilyMark();
+        
         
         //Getting Email Template
         if(isPurchasedForOtherVersions($suite->familyMark)) //Cancel Additional Version

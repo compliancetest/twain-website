@@ -3,13 +3,15 @@
 add_action('init', 'execute_subscription_actions');
 function execute_subscription_actions()
 {
-    if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'direct_payment'))
+    if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'paid_subscription'))
     {
         purchase_paid_subscription();        
-    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'free_charge')){
+    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'free_subscription')){
         purchase_free_subscription();
-    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'create_subscription')){
+    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'additional_subscription')){
         purchase_additional_subscription();
+    }else if(isset($_POST['_paymentnonce']) && wp_verify_nonce($_POST['_paymentnonce'], 'organisation_subscription')){
+        purchase_organisation_subscription();
     }else if(isset($_REQUEST['_paymentnonce']) && wp_verify_nonce($_REQUEST['_paymentnonce'], 'unsubscribe')){  
         unsubscribe();
     }else if(isset($_REQUEST['ext-action']) && wp_verify_nonce($_REQUEST['ext-action'], 'check-subscriptions')){
@@ -388,6 +390,103 @@ function purchase_additional_subscription()
     
     exit;
 }
+
+function purchase_organisation_subscription()
+{
+    global $wpdb, $CPRest;
+    
+    $suite_id = intval($_POST['suite_id']);
+    
+    $user_id = get_current_user_id();
+    
+    $return = !$suite_id ? "/" : get_permalink($suite_id);
+    
+    if(!$user_id || !$suite_id)
+    {
+        echo "Invalid Request!";
+        exit;
+    }
+    
+    //Getting Family Mark
+    $suite = new TestSuite($suite_id);
+    $suite->load();
+    
+    if(!($org_purchase_id = getOrganisationPurchaseId($suite->familyMark)))
+    {
+        echo "Invalid Request!";
+        exit;
+    }
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_purchases WHERE id=%d", $org_purchase_id);
+    $purchase = $wpdb->get_row($query);
+
+    $purchase_id = $purchase->id;
+    $status = $purchase->status;
+    
+    $group = groups_get_group( array('group_id' => $suite->community_id));
+    
+    $user = get_userdata($user_id);
+    
+    //Create MSH Datas 
+    $esb_data = array(
+        'p_mode_agreement' => 'LIGHT',
+        'harness_endpoint_url' => HARNESS_ENDPOINT_URL, 
+        'harness_username' => "harness" . $user->ID . "_" . $suite->id, 
+        'harness_password' => cp_generate_password(8)
+    );
+    
+    //Create subscription row
+    $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
+        'user_id' => $user->ID,
+        'suite_id' => $suite->id,
+        'purchase_id' => $purchase_id,
+        'subscribed_date' => date('Y-m-d H:i:s'),
+        'esb_user_id' => 0,
+        'harness_username' => $esb_data['harness_username'],
+        'harness_password' => $esb_data['harness_password'],
+        'harness_endpoint_url' => $esb_data['harness_endpoint_url'],
+        'tester_username' => '',
+        'tester_password' => '',
+        'tester_endpoint_url' => '',
+        'p_mode_agreement' => $esb_data['p_mode_agreement'],
+        'status' => $status
+    ));
+    
+    $subscribe_id = $wpdb->insert_id;
+    
+    //Add wp_users_organisation_subscriptions
+    $wpdb->insert($wpdb->prefix . "users_organisation_subscriptions", array(
+        'subscription_id' => $subscribe_id,
+        'family_mark' => $suite->familyMark,
+        'payer_id' => $purchase->user_id
+    ));
+    
+    //Increase Joined Count
+    $wpdb->query("UPDATE {$wpdb->prefix}users_organisation_pricing SET `joined_count`=`joined_count` + 1 WHERE user_id=" . $purchase->user_id . " AND family_mark=" . $suite->familyMark);
+    
+    //Send Email
+    $emailData = array(
+        '[name]' => cp_get_user_fullname($user->ID),
+        '[email]' => $user->user_email,
+        '[suite_name]' => $suite->title,
+        '[suite_url]' => get_permalink($suite->id),
+        '[paid_amount]' => $purchase->paid_amount,
+        '[monthly_fee]' => $purchase->monthly_fee,
+        '[signup_fee]' => $purchase->signup_fee,
+        '[community_url]' => bp_get_group_permalink($group)
+    );
+    
+    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_additional_subscription', $emailData);
+    cp_send_email_to_admin('purchase_additional_subscription_admin', $emailData);
+    
+//    addMessage("Your subscription has been proceeded successfully");
+    
+    echo 'success';
+    
+    exit;
+}
+
+
 
 function unsubscribe()
 {

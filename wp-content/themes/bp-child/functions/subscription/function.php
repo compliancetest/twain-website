@@ -187,6 +187,9 @@ function isPurchasedForOtherVersions($familyMark, $user_id = null)
     
     if(!$user_id)
         $user_id = get_current_user_id();
+    
+    if(!$user_id)
+        return false;
             
     $query = $wpdb->prepare("SELECT count(DISTINCT(s.id)) FROM {$wpdb->prefix}users_subscriptions AS s
                              INNER JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id
@@ -194,6 +197,38 @@ function isPurchasedForOtherVersions($familyMark, $user_id = null)
     $count = $wpdb->get_var($query);
     
     return !$count ? false : true;
+}
+
+
+function getOrganisationPurchaseId($familyMark, $user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    if(!$user_id)
+        return false;
+        
+    $user = get_userdata($user_id);
+    
+    $user_domain = substr($user->user_email, strpos($user->user_email, '@'));
+    
+    $query = $wpdb->prepare("SELECT s.purchase_id, op.user_count, op.joined_count FROM {$wpdb->prefix}users_subscriptions AS s " .
+             "LEFT JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id " .
+             "LEFT JOIN {$wpdb->prefix}users_organisation_pricing AS op ON s.user_id=op.user_id AND ts.family_mark=op.family_mark " .
+             "LEFT JOIN {$wpdb->users} AS u ON s.user_id=u.ID " .
+             "WHERE op.family_mark=%d AND u.user_email LIKE %s", $familyMark, '%' . $user_domain);
+    
+    $prow = $wpdb->get_row($query);
+    
+    if(!$prow)
+        return false;
+    
+    if($prow->user_count <= $prow->joined_count)
+        return false;
+    
+    return $prow->purchase_id;
 }
 
 /**

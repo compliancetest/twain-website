@@ -43,9 +43,34 @@ function ct_manage_fee_overrides()
         update_user_meta($userID, 'signup_fee', $result1);
         update_user_meta($userID, 'monthly_fee', $result2);
         
-        if($_POST['organisation'])
+        //Getting Old Organisations Data
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_organisation_pricing WHERE user_id=%d", $_REQUEST['id']);
+        $oRows = $wpdb->get_results($query);
+        
+        $orgPrices = array();
+        foreach($oRows as $iRow)
         {
-            
+            //Remove Unchecked rows
+            if(!isset($_POST['organisation']) || !in_array($iRow->family_mark, $_POST['organisation']))
+            {
+                $wpdb->delete($wpdb->prefix . "users_organisation_pricing", array("id" => $iRow->id));
+            }
+            $orgPrices[$iRow->family_mark] = array(
+                                            'user_count' => $iRow->user_count,
+                                            'joined_count' => $iRow->joined_count
+                                        );
+        }
+        
+        if(isset($_POST['organisation']))
+        {
+            foreach($_POST['organisation'] as $s)
+            {
+                $user_count = !$_POST['organisation_count' . $s] ? 0 : intval($_POST['organisation_count' . $s]);
+                if(isset($orgPrices[$s])) //Update
+                    $wpdb->update($wpdb->prefix . "users_organisation_pricing", array('user_count' => $user_count), array("user_id" => $userID, 'family_mark' => $s));
+                else //Create{
+                    $wpdb->insert($wpdb->prefix . "users_organisation_pricing", array('user_id' => $userID, 'family_mark' => $s, 'user_count' => $user_count, 'joined_count' => 0));
+            }            
         }
         
         $msg = 'Successfully Saved!';
@@ -57,17 +82,24 @@ function ct_manage_fee_overrides()
         $userData = get_userdata($userID);
         $signup_fee = get_user_meta($userID, 'signup_fee', true);
         $monthly_fee = get_user_meta($userID, 'monthly_fee', true);
-        $organisation = get_user_meta($userID, 'organisation', true);
-        $organisation_count = get_user_meta($userID, 'organisation_count', true);
+        
         if(!$signup_fee)
             $signup_fee = array();
         if(!$monthly_fee)
             $monthly_fee = array();
-        if(!$organisation)
-            $organisation = array();
-        if(!$organisation_count)
-            $organisation_count = array();
         
+        //Getting Organisations
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_organisation_pricing WHERE user_id=%d", $_REQUEST['id']);
+        $oRows = $wpdb->get_results($query);
+        
+        $orgPrices = array();
+        foreach($oRows as $iRow)
+        {
+            $orgPrices[$iRow->family_mark] = array(
+                                            'user_count' => $iRow->user_count,
+                                            'joined_count' => $iRow->joined_count
+                                        );
+        }
         
         $args = array(
                 'post_type' => 'test-suite',         
@@ -203,14 +235,20 @@ function ct_manage_fee_overrides()
                                     <input type="checkbox" name="set_value<?php echo $suite->family_mark?>" class="set-value-chk" value="1" <?php echo isset($signup_fee[$suite->ID]) || isset($monthly_fee[$suite->ID]) ? 'checked="checked"' : '' ?>   />
                                     <input type="hidden" name="suite_id[]" value="<?php echo $suite->family_mark?>" />
                                 </td> 
-                                <?php endif; ?>      
-                                <td>
-                                    <input type="checkbox" name="organisation_user[]" value="<?php echo $suite->ID?>" <?php echo in_array($suite->ID ,$organisation) ? 'checked="checked"' : '' ?>   />
+                                <td rowspan="<?php echo $familyCounts?>">
+                                    <input type="checkbox" name="organisation[]" value="<?php echo $suite->family_mark?>" class="set-organisation-chk" <?php echo isset($orgPrices[$suite->family_mark]) ? 'checked="checked"' : '' ?>   />
                                 </td>                            
-                                <td>
-                                    <input type="text" name="organisation_count<?php echo $suite->ID?>" value="<?php echo isset($organisation_count[$suite->ID]) ? $organisation_count[$suite->ID] : ""?>"  />
+                                <td rowspan="<?php echo $familyCounts?>">
+                                    <input type="text" name="organisation_count<?php echo $suite->family_mark?>" class="organisation-count" value="<?php echo isset($orgPrices[$suite->family_mark]['user_count']) ? $orgPrices[$suite->family_mark]['user_count'] : ""?>" <?php echo isset($orgPrices[$suite->family_mark]) ? '' : 'disabled="disabled"' ?>  />
                                 </td>                            
                                                          
+                                <td rowspan="<?php echo $familyCounts?>">
+                                    <?php echo isset($orgPrices[$suite->family_mark]['joined_count']) ? $orgPrices[$suite->family_mark]['joined_count'] : "-"?>
+                                </td>      
+                                <?php endif; ?>      
+                                                      
+                                                         
+                                
                             </tr>
                             <?php
                         }
@@ -229,6 +267,13 @@ function ct_manage_fee_overrides()
                             else
                                 parent.find('input.signup-fee, input.monthly-fee').prop('disabled', true);
                         })
+                        parent.find('input.set-organisation-chk').click(function(){
+                            if(this.checked)
+                                parent.find('input.organisation-count').prop('disabled', false);
+                            else
+                                parent.find('input.organisation-count').prop('disabled', true);
+                        })
+                        
                     })
                 })
             </script>
