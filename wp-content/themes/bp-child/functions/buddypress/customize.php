@@ -797,3 +797,23 @@ function cp_notice_user_on_community()
         }
     }
 }
+
+
+function groups_screen_group_admin_generate_json() {
+
+    if ( 'group-generate-json' != bp_get_group_current_admin_tab() )
+        return false;
+        
+    require_once( ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php' );
+
+    if (!empty($_FILES) && isset($_POST['upload'])) {
+        $jg = new JsonGenerator( $_FILES['profile_excel_file']['tmp_name'] );
+        $zip_link = $jg->checkSheets();
+        if (!empty($zip_link)) {
+            $_SESSION['admin_json_zip_link'] = $zip_link;
+        }
+    }
+
+    bp_core_load_template( apply_filters( 'groups_template_group_admin_generate_json', 'groups/single/home' ) );
+}
+add_action('bp_screens', 'groups_screen_group_admin_generate_json');
