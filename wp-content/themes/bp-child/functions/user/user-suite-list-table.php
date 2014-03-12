@@ -23,6 +23,7 @@ class CT_User_Suite_List_Table extends WP_List_Table
             "name" => __('Name'),
             "email" => __("Email"),
             "fee" => __("Signup Fee"),                        
+            "organisation" => __("Organisation Pricing"),                        
             "id" => __("ID"),  
         );
     }
@@ -60,6 +61,8 @@ class CT_User_Suite_List_Table extends WP_List_Table
       
     function column_default($item, $column_name)
     {
+        global $wpdb;
+        
         switch($column_name)
         {
             case 'username':
@@ -85,7 +88,22 @@ class CT_User_Suite_List_Table extends WP_List_Table
                     }
                 }
                 return implode('<br />', $data);
-            
+            case 'organisation':
+                //Getting Old Organisations Data
+                $query = $wpdb->prepare("SELECT op.*, p.post_title FROM {$wpdb->prefix}users_organisation_pricing AS op
+                                         LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.family_mark=op.family_mark
+                                         LEFT JOIN {$wpdb->posts} AS p ON p.id=ts.suite_id
+                                         WHERE user_id=%d", $item->ID);
+                $oRows = $wpdb->get_results($query);
+                
+                $orgPrices = array();
+                foreach($oRows as $iRow)
+                {
+                    $orgPrices[] = $iRow->post_title . ": <b style='font-weight: bold'>User Count: " . $iRow->user_count . "</b>". " ,<b style='font-weight: bold'>Joined: " . $iRow->joined_count . "</b>";
+                }
+                
+                return implode('<br />', $orgPrices);
+                
             default:
                 return $item->$column_name;
         }
