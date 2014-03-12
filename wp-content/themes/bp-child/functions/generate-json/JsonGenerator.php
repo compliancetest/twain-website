@@ -3,13 +3,16 @@
  * @author Ivan Solowjew
  * @date: 1/19/14
  */
-include_once getcwd().'/JsonSchema/jsv4.php';
+include_once 'JsonSchema/jsv4.php';
 
 class JsonGenerator {
 
     private $_excel = null;
 
-    protected $jsonArrays = array();
+    private $jsonArrays = array();
+    
+    private $folder_name = '';
+    private $folder_path = '';
 
     CONST BRACKETS_REG = '#\[((?>[^\[\]]+)|(?R))*\]#x';
 
@@ -23,12 +26,16 @@ class JsonGenerator {
     }
 
     public function checkSheets() {
-        $sheetNames = $this->_excel->getSheetNames();
-        foreach( $sheetNames AS $currentSheet ) {
-            if( strpos( $currentSheet, 'Employers') !== FALSE || strpos( $currentSheet, 'Products') !== FALSE) {
-                $this->generateProfileJson( $currentSheet );
-            }
+        $this->folder_name = time();
+        $this->folder_path = ABSPATH . 'wp-content/uploads/json_zips/' . $this->folder_name;
+        if (!mkdir($this->folder_path)) {
+            die('Failed to create folders...');
         }
+        
+        $this->generateProfileJson( 'Profile.Products' );
+        $this->generateProfileJson( 'Profile.Employers' );
+        
+        return $this->_createProfilesZip();
     }
 
     public function generateProfileJson( $sheetName ) {
@@ -58,10 +65,9 @@ class JsonGenerator {
                 }
             }
         } catch (Exception $e){
-			echo $e;
         }
 
-        $this->_createProfiles($this->jsonArrays);
+        $this->_createProfiles($this->jsonArrays);        
     }
 
     /**
@@ -102,13 +108,14 @@ class JsonGenerator {
         return;
     }
 
-    protected function replaceBrackets( $string ){
+    private function replaceBrackets( $string ){
         return preg_replace(self::BRACKETS_REG, '', $string);
     }
     /**
      * @param $data
      */
     private function _createProfiles($data) {
+        
         foreach( $data AS $profileKey => $profileData){
             $profileData = $this->_validateData( $profileData);
             //all fields should be not empty
@@ -120,15 +127,39 @@ class JsonGenerator {
             $validation = $this->_validateJson(($json), $profileData['Profile']['Type']);
             if( ! $validation->valid){
                 $filename = 'ErrorLog.'.$filename;
-                $errorFile = fopen(  __DIR__ . '/phpExcel/json/'.$filename, "w+");
-                fwrite($errorFile, json_encode($validation->errors, JSON_PRETTY_PRINT));
+                $errorFile = fopen(  $this->folder_path . '/' . $filename, "w+");
+                if (version_compare(phpversion(), '5.4.0', '>')) {
+                    fwrite($errorFile, json_encode($validation->errors, JSON_PRETTY_PRINT));
+                } else {
+                    fwrite($errorFile, json_encode($validation->errors ));
+                }
                 fclose($errorFile);
             } else {
-                $fp = fopen(  __DIR__ . '/phpExcel/json/'.$filename, "w+");
-                fwrite($fp, json_encode($json, JSON_PRETTY_PRINT) );
+                $fp = fopen(  $this->folder_path . '/' . $filename, "w+");
+                if (version_compare(phpversion(), '5.4.0', '>')) {
+                    fwrite($fp, json_encode($json, JSON_PRETTY_PRINT) );
+                } else {
+                    fwrite($fp, json_encode( $json ) );
+                }
                 fclose($fp);
             }
+        }     
+    }
+    
+    private function _createProfilesZip() {
+        // Create Zip file with json data
+        $zip = new ZipArchive();
+        $zip_name = 'json_profiles.zip'; // Zip name
+        $zip->open($this->folder_path . '/' .$zip_name, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE );
+        $files = glob($this->folder_path . '/*.json');
+        foreach($files as $file){
+            $zip->addFromString(basename($file),  file_get_contents($file));
         }
+        $zip->close();
+        
+        $zip_link = site_url() . '/wp-content/uploads/json_zips/' . $folder_name . '/' . $zip_name;
+        
+        return $zip_link;   
     }
 
     private function _validateData( $row ){
@@ -173,7 +204,7 @@ class JsonGenerator {
      * @param $entryToValidate - SubEntry type for validation - 'Employees' OR 'Members'
      */
     private function _validateSubEntry( & $row, $entryToValidate){
-        if(isset($row[$entryToValidate])){
+        if(isset($row[$entryToValidate]) && is_array( $row[$entryToValidate] ) ){
             foreach($row[$entryToValidate] AS $k => $employee){
                 foreach( $employee AS $employeeFieldName => $employeeFieldValue ) {
                     if( ! isset($employeeFieldValue['optionality'])) {
