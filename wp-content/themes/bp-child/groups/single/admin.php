@@ -679,6 +679,28 @@
                 <input type="hidden" name="save" id="save" value="Save Changes" />
             </form>
         </div>
+        <!-- Generate JSON -->
+        <div class="grid-box" id="group_generate_json_box">
+            <form name="group-generate-json-form" id="group-generate-json-form" action="<?php bp_group_admin_form_action('group-generate-json')?>" method="post" enctype="multipart/form-data" role="main">
+                <div class="grid-box-header">
+                    <h5>Generate JSON</h5>
+                </div>
+                <div class="grid-box-body">
+                    <div class="column">
+                        <input type="file" name="profile_excel_file" id="profile_excel_file" class="input-file"  file-type="image" file-extensions="(.xls, .xlsx file)" />
+                        <a href="#" class="action-btn process-btn no-submit left10 top3" id="upload-profile-excel-btn"><span class="p"></span><span class="t">Generate JSON</span></a>
+                        <div class="clear"></div>
+                        <input type="hidden" name="action" id="generate-json-action" value="bp_generate_json" />
+                        <input type="hidden" name="upload" id="generate-json-upload" value="Upload Excel" />
+                    </div>
+                </div>
+                <?php if (isset($_SESSION['admin_json_zip_link']) && $_SESSION['admin_json_zip_link'] != ''): ?>
+                <div class="grid-box-body" id="group-generated-json">
+                    <a href="<?php echo $_SESSION['admin_json_zip_link']; ?>">json_profiles.zip</a>
+                </div>
+                <?php endif; ?>
+            </form>
+        </div>
     </div>
     <div class="clear"></div>
 </div>
