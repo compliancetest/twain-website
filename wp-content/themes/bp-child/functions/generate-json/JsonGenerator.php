@@ -157,7 +157,7 @@ class JsonGenerator {
         }
         $zip->close();
         
-        $zip_link = site_url() . '/wp-content/uploads/json_zips/' . $folder_name . '/' . $zip_name;
+        $zip_link = site_url() . '/wp-content/uploads/json_zips/' . $this->folder_name . '/' . $zip_name;
         
         return $zip_link;   
     }
