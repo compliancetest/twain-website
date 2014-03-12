@@ -94,4 +94,13 @@
         $('#group-members-form').submit();
         return false;
     })
+    
+    // Generate JSON
+    $('#group_generate_json_box #upload-profile-excel-btn').click(function(){
+        if($('#group_generate_json_box #profile_excel_file').val() != '')
+        {
+            $(this).parents('form').submit();    
+        }
+        return false;
+    })
 })(jQuery)
