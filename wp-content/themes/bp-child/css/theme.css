@@ -5175,6 +5175,11 @@ min-height: 70px;
     border-top-color: #eaeaea;
 }
 
+#group_admin_page #group-generated-json {
+    background: #f9f9f9;
+    border-top-color: #eaeaea;
+}
+
 #group_members_body .nav{
     border: solid 1px #a9a9a9;
     border-radius: 3px;
