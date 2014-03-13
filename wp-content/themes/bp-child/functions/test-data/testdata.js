@@ -357,6 +357,17 @@ jQuery(document).ready(function(){
             }
         });
     });
+    
+    jQuery('.delete-profile-btn').each(function(){
+        var link = jQuery(this).attr('href');
+        jQuery(this).cplightbox({
+            type: 'inline',
+            href: '#delete-profile-box',
+            onStart: function(){
+                jQuery('#delete-profile-box .process-btn').attr('href', link);
+            }
+        })
+    });
 });
 
 /**
