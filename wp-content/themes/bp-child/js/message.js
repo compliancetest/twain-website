@@ -64,6 +64,16 @@ jQuery(document).ready(function(){
                 });
                 
                 jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());                
+                jQuery('#trigger-message-box .tester-profiles-section').html(jQuery(rsp).find('tester').text());
+                jQuery("#trigger-message-box .harness-profiles-section a[rel='custom-popup'], #trigger-message-box .tester-profiles-section a[rel='custom-popup']").cplightbox({
+                    closeWhenClickOveraly: false,
+                    onAjaxSuccess: function(obj){
+                        jQuery(obj).find("a[rel='custom-popup']").cplightbox();        
+                    }
+                });  
+                if(jQuery('#trigger-message-box .loading-with-text').length < 1)
+                    jQuery('#trigger-message-box form').append('<div class="loading loading-with-text radius6"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>');      
+                
             },
             error: function(err){
                 showTriggerMessageResultMessage('Sorry, there was an error while getting data.', 'error');                
@@ -94,6 +104,15 @@ jQuery(document).ready(function(){
                     jQuery('#tm-template').append('<option value="' + jQuery(this).text() + '">' + jQuery(this).text() + '</option>');
                 });
                 jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());
+                jQuery('#trigger-message-box .tester-profiles-section').html(jQuery(rsp).find('tester').text());
+                jQuery("#trigger-message-box .harness-profiles-section a[rel='custom-popup'], #trigger-message-box .tester-profiles-section a[rel='custom-popup']").cplightbox({
+                    closeWhenClickOveraly: false,
+                    onAjaxSuccess: function(obj){
+                        jQuery(obj).find("a[rel='custom-popup']").cplightbox();        
+                    }
+                });        
+                if(jQuery('#trigger-message-box .loading-with-text').length < 1)
+                    jQuery('#trigger-message-box form').append('<div class="loading loading-with-text radius6"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>');
             },
             error: function(err){
                 showTriggerMessageResultMessage('Sorry, there was an error while getting data.', 'error');

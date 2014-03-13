@@ -201,6 +201,10 @@ function loadMessageTemplate()
             echo '<harness><![CDATA[';
             echo _getHarnessProfilesHTML($row->case_id);
             echo ']]></harness>';
+            
+            echo '<tester><![CDATA[';
+            echo _getTesterProfilesHTML($row->case_id);
+            echo ']]></tester>';
         }        
         foreach(unserialize($row->harness_profile_id) as $i)
         {
@@ -318,6 +322,10 @@ function getCaseTemplatesAndProfiles()
             echo '<harness><![CDATA[';
             echo _getHarnessProfilesHTML($case_id);
             echo ']]></harness>';
+            
+            echo '<tester><![CDATA[';
+            echo _getTesterProfilesHTML($case_id);
+            echo ']]></tester>';
         }
     }
     
@@ -369,6 +377,10 @@ function getTestCases()
         echo _getHarnessProfilesHTML($cases[0]->ID);
         echo ']]></harness>';
         
+        echo '<tester><![CDATA[';
+        echo _getTesterProfilesHTML($cases[0]->ID);
+        echo ']]></tester>';
+        
     }
     
     echo '</results>';
@@ -393,8 +405,40 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     foreach($harnessProfiles as $instance){
         $instanceObj = json_decode(base64_decode($instance->content));
         $html .= '<div class="field-row">';
-        $html .= '<div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profiles' . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
-        $html .= '<div class="grid-cell width20P">' . $instanceObj->ProfilePurpose . '</div>';
+        $html .= '<div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profiles' . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
+        $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
+        $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
+        $html .= '<div class="clear"></div>';
+        $html .= '</div>';
+    }
+        
+    return $html;
+}
+
+function _getTesterProfilesHTML($case_id, $defaults = array())
+{
+    $html = '';
+    
+    $caseObj = new TestCase($case_id);        
+    $caseObj->loadProfileInstances();
+    $harnessProfiles = $caseObj->getProfileInstanceRows();
+
+    $customerProfileInstances = getCustomerProfileInstances();
+            
+    $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);
+    
+    $html .= '<h5>Tester Profiles</h5>';
+    $html .= '<div class="field-row">';
+    $html .= '<div class="grid-cell width50P"><b>Name</b></div>';
+    $html .= '<div class="grid-cell width20P"><b>Purpose</b></div>';
+    $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
+    $html .= '<div class="clear"></div>';
+    $html .= '</div>';
+    foreach($harnessProfiles as $instance){
+        $instanceObj = json_decode(base64_decode($instance->content));
+        $html .= '<div class="field-row">';
+        $html .= '<div class="grid-cell width50P"><input type="checkbox" name="tester_profiles[]" id="tester_profiles' . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
+        $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
         $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
         $html .= '<div class="clear"></div>';
         $html .= '</div>';
@@ -507,7 +551,9 @@ function showTriggerMessageBox()
             
             $current_template = !$lastData ? $caseTemplates[0] : $lastData->template;
             
-            $testerProfiles = getCustomerProfileInstances();
+            $customerProfileInstances = getCustomerProfileInstances();
+            
+            $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);
         ?>
         <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">
             <form name="messageForm" id="messageForm" action="">
@@ -555,22 +601,7 @@ function showTriggerMessageBox()
                                 </div>                    
                                 <div class="clear"></div>
                             </div> 
-                        </div> 
-                        <div class="info-section">
-                            <h5>Or Choose / Remove a Saved Message</h5>
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <select name="prev-message" id="tm-prev-message" class="select">
-                                        <option value="">- Select -</option>
-                                        <?php foreach($prevMessages as $m){ ?>
-                                        <option value="<?php echo $m->id?>"><?php echo $m->name ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>                
-                                <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('remove-message')?>" class="action-btn delete-btn left" id="remove-message-template-link"><span class="p"></span><span class="t">Remove</span></a>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
+                        </div>                         
                         <div class="harness-profiles-section">
                             <h5>Harness Profiles</h5>
                             <div class="field-row">
@@ -583,7 +614,7 @@ function showTriggerMessageBox()
                                 <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
                                 <div class="field-row">
                                     <div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profile<?php echo $instance->id?>" value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $current_harness_profile_id)?> /> <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>&back=1" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a></div>
-                                    <div class="grid-cell width20P"><?php echo $instanceObj->ProfilePurpose?></div>
+                                    <div class="grid-cell width20P"><?php echo $instanceObj->Profile->Purpose?></div>
                                     <div class="grid-cell width30P"><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>  </div>
                                     <div class="clear"></div>
                                 </div>    
@@ -601,7 +632,7 @@ function showTriggerMessageBox()
                                 <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
                                 <div class="field-row">
                                     <div class="grid-cell width50P"><input type="checkbox" name="tester_profiles[]" id="tester_profile<?php echo $instance->id?>" value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $current_tester_profile_id)?> /> <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>&back=1" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a></div>
-                                    <div class="grid-cell width20P"><?php echo $instanceObj->ProfilePurpose?></div>
+                                    <div class="grid-cell width20P"><?php echo $instanceObj->Profile->Purpose?></div>
                                     <div class="grid-cell width30P"><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>  </div>
                                     <div class="clear"></div>
                                 </div>    
@@ -609,11 +640,7 @@ function showTriggerMessageBox()
                         </div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">
-                        <div class="grid-cell left">                            
-                            <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('save-message')?>" class="action-btn process-btn left" id="save-message-template-link"><span class="p"></span><span class="t">Save</span></a>
-                            <input type="text" class="input left" name="message-template-name" id="message-template-name" placeholder="Message Name" />
-                        </div>
-                        <a href="#" class="action-btn process-btn submit-btn" id="send-message-link"><span class="p"></span><span class="t">Send Message</span></a>
+                        <a href="#" class="action-btn process-btn submit-btn has-tooltip" id="send-message-link"><span class="p"></span><span class="t">Confirm</span><span class="simple_tooltip">Confirm Trigger Message<span></span></span></a>
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>

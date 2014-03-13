@@ -107,11 +107,11 @@ function saveProductService()
                 wp_redirect('/add-new-product-and-service');
             else
                 wp_redirect('/edit-product-and-service/?id=' . $id);
-            return;
+            exit;
         }
     }
-
-    if(!preg_match('@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@', $_POST['product_release_date'])){
+    
+    if($_POST['product_release_date'] != '' && !preg_match('@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@', $_POST['product_release_date'])){
         addMessage('Date not valid', 'error');
         $_SESSION['product_data'] = $_POST;
         
@@ -119,7 +119,8 @@ function saveProductService()
             wp_redirect('/add-new-product-and-service');
         else
             wp_redirect('/edit-product-and-service/?id=' . $id);
-        return;
+        exit;
+        
     }
 
     
@@ -130,7 +131,7 @@ function saveProductService()
     $esb->saveProductInfo($id, $product_id, $_POST['product_name']);
     
     update_post_meta($id, 'product_name', htmlspecialchars($_POST['product_name']));
-    update_post_meta($id, 'product_release_date', date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));
+    update_post_meta($id, 'product_release_date', !$_POST['product_release_date'] ? date("Y-m-d H:i:s") : date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));
     update_post_meta($id, 'product_type', htmlspecialchars($_POST['product_type']));
     update_post_meta($id, 'product_version', htmlspecialchars($_POST['product_version']));
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));

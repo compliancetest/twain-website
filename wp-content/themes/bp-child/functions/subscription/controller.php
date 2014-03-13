@@ -632,7 +632,8 @@ function process_inarrear_frozen_subscriptions()
     $rows = $wpdb->get_results($query, ARRAY_A);
     foreach($rows as $row)
     {
-        $obj = new CT_Subscription($row);
+        $obj = new CT_Purchase($row->id);
+        $obj->load();
         $obj->frozen();
     }
     
@@ -641,7 +642,8 @@ function process_inarrear_frozen_subscriptions()
     $rows = $wpdb->get_results($query, ARRAY_A);
     foreach($rows as $row)
     {
-        $obj = new CT_Subscription($row);
+        $obj = new CT_Purchase($row->id);
+        $obj->load();
         $obj->delete();
     }
     

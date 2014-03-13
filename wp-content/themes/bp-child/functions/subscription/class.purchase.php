@@ -98,7 +98,8 @@ class CT_Purchase
             '[email]' => $user->user_email,
             '[suite_name]' => get_the_title($this->suite_id),
             '[suite_url]' => get_permalink($this->suite_id),
-            '[monthly_fee]' => $this->monthly_fee
+            '[monthly_fee]' => $this->monthly_fee,
+            '[paid_amount]' => $this->paid_amount
         );
         
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'inarrears_subscription', $emailData);
@@ -113,12 +114,10 @@ class CT_Purchase
         {
             //Update subscription status
             $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Frozen', 'frozen_count' => 1), array('id' => $this->id));            
+            //Update Subscription Status
+            $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Frozen'), array('purchase_id' => $this->id));    
             //Send Email Notification
             $user = get_userdata($this->user_id);
-            //Send Mail
-            $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-            if($this->monthly_fee > $cur_suite_price)
-                $this->monthly_fee = $cur_suite_price;
             
             //Send Mail
             $emailData = array(
@@ -126,7 +125,8 @@ class CT_Purchase
                 '[email]' => $user->user_email,
                 '[suite_name]' => get_the_title($this->suite_id),
                 '[suite_url]' => get_permalink($this->suite_id),
-                '[paid_amount]' => $this->monthly_fee
+                '[monthly_amount]' => $this->monthly_fee,
+                '[paid_amount]' => $this->paid_amount
             );
             
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'frozen_subscription', $emailData);

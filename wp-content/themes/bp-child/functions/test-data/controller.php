@@ -389,8 +389,6 @@ function deleteProfileTypeInstance($action)
         exit;
     }
     
-    //Remove File
-    @unlink(ABSPATH . "profiles/" . $row->type . "/" . $row->filename);
     $wpdb->delete($wpdb->prefix . "community_profile_instances", array('id' => $row->id));
     $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` - 1 WHERE id=%d", $row->type_id));
     $wpdb->delete($wpdb->prefix . "community_profile_meta", array('profile_id' => $row->id));

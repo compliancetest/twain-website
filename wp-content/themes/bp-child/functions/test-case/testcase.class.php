@@ -268,7 +268,7 @@ class TestCase
         return $roles;
     }
     
-    public function getProfileInstanceRows()
+    public function getProfileInstanceRows($type = 'harness')
     {
         global $wpdb;
         
