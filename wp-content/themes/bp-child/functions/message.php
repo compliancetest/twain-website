@@ -96,7 +96,7 @@ function sendMessage()
             
             
             $result = $CPRest->doMessageAPI('message/invoke', $xmlData);
-            var_dump($xmlData);
+            
             $resultDoc = new DOMDocument();
             
             if(!$result || !$resultDoc->loadXML($result))
@@ -192,7 +192,7 @@ function loadMessageTemplate()
             foreach($caseTemplates as $t)
             {
                 echo '<template>';
-                echo '<name><![CDATA[' . $t['url'] . ']]></name>';
+                echo '<name><![CDATA[' . $t['name'] . ']]></name>';
                 echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
                 echo '</template>';
             }
@@ -313,7 +313,7 @@ function getCaseTemplatesAndProfiles()
             foreach($caseTemplates as $t)
             {
                 echo '<template>';
-                echo '<name><![CDATA[' . $t['url'] . ']]></name>';
+                echo '<name><![CDATA[' . $t['name'] . ']]></name>';
                 echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
                 echo '</template>';
             }
@@ -367,7 +367,7 @@ function getTestCases()
             foreach($caseTemplates as $t)
             {
                 echo '<template>';
-                echo '<name><![CDATA[' . $t['url'] . ']]></name>';
+                echo '<name><![CDATA[' . $t['name'] . ']]></name>';
                 echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
                 echo '</template>';
             }
