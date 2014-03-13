@@ -57,13 +57,14 @@ function sendMessage()
             echo '<status>error</status>';
             echo '<error>Invalid Request!</error>';    
         }else{
-            $suiteObj = new TestSuite($suite_id);
+            $suiteObj = new TestSuite($suite_id);            
             $caseObj = new TestCase($case_id);
             $caseObj->load();
 //            <api:testSuiteId>' . $suite_id . '</api:testSuiteId>
             //Create XML
             $xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
                             <api:testCase>
+                                <api:testSuiteId>' . $suiteObj->getSuiteID() . '</api:testSuiteId>                                
                                 <api:testCaseId>' . $caseObj->testCaseID . "_V" . $caseObj->version . '</api:testCaseId>                                
                                 <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
                                 <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>
