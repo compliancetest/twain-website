@@ -60,7 +60,7 @@ get_header();
                                 ?>
                             </div>
                             <div class="td td-action">
-                                <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link">
+                                <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
                                     <span class="p"></span>
                                     <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
                                 </a>
@@ -89,6 +89,19 @@ get_header();
     <div class="clear"></div>
 </div> <!--end content-->
 
+<div class="popup-box" id="delete-community-box" style="display: none; width: 500px">
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+    <div class="popup-box-content"> 
+        Are you sure that you want to delete this community?
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">                   
+        <div class="loading loading-with-text radius6"><div><b>DELETING COMMUNITY</b><span>Please wait...</span></div></div> 
+        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>                
+</div>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
@@ -96,7 +109,18 @@ jQuery(document).ready(function(){
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
-    })
+    });
+    
+    jQuery('.delete-community-btn').each(function(){
+        var link = jQuery(this).attr('href');
+        jQuery(this).cplightbox({
+            type: 'inline',
+            href: '#delete-community-box',
+            onStart: function(){
+                jQuery('#delete-community-box .process-btn').attr('href', link);
+            }
+        })
+    });
 })
 </script>
 <?php
