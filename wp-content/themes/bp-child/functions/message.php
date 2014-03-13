@@ -96,7 +96,7 @@ function sendMessage()
             
             
             $result = $CPRest->doMessageAPI('message/invoke', $xmlData);
-            
+            var_dump($xmlData);
             $resultDoc = new DOMDocument();
             
             if(!$result || !$resultDoc->loadXML($result))
