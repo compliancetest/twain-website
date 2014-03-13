@@ -382,41 +382,42 @@
             $('#my_payment').find('.message').remove();            
             return false;
         })
-
+        
         //Remove Membership
-        $('#my_community_memberships .leave-community-link').click(function(){
+        $('#delete-community-box .process-btn').on('click', function(){
             $('#my_community_memberships .message').remove();
-            if(confirm('Are you sure that you want to remove this membership?'))
-            {
-                var link = $(this);
-                $('#my_community_memberships .loading1').show();
-                $.ajax({
-                    url: link.attr('href'),
-                    type: 'get',
-                    success: function(rsp){
-                        $('#my_community_memberships .loading1').hide();
-                        if(rsp == 'success')
-                        {
-                            link.parents('.tr').fadeOut('fast', function(){
-                                $(this).remove();
-                                if($('#my_community_memberships .tbody .tr').size() < 1)
-                                    $('#my_community_memberships .tbody').append('<div class="tr">' +
-                                                   '<div class="td td-full">There is no community that you joined.</div>' +
-                                                   '<div class="clear"></div>' +
-                                               '</div>');
-                            })
-                        }else{
-                            $('#my_community_memberships').append('<div class="message error">' + rsp + '</div>');
-                        }
-                    },
-                    error: function(err){
-                        $('#my_community_memberships .loading1').hide();
-                        $('#my_community_memberships').append('<div class="message error">' + err.responseText + '</div>');
+            
+            var link = $(this);
+            $('#my_community_memberships .loading1').show();
+            $.ajax({
+                url: link.attr('href'),
+                type: 'get',
+                success: function(rsp){
+                    $('#my_community_memberships .loading1').hide();
+                    if(rsp == 'success')
+                    {
+                        link = $('#my_community_memberships a[href="' + $(link).attr('href') + '"]');
+                        link.parents('.tr').fadeOut('fast', function(){
+                            $(this).remove();
+                            if($('#my_community_memberships .tbody .tr').size() < 1)
+                                $('#my_community_memberships .tbody').append('<div class="tr">' +
+                                               '<div class="td td-full">There is no community that you joined.</div>' +
+                                               '<div class="clear"></div>' +
+                                           '</div>');
+                        })
+                    }else{
+                        $('#my_community_memberships').append('<div class="message error">' + rsp + '</div>');
                     }
-                })
-            }
-            return false;
-        })
+                },
+                error: function(err){
+                    $('#my_community_memberships .loading1').hide();
+                    $('#my_community_memberships').append('<div class="message error">' + err.responseText + '</div>');
+                }
+            });
+            
+            $('#delete-community-box .cancel-btn').click();
+            return false;            
+        });
 
         
         $('#my_subscriptions .unsubscribe-btn').each(function(){
