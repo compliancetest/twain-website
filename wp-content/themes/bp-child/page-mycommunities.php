@@ -104,7 +104,7 @@ get_header();
 </div>
 
 <script type="text/javascript">
-jQuery(document).ready(function(){
+jQuery(document).ready(function($){
     fixTdHeight(jQuery('#my_community_memberships'));
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
