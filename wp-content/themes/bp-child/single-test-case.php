@@ -70,7 +70,7 @@ $case->load();
 							<p>Harness Role: <span><?php echo $case->harnessRole ?></span></p>
 						</div>
 						<div class="grid_cell width30P left">
-							<p>Initiator: <span><?php echo $case->Initiator ?></span></p>
+							<p>Initiator: <span><?php echo ucfirst($case->Initiator) ?></span></p>
 						</div>
 						<div class="clear"></div>
 					</div>
