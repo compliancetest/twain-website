@@ -85,7 +85,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                                     {
                                 ?>
                                 <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
-                                <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
+                                <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
                                 <?php
                                     }
                                 ?>
@@ -122,6 +122,19 @@ $subscriptions =  getUserSubscriptions(null, true);
     </div>
     <div class="clear"></div>
 </div> <!--end content-->
+<div class="popup-box" id="delete-profile-box" style="display: none; width: 500px">
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+    <div class="popup-box-content"> 
+        Are you sure that you want to delete this profile?
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">                   
+        <div class="loading loading-with-text radius6"><div><b>DELETING PROFILE</b><span>Please wait...</span></div></div> 
+        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>                
+</div>
 <?php
 if(count($subscriptions) > 0){
 ?>
