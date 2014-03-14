@@ -285,7 +285,7 @@ class TestSuite
             
         $ids = $wpdb->escape($this->profileTypes);
         
-        $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.type='harness' AND pt.id IN (" . implode(", ", $ids) . ") ORDER BY pi.post_title ASC";        
+        $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.type='harness' AND pt.id IN (" . implode(", ", $ids) . ")";        
         $rows = $wpdb->get_results($query);
         
         return $rows;
@@ -341,6 +341,7 @@ class TestSuite
         
         $case_query = new WP_Query($args);
         $this->testCases = $case_query->get_posts();
+        print_r($case_query);
         
         return $this->testCases;
     }
