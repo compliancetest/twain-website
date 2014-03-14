@@ -401,6 +401,7 @@ Template Name Posts: Test Suite
             $selectedConfLevel = isset($_GET['conformance']) ? $_GET['conformance'] : '';
         ?>
 		<div class="clear"></div>
+        <?php if (is_user_logged_in()): ?>
 		<div class="grid_row test_cases">
 			<div id="append_filter">
                 <div class="grid_cell width35P">
@@ -683,7 +684,7 @@ Template Name Posts: Test Suite
             </div>
             <div class="space15"></div>
 		</div>
-		
+		<?php endif; ?>
 			
 	</div> <!--end content container-->
 <?php
