@@ -315,7 +315,7 @@ class TestSuite
         $args = array(
                 'post_type' => 'test-case',         
                 'posts_per_page' => -1,
-                'order_by'  => 'title',
+                'orderby'  => 'title',
                 'order'     => 'ASC',                
                 'meta_query' => array(
                                     'relation' => 'AND',
@@ -341,7 +341,6 @@ class TestSuite
         
         $case_query = new WP_Query($args);
         $this->testCases = $case_query->get_posts();
-        print_r($case_query);
         
         return $this->testCases;
     }
