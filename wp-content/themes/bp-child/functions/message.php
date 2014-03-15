@@ -173,7 +173,7 @@ function loadMessageTemplate()
         {
             //Getting Cases
             echo '<cases>';            
-            $cases = $suiteObj->loadTestCases();
+            $cases = $suiteObj->loadHarnessInitiatedTestCases();
             foreach($cases as $case)
             {
                 echo '<case id="' . $case->ID . '">' . get_post_meta($case->ID, 'test_case_id', true) . '</case>'; 
@@ -350,7 +350,7 @@ function getTestCases()
     {
         echo '<cases>';
         $suiteObj = new TestSuite($subscription->suite_id);
-        $cases = $suiteObj->loadTestCases();
+        $cases = $suiteObj->loadHarnessInitiatedTestCases();
         foreach($cases as $case)
         {
             echo '<case id="' . $case->ID . '">' . get_post_meta($case->ID, 'test_case_id', true) . '</case>'; 
@@ -404,13 +404,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
     foreach($harnessProfiles as $instance){
-        $instanceObj = json_decode(base64_decode($instance->content));
-        $html .= '<div class="field-row">';
-        $html .= '<div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profiles' . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
-        $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
-        $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
-        $html .= '<div class="clear"></div>';
-        $html .= '</div>';
+        $html .= _getProfileRow($instance, 'harness_profile', $defaults);
     }
         
     return $html;
@@ -436,18 +430,30 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
     foreach($harnessProfiles as $instance){
-        $instanceObj = json_decode(base64_decode($instance->content));
-        $html .= '<div class="field-row">';
-        $html .= '<div class="grid-cell width50P"><input type="checkbox" name="tester_profiles[]" id="tester_profiles' . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
-        $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
-        $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
-        $html .= '<div class="clear"></div>';
-        $html .= '</div>';
+        $html .= _getProfileRow($instance, 'tester_profile', $defaults);
     }
     
     return $html;
 }
 
+function _getProfileRow($instance, $name, $defaults)
+{
+    $instanceObj = json_decode(base64_decode($instance->content));
+    
+    $version[] = $instanceObj->Profile->Version->Major;
+    $version[] = $instanceObj->Profile->Version->Minor;
+    if($instanceObj->Profile->Version->Patch)
+        $version[] = $instanceObj->Profile->Version->Patch;
+    
+    $html .= '<div class="field-row">';
+    $html .= '<div class="grid-cell width50P"><input type="checkbox" name="' . $name . 's[]" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
+    $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
+    $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
+    $html .= '<div class="clear"></div>';
+    $html .= '</div>';
+    
+    return $html;
+}
 
 function showTriggerMessageBox()
 {
@@ -525,7 +531,7 @@ function showTriggerMessageBox()
             
             //Getting Test Cases
             $suiteObj = new TestSuite($current_suite_id);
-            $cases = $suiteObj->loadTestCases();
+            $cases = $suiteObj->loadHarnessInitiatedTestCases();
             
             $current_case_id = !$lastData ? $cases[0]->ID : $lastData->case_id;
             $is_valid_case = false;
@@ -611,15 +617,11 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php foreach($harnessProfiles as $instance){ ?>
-                                <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
-                                <div class="field-row">
-                                    <div class="grid-cell width50P"><input type="checkbox" name="harness_profiles[]" id="harness_profile<?php echo $instance->id?>" value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $current_harness_profile_id)?> /> <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>&back=1" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a></div>
-                                    <div class="grid-cell width20P"><?php echo $instanceObj->Profile->Purpose?></div>
-                                    <div class="grid-cell width30P"><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>  </div>
-                                    <div class="clear"></div>
-                                </div>    
-                            <?php } ?>
+                            <?php 
+                                foreach($harnessProfiles as $instance){ 
+                                    echo _getProfileRow($instance, 'harness_profile', $current_harness_profile_id);
+                                } 
+                            ?>
                         </div>
                         <div class="tester-profiles-section">
                             <h5>Tester Profiles</h5>
@@ -629,15 +631,11 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php foreach($testerProfiles as $instance){ ?>
-                                <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
-                                <div class="field-row">
-                                    <div class="grid-cell width50P"><input type="checkbox" name="tester_profiles[]" id="tester_profile<?php echo $instance->id?>" value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $current_tester_profile_id)?> /> <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>&back=1" rel="custom-popup" cp-type="ajax"><?php echo $instance->profile_name?></a></div>
-                                    <div class="grid-cell width20P"><?php echo $instanceObj->Profile->Purpose?></div>
-                                    <div class="grid-cell width30P"><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?></a>  </div>
-                                    <div class="clear"></div>
-                                </div>    
-                            <?php } ?>
+                            <?php 
+                                foreach($testerProfiles as $instance){ 
+                                    echo _getProfileRow($instance, 'tester_profile', $current_tester_profile_id);                                
+                                } 
+                            ?>
                         </div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">
