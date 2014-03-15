@@ -103,7 +103,7 @@ $get_posts = new WP_Query($args);
 $products = $get_posts->get_posts();
 
 //Add products of current user with visibility "Private"
-if ( !is_super_admin() ) {
+if ( is_user_logged_in() && !is_super_admin()) {
     $current_user_private_posts = array(
         'post_type' => $post_type,
         'posts_per_page' => -1,
