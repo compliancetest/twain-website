@@ -60,6 +60,7 @@
                             endif;
                         ?>
                     </p>
+                    <p>Visibility: <span class="bold"><?php echo $product->visibility; ?></span></p>
                 </div>
                 <div class="grid_cell width50P">
                     <p><?php echo $product->descrition; ?></p>

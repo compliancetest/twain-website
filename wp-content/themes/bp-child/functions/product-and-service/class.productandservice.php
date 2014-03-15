@@ -19,7 +19,9 @@ class ProductAndService
     var $owner = '';
     
     var $descrition = '';
-    
+
+    var $visibility = '';
+
     var $relatedProducts = array();
     
     public function loadSingleValue($key)
@@ -49,7 +51,8 @@ class ProductAndService
         $this->version = $this->loadSingleValue('product_version');
         $this->accessURL = $this->loadSingleValue('product_url');
         $this->descrition = $this->loadSingleValue('product_description');
-        
+        $this->visibility = $this->loadSingleValue('product_visibility');
+
         $this->loadRelatedProducts();
     }
     

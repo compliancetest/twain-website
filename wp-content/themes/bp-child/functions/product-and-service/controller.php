@@ -111,6 +111,17 @@ function saveProductService()
         }
     }
     
+    if($_POST['product_visibility'])
+    {
+        $product_status_post = htmlspecialchars($_POST['product_visibility']);
+        if ($product_status_post == 'on'){
+            $product_visibility = 'Public';
+        }
+
+    } else {
+        $product_visibility = 'Private';
+    }
+
     if($_POST['product_release_date'] != '' && !preg_match('@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@', $_POST['product_release_date'])){
         addMessage('Date not valid', 'error');
         $_SESSION['product_data'] = $_POST;
@@ -137,7 +148,8 @@ function saveProductService()
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));
     update_post_meta($id, 'product_description', htmlspecialchars($_POST['product_description']));
     update_post_meta($id, 'product_owner', htmlspecialchars($_POST['product_owner']));
-    
+    update_post_meta($id, 'product_visibility', $product_visibility);
+
     //Save Related Products
     $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
     $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();

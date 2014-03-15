@@ -42,7 +42,7 @@ if(isset($_SESSION['product_data']))
     $product->version = $prevData['product_version'];
     $product->owner = $prevData['product_owner'];
     $product->descrition = $prevData['product_description'];
-    
+
     $product->relatedProducts = array();
     if($prevData['related-product'])
     {
@@ -105,7 +105,7 @@ if(isset($_SESSION['product_data']))
                            <span class="focus-tooltip"><span></span>Provide a link to the page on your website that describes this product or service.</span>
                        </div>      
                        <div class="clear"></div>
-                   </div>          
+                   </div>
                    <div class="field-row">
                        <div class="grid-cell">      
                            <div class="has-focus-tooltip">
@@ -123,6 +123,12 @@ if(isset($_SESSION['product_data']))
                             <label>Description:</label>
                             <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $product->descrition?></textarea>
                             <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
+                       </div>
+                       <div class="clear"></div>
+                   </div>
+                   <div class="field-row">
+                       <div class="grid-cell">
+                           <label><input type="checkbox" name="product_visibility" id="product_visibility" <?php echo !$product->visibility || $product->visibility == 'Public' ? 'checked="checked"' : ''?> /> Public</label>
                        </div>
                        <div class="clear"></div>
                    </div>
