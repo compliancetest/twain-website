@@ -570,7 +570,7 @@ get_header();
                        </div>                       
                        <div class="grid-cell width50P">
                            <label>Expected Result:</label>
-                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width98P"><?php echo $row['result']?></textarea>
+                           <textarea name="step_expected[]" class="textarea width98P"><?php echo $row['result']?></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -587,7 +587,7 @@ get_header();
                        </div>                       
                        <div class="grid-cell width50P">
                            <label>Expected Result:</label>
-                           <textarea name="step_expected[]" value="<?php echo $row['result']?>" class="textarea width98P"></textarea>
+                           <textarea name="step_expected[]" class="textarea width98P"></textarea>
                        </div>                       
                        <div class="grid-cell">
                            <label>&nbsp;</label>
