@@ -18,16 +18,7 @@ $post_type = 'product-service';
 $posts_per_page = 10;
     
 //Search Test Suites
-$args = array(
-        'post_type' => $post_type,         
-        'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and')
-);
-
-if ( !is_super_admin() ) {
-    $args['meta_key'] = 'product_visibility';
-    $args['meta_value'] = 'Public';
-}
+$args = get_products_args();
 
 //Getting Search Query
 $term = trim(isset($_GET['q']) ? $_GET['q'] : '');
@@ -101,22 +92,6 @@ $args['posts_per_page'] = $posts_per_page;
 
 $get_posts = new WP_Query($args);
 $products = $get_posts->get_posts();
-
-//Add products of current user with visibility "Private"
-if ( is_user_logged_in() && !is_super_admin()) {
-    $current_user_private_posts = array(
-        'post_type' => $post_type,
-        'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and'),
-        'meta_key' => 'product_visibility',
-        'meta_value' => 'Private',
-        'author' => get_current_user_id()
-    );
-    $current_user_get_posts = new WP_Query($current_user_private_posts);
-    $current_user_private_products = $current_user_get_posts->get_posts();
-
-    $products = array_merge($products, $current_user_private_products);
-}
 ?>
 <div class="content container" id="search">      
     <div id="search_title_block" class="page-title-block column noshadow">                    

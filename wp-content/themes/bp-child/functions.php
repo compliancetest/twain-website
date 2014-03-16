@@ -984,3 +984,52 @@ function get_valid_full_url($url)
     
     return $url;
 }
+
+
+function get_products_args(){
+    $post_type = 'product-service';
+
+    if ( is_user_logged_in() && !is_super_admin()) {
+
+        $all_public_posts = get_posts(array(
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+            'meta_key' => 'product_visibility',
+            'meta_value' => 'Public'
+        ));
+
+        $current_user_private_posts = get_posts(array(
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+            'meta_key' => 'product_visibility',
+            'meta_value' => 'Private',
+            'author' => get_current_user_id()
+        ));
+
+        $merged_posts = array_merge( $current_user_private_posts, $all_public_posts); //combine queries
+
+        $post_ids = array();
+        foreach( $merged_posts as $item ) {
+            $post_ids[]=$item->ID; //create a new query only of the post ids
+        }
+        $unique_posts = array_unique($post_ids); //remove duplicate post ids
+
+        $args = array(
+            'post__in' => $unique_posts,
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+        );
+    } else {
+        $args = array(
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+            'tax_query' => array('relation' => 'and'),
+        );
+        if ( !is_super_admin() ) {
+            $args['meta_key'] = 'product_visibility';
+            $args['meta_value'] = 'Public';
+        }
+    }
+
+    return $args;
+}
