@@ -98,7 +98,14 @@ $products = $get_posts->get_posts();
         <?php get_sidebar('search') ?>        
         <p class="search_result_label">            
             <?php if (count($products) > 0) { ?>
-                Showing <?php echo ($page - 1) * $posts_per_page + 1?> - <?php echo $page * $posts_per_page ?> of <b><?php echo $get_posts->found_posts?></b> Results
+                <?php
+                    if ($get_posts->found_posts < $page * $posts_per_page){
+                        $last_post_of_page = $get_posts->found_posts;
+                    } else {
+                        $last_post_of_page = $page * $posts_per_page;
+                    }
+                ?>
+                Showing <?php echo ($page - 1) * $posts_per_page + 1?> - <?php echo $last_post_of_page; ?> of <b><?php echo $get_posts->found_posts?></b> Results
                 <?php if($term){ ?> for "<b><?php echo $term?></b>" <?php } ?>
             <?php }else{ ?>
                 No result found!
