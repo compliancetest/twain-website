@@ -16,7 +16,7 @@ function ct_manage_email_verifications()
     
     require_once('user-verification-list-table.php');
     
-    if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'verify')
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'verify')
     {
         if ( empty($_REQUEST['users']) )
             $userids = array( intval( $_REQUEST['user'] ) );
@@ -35,7 +35,7 @@ function ct_manage_email_verifications()
         }
         
         $msg = 'Successfully Verified!';
-    } else if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'cencelled') {
+    } else if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'cancelled') {
         if ( empty($_REQUEST['users']) )
             $userids = array( intval( $_REQUEST['user'] ) );
         else
