@@ -151,7 +151,11 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         $email = $user_object->user_email;
         
         $email_new = $wpdb->get_col("SELECT email_changed FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID . " LIMIT 1");
-        print_r($email_new);
+        if (count($email_new) > 0) {
+            $email_new = $email_new[0];
+        } else {
+            $email_new = '';
+        }
 
         $url = 'users.php?';
 
