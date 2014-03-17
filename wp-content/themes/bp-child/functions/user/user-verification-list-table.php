@@ -148,6 +148,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         if ( !( is_object( $user_object ) && is_a( $user_object, 'WP_User' ) ) )
             $user_object = get_userdata( (int) $user_object );
         $user_object->filter = 'display';
+        print_r($user_object);
         $email = $user_object->user_email;
         $email_new = $user_object->email_changed;
 
