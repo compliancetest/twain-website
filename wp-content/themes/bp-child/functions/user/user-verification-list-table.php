@@ -150,7 +150,8 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         $user_object->filter = 'display';
         $email = $user_object->user_email;
         
-        $email_new = $wpdb->get_col("SELECT email_changed FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID);
+        $email_new = $wpdb->get_col("SELECT email_changed FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID . " LIMIT 1");
+        print_r($email_new);
 
         $url = 'users.php?';
 
