@@ -172,8 +172,10 @@ class CT_User_Verification_List_Table extends WP_List_Table {
 
             $edit = "<strong>$user_object->user_login</strong><br />";
 
-            if ( !is_multisite() && get_current_user_id() != $user_object->ID && current_user_can( 'delete_user', $user_object->ID ) )
+            if ( !is_multisite() && get_current_user_id() != $user_object->ID && current_user_can( 'delete_user', $user_object->ID ) ) {
                 $actions['delete'] = "<a class='submitdelete' href='" . wp_nonce_url( "users.php?page=user_email_verifications&action=verify&amp;user=$user_object->ID", 'bulk-users' ) . "'>" . __( 'Verify' ) . "</a>";
+                $actions['cancel'] = "<a class='submitcancel' href='" . wp_nonce_url( "users.php?page=user_email_verifications&action=cancelled&amp;user=$user_object->ID", 'bulk-users' ) . "'>" . __( 'Cancel' ) . "</a>";
+            }
             $actions = apply_filters( 'user_row_actions', $actions, $user_object );
             $edit .= $this->row_actions( $actions );
 
