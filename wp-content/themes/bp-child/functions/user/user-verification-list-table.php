@@ -76,8 +76,10 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         $actions = array();
 
         if ( !is_multisite() ) {
-            if ( current_user_can( 'delete_users' ) )
+            if ( current_user_can( 'delete_users' ) ) {
                 $actions['verify'] = __( 'Verified' );
+                $actions['cancelled'] = __( 'Cancelled' );
+            }
         }
 
         return $actions;
