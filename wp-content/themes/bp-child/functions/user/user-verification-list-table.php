@@ -53,6 +53,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         $wp_user_search = new WP_User_Query( $args );
         $wp_user_search->query_from .= " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID";
         $wp_user_search->query_where .= ' AND (wp_users.user_status = 3 OR uc.email_changed != \'\')';
+        echo $wp_user_search->query_fields;
         $wp_user_search->query();
         
         $this->items = $wp_user_search->get_results();
@@ -100,6 +101,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
             'username' => __( 'Username' ),
             'name'     => __( 'Name' ),
             'email'    => __( 'E-mail' ),
+            'email_new'    => __( 'New E-mail' ),
             'role'     => __( 'Role' )
         );
 
@@ -200,8 +202,11 @@ class CT_User_Verification_List_Table extends WP_List_Table {
                 case 'name':
                     $r .= "<td $attributes>$user_object->first_name $user_object->last_name</td>";
                     break;
-                case 'email':
+                case 'email': 
                     $r .= "<td $attributes><a href='mailto:$email' title='" . esc_attr( sprintf( __( 'E-mail: %s' ), $email ) ) . "'>$email</a></td>";
+                    break;
+                case 'email_new':
+                    $r .= "<td $attributes><a href='mailto:$email_new' title='" . esc_attr( sprintf( __( 'New E-mail: %s' ), $email_new ) ) . "'>$email_new</a></td>";
                     break;
                 case 'role':
                     $r .= "<td $attributes>$role_name</td>";
