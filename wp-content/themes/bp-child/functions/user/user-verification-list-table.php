@@ -53,7 +53,6 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         $wp_user_search = new WP_User_Query( $args );
         $wp_user_search->query_from .= " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID";
         $wp_user_search->query_where .= ' AND (wp_users.user_status = 3 OR uc.email_changed != \'\')';
-        $wp_user_search->query_fields .= ", uc.email_changed email_new";
         $wp_user_search->query();
         
         $this->items = $wp_user_search->get_results();
@@ -144,14 +143,14 @@ class CT_User_Verification_List_Table extends WP_List_Table {
 
     
     function single_row( $user_object, $style = '', $role = '', $numposts = 0 ) {
-        global $wp_roles;
+        global $wpdb, $wp_roles;
 
         if ( !( is_object( $user_object ) && is_a( $user_object, 'WP_User' ) ) )
             $user_object = get_userdata( (int) $user_object );
         $user_object->filter = 'display';
-        print_r($user_object);
         $email = $user_object->user_email;
-        $email_new = $user_object->email_new;
+        
+        $email_new = $wpdb->get_col("SELECT email_changed FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID);
 
         $url = 'users.php?';
 
