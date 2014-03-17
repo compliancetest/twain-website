@@ -35,6 +35,23 @@ function ct_manage_email_verifications()
         }
         
         $msg = 'Successfully Verified!';
+    } else if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'cencelled') {
+        if ( empty($_REQUEST['users']) )
+            $userids = array( intval( $_REQUEST['user'] ) );
+        else
+            $userids = array_map( 'intval', (array) $_REQUEST['users'] );
+        
+        foreach ($userids as $userid)
+        {
+            $wpdb->update($wpdb->prefix . 'users', array('user_activation_key'=>''), array('ID'=>$userid));
+            $user_temp = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix . 'users_changes WHERE user_id=' . $userid);
+            
+            if ($user_temp) {
+                $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_changes WHERE user_id =" . $userid);    
+            }
+        }
+        
+        $msg = 'Successfully Cancelled!';
     }
         
     $listTable = new CT_User_Verification_List_Table();
