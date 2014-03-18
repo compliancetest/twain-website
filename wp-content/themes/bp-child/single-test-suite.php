@@ -131,29 +131,32 @@ Template Name Posts: Test Suite
 
                 <div class="tab-content white_bcg" id="tabs_sv3" style="display: none; ">
                     <div class="column padding15-20">
-                        <?php
+                    <?php
                         $profileTypes = $suite->getProfileTypesRows();
-
-                        foreach($profileTypes as $profileType){ ?>
-                            <div class="grid-cell width100P">
-                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax">
-                                    <?php echo $profileType->title?>
-                                    <?php
-                                        $pJSON = json_decode(base64_decode($profileType->schema));
-                                        if($pJSON->Version)
-                                        {
-                                            $version = array();
-                                            foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                        if (count($profileTypes) > 0) {
+                            foreach($profileTypes as $profileType) { 
+                    ?>
+                                <div class="grid-cell width100P">
+                                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $profileType->id?>" rel="custom-popup" cp-type="ajax">
+                                        <?php echo $profileType->title?>
+                                        <?php
+                                            $pJSON = json_decode(base64_decode($profileType->schema));
+                                            if($pJSON->Version)
                                             {
-                                                $version[] = $v;
+                                                $version = array();
+                                                foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                                                {
+                                                    $version[] = $v;
+                                                }
+                                                echo " v" . implode(".", $version);
                                             }
-                                            echo " v" . implode(".", $version);
-                                        }
-                                    ?>
-                                </a>
-                            </div>
-                        <?php } ?>
-
+                                        ?>
+                                    </a>
+                                </div>
+                    <?php 
+                            } 
+                        }
+                    ?>
                     </div>
                     <div class="clear"></div>
                 </div><!--end tab 3-->
