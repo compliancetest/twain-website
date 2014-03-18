@@ -3,6 +3,11 @@
       $('#add-new-download').click(function(){
           $('#new-downloads').fadeIn('fast');
           $('#uploaded-files .grid-list-footer').hide();
+          $('#new-downloads').fadeIn('fast');
+          $('#new-downloads').find('textarea').redactor({
+              air: true,
+              minHeight: 80
+          })
           return false;
       })
       $('#add-more-file').click(function(){
@@ -12,6 +17,10 @@
           newRow.hide();
           $('#new-downloads .grid-list-footer').before(newRow);
           newRow.fadeIn('fast');
+          newRow.find('textarea').redactor({
+              air: true,
+              minHeight: 80
+          })
           return false;
       })
       $('#new-downloads .delete-btn').click(function(){
@@ -38,6 +47,8 @@
           $('#new-downloads').hide();
           $('#uploaded-files .grid-list-footer').fadeIn('fast');
           $('#new-downloads .message').hide();
+          
+          return false;
       })
       
       $('#newfileform').submit(function(){
@@ -128,12 +139,17 @@
                       if($(rsp).find('form').length > 0){
                           rowObj.after(rsp);
                           $('#fileRow' + fID).hide();
-                          $('#fileEditRow' + fID).fadeIn('fast');
+                          $('#fileEditRow' + fID).fadeIn('fast');                          
+                          $('#fileEditRow' + fID).find('textarea').redactor({
+                              air: true,
+                              minHeight: 80
+                          })
                       }else{
                           rowObj.append(rsp);
                           rowObj.find('.message').fadeIn('fast');
                           
                       }
+                      customizeFileTag();
                   }
               })
 

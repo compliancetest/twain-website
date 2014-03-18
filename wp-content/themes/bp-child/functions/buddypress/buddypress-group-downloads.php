@@ -104,15 +104,16 @@ if ( class_exists( 'BP_Group_Extension' ) )
                         array('group_id'=>$group_id, 
                               'name' => !$fileNames[$i] ? $fileName : htmlspecialchars($fileNames[$i]),
                               'version' => $fileVersions[$i],
-                              'description' => htmlspecialchars($fileDescs[$i]), 
+                              'description' => $fileDescs[$i], 
                               'version_description' => '', 
-                              'license' => htmlspecialchars($fileLicenses[$i]), 
+                              'license' => $fileLicenses[$i], 
                               'size' => $file['size'], 
                               'created_date' => date('Y-m-d H:i:s'), 
                               'last_updated' => date('Y-m-d H:i:s'), 
                               'location' => $fileName,
                               'download_file' => file_get_contents($file['tmp_name']))
                    );
+                   
                    unlink($file['tmp_name']);
                }
             }
@@ -181,39 +182,45 @@ if ( class_exists( 'BP_Group_Extension' ) )
         {
             global $wpdb;
             
-            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "bp_groups_downloads WHERE id=%d AND group_id=%d", $file_id, $group_id);            
             $row = $wpdb->get_row($query);
             if($row)
             {
                 $data = array();
+                
+                $data['description'] = ($_POST['file_desc']);
+                $data['version'] = $_POST['file_version'];
+                $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
+                $data['license'] = ($_POST['file_license']);
+                $data['name'] = htmlspecialchars($_POST['file_name']);
+                
                 $file = $_FILES['file'];
+                
                 if ($file['error'] == UPLOAD_ERR_OK) {
                     
                     if(isset($_POST['file_name']) && $_POST['file_name'] != '')
                         $data['name'] = htmlspecialchars($_POST['file_name']);
                     else{
-                        $data['name'] = basename($row->location);
+                        $data['name'] = basename($file['name']);
                     }
                     
-                    $data['description'] = htmlspecialchars($_POST['file_desc']);
-                    $data['version'] = $_POST['file_version'];
-                    $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
-                    $data['license'] = htmlspecialchars($_POST['file_license']);
+                    
                     $data['download_file'] = file_get_contents($file['tmp_name']);
                     $data['location'] = $file['name'];
-                    $data['size'] = $file['size'];
+                    $data['size'] = $file['size'];                    
                     
-                    $data = stripslashes_deep( $data );
-                    
-                    $wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id));
                     unlink($file['tmp_name']);
                     
-                    addMessage('File has been updated successfully!');
-                    return true;
-                } else {
+                } 
+                
+                $data = stripslashes_deep( $data );                    
+                if(!$wpdb->update($wpdb->prefix . 'bp_groups_downloads', $data, array('id' => $row->id))){
                     addMessage('Invalid Request!', 'error');
                     return 'File not found!';
                 }
+                
+                addMessage('File has been updated successfully!');
+                return true;
             }else{
                 addMessage('Invalid Request!', 'error');
                 return 'File not found!';
@@ -376,20 +383,23 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                 <form id="fileEditForm<?php echo $file->id?>" class="file-edit-form" action="" enctype="multipart/form-data" method="post">
                                     <h3>Edit File</h3>
                                     <div class="grid-list">
-                                        <div class="grid-list-row">
-                                            <div class="grid-list-cell width35P">
-                                                <input type="file" name="file" class="input-file" />
-                                                <br />(The original file will be replaced. Please leave this blank if you don't want change the file.)
-                                            </div>
+                                        <div class="grid-list-row">                                            
                                             <div class="grid-list-cell left15 grid-field-cell">
                                                 <label>File Name:</label>
                                                 <input type="text" class="text" name="file_name" value="<?php echo $file->name?>" /><br clear="all">
                                                 <label>File Version:</label>
                                                 <input type="text" class="text" name="file_version" value="<?php echo $file->version?>" /><br clear="all">
+                                            </div>
+                                            <div class="grid-list-cell width35P">
+                                                <input type="file" name="file" class="input-file" />
+                                                <br clear="all" />(The original file will be replaced. Please leave this blank if you don't want change the file.)
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="grid-list-cell grid-field-cell width85P">                                                
                                                 <label>Description:</label>
-                                                <input type="text" class="text" name="file_desc" value="<?php echo $file->description?>" /><br clear="all">
+                                                <textarea cols="20" rows="5" name="file_desc" class="text"><?php echo $file->description?></textarea><br clear="all">
                                                 <label>Description of Changes:</label>
-                                                <input type="text" class="text" name="file_changes_desc" value="<?php echo $file->version_description?>" /><br clear="all">
+                                                <input type="text" class="text file_changes_desc" name="file_changes_desc" value="<?php echo $file->version_description?>" /><br clear="all">
                                                 <label>File License Agreement:</label>
                                                 <textarea cols="20" rows="5" class="textarea" name="file_license"><?php echo $file->license?></textarea>
                                             </div>

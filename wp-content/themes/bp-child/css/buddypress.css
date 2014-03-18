@@ -262,12 +262,19 @@
     text-align: right;
 }
 #new-downloads .grid-field-cell input,
-#new-downloads .grid-field-cell textarea,
-.grid-file-edit-row .grid-field-cell input,
-.grid-file-edit-row .grid-field-cell textarea{
+.grid-file-edit-row .grid-field-cell input{
     float: right;
     width: 325px;
     margin-bottom: 12px;
+}
+#new-downloads .grid-field-cell textarea,
+.grid-file-edit-row .grid-field-cell textarea{
+    float: right;
+    width: 560px;
+    margin-bottom: 12px;
+}
+.grid-file-edit-row .grid-field-cell input.file_changes_desc{
+    width: 560px;
 }
 #new-downloads .grid-field-cell,
 .grid-file-edit-row .grid-field-cell{

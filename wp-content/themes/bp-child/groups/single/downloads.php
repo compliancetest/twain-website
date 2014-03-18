@@ -93,18 +93,21 @@ $downloads = new CP_Downloads_Group_Extension();
         <form name="newfileform" id="newfileform" action="" enctype="multipart/form-data" method="post">
             <h3>Upload New File(s)</h3>
             <div class="grid-list">
-                <div class="grid-list-row">
-                    <div class="grid-list-cell width35P">
-                        <input type="file" name="file[]" class="input-file" />
-                        <a href="#" class="action-btn delete-btn" id="cancel-download"><span class="p"></span><span class="t">Remove</span></a>    
-                    </div>
+                <div class="grid-list-row">                    
                     <div class="grid-list-cell left15 grid-field-cell">
                         <label>File Name:</label>
                         <input type="text" class="input" name="file_name[]" /><br clear="all">
                         <label>File Version:</label>
-                        <input type="text" class="input" name="file_version[]" value="" /><br clear="all">
-                        <label>Description:</label>
-                        <input type="text" class="input" name="file_description[]" class="text" /><br clear="all">
+                        <input type="text" class="input" name="file_version[]" value="" />
+                    </div>
+                    <div class="grid-list-cell width35P">
+                        <input type="file" name="file[]" class="input-file" />
+                        <a href="#" class="action-btn delete-btn" id="cancel-download"><span class="p"></span><span class="t">Remove</span></a>    
+                    </div>
+                    <div class="clear"></div>
+                    <div class="grid-field-cell grid-list-cell width85P">                        
+                        <label>Description:</label>                        
+                        <textarea cols="20" rows="5" name="file_description[]" class="text"></textarea><br clear="all">
                         <label>File License Agreement:</label>
                         <textarea cols="20" rows="5" name="file_license[]" class="text"></textarea>                            
                     </div>

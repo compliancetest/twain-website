@@ -3,6 +3,7 @@ jQuery(document).ready(function(){
     jQuery('#trigger-message-link').cplightbox({
         type: 'ajax',
         closeWhenClickOveraly: false,
+        removeBoxAfterClose: true,
         onAjaxSuccess: function(obj){
             //Custom Popup Box
             jQuery(obj).find("a[rel='custom-popup']").cplightbox({

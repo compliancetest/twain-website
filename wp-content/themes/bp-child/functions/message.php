@@ -507,7 +507,8 @@ function showTriggerMessageBox()
             </div>    
         <?php    
         }else{
-            $lastData = getUserLastDataForMessage($user_id);
+//            $lastData = getUserLastDataForMessage($user_id);
+            $lastData = null;
             $products = getUserProductsAndServices($user_id);
             
             $current_suite_id = !$lastData ? $suites[0]->suite_id : $lastData->suite_id;
