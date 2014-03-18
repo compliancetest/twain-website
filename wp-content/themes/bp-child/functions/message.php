@@ -79,11 +79,9 @@ function sendMessage()
                             <api:profile namespace="Harness">';
                             
             $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id = %d", $harness_profile);
-            $harnessProfileInstance = $wpdb->get_row($query);
-            foreach($harnessProfileInstances as $instance)
-            {
-                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
-            }
+            $harnessProfileInstance = $wpdb->get_row($query);            
+            $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $harnessProfileInstance->token . '</api:profileURL>';
+            
             $xmlData .= '</api:profile> 
                     </api:messageTemplate>
                     <api:identity>
