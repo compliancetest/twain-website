@@ -38,13 +38,13 @@ function sendMessage()
     $case_id = $_POST['test-case'];
     $template = $_POST['template'];
     
-    $harness_profiles = $_POST['harness_profiles'];
-    $tester_profiles = $_POST['tester_profiles'];
+    $harness_profile = $_POST['harness_profile'];
+    $tester_profile = $_POST['tester_profile'];
     
     header('content-type: application/xml');
     echo '<result>';
     
-    if(!$suite_id || !$product_id || !$case_id || !$template || !$harness_profiles || !$tester_profiles)
+    if(!$suite_id || !$product_id || !$case_id || !$template || !$harness_profile || !$tester_profile)
     {
         echo '<status>error</status>';
         echo '<error>Invalid Request!</error>';
@@ -71,16 +71,15 @@ function sendMessage()
                                 <api:messageTemplate  templateURI="' . $template . '">
                                     <api:profile namespace="Tester">' ; 
             //Getting Tester Profiles
-            $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id IN (" . implode(", ", $wpdb->escape($tester_profiles)) . ")";
-            $testerProfileInstances = $wpdb->get_results($query);
-            foreach($testerProfileInstances as $instance)
-            {
-                $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
-            }
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $tester_profile);
+            $testerProfileInstance = $wpdb->get_row($query);            
+            $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $testerProfileInstance->token . '</api:profileURL>';
+            
             $xmlData .= '</api:profile>
                             <api:profile namespace="Harness">';
-            $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id IN (" . implode(", ", $wpdb->escape($harness_profiles)) . ")";
-            $harnessProfileInstances = $wpdb->get_results($query);
+                            
+            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id = %d", $harness_profile);
+            $harnessProfileInstance = $wpdb->get_row($query);
             foreach($harnessProfileInstances as $instance)
             {
                 $xmlData .= '<api:profileURL>' . get_site_url(null, '', 'https') . "/get-profile?id=" . $instance->token . '</api:profileURL>';
@@ -446,7 +445,7 @@ function _getProfileRow($instance, $name, $defaults)
         $version[] = $instanceObj->Profile->Version->Patch;
     
     $html .= '<div class="field-row">';
-    $html .= '<div class="grid-cell width50P"><input type="checkbox" name="' . $name . 's[]" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
+    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
     $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
     $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . '</a>  </div>';
     $html .= '<div class="clear"></div>';
