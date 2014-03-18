@@ -269,8 +269,12 @@ class TestSuite
         global $wpdb;
         
         $ids = $wpdb->escape($this->profileTypes);
-        $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id IN (" . implode(", ", $ids) . ")";
-        $rows = $wpdb->get_results($query);
+        if (count($ids) > 0) {
+            $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id IN (" . implode(", ", $ids) . ")";
+            $rows = $wpdb->get_results($query);
+        } else {
+            $rows = array();
+        }
         
         return $rows;
         
