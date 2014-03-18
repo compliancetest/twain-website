@@ -36,6 +36,8 @@ define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 //Include Recaptcha library
 require_once(THE_FUNCTION . '/recaptchalib.php');
 
+require_once(THE_FUNCTION . '/cut_html_string.php');
+
 require_once(THE_FUNCTION . '/esb/esb.php');
 
 //Site Settings Page
