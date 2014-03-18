@@ -236,7 +236,7 @@ function ct_get_blog_years($type = null, $community_id = null)
     {
         $where[] = $wpdb->prepare(" p.post_type=%s ", $type);
     }else{
-        $where[] = $wpdb->prepare(" p.post_type IN ('" . implode("', '", $postTypes) . "') ");
+        $where[] = " p.post_type IN ('" . implode("', '", $postTypes) . "') ";
     }
     
     if($community_id)
