@@ -29,7 +29,7 @@ $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
             <div class="grid-list-row" id="fileRow<?php echo $file->id?>">
                 <div class="grid-list-cell width40P">
                     <?php 
-                        if($file->license){
+                        if($file->license || $group_license){
                     ?>                    
                     <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_show_license')?>&id=<?php echo $file->id?>" class="download-link" rel="has-license"><?php echo $file->name?></a><br />
                     <?php }else{ ?>

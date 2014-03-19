@@ -138,10 +138,10 @@ get_header( 'buddypress' );
                                             <div class="top10">
                                                 <input type="checkbox" name="agree_terms" value="agree" id="agree_community_terms"> I agree with <a href="#community-terms-box<?php bp_group_id()?>" rel="custom-popup" class="normal" id="show-community-terms">Terms & Conditions</a>
                                                 <div class="clear"></div>
-                                                <div class="space5"></div>
+                                                <div class="space5"></div><!--
                                                 <input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license"> I agree with <a href="#community-license-box<?php bp_group_id()?>" rel="custom-popup" id="show-community-license" class="normal">License Agreement</a>
                                                 <div class="clear"></div>
-                                                <div class="space5"></div>
+                                                <div class="space5"></div>-->
                                                 <div class="err_request"></div>
                                             </div>
                                             <div class="clear"></div>                            

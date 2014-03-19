@@ -13,9 +13,9 @@
         var communityId=  $(this).attr('data-id');
         var form = $('#community-registration' + communityId + ' form');        
         
-        if(!form.find('#agree_community_terms').prop('checked') || !form.find('#agree_community_license').prop('checked'))
+        if(!form.find('#agree_community_terms').prop('checked') /*|| !form.find('#agree_community_license').prop('checked')*/)
         {
-            $('.community-registration-box .message').html('You must agree the community Terms & Conditions and License Agreement.').addClass('error').fadeIn('fast');
+            $('.community-registration-box .message').html('You must agree the community Terms & Conditions.').addClass('error').fadeIn('fast');
             return false;
         }
         $('#community-registration' + communityId + ' .message').hide();
