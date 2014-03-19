@@ -310,6 +310,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     
                     //Get File
                     $file = $obj->getFile($group->id, $_REQUEST['id']);
+                    $license = groups_get_groupmeta($group->id, 'license_agreements');
                     ?>
                     <div id="agree-file-license" class="popup-box" style="display: none;">                
                         <div class="popup-box-header radius6 noradiusbottom">License Agreement</div>
@@ -321,13 +322,13 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                 ?>
                                 <div class="message error">Invalid Request!</div>
                                 <?php
-                                    }else if(!$file->license){
+                                    }else if(!$file->license && !$license){
                                 ?>
                                 <p>This file doesn't have a License Agreement.</p>
                                 <?php
                                     }else{
                                 ?>
-                                    <p><?php echo $file->license?></p>
+                                    <p><?php echo !$file->license ? $license : $file->license?></p>
                                     <label><input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license" <?php echo isset($_SESSION['agree_license'][$file->id]) ? 'checked="checked"' : ''?> autocomplete="off" /> I agree with the License Agreement</label>                
                                 <?php
                                     }

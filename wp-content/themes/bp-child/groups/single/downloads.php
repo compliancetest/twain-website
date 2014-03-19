@@ -6,6 +6,8 @@ global $groups_template;
 
 $downloads = new CP_Downloads_Group_Extension();
 
+$group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
+
 ?>
 <div id="downloads-container" class="tab-content white_bcg padding10">    
     <!-- Files List Page -->
@@ -43,7 +45,7 @@ $downloads = new CP_Downloads_Group_Extension();
                 </div>
                 <div class="grid-list-cell grid-list-cell-line2 tocenter width15P">
                     <?php
-                        if($file->license){
+                        if($file->license || $group_license){
                     ?>
                     <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_show_license')?>&id=<?php echo $file->id?>" class="license-link has-license download-link" rel="has-license">License<br />Agreement<span class="simple_tooltip"><span></span>To download this file<br />you have to read &<br />agree Licence Agreement</span></a>
                     <?php                                
