@@ -111,7 +111,13 @@ $testsuites = get_posts( $args );
                     <?php if (count($testsuites) > 0): ?>
                         No instance created yet
                     <?php else: ?>
-                        You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.
+                        <?php 
+                            if (is_user_logged_in()) {
+                                echo MESSAGE_WARNING_ANONYMOUS;
+                            } else {
+                                echo MESSAGE_WARNING_COMMUNITY_MEMBER;
+                            }
+                        ?>
                     <?php endif; ?>
                 </div>
                 <div class="clear"></div>
