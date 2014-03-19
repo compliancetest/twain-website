@@ -345,7 +345,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                             <a href="javascript: void(0)" class="action-btn download-btn"><span class="p"></span><span class="t">DOWNLOAD</span></a>
                             <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
                             <div class="clear"></div>
-                            <div class="message error" style="display: none;">Please aggree the License Agreement.</div>
+                            <div class="message error" style="display: none;">Please agree with the License Agreement.</div>
                         </div>
                         <div class="loading"></div>
                         <a id="close-popup-community" class="close_btn"></a>                
