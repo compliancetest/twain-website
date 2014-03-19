@@ -150,9 +150,9 @@
                 <p class="no-docs">
                 <?php 
                     if (!is_user_logged_in()) {
-                        echo '<p>' . MESSAGE_WARNING_ANONYMOUS . '</p>';
+                        echo MESSAGE_WARNING_ANONYMOUS;
                     } else {
-                        echo '<p>' . MESSAGE_WARNING_COMMUNITY_MEMBER . '</p>';
+                        echo MESSAGE_WARNING_COMMUNITY_MEMBER;
                     }
                 ?>
                 </p>
