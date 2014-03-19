@@ -95,7 +95,7 @@
                   $('#agree-file-license .message').hide();
                   if($(form).find('#agree_community_license').length > 0 && $(form).find('#agree_community_license:checked').length < 1)
                   {
-                      $('#agree-file-license .message').html('Please aggree the License Agreement.').fadeIn();
+                      $('#agree-file-license .message').html('Please agree with the License Agreement.').fadeIn();
                       return false;
                   }
                   
