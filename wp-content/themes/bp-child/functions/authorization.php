@@ -44,7 +44,7 @@ function checkCurrentUserCapability()
                 }
             }        
         }else{
-            addMessage('You must be a registered member of the site to view this content. Registration is free - just go to the ComplianceTest home page and click on the Signup button.', 'notice');
+            addMessage(MESSAGE_WARNING_ANONYMOUS, 'notice');
             wp_redirect(home_url());
             exit;
         }
