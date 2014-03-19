@@ -229,12 +229,12 @@ function getUserSubscriptions($user_id = null, $all = false)
         $user_id = get_current_user_id();
     
     if($all)
-        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, up.monthly_fee, up.signup_fee FROM " . $wpdb->prefix . "users_subscriptions AS s 
+        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, up.monthly_fee, up.signup_fee, up.user_id AS purchaser_id FROM " . $wpdb->prefix . "users_subscriptions AS s 
                                  LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id 
                                  LEFT JOIN {$wpdb->prefix}users_purchases AS up ON up.id=s.purchase_id
                                  WHERE s.user_id=%d", $user_id);
     else
-        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, up.monthly_fee, up.signup_fee FROM " . $wpdb->prefix . "users_subscriptions AS s 
+        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, up.monthly_fee, up.signup_fee, up.user_id AS purchaser_id FROM " . $wpdb->prefix . "users_subscriptions AS s 
                                  LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id 
                                  LEFT JOIN {$wpdb->prefix}users_purchases AS up ON up.id=s.purchase_id 
                                  WHERE s.user_id=%d AND s.status != 'Frozen'", $user_id);

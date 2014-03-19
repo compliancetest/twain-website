@@ -167,7 +167,7 @@ function ct_manage_fee_overrides()
                             <th>First Monthly Fee</th>
                             <th>Set Value</th>
                             <th>Organisation User</th>
-                            <th>User Count</th>
+                            <th>Subscriber Count</th>
                             <th>Joined Users</th>
                         </tr>
                     </thead>

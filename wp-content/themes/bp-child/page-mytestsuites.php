@@ -53,7 +53,9 @@ get_header();
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
                             <div class="td td-fee tocenter">
-                              <?php if($prev_purchase_id == $row->purchase_id): ?>
+                              <?php if($row->user_id != $row->purchaser_id)  : ?>
+                                <span class="has-tooltip">*<span class="simple_tooltip">This subscription is covered by an organisational licence<span></span></span></span>
+                              <?php elseif($prev_purchase_id == $row->purchase_id): ?>
                                 <span class="has-tooltip">*<span class="simple_tooltip">Use of all versions of a test suite is covered by a single subscription fee<span></span></span></span>
                               <?php else: ?>
                                 $<?php 

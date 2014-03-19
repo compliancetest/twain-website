@@ -99,7 +99,7 @@ class CT_User_Suite_List_Table extends WP_List_Table
                 $orgPrices = array();
                 foreach($oRows as $iRow)
                 {
-                    $orgPrices[] = $iRow->post_title . ": <b style='font-weight: bold'>User Count: " . $iRow->user_count . "</b>". " ,<b style='font-weight: bold'>Joined: " . $iRow->joined_count . "</b>";
+                    $orgPrices[] = $iRow->post_title . ": Subscriber Count: <b style='font-weight: bold'>" . $iRow->user_count . "</b>". " ,<b style='font-weight: bold'>Joined: " . $iRow->joined_count . "</b>";
                 }
                 
                 return implode('<br />', $orgPrices);
