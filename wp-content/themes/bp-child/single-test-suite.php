@@ -404,12 +404,13 @@ Template Name Posts: Test Suite
             $selectedConfLevel = isset($_GET['conformance']) ? $_GET['conformance'] : '';
         ?>
 		<div class="clear"></div>
-        <?php if (is_user_logged_in()): ?>
+        
 		<div class="grid_row test_cases">
 			<div id="append_filter">
                 <div class="grid_cell width35P">
                     <h5 class="blue_txt">Test Cases</h5>
                 </div>
+                <?php if (is_user_logged_in()): ?>
                 <form id="filter_ts" method="get" action="<?php the_permalink()?>">                                        
                     <div class="grid_cell right">
                         <span class="left padding5-10">Filter By: </span>
@@ -445,6 +446,7 @@ Template Name Posts: Test Suite
                         <div class="clear"></div>
                     </div>
                 </form>
+                <?php endif; ?>
                 <div class="clear"></div>
                 <div id="double_border"></div>
 			</div>
@@ -472,7 +474,8 @@ Template Name Posts: Test Suite
 				
 				
 				<div class="clear"></div>
-							
+				
+                <?php if (is_user_logged_in()): ?>
 				<div class="grids" id="testcases-list">
 				<?php 
                     $posts_per_page = 10;
@@ -666,6 +669,7 @@ Template Name Posts: Test Suite
                         <?php
                     }
                 ?>
+                
 			    </div>            
             <div class="space10"></div>
 			<div class="pagination-wrapper">
@@ -690,9 +694,13 @@ Template Name Posts: Test Suite
                     ?>
                 </div>         
             </div>
+            <?php else: ?>
+            <div class="grids" id="testcases-list">
+                <div class="tocenter padding10">You don't have sufficient privilege to view the content.</div>
+            </div>
+            <?php endif; ?>
             <div class="space15"></div>
 		</div>
-		<?php endif; ?>
 			
 	</div> <!--end content container-->
 <?php
