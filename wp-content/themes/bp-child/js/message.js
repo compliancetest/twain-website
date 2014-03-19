@@ -324,7 +324,7 @@ jQuery(document).ready(function(){
             return false;
         }
         
-        if(jQuery('.harness-profiles-section input[type="checkbox"]:checked').length < 1 || jQuery('.tester-profiles-section input[type="checkbox"]:checked').length < 1)
+        if(jQuery('.harness-profiles-section input[type="radio"]:checked').length < 1 || jQuery('.tester-profiles-section input[type="radio"]:checked').length < 1)
         {
             showTriggerMessageResultMessage('Please select profile(s).', 'error');
             return false;
