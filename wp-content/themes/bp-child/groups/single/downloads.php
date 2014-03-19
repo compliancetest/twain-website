@@ -97,8 +97,8 @@ $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
             <div class="grid-list">
                 <div class="grid-list-row">                    
                     <div class="grid-list-cell left15 grid-field-cell">
-                        <label>File Name:</label>
-                        <input type="text" class="input" name="file_name[]" /><br clear="all">
+                       <!-- <label>File Name:</label>
+                        <input type="text" class="input" name="file_name[]" /><br clear="all">-->
                         <label>File Version:</label>
                         <input type="text" class="input" name="file_version[]" value="" />
                     </div>

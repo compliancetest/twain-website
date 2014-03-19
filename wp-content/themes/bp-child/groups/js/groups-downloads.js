@@ -11,16 +11,29 @@
           return false;
       })
       $('#add-more-file').click(function(){
-          var newRow = $('#new-downloads .grid-list-row:eq(0)').clone(true);
-          newRow.find('input[type="text"], textarea').val('');
-//          newRow.find('input[name="file_version[]"]').val('1.0');
-          newRow.hide();
-          $('#new-downloads .grid-list-footer').before(newRow);
-          newRow.fadeIn('fast');
-          newRow.find('textarea').redactor({
+          $('#new-downloads .grid-list-footer').before('<div class="grid-list-row">' + 
+                    '<div class="grid-list-cell left15 grid-field-cell">' +
+                        '<label>File Version:</label>' +
+                        '<input type="text" class="input" name="file_version[]" value="" />' +
+                    '</div>' +
+                    '<div class="grid-list-cell width35P">' +
+                        '<input type="file" name="file[]" class="input-file" />' +
+                        '<a href="#" class="action-btn delete-btn" id="cancel-download"><span class="p"></span><span class="t">Remove</span></a>    ' +
+                    '</div>' +
+                    '<div class="clear"></div>' +
+                    '<div class="grid-field-cell grid-list-cell width85P">                        ' +
+                        '<label>Description:</label>' +
+                        '<textarea cols="20" rows="5" name="file_description[]" class="text"></textarea><br clear="all">' +
+                        '<label>File License Agreement:</label>' +
+                        '<textarea cols="20" rows="5" name="file_license[]" class="text"></textarea>' +
+                    '</div>' +
+                    '<div class="clear"></div>' +
+                '</div>');
+          $('#new-downloads .grid-list-footer').prev().find('textarea').redactor({
               air: true,
               minHeight: 80
           })
+          customizeFileTag();
           return false;
       })
       $('#new-downloads .delete-btn').click(function(){

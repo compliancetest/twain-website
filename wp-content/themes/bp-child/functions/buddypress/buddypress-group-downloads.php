@@ -78,7 +78,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 mkdir($baseDir, 0777);*/
             
             //Upload Files
-            $fileNames = stripslashes_deep($_POST['file_name']);
+//            $fileNames = stripslashes_deep($_POST['file_name']);
             $fileVersions = $_POST['file_version'];
             $fileDescs = stripslashes_deep($_POST['file_description']);
             $fileLicenses = stripslashes_deep($_POST['file_license']);
@@ -102,7 +102,8 @@ if ( class_exists( 'BP_Group_Extension' ) )
                    //Save data
                    $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
                         array('group_id'=>$group_id, 
-                              'name' => !$fileNames[$i] ? $fileName : htmlspecialchars($fileNames[$i]),
+                              'name' => $fileName,
+//                              'name' => !$fileNames[$i] ? $fileName : htmlspecialchars($fileNames[$i]),
                               'version' => $fileVersions[$i],
                               'description' => $fileDescs[$i], 
                               'version_description' => '', 
@@ -192,17 +193,17 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 $data['version'] = $_POST['file_version'];
                 $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
                 $data['license'] = ($_POST['file_license']);
-                $data['name'] = htmlspecialchars($_POST['file_name']);
+//                $data['name'] = htmlspecialchars($_POST['file_name']);
                 
                 $file = $_FILES['file'];
                 
                 if ($file['error'] == UPLOAD_ERR_OK) {
                     
-                    if(isset($_POST['file_name']) && $_POST['file_name'] != '')
+                    /*if(isset($_POST['file_name']) && $_POST['file_name'] != '')
                         $data['name'] = htmlspecialchars($_POST['file_name']);
-                    else{
+                    else{*/
                         $data['name'] = basename($file['name']);
-                    }
+//                    }
                     
                     
                     $data['download_file'] = file_get_contents($file['tmp_name']);
@@ -387,7 +388,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                         <div class="grid-list-row">                                            
                                             <div class="grid-list-cell left15 grid-field-cell">
                                                 <label>File Name:</label>
-                                                <input type="text" class="text" name="file_name" value="<?php echo $file->name?>" /><br clear="all">
+                                                <input type="text" class="text readonly" name="file_name" value="<?php echo $file->name?>" readonly="readonly" /><br clear="all">
                                                 <label>File Version:</label>
                                                 <input type="text" class="text" name="file_version" value="<?php echo $file->version?>" /><br clear="all">
                                             </div>
