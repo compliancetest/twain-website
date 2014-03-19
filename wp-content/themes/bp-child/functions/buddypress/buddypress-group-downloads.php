@@ -238,7 +238,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
 
         //@todo Refactor this block
         if(($_REQUEST["action"]=="bpnoaccess") && !is_user_logged_in()){
-            addMessage('You must signup to view the page requested.', 'notice');
+            addMessage(MESSAGE_WARNING_ANONYMOUS, 'notice');
             wp_redirect(home_url());
             exit;
         }
