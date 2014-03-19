@@ -449,7 +449,7 @@ function _getProfileRow($instance, $name, $defaults)
         $sVersion[] = $schemaObj->Version->Patch;
     
     $html .= '<div class="field-row">';
-    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right5" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
+    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
     $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
     $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . ' v' . implode(".", $sVersion) . '</a>  </div>';
     $html .= '<div class="clear"></div>';
@@ -616,7 +616,8 @@ function showTriggerMessageBox()
                         <div class="harness-profiles-section">
                             <h5>Harness Profiles</h5>
                             <div class="field-row">
-                                <div class="grid-cell width50P"><b>Name</b></div>
+                                <div class="grid-cell width5P">&nbsp;</div>
+                                <div class="grid-cell width45P"><b>Name</b></div>
                                 <div class="grid-cell width20P"><b>Purpose</b></div>
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
@@ -630,7 +631,8 @@ function showTriggerMessageBox()
                         <div class="tester-profiles-section">
                             <h5>Tester Profiles</h5>
                             <div class="field-row">
-                                <div class="grid-cell width50P"><b>Name</b></div>
+                                <div class="grid-cell width5P">&nbsp;</div>
+                                <div class="grid-cell width45P"><b>Name</b></div>
                                 <div class="grid-cell width20P"><b>Purpose</b></div>
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
