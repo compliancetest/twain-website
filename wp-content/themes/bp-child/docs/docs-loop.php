@@ -147,7 +147,15 @@
             <?php if (count($testsuites) > 0): ?>
                 <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
             <?php else: ?>
-                <p class="no-docs">You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.</p>
+                <p class="no-docs">
+                <?php 
+                    if (!is_user_logged_in()) {
+                        echo '<p>' . MESSAGE_WARNING_ANONYMOUS . '</p>';
+                    } else {
+                        echo '<p>' . MESSAGE_WARNING_COMMUNITY_MEMBER . '</p>';
+                    }
+                ?>
+                </p>
             <?php endif; ?>
             
             <?php if ( can_create_community_article( bp_get_current_group_id()) ): ?>
