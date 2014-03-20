@@ -118,6 +118,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
             'username' => 'login',
             'name'     => 'name',
             'email'    => 'email',
+            'created_date'    => 'created_date',
         );
 
         return $c;
