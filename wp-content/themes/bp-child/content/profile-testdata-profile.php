@@ -208,7 +208,7 @@ if(count($subscriptions) > 0){
 <div class="popup-box" id="need-subscription-box" style="display: none; width: 500px;">
     <div class="popup-box-header radius6 noradiusbottom">Need a subscription</div>        
     <div class="popup-box-content grid-box-body">                    
-        <p class="message notice">You must subscribe to a test suite before you can create a test data profile.</p>
+        <p class="message notice"><?php echo MESSAGE_WARNING_COMMUNITY_MEMBER; ?></p>
     </div>
     <div class="popup-box-footer radius6 noradiustop">                                    
         <div class="clear"></div>
