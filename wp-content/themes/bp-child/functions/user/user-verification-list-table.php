@@ -103,6 +103,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
             'name'     => __( 'Name' ),
             'email'    => __( 'E-mail' ),
             'email_new'    => __( 'New E-mail' ),
+            'created_date'    => __( 'Created Date' ),
             'role'     => __( 'Role' )
         );
 
@@ -151,10 +152,12 @@ class CT_User_Verification_List_Table extends WP_List_Table {
             $user_object = get_userdata( (int) $user_object );
         $user_object->filter = 'display';
         $email = $user_object->user_email;
+        $created_date = $user_object->user_registered;
         
-        $email_new = $wpdb->get_col("SELECT email_changed FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID . " LIMIT 1");
-        if (count($email_new) > 0) {
-            $email_new = $email_new[0];
+        $row = $wpdb->get_row("SELECT email_changed, updated_date FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID . " LIMIT 1");
+        if (!empty($row)) {
+            $email_new = $row['email_changed'];
+            $created_date = $row['updated_date'];
         } else {
             $email_new = '';
         }
@@ -217,6 +220,9 @@ class CT_User_Verification_List_Table extends WP_List_Table {
                     break;
                 case 'email_new':
                     $r .= "<td $attributes><a href='mailto:$email_new' title='" . esc_attr( sprintf( __( 'New E-mail: %s' ), $email_new ) ) . "'>$email_new</a></td>";
+                    break;
+                case 'created_date':
+                    $r .= "<td $attributes>$created_date</td>";
                     break;
                 case 'role':
                     $r .= "<td $attributes>$role_name</td>";
