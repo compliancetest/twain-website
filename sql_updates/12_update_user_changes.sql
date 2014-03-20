@@ -1,0 +1,1 @@
+ALTER TABLE `wp_users_changes` ADD COLUMN `updated_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER `verification_code`;
