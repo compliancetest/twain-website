@@ -330,7 +330,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                     }else{
                                 ?>
                                     <p><?php echo !$file->license ? $license : $file->license?></p>
-                                    <label><input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license" <?php echo isset($_SESSION['agree_license'][$file->id]) ? 'checked="checked"' : ''?> autocomplete="off" /> I agree with the License Agreement</label>                
+                                    <label><input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license" <?php echo 0 && isset($_SESSION['agree_license'][$file->id]) ? 'checked="checked"' : ''?> autocomplete="off" /> I agree with the License Agreement</label>                
                                 <?php
                                     }
                                 ?>   
