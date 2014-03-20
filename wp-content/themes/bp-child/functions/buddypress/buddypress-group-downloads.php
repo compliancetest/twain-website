@@ -315,7 +315,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     ?>
                     <div id="agree-file-license" class="popup-box" style="display: none;">                
                         <div class="popup-box-header radius6 noradiusbottom">License Agreement</div>
-                        <div class="popup-box-content">
+                        <div class="popup-box-content redactor_editor">
                             <form method="post" action="<?php echo bp_get_group_permalink($group) . 'downloads'?>" id="agree-file-license-form">                        
                                 <?php
                                     if(!$file)

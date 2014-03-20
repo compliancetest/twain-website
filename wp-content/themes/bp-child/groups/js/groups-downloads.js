@@ -179,5 +179,18 @@
           $('#fileRow' + fID).fadeIn('fast');
           return false;
       })
+      $('#delete-file-box form').submit(function(){
+          $('#delete-file-box form .loading').show();
+      })
+      $('#uploaded-files .delete-file-link').each(function(){
+          var fid = $(this).attr('data-id');
+          jQuery(this).cplightbox({
+              type: 'inline',
+              href: '#delete-file-box',
+              onStart: function(){
+                  jQuery('#delete-file-box #fid').val(fid);
+              }
+          }) 
+      });
   })
 })(jQuery)

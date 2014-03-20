@@ -60,7 +60,7 @@ $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
                 <div class="grid-list-cell width10P">
                     <?php if(bp_group_is_admin()) { ?>
                         <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_get_file')?>&id=<?php echo $file->id?>" class="action-btn blue-edit-btn icon-btn" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Edit</span></a>
-                        <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_delete')?>&id=<?php echo $file->id?>" class="action-btn delete-btn icon-btn no-submit" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Delete</span></a>
+                        <a href="javascript: void(0);" class="action-btn delete-btn icon-btn no-submit delete-file-link" data-id="<?php echo $file->id?>"><span class="p"></span><span class="simple_tooltip"><span></span>Delete</span></a>
                     <?php } ?>                        
                 </div>
                 <div class="clear"></div>
@@ -129,5 +129,24 @@ $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
             ?>
         </form>
     </div>        
+    <div class="popup-box" id="delete-file-box" style="display: none; width: 500px">
+        <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+        <form method="get" name="" action="<?php bp_group_permalink()?><?php echo $downloads->slug?>">
+        <div class="popup-box-content"> 
+            Are you sure that you want to delete this file?
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">                   
+            <div class="loading loading-with-text radius6"><div><b>DELETING FILE</b><span>Please wait...</span></div></div> 
+            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+            <div class="clear"></div>
+        </div>
+        <input type="hidden" name="id" id="fid" value="" />
+        <?php
+            wp_nonce_field('groups_downloads_delete');
+        ?>        
+        </form>
+        <a class="close_btn"></a>                
+    </div>
     <?php } ?>     
 </div>
