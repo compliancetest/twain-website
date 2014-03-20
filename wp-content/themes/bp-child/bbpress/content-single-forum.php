@@ -55,7 +55,7 @@
 		<?php bbp_single_forum_description(); ?>
         <div class="clear"></div>
         <p>
-            <input type="checkbox" name="forum_subscription" id="ct_forum_subscription" value="<?php echo bbp_get_forum_id(); ?>" <?=ct_is_forum_subscriber(bbp_get_forum_id())?('checked'):('');?>>
+            <input type="checkbox" name="forum_subscription" id="ct_forum_subscription" value="<?php echo bbp_get_forum_id(); ?>" <?=ct_is_forum_subscriber(bbp_get_forum_id())?('checked="checked"'):('');?>>
             <label for="ct_forum_subscription">Please notify me of all new posts and replies via email</label>
         </p>
 		<?php if ( bbp_has_forums() ) : ?>
