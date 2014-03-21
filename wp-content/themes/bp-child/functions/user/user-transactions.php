@@ -345,7 +345,8 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
             'posts_per_page' => -1,
         );
     }else{
-        $customerIDs = getManagedCustomerWPIDs($user_id);
+//        $customerIDs = getManagedCustomerWPIDs($user_id);
+        $customerIDs = null;
         if(!$customerIDs)
         {
             $args = array(
