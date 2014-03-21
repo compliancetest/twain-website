@@ -70,7 +70,7 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
         {
             case 'username':
                 return get_avatar($item->ID, 32) . '<strong>' . $item->user_login . '</strong>' . $this->row_actions(array(
-                    "<a href='users.php?page=user_fee_overrides&action=edit&id=" . $item->ID . "'>Edit</a>"                    
+                    "<a href='admin.php?page=users&action=view&id=" . $item->ID . "'>View</a>"                    
                 ));
             case 'name':
                 return $item->first_name . " " . $item->last_name;

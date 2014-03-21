@@ -122,8 +122,13 @@ $products = $get_posts->get_posts();
         <div class="four_fifths right">
             <div class="column padding20-10">
                 <div class="grid dark_gray_txt">
-                    <div class="grid_head grid_head_border">                        
+                    <div class="grid_head grid_head_border">       
+                        <?php if(is_admin() || is_super_admin()): ?>
+                        <div class="grid_cell nopaddingtop width25P">Name</div>
+                        <div class="grid_cell nopaddingtop width10P">Public</div>
+                        <?php else: ?>
                         <div class="grid_cell nopaddingtop width35P">Name</div>
+                        <?php endif; ?>                        
                         <div class="grid_cell nopaddingtop width15P tocenter">Owner</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Type</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Date</div>
@@ -147,10 +152,20 @@ $products = $get_posts->get_posts();
                                 $group = groups_get_group( array( 'group_id' => $groupID ) )
                         ?>
                         <div class="grid_row grid_row_border">
+                            <?php if(is_admin() || is_super_admin()): ?>
+                            <div class="grid_cell width25P">
+                                <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
+                                <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
+                            </div>
+                            <div class="grid_cell width10P">
+                                <?php echo !$product->visibility ? 'Public' : $product->visibility; ?>
+                            </div>
+                            <?php else: ?>
                             <div class="grid_cell width35P">
                                 <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
                                 <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
                             </div>
+                            <?php endif; ?>                            
                             <div class="grid_cell width15P tocenter">
                                 <?php echo $owner?>
                             </div>           
