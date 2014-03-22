@@ -53,10 +53,12 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         $wp_user_search = new WP_User_Query( $args );
         $wp_user_search->query_from .= " LEFT OUTER JOIN " . $wpdb->prefix . "users_changes uc ON uc.user_id = ID";
         $wp_user_search->query_where .= ' AND (wp_users.user_status = 3 OR uc.email_changed != \'\')';
+        $wp_user_search->query_fields .= ', IFNULL(uc.updated_date, wp_users.user_registered) as created_date';
+        if ($args['orderby'] == 'created_date') {
+            $wp_user_search->query_orderby = 'ORDER BY ' . $args['orderby'] . ' ' . $args['order'];
+        }
         
         $wp_user_search->query();
-        
-        $wp_user_search->query_fields .= ', IFNULL(uc.updated_date, wp_users.user_registered) as created_date';
         
         $this->items = $wp_user_search->get_results();
         
@@ -67,7 +69,7 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         
         $columns = $this->get_columns();
         $hidden = array();
-        $sortable = $this->get_sortable_columns($orderby);          
+        $sortable = $this->get_sortable_columns($args['orderby']);          
         $this->_column_headers = array($columns, $hidden, $sortable);
     }
 
@@ -113,12 +115,12 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         return $c;
     }
 
-    function get_sortable_columns() {
+    function get_sortable_columns($orderby) {
         $c = array(
-            'username' => 'login',
-            'name'     => 'name',
-            'email'    => 'email',
-            'created_date'    => 'created_date',
+            "username" => array("login", $orderby == 'login'),
+            "name" => array("name", $orderby == 'name'),
+            "email" => array("email", $orderby == 'email'),
+            "created_date" => array("created_date", $orderby == 'created_date')
         );
 
         return $c;
