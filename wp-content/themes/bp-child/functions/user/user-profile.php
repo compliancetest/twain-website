@@ -95,7 +95,7 @@ function cp_user_detail_edit()
         $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_changes WHERE user_id =" . $user_id);
         
         $verification_code = md5($email);
-        $wpdb->insert($wpdb->prefix . 'users_changes', array('user_id'=> $user_id, 'email_changed' => $email, 'verification_code' => $verification_code));
+        $wpdb->insert($wpdb->prefix . 'users_changes', array('user_id'=> $user_id, 'email_changed' => $email, 'verification_code' => $verification_code, 'updated_date' => date('Y-m-d H:i:s')));
         
         $data = array(
             '[name]' => get_user_meta($user_id, 'first_name', true) . " " . get_user_meta($user_id, 'last_name', true),
