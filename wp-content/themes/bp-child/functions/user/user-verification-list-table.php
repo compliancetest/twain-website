@@ -162,8 +162,8 @@ class CT_User_Verification_List_Table extends WP_List_Table {
         
         $row = $wpdb->get_row("SELECT email_changed, updated_date FROM $wpdb->prefix" . "users_changes WHERE user_id=" . $user_object->ID . " LIMIT 1");
         if (!empty($row)) {
-            $email_new = $row['email_changed'];
-            $created_date = $row['updated_date'];
+            $email_new = $row->email_changed;
+            $created_date = $row->updated_date;
         } else {
             $email_new = '';
         }
