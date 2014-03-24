@@ -28,9 +28,9 @@ if ($token) {
         $user_row = $wpdb->get_row($query);
         if ($password == $user_row->harness_password) {
             if ($meta_key) {
-                $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_meta cpm Inner Join $wpdb->prefix" . "community_profile_instances cpi ON cpm.profile_id=cpi.id Where (cpi.`type`!='tester' OR cpi.lookup=1) AND cpm.meta_key=%s AND cpm.meta_value=%s AND cpi.creator_id=%s Order By cpm.meta_id desc, cpi.id desc, cpi.type desc Limit 1", $meta_key, $meta_value, $user_row->user_id);
+                $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_meta cpm Inner Join $wpdb->prefix" . "community_profile_instances cpi ON cpm.profile_id=cpi.id Where (cpi.`type`!='tester' OR cpi.lookup=1) AND cpm.meta_key=%s AND cpm.meta_value=%s AND cpi.creator_id=%s Order By cpi.type desc, cpi.id desc Limit 1", $meta_key, $meta_value, $user_row->user_id);
             } else {
-                $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances cpi Where (`type`!='tester' OR lookup=1) AND creator_id=%s Order By cpi.id desc, cpi.type desc Limit 1", $user_row->user_id);
+                $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances cpi Where (`type`!='tester' OR lookup=1) AND creator_id=%s Order By cpi.type desc, cpi.id desc Limit 1", $user_row->user_id);
             }
             $row = $wpdb->get_row($query);
         }
