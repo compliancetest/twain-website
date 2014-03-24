@@ -29,6 +29,7 @@ if ($token) {
         if ($password == $user_row->harness_password) {
             if ($meta_key) {
                 $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_meta cpm Inner Join $wpdb->prefix" . "community_profile_instances cpi ON cpm.profile_id=cpi.id Where (cpi.`type`!='tester' OR (cpi.lookup=1 AND cpi.creator_id=%s)) AND cpm.meta_key=%s AND cpm.meta_value=%s AND () Order By cpi.type desc, cpi.id desc Limit 1", $user_row->user_id, $meta_key, $meta_value);
+                echo $query;
             } else {
                 $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances cpi Where (`type`!='tester' OR lookup=1) AND creator_id=%s Order By cpi.type desc, cpi.id desc Limit 1", $user_row->user_id);
             }
