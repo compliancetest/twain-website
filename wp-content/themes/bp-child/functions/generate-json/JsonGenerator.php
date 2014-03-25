@@ -41,6 +41,7 @@ class JsonGenerator {
     }
 
     public function generateProfileJson( $sheetName ) {
+        ini_set('display_errors', 1);
         $this->excludeProfiles = array();
         $this->jsonArrays = array();
         $profileFields = array('Type', 'Purpose', 'Title', 'Description', 'Version.Major', 'Version.Minor');
