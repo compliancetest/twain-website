@@ -789,7 +789,7 @@ function groups_screen_group_admin_generate_json() {
 
     if ( 'group-generate-json' != bp_get_group_current_admin_tab() )
         return false;
-        
+    ini_set('display_errors', 1);    
     require_once( ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php' );
 
     if (!empty($_FILES) && isset($_POST['upload'])) {
