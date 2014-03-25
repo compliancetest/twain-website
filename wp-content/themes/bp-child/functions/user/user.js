@@ -102,6 +102,7 @@
             var firstname = $("#first_name_id").val();
             var lastname =    $("#last_name_id").val();
             var email = $("#email_id").val();
+            var email_confirm = $("#confirm_email_id").val();
             var user = $("#user_login_id").val();
             var organisation = $("#organisation_id").val();
             var contact_phone = $("#contact_phone_id").val();
@@ -113,7 +114,12 @@
             
             var msgObj = $('#registration-popup #reg .message');
             if(firstname && lastname && email && user && organisation && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
-                
+                if (email != email_confirm){
+                    msgObj.hide();
+                    msgObj.removeClass('success').addClass('error').html('Emails don\'t match!').fadeIn('fast');
+                    return false;
+                    noError = false;
+                }
                 if (user_pass != user_pass_confirm){
                     msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('Passwords don\'t match!').fadeIn('fast');
