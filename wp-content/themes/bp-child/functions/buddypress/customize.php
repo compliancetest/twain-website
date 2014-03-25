@@ -786,9 +786,10 @@ function cp_check_docs_create($is_doc_create)
 }
 
 function groups_screen_group_admin_generate_json() {
-
+    echo '111';
     if ( 'group-generate-json' != bp_get_group_current_admin_tab() )
         return false;
+    echo '222';
     ini_set('display_errors', 1);    
     require_once( ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php' );
 
