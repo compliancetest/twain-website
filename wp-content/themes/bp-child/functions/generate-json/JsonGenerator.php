@@ -150,13 +150,14 @@ class JsonGenerator {
         // Create Zip file with json data
         $zip = new ZipArchive();
         $zip_name = 'json_profiles.zip'; // Zip name
+        echo $this->folder_path . '/' .$zip_name;
         $zip->open($this->folder_path . '/' .$zip_name, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE );
         $files = glob($this->folder_path . '/*.json');
         foreach($files as $file){
             $zip->addFromString(basename($file),  file_get_contents($file));
         }
         $zip->close();
-        echo $zip_link;
+        
         $zip_link = site_url() . '/wp-content/uploads/json_zips/' . $this->folder_name . '/' . $zip_name;
         
         return $zip_link;   
