@@ -790,6 +790,17 @@ function groups_screen_group_admin_generate_json() {
     if ( 'group-generate-json' != bp_get_group_current_admin_tab() )
         return false;
         
+    $folders = glob(ABSPATH . 'wp-content/uploads/json_zips/*');
+    foreach ($folders as $folder) {
+        if (file_exists($folder)) {
+            $between = date_diff(date_create(date('Y-m-d H:i:s')), date_create(date('Y-m-d H:i:s', filemtime($folder))))->format('%a');
+            if ($between >= 2) {
+                array_map('unlink', glob($folder . '/*.*'));
+                rmdir($folder);
+            }
+        }
+    }
+        
     require_once( ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php' );
 
     if (!empty($_FILES) && isset($_POST['upload'])) {
