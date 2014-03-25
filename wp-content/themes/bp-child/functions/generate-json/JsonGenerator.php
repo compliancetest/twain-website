@@ -156,7 +156,7 @@ class JsonGenerator {
             $zip->addFromString(basename($file),  file_get_contents($file));
         }
         $zip->close();
-        
+        echo $zip_link;
         $zip_link = site_url() . '/wp-content/uploads/json_zips/' . $this->folder_name . '/' . $zip_name;
         
         return $zip_link;   
