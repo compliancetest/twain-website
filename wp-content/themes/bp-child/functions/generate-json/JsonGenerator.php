@@ -33,21 +33,19 @@ class JsonGenerator {
         }
         
         $this->generateProfileJson( 'Profile.Products' );
-        echo '333';
         $this->generateProfileJson( 'Profile.Employers' );
-        echo '444';
         
         return $this->_createProfilesZip();
     }
 
     public function generateProfileJson( $sheetName ) {
-        ini_set('display_errors', 1);
         $this->excludeProfiles = array();
         $this->jsonArrays = array();
         $profileFields = array('Type', 'Purpose', 'Title', 'Description', 'Version.Major', 'Version.Minor');
         PHPExcel_Calculation::getInstance()->cyclicFormulaCount = 100000;
         try{
             $sheetData = $this->_excel->getSheetByName($sheetName)->toArray();
+            
             foreach ( $sheetData AS $key => $row) {
                 if( $key !== 0 && ($row[1] !== 'Void' && $row[1] !== '')) {
                     if($row[1] === 'Void' || $row[1] === 'void') {
@@ -69,8 +67,8 @@ class JsonGenerator {
             }
         } catch (Exception $e){
         }
-
-        $this->_createProfiles($this->jsonArrays);        
+        
+        $this->_createProfiles($this->jsonArrays);
     }
 
     /**
@@ -119,14 +117,21 @@ class JsonGenerator {
      */
     private function _createProfiles($data) {
         
-        foreach( $data AS $profileKey => $profileData){
+        foreach( $data as $profileKey => $profileData){
             $profileData = $this->_validateData( $profileData);
             //all fields should be not empty
             $json = json_decode(json_encode($profileData));
+            
+            if (empty($profileData['Profile']['Type']) || empty($profileData['Profile']['Title']) || empty($profileData['Profile']['Version'])) {
+                continue;
+            }
+            
             $filename = @$profileData['Profile']['Type'].'.'.@$profileData['Profile']['Title'].'.'.@$profileData['Profile']['Version']['Major'].'.'.@$profileData['Profile']['Version']['Minor'].'.json';
+            
             if( $filename == '}.}.}.}.json' || $filename == '....json'){
                 continue;
             }
+            
             $validation = $this->_validateJson(($json), $profileData['Profile']['Type']);
             if( ! $validation->valid){
                 $filename = 'ErrorLog.'.$filename;
@@ -153,7 +158,7 @@ class JsonGenerator {
         // Create Zip file with json data
         $zip = new ZipArchive();
         $zip_name = 'json_profiles.zip'; // Zip name
-        echo $this->folder_path . '/' .$zip_name;
+        
         $zip->open($this->folder_path . '/' .$zip_name, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE );
         $files = glob($this->folder_path . '/*.json');
         foreach($files as $file){
