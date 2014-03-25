@@ -419,8 +419,8 @@ if(!is_user_logged_in())
                                     <input type="email" class="" title="" name="user_email" id="email_id">
                                 </div>
                                 <div class="field">
-                                    <label for="user_login_id">Username</label>
-                                    <input type="text" class="" title="" name="user_login" id="user_login_id">
+                                    <label for="confirm_email_id">Confirm Email</label>
+                                    <input type="text" class="" title="" name="user_email_confirm" id="confirm_email_id">
                                 </div>
                                 <div class="clear"></div>
 
@@ -432,7 +432,13 @@ if(!is_user_logged_in())
                                     <label for="contact_phone_id">Contact Phone Number</label>
                                     <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
                                 </div>
-                                <div class="clear"></div>     
+                                <div class="clear"></div>
+                                
+                                <div class="field">
+                                    <label for="user_login_id">Username</label>
+                                    <input type="text" class="" title="" name="user_login" id="user_login_id">
+                                </div>     
+                                <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="user_pass">Password</label>
