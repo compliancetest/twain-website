@@ -33,7 +33,9 @@ class JsonGenerator {
         }
         
         $this->generateProfileJson( 'Profile.Products' );
+        echo '333';
         $this->generateProfileJson( 'Profile.Employers' );
+        echo '444';
         
         return $this->_createProfilesZip();
     }
