@@ -553,7 +553,10 @@ function process_recurring_payment()
                 ));
                 
             }else{
-                //Set the status to InArrears
+                //Update Card Status                
+                $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
+                
+                //Set the status to InArrears                
                 $purchase->inArrears();
                 continue;
             }

@@ -94,6 +94,13 @@ class CT_Subscription
             //Update subscription status
             $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Unsubscribing'), array('id' => $this->id));
             
+            $remainingSubscriptions = getNumSubscriptions($this->purchase_id);
+            if(!$remainingSubscriptions)
+            {
+                //Remove Purchases
+                $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->purchase_id));            
+            }
+            
             //Send Email Notification
             $user = get_userdata($this->user_id);
             
@@ -164,71 +171,6 @@ class CT_Subscription
         }
     }
     
-    /**
-    * Set Subscription status to InArrears 
-    * 
-    */
-    function inArrears()
-    {
-        global $wpdb;
-        if($this->id)
-        {
-            //Update subscription status
-            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'InArrears', 'inarrears_count' => 1, 'frozen_count' => 0), array('id' => $this->id));
-            //Update Card Status
-            $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
-            //Send Email Notification
-            $user = get_userdata($this->user_id);
-        
-            $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-            if($this->monthly_fee > $cur_suite_price)
-                $this->monthly_fee = $cur_suite_price;
-            
-            //Send Mail
-            $emailData = array(
-                '[name]' => $user->first_name . " " . $user->last_name,
-                '[email]' => $user->user_email,
-                '[suite_name]' => get_the_title($this->suite_id),
-                '[suite_url]' => get_permalink($this->suite_id),
-                '[paid_amount]' => $this->monthly_fee
-            );
-            
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'inarrears_subscription', $emailData);
-            cp_send_email_to_admin('inarrears_subscription_admin', $emailData);            
-        }
-    }
-    
-    /**
-    * Set Subscription status to Frozen
-    * 
-    */
-    function frozen()
-    {
-        global $wpdb;
-        if($this->id)
-        {
-            //Update subscription status
-            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Frozen', 'frozen_count' => 1), array('id' => $this->id));            
-            //Send Email Notification
-            $user = get_userdata($this->user_id);
-            //Send Mail
-            $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-            if($this->monthly_fee > $cur_suite_price)
-                $this->monthly_fee = $cur_suite_price;
-            
-            //Send Mail
-            $emailData = array(
-                '[name]' => $user->first_name . " " . $user->last_name,
-                '[email]' => $user->user_email,
-                '[suite_name]' => get_the_title($this->suite_id),
-                '[suite_url]' => get_permalink($this->suite_id),
-                '[paid_amount]' => $this->monthly_fee
-            );
-            
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'frozen_subscription', $emailData);
-            cp_send_email_to_admin('frozen_subscription_admin', $emailData);            
-        }
-    }
     
     /**
     * Remove Subscription and Test Plans, Compliance Claims
@@ -306,7 +248,7 @@ class CT_Subscription
     }
     
     /**
-    * Active Subscription and Test Plans, Compliance Claims
+    * Active Subscription
     * 
     */
     function active()
@@ -314,13 +256,11 @@ class CT_Subscription
         global $wpdb;
         
         //Extend the period of the subscription
-        $wpdb->update($wpdb->prefix . "users_purchases", array('status'=>'Active', 'expiry_date' => date("Y-m-d", strtotime('first day next month'))), array('id' => $this->id));
+        $wpdb->update($wpdb->prefix . "users_subscriptions", array('status'=>'Active'), array('id' => $this->id));
         
         $user = get_userdata($this->user_id);
         
-        $cur_suite_price = get_post_meta($this->suite_id, 'monthly_subscription_price', true);
-        if($this->monthly_fee > $cur_suite_price)
-            $this->monthly_fee = $cur_suite_price;
+        $monthlyFee = getSubscriptionMonthlyFee($this, $this->user_id);
         
         //Send Mail
         $emailData = array(
@@ -328,7 +268,7 @@ class CT_Subscription
             '[email]' => $user->user_email,
             '[suite_name]' => get_the_title($this->suite_id),
             '[suite_url]' => get_permalink($this->suite_id),
-            '[paid_amount]' => $this->monthly_fee
+            '[paid_amount]' => $monthlyFee
         );
         
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), $this->status == 'InArrears' ? 'active_subscription' : 'active_subscription2', $emailData);

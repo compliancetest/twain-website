@@ -821,7 +821,7 @@ if(!$purchasedSubscription):
         </div>     
         <?php if($subscriptionType == 'free'): ?>
             <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('free_subscription'); ?>" />
-        <?php elseif($subscriptionType == 'create_subscription'): ?>
+        <?php elseif($subscriptionType == 'additional'): ?>
             <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('additional_subscription'); ?>" />
         <?php elseif($subscriptionType == 'organisation'): ?>
             <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('organisation_subscription'); ?>" />

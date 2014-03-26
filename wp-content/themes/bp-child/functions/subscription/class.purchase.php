@@ -82,40 +82,19 @@ class CT_Purchase
     */
     public function inArrears()
     {
+        global $wpdb;
+        
         //Update subscription status
         $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'InArrears', 'inarrears_count' => 1, 'frozen_count' => 0), array('id' => $this->id));
-        //Update Subscription Status
-        $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'InArrears'), array('purchase_id' => $this->id));
-        //Update Card Status
-        $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
         
-        //Send Email Notification
-        $user = get_userdata($this->user_id);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE purchase_id=%d AND `status` != 'Unsubscribing'", $this->id);
+        $subscriptions = $wpdb->get_results($query);
         
-        //Send Mail
-        $emailData = array(
-            '[name]' => $user->first_name . " " . $user->last_name,
-            '[email]' => $user->user_email,
-            '[suite_name]' => get_the_title($this->suite_id),
-            '[suite_url]' => get_permalink($this->suite_id),
-            '[monthly_fee]' => $this->monthly_fee,
-            '[paid_amount]' => $this->paid_amount
-        );
-        
-        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'inarrears_subscription', $emailData);
-        cp_send_email_to_admin('inarrears_subscription_admin', $emailData);         
-    }
-    
-    
-    public function frozen()
-    {
-        global $wpdb;
-        if($this->id)
+        foreach($subscriptions as $srow)
         {
-            //Update subscription status
-            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Frozen', 'frozen_count' => 1), array('id' => $this->id));            
             //Update Subscription Status
-            $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Frozen'), array('purchase_id' => $this->id));    
+            $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Frozen'), array('id' => $srow->id));    
+            
             //Send Email Notification
             $user = get_userdata($this->user_id);
             
@@ -123,14 +102,70 @@ class CT_Purchase
             $emailData = array(
                 '[name]' => $user->first_name . " " . $user->last_name,
                 '[email]' => $user->user_email,
-                '[suite_name]' => get_the_title($this->suite_id),
-                '[suite_url]' => get_permalink($this->suite_id),
-                '[monthly_amount]' => $this->monthly_fee,
+                '[suite_name]' => get_the_title($srow->suite_id),
+                '[suite_url]' => get_permalink($srow->suite_id),
+                '[monthly_fee]' => $this->monthly_fee,
                 '[paid_amount]' => $this->paid_amount
             );
             
-            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'frozen_subscription', $emailData);
-            cp_send_email_to_admin('frozen_subscription_admin', $emailData);            
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'inarrears_subscription', $emailData);
+            cp_send_email_to_admin('inarrears_subscription_admin', $emailData);             
+        }
+    }
+    
+    public function frozen()
+    {
+        global $wpdb;
+        
+        if($this->id)
+        {
+            //Update subscription status
+            $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Frozen', 'frozen_count' => 1), array('id' => $this->id));            
+            
+            //Update Card Status
+            //$wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
+                
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE purchase_id=%d AND `status` != 'Unsubscribing'", $this->id);
+            $subscriptions = $wpdb->get_results($query);
+            
+            foreach($subscriptions as $srow)
+            {
+                //Update Subscription Status
+                $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'InArrears'), array('purchase_id' => $this->id));    
+                //Send Email Notification
+                $user = get_userdata($this->user_id);
+                
+                //Send Mail
+                $emailData = array(
+                    '[name]' => $user->first_name . " " . $user->last_name,
+                    '[email]' => $user->user_email,
+                    '[suite_name]' => get_the_title($srow->suite_id),
+                    '[suite_url]' => get_permalink($srow->suite_id),
+                    '[monthly_amount]' => $this->monthly_fee,
+                    '[paid_amount]' => $this->paid_amount
+                );
+                
+                cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'frozen_subscription', $emailData);
+                cp_send_email_to_admin('frozen_subscription_admin', $emailData);            
+            }
+        }
+    }
+    
+    public function active()
+    {
+        global $wpdb;
+        
+        $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Active', 'frozen_count' => 0, 'inarrears_count' => 0), array('id' => $this->id));
+        
+        //Process behinded purchasement
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE purchase_id=%d AND `status` != 'Unsubscribing' AND `status` != 'Active'", $this->id);
+        $subscriptions = $wpdb->get_results($query);
+        
+        foreach($subscriptions as $srow)
+        {
+            $subObj = new CT_Subscription($srow->id);
+            $subObj->load();
+            $subObj->active();
         }
     }
 }

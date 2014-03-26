@@ -258,3 +258,53 @@ function getSubscriptionMonthlyFee($subscription, $user_id = null)
         
     return $monthlyFee;
 }
+
+function getSubscriptionMonthlyFee2($suite_id, $subMonthlyFee, $user_id = null)
+{
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    $suiteMonthlyFee = doubleval(get_post_meta($suite_id, 'monthly_subscription_price', true));    
+    
+    $monthlyFee = min($suiteMonthlyFee, $subMonthlyFee);    
+    
+    $userMonthlyFees = get_user_meta($user_id, 'monthly_fee', true);
+    
+    if(isset($userMonthlyFees[$suite_id]))
+        $monthlyFee = doubleval($userMonthlyFees[$suite_id]);
+        
+    return $monthlyFee;
+}
+
+function getExpiredPayments()
+{
+    global $wpdb;
+    
+    $cur_date = date("Y-m-d");
+    
+    $query = $wpdb->prepare("SELECT up.*, count(us.id) AS subscriptions, ts.family_mark FROM {$wpdb->prefix}users_purchases AS up 
+                            LEFT JOIN {$wpdb->prefix}users_subscriptions AS us ON up.id=us.purchase_id
+                            LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id=us.suite_id
+                            WHERE up.expiry_date <= %s
+                            GROUP BY up.id
+                            ", $cur_date);
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function ct_get_months($date1, $date2)
+{
+    $date1 = strtotime(date("Y-m-01", strtotime($date1)));
+    $date2 = strtotime(date("Y-m-01", strtotime($date2)));
+    
+    $months = 0;
+    while($date1 < $date2)
+    {
+        
+        $months++;
+        $date1 = strtotime("+1 MONTH", $date1);        
+    }
+    
+    return $months;
+}
