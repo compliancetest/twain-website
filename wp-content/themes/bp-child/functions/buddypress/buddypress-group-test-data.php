@@ -27,7 +27,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             if (is_user_logged_in()) {
                 locate_template( array( 'groups/single/test-data.php'        ), true );
             }else{
-                echo '<p>You need to join the community to view Test Data.</p>';
+                echo '<p>' . MESSAGE_WARNING_ANONYMOUS . '</p>';
             }
             ?>
             
