@@ -23,13 +23,12 @@ if ( class_exists( 'BP_Group_Extension' ) )
         function display()
         {
             //Check if the current user is member of the group or not
-            locate_template( array( 'groups/single/test-data.php'        ), true );
-            /*if(bp_group_is_member())
-            {
+            //if(bp_group_is_member())
+            if (is_user_logged_in()) {
                 locate_template( array( 'groups/single/test-data.php'        ), true );
             }else{
-                ?><p>You need to join the community to view Test Data.</p><?php
-            }*/
+                echo '<p>You need to join the community to view Test Data.</p>';
+            }
             ?>
             
             <?php
