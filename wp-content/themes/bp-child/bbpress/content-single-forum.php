@@ -35,7 +35,7 @@
     <?php endif; ?>
 
     <?php do_action( 'bbp_template_after_search_results' ); ?>
-<?php }else{ ?>
+<?php } else if (is_user_logged_in()) { ?>
     <?php bbp_breadcrumb(); ?>
     
 	<div class="bbp-search-form">
@@ -87,5 +87,8 @@
 	<?php endif; ?>
 
 	<?php do_action( 'bbp_template_after_single_forum' ); ?>
+<?php }else{ ?>
+    <p><?php echo MESSAGE_WARNING_ANONYMOUS; ?></p>
 <?php } ?>
+
 </div>
