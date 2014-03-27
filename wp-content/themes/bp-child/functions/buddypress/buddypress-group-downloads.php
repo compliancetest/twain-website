@@ -193,6 +193,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 $data['version'] = $_POST['file_version'];
                 $data['version_description'] = htmlspecialchars($_POST['file_changes_desc']);
                 $data['license'] = ($_POST['file_license']);
+                $data['last_updated'] = date('Y-m-d H:i:s');
 //                $data['name'] = htmlspecialchars($_POST['file_name']);
                 
                 $file = $_FILES['file'];
