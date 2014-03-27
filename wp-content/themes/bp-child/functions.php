@@ -27,7 +27,7 @@ define('MESSAGE_WARNING_ANONYMOUS', 'You must be a registered member of the site
 define('MESSAGE_WARNING_REGISTERED', 'You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button.');
 define('MESSAGE_WARNING_COMMUNITY_MEMBER', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
 define('MESSAGE_WARNING_COMMUNITY_ADMIN', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
-define('MESSAGE_WARNING_COMMUNITY_SUBSCRIBER', '');
+define('MESSAGE_WARNING_COMMUNITY_SUBSCRIBER', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
 
 //Session Start
 add_action('init', 'cp_session_start');
