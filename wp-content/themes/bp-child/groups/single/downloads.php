@@ -4,6 +4,8 @@
 */
 global $groups_template;
 
+$group = $groups_template->group;
+
 $downloads = new CP_Downloads_Group_Extension();
 
 $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
@@ -31,10 +33,11 @@ $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
                     <?php 
                         if($file->license || $group_license){
                     ?>                    
-                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_show_license')?>&id=<?php echo $file->id?>" class="download-link" rel="has-license"><?php echo $file->name?></a><br />
+                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_show_license')?>&id=<?php echo $file->id?>" class="download-link" rel="has-license"><?php echo $file->name?></a>
                     <?php }else{ ?>
-                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_download')?>&id=<?php echo $file->id?>" class="download-link"><?php echo $file->name?></a><br />
+                    <a href="<?php bp_group_permalink()?><?php echo $downloads->slug?>?_wpnonce=<?php echo wp_create_nonce('groups_downloads_download')?>&id=<?php echo $file->id?>" class="download-link"><?php echo $file->name?></a>
                     <?php } ?>
+                    <br />
                     <?php if($file->version){ ?>
                     Version: <b><?php echo htmlspecialchars($file->version)?></b> <?php echo $file->version_description ? "(" . $file->version_description . ")" : "" ?><br />
                     <?php } ?>
