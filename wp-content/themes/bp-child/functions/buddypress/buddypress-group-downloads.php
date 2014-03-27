@@ -309,7 +309,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                 }
                 if(wp_verify_nonce($_REQUEST['_wpnonce'], 'groups_downloads_show_license')) //Download Files
                 {
-                    
+                    $subscriptions = getUserSubscriptions(null, true);
                     //Get File
                     $file = $obj->getFile($group->id, $_REQUEST['id']);
                     $license = groups_get_groupmeta($group->id, 'license_agreements');
@@ -330,8 +330,12 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                 <?php
                                     }else{
                                 ?>
+                                    <?php if (count($subscriptions) > 0): ?>
                                     <p><?php echo !$file->license ? $license : $file->license?></p>
                                     <label><input type="checkbox" name="agree_license" value="agree_license" id="agree_community_license" <?php echo 0 && isset($_SESSION['agree_license'][$file->id]) ? 'checked="checked"' : ''?> autocomplete="off" /> I agree with the License Agreement</label>                
+                                    <?php else: ?>
+                                    <p><?php echo MESSAGE_WARNING_COMMUNITY_SUBSCRIBER; ?></p>
+                                    <?php endif; ?>
                                 <?php
                                     }
                                 ?>   
@@ -343,6 +347,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                                 <div class="clear"></div>                            
                             </form>    
                         </div>
+                        <?php if (count($subscriptions) > 0): ?>
                         <div class="popup-box-footer radius6 noradiustop">                                                        
                             <a href="javascript: void(0)" class="action-btn download-btn"><span class="p"></span><span class="t">DOWNLOAD</span></a>
                             <a href="javascript: void(0)" class="action-btn cancel-btn"><span class="p"></span><span class="t">CANCEL</span></a>                    
@@ -350,6 +355,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                             <div class="message error" style="display: none;">Please agree with the License Agreement.</div>
                         </div>
                         <div class="loading"></div>
+                        <?php endif; ?>
                         <a id="close-popup-community" class="close_btn"></a>                
                     </div>
                     <?php
