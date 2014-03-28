@@ -696,7 +696,7 @@ Template Name Posts: Test Suite
             </div>
             <?php else: ?>
             <div class="grids" id="testcases-list">
-                <div class="tocenter padding10">You don't have sufficient privilege to view the content.</div>
+                <div class="tocenter padding10"><?php echo MESSAGE_WARNING_ANONYMOUS; ?></div>
             </div>
             <?php endif; ?>
             <div class="space15"></div>
