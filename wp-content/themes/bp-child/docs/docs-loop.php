@@ -14,6 +14,7 @@
         $group = groups_get_group( 'group_id=' . $group_id );
     ?>
 
+    <?php if (is_user_logged_in()): ?>    
     <?php if ( bp_docs_has_docs() ) : ?>
         <div class="grid-list" id='doc-list'>
             <div class="grid-list-row grid-list-header">
@@ -126,37 +127,7 @@
 
     <?php else: ?>
             
-            <?php
-                //Getting Test Suites
-                $args = array(
-                        'post_type' => 'test-suite', 
-                        'posts_per_page' => -1,
-                        'tax_query' => array('relation' => 'and'),
-                        'meta_query' => array(
-                            array(
-                                'key' => 'community_id',
-                                'value' => $group_id,
-                                'compare' => '='
-                            )
-                        ),
-                        'orderby' => 'title',
-                        'order' => 'ASC'
-                    );
-                $testsuites = get_posts( $args );
-            ?>
-            <?php if (count($testsuites) > 0): ?>
-                <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
-            <?php else: ?>
-                <p class="no-docs">
-                <?php 
-                    if (!is_user_logged_in()) {
-                        echo MESSAGE_WARNING_ANONYMOUS;
-                    } else {
-                        echo MESSAGE_WARNING_COMMUNITY_MEMBER;
-                    }
-                ?>
-                </p>
-            <?php endif; ?>
+            <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
             
             <?php if ( can_create_community_article( bp_get_current_group_id()) ): ?>
             <a href="<?php echo bp_docs_get_create_link(); ?>" class="action-btn add-new-btn has-tooltip">
@@ -166,7 +137,9 @@
             <?php endif; ?>
 
     <?php endif ?>
-    
+    <?php else: ?>
+        <p><?php echo MESSAGE_WARNING_ANONYMOUS; ?></p>
+    <?php endif; ?>
         <div class="clear"></div>
     
     </div>
