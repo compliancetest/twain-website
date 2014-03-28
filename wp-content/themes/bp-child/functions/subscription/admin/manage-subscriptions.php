@@ -80,13 +80,15 @@ function ct_manage_subscriptions_trigger_processing_run()
                             <th rowspan="2">Subscriptions</th>
                             <th rowspan="2">Monthly Fee</th>
                             <th rowspan="2">Total Amount</th>
-                            <th colspan="2" style="text-align: center" class="current-stats">Before Processing</th>
-                            <th colspan="2" style="text-align: center" class="new-stats">After Processing</th>
+                            <th colspan="3" style="text-align: center" class="current-stats">Before Processing</th>
+                            <th colspan="3" style="text-align: center" class="new-stats">After Processing</th>
                         </tr>
                         <tr>
-                            <th style="text-align: center" class="current-stats">Status</th>
+                            <th style="text-align: center" class="current-stats">Payment Method Status</th>
+                            <th style="text-align: center" class="current-stats">Subscription Status</th>
                             <th style="text-align: center" class="current-stats">Due Date</th>
-                            <th style="text-align: center" class="new-stats">Status</th>
+                            <th style="text-align: center" class="new-stats">Payment Method Status</th>
+                            <th style="text-align: center" class="new-stats">Subscription Status</th>
                             <th style="text-align: center" class="new-stats">Due Date</th>
                             <th rowspan="2">ID</th>
                         </tr>
@@ -96,7 +98,7 @@ function ct_manage_subscriptions_trigger_processing_run()
                         $query = $wpdb->prepare("SELECT up.*, count(us.id) AS subscriptions, us.suite_id, uc.status AS card_status FROM {$wpdb->prefix}users_purchases AS up 
                             LEFT JOIN {$wpdb->prefix}users_subscriptions AS us ON up.id=us.purchase_id                       
                             LEFT JOIN {$wpdb->prefix}users_cards AS uc ON up.card_id=uc.id                       
-                            WHERE up.expiry_date <= %s
+                            WHERE up.expiry_date <= %s AND uc.status='Active'
                             GROUP BY up.id
                             ", date("Y-m-d"));
                         $payments = $wpdb->get_results($query);
@@ -104,13 +106,13 @@ function ct_manage_subscriptions_trigger_processing_run()
                         if(!$payments):
                         ?>
                         <tr>
-                            <td colspan="9" class="alt">No Due Payments Found!</td>
+                            <td colspan="11" class="alt">No Due Payments Found!</td>
                         </tr>
                     <?php
                         else:
                         
                         foreach($payments as $i=>$row){
-                        ?>
+                    ?>
                         <tr  <?php echo $i % 2 == 0 ? 'class="alt"' : '' ?>>
                             <td><?php echo $i + 1?></td>                            
                             <td><a href="<?php echo admin_url()?>admin.php?page=users&action=detail&id=<?php echo $row->user_id?>" target="_blank"><?php echo cp_get_user_fullname($row->user_id)?></a></td>
@@ -133,17 +135,29 @@ function ct_manage_subscriptions_trigger_processing_run()
                                 <?php $months = ct_get_months($row->expiry_date, date("Y-m-d")) + 1; ?>
                                 $<?php echo intval($monthlyFee) * $months ?> ($<?php echo $monthlyFee?> * <?php echo $months ?> months)
                             </td>
+                            
+                            <td style="text-align: center" class="current-stats">
+                                <span class="ct-status <?php echo strtolower($row->card_status)?>">
+                                    <?php echo $row->card_status?>
+                                </span>
+                            </td>
                             <td style="text-align: center" class="current-stats">
                                 <span class="ct-status <?php echo strtolower($row->status)?>">
                                     <?php echo $row->status?>
                                 </span>
-                            </td>
+                            </td>                            
                             <td style="text-align: center" class="current-stats"><?php echo $row->expiry_date?></td>
+                            
+                            <td style="text-align: center" class="new-stats">
+                                <span class="ct-status <?php echo strtolower($row->card_status)?>">
+                                    <?php echo $row->card_status?>
+                                </span>
+                            </td>
                             <td style="text-align: center" class="new-stats">
                                 <span class="ct-status <?php echo strtolower($row->status)?>">
                                     <?php echo $row->status?>
                                 </span>
-                            </td>
+                            </td>                            
                             <td style="text-align: center"  class="new-stats">
                                 <?php
                                     echo date("Y-m-01", strtotime("+1 MONTH", time()));
