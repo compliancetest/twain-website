@@ -138,7 +138,7 @@
 
     <?php endif ?>
     <?php else: ?>
-        <p><?php echo MESSAGE_WARNING_ANONYMOUS; ?></p>
+        <p style="padding: 0 10px;"><?php echo MESSAGE_WARNING_ANONYMOUS; ?></p>
     <?php endif; ?>
         <div class="clear"></div>
     
