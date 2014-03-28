@@ -14,7 +14,7 @@
         $group = groups_get_group( 'group_id=' . $group_id );
     ?>
 
-    <?php if (is_user_logged_in()): ?>    
+    <?php if (bp_group_is_member()): ?>    
     <?php if ( bp_docs_has_docs() ) : ?>
         <div class="grid-list" id='doc-list'>
             <div class="grid-list-row grid-list-header">
@@ -137,6 +137,8 @@
             <?php endif; ?>
 
     <?php endif ?>
+    <?php elseif (is_user_logged_in()): ?>    
+        <p style="padding: 0 10px;"><?php echo MESSAGE_WARNING_REGISTERED; ?></p>
     <?php else: ?>
         <p style="padding: 0 10px;"><?php echo MESSAGE_WARNING_ANONYMOUS; ?></p>
     <?php endif; ?>
