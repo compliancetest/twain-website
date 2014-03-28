@@ -99,7 +99,7 @@ function sendMessage()
             if(!$result || !$resultDoc->loadXML($result))
             {
                 echo '<status>error</status>';
-                echo '<error>There was an error while sending this message</error>';
+                echo '<error><![CDATA[There was an error while sending this message' . (!$result ? '' : ": $result") . ']]></error>';
             }else{                
                 if($resultDoc->getElementsByTagName('code')->length > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ACCEPTED'){
                     echo '<status>success</status>';
