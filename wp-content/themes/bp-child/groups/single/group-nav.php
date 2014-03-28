@@ -1,7 +1,7 @@
 <?php
     //Community Nav            
-    //$isMember  = is_user_logged_in() &&  bp_group_is_member();    
-    $isMember  = is_user_logged_in();    
+    $isMember  = is_user_logged_in() &&  bp_group_is_member();    
+    //$isMember  = is_user_logged_in();    
 ?>
 <ul class="tabs <?php echo $isMember ? 'no-ajax' : '' ?>">
     <li class="<?php echo (bp_current_action() == 'home' || bp_current_action() == '') ? 'active' : ''?>">
