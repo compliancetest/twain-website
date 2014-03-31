@@ -626,8 +626,14 @@ Template Name Posts: Test Suite
                                     <div class="right10">
                                         <?php 
                                             $tDesc = get_post_meta($row->ID ,'test_intent_description', true);
-                                            $htmlCut = new HtmlCutString($tDesc, 100);
-                                            $rtString = $htmlCut->cut();
+                                            if(!$tDesc){
+                                                $rString = '';
+                                            }else{
+                                                $htmlCut = new HtmlCutString($tDesc, 100);
+                                                $rtString = $htmlCut->cut();    
+                                            }
+                                                
+                                            
                                             echo $rtString;
                                             /*
                                             $intentDesc = strip_tags( get_post_meta($row->ID ,'test_intent_description', true) );
