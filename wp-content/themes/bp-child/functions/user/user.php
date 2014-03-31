@@ -355,9 +355,9 @@ function getManagedCustomers($user_id = null)
         if(!$suite_ids)
             return null;
             
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ") ORDER BY u.display_name";        
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_subscriptions AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ") ORDER BY u.display_name";        
     }else{
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_purchases AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID, u.display_name AS CUSTOMER_NAME FROM $wpdb->prefix" . "users_subscriptions AS p LEFT JOIN $wpdb->users AS u ON u.ID = p.user_id WHERE  p.status='Active' ORDER BY u.display_name";
     }
     
     $customers = $wpdb->get_results($query);
