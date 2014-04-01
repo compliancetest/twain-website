@@ -12,6 +12,7 @@
     // Include 2D barcode class (search for installation path)
     require_once('functions/tcpdf/tcpdf_barcodes_2d.php');
 
+
 // Extra header voor background color
 class CPPDF extends TCPDF {
     //Page header
@@ -52,7 +53,6 @@ class CPPDF extends TCPDF {
 // create new PDF document
 $pdf = new CPPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('ComplianceTest');
@@ -60,7 +60,7 @@ $pdf->SetTitle('ComplianceTest Certificate');
 $pdf->SetSubject('ComplianceTest Certificate');
 
 // set margins
-$pdf->SetMargins(11, 25, 11, true);
+$pdf->SetMargins(12, 29, 12, true);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -79,7 +79,7 @@ if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
 // ---------------------------------------------------------
 
 // Set font
-$pdf->SetFont('helvetica', '', 14, '', true);
+$pdf->SetFont('opensans', '', 13, '', true);
 
 // Set line-height
 $pdf->setCellHeightRatio(1);
@@ -102,8 +102,8 @@ $css_style = '
     }
 </style>';
 
-$title = '<h1 style="color: #000; font-size: 40pt; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
-$description = '<p style="font-size: 13.5pt; line-height:18pt;"><br>This certificate confirms that the holder has successfully completed the indicated test suite using the specified product or service version. The test suite has been designed to meet the compliance requirements of the reference specification issuer.<br></p>';
+$title = '<h1 style="color: #000; font-size: 48pt; font-weight: bold; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
+$description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has successfully completed the indicated test suite using the specified product or service version. The test suite has been designed to meet the compliance requirements of the reference specification issuer.<br></p>';
 
 $certificate_data_info = '
 <style>
@@ -112,14 +112,14 @@ $certificate_data_info = '
         font-weight: normal;
         margin-left: 2pt;
         width: 35%;
-        font-size:16pt;
+        font-size:13pt;
         color:#262626;
     }
     table.certificate-info td {
         border-bottom: 0.2em solid #959595;
         font-weight: bold;
         width:63%;
-        font-size:16pt;
+        font-size:13pt;
         color:#000;
     }
 </style>
@@ -172,9 +172,13 @@ $certificate_data_info = '
 // Print text using writeHTMLCell()
 //$pdf->writeHTMLCell(0, 0, '', '', $css_style, 0, 1, 0, true, '', true);
 
+$pdf->SetFont('opensansb', '', 13, '', true);
+
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $title, 0, 1, 0, false, 'C', true);
 
+
+$pdf->SetFont('opensans', '', 13, '', true);
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $description, 0, 1, 0, false, '', false);
 
