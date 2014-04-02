@@ -13,6 +13,23 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        if(isset($_GET['fix_claim']))
+        {
+            //Delete Old Cases
+            $results = $wpdb->get_results("SELECT * FROM wp_compliance_claims");
+            foreach($results as $r)
+            {
+                if(!$r->token)
+                {
+                    $token = createClaimToken();                    
+                    $wpdb->update("wp_compliance_claims", array('token' => $token), array('id' => $r->id));                    
+                }
+                if(!$r->claim_id)
+                       $wpdb->update("wp_compliance_claims", array('claim_id' => getClaimID($r->id, $r->suite_id)), array('id' => $r->id));                    
+            }
+            
+            die("Done!");                        
+        }
         if(isset($_GET['fix_suite_family_mark']))
         {
             //Delete Old Cases

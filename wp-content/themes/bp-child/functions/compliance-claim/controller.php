@@ -5,6 +5,27 @@
 if(!defined('TABLE_CLAIM'))
     define('TABLE_CLAIM', 'wp_compliance_claims');
 
+add_action('template_redirect', 'ct_claim_certification_view');
+//Display Claim Certificate
+function ct_claim_certification_view()
+{    
+    if(get_query_var('pagename') == 'claim-certificate')
+    {
+        global $wpdb;
+        
+        //Display Claim
+        $token = get_query_var('claim');
+        $query = $wpdb->prepare("SELECT certificate FROM {$wpdb->prefix}compliance_claims WHERE token=%s", $token);
+        $certificate = $wpdb->get_var($query);
+        
+        header("Content-type: application/pdf");
+        readfile(STYLESHEETPATH . "/images/sample.pdf");
+        
+        //Echo PDF file
+        exit;
+    }
+}
+    
 add_action('init', 'process_claim_actions', 100);
 function process_claim_actions()
 {
@@ -89,8 +110,14 @@ function makeClaim()
             'status'    =>  'Self Assessed',
             'created_date'    =>  date('Y-m-d H:i:s'),
             'last_updated'    =>  date('Y-m-d H:i:s'),
+            'token' => createClaimToken(),
+            'certificate' => '', //This is empty for now. Ilia will need to update this
             'audit'    =>  ''
         ));
+        if(!$nId)
+            $nId = $wpdb->update(TABLE_CLAIM, array(
+                'claim_id'    =>  getClaimID($wpdb->insert_id, $_POST['suite_id'])                
+            ), array('id' => $claim->id));
     }else{  //Edit Claim
         $nId = $wpdb->update(TABLE_CLAIM, array(
             'suite_id'    =>  $_POST['suite_id'],
@@ -319,7 +346,19 @@ function getTestPlansBySuiteId($suite_id, $user_id)
 function getClaimID($claim_id, $suite_id)
 {
     $suite = new TestSuite($suite_id);                               
-    $claimID = $suite->getSuiteID() . "_" . str_pad($claim_id, 6,0, STR_PAD_LEFT);
-    
+    $claimID = $suite->getSuiteID() . "_" . substr(str_shuffle('01234567890123456789'), 0, 6);
+    cp_generate_password();
     return $claimID;
+}
+
+function createClaimToken()
+{
+    global $wpdb;
+    
+    do{
+        $token = cp_generate_password(20);
+        $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}compliance_claims WHERE token='$token'");        
+    }while($id);
+    
+    return $token;
 }

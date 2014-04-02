@@ -64,6 +64,7 @@ get_header();
                <div class="grid-box-body">
                    <div class="thead tr">
                        <div class="td td-claim-id tocenter">Claim ID</div>
+                       <div class="td td-certificate">Certificate</div>
                        <div class="td td-issuer">Issuer</div>
                        <div class="td td-suite">Suite</div>
                        <div class="td td-level">Level</div>
@@ -84,11 +85,11 @@ get_header();
                            </div>
                            <?php
                        }else{
-                           foreach($claims as $claim){
-                               $claimID = getClaimID($claim->id, $claim->suite_id);
+                           foreach($claims as $claim){                               
                            ?>
                            <div class="tr">
-                               <div class="td td-claim-id toright"><?php echo $claimID ?></div>
+                               <div class="td td-claim-id toright"><?php echo $claim->claim_id ?></div>
+                               <div class="td td-certificate"><a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>" target="_blank">View PDF</a></div>
                                <div class="td td-issuer"><?php echo $claim->issuer ?></div>
                                <div class="td td-suite"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
                                <div class="td td-level"><?php echo $claim->conformance_level?></div>

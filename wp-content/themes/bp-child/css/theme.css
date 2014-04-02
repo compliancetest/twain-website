@@ -4649,8 +4649,11 @@ min-height: 70px;
 #my_products .td-issuer{
     width: 65px;
 }
+#my_products .td-certificate{
+    width: 68px;
+}
 #my_products .td-suite{
-    width: 269px;
+    width: 180px;
 }
 #my_products .td-level{
     width: 60px;

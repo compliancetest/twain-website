@@ -893,16 +893,18 @@ function add_cp_custom_rewrites()
 {
     //Add Ticket Rewrite Rules
     add_rewrite_rule('^my-support-tickets/([0-9]*)$','index.php?pagename=my-support-tickets&ticket=$matches[1]', 'top');    
+    //Add Claim Rewrite Rules
+    add_rewrite_rule('^claims/(.*)$','index.php?pagename=claim-certificate&claim=$matches[1]', 'top');    
 }
 
-add_filter('query_vars', 'add_ticket_query_var');
-function add_ticket_query_var($public_query_vars)
+add_filter('query_vars', 'add_custom_query_var');
+function add_custom_query_var($public_query_vars)
 {
     $public_query_vars[] = 'ticket';
+    $public_query_vars[] = 'claim';
     
     return $public_query_vars;
 }
-
 
 //Get User Name for Whole site
 function cp_get_user_display_name($user)

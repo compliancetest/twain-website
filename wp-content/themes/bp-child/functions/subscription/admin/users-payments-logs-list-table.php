@@ -24,7 +24,8 @@ class CT_Users_Payments_Logs_List_Table extends WP_List_Table
             "created_date" => __("Date"),
             "payments" => __('# of Payments'),
             "subscriptions" => __("# of Subscriptions"),
-            "total_amount" => __("Total Amount")
+            "total_amount" => __("Total Amount"),
+            "action" => __("&nbsp;")
         );
     }
     
@@ -67,6 +68,8 @@ class CT_Users_Payments_Logs_List_Table extends WP_List_Table
         
         switch($column_name)
         {            
+            case 'action': 
+                return "<a href='" . admin_url() ."admin.php?page=processing&action=detail&id=" . $item->id . "'>View Detail</a>";
             default:
                 return $item->$column_name;
         }
@@ -95,6 +98,10 @@ class CT_Users_Payments_Logs_List_Table extends WP_List_Table
             "per_page"=>$this->per_pages
         ));
       
+        $query = "SELECT * FROM {$wpdb->prefix}users_payments_logs ";
+        $query .= " ORDER BY $orderby $order ";
+        $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        
         $this->items = $wpdb->get_results($query);
       
         $columns = $this->get_columns();
