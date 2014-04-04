@@ -212,6 +212,7 @@ get_header();
             })
         });
         
+        
         $('.add-claim-btn, .edit-claim-btn').cplightbox({
             onLoad: function(){
                 $('#obligation-box .popup-box-content').html($('#obligation' + this.self.attr('data-product-id')).html());

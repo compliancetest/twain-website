@@ -39,108 +39,258 @@ function create_compliancetest_settings_page()
         update_option('mailchimp_all_list_id', $_POST['mailchimp_all_list_id']);
         
     }
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
+        //Save Options
+        update_option('esb_host', $_POST['esb_host']);
+        update_option('esb_username', $_POST['esb_username']);
+        update_option('esb_password', $_POST['esb_password']);
+        update_option('esb_database', $_POST['esb_database']);
+        
+    }
     
 ?>
-<div id="eway-options-wrap">    
-    <div class="icon32" id="icon-tools"> <br /> </div>    
-    <h2>eWay Settings</h2>    
-    <p>You can config the information for eway payment.</p>    
-    <form method="post" action="">      
-        <p>
-            <b>Payment Mode:</b> <label><input type="radio" name="eway_payment_mode" id="eway_payment_mode_live" value="live" <?php echo get_option('eway_payment_mode') == 'live' ? 'checked="checked"' : ''?> /> Live</label>
-                <label><input type="radio" name="eway_payment_mode" id="eway_payment_mode_sandbox" value="sandbox" <?php echo get_option('eway_payment_mode') != 'live' ? 'checked="checked"' : ''?> /> Test
-            </label>
-        </p>
-        <h3>Live Mode Settings</h3>
-        <table cellpadding="5">
-            <tr>
-                <td><label><b>Customer ID:</b></label></td>
-                <td><input type="text" name="eway_live_customer_id" id="eway_live_customer_id" value="<?php echo get_option('eway_live_customer_id')?>" autocomplete="off" /></td>
-            </tr>
-            <tr>
-                <td><label><b>User Name:</b></label></td>
-                <td><input type="text" name="eway_live_user_name" id="eway_live_user_name" value="<?php echo get_option('eway_live_user_name')?>" autocomplete="off" /></td>
-            </tr>
-            <tr>
-                <td><label><b>User PWD:</b></label></td>
-                <td><input type="password" name="eway_live_user_pwd" id="eway_live_user_pwd" value="<?php echo get_option('eway_live_user_pwd')?>" autocomplete="off" /></td>
-            </tr>
-        </table>
-        <h3>Sandbox Mode Settings</h3>
-        <table cellpadding="5">
-            <tr>
-                <td><label><b>Customer ID:</b></label></td>
-                <td><input type="text" name="eway_sandbox_customer_id" id="eway_sandbox_customer_id" value="<?php echo get_option('eway_sandbox_customer_id')?>" autocomplete="off" /></td>
-            </tr>
-            <tr>
-                <td><label><b>User Name:</b></label></td>
-                <td><input type="text" name="eway_sandbox_user_name" id="eway_sandbox_user_name" value="<?php echo get_option('eway_sandbox_user_name')?>" autocomplete="off" /></td>
-            </tr>
-            <tr>
-                <td><label><b>User PWD:</b></label></td>
-                <td><input type="password" name="eway_sandbox_user_pwd" id="eway_sandbox_user_pwd" value="<?php echo get_option('eway_sandbox_user_pwd')?>" autocomplete="off" /></td>
-            </tr>
-        </table>        
-        <?php submit_button()   ?>
-        <?php wp_nonce_field('save-eway-options'); ?>
-    </form>  
-    <hr />
-    <h2>Subscription Settings</h2>        
-    <form method="post" action="">      
-        <table cellpadding="5">
-            <tr>
-                <td><label><b>InArrears Count:</b></label></td>
-                <td><input type="text" name="inarrears_count" id="inarrears_count" value="<?php echo get_option('inarrears_count')?>" autocomplete="off" /> Days</td>
-            </tr>
-            <tr>
-                <td><label><b>Frozen Count:</b></label></td>
-                <td><input type="text" name="frozen_count" id="frozen_count" value="<?php echo get_option('frozen_count')?>" autocomplete="off" /> Days</td>
-            </tr>
-        </table>      
-        <?php submit_button()   ?>
-        <?php wp_nonce_field('save-subscription-settings'); ?>
-    </form>  
-    <hr />
-    <h2>Recaptcha Settings</h2>        
-    <form method="post" action="">      
-        <table cellpadding="5">
-            <tr>
-                <td><label><b>Public Key:</b></label></td>
-                <td><input type="text" name="recaptcha_public_key" id="recaptcha_public_key" value="<?php echo get_option('recaptcha_public_key')?>" size="50" autocomplete="off" /></td>
-            </tr>
-            <tr>
-                <td><label><b>Private Key:</b></label></td>
-                <td><input type="text" name="recaptcha_private_key" id="recaptcha_private_key" value="<?php echo get_option('recaptcha_private_key')?>" size="50" autocomplete="off" /></td>
-            </tr>
-        </table>      
-        <?php submit_button()   ?>
-        <?php wp_nonce_field('save-recaptcha-settings'); ?>
-    </form>  
-    <hr />
-    <h2>Mailchimp List for Registered Users</h2>
-    <?php
-        $mailchimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
-        $mailchimp_list = new mailchimp_lists($mailchimp);
-        $lists = $mailchimp_list->getList();
+<script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/js/jquery-ui-1.10.3.custom.js"></script>
+<link href="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/css/jquery-ui-1.10.3.custom.css"  type="text/css" rel="stylesheet" />
+<style type="text/css">
+    #emails .ui-tabs-nav{            
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
         
-        ?>
-        <form method="post" action="">      
-        <?php
-        foreach($lists['data'] as $list)
-        {
-            ?><p><input type="radio" name="mailchimp_all_list_id" value="<?php echo $list['id']?>" <?php echo $list['id'] == get_option('mailchimp_all_list_id') ? 'checked="checked"' : ''?> /> <label><?php echo $list['name']?></label></p><?php
-        }
-        ?>
-            <?php submit_button()   ?>
-            <?php wp_nonce_field('save-mailchimp-all-list-settings'); ?>
-            <p>
-                <a href="<?php echo get_site_url() ?>?ext-action=add-users-to-mailchimp" target="_blank" class="button">Sync All Users with the selected list</a>
-                <br />(You will need to save your change first.)        
-            </p>
-        </form>  
-    <?php
-    ?>
+    }
+    /*#emails textarea{
+        width: 100%;
+        height: 200px;
+    }*/
+    #emails input[type="text"]{
+        width: 50%;
+    }
+    .mceIframeContainer{
+        height: 300px;
+    }
+    .mceIframeContainer iframe{
+        height: 100% !important;
+        
+    }
+    .ui-tabs .ui-tabs-nav li{            
+        display: block;
+        float: none;
+        border-radius: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+    .ui-tabs .ui-tabs-nav li a{
+        float: none;
+        display: block;
+        border-radius: 0;
+        background: #f7f7f7;
+        padding: 8px 14px;
+        margin: 0;
+        border-right: solid 1px #DFDFDF;
+        border-left: solid 1px #DFDFDF;
+        border-bottom: 1px solid #DFDFDF;
+        border-top: 1px solid #F9F9F9;
+        outline: none;
+    }
     
+    .ui-tabs .ui-tabs-nav li.ui-tabs-active a{
+        background: #fff;
+        color: #333;
+        border-right: solid 1px #fff;            
+    }
+    .ui-tabs .ui-tabs-nav li.tab-separator{
+        background: none repeat scroll 0 0 #F0F0F0;
+        border: 1px solid #DDD !important;
+        color: #333;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 14px !important;
+        margin-top: 10px !important; 
+    }
+    .ui-tabs .ui-tabs-nav li.tab-separator:first-child{
+        margin-top: 0 !important;
+    }
+    #compliancetest-settings{
+        padding: 0;
+        border-radius: 0;
+    }
+    #compliancetest-settings-nav{
+        width: 210px;
+        float: left;
+    }
+    #compliancetest-settings-wrapper{
+        margin-left: 210px;
+        border-top: solid 1px #ddd;
+    }
+    #compliancetest-settings-wrapper .widefat{
+        clear: none;
+    }
+    #compliancetest-settings-wrapper h3{
+        border-bottom: 1px solid #A0A0A0;
+        font-size: 18px;
+        margin: 0;
+        padding-bottom: 10px;
+    }
+</style>
+<div class="wrap">    
+    <div class="icon32" id="icon-tools"> <br /> </div>    
+    <h2>Compliancetest Setting</h2>            
+    <div id="compliancetest-settings">
+        <div id="compliancetest-settings-nav">
+            <ul>
+                <li><a href="#ct-eway-settings">eWay Settings</a></li>
+                <li><a href="#ct-esb-settings">ESB Settings</a></li>
+                <li><a href="#ct-subscriptions-settings">Subscriptions Settings</a></li>
+                <li><a href="#ct-recaptcha-settings">Recaptcha Settings</a></li>
+                <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
+            </ul>
+        </div>
+        <div id="compliancetest-settings-wrapper">
+            <div id="ct-eway-settings">
+                <h3>eWay Settings</h3>
+                <form method="post" action="">      
+                    <p>
+                        <b>Payment Mode:</b> <label><input type="radio" name="eway_payment_mode" id="eway_payment_mode_live" value="live" <?php echo get_option('eway_payment_mode') == 'live' ? 'checked="checked"' : ''?> /> Live</label>
+                            <label><input type="radio" name="eway_payment_mode" id="eway_payment_mode_sandbox" value="sandbox" <?php echo get_option('eway_payment_mode') != 'live' ? 'checked="checked"' : ''?> /> Test
+                        </label>
+                    </p>
+                    <h3>Live Mode Settings</h3>
+                    <table class="widefat">
+                        <tr>
+                            <td><label><b>Customer ID:</b></label></td>
+                            <td><input type="text" name="eway_live_customer_id" id="eway_live_customer_id" value="<?php echo get_option('eway_live_customer_id')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>User Name:</b></label></td>
+                            <td><input type="text" name="eway_live_user_name" id="eway_live_user_name" value="<?php echo get_option('eway_live_user_name')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>User PWD:</b></label></td>
+                            <td><input type="password" name="eway_live_user_pwd" id="eway_live_user_pwd" value="<?php echo get_option('eway_live_user_pwd')?>" autocomplete="off" /></td>
+                        </tr>
+                    </table>
+                    <br />
+                    <h3>Sandbox Mode Settings</h3>
+                    <table class="widefat">
+                        <tr>
+                            <td><label><b>Customer ID:</b></label></td>
+                            <td><input type="text" name="eway_sandbox_customer_id" id="eway_sandbox_customer_id" value="<?php echo get_option('eway_sandbox_customer_id')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>User Name:</b></label></td>
+                            <td><input type="text" name="eway_sandbox_user_name" id="eway_sandbox_user_name" value="<?php echo get_option('eway_sandbox_user_name')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>User PWD:</b></label></td>
+                            <td><input type="password" name="eway_sandbox_user_pwd" id="eway_sandbox_user_pwd" value="<?php echo get_option('eway_sandbox_user_pwd')?>" autocomplete="off" /></td>
+                        </tr>
+                    </table>        
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-eway-options'); ?>
+                </form>  
+            </div>
+            <div id="ct-esb-settings">
+                <h3>ESB Settings</h3>
+                <form method="post" action="">
+                    <table class="widefat">
+                        <tr>
+                            <th><label><b>Hostname:</b></label></th>
+                            <td><input type="text" name="esb_host" id="esb_host" value="<?php echo get_option('esb_host')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Username:</b></label></th>
+                            <td><input type="text" name="esb_username" id="esb_username" value="<?php echo get_option('esb_username')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Password:</b></label></th>
+                            <td><input type="text" name="esb_password" id="esb_password" value="<?php echo get_option('esb_password')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Database Name:</b></label></th>
+                            <td><input type="text" name="esb_database" id="esb_database" value="<?php echo get_option('esb_database')?>" autocomplete="off" /></td>
+                        </tr>
+                        
+                    </table>      
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-esb-settings'); ?>
+                </form>
+            </div>
+            <div id="ct-subscriptions-settings">
+                <h3>Subscription Settings</h3>        
+                <form method="post" action="">      
+                    <table class="widefat">
+                        <tr>
+                            <td><label><b>InArrears Count:</b></label></td>
+                            <td><input type="text" name="inarrears_count" id="inarrears_count" value="<?php echo get_option('inarrears_count')?>" autocomplete="off" /> Days</td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Frozen Count:</b></label></td>
+                            <td><input type="text" name="frozen_count" id="frozen_count" value="<?php echo get_option('frozen_count')?>" autocomplete="off" /> Days</td>
+                        </tr>
+                    </table>      
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-subscription-settings'); ?>
+                </form>  
+            </div>
+            <div id="ct-recaptcha-settings">
+                <h3>Recaptcha Settings</h3>        
+                <form method="post" action="">      
+                    <table  class="widefat">
+                        <tr>
+                            <td><label><b>Public Key:</b></label></td>
+                            <td><input type="text" name="recaptcha_public_key" id="recaptcha_public_key" value="<?php echo get_option('recaptcha_public_key')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Private Key:</b></label></td>
+                            <td><input type="text" name="recaptcha_private_key" id="recaptcha_private_key" value="<?php echo get_option('recaptcha_private_key')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                    </table>      
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-recaptcha-settings'); ?>
+                </form>  
+            </div>
+            <div id="ct-mailchimp-settings">
+                <h3>Mailchimp List for Registered Users</h3>
+                <?php
+                    $mailchimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+                    $mailchimp_list = new mailchimp_lists($mailchimp);
+                    $lists = $mailchimp_list->getList();
+                    
+                    ?>
+                    <form method="post" action="">      
+                    <?php
+                    foreach($lists['data'] as $list)
+                    {
+                        ?><p><input type="radio" name="mailchimp_all_list_id" value="<?php echo $list['id']?>" <?php echo $list['id'] == get_option('mailchimp_all_list_id') ? 'checked="checked"' : ''?> /> <label><?php echo $list['name']?></label></p><?php
+                    }
+                    ?>
+                        <?php submit_button()   ?>
+                        <?php wp_nonce_field('save-mailchimp-all-list-settings'); ?>
+                        <p>
+                            <a href="<?php echo get_site_url() ?>?ext-action=add-users-to-mailchimp" target="_blank" class="button">Sync All Users with the selected list</a>
+                            <br />(You will need to save your change first.)        
+                        </p>
+                    </form>  
+                <?php
+                ?>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+            jQuery(document).ready(function(){
+                jQuery('#compliancetest-settings').tabs({"active": "<?php echo isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 0?>"});                    
+            })
+            function saveEmailTemplates()
+            {
+                //Getting Actived Tabs
+                var idx = jQuery('#compliancetest-settings-nav li.ui-state-default').index(jQuery('#compliancetest-settings-nav li.ui-tabs-active').get(0));
+                jQuery('#email-tab-idx').val(idx);
+                return true;
+            }
+            
+      </script>
 </div>
 <?php   
 }

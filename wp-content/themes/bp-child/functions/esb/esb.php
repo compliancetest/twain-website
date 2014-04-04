@@ -2,7 +2,6 @@
 /**
 * Manage Backend Data
 */
-require_once(THE_FUNCTION . "/esb/config.php");
 
 class ManageESB
 {
@@ -30,7 +29,12 @@ class ManageESB
     
     public function  loadDatabase()
     {
-        $db = new wpdb(ESB_DB_USERNAME, ESB_DB_PASSWORD, ESB_DB_DATABASE, ESB_DB_HOST);
+        $esb_db_username = get_option('esb_username');
+        $esb_db_password = get_option('esb_password');
+        $esb_db_database = get_option('esb_database');
+        $esb_db_host = get_option('esb_host');
+        
+        $db = new wpdb($esb_db_username, $esb_db_password, $esb_db_database, $esb_db_host);
         ManageESB::$esbdb = $db;
         
         return $db;
