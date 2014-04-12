@@ -566,48 +566,9 @@ function cp_get_customer_harness_detail()
             </div>
         </div>
     <?php else: ?>
-    <?php
-        $esbError = false;
-        if(!$row->esb_user_id)
-        {
-            //create esb account
-            $community_id = cp_get_post_meta($row->suite_id, 'community_id', true);    
-            $group = groups_get_group( array('group_id' => $community_id));
-            
-            $xmlData = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                            <api:user>
-                                <api:username>' . "harness" . $row->user_id . "_" . $row->suite_id . '</api:username>
-                                <api:password>' . $row->harness_password . '</api:password>
-                                <api:userGroups>
-                                    <api:group>
-                                        <api:groupId>' . $community_id . '</api:groupId>
-                                        <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                                    </api:group>
-                                </api:userGroups>                       
-                                <api:userPModeAgreement>' . $row->p_mode_agreement . '</api:userPModeAgreement>                            
-                                <api:userEndpoint>' . $row->tester_endpoint_url . '</api:userEndpoint>
-                                <api:userEndpointUsername>' . $row->tester_username . '</api:userEndpointUsername>
-                                <api:userEndpointPassword>' . $row->tester_password . '</api:userEndpointPassword>
-                            </api:user>
-                        </api:createUserRequest>';
-            
-            $result = $CPRest->doUserAPI('user/create', $xmlData);
-            
-            $resultDoc = new DOMDocument();
-            
-            if(!$resultDoc || !$resultDoc->loadXML($result))
-            {
-                $esbError = "There was a problem managing your test credentials. Please try again later.";
-            }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
-                $esbError = $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
-            }else{ //Success
-                $wpdb->update($wpdb->prefix . "users_subscriptions", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $row->id));            
-            }
-        }
-    ?>
+
         <div class="popup-box" id="harness-detail-box<?php echo $_REQUEST['id']?>" style="display: none; width: 450px;">
             <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>    
-            <?php if(!$esbError): ?>
             <form name="harness-form" id="harness-form" action="">
                 <div class="popup-box-content grid-box-body">    
                     <div class="field-row">
@@ -677,15 +638,6 @@ function cp_get_customer_harness_detail()
                 <input type="hidden" name="id" id="harness-id" value="<?php echo $row->id?>" />
                 <?php wp_nonce_field('save-harness', 'cp-action'); ?>
             </form>
-            <?php else: ?>
-            <div class="popup-box-content grid-box-body">    
-                <p class="message error"><?php echo $esbError; ?></p>
-            </div>
-            <div class="popup-box-footer radius6 noradiustop">                                                
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                <div class="clear"></div>
-            </div>
-            <?php endif; ?>
         </div>
     <?php 
     endif; 
@@ -719,75 +671,10 @@ function cp_save_customer_harness_detail()
         $_POST['tester_endpoint_url'] = $data->tester_endpoint_url;
         $_POST['tester_username'] = $data->tester_username;
         $_POST['tester_password'] = $data->tester_password;
-    }
-    
+    }    
     
     $community_id = cp_get_post_meta($data->suite_id, 'community_id', true);    
     $group = groups_get_group( array('group_id' => $community_id));
-    
-    if(!$data->esb_user_id)
-    {
-        $xmlData = '<api:createUserRequest xmlns:api="http://compliancetest.net/api">
-                        <api:user>
-                            <api:username>' . "harness" . $user->ID . "_" . $data->suite_id . '</api:username>
-                            <api:password>' . $_POST['harness_password'] . '</api:password>
-                            <api:userGroups>
-                                <api:group>
-                                    <api:groupId>' . $community_id . '</api:groupId>
-                                    <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                                </api:group>
-                            </api:userGroups>                       
-                            <api:userPModeAgreement>' . $_POST['p_mode_agreement'] . '</api:userPModeAgreement>                            
-                            <api:userEndpoint>' . $_POST['tester_endpoint_url'] . '</api:userEndpoint>
-                            <api:userEndpointUsername>' . $_POST['tester_username'] . '</api:userEndpointUsername>
-                            <api:userEndpointPassword>' . $_POST['tester_password'] . '</api:userEndpointPassword>
-                        </api:user>
-                    </api:createUserRequest>';
-        
-        $result = $CPRest->doUserAPI('user/create', $xmlData);
-        
-        $resultDoc = new DOMDocument();
-        
-        if(!$resultDoc || !$resultDoc->loadXML($result))
-        {
-            return "There was a problem managing your test credentials. Please try again later.";
-        }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){
-            return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
-        }else{ //Success
-            $wpdb->update($wpdb->prefix . "users_subscriptions", array('esb_user_id' => $resultDoc->getElementsByTagName('userId')->item(0)->nodeValue), array('id' => $id));            
-        }
-    }else{
-        //Update Data
-        $xmlData = '<api:updateUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:userId>' . $data->esb_user_id . '</api:userId>
-                        <api:username>' . $data->harness_username . '</api:username>            
-                        <api:password>' . $_POST['harness_password'] . '</api:password>                        
-                        <api:userGroups>
-                            <api:group>
-                                <api:groupId>' . $community_id . '</api:groupId>
-                                <api:groupName>' . bp_get_group_name($group) . '</api:groupName>
-                            </api:group>
-                        </api:userGroups>   
-                        <api:userPModeAgreement>' . $_POST['p_mode_agreement'] . '</api:userPModeAgreement>                            
-                        <api:userEndpoint>' . $_POST['tester_endpoint_url'] . '</api:userEndpoint>
-                        <api:userEndpointUsername>' . $_POST['tester_username'] . '</api:userEndpointUsername>
-                        <api:userEndpointPassword>' . $_POST['tester_password'] . '</api:userEndpointPassword>
-                    </api:user>
-                </api:updateUserRequest>';
-        
-        $result = $CPRest->doUserAPI('user/update', $xmlData);
-        
-        $resultDoc = new DOMDocument();
-        
-        if(!$result || !$resultDoc->loadXML($result))
-        {
-            return 'There was a problem managing your test credentials. Please try again later.';
-        }else if($resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR'){            
-            return $resultDoc->getElementsByTagName('error')->item(0)->nodeValue;
-        }
-        
-    }
     
     $updateArr = array(
         'p_mode_agreement' => $_POST['p_mode_agreement'],
@@ -804,7 +691,7 @@ function cp_save_customer_harness_detail()
         $updateArr,
         array('id' => $data->id)
     );        
-    echo $wpdb->last_error;
+    
     return "success";
 }
 

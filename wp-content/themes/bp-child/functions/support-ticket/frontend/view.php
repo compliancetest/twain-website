@@ -5,29 +5,55 @@
 
 function showSumitTicketBox()
 {
-    global $ct_ticket_category, $ct_ticket_priority, $ct_ticket_status;
+    global $ct_ticket_category, $ct_ticket_priority, $ct_ticket_status, $wpdb;
     
     $user_id = get_current_user_id();
-    
-    //Getting Subscription IDs and Manageable customer IDs
-    $esbIDs = getUserAllCustomerESBIDs($user_id, true);    
-    
-    if(!$esbIDs)
+     
+    $is_error = false;
+    $error = null;
+    if(!ct_can_create_support_ticket($user_id))
     {
+        $is_error = true;
+        $error = 'Sorry, you need to purchase at least one subscription to create a support ticket.';
+    }
+    
+    if(!$is_error)
+    {
+        //Getting Payments and subscribed test suites
+        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, up.monthly_fee, up.signup_fee, up.user_id AS purchaser_id FROM " . $wpdb->prefix . "users_subscriptions AS s 
+                                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id 
+                                 LEFT JOIN {$wpdb->prefix}users_purchases AS up ON up.id=s.purchase_id 
+                                 WHERE s.user_id=%d AND s.status = 'Active' ORDER BY suite_title", $user_id);
+        $subscriptions = getUserSubscriptions($user_id);
+        if(!$subscriptions)
+        {
+            $is_error = true;
+            $error = "Sorry, you have not any active subscriptions.";
+        }
+        
+    }
+    
+    if(!$is_error)
+    {
+        $cards = getUserCreditCards($user_id, true);  
+        if(!$cards)
+        {
+            $is_error = true;
+        }
+    }
+    if($is_error){
     ?>
     <div class="popup-box edit-ticket-box" id="submit-ticket-box" style="display: none; width: 700px;">
         <form name="ticketForm" id="ticketForm" action="">
             <div class="popup-box-header radius6 noradiusbottom">Submit a Request</div>        
                 <div class="popup-box-content grid-box-body">                    
-                    <p class="message notice">Sorry, you need to purchase at least one subscription to create a support ticket.</p>
+                    <p class="message notice"><?php echo $error ?></p>
                 </div>
                 <div class="popup-box-footer radius6 noradiustop">
                     <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                     <div class="clear"></div>
                 </div>
-            <a class="close_btn"></a>                        
-            <input type="hidden" name="suite_id" value="<?php echo $suite->id?>" />
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('direct_payment')?>" />
+            <a class="close_btn"></a>                                    
         </form>
     </div>
     <?php
@@ -37,8 +63,18 @@ function showSumitTicketBox()
         <form name="ticketForm" id="ticketForm" action="" method="post">
             <div class="popup-box-header radius6 noradiusbottom">Submit a Request</div>        
                 <div class="popup-box-content grid-box-body">
-                    
-                    <!--<p class="message notice">Sorry, you need to purchase at least one subscription to create a support ticket.</p>-->
+                    <div class="field-row">
+                        <div class="grid-cell">
+                            <label>Test Suites:</label>
+                            <select name="suite_id" id="suite_id" class="select">
+                                <option value="">- Select -</option>
+                                <?php foreach($subscriptions as $s): ?>
+                                <option value="<?php echo $s->suite_id?>"><?php echo $s->suite_title?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="clear"></div>
+                    </div>                                                    
                     <div class="field-row">
                         <div class="grid-cell">
                             <label>Subject:</label>
@@ -59,7 +95,19 @@ function showSumitTicketBox()
                         <?php
                             echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket-priority', null, '- Select -');
                         ?>
-                    </div>                          
+                    </div>    
+                    <div class="field-row">
+                        <div class="grid-cell">
+                            <label>Payment Methods:</label>
+                            <select name="card_id" id="card_id" class="select" disabled="disabled">
+                                <option value="">- Select -</option>
+                                <?php foreach($cards as $c): ?>
+                                <option value="<?php echo $c->id?>"><?php echo chunk_split($c->card_number, 4)?>(<?php echo chunk_split($c->nickname, 4)?>)</option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="clear"></div>
+                    </div>                      
                     <div class="field-row">
                         <label>Type:</label>
                         <?php

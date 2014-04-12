@@ -413,9 +413,9 @@ function getManagedCustomerESBIDs($user_id = null)
         if(!$suite_ids)
             return null;
             
-        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
+        $query = "SELECT p.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
     }else{
-        $query = "SELECT DISTINCT(p.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE  p.status='Active'";
+        $query = "SELECT p.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE  p.status='Active'";
     }
     
     $ids = $wpdb->get_col($query);
@@ -439,15 +439,15 @@ function getUserAllCustomerESBIDs($user_id = null, $exclude_free_charge = false)
     {
         $suite_ids = getAssignedSuiteIds($user_id);
         if(!$suite_ids)            
-            $query = "SELECT DISTINCT(s.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
+            $query = "SELECT s.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
                       LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id 
                       WHERE s.status='Active' AND s.user_id=$user_id";        
         else
-            $query = "SELECT DISTINCT(s.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
+            $query = "SELECT s.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
                       LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id
                       WHERE s.status='Active' AND (s.suite_id IN (" . implode(", ", $suite_ids) . ") OR s.user_id=$user_id)";        
     }else{
-        $query = "SELECT DISTINCT(s.esb_user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
+        $query = "SELECT s.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
                   LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id  
                   WHERE s.status='Active'";
     }

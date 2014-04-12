@@ -29,8 +29,6 @@ class CT_Subscription
     
     var $card_id = null;
     
-    var $esb_user_id = null;
-    
     var $harness_username = null;
     var $harness_password = null;
     var $harness_endpoint_url = null;
@@ -138,36 +136,12 @@ class CT_Subscription
         if($this->id)
         {
             $user = get_userdata(get_current_user_id());
-    
-            if(intval($this->esb_user_id) > 0)
-            {
-                //Remove Backend Account
-                $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
-                            <api:user>
-                                <api:userId>' . $this->esb_user_id . '</api:userId>                        
-                            </api:user>
-                        </api:deleteUserRequest>';
-                
-                $result = $CPRest->doUserAPI('user/delete', $data);
-                
-                $resultDoc = new DOMDocument(); 
-            }
+             
+            //Remove Subscription
+            $this->delete();            
             
-            if(intval($this->esb_user_id) > 0 && (!$result || !$resultDoc->loadXML($result)))
-            {
-                addMessage("There was a problem deleting your test credentials.", "error");
-                
-            }else{
-                if(intval($this->esb_user_id) > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
-                {
-                    addMessage('There was a problem deleting your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue, 'error');
-                }else{                        
-                    //Remove Subscription
-                    $this->delete();            
-                    
-                    addMessage('Your subscription has been cancelled.');
-                }
-            }
+            addMessage('Your subscription has been cancelled.');
+            
         }
     }
     

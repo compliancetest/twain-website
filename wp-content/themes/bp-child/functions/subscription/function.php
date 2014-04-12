@@ -83,50 +83,6 @@ function calculateFirstPaymentAmount($monthly_price)
     return ceil($monthly_price * ($remainedDay / $totalDay));
 }
 
-/**
-* Cancel Subscriptions and Remove All Data of it
-* 
-* @param CT_Subscription $subscription
-*/
-function cancelSubscription($subscription)
-{
-    global $wpdb, $CPRest;
-    
-    $user = get_userdata(get_current_user_id());
-    
-    if(intval($subscription->esb_user_id) > 0)
-    {
-        //Remove Backend Account
-        $data = '<api:deleteUserRequest xmlns:api="http://compliancetest.net/api">
-                    <api:user>
-                        <api:userId>' . $subscription->esb_user_id . '</api:userId>                        
-                    </api:user>
-                </api:deleteUserRequest>';
-        
-        $result = $CPRest->doUserAPI('user/delete', $data);
-        
-        $resultDoc = new DOMDocument(); 
-    }
-    
-    if(intval($subscription->esb_user_id) > 0 && (!$result || !$resultDoc->loadXML($result)))
-    {
-        addMessage("There was a problem deleting your test credentials.", "error");
-        
-    }else{
-        if(intval($subscription->esb_user_id) > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ERROR')
-        {
-            addMessage('There was a problem deleting your test credentials: ' . $resultDoc->getElementsByTagName('error')->item(0)->nodeValue, 'error');
-        }else{                        
-            //Remove Subscription
-            $subscription->delete();            
-            
-            addMessage('Your subscription has been cancelled.');
-        }
-    }
-    
-    return;
-}
-
 function render_unsubscription_popup($return = null)
 {
     ?>
@@ -308,3 +264,4 @@ function ct_get_months($date1, $date2)
     
     return $months;
 }
+

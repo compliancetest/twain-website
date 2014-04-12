@@ -84,9 +84,9 @@ function createSupportTicket()
     $customer = get_userdata($user_id);
     
     //Send Email Notification to Support
-    sendTicketEmail('ticket_created_support', 'support', $wpdb->insert_id, null, $user_id, null);
+    ct_send_ticket_email('ticket_created_support', 'support', $wpdb->insert_id, null, $user_id, null);
     //Send Email Notification to the Customer
-    sendTicketEmail('ticket_created', 'customer', $wpdb->insert_id, null, $user_id, null);
+    ct_send_ticket_email('ticket_created', 'customer', $wpdb->insert_id, null, $user_id, null);
     /***************** End Send Mail *****************************/
     
     addMessage('Your ticket has been submitted successfully.');
@@ -306,14 +306,14 @@ function acceptTerm()
         if($ticketDetail->customer_id == $user_id)
         {
             //Send To Support
-            sendTicketEmail("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            ct_send_ticket_email("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }else{
             //Send to Customer
-            sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }        
         
         //Send ticket Started Notification
-        sendTicketEmail("ticket_started", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+        ct_send_ticket_email("ticket_started", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         
         /***************** End Send Mail *****************************/
         
@@ -390,10 +390,10 @@ function changeTicketTerm()
         if($ticketDetail->customer_id == $user_id)
         {
             //Send To Support
-            sendTicketEmail("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            ct_send_ticket_email("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }else{
             //Send to Customer
-            sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }
         
         addMessage("Your ticket has been updated.", "success");
@@ -530,10 +530,10 @@ function sendTicketMessage()
         if($ticketDetail->customer_id == $user_id)
         {
             //Send To Support
-            sendTicketEmail("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            ct_send_ticket_email("ticket_updated_support", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }else{
             //Send to Customer
-            sendTicketEmail("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+            ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
         }
         
         if($status_changed)
@@ -544,12 +544,12 @@ function sendTicketMessage()
             if($new_status == TICKET_STATUS_RESOLVED)
             {
                 //Send Notification of status resolved to the user 
-                sendTicketEmail("ticket_solved", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
-                sendTicketEmail("ticket_solved_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+                ct_send_ticket_email("ticket_solved", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+                ct_send_ticket_email("ticket_solved_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
             }else if($new_status == TICKET_STATUS_CLOSED){
                 //Send Notification of status resolved to the user 
-                sendTicketEmail("ticket_closed", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
-                sendTicketEmail("ticket_closed_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+                ct_send_ticket_email("ticket_closed", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
+                ct_send_ticket_email("ticket_closed_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
             }
         }
         

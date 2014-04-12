@@ -69,7 +69,7 @@ function makeTicketRead($ticket_id, $type)
 * @param Int $customer_id
 * @param Int $support_id
 */
-function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null, $customer_id = null, $support_id = null)
+function ct_send_ticket_email($email_id, $email_type, $ticket_id, $message_id = null, $customer_id = null, $support_id = null)
 {
     global $wpdb;
     
@@ -139,4 +139,25 @@ function sendTicketEmail($email_id, $email_type, $ticket_id, $message_id = null,
         
     }
     
+}
+
+/**
+* Check if the user is paid subscriber
+* 
+* @param Int $user_id
+* 
+* @return Boolean 
+*/
+function ct_can_create_support_ticket($user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();        
+    
+    //Check if the user has purchasement or not
+    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_purchases WHERE user_id=%d", $user_id);
+    $count = $wpdb->get_var($query);
+    
+    return $count > 0 ? true : false;
 }

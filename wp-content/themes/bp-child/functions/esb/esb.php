@@ -40,7 +40,7 @@ class ManageESB
         return $db;
     }
     
-    public function getCaseStatus($esb_user_id, $suite_id = null, $product_id = null, $case_id = null)
+    public function getCaseStatus($customer_id, $suite_id = null, $product_id = null, $case_id = null)
     {
         /*if($suite_id != null)
             $this->addTestSuiteIDToLog($suite_id);*/
@@ -49,7 +49,7 @@ class ManageESB
                                             "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                                             "LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID=m.PRODUCT_ID " .
                                             "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=m.TEST_SUITE_CONFIGURATION_ID " .
-                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1 AND m.CUSTOMER_ID=%d", $esb_user_id);
+                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1 AND m.CUSTOMER_ID=%d", $customer_id);
         
         if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND s.TEST_SUITE_WP_ID=%d", $suite_id);
@@ -122,7 +122,7 @@ class ManageESB
         $customerWhere = '';
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             
             if(!$esbIDs)
                 return array();
@@ -161,14 +161,14 @@ class ManageESB
     * @param Int $user_id
     * @param Int $customer_id
     */
-    public function _getUserESBIds($user_id = null, $customer_id = null)
+    public function _getCustomerESBIds($user_id = null, $customer_id = null)
     {
         global $wpdb;
         
         if($user_id == null)
             $user_id = get_current_user_id();
         
-        $query = "SELECT DISTINCT(esb_user_id) FROM " . $wpdb->prefix . "users_subscriptions WHERE `status`='Active'";
+        $query = "SELECT id FROM " . $wpdb->prefix . "users_subscriptions WHERE `status`='Active'";
         
         if($customer_id != null)
             $query .= " AND " . $wpdb->prepare("user_id=%d", $customer_id);
@@ -206,7 +206,7 @@ class ManageESB
         
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
@@ -425,7 +425,7 @@ class ManageESB
                 
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
@@ -500,7 +500,7 @@ class ManageESB
                 
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
@@ -574,7 +574,7 @@ class ManageESB
                 
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
@@ -652,7 +652,7 @@ class ManageESB
                 
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
@@ -730,7 +730,7 @@ class ManageESB
                 
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             
@@ -807,7 +807,7 @@ class ManageESB
                 
         if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
         {
-            $esbIDs = $this->_getUserESBIds($user_id, $customer_id);
+            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
             if(!$esbIDs)
                 return array();
             

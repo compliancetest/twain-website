@@ -28,7 +28,7 @@ $esb = new ManageESB();
             </div>
            <?php foreach($mysuites as $suite){ ?>
            <?php
-               $caseStatus = $esb->getCaseStatus($suite->esb_user_id, $suite->suite_id);
+               $caseStatus = $esb->getCaseStatus($suite->id, $suite->suite_id);
                
            ?>
            <div class="grid-box table-box">
