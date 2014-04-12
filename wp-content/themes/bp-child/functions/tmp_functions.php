@@ -240,6 +240,7 @@ if(is_super_admin())
             
             foreach ($rows as $row) {
                 ManageESB::$esbdb->query("UPDATE MSH_CONVERSATION_METADATA SET CUSTOMER_ID='" . $row->id . "' WHERE CUSTOMER_ID='" . $row->esb_user_id . "'");                
+                echo "UPDATE MSH_CONVERSATION_METADATA SET CUSTOMER_ID='" . $row->id . "' WHERE CUSTOMER_ID='" . $row->esb_user_id . "'<br />";
             }
             die("completed");
         }   
