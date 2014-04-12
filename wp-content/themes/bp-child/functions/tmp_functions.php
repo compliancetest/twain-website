@@ -237,9 +237,9 @@ if(is_super_admin())
         if(isset($_GET['fix_transactions']))
         {
             $rows = $wpdb->get_results("SELECT id, esb_user_id FROM " . $wpdb->prefix . "users_subscriptions WHERE esb_user_id > 0");
-            echo count($rows);
-            foreach ($rows as $row) {
-                echo "UPDATE MSH_CONVERSATION_METADATA SET CUSTOMER_ID='" . $row->id . "' WHERE CUSTOMER_ID='" . $row->esb_user_id . "'<br />";
+            $esb = new ManageESB();
+            
+            foreach ($rows as $row) {            
                 ManageESB::$esbdb->query("UPDATE MSH_CONVERSATION_METADATA SET CUSTOMER_ID='" . $row->id . "' WHERE CUSTOMER_ID='" . $row->esb_user_id . "'");                                
             }
             die("completed");
