@@ -552,20 +552,22 @@ function sendTicketMessage()
         
         if($status_changed)
         {
+            $paid_amount = $ticketDetail->ttpay * $ticketDetail->price;
+            
             $wpdb->query("UPDATE " . TABLE_TICKETS . " SET status_id=" . $new_status . " WHERE id=" . $ticketDetail->id);
             $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticketDetail->id, 'status_id' => $new_status, 'created_date' => date("Y-m-d H:i:s")));
             
             if($new_status == TICKET_STATUS_RESOLVED)
             {
-                if($row['ttpay'] * $row['price'] > 0)
+                if($paid_amount > 0)
                 {
                     //Make the payment
-                    $card = getUserCardById($row['card_id']);
+                    $card = getUserCardById($ticketDetail->card_id);
                     if(!$card || $card->status != 'Active')                    
                     {
                         addMessage("The payment method doesn't exist or has been suspended.", "error");
                     }else{                        
-                        $result = processEwayPayment($card->customer_id, $row['ttpay'] * $row['price'], "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
+                        $result = processEwayPayment($card->customer_id, $paid_amount, "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
                         if($result['ewayTrxnStatus'] == 'True')
                         {            
                             //Save Transaction
@@ -574,7 +576,7 @@ function sendTicketMessage()
                                 "parent_id" => $ticketDetail->id,                
                                 "type" => 'ticket',
                                 "trxn_number" => $result['ewayTrxnNumber'],
-                                "amount" => $row['ttpay'] * $row['price'],
+                                "amount" => $paid_amount,
                                 "auth_code" => $result['ewayAuthCode'],
                                 "created_date" => date("Y-m-d H:i:s")
                             ));
