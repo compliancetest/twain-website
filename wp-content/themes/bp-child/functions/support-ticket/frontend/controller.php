@@ -480,7 +480,6 @@ function sendTicketMessage()
         $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b></i>' . "\n\r\n\r" . $message ; 
         $status_changed = true;
         $new_status = TICKET_STATUS_RESOLVED;
-        break;
     }
     
     
