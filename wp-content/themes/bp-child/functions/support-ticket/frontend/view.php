@@ -95,11 +95,18 @@ function showSumitTicketBox()
                         <?php
                             echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket-priority', null, '- Select -');
                         ?>
-                    </div>    
+                    </div>                         
+                    <div class="field-row">
+                        <label>Type:</label>
+                        <?php
+                            echo $ct_ticket_category->getCategoriesSelectboxHTML('category', 'ticket-category', null, '- Select -');
+                            
+                        ?>
+                    </div>
                     <div class="field-row">
                         <div class="grid-cell">
                             <label>Payment Methods:</label>
-                            <select name="card_id" id="card_id" class="select" disabled="disabled">
+                            <select name="ticket-card-id" id="ticket-card-id" class="select">
                                 <option value="">- Select -</option>
                                 <?php foreach($cards as $c): ?>
                                 <option value="<?php echo $c->id?>"><?php echo chunk_split($c->card_number, 4)?>(<?php echo chunk_split($c->nickname, 4)?>)</option>
@@ -107,14 +114,7 @@ function showSumitTicketBox()
                             </select>
                         </div>
                         <div class="clear"></div>
-                    </div>                      
-                    <div class="field-row">
-                        <label>Type:</label>
-                        <?php
-                            echo $ct_ticket_category->getCategoriesSelectboxHTML('category', 'ticket-category', null, '- Select -');
-                            
-                        ?>
-                    </div>      
+                    </div>   
                     <div class="field-row" id="ticket-time-row" style="display: none;">
                         <div class="grid_cell width50P">
                             <label>Time to Response:</label>
@@ -142,7 +142,6 @@ function showSumitTicketBox()
                 </div>
             <a class="close_btn"></a>                        
             <div class="loading loading-with-text"><div><b>SENDING YOUR MESSAGE</b><span>Please wait...</span></div></div>
-            <input type="hidden" name="suite_id" value="<?php echo $suite->id?>" />
             <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('submit-ticket')?>" />
         </form>
     </div>

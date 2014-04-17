@@ -90,6 +90,7 @@ function ct_send_ticket_email($email_id, $email_type, $ticket_id, $message_id = 
         $emailData['[ticket_ttresponse]'] = $ticketDetail->ttresponse;
         $emailData['[ticket_created]'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
         $emailData['[ticket_updated]'] = formatDate($ticketDetail->last_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
+        $emailData['[paid_amount]'] = doubleval($ticketDetail->ttpay) * doubleval($ticketDetail->price);
     }
     
     if($customer_id)

@@ -26,6 +26,8 @@ function createSupportTicket()
     //Remove Spaces from start and end, strip html tags
     $content = stripslashes_deep(strip_tags(trim($_POST['question'])));
     
+    $suite_id = $_POST['suite_id'];
+    $card_id = $_POST['ticket-card-id'];
     $priority_id = $_POST['priority'];
     $category_id = $_POST['category'];
     
@@ -33,6 +35,9 @@ function createSupportTicket()
     $categories = $ct_ticket_category->getCategories();
     
     $error = array();
+    if(!$suite_id)
+        $error[] = 'Please select a test suite.';
+    
     if(!$subject)
         $error[] = 'Ticket subject should not be empty.';
     
@@ -41,6 +46,14 @@ function createSupportTicket()
         
     if(!$priority_id || !($priority = $ct_ticket_priority->getPriorityById($priority_id)))
         $error[] = 'Ticket priority is not valid.';
+    
+    if($priority_id && $priority && $priority->price > 0)
+    {
+        if(!$card_id)
+            $error[] = 'Please select a payment method.';
+        else if(!($card = getUserCardById($card_id)))
+            $error[] = 'Please select a valid payment method';
+    }
     
     if(!$category_id || !($category = $ct_ticket_category->getCategoryById($category_id)))
         $error[] = 'Ticket type is not valid.';
@@ -55,6 +68,8 @@ function createSupportTicket()
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
+        'suite_id' => $suite_id,
+        'card_id' => !$card_id ? 0 : $card_id,
         'title' => $subject,
         'content' => $content,
         'category_id' => $category->id,
@@ -543,6 +558,37 @@ function sendTicketMessage()
             
             if($new_status == TICKET_STATUS_RESOLVED)
             {
+                if($row['ttpay'] * $row['ttprice'] > 0)
+                {
+                    //Make the payment
+                    $card = getUserCardById($row['card_id']);
+                    if(!$card || $card->status != 'Active')                    
+                    {
+                        addMessage("The payment method doesn't exist or has been suspended.", "error");
+                    }else{
+                        $result = processEwayPayment($card->customer_id, $row['ttpay'] * $row['ttprice'], "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
+                        if($result['ewayTrxnStatus'] == 'True')
+                        {            
+                            //Save Transaction
+                            $wpdb->insert($wpdb->prefix . 'users_transactions', array(
+                                "user_id" => $card->user_id,
+                                "parent_id" => $ticketDetail->id,                
+                                "type" => 'ticket',
+                                "trxn_number" => $result['ewayTrxnNumber'],
+                                "amount" => $row['ttpay'] * $row['ttprice'],
+                                "auth_code" => $result['ewayAuthCode'],
+                                "created_date" => date("Y-m-d H:i:s")
+                            ));
+                            
+                        }else{
+                            if(isset($result['ewayTrxnError']))
+                                addMessage($result['ewayTrxnError'], "error");
+                            else if(isset($result['faultstring']))
+                                addMessage($result['faultstring'], "error");
+                        }
+                    }
+                    
+                }
                 //Send Notification of status resolved to the user 
                 ct_send_ticket_email("ticket_solved", 'customer', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);
                 ct_send_ticket_email("ticket_solved_admin", 'support', $ticketDetail->id, $messageID, $ticketDetail->customer_id, $ticketDetail->support_id);

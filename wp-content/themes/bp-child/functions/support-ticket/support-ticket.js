@@ -30,7 +30,7 @@ jQuery(document).ready(function(){
             jQuery("#ticket-price-row").hide();    
         }else if(jQuery('#ticket-priority').val() != ''){            
             jQuery('#ticket-price').html(jQuery('option:selected', this).attr('has-fee') == 'no' ? 'Free' : ('$' + jQuery('#ticket-priority option:selected').attr('price') + '/hr') );
-            jQuery('#ticket-price-row').show();                        
+            jQuery('#ticket-price-row').show();                   
         }
     })
     
@@ -38,10 +38,29 @@ jQuery(document).ready(function(){
     jQuery('body').on('click', '#submit-ticket-link', function(){
         jQuery('#ticketForm').submit();
     });
+    jQuery('body').on('focus', '#ticketForm input[type="text"]', function(){
+        jQuery(this) .removeClass('input-error');
+    });
+    jQuery('body').on('focus', '#ticketForm select', function(){
+        jQuery(this) .removeClass('select-error');
+    });
+    jQuery('body').on('focus', '#ticketForm textarea', function(){
+        jQuery(this) .removeClass('textarea-error');
+    });
     jQuery('body').on('submit', '#ticketForm', function(){
         
         var isValid = true;
         var form = jQuery('#ticketForm');
+        form.find('.input-error').removeClass('input-error');
+        form.find('.textarea-error').removeClass('textarea-error');
+        form.find('.select-error').removeClass('select-error');
+        
+        //Error if subject is null
+        if(form.find('#suite_id').val() == '')
+        {
+            form.find('#suite_id').addClass('select-error');
+            isValid = false;
+        }
         
         //Error if subject is null
         if(form.find('#subject').val() == '')
@@ -68,6 +87,13 @@ jQuery(document).ready(function(){
         if(form.find('#ticket-category').val() == '')
         {
             form.find('#ticket-category').addClass('select-error');
+            isValid = false;
+        }
+        
+        //Error if the payment method is not selected
+        if(form.find('#ticket-category option:selected').attr('has-fee') != 'no' && form.find('#ticket-card-id').val() == '')
+        {
+            form.find('#ticket-card-id').addClass('select-error');
             isValid = false;
         }
         

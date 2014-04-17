@@ -120,7 +120,8 @@ function purchase_paid_subscription()
         //Save Transaction
         $wpdb->insert($wpdb->prefix . 'users_transactions', array(
             "user_id" => $user->ID,
-            "purchase_id" => $purchase_id,
+            "parent_id" => $purchase_id,
+            "type" => 'purchase_subscription',
             "trxn_number" => $result['ewayTrxnNumber'],
             "amount" => $paymentAmount,
             "auth_code" => $result['ewayAuthCode'],
@@ -541,7 +542,8 @@ function process_recurring_payment()
                 //Save Transaction
                 $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                     "user_id" => $row->user_id,
-                    "purchase_id" => $row->purchase_id,
+                    "parent_id" => $row->purchase_id,
+                    "type" => 'purchase_subscription',
                     "trxn_number" => $result['ewayTrxnNumber'],
                     "amount" => $purchase->monthly_fee,
                     "auth_code" => $result['ewayAuthCode'],
@@ -588,7 +590,8 @@ function process_suspended_subscriptions()
             //Save Transaction
             $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                 "user_id" => $row['user_id'],
-                "suite_id" => $row['suite_id'],
+                "parent_id" => $row['id'],                
+                "type" => 'purchase_subscription',
                 "trxn_number" => $result['ewayTrxnNumber'],
                 "amount" => $row['monthly_fee'],
                 "auth_code" => $result['ewayAuthCode'],

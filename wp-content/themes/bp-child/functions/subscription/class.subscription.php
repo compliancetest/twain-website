@@ -166,7 +166,7 @@ class CT_Subscription
             //Remove Purchases
             $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->purchase_id));
             //Remove transactions
-            $wpdb->delete($wpdb->prefix . 'users_transactions', array('purchase_id' => $this->purchase_id));            
+            $wpdb->delete($wpdb->prefix . 'users_transactions', array('parent_id' => $this->purchase_id, 'type' => 'purchase_subscription'));            
         }
         
         //Remove Test Plans

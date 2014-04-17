@@ -7015,15 +7015,15 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding: 7px 15px;
     background: #fff;
     border: solid 1px #cfcfcf;
-    width: 639px;
+    width: 839px;
 }
 .ticket-info > span{
     display: inline-block;
-    margin-right: 30px;
+    margin-right: 50px;
     color: #666;
 }
 .ticket-info > span label{
-    
+    margin-right: 10px;
 }
 .ticket-date{
     margin-bottom: 0;
@@ -7041,7 +7041,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 #ticket-term-info{
-    width: 728px;     
+    width: 928px;     
     position: relative;
     margin-bottom: 0;
 }
@@ -7070,9 +7070,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 #change-term-contr .term-row .input-text{
     width: 55px;
+    margin-left: 10px;
 }
 #change-term-contr .term-row span{
-    margin-right: 40px;
+    margin-right: 60px;
 }
 
 #change-term-contr .field-row{
@@ -7087,7 +7088,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 #change-term-contr .field-row textarea{
     float: left;
-    width: 648px;
+    width: 848px;
 }
 
 #change-term-contr .btn-row{
@@ -7113,7 +7114,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding-left: 15px;
 }
 #new-message-wrap .field-row textarea{
-    width: 680px;
+    width: 860px;
 }
 #new-message-wrap .btn-row{
     padding: 10px 0;

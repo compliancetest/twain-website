@@ -300,7 +300,8 @@ function ct_manage_subscriptions_trigger_processing_run()
                     //Save Transaction
                     $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                         "user_id" => $row->user_id,
-                        "purchase_id" => $row->id,
+                        "parent_id" => $row->id,
+                        "type" => 'purchase_subscription',
                         "trxn_number" => $result['ewayTrxnNumber'],
                         "amount" => $monthlyFee * $months,
                         "auth_code" => $result['ewayAuthCode'],
