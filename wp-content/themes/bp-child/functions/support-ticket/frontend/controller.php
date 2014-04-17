@@ -557,15 +557,15 @@ function sendTicketMessage()
             
             if($new_status == TICKET_STATUS_RESOLVED)
             {
-                if($row['ttpay'] * $row['ttprice'] > 0)
+                if($row['ttpay'] * $row['price'] > 0)
                 {
                     //Make the payment
                     $card = getUserCardById($row['card_id']);
                     if(!$card || $card->status != 'Active')                    
                     {
                         addMessage("The payment method doesn't exist or has been suspended.", "error");
-                    }else{
-                        $result = processEwayPayment($card->customer_id, $row['ttpay'] * $row['ttprice'], "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
+                    }else{                        
+                        $result = processEwayPayment($card->customer_id, $row['ttpay'] * $row['price'], "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
                         if($result['ewayTrxnStatus'] == 'True')
                         {            
                             //Save Transaction
@@ -574,7 +574,7 @@ function sendTicketMessage()
                                 "parent_id" => $ticketDetail->id,                
                                 "type" => 'ticket',
                                 "trxn_number" => $result['ewayTrxnNumber'],
-                                "amount" => $row['ttpay'] * $row['ttprice'],
+                                "amount" => $row['ttpay'] * $row['price'],
                                 "auth_code" => $result['ewayAuthCode'],
                                 "created_date" => date("Y-m-d H:i:s")
                             ));
