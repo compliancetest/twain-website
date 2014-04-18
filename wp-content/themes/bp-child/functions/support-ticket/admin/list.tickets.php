@@ -228,7 +228,7 @@ class CT_Tickets_Ticket_List_Table extends WP_List_Table
     {
         global $wpdb;
         
-        $query = "SELECT up.*, u.display_name, u.user_email  FROM " . $wpdb->prefix . "users_purchases AS up "
+        $query = "SELECT DISTINCT(up.user_id), u.display_name, u.user_email  FROM " . $wpdb->prefix . "users_purchases AS up "
                 ."LEFT JOIN {$wpdb->users} AS u ON u.ID=up.user_id WHERE up.status='Active' ORDER BY display_name";
         
         $results = $wpdb->get_results($query);
