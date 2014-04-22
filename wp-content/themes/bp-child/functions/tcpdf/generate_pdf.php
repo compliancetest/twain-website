@@ -34,6 +34,22 @@ function generateClaimPdf() {
         $pdf->setLanguageArray($l);
     }
 
+
+/*
+    // set certificate file
+    $certificate = 'file://c:\ssl\cptest.crt';
+
+    // set additional information
+    $info = array(
+        'Name' => 'ComplianceTest',
+        'Location' => 'Australia',
+        'Reason' => 'ComplianceTest Testing',
+        'ContactInfo' => 'http://www.compliancetest.net',
+    );
+
+    // set document signature
+    $pdf->setSignature($certificate, $certificate, '', '', 2, $info);
+*/
     // ---------------------------------------------------------
 
     // Set font
@@ -131,6 +147,15 @@ function generateClaimPdf() {
     // Print text using writeHTMLCell()
     $compliance_tested_image = K_PATH_IMAGES . "compliance-tested.png";
     $pdf->Image($compliance_tested_image, '', '', 120, '', 'PNG', '', 'N', false, 300, 'C', false, false, 1, false, false, false);
+
+    // define active area for signature appearance
+    $pdf->setSignatureAppearance(45, 72, 121, 29);
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    // *** set an empty signature appearance ***
+//    $pdf->addEmptySignatureAppearance(0, 20, 210, 50);
+
 
     // Print text using writeHTMLCell()
     $pdf->writeHTMLCell('', '', '', '', $certificate_data_info, 0, 1, 0, true, '', true);
