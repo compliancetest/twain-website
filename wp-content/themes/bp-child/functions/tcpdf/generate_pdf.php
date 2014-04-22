@@ -102,6 +102,10 @@ function generateClaimPdf() {
         <td>Fund</td>
     </tr>
     <tr>
+        <th>Status</th>
+        <td>Self Assessed</td>
+    </tr>
+    <tr>
         <th>Claim ID</th>
         <td>SS-CTR-00768475</td>
     </tr>
