@@ -63,12 +63,10 @@ class CT_Tickets_Ticket_List_Table extends WP_List_Table
     {
         switch($column_name)
         {
-            /*case 'subject':
-                return $item->status . $this->row_actions(array(
-                    "<a href='admin.php?page=ct-tickets-statuses&ct-ticket-action=" . wp_create_nonce('edit-ticket-status') . "&id=" . $item->id . "'>Edit</a>",
-                    "<a href='admin.php?page=ct-tickets-statuses&ct-ticket-action=" . wp_create_nonce('delete-ticket-status') . "&id=" . $item->id . "'>Delete</a>"
-                    
-                ));*/
+            case 'title':
+                return $item->title . $this->row_actions(array(
+                    "<a href='admin.php?page=ct-tickets&id=" . $item->id . "'>View</a>"                    
+                ));
             case 'id':
                 return str_pad($item->id, 8, 0, STR_PAD_LEFT);            
             case 'customer':
@@ -181,7 +179,7 @@ class CT_Tickets_Ticket_List_Table extends WP_List_Table
                 . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
                 . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
                 . "LEFT JOIN " . $wpdb->users . " AS U ON u.ID=t.customer_id "
-                . "LEFT JOIN " . $wpdb->users . " AS U1 ON u1.ID=t.customer_id ";
+                . "LEFT JOIN " . $wpdb->users . " AS U1 ON u1.ID=t.support_id ";
         
         $where = array();
         
