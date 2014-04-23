@@ -28,28 +28,20 @@ function generateClaimPdf() {
     // Set image scale factor
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-    // Set some language-dependent strings (optional)
-    if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
-        require_once(dirname(__FILE__) . '/lang/eng.php');
-        $pdf->setLanguageArray($l);
-    }
-
-
-/*
     // set certificate file
-    $certificate = 'file://c:\ssl\cptest.crt';
+    $certificate = 'file://' . __DIR__ . '\claims.pem';
 
     // set additional information
     $info = array(
-        'Name' => 'ComplianceTest',
+//        'Name' => 'ComplianceTest',
+//        'Reason' => 'ComplianceTest Testing',
         'Location' => 'Australia',
-        'Reason' => 'ComplianceTest Testing',
         'ContactInfo' => 'http://www.compliancetest.net',
     );
 
     // set document signature
     $pdf->setSignature($certificate, $certificate, '', '', 2, $info);
-*/
+
     // ---------------------------------------------------------
 
     // Set font
