@@ -1043,3 +1043,15 @@ function get_products_args(){
 
     return $args;
 }
+
+function ct_cut_html_string($string, $length = 100)
+{
+    if(!$string){
+        $rString = '';
+    }else{
+        $htmlCut = new HtmlCutString($string, $length);
+        $rString = $htmlCut->cut();    
+    }
+    
+    return $rString;
+}

@@ -3,6 +3,8 @@ class ComplianceClaim
 {
     var $id = null;
     
+    var $claim_id = null;
+    
     var $product_id = null;
     
     var $creator_id = null;
@@ -44,6 +46,7 @@ class ComplianceClaim
             $this->suite_id = $row->suite_id;
             $this->conformance_level = $row->conformance_level;
             $this->role = $row->role;
+            $this->claim_id = $row->claim_id;
             $this->status = $row->status;
             $this->created_date = $row->created_date;
             $this->last_updated = $row->last_updated;

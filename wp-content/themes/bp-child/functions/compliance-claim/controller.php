@@ -19,7 +19,7 @@ function ct_claim_certification_view()
         $certificate = $wpdb->get_var($query);
         
         header("Content-type: application/pdf");
-        readfile(STYLESHEETPATH . "/images/sample.pdf");
+        echo $certificate;
         
         //Echo PDF file
         exit;
@@ -114,10 +114,14 @@ function makeClaim()
             'certificate' => '', //This is empty for now. Ilia will need to update this
             'audit'    =>  ''
         ));
-        if(!$nId)
-            $nId = $wpdb->update(TABLE_CLAIM, array(
-                'claim_id'    =>  getClaimID($wpdb->insert_id, $_POST['suite_id'])                
-            ), array('id' => $claim->id));
+        
+        $claimID = $wpdb->insert_id;
+        
+        $wpdb->update(TABLE_CLAIM, array(
+            'claim_id'    =>  getClaimID($wpdb->insert_id, $_POST['suite_id'])                
+        ), array('id' => $claimID));
+        
+        
     }else{  //Edit Claim
         $nId = $wpdb->update(TABLE_CLAIM, array(
             'suite_id'    =>  $_POST['suite_id'],
@@ -132,9 +136,394 @@ function makeClaim()
         wp_redirect('/my-products');
         exit;
     }
+    
+    //Update DPF
+    $pdfString = createClaimPDF($claimID);
+    $wpdb->update(TABLE_CLAIM, array(
+            'certificate'    =>  $pdfString                
+        ), array('id' => $claimID));
+    
     addMessage('Compliance Claim was saved successfully!');
     wp_redirect('/my-products');
     exit;
+}
+
+function createClaimPDF($claim_id)
+{
+    global $wpdb;
+    
+    require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
+    require_once(THE_FUNCTION . '/tcpdf/config/tcpdf_config.php');
+    // Include 2D barcode class
+    require_once(THE_FUNCTION . '/tcpdf/tcpdf_barcodes_2d.php');
+    
+    // Create new PDF document
+    $pdf = new CPPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+    // Set document meta information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('ComplianceTest');
+    $pdf->SetTitle('ComplianceTest Certificate');
+    $pdf->SetSubject('ComplianceTest Certificate');
+
+    // Set margins
+    $pdf->SetMargins(12, 29, 12, true);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // Set auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // Set image scale factor
+    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    // set certificate file
+    $certificate = 'file://' . THE_FUNCTION . '\tcpdf\claims.pem';
+
+    // set additional information
+    $info = array(
+//        'Name' => 'ComplianceTest',
+//        'Reason' => 'ComplianceTest Testing',
+        'Location' => 'Australia',
+        'ContactInfo' => 'http://www.compliancetest.net',
+    );
+
+    // set document signature
+    $pdf->setSignature($certificate, $certificate, '', '', 2, $info);
+
+    // ---------------------------------------------------------
+
+    // Set font
+    $pdf->SetFont('opensans', '', 13, '', true);
+
+    // Set line-height
+    $pdf->setCellHeightRatio(1);
+
+    // Add a page
+    // This method has several options, check the source code documentation for more information.
+    $pdf->AddPage();
+
+    $title = '<h1 style="color: #000; font-size: 48pt; font-weight: bold; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
+    $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has successfully completed the indicated test suite using the specified product or service version. The test suite has been designed to meet the compliance requirements of the reference specification issuer.<br></p>';
+    
+    //Getting Claim Defaults
+    $claim = new ComplianceClaim($claim_id);
+    $claim->load();
+    
+    $suite = new TestSuite($claim->suite_id);
+    $suite->load();
+    
+    $certificate_data_info = '
+<style>
+    table.certificate-info th {
+        border-bottom: 0.2em solid #959595;
+        font-weight: normal;
+        margin-left: 2pt;
+        width: 35%;
+        font-size:13pt;
+        color:#262626;
+    }
+    table.certificate-info td {
+        border-bottom: 0.2em solid #959595;
+        font-weight: bold;
+        width:63%;
+        font-size:13pt;
+        color:#000;
+    }
+</style>
+<br><br>
+<table cellspacing="5" cellpadding="5" class="certificate-info" width="100%">
+    <tr>
+        <th>Issued To</th>
+        <td>' . $claim->issuer . '</td>
+    </tr>
+    <tr>
+        <th>Product or Service</th>
+        <td><a href="' . get_permalink($claim->product_id) .'">' . get_the_title($claim->product_id) . '</a></td>
+    </tr>
+    <tr>
+        <th>Product Version</th>
+        <td>' . get_post_meta($claim->product_id, 'product_version', true) . '</td>
+    </tr>
+    <tr>
+        <th>Test Suite</th>
+        <td><a href="' . get_permalink($claim->suite_id) .'">' . get_the_title($claim->suite_id) . '</a></td>
+    </tr>
+    <tr>
+        <th>Test Suite Version</th>
+        <td>' . $suite->version . '</td>
+    </tr>
+    <tr>
+        <th>Specification Issuer</th>
+        <td>' . get_post_meta($claim->product_id, 'product_owner', true) . '</td>
+    </tr>
+    <tr>
+        <th>Conformance Level(s)</th>
+        <td>' . $claim->conformance_level . '</td>
+    </tr>
+    <tr>
+        <th>Role(s)</th>
+        <td>' . $claim->role . '</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>' . $claim->status . '</td>
+    </tr>
+    <tr>
+        <th>Claim ID</th>
+        <td>' . $claim->claim_id .'</td>
+    </tr>
+    <tr>
+        <th>Date of Claim</th>
+        <td>' . formatDate($claim->created_date, 'd F Y') . '</td>
+    </tr>
+</table>
+';
+
+
+    $pdf->SetFont('opensansb', '', 13, '', true);
+
+    $pdf->setHtmlLinksStyle(array(91, 117, 182));
+
+    // Print text using writeHTMLCell()
+    $pdf->writeHTMLCell(0, 0, '', '', $title, 0, 1, 0, false, 'C', true);
+
+
+    $pdf->SetFont('opensans', '', 13, '', true);
+    // Print text using writeHTMLCell()
+    $pdf->writeHTMLCell(0, 0, '', '', $description, 0, 1, 0, false, '', false);
+
+    // Print text using writeHTMLCell()
+    $compliance_tested_image = K_PATH_IMAGES . "compliance-tested.png";
+    $pdf->Image($compliance_tested_image, '', '', 120, '', 'PNG', '', 'N', false, 300, 'C', false, false, 1, false, false, false);
+
+    // define active area for signature appearance
+    $pdf->setSignatureAppearance(45, 72, 121, 29);
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    // *** set an empty signature appearance ***
+//    $pdf->addEmptySignatureAppearance(0, 20, 210, 50);
+
+
+    // Print text using writeHTMLCell()
+    $pdf->writeHTMLCell('', '', '', '', $certificate_data_info, 0, 1, 0, true, '', true);
+
+    // Styles for QR code
+    $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
+
+    // QRCODE,H : QR-CODE Best error correction
+    $pdf->write2DBarcode(get_permalink($claim->product_id), 'QRCODE,H', '', '', 40, 40, $style, 'N');
+
+    $link = '<div style="text-align:center;"><a href="' . get_permalink($claim->product_id) . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_permalink($claim->product_id) . '</a></div>';
+
+    $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
+    // ---------------------------------------------------------
+
+
+    // ---------------------------------------------------------
+    $pdf->SetMargins(3.8, 24.5, 3.8, true);
+
+    // Add a page
+    // This method has several options, check the source code documentation for more information.
+    $pdf->AddPage();
+
+
+    $pdf->setTextShadow(array('enabled' => false));
+    
+    $test_cases_table_html = '
+<style>
+    .test-cases-table th {
+        background-color:#5a75b6;
+        color:#fff;
+        font-size:7pt;
+        vertical-align:middle;
+        line-height:18pt;
+        text-align:center;
+        font-weight:bold;
+    }
+    .test-cases-table th.test-outcome{
+        line-height:10px;
+    }
+    .test-cases-table th.test-scenario{
+        text-align:left;
+    }
+    .test-cases-table td {
+        font-size:6pt;
+        line-height:6pt;
+        color:#000;
+    }
+    .test-cases-table .even td{
+        background-color:#f3f4f5;
+    }
+    .test-cases-table .odd td{
+        background-color:#ececed;
+    }
+    .test-cases-table td a{
+        font-size:10pt;
+    }
+    .test-cases-table td.test-scenario{
+        background-color:#e2e2e2;
+    }
+
+    .issued, .test-outcome, .supporting-evidence{
+        text-align:center;
+    }
+</style>
+<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
+    <tr>
+        <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
+        <th class="test-case" style="width:12%;">Test Case</th>
+        <th class="issued" style="width:8%;">Issued</th>
+        <th class="test-intent" style="width:30%;">Test Intent Description</th>
+        <th class="test-outcome" style="width:8%;">Test<br/>Outcome</th>
+        <th class="supporting-evidence" style="width:17%;">Supporting Evidence</th>
+    </tr>';
+    
+    //Getting Test Cases
+    $args = array(
+            'post_type' => 'test-case',         
+            'posts_per_page' => -1,                            
+            'orderby'  => 'title',
+            'order'     => 'ASC',                            
+            'meta_query' => array('relation' => 'and')
+    );
+    //Add Test Suite ID
+    $args['meta_query'][] = array('key' => 'test_suite', 'value' => $claim->suite_id, 'compare' => '=');
+    
+    $args['meta_query'][] = array(
+                                'key' => 'hide_case',
+                                'value' => 0,
+                                'compare' => '='
+                            ); 
+    $args['meta_query'][] = array(
+                                'key' => 'conformance_level_' . $suite->id,
+                                'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                                'compare' => '!='
+                            );  
+          
+    $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $claim->role, 'compare' => '=');               
+    $args['meta_query'][] = array('key' => 'conformance_level_'. $claim->suite_id, 'value' => $claim->conformance_level,'compare' => '=');
+    
+    $get_query = new WP_Query($args);
+
+    //Add Order by Scenaro 
+    $get_query->set('suppress_filters', false);
+    add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
+    add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
+    add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
+    $testCases = $get_query->get_posts();
+    
+    //Remove Filters
+    remove_filter('posts_join_paged', 'add_scenario_join_query');
+    remove_filter('posts_orderby', 'add_scenario_orderby_query');
+    remove_filter('posts_fields_request', 'add_scenario_fields_query');
+    
+    
+    
+    //Getting Customer Subscription ID
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->preifx}subscriptions WHERE user_id=%d AND suite_id=%d", $claim->creator_id, $claim->suite_id);
+    $esbID = $wpdb->get_var($query);
+    
+    if($esbID)
+    {
+        //Getting Case Status
+        $esb = new ManageESB();
+        
+        $query = "SELECT m.ID as MSG_ID, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
+                 "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
+                 "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
+                 "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
+                 "LEFT JOIN " . $esb->table_test_case_configuration . " AS cc ON c.TEST_CASE_CONFIGURATION_ID=cc.ID " .                 
+                 " WHERE c.customer_id=$esbID AND sc.TEST_SUITE_WP_ID={$claim->suite_id} AND c.PRODUCT_ID='" . get_post_meta($claim->product_id, 'product_id', true) . "'";
+        
+        $esbResults = ManageESB::$esbdb->get_results($query);
+        
+    }
+    
+    //Classify the results by Scenario
+    $results = array();
+    foreach($testCases as $row)
+    {
+        if(isset($esbResults))
+        {
+            foreach($esbResults as $erow)    
+            {
+                if($erow->TEST_CASE_ID == $row->ID)
+                {
+                    $row->OUTCOME = $erow->OUTCOME;
+                    $row->MSG_ID = $erow->MSG_ID;                    
+                }
+            }
+        }
+        if(!isset($results[$row->scenarioId]))
+            $results[$row->scenarioId] = array();
+        $results[$row->scenarioId][] = $row;
+    }
+    
+    $first = true;
+    $idx = 0;
+    
+    foreach($results as $scId => $testCases)
+    { 
+        $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
+        if(!$tDesc){
+            $rString = '';
+        }else{
+            $htmlCut = new HtmlCutString($tDesc, 100);
+            $rtString = $htmlCut->cut();    
+        }
+            
+           
+        $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
+                <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[0]->scenarioCode . ':</strong><br>' . $testCases[0]->scenarioDescription . '</td>
+                <td class="test-case">' . get_the_title($testCases[0]->ID) . '</td>
+                <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
+                <td class="test-intent">' . $rString . '</td>';        
+        $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
+        
+        if(isset($testCases[0]->MSG_ID))
+            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSH_ID . '">/message-envelope?id=' . $testCases[0]->MSH_ID . '</a></td>';
+        else
+            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+        
+        $test_cases_table_html .= '</tr>';    
+        $idx++;
+        
+        for($i=1; $i < count($testCases); $i++)
+        {
+            $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
+                    <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>
+                    <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
+                    <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
+                    <td class="test-intent">' . $rString . '</td>';        
+            $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[$i]->OUTCOME) ? $testCases[$i]->OUTCOME : '-') . '</td>';
+            
+            if(isset($testCases[$i]->MSG_ID))
+                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSH_ID . '">/message-envelope?id=' . $testCases[$i]->MSH_ID . '</a></td>';
+            else
+                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+            
+            $test_cases_table_html .= '</tr>';    
+            $idx++;
+        }
+    }
+    
+
+    $pdf->SetFont('opensans', '', 13, '', true);
+    
+    if($results)
+        $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', true);
+        
+    $test_cases_table_html .= '</table>';
+    // Close and output PDF document
+    // This method has several options, check the source code documentation for more information.
+    $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
+    
+    return $pdfString;
+    //============================================================+
+    // END OF FILE
+    //============================================================+
 }
 
 function editClaim()

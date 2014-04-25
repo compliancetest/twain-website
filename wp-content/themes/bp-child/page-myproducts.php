@@ -85,7 +85,7 @@ get_header();
                            </div>
                            <?php
                        }else{
-                           foreach($claims as $claim){                               
+                           foreach($claims as $claim){                                                  
                            ?>
                            <div class="tr">
                                <div class="td td-claim-id toright"><?php echo $claim->claim_id ?></div>
