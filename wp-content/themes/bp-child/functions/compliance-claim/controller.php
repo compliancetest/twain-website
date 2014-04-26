@@ -150,7 +150,7 @@ function makeClaim()
 
 function createClaimPDF($claim_id)
 {
-    global $wpdb;
+    global $wpdb, $post;
     
     require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
     require_once(THE_FUNCTION . '/tcpdf/config/tcpdf_config.php');
@@ -380,6 +380,8 @@ function createClaimPDF($claim_id)
         <th class="supporting-evidence" style="width:17%;">Supporting Evidence</th>
     </tr>';
     
+    $post = get_post($claim->suite_id);
+    
     //Getting Test Cases
     $args = array(
             'post_type' => 'test-case',         
@@ -405,6 +407,8 @@ function createClaimPDF($claim_id)
     $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $claim->role, 'compare' => '=');               
     $args['meta_query'][] = array('key' => 'conformance_level_'. $claim->suite_id, 'value' => $claim->conformance_level,'compare' => '=');
     
+    
+    
     $get_query = new WP_Query($args);
     //Add Order by Scenaro 
     $get_query->set('suppress_filters', false);
@@ -412,13 +416,11 @@ function createClaimPDF($claim_id)
     add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
     add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
     $testCases = $get_query->get_posts();
-    echo $get_query->request;exit;
+    
     //Remove Filters
     remove_filter('posts_join_paged', 'add_scenario_join_query');
     remove_filter('posts_orderby', 'add_scenario_orderby_query');
     remove_filter('posts_fields_request', 'add_scenario_fields_query');
-    
-    
     
     //Getting Customer Subscription ID
     $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d AND suite_id=%d", $claim->creator_id, $claim->suite_id);
