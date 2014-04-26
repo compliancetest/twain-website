@@ -437,7 +437,7 @@ function createClaimPDF($claim_id)
                  "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
                  "LEFT JOIN " . $esb->table_test_case_configuration . " AS cc ON c.TEST_CASE_CONFIGURATION_ID=cc.ID " .                 
                  " WHERE c.customer_id=$esbID AND sc.TEST_SUITE_WP_ID={$claim->suite_id} AND c.PRODUCT_ID='" . get_post_meta($claim->product_id, 'product_id', true) . "'";
-        
+        echo $query;exit;
         $esbResults = ManageESB::$esbdb->get_results($query);
         
     }
