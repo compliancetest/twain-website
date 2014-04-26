@@ -18,7 +18,7 @@ class CPRest
         }
     }
 
-    public function doAPI($url, $data, $isPost = true, $isXMLHeader = true)
+    public function doAPI($url, $data, $isPost = true, $isXMLHeader = true, $displayError = true)
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -38,7 +38,10 @@ class CPRest
         if (!curl_errno($ch)) {
             return $response;
         } else {
-            echo '<html><head><title>Sorry!</title><link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700" rel="stylesheet" type="text/css"/><link href="https://www.compliancetest.net/wp-content/themes/bp-child/css/xslt.css" type="text/css" rel="stylesheet"/></head><body><div id="wrapper"><div id="header-wrapper"><div class="content"><a href="https://www.compliancetest.net" class="logo left"><img src="https://www.compliancetest.net/wp-content/uploads/2013/03/logo.png"/></a></div></div><div id="menu-wrapper"></div><div id="content-wrapper"><div class="content"><div id="content-inner"><h2>An Error Occurred!</h2><p>We\'re sorry, but an error occurred during request execution. Please try again later or contact support.</p></div></div></div></div></body></html>';
+            if($displayError)
+                echo '<html><head><title>Sorry!</title><link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700" rel="stylesheet" type="text/css"/><link href="https://www.compliancetest.net/wp-content/themes/bp-child/css/xslt.css" type="text/css" rel="stylesheet"/></head><body><div id="wrapper"><div id="header-wrapper"><div class="content"><a href="https://www.compliancetest.net" class="logo left"><img src="https://www.compliancetest.net/wp-content/uploads/2013/03/logo.png"/></a></div></div><div id="menu-wrapper"></div><div id="content-wrapper"><div class="content"><div id="content-inner"><h2>An Error Occurred!</h2><p>We\'re sorry, but an error occurred during request execution. Please try again later or contact support.</p></div></div></div></div></body></html>';
+            else
+                return false;
         }
     }
 
@@ -48,9 +51,9 @@ class CPRest
      * @param String $action
      * @param String $data
      */
-    public function doUserAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
+    public function doUserAPI($action, $data = '', $isPost = true, $isXMLHeader = true, $displayError = true)
     {
-        return $this->doAPI($this->internal_api_namespace . "/users/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->internal_api_namespace . "/users/" . $action, $data, $isPost, $isXMLHeader, $displayError);
     }
 
     /**
@@ -60,19 +63,19 @@ class CPRest
      * @param String $data
      */
 
-    public function doRepositoryAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
+    public function doRepositoryAPI($action, $data = '', $isPost = true, $isXMLHeader = true, $displayError = true)
     {
-        return $this->doAPI($this->external_api_namespace . "/repository/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->external_api_namespace . "/repository/" . $action, $data, $isPost, $isXMLHeader, $displayError);
     }
 
-    public function doMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
+    public function doMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true, $displayError = true)
     {
-        return $this->doAPI($this->external_api_namespace . "/messaging/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->external_api_namespace . "/messaging/" . $action, $data, $isPost, $isXMLHeader, $displayError);
     }
 
-    public function doMetadataAPI($action, $data = '', $isPost = true, $isXMLHeader = true)
+    public function doMetadataAPI($action, $data = '', $isPost = true, $isXMLHeader = true, $displayError = true)
     {
-        return $this->doAPI($this->internal_api_namespace . "/metadata/" . $action, $data, $isPost, $isXMLHeader);
+        return $this->doAPI($this->internal_api_namespace . "/metadata/" . $action, $data, $isPost, $isXMLHeader, $displayError);
     }
 
     public function getTemplateList($suiteName, $majorVersion)

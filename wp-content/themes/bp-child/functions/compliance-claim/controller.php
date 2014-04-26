@@ -422,7 +422,7 @@ function createClaimPDF($claim_id)
     
     
     //Getting Customer Subscription ID
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->preifx}subscriptions WHERE user_id=%d AND suite_id=%d", $claim->creator_id, $claim->suite_id);
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d AND suite_id=%d", $claim->creator_id, $claim->suite_id);
     $esbID = $wpdb->get_var($query);
     
     if($esbID)
