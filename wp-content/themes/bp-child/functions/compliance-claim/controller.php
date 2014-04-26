@@ -472,7 +472,7 @@ function createClaimPDF($claim_id)
             $rString = '';
         }else{
             $htmlCut = new HtmlCutString($tDesc, 100);
-            $rtString = $htmlCut->cut();    
+            $rString = $htmlCut->cut();    
         }
             
            
@@ -493,8 +493,14 @@ function createClaimPDF($claim_id)
         
         for($i=1; $i < count($testCases); $i++)
         {
-            $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
-                    <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>
+            $tDesc = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
+            if(!$tDesc){
+                $rString = '';
+            }else{
+                $htmlCut = new HtmlCutString($tDesc, 100);
+                $rString = $htmlCut->cut();    
+            }
+            $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">                    
                     <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
                     <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
                     <td class="test-intent">' . $rString . '</td>';        
@@ -510,16 +516,17 @@ function createClaimPDF($claim_id)
         }
     }
     
-
+    $test_cases_table_html .= '</table>';
     $pdf->SetFont('opensans', '', 13, '', true);
     
     if($results)
         $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', true);
         
-    $test_cases_table_html .= '</table>';
+    
+        
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.
-    $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
+    $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');exit;
     
     return $pdfString;
     //============================================================+
