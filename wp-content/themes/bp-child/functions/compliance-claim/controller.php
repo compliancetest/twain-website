@@ -526,7 +526,7 @@ function createClaimPDF($claim_id)
         
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.
-    $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');exit;
+    $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
     
     return $pdfString;
     //============================================================+
