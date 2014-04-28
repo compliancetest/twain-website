@@ -233,7 +233,7 @@ function cp_save_transaction_log()
                               <api:testCaseId>' . $testCaseId . '</api:testCaseId>
                               <api:conversationId>' . $row->CONVERSATION_ID . '</api:conversationId>
                             </api:calculateTestCaseOutcomeRequest>';
-                $result = $rest->doMetadataAPI("testcase/outcome", $xmlData, true, true, true);                
+                $result = $rest->doMetadataAPI("testcase/outcome", $xmlData, true, true, false);                
                 
             }
         }
