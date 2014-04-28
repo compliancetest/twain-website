@@ -405,7 +405,7 @@ function ct_manage_subscriptions_show_users_list()
     ?>
     <div class="wrap">
         <h2>Users</h2>
-        <form name="adminform" action="users.php?page=user_fee_overrides" method="post">
+        <form name="adminform" action="admin.php?page=manage-payments" method="post">
         <?php
             echo $listTable->display();
         ?>
