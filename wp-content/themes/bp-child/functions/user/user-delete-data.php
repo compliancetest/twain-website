@@ -102,7 +102,7 @@ function ct_clear_user_transaction_logs()
         
         if($esbIds)
         {
-            $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE ID in (" . implode(", ", $esbIds) . ")";            
+            $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE CUSTOMER_ID in (" . implode(", ", $esbIds) . ")";            
             ManageESB::$esbdb->query($query);
         }
         wp_redirect(admin_url() . 'users.php?clear-trans=1');
