@@ -23,6 +23,20 @@ function ct_delete_user_data($user_id)
         wp_delete_post($p->ID);
     }
     
+    $esb = new ManageESB();
+        
+    //Getting ESB IDs
+    $query = "SELECT id FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id = $user_id";                
+    $esbIds = $wpdb->get_col($query);
+    
+    //Delete Transaction Logs
+    
+    if($esbIds)
+    {
+        $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE CUSTOMER_ID in (" . implode(", ", $esbIds) . ")";            
+        ManageESB::$esbdb->query($query);
+    }
+    
     //Delete Payment Logs
     $wpdb->delete($wpdb->prefix . "users_transactions", array('user_id' => $user_id));
     //Delete Subscriptions
@@ -37,18 +51,7 @@ function ct_delete_user_data($user_id)
     $wpdb->delete($wpdb->prefix . "compliance_claims", array('creator_id' => $user_id));
     //Delete Profile Instances
     $wpdb->delete($wpdb->prefix . "community_profile_instances", array('creator_id' => $user_id, 'type' => 'tester'));
-    //Delete Transaction Logs
-    $esb = new ManageESB();
-        
-    //Getting ESB IDs
-    $query = "SELECT id FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id = $user_id";                
-    $esbIds = $wpdb->get_col($query);
     
-    if($esbIds)
-    {
-        $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE ID in (" . implode(", ", $esbIds) . ")";            
-        ManageESB::$esbdb->query($query);
-    }
     
     return $user_id;
 }
