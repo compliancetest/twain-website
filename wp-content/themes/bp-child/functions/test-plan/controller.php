@@ -174,7 +174,7 @@ function editPlan()
                     <div class="grid-cell">
                         <label>Product/Service</label>
                         <select class="select" name="product_id" id="product_id">                            
-                            <option value="">Select a Product/Serivce</option>
+                            <option value="">Select a Product/Service</option>
                             <?php foreach($products as $p){ ?>
                             <option value="<?php echo $p->ID?>" <?php echo $plan->product_id == $p->ID ? 'selected="selected"' : ''?>><?php echo get_the_title($p->ID)?></option>
                             <?php } ?>
