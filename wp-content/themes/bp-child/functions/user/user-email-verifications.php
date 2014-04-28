@@ -34,6 +34,7 @@ function ct_manage_email_verifications()
             }
         }
         
+        
         $msg = 'Successfully Verified!';
     } else if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'cancelled') {
         if ( empty($_REQUEST['users']) )

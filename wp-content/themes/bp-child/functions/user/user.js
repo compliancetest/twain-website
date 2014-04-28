@@ -21,6 +21,7 @@
             $(".simple_tooltip_pop").fadeOut('fast');
         });
         
+        
         //Add Loading Wrapper to Top Login Form
         $('#top_access').append('<div class="loading1"></div>');
         //Header Login Form

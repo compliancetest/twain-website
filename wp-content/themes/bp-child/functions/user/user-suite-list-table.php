@@ -59,6 +59,7 @@ class CT_User_Suite_List_Table extends WP_List_Table
           }
     }
       
+      
     function column_default($item, $column_name)
     {
         global $wpdb;

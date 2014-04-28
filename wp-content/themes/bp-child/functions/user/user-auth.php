@@ -2,7 +2,6 @@
 /**
 * Manage User Login, Register, Verification Email
 */
-
 //Compliancetest login function
 function compliancetest_login()
 {
