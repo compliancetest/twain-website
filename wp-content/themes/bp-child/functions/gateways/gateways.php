@@ -138,9 +138,6 @@ function gateway_actions()
         {
             $wpdb->query("DELETE FROM " . $wpdb->prefix . "gateways WHERE gateway_id IN (" . implode(', ', $gateway_ids) . ')');    
         }
-        
-        
-        $msg = 'Successfully Verified!';
     }
 }
 ?>
