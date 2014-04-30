@@ -151,6 +151,8 @@ require_once(THE_FUNCTION . "/tmp_functions.php");
 
 require_once(STYLESHEETPATH . '/bbpress/customize.php');
 
+require_once(THE_FUNCTION . '/gateways/gateways.php');
+
 /* 
  * Loads the Options Panel
  *
