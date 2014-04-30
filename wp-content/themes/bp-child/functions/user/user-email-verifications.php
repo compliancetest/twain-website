@@ -59,7 +59,7 @@ function ct_manage_email_verifications()
     $listTable->prepare_items();
     ?>
     <div class="wrap">
-        <h2>Users</h2>
+        <h2>Users Email Verification</h2>
         <?php if(isset($msg)){ ?>
         <div id="message" class="updated below-h2"><p><?php echo $msg?></p></div>
         <?php } ?>
