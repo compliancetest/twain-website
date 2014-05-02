@@ -75,7 +75,7 @@ function ct_manage_gateway_edit()
         <?php else: ?>
             <h2>Add New Gateway</h2>
         <?php endif; ?>
-        <form name="adminform" action="<?php echo admin_url() . 'admin.php?page=gateway_edit'; ?>" method="post" onsubmit="return validateGatewayForm()">
+        <form name="adminform" action="<?php echo admin_url() . 'admin.php?page=gateway_edit'; ?>" method="post">
             <div id="infos-gateway" class="postbox">
                 <h3 class="hndle"><span>Gateway Information</span></h3>
                 <div class="inside">
@@ -141,10 +141,3 @@ function gateway_actions()
     }
 }
 ?>
-
-<script type="text/javascript">
-function validateGatewayForm()
-{
-    return true;
-}
-</script>
