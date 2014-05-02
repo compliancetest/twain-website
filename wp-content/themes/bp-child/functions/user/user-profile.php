@@ -549,6 +549,8 @@ function cp_get_customer_harness_detail()
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE id=%d", $_REQUEST['id']);
     $row = $wpdb->get_row($query);
     
+    $gateways = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gateways");
+    
     $user_id = get_current_user_id();
     
     $user = get_userdata($user_id);
@@ -600,6 +602,34 @@ function cp_get_customer_harness_detail()
                             <div class="grid-cell">
                                 <label>Harness Password:</label>
                                 <input class="input" type="text" name="harness_password" id="harness_password" value="<?php echo $row->harness_password?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Entity Type:</label>
+                                <select name="entity_type" class="select">
+                                    <?php foreach ($gateways as $gateway): ?>
+                                    <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Entity Type:</label>
+                                <select name="entity_type" class="select">
+                                    <option value="ABN" <?php echo ($row->entity_type == 'ABN') ? ('selected="selected"') : (''); ?>>ABN</option>
+                                    <option value="USI" <?php echo ($row->entity_type == 'USI') ? ('selected="selected"') : (''); ?>>USI</option>
+                                </select>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <label>Entity Indentifier:</label>
+                                <input class="input" type="text" name="entity_identitier" value="<?php echo $row->entity_identitier?>" />
                             </div>
                             <div class="clear"></div>
                         </div>                 
@@ -678,7 +708,10 @@ function cp_save_customer_harness_detail()
     
     $updateArr = array(
         'p_mode_agreement' => $_POST['p_mode_agreement'],
-        'harness_password' => $_POST['harness_password']
+        'harness_password' => $_POST['harness_password'],
+        'gateway_id' => $_POST['gateway_id'],
+        'entity_type' => $_POST['entity_type'],
+        'entity_identifier' => $_POST['entity_identifier']
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
