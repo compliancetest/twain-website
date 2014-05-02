@@ -629,7 +629,7 @@ function cp_get_customer_harness_detail()
                         <div class="field-row">
                             <div class="grid-cell">
                                 <label>Entity Indentifier:</label>
-                                <input class="input" type="text" name="entity_identitier" value="<?php echo $row->entity_identitier?>" />
+                                <input class="input" type="text" name="entity_identifier" value="<?php echo $row->entity_identifier?>" />
                             </div>
                             <div class="clear"></div>
                         </div>                 
