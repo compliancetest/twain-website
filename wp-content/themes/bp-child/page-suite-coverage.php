@@ -127,7 +127,7 @@ $esb = new ManageESB();
            <?php } ?>
            <?php else: ?>
            <div>
-                This section shows the degree to which the transactions you have executed against ComplianceTest have satisfied the requirements of the test plans you have created for the products you are testing.<br/>
+                <p>This section shows the degree to which the transactions you have executed against ComplianceTest have satisfied the requirements of the test plans you have created for the products you are testing.</p>
                 If you are seeing this message, it means you have yet to subscribe to one or more test suites, create entries for the products you wish to test, and then create test plans to confirm the operation of your products against test suites.
            </div>
            <?php endif; ?>
