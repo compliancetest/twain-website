@@ -26,6 +26,7 @@ $esb = new ManageESB();
                 endwhile;
             ?>
             </div>
+            <?php if (count($mysuites) > 0): ?>
            <?php foreach($mysuites as $suite){ ?>
            <?php
                $caseStatus = $esb->getCaseStatus($suite->id, $suite->suite_id);
@@ -124,6 +125,12 @@ $esb = new ManageESB();
            <div class="clear"></div>
            <div class="space20"></div>   
            <?php } ?>
+           <?php else: ?>
+           <div>
+                This section shows the degree to which the transactions you have executed against ComplianceTest have satisfied the requirements of the test plans you have created for the products you are testing.<br/>
+                If you are seeing this message, it means you have yet to subscribe to one or more test suites, create entries for the products you wish to test, and then create test plans to confirm the operation of your products against test suites.
+           </div>
+           <?php endif; ?>
         </div>           
     </div>
 	<div class="clear"></div>
