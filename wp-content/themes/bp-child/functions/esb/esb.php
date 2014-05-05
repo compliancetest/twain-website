@@ -896,8 +896,6 @@ class ManageESB
         
     }
     
-    
-    
     public function  getMessageEnvelope($id, $user_id = null)
     {
         global $wpdb;

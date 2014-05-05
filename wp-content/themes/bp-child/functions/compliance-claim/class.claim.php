@@ -25,6 +25,8 @@ class ComplianceClaim
     
     var $issuer = '';
     
+    var $token = '';
+    
     public function __construct($id = null)
     {
         if($id != null)
@@ -52,6 +54,7 @@ class ComplianceClaim
             $this->last_updated = $row->last_updated;
             $this->audit = $row->audit;
             $this->issuer = $row->issuer;
+            $this->token = $row->token;
         }
         
         return $row;

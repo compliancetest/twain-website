@@ -165,6 +165,9 @@ function create_email_management_page()
                         <li class="tab-separator">Forum Section</li>
                         <li><a href="#forum-new-post">New Forum Post</a></li>
                         <li><a href="#forum-reply-post">Reply Forum Post</a></li>
+                        
+                        <li class="tab-separator">Claim Section</li>
+                        <li><a href="#claim-created">Claim is made</a></li>
                     </ul>
                 </div>
                 <div id="email-templates-wrapper">
@@ -1755,6 +1758,37 @@ function create_email_management_page()
                     </table>
                 </div>
                 <!-- End Forum -->
+                <div id="claim-created">
+                    <?php
+                    $claim_created_admin_email_title = get_option('claim_created_admin_email_title');
+                    $claim_created_admin_email_content = get_option('claim_created_admin_email_content');
+                    ?>
+                    <h3>Claim is made</h3>
+                    <p><b>Short Codes:</b> [claim_id], [product], [username], [useremail], [issuer], [certificate], [test_suite], [conformance_level], [role], [status], [date]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="claim_created_admin_email_title" id="claim_created_admin_email_title" value="<?php echo $claim_created_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($claim_created_admin_email_content, 'claim_created_admin_email_content', array('media_buttons' => false)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Claim -->
+                
                 </div>
             </div>
           </div>
@@ -2071,6 +2105,11 @@ function save_email_templates()
           update_option('forum_reply_post_email_title', $forum_reply_post_email_title);          
           $forum_reply_post_email_content = stripslashes_deep($_POST['forum_reply_post_email_content']);          
           update_option('forum_reply_post_email_content', $forum_reply_post_email_content);          
+          
+          $claim_created_admin_email_title = htmlentities(stripslashes_deep($_POST['claim_created_admin_email_title']));          
+          update_option('claim_created_admin_email_title', $claim_created_admin_email_title);          
+          $claim_created_admin_email_content = stripslashes_deep($_POST['claim_created_admin_email_content']);          
+          update_option('claim_created_admin_email_content', $claim_created_admin_email_content);          
           
           wp_redirect("/wp-admin/admin.php?page=email-management&tab=" . (!$_REQUEST['tab'] ? 0 : $_REQUEST['tab']));
     }

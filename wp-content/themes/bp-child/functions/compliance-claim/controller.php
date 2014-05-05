@@ -81,6 +81,8 @@ function makeClaim()
     $productID = $_POST['product_id'];
     $claimID = isset($_POST['id']) ? $_POST['id'] : null;
     
+    $isNew = !$claimID ? true : false;
+    
     $user_id = get_current_user_id();
     
     $claim = new ComplianceClaim($claimID);
@@ -142,6 +144,31 @@ function makeClaim()
     $wpdb->update(TABLE_CLAIM, array(
             'certificate'    =>  $pdfString                
         ), array('id' => $claimID));
+    
+    if($isNew)
+    {
+        //Send Email to Community Admins
+        $claim = new ComplianceClaim($claimID);
+        $claim->load();
+        
+        $userInfo = get_userdata($user_id);
+        
+        $emailData = array(
+            '[claim_id]' => $claim->claim_id,
+            '[product]' => '<a href="' . get_permalink($claim->product_id) . '">' . get_the_title($claim->product_id) . '</a>',
+            '[test_suite]' => '<a href="' . get_permalink($claim->suite_id) . '">' . get_the_title($claim->suite_id) . '</a>',
+            '[issuer]' => $claim->issuer,
+            '[conformance_level]' => $claim->conformance_level,
+            '[role]' => $claim->role,
+            '[status]' => $claim->status,
+            '[date]' => $claim->created_date,            
+            '[username]' => $userInfo->first_name . " " . $userInfo->last_name,            
+            '[useremail]' => $userInfo->user_email,            
+            '[certificate]' => '<a href="' . get_site_url()  . '/claims/' . $claim->token . '" target="_blank">View PDF</a>' 
+        );
+        
+        cp_send_email_to_community_admin(get_post_meta($claim->suite_id, 'community_id', true), 'claim_created_admin', $emailData);        
+    }
     
     addMessage('Compliance Claim was saved successfully!');
     wp_redirect('/my-products');
