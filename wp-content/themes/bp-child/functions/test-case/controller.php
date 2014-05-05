@@ -531,6 +531,7 @@ function saveCase()
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
     
     $_POST['test_intent_description'] = str_replace('&', '&amp;', str_replace('&amp;', '&', $_POST['test_intent_description']));
+    $_POST['test_intent_description'] = str_replace('&nbsp;', '', $_POST['test_intent_description']);
     update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
     
     cp_update_post_meta($id, 'outcome_type', $_POST['outcome_type']);
