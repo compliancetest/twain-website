@@ -473,8 +473,8 @@ function purchase_organisation_subscription()
         '[community_url]' => bp_get_group_permalink($group)
     );
     
-    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_additional_subscription', $emailData);
-    cp_send_email_to_admin('purchase_additional_subscription_admin', $emailData);
+    cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_organisational_subscription', $emailData);
+    cp_send_email_to_admin('purchase_organisational_subscription_admin', $emailData);
     
 //    addMessage("Your subscription has been proceeded successfully");
     

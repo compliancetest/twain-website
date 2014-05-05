@@ -131,6 +131,7 @@ function create_email_management_page()
                         <li><a href="#purchase-signup-fee-only-subscription">Purchase Sign-up Fee Only<br />Subscription</a></li>
                         <li><a href="#purchase-free-subscription">Purchase Free Subscription</a></li>                        
                         <li><a href="#purchase-additional-subscription">Purchase Subscription to<br />Additional Version</a></li>                        
+                        <li><a href="#purchase-organisational-subscription">Purchase Subscription based<br />on Organisational Pricing</a></li>                        
                         <li><a href="#inarrears-subscription">Active -> InArrears</a></li>
                         <li><a href="#frozen-subscription">InArrears -> Frozen</a></li>
                         <li><a href="#active-subscription">InArrears -> Active</a></li>
@@ -603,6 +604,57 @@ function create_email_management_page()
                         </tbody>                        
                     </table>
                 </div>
+                <div id="purchase-organisational-subscription">
+                    <?php
+                    $purchase_organisational_subscription_email_title = get_option('purchase_organisational_subscription_email_title');
+                    $purchase_organisational_subscription_email_content = get_option('purchase_organisational_subscription_email_content');
+                    $purchase_organisational_subscription_admin_email_title = get_option('purchase_organisational_subscription_admin_email_title');
+                    $purchase_organisational_subscription_admin_email_content = get_option('purchase_organisational_subscription_admin_email_content');
+                    ?>
+                    <h3>Purchase a subscription to additional version</h3>
+                    <p><b>Short Codes:</b> [name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [signup_fee], [monthly_fee], [community_url], [payment_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="purchase_organisational_subscription_email_title" id="purchase_organisational_subscription_email_title" value="<?php echo $purchase_organisational_subscription_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($purchase_organisational_subscription_email_content, 'purchase_organisational_subscription_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="purchase_organisational_subscription_admin_email_title" id="purchase_organisational_subscription_admin_email_title" value="<?php echo $purchase_organisational_subscription_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($purchase_organisational_subscription_admin_email_content, 'purchase_organisational_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                </td>
+                            </tr>
+                        </tbody>                        
+                    </table>
+                </div>
+                
                 <div id="unsubscribe-subscription">
                     <?php
                     $unsubscribing_email_title = get_option('unsubscribing_email_title');
@@ -1808,6 +1860,16 @@ function save_email_templates()
           update_option('purchase_additional_subscription_admin_email_title', $purchase_additional_subscription_admin_email_title);          
           $purchase_additional_subscription_admin_email_content = stripslashes_deep($_POST['purchase_additional_subscription_admin_email_content']);          
           update_option('purchase_additional_subscription_admin_email_content', $purchase_additional_subscription_admin_email_content);
+          
+          
+          $purchase_organisational_subscription_email_title = htmlentities(stripslashes_deep($_POST['purchase_organisational_subscription_email_title']));          
+          update_option('purchase_organisational_subscription_email_title', $purchase_organisational_subscription_email_title);          
+          $purchase_organisational_subscription_email_content = stripslashes_deep($_POST['purchase_organisational_subscription_email_content']);          
+          update_option('purchase_organisational_subscription_email_content', $purchase_organisational_subscription_email_content);          
+          $purchase_organisational_subscription_admin_email_title = htmlentities(stripslashes_deep($_POST['purchase_organisational_subscription_admin_email_title']));          
+          update_option('purchase_organisational_subscription_admin_email_title', $purchase_organisational_subscription_admin_email_title);          
+          $purchase_organisational_subscription_admin_email_content = stripslashes_deep($_POST['purchase_organisational_subscription_admin_email_content']);          
+          update_option('purchase_organisational_subscription_admin_email_content', $purchase_organisational_subscription_admin_email_content);
           
           $membership_request_received_admin_email_title = htmlentities(stripslashes_deep($_POST['membership_request_received_admin_email_title']));
           update_option('membership_request_received_admin_email_title', $membership_request_received_admin_email_title);          
