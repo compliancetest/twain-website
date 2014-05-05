@@ -37,6 +37,8 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
             "username" => array("login", $orderby == 'login'),
             "name" => array("name", $orderby == 'name'),
             "email" => array("email", $orderby == 'email'),
+            "payments_methods" => array("cards", $orderby == 'cards'),
+            "subscriptions" => array("subscriptions", $orderby == 'subscriptions'),
             "id" => array("ID", $orderby == 'ID')
         );
     }
@@ -56,8 +58,15 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
               <div style="float: left;">
               <?php              
               $this->search_box("Search", "search");
-              ?>              
-              </div>
+              ?>                  
+              <label style="margin-right: 10px">
+                  Show 
+                  <select name="filter_subscriptions" onchange="document.adminform.submit()">
+                      <option value="1" <?php echo isset($_REQUEST['filter_subscriptions']) && $_REQUEST['filter_subscriptions'] == 1 ? 'selected="selected"' : '' ?>>All Users</option>
+                      <option value="2" <?php echo !isset($_REQUEST['filter_subscriptions']) || $_REQUEST['filter_subscriptions'] == 2 ? 'selected="selected"' : '' ?>>Customers</option>
+                  </select>
+              </label>
+              </div>              
               <?php
           }
     }
@@ -105,6 +114,8 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
         $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'name';
         $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : 'asc';
         
+        $filter_subscriptions = isset($_REQUEST['filter_subscriptions']) ? $_REQUEST['filter_subscriptions'] : 2;
+        
         $args = array(
             'number' => $users_per_page,
             'offset' => ( $paged-1 ) * $users_per_page,
@@ -120,43 +131,48 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
 
         // Query the user IDs for this page
         $wp_user_search = new WP_User_Query( $args );
+        
+        //Add subscriptions count query
+        $wp_user_search->query_from .= " LEFT JOIN (SELECT user_id, count(*) AS subscriptions FROM {$wpdb->prefix}users_subscriptions GROUP BY user_id) AS us ON us.user_id = {$wpdb->users}.ID ";
+        $wp_user_search->query_fields .= " ,subscriptions ";
+        //Add cards count query
+        $wp_user_search->query_from .= " LEFT JOIN (SELECT user_id, count(*) AS cards FROM {$wpdb->prefix}users_cards GROUP BY user_id) AS uc ON uc.user_id = {$wpdb->users}.ID ";
+        $wp_user_search->query_fields .= " ,cards ";
+        
+        if($orderby == 'cards' || $orderby == 'subscriptions')
+            $wp_user_search->query_orderby = ' ORDER BY ' . $orderby . ' ' . $order;
+        
+        if($filter_subscriptions == 2)
+            $wp_user_search->query_where .= ' AND subscriptions > 0 ';
+        
+        $wp_user_search->results = $wpdb->get_results("SELECT $wp_user_search->query_fields $wp_user_search->query_from $wp_user_search->query_where $wp_user_search->query_orderby $wp_user_search->query_limit");            
+        
+        if ( isset( $wp_user_search->query_vars['count_total'] ) && $wp_user_search->query_vars['count_total'] )
+            $wp_user_search->total_users = $wpdb->get_var( apply_filters( 'found_users_query', 'SELECT FOUND_ROWS()' ) );
 
-        $results = $wp_user_search->get_results();
+        if ( !$wp_user_search->results )
+        {
+            $results = array();
+        }else{
+            if ( 'all_with_meta' == $wp_user_search->query_vars['fields'] ) {
+                cache_users( $wp_user_search->results );
+
+                $r = array();
+                foreach ( $wp_user_search->results as $urow ){
+                    $r[ $urow->ID ] = new WP_User( $urow->ID, '', $wp_user_search->query_vars['blog_id'] );
+                    $r[ $urow->ID ]->subscriptions = $urow->subscriptions;
+                    $r[ $urow->ID ]->cards = $urow->cards;
+                }
+
+                $wp_user_search->results = $r;
+            } 
+            $results = $wp_user_search->get_results();
+        }
+        
         $uids = array();
         foreach($results as $u)
         {
             $uids[] = $u->ID;
-        }
-        
-        //Getting Payments and Subscriptions
-        $query = "SELECT count(id) AS count, user_id FROM {$wpdb->prefix}users_cards WHERE user_id IN (" . implode(",", $uids) . ") GROUP BY user_id";
-        $cards = $wpdb->get_results($query);
-        
-        foreach($results as $i=>$row)
-        {
-            foreach($cards as $c)
-            {
-                if($c->user_id == $row->ID)
-                {
-                    $results[$i]->cards = $c->count;
-                    break;
-                }
-            }
-        }
-        
-        //Getting Subscriptions        
-        $query = "SELECT count(id) AS count, user_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id IN (" . implode(",", $uids) . ") GROUP BY user_id";
-        $subscriptions = $wpdb->get_results($query);
-        foreach($results as $i=>$row)
-        {
-            foreach($subscriptions as $c)
-            {
-                if($c->user_id == $row->ID)
-                {
-                    $results[$i]->subscriptions = $c->count;
-                    break;
-                }
-            }
         }
         
         $this->items = $results;
