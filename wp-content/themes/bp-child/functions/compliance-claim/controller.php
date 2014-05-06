@@ -205,7 +205,9 @@ function createClaimPDF($claim_id)
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
     // set certificate file
-    $certificate = 'file://' . THE_FUNCTION . '\tcpdf\claims.pem';
+    //$certificate = 'file://' . THE_FUNCTION . '\tcpdf\claims.pem';
+    $certificate = get_option('pdf_certificate');
+    $private_key = get_option('pdf_private_key');
 
     // set additional information
     $info = array(
@@ -216,7 +218,8 @@ function createClaimPDF($claim_id)
     );
 
     // set document signature
-    $pdf->setSignature($certificate, $certificate, '', '', 2, $info);
+    //$pdf->setSignature($certificate, $certificate, '', '', 2, $info);
+    $pdf->setSignature($certificate, $private_key, '', '', 2, $info);
 
     // ---------------------------------------------------------
 
