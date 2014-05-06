@@ -69,7 +69,7 @@ function cp_edit_transaction_log(){
                                </select>
                                <?php             
                            }else{
-                               ?><a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 12)?></a><?php
+                               ?><a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo $row->TEST_SUITE_TITLE; ?></a><?php
                            }
                        }                       
                    ?>
