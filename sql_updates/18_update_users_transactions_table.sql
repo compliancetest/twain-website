@@ -1,0 +1,1 @@
+ALTER TABLE `wp_users_transactions` CHANGE `purchase_id` `parent_id` INT(11) DEFAULT 0;
