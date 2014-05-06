@@ -45,7 +45,16 @@ function create_compliancetest_settings_page()
         update_option('esb_username', $_POST['esb_username']);
         update_option('esb_password', $_POST['esb_password']);
         update_option('esb_database', $_POST['esb_database']);
-        
+    }
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-pdf-certificate-settings')){    
+        if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_certificate']['tmp_name'])) {
+            $certificate = file_get_contents($_FILES['pdf_certificate']['tmp_name']);
+            update_option('pdf_certificate', $certificate);
+        }
+        if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_private_key']['tmp_name'])) {
+            $private_key = file_get_contents($_FILES['pdf_private_key']['tmp_name']);
+            update_option('pdf_private_key', $certificate);
+        }
     }
     
 ?>
@@ -144,6 +153,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-subscriptions-settings">Subscriptions Settings</a></li>
                 <li><a href="#ct-recaptcha-settings">Recaptcha Settings</a></li>
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
+                <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
             </ul>
         </div>
         <div id="compliancetest-settings-wrapper">
@@ -274,6 +284,23 @@ function create_compliancetest_settings_page()
                     </form>  
                 <?php
                 ?>
+            </div>
+            <div id="ct-pdf-certificate-settings">
+                <h3>PDF Certificate Settings</h3>        
+                <form method="post" action="" enctype="multipart/form-data">      
+                    <table  class="widefat">
+                        <tr>
+                            <td><label><b>Certificate (*.pem):</b></label></td>
+                            <td><input type="file" name="pdf_certificate" id="pdf_certificate" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Private Key (*.pem):</b></label></td>
+                            <td><input type="file" name="pdf_private_key" id="pdf_private_key" /></td>
+                        </tr>
+                    </table>      
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-pdf-certificate-settings'); ?>
+                </form>  
             </div>
         </div>
     </div>
