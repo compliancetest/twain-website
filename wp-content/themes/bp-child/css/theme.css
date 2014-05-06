@@ -5038,6 +5038,7 @@ min-height: 70px;
 }
 #edit-transaction-log-box .td-suite{
     width: 120px;
+    word-wrap: break-word;
 }
 #edit-transaction-log-box .td-outcome{
     width: 60px;
