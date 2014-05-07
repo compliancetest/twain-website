@@ -638,7 +638,7 @@ function cp_get_customer_harness_detail()
                                 </div>                 
                             </div>
                         </div>
-                        <div id="harness-gateway" class="second-tab-content hide">
+                        <div id="harness-gateway" class="second-tab-content" style="display: none;">
                             <div class="field-row">
                                 <div class="grid-cell">
                                     <label>Gateway:</label>
