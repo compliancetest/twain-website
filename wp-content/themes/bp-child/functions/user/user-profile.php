@@ -682,6 +682,22 @@ function cp_get_customer_harness_detail()
                 <input type="hidden" name="id" id="harness-id" value="<?php echo $row->id?>" />
                 <?php wp_nonce_field('save-harness', 'cp-action'); ?>
             </form>
+            <script type="text/javascript">
+                jQuery(document).ready(function($){
+                    function switch_secondtabs(obj)
+                    {
+                        $(obj).parent().addClass('active');
+                        $(obj).parent().siblings().removeClass('active');
+                        
+                        $('.second-tabs-container > div').hide();
+                        var id = obj.attr("rel");
+                     
+                        $('#'+id).show();
+                        
+                        return false;
+                    }
+                });
+            </script>
         </div>
     <?php 
     endif; 
