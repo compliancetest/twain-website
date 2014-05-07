@@ -459,13 +459,6 @@
             }
         })
         
-        $(document).on('click', function(){
-            switch_secondtabs($(this));
-            $(this).parent().addClass('active');
-            $(this).parent().siblings().removeClass('active');
-            return false;
-        });
-        
     });
     
 
