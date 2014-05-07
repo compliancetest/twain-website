@@ -573,93 +573,107 @@ function cp_get_customer_harness_detail()
             <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>    
             <form name="harness-form" id="harness-form" action="">
                 <div class="popup-box-content grid-box-body">    
-                    <div class="field-row">
-                        <div class="grid-cell">
-                            <label>P-Mode Profile:</label>
-                            <select name="p_mode_agreement" id="p_mode_agreement" class="select">
-                                <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
-                                <option value="HIGH-END" <?php echo $row->p_mode_agreement == 'HIGH-END' ? 'selected="selected"' : ''?>>HIGH-END</option>
-                            </select>
-                        </div>
-                        <div class="clear"></div>
+                    <div class="second-tabs">
+                        <ul>
+                            <li class="active"><a rel="harness-direct">Direct</a></li>
+                            <li><a rel="harness-gateway">Gateway</a></li>
+                        </ul>
                     </div>
-                    <div class="harness-endpoint-info">                
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Harness EndPoint:</label>
-                                <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="<?php echo $row->harness_endpoint_url?>" />
+                    <div class="second-tabs-container">
+                        <div id="harness-direct" class="second-tab-content">
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>P-Mode Profile:</label>
+                                    <select name="p_mode_agreement" id="p_mode_agreement" class="select">
+                                        <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
+                                        <option value="HIGH-END" <?php echo $row->p_mode_agreement == 'HIGH-END' ? 'selected="selected"' : ''?>>HIGH-END</option>
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="clear"></div>
+                            <div class="harness-endpoint-info">                
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Harness EndPoint:</label>
+                                        <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="<?php echo $row->harness_endpoint_url?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Harness Username:</label>
+                                        <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="<?php echo $row->harness_username?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>            
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Harness Password:</label>
+                                        <input class="input" type="text" name="harness_password" id="harness_password" value="<?php echo $row->harness_password?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+                            <div class="tester-endpoint-info" <?php echo $row->p_mode_agreement == 'LIGHT' ? 'style="display: none"' : '' ?>>
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Tester EndPoint:</label>
+                                        <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="<?php echo $row->tester_endpoint_url?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Tester Username:</label>
+                                        <input class="input" type="text" name="tester_username" id="tester_username" value="<?php echo $row->tester_username?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>            
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Tester Password:</label>
+                                        <input class="input" type="text" name="tester_password" id="tester_password" value="<?php echo $row->tester_password?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>                 
+                            </div>
                         </div>
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Harness Username:</label>
-                                <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="<?php echo $row->harness_username?>" />
+                        <div id="harness-gateway" class="second-tab-content hide">
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Gateway:</label>
+                                    <select name="gateway_id" class="select">
+                                        <option value="">None</option>
+                                        <?php foreach ($gateways as $gateway): ?>
+                                        <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="clear"></div>
-                        </div>            
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Harness Password:</label>
-                                <input class="input" type="text" name="harness_password" id="harness_password" value="<?php echo $row->harness_password?>" />
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Entity Type:</label>
+                                    <select name="entity_type" class="select">
+                                        <option value="">None</option>
+                                        <option value="ABN" <?php echo ($row->entity_type == 'ABN') ? ('selected="selected"') : (''); ?>>ABN</option>
+                                        <option value="USI" <?php echo ($row->entity_type == 'USI') ? ('selected="selected"') : (''); ?>>USI</option>
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="clear"></div>
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Entity Indentifier:</label>
+                                    <input class="input" type="text" name="entity_identifier" value="<?php echo $row->entity_identifier?>" />
+                                </div>
+                                <div class="clear"></div>
+                            </div>                 
                         </div>
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Entity Type:</label>
-                                <select name="gateway_id" class="select">
-                                    <?php foreach ($gateways as $gateway): ?>
-                                    <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Entity Type:</label>
-                                <select name="entity_type" class="select">
-                                    <option value="ABN" <?php echo ($row->entity_type == 'ABN') ? ('selected="selected"') : (''); ?>>ABN</option>
-                                    <option value="USI" <?php echo ($row->entity_type == 'USI') ? ('selected="selected"') : (''); ?>>USI</option>
-                                </select>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Entity Indentifier:</label>
-                                <input class="input" type="text" name="entity_identifier" value="<?php echo $row->entity_identifier?>" />
-                            </div>
-                            <div class="clear"></div>
-                        </div>                 
-                    </div>
-                    <div class="tester-endpoint-info" <?php echo $row->p_mode_agreement == 'LIGHT' ? 'style="display: none"' : '' ?>>
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Tester EndPoint:</label>
-                                <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="<?php echo $row->tester_endpoint_url?>" />
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Tester Username:</label>
-                                <input class="input" type="text" name="tester_username" id="tester_username" value="<?php echo $row->tester_username?>" />
-                            </div>
-                            <div class="clear"></div>
-                        </div>            
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <label>Tester Password:</label>
-                                <input class="input" type="text" name="tester_password" id="tester_password" value="<?php echo $row->tester_password?>" />
-                            </div>
-                            <div class="clear"></div>
-                        </div>                 
                     </div>
                 </div>
                 <div class="popup-box-footer radius6 noradiustop">                                    
-                    <a href="javascript: void(0)" class="action-btn process-btn submit-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">SAVE</span></a>            
+                    <a href="javascript: void(0)" class="action-btn process-btn submit-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">Confirm</span></a>            
                     <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                     <div class="clear"></div>
                 </div>
