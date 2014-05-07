@@ -168,19 +168,17 @@ jQuery(document).ready(function($) {
 		obj.addClass("selected");
 	}
     
-    $(document).on('click', '.second-tabs a', function(){
-        switch_secondtabs($(this));
-        $(this).parent().addClass('active');
-        $(this).parent().siblings().removeClass('active');
-        return false;
-    });
-     
     function switch_secondtabs(obj)
     {
+        $(obj).parent().addClass('active');
+        $(obj).parent().siblings().removeClass('active');
+        
         $('.second-tabs-container > div').hide();
         var id = obj.attr("rel");
      
         $('#'+id).show();
+        
+        return false;
     }
 	
 	/* tab Test Suite View */
