@@ -167,19 +167,6 @@ jQuery(document).ready(function($) {
 		$('#'+id).show();
 		obj.addClass("selected");
 	}
-    
-    function switch_secondtabs(obj)
-    {
-        $(obj).parent().addClass('active');
-        $(obj).parent().siblings().removeClass('active');
-        
-        $('.second-tabs-container > div').hide();
-        var id = obj.attr("rel");
-     
-        $('#'+id).show();
-        
-        return false;
-    }
 	
 	/* tab Test Suite View */
 	
