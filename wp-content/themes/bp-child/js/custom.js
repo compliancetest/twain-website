@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
 		obj.addClass("selected");
 	}
     
-    jQuery('.second-tabs a').on('click', function(){
+    $(document).on('click', '.second-tabs a', function(){
         switch_secondtabs($(this));
         $(this).parent().addClass('active');
         $(this).parent().siblings().removeClass('active');
