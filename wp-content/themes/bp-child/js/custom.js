@@ -167,6 +167,21 @@ jQuery(document).ready(function($) {
 		$('#'+id).show();
 		obj.addClass("selected");
 	}
+    
+    $('.second-tabs a').click(function(){
+        switch_secondtabs($(this));
+        $(this).parent().addClass('active');
+        $(this).parent().siblings().removeClass('active');
+        return false;
+    });
+     
+    function switch_secondtabs(obj)
+    {
+        $('.second-tabs-container > div').hide();
+        var id = obj.attr("rel");
+     
+        $('#'+id).show();
+    }
 	
 	/* tab Test Suite View */
 	
