@@ -654,11 +654,25 @@ function cp_get_customer_harness_detail()
                             </div>
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <label>Entity Type:</label>
-                                    <select name="entity_type" class="select">
+                                    <label>Tester Role:</label>
+                                    <select name="tester_role" class="select" onchange="changeTesterRole(this)">
                                         <option value="">None</option>
+                                        <option value="Fund" <?php echo ($row->tester_role == 'Fund') ? ('selected="selected"') : (''); ?>>Fund</option>
+                                        <option value="Employer" <?php echo ($row->tester_role == 'Employer') ? ('selected="selected"') : (''); ?>>Employer</option>
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Entity Type:</label>
+                                    <select name="entity_type" class="select" <?php echo (empty($row->tester_role)) ? ('disabled="disabled"') : (''); ?>>
+                                        <option value="">None</option>
+                                        <?php if ($row->tester_role != 'Employer'): ?>
                                         <option value="ABN" <?php echo ($row->entity_type == 'ABN') ? ('selected="selected"') : (''); ?>>ABN</option>
+                                        <?php endif; ?>
                                         <option value="USI" <?php echo ($row->entity_type == 'USI') ? ('selected="selected"') : (''); ?>>USI</option>
+                                        <option value="Main Name" <?php echo ($row->entity_type == 'Main Name') ? ('selected="selected"') : (''); ?>>Main Name</option>
                                     </select>
                                 </div>
                                 <div class="clear"></div>
@@ -695,6 +709,21 @@ function cp_get_customer_harness_detail()
                     jQuery('#' + id).show();
                     
                     return false;
+                }
+                function changeTesterRole(obj) {
+                    jQuery('select[name=entity_type]').attr('disabled') = false;
+                    if (jQuery(obj).val() == 'Fund') {
+                        if (jQuery('select[name=entity_type] option(eq:1)').val() != 'ABN') {
+                            jQuery('select[name=entity_type] option(eq:0)').after('<option value="ABN">ABN</option>');
+                        }
+                    } else if (jQuery(obj).val() == 'Employer') { 
+                        if (jQuery('select[name=entity_type] option(eq:1)').val() == 'ABN') {
+                            jQuery('select[name=entity_type] option(eq:1)').remove();
+                        }
+                    } else {
+                        jQuery('select[name=entity_type] option(eq:0)').attr('selected') = true;
+                        jQuery('select[name=entity_type]').attr('disabled') = true;
+                    }
                 }
             </script>
         </div>
