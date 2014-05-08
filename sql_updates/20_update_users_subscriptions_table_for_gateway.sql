@@ -1,0 +1,1 @@
+ALTER TABLE `wp_users_subscriptions` ADD COLUMN `tester_role` VARCHAR(20);
