@@ -644,7 +644,7 @@ function cp_get_customer_harness_detail()
                             <div class="field-row">
                                 <div class="grid-cell">
                                     <label>Profile:</label>
-                                    <select name="profile_id" class="select">
+                                    <select name="profile_id" class="select" onchange="viewProfileData(this.value)">
                                         <option value="0">None</option>
                                         <?php 
                                             if (count($profileInstances) > 0):
@@ -677,6 +677,7 @@ function cp_get_customer_harness_detail()
                                 </div>
                                 <div class="clear"></div>
                             </div>
+                            <div id="profile-data-container"></div>
                         </div>
                     </div>
                 </div>
@@ -703,10 +704,64 @@ function cp_get_customer_harness_detail()
                     
                     return false;
                 }
+                function viewProfileData(profile_id)
+                {
+                    if (profile_id == 0) {
+                        jQuery('#profile-data-container').html('');
+                    } else {
+                        jQuery.ajax({
+                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id,
+                            type: 'post',
+                            success: function(res) {
+                                jQuery('#profile-data-container').html(res);
+                            }
+                        });
+                    }
+                }
             </script>
         </div>
     <?php 
     endif; 
+}
+
+function cp_get_customer_harness_detail_profile_data()
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id=%d", $_REQUEST['id']);
+    $row = $wpdb->get_row($query);
+    
+    if (!empty($row)):
+        $profile_instance = json_decode(base64_decode($row->content));
+        $profile_schema = json_decode(base64_decode($instance->schema)); 
+                                   
+        $profile_type_title = $row->profile_type_title;
+        if($profile_schema->Version) {
+            $version = array();
+            foreach(get_object_vars($profile_schema->Version) as $k=>$v) {
+                $version[] = $v;
+            }
+            $profile_type_title .= ' v' . implode('.', $version);
+        }
+?>
+    <div class="field-row">
+        <div class="grid-cell">
+            <label>Profile Type:</label>
+            <input class="input" type="text" name="profile_type_title" value="<?php echo $profile_type_title; ?>" readonly="readonly" disabled="disabled"/>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <?php foreach ($profile_instance->Entity as $label=>$value): ?>
+    <div class="field-row">
+        <div class="grid-cell">
+            <label><?php echo $label; ?>:</label>
+            <input class="input" type="text" name="profile_entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>" readonly="readonly" disabled="disabled"/>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <?php endforeach; ?>
+<?php
+    endif;
 }
 
 function cp_save_customer_harness_detail()
