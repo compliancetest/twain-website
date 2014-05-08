@@ -4091,6 +4091,60 @@ display:block !important;
     text-decoration: underline;
 }
 
+body .second-tabs li {
+    float: left;
+    border-radius: 6px 6px 0 0;
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    -o-border-radius: 6px 6px 0 0;
+    background: #ffffff; 
+    background: -moz-linear-gradient(top,  #ffffff 2%, #eaeaea 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,#ffffff), color-stop(100%,#eaeaea)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 2%,#eaeaea 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 2%,#eaeaea 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 2%,#eaeaea 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ffffff 2%,#eaeaea 100%); /* W3C */
+    margin: 0 10px 0 0;
+    box-shadow: 0 0 20px -10px #fff inset;
+    border: 1px solid #e1e1e1;
+    margin-top: 4px;
+    position: relative;
+}
+
+    body .second-tabs li:hover {
+        background: #fff;
+    }
+    
+    body .second-tabs li.active {
+        background: #2b87d6;
+        box-shadow: 0 0 30px -7px #002747 inset;
+        -moz-box-shadow: 0 0 30px -7px #002747 inset;
+        -webkit-box-shadow: 0 0 30px -7px #002747 inset;
+        -o-box-shadow: 0 0 30px -7px #002747 inset;
+        padding: 2px;
+        border: 1px solid #3577ad;
+        margin-top: 0;
+    }
+
+    body .second-tabs li a {
+        padding: 5px;
+        display: block;
+        font-family: 'Open Sans', Arial, sans-serif;
+        color: #666;
+        text-shadow: 0 1px 0 #fff;
+        -moz-text-shadow: 0 1px 0 #fff;
+        -webkit-text-shadow: 0 1px 0 #fff;
+        -o-text-shadow: 0 1px 0 #fff;
+        font-size: 16px;
+        font-weight: normal;
+    }
+    
+    body .second-tabs-container {
+    }
+    
+    body .second-tabs-container .second-tab-content {
+    }
+
 #join-community{
     cursor: pointer;
 }
