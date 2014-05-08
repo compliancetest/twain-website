@@ -1,1 +1,2 @@
-ALTER TABLE `wp_users_subscriptions` ADD COLUMN `tester_role` VARCHAR(20);
+ALTER TABLE `wp_users_subscriptions` ADD COLUMN `profile_id` INT(11) DEFAULT 0;
+ALTER TABLE `wp_users_subscriptions` ADD COLUMN `gateway_id` INT(11) DEFAULT 0;
