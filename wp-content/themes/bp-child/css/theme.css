@@ -4139,6 +4139,20 @@ body .second-tabs li {
         font-weight: normal;
     }
     
+    body .tabs li a span {
+        line-height: 28px;
+        padding: 0 15px;
+        font-family: 'Oswald', Arial, Helvetica sans-serif;
+    }
+    
+    body .tabs li.active a span {
+        color: #fff;
+        text-shadow: 0 1px 0 #002747;
+        -moz-text-shadow: 0 1px 0 #002747;
+        -webkit-text-shadow: 0 1px 0 #002747;
+        -o-text-shadow: 0 1px 0 #002747;
+    }
+    
     body .second-tabs-container {
     }
     
