@@ -734,12 +734,12 @@ function cp_get_customer_harness_detail_profile_data()
     
     if (!empty($row)):
         $profile_instance = json_decode(base64_decode($row->content));
-        $profile_schema = json_decode(base64_decode($instance->schema)); 
+        $profile_schema = json_decode(base64_decode($row->schema)); 
                                    
         $profile_type_title = $row->profile_type_title;
         if($profile_schema->Version) {
             $version = array();
-            foreach(get_object_vars($profile_schema->Version) as $k=>$v) {
+            foreach (get_object_vars($profile_schema->Version) as $k=>$v) {
                 $version[] = $v;
             }
             $profile_type_title .= ' v' . implode('.', $version);
