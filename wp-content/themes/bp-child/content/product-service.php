@@ -135,8 +135,9 @@
                 <div class="grid_cell nopaddingtop width20P toleft">Suite</div>
                 <div class="grid_cell nopaddingtop width10P">Level</div>
                 <div class="grid_cell nopaddingtop width10P">Role</div>                
-                <div class="grid_cell nopaddingtop width15P">Status</div>
-                <div class="grid_cell nopaddingtop width13P toleft">Date</div>
+                <div class="grid_cell nopaddingtop width12P">Status</div>
+                <div class="grid_cell nopaddingtop width10P toleft">Date</div>
+                <div class="grid_cell nopaddingtop width6P">Certificate</div>
                 <div class="clear"></div>
             </div>
         </div>
@@ -153,14 +154,17 @@
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>  
                         
                         <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>                                              
-                        <div class="grid_cell nopaddingtop width15P">
+                        <div class="grid_cell nopaddingtop width12P">
                             <?php if($claim->status == 'Verified'){ ?>
                             <span class="status-certified"><?php echo $claim->status?></span>
                             <?php }else{ ?>
                             <span class="status-unverified"><?php echo $claim->status?></span>
                             <?php } ?>
                         </div>
-                        <div class="grid_cell nopaddingtop width13P toleft"><?php echo formatDate($claim->last_updated)?></div>    
+                        <div class="grid_cell nopaddingtop width10P toleft"><?php echo formatDate($claim->last_updated)?></div>    
+                        <div class="grid_cell nopaddingtop width6P">
+                            <a href="javascript: void;" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>', '', 'height=600')">View PDF</a>
+                        </div>
                         <div class="clear"></div>
                     </div>
             <?php                            

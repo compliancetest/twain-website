@@ -89,7 +89,7 @@ get_header();
                            ?>
                            <div class="tr">
                                <div class="td td-claim-id toright"><?php echo $claim->claim_id ?></div>
-                               <div class="td td-certificate"><a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>" target="_blank">View PDF</a></div>
+                               <div class="td td-certificate"><a href="javascript: void;" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>', '', 'height=600')">View PDF</a></div>
                                <div class="td td-issuer"><?php echo $claim->issuer ?></div>
                                <div class="td td-suite"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
                                <div class="td td-level"><?php echo $claim->conformance_level?></div>
