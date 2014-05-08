@@ -4140,8 +4140,8 @@ body .second-tabs li {
     }
     
     body .second-tabs li a span {
-        line-height: 28px;
-        padding: 0 15px;
+        line-height: 20px;
+        padding: 0 10px;
         font-family: 'Oswald', Arial, Helvetica sans-serif;
     }
     
@@ -4157,6 +4157,11 @@ body .second-tabs li {
     }
     
     body .second-tabs-container .second-tab-content {
+        box-shadow: 0 0 3px #DDD;
+        -moz-box-shadow: 0 0 3px #DDD;
+        -webkit-box-shadow: 0 0 3px #DDD;
+        -o-box-shadow: 0 0 3px #DDD;
+        border: solid 1px #E1E1E1;
     }
 
 #join-community{
