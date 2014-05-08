@@ -769,7 +769,8 @@ function cp_save_customer_harness_detail()
         'harness_password' => $_POST['harness_password'],
         'gateway_id' => $_POST['gateway_id'],
         'entity_type' => $_POST['entity_type'],
-        'entity_identifier' => $_POST['entity_identifier']
+        'entity_identifier' => $_POST['entity_identifier'],
+        'tester_role' => $_POST['tester_role']
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
