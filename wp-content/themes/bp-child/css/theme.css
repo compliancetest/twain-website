@@ -4137,6 +4137,7 @@ body .second-tabs li {
         -o-text-shadow: 0 1px 0 #fff;
         font-size: 16px;
         font-weight: normal;
+        cursor: pointer;
     }
     
     body .second-tabs li a span {
@@ -4162,6 +4163,7 @@ body .second-tabs li {
         -webkit-box-shadow: 0 0 3px #DDD;
         -o-box-shadow: 0 0 3px #DDD;
         border: solid 1px #E1E1E1;
+        padding: 20px 20px 15px;
     }
 
 #join-community{
