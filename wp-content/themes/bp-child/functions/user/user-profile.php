@@ -711,7 +711,7 @@ function cp_get_customer_harness_detail()
                     return false;
                 }
                 function changeTesterRole(obj) {
-                    jQuery('select[name=entity_type]').attr('disabled') = false;
+                    jQuery('select[name=entity_type]').attr('disabled', false);
                     if (jQuery(obj).val() == 'Fund') {
                         if (jQuery('select[name=entity_type] option(eq:1)').val() != 'ABN') {
                             jQuery('select[name=entity_type] option(eq:0)').after('<option value="ABN">ABN</option>');
@@ -721,8 +721,8 @@ function cp_get_customer_harness_detail()
                             jQuery('select[name=entity_type] option(eq:1)').remove();
                         }
                     } else {
-                        jQuery('select[name=entity_type] option(eq:0)').attr('selected') = true;
-                        jQuery('select[name=entity_type]').attr('disabled') = true;
+                        jQuery('select[name=entity_type] option(eq:0)').attr('selected', true);
+                        jQuery('select[name=entity_type]').attr('disabled', true);
                     }
                 }
             </script>
