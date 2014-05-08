@@ -640,11 +640,36 @@ function cp_get_customer_harness_detail()
                             </div>
                         </div>
                         <div id="harness-gateway" class="second-tab-content" style="display: none;">
+                            <?php $profileInstances = getCustomerProfileInstances(); ?>
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Profile:</label>
+                                    <select name="profile_id" class="select">
+                                        <option value="0">None</option>
+                                        <?php 
+                                            if (count($profileInstances) > 0):
+                                            foreach ($profileInstances as $instance): 
+                                                $instanceObj = json_decode(base64_decode($instance->content));
+                                                $version = array();
+                                                if($instanceObj->Profile->Version) {
+                                                    foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v) {
+                                                        $version[] = $v;
+                                                    }
+                                                    
+                                                }
+                                                $profileName = $instance->profile_name . ' v' . implode('.', $version);
+                                        ?>
+                                        <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $profileName; ?></option>
+                                        <?php endforeach; endif; ?>
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
                             <div class="field-row">
                                 <div class="grid-cell">
                                     <label>Gateway:</label>
                                     <select name="gateway_id" class="select">
-                                        <option value="">None</option>
+                                        <option value="0">None</option>
                                         <?php foreach ($gateways as $gateway): ?>
                                         <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
                                         <?php endforeach; ?>
@@ -652,38 +677,6 @@ function cp_get_customer_harness_detail()
                                 </div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>Tester Role:</label>
-                                    <select name="tester_role" class="select" onchange="changeTesterRole(this)">
-                                        <option value="">None</option>
-                                        <option value="Fund" <?php echo ($row->tester_role == 'Fund') ? ('selected="selected"') : (''); ?>>Fund</option>
-                                        <option value="Employer" <?php echo ($row->tester_role == 'Employer') ? ('selected="selected"') : (''); ?>>Employer</option>
-                                    </select>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>Entity Type:</label>
-                                    <select name="entity_type" class="select" <?php echo (empty($row->tester_role)) ? ('disabled="disabled"') : (''); ?>>
-                                        <option value="">None</option>
-                                        <?php if ($row->tester_role != 'Employer'): ?>
-                                        <option value="ABN" <?php echo ($row->entity_type == 'ABN') ? ('selected="selected"') : (''); ?>>ABN</option>
-                                        <?php endif; ?>
-                                        <option value="USI" <?php echo ($row->entity_type == 'USI') ? ('selected="selected"') : (''); ?>>USI</option>
-                                        <option value="Main Name" <?php echo ($row->entity_type == 'Main Name') ? ('selected="selected"') : (''); ?>>Main Name</option>
-                                    </select>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>Entity Identifier:</label>
-                                    <input class="input" type="text" name="entity_identifier" value="<?php echo $row->entity_identifier?>" />
-                                </div>
-                                <div class="clear"></div>
-                            </div>                 
                         </div>
                     </div>
                 </div>
@@ -709,21 +702,6 @@ function cp_get_customer_harness_detail()
                     jQuery('#' + id).show();
                     
                     return false;
-                }
-                function changeTesterRole(obj) {
-                    jQuery('select[name=entity_type]').attr('disabled', false);
-                    if (jQuery(obj).val() == 'Fund') {
-                        if (jQuery('select[name=entity_type] option:eq(1)').val() != 'ABN') {
-                            jQuery('select[name=entity_type] option:eq(0)').after('<option value="ABN">ABN</option>');
-                        }
-                    } else if (jQuery(obj).val() == 'Employer') { 
-                        if (jQuery('select[name=entity_type] option:eq(1)').val() == 'ABN') {
-                            jQuery('select[name=entity_type] option:eq(1)').remove();
-                        }
-                    } else {
-                        jQuery('select[name=entity_type] option:eq(0)').attr('selected', true);
-                        jQuery('select[name=entity_type]').attr('disabled', true);
-                    }
                 }
             </script>
         </div>
@@ -768,9 +746,7 @@ function cp_save_customer_harness_detail()
         'p_mode_agreement' => $_POST['p_mode_agreement'],
         'harness_password' => $_POST['harness_password'],
         'gateway_id' => $_POST['gateway_id'],
-        'entity_type' => $_POST['entity_type'],
-        'entity_identifier' => $_POST['entity_identifier'],
-        'tester_role' => $_POST['tester_role']
+        'profile_id' => $_POST['profile_id']
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
