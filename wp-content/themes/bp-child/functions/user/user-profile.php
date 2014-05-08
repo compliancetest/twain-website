@@ -709,11 +709,13 @@ function cp_get_customer_harness_detail()
                     if (profile_id == 0) {
                         jQuery('#profile-data-container').html('');
                     } else {
+                        jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').show();
                         jQuery.ajax({
                             url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id,
                             type: 'post',
                             success: function(res) {
                                 jQuery('#profile-data-container').html(res);
+                                jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').hide();
                             }
                         });
                     }
