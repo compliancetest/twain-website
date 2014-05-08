@@ -718,6 +718,7 @@ function cp_get_customer_harness_detail()
                         });
                     }
                 }
+                viewProfileData(jQuery('#harness-gateway select[name=profile_id]').val());
             </script>
         </div>
     <?php 
