@@ -578,6 +578,7 @@ function cp_get_customer_harness_detail()
                             <li class="active"><a onclick="switch_secondtabs(this)" rel="harness-direct"><span>Direct</span></a></li>
                             <li><a onclick="switch_secondtabs(this)" rel="harness-gateway"><span>Gateway</span></a></li>
                         </ul>
+                        <div class="clear"></div>
                     </div>
                     <div class="second-tabs-container">
                         <div id="harness-direct" class="second-tab-content">
