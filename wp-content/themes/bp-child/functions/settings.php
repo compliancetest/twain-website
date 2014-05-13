@@ -50,10 +50,12 @@ function create_compliancetest_settings_page()
         if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_certificate']['tmp_name'])) {
             $certificate = file_get_contents($_FILES['pdf_certificate']['tmp_name']);
             update_option('pdf_certificate', $certificate);
+            update_option('pdf_certificate_name', $_FILES['pdf_certificate']['name']);
         }
         if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_private_key']['tmp_name'])) {
             $private_key = file_get_contents($_FILES['pdf_private_key']['tmp_name']);
             update_option('pdf_private_key', $certificate);
+            update_option('pdf_private_key_name', $_FILES['pdf_private_key']['name']);
         }
     }
     
@@ -291,11 +293,17 @@ function create_compliancetest_settings_page()
                     <table  class="widefat">
                         <tr>
                             <td><label><b>Certificate (*.pem):</b></label></td>
-                            <td><input type="file" name="pdf_certificate" id="pdf_certificate" /></td>
+                            <td>
+                                <input type="file" name="pdf_certificate" id="pdf_certificate" />
+                                <label><?php echo get_option('pdf_certificate_name')?></label>
+                            </td>
                         </tr>
                         <tr>
                             <td><label><b>Private Key (*.pem):</b></label></td>
-                            <td><input type="file" name="pdf_private_key" id="pdf_private_key" /></td>
+                            <td>
+                                <input type="file" name="pdf_private_key" id="pdf_private_key" />
+                                <label><?php echo get_option('pdf_private_key_name')?></label>
+                            </td>
                         </tr>
                     </table>      
                     <?php submit_button()   ?>
