@@ -230,8 +230,9 @@ function purchase_free_subscription()
     
     if(!groups_is_user_member($user_id, $suite->community_id))
     {
-        addMessage("You must join to this community to get the access of the test suite.", "error");
-        wp_redirect(bp_get_group_permalink($group));
+        echo 'You must join to this community to get the access of the test suite.';
+//        addMessage("You must join to this community to get the access of the test suite.", "error");
+//        wp_redirect(bp_get_group_permalink($group));
         exit;
     }
     
