@@ -295,14 +295,14 @@ function create_compliancetest_settings_page()
                             <td><label><b>Certificate (*.pem):</b></label></td>
                             <td>
                                 <input type="file" name="pdf_certificate" id="pdf_certificate" />
-                                <label><?php echo get_option('pdf_certificate_name')?></label>
+                                <label><?php echo (!empty(get_option('pdf_certificate_name'))) ? ('('.get_option('pdf_certificate_name').')') : (''); ?></label>
                             </td>
                         </tr>
                         <tr>
                             <td><label><b>Private Key (*.pem):</b></label></td>
                             <td>
                                 <input type="file" name="pdf_private_key" id="pdf_private_key" />
-                                <label><?php echo get_option('pdf_private_key_name')?></label>
+                                <label><?php echo (!empty(get_option('pdf_private_key_name'))) ? ('('.get_option('pdf_private_key_name').')') : (''); ?></label>
                             </td>
                         </tr>
                     </table>      
