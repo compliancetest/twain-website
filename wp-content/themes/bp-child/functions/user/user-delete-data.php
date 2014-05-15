@@ -221,7 +221,7 @@ function cp_show_user_all_data($userID)
     $plains = $wpdb->get_results($query);
     if($plains)
     {
-        echo '<hr /><h3 style="margin-bottom: 5px;">Test Plains</h3>';
+        echo '<hr /><h3 style="margin-bottom: 5px;">Test Plans</h3>';
         echo '<table cellpadding="5" border="1">';
         echo '<thead><tr><th>Test Suite</th><th>Product</th><th>Level</th><th>Role</th><th>Date</th></tr></thead>';
         echo '<tbody>';
