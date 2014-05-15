@@ -54,7 +54,7 @@ function create_compliancetest_settings_page()
         }
         if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_private_key']['tmp_name'])) {
             $private_key = file_get_contents($_FILES['pdf_private_key']['tmp_name']);
-            update_option('pdf_private_key', $certificate);
+            update_option('pdf_private_key', $private_key);
             update_option('pdf_private_key_name', $_FILES['pdf_private_key']['name']);
         }
     }
