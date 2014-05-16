@@ -701,6 +701,7 @@
                 <?php endif; ?>
             </form>
         </div>
+        <div class="space20"></div>
         <div class="grid-box" id="group_generate_fvs_box">
             <form name="group-generate-fvs-form" id="group-generate-fvs-form" action="<?php bp_group_admin_form_action('group-generate-fvs')?>" method="post" enctype="multipart/form-data" role="main">
                 <div class="grid-box-header">
