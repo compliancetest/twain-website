@@ -712,7 +712,7 @@
                 <div class="grid-box-body">
                     <div class="column">
                         <input type="file" name="profile_excel_file" id="profile_excel_file" class="input-file"  file-type="image" file-extensions="(.xls, .xlsx file)" />
-                        <a href="#" class="action-btn process-btn no-submit left10 top3" id="upload-profile-excel-btn"><span class="p"></span><span class="t">Generate JSON</span></a>
+                        <a href="#" class="action-btn process-btn no-submit left10 top3" id="upload-profile-excel-btn"><span class="p"></span><span class="t">Generate FSV</span></a>
                         <div class="clear"></div>
                         <input type="hidden" name="action" id="generate-fvs-action" value="bp_generate_fvs" />
                         <input type="hidden" name="upload" id="generate-fvs-upload" value="Upload Excel" />
