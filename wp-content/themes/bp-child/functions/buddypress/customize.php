@@ -814,3 +814,37 @@ function groups_screen_group_admin_generate_json() {
     bp_core_load_template( apply_filters( 'groups_template_group_admin_generate_json', 'groups/single/home' ) );
 }
 add_action('bp_screens', 'groups_screen_group_admin_generate_json');
+
+function groups_screen_group_admin_upload_fvs() {
+    
+    if ( 'group-upload-fvs' != bp_get_group_current_admin_tab() )
+        return false;
+            
+    require_once( ABSPATH . 'wp-content/themes/bp-child/functions/buddypress/generate-fvs.php' );
+    
+    $fvs_generator = new FvsGenerator();
+    
+    $fvs_generator->saveToDatabase();
+    
+    bp_core_load_template( apply_filters( 'groups_template_group_admin_upload_fvs', 'groups/single/home' ) );
+}
+add_action('bp_screens', 'groups_screen_group_admin_upload_fvs');
+
+function groups_screen_group_admin_generate_fvs() {
+    
+    if ( 'group-generate-fvs' != bp_get_group_current_admin_tab() )
+        return false;
+        
+    require_once( ABSPATH . 'wp-content/themes/bp-child/functions/buddypress/generate-fvs.php' );
+    
+    $fvs_generator = new FvsGenerator();
+    
+    $fvs_generator->init();
+    $fvs_generator->process();
+    
+    $fvs_generator->download();
+    
+    exit;
+    
+}
+add_action('init', 'groups_screen_group_admin_generate_fvs');
