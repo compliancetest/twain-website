@@ -705,25 +705,36 @@
         <div class="space20"></div>
         <!-- Generate FVS -->
         <div class="grid-box" id="group_generate_fvs_box">
-            <form name="group-generate-fvs-form" id="group-generate-fvs-form" action="<?php bp_group_admin_form_action('group-generate-fvs')?>" method="post" enctype="multipart/form-data" role="main">
-                <div class="grid-box-header">
-                    <h5>Generate FVS</h5>
-                </div>
-                <div class="grid-box-body">
+            <div class="grid-box-header">
+                <h5>Generate FVS</h5>
+            </div>
+            <div class="grid-box-body">
+                <form name="group-upload-fvs-form" id="group-upload-fvs-form" action="<?php bp_group_admin_form_action('group-upload-fvs')?>" method="post" enctype="multipart/form-data">
                     <div class="column">
-                        <input type="file" name="profile_excel_file" id="profile_excel_file" class="input-file"  file-type="image" file-extensions="(.xls, .xlsx file)" />
-                        <a href="#" class="action-btn process-btn no-submit left10 top3" id="upload-profile-excel-btn"><span class="p"></span><span class="t">Generate FSV</span></a>
+                        <input type="file" name="fvs_file" id="fvs_file" class="input-file"  file-type="image" file-extensions="(.xls, .xlsx file)" />
+                        <input type="hidden" name="action" id="upload-fvs-action" value="bp_upload_fvs" />
+                        <a href="#" class="action-btn upload-btn no-submit left10 top3" id="upload-fvs-btn"><span class="p"></span><span class="t">Upload</span></a>
                         <div class="clear"></div>
-                        <input type="hidden" name="action" id="generate-fvs-action" value="bp_generate_fvs" />
-                        <input type="hidden" name="upload" id="generate-fvs-upload" value="Upload Excel" />
                     </div>
-                </div>
-                <?php if (isset($_SESSION['admin_json_zip_link']) && $_SESSION['admin_json_zip_link'] != ''): ?>
-                <div class="grid-box-body" id="group-generated-fvs">
-                    <a href="<?php echo $_SESSION['admin_json_zip_link']; ?>">json_profiles.zip</a>
-                </div>
-                <?php endif; ?>
-            </form>
+                </form>
+            </div>
+            <?php 
+                $uploaded_fvs_name = get_option('fvs_file_name');
+                if ($uploaded_fvs_name): 
+            ?>
+            <div class="grid-box-body" id="group-generated-fvs">
+                <?php echo $uploaded_fvs_name; ?>
+            </div>
+            <?php endif; ?>
+            <div class="grid-box-footer">
+                <form name="group-generate-fvs-form" id="group-generate-fvs-form" action="<?php bp_group_admin_form_action('group-generate-fvs')?>" method="post">
+                    <div class="btn-row">
+                        <a href="#" class="action-btn process-btn no-submit left10 top3" id="generate-fvs-btn"><span class="p"></span><span class="t">Generate FVS</span></a>
+                        <div class="clear"></div>
+                    </div>
+                    <input type="hidden" name="fvs_file_exist" id="fvs_file_exist" value="<?php echo ($uploaded_fvs_name) ? (1) : (0); ?>" />
+                </form>
+            </div>
         </div>
     </div>
     <div class="clear"></div>
