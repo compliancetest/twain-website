@@ -793,4 +793,6 @@ body div.bbp-template-notice.error p{
 }
 #group-uploaded-fvs {
     padding: 10px 20px;
+    color: #127dbb;
+    font-weight: bold;
 }
