@@ -722,7 +722,7 @@
                 $uploaded_fvs_name = get_option('fvs_file_name');
                 if ($uploaded_fvs_name): 
             ?>
-            <div class="grid-box-body" id="group-generated-fvs">
+            <div class="grid-box-body" id="group-uploaded-fvs">
                 <?php echo $uploaded_fvs_name; ?>
             </div>
             <?php endif; ?>
