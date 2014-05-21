@@ -791,3 +791,6 @@ body div.bbp-template-notice.error p{
     right: 20px;
     float: right;
 }
+#group-uploaded-fvs {
+    padding: 10px 20px;
+}
