@@ -103,4 +103,22 @@
         }
         return false;
     })
+    
+    // Upload FVS
+    $('#group-upload-fvs-form #upload-fvs-btn').click(function(){
+        if($('#group-upload-fvs-form #fvs_file').val() != '')
+        {
+            $(this).parents('form').submit();    
+        }
+        return false;
+    })
+    
+    // Generate FVS
+    $('#group-generate-fvs-form #generate-fvs-btn').click(function(){
+        if($('#group-generate-fvs-form #fvs_file_exist').val() == 1)
+        {
+            $(this).parents('form').submit();    
+        }
+        return false;
+    })
 })(jQuery)
