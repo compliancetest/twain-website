@@ -39,9 +39,7 @@ class FvsGenerator {
 
     public function process() {
         
-        
         $gateway_list = $this->getGatewayList();
-        var_dump($gateway_list); exit;
         
         $test_urls = array();
         $contribution_prod_urls = array();
@@ -61,7 +59,7 @@ class FvsGenerator {
         $activeSheet->setCellValue('A2', 'New Data');
         $count = count($activeSheet->toArray());
         
-        for ($i=1; $i<$count; $i++) {
+        for ($i=2; $i<=$count; $i++) {
             $p_esa_url = $activeSheet->getCell('N'.$i)->getValue();
             $s_esa_url = $activeSheet->getCell('R'.$i)->getValue();
             if (array_search($p_esa_url, $contribution_prod_urls) !== FALSE) {
@@ -81,11 +79,11 @@ class FvsGenerator {
         
         // FVS USI list
         $fvs_usi_list = array();
-        for ($i=1; $i<$count; $i++) {
+        for ($i=2; $i<=$count; $i++) {
             $fvs_usi_list[] = $activeSheet->getCell('G'.$i)->getValue();
         }
         
-        $new_row_index = $count;
+        $new_row_index = $count + 1;
         
         foreach ($usi_list as $usi) {
             // If associated usi does exist in FSV, add new row for USI of profile
