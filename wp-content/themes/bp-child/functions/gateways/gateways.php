@@ -142,11 +142,14 @@ function gateway_actions()
 {
     global $wpdb;
     
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+    if (!is_admin())
+        return;
     
-    if ($action == 'save') 
+    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+    $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
+    
+    if ($action == 'save' && $page == 'gateway_edit') 
     {
-        
         $gateway_id = isset($_REQUEST['gateway_id']) ? $_REQUEST['gateway_id'] : null;
         $gateway_name = isset($_REQUEST['gateway_name']) ? $_REQUEST['gateway_name'] : null;
         $gateway_abn = isset($_REQUEST['gateway_abn']) ? $_REQUEST['gateway_abn'] : null;
@@ -180,7 +183,7 @@ function gateway_actions()
             wp_redirect(admin_url() . 'admin.php?page=gateway_edit&gateway_id=' . $wpdb->insert_id . '&message=1');
         }
     } 
-    else if ($action == 'delete')
+    else if ($action == 'delete' && $page == 'gateways')
     {
         if ( empty($_REQUEST['gateway_ids']) )
             $gateway_ids = array( intval( $_REQUEST['gateway_id'] ) );
