@@ -130,11 +130,11 @@ function createSupportTicket()
     /***************** Begin Send Mail ***************************/
     $ticketDetail = getTicketById($wpdb->insert_id);
     //Send Email Notification to the Customer
-    ct_send_ticket_email('ticket_created', 'customer', $ticketDetail, null);    
+    ct_send_ticket_email('ticket_created', 'customer', $ticketDetail);    
     //Send Email Notification to Support
-    ct_send_ticket_email('ticket_created_support', 'support', $ticketDetail, null);
+    ct_send_ticket_email('ticket_created_support', 'support', $ticketDetail);
     //Send Email Notification to Admin
-    ct_send_ticket_email('ticket_created_admin', 'admin', $ticketDetail, null);    
+    ct_send_ticket_email('ticket_created_admin', 'admin', $ticketDetail);    
     /***************** End Send Mail *****************************/
     
     addMessage('Your ticket has been submitted successfully.');
@@ -607,7 +607,8 @@ function sendTicketMessage()
             }
             
             //Update Ticket Status
-            ct_update_ticket_status($ticketDetail->id, $new_status);
+            if($status_changed)
+                ct_update_ticket_status($ticketDetail->id, $new_status);
         }    
             
     }
@@ -664,31 +665,30 @@ function sendTicketMessage()
         //Reload Ticket
         $ticketDetail = getTicketById($ticketDetail->id);
         
-        ///Send Email Notification
-        if($is_support)
+        if(!$status_changed || ($new_status != TICKET_STATUS_RESOLVED && $new_status != TICKET_STATUS_CLOSED))
         {
-            //Send to Customer
-            ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail, $messageID);            
-        }else{
-            //Send To Support
-            ct_send_ticket_email("ticket_updated_support", 'support', $ticketDetail, $messageID);
-        }
-        ct_send_ticket_email("ticket_updated_admin", 'admin', $ticketDetail, $messageID);
-        
-        if(!$status_changed || $new_status != TICKET_STATUS_CLOSED)
-        {
+            //There are separate email templates for Resolved and Closed Tickets
+            ///Send Email Notification
+            if($is_support)
+            {
+                //Send to Customer
+                ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail, $messageID);            
+            }else{
+                //Send To Support
+                ct_send_ticket_email("ticket_updated_support", 'support', $ticketDetail, $messageID);
+            }
+            ct_send_ticket_email("ticket_updated_admin", 'admin', $ticketDetail, $messageID);
             //Add Success Message
             addMessage("Ticket has been updated.", "success");
-        }
-           
-        if($status_changed)
-        {
+        }else if($status_changed){
             if($new_status == TICKET_STATUS_RESOLVED)
             {                
                 //Send Notification of status resolved to the user 
                 ct_send_ticket_email("ticket_solved", 'customer', $ticketDetail, $messageID);
                 ct_send_ticket_email("ticket_solved_support", 'support', $ticketDetail, $messageID);
                 ct_send_ticket_email("ticket_solved_admin", 'admin', $ticketDetail, $messageID);
+                //Add Success Message
+                addMessage("Ticket has been updated.", "success");
             }else if($new_status == TICKET_STATUS_CLOSED){
                 //Send Ticket Closed notification to the user 
                 ct_send_ticket_email("ticket_closed", 'customer', $ticketDetail, $messageID);
@@ -790,7 +790,7 @@ function processTicketPayment($ticket_id)
     if($ticketDetail->total_price > 0)
     {
         //Check Prepurchased Tokens
-        $purchasedTokens = ct_get_prepurchased_tokens($ticket->customer_id);    
+        $purchasedTokens = ct_get_prepurchased_tokens($ticketDetail->customer_id);    
         
         if($purchasedTokens > 0)
         {
@@ -799,7 +799,7 @@ function processTicketPayment($ticket_id)
             $remainedTokens = $purchasedTokens - $paidTokens;
             
             //Update User Purchased Token
-            $wpdb->update($wpdb->prefix . "users_extra",  array('purchased_tokens' => $remainedTokens));
+            $wpdb->update($wpdb->prefix . "users_extra",  array('purchased_tokens' => $remainedTokens), array('userID'=> $customerDetail->ID));
             
             $wpdb->insert($wpdb->prefix . 'users_transactions', array(
                 "user_id" => $ticketDetail->customer_id,
@@ -822,7 +822,7 @@ function processTicketPayment($ticket_id)
             if($paidTokens == $ticketDetail->total_price)            
                 return true;
             
-            $wpdb->update($wpdb->prefix . "tickets",  array('pending_amount' => $ticketDetail->total_price - $paidTokens));
+            $wpdb->update($wpdb->prefix . "tickets",  array('pending_amount' => $ticketDetail->total_price - $paidTokens), array('id' => $ticketDetail->id));
             $ticketDetail->total_price = $ticketDetail->total_price - $paidTokens;
             
         }
@@ -849,6 +849,7 @@ function processTicketPayment($ticket_id)
             return "The payment method doesn't exist or has been suspended.";            
         }
         
+        $card = getUserCardById($card_id, $ticketDetail->customer_id);
         $paid_amount = $ticketDetail->total_price * $token_price;
         
         $result = processEwayPayment($card->customer_id, $paid_amount, "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
@@ -865,7 +866,7 @@ function processTicketPayment($ticket_id)
                 "created_date" => date("Y-m-d H:i:s")
             ));
             
-            $wpdb->update($wpdb->prefix . "tickets",  array('pending_amount' => 0));
+            $wpdb->update($wpdb->prefix . "tickets",  array('pending_amount' => 0), array('id' => $ticketDetail->id));
             
             $ticketDetail->paid_amount = $paid_amount;
             

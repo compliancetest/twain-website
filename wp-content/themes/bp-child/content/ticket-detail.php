@@ -186,13 +186,14 @@
                                     else: 
                                 ?>
                                 <div>
+                                    <?php if($ticket->status_id != TICKET_STATUS_CLOSED): ?>
                                     <b>Update Status:</b>                                     
                                     <?php if($ticket->status_id != TICKET_STATUS_RESOLVED && $ticket->status_id != TICKET_STATUS_CLOSED): ?>
                                     <label class="left5"><input type="radio" name="status_change" value="in_progress" autocomplete="off" <?php echo cp_checked($ticket->status_id, TICKET_STATUS_IN_PROGRESS)?> /> In Progress</label>
                                     <label class="left5"><input type="radio" name="status_change" value="feedback" autocomplete="off" <?php echo cp_checked($ticket->status_id, TICKET_STATUS_FEEDBACK)?> /> Feedback</label>                                    
                                     <label class="left5"><input type="radio" name="status_change" value="resolved" autocomplete="off"  <?php echo cp_checked($ticket->status_id, TICKET_STATUS_RESOLVED)?> /> Resolved</label>
                                     <?php endif; ?>
-                                    <?php if($ticket->status_id != TICKET_STATUS_CLOSED): ?>
+                                    
                                     <label class="left5"><input type="radio" name="status_change" value="closed" autocomplete="off" <?php echo cp_checked($ticket->status_id, TICKET_STATUS_CLOSED)?> /> Closed</label>
                                     <?php endif; ?>
                                 </div>

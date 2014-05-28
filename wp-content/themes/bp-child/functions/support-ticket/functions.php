@@ -114,19 +114,19 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
         $emailData['[remained_tokens]'] = $ticketDetail->remained_tokens;
     
     
-    $emailData['[ticket_created]'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
-    $emailData['[ticket_updated]'] = formatDate($ticketDetail->last_date, "F d, Y h:i A", $email_type == 'customer' ? $customer_id : $support_id);
+    $emailData['[ticket_created]'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $ticketDetail->customer_id : $ticketDetail->support_id);
+    $emailData['[ticket_updated]'] = formatDate($ticketDetail->last_date, "F d, Y h:i A", $email_type == 'customer' ? $ticketDetail->customer_id : $ticketDetail->support_id);
     
     if($ticketDetail->customer_id)
     {
-        $customerDetail = get_userdata($customer_id);         
+        $customerDetail = get_userdata($ticketDetail->customer_id);         
         $emailData['[customer]'] = $emailData['[customer_name]'] = cp_get_user_display_name($customerDetail);
         $emailData['[customer_email]'] = $customerDetail->user_email;
     }
     
     if($ticketDetail->support_id)
     {
-        $supportDetail = get_userdata($support_id);
+        $supportDetail = get_userdata($ticketDetail->support_id);
         $emailData['[support_name]'] = cp_get_user_display_name($supportDetail);
         $emailData['[support_email]'] = $supportDetail->user_email;
     }
