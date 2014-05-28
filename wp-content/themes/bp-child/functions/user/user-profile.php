@@ -759,6 +759,7 @@ function cp_get_customer_harness_detail_profile_data()
         <div class="grid-cell">
             <label><?php echo $label; ?>:</label>
             <input class="input" type="text" name="profile_entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>" readonly="readonly" disabled="disabled"/>
+            <input type="hidden" name="entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>"/>
         </div>
         <div class="clear"></div>
     </div>
@@ -813,11 +814,11 @@ function cp_save_customer_harness_detail()
         $updateArr['tester_password'] = $_POST['tester_password'];
     }
     
-    if (isset($_POST['profile_entity_usi']) && $_POST['profile_entity_usi'] != '') {
-        $updateArr['entity_id'] = $_POST['profile_entity_usi'];
+    if (isset($_POST['entity_usi']) && $_POST['entity_usi'] != '') {
+        $updateArr['entity_id'] = $_POST['entity_usi'];
         $updateArr['entity_type'] = 'urn:oasis:tc:ebcore:partyid-type:ABN:0151';
-    } else if (isset($_POST['profile_entity_abn']) && $_POST['profile_entity_abn'] != '') {
-        $updateArr['entity_id'] = $_POST['profile_entity_abn'];
+    } else if (isset($_POST['entity_abn']) && $_POST['entity_abn'] != '') {
+        $updateArr['entity_id'] = $_POST['entity_abn'];
         $updateArr['entity_type'] = 'http://sbr.gov.au/identifier/usi';
     } else {
         $updateArr['entity_id'] = '';
