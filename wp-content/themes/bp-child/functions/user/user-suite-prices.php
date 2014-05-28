@@ -16,64 +16,76 @@ function ct_manage_fee_overrides()
     
     require_once('user-suite-list-table.php');
     
-    if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'save')
+    if(isset($_REQUEST['action']))
     {
-        $userID = $_REQUEST['id'];
-        $familyMarks = $_POST['suite_id']; //These are family mark
-        
-        //Getting Test Suites
-        $query = "SELECT suite_id, family_mark FROM {$wpdb->prefix}test_suites where family_mark in (" . implode(", ", $familyMarks) . ")";
-        $suites = $wpdb->get_results($query);
-        
-        $result1 = array();
-        $result2 = array();
-        foreach($suites as $suite)
+        if($_REQUEST['action'] == 'save')
         {
-            $sid = intval($suite->suite_id);
-            if(isset($_POST['set_value' . $suite->family_mark]) && $_POST['signup_fee' . $suite->family_mark] != '')
+            $userID = $_REQUEST['id'];
+            $familyMarks = $_POST['suite_id']; //These are family mark
+            
+            //Getting Test Suites
+            $query = "SELECT suite_id, family_mark FROM {$wpdb->prefix}test_suites where family_mark in (" . implode(", ", $familyMarks) . ")";
+            $suites = $wpdb->get_results($query);
+            
+            $result1 = array();
+            $result2 = array();
+            foreach($suites as $suite)
             {
-               $result1[$sid] = $_POST['signup_fee' . $suite->family_mark];               
+                $sid = intval($suite->suite_id);
+                if(isset($_POST['set_value' . $suite->family_mark]) && $_POST['signup_fee' . $suite->family_mark] != '')
+                {
+                   $result1[$sid] = $_POST['signup_fee' . $suite->family_mark];               
+                }
+                if(isset($_POST['set_value' . $suite->family_mark]) && $_POST['monthly_fee' . $suite->family_mark] != '')
+                {
+                   $result2[$sid] = $_POST['monthly_fee' . $suite->family_mark];               
+                }
+                
             }
-            if(isset($_POST['set_value' . $suite->family_mark]) && $_POST['monthly_fee' . $suite->family_mark] != '')
+            update_user_meta($userID, 'signup_fee', $result1);
+            update_user_meta($userID, 'monthly_fee', $result2);
+            
+            //Getting Old Organisations Data
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_organisation_pricing WHERE user_id=%d", $_REQUEST['id']);
+            $oRows = $wpdb->get_results($query);
+            
+            $orgPrices = array();
+            foreach($oRows as $iRow)
             {
-               $result2[$sid] = $_POST['monthly_fee' . $suite->family_mark];               
+                //Remove Unchecked rows
+                if(!isset($_POST['organisation']) || !in_array($iRow->family_mark, $_POST['organisation']))
+                {
+                    $wpdb->delete($wpdb->prefix . "users_organisation_pricing", array("id" => $iRow->id));
+                }
+                $orgPrices[$iRow->family_mark] = array(
+                                                'user_count' => $iRow->user_count,
+                                                'joined_count' => $iRow->joined_count
+                                            );
             }
             
-        }
-        update_user_meta($userID, 'signup_fee', $result1);
-        update_user_meta($userID, 'monthly_fee', $result2);
-        
-        //Getting Old Organisations Data
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_organisation_pricing WHERE user_id=%d", $_REQUEST['id']);
-        $oRows = $wpdb->get_results($query);
-        
-        $orgPrices = array();
-        foreach($oRows as $iRow)
-        {
-            //Remove Unchecked rows
-            if(!isset($_POST['organisation']) || !in_array($iRow->family_mark, $_POST['organisation']))
+            if(isset($_POST['organisation']))
             {
-                $wpdb->delete($wpdb->prefix . "users_organisation_pricing", array("id" => $iRow->id));
+                foreach($_POST['organisation'] as $s)
+                {
+                    $user_count = !$_POST['organisation_count' . $s] ? 0 : intval($_POST['organisation_count' . $s]);
+                    if(isset($orgPrices[$s])) //Update
+                        $wpdb->update($wpdb->prefix . "users_organisation_pricing", array('user_count' => $user_count), array("user_id" => $userID, 'family_mark' => $s));
+                    else //Create{
+                        $wpdb->insert($wpdb->prefix . "users_organisation_pricing", array('user_id' => $userID, 'family_mark' => $s, 'user_count' => $user_count, 'joined_count' => 0));
+                }            
             }
-            $orgPrices[$iRow->family_mark] = array(
-                                            'user_count' => $iRow->user_count,
-                                            'joined_count' => $iRow->joined_count
-                                        );
+            
+            $msg = 'Successfully Saved!';
+        }else if($_REQUEST['action'] == 'save-tokens'){
+            $userID = $_REQUEST['id'];
+            $purchasedTokens = $_POST['prepurchased_tokens'];
+            
+            $query = $wpdb->prepare("INSERT INTO {$wpdb->prefix}users_extra(`userID`, `purchased_tokens`)VALUES(%d, %d) ON DUPLICATE KEY UPDATE `purchased_tokens`=%d", $userID, $purchasedTokens, $purchasedTokens);
+            
+            $wpdb->query($query);
+            $msg = 'Successfully Saved!';
+            
         }
-        
-        if(isset($_POST['organisation']))
-        {
-            foreach($_POST['organisation'] as $s)
-            {
-                $user_count = !$_POST['organisation_count' . $s] ? 0 : intval($_POST['organisation_count' . $s]);
-                if(isset($orgPrices[$s])) //Update
-                    $wpdb->update($wpdb->prefix . "users_organisation_pricing", array('user_count' => $user_count), array("user_id" => $userID, 'family_mark' => $s));
-                else //Create{
-                    $wpdb->insert($wpdb->prefix . "users_organisation_pricing", array('user_id' => $userID, 'family_mark' => $s, 'user_count' => $user_count, 'joined_count' => 0));
-            }            
-        }
-        
-        $msg = 'Successfully Saved!';
     }
     
     if(isset($_REQUEST['id']) && $_REQUEST['id'])
@@ -136,6 +148,11 @@ function ct_manage_fee_overrides()
             $purchases[$r->suite_id] = $r->monthly_fee;
         }
         
+        //Getting Prepurchased Tokens
+        $query = "SELECT purchased_tokens FROM {$wpdb->prefix}users_extra WHERE userID=" . $userID;
+        $purchasedTokens = $wpdb->get_var($query);
+        if(!$purchasedTokens)
+            $purchasedTokens = 0;
         ?>
         <div class="wrap">
             <h2>Edit Fees for <?php echo $userData->first_name . " " . $userData->last_name ?></h2>
@@ -155,7 +172,7 @@ function ct_manage_fee_overrides()
                             <th rowspan="2">Community</th>
                             <th colspan="3">Suite</th>
                             <th colspan="5">User</th>
-                            <th colspan="3">Organisational Pricing</th>
+                            <th colspan="3">Organisational Pricing</th>                            
                         </tr>
                         <tr>
                             <th>Title</th>
@@ -245,15 +262,25 @@ function ct_manage_fee_overrides()
                                 <td rowspan="<?php echo $familyCounts?>">
                                     <?php echo isset($orgPrices[$suite->family_mark]['joined_count']) ? $orgPrices[$suite->family_mark]['joined_count'] : "-"?>
                                 </td>      
-                                <?php endif; ?>      
-                                                      
-                                                         
-                                
+                                <?php endif; ?>
                             </tr>
                             <?php
                         }
                     ?>
                     </tbody>
+                </table>
+            </form>
+            <hr />
+            <h3>Prepurchased Tokens (<small>1 token = $<?php echo get_option('token_price')?></small>)</h3>
+            <form name="adminform" action="users.php?page=user_fee_overrides" method="post">
+                <input type="hidden" name="page" value="user_fee_overrides" />
+                <input type="hidden" name="action" value="save-tokens" />
+                <input type="hidden" name="id" value="<?php echo $userID?>" />
+                <table border="1" style="" cellpadding="5">
+                    <tr>
+                        <th>Prepurchased Tokens</th>
+                        <td><input type="text" name="prepurchased_tokens" id="prepurchased_tokens" value="<?php echo $purchasedTokens ?>" /></td>
+                    </tr>
                 </table>
                 <p><input type="submit" value="Save" class="button button-primary button-large" /></p>
             </form>

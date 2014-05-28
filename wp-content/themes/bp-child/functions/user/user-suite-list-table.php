@@ -24,6 +24,7 @@ class CT_User_Suite_List_Table extends WP_List_Table
             "email" => __("Email"),
             "fee" => __("Signup Fee"),                        
             "organisation" => __("Organisation Pricing"),                        
+            "prepurchased_tokens" => __("Prepurchased Tokens"),                        
             "id" => __("ID"),  
         );
     }
@@ -104,7 +105,11 @@ class CT_User_Suite_List_Table extends WP_List_Table
                 }
                 
                 return implode('<br />', $orgPrices);
-                
+            
+            case 'prepurchased_tokens':
+                $query = "SELECT purchased_tokens FROM {$wpdb->prefix}users_extra WHERE userID=" . $item->ID;
+                $tokens = $wpdb->get_var($query);
+                return !$tokens ? 0 : $tokens;
             default:
                 return $item->$column_name;
         }

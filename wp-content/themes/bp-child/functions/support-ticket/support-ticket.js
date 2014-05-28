@@ -16,24 +16,30 @@ jQuery(document).ready(function(){
             jQuery('#ttresponse').val(jQuery('option:selected', this).attr('ttresponse'));
             jQuery('#ttresolve').val(jQuery('option:selected', this).attr('ttresolve'));            
             jQuery("#ticket-time-row").show();    
-            if(jQuery('#ticket-category').val() != '')
-            {
-                jQuery('#ticket-price').html(jQuery('#ticket-category option:selected').attr('has-fee') == 'no' ? 'Free' : ('$' + jQuery('option:selected', this).attr('price') + '/hr') );
-                jQuery('#ticket-price-row').show();
-            }
             
         }
+        ticketUpdatePriceRow();
     })
     jQuery('body').on('change', '#ticket-category', function(){
-        if(jQuery(this).val() == '')
-        {
-            jQuery("#ticket-price-row").hide();    
-        }else if(jQuery('#ticket-priority').val() != ''){            
-            jQuery('#ticket-price').html(jQuery('option:selected', this).attr('has-fee') == 'no' ? 'Free' : ('$' + jQuery('#ticket-priority option:selected').attr('price') + '/hr') );
-            jQuery('#ticket-price-row').show();                   
-        }
+        ticketUpdatePriceRow();
     })
     
+    
+    function ticketUpdatePriceRow()
+    {
+        if(jQuery('#ticket-priority').val() == '' || jQuery('#ticket-category').val() == '')
+        {
+            jQuery("#ticket-price-row").hide();    
+        }else{
+            jQuery('#ticket-price').html(jQuery('#ticket-category option:selected').attr('has-fee') == 'no' ? 'Free' : (jQuery('#ticket-priority option:selected').attr('price') + ' Tokens/hr') );            
+            if(jQuery('#ticket-category option:selected').attr('has-fee') == 'no')
+                    jQuery('#ticket-price').next().hide();
+                else
+                    jQuery('#ticket-price').next().show();
+                    
+            jQuery('#ticket-price-row').show();                 
+        }
+    }
     
     jQuery('body').on('click', '#submit-ticket-link', function(){
         jQuery('#ticketForm').submit();
@@ -47,6 +53,9 @@ jQuery(document).ready(function(){
     jQuery('body').on('focus', '#ticketForm textarea', function(){
         jQuery(this) .removeClass('textarea-error');
     });
+    
+    var forceCreateTicket = false;
+    
     jQuery('body').on('submit', '#ticketForm', function(){
         
         var isValid = true;
@@ -91,18 +100,43 @@ jQuery(document).ready(function(){
         }
         
         //Error if the payment method is not selected
-        if(form.find('#ticket-category option:selected').attr('has-fee') != 'no' && form.find('#ticket-card-id').val() == '')
+        if(form.find('#ticket-category option:selected').attr('has-fee') != 'no' && form.find('#prepurchased-tokens').val() == 0 && form.find('#ticket-card-id').val() == '')
         {
             form.find('#ticket-card-id').addClass('select-error');
             isValid = false;
         }
         
-        if(isValid)
+        if(isValid && !forceCreateTicket)
         {
-            form.find('.loading').show()
+            //Validate Using Ajax
+            form.find('.loading').show();
+            jQuery.ajax({
+                url: '/',
+                type: 'post',
+                data: form.serialize(),
+                dataType: 'xml',
+                success: function(rsp){
+                    if(jQuery(rsp).find('status').text() == 'success')
+                    {
+                        forceCreateTicket = true;
+                        form.find('#ct-ticket-validate-action').remove();
+                        form.find('#ct-ticket-create-action').attr('name', 'ct-ticket-action');                    
+                        form.submit();
+                    }else{
+                        form.find('.loading').hide();        
+                        form.find('.popup-box-content .message').remove();
+                        form.find('.popup-box-content').append('<div class="message error" style="display: none">' + jQuery(rsp).find('error').text() + '</div>');
+                        form.find('.popup-box-content .message').fadeIn();
+                    }
+                },
+                error: function(error)
+                {
+                    form.find('.loading').hide();
+                }
+            })
         }
         
-        return isValid;
+        return forceCreateTicket;
     });
     
     //Show Change Term Form
@@ -111,6 +145,23 @@ jQuery(document).ready(function(){
         jQuery('#ticket-term-info').hide();
         return false;
     });
+    
+    jQuery('#changeTermForm #ticket-priority').change(function(){
+        
+        var ttresolve = jQuery(this).find('option:selected').attr('ttresolve');
+        var ttresponse = jQuery(this).find('option:selected').attr('ttresponse');
+        var price = jQuery(this).find('option:selected').attr('price');
+        
+        jQuery('#changeTermForm #term_ttresolve').find('span').html(ttresolve);
+        jQuery('#changeTermForm #term_ttresolve').find('input[type="text"]').val(ttresolve);
+        jQuery('#changeTermForm #term_ttresponse').find('span').html(ttresponse);
+        jQuery('#changeTermForm #term_ttresponse').find('input[type="text"]').val(ttresponse);
+        if(jQuery('#changeTermForm #term_price').find('span').html() != 'Free')
+        {
+            jQuery('#changeTermForm #term_price').find('span').html(price + " Tokens/hr");
+            jQuery('#changeTermForm #term_price').find('input[type="text"]').val(price);        
+        }
+    })
     
     jQuery('#change-term-contr .cancel-btn').click(function(){
         jQuery('#change-term-contr').hide();
@@ -141,19 +192,19 @@ jQuery(document).ready(function(){
         jQuery('#changeTermForm .input-error').removeClass('input-error');
         
         //Validate the input values
-        if(!jQuery('#changeTermForm #ttpay').val() || isNaN(jQuery('#changeTermForm #ttpay').val()))
+        if( jQuery('#changeTermForm #ttpay').length > 0 && (!jQuery('#changeTermForm #ttpay').val() || isNaN(jQuery('#changeTermForm #ttpay').val())) )
         {
             jQuery('#changeTermForm #ttpay').addClass("input-error");
             isValid = false;
         }
         
-        if(!jQuery('#changeTermForm #ttresolve').val() || isNaN(jQuery('#changeTermForm #ttresolve').val()))
+        if(jQuery('#changeTermForm #ttpay').length > 0 && (!jQuery('#changeTermForm #ttresolve').val() || isNaN(jQuery('#changeTermForm #ttresolve').val())))
         {
             jQuery('#changeTermForm #ttresolve').addClass("input-error");
             isValid = false;
         }
         
-        if(!jQuery('#changeTermForm #ttresponse').val() || isNaN(jQuery('#changeTermForm #ttresponse').val()))
+        if(jQuery('#changeTermForm #ttpay').length > 0 && (!jQuery('#changeTermForm #ttresponse').val() || isNaN(jQuery('#changeTermForm #ttresponse').val())))
         {
             jQuery('#changeTermForm #ttresponse').addClass("input-error");
             isValid = false;

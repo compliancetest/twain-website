@@ -17,6 +17,20 @@ function ct_process_ticket_frontend_actions()
         {
             showSumitTicketBox();            
             exit;
+        }else if(wp_verify_nonce($action, 'validate-ticket')){
+            $errors = getCreateTicketErrors();
+            
+            header('Content-type: application/xml');
+            echo "<result>";
+            if(!$errors)
+            {
+                echo "<status>success</status>";
+            }else{
+                echo "<status>error</status>";
+                echo "<error><![CDATA[" . implode("<br />", $errors) . "]]></error>";
+            }
+            echo "</result>";
+            exit;
         }else if(wp_verify_nonce($action, 'submit-ticket')){
             createSupportTicket();
         }else if(wp_verify_nonce($action, 'accept-term')){

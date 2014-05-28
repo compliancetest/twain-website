@@ -161,6 +161,8 @@ function create_email_management_page()
                         <li><a href="#ticket-started">Ticket Started</a></li>                    
                         <li><a href="#ticket-solved">Ticket Resolved</a></li>                    
                         <li><a href="#ticket-closed">Ticket Closed</a></li>                    
+                        <li><a href="#ticket-payment-processed1">Payment Processed<br />With Credit Card</a></li>
+                        <li><a href="#ticket-payment-processed2">Payment Processed<br />With Prepurchased Tokens</a></li>
                         
                         <li class="tab-separator">Forum Section</li>
                         <li><a href="#forum-new-post">New Forum Post</a></li>
@@ -197,7 +199,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>                                    
-                                    <?php wp_editor($new_user_email_content, 'new_user_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($new_user_email_content, 'new_user_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>                        
@@ -216,7 +218,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($new_user_admin_email_content, 'new_user_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($new_user_admin_email_content, 'new_user_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -248,7 +250,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>                                    
-                                    <?php wp_editor($email_changed_email_content, 'email_changed_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($email_changed_email_content, 'email_changed_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>                        
@@ -267,7 +269,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($email_changed_admin_email_content, 'email_changed_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($email_changed_admin_email_content, 'email_changed_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -298,7 +300,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>                                    
-                                    <?php wp_editor($changed_email_verify_success_email_content, 'changed_email_verify_success_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($changed_email_verify_success_email_content, 'changed_email_verify_success_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -317,7 +319,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($changed_email_verify_success_admin_email_content, 'changed_email_verify_success_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($changed_email_verify_success_admin_email_content, 'changed_email_verify_success_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -347,7 +349,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($verify_email_content, 'verify_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($verify_email_content, 'verify_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>     
@@ -378,7 +380,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>                                    
-                                    <?php wp_editor($user_verify_success_email_content, 'user_verify_success_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($user_verify_success_email_content, 'user_verify_success_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -397,7 +399,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($user_verify_success_admin_email_content, 'user_verify_success_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($user_verify_success_admin_email_content, 'user_verify_success_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -429,7 +431,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($purchase_subscription_email_content, 'purchase_subscription_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($purchase_subscription_email_content, 'purchase_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -448,7 +450,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($purchase_subscription_admin_email_content, 'purchase_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($purchase_subscription_admin_email_content, 'purchase_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -480,7 +482,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($purchase_free_subscription_email_content, 'purchase_free_subscription_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($purchase_free_subscription_email_content, 'purchase_free_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -499,7 +501,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($purchase_free_subscription_admin_email_content, 'purchase_free_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($purchase_free_subscription_admin_email_content, 'purchase_free_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -531,7 +533,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($purchase_signup_fee_only_subscription_email_content, 'purchase_signup_fee_only_subscription_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($purchase_signup_fee_only_subscription_email_content, 'purchase_signup_fee_only_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -550,7 +552,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($purchase_signup_fee_only_subscription_admin_email_content, 'purchase_signup_fee_only_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($purchase_signup_fee_only_subscription_admin_email_content, 'purchase_signup_fee_only_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -582,7 +584,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($purchase_additional_subscription_email_content, 'purchase_additional_subscription_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($purchase_additional_subscription_email_content, 'purchase_additional_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -601,7 +603,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($purchase_additional_subscription_admin_email_content, 'purchase_additional_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($purchase_additional_subscription_admin_email_content, 'purchase_additional_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>                        
@@ -632,7 +634,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($purchase_organisational_subscription_email_content, 'purchase_organisational_subscription_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($purchase_organisational_subscription_email_content, 'purchase_organisational_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -651,7 +653,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($purchase_organisational_subscription_admin_email_content, 'purchase_organisational_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($purchase_organisational_subscription_admin_email_content, 'purchase_organisational_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>                        
@@ -683,7 +685,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($unsubscribing_email_content, 'unsubscribing_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($unsubscribing_email_content, 'unsubscribing_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -702,7 +704,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($unsubscribing_admin_email_content, 'unsubscribing_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($unsubscribing_admin_email_content, 'unsubscribing_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -734,7 +736,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($cancel_subscription_email_content, 'cancel_subscription_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($cancel_subscription_email_content, 'cancel_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -753,7 +755,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($cancel_subscription_admin_email_content, 'cancel_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -786,7 +788,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($cancel_free_subscription_email_content, 'cancel_free_subscription_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($cancel_free_subscription_email_content, 'cancel_free_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -805,7 +807,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($cancel_free_subscription_admin_email_content, 'cancel_free_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($cancel_free_subscription_admin_email_content, 'cancel_free_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -838,7 +840,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($cancel_additional_subscription_email_content, 'cancel_additional_subscription_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($cancel_additional_subscription_email_content, 'cancel_additional_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -857,7 +859,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($cancel_additional_subscription_admin_email_content, 'cancel_additional_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($cancel_additional_subscription_admin_email_content, 'cancel_additional_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -890,7 +892,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($active_subscription_email_content, 'active_subscription_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($active_subscription_email_content, 'active_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -909,7 +911,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($active_subscription_admin_email_content, 'active_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($active_subscription_admin_email_content, 'active_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -941,7 +943,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($active_subscription2_email_content, 'active_subscription2_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($active_subscription2_email_content, 'active_subscription2_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -960,7 +962,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($active_subscription2_admin_email_content, 'active_subscription2_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($active_subscription2_admin_email_content, 'active_subscription2_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -992,7 +994,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($inarrears_subscription_email_content, 'inarrears_subscription_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($inarrears_subscription_email_content, 'inarrears_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1011,7 +1013,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($inarrears_subscription_admin_email_content, 'inarrears_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($inarrears_subscription_admin_email_content, 'inarrears_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1043,7 +1045,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($frozen_subscription_email_content, 'frozen_subscription_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($frozen_subscription_email_content, 'frozen_subscription_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1062,7 +1064,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($frozen_subscription_admin_email_content, 'frozen_subscription_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($frozen_subscription_admin_email_content, 'frozen_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1093,7 +1095,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($membership_request_received_admin_email_content, 'membership_request_received_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($membership_request_received_admin_email_content, 'membership_request_received_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1125,7 +1127,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($membership_request_approved_email_content, 'membership_request_approved_email_content', array('media_buttons' => false)) ?>     
+                                    <?php wp_editor($membership_request_approved_email_content, 'membership_request_approved_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>     
                                 </td>
                             </tr>
                         </tbody>
@@ -1144,7 +1146,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($membership_request_approved_admin_email_content, 'membership_request_approved_admin_email_content', array('media_buttons' => false)) ?>     
+                                    <?php wp_editor($membership_request_approved_admin_email_content, 'membership_request_approved_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>     
                                 </td>
                             </tr>
                         </tbody>
@@ -1176,7 +1178,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($member_promoted_email_content, 'member_promoted_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($member_promoted_email_content, 'member_promoted_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1195,7 +1197,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($member_promoted_admin_email_content, 'member_promoted_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($member_promoted_admin_email_content, 'member_promoted_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1226,7 +1228,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($member_leave_community_admin_email_content, 'member_leave_community_admin_email_content', array('media_buttons' => false)) ?>                
+                                    <?php wp_editor($member_leave_community_admin_email_content, 'member_leave_community_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>                
                                 </td>
                             </tr>
                         </tbody>
@@ -1259,7 +1261,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($membership_request_rejected_email_content, 'membership_request_rejected_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($membership_request_rejected_email_content, 'membership_request_rejected_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -1278,7 +1280,7 @@ function create_email_management_page()
                         <tr>
                             <td class="tdlabel"><b>Content</b></td>
                             <td>
-                                <?php wp_editor($membership_request_rejected_admin_email_content, 'membership_request_rejected_admin_email_content', array('media_buttons' => false)) ?>
+                                <?php wp_editor($membership_request_rejected_admin_email_content, 'membership_request_rejected_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                             </td>
                         </tr>
                         </tbody>
@@ -1313,7 +1315,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($remove_member_email_content, 'remove_member_email_content', array('media_buttons' => false)) ?>     
+                                    <?php wp_editor($remove_member_email_content, 'remove_member_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>     
                                 </td>
                             </tr>
                         </tbody>
@@ -1332,7 +1334,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($remove_member_admin_email_content, 'remove_member_admin_email_content', array('media_buttons' => false)) ?>     
+                                    <?php wp_editor($remove_member_admin_email_content, 'remove_member_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>     
                                 </td>
                             </tr>
                         </tbody>
@@ -1362,7 +1364,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                <?php wp_editor($forgot_password_email_content, 'forgot_password_email_content', array('media_buttons' => false)) ?>                
+                                <?php wp_editor($forgot_password_email_content, 'forgot_password_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>                
                                 </td>
                             </tr>
                         </tbody>
@@ -1393,7 +1395,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($password_changed_email_content, 'password_changed_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($password_changed_email_content, 'password_changed_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1412,7 +1414,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($password_changed_admin_email_content, 'password_changed_admin_email_content', array('media_buttons' => false)) ?>
+                                    <?php wp_editor($password_changed_admin_email_content, 'password_changed_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -1442,7 +1444,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($suite_changed_email_content, 'suite_changed_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($suite_changed_email_content, 'suite_changed_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1472,7 +1474,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($case_changed_email_content, 'case_changed_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($case_changed_email_content, 'case_changed_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1486,9 +1488,20 @@ function create_email_management_page()
                     $ticket_created_email_content = get_option('ticket_created_email_content');
                     $ticket_created_support_email_title = get_option('ticket_created_support_email_title');
                     $ticket_created_support_email_content = get_option('ticket_created_support_email_content');                    
+                    $ticket_created_admin_email_title = get_option('ticket_created_admin_email_title');
+                    $ticket_created_admin_email_content = get_option('ticket_created_admin_email_content');                    
                     ?>           
                     <h3>Ticket Created</h3>         
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [token_price]<small>($/token)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content] <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1505,7 +1518,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_created_email_content, 'ticket_created_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_created_email_content, 'ticket_created_email_content', array('media_buttons' => false, 'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1524,7 +1537,26 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_created_support_email_content, 'ticket_created_support_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_created_support_email_content, 'ticket_created_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_created_admin_email_title" id="ticket_created_admin_email_title" value="<?php echo $ticket_created_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_created_admin_email_content, 'ticket_created_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1537,11 +1569,21 @@ function create_email_management_page()
                     $ticket_updated_email_title = get_option('ticket_updated_email_title');
                     $ticket_updated_email_content = get_option('ticket_updated_email_content');                    
                     $ticket_updated_support_email_title = get_option('ticket_updated_support_email_title');
-                    $ticket_updated_support_email_content = get_option('ticket_updated_support_email_content');                    
-                    
+                    $ticket_updated_support_email_content = get_option('ticket_updated_support_email_content');
+                    $ticket_updated_admin_email_title = get_option('ticket_updated_admin_email_title');
+                    $ticket_updated_admin_email_content = get_option('ticket_updated_admin_email_content');
                     ?>
-                    <h3>Ticket Updated</h3>
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email], [message_content]</p>
+                    <h3>Ticket Updated</h3>                    
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1558,7 +1600,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_updated_email_content, 'ticket_updated_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_updated_email_content, 'ticket_updated_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1577,7 +1619,26 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_updated_support_email_content, 'ticket_updated_support_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_updated_support_email_content, 'ticket_updated_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                         <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_updated_admin_email_title" id="ticket_updated_admin_email_title" value="<?php echo $ticket_updated_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_updated_admin_email_content, 'ticket_updated_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1590,9 +1651,24 @@ function create_email_management_page()
                     $ticket_started_email_title = get_option('ticket_started_email_title');
                     $ticket_started_email_content = get_option('ticket_started_email_content');                    
                     
+                    $ticket_started_support_email_title = get_option('ticket_started_support_email_title');
+                    $ticket_started_support_email_content = get_option('ticket_started_support_email_content');                    
+                    
+                    $ticket_started_admin_email_title = get_option('ticket_started_admin_email_title');
+                    $ticket_started_admin_email_content = get_option('ticket_started_admin_email_content');                    
+                    
                     ?>
                     <h3>Ticket Started</h3>
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1609,7 +1685,45 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_started_email_content, 'ticket_started_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_started_email_content, 'ticket_started_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_started_support_email_title" id="ticket_started_support_email_title" value="<?php echo $ticket_started_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_started_support_email_content, 'ticket_started_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_started_admin_email_title" id="ticket_started_admin_email_title" value="<?php echo $ticket_started_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_started_admin_email_content, 'ticket_started_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1622,10 +1736,21 @@ function create_email_management_page()
                     $ticket_solved_email_content = get_option('ticket_solved_email_content');
                     $ticket_solved_support_email_title = get_option('ticket_solved_support_email_title');
                     $ticket_solved_support_email_content = get_option('ticket_solved_support_email_content');
+                    $ticket_solved_admin_email_title = get_option('ticket_solved_admin_email_title');
+                    $ticket_solved_admin_email_content = get_option('ticket_solved_admin_email_content');
                     
                     ?>
                     <h3>Ticket Resolved</h3>
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email],[paid_amount], [message_content]</p>
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1642,7 +1767,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_solved_email_content, 'ticket_solved_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_solved_email_content, 'ticket_solved_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1661,7 +1786,26 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_solved_support_email_content, 'ticket_solved_support_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_solved_support_email_content, 'ticket_solved_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_solved_admin_email_title" id="ticket_solved_admin_email_title" value="<?php echo $ticket_solved_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_solved_admin_email_content, 'ticket_solved_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1672,9 +1816,20 @@ function create_email_management_page()
                     <?php
                     $ticket_closed_email_title = get_option('ticket_closed_email_title');
                     $ticket_closed_email_content = get_option('ticket_closed_email_content');
+                    $ticket_closed_admin_email_title = get_option('ticket_closed_admin_email_title');
+                    $ticket_closed_admin_email_content = get_option('ticket_closed_admin_email_content');
                     ?>
                     <h3>Ticket Closed</h3>
-                    <p><b>Short Codes:</b> [website_url], [env], [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_price], [ticket_ttpay], [ticket_ttresolve], [ticket_ttresponse], [ticket_content], [customer_name], [customer_email], [support_name], [support_email]</p>
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -1691,10 +1846,197 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($ticket_closed_email_content, 'ticket_closed_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($ticket_closed_email_content, 'ticket_closed_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_closed_admin_email_title" id="ticket_closed_admin_email_title" value="<?php echo $ticket_closed_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_closed_admin_email_content, 'ticket_closed_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
+                
+                <div id="ticket-payment-processed1">
+                    <?php
+                    $ticket_payment_processed_by_card_email_title = get_option('ticket_payment_processed_by_card_email_title');
+                    $ticket_payment_processed_by_card_email_content = get_option('ticket_payment_processed_by_card_email_content');
+                    $ticket_payment_processed_by_card_support_email_title = get_option('ticket_payment_processed_by_card_support_email_title');
+                    $ticket_payment_processed_by_card_support_email_content = get_option('ticket_payment_processed_by_card_support_email_content');
+                    $ticket_payment_processed_by_card_admin_email_title = get_option('ticket_payment_processed_by_card_admin_email_title');
+                    $ticket_payment_processed_by_card_admin_email_content = get_option('ticket_payment_processed_by_card_admin_email_content');
+                    ?>
+                    <h3>Payment processed by using customer credit cards</h3>
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small><br />
+                                [paid_tokens]<small>($)</small>, [paid_amount]<small>($)</small>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_payment_processed_by_card_email_title" id="ticket_payment_processed_by_card_email_title" value="<?php echo $ticket_payment_processed_by_card_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_payment_processed_by_card_email_content, 'ticket_payment_processed_by_card_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_payment_processed_by_card_support_email_title" id="ticket_payment_processed_by_card_support_email_title" value="<?php echo $ticket_payment_processed_by_card_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_payment_processed_by_card_support_email_content, 'ticket_payment_processed_by_card_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_payment_processed_by_card_admin_email_title" id="ticket_payment_processed_by_card_admin_email_title" value="<?php echo $ticket_payment_processed_by_card_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_payment_processed_by_card_admin_email_content, 'ticket_payment_processed_by_card_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
+                <div id="ticket-payment-processed2">
+                    <?php
+                    $ticket_payment_processed_by_tokens_email_title = get_option('ticket_payment_processed_by_tokens_email_title');
+                    $ticket_payment_processed_by_tokens_email_content = get_option('ticket_payment_processed_by_tokens_email_content');
+                    $ticket_payment_processed_by_tokens_support_email_title = get_option('ticket_payment_processed_by_tokens_support_email_title');
+                    $ticket_payment_processed_by_tokens_support_email_content = get_option('ticket_payment_processed_by_tokens_support_email_content');
+                    $ticket_payment_processed_by_tokens_admin_email_title = get_option('ticket_payment_processed_by_tokens_admin_email_title');
+                    $ticket_payment_processed_by_tokens_admin_email_content = get_option('ticket_payment_processed_by_tokens_admin_email_content');
+                    ?>
+                    <h3>Payment processed by using prepurchased tokens</h3>
+                    <table border="0">
+                        <tr>
+                            <td rowspan="2" valign="top"><b>Short Codes:</b></td>
+                            <td>
+                                [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small><br />
+                                [purchased_tokens], [paid_tokens], [remained_tokens]
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_payment_processed_by_tokens_email_title" id="ticket_payment_processed_by_tokens_email_title" value="<?php echo $ticket_payment_processed_by_tokens_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_payment_processed_by_tokens_email_content, 'ticket_payment_processed_by_tokens_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_payment_processed_by_tokens_support_email_title" id="ticket_payment_processed_by_tokens_support_email_title" value="<?php echo $ticket_payment_processed_by_tokens_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_payment_processed_by_tokens_support_email_content, 'ticket_payment_processed_by_tokens_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_payment_processed_by_tokens_admin_email_title" id="ticket_payment_processed_by_tokens_admin_email_title" value="<?php echo $ticket_payment_processed_by_tokens_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_payment_processed_by_tokens_admin_email_content, 'ticket_payment_processed_by_tokens_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
                     </table>
                 </div>
                 
@@ -1722,7 +2064,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($forum_new_post_email_content, 'forum_new_post_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($forum_new_post_email_content, 'forum_new_post_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1751,7 +2093,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($forum_reply_post_email_content, 'forum_reply_post_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($forum_reply_post_email_content, 'forum_reply_post_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -1781,7 +2123,7 @@ function create_email_management_page()
                             <tr>
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
-                                    <?php wp_editor($claim_created_admin_email_content, 'claim_created_admin_email_content', array('media_buttons' => false)) ?>    
+                                    <?php wp_editor($claim_created_admin_email_content, 'claim_created_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -2064,6 +2406,10 @@ function save_email_templates()
           update_option('ticket_created_support_email_title', $ticket_created_support_email_title);          
           $ticket_created_support_email_content = stripslashes_deep($_POST['ticket_created_support_email_content']);          
           update_option('ticket_created_support_email_content', $ticket_created_support_email_content);
+          $ticket_created_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_created_admin_email_title']));          
+          update_option('ticket_created_admin_email_title', $ticket_created_admin_email_title);          
+          $ticket_created_admin_email_content = stripslashes_deep($_POST['ticket_created_admin_email_content']);          
+          update_option('ticket_created_admin_email_content', $ticket_created_admin_email_content);
           
           $ticket_updated_email_title = htmlentities(stripslashes_deep($_POST['ticket_updated_email_title']));          
           update_option('ticket_updated_email_title', $ticket_updated_email_title);          
@@ -2073,12 +2419,24 @@ function save_email_templates()
           update_option('ticket_updated_support_email_title', $ticket_updated_support_email_title);          
           $ticket_updated_support_email_content = stripslashes_deep($_POST['ticket_updated_support_email_content']);          
           update_option('ticket_updated_support_email_content', $ticket_updated_support_email_content);
+          $ticket_updated_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_updated_admin_email_title']));          
+          update_option('ticket_updated_admin_email_title', $ticket_updated_admin_email_title);          
+          $ticket_updated_admin_email_content = stripslashes_deep($_POST['ticket_updated_admin_email_content']);          
+          update_option('ticket_updated_admin_email_content', $ticket_updated_admin_email_content);
           
           
           $ticket_started_email_title = htmlentities(stripslashes_deep($_POST['ticket_started_email_title']));          
           update_option('ticket_started_email_title', $ticket_started_email_title);          
           $ticket_started_email_content = stripslashes_deep($_POST['ticket_started_email_content']);          
-          update_option('ticket_started_email_content', $ticket_started_email_content);
+          update_option('ticket_started_email_content', $ticket_started_email_content);          
+          $ticket_started_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_started_support_email_title']));          
+          update_option('ticket_started_support_email_title', $ticket_started_support_email_title);          
+          $ticket_started_support_email_content = stripslashes_deep($_POST['ticket_started_support_email_content']);          
+          update_option('ticket_started_support_email_content', $ticket_started_support_email_content);
+          $ticket_started_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_started_admin_email_title']));          
+          update_option('ticket_started_admin_email_title', $ticket_started_admin_email_title);          
+          $ticket_started_admin_email_content = stripslashes_deep($_POST['ticket_started_admin_email_content']);          
+          update_option('ticket_started_admin_email_content', $ticket_started_admin_email_content);
           
           $ticket_solved_email_title = htmlentities(stripslashes_deep($_POST['ticket_solved_email_title']));          
           update_option('ticket_solved_email_title', $ticket_solved_email_title);          
@@ -2088,6 +2446,10 @@ function save_email_templates()
           update_option('ticket_solved_support_email_title', $ticket_solved_support_email_title);          
           $ticket_solved_support_email_content = stripslashes_deep($_POST['ticket_solved_support_email_content']);          
           update_option('ticket_solved_support_email_content', $ticket_solved_support_email_content);
+          $ticket_solved_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_solved_admin_email_title']));          
+          update_option('ticket_solved_admin_email_title', $ticket_solved_admin_email_title);          
+          $ticket_solved_admin_email_content = stripslashes_deep($_POST['ticket_solved_admin_email_content']);          
+          update_option('ticket_solved_admin_email_content', $ticket_solved_admin_email_content);
           
           
           
@@ -2095,6 +2457,36 @@ function save_email_templates()
           update_option('ticket_closed_email_title', $ticket_closed_email_title);          
           $ticket_closed_email_content = stripslashes_deep($_POST['ticket_closed_email_content']);          
           update_option('ticket_closed_email_content', $ticket_closed_email_content);
+          $ticket_closed_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_closed_admin_email_title']));          
+          update_option('ticket_closed_admin_email_title', $ticket_closed_admin_email_title);          
+          $ticket_closed_admin_email_content = stripslashes_deep($_POST['ticket_closed_admin_email_content']);          
+          update_option('ticket_closed_admin_email_content', $ticket_closed_admin_email_content);
+          
+          $ticket_payment_processed_by_card_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_card_email_title']));          
+          update_option('ticket_payment_processed_by_card_email_title', $ticket_payment_processed_by_card_email_title);          
+          $ticket_payment_processed_by_card_email_content = stripslashes_deep($_POST['ticket_payment_processed_by_card_email_content']);          
+          update_option('ticket_payment_processed_by_card_email_content', $ticket_payment_processed_by_card_email_content);
+          $ticket_payment_processed_by_card_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_card_support_email_title']));          
+          update_option('ticket_payment_processed_by_card_support_email_title', $ticket_payment_processed_by_card_support_email_title);          
+          $ticket_payment_processed_by_card_support_email_content = stripslashes_deep($_POST['ticket_payment_processed_by_card_support_email_content']);          
+          update_option('ticket_payment_processed_by_card_support_email_content', $ticket_payment_processed_by_card_support_email_content);
+          $ticket_payment_processed_by_card_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_card_admin_email_title']));          
+          update_option('ticket_payment_processed_by_card_admin_email_title', $ticket_payment_processed_by_card_admin_email_title);          
+          $ticket_payment_processed_by_card_admin_email_content = stripslashes_deep($_POST['ticket_payment_processed_by_card_admin_email_content']);          
+          update_option('ticket_payment_processed_by_card_admin_email_content', $ticket_payment_processed_by_card_admin_email_content);
+          
+          $ticket_payment_processed_by_tokens_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_tokens_email_title']));          
+          update_option('ticket_payment_processed_by_tokens_email_title', $ticket_payment_processed_by_tokens_email_title);          
+          $ticket_payment_processed_by_tokens_email_content = stripslashes_deep($_POST['ticket_payment_processed_by_tokens_email_content']);          
+          update_option('ticket_payment_processed_by_tokens_email_content', $ticket_payment_processed_by_tokens_email_content);
+          $ticket_payment_processed_by_tokens_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_tokens_support_email_title']));          
+          update_option('ticket_payment_processed_by_tokens_support_email_title', $ticket_payment_processed_by_tokens_support_email_title);          
+          $ticket_payment_processed_by_tokens_support_email_content = stripslashes_deep($_POST['ticket_payment_processed_by_tokens_support_email_content']);          
+          update_option('ticket_payment_processed_by_tokens_support_email_content', $ticket_payment_processed_by_tokens_support_email_content);
+          $ticket_payment_processed_by_tokens_admin_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_tokens_admin_email_title']));          
+          update_option('ticket_payment_processed_by_tokens_admin_email_title', $ticket_payment_processed_by_tokens_admin_email_title);          
+          $ticket_payment_processed_by_tokens_admin_email_content = stripslashes_deep($_POST['ticket_payment_processed_by_tokens_admin_email_content']);          
+          update_option('ticket_payment_processed_by_tokens_admin_email_content', $ticket_payment_processed_by_tokens_admin_email_content);
           
           $forum_new_post_email_title = htmlentities(stripslashes_deep($_POST['forum_new_post_email_title']));          
           update_option('forum_new_post_email_title', $forum_new_post_email_title);          

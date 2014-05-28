@@ -39,6 +39,12 @@ function create_compliancetest_settings_page()
         update_option('mailchimp_all_list_id', $_POST['mailchimp_all_list_id']);
         
     }
+    
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-token-price')){
+        //Save Options
+        update_option('token_price', $_POST['token_price']);
+        
+    }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
         update_option('esb_host', $_POST['esb_host']);
@@ -149,16 +155,30 @@ function create_compliancetest_settings_page()
     <h2>Compliancetest Setting</h2>            
     <div id="compliancetest-settings">
         <div id="compliancetest-settings-nav">
-            <ul>
+            <ul>                
                 <li><a href="#ct-eway-settings">eWay Settings</a></li>
                 <li><a href="#ct-esb-settings">ESB Settings</a></li>
                 <li><a href="#ct-subscriptions-settings">Subscriptions Settings</a></li>
+                <li><a href="#ct-token-price">Token Price</a></li>
                 <li><a href="#ct-recaptcha-settings">Recaptcha Settings</a></li>
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
             </ul>
         </div>
         <div id="compliancetest-settings-wrapper">
+            <div id="ct-token-price">
+                <h3>Token Price</h3>
+                <form method="post" action="">
+                    <table class="widefat">
+                        <tr>
+                            <td><label><b>Price:</b></label></td>
+                            <td>$<input type="text" name="token_price" id="token_price" size="15" value="<?php echo get_option('token_price')?>" autocomplete="off" /> / token</td>
+                        </tr>
+                    </table>   
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-token-price'); ?>
+                </form>
+            </div>
             <div id="ct-eway-settings">
                 <h3>eWay Settings</h3>
                 <form method="post" action="">      

@@ -3,19 +3,26 @@
 * Ticket Detail Page
 */
 
-$ticket = getTicketById($ticket_id);
-$user_id = get_current_user_id();
+
 ?>
-<?php if(!$ticket): ?>
+<?php if(!$ticket): ?> <!-- Ticket does not exist -->
+
 <div class="column ticket-detail">       
     <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
     <h2>Ticket #<?php echo $ticket_id?></h2>
     <p>Ticket not found. The ticket id is not correct or not your ticket.</p>
 </div>
-<?php else: ?>
-<?php
-    makeTicketRead($ticket_id, $ticket->customer_id == $user_id ? 'customer' : 'support');
+
+<?php else: ?> <!-- Ticket exist -->
+
+<?php    
+    $is_support = ct_is_support($ticket_id);    
+    
+    $customerDetail = get_userdata($ticket->customer_id);
+    
+    makeTicketRead($ticket_id, $ticket->customer_id == $user_id ? 'customer' : 'support');    
 ?>
+
 <div class="column ticket-detail"> 
     <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
     <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar"><?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb&width=77&height=77' ); ?></a>
@@ -47,29 +54,51 @@ $user_id = get_current_user_id();
 </div>
 <div class="ticket-term-detail">
     <p class="ticket-info" id="ticket-term-info">
-        <span><b>Price:</b> <?php echo $ticket->price > 0 ? '$' . $ticket->price . "/hr" : 'Free'?></span>
+        <span><b>Price:</b> <?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
         <span><b>Time to Pay:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
         <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>
         <span><b>Time to Response:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
-        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="simple_tooltip"><span></span>Change Term</span></a>
+        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="t">Change</span><span class="simple_tooltip"><span></span>Change Term</span></a>
         <?php if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id): ?>
-        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip"><span></span>Accept Term</span></a>
+        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="t">Accept</span><span class="simple_tooltip"><span></span>Accept Term</span></a>
         <?php endif; ?>
     </p>
     <div id="change-term-contr" style="display: none;">
         <form name="changeTermForm" id="changeTermForm" method="post">
-            <div class="term-row">                        
-                <span>
+            <div class="term-row">     
+                <span class="item">
+                    <b>Priority:</b>
+                    <?php
+                        echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket-priority', $ticket->priority_id, null);
+                    ?>
+                </span>                   
+                <span class="item" id="term_price">
+                    <b>Price:</b> 
+                    <span><?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
+                </span>
+                <span class="item" id="term_ttpay">
                     <b>Time to Pay:</b>
-                    <input type="text" name="ttpay" id="ttpay" value="<?php echo $ticket->ttpay?>"  class="input-text" /> hours
+                    <?php if($is_support): ?>
+                     <input type="text" name="ttpay" id="ttpay" value="<?php echo $ticket->ttpay?>"  class="input-text" /> hours
+                    <?php else: ?>
+                     <span><?php echo $ticket->ttpay?></span> hours
+                    <?php endif; ?>
                 </span>
-                <span>
-                    <b>Time to Resolve:</b>
-                    <input type="text" name="ttresolve" id="ttresolve" value="<?php echo $ticket->ttresolve?>" class="input-text" /> hours
+                <span class="item" id="term_ttresolve">
+                    <b>Time to Resolve:</b>                                        
+                    <?php if($is_support): ?>                     
+                     <input type="text" name="ttresolve" id="ttresolve" value="<?php echo $ticket->ttresolve?>" class="input-text" /> hours
+                    <?php else: ?>
+                     <span><?php echo $ticket->ttresolve?></span> hours                    
+                    <?php endif; ?>
                 </span>
-                <span>
+                <span class="item" id="term_ttresponse">
                     <b>Time to Response:</b>
-                    <input type="text" name="ttresponse" id="ttresponse" value="<?php echo $ticket->ttresponse?>" class="input-text" /> hours
+                    <?php if($is_support): ?>                     
+                     <input type="text" name="ttresponse" id="ttresponse" value="<?php echo $ticket->ttresponse?>" class="input-text" /> hours
+                    <?php else: ?>
+                     <span><?php echo $ticket->ttresponse?></span> hours                    
+                    <?php endif; ?>                    
                 </span>
             </div>
             <div class="field-row">
@@ -78,8 +107,8 @@ $user_id = get_current_user_id();
                 <div class="clear"></div>
             </div>
             <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="simple_tooltip"><span></span>Canel</span></a>                        
-                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="simple_tooltip"><span></span>Submit</span></a>                
+                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="t">Cancel</span><span class="simple_tooltip"><span></span>Canel</span></a>                        
+                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="t">Submit</span><span class="simple_tooltip"><span></span>Submit</span></a>                
                 <div class="clear"></div>
             </div>
             <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('change-ticket-term')?>" />
@@ -94,7 +123,7 @@ $user_id = get_current_user_id();
 <div class="column" id="ticket-messages-list">
     <h2>Comments</h2>
     <?php
-    foreach($messages as $message){         
+    foreach($messages as $message){                 
     ?>
         <div class="ticket-message">
             <div class="left width10P">
@@ -107,7 +136,14 @@ $user_id = get_current_user_id();
                 <span class="right"><b><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></b></span>                
                 <div class="clear"></div>
                 <div class="space7"></div>
-                <?php echo apply_filters("the_content", $message->message); ?>                
+                <?php 
+                    if($is_support)
+                        $message_content = str_replace('[customer]', $customerDetail->first_name . " " . $customerDetail->last_name, $message->message);
+                    else
+                        $message_content = str_replace('[customer]', "you", $message->message);
+                        
+                    echo apply_filters("the_content", $message_content);
+                ?>
                 <?php if($message->has_attachment): ?>
                 <div class="ticket-attachments">
                     <?php $attachments = getAttachmentsByMessageId($message->id); ?>
@@ -176,4 +212,5 @@ $user_id = get_current_user_id();
         </div>
     </div>
 </div>
+
 <?php endif;?>

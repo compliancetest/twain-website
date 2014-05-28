@@ -6911,7 +6911,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 /*** Support Ticket Popup ***/
 .edit-ticket-box .grid-box-body .field-row label{
     float: left;
-    width: 110px;
+    width: 130px;
     text-align: right;
     padding-right: 20px;
     line-height: 26px;
@@ -6925,12 +6925,13 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 100px !important;
 }
 .edit-ticket-box .field-desc{
-    margin-left: 130px;
+    margin-left: 150px;
 }
 .edit-ticket-box #ticket-price-row span{
     float: left;
     line-height: 26px;
 }
+.edit-ticket-box #ticket-prepurchased-tokens-row span,
 .edit-ticket-box #ticket-time-row span{
     float: left;
     line-height: 26px;
@@ -7129,7 +7130,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     right: 5px;
 }
 #ticket-term-info .process-btn{
-    right: 35px;
+    right: 80px;
 }
 
 
@@ -7148,8 +7149,12 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 55px;
     margin-left: 10px;
 }
-#change-term-contr .term-row span{
-    margin-right: 60px;
+#change-term-contr .term-row .item{
+    margin-right: 20px;
+}
+#change-term-contr .select{
+    font-size: 12px;
+    color: #666;
 }
 
 #change-term-contr .field-row{

@@ -17,7 +17,7 @@ if(!defined('TABLE_TICKET_STATUSES'))
     define('TABLE_TICKET_STATUSES', $wpdb->prefix . 'ticket_statuses');
 
 if(!defined('TABLE_TICKET_STATUS_HISTORY'))
-    define('TABLE_TICKET_STATUS_HISTORY', $wpdb->prefix . 'ticket_status_history');
+    define('TABLE_TICKET_STATUS_HISTORY', $wpdb->prefix . 'tickets_status_history');
 
 if(!defined('TABLE_TICKET_MESSAGES'))
     define('TABLE_TICKET_MESSAGES', $wpdb->prefix . 'ticket_messages');

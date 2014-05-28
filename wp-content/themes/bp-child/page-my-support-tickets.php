@@ -7,10 +7,32 @@ if(!is_user_logged_in()){
     exit;
 } 
 
+$user_id = get_current_user_id();
+
 $ticket_id = get_query_var('ticket');
 
+if($ticket_id)
+{
+    //Validate ticket id
+    $ticket = getTicketById($ticket_id);
+    if(!$ticket)    
+    {
+        addMessage("Invalid Request!", 'error');
+        wp_redirect('/my-support-tickets/7/');
+        exit;
+    }
+    
+    $is_support = ct_is_support($ticket_id);
+    if(!$is_support && $ticket->customer_id != $user_id ) //Permission Denied
+    {
+        addMessage("Invalid Request!", 'error');
+        wp_redirect('/my-support-tickets/7/');
+        exit;
+    }
+}
 
 get_header();
+
 ?>
 <div class="content" id="my_tickets">
     <div class="dashboard-tabs">

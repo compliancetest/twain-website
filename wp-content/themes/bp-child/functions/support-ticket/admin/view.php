@@ -126,6 +126,7 @@ function ct_ticket_priorities()
                 <a href="admin.php?page=ct-tickets-priorities">Back to the priority list page</a>
             </p>
             <form id='editpriorityform' action="" method="post">
+                (1 Token = $<?php echo get_option('token_price')?>)
                 <table class="form-table">
                     <tbody>
                         <tr class="form-field form-required">
@@ -139,7 +140,7 @@ function ct_ticket_priorities()
                     </tr>
                     <tr class="form-field">
                         <th scope="row" valign="top">
-                            <label for="price">Price(per hour)</label>
+                            <label for="price">Price(Token / Hour)</label>
                         </th>
                         <td>
                             <input name="price" id="price" type="text" value="<?php echo $priority->price?>" size="40" maxlength="255" aria-required="true">
@@ -190,6 +191,7 @@ function ct_ticket_priorities()
                 <div class="col-wrap">
                     <div class="form-wrap">
                         <h3>Add New Priority</h3>
+                        (1 Token = $<?php echo get_option('token_price')?>)
                         <form id="addpriority" method="post" action="">
                             <div class="form-field form-required">
                                 <label for="priority">Name</label>
@@ -197,7 +199,7 @@ function ct_ticket_priorities()
                                 <p>The name is how it appears on your site.</p>
                             </div>
                             <div class="form-field form-required">
-                                <label for="price">Price(per hour)</label>
+                                <label for="price">Price(Token Per Hour)</label>
                                 <input name="price" id="price" type="text" value="" size="40" maxlength="255" aria-required="true">
                                 <p>This is the fee to handle ticket.</p>
                             </div>
