@@ -826,8 +826,12 @@ function cp_save_customer_harness_detail()
     }
     
     // Check if USI or ABN is duplicated in subscription list
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id!=%d AND entity_id=%s AND entity_type=%s", $data->id, $updateArr['entity_id'], $updateArr['entity_type']);
-    $duplicateRow = $wpdb->get_row($query); 
+    $duplicateRow = false;
+    
+    if ($updateArr['entity_id'] != '') {
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id!=%d AND entity_id=%s AND entity_type=%s", $data->id, $updateArr['entity_id'], $updateArr['entity_type']);
+        $duplicateRow = $wpdb->get_row($query); 
+    }
     
     if (!$duplicateRow) {
         $wpdb->update($wpdb->prefix . "users_subscriptions", 
