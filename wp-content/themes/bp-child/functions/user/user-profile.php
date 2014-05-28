@@ -812,13 +812,32 @@ function cp_save_customer_harness_detail()
         $updateArr['tester_username'] = $_POST['tester_username'];
         $updateArr['tester_password'] = $_POST['tester_password'];
     }
-        
-    $wpdb->update($wpdb->prefix . "users_subscriptions", 
-        $updateArr,
-        array('id' => $data->id)
-    );        
     
-    return "success";
+    if (isset($_POST['profile_entity_usi']) && $_POST['profile_entity_usi'] != '') {
+        $updateArr['entity_id'] = $_POST['profile_entity_usi'];
+        $updateArr['entity_type'] = 'urn:oasis:tc:ebcore:partyid-type:ABN:0151';
+    } else if (isset($_POST['profile_entity_abn']) && $_POST['profile_entity_abn'] != '') {
+        $updateArr['entity_id'] = $_POST['profile_entity_abn'];
+        $updateArr['entity_type'] = 'http://sbr.gov.au/identifier/usi';
+    } else {
+        $updateArr['entity_id'] = '';
+        $updateArr['entity_type'] = '';
+    }
+    
+    // Check if USI or ABN is duplicated in subscription list
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id!=%d AND entity_id=%s AND entity_type=%s", $data->id, $updateArr['entity_id'], $updateArr['entity_type']);
+    $duplicateRow = $wpdb->get_row($query); 
+    
+    if (!$duplicateRow) {
+        $wpdb->update($wpdb->prefix . "users_subscriptions", 
+            $updateArr,
+            array('id' => $data->id)
+        );        
+        
+        return "success";
+    } else {
+        return "The USI or ABN in the selected profile is already in use. Please update the profile and try again.";
+    }
 }
 
 function cp_save_suite_notify_changes()
