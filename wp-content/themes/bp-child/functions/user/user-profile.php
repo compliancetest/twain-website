@@ -804,8 +804,8 @@ function cp_save_customer_harness_detail()
     $updateArr = array(
         'p_mode_agreement' => $_POST['p_mode_agreement'],
         'harness_password' => $_POST['harness_password'],
-        'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : (null)),
-        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : (null))
+        'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : (NULL)),
+        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : (NULL))
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
