@@ -804,8 +804,8 @@ function cp_save_customer_harness_detail()
     $updateArr = array(
         'p_mode_agreement' => $_POST['p_mode_agreement'],
         'harness_password' => $_POST['harness_password'],
-        'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : (NULL)),
-        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : (NULL))
+        'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : ('NULL')),
+        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : ('NULL'))
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
@@ -834,15 +834,23 @@ function cp_save_customer_harness_detail()
     }
     
     if (!$duplicateRow) {
+        
+        add_filter( 'query', 'wp_db_null_value' );
         $wpdb->update($wpdb->prefix . "users_subscriptions", 
             $updateArr,
             array('id' => $data->id)
         );        
+        remove_filter( 'query', 'wp_db_null_value' );
         
         return "success";
     } else {
         return "The USI or ABN in the selected profile is already in use. Please update the profile and try again.";
     }
+}
+
+function wp_db_null_value( $query )
+{
+  return str_ireplace( "'NULL'", "NULL", $query ); 
 }
 
 function cp_save_suite_notify_changes()
