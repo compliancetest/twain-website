@@ -645,7 +645,7 @@ function cp_get_customer_harness_detail()
                                 <div class="grid-cell">
                                     <label>Profile:</label>
                                     <select name="profile_id" class="select" onchange="viewProfileData(this.value)">
-                                        <option value="0">None</option>
+                                        <option value="">None</option>
                                         <?php 
                                             if (count($profileInstances) > 0):
                                             foreach ($profileInstances as $instance): 
@@ -669,7 +669,7 @@ function cp_get_customer_harness_detail()
                                 <div class="grid-cell">
                                     <label>Gateway:</label>
                                     <select name="gateway_id" class="select">
-                                        <option value="0">None</option>
+                                        <option value="">None</option>
                                         <?php foreach ($gateways as $gateway): ?>
                                         <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
                                         <?php endforeach; ?>
@@ -804,8 +804,8 @@ function cp_save_customer_harness_detail()
     $updateArr = array(
         'p_mode_agreement' => $_POST['p_mode_agreement'],
         'harness_password' => $_POST['harness_password'],
-        'gateway_id' => $_POST['gateway_id'],
-        'profile_id' => $_POST['profile_id']
+        'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : (null)),
+        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : (null))
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
