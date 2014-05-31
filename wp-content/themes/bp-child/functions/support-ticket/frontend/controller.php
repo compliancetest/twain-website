@@ -702,7 +702,7 @@ function sendTicketMessage()
                     {
                         addMessage('Ticket has been closed and the payment has been processed succesfully.', 'success');
                     }else{
-                        addMessage('Ticket has been closed, but there was an error while processing the payment.<br />' . $paymentSent, 'error');
+                        addMessage('Ticket has been closed, but there was an error while processing the payment.<br />Processing Payment Error: ' . $paymentSent, 'error');
                     }
                 }else{
                     addMessage('Ticket has been closed successfully.', 'success');
@@ -879,9 +879,9 @@ function processTicketPayment($ticket_id)
         }else{
             
             if(isset($result['ewayTrxnError']))
-                return "Processing Payment Error: " . $result['ewayTrxnError'];
+                return $result['ewayTrxnError'];
             else if(isset($result['faultstring']))
-                return "Processing Payment Error: " . $result['faultstring'];
+                return $result['faultstring'];
             
             return false;
         }
