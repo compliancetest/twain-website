@@ -1497,7 +1497,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [token_price]<small>($/token)</small> <br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content] <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content] <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
                             </td>
                         </tr>
@@ -1579,7 +1579,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
                             </td>
                         </tr>
@@ -1664,7 +1664,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
                             </td>
                         </tr>
@@ -1746,7 +1746,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
                             </td>
                         </tr>
@@ -1825,7 +1825,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>
                             </td>
                         </tr>
@@ -1889,7 +1889,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small><br />
                                 [paid_tokens]<small>($)</small>, [paid_amount]<small>($)</small>
                             </td>
@@ -1972,7 +1972,7 @@ function create_email_management_page()
                             <td rowspan="2" valign="top"><b>Short Codes:</b></td>
                             <td>
                                 [website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
-                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
+                                [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
                                 [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small><br />
                                 [purchased_tokens], [paid_tokens], [remained_tokens]
                             </td>

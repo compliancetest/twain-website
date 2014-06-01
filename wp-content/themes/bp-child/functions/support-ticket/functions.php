@@ -92,6 +92,7 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
     $emailData['[ticket_url]'] = get_site_url(null, "/my-support-tickets/" . $ticketDetail->id, "https");    
     $emailData['[ticket_type]'] = $ticketDetail->category_title;
     $emailData['[ticket_priority]'] = $ticketDetail->priority_title;
+    $emailData['[ticket_status]'] = $ticketDetail->status_title;        
     $emailData['[ticket_content]'] = apply_filters('the_content', $ticketDetail->content);    
     
     $emailData['[time_to_pay]'] = $ticketDetail->ttpay;        
