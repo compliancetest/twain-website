@@ -2654,7 +2654,7 @@ function cp_send_email_to_support($communities, $template_name, $data = array())
         $query = $wpdb->prepare( "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND p.is_mod = 1 AND p.is_banned = 0", $communities );
     
     $users = $wpdb->get_results($query);
-    
+    echo $query;
     $to = array();
     foreach($users as $u)
     {           
