@@ -146,6 +146,9 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
         }
     }
     
+    //
+    $emailData['[message]'] = str_replace('[customer]', $emailData['[customer]'], $emailData['[message]']);
+    
     if($email_type == 'customer')
     {
         cp_send_email(array('name' => cp_get_user_display_name($customerDetail), 'email' => $customerDetail->user_email), $email_id, $emailData);
