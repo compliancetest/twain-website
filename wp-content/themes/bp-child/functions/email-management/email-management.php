@@ -1818,6 +1818,8 @@ function create_email_management_page()
                     $ticket_closed_email_content = get_option('ticket_closed_email_content');
                     $ticket_closed_admin_email_title = get_option('ticket_closed_admin_email_title');
                     $ticket_closed_admin_email_content = get_option('ticket_closed_admin_email_content');
+                    $ticket_closed_support_email_title = get_option('ticket_closed_support_email_title');
+                    $ticket_closed_support_email_content = get_option('ticket_closed_support_email_content');
                     ?>
                     <h3>Ticket Closed</h3>
                     <table border="0">
@@ -1847,6 +1849,25 @@ function create_email_management_page()
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
                                     <?php wp_editor($ticket_closed_email_content, 'ticket_closed_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="ticket_closed_support_email_title" id="ticket_closed_support_email_title" value="<?php echo $ticket_closed_support_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($ticket_closed_support_email_content, 'ticket_closed_support_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>    
                                 </td>
                             </tr>
                         </tbody>
@@ -2461,6 +2482,10 @@ function save_email_templates()
           update_option('ticket_closed_admin_email_title', $ticket_closed_admin_email_title);          
           $ticket_closed_admin_email_content = stripslashes_deep($_POST['ticket_closed_admin_email_content']);          
           update_option('ticket_closed_admin_email_content', $ticket_closed_admin_email_content);
+          $ticket_closed_support_email_title = htmlentities(stripslashes_deep($_POST['ticket_closed_support_email_title']));          
+          update_option('ticket_closed_support_email_title', $ticket_closed_support_email_title);          
+          $ticket_closed_support_email_content = stripslashes_deep($_POST['ticket_closed_support_email_content']);          
+          update_option('ticket_closed_support_email_content', $ticket_closed_support_email_content);
           
           $ticket_payment_processed_by_card_email_title = htmlentities(stripslashes_deep($_POST['ticket_payment_processed_by_card_email_title']));          
           update_option('ticket_payment_processed_by_card_email_title', $ticket_payment_processed_by_card_email_title);          
