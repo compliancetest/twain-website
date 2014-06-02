@@ -121,7 +121,7 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
     if($ticketDetail->customer_id)
     {
         $customerDetail = get_userdata($ticketDetail->customer_id);         
-        $emailData['[customer]'] = $emailData['[customer_name]'] = cp_get_user_display_name($customerDetail);
+        $emailData['[customer]'] = $emailData['[customer_name]'] = $customerDetail->first_name . " " . $customerDetail->last_name;
         $emailData['[customer_email]'] = $customerDetail->user_email;
     }
     
