@@ -816,10 +816,10 @@ function cp_save_customer_harness_detail()
     
     if (isset($_POST['entity_usi']) && $_POST['entity_usi'] != '') {
         $updateArr['entity_id'] = $_POST['entity_usi'];
-        $updateArr['entity_type'] = 'urn:oasis:tc:ebcore:partyid-type:ABN:0151';
+        $updateArr['entity_type'] = 'http://sbr.gov.au/identifier/usi';
     } else if (isset($_POST['entity_abn']) && $_POST['entity_abn'] != '') {
         $updateArr['entity_id'] = $_POST['entity_abn'];
-        $updateArr['entity_type'] = 'http://sbr.gov.au/identifier/usi';
+        $updateArr['entity_type'] = 'urn:oasis:tc:ebcore:partyid-type:ABN:0151';
     } else {
         $updateArr['entity_id'] = '';
         $updateArr['entity_type'] = '';
