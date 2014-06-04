@@ -164,8 +164,7 @@ function ct_manage_fee_overrides()
             <form name="adminform" action="users.php?page=user_fee_overrides" method="post">
                 <input type="hidden" name="page" value="user_fee_overrides" />
                 <input type="hidden" name="action" value="save" />
-                <input type="hidden" name="id" value="<?php echo $userID?>" />
-                <p><input type="submit" value="Save" class="button button-primary button-large" /></p>
+                <input type="hidden" name="id" value="<?php echo $userID?>" />                
                 <table border="1" style="" cellpadding="5" id="editFeeTable">
                     <thead>
                         <tr>
@@ -269,6 +268,7 @@ function ct_manage_fee_overrides()
                     ?>
                     </tbody>
                 </table>
+                <p><input type="submit" value="Save Fees" class="button button-primary button-large" /></p>
             </form>
             <hr />
             <h3>Prepurchased Tokens (<small>1 token = $<?php echo get_option('token_price')?></small>)</h3>
@@ -282,7 +282,7 @@ function ct_manage_fee_overrides()
                         <td><input type="text" name="prepurchased_tokens" id="prepurchased_tokens" value="<?php echo $purchasedTokens ?>" /></td>
                     </tr>
                 </table>
-                <p><input type="submit" value="Save" class="button button-primary button-large" /></p>
+                <p><input type="submit" value="Save Tokens" class="button button-primary button-large" /></p>
             </form>
             <script type="text/javascript">
                 jQuery(document).ready(function($){
