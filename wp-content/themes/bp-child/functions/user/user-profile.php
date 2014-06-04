@@ -929,6 +929,7 @@ function generateProfile($profile_id, $community_id)
             $row['created_date'] = date('Y-m-d F:i:s');
             
             $profile_ref['ref_'.$row['id']] = $row['token'];
+            unset($row['id']);
             
             foreach ($customData->Rules as $rule) {
                 if ($rule->Type == 'Value') {
