@@ -570,127 +570,140 @@ function cp_get_customer_harness_detail()
     <?php else: ?>
 
         <div class="popup-box" id="harness-detail-box<?php echo $_REQUEST['id']?>" style="display: none; width: 450px;">
-            <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>    
-            <form name="harness-form" id="harness-form" action="">
-                <div class="popup-box-content grid-box-body">    
-                    <div class="second-tabs">
-                        <ul>
-                            <li class="active"><a onclick="switch_secondtabs(this)" rel="harness-direct"><span>Direct</span></a></li>
-                            <li><a onclick="switch_secondtabs(this)" rel="harness-gateway"><span>Gateway</span></a></li>
-                        </ul>
+            <div id="harness-detail-container">
+                <div class="popup-box-header radius6 noradiusbottom">Test Harness Access Detail.</div>    
+                <form name="harness-form" id="harness-form" action="">
+                    <div class="popup-box-content grid-box-body">    
+                        <div class="second-tabs">
+                            <ul>
+                                <li class="active"><a onclick="switch_secondtabs(this)" rel="harness-direct"><span>Direct</span></a></li>
+                                <li><a onclick="switch_secondtabs(this)" rel="harness-gateway"><span>Gateway</span></a></li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="second-tabs-container">
+                            <div id="harness-direct" class="second-tab-content">
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>P-Mode Profile:</label>
+                                        <select name="p_mode_agreement" id="p_mode_agreement" class="select">
+                                            <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
+                                            <option value="HIGH-END" <?php echo $row->p_mode_agreement == 'HIGH-END' ? 'selected="selected"' : ''?>>HIGH-END</option>
+                                        </select>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="harness-endpoint-info">                
+                                    <div class="field-row">
+                                        <div class="grid-cell">
+                                            <label>Harness EndPoint:</label>
+                                            <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="<?php echo $row->harness_endpoint_url?>" />
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="field-row">
+                                        <div class="grid-cell">
+                                            <label>Harness Username:</label>
+                                            <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="<?php echo $row->harness_username?>" />
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>            
+                                    <div class="field-row">
+                                        <div class="grid-cell">
+                                            <label>Harness Password:</label>
+                                            <input class="input" type="text" name="harness_password" id="harness_password" value="<?php echo $row->harness_password?>" />
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                                <div class="tester-endpoint-info" <?php echo $row->p_mode_agreement == 'LIGHT' ? 'style="display: none"' : '' ?>>
+                                    <div class="field-row">
+                                        <div class="grid-cell">
+                                            <label>Tester EndPoint:</label>
+                                            <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="<?php echo $row->tester_endpoint_url?>" />
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="field-row">
+                                        <div class="grid-cell">
+                                            <label>Tester Username:</label>
+                                            <input class="input" type="text" name="tester_username" id="tester_username" value="<?php echo $row->tester_username?>" />
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>            
+                                    <div class="field-row">
+                                        <div class="grid-cell">
+                                            <label>Tester Password:</label>
+                                            <input class="input" type="text" name="tester_password" id="tester_password" value="<?php echo $row->tester_password?>" />
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>                 
+                                </div>
+                            </div>
+                            <div id="harness-gateway" class="second-tab-content" style="display: none;">
+                                <?php $profileInstances = getCustomerProfileInstances(); ?>
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Profile:</label>
+                                        <select name="profile_id" class="select" onchange="viewProfileData(this.value)">
+                                            <option value="">None</option>
+                                            <?php 
+                                                if (count($profileInstances) > 0):
+                                                foreach ($profileInstances as $instance): 
+                                                    $instanceObj = json_decode(base64_decode($instance->content));
+                                                    $version = array();
+                                                    if($instanceObj->Profile->Version) {
+                                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v) {
+                                                            $version[] = $v;
+                                                        }
+                                                        
+                                                    }
+                                                    $profileName = $instance->profile_name . ' v' . implode('.', $version);
+                                            ?>
+                                            <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $profileName; ?></option>
+                                            <?php endforeach; endif; ?>
+                                        </select>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <label>Gateway:</label>
+                                        <select name="gateway_id" class="select">
+                                            <option value="">None</option>
+                                            <?php foreach ($gateways as $gateway): ?>
+                                            <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="profile-data-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="popup-box-footer radius6 noradiustop">                                    
+                        <a href="javascript: void(0)" class="action-btn process-btn submit-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">Save</span></a>            
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>
-                    <div class="second-tabs-container">
-                        <div id="harness-direct" class="second-tab-content">
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>P-Mode Profile:</label>
-                                    <select name="p_mode_agreement" id="p_mode_agreement" class="select">
-                                        <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
-                                        <option value="HIGH-END" <?php echo $row->p_mode_agreement == 'HIGH-END' ? 'selected="selected"' : ''?>>HIGH-END</option>
-                                    </select>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="harness-endpoint-info">                
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Harness EndPoint:</label>
-                                        <input class="input" type="text" name="harness_endpoint_url" id="harness_endpoint_url" readonly="readonly" disabled="disabled" value="<?php echo $row->harness_endpoint_url?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Harness Username:</label>
-                                        <input class="input" type="text" name="harness_username" readonly="readonly" disabled="disabled" id="harness_username" value="<?php echo $row->harness_username?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>            
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Harness Password:</label>
-                                        <input class="input" type="text" name="harness_password" id="harness_password" value="<?php echo $row->harness_password?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                            <div class="tester-endpoint-info" <?php echo $row->p_mode_agreement == 'LIGHT' ? 'style="display: none"' : '' ?>>
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Tester EndPoint:</label>
-                                        <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="<?php echo $row->tester_endpoint_url?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Tester Username:</label>
-                                        <input class="input" type="text" name="tester_username" id="tester_username" value="<?php echo $row->tester_username?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>            
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Tester Password:</label>
-                                        <input class="input" type="text" name="tester_password" id="tester_password" value="<?php echo $row->tester_password?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>                 
-                            </div>
-                        </div>
-                        <div id="harness-gateway" class="second-tab-content" style="display: none;">
-                            <?php $profileInstances = getCustomerProfileInstances(); ?>
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>Profile:</label>
-                                    <select name="profile_id" class="select" onchange="viewProfileData(this.value)">
-                                        <option value="">None</option>
-                                        <?php 
-                                            if (count($profileInstances) > 0):
-                                            foreach ($profileInstances as $instance): 
-                                                $instanceObj = json_decode(base64_decode($instance->content));
-                                                $version = array();
-                                                if($instanceObj->Profile->Version) {
-                                                    foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v) {
-                                                        $version[] = $v;
-                                                    }
-                                                    
-                                                }
-                                                $profileName = $instance->profile_name . ' v' . implode('.', $version);
-                                        ?>
-                                        <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $profileName; ?></option>
-                                        <?php endforeach; endif; ?>
-                                    </select>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>Gateway:</label>
-                                    <select name="gateway_id" class="select">
-                                        <option value="">None</option>
-                                        <?php foreach ($gateways as $gateway): ?>
-                                        <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div id="profile-data-container"></div>
-                        </div>
+                    <div class="loading"></div>
+                    <a class="close_btn"></a>
+                    <input type="hidden" name="id" id="harness-id" value="<?php echo $row->id?>" />
+                    <?php wp_nonce_field('save-harness', 'cp-action'); ?>
+                </form>
+            </div>
+            <div id="harness-generate-profile-container" style="display: none;">
+                    <div class="popup-box-header radius6 noradiusbottom">Generate Profile</div>
+                    <div class="popup-box-content grid-box-body">    
+                        This action will generate a custom set of data profiles in your test data tab specifically tailored to work with the selected gateway profile.
                     </div>
-                </div>
-                <div class="popup-box-footer radius6 noradiustop">                                    
-                    <a href="javascript: void(0)" class="action-btn process-btn submit-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">Confirm</span></a>            
-                    <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                    <div class="clear"></div>
-                </div>
-                <div class="loading"></div>
-                <a class="close_btn"></a>
-                <input type="hidden" name="id" id="harness-id" value="<?php echo $row->id?>" />
-                <?php wp_nonce_field('save-harness', 'cp-action'); ?>
-            </form>
+                    <div class="popup-box-footer radius6 noradiustop">                                    
+                        <a href="javascript: confirmGenerateProfile('<?php echo $_REQUEST['id']?>')" class="action-btn process-btn" ><span class="p"></span><span class="t">Confirm</span></a>            
+                        <a href="javascript: cancelGenerateProfile()" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <div class="clear"></div>
+                    </div>
+            </div>
             <script type="text/javascript">
                 function switch_secondtabs(obj)
                 {
@@ -721,6 +734,44 @@ function cp_get_customer_harness_detail()
                     }
                 }
                 viewProfileData(jQuery('#harness-gateway select[name=profile_id]').val());
+                function generateProfile()
+                {
+                    jQuery('#harness-detail-container').hide();
+                    jQuery('#harness-generate-profile-container').show();
+                }
+                function cancelGenerateProfile()
+                {
+                    jQuery('#harness-detail-container').show();
+                    jQuery('#harness-generate-profile-container').hide();
+                }
+                function confirmGenerateProfile(id)
+                {
+                    jQuery('#harness-detail-container').show();
+                    jQuery('#harness-generate-profile-container').hide();
+                    
+                    jQuery('#harness-detail-box' + id + ' .loading').show();
+                    jQuery('#harness-detail-box' + id + ' .message').remove();
+
+                    jQuery.ajax({
+                        url: '/',
+                        data: jQuery('#harness-form').serialize() + '&action_mode=generate-profile',
+                        type: 'post',
+                        success: function(rsp){
+                            jQuery('#harness-detail-box' + id + ' .loading').hide();
+                            if(rsp == 'success')
+                            {
+                                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');                
+                            }else{
+                                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
+                            }
+                        },
+                        error: function(err){
+                            jQuery('#harness-detail-box' + id + ' .loading').hide();
+                            jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
+                        }
+                    })
+                    return false;
+                }
             </script>
         </div>
     <?php 
@@ -764,6 +815,10 @@ function cp_get_customer_harness_detail_profile_data()
         <div class="clear"></div>
     </div>
     <?php endforeach; ?>
+    <div id="generate-profile-container">
+        <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profile</span></a>            
+        <div class="clear"></div>
+    </div>
 <?php
     endif;
 }
@@ -842,9 +897,73 @@ function cp_save_customer_harness_detail()
         );        
         remove_filter( 'query', 'wp_db_null_value' );
         
+        if ((isset($_POST['action_mode']) && $_POST['action_mode'] == 'generate-profile') && $updateArr['profile_id'] != 'NULL') {
+            generateProfile($updateArr['profile_id'], $community_id);
+        }
+        
         return "success";
     } else {
         return "The USI or ABN in the selected profile is already in use. Please update the profile and try again.";
+    }
+}
+
+function generateProfile($profile_id, $community_id)
+{
+    $customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
+    
+    global $wpdb;
+    
+    $profile_ref = array();
+    
+    foreach ($customDataGeneration->CustomDataGeneration as $customData) 
+    {
+        $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
+        $identifierValues = $customData->SourceProfiles->Values;
+        $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
+
+        foreach ($rows as $row) {
+            $content = json_decode(base64_decode($row['content']));
+            
+            $row['type'] = 'tester';
+            $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
+            $row['created_date'] = date('Y-m-d F:i:s');
+            
+            $profile_ref['ref_'.$row['id']] = $row['token'];
+            
+            foreach ($customData->Rules as $rule) {
+                if ($rule->Type == 'Value') {
+                    $elementPath = str_replace('.', '->', $rule->ReplacementPath);
+                    eval('$content->' . $elementPath . '=$rule->OriginalValue;');
+                } else if ($rule->Type == 'Reference') {
+                    // Replace $ref values with links of generated profiles
+                    foreach ($content->Employers as $employer) {
+                        $ref = explode('=', $employer->Profile->{'$ref'});
+                        $ref_row = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix .'community_profile_instances WHERE token=\'' . $ref[1] . '\'');
+                        if (isset($profile_ref['ref_'.$ref_row->id])) {
+                            $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref['ref_'.$ref_row->id];
+                        }
+                    }
+                }
+            }
+            
+            $row['content'] = base64_encode(json_encode($content));
+            
+            // Create new profile
+            $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
+            $new_profile_id = $wpdb->insert_id;
+            
+            $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$new_profile_id), '%d');
+            
+            // Generate meta values of new profile
+            $profile_meta = getProfileMetaData($content);
+            foreach ($profile_meta as $meta_key => $meta_value) {
+                $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
+                    'profile_id' => $new_profile_id,
+                    'meta_key' => $meta_key,
+                    'meta_value' => $meta_value,
+                ));
+            }
+        }
     }
 }
 
