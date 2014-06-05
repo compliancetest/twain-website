@@ -6951,6 +6951,17 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #tickets_list .td-ticket-subject{
     width: 390px;
 }
+#tickets_list .support-view .td-ticket-subject{
+    width: 188px;
+}
+
+#tickets_list .td-ticket-customer{
+    width: 80px;
+}
+#tickets_list .td-ticket-org{
+    width: 100px;
+}
+
 #tickets_list .td-ticket-requested,
 #tickets_list .td-ticket-solved,
 #tickets_list .td-ticket-updated{
