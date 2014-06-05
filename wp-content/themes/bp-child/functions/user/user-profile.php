@@ -760,7 +760,7 @@ function cp_get_customer_harness_detail()
                             jQuery('#harness-detail-box' + id + ' .loading').hide();
                             if(rsp == 'success')
                             {
-                                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');                
+                                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message success">New profile has been generated successfully!</div>');                
                             }else{
                                 jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
                             }
