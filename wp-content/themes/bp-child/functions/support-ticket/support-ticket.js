@@ -8,13 +8,13 @@ jQuery(document).ready(function(){
     jQuery('body').on('change', '#ticket-priority', function(){
         if(jQuery(this).val() == '')
         {
-            jQuery('#ttresponse').val('');
-            jQuery('#ttresolve').val('');
+            jQuery('#ttresponse').html('');
+            jQuery('#ttresolve').html('');
             jQuery("#ticket-price-row").hide();    
             jQuery("#ticket-time-row").hide();    
         }else{                        
-            jQuery('#ttresponse').val(jQuery('option:selected', this).attr('ttresponse'));
-            jQuery('#ttresolve').val(jQuery('option:selected', this).attr('ttresolve'));            
+            jQuery('#ttresponse').html(jQuery('option:selected', this).attr('ttresponse') + ' hours');
+            jQuery('#ttresolve').html(jQuery('option:selected', this).attr('ttresolve') + ' hours');            
             jQuery("#ticket-time-row").show();    
             
         }

@@ -128,7 +128,7 @@ function showSumitTicketBox()
                     
                     <div class="field-row" id="ticket-time-row" style="display: none;">
                         <div class="grid_cell width50P">
-                            <label>Time to Response:</label>
+                            <label>Time to Respond:</label>
                             <span id="ttresponse">24 hours</span>
                             <div class="clear"></div>
                         </div>

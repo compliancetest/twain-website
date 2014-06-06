@@ -83,7 +83,7 @@ class CT_TicketPriority
             $html .= "<option value=''>$emptyOptionLabel</option>";
         foreach($priorities as $p)
         {
-            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . $p->ttresolve . "' ttresponse='" . $p->ttresponse . "' price='" . $p->price . "'>$p->priority</option>";
+            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . intval($p->ttresolve) . "' ttresponse='" . intval($p->ttresponse) . "' price='" . $p->price . "'>$p->priority</option>";
         }
         $html .= "</select>";
         

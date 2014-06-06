@@ -54,10 +54,10 @@
 </div>
 <div class="ticket-term-detail">
     <p class="ticket-info" id="ticket-term-info">
-        <span><b>Price:</b> <?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
-        <span><b>Time to Pay:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
+        <span><b>Price/hr:</b> <?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
+        <span><b>Effort:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
         <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>
-        <span><b>Time to Response:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
+        <span><b>Time to Respond:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
         <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="t">Change</span><span class="simple_tooltip"><span></span>Change Term</span></a>
         <?php if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id): ?>
         <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="t">Accept</span><span class="simple_tooltip"><span></span>Accept Term</span></a>
@@ -73,11 +73,11 @@
                     ?>
                 </span>                   
                 <span class="item" id="term_price">
-                    <b>Price:</b> 
+                    <b>Price/hr:</b> 
                     <span><?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
                 </span>
                 <span class="item" id="term_ttpay">
-                    <b>Time to Pay:</b>
+                    <b>Effort:</b>
                     <?php if($is_support): ?>
                      <input type="text" name="ttpay" id="ttpay" value="<?php echo $ticket->ttpay?>"  class="input-text" /> hours
                     <?php else: ?>
@@ -93,7 +93,7 @@
                     <?php endif; ?>
                 </span>
                 <span class="item" id="term_ttresponse">
-                    <b>Time to Response:</b>
+                    <b>Time to Respond:</b>
                     <?php if($is_support): ?>                     
                      <input type="text" name="ttresponse" id="ttresponse" value="<?php echo $ticket->ttresponse?>" class="input-text" /> hours
                     <?php else: ?>

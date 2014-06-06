@@ -359,6 +359,7 @@ function ct_ticket_display_tickets()
     if(isset($_GET['id']))
     {
         $ticket = getTicketById($_GET['id']);
+        
         ?>
         <div class="wrap">
             <a href="<?php echo admin_url()?>admin.php?page=ct-tickets" class="back-to-supports right">Back to <b>Support Tickets</b></a>
@@ -392,6 +393,7 @@ function ct_ticket_display_tickets()
             </div>
             <hr />
             <?php 
+                $customer = get_userdata($ticket->customer_id);
                 $messages = getTicketMessagesByTicketId($ticket->id); 
             ?>
             <h2>Comments</h2>
@@ -409,7 +411,7 @@ function ct_ticket_display_tickets()
                         <span class="right"><b><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></b></span>                
                         <div class="clear"></div>
                         <div class="space7"></div>
-                        <?php echo apply_filters("the_content", $message->message); ?>                
+                        <?php echo apply_filters("the_content", str_replace('[customer]', $customer->first_name . " " . $customer->last_name, $message->message)); ?>                
                         <?php if($message->has_attachment): ?>
                         <div class="ticket-attachments">
                             <?php $attachments = getAttachmentsByMessageId($message->id); ?>
