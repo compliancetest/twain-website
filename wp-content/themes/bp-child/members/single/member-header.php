@@ -22,14 +22,30 @@ $profileID = bp_current_user_id();
     <div id="item-header-content" class="profile-title">
 	    <h3 class="left">
 		    <a href="<?php bp_displayed_user_link(); ?>">
-                <?php echo cp_get_user_display_name($profileID) ?>
+                <?php                     
+                    echo cp_get_user_display_name($profileID) 
+                ?>
             </a>
 	    </h3>
+        <div class="clear"></div>
         <?php 
             //Temporarily disable it
             //echo cp_bp_get_send_message_button() 
+            
+            //Display User Detal for Support and Admins
+            if(cp_is_customer_support_or_admin($profileID))
+            {
+                $profileDetail = get_userdata($profileID);                
+                ?>
+                <p>
+                    <b>Email Address:</b> <a href="mailto:<?php echo $profileDetail->user_email ?>"><?php echo $profileDetail->user_email ?></a><br />
+                    <b>Phone Number:</b> <?php echo get_user_meta($profileID, 'phone_number', true); ?>
+                </p>
+                <?php
+            }
+            
         ?>
-        <div class="clear"></div>
+        
         <?php
             $biography = get_user_meta($profileID, 'description', true);
         ?>

@@ -11,7 +11,7 @@ $limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('ticke
 setItemsPerPage($limit, 'tickets');
 
 $orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'last_updated';
-if(!in_array($orderBy, array('id', 'title', 'created_date', 'last_updated', 'solved_date', 'status_id', 'category_id', 'priority_id')))
+if(!in_array($orderBy, array('id', 'title', 'created_date', 'last_updated', 'solved_date', 'status_id', 'category_id', 'priority_id', 'customer_name', 'organisation')))
     $orderBy = 'last_updated';
 
 $order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'last_updated' ? 'desc' : 'asc');
@@ -32,6 +32,7 @@ if($filterPriority)
 if($filterCategory)
     $params[] = 'type=' . $filterCategory;
 
+$is_support = getManagedCustomerWPIDs() ? true : false;
 
 ?>
 <div class="filter-box column">
@@ -75,7 +76,7 @@ if($filterCategory)
     </div>
     <div class="clear"></div>
     <div class="space10"></div>
-    <div class="grid-box table-box" id="tickets_table">
+    <div class="grid-box table-box <?php echo $is_support ? 'support-view' : ''?>" id="tickets_table">
        <div class="grid-box-body">
            <div class="thead tr">
                <div class="td td-ticket-id td-sortable tocenter">
@@ -84,6 +85,15 @@ if($filterCategory)
                <div class="td td-ticket-subject td-sortable">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=title&order=<?php echo $orderBy == 'title' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'title'){ ?>class="<?php echo $order?>"<?php } ?>>Subject <span class="sort"></span></a>
                </div>
+               <?php if($is_support):?>
+               <div class="td td-ticket-customer td-sortable">
+                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=customer_name&order=<?php echo $orderBy == 'customer_name' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'customer_name'){ ?>class="<?php echo $order?>"<?php } ?>>Customer<span class="sort"></span></a>
+               </div>
+               <div class="td td-ticket-org td-sortable">
+                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=organisation&order=<?php echo $orderBy == 'organisation' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'organisation'){ ?>class="<?php echo $order?>"<?php } ?>>Organisation<span class="sort"></span></a>
+               </div>
+               
+               <?php endif; ?>
                <div class="td td-ticket-requested td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=created_date&order=<?php echo $orderBy == 'created_date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'created_date'){ ?>class="<?php echo $order?>"<?php } ?>>Requested <span class="sort"></span></a>
                </div>
@@ -101,7 +111,7 @@ if($filterCategory)
                </div>                               
                <div class="clear"></div>
            </div>
-           <div class="tbody">
+           <div class="tbody fix-table-height">
            <?php
                if($totalItems > 0){
                    foreach($tickets as $ticket)
@@ -111,6 +121,7 @@ if($filterCategory)
                            $new_messages = $ticket->customer_new_messages;
                        else if($ticket->customer_id != get_current_user_id() && $ticket->support_new_messages > 0)
                            $new_messages = $ticket->support_new_messages; 
+                       //Getting Customer Organisation
                        
            ?>
                         <div class="tr priority-<?php echo sanitize_title($ticket->priority_title) ?> <?php echo $new_messages > 0 ? 'has-new' : ''?>" onclick="document.location.href='/my-support-tickets/<?php echo $ticket->id?>'">
@@ -134,6 +145,14 @@ if($filterCategory)
                                 ?>
                                 <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo $ticket->title?></a>
                             </div>
+                            <?php if($is_support):?>
+                            <div class="td td-ticket-customer td-sortable">
+                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo $ticket->customer_name; ?></a>
+                            </div>
+                            <div class="td td-ticket-org td-sortable">
+                                <?php echo $ticket->organisation; ?>
+                            </div>                            
+                            <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
                             <div class="td td-ticket-type"><?php echo $ticket->category_title ?></div>
                             <div class="td td-ticket-status tocenter">

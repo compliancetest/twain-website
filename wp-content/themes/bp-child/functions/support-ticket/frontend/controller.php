@@ -159,10 +159,12 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     
     $customer_ids = getManagedCustomerWPIDs($user_id);
     
-    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title FROM " . TABLE_TICKETS . " AS t "
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, u.display_name AS customer_name, um.meta_value as organisation FROM " . TABLE_TICKETS . " AS t "
            . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
            . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
-           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id ";
+           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
+           . "LEFT JOIN " . $wpdb->users . " AS u ON t.customer_id=u.ID "
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' ";
     
     $customer_ids[] = $user_id;
     $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
@@ -193,6 +195,8 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
         case "priority_id":
         case "solved_date":
         case "last_updated":
+        case "customer_name":
+        case "organisation":
             $orderQuery = " ORDER BY $orderBy $order";
             break;
         default:

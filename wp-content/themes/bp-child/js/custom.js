@@ -539,6 +539,8 @@ jQuery(document).ready(function($) {
           minHeight: 80
     });
     
+    //Fix table height
+    fixTdHeight(jQuery('.fix-table-height'));
 });
 
 function customizeFileTag()

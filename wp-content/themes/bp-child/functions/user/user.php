@@ -534,3 +534,66 @@ function getTestCaseTemplates($case_id)
     
     return $results;
 }
+
+/**
+* Check user is 
+* 
+* @param Int $customer_id
+* @param Int $user_id
+*/
+function cp_is_customer_admin($customer_id, $user_id = false)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    if(!$user_id)
+        return false;
+    
+    //Getting Community IDs
+    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix . "bp_groups_members WHERE is_admin=1 AND user_id=%d AND group_id IN 
+        (SELECT DISTINCT(group_id) FROM " . $wpdb->prefix . "bp_groups_members WHERE user_id=%d AND is_confirmed=1)", $user_id, $customer_id);
+    
+    $c = $wpdb->get_var($query);
+    
+    return $c > 0 ? true : false;
+}
+
+function cp_is_customer_support($customer_id, $user_id = false)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    if(!$user_id)
+        return false;
+    
+    //Getting Community IDs
+    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix . "bp_groups_members WHERE is_mod=1 AND user_id=%d AND group_id IN 
+        (SELECT DISTINCT(group_id) FROM " . $wpdb->prefix . "bp_groups_members WHERE user_id=%d AND is_confirmed=1)", $user_id, $customer_id);
+    
+    $c = $wpdb->get_var($query);
+    
+    return $c > 0 ? true : false;
+}
+
+function cp_is_customer_support_or_admin($customer_id, $user_id = false)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    if(!$user_id)
+        return false;
+    
+    //Getting Community IDs
+    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix . "bp_groups_members WHERE (is_mod=1 OR is_admin=1) AND user_id=%d AND group_id IN 
+        (SELECT DISTINCT(group_id) FROM " . $wpdb->prefix . "bp_groups_members WHERE user_id=%d AND is_confirmed=1)", $user_id, $customer_id);
+    
+    $c = $wpdb->get_var($query);
+    
+    return $c > 0 ? true : false;
+}
