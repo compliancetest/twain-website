@@ -80,47 +80,57 @@ function ct_manage_gateway_edit()
                 <h3 class="hndle"><span>Gateway Information</span></h3>
                 <div class="inside">
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Gateway Name</label> 
+                        <label for="gateway_name">Gateway Name</label> 
                         <input class="mf_text" type="text" id="gateway_name" name="gateway_name" value="<?php echo $gateway_data->name; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Gateway ABN</label> 
+                        <label for="gateway_username">Username</label> 
+                        <input class="mf_text" type="text" id="gateway_username" name="gateway_username" value="<?php echo $gateway_data->username; ?>"> 
+                        <p class="mf_caption"></p>
+                    </div>
+                    <div class="mf_field_wrapper mf_field_test_case_id text">
+                        <label for="gateway_password">Password</label> 
+                        <input class="mf_text" type="password" id="gateway_password" name="gateway_password" value=""> 
+                        <p class="mf_caption"></p>
+                    </div>
+                    <div class="mf_field_wrapper mf_field_test_case_id text">
+                        <label for="gateway_abn">Gateway ABN</label> 
                         <input class="mf_text" type="text" id="gateway_abn" name="gateway_abn" value="<?php echo $gateway_data->abn; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Gateway Test URL</label> 
+                        <label for="gateway_test_url">Gateway Test URL</label> 
                         <input class="mf_text" type="text" id="gateway_test_url" name="gateway_test_url" value="<?php echo $gateway_data->test_url; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Gateway Production URL</label> 
+                        <label for="gateway_prod_url">Gateway Production URL</label> 
                         <input class="mf_text" type="text" id="gateway_prod_url" name="gateway_prod_url" value="<?php echo $gateway_data->prod_url; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Contribution Test URL</label> 
+                        <label for="contribution_test_url">Contribution Test URL</label> 
                         <input class="mf_text" type="text" id="contribution_test_url" name="contribution_test_url" value="<?php echo $gateway_data->contribution_test_url; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Contribution Production URL</label> 
+                        <label for="contribution_prod_url">Contribution Production URL</label> 
                         <input class="mf_text" type="text" id="contribution_prod_url" name="contribution_prod_url" value="<?php echo $gateway_data->contribution_prod_url; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Rollover Test URL</label> 
+                        <label for="rollover_test_url">Rollover Test URL</label> 
                         <input class="mf_text" type="text" id="rollover_test_url" name="rollover_test_url" value="<?php echo $gateway_data->rollover_test_url; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Rollover Production URL</label> 
+                        <label for="rollover_prod_url">Rollover Production URL</label> 
                         <input class="mf_text" type="text" id="rollover_prod_url" name="rollover_prod_url" value="<?php echo $gateway_data->rollover_prod_url; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="test_case_id">Signing Certificate</label> 
+                        <label for="certificate">Signing Certificate</label> 
                         <input class="mf_text" type="file" id="certificate" name="certificate"> 
                         <?php if ($gateway_data->certificate_name != ''): ?>
                         <label style="font-style: italic;color: #0000FF;">("<?php echo $gateway_data->certificate_name; ?>" already uploaded.)</label>
@@ -152,6 +162,8 @@ function gateway_actions()
     {
         $gateway_id = isset($_REQUEST['gateway_id']) ? $_REQUEST['gateway_id'] : null;
         $gateway_name = isset($_REQUEST['gateway_name']) ? $_REQUEST['gateway_name'] : null;
+        $gateway_username = isset($_REQUEST['gateway_username']) ? $_REQUEST['gateway_username'] : null;
+        $gateway_password = isset($_REQUEST['gateway_password']) ? md5($_REQUEST['gateway_password']) : null;
         $gateway_abn = isset($_REQUEST['gateway_abn']) ? $_REQUEST['gateway_abn'] : null;
         $gateway_test_url = isset($_REQUEST['gateway_test_url']) ? $_REQUEST['gateway_test_url'] : null;
         $gateway_prod_url = isset($_REQUEST['gateway_prod_url']) ? $_REQUEST['gateway_prod_url'] : null;
@@ -162,6 +174,7 @@ function gateway_actions()
         
         $gateway_data = array(
             'name' => $gateway_name, 
+            'username' => $gateway_username,
             'abn' => $gateway_abn, 
             'test_url' => $gateway_test_url,
             'prod_url' => $gateway_prod_url,
@@ -170,6 +183,10 @@ function gateway_actions()
             'rollover_test_url' => $rollover_test_url,
             'rollover_prod_url' => $rollover_prod_url,
         );
+        
+        if ($gateway_password) {
+            $gateway_data['password'] = $gateway_password;
+        }
         
         if (!empty($_FILES) && is_uploaded_file($_FILES['certificate']['tmp_name'])) {
             $gateway_data['certificate'] = file_get_contents($_FILES['certificate']['tmp_name']);
