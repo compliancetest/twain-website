@@ -163,7 +163,7 @@ function gateway_actions()
         $gateway_id = isset($_REQUEST['gateway_id']) ? $_REQUEST['gateway_id'] : null;
         $gateway_name = isset($_REQUEST['gateway_name']) ? $_REQUEST['gateway_name'] : null;
         $gateway_username = isset($_REQUEST['gateway_username']) ? $_REQUEST['gateway_username'] : null;
-        $gateway_password = isset($_REQUEST['gateway_password']) ? md5($_REQUEST['gateway_password']) : null;
+        $gateway_password = isset($_REQUEST['gateway_password']) ? base64_encode($_REQUEST['gateway_password']) : null;
         $gateway_abn = isset($_REQUEST['gateway_abn']) ? $_REQUEST['gateway_abn'] : null;
         $gateway_test_url = isset($_REQUEST['gateway_test_url']) ? $_REQUEST['gateway_test_url'] : null;
         $gateway_prod_url = isset($_REQUEST['gateway_prod_url']) ? $_REQUEST['gateway_prod_url'] : null;
