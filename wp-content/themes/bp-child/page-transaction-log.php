@@ -284,7 +284,14 @@ if($filterCustomer){
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-convsn">
-                                   <?php echo $row->CONVERSATION_ID ?>                                   
+                                   <?php 
+                                        if(strlen($row->CONVERSATION_ID) > 28)
+                                        {
+                                            echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 10) . "....." . substr($row->CONVERSATION_ID, -10) . '</span>';
+                                        }else{
+                                            echo $row->CONVERSATION_ID;
+                                        }                                    
+                                   ?>                                   
                                </div>
                                <div class="td td-date tocenter">
                                    <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />                                   
