@@ -45,6 +45,7 @@ class CT_Gateway_List_Table extends WP_List_Table {
         $query_str = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $wpdb->prefix . "gateways WHERE 1 = 1";
         if ($gatewaysearch != '') {
             $query_str .= " AND (`name` LIKE '%$gatewaysearch%'";
+            $query_str .= " OR `username` LIKE '%$gatewaysearch%'";
             $query_str .= " OR `abn` LIKE '%$gatewaysearch%'";
             $query_str .= " OR `prod_url` LIKE '%$gatewaysearch%'";
             $query_str .= " OR `test_url` LIKE '%$gatewaysearch%')";
@@ -89,6 +90,7 @@ class CT_Gateway_List_Table extends WP_List_Table {
         $c = array(
             'cb'       => '<input type="checkbox" />',
             'name'     => __( 'Name' ),
+            'username'     => __( 'Username' ),
             'abn'    => __( 'ABN' ),
             'test_url'    => __( 'Test URL' ),
             'prod_url'    => __( 'Prod URL' )
@@ -101,6 +103,7 @@ class CT_Gateway_List_Table extends WP_List_Table {
     {
         $c = array(
             "name" => array("name", $orderby == 'name'),
+            "username" => array("username", $orderby == 'username'),
             "abn" => array("abn", $orderby == 'abn'),
         );
 
@@ -155,6 +158,9 @@ class CT_Gateway_List_Table extends WP_List_Table {
                     break;
                 case 'name':
                     $r .= "<td $attributes>$edit</td>";
+                    break;
+                case 'username':
+                    $r .= "<td $attributes>$gateway->username</td>";
                     break;
                 case 'abn':
                     $r .= "<td $attributes>$gateway->abn</td>";
