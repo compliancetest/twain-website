@@ -177,6 +177,7 @@ function create_compliancetest_settings_page()
                     </table>   
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-token-price'); ?>
+                    <input type="hidden" name="tab_index" value="3">
                 </form>
             </div>
             <div id="ct-eway-settings">
@@ -220,6 +221,7 @@ function create_compliancetest_settings_page()
                     </table>        
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-eway-options'); ?>
+                    <input type="hidden" name="tab_index" value="0">
                 </form>  
             </div>
             <div id="ct-esb-settings">
@@ -246,6 +248,7 @@ function create_compliancetest_settings_page()
                     </table>      
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-esb-settings'); ?>
+                    <input type="hidden" name="tab_index" value="1">
                 </form>
             </div>
             <div id="ct-subscriptions-settings">
@@ -263,6 +266,7 @@ function create_compliancetest_settings_page()
                     </table>      
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-subscription-settings'); ?>
+                    <input type="hidden" name="tab_index" value="2">
                 </form>  
             </div>
             <div id="ct-recaptcha-settings">
@@ -280,6 +284,7 @@ function create_compliancetest_settings_page()
                     </table>      
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-recaptcha-settings'); ?>
+                    <input type="hidden" name="tab_index" value="4">
                 </form>  
             </div>
             <div id="ct-mailchimp-settings">
@@ -303,6 +308,7 @@ function create_compliancetest_settings_page()
                             <a href="<?php echo get_site_url() ?>?ext-action=add-users-to-mailchimp" target="_blank" class="button">Sync All Users with the selected list</a>
                             <br />(You will need to save your change first.)        
                         </p>
+                        <input type="hidden" name="tab_index" value="5">
                     </form>  
                 <?php
                 ?>
@@ -330,6 +336,7 @@ function create_compliancetest_settings_page()
                     </table>      
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-pdf-certificate-settings'); ?>
+                    <input type="hidden" name="tab_index" value="6">
                 </form>  
             </div>
         </div>
@@ -337,7 +344,7 @@ function create_compliancetest_settings_page()
     
     <script type="text/javascript">
             jQuery(document).ready(function(){
-                jQuery('#compliancetest-settings').tabs({"active": "<?php echo isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 0?>"});                    
+                jQuery('#compliancetest-settings').tabs({"active": "<?php echo isset($_REQUEST['tab_index']) ? $_REQUEST['tab_index'] : 0?>"});                    
             })
             function saveEmailTemplates()
             {
