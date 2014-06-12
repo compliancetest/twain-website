@@ -324,7 +324,7 @@ function create_compliancetest_settings_page()
                             <td>
                                 <input type="file" name="pdf_private_key" id="pdf_private_key" />
                                 <?php $pdf_private_key_name = get_option('pdf_private_key_name'); ?>
-                                <label><?php echo ($pdf_private_key_name) ? ('('.$pdf_private_key_name.')') : (''); ?></label>
+                                <label><?php echo ($pdf_private_key_name) ? ('(Currently '.$pdf_private_key_name.')') : (''); ?></label>
                             </td>
                         </tr>
                     </table>      
