@@ -41,14 +41,14 @@ class FvsGenerator {
         
         $gateway_list = $this->getGatewayList();
         
-        $test_urls = array();
         $contribution_prod_urls = array();
         $rollover_prod_urls = array();
         
         foreach ($gateway_list as $gateway) {
-            $test_urls[] = $gateway['test_url'];
             $contribution_prod_urls[] = $gateway['contribution_prod_url'];
+            $contribution_test_urls[] = $gateway['contribution_test_url'];
             $rollover_prod_urls[] = $gateway['rollover_prod_url'];
+            $rollover_test_urls[] = $gateway['rollover_test_url'];
         }
         
         // N: Primary Destination - Electronic Service Address
@@ -63,14 +63,14 @@ class FvsGenerator {
             $p_esa_url = $activeSheet->getCell('N'.$i)->getValue();
             $s_esa_url = $activeSheet->getCell('R'.$i)->getValue();
             if (array_search($p_esa_url, $contribution_prod_urls) !== FALSE) {
-                $activeSheet->setCellValue('N'.$i, $test_urls[array_search($p_esa_url, $contribution_prod_urls)]);
+                $activeSheet->setCellValue('N'.$i, $contribution_test_urls[array_search($p_esa_url, $contribution_prod_urls)]);
             } else if (array_search($p_esa_url, $rollover_prod_urls) !== FALSE) {
-                $activeSheet->setCellValue('N'.$i, $test_urls[array_search($p_esa_url, $rollover_prod_urls)]);
+                $activeSheet->setCellValue('N'.$i, $rollover_test_urls[array_search($p_esa_url, $rollover_prod_urls)]);
             }
             if (array_search($s_esa_url, $contribution_prod_urls) !== FALSE) {
-                $activeSheet->setCellValue('R'.$i, $test_urls[array_search($s_esa_url, $contribution_prod_urls)]);
+                $activeSheet->setCellValue('R'.$i, $contribution_test_urls[array_search($s_esa_url, $contribution_prod_urls)]);
             } else if (array_search($s_esa_url, $rollover_prod_urls) !== FALSE) {
-                $activeSheet->setCellValue('R'.$i, $test_urls[array_search($s_esa_url, $rollover_prod_urls)]);
+                $activeSheet->setCellValue('R'.$i, $rollover_test_urls[array_search($s_esa_url, $rollover_prod_urls)]);
             }
         }
         
