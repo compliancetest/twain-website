@@ -100,16 +100,6 @@ function ct_manage_gateway_edit()
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="gateway_test_url">Gateway Test URL</label> 
-                        <input class="mf_text" type="text" id="gateway_test_url" name="gateway_test_url" value="<?php echo $gateway_data->test_url; ?>"> 
-                        <p class="mf_caption"></p>
-                    </div>
-                    <div class="mf_field_wrapper mf_field_test_case_id text">
-                        <label for="gateway_prod_url">Gateway Production URL</label> 
-                        <input class="mf_text" type="text" id="gateway_prod_url" name="gateway_prod_url" value="<?php echo $gateway_data->prod_url; ?>"> 
-                        <p class="mf_caption"></p>
-                    </div>
-                    <div class="mf_field_wrapper mf_field_test_case_id text">
                         <label for="contribution_test_url">Contribution Test URL</label> 
                         <input class="mf_text" type="text" id="contribution_test_url" name="contribution_test_url" value="<?php echo $gateway_data->contribution_test_url; ?>"> 
                         <p class="mf_caption"></p>
@@ -165,8 +155,6 @@ function gateway_actions()
         $gateway_username = isset($_REQUEST['gateway_username']) ? $_REQUEST['gateway_username'] : null;
         $gateway_password = isset($_REQUEST['gateway_password']) ? base64_encode($_REQUEST['gateway_password']) : null;
         $gateway_abn = isset($_REQUEST['gateway_abn']) ? $_REQUEST['gateway_abn'] : null;
-        $gateway_test_url = isset($_REQUEST['gateway_test_url']) ? $_REQUEST['gateway_test_url'] : null;
-        $gateway_prod_url = isset($_REQUEST['gateway_prod_url']) ? $_REQUEST['gateway_prod_url'] : null;
         $contribution_test_url = isset($_REQUEST['contribution_test_url']) ? $_REQUEST['contribution_test_url'] : null;
         $contribution_prod_url = isset($_REQUEST['contribution_prod_url']) ? $_REQUEST['contribution_prod_url'] : null;
         $rollover_test_url = isset($_REQUEST['rollover_test_url']) ? $_REQUEST['rollover_test_url'] : null;
@@ -176,8 +164,6 @@ function gateway_actions()
             'name' => $gateway_name, 
             'username' => $gateway_username,
             'abn' => $gateway_abn, 
-            'test_url' => $gateway_test_url,
-            'prod_url' => $gateway_prod_url,
             'contribution_test_url' => $contribution_test_url,
             'contribution_prod_url' => $contribution_prod_url,
             'rollover_test_url' => $rollover_test_url,
