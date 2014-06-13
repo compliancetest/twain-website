@@ -47,8 +47,10 @@ class CT_Gateway_List_Table extends WP_List_Table {
             $query_str .= " AND (`name` LIKE '%$gatewaysearch%'";
             $query_str .= " OR `username` LIKE '%$gatewaysearch%'";
             $query_str .= " OR `abn` LIKE '%$gatewaysearch%'";
-            $query_str .= " OR `prod_url` LIKE '%$gatewaysearch%'";
-            $query_str .= " OR `test_url` LIKE '%$gatewaysearch%')";
+            $query_str .= " OR `contribution_test_url` LIKE '%$gatewaysearch%'";
+            $query_str .= " OR `contribution_prod_url` LIKE '%$gatewaysearch%'";
+            $query_str .= " OR `rollover_test_url` LIKE '%$gatewaysearch%'";
+            $query_str .= " OR `rollover_prod_url` LIKE '%$gatewaysearch%')";
         }
         if (isset($args['orderby']) && $args['orderby'] != '') {
             $query_str .= ' ORDER BY ' . $args['orderby'] . ' ' . $args['order'];
@@ -92,8 +94,10 @@ class CT_Gateway_List_Table extends WP_List_Table {
             'name'     => __( 'Name' ),
             'username'     => __( 'Username' ),
             'abn'    => __( 'ABN' ),
-            'test_url'    => __( 'Test URL' ),
-            'prod_url'    => __( 'Prod URL' )
+            'contribution_test_url'    => __( 'Contribution Test URL' ),
+            'contribution_prod_url'    => __( 'Contribution Production URL' ),
+            'rollover_test_url'    => __( 'Rollover Test URL' ),
+            'rollover_prod_url'    => __( 'Rollover Production URL' ),
         );
 
         return $c;
@@ -165,11 +169,17 @@ class CT_Gateway_List_Table extends WP_List_Table {
                 case 'abn':
                     $r .= "<td $attributes>$gateway->abn</td>";
                     break;
-                case 'test_url':
-                    $r .= "<td $attributes>$gateway->test_url</td>";
+                case 'contribution_test_url':
+                    $r .= "<td $attributes>$gateway->contribution_test_url</td>";
                     break;
-                case 'prod_url':
-                    $r .= "<td $attributes>$gateway->prod_url</td>";
+                case 'contribution_prod_url':
+                    $r .= "<td $attributes>$gateway->contribution_prod_url</td>";
+                    break;
+                case 'rollover_test_url':
+                    $r .= "<td $attributes>$gateway->rollover_test_url</td>";
+                    break;
+                case 'rollover_prod_url':
+                    $r .= "<td $attributes>$gateway->rollover_prod_url</td>";
                     break;
                 default:
                     $r .= "<td $attributes>";
