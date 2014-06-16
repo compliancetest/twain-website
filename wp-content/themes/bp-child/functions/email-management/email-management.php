@@ -185,7 +185,7 @@ function create_email_management_page()
                     <table class="widefat">
                         <thead>
                             <tr>
-                                <th colspan="2">For Admin</th>
+                                <th colspan="2">For Admin </th>
                             </tr>
                         </thead>
                         <tbody>
