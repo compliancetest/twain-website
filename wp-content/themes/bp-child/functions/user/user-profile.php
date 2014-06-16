@@ -721,6 +721,7 @@ function cp_get_customer_harness_detail()
                 {
                     if (profile_id == 0) {
                         jQuery('#profile-data-container').html('');
+                        jQuery('select[name=gateway_id]')[0].selectedIndex = 0;
                     } else {
                         jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').show();
                         jQuery.ajax({
