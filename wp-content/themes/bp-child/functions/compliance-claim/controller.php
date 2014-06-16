@@ -155,8 +155,10 @@ function makeClaim()
         
         $emailData = array(
             '[claim_id]' => $claim->claim_id,
-            '[product]' => '<a href="' . get_permalink($claim->product_id) . '">' . get_the_title($claim->product_id) . '</a>',
-            '[test_suite]' => '<a href="' . get_permalink($claim->suite_id) . '">' . get_the_title($claim->suite_id) . '</a>',
+            '[product_name]' => get_the_title($claim->product_id),
+            '[product_url]' => get_permalink($claim->product_id),
+            '[suite_name]' => get_the_title($claim->suite_id),
+            '[suite_url]' => get_permalink($claim->suite_id),
             '[issuer]' => $claim->issuer,
             '[conformance_level]' => $claim->conformance_level,
             '[role]' => $claim->role,
@@ -343,9 +345,9 @@ function createClaimPDF($claim_id)
     $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
 
     // QRCODE,H : QR-CODE Best error correction
-    $pdf->write2DBarcode(get_permalink($claim->product_id), 'QRCODE,H', '', '', 40, 40, $style, 'N');
+    $pdf->write2DBarcode( get_site_url() . '/claims/' . $claim->token, 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
-    $link = '<div style="text-align:center;"><a href="' . get_permalink($claim->product_id) . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_permalink($claim->product_id) . '</a></div>';
+    $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/claims/' . $claim->token . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/claims/' . $claim->token . '</a></div>';
 
     $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
     // ---------------------------------------------------------
