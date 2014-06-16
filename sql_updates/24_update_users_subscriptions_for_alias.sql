@@ -1,0 +1,1 @@
+ALTER TABLE `wp_users_subscriptions` ADD COLUMN `alias` VARCHAR(30) DEFAULT '' BEFORE `status`;
