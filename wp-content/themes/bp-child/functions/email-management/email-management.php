@@ -179,14 +179,13 @@ function create_email_management_page()
                         $new_user_email_content = get_option('new_user_email_content');
                         $new_user_admin_email_title = get_option('new_user_admin_email_title');
                         $new_user_admin_email_content = get_option('new_user_admin_email_content');
-                        
                     ?>       
                     <h3>User Registered</h3>
                     <p><b>Short Codes:</b> [name], [username], [email], [website_url], [env], [password], [link], [organisation]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
-                                <th colspan="2">For User</th>
+                                <th colspan="2">For Admin</th>
                             </tr>
                         </thead>
                         <tbody>
