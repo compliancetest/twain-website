@@ -734,7 +734,10 @@ function cp_get_customer_harness_detail()
                         });
                     }
                 }
+                
                 viewProfileData(jQuery('#harness-gateway select[name=profile_id]').val(), '<?php echo $_REQUEST['id']; ?>');
+                jQuery('#my_testsuites .message').remove();
+                
                 function generateProfile()
                 {
                     jQuery('#harness-detail-container').hide();
@@ -761,8 +764,11 @@ function cp_get_customer_harness_detail()
                             jQuery('#harness-detail-box' + id + ' .loading').hide();
                             if(rsp == 'success')
                             {
-                                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message success">New profile has been generated successfully!</div>');                
-                            }else{
+                                jQuery('#my_testsuites').prepend('<div style="margin-bottom:20px;" class="message success">New profile has been generated successfully!</div>');                
+                                jQuery('#harness-detail-box' + id + ' .close-popup-btn').click();
+                            }
+                            else
+                            {
                                 jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
                             }
                         },
