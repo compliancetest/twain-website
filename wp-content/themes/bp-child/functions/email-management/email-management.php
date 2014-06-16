@@ -2126,7 +2126,7 @@ function create_email_management_page()
                     $claim_created_admin_email_content = get_option('claim_created_admin_email_content');
                     ?>
                     <h3>Claim is made</h3>
-                    <p><b>Short Codes:</b> [claim_id], [product], [username], [useremail], [issuer], [certificate], [test_suite], [conformance_level], [role], [status], [date]</p>
+                    <p><b>Short Codes:</b> [claim_id], [product_url],[product_name], [username], [useremail], [issuer], [certificate], [suite_name],[suite_url], [conformance_level], [role], [status], [date]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
