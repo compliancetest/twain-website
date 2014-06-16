@@ -484,8 +484,11 @@ function saveHarnessDetails(id)
             jQuery('#harness-detail-box' + id + ' .loading').hide();
             if(rsp == 'success')
             {
-                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message success">Your data was saved!</div>');                
-            }else{
+                jQuery('#my_testsuites').prepend('<div class="message success">Your data was saved!</div>');                
+                jQuery('#harness-detail-box' + id + ' .close-popup-btn').click();
+            }
+            else
+            {
                 jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
             }
         },
