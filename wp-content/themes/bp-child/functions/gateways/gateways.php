@@ -91,7 +91,7 @@ function ct_manage_gateway_edit()
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
                         <label for="gateway_password">Password</label> 
-                        <input class="mf_text" type="password" id="gateway_password" name="gateway_password" value=""> 
+                        <input class="mf_text" type="text" id="gateway_password" name="gateway_password" value="<?php echo $gateway_data->password; ?>"> 
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
@@ -153,7 +153,7 @@ function gateway_actions()
         $gateway_id = isset($_REQUEST['gateway_id']) ? $_REQUEST['gateway_id'] : null;
         $gateway_name = isset($_REQUEST['gateway_name']) ? $_REQUEST['gateway_name'] : null;
         $gateway_username = isset($_REQUEST['gateway_username']) ? $_REQUEST['gateway_username'] : null;
-        $gateway_password = isset($_REQUEST['gateway_password']) ? base64_encode($_REQUEST['gateway_password']) : null;
+        $gateway_password = isset($_REQUEST['gateway_password']) ? $_REQUEST['gateway_password'] : null;
         $gateway_abn = isset($_REQUEST['gateway_abn']) ? $_REQUEST['gateway_abn'] : null;
         $contribution_test_url = isset($_REQUEST['contribution_test_url']) ? $_REQUEST['contribution_test_url'] : null;
         $contribution_prod_url = isset($_REQUEST['contribution_prod_url']) ? $_REQUEST['contribution_prod_url'] : null;
@@ -163,17 +163,14 @@ function gateway_actions()
         $gateway_data = array(
             'name' => $gateway_name, 
             'username' => $gateway_username,
+            'password' => $gateway_password,
             'abn' => $gateway_abn, 
             'contribution_test_url' => $contribution_test_url,
             'contribution_prod_url' => $contribution_prod_url,
             'rollover_test_url' => $rollover_test_url,
             'rollover_prod_url' => $rollover_prod_url,
         );
-        
-        if ($gateway_password) {
-            $gateway_data['password'] = $gateway_password;
-        }
-        
+                
         if (!empty($_FILES) && is_uploaded_file($_FILES['certificate']['tmp_name'])) {
             $gateway_data['certificate'] = file_get_contents($_FILES['certificate']['tmp_name']);
             $gateway_data['certificate_name'] = $_FILES['certificate']['name'];
