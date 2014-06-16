@@ -645,7 +645,7 @@ function cp_get_customer_harness_detail()
                                 <div class="field-row">
                                     <div class="grid-cell">
                                         <label>Profile:</label>
-                                        <select name="profile_id" class="select" onchange="viewProfileData(this.value)">
+                                        <select name="profile_id" class="select" onchange="viewProfileData(this.value, <?php echo $_REQUEST['id']?>)">
                                             <option value="">None</option>
                                             <?php 
                                                 if (count($profileInstances) > 0):
@@ -717,7 +717,7 @@ function cp_get_customer_harness_detail()
                     
                     return false;
                 }
-                function viewProfileData(profile_id)
+                function viewProfileData(profile_id, subscription_id)
                 {
                     if (profile_id == 0) {
                         jQuery('#profile-data-container').html('');
@@ -725,7 +725,7 @@ function cp_get_customer_harness_detail()
                     } else {
                         jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').show();
                         jQuery.ajax({
-                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id,
+                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id + '&subscription_id=' + subscription_id,
                             type: 'post',
                             success: function(res) {
                                 jQuery('#profile-data-container').html(res);
@@ -786,6 +786,10 @@ function cp_get_customer_harness_detail_profile_data()
     $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id=%d", $_REQUEST['id']);
     $row = $wpdb->get_row($query);
     
+    $subscription_id = $_REQUEST['subscription_id'];
+    $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
+    $subscription_row = $wpdb->get_row($subscription_query);
+    
     if (!empty($row)):
         $profile_instance = json_decode(base64_decode($row->content));
         $profile_schema = json_decode(base64_decode($row->schema)); 
@@ -799,6 +803,26 @@ function cp_get_customer_harness_detail_profile_data()
             $profile_type_title .= ' v' . implode('.', $version);
         }
 ?>
+    <?php 
+        $hasABN = 0;
+        foreach ($profile_instance->Entity as $label=>$value) {
+            if (strtolower($label) == 'abn') {
+                $hasABN = 1;
+                break;
+            }
+        }
+    ?>
+    <?php if ($hasABN): ?>
+    <div class="field-row">
+        <div class="grid-cell">
+            <label>Alias:</label>
+            <input class="input" type="text" name="alias" value="<?php echo $subscription_row->alias; ?>"/>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <?php else: ?>
+        <input class="input" type="hidden" name="alias" value=""/>
+    <?php endif; ?>
     <div class="field-row">
         <div class="grid-cell">
             <label>Profile Type:</label>
@@ -861,7 +885,8 @@ function cp_save_customer_harness_detail()
         'p_mode_agreement' => $_POST['p_mode_agreement'],
         'harness_password' => $_POST['harness_password'],
         'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : ('NULL')),
-        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : ('NULL'))
+        'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : ('NULL')),
+        'alias' => (($_POST['alias']!='') ? ($_POST['alias']) : (''))
     );
     
     if($_POST['p_mode_agreement'] == 'HIGH-END'){
