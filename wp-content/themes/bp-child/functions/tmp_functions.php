@@ -30,6 +30,30 @@ if(is_super_admin())
             
             die("Done!");                        
         }
+        if(isset($_GET['fix_users_extra']))
+        {
+            $results = $wpdb->get_results("SELECT * FROM wp_users");
+            foreach($results as $r)
+            {
+                $wpdb->query("INSERT INTO {$wpdb->prefix}users_extra(`userID`)VALUES(" . $r->ID . ") ON DUPLICATE KEY UPDATE `userID`=" . $r->ID);
+            }
+            
+            //Update Cards
+            $results = $wpdb->get_results("SELECT count(*) AS c, user_id FROM wp_users_cards GROUP BY user_id");
+            foreach($results as $r)
+            {
+                $wpdb->update($wpdb->prefix . "users_extra", array('cards' => $r->c), array('userID' => $r->user_id));
+            }
+            
+            //Update Subscriptions
+            $results = $wpdb->get_results("SELECT count(*) AS c, user_id FROM wp_users_subscriptions GROUP BY user_id");
+            foreach($results as $r)
+            {
+                $wpdb->update($wpdb->prefix . "users_extra", array('subscriptions' => $r->c), array('userID' => $r->user_id));
+            }
+            
+            die("Done!");                        
+        }
         if(isset($_GET['fix_suite_family_mark']))
         {
             //Delete Old Cases
