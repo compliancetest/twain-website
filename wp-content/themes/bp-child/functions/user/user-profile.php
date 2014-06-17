@@ -165,6 +165,9 @@ function cp_delete_payment_method()
     }
     
     $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_cards WHERE id=" . $id);
+    
+    cp_update_user_cards_count($user_id);
+    
     echo "success";
     exit;
 }
@@ -417,8 +420,10 @@ function cp_user_payment_save()
             ));        
             if(!$query_result)
                 $id = $wpdb->last_error;
-            else
+            else{
                 $id = $wpdb->insert_id;            
+                cp_update_user_cards_count($user_id);
+            }
         }
     }else{
         //Getting Card

@@ -25,8 +25,10 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
             "username" => __("Username"),
             "name" => __('Name'),
             "email" => __("Email"),
-            "payments_methods" => __("Payment Methods"),                        
+            "payments_methods" => __("Payment Methods"),                                    
             "subscriptions" => __("Subscriptions"),                        
+            "total_ticket_hours" => __("Total Ticket Hours<br />(Normal/High/Urgent)"),
+            "pending_ticket_hours" => __("Pending Ticket Hours<br />(Normal/High/Urgent)"),
             "id" => __("ID"),  
         );
     }
@@ -78,7 +80,7 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
         switch($column_name)
         {
             case 'username':
-                return get_avatar($item->ID, 32) . '<strong>' . $item->user_login . '</strong>' . $this->row_actions(array(
+                return get_avatar($item->ID, 22) . '<strong>' . $item->user_login . '</strong>' . $this->row_actions(array(
                     "<a href='admin.php?page=users&action=detail&id=" . $item->ID . "'>Detail</a>"                    
                 ));
             case 'name':
@@ -92,6 +94,11 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
             
             case 'subscriptions':
                 return !isset($item->subscriptions) ? 0 : $item->subscriptions;
+            
+            case 'total_ticket_hours':
+                return str_pad($item->total_ticket_hours_normal, 2, '0', STR_PAD_LEFT) . ' / ' . str_pad($item->total_ticket_hours_high, 2, '0', STR_PAD_LEFT) . ' / ' . str_pad($item->total_ticket_hours_urgent, 2, '0', STR_PAD_LEFT);
+            case 'pending_ticket_hours':
+                return $item->pending_ticket_hours_normal . '/' . $item->pending_ticket_hours_high . '/' . $item->pending_ticket_hours_urgent;
             
             default:
                 return $item->$column_name;
@@ -132,18 +139,16 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
         // Query the user IDs for this page
         $wp_user_search = new WP_User_Query( $args );
         
-        //Add subscriptions count query
-        $wp_user_search->query_from .= " LEFT JOIN (SELECT user_id, count(*) AS subscriptions FROM {$wpdb->prefix}users_subscriptions GROUP BY user_id) AS us ON us.user_id = {$wpdb->users}.ID ";
-        $wp_user_search->query_fields .= " ,subscriptions ";
-        //Add cards count query
-        $wp_user_search->query_from .= " LEFT JOIN (SELECT user_id, count(*) AS cards FROM {$wpdb->prefix}users_cards GROUP BY user_id) AS uc ON uc.user_id = {$wpdb->users}.ID ";
-        $wp_user_search->query_fields .= " ,cards ";
+        //Add User Extra
+        $wp_user_search->query_from .= " LEFT JOIN {$wpdb->prefix}users_extra AS ue ON ue.userID={$wpdb->users}.ID  ";
+        
+        $wp_user_search->query_fields .= " ,ue.* ";
         
         if($orderby == 'cards' || $orderby == 'subscriptions')
             $wp_user_search->query_orderby = ' ORDER BY ' . $orderby . ' ' . $order;
         
         if($filter_subscriptions == 2)
-            $wp_user_search->query_where .= ' AND subscriptions > 0 ';
+            $wp_user_search->query_where .= ' AND ue.subscriptions > 0 ';
         
         $wp_user_search->results = $wpdb->get_results("SELECT $wp_user_search->query_fields $wp_user_search->query_from $wp_user_search->query_where $wp_user_search->query_orderby $wp_user_search->query_limit");            
         
@@ -160,8 +165,16 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
                 $r = array();
                 foreach ( $wp_user_search->results as $urow ){
                     $r[ $urow->ID ] = new WP_User( $urow->ID, '', $wp_user_search->query_vars['blog_id'] );
+                    
                     $r[ $urow->ID ]->subscriptions = $urow->subscriptions;
                     $r[ $urow->ID ]->cards = $urow->cards;
+                    
+                    $r[ $urow->ID ]->total_ticket_hours_normal = $urow->total_ticket_hours_normal;
+                    $r[ $urow->ID ]->total_ticket_hours_high = $urow->total_ticket_hours_high;
+                    $r[ $urow->ID ]->total_ticket_hours_urgent = $urow->total_ticket_hours_urgent;
+                    $r[ $urow->ID ]->pending_ticket_hours_normal = $urow->pending_ticket_hours_normal;
+                    $r[ $urow->ID ]->pending_ticket_hours_high = $urow->pending_ticket_hours_high;
+                    $r[ $urow->ID ]->pending_ticket_hours_urgent = $urow->pending_ticket_hours_urgent;
                 }
 
                 $wp_user_search->results = $r;

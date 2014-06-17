@@ -99,5 +99,9 @@ class CPRest
 
         return $availableTemplates;
     }
-
+    
+    public function doUploadMessageAPI($action, $data = '', $isPost = true, $isXMLHeader = true, $displayError = true)
+    {
+        return $this->doAPI($this->external_api_namespace. "/ato/" . $action, $data, $isPost, $isXMLHeader, $displayError);
+    }
 }

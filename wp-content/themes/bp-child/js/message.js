@@ -307,12 +307,7 @@ jQuery(document).ready(function(){
         {
             jQuery('#tm-test-case').addClass('select-error');
             isValid = false;
-        }
-        if(!jQuery('#tm-product').val())
-        {
-            jQuery('#tm-product').addClass('select-error');
-            isValid = false;
-        }
+        }        
         if(!jQuery('#tm-template').val())
         {
             jQuery('#tm-template').addClass('select-error');
@@ -358,4 +353,117 @@ jQuery(document).ready(function(){
         });
         return false;
     })
+    
+    
+    //Upload Message
+    jQuery('#upload-message-link').cplightbox({
+        type: 'ajax',
+        closeWhenClickOveraly: false,
+        removeBoxAfterClose: true,        
+        onAjaxSuccess: function(){
+            customizeFileTag();   
+        },
+        onStart: function(){            
+            jQuery('#upload-message-box .input-error').removeClass('input-error');
+            jQuery('#upload-message-box .select-error').removeClass('select-error');
+            jQuery('#upload-message-box p.error').remove();
+        }
+    })
+    
+    /**
+    * Update Test Case
+    */
+    jQuery('body').on('change', '#um-test-suite', function(){
+        var suite_id = this.value;
+        jQuery('#upload-message-box .loading-with-text b').html('LOADING DATA');
+        jQuery('#upload-message-box .loading-with-text').show();
+        jQuery('#upload-message-box .popup-box-content .message').fadeOut('fast');
+        jQuery.ajax({
+            url: '/',
+            data: {'ct-message-action': 'get-test-cases', 'suite_id': suite_id, 'only-cases': 1},
+            type: 'post',
+            dataType: 'xml',
+            complete: function(){
+                jQuery('#upload-message-box .loading-with-text').hide();
+            },
+            success: function(rsp){                
+                
+                jQuery('#um-test-case').find('option').remove();                
+                jQuery(rsp).find('case').each(function(idx){
+                    jQuery('#um-test-case').append('<option value="' + jQuery(this).attr('id') + '">' + jQuery(this).text() + '</option>');
+                });
+                
+                if(jQuery('#upload-message-box .loading-with-text').length < 1)
+                    jQuery('#upload-message-box form').append('<div class="loading loading-with-text radius6"><div><b>SENDING MESSAGE</b><span>Please wait...</span></div></div>');      
+                
+            },
+            error: function(err){
+                showTriggerMessageResultMessage('Sorry, there was an error while getting data.', 'error');                
+            }
+        })
+    })
+    
+    jQuery('body').on('click', '#upload-message-link', function(){
+        jQuery('#uploadMessageForm').submit();        
+        return false;
+    })
+    
+    /**
+    * Upload Message
+    */
+    jQuery('body').on('submit', '#uploadMessageForm', function(){
+        jQuery('#upload-message-box .popup-box-content').find('.message').remove();
+        jQuery('#upload-message-box .popup-box-content').find('.input-error').removeClass('input-error');
+        jQuery('#upload-message-box .popup-box-content').find('.select-error').removeClass('select-error');
+        var isValid = true;
+        if(!jQuery('#um-test-suite').val())
+        {
+            jQuery('#um-test-suite').addClass('select-error');
+            isValid = false;
+        }
+        if(!jQuery('#um-test-case').val())
+        {
+            jQuery('#um-test-case').addClass('select-error');
+            isValid = false;
+        }
+        if(!jQuery('#um-product').val())
+        {
+            jQuery('#um-product').addClass('select-error');
+            isValid = false;
+        }
+        if(!isValid)
+        {
+            showUploadMessageResultMessage('Please complete fields in red.', 'error');
+            return false;
+        }
+        if(!jQuery('#um-file').val())
+        {
+            showUploadMessageResultMessage('Please choose a file that you want to upload.', 'error');
+            return false;
+        }
+        
+        jQuery('#upload-message-box .loading-with-text b').html('SENDING MESSAGE');
+        jQuery('#upload-message-box .loading-with-text').show();
+        
+        return true;
+    })
+    
+    
+    var uploadMessageTimer = null;
+    
+    function showUploadMessageResultMessage(msg, type)
+    {
+        if(uploadMessageTimer != null)
+        {
+            clearTimeout(uploadMessageTimer);                    
+        }
+        jQuery('#upload-message-box .popup-box-content').find('.message').remove();
+        jQuery('#upload-message-box .popup-box-content').prepend('<p class="message ' + type +  '">' + msg + '</p>');
+        uploadMessageTimer = setTimeout(function(){
+            jQuery('#upload-message-box .popup-box-content').find('.message').fadeOut('fast');
+            uploadMessageTimer = null;
+        }, 2000);
+    }
+    
+    
 })

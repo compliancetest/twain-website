@@ -199,6 +199,8 @@ if($filterCustomer){
         </div> 
         <div class="padding10">
             <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('trigger-message')?>" id="trigger-message-link" class="action-btn process-btn left"><span class="p"></span><span class="t">TRIGGER MESSAGE</span></a>
+            <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('upload-message')?>" id="upload-message-link" class="action-btn process-btn left left10"><span class="p"></span><span class="t">UPLOAD MESSAGE</span></a>
+            
             <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
             <a href="#" id="edit-log-link" class="action-btn edit-btn icon-btn right has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Selected Rows<span></span></span></a>            
             <div class="clear"></div>

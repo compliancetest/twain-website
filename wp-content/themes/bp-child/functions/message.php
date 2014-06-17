@@ -25,6 +25,14 @@ function ct_process_message_actions()
     }else if($action == 'load-message-template'){
         loadMessageTemplate();    
     }
+    else if(wp_verify_nonce($action, 'upload-message'))    
+    {
+        showUploadMessageBox();
+    }
+    else if(wp_verify_nonce($action, 'send-uploaded-message'))
+    {
+        uploadMessage();
+    }
 }
 
 function sendMessage()
@@ -44,7 +52,7 @@ function sendMessage()
     header('content-type: application/xml');
     echo '<result>';
     
-    if(!$suite_id || !$product_id || !$case_id || !$template || !$harness_profile || !$tester_profile)
+    if(!$suite_id || !$case_id || !$template || !$harness_profile || !$tester_profile)
     {
         echo '<status>error</status>';
         echo '<error>Invalid Request!</error>';
@@ -65,10 +73,14 @@ function sendMessage()
             $xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
                             <api:testCase>                                
                                 <api:testCaseId>' . $caseObj->testCaseID . "_V" . $caseObj->version . '</api:testCaseId>                                
-                                <api:testSuiteId>' . $suiteObj->getSuiteID() . '</api:testSuiteId> 
-                                <api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
-                                <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>
-                                <api:messageTemplate  templateURI="' . $template . '">
+                                <api:testSuiteId>' . $suiteObj->getSuiteID() . '</api:testSuiteId>';
+            if($product_id)
+            {
+                $xmlData .= '<api:productName>' . get_post_meta($product_id, 'product_name', true) . '</api:productName>
+                                <api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>';
+            }
+                                
+            $xmlData .= '<api:messageTemplate  templateURI="' . $template . '">
                                     <api:profile namespace="Tester">' ; 
             //Getting Tester Profiles
             $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $tester_profile);
@@ -258,7 +270,6 @@ function saveMessageTemplate()
     exit;
 }
 
-
 function removeMessageTemplate()
 {
     global $wpdb, $CPRest;
@@ -282,8 +293,6 @@ function removeMessageTemplate()
     echo '</result>';
     exit;
 }
-
-
 
 function getCaseTemplatesAndProfiles()
 {
@@ -354,31 +363,33 @@ function getTestCases()
         }
         echo '</cases>';
         
-        if($cases)
-        {
-            //Getting Case Message Templates
-            $caseObj = new TestCase($cases[0]->ID);
-            
-            $caseTemplates = $caseObj->loadMessageTemplates();
-            echo '<templates>';
-            foreach($caseTemplates as $t)
+        if(!isset($_POST['only-cases']))
+        {        
+            if($cases)
             {
-                echo '<template>';
-                echo '<name><![CDATA[' . $t['name'] . ']]></name>';
-                echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
-                echo '</template>';
-            }
-            echo '</templates>';
-        }
+                //Getting Case Message Templates
+                $caseObj = new TestCase($cases[0]->ID);
                 
-        echo '<harness><![CDATA[';
-        echo _getHarnessProfilesHTML($cases[0]->ID);
-        echo ']]></harness>';
-        
-        echo '<tester><![CDATA[';
-        echo _getTesterProfilesHTML($cases[0]->ID);
-        echo ']]></tester>';
-        
+                $caseTemplates = $caseObj->loadMessageTemplates();
+                echo '<templates>';
+                foreach($caseTemplates as $t)
+                {
+                    echo '<template>';
+                    echo '<name><![CDATA[' . $t['name'] . ']]></name>';
+                    echo '<uri><![CDATA[' . $t['url'] . ']]></uri>';
+                    echo '</template>';
+                }
+                echo '</templates>';
+            }
+            
+            echo '<harness><![CDATA[';
+            echo _getHarnessProfilesHTML($cases[0]->ID);
+            echo ']]></harness>';
+            
+            echo '<tester><![CDATA[';
+            echo _getTesterProfilesHTML($cases[0]->ID);
+            echo ']]></tester>';
+        }
     }
     
     echo '</results>';
@@ -585,8 +596,9 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width250 left15">
                                     <label for="tm-product">Product</label>
                                     <select name="product" id="tm-product" class="select">
+                                        <option value="">Select a Product</option>
                                         <?php foreach($products as $p){ ?>
-                                        <option value="<?php echo $p->ID?>" <?php echo $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
+                                        <option value="<?php echo $p->ID?>" <?php echo 0 && $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>                    
@@ -657,6 +669,258 @@ function showTriggerMessageBox()
         <?php
         }
     }
+    
+    exit;
+}
+
+
+////////////////////////////////// Upload Message
+
+function showUploadMessageBox()
+{
+    global $CPRest;
+    
+    $user_id = get_current_user_id();
+    
+    //Getting Subscribed Test Suites
+    $suites = getUserSubscriptions();
+    
+    
+    if(!$suites)    
+    {
+    ?>
+        <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">    
+            <div class="popup-box-header radius6 noradiusbottom">Upload Message</div>        
+                <div class="popup-box-content grid-box-body">
+                    <p class="message warning">You need to purchase subscription for at least one test suite to Upload message.</p>                
+                </div>
+                <div class="popup-box-footer radius6 noradiustop">                
+                    <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+                    <div class="clear"></div>
+                </div>
+            <a class="close_btn"></a>                        
+        </div>    
+    <?php    
+    }else{        
+        if(!$suites) //User has not yet defined his profile.
+        {
+        ?>
+            <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">    
+                <div class="popup-box-header radius6 noradiusbottom">Trigger Message</div>        
+                    <div class="popup-box-content grid-box-body">
+                        <p class="message notice">You have not defined your profile, yet. Please go to <a href="<?php echo get_site_url()?>/my-profile">My Profile &gt; My Test Suite Subscriptions &gt; Harness Details</a> to define your proifle.</p>                
+                    </div>
+                    <div class="popup-box-footer radius6 noradiustop">                
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+                        <div class="clear"></div>
+                    </div>
+                <a class="close_btn"></a>                        
+            </div>    
+        <?php    
+        }else{
+            $lastData = null;
+            $products = getUserProductsAndServices($user_id);
+
+            $current_suite_id = $suites[0]->suite_id;                                
+            
+            $current_product_id = $products[0]->ID;
+            
+            //Getting Test Cases
+            $suiteObj = new TestSuite($current_suite_id);
+            $cases = $suiteObj->loadHarnessInitiatedTestCases();
+            $current_case_id = $cases[0]->ID;
+            
+        ?>
+        <div class="popup-box" id="upload-message-box" style="display: none; width: 555px;">
+            <form name="messageForm" id="uploadMessageForm" action="" enctype="multipart/form-data" method="post">
+                <div class="popup-box-header radius6 noradiusbottom">Upload Message</div>        
+                    <div class="popup-box-content grid-box-body">                          
+                        <p>Send a message from our test harness to your system. Choose a test case, then select select a file.</p>
+                        <div class="info-section">
+                            <div class="field-row">
+                                <div class="grid-cell width250">
+                                    <label for="tm-test-suite">Test Suite</label>
+                                    <select name="test-suite" id="um-test-suite" class="select">
+                                        <?php foreach($suites as $s){ ?>
+                                        <option value="<?php echo $s->suite_id?>" <?php echo $s->suite_id == $current_suite_id ? 'selected="selected"' : '' ?>><?php echo $s->suite_title ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="grid-cell width250 left15">
+                                    <label for="um-test-suite">Test Case</label>
+                                    <select name="test-case" id="um-test-case" class="select">
+                                        <?php foreach($cases as $c){ ?>
+                                        <option value="<?php echo $c->ID?>" <?php echo $c->ID == $current_case_id ? 'selected="selected"' : '' ?>><?php echo $c->post_title ?></option>
+                                        <?php } ?>
+                                    </select>                                    
+                                </div>                    
+                                <div class="clear"></div>
+                            </div>     
+                            <div class="field-row">
+                                <div class="grid-cell width100P">
+                                    <label for="um-product">Product</label>
+                                    <select name="product" id="um-product" class="select">
+                                        <option value="">Select a Product</option>
+                                        <?php foreach($products as $p){ ?>
+                                        <option value="<?php echo $p->ID?>" <?php echo $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>                                
+                                <div class="clear"></div>
+                            </div>                             
+                            <h5>Choose File</h5>
+                            <div class="field-row">
+                                <div class="grid-cell width50P">
+                                    <label>&nbsp;</label>
+                                    <input type="file" name="file" id="um-file" class="left input-file" />
+                                </div>
+                                <div class="grid-cell width50P">
+                                    <label for="um-filename">File Name</label>
+                                    <input type="text" class="input" name="filename" id="um-filename" /><br />
+                                    <small>(If it's blank, the uploaded file's name will be used.)</small>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <a href="#" class="action-btn process-btn submit-btn has-tooltip" id="upload-message-link"><span class="p"></span><span class="t">Confirm</span><span class="simple_tooltip">Confirm Trigger Message<span></span></span></a>
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <div class="clear"></div>
+                    </div>
+                <a class="close_btn"></a>                        
+                <div class="loading loading-with-text radius6"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>                
+                <input type="hidden" name="ct-message-action" value="<?php echo wp_create_nonce('send-uploaded-message')?>" />
+            </form>
+        </div>
+        <?php
+        }
+    }
+    
+    exit;
+}
+
+function uploadMessage()
+{
+    global $wpdb, $CPRest;
+    
+    $user_id = get_current_user_id();
+    
+    $suite_id = $_POST['test-suite'];
+    $product_id = $_POST['product'];
+    $case_id = $_POST['test-case'];
+    
+    $file = $_FILES['file'];
+    
+    if(!$suite_id || !$case_id || !$file || $file['error'] != UPLOAD_ERR_OK)
+    {
+        addMessage('Invalid Request', 'error');
+        wp_redirect('/my-transaction-log');
+        exit;
+    }else{
+        //Getting Subscription Ino
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
+        $subscription = $wpdb->get_row($query);
+        if(!$subscription || get_post_meta($case_id, 'test_suite', true) != $suite_id) //Test Suite And Case Validation
+        {
+            addMessage('Invalid Request', 'error');
+            wp_redirect('/my-transaction-log');
+            exit;
+        }else{
+            $filename = basename($file['name']);
+            
+            //Getting File Content
+            if(trim($_POST['filename']) != '')
+            {
+                $newfilename = trim($_POST['filename']);
+                if(strpos($newfilename, ".") === false)
+                {
+                    //Getting Extension from the old name
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    $newfilename .= '.' . $ext;
+                }
+                
+                $filename = $newfilename;
+            }
+            
+            
+            $filecontent = file_get_contents($file['tmp_name']);            
+            $filesize = $file['size'];                    
+            
+            $suiteObj = new TestSuite($suite_id);            
+            $caseObj = new TestCase($case_id);
+            $caseObj->load();
+            
+            $fileId = $caseObj->testCaseID . "_" . $subscription->harness_username;
+            
+            //Getting Previous Files
+            $query = $wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}users_transactions_files WHERE fileId LIKE %s", $fileId . "%");
+            $idx = $wpdb->get_var($query);
+            $idx++;
+            
+            $fileId = $fileId . "_" . $idx;
+            
+            //Save Data To Transactions Files Table
+            $return = $wpdb->insert($wpdb->prefix . "users_transactions_files", 
+                            array(
+                                'fileId' => $fileId,
+                                'fileName' => $filename,
+                                'content' => $filecontent,
+                                'fileSize' => $filesize,
+                                'uploadedDate' => date("Y-m-d H:i:s")
+                            )
+                         );
+            
+            if(!$return)
+            {
+                addMessage('There was an error while saving the file: ' . $wpdb->last_error);
+                wp_redirect('/my-transaction-log');
+                exit;
+            }
+            
+            
+            $xmlData = '<api:processUploadedMessageRequest xmlns:api="http://compliancetest.net/api">
+                            <api:testCaseUploadMessage>                              
+                                <api:testCaseId>' . $caseObj->testCaseID . "_V" . $caseObj->version . '</api:testCaseId>                                
+                                <api:testSuiteId>' . $suiteObj->getSuiteID() . '</api:testSuiteId> ';
+            if($product_id)
+                $xmlData .= '<api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>';
+                
+            $xmlData .= '<api:uploadIdentifier>' . $fileId . '</api:uploadIdentifier>                                
+                                <api:identity>
+                                    <api:username>' . $subscription->harness_username . '</api:username>
+                                    <api:password>' . $subscription->harness_password . '</api:password>
+                                </api:identity>
+                            </api:testCaseUploadMessage>
+                         </api:processUploadedMessageRequest>';
+            
+            
+            $result = $CPRest->doUploadMessageAPI('message/upload/', $xmlData);
+            
+            $resultDoc = new DOMDocument();
+            
+            if(!$result || !$resultDoc->loadXML($result))
+            {
+                addMessage('There was an error while uploading the message' . (!$result ? '.' : ": $result"), 'error');
+            }else{                
+                if($resultDoc->getElementsByTagName('code')->length > 0 && $resultDoc->getElementsByTagName('code')->item(0)->nodeValue == 'ACCEPTED'){
+                    
+                    addMessage('The file has been uploaded successfully.', 'success');
+                }else if($resultDoc->getElementsByTagName('faultstring')->length > 0){
+                    addMessage($resultDoc->getElementsByTagName('faultstring')->item(0)->nodeValue, 'error');
+                }else if($resultDoc->getElementsByTagName('error')->length > 0){
+                    addMessage($resultDoc->getElementsByTagName('error')->item(0)->nodeValue, 'error');
+                }else{
+                    addMessage('There was an error while uploading the file.', 'error');
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    wp_redirect('/my-transaction-log');
     
     exit;
 }

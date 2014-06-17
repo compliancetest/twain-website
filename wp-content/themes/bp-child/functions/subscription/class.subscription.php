@@ -140,6 +140,9 @@ class CT_Subscription
             //Remove Subscription
             $this->delete();            
             
+            //Update the Subscriptions Count
+            cp_update_user_subscriptions_count($user->ID);
+            
             addMessage('Your subscription has been cancelled.');
             
         }

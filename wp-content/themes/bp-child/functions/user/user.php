@@ -597,3 +597,25 @@ function cp_is_customer_support_or_admin($customer_id, $user_id = false)
     
     return $c > 0 ? true : false;
 }
+
+function cp_update_user_cards_count($user_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_cards WHERE user_id=%d", $user_id);    
+    $cards = $wpdb->get_var($query);
+    
+    $wpdb->update($wpdb->prefix . "users_extra", array('cards' => $cards), array('userID' => $user_id));
+    
+}
+
+function cp_update_user_subscriptions_count($user_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d", $user_id);    
+    $subscriptions = $wpdb->get_var($query);
+    
+    $wpdb->update($wpdb->prefix . "users_extra", array('subscriptions' => $subscriptions), array('userID' => $user_id));
+}
+

@@ -146,6 +146,9 @@ function purchase_paid_subscription()
         
         $subscribe_id = $wpdb->insert_id;
         
+        //Update the Subscriptions Count
+        cp_update_user_subscriptions_count($user->ID);
+        
         //Make this customer a member of the group
         if(!groups_is_user_member($user->ID, $suite->community_id))
         {
@@ -260,6 +263,8 @@ function purchase_free_subscription()
     ));
     
     $purchase_id = $wpdb->insert_id;
+    //Update the Subscriptions Count
+    cp_update_user_subscriptions_count($user->ID);
     
     //Create subscription row
     $wpdb->insert($wpdb->prefix . "users_subscriptions", array(
@@ -367,6 +372,8 @@ function purchase_additional_subscription()
     ));
     
     $subscribe_id = $wpdb->insert_id;
+    //Update the Subscriptions Count
+    cp_update_user_subscriptions_count($user->ID);
     
     //Send Email
     $emailData = array(
@@ -451,6 +458,8 @@ function purchase_organisation_subscription()
     ));
     
     $subscribe_id = $wpdb->insert_id;
+    //Update the Subscriptions Count
+    cp_update_user_subscriptions_count($user->ID);
     
     //Add wp_users_organisation_subscriptions
     $wpdb->insert($wpdb->prefix . "users_organisation_subscriptions", array(

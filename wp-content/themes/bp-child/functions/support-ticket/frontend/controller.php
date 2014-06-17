@@ -712,6 +712,7 @@ function sendTicketMessage()
                     addMessage('Ticket has been closed successfully.', 'success');
                 }
                 
+                updateTicketHours($ticketDetail->id);                
             }       
         }
         
@@ -892,4 +893,26 @@ function processTicketPayment($ticket_id)
     }
     
     return true;    
+}
+
+function updateTicketHours($ticket_id)
+{
+    global $wpdb, $ct_ticket_category, $ct_ticket_priority;
+    
+    $ticketDetail = getTicketById($ticket_id);
+    
+    $priority = $ct_ticket_priority->getPriorityById($ticketDetail->priority_id);
+    
+    if($ticketDetail->price > 0)
+    {
+        $totalTime = $ticketDetail->ttpay;
+        $pendingTime = $ticketDetail->pending_amount / $priority->price;
+        
+        $totalFieldID = 'total_ticket_hours_' . strtolower($priority->priority);
+        $pendingFieldID = 'pending_ticket_hours_' . strtolower($priority->priority);
+        
+        $query = "UPDATE {$wpdb->prefix}users_extra SET `" . $totalFieldID . "` = `" . $totalFieldID . "` + " . $totalTime . ", `" . $pendingFieldID . "` = `" . $pendingFieldID . "` + " . $pendingTime . " WHERE userID=" . $ticketDetail->customer_id;
+        
+        $wpdb->query($query);
+    }
 }

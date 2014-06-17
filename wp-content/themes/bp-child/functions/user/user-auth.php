@@ -61,6 +61,9 @@ function compliancetest_create_new_user(){
         echo $user_id->get_error_message();
     }else{
         wp_update_user( array ('ID' => $user_id, 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'])) ;
+        
+        //Create New Row on users_extra table
+        $wpdb->insert($wpdb->prefix . "users_extra", array('userID' => $user_id));
     
         $activation_key =  md5($_POST['user_email']);
         $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");

@@ -24,7 +24,7 @@ class CT_Users_Payments_Logs_List_Table extends WP_List_Table
             "created_date" => __("Date"),
             "payments" => __('# of Payments'),
             "subscriptions" => __("# of Subscriptions"),
-            "total_amount" => __("Total Amount"),
+            "total_amount" => __("Total Amount"),            
             "action" => __("&nbsp;")
         );
     }

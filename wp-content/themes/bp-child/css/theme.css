@@ -6500,6 +6500,7 @@ table#message-threads .thread-from div{
 /***
 * Trigger Message Box
 ***/
+#upload-message-box p,
 #trigger-message-box p{
     line-height: 1.3em;
     font-size: 13px;
@@ -6507,6 +6508,8 @@ table#message-threads .thread-from div{
 .popup-box .info-section{
     padding: 10px 0 0;
 }
+#upload-message-box .input,
+#upload-message-box .select,
 #trigger-message-box .select{
     width: 100%;
 }

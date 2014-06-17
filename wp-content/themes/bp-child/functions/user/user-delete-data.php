@@ -51,7 +51,8 @@ function ct_delete_user_data($user_id)
     $wpdb->delete($wpdb->prefix . "compliance_claims", array('creator_id' => $user_id));
     //Delete Profile Instances
     $wpdb->delete($wpdb->prefix . "community_profile_instances", array('creator_id' => $user_id, 'type' => 'tester'));
-    
+    //Delete User Extra Fields
+    $wpdb->delete($wpdb->prefix . "users_extra", array("userID" => $user_id));
     
     return $user_id;
 }
