@@ -601,7 +601,7 @@ function saveCase()
                               'version_patch' => $_POST['version_patch'],
                               'family_mark' => $familyMark)
                      );
-        cp_sort_test_cases($testCaseId, $_POST['version_major']);
+        cp_sort_test_cases($familyMark, $_POST['version_major']);
     }
     
     if($version_updated)
@@ -664,10 +664,12 @@ function cp_sort_test_cases($familyMark, $version_major)
     
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_cases WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $familyMark, $version_major);
     $cases = $wpdb->get_results($query);
+    
     foreach($cases as $i=>$s)
     {
-        update_post_meta($s->case_id, 'hide_case', $i > 0 ? 1 : 0);
+        update_post_meta($s->case_id, 'hide_case', $i > 0 ? 1 : 0);        
     }
+    
 }
 
 function isNewVersionExist($familyMark, $version_major, $version_minor = null, $version_patch = null)
