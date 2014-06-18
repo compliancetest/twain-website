@@ -53,11 +53,7 @@ function ct_manage_gateway_edit()
         $gateway_data = $wpdb->get_row($query);
     }
 ?>
-    <style type="text/css">
-        .mf_field_wrapper { margin: 0 6px 0; overflow: hidden; }
-        .mf_field_wrapper label { display: block; clear: left; font-weight: bold; padding: .5em 0; }
-        .mf_text { width: 95%; margin-left: 1px; }
-    </style>
+    <link rel="stylesheet" href="<?php echo site_url(); ?>/wp-content/themes/bp-child/functions/gateways/css/gateway.css" type="text/css">
     <?php if (IS_GATEWAY_UPDATED || (isset($_REQUEST['message']) && $_REQUEST['message'] == '1')): ?>
     <div id="message" class="updated fade">    
         <p>
@@ -120,6 +116,24 @@ function ct_manage_gateway_edit()
                         <p class="mf_caption"></p>
                     </div>
                     <div class="mf_field_wrapper mf_field_test_case_id text">
+                        <label for="alias_tmp">Alias</label> 
+                        <input type="text" id="alias_tmp" name="alias_tmp" value=""> <input type="button" value="Add" onclick="addAlias()">
+                        <div id="alias-container">
+                            <?php if ($gateway_data->alias_list != ''): ?>
+                                <?php 
+                                    $alias_list = explode('|', $gateway_data->alias_list);
+                                    foreach ($alias_list as $alias): 
+                                ?>
+                                    <a class="entry-alias" rel="<?php echo $alias; ?>"><?php echo $alias; ?></a>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                There is no alias.
+                            <?php endif; ?>
+                        </div>
+                        <input type="hidden" name="alias_list" id="alias_list" value="<?php echo $gateway_data->alias_list; ?>">
+                        <p class="mf_caption"></p>
+                    </div>
+                    <div class="mf_field_wrapper mf_field_test_case_id text">
                         <label for="certificate">Signing Certificate</label> 
                         <input class="mf_text" type="file" id="certificate" name="certificate"> 
                         <?php if ($gateway_data->certificate_name != ''): ?>
@@ -134,6 +148,46 @@ function ct_manage_gateway_edit()
             <input type="hidden" name="gateway_id" value="<?php echo $gateway_id; ?>" />
         </form>
     </div>
+    <script type="text/javascript">
+        function addAlias()
+        {
+            var alias = jQuery('#alias_tmp').val();
+            var alias_list = jQuery('#alias_list').val();
+            var alias_arr = alias_list.split('|');
+            var alias_html = '<a class="entry-alias" rel="' + alias + '">' + alias + '</a>';
+            if (alias_arr.indexOf(alias) >= 0) {
+                jQuery('#alias_tmp').val('');
+                return false;
+            }
+            if (alias != '') {
+                if (alias_list == '') {
+                    alias_list = alias;
+                    jQuery('#alias-container').html(alias_html);
+                } else {
+                    alias_list += '|' + alias;
+                    jQuery('#alias-container').append(alias_html);
+                }
+                jQuery('#alias_list').val(alias_list);
+                jQuery('#alias_tmp').val('');
+            }
+        }
+        jQuery('body').on('click', '#alias-container a', function(){
+            var alias_list = jQuery('#alias_list').val();
+            var alias_arr = alias_list.split('|');
+            var alias = jQuery(this).attr('rel');
+            
+            alias_arr.splice(alias_arr.indexOf(alias), 1);
+            alias_list = alias_arr.join('|');
+            jQuery('#alias_list').val(alias_list);
+            jQuery(this).remove();
+        });
+        jQuery('#alias_tmp').keydown(function(e){
+            if (e.keyCode == 13) {
+                addAlias();
+                return false;
+            }
+        });
+    </script>
 <?php
 }
 
@@ -159,6 +213,7 @@ function gateway_actions()
         $contribution_prod_url = isset($_REQUEST['contribution_prod_url']) ? $_REQUEST['contribution_prod_url'] : null;
         $rollover_test_url = isset($_REQUEST['rollover_test_url']) ? $_REQUEST['rollover_test_url'] : null;
         $rollover_prod_url = isset($_REQUEST['rollover_prod_url']) ? $_REQUEST['rollover_prod_url'] : null;
+        $alias_list = isset($_REQUEST['alias_list']) ? $_REQUEST['alias_list'] : '';
         
         $gateway_data = array(
             'name' => $gateway_name, 
@@ -169,6 +224,7 @@ function gateway_actions()
             'contribution_prod_url' => $contribution_prod_url,
             'rollover_test_url' => $rollover_test_url,
             'rollover_prod_url' => $rollover_prod_url,
+            'alias_list' => $alias_list,
         );
                 
         if (!empty($_FILES) && is_uploaded_file($_FILES['certificate']['tmp_name'])) {
