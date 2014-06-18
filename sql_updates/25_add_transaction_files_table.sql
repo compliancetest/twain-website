@@ -1,0 +1,9 @@
+CREATE TABLE `wp_users_transactions_files` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fileId` VARCHAR(100) DEFAULT NULL,
+  `fileName` VARCHAR(200) DEFAULT NULL,
+  `content` MEDIUMBLOB,
+  `fileSize` INT(11) DEFAULT NULL,
+  `uploadedDate` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
