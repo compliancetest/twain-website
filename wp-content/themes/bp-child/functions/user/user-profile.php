@@ -964,6 +964,7 @@ function generateProfile($profile_id, $community_id)
             $row['type'] = 'tester';
             $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
             $row['created_date'] = date('Y-m-d F:i:s');
+            $row['purpose'] = $content->Profile->Purpose;
             
             $profile_ref['ref_'.$row['id']] = $row['token'];
             unset($row['id']);

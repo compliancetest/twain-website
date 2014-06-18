@@ -13,6 +13,20 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        if(isset($_GET['fix_profile_instances']))
+        {
+            
+            //Delete Old Cases
+            $results = $wpdb->get_results("SELECT * FROM wp_community_profile_instances");
+            foreach($results as $r)
+            {
+                $instanceObj = json_decode(base64_decode($r->content));    
+                       $wpdb->update("wp_community_profile_instances", array('purpose' => $instanceObj->Profile->Purpose), array('id' => $r->id));                    
+            }
+            
+            die("Done!");                        
+        }
+        
         if(isset($_GET['fix_claim']))
         {
             //Delete Old Cases

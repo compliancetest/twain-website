@@ -306,6 +306,7 @@ function saveProfileInstance($action)
                         array(
                             'type' => $instance_type,
                             'profile_name' => $jsonObject->Profile->Title,
+                            'purpose' => $jsonObject->Profile->Purpose,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => '',
@@ -320,6 +321,7 @@ function saveProfileInstance($action)
                         array(
                             'type' => $instance_type,
                             'profile_name' => $jsonObject->Profile->Title,
+                            'purpose' => $jsonObject->Profile->Purpose,
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => '',
