@@ -650,7 +650,7 @@ function cp_get_customer_harness_detail()
                                 <div class="field-row">
                                     <div class="grid-cell">
                                         <label>Profile:</label>
-                                        <select name="profile_id" class="select" onchange="viewProfileData(this.value, <?php echo $_REQUEST['id']?>)">
+                                        <select name="profile_id" class="select" onchange="viewProfileData()">
                                             <option value="">None</option>
                                             <?php 
                                                 if (count($profileInstances) > 0):
@@ -674,7 +674,7 @@ function cp_get_customer_harness_detail()
                                 <div class="field-row">
                                     <div class="grid-cell">
                                         <label>Gateway:</label>
-                                        <select name="gateway_id" class="select">
+                                        <select name="gateway_id" class="select" onchange="viewProfileData()">
                                             <option value="">None</option>
                                             <?php foreach ($gateways as $gateway): ?>
                                             <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
@@ -722,15 +722,19 @@ function cp_get_customer_harness_detail()
                     
                     return false;
                 }
-                function viewProfileData(profile_id, subscription_id)
+                function viewProfileData()
                 {
+                    var profile_id = jQuery('#harness-gateway select[name=profile_id]').val();
+                    var gateway_id = jQuery('#harness-gateway select[name=gateway_id]').val()
+                    var subscription_id = '<?php echo $_REQUEST['id']; ?>';
+                    
                     if (profile_id == 0) {
                         jQuery('#profile-data-container').html('');
                         jQuery('select[name=gateway_id]')[0].selectedIndex = 0;
                     } else {
                         jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').show();
                         jQuery.ajax({
-                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id + '&subscription_id=' + subscription_id,
+                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id + '&subscription_id=' + subscription_id + '&gateway_id=' + gateway_id,
                             type: 'post',
                             success: function(res) {
                                 jQuery('#profile-data-container').html(res);
@@ -740,7 +744,7 @@ function cp_get_customer_harness_detail()
                     }
                 }
                 
-                viewProfileData(jQuery('#harness-gateway select[name=profile_id]').val(), '<?php echo $_REQUEST['id']; ?>');
+                viewProfileData();
                 jQuery('#my_testsuites .message').remove();
                 
                 function generateProfile()
@@ -801,6 +805,16 @@ function cp_get_customer_harness_detail_profile_data()
     $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
     $subscription_row = $wpdb->get_row($subscription_query);
     
+    $gateway_id = $_REQUEST['gateway_id'];
+    $gateway_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "gateways WHERE gateway_id=%d", $gateway_id);
+    $gateway_row = $wpdb->get_row($gateway_query);
+    
+    $alias_list = array();
+    if ($gateway_row->alias_list != '') {
+        $alias_list = explode('|', $gateway_row->alias_list);
+    }
+    asort($alias_list);
+    
     if (!empty($row)):
         $profile_instance = json_decode(base64_decode($row->content));
         $profile_schema = json_decode(base64_decode($row->schema)); 
@@ -827,7 +841,15 @@ function cp_get_customer_harness_detail_profile_data()
     <div class="field-row">
         <div class="grid-cell">
             <label>Alias:</label>
+            <?php if (count($alias_list) == 0): ?>
             <input class="input" type="text" name="alias" value="<?php echo $subscription_row->alias; ?>"/>
+            <?php else: ?>
+            <select name="alias" class="select">
+                <?php foreach ($alias_list as $alias): ?>
+                <option value="<?php echo $alias; ?>" <?php echo ($alias == $subscription_row->alias) ? ('selected') : (''); ?>><?php echo $alias; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php endif; ?>
         </div>
         <div class="clear"></div>
     </div>
