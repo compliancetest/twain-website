@@ -559,10 +559,25 @@
                             </table>
                         </td>
                     </tr>
+                    <xsl:if test="event.02.data:Locations">
                     <tr>
-                        <td><xsl:value-of select="name(event.02.data:Locations/event.02.data:Location.Instance.Identifier)" /></td>
-                        <td><xsl:value-of select="event.02.data:Locations/event.02.data:Location.Path.Text/text()" /></td>
+                        <td><xsl:value-of select="name(event.02.data:Locations)" /></td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="format-table1">
+                                <tr>
+                                    <th>Identifier</th>
+                                    <th>Path</th>
+                                </tr>
+                                <xsl:for-each select="event.02.data:Locations/event.02.data:Location">
+                                    <tr>
+                                        <td><div class="break-all"><xsl:value-of select="event.02.data:Location.Instance.Identifier/text()" /></div></td>
+                                        <td><xsl:value-of select="event.02.data:Location.Path.Text/text()" /></td>
+                                    </tr>
+                                </xsl:for-each>
+                            </table>
+                        </td>
                     </tr>
+                    </xsl:if>
                 </tbody>
             </table>
         </div>
