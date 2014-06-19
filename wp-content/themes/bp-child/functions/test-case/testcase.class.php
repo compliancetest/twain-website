@@ -277,7 +277,7 @@ class TestCase
             
         $ids = $wpdb->escape($this->profileInstances);
         
-        $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id IN (" . implode(", ", $ids) . ")";        
+        $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id IN (" . implode(", ", $ids) . ") ORDER BY pi.purpose, pi.profile_name";        
         $rows = $wpdb->get_results($query);
         
         return $rows;

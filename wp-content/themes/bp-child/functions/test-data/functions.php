@@ -43,7 +43,7 @@ function getCustomerProfileInstances($user_id = null)
     if(!$user_id)
         $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.creator_id=%d AND pi.type='tester'", $user_id);
+    $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.creator_id=%d AND pi.type='tester' ORDER BY pi.purpose, pi.profile_name", $user_id);
     $rows = $wpdb->get_results($query);
     
     return $rows;

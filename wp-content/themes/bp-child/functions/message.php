@@ -401,9 +401,14 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
 {
     $html = '';
     
-    $caseObj = new TestCase($case_id);        
+    /*$caseObj = new TestCase($case_id);        
     $caseObj->loadProfileInstances();
     $harnessProfiles = $caseObj->getProfileInstanceRows();
+    */
+    $user_id = get_current_user_id();
+    
+    $profileInstances = _getTesterAndHarnessProfileInstances($case_id, $user_id);
+    
     $html .= '<h5>Harness Profiles</h5>';
     $html .= '<div class="field-row">';
     $html .= '<div class="grid-cell width50P"><b>Name</b></div>';
@@ -411,7 +416,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
-    foreach($harnessProfiles as $instance){
+    foreach($profileInstances as $instance){
         $html .= _getProfileRow($instance, 'harness_profile', $defaults);
     }
         
@@ -422,13 +427,17 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
 {
     $html = '';
     
-    $caseObj = new TestCase($case_id);        
+    /*$caseObj = new TestCase($case_id);        
     $caseObj->loadProfileInstances();
     $harnessProfiles = $caseObj->getProfileInstanceRows();
 
     $customerProfileInstances = getCustomerProfileInstances();
             
-    $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);
+    $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);*/
+    
+    $user_id = get_current_user_id();
+    
+    $profileInstances = _getTesterAndHarnessProfileInstances($case_id, $user_id);
     
     $html .= '<h5>Tester Profiles</h5>';
     $html .= '<div class="field-row">';
@@ -437,7 +446,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
-    foreach($harnessProfiles as $instance){
+    foreach($profileInstances as $instance){
         $html .= _getProfileRow($instance, 'tester_profile', $defaults);
     }
     
@@ -467,6 +476,22 @@ function _getProfileRow($instance, $name, $defaults)
     $html .= '</div>';
     
     return $html;
+}
+
+function _getTesterAndHarnessProfileInstances($case_id, $user_id)
+{
+    global $wpdb;
+    
+    $caseObj = new TestCase($case_id);        
+    $caseObj->loadProfileInstances();
+    
+    $ids = $wpdb->escape($caseObj->profileInstances);        
+    
+    $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.id IN (" . implode(", ", $ids) . ")) OR (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);   
+    
+    $profiles = $wpdb->get_results($query);
+    
+    return $profiles;
 }
 
 function showTriggerMessageBox()
@@ -566,16 +591,19 @@ function showTriggerMessageBox()
             
             //Getting Harness Profiles
             $caseObj = new TestCase($current_case_id);
-            $caseObj->loadProfileInstances();
-            $harnessProfiles = $caseObj->getProfileInstanceRows();
+            /*$caseObj->loadProfileInstances();
+            $harnessProfiles = $caseObj->getProfileInstanceRows();*/
             
             $caseTemplates = $caseObj->loadMessageTemplates();
             
             $current_template = !$lastData ? $caseTemplates[0] : $lastData->template;
             
-            $customerProfileInstances = getCustomerProfileInstances();
+            /*$customerProfileInstances = getCustomerProfileInstances();
             
-            $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);
+            $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);*/
+            
+            $profileInstances = _getTesterAndHarnessProfileInstances($current_case_id, $user_id);
+            
         ?>
         <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">
             <form name="messageForm" id="messageForm" action="">
@@ -635,7 +663,7 @@ function showTriggerMessageBox()
                                 <div class="clear"></div>
                             </div>
                             <?php 
-                                foreach($harnessProfiles as $instance){ 
+                                foreach($profileInstances as $instance){ 
                                     echo _getProfileRow($instance, 'harness_profile', $current_harness_profile_id);
                                 } 
                             ?>
@@ -650,7 +678,7 @@ function showTriggerMessageBox()
                                 <div class="clear"></div>
                             </div>
                             <?php 
-                                foreach($testerProfiles as $instance){ 
+                                foreach($profileInstances as $instance){ 
                                     echo _getProfileRow($instance, 'tester_profile', $current_tester_profile_id);                                
                                 } 
                             ?>
