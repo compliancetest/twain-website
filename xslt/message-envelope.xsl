@@ -8,6 +8,43 @@
                     xmlns:ebms="http://docs.oasis-open.org/ebxml-msg/ebms/v3.0/ns/core/200704/"
                     xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
                     xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                    xmlns:event.02.data="http://sbr.gov.au/comn/event.02.data" 
+                    xmlns:TSFPI.00.00="http://sbr.gov.au/dims/TSFPI.00.00.dims" 
+                    xmlns:SSFPI.00.00="http://sbr.gov.au/dims/SSFPI.00.00.dims" 
+                    xmlns:mr.0001.initiaterollover.req.02.00="http://sbr.gov.au/rprt/super/mr/mr.0001.initiaterollover.request.02.00.report" 
+                    xmlns:xl="http://www.xbrl.org/2003/XLink"                     
+                    xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+                    xmlns:SourceSuperFundABN.02.00="http://sbr.gov.au/dims/SourceSuperFundABN.02.00.dims" 
+                    xmlns:address3.02.01="http://sbr.gov.au/comnmdle/comnmdle.addressdetails3.02.01.module" 
+                    xmlns:wsa="http://www.w3.org/2005/08/addressing" 
+                    xmlns:regexpFunctions="java:net.compliancetest.xslt.extention.RegexpFuntions" 
+                    xmlns:dateFunctions="java:net.compliancetest.xslt.extention.DateFunctions" 
+                    xmlns:emsup.02.08="http://sbr.gov.au/icls/em/emsup/emsup.02.08.data" 
+                    xmlns:SSFAMI.00.00="http://sbr.gov.au/dims/SSFAMI.00.00.dims" 
+                    xmlns:emsup.02.03="http://sbr.gov.au/icls/em/emsup/emsup.02.03.data" 
+                    xmlns:email1.02.00="http://sbr.gov.au/comnmdle/comnmdle.electroniccontactelectronicmail1.02.00.module" 
+                    xmlns:definitionFunctions="java:net.compliancetest.xslt.extention.DefinitionFunctions" 
+                    xmlns:pyde.02.08="http://sbr.gov.au/icls/py/pyde/pyde.02.08.data" 
+                    xmlns:iso="http://purl.oclc.org/dsdl/schematron" 
+                    xmlns:RcvSprFndAbn.02.00="http://sbr.gov.au/dims/RcvSprFndAbn.02.00.dims" 
+                    xmlns:TargetSuperFundABN.02.00="http://sbr.gov.au/dims/TargetSuperFundABN.02.00.dims" 
+                    xmlns:TsfrSprFndAbn.02.00="http://sbr.gov.au/dims/TsfrSprFndAbn.02.00.dims" 
+                    xmlns:prsnstrcnm1.02.00="http://sbr.gov.au/comnmdle/comnmdle.personstructuredname1.02.00.module" 
+                    xmlns:orgname1.02.00="http://sbr.gov.au/comnmdle/comnmdle.organisationname1.02.00.module" 
+                    xmlns:tech="http://sbr.gov.au/fdtn/sbr.01.02.tech" 
+                    xmlns:i="http://www.w3.org/2001/XMLSchema-instance" 
+                    xmlns:phone1.02.00="http://sbr.gov.au/comnmdle/comnmdle.electroniccontacttelephone1.02.00.module" 
+                    xmlns:s="http://www.w3.org/2003/05/soap-envelope" 
+                    xmlns:pyde.02.00="http://sbr.gov.au/icls/py/pyde/pyde.02.00.data"                     
+                    xmlns:pyde.02.01="http://sbr.gov.au/icls/py/pyde/pyde.02.01.data" 
+                    xmlns:numericFunctions="java:net.compliancetest.xslt.extention.NumericFunctions" 
+                    xmlns:RprtPyType.02.03="http://sbr.gov.au/dims/RprtPyType.02.03.dims" 
+                    xmlns:core="http://sbr.gov.au/comn/core.02.data" 
+                    xmlns:pyid.02.00="http://sbr.gov.au/icls/py/pyid/pyid.02.00.data" 
+                    xmlns:sch="http://www.ascc.net/xml/schematron" 
+                    xmlns:pyid.02.05="http://sbr.gov.au/icls/py/pyid/pyid.02.05.data" 
+                    xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+                    xmlns:arelle="http://arelle.org/xbrl/validation/xml"
 
             >
 
@@ -36,28 +73,41 @@
                             <h2>SOAP Headers Information</h2>
 
                             <xsl:call-template name="soapHeaderTable"/>
-
-                            <h2>XBRL Instance</h2>
-                            <p>The tables below list the data elements and values for each XBRL context found in this instance document. The reference reporting taxonomy is:</p>
-                            <!-- add a reference to the reporting taxonomy - as a hyperlink (hence the xsl:attribute href) -->
-                            <p>
-                                <a>
-                                    <xsl:attribute name="href">
+                            
+                            <!-- Start XBRL Part -->
+                            <xsl:if  test="/soap:Envelope/soap:Body/xbrli:xbrl">
+                                <h2>XBRL Instance</h2>
+                                <p>The tables below list the data elements and values for each XBRL context found in this instance document. The reference reporting taxonomy is:</p>
+                                <!-- add a reference to the reporting taxonomy - as a hyperlink (hence the xsl:attribute href) -->
+                                <p>
+                                    <a>
+                                        <xsl:attribute name="href">
+                                            <xsl:value-of select="/soap:Envelope/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
+                                        </xsl:attribute>
                                         <xsl:value-of select="/soap:Envelope/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
-                                    </xsl:attribute>
-                                    <xsl:value-of select="/soap:Envelope/soap:Body/xbrli:xbrl/link:schemaRef/@xlink:href"/>
-                                </a>
-                            </p>
-                            <!-- Now start a loop for each xbrl context -->
-                            <xsl:for-each select="/soap:Envelope/soap:Body/xbrli:xbrl/xbrli:context">
-                                <xsl:sort select="@id"/>
-                                <!-- And call the XSL template to create a table of facts for the context. -->
-                                <xsl:call-template name="factTable">
-                                    <!-- And make sure that you collect and pass the context id as a parameter so the table knows which facts to collect -->
-                                    <xsl:with-param name="context" select="@id"/>
-                                </xsl:call-template>
-                            </xsl:for-each>
-                            <!-- Close out the html stuff and end the master template -->
+                                    </a>
+                                </p>
+                                <!-- Now start a loop for each xbrl context -->
+                                <xsl:for-each select="/soap:Envelope/soap:Body/xbrli:xbrl/xbrli:context">
+                                    <xsl:sort select="@id"/>
+                                    <!-- And call the XSL template to create a table of facts for the context. -->
+                                    <xsl:call-template name="factTable">
+                                        <!-- And make sure that you collect and pass the context id as a parameter so the table knows which facts to collect -->
+                                        <xsl:with-param name="context" select="@id"/>
+                                    </xsl:call-template>
+                                </xsl:for-each>
+                            </xsl:if>
+                            <!-- Close XBRL Part -->
+                            
+                            <!-- Start Event Part -->
+                            <xsl:if  test="/soap:Envelope/soap:Body/event.02.data:Event">
+                                <h2>Event Instance</h2>
+                                <p><b>event.02.data:MaximumSeverity.Code:</b> <xsl:value-of select="/soap:Envelope/soap:Body/event.02.data:Event/event.02.data:MaximumSeverity.Code/text()" /></p>
+                                <xsl:for-each select="/soap:Envelope/soap:Body/event.02.data:Event/event.02.data:EventItems/event.02.data:EventItem">
+                                    <xsl:call-template name="eventItemTemplate" />
+                                </xsl:for-each>
+                            </xsl:if>
+                            <!-- End Event Part -->
                     </td></tr></table>
 <!--                    </div>-->
                 </div>
@@ -332,9 +382,8 @@
         </div>
     </div>
 </xsl:template>
-
-
 <!-- This is the fact table template -->
+
 <xsl:template name="factTable">
     <!-- collect the context id parameter -->
     <xsl:param name="context"/>
@@ -464,4 +513,60 @@
     <p/>
 </xsl:template>
 <!-- And that's it!  All done :-) Close the stylesheet -->
+
+<xsl:template name="eventItemTemplate">
+    <div class="grid-box">
+        <div class="grid-box-header"><h3>Event Item</h3></div>
+        <div class="grid-box-body">
+            <table cellpadding="0" cellspacing="0" class="format-table">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Error.Code)" /></td>
+                        <td><xsl:value-of select="event.02.data:Error.Code/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Severity.Code)" /></td>
+                        <td><xsl:value-of select="event.02.data:Severity.Code/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Short.Description)" /></td>
+                        <td><xsl:value-of select="event.02.data:Short.Description/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Detailed.Description)" /></td>
+                        <td><xsl:value-of select="event.02.data:Detailed.Description/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Parameters)" /></td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="format-table1">
+                                <tr>
+                                    <th>Identifier</th>
+                                    <th>Value</th>
+                                </tr>
+                                <xsl:for-each select="event.02.data:Parameters/event.02.data:Parameter">
+                                    <tr>
+                                        <td><div class="break-all"><xsl:value-of select="event.02.data:Parameter.Identifier/text()" /></div></td>
+                                        <td><xsl:value-of select="event.02.data:Parameter.Text/text()" /></td>
+                                    </tr>
+                                </xsl:for-each>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Locations/event.02.data:Location.Instance.Identifier)" /></td>
+                        <td><xsl:value-of select="event.02.data:Locations/event.02.data:Location.Path.Text/text()" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</xsl:template>
+
 </xsl:stylesheet>
