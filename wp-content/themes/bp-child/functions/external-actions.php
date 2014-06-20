@@ -128,7 +128,7 @@ function process_external_actions()
                 }
                 $page++;
             }while(count($subscribers['data']) > 0);
-            
+            print_r($allSubscribers);
             foreach($allSubscribers as $s_email)
             {
                 if(!isset($members_list[$s_email]))   
