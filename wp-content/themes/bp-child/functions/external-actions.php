@@ -22,10 +22,10 @@ function process_external_actions()
         $page = 0;
         
         do{
-            $subscribers = $mailChimpList->members(DEFAULT_MAILCHIMP_LIST_ID);  
+            $subscribers = $mailChimpList->members(DEFAULT_MAILCHIMP_LIST_ID, 'subscribed', array('start' => $page, 'limit' => $limit));  
             foreach($subscribers['data'] as $srow)
             {
-                $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $srow['email'], 'start' => $page, 'limit' => $limit), true);
+                $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $srow['email']), true);
             }
         }while(count($subscribers['data']) > 0);
         
@@ -104,35 +104,49 @@ function process_external_actions()
         */
         //Getting Memebers
         $members = groups_get_group_members($community_id, false, false, false);        
-        var_dump($members);exit;
+        
         if($members){
-            
-            do{
-                $subscribers = $mailChimpList->members($list_id);  
-                var_dump($subscribers);exit;
-                foreach($subscribers['data'] as $srow)
-                {
-                    $isExists = false;
-                    foreach($members['members'] as $member)
-                    {
-                        if($member->user_email == $srow['email'])
-                        {
-                            $isExists = true;
-                            break;
-                        }
-                    }
-                    if(!$isExists)
-                        $mailChimpList->unsubscribe($list_id, array('email' => $srow['email']), true);
-                }
-            }while($subscribers['total'] > count($subscribers['data']));
-            
-            
+            //Getting memeber emails
+            $members_list = array();
             foreach($members['members'] as $member)
             {
-                $user = get_userdata($member->user_id);                          
+                $user = get_userdata($member->user_id);
+                $members_list[$user->user_email] = array('first_name' => $user->first_name, 'last_name' => $user->last_name, 'email' => $user->user_email);
+            }
+            
+            $page = 0;
+            $limit = 50;
+            
+            $allSubscribers = array();
+            
+            do{
+                $subscribers = $mailChimpList->members($list_id, 'subscribed', array('start' => $page, 'limit' => $limit));                  
+                
+                foreach($subscribers['data'] as $srow)
+                {
+                    $allSubscribers[] = $srow['email'];                    
+                }
+                $page++;
+            }while(count($subscribers['data']) > 0);
+            
+            foreach($allSubscribers as $s_email)
+            {
+                if(!isset($members_list[$s_email]))   
+                {
+                    //Unsubscribe user
+                    try{
+                        $mailChimpList->unsubscribe($list_id, array('email' => $srow['email']), true);
+                    }catch(Exception $e){
+                        
+                    }
+                }
+            }
+                        
+            foreach($members_list as $member)
+            {
                 try{
-                    echo $user->user_email ."<br />";
-                    $result = $mailChimpList->subscribe($list_id, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name), 'html', false);        
+                    echo $member['email'] ."<br />";
+                    $result = $mailChimpList->subscribe($list_id, array('email' => $member['email']), array('FNAME' => $member['first_name'], 'LNAME' => $member['last_name']), 'html', false);
                 }catch(Exception $e){
                     
                 }
