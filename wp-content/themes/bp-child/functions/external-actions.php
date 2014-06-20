@@ -18,13 +18,16 @@ function process_external_actions()
         $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
         $mailChimpList = new Mailchimp_Lists($mailChimp);
         
+        $limit = 50;        
+        $page = 0;
+        
         do{
             $subscribers = $mailChimpList->members(DEFAULT_MAILCHIMP_LIST_ID);  
             foreach($subscribers['data'] as $srow)
             {
-                $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $srow['email']), true);
+                $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $srow['email'], 'start' => $page, 'limit' => $limit), true);
             }
-        }while($subscribers['total'] > count($subscribers['data']));
+        }while(count($subscribers['data']) > 0);
         
         //Delete Unsubscribed Members
         do{
@@ -33,7 +36,7 @@ function process_external_actions()
             {
                 $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $srow['email']), true);
             }
-        }while($subscribers['total'] > count($subscribers['data']));
+        }while(count($subscribers['data']) > 0);
         
         echo "<b>Users</b><br />";
         
@@ -101,7 +104,7 @@ function process_external_actions()
         */
         //Getting Memebers
         $members = groups_get_group_members($community_id, false, false, false);        
-        var_dump($members);
+        var_dump($members);exit;
         if($members){
             
             do{
