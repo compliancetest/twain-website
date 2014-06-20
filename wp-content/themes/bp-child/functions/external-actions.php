@@ -90,6 +90,7 @@ function process_external_actions()
         echo "<b>Members</b><br />";
         
         //Delete Unsubscribed Members
+        /*echo "Removing Unsubscribed Members";
         do{
             $subscribers = $mailChimpList->members($list_id, 'unsubscribed');  
             foreach($subscribers['data'] as $srow)
@@ -97,7 +98,7 @@ function process_external_actions()
                 $mailChimpList->unsubscribe($list_id, array('email' => $srow['email']), true);
             }
         }while($subscribers['total'] > count($subscribers['data']));
-        
+        */
         //Getting Memebers
         $members = groups_get_group_members($community_id, false, false, false);        
         
