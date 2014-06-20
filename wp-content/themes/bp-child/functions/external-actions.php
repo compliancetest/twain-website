@@ -101,12 +101,12 @@ function process_external_actions()
         */
         //Getting Memebers
         $members = groups_get_group_members($community_id, false, false, false);        
-        
+        var_dump($members);
         if($members){
             
             do{
                 $subscribers = $mailChimpList->members($list_id);  
-                
+                var_dump($subscribers);exit;
                 foreach($subscribers['data'] as $srow)
                 {
                     $isExists = false;
