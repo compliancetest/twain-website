@@ -8,6 +8,10 @@ function process_external_actions()
 {
     global $wpdb;
     
+    if(!is_admin() && !is_super_admin())
+    {
+        return;
+    }
     $action = isset($_GET['ext-action']) ? $_GET['ext-action'] : null;
     if($action == 'add-users-to-mailchimp') //Add Users to All Subscribe List
     {
@@ -101,6 +105,7 @@ function process_external_actions()
             
             do{
                 $subscribers = $mailChimpList->members($list_id);  
+                
                 foreach($subscribers['data'] as $srow)
                 {
                     $isExists = false;
