@@ -128,14 +128,15 @@ function process_external_actions()
                 }
                 $page++;
             }while(count($subscribers['data']) > 0);
-            print_r($allSubscribers);
+            
             foreach($allSubscribers as $s_email)
             {
                 if(!isset($members_list[$s_email]))   
                 {
                     //Unsubscribe user
                     try{
-                        $mailChimpList->unsubscribe($list_id, array('email' => $srow['email']), true);
+                        
+                        $mailChimpList->unsubscribe($list_id, array('email' => $s_email), true);
                     }catch(Exception $e){
                         
                     }
