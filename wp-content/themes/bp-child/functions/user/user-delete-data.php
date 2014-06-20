@@ -54,6 +54,13 @@ function ct_delete_user_data($user_id)
     //Delete User Extra Fields
     $wpdb->delete($wpdb->prefix . "users_extra", array("userID" => $user_id));
     
+    //Unsubscribe the user from the mailchimp list
+    $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
+    $mailChimpList = new Mailchimp_Lists($mailChimp);
+    
+    $userData = get_userdata($user_id);
+    $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $userData->user_email), true);
+        
     return $user_id;
 }
 
