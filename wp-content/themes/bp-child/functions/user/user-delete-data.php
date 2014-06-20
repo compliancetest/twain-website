@@ -62,7 +62,7 @@ function ct_delete_user_data($user_id)
     try{
         $mailChimpList->unsubscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $userData->user_email), true);                    
     }catch(Exception $e){
-        print_r($e);
+        return $user_id;
     }    
         
     return $user_id;
