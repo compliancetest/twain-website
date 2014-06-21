@@ -482,7 +482,7 @@ function subscribe_user_to_community_list1($user_id, $group_id)
     $mailChimpList = new Mailchimp_Lists($mailChimp);
     $user = get_userdata($user_id);
     try{
-        $result = $mailChimpList->subscribe($list_id, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name), 'html', false);        
+        $result = $mailChimpList->subscribe($list_id, array('email' => $user->user_email), array('FNAME' => $user->first_name, 'LNAME' => $user->last_name), 'html', false);
     }catch(Exception $e){
         
     }
