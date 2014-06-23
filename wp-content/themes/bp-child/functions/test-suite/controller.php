@@ -403,9 +403,9 @@ function saveSuite()
             continue;
         if(!$_POST['scenario_id'][$idx])                
         {
-            $wpdb->insert($wpdb->prefix . "test_suites_scenarios", array('suite_id' =>  $id, 'code' => $_POST['scenario_code'][$idx], 'description' => $_POST['scenario_desc'][$idx], 'sequence' => $_POST['scenario_sequence'][$idx]));
+            $wpdb->insert($wpdb->prefix . "test_suites_scenarios", array('suite_id' =>  $id, 'code' => $_POST['scenario_code'][$idx], 'description' => stripslashes_deep($_POST['scenario_desc'][$idx]), 'sequence' => $_POST['scenario_sequence'][$idx]));
         }else{
-            $wpdb->update($wpdb->prefix . "test_suites_scenarios", array('suite_id' =>  $id, 'code' => $_POST['scenario_code'][$idx], 'description' => $_POST['scenario_desc'][$idx], 'sequence' => $_POST['scenario_sequence'][$idx]), array('id' => $_POST['scenario_id'][$idx]));
+            $wpdb->update($wpdb->prefix . "test_suites_scenarios", array('suite_id' =>  $id, 'code' => $_POST['scenario_code'][$idx], 'description' => stripslashes_deep($_POST['scenario_desc'][$idx]), 'sequence' => $_POST['scenario_sequence'][$idx]), array('id' => $_POST['scenario_id'][$idx]));
         }
     }
     
