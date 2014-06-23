@@ -400,6 +400,62 @@ function deleteProfileTypeInstance($action)
     exit;
 }
 
+function copyProfileTypeInstance($action)
+{
+    global $wpdb;
+    
+    $id = $_REQUEST['id'];
+    
+    $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $id);
+    $row = $wpdb->get_row($query, ARRAY_A);
+    
+    if(!$row)
+    {
+        addMessage('Invalid Request!', 'error');
+        return;
+    }
+    
+    $redirect = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : cp_get_group_permalink_by_id($row['community_id']) . "testdata";
+    
+    if( (wp_verify_nonce($action, 'copy-harness-instance') && !groups_is_user_admin($user_id, $row['community_id'])) || (wp_verify_nonce($action, 'copy-profile-instance') && $row['creator_id'] != $user_id ) )
+    {
+        addMessage('Permission Denied!', 'error');        
+        wp_redirect($redirect);
+        exit;
+    }
+  
+    // Copy harness profile instance (James)
+    
+    $content = json_decode(base64_decode($row['content']));
+    $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $row['community_id']);
+    $row['created_date'] = date('Y-m-d F:i:s');
+    unset($row['id']);
+    
+    $content->Profile->Title .= '(copy)';
+    $row['profile_name'] .= '(copy)';
+    $row['content'] = base64_encode(json_encode($content));
+    
+    $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
+    $new_profile_id = $wpdb->insert_id;
+    
+    $profile_meta = getProfileMetaData($content);
+    foreach ($profile_meta as $meta_key => $meta_value) {
+        $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
+            'profile_id' => $new_profile_id,
+            'meta_key' => $meta_key,
+            'meta_value' => $meta_value,
+        ));
+    }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    
+    addMessage('Profile instance was copied.');
+    wp_redirect($redirect);
+    exit;
+}
+
 function downloadProfileTypeInstance()
 {
     global $wpdb;
