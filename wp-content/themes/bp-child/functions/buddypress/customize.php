@@ -500,7 +500,7 @@ function unsubscribe_user_to_community_list($group_id, $user_id)
     $mailChimpList = new Mailchimp_Lists($mailChimp);
     $user = get_userdata($user_id);
     try{
-        $result = $mailChimpList->unsubscribe($list_id, array('email' => $user->user_email), true);    
+        $result = $mailChimpList->unsubscribe($list_id, array('email' => $user->user_email), true);
     }catch(Exception $e){
         
     }

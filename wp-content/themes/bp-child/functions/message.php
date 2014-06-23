@@ -309,7 +309,8 @@ function getCaseTemplatesAndProfiles()
     echo '<results>';
     if($suite_id)
     {
-        if(get_post_meta($case_id, 'test_suite', true) == $suite_id)
+        $cases = get_post_meta($case_id, 'test_suite');
+        if(is_array($cases) && in_array($suite_id, $cases))
         {
             //Getting Case Message Templates
             $caseObj = new TestCase($case_id);
