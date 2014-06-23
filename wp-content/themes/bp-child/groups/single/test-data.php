@@ -94,7 +94,8 @@ $testsuites = get_posts( $args );
                         {
                     ?>
                     <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn blue-edit-btn"><span class="p"></span></a>
-                    <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('delete-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn delete-btn left10 delete-profile-btn"><span class="p"></span></a>
+                    <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('delete-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn delete-btn left5 delete-profile-btn"><span class="p"></span></a>
+                    <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('copy-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn blue-btn copy-btn left5"><span class="p"></span></a>
                     <?php
                         }
                     ?>
