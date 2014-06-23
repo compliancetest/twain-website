@@ -853,7 +853,10 @@ function uploadMessage()
         //Getting Subscription Ino
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
         $subscription = $wpdb->get_row($query);
-        if(!$subscription || get_post_meta($case_id, 'test_suite', true) != $suite_id) //Test Suite And Case Validation
+        
+        $cases = get_post_meta($case_id, 'test_suite');
+        
+        if(!$subscription || !in_array($suite_id, $cases)) //Test Suite And Case Validation
         {
             addMessage('Invalid Request', 'error');
             wp_redirect('/my-transaction-log');
