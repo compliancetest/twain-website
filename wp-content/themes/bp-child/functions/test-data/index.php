@@ -33,6 +33,8 @@ function cp_process_test_data_actions()
             viewProfileInstance();
         }else if(wp_verify_nonce($action, 'delete-harness-instance') || wp_verify_nonce($action, 'delete-profile-instance')){
             deleteProfileTypeInstance($action);
+        }else if(wp_verify_nonce($action, 'copy-harness-instance')){
+            copyProfileTypeInstance($action);
         }else if(wp_verify_nonce($action, 'download-profile-type')){
             downloadProfileType();
         }else if(wp_verify_nonce($action, 'download-profile-instance')){
