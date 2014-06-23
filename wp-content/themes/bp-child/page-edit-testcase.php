@@ -104,15 +104,15 @@ get_header();
                        <div class="grid-cell status-cell">
                            <label for="ts_identifier">Status: </label>
                            <input type="radio" name="test_case_status" id="ts_status_draft" value="Draft" <?php echo $case->status == 'Draft' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_draft">D</span> Draft</span>
+                           <span class="label"><span class="status_btn status_circle status_draft">D</span> Draft</span>
                            <input type="radio" name="test_case_status" id="ts_status_build" value="Build" <?php echo $case->status == 'Build' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_build">B</span> Build</span>
+                           <span class="label"><span class="status_btn status_circle status_build">B</span> Build</span>
                            <input type="radio" name="test_case_status" id="ts_status_active"  value="Active" <?php echo $case->status == 'Active' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_active">A</span> Active</span><br />
+                           <span class="label"><span class="status_btn status_circle status_active">A</span> Active</span><br />
                            <input type="radio" name="test_case_status" id="ts_status_deprecated" value="Deprecated" <?php echo $case->status == 'Deprecated' ? 'checked="checked"' : ''?> />
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_deprecated">C</span> Deprecated</span>
+                           <span class="label"><span class="status_btn status_circle status_deprecated">C</span> Deprecated</span>
                            <input type="radio" name="test_case_status" id="ts_status_obsolete" value="Obsolete" <?php echo $case->status == 'Obsolete' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_obsolete">O</span> Obsolete</span>                           
+                           <span class="label"><span class="status_btn status_circle status_obsolete">O</span> Obsolete</span>                           
                        </div>      
                        <div class="grid-cell version-cell">
                            <label for="version">Version: </label>
