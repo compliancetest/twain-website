@@ -413,6 +413,10 @@ function ct_duplicate_data()
                                     $wpdb->query("DELETE FROM {$wpdb->prefix}community_profile_instances WHERE community_id=" . $new_community_id);
                                     $wpdb->query("DELETE FROM {$wpdb->prefix}community_profile_types WHERE community_id=" . $new_community_id);
                                     
+                                    //ID Map Cache
+                                    $profile_type_ids = array();
+                                    $profile_instance_ids = array();
+                                    
                                     //Getting Profile Types
                                     $query = "SELECT * FROM {$wpdb->prefix}community_profile_types WHERE community_id=" . $community['id'];
                                     $pTypes = $new_wpdb->get_results($query, ARRAY_A);
@@ -423,6 +427,9 @@ function ct_duplicate_data()
                                         $data['community_id'] = $new_community_id;
                                         $wpdb->insert($wpdb->prefix . 'community_profile_types', $data);
                                         $nTypeId = $wpdb->insert_id;
+                                        
+                                        $profile_type_ids[$pType['id']] = $nTypeId;
+                                        
                                         //Copy Profile Instances
                                         $query = "SELECT * FROM {$wpdb->prefix}community_profile_instances WHERE type_id=" . $pType['id'];
                                         $pInstances = $new_wpdb->get_results($query, ARRAY_A);    
@@ -430,9 +437,11 @@ function ct_duplicate_data()
                                         {
                                             $pIns['community_id'] = $new_community_id;
                                             $pIns['type_id'] = $nTypeId;
+                                            $oPInsId = $pIns['id'];
                                             $pIns['id'] = null;
                                             unset($pIns['id']);
                                             $wpdb->insert($wpdb->prefix . 'community_profile_instances', $pIns);
+                                            $profile_instance_ids[$oPInsId] = $wpdb->insert_id;
                                         }
                                     }
                                     
@@ -448,7 +457,7 @@ function ct_duplicate_data()
                                         $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', $drow);
                                     }
                                     
-                                    echo '<b>Community: ' . $community['name'] . ' has been copied.</b>';
+                                    echo '<b>Community: ' . $community['name'] . ' has been copied.</b><br />';
                                     
                                     //Copy Suites
                                     $query = "SELECT DISTINCT(post_id) FROM {$wpdb->postmeta} WHERE meta_key='community_id' AND meta_value=" . $community['id'];
@@ -479,6 +488,13 @@ function ct_duplicate_data()
                                             $newScenarioId = $wpdb->insert_id;
                                             $scenariosMap[$scenario->id] = $newScenarioId;
                                         }
+                                        
+                                    }
+                                    
+                                    //Update Profile Types
+                                    foreach($profile_type_ids as $oid => $nid)
+                                    {
+                                        $wpdb->query("UPDATE {$wpdb->postmeta} SET `meta_value`=REPLACE(`meta_value`, ';;{$oid};;', ';;{$nid};;') WHERE `meta_key`='ts_profile_types'");
                                     }
                                     
                                     //Copy Test Cases that are associated to the test suites
@@ -491,6 +507,12 @@ function ct_duplicate_data()
                                     foreach($rows as $row)
                                     {
                                         ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap);
+                                    }
+                                    
+                                    //Update Profile Types
+                                    foreach($profile_instance_ids as $oid => $nid)
+                                    {
+                                        $wpdb->query("UPDATE {$wpdb->postmeta} SET `meta_value`=REPLACE(`meta_value`, ';;{$oid};;', ';;{$nid};;') WHERE `meta_key`='profile_instances'");
                                     }
                                     
                                 }
