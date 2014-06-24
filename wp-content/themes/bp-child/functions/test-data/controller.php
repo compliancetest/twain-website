@@ -503,11 +503,11 @@ function downloadProfileType()
 {
     global $wpdb;
     
-    $id = $_REQUEST['id'];
+    $type_id = $_REQUEST['type_id'];
     
     $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d", $id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d", $type_id);
 
     $row = $wpdb->get_row($query);
     
