@@ -405,7 +405,7 @@ function getUserSubscribedCases($user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
         
-    $query = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p ";
+    $select = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p ";
     
     $where = " WHERE p.post_type='test-case' AND p.post_status='publish' ";
     if(!is_super_admin() && !is_admin())
@@ -428,7 +428,7 @@ function getUserSubscribedCases($user_id = null)
         
     }
     
-    $query .= " ORDER BY post_title";
+    $query = $select . $left_join . $where . " ORDER BY post_title";
     
     $rows = $wpdb->get_results($query);
     
