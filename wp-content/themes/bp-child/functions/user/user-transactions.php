@@ -405,7 +405,9 @@ function getUserSubscribedCases($user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
         
-    $query = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' WHERE p.post_type='test-case' AND p.post_status='publish'";
+    $query = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p ";
+    
+    $where = " WHERE p.post_type='test-case' AND p.post_status='publish' ";
     if(!is_super_admin() && !is_admin())
     {
         $suite_ids = getUserAllSuiteIDs($user_id);
@@ -413,7 +415,17 @@ function getUserSubscribedCases($user_id = null)
         if(!$suite_ids)
             return array();
         
-        $query .= " AND pm.meta_value IN (" . implode(", ", $suite_ids) . ")";
+        $left_join = " LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' ";            
+        $where .= " AND pm.meta_value IN (" . implode(", ", $suite_ids) . ") ";
+        $left_join = " LEFT JOIN " . $wpdb->postmeta . " AS pm_h ON p.ID=pm_h.post_id AND pm_h.meta_key='hide_case' ";            
+        $where .= " AND pm_h.meta_value=0 ";
+        
+        foreach($suite_ids as $sid)
+        {
+            $left_join = " LEFT JOIN " . $wpdb->postmeta . " AS pm" . $sid . " ON p.ID=pm" . $sid . ".post_id AND pm" . $sid . ".meta_key='conformance_level_" . $sid . "' ";            
+            $where .= " AND pm" . $sid . ".meta_value!='" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE . "' ";    
+        }
+        
     }
     
     $query .= " ORDER BY post_title";

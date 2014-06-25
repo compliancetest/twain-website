@@ -329,6 +329,23 @@ class TestSuite
                                 )
         );
         
+        if(!$this->community_id)
+            $this->community_id = $this->loadSingleValue('community_id');
+        
+        if(!groups_is_user_admin(get_current_user_id(), $this->community_id)){
+            $args['meta_query'][] = array(
+                                        'key' => 'hide_case',
+                                        'value' => 0,
+                                        'compare' => '='
+                                    ); 
+            $args['meta_query'][] = array(
+                                        'key' => 'conformance_level_' . $this->id,
+                                        'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                                        'compare' => '!='
+                                    );  
+              
+        }
+        
         if(!empty($level))
         {
             if(!is_array($level))
