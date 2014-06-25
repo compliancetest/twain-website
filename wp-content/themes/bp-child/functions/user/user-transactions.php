@@ -55,7 +55,7 @@ function cp_edit_transaction_log(){
                    <?php
                        if($row->TEST_CASE_DB_ID)
                        {
-                           $cSuiteIDs = get_post_meta($row->TEST_CASE_DB_ID, 'test_suite');
+                           $cSuiteIDs = ct_get_active_suite_ids_of_case($row->TEST_CASE_DB_ID);
                            if(count($cSuiteIDs) > 1)
                            {
                                ?>

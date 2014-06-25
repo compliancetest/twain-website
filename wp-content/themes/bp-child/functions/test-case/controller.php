@@ -812,3 +812,24 @@ function confirmDeletingCase()
     <?php
     
 }
+
+function ct_get_active_suite_ids_of_case($caseID)
+{
+    global $wpdb;
+    
+    if(is_admin() || is_super_admin())
+    {
+        $query = $wpdb->prepare("SELECT DISTINCT(pm.post_id) FROM {$wpdb->postmeta} AS pm
+              LEFT JOIN {$wpdb->posts} AS p ON p.ID=pm.meta_value
+              WHERE pm.post_id=%d AND pm.meta_key='test_suite' AND p.post_type='test-suite' AND p.post_status='publish'", $caseID);
+    }else{
+        $query = $wpdb->prepare("SELECT DISTINCT(pm.post_id) FROM {$wpdb->postmeta} AS pm
+              LEFT JOIN {$wpdb->posts} AS p ON p.ID=pm.meta_value
+              LEFT JOIN {$wpdb->postmeta} AS pm1 ON pm1.post_id=p.ID AND pm1.meta_key='hide_suite'
+              WHERE pm.post_id=%d AND pm.meta_key='test_suite' AND p.post_type='test-suite' AND p.post_status='publish' AND pm1.meta_value=0", $caseID);    
+    }
+    
+    $ids = $wpdb->get_col($query);
+    
+    return $ids;
+}
