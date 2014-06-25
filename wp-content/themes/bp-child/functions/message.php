@@ -755,7 +755,7 @@ function showUploadMessageBox()
 
             $current_suite_id = $suites[0]->suite_id;                                
             
-            $current_product_id = $products[0]->ID;
+            $current_product_id = null;
             
             //Getting Test Cases
             $suiteObj = new TestSuite($current_suite_id);
