@@ -426,11 +426,11 @@ jQuery(document).ready(function(){
             jQuery('#um-test-case').addClass('select-error');
             isValid = false;
         }
-        if(!jQuery('#um-product').val())
+        /*if(!jQuery('#um-product').val())
         {
             jQuery('#um-product').addClass('select-error');
             isValid = false;
-        }
+        }*/
         if(!isValid)
         {
             showUploadMessageResultMessage('Please complete fields in red.', 'error');
