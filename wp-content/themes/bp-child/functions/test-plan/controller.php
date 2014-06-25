@@ -66,18 +66,8 @@ function certifyPlan()
                 $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
                 $oId = $wpdb->get_var($query);
                 if(!$oId)
-                {
-                    $wpdb->insert($wpdb->prefix . "compliance_claims", array(
-                        'product_id'    =>  $plan->product_id,
-                        'creator_id'    =>  $user_id,
-                        'suite_id'    =>  $plan->suite_id,
-                        'conformance_level'    =>  $level,
-                        'role'    =>  $role,
-                        'status'    =>  'Verified',
-                        'created_date'    =>  date('Y-m-d H:i:s'),
-                        'last_updated'    =>  date('Y-m-d H:i:s'),
-                        'audit'    =>  ''
-                    ));
+                {                    
+                    _createClaim($plan->product_id, $plan->suite_id, $level, $role);
                 }else{
                     $nId = $wpdb->update(TABLE_CLAIM, array(
                         'status'    =>  'Verified',

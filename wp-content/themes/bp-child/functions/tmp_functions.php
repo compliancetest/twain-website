@@ -13,6 +13,20 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        if(isset($_GET['fix_case_suite_link']))
+        {
+            
+            //Delete Old Cases
+            $results = $wpdb->get_results("SELECT COUNT(meta_id) AS c , meta_value, post_id FROM wp_postmeta WHERE meta_key='test_suite' GROUP BY post_id, meta_value HAVING c > 1");
+            foreach($results as $r)
+            {
+                $wpdb->query("DELETE FROM wp_postmeta WHERE meta_value='" . $r->meta_value . "' AND post_id='" . $r->post_id . "' LIMIT 1 ");
+            }
+            
+            die("Done!");                        
+        }
+        
+        
         if(isset($_GET['fix_profile_instances']))
         {
             

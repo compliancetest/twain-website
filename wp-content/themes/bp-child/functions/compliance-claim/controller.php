@@ -80,6 +80,19 @@ function makeClaim()
     
     $productID = $_POST['product_id'];
     $claimID = isset($_POST['id']) ? $_POST['id'] : null;
+    $suiteId = $_POST['suite_id'];
+    $confLevel = $_POST['level'];
+    $role = $_POST['role'];
+    
+    _createClaim($productID, $suiteId, $confLevel, $role, $claimID);
+    
+    wp_redirect('/my-products');
+    exit;    
+}
+
+function _createClaim($productID, $suite_id, $confLevel, $role, $claimID = null)
+{
+    global $wpdb;
     
     $isNew = !$claimID ? true : false;
     
@@ -97,8 +110,7 @@ function makeClaim()
     if(!$is_allowed)
     {
         addMessage('Permission Denied!', 'error');
-        wp_redirect('/my-products');
-        exit;
+        return false;
     }
     
     if(!$claimID) //Make Claim
@@ -106,9 +118,9 @@ function makeClaim()
         $nId = $wpdb->insert(TABLE_CLAIM, array(
             'product_id'    =>  $productID,
             'creator_id'    =>  $user_id,
-            'suite_id'    =>  $_POST['suite_id'],
-            'conformance_level'    =>  $_POST['level'],
-            'role'    =>  $_POST['role'],
+            'suite_id'    =>  $suite_id,
+            'conformance_level'    =>  $confLevel,
+            'role'    =>  $role,
             'status'    =>  'Self Assessed',
             'created_date'    =>  date('Y-m-d H:i:s'),
             'last_updated'    =>  date('Y-m-d H:i:s'),
@@ -126,17 +138,16 @@ function makeClaim()
         
     }else{  //Edit Claim
         $nId = $wpdb->update(TABLE_CLAIM, array(
-            'suite_id'    =>  $_POST['suite_id'],
-            'conformance_level'    =>  $_POST['level'],
-            'role'    =>  $_POST['role'],
+            'suite_id'    =>  $suite_id,
+            'conformance_level'    =>  $confLevel,
+            'role'    =>  $role,
             'last_updated'    =>  date('Y-m-d H:i:s')
         ), array('id' => $claim->id));
     }
     if(!$nId)
     {
         addMessage($wpdb->last_error, 'error');
-        wp_redirect('/my-products');
-        exit;
+        return false;
     }
     
     //Update DPF
@@ -173,8 +184,7 @@ function makeClaim()
     }
     
     addMessage('Compliance Claim was saved successfully!');
-    wp_redirect('/my-products');
-    exit;
+    return true;
 }
 
 function createClaimPDF($claim_id)
