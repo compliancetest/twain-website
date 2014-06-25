@@ -607,7 +607,7 @@ if($filterCustomer){
  </script>       
 </div> <!--end content-->
 
-<div class="popup-box" id="edit-transaction-log-box" style="display: none; width: 900px">
+<div class="popup-box" id="edit-transaction-log-box" style="display: none; width: 1000px">
 <form name="editLogForm" id="editLogForm" action="">
     <div class="popup-box-header radius6 noradiusbottom">Edit Transaction Log</div>
     <div class="popup-box-content"> 

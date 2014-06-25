@@ -5101,7 +5101,7 @@ min-height: 70px;
     padding-bottom: 5px;
 }
 #edit-transaction-log-box .td-product{
-    width: 200px;
+    width: 160px;
 }
 #edit-transaction-log-box .td-product input{
     position: relative;
@@ -5109,10 +5109,10 @@ min-height: 70px;
     margin-right: 5px;
 }
 #edit-transaction-log-box .td-case{
-    width: 120px;
+    width: 190px;
 }
 #edit-transaction-log-box .td-suite{
-    width: 120px;
+    width: 190px;
     word-wrap: break-word;
 }
 #edit-transaction-log-box .td-outcome{
