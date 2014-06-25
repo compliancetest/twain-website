@@ -431,7 +431,7 @@ function getUserSubscribedCases($user_id = null)
     $query = $select . $left_join . $where . " ORDER BY post_title";
     
     $rows = $wpdb->get_results($query);
-    
+    echo $query;
     return $rows;
 }
 
