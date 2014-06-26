@@ -430,11 +430,12 @@ function copyProfileTypeInstance($action)
     
     $content = json_decode(base64_decode($row['content']));
     $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $row['community_id']);
+    $row['type'] = 'tester';
     $row['created_date'] = date('Y-m-d F:i:s');
     unset($row['id']);
     
-    $content->Profile->Title .= '(copy)';
-    $row['profile_name'] .= '(copy)';
+    //$content->Profile->Title .= '(copy)';
+    //$row['profile_name'] .= '(copy)';
     $row['content'] = base64_encode(json_encode($content));
     
     $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
