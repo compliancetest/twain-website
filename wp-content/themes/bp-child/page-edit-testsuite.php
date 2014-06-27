@@ -128,15 +128,15 @@ if(!$suite->community_id)
                        <div class="grid-cell status-cell">
                            <label>Status: </label>
                            <input type="radio" name="ts_status" id="ts_status_draft" value="Draft" <?php echo $suite->status == 'Draft' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_draft">D</span> Draft</span>
+                           <span class="label"><span class="status_btn status_circle status_draft">D</span> Draft</span>
                            <input type="radio" name="ts_status" id="ts_status_active" value="Active" <?php echo $suite->status == 'Active' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_active">A</span> Active</span>
+                           <span class="label"><span class="status_btn status_circle status_active">A</span> Active</span>
                            <input type="radio" name="ts_status" id="ts_status_deprecated" value="Deprecated" <?php echo $suite->status == 'Deprecated' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_deprecated">C</span> Deprecated</span><br />
+                           <span class="label"><span class="status_btn status_circle status_deprecated">C</span> Deprecated</span><br />
                            <input type="radio" name="ts_status" id="ts_status_obsolete" value="Obsolete" <?php echo $suite->status == 'Obsolete' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_obsolete">O</span> Obsolete</span>
+                           <span class="label"><span class="status_btn status_circle status_obsolete">O</span> Obsolete</span>
                            <input type="radio" name="ts_status" id="ts_status_partial" value="Partial" <?php echo $suite->status == 'Partial' ? 'checked="checked"' : ''?> /> 
-                           <span class="label"><span class="status_btn status_circle has-tooltip status_partial">P</span> Partial</span>
+                           <span class="label"><span class="status_btn status_circle status_partial">P</span> Partial</span>
                        </div>
                        <div class="grid-cell version-cell">
                            <label for="ts_name">Version: </label>
