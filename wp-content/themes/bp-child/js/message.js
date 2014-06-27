@@ -380,7 +380,7 @@ jQuery(document).ready(function(){
         jQuery('#upload-message-box .popup-box-content .message').fadeOut('fast');
         jQuery.ajax({
             url: '/',
-            data: {'ct-message-action': 'get-test-cases', 'suite_id': suite_id, 'only-cases': 1},
+            data: {'ct-message-action': 'get-test-cases', 'suite_id': suite_id, 'only-cases': 1, 'case-type' :'tester'},
             type: 'post',
             dataType: 'xml',
             complete: function(){

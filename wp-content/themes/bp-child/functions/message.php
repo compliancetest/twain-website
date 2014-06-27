@@ -360,7 +360,10 @@ function getTestCases()
     {
         echo '<cases>';
         $suiteObj = new TestSuite($subscription->suite_id);
-        $cases = $suiteObj->loadHarnessInitiatedTestCases();
+        if(isset($_POST['case-type']) && $_POST['case-type'] == 'tester')
+            $cases = $suiteObj->loadTesterInitiatedTestCases();            
+        else
+            $cases = $suiteObj->loadHarnessInitiatedTestCases();
         foreach($cases as $case)
         {
             echo '<case id="' . $case->ID . '">' . get_post_meta($case->ID, 'test_case_id', true) . '</case>'; 
@@ -759,7 +762,7 @@ function showUploadMessageBox()
             
             //Getting Test Cases
             $suiteObj = new TestSuite($current_suite_id);
-            $cases = $suiteObj->loadHarnessInitiatedTestCases();
+            $cases = $suiteObj->loadTesterInitiatedTestCases();
             $current_case_id = $cases[0]->ID;
             
         ?>

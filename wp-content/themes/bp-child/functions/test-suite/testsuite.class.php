@@ -410,6 +410,50 @@ class TestSuite
         return $this->testCases;
     }
     
+    public function loadTesterInitiatedTestCases()
+    {        
+        $args = array(
+                'post_type' => 'test-case',         
+                'posts_per_page' => -1,
+                'orderby'  => 'title',
+                'order'     => 'ASC',                
+                'meta_query' => array(
+                                    'relation' => 'AND',
+                                    array('key' => 'test_suite', 
+                                          'value' => $this->id, 
+                                          'compare' => '=')
+                                )
+        );
+        
+        
+        $args['meta_query'][] = array('key' => 'test_case_status', 'value' => 'Active', 'compare' => '=');
+        $args['meta_query'][] = array('key' => 'choose_initiator', 'value' => 'tester', 'compare' => '=');
+        
+        
+        if(!$this->community_id)
+            $this->community_id = $this->loadSingleValue('community_id');
+        
+        if(!groups_is_user_admin(get_current_user_id(), $this->community_id)){
+            $args['meta_query'][] = array(
+                                        'key' => 'hide_case',
+                                        'value' => 0,
+                                        'compare' => '='
+                                    ); 
+            $args['meta_query'][] = array(
+                                        'key' => 'conformance_level_' . $this->id,
+                                        'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                                        'compare' => '!='
+                                    );  
+              
+        }
+        
+        $case_query = new WP_Query($args);
+        $this->testCases = $case_query->get_posts();
+        
+        
+        return $this->testCases;
+    }
+    
     public function loadConformanceLevel()
     {
         $lvl_code = cp_get_post_meta($this->id, 'lvl_code', true);
