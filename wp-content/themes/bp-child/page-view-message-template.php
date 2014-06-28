@@ -94,13 +94,13 @@ $action = 'template/render'; // . ($mode == 'html' ? '/HTML' : '');
 
 $result = $CPRest->doRepositoryAPI($action, $data);
 
-$resultDoc = new DOMDocument();
-if ($result && $resultDoc->loadHTML($result) && $mode == 'html') {
+//$resultDoc = new DOMDocument();
+if ($result && $mode == 'html') {
     header("Content-type: application/xml");
     $xslt = get_site_url() . '/xslt/message-template-render.xsl';
     echo "<?xml version='1.0' encoding='utf-8'?>";
     echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
-} elseif ($result && $resultDoc->loadXML($result) && $mode == 'xml') {
+} elseif ($result && $mode == 'xml') {
     header("Content-type: application/xml");
 }
 
