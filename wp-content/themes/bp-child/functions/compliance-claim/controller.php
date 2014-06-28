@@ -532,7 +532,7 @@ function createClaimPDF($claim_id)
         $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
         
         if(isset($testCases[0]->MSG_ID))
-            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">/message-envelope?id=' . $testCases[0]->MSG_ID . '</a></td>';
+            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a></td>';
         else
             $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
         
