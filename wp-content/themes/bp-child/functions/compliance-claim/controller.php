@@ -86,7 +86,10 @@ function makeClaim()
     $confLevel = $_POST['level'];
     $role = $_POST['role'];
     
-    _createClaim($productID, $suiteId, $confLevel, $role, 'Self Assessed', $claimID);
+    if(_createClaim($productID, $suiteId, $confLevel, $role, 'Self Assessed', $claimID))
+    {
+        addMessage('Compliance Claim was saved successfully!');
+    }
     
     wp_redirect('/my-products');
     exit;    
@@ -186,7 +189,7 @@ function _createClaim($productID, $suite_id, $confLevel, $role, $status, $claimI
         cp_send_email_to_community_admin(get_post_meta($claim->suite_id, 'community_id', true), 'claim_created_admin', $emailData);        
     }
     
-    addMessage('Compliance Claim was saved successfully!');
+    
     return true;
 }
 
