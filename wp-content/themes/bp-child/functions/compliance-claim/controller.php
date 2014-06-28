@@ -86,7 +86,7 @@ function makeClaim()
     $confLevel = $_POST['level'];
     $role = $_POST['role'];
     
-    if(_createClaim($productID, $suiteId, $confLevel, $role, 'Self Assessed', $claimID))
+    if(_saveClaim($productID, $suiteId, $confLevel, $role, 'Self Assessed', $claimID))
     {
         addMessage('Compliance Claim was saved successfully!');
     }
@@ -95,7 +95,7 @@ function makeClaim()
     exit;    
 }
 
-function _createClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null)
+function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null)
 {
     global $wpdb;
     
@@ -137,7 +137,7 @@ function _createClaim($productID, $suite_id, $confLevel, $role, $status, $claimI
         $claimID = $wpdb->insert_id;
         
         $wpdb->update(TABLE_CLAIM, array(
-            'claim_id'    =>  getClaimID($wpdb->insert_id, $_POST['suite_id'])                
+            'claim_id'    =>  getClaimID($wpdb->insert_id, $suite_id)                
         ), array('id' => $claimID));
         
         
