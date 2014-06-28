@@ -15,6 +15,8 @@ function ct_claim_certification_view()
         
         //Display Claim
         $token = get_query_var('claim');
+        //Remove .pdf from the token
+        $token = str_replace(".pdf", "", $token);
         $query = $wpdb->prepare("SELECT certificate FROM {$wpdb->prefix}compliance_claims WHERE token=%s", $token);
         $certificate = $wpdb->get_var($query);
         
@@ -84,13 +86,13 @@ function makeClaim()
     $confLevel = $_POST['level'];
     $role = $_POST['role'];
     
-    _createClaim($productID, $suiteId, $confLevel, $role, $claimID);
+    _createClaim($productID, $suiteId, $confLevel, $role, 'Self Assessed', $claimID);
     
     wp_redirect('/my-products');
     exit;    
 }
 
-function _createClaim($productID, $suite_id, $confLevel, $role, $claimID = null)
+function _createClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null)
 {
     global $wpdb;
     
@@ -121,7 +123,7 @@ function _createClaim($productID, $suite_id, $confLevel, $role, $claimID = null)
             'suite_id'    =>  $suite_id,
             'conformance_level'    =>  $confLevel,
             'role'    =>  $role,
-            'status'    =>  'Self Assessed',
+            'status'    =>  $status,
             'created_date'    =>  date('Y-m-d H:i:s'),
             'last_updated'    =>  date('Y-m-d H:i:s'),
             'token' => createClaimToken(),
@@ -141,6 +143,7 @@ function _createClaim($productID, $suite_id, $confLevel, $role, $claimID = null)
             'suite_id'    =>  $suite_id,
             'conformance_level'    =>  $confLevel,
             'role'    =>  $role,
+            'status'    =>  $status,
             'last_updated'    =>  date('Y-m-d H:i:s')
         ), array('id' => $claim->id));
     }
@@ -277,7 +280,7 @@ function createClaimPDF($claim_id)
 <table cellspacing="5" cellpadding="5" class="certificate-info" width="100%">
     <tr>
         <th>Issued To</th>
-        <td>' . $claim->issuer . '</td>
+        <td>' . get_post_meta($claim->product_id, 'product_owner', true) . '</td>
     </tr>
     <tr>
         <th>Product or Service</th>
@@ -297,7 +300,7 @@ function createClaimPDF($claim_id)
     </tr>
     <tr>
         <th>Specification Issuer</th>
-        <td>' . get_post_meta($claim->product_id, 'product_owner', true) . '</td>
+        <td>' . $claim->issuer . '</td>
     </tr>
     <tr>
         <th>Conformance Level(s)</th>
@@ -355,9 +358,9 @@ function createClaimPDF($claim_id)
     $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
 
     // QRCODE,H : QR-CODE Best error correction
-    $pdf->write2DBarcode( get_site_url() . '/claims/' . $claim->token, 'QRCODE,H', '', '', 40, 40, $style, 'N');
+    $pdf->write2DBarcode( get_site_url() . '/claims/' . $claim->token . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
-    $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/claims/' . $claim->token . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/claims/' . $claim->token . '</a></div>';
+    $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/claims/' . $claim->token . ".pdf" . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/claims/' . $claim->token . '.pdf</a></div>';
 
     $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
     // ---------------------------------------------------------

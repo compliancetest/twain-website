@@ -467,7 +467,7 @@ if($filterCustomer){
                                 jQuery('#edit-transaction-log-box .table-box .tbody .td-case select').change(function(){
                                     var sids = jQuery(this).find('option:selected').attr('data-suites').split(",");
                                     var tdSuite = jQuery(this).parent().parent().find('.td-suite');
-                                    if(sids.length > 1)
+                                    if(sids.length >= 1)
                                     {
                                         tdSuite.removeClass('td-fixed');
                                         tdSuite.html('<select name="suite' + tdSuite.attr('data-id') + '" class="select"></select>');
@@ -477,14 +477,14 @@ if($filterCustomer){
                                                 tdSuite.find('select').append(jQuery(this).clone());
                                             }
                                         })
-                                    }else if(sids.length == 1){
+                                    /*}else if(sids.length == 1){
                                         tdSuite.addClass('td-fixed');
                                         jQuery('#edit-transaction-log-box #all-suites option').each(function(){
                                             if(jQuery(this).val() == sids[0])
                                             {
                                                 tdSuite.html('<a href="' + jQuery(this).attr('data-permalink') + '">' + jQuery(this).text() + '</a>')
                                             }
-                                        })
+                                        })*/
                                     }else{
                                         tdSuite.addClass('td-fixed');
                                         tdSuite.html('');

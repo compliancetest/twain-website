@@ -56,21 +56,20 @@ function cp_edit_transaction_log(){
                        if($row->TEST_CASE_DB_ID)
                        {
                            $cSuiteIDs = ct_get_active_suite_ids_of_case($row->TEST_CASE_DB_ID);
-                           if(count($cSuiteIDs) > 1)
+                           if($cSuiteIDs)
                            {
-                               ?>
-                               <select name="suite<?php echo $row->ID?>" class="select">
-                               <?php
-                                   foreach($allSuites as $s){
-                                       if(in_array($s->ID, $cSuiteIDs))
-                                           echo '<option value="' . $s->ID . '" ' . ($row->TEST_SUITE_ID == $s->ID ? 'selected="selected"' : '') . '>' . $s->post_title . '</option>';
-                                   }
-                               ?>
-                               </select>
-                               <?php             
-                           }else{
-                               ?><a href="<?php echo get_permalink($row->TEST_SUITE_ID)?>"><?php echo $row->TEST_SUITE_TITLE; ?></a><?php
+                           ?>
+                           <select name="suite<?php echo $row->ID?>" class="select">
+                           <?php
+                               foreach($allSuites as $s){
+                                   if(in_array($s->ID, $cSuiteIDs))
+                                       echo '<option value="' . $s->ID . '" ' . ($row->TEST_SUITE_ID == $s->ID ? 'selected="selected"' : '') . '>' . $s->post_title . '</option>';
+                               }
+                           ?>
+                           </select>
+                           <?php             
                            }
+                           
                        }                       
                    ?>
                </div>
