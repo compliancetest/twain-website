@@ -699,7 +699,7 @@ function cp_get_customer_harness_detail()
                 </form>
             </div>
             <div id="harness-generate-profile-container" style="display: none;">
-                    <div class="popup-box-header radius6 noradiusbottom">Generate Profile</div>
+                    <div class="popup-box-header radius6 noradiusbottom">Generate Profiles</div>
                     <div class="popup-box-content grid-box-body">    
                         This action will generate a custom set of data profiles in your test data tab specifically tailored to work with the selected gateway profile.
                     </div>
@@ -874,7 +874,7 @@ function cp_get_customer_harness_detail_profile_data()
     </div>
     <?php endforeach; ?>
     <div id="generate-profile-container">
-        <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profile</span></a>            
+        <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profiles</span></a>            
         <div class="clear"></div>
     </div>
 <?php
