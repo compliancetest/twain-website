@@ -738,7 +738,7 @@ function add_scenario_join_query($join, $object)
 {
     global $wpdb, $post;
     
-    $join .= " INNER JOIN {$wpdb->postmeta} AS scenario_meta ON scenario_meta.post_id={$wpdb->posts}.ID AND scenario_meta.meta_key='scenario_" . $post->ID . "' ";
+    $join .= " INNER JOIN {$wpdb->postmeta} AS scenario_meta ON scenario_meta.post_id={$wpdb->posts}.ID AND scenario_meta.meta_key='scenario_" . $object->post->ID . "' ";
     $join .= " INNER JOIN {$wpdb->prefix}test_suites_scenarios AS scenario ON scenario_meta.meta_value=scenario.id ";
     
     return $join;

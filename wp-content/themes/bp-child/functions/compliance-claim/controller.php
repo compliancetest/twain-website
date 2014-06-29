@@ -458,6 +458,7 @@ function createClaimPDF($claim_id)
     
     
     $get_query = new WP_Query($args);
+    $get_query->post = $post;
     //Add Order by Scenaro 
     $get_query->set('suppress_filters', false);
     add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
@@ -575,6 +576,16 @@ function createClaimPDF($claim_id)
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.
     $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
+    
+    //Save File
+   /* if(!is_dir(ABSPATH . "claims"))
+    {
+        mkdir(ABSPATH . "claims", 0777);
+        $fp = fopen(ABSPATH . "claims/index.html", "w"); fclose($fp);
+    }
+    $fp = fopen(ABSPATH . "claims/" . $claim->token . ".pdf", "w"); 
+    fwrite($fp, $pdfString);
+    fclose($fp);*/
     
     return $pdfString;
     //============================================================+

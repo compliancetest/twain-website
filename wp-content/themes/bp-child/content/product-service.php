@@ -163,7 +163,7 @@
                         </div>
                         <div class="grid_cell nopaddingtop width10P toleft"><?php echo formatDate($claim->last_updated)?></div>    
                         <div class="grid_cell nopaddingtop width6P">
-                            <a href="javascript: void;" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>', '', 'height=600')">View PDF</a>
+                            <a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View PDF</a>
                         </div>
                         <div class="clear"></div>
                     </div>
