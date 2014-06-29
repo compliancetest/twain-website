@@ -465,7 +465,7 @@ function createClaimPDF($claim_id)
     add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
     add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
     $testCases = $get_query->get_posts();
-    echo $get_query->request;
+    echo $get_query->request;exit;
     //Remove Filters
     remove_filter('posts_join_paged', 'add_scenario_join_query');
     remove_filter('posts_orderby', 'add_scenario_orderby_query');
