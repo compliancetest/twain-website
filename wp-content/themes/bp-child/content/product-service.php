@@ -164,6 +164,7 @@
                         <div class="grid_cell nopaddingtop width10P toleft"><?php echo formatDate($claim->last_updated)?></div>    
                         <div class="grid_cell nopaddingtop width6P">
                             <a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View PDF</a>
+                            <a href="<?php echo get_site_url()?>/?download-certificate=1&claim=<?php echo $claim->token?>" target="_blank">Download</a>
                         </div>
                         <div class="clear"></div>
                     </div>

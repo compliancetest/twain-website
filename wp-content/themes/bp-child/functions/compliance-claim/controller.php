@@ -40,7 +40,41 @@ function process_claim_actions()
         makeClaim();
     }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'delete-claim')){
         deleteClaim();
+    }else if(isset($_GET['download-certificate'])){
+        ct_download_certificate();
     }
+}
+
+function ct_download_certificate()
+{    
+    global $wpdb;
+    
+    //Display Claim
+    $token = $_GET['claim'];
+    
+    //Remove .pdf from the token
+    $token = str_replace(".pdf", "", $token);
+    $query = $wpdb->prepare("SELECT certificate FROM {$wpdb->prefix}compliance_claims WHERE token=%s", $token);
+    $certificate = $wpdb->get_var($query);
+    if(!$certificate)
+    {
+        echo "Invalid Request!";
+        exit;
+    }
+    
+//    header("Content-type: application/pdf");
+    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+    header("Content-Type: Application/octet-stream");
+    header("Content-disposition: attachment; filename=" . $token . ".pdf");
+    
+    echo $certificate;
+    
+    //Echo PDF file
+    exit;
+    
 }
 
 function deleteClaim()

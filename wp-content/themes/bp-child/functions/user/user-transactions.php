@@ -47,7 +47,7 @@ function cp_edit_transaction_log(){
                    <select name="case<?php echo $row->ID?>" class="select">
                        <option value="0">Not Assigned</option>
                        <?php foreach($testCases as $c){ 
-                           $tSuiteIDs = get_post_meta($c->ID, 'test_suite');                           
+                           $tSuiteIDs = ct_get_active_suite_ids_of_case($c->ID);                  
                            $allSuites = array_merge($allSuites, $tSuiteIDs);
                            ?>
                        <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?> data-suites="<?php echo implode(',', $tSuiteIDs)?>"><?php echo cp_wrap($c->post_title, 12)?></option>
