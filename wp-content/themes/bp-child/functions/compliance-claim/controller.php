@@ -480,7 +480,7 @@ function createClaimPDF($claim_id)
         //Getting Case Status
         $esb = new ManageESB();
         
-        $query = "SELECT m.ID as MSG_ID, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
+        $query = "SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
                  "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
                  "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
                  "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
@@ -533,9 +533,13 @@ function createClaimPDF($claim_id)
         $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
         
         if(isset($testCases[0]->MSG_ID))
+        {
             $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a></td>';
+        }
         else
+        {
             $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+        }
         
         $test_cases_table_html .= '</tr>';    
         $idx++;
