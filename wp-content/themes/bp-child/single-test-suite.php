@@ -519,7 +519,7 @@ Template Name Posts: Test Suite
                     }
                     
                     $get_query = new WP_Query($args);
-
+                    $get_query->post = $post;
                     //Add Order by Scenaro 
                     $get_query->set('suppress_filters', false);
                     add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);

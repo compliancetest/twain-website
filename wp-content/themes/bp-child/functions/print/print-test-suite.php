@@ -233,9 +233,11 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
 
 
                 $get_query = new WP_Query($args);
-
+                
                 //Add Order by Scenaro
-                $get_query->set('suppress_filters', false);
+                $get_query->set('suppress_filters', false);                
+                $get_query->post = get_post($suiteID);
+                
                 add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
                 add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
                 add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
@@ -246,9 +248,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 remove_filter('posts_orderby', 'add_scenario_orderby_query');
                 remove_filter('posts_fields_request', 'add_scenario_fields_query');
 
-                $get_query = new WP_Query($args);
-
-                $testCases = $get_query->get_posts();
+                
                 $i = 0;
                 foreach($testCases as $row)
                 {
