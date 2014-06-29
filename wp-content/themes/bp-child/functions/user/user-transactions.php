@@ -451,7 +451,7 @@ function getAssociatedSuitesFromCases($cases)
         $query = "SELECT DISTINCT(p.ID), p.post_title FROM {$wpdb->posts} AS p 
                   LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.meta_value AND pm.meta_key='test_suite' 
                   LEFT JOIN {$wpdb->postmeta} AS pm1 ON p.ID=pm1.post_id AND pm1.meta_key='hide_suite' 
-                  WHERE p.post_type='test-suite' AND p.post_status='publish' AND pm1.meta_value='0' AND pm.post_id IN (" . implode(", ", $ids) . ")";
+                  WHERE p.post_type='test-suite' AND p.post_status='publish' AND pm1.meta_value!='1' AND pm.post_id IN (" . implode(", ", $ids) . ")";
     }
     
     $rows = $wpdb->get_results($query);
