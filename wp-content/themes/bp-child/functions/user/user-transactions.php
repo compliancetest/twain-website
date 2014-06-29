@@ -24,7 +24,9 @@ function cp_edit_transaction_log(){
         //Getting User Products
         $products = getUserProductsAndServices();
         $testCases  = getUserSubscribedCases();
-        $allSuites = getAssociatedSuitesFromCases($testCases);
+        
+        $allSuites = array();
+        $currentCaseSuites = array();
         
         $result = "";
         ob_start();
@@ -45,7 +47,8 @@ function cp_edit_transaction_log(){
                    <select name="case<?php echo $row->ID?>" class="select">
                        <option value="0">Not Assigned</option>
                        <?php foreach($testCases as $c){ 
-                           $tSuiteIDs = get_post_meta($c->ID, 'test_suite');
+                           $tSuiteIDs = get_post_meta($c->ID, 'test_suite');                           
+                           $allSuites = array_merge($allSuites, $tSuiteIDs);
                            ?>
                        <option value="<?php echo $c->ID?>" <?php echo $row->TEST_CASE_DB_ID == $c->ID ? 'selected="selected"' : ''?> data-suites="<?php echo implode(',', $tSuiteIDs)?>"><?php echo cp_wrap($c->post_title, 12)?></option>
                        <?php } ?>
@@ -61,9 +64,8 @@ function cp_edit_transaction_log(){
                            ?>
                            <select name="suite<?php echo $row->ID?>" class="select">
                            <?php
-                               foreach($allSuites as $s){
-                                   if(in_array($s->ID, $cSuiteIDs))
-                                       echo '<option value="' . $s->ID . '" ' . ($row->TEST_SUITE_ID == $s->ID ? 'selected="selected"' : '') . '>' . $s->post_title . '</option>';
+                               foreach($cSuiteIDs as $s){
+                                       echo '<option value="' . $s . '" ' . ($row->TEST_SUITE_ID == $s ? 'selected="selected"' : '') . '>' . get_the_title($s) . '</option>';
                                }
                            ?>
                            </select>
@@ -105,9 +107,10 @@ function cp_edit_transaction_log(){
             <?php
         }
         echo '<select id="all-suites" style="display: none">';
+        $allSuites = array_unique($allSuites);        
         foreach($allSuites as $s)
         {
-            echo '<option value="' . $s->ID .'" data-permalink="' . get_permalink($s->ID) . '">' . $s->post_title . '</option>';
+            echo '<option value="' . $s .'" data-permalink="' . get_permalink($s) . '">' . get_the_title($s) . '</option>';
         }
         echo '</select>';
         $result = ob_get_contents();
@@ -451,9 +454,9 @@ function getAssociatedSuitesFromCases($cases)
         $query = "SELECT DISTINCT(p.ID), p.post_title FROM {$wpdb->posts} AS p 
                   LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.meta_value AND pm.meta_key='test_suite' 
                   LEFT JOIN {$wpdb->postmeta} AS pm1 ON p.ID=pm1.post_id AND pm1.meta_key='hide_suite' 
-                  WHERE p.post_type='test-suite' AND p.post_status='publish' AND pm1.meta_value!='1' AND pm.post_id IN (" . implode(", ", $ids) . ")";
+                  WHERE p.post_type='test-suite' AND p.post_status='publish' AND pm1.meta_value='0' AND pm.post_id IN (" . implode(", ", $ids) . ")";
     }
-    echo $query;
+    
     $rows = $wpdb->get_results($query);
     
     return $rows;
