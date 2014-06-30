@@ -979,9 +979,9 @@ function generateProfile($profile_id, $community_id)
     
     $pre_desc = '';
     if (isset($profile_content->Entity->USI)) {
-        $pre_desc = '(For testing with ABN ' . $profile_content->Entity->ABN . ')';
-    } else if (isset($profile_content->Entity->ABN)) {
         $pre_desc = '(For testing with USI ' . $profile_content->Entity->USI . ')';
+    } else if (isset($profile_content->Entity->ABN)) {
+        $pre_desc = '(For testing with ABN ' . $profile_content->Entity->ABN . ')';
     }
     
     if (empty($customDataGeneration)) {
