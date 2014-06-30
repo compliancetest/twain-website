@@ -1024,7 +1024,7 @@ function generateProfile($profile_id, $community_id)
             
             $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
             
-            $row['content'] = base64_encode(json_encode($content));
+            $row['content'] = base64_encode(stripcslashes(json_encode($content)));
             
             // Create new profile
             $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
