@@ -968,13 +968,28 @@ function cp_save_customer_harness_detail()
 
 function generateProfile($profile_id, $community_id)
 {
-    $customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
+    $profile = $wpdb->get_row($query);
+    $profile_content = json_decode(base64_decode($profile->content));
+    $customDataGeneration = isset($profile_content->CustomProfilesGeneration) ? ($profile_content->CustomProfilesGeneration) : (null);
+    //$customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
+    
+    $pre_desc = '';
+    if (isset($profile_content->Entity->USI)) {
+        $pre_desc = '(For testing with ABN ' . $profile_content->Entity->ABN . ')';
+    } else if (isset($profile_content->Entity->ABN)) {
+        $pre_desc = '(For testing with USI ' . $profile_content->Entity->USI . ')';
+    }
+    
+    if (empty($customDataGeneration)) {
+        return;
+    }
     
     global $wpdb;
     
     $profile_ref = array();
     
-    foreach ($customDataGeneration->CustomDataGeneration as $customData) 
+    foreach ($customDataGeneration as $customData) 
     {
         $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
         $identifierValues = $customData->SourceProfiles->Values;
@@ -1006,6 +1021,8 @@ function generateProfile($profile_id, $community_id)
                     }
                 }
             }
+            
+            $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
             
             $row['content'] = base64_encode(json_encode($content));
             
