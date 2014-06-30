@@ -995,6 +995,7 @@ function generateProfile($profile_id, $community_id)
         $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
         $identifierValues = $customData->SourceProfiles->Values;
         $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
+        print_r($rows); exit;
 
         foreach ($rows as $row) {
             $content = json_decode(base64_decode($row['content']));
