@@ -968,6 +968,8 @@ function cp_save_customer_harness_detail()
 
 function generateProfile($profile_id, $community_id)
 {
+    global $wpdb;
+    
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
     $profile = $wpdb->get_row($query);
     $profile_content = json_decode(base64_decode($profile->content));
@@ -985,8 +987,6 @@ function generateProfile($profile_id, $community_id)
     if (empty($customDataGeneration)) {
         return;
     }
-    
-    global $wpdb;
     
     $profile_ref = array();
     
