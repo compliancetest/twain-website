@@ -1011,7 +1011,10 @@ function generateProfile($profile_id, $community_id)
             foreach ($customData->Rules as $rule) {
                 if ($rule->Type == 'Value') {
                     $elementPath = str_replace('.', '->', $rule->ReplacementPath);
-                    eval('$content->' . $elementPath . '=$rule->OriginalValue;');
+                    eval('$isPath = isset($content->' . $elementPath . ') ? (1) : (0);');
+                    if ($isPath) {
+                        eval('$content->' . $elementPath . '=$rule->OriginalValue;');
+                    }
                 } else if ($rule->Type == 'Reference') {
                     // Replace $ref values with links of generated profiles
                     foreach ($content->Employers as $employer) {
