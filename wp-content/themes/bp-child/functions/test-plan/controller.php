@@ -68,9 +68,10 @@ function certifyPlan()
                 _saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId);                
             }
         }
+        addMessage('The plan was certified successfully');
+    }else{
+        addMessage('You must complete the test plan before a claim can be made.', 'warning');
     }
-    
-    addMessage('The plan was certified successfully');
     
     wp_redirect($return);
     
