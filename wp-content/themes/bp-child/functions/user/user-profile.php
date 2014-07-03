@@ -1010,11 +1010,13 @@ function generateProfile($profile_id, $community_id)
             
             foreach ($customData->Rules as $rule) {
                 if ($rule->Type == 'Value') {
-                    $elementPath = str_replace('.', '->', $rule->ReplacementPath);
-                    eval('$isPath = isset($content->' . $elementPath . ') ? (1) : (0);');
-                    if ($isPath) {
-                        eval('$content->' . $elementPath . '=$rule->OriginalValue;');
+                    
+                    $replacementPath = str_replace('.', '->', $rule->ReplacementPath);
+                    eval('$replacementValue = $profile_content->' . $elementPath . ';');
+                    if ($replacementValue) {
+                        $content = json_decode(str_replace($rule->OriginalValue, $replacementValue, json_encode($content)));
                     }
+                        
                 } else if ($rule->Type == 'Reference') {
                     // Replace $ref values with links of generated profiles
                     foreach ($content->Employers as $employer) {
