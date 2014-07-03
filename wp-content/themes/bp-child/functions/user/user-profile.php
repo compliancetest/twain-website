@@ -1012,7 +1012,7 @@ function generateProfile($profile_id, $community_id)
                 if ($rule->Type == 'Value') {
                     
                     $replacementPath = str_replace('.', '->', $rule->ReplacementPath);
-                    eval('$replacementValue = $profile_content->' . $elementPath . ';');
+                    eval('$replacementValue = $profile_content->' . $replacementPath . ';');
                     if ($replacementValue) {
                         $content = json_decode(str_replace($rule->OriginalValue, $replacementValue, json_encode($content)));
                     }
