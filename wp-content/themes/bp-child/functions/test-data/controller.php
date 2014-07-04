@@ -422,7 +422,8 @@ function copyProfileInstance($action)
     // Copy harness profile instance (James)
     
     $content = json_decode(base64_decode($row['content']));
-    $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $row['community_id']);
+    $row['token_original'] = $row['token'];
+    $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $row['community_id']);    
     $row['type'] = 'tester';
     $row['creator_id'] = $user_id;
     $row['created_date'] = date('Y-m-d F:i:s');
