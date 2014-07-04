@@ -400,7 +400,7 @@ function deleteProfileTypeInstance($action)
     exit;
 }
 
-function copyProfileTypeInstance($action)
+function copyProfileInstance($action)
 {
     global $wpdb;
     
