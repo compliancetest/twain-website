@@ -990,6 +990,10 @@ function generateProfile($profile_id, $community_id)
     
     $profile_ref = array();
     
+    if (!empty($profile->token_original)) {
+        $profile_ref[$profile->token_original] = $profile->token;
+    }
+    
     foreach ($customDataGeneration as $customData) 
     {
         $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
@@ -1000,12 +1004,13 @@ function generateProfile($profile_id, $community_id)
             $content = json_decode(base64_decode($row['content']));
             
             $row['type'] = 'tester';
+            $token_original = $row['token'];
             $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
             $row['created_date'] = date('Y-m-d F:i:s');
             $row['purpose'] = $content->Profile->Purpose;
             $row['creator_id'] = get_current_user_id();
             
-            $profile_ref['ref_'.$row['id']] = $row['token'];
+            $profile_ref[$token_original] = $row['token'];
             unset($row['id']);
             
             foreach ($customData->Rules as $rule) {
@@ -1021,9 +1026,8 @@ function generateProfile($profile_id, $community_id)
                     // Replace $ref values with links of generated profiles
                     foreach ($content->Employers as $employer) {
                         $ref = explode('=', $employer->Profile->{'$ref'});
-                        $ref_row = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix .'community_profile_instances WHERE token=\'' . $ref[1] . '\'');
-                        if (isset($profile_ref['ref_'.$ref_row->id])) {
-                            $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref['ref_'.$ref_row->id];
+                        if (isset($profile_ref[$ref[1]])) {
+                            $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
                         }
                     }
                 }
