@@ -1005,10 +1005,12 @@ function generateProfile($profile_id, $community_id)
             
             $row['type'] = 'tester';
             $token_original = $row['token'];
+            $row['token_original'] = $token_original;
             $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
             $row['created_date'] = date('Y-m-d F:i:s');
             $row['purpose'] = $content->Profile->Purpose;
             $row['creator_id'] = get_current_user_id();
+            $row['token_original'] = $token_original;
             
             $profile_ref[$token_original] = $row['token'];
             unset($row['id']);
