@@ -794,6 +794,11 @@ function cp_get_customer_harness_detail()
     endif; 
 }
 
+function james_compare_alias($a, $b)
+{
+    return strnatcmp($a['alias'], $b['alias']);
+}
+
 function cp_get_customer_harness_detail_profile_data()
 {
     global $wpdb;
@@ -805,15 +810,21 @@ function cp_get_customer_harness_detail_profile_data()
     $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
     $subscription_row = $wpdb->get_row($subscription_query);
     
-    $gateway_id = $_REQUEST['gateway_id'];
-    $gateway_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "gateways WHERE gateway_id=%d", $gateway_id);
-    $gateway_row = $wpdb->get_row($gateway_query);
-    
+    $gateways_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "gateways");
+    $gateways = $wpdb->get_row($gateways_query);
     $alias_list = array();
-    if ($gateway_row->alias_list != '') {
-        $alias_list = explode('|', $gateway_row->alias_list);
+    
+    foreach ($gateways as $gateway) {
+        if ($gateway->alias_list != '') {
+            $alias_group = explode('|', $gateway->alias_list);
+        }
+        if (count($alias_group) > 0) {
+            foreach ($alias_group as $alias) {
+                $alias_list[] = array('gateway_id' => $gateway->gateway_id, 'alias' => $alias);
+            }
+        }
     }
-    asort($alias_list);
+    usort($alias_list, 'james_compare_alias');
     
     if (!empty($row)):
         $profile_instance = json_decode(base64_decode($row->content));
@@ -846,7 +857,7 @@ function cp_get_customer_harness_detail_profile_data()
             <?php else: ?>
             <select name="alias" class="select">
                 <?php foreach ($alias_list as $alias): ?>
-                <option value="<?php echo $alias; ?>" <?php echo ($alias == $subscription_row->alias) ? ('selected') : (''); ?>><?php echo $alias; ?></option>
+                <option value="<?php echo $alias['alias']; ?>" rel="<?php echo $alias['gateway_id']; ?>" <?php echo ($alias['alias'] == $subscription_row->alias) ? ('selected') : (''); ?>><?php echo $alias['alias']; ?></option>
                 <?php endforeach; ?>
             </select>
             <?php endif; ?>
