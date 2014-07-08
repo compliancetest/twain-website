@@ -674,7 +674,7 @@ function cp_get_customer_harness_detail()
                                 <div class="field-row">
                                     <div class="grid-cell">
                                         <label>Gateway:</label>
-                                        <select name="gateway_id" class="select" onchange="viewProfileData()">
+                                        <select name="gateway_id" class="select">
                                             <option value="">None</option>
                                             <?php foreach ($gateways as $gateway): ?>
                                             <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
@@ -725,7 +725,6 @@ function cp_get_customer_harness_detail()
                 function viewProfileData()
                 {
                     var profile_id = jQuery('#harness-gateway select[name=profile_id]').val();
-                    var gateway_id = jQuery('#harness-gateway select[name=gateway_id]').val()
                     var subscription_id = '<?php echo $_REQUEST['id']; ?>';
                     
                     if (profile_id == 0) {
@@ -734,7 +733,7 @@ function cp_get_customer_harness_detail()
                     } else {
                         jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').show();
                         jQuery.ajax({
-                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id + '&subscription_id=' + subscription_id + '&gateway_id=' + gateway_id,
+                            url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id + '&subscription_id=' + subscription_id,
                             type: 'post',
                             success: function(res) {
                                 jQuery('#profile-data-container').html(res);
@@ -849,6 +848,12 @@ function cp_get_customer_harness_detail_profile_data()
         }
     ?>
     <?php if ($hasABN): ?>
+    <div class="field-row">
+        <div class="grid-cell">
+            <input class="input" type="text" name="gateway_label" id="gateway_label" value="<?php echo $subscription_row->alias; ?>" readonly="readonly" disabled="disabled"/>
+        </div>
+        <div class="clear"></div>
+    </div>
     <div class="field-row">
         <div class="grid-cell">
             <label>Alias:</label>
