@@ -153,6 +153,9 @@ require_once(STYLESHEETPATH . '/bbpress/customize.php');
 
 require_once(THE_FUNCTION . '/gateways/gateways.php');
 
+//Organisations
+require_once(THE_FUNCTION . '/organisation/admin.php');
+
 /* 
  * Loads the Options Panel
  *

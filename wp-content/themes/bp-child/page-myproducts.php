@@ -139,7 +139,7 @@ get_header();
             <a href="#make-claim-box" cp-type="inline"  class="action-btn process-btn"><span class="p"></span><span class="t">ACCEPT</span></a>
             <div class="clear"></div>
         </div>
-        <a class="close_btn"></a>                
+        <a class="close_btn"></a>
     </div>        
     <div class="popup-box" id="delete-product-box" style="display: none; width: 500px">
         <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
