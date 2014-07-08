@@ -990,9 +990,9 @@ function generateProfile($profile_id, $community_id)
     
     $profile_ref = array();
     
-    if (!empty($profile->token_original)) {
+    /*if (!empty($profile->token_original)) {
         $profile_ref[$profile->token_original] = $profile->token;
-    }
+    }*/
     
     foreach ($customDataGeneration as $customData) 
     {
@@ -1028,6 +1028,13 @@ function generateProfile($profile_id, $community_id)
                     // Replace $ref values with links of generated profiles
                     foreach ($content->Employers as $employer) {
                         $ref = explode('=', $employer->Profile->{'$ref'});
+                        
+                        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s", $ref[1]);
+                        $temp_profile = $wpdb->get_row($query);
+                        if (!empty($temp_profile)) {
+                            $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                        }
+                        
                         if (isset($profile_ref[$ref[1]])) {
                             $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
                         }
