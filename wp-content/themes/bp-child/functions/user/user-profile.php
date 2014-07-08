@@ -671,7 +671,7 @@ function cp_get_customer_harness_detail()
                                     </div>
                                     <div class="clear"></div>
                                 </div>
-                                <div class="field-row">
+                                <div class="field-row" id="gateway-box">
                                     <div class="grid-cell">
                                         <label>Gateway:</label>
                                         <select name="gateway_id" class="select">
@@ -790,6 +790,10 @@ function cp_get_customer_harness_detail()
                 
                 function selectAlias() 
                 {
+                    var gateway_id = jQuery('select[name=alias] option:selected').attr('rel');
+                    jQuery('select[name=gateway_id] option').attr('selected', false);
+                    jQuery('select[name=gateway_id] option[value=' + gateway_id + ']').attr('selected', true);
+                    jQuery('input[name=gateway_label]').val(jQuery('select[name=gateway_id] option[value=' + gateway_id + ']').html());
                 }
             </script>
         </div>
@@ -813,7 +817,7 @@ function cp_get_customer_harness_detail_profile_data()
     $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
     $subscription_row = $wpdb->get_row($subscription_query);
     
-    $gateways = $wpdb->get_row("SELECT * FROM " . $wpdb->prefix . "gateways");
+    $gateways = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "gateways");
     $alias_list = array();
     
     foreach ($gateways as $gateway) {
@@ -826,6 +830,7 @@ function cp_get_customer_harness_detail_profile_data()
             }
         }
     }
+
     usort($alias_list, 'james_compare_alias');
     
     if (!empty($row)):
@@ -851,29 +856,37 @@ function cp_get_customer_harness_detail_profile_data()
         }
     ?>
     <?php if ($hasABN): ?>
-    <div class="field-row">
-        <div class="grid-cell">
-            <input class="input" type="text" name="gateway_label" id="gateway_label" value="<?php echo $subscription_row->alias; ?>" readonly="readonly" disabled="disabled"/>
+        <div class="field-row">
+            <div class="grid-cell">
+                <label>Gateway:</label>
+                <input class="input" type="text" name="gateway_label" id="gateway_label" value="" readonly="readonly" disabled="disabled"/>
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-    </div>
-    <div class="field-row">
-        <div class="grid-cell">
-            <label>Alias:</label>
-            <?php if (count($alias_list) == 0): ?>
-            <input class="input" type="text" name="alias" value="<?php echo $subscription_row->alias; ?>"/>
-            <?php else: ?>
-            <select name="alias" class="select" onchange="selectAlias()">
-                <?php foreach ($alias_list as $alias): ?>
-                <option value="<?php echo $alias['alias']; ?>" rel="<?php echo $alias['gateway_id']; ?>" <?php echo ($alias['alias'] == $subscription_row->alias) ? ('selected') : (''); ?>><?php echo $alias['alias']; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <?php endif; ?>
+        <div class="field-row">
+            <div class="grid-cell">
+                <label>Alias:</label>
+                <?php if (count($alias_list) == 0): ?>
+                <input class="input" type="text" name="alias" value="<?php echo $subscription_row->alias; ?>"/>
+                <?php else: ?>
+                <select name="alias" class="select" onchange="selectAlias()">
+                    <?php foreach ($alias_list as $alias): ?>
+                    <option value="<?php echo $alias['alias']; ?>" rel="<?php echo $alias['gateway_id']; ?>" <?php echo ($alias['gateway_id'] == $subscription_row->gateway_id && $alias['alias'] == $subscription_row->alias) ? ('selected') : (''); ?>><?php echo $alias['alias']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-    </div>
+        <script type="text/javascript">
+            jQuery('#gateway-box').hide();
+            selectAlias();
+        </script>
     <?php else: ?>
         <input class="input" type="hidden" name="alias" value=""/>
+        <script type="text/javascript">
+            jQuery('#gateway-box').show();
+        </script>
     <?php endif; ?>
     <div class="field-row">
         <div class="grid-cell">
