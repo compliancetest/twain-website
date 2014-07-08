@@ -675,7 +675,7 @@ function cp_get_customer_harness_detail()
                                     <div class="grid-cell">
                                         <label>Gateway:</label>
                                         <select name="gateway_id" class="select">
-                                            <option value="">None</option>
+                                            <option value="">None1</option>
                                             <?php foreach ($gateways as $gateway): ?>
                                             <option value="<?php echo $gateway->gateway_id; ?>" <?php echo ($row->gateway_id == $gateway->gateway_id) ? ('selected="selected"') : (''); ?>><?php echo $gateway->name; ?></option>
                                             <?php endforeach; ?>
