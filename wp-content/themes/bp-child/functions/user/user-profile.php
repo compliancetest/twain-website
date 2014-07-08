@@ -787,6 +787,10 @@ function cp_get_customer_harness_detail()
                     })
                     return false;
                 }
+                
+                function selectAlias() 
+                {
+                }
             </script>
         </div>
     <?php 
@@ -860,7 +864,7 @@ function cp_get_customer_harness_detail_profile_data()
             <?php if (count($alias_list) == 0): ?>
             <input class="input" type="text" name="alias" value="<?php echo $subscription_row->alias; ?>"/>
             <?php else: ?>
-            <select name="alias" class="select">
+            <select name="alias" class="select" onchange="selectAlias()">
                 <?php foreach ($alias_list as $alias): ?>
                 <option value="<?php echo $alias['alias']; ?>" rel="<?php echo $alias['gateway_id']; ?>" <?php echo ($alias['alias'] == $subscription_row->alias) ? ('selected') : (''); ?>><?php echo $alias['alias']; ?></option>
                 <?php endforeach; ?>
