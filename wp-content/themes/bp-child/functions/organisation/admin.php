@@ -12,6 +12,7 @@ function ct_add_manage_organisation_menu()
 {
     add_menu_page("Manage Organsations", "Organisations", "manage_options", "manage-organisations", "ct_show_organisations_list");
     add_submenu_page("manage-organisations", "Add Organsation", "Add New", "manage_options", "add-organisation", "ct_show_new_organisation");
+    
 }
 
 function ct_show_organisations_list()
@@ -21,12 +22,6 @@ function ct_show_organisations_list()
     ?>
     <div class="wrap">
         <h2>Organisations</h2>        
-        <?php if(isset($_SESSION['org-message'])){ ?>
-        <div id="message" class="updated below-h2"><p><?php echo $_SESSION['org-message']?></p></div>
-        <?php 
-        $_SESSION['org-message'] = null;
-        unset($_SESSION['org-message']);
-        } ?>
         <br clear="all" />
         <form name="adminform" action="users.php?page=processing" method="post">
         <?php
@@ -66,11 +61,11 @@ function ct_show_new_organisation()
     ?>
     <div class="wrap">
         <h2><?php echo $id ? 'Edit' : 'New'?> Organisation</h2>
-        <?php if(isset($_SESSION['org-message'])){ ?>
-        <div id="message" class="updated below-h2"><p><?php echo $_SESSION['org-message']?></p></div>
+        <?php if(isset($_GET['org-message'])){ ?>
+        <div id="message" class="updated below-h2"><p><?php echo $_GET['org-message']?></p></div>
         <?php 
-        $_SESSION['org-message'] = null;
-        unset($_SESSION['org-message']);
+        $_GET['org-message'] = null;
+        unset($_GET['org-message']);
         } ?>
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
@@ -90,6 +85,21 @@ function ct_show_new_organisation()
                 <tr>    
                     <th>Invoice Me</th>
                     <td><input type="checkbox" name="invoice_me" id="invoice_me" value="1" <?php echo $data['invoice_me'] == '1' ? 'checked="checked"' : ''?> /></td>
+                </tr>
+                <tr>
+                    <th>Organisation Administrator</th>
+                    <td>
+                        <?php
+                            //Getting All users
+                            $users = get_users();
+                        ?>
+                        <select name="admin_id" id="admin_id">
+                            <option>- Select -</option>
+                            <?php foreach($users as $u): ?>
+                            <option value="<?php echo $u->ID?>" <?php echo $u->ID == $data['admin_id'] ? 'selected="selected"' : ''?>><?php echo $u->display_name ?> (<?php echo $u->user_email ?>)</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2"><b>Primary Contact</b></td>
@@ -171,11 +181,18 @@ function ct_process_organisation_admin_actions()
             $organisationClass->bind($_POST);
             if($organisationClass->save())
             {
-                $_SESSION['message'] = 'Organisation Saved.';
-                wp_redirect(admin_url() . "admin.php?page=manage-organisations");                
+                echo 'Organisation Saved.';
+                ?>
+                <script type="text/javascript">
+                    setTimeout(function(){
+                        document.location.href = '<?php echo admin_url()?>admin.php?page=manage-organisations';
+                    }, 1000);
+                </script>
+                <?php
+                
                 exit;
             }else{
-                $_SESSION['message'] = $wpdb->last_error;
+                $_GET['org-message'] = $wpdb->last_error;
                 return;
             }
         }

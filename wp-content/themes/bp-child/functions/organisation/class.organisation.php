@@ -28,6 +28,9 @@ class CT_Organisation
     
     var $contact_id = '';
     
+    var $admin_id = 0;
+    
+    
     public function __construct($id = null)
     {
         global $wpdb;

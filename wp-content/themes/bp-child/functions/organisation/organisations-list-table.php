@@ -24,6 +24,7 @@ class CT_Organisations_List_Table extends WP_List_Table
 //            "cb" => "<input type='checkbox' />",            
             "organisation_name" => __("Organisation Name"),
             "organisation_domain" => __('Organisation Domain'),
+            "organisation_admin" => __('Organisation Admin'),
             "xero_contact_name" => __("Xero Contact Name"),
             "invoice_me" => __("Invoice Me"),                                    
             "contact_first_name" => __("First Name"),                        
@@ -90,6 +91,9 @@ class CT_Organisations_List_Table extends WP_List_Table
             case 'phonenumber':
                 return "(" . $item->phonenumber_countrycode . ") " . "(" . $item->phonenumber_areacode . ") " . $item->phonenumber;
             
+            case 'organisation_admin':
+                return $item->admin_name . "(" . $item->admin_email . ")";
+            
             case 'invoice_me':
                 return $item->invoice_me ? 'Yes' : 'No';
             
@@ -121,7 +125,7 @@ class CT_Organisations_List_Table extends WP_List_Table
             "per_page"=>$this->per_pages
         ));
       
-        $query = "SELECT * FROM {$wpdb->prefix}organisations ";
+        $query = "SELECT o.*, u.user_email AS admin_email, u.display_name AS admin_name FROM {$wpdb->prefix}organisations as o LEFT JOIN {$wpdb->users} as u on u.ID=o.admin_id ";
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         
