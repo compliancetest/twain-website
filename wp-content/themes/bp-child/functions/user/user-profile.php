@@ -813,8 +813,7 @@ function cp_get_customer_harness_detail_profile_data()
     $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
     $subscription_row = $wpdb->get_row($subscription_query);
     
-    $gateways_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "gateways");
-    $gateways = $wpdb->get_row($gateways_query);
+    $gateways = $wpdb->get_row("SELECT * FROM " . $wpdb->prefix . "gateways");
     $alias_list = array();
     
     foreach ($gateways as $gateway) {
