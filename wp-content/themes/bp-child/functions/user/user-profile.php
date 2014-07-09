@@ -1002,6 +1002,8 @@ function generateProfile($profile_id, $community_id)
 {
     global $wpdb;
     
+    $user_id = get_current_user_id();
+    
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
     $profile = $wpdb->get_row($query);
     $profile_content = json_decode(base64_decode($profile->content));
@@ -1064,7 +1066,7 @@ function generateProfile($profile_id, $community_id)
                             $ref = explode('=', $employer->Profile->{'$ref'});
                             
                             if (!isset($profile_ref[$ref[1]])) {
-                                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s", $ref[1]);
+                                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
                                 $temp_profile = $wpdb->get_row($query);
                                 if (!empty($temp_profile)) {
                                     $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1111,7 +1113,7 @@ function generateProfile($profile_id, $community_id)
                         $ref = explode('=', $employer->Profile->{'$ref'});
                         
                         if (!isset($profile_ref[$ref[1]])) {
-                            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s", $ref[1]);
+                            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
                             $temp_profile = $wpdb->get_row($query);
                             if (!empty($temp_profile)) {
                                 $profile_ref[$temp_profile->token_original] = $temp_profile->token;
