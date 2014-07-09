@@ -19,7 +19,7 @@ get_header();
             <div class="grid-box table-box" id="my_subscriptions">
                 <div class="grid-box-body">
                     <div class="thead tr">
-                        <div class="td td-community">Community1</div>
+                        <div class="td td-community">Community</div>
                         <div class="td td-suite">Test Suite</div>
                         <div class="td td-fee">Fee</div>
                         <div class="td td-status tocenter">Status</div>
