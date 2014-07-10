@@ -1,0 +1,133 @@
+<?php
+/**
+* Manage Xero Items
+*/
+require_once (THE_FUNCTION . "/xero-api/CT_Xero.php");
+require_once (THE_FUNCTION . "/xero-items/xero-items-list-table.php");
+require_once(THE_FUNCTION . "/xero-items/class.xeroitem.php");
+
+//Create Menus
+add_action("admin_menu", "ct_add_manage_xeroitems_menu");
+function ct_add_manage_xeroitems_menu()
+{
+    add_menu_page("Manage Xero Items", "Xero Items", "manage_options", "manage-xeroitems", "ct_show_xeroitems_list");
+    add_submenu_page("manage-xeroitems", "Add Xero Item", "Add New", "manage_options", "add-xeroitem", "ct_show_new_xeroitem");
+    
+}
+
+function ct_show_xeroitems_list()
+{
+    $listTable = new CT_Xeroitems_List_Table();
+    $listTable->prepare_items();
+    ?>
+    <div class="wrap">
+        <h2>Xero Items</h2>
+        <br clear="all" />
+        <form name="adminform" action="users.php?page=processing" method="post">
+        <?php
+            echo $listTable->display();
+        ?>
+        </form>
+    </div>
+    <?php       
+}
+
+/**
+* Add or Edit Xero Item
+* 
+*/
+function ct_show_new_xeroitem()
+{
+    $variables = get_class_vars('CT_Xeroitem');
+    $data = array();    
+    foreach(array_keys($variables) as $_m)
+    {            
+        $data[$_m] = '';
+    }
+    
+    if(isset($_GET['id']))
+    {
+        $id = $_GET['id'];        
+        $xeroitemClass = new CT_Xeroitem($_GET['id']);
+        foreach($data as $_m=>$_v)
+        {            
+            $data[$_m] = $xeroitemClass->$_m;
+        }    
+    }
+    else
+    {
+        $id = null;    
+    }
+    ?>
+    <div class="wrap">
+        <h2><?php echo $id ? 'Edit' : 'New'?> Xero Item</h2>
+        <?php if(isset($_GET['org-message'])){ ?>
+        <div id="message" class="updated below-h2"><p><?php echo $_GET['org-message']?></p></div>
+        <?php 
+        $_GET['org-message'] = null;
+        unset($_GET['org-message']);
+        } ?>
+        <br clear="all" />
+        <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-xeroitem<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
+            <table class="widefat" style="width: auto;">
+                <tr>    
+                    <th>Code</th>
+                    <td><input type="text" name="code" id="code" value="<?php echo $data['code']?>" /></td>
+                </tr>
+                <tr>    
+                    <th>Description</th>
+                    <td><input type="text" name="description" id="description" value="<?php echo $data['description']?>" /></td>
+                </tr>
+                <tr>    
+                    <th>Unit Price</th>
+                    <td><input type="text" name="unit_price" id="unit_price" value="<?php echo $data['unit_price']?>" /></td>
+                </tr>
+                <tr>    
+                    <th>Account Code</th>
+                    <td><input type="text" name="account_code" id="account_code" value="<?php echo $data['account_code']?>" /></td>
+                </tr>
+                <tr><td colspan="2"><input type="submit" value="Save Xero Item" class="button button-primary" /></td></tr>
+            </table>
+            <input type="hidden" name="id" value="<?php echo $id?>" />
+            <input type="hidden" name="org-action" value="save-xeroitem" />
+        </form>
+    </div>
+    <?php
+}
+
+
+add_action("admin_init", "ct_process_xeroitem_admin_actions");
+function ct_process_xeroitem_admin_actions()
+{
+    global $wpdb;
+    
+    if(isset($_REQUEST['org-action']))
+    {
+        $action = $_REQUEST['org-action'];
+        
+        if($action == 'save-xeroitem')
+        {
+            //Save Xero Items
+            $xeroitemClass = new CT_Xeroitem($_POST['id']);
+            $xeroitemClass->bind($_POST);
+            $resp = $xeroitemClass->save();
+            if( $resp )
+            {
+                echo $resp;
+                ?>
+                <script type="text/javascript">
+                    setTimeout(function(){
+                        document.location.href = '<?php echo admin_url()?>admin.php?page=manage-xeroitems';
+                    }, 1000);
+                </script>
+                <?php
+                
+                exit;
+            }else{
+                $_GET['org-message'] = $wpdb->last_error;
+                return;
+            }
+        }
+    }
+    
+}

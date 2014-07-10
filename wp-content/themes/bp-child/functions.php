@@ -156,6 +156,9 @@ require_once(THE_FUNCTION . '/gateways/gateways.php');
 //Organisations
 require_once(THE_FUNCTION . '/organisation/admin.php');
 
+//Xero Items
+require_once(THE_FUNCTION . '/xero-items/admin.php');
+
 /* 
  * Loads the Options Panel
  *
