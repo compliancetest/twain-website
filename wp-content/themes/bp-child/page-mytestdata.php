@@ -298,7 +298,7 @@ jQuery(document).ready(function(){
             jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
                 ids.push(this.value);
             })           
-            if(!confirm('Are you sure you want to delete? Some of the rows you have selected are marked as audit records'))
+            if(!confirm('Are you sure you want to delete?'))
             {
                 return false;
             }
