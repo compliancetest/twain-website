@@ -52,6 +52,11 @@ function create_compliancetest_settings_page()
         update_option('esb_password', $_POST['esb_password']);
         update_option('esb_database', $_POST['esb_database']);
     }
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xero-settings')){
+        //Save Options
+        update_option('xero_consumer_key', $_POST['xero_consumer_key']);
+        update_option('xero_consumer_secret', $_POST['xero_consumer_secret']);
+    }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-pdf-certificate-settings')){    
         if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_certificate']['tmp_name'])) {
             $certificate = file_get_contents($_FILES['pdf_certificate']['tmp_name']);
@@ -163,6 +168,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-recaptcha-settings">Recaptcha Settings</a></li>
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
+                <li><a href="#ct-xero-settings">Xero Settings</a></li>
             </ul>
         </div>
         <div id="compliancetest-settings-wrapper">
@@ -339,6 +345,27 @@ function create_compliancetest_settings_page()
                     <input type="hidden" name="tab_index" value="6">
                 </form>  
             </div>
+
+            <div id="ct-xero-settings">
+                <h3>Xero Settings</h3>
+                <form method="post" action="">
+                    <table class="widefat">
+                        <tr>
+                            <th><label><b>Consumer Key:</b></label></th>
+                            <td><input type="text" name="xero_consumer_key" id="xero_consumer_key" value="<?php echo get_option('xero_consumer_key')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Consumer Secret:</b></label></th>
+                            <td><input type="text" name="xero_consumer_secret" id="xero_consumer_secret" value="<?php echo get_option('xero_consumer_secret')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+
+                    </table>
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-xero-settings'); ?>
+                    <input type="hidden" name="tab_index" value="1">
+                </form>
+            </div>
+
         </div>
     </div>
     
