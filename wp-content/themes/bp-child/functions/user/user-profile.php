@@ -1039,6 +1039,7 @@ function generateProfile($profile_id, $community_id)
             foreach ($rows as $row) {
                 $content = json_decode(base64_decode($row['content']));
                 
+                $row['profile_name'] .= '(' . $profile->profile_name . ')';
                 $row['type'] = 'tester';
                 $token_original = $row['token'];
                 $row['token_original'] = $token_original;
@@ -1079,7 +1080,7 @@ function generateProfile($profile_id, $community_id)
                         }
                     }
                 }
-                
+                $content->Profile->Title .= '(' . $profile->profile_name . ')';
                 $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
                 
                 $row['content'] = base64_encode(stripcslashes(json_encode($content)));
