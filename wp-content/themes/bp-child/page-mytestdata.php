@@ -307,9 +307,9 @@ jQuery(document).ready(function(){
             jQuery('#my_testdata .loading1').show();
             
             jQuery.ajax({
-                url: '/',
+                url: '/my-profile',
                 data: {
-                    'cp-action': '<?php echo wp_create_nonce('delete-profile-instance')?>',
+                    'td-action': '<?php echo wp_create_nonce('delete-profile-instance')?>',
                     'id': ids
                 },
                 type: 'post',
