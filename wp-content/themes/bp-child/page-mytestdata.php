@@ -18,14 +18,18 @@ $subscriptions =  getUserSubscriptions(null, true);
     </div>
     <div class="container">
         <div class="column">
+            <a href="#" id="delete-profile-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
+            <div class="clear"></div>
+            <div class="space10"></div>
             <div class="grid-box table-box" id="my_test_data_profiles">
                 <div class="grid-box-body">
-                    <div class="thead tr">
-                       <div class="td td-profile-name">Profile Name</div>
-                       <div class="td td-profile-type">Type</div>
-                       <div class="td td-profile-lookup">Include In Lookup</div>
-                       <div class="td td-action">Action</div>
-                       <div class="clear"></div>
+                   <div class="thead tr">
+                        <div class="td td-chk tocenter"><input type="checkbox" id="chk-profile-all" autocomplete="off" /></div>
+                        <div class="td td-profile-name">Profile Name</div>
+                        <div class="td td-profile-type">Type</div>
+                        <div class="td td-profile-lookup">Include In Lookup</div>
+                        <div class="td td-action">Action</div>
+                        <div class="clear"></div>
                    </div>
                    <div class="tbody">
                    <?php
@@ -42,6 +46,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                            $instanceObj = json_decode(base64_decode($instance->content));
                    ?>
                         <div class="tr">
+                           <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $instance->id?>" value="<?php echo $instance->id?>" /></div>
                            <div class="td td-profile-name">
                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link" ><?php echo $instance->profile_name?>
                                <?php
@@ -275,7 +280,48 @@ jQuery(document).ready(function(){
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
+    });
+    
+    jQuery('#chk-profile-all').click(function(){
+        jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]').prop('checked', this.checked);
     })
+    
+    jQuery('#delete-profile-link').click(function(){
+        var checked = jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').length;            
+        if(checked == 0)
+        {
+            alert("Please select a row.");
+            return false;
+        }else{
+            
+            var ids = new Array();
+            jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
+                ids.push(this.value);
+            })           
+            if(!confirm('Are you sure you want to delete? Some of the rows you have selected are marked as audit records'))
+            {
+                return false;
+            }
+            
+            jQuery('#my_testdata').append('<div class="loading1"></div>');
+            jQuery('#my_testdata .loading1').show();
+            
+            jQuery.ajax({
+                url: '/',
+                data: {
+                    'cp-action': '<?php echo wp_create_nonce('delete-profile-instance')?>',
+                    'id': ids
+                },
+                type: 'post',
+                dataType: 'html',
+                success: function(rsp){                        
+                    document.location.reload();
+
+                }
+            })    
+            return false;
+        }
+    });
 })
 </script>
 <?php
