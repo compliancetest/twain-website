@@ -310,7 +310,8 @@ jQuery(document).ready(function(){
                 url: '/my-profile',
                 data: {
                     'td-action': '<?php echo wp_create_nonce('delete-profile-instance')?>',
-                    'id': ids
+                    'id': ids,
+                    'return': '<?php echo base64_encode(get_site_url() . '/my-test-data')?>'
                 },
                 type: 'post',
                 dataType: 'html',
