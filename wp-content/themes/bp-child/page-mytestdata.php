@@ -303,7 +303,7 @@ jQuery(document).ready(function(){
                 return false;
             }
             
-            jQuery('#my_testdata').append('<div class="loading1"></div>');
+            //jQuery('#my_testdata').append('<div class="loading1"></div>');
             jQuery('#my_testdata .loading1').show();
             
             jQuery.ajax({
