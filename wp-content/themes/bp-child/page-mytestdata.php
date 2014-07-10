@@ -284,7 +284,7 @@ jQuery(document).ready(function(){
     
     jQuery('#chk-profile-all').click(function(){
         jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]').prop('checked', this.checked);
-    })
+    });
     
     jQuery('#delete-profile-link').click(function(){
         var checked = jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').length;            
