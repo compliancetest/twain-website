@@ -73,17 +73,26 @@ class CT_Organisation
             if($_m == 'id')
                 continue;
             $data[$_m] = $this->$_m;            
-        }        
-        
-        if(!$this->id)
+        }
+        $xero = new CT_Xero();
+        if( ! $this->id)
         {
+            $response = $xero->upsertContact( $data );
+
+            if( is_array( $response) ){
+                return $wpdb->insert($wpdb->prefix . "organisations", array_merge( $data, array( 'contact_id' => $response['Contacts']['Contact']['ContactID'] ) ));
+            }
             //Insert
-            return $wpdb->insert($wpdb->prefix . "organisations", $data);
+            return $response;
         }
         else
         {
+            $response = $xero->upsertContact( $data );
+            if( is_array( $response) ){
+                return $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
+            }
             //Update
-            return $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
+            return $response;
         }
     }
     

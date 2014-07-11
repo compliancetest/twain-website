@@ -29,6 +29,11 @@ function ct_show_organisations_list()
         ?>
         </form>
     </div>
+    <div class="wrap">
+        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=reload-organisation-from">Update Organisations From Xero</a>
+        <div class="clear"></div>
+        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=reload-organisation-to">Load Organisations List To Xero</a>
+    </div>
     <?php       
 }
 
@@ -70,17 +75,22 @@ function ct_show_new_organisation()
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
             <table class="widefat" style="width: auto;">
+                <?php if( $id ):?>
+                    <tr>
+                        <td><input type="hidden" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" required="required"/></td>
+                    </tr>
+                <?php endif;?>
                 <tr>    
                     <th>Organisation Name</th>
-                    <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>" /></td>
+                    <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Xero Contact Name</th>
-                    <td><input type="text" name="xero_contact_name" id="xero_contact_name" value="<?php echo $data['xero_contact_name']?>" /></td>
+                    <td><input type="text" name="xero_contact_name" id="xero_contact_name" value="<?php echo $data['xero_contact_name']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Organisation Domain</th>
-                    <td><input type="text" name="organisation_domain" id="organisation_domain" value="<?php echo $data['organisation_domain']?>" /></td>
+                    <td><input type="text" name="organisation_domain" id="organisation_domain" value="<?php echo $data['organisation_domain']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Invoice Me</th>
@@ -106,44 +116,44 @@ function ct_show_new_organisation()
                 </tr>
                 <tr>    
                     <th>First Name</th>
-                    <td><input type="text" name="contact_first_name" id="contact_first_name" value="<?php echo $data['contact_first_name']?>" /></td>
+                    <td><input type="text" name="contact_first_name" id="contact_first_name" value="<?php echo $data['contact_first_name']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Last Name</th>
-                    <td><input type="text" name="contact_last_name" id="contact_last_name" value="<?php echo $data['contact_last_name']?>" /></td>
+                    <td><input type="text" name="contact_last_name" id="contact_last_name" value="<?php echo $data['contact_last_name']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Email Address</th>
-                    <td><input type="text" name="contact_email" id="contact_email" value="<?php echo $data['contact_email']?>" /></td>
+                    <td><input type="text" name="contact_email" id="contact_email" value="<?php echo $data['contact_email']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>ABN</th>
-                    <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>" /></td>
+                    <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>" required="required"/></td>
                 </tr>
                 <tr><td colspan="2"><b>Billing Address</b></td></tr>
                 <tr>    
                     <th>Attention</th>
-                    <td><input type="text" name="billing_address_attention" id="billing_address_attention" value="<?php echo $data['billing_address_attention']?>" size="40" /></td>
+                    <td><input type="text" name="billing_address_attention" id="billing_address_attention" value="<?php echo $data['billing_address_attention']?>" size="40" required="required"/></td>
                 </tr>                
                 <tr>    
                     <th>Address</th>
-                    <td><input type="text" name="billing_address" id="billing_address" value="<?php echo $data['billing_address']?>" size="40" /></td>
+                    <td><input type="text" name="billing_address" id="billing_address" value="<?php echo $data['billing_address']?>" size="40" required="required"/></td>
                 </tr>                
                 <tr>    
                     <th>City</th>
-                    <td><input type="text" name="billing_city" id="billing_city" value="<?php echo $data['billing_city']?>" /></td>
+                    <td><input type="text" name="billing_city" id="billing_city" value="<?php echo $data['billing_city']?>" required="required"/></td>
                 </tr>                
                 <tr>    
                     <th>State</th>
-                    <td><input type="text" name="billing_state" id="billing_state" value="<?php echo $data['billing_state']?>" /></td>
+                    <td><input type="text" name="billing_state" id="billing_state" value="<?php echo $data['billing_state']?>" required="required"/></td>
                 </tr>                
                 <tr>    
                     <th>Postcode</th>
-                    <td><input type="text" name="billing_postcode" id="billing_postcode" value="<?php echo $data['billing_postcode']?>" /></td>
+                    <td><input type="text" name="billing_postcode" id="billing_postcode" value="<?php echo $data['billing_postcode']?>" required="required"/></td>
                 </tr>                
                 <tr>    
                     <th>Country</th>
-                    <td><input type="text" name="billing_country" id="billing_country" value="<?php echo $data['billing_country']?>" /></td>
+                    <td><input type="text" name="billing_country" id="billing_country" value="<?php echo $data['billing_country']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Telephone</th>
@@ -179,23 +189,100 @@ function ct_process_organisation_admin_actions()
             if(!isset($_POST['invoice_me']))
                 $_POST['invoice_me'] = 0;
             $organisationClass->bind($_POST);
-            if($organisationClass->save())
+            $response = $organisationClass->save();
+            if( ! is_string( $response ) )
             {
                 echo 'Organisation Saved.';
-                ?>
-                <script type="text/javascript">
-                    setTimeout(function(){
-                        document.location.href = '<?php echo admin_url()?>admin.php?page=manage-organisations';
-                    }, 1000);
-                </script>
-                <?php
-                
-                exit;
+                redirect_and_exit();
             }else{
-                $_GET['org-message'] = $wpdb->last_error;
+                $_GET['org-message'] = $wpdb->last_error | $response;
                 return;
             }
+        } else if( $action == 'reload-organisation-from' ){
+            $xero = new CT_Xero();
+            $contacts = $xero->getContacts();
+            if( $contacts ){
+                foreach( $contacts AS $contact ){
+                    $address_key = $phone_key = 0;
+                    foreach( $contact['Addresses']['Address'] AS $key => $address ) {
+                        if( $address['AddressType'] == 'POBOX' ){
+                            $address_key = $key;
+                        }
+                    }
+                    foreach( $contact['Phones']['Phone'] AS $key => $phone ) {
+                        if( $phone['PhoneType'] == 'DEFAULT' ){
+                            $phone_key = $key;
+                        }
+                    }
+                    $organisationData = array(
+                        'contact_id'                => $contact['ContactID'],
+                        'organisation_name'         => $contact['Name'],
+                        'xero_contact_name'         => $contact['Name'],
+                        'invoice_me'                => 0,
+                        'contact_first_name'        => $contact['FirstName'],
+                        'contact_last_name'         => $contact['LastName'],
+                        'contact_email'             => $contact['EmailAddress'],
+                        'abn'                       => $contact['TaxNumber'],
+                        'billing_address_attention' => $contact['Addresses']['Address'][$address_key]['AttentionTo'],
+                        'billing_address'           => $contact['Addresses']['Address'][$address_key]['AddressLine1'],
+                        'billing_city'              => $contact['Addresses']['Address'][$address_key]['City'],
+                        'billing_postcode'          => $contact['Addresses']['Address'][$address_key]['PostalCode'],
+                        'billing_state'             => $contact['Addresses']['Address'][$address_key]['Region'],
+                        'billing_country'           => $contact['Addresses']['Address'][$address_key]['Country'],
+                        'phonenumber'               => $contact['Phones']['Phone'][1]['PhoneNumber'],
+                        'phonenumber_areacode'      => $contact['Phones']['Phone'][1]['PhoneAreaCode'],
+                        'phonenumber_countrycode'   => $contact['Phones']['Phone'][1]['PhoneCountryCode']
+                    );
+                    $table_id = $wpdb->get_var( $wpdb->prepare( "SELECT contact_id FROM {$wpdb->prefix}organisations WHERE contact_id = %s ", $contact['ContactID'] ) );
+                    if( $table_id ){
+                        $wpdb->update( "{$wpdb->prefix}organisations",
+                            $organisationData,
+                            array( 'id' => $table_id ),
+                            array(
+                                '%s', '%s', '%s', '%d', '%s', '%s', "%s", '%d', '%s', '%s', '%s', '%d', '%s', '%s', "%d", '%d', '%d'
+                            ),
+                            array( '%d' )
+                        );
+                    } else {
+                        $wpdb->insert( "{$wpdb->prefix}organisations",
+                            $organisationData,
+                            array(
+                                '%s', '%s', '%s', '%d', '%s', '%s', "%s", '%d', '%s', '%s', '%s', '%d', '%s', '%s', "%d", '%d', '%d'
+                            )
+                        );
+                    }
+                }
+            }
+            redirect_and_exit();
+        } else if( $action = 'reload-organisation-to'){
+            $organisations_list = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations");
+            if( $organisations_list ){
+                foreach( $organisations_list AS $organisation ){
+                    $xero = new CT_Xero();
+                    $xeroContact = $xero->upsertContact( (array) $organisation );
+                    if( isset( $xeroContact['Contacts']['Contact']['ContactID'] ) ){
+                        $wpdb->update("{$wpdb->prefix}organisations",
+                            array( 'contact_id' => $xeroContact['Contacts']['Contact']['ContactID'] ),
+                            array( 'id' => $organisation->id ),
+                            array( '%s' ),
+                            array( '%d' )
+                        );
+                    }
+                }
+            }
+            redirect_and_exit();
         }
     }
     
+}
+function redirect_and_exit(){
+    ?>
+    <script type="text/javascript">
+        setTimeout(function(){
+            document.location.href = '<?php echo admin_url()?>admin.php?page=manage-organisations';
+        }, 1000);
+    </script>
+<?php
+
+    exit;
 }

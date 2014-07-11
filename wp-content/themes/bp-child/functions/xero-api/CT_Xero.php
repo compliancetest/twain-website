@@ -41,6 +41,10 @@ class CT_Xero {
         $this->xero->config['session_handle']      = $this->_oauthSession['oauth_session_handle'];
     }
 
+    /**
+     * Function used to update all local item with data from Xero API.
+     * @return bool
+     */
     public function updateItems(){
         global $wpdb;
         $this->xero->request('GET', $this->xero->url('Items', 'core'), array( 'order' => 'code asc'));
@@ -66,6 +70,12 @@ class CT_Xero {
         return true;
     }
 
+    /**
+     * Function used to add OR update Xero item.
+     * If $xeroItem['code'] exists, then item updates, otherwise we create new item
+     * @param $xeroItem - Item data
+     * @return array|bool - Array with updated data on success and false on error
+     */
     public function addXeroItem( $xeroItem ){
         $xml = "<Item>";
         if( isset( $xeroItem['id'] ) ) $xml.= "<ItemID>{$xeroItem['id']}</ItemID>";
@@ -96,6 +106,91 @@ class CT_Xero {
         
     }
 
+    public function upsertContact( $contactData ){
+        $requiredFields = array( 'organisation_name', 'contact_first_name', 'contact_last_name', 'contact_email', 'abn', 'phonenumber', 'phonenumber_areacode', 'phonenumber_countrycode', 'billing_address_attention', 'billing_address', 'billing_city', 'billing_state', 'billing_postcode', 'billing_country' );
+        foreach( $requiredFields AS $requiredField ){
+            if( ! isset( $contactData[$requiredField] ) || empty( $contactData[$requiredField] ) ){
+                return 'Some required fields missed or empty';
+            }
+        }
+        $xml = new SimpleXMLElement( '<Contact></Contact>' );
+        $xeroData = array(
+            'Name'                      => $contactData['organisation_name'],
+            'FirstName'                 => $contactData['contact_first_name'],
+            'LastName'                  => $contactData['contact_last_name'],
+            'EmailAddress'              => $contactData['contact_email'],
+            'TaxNumber'                 => $contactData['abn'],
+            'AccountsReceivableTaxType' => 'OUTPUT',
+            'Phones' => array(
+                            'Phone' => array(
+                                'PhoneType'        => 'DEFAULT',
+                                'PhoneNumber'      => $contactData['phonenumber'],
+                                'PhoneAreaCode'    => $contactData['phonenumber_areacode'],
+                                'PhoneCountryCode' => $contactData['phonenumber_countrycode']
+                            )
+                        ),
+            'Addresses' => array(
+                                'Address' => array(
+                                    'AddressType'  => 'POBOX',
+                                    'AttentionTo'  => $contactData['billing_address_attention'],
+                                    'AddressLine1' => $contactData['billing_address'],
+                                    'City'         => $contactData['billing_city'],
+                                    'Region'       => $contactData['billing_state'],
+                                    'PostalCode'   => $contactData['billing_postcode'],
+                                    'Country'      => $contactData['billing_country']
+                                )
+                            )
+        );
+        if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
+        $this->array2xml( $xeroData, $xml);
+        $xml = '<Contacts>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Contacts>';
+        $this->xero->request('POST', $this->xero->url('Contacts', 'core'), array(), $xml);
+//        var_dump($contactData);
+//        var_dump($xeroData);
+//        echo ($xml);
+//        var_dump($this->xero->response);die;
+        if ( $this->xero->response['code'] == 200 ) {
+            return $this->responseToArray();
+        }
+        return $this->xero->response;
+    }
+
+    public function getContacts( $countactID = false ){
+        $where = array();
+        if( $countactID ) $where = array( 'ContactID' => $countactID );
+        $this->xero->request('GET', $this->xero->url('Contacts', 'core'), $where );
+        $response = $this->responseToArray();
+        if( isset( $response['Contacts']['Contact'] ) && is_array( $response['Contacts']['Contact'] ) ){
+            return $response['Contacts']['Contact'];
+        }
+        return false;
+    }
+
+    /**
+     * @param $data Array with Contact details
+     * @param $response - Xml with Contact details
+     */
+    protected function array2xml( $data, &$response ){
+        foreach($data as $key => $value) {
+            if(is_array($value)) {
+                if(!is_numeric($key)){
+                    $subnode = $response->addChild("$key");
+                    $this->array2xml($value, $subnode);
+                }
+                else{
+                    $subnode = $response->addChild("item$key");
+                    $this->array2xml($value, $subnode);
+                }
+            }
+            else {
+                $response->addChild("$key",htmlspecialchars("$value"));
+            }
+        }
+    }
+    /**
+     * Function used to transform XML response to array
+     * @return array
+     */
     protected function responseToArray(){
         return json_decode( json_encode( $this->xero->parseResponse($this->xero->response['response'], 'xml' ) ), 1 );
     }

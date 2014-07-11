@@ -98,19 +98,19 @@ function ct_show_new_xeroitem()
             <table class="widefat" style="width: auto;">
                 <tr>    
                     <th>Code</th>
-                    <td><input type="text" name="code" id="code" value="<?php echo $data['code']?>" /></td>
+                    <td><input type="text" name="code" id="code" value="<?php echo $data['code']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Description</th>
-                    <td><input type="text" name="description" id="description" value="<?php echo $data['description']?>" /></td>
+                    <td><input type="text" name="description" id="description" value="<?php echo $data['description']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Unit Price</th>
-                    <td><input type="text" name="unit_price" id="unit_price" value="<?php echo $data['unit_price']?>" /></td>
+                    <td><input type="text" name="unit_price" id="unit_price" value="<?php echo $data['unit_price']?>" required="required"/></td>
                 </tr>
                 <tr>    
                     <th>Account Code</th>
-                    <td><input type="text" name="account_code" id="account_code" value="<?php echo $data['account_code']?>" /></td>
+                    <td><input type="text" name="account_code" id="account_code" value="<?php echo $data['account_code']?>" required="required"/></td>
                 </tr>
                 <tr><td colspan="2"><input type="submit" value="Save Xero Item" class="button button-primary" /></td></tr>
             </table>
