@@ -704,8 +704,8 @@ function cp_get_customer_harness_detail()
                         This action will generate a custom set of data profiles in your test data tab specifically tailored to work with the selected gateway profile.
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">                                    
-                        <a href="javascript: confirmGenerateProfile('<?php echo $_REQUEST['id']?>')" class="action-btn process-btn" ><span class="p"></span><span class="t">Confirm</span></a>            
-                        <a href="javascript: cancelGenerateProfile()" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <a href="javascript:confirmGenerateProfile('<?php echo $_REQUEST['id']?>')" class="action-btn process-btn" ><span class="p"></span><span class="t">Confirm</span></a>            
+                        <a href="javascript:cancelGenerateProfile()" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>
             </div>
