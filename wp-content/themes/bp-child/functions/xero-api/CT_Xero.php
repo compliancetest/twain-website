@@ -18,6 +18,7 @@ class CT_Xero {
 
         $consumerKey    = get_option( 'xero_consumer_key' );
         $consumerSecret = get_option( 'xero_consumer_secret' );
+        
         if( ! $consumerKey || ! $consumerSecret ){
             throw new \Exception( 'Consumer key OR secret not setted up correctly! ');
         }
@@ -43,6 +44,7 @@ class CT_Xero {
     public function updateItems(){
         global $wpdb;
         $this->xero->request('GET', $this->xero->url('Items', 'core'), array( 'order' => 'code asc'));
+        
         $invoices = $this->responseToArray();
         if( isset( $invoices['Items']['Item'] ) && is_array( $invoices['Items']['Item'] ) ){
             $wpdb->query("TRUNCATE {$wpdb->prefix}xeroitems");
@@ -79,6 +81,19 @@ class CT_Xero {
             return $this->responseToArray();
         }
         return false;
+    }
+    
+    public function updateAccounts()
+    {
+        global $wpdb;
+        
+        $this->xero->request('GET', $this->xero->url('Acounts', 'core'));
+        
+        $accounts = $this->responseToArray();
+        
+        var_dump($accounts);
+        exit;
+        
     }
 
     protected function responseToArray(){

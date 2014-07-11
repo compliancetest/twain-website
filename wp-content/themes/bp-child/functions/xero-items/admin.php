@@ -4,6 +4,7 @@
 */
 require_once (THE_FUNCTION . "/xero-api/CT_Xero.php");
 require_once (THE_FUNCTION . "/xero-items/xero-items-list-table.php");
+require_once (THE_FUNCTION . "/xero-items/xero-accounts-list-table.php");
 require_once(THE_FUNCTION . "/xero-items/class.xeroitem.php");
 
 //Create Menus
@@ -11,8 +12,30 @@ add_action("admin_menu", "ct_add_manage_xeroitems_menu");
 function ct_add_manage_xeroitems_menu()
 {
     add_menu_page("Manage Xero Items", "Xero Items", "manage_options", "manage-xeroitems", "ct_show_xeroitems_list");
+    add_submenu_page("manage-xeroitems", "Xero Accounts", "Xero Accounts", "manage_options", "xero-accounts", "ct_show_xero_accounts_list");
     add_submenu_page("manage-xeroitems", "Add Xero Item", "Add New", "manage_options", "add-xeroitem", "ct_show_new_xeroitem");
     
+    
+}
+
+function ct_show_xero_accounts_list()
+{
+    $listTable = new CT_Xero_Accounts_List_Table();
+    $listTable->prepare_items();
+    ?>
+    <div class="wrap">
+        <h2>Xero Accounts</h2>
+        <br clear="all" />
+        <form name="adminform" action="" method="post">
+        <?php
+            echo $listTable->display();
+        ?>
+        </form>
+    </div>
+    <div class="wrap">
+        <a href="<?php echo admin_url()?>admin.php?org-action=reload-xeroaccounts">Update Accounts From Xero</a>
+    </div>
+    <?php       
 }
 
 function ct_show_xeroitems_list()
@@ -138,6 +161,19 @@ function ct_process_xeroitem_admin_actions()
             <script type="text/javascript">
                 setTimeout(function(){
                     document.location.href = '<?php echo admin_url()?>admin.php?page=manage-xeroitems';
+                }, 1000);
+            </script>
+            <?php
+
+            exit;
+        } else if( $action == 'reload-xeroaccounts' ){
+            $xero = new CT_Xero();
+            $xero->updateAccounts();
+            echo 'Completed';
+            ?>
+            <script type="text/javascript">
+                setTimeout(function(){
+                    document.location.href = '<?php echo admin_url()?>admin.php?page=xero-accounts';
                 }, 1000);
             </script>
             <?php
