@@ -254,7 +254,7 @@ function ct_process_organisation_admin_actions()
                 }
             }
             redirect_and_exit();
-        } else if( $action = 'reload-organisation-to'){
+        } else if( $action == 'reload-organisation-to'){
             $organisations_list = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations");
             if( $organisations_list ){
                 foreach( $organisations_list AS $organisation ){
