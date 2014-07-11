@@ -97,7 +97,7 @@ class CT_Xero {
     {
         global $wpdb;
         
-        $this->xero->request('GET', $this->xero->url('Acounts', 'core'));
+        $this->xero->request('GET', $this->xero->url('Accounts', 'core'));
         
         $accounts = $this->responseToArray();
         
