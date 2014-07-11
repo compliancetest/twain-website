@@ -730,7 +730,9 @@ function cp_get_customer_harness_detail()
                     if (profile_id == 0) {
                         jQuery('#profile-data-container').html('');
                         jQuery('select[name=gateway_id]')[0].selectedIndex = 0;
+                        jQuery('#gateway-box').hide();
                     } else {
+                        jQuery('#gateway-box').show();
                         jQuery('#harness-detail-box<?php echo $_REQUEST['id']?> .loading').show();
                         jQuery.ajax({
                             url: '/?cp-action=<?php echo wp_create_nonce('get-harness-profile-data')?>&id=' + profile_id + '&subscription_id=' + subscription_id,
