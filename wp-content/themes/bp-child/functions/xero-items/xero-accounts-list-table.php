@@ -22,14 +22,16 @@ class CT_Xero_Accounts_List_Table extends WP_List_Table
     {
         return $column = array(
 //            "cb" => "<input type='checkbox' />",            
+            "Class" => __("Class"),
             "Code"  => __('Code'),
             "Name"   => __('Name'),
             "AcountID"         => __("AcountID"),                        
             "Type" => __("Type"),
             "TaxType" => __("TaxType"),
+            "Description" => __("Description"),            
             "EnablePaymentsToAccount" => __("EnablePaymentsToAccount"),
-            "BankAccountNumber" => __("BankAccountNumber"),
-            "CurrencyCode" => __("CurrencyCode")            
+            "ShowInExpenseClaims" => __("ShowInExpenseClaims"),
+            "ReportingCode" => __("ReportingCode")            
         );
     }
     
@@ -42,8 +44,8 @@ class CT_Xero_Accounts_List_Table extends WP_List_Table
             "Type" => array("Type", $orderby == 'Type'),
             "TaxType" => array("TaxType", $orderby == 'TaxType'),
             "EnablePaymentsToAccount" => array("EnablePaymentsToAccount", $orderby == 'EnablePaymentsToAccount'),
-            "BankAccountNumber" => array("BankAccountNumber", $orderby == 'BankAccountNumber'),
-            "CurrencyCode" => array("CurrencyCode", $orderby == 'CurrencyCode')
+            "ShowInExpenseClaims" => array("ShowInExpenseClaims", $orderby == 'ShowInExpenseClaims'),
+            "ReportingCode" => array("ReportingCode", $orderby == 'ReportingCode')
         );
     }
     
@@ -103,7 +105,7 @@ class CT_Xero_Accounts_List_Table extends WP_List_Table
         ));
       
         $query  = "SELECT * FROM {$wpdb->prefix}xero_accounts ";
-        $query .= " ORDER BY $orderby $order ";
+        $query .= " ORDER BY Class asc, $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         
         $this->items = $wpdb->get_results($query);
