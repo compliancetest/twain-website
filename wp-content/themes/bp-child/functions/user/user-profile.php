@@ -784,8 +784,8 @@ function cp_get_customer_harness_detail()
                             jQuery('#harness-detail-box' + id + ' .loading').hide();
                             jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
                         }
-                    })
-                    return false;
+                    });
+                    //return false;
                 }
                 
                 function selectAlias() 
