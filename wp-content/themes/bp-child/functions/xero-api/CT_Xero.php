@@ -100,6 +100,8 @@ class CT_Xero {
         $this->xero->request('GET', $this->xero->url('Accounts', 'core'));
         
         $accounts = $this->responseToArray();
+        
+        var_dump($accounts['Accounts']);
         foreach($accounts as $account)
         {
             var_dump($accounts);
