@@ -170,14 +170,14 @@ function ct_process_xeroitem_admin_actions()
             $xero = new CT_Xero();
             $xero->updateAccounts();
             echo 'Completed';
-            /*?>
+            ?>
             <script type="text/javascript">
                 setTimeout(function(){
                     document.location.href = '<?php echo admin_url()?>admin.php?page=xero-accounts';
                 }, 1000);
             </script>
             <?php
-*/
+
             exit;
         }
     }

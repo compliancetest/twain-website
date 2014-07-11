@@ -109,8 +109,7 @@ class CT_Xero {
             $wpdb->insert($wpdb->prefix . "xero_accounts", $account);
         }
         
-        
-        exit;
+        return true;
         
     }
 
