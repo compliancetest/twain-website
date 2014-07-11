@@ -107,6 +107,7 @@ class CT_Xero {
         foreach($accounts['Accounts']['Account'] as $account)
         {         
             $wpdb->insert($wpdb->prefix . "xero_accounts", $account);
+            var_dump($account);
             echo $wpdb->last_error;
         }
         exit;
