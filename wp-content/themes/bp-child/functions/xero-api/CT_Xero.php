@@ -101,8 +101,14 @@ class CT_Xero {
         
         $accounts = $this->responseToArray();
         
-        var_dump($accounts['Accounts']);
-
+        //Remove All Data
+        $wpdb->query("DELETE FROM {$wpdb->prefix}xero_accounts");
+        
+        foreach($accounts['Accounts'] as $account)
+        {
+            $wpdb->insert($wpdb->prefix . "xero_accounts", $account);
+        }
+        
         
         exit;
         
