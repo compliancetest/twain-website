@@ -105,11 +105,10 @@ class CT_Xero {
         $wpdb->query("DELETE FROM {$wpdb->prefix}xero_accounts");
         
         foreach($accounts['Accounts'] as $account)
-        {
-            var_dump($account);
+        {         
             $wpdb->insert($wpdb->prefix . "xero_accounts", $account);
         }
-        exit;
+        
         return true;
         
     }
