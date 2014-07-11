@@ -29,6 +29,9 @@ function ct_show_xeroitems_list()
         ?>
         </form>
     </div>
+    <div class="wrap">
+        <a href="<?php echo admin_url()?>admin.php?page=add-xeroitem&org-action=reload-xeroitems">Update Items From Xero</a>
+    </div>
     <?php       
 }
 
@@ -127,6 +130,19 @@ function ct_process_xeroitem_admin_actions()
                 $_GET['org-message'] = $wpdb->last_error;
                 return;
             }
+        } else if( $action == 'reload-xeroitems' ){
+            $xero = new CT_Xero();
+            $xero->updateItems();
+            echo 'Done';
+            ?>
+            <script type="text/javascript">
+                setTimeout(function(){
+                    document.location.href = '<?php echo admin_url()?>admin.php?page=manage-xeroitems';
+                }, 1000);
+            </script>
+            <?php
+
+            exit;
         }
     }
     

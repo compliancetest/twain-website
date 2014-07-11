@@ -81,8 +81,6 @@ class CT_Xeroitems_List_Table extends WP_List_Table
     {
         global $wpdb;
 
-        $xero = new CT_Xero();
-        $xero->updateItems();
         $paged = $this->get_pagenum();
         
         $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'code';
