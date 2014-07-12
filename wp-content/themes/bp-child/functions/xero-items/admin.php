@@ -64,6 +64,8 @@ function ct_show_xeroitems_list()
 */
 function ct_show_new_xeroitem()
 {
+    global $wpdb;
+    
     $variables = get_class_vars('CT_Xeroitem');
     $data = array();    
     foreach(array_keys($variables) as $_m)
@@ -84,6 +86,10 @@ function ct_show_new_xeroitem()
     {
         $id = null;    
     }
+    
+    //Getting Accounts
+    $query = "SELECT * FROM {$wpdb->prefix}xero_accounts ORDER BY Class ASC, Name ASC";
+    $accounts = $wpdb->get_results($query);
     ?>
     <div class="wrap">
         <h2><?php echo $id ? 'Edit' : 'New'?> Xero Item</h2>
@@ -110,7 +116,14 @@ function ct_show_new_xeroitem()
                 </tr>
                 <tr>    
                     <th>Account Code</th>
-                    <td><input type="text" name="account_code" id="account_code" value="<?php echo $data['account_code']?>" required="required"/></td>
+                    <td>
+                        <select name="account_code" id="account_code">
+                            <option>- Select -</option>
+                        <?php foreach($accounts as $acc): ?>
+                            <option value="<?php echo $acc->Code?>" <?php echo $data['account_code'] == $acc->Code ? "selected='selected'" : ""?>><?php echo $acc->Name; ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </td>
                 </tr>
                 <tr><td colspan="2"><input type="submit" value="Save Xero Item" class="button button-primary" /></td></tr>
             </table>
