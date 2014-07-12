@@ -125,7 +125,7 @@ function ct_show_new_xeroitem()
                         <?php if($acc->Class != $optGroup) :?>
                         <optgroup label="<?php echo $acc->Class?>"><?php echo $acc->Class?></optgroup>
                         <?php endif; ?>
-                            <option value="<?php echo $acc->Code?>" <?php echo $data['account_code'] == $acc->Code ? "selected='selected'" : ""?>><?php echo $acc->Class; ?>: <?php echo $acc->Name; ?></option>
+                            <option value="<?php echo $acc->Code?>" <?php echo $data['account_code'] == $acc->Code ? "selected='selected'" : ""?>><?php echo $acc->Name; ?></option>
                         
                         <?php 
                         $optGroup = $acc->Class;                        
