@@ -91,7 +91,7 @@ class CT_Xero_Accounts_List_Table extends WP_List_Table
         $order   = isset($_REQUEST['order']) ? $_REQUEST['order'] : 'asc';
 
         // Query items for this table
-        $query = "SELECT count(*) FROM {$wpdb->prefix}xeroitems";
+        $query = "SELECT count(*) FROM {$wpdb->prefix}xero_accounts";
         $totalItems = $wpdb->get_var($query);
         
         $totalPages = ceil($totalItems / $this->per_pages);
