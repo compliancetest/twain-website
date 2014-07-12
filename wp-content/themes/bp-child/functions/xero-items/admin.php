@@ -120,7 +120,7 @@ function ct_show_new_xeroitem()
                         <select name="account_code" id="account_code">
                             <option>- Select -</option>
                         <?php foreach($accounts as $acc): ?>
-                            <option value="<?php echo $acc->Code?>" <?php echo $data['account_code'] == $acc->Code ? "selected='selected'" : ""?>><?php echo $acc->Name; ?></option>
+                            <option value="<?php echo $acc->Code?>" <?php echo $data['account_code'] == $acc->Code ? "selected='selected'" : ""?>><?php echo $acc->Class; ?>: <?php echo $acc->Name; ?></option>
                         <?php endforeach; ?>
                         </select>
                     </td>
