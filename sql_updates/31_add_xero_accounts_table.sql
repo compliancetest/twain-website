@@ -1,6 +1,6 @@
 CREATE TABLE `wp_xero_accounts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `AcountID` varchar(255) DEFAULT NULL,
+  `AccountID` varchar(255) DEFAULT NULL,
   `Code` varchar(100) DEFAULT NULL,
   `Name` varchar(100) DEFAULT NULL,
   `Status` varchar(20) DEFAULT NULL,
@@ -13,4 +13,4 @@ CREATE TABLE `wp_xero_accounts` (
   `ReportingCode` varchar(100) DEFAULT NULL,
   `HasAttachments` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
