@@ -139,7 +139,10 @@ class CT_Xero {
                                 'Address' => array(
                                     'AddressType'  => 'POBOX',
                                     'AttentionTo'  => $contactData['billing_address_attention'],
-                                    'AddressLine1' => $contactData['billing_address'],
+                                    'AddressLine1' => $contactData['billing_address1'],
+                                    'AddressLine2' => $contactData['billing_address2'],
+                                    'AddressLine3' => $contactData['billing_address3'],
+                                    'AddressLine4' => $contactData['billing_address4'],
                                     'City'         => $contactData['billing_city'],
                                     'Region'       => $contactData['billing_state'],
                                     'PostalCode'   => $contactData['billing_postcode'],

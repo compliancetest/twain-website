@@ -7,7 +7,6 @@ class CT_Organisation
     var $organisation_name = '';
     var $organisation_domain = '';
     var $invoice_me = 0;
-    var $xero_contact_name = '';
     
     var $contact_first_name = '';
     var $contact_last_name = '';
@@ -16,7 +15,11 @@ class CT_Organisation
     var $abn = '';
     
     var $billing_address_attention = '';    
-    var $billing_address = '';
+    var $billing_address1 = '';
+    var $billing_address2 = '';
+    var $billing_address3 = '';
+    var $billing_address4 = '';
+    
     var $billing_city = '';
     var $billing_postcode = '';
     var $billing_state = '';

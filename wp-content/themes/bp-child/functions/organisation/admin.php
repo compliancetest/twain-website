@@ -85,10 +85,6 @@ function ct_show_new_organisation()
                     <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>" required="required"/></td>
                 </tr>
                 <tr>    
-                    <th>Xero Contact Name</th>
-                    <td><input type="text" name="xero_contact_name" id="xero_contact_name" value="<?php echo $data['xero_contact_name']?>" required="required"/></td>
-                </tr>
-                <tr>    
                     <th>Organisation Domain</th>
                     <td><input type="text" name="organisation_domain" id="organisation_domain" value="<?php echo $data['organisation_domain']?>" required="required"/></td>
                 </tr>
@@ -136,8 +132,20 @@ function ct_show_new_organisation()
                     <td><input type="text" name="billing_address_attention" id="billing_address_attention" value="<?php echo $data['billing_address_attention']?>" size="40" required="required"/></td>
                 </tr>                
                 <tr>    
-                    <th>Address</th>
-                    <td><input type="text" name="billing_address" id="billing_address" value="<?php echo $data['billing_address']?>" size="40" required="required"/></td>
+                    <th>Address1</th>
+                    <td><input type="text" name="billing_address1" id="billing_address1" value="<?php echo $data['billing_address1']?>" size="40" required="required"/></td>
+                </tr>                
+                <tr>    
+                    <th>Address2</th>
+                    <td><input type="text" name="billing_address2" id="billing_address2" value="<?php echo $data['billing_address2']?>" size="40" required="required"/></td>
+                </tr>                
+                <tr>    
+                    <th>Address3</th>
+                    <td><input type="text" name="billing_address3" id="billing_address3" value="<?php echo $data['billing_address3']?>" size="40" required="required"/></td>
+                </tr>                
+                <tr>    
+                    <th>Address4</th>
+                    <td><input type="text" name="billing_address4" id="billing_address4" value="<?php echo $data['billing_address4']?>" size="40" required="required"/></td>
                 </tr>                
                 <tr>    
                     <th>City</th>
@@ -217,14 +225,16 @@ function ct_process_organisation_admin_actions()
                     $organisationData = array(
                         'contact_id'                => $contact['ContactID'],
                         'organisation_name'         => $contact['Name'],
-                        'xero_contact_name'         => $contact['Name'],
                         'invoice_me'                => 0,
                         'contact_first_name'        => $contact['FirstName'],
                         'contact_last_name'         => $contact['LastName'],
                         'contact_email'             => $contact['EmailAddress'],
                         'abn'                       => $contact['TaxNumber'],
                         'billing_address_attention' => $contact['Addresses']['Address'][$address_key]['AttentionTo'],
-                        'billing_address'           => $contact['Addresses']['Address'][$address_key]['AddressLine1'],
+                        'billing_address1'           => $contact['Addresses']['Address'][$address_key]['AddressLine1'],
+                        'billing_address2'           => $contact['Addresses']['Address'][$address_key]['AddressLine2'],
+                        'billing_address3'           => $contact['Addresses']['Address'][$address_key]['AddressLine3'],
+                        'billing_address4'           => $contact['Addresses']['Address'][$address_key]['AddressLine4'],
                         'billing_city'              => $contact['Addresses']['Address'][$address_key]['City'],
                         'billing_postcode'          => $contact['Addresses']['Address'][$address_key]['PostalCode'],
                         'billing_state'             => $contact['Addresses']['Address'][$address_key]['Region'],
