@@ -86,7 +86,12 @@ class CT_Organisations_List_Table extends WP_List_Table
                     "<a href='admin.php?page=add-organisation&id=" . $item->id . "'>Edit</a>"                    
                 ));
             case 'billing_address':
-                return $item->billing_address_attention . " " . $item->billing_address . ", " . $item->billing_city . ", " . $item->billing_state . " " . $item->billing_postcode . ", " . $item->billing_country;
+                return $item->billing_address_attention . " " . 
+                        $item->billing_address1 . 
+                        (!$item->billing_address2 ? "" : (", " . $item->billing_address2)) . 
+                        (!$item->billing_address3 ? "" : (", " . $item->billing_address3)) . 
+                        (!$item->billing_address4 ? "" : (", " . $item->billing_address4)) . 
+                        ", " . $item->billing_city . ", " . $item->billing_state . " " . $item->billing_postcode . ", " . $item->billing_country;
             
             case 'phonenumber':
                 return "(" . $item->phonenumber_countrycode . ") " . "(" . $item->phonenumber_areacode . ") " . $item->phonenumber;

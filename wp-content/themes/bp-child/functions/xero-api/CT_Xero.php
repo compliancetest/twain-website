@@ -113,7 +113,7 @@ class CT_Xero {
     }
 
     public function upsertContact( $contactData ){
-        $requiredFields = array( 'organisation_name', 'contact_first_name', 'contact_last_name', 'contact_email', 'abn', 'phonenumber', 'phonenumber_areacode', 'phonenumber_countrycode', 'billing_address_attention', 'billing_address', 'billing_city', 'billing_state', 'billing_postcode', 'billing_country' );
+        $requiredFields = array( 'organisation_name', 'contact_first_name', 'contact_last_name', 'contact_email', 'abn', 'phonenumber', 'phonenumber_areacode', 'phonenumber_countrycode', 'billing_address_attention', 'billing_address1', 'billing_address2', 'billing_address3', 'billing_address4', 'billing_city', 'billing_state', 'billing_postcode', 'billing_country' );
         foreach( $requiredFields AS $requiredField ){
             if( ! isset( $contactData[$requiredField] ) || empty( $contactData[$requiredField] ) ){
                 return 'Some required fields missed or empty';

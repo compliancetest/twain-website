@@ -82,7 +82,7 @@ class CT_Organisation
         {
             $response = $xero->upsertContact( $data );
 
-            if( is_array( $response) ){
+            if(is_array( $response) ){
                 return $wpdb->insert($wpdb->prefix . "organisations", array_merge( $data, array( 'contact_id' => $response['Contacts']['Contact']['ContactID'] ) ));
             }
             //Insert
@@ -91,7 +91,7 @@ class CT_Organisation
         else
         {
             $response = $xero->upsertContact( $data );
-            if( is_array( $response) ){
+            if(is_array( $response) ){
                 return $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
             }
             //Update
