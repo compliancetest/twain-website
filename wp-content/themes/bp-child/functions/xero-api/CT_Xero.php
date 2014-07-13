@@ -42,7 +42,7 @@ class CT_Xero {
     }
 
     /**
-     * Function used to update all local item with data from Xero API.
+     * Function used to update all local items with data from Xero API.
      * @return bool
      */
     public function updateItems(){
@@ -113,7 +113,7 @@ class CT_Xero {
     }
 
     public function upsertContact( $contactData ){
-        $requiredFields = array( 'organisation_name', 'contact_first_name', 'contact_last_name', 'contact_email', 'abn', 'phonenumber', 'phonenumber_areacode', 'phonenumber_countrycode', 'billing_address_attention', 'billing_address1', 'billing_address2', 'billing_address3', 'billing_address4', 'billing_city', 'billing_state', 'billing_postcode', 'billing_country' );
+        $requiredFields = array( 'contact_id' );
         foreach( $requiredFields AS $requiredField ){
             if( ! isset( $contactData[$requiredField] ) || empty( $contactData[$requiredField] ) ){
                 return 'Some required fields missed or empty';
@@ -154,14 +154,10 @@ class CT_Xero {
         $this->array2xml( $xeroData, $xml);
         $xml = '<Contacts>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Contacts>';
         $this->xero->request('POST', $this->xero->url('Contacts', 'core'), array(), $xml);
-//        var_dump($contactData);
-//        var_dump($xeroData);
-//        echo ($xml);
-//        var_dump($this->xero->response);die;
         if ( $this->xero->response['code'] == 200 ) {
             return $this->responseToArray();
         }
-        return $this->xero->response;
+        return 'Xero Validation Error';
     }
 
     public function getContacts( $countactID = false ){

@@ -75,18 +75,17 @@ function ct_show_new_organisation()
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
             <table class="widefat" style="width: auto;">
-                <?php if( $id ):?>
-                    <tr>
-                        <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" required="required"/></td>
-                    </tr>
-                <?php endif;?>
-                <tr>    
+                <tr>
+                    <th>Contact ID</th>
+                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40" required="required" <?php if( $id ):?> readonly="readonly"<?php endif;?>/></td>
+                </tr>
+                <tr>
                     <th>Organisation Name</th>
-                    <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>" required="required"/></td>
+                    <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>"/></td>
                 </tr>
                 <tr>    
                     <th>Organisation Domain</th>
-                    <td><input type="text" name="organisation_domain" id="organisation_domain" value="<?php echo $data['organisation_domain']?>" required="required"/></td>
+                    <td><input type="text" name="organisation_domain" id="organisation_domain" value="<?php echo $data['organisation_domain']?>"/></td>
                 </tr>
                 <tr>    
                     <th>Invoice Me</th>
@@ -100,7 +99,7 @@ function ct_show_new_organisation()
                             $users = get_users();
                         ?>
                         <select name="admin_id" id="admin_id">
-                            <option>- Select -</option>
+                            <option value="">- Select -</option>
                             <?php foreach($users as $u): ?>
                             <option value="<?php echo $u->ID?>" <?php echo $u->ID == $data['admin_id'] ? 'selected="selected"' : ''?>><?php echo $u->display_name ?> (<?php echo $u->user_email ?>)</option>
                             <?php endforeach; ?>
@@ -112,56 +111,56 @@ function ct_show_new_organisation()
                 </tr>
                 <tr>    
                     <th>First Name</th>
-                    <td><input type="text" name="contact_first_name" id="contact_first_name" value="<?php echo $data['contact_first_name']?>" required="required"/></td>
+                    <td><input type="text" name="contact_first_name" id="contact_first_name" value="<?php echo $data['contact_first_name']?>"/></td>
                 </tr>
                 <tr>    
                     <th>Last Name</th>
-                    <td><input type="text" name="contact_last_name" id="contact_last_name" value="<?php echo $data['contact_last_name']?>" required="required"/></td>
+                    <td><input type="text" name="contact_last_name" id="contact_last_name" value="<?php echo $data['contact_last_name']?>"/></td>
                 </tr>
                 <tr>    
                     <th>Email Address</th>
-                    <td><input type="text" name="contact_email" id="contact_email" value="<?php echo $data['contact_email']?>" required="required"/></td>
+                    <td><input type="text" name="contact_email" id="contact_email" value="<?php echo $data['contact_email']?>"/></td>
                 </tr>
                 <tr>    
                     <th>ABN</th>
-                    <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>" required="required"/></td>
+                    <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>"/></td>
                 </tr>
                 <tr><td colspan="2"><b>Billing Address</b></td></tr>
                 <tr>    
                     <th>Attention</th>
-                    <td><input type="text" name="billing_address_attention" id="billing_address_attention" value="<?php echo $data['billing_address_attention']?>" size="40" required="required"/></td>
+                    <td><input type="text" name="billing_address_attention" id="billing_address_attention" value="<?php echo $data['billing_address_attention']?>" size="40"/></td>
                 </tr>                
                 <tr>    
                     <th>Address1</th>
-                    <td><input type="text" name="billing_address1" id="billing_address1" value="<?php echo $data['billing_address1']?>" size="40" required="required"/></td>
+                    <td><input type="text" name="billing_address1" id="billing_address1" value="<?php echo $data['billing_address1']?>" size="40"/></td>
                 </tr>                
                 <tr>    
                     <th>Address2</th>
-                    <td><input type="text" name="billing_address2" id="billing_address2" value="<?php echo $data['billing_address2']?>" size="40" required="required"/></td>
+                    <td><input type="text" name="billing_address2" id="billing_address2" value="<?php echo $data['billing_address2']?>" size="40"/></td>
                 </tr>                
                 <tr>    
                     <th>Address3</th>
-                    <td><input type="text" name="billing_address3" id="billing_address3" value="<?php echo $data['billing_address3']?>" size="40" required="required"/></td>
+                    <td><input type="text" name="billing_address3" id="billing_address3" value="<?php echo $data['billing_address3']?>" size="40"/></td>
                 </tr>                
                 <tr>    
                     <th>Address4</th>
-                    <td><input type="text" name="billing_address4" id="billing_address4" value="<?php echo $data['billing_address4']?>" size="40" required="required"/></td>
+                    <td><input type="text" name="billing_address4" id="billing_address4" value="<?php echo $data['billing_address4']?>" size="40"/></td>
                 </tr>                
                 <tr>    
                     <th>City</th>
-                    <td><input type="text" name="billing_city" id="billing_city" value="<?php echo $data['billing_city']?>" required="required"/></td>
+                    <td><input type="text" name="billing_city" id="billing_city" value="<?php echo $data['billing_city']?>"/></td>
                 </tr>                
                 <tr>    
                     <th>State</th>
-                    <td><input type="text" name="billing_state" id="billing_state" value="<?php echo $data['billing_state']?>" required="required"/></td>
+                    <td><input type="text" name="billing_state" id="billing_state" value="<?php echo $data['billing_state']?>"/></td>
                 </tr>                
                 <tr>    
                     <th>Postcode</th>
-                    <td><input type="text" name="billing_postcode" id="billing_postcode" value="<?php echo $data['billing_postcode']?>" required="required"/></td>
+                    <td><input type="text" name="billing_postcode" id="billing_postcode" value="<?php echo $data['billing_postcode']?>"/></td>
                 </tr>                
                 <tr>    
                     <th>Country</th>
-                    <td><input type="text" name="billing_country" id="billing_country" value="<?php echo $data['billing_country']?>" required="required"/></td>
+                    <td><input type="text" name="billing_country" id="billing_country" value="<?php echo $data['billing_country']?>"/></td>
                 </tr>
                 <tr>    
                     <th>Telephone</th>
@@ -243,22 +242,17 @@ function ct_process_organisation_admin_actions()
                         'phonenumber_areacode'      => $contact['Phones']['Phone'][1]['PhoneAreaCode'],
                         'phonenumber_countrycode'   => $contact['Phones']['Phone'][1]['PhoneCountryCode']
                     );
-                    $table_id = $wpdb->get_var( $wpdb->prepare( "SELECT contact_id FROM {$wpdb->prefix}organisations WHERE contact_id = %s ", $contact['ContactID'] ) );
+                    $table_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}organisations WHERE contact_id = %s ", $contact['ContactID'] ) );
+
+                    //we update only entries that already exists in local database
                     if( $table_id ){
                         $wpdb->update( "{$wpdb->prefix}organisations",
                             $organisationData,
                             array( 'id' => $table_id ),
                             array(
-                                '%s', '%s', '%s', '%d', '%s', '%s', "%s", '%d', '%s', '%s', '%s', '%d', '%s', '%s', "%d", '%d', '%d'
+                                '%s', '%s', '%d', '%s', '%s', '%s', "%d", '%s', '%s', '%s', '%s', '%s', '%s', '%d', "%s", '%s', '%d', '%d', '%d'
                             ),
                             array( '%d' )
-                        );
-                    } else {
-                        $wpdb->insert( "{$wpdb->prefix}organisations",
-                            $organisationData,
-                            array(
-                                '%s', '%s', '%s', '%d', '%s', '%s', "%s", '%d', '%s', '%s', '%s', '%d', '%s', '%s', "%d", '%d', '%d'
-                            )
                         );
                     }
                 }
