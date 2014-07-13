@@ -825,8 +825,6 @@ function cp_get_customer_harness_detail_profile_data()
     foreach ($gateways as $gateway) {
         if ($gateway->alias_list != '') {
             $alias_group = explode('|', $gateway->alias_list);
-        }
-        if (count($alias_group) > 0) {
             foreach ($alias_group as $alias) {
                 $alias_list[] = array('gateway_id' => $gateway->gateway_id, 'alias' => $alias);
             }
