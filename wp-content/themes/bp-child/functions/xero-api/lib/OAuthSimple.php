@@ -428,7 +428,7 @@ class OAuthSimple {
 
                 $publickey = "";
                 // Fetch the public key
-                if($publickey = openssl_get_publickey($this->_readFile($this->_secrets['public_key']))){
+                if($publickey = openssl_get_publickey( file_exists( $this->_secrets['public_key'] ) ? $this->_readFile($this->_secrets['public_key']) : $this->_secrets['public_key'])){
 
                 }else{
                     throw new OAuthSimpleException('Cannot access public key for signing');
@@ -436,7 +436,7 @@ class OAuthSimple {
                 
                 $privatekeyid = "";
                 // Fetch the private key
-                if($privatekeyid = openssl_pkey_get_private($this->_readFile($this->_secrets['private_key'])))
+                if($privatekeyid = openssl_pkey_get_private( file_exists( $this->_secrets['private_key'] ) ?$this->_readFile($this->_secrets['private_key']) : $this->_secrets['private_key']))
                 {
                     // Sign using the key
                      $this->sbs = $this->_oauthEscape($this->_action).'&'.$this->_oauthEscape($this->_path).'&'.$this->_oauthEscape($this->_normalizedParameters());

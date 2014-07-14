@@ -57,12 +57,15 @@ function create_compliancetest_settings_page()
         update_option('xero_consumer_key', $_POST['xero_consumer_key']);
         update_option('xero_consumer_secret', $_POST['xero_consumer_secret']);
         if (!empty($_FILES) && is_uploaded_file($_FILES['xero_public_key']['tmp_name'])) {
-            move_uploaded_file( $_FILES['xero_public_key']['tmp_name'], dirname(__FILE__).'/xero-api/certs/publickey.cer' );
             update_option('xero_public_key',  $_FILES['xero_public_key']['name'] );
+            update_option('xero_public_key_file',  file_get_contents( $_FILES['xero_public_key']['tmp_name'] ) );
+            move_uploaded_file( $_FILES['xero_public_key']['tmp_name'], dirname(__FILE__).'/xero-api/certs/publickey.cer' );
+
         }
         if (!empty($_FILES) && is_uploaded_file($_FILES['xero_private_key']['tmp_name'])) {
-            move_uploaded_file( $_FILES['xero_private_key']['tmp_name'], dirname(__FILE__).'/xero-api/certs/privatekey.pem' );
             update_option('xero_private_key', $_FILES['xero_private_key']['name'] );
+            update_option('xero_private_key_file',  file_get_contents( $_FILES['xero_private_key']['tmp_name'] ) );
+            move_uploaded_file( $_FILES['xero_private_key']['tmp_name'], dirname(__FILE__).'/xero-api/certs/privatekey.pem' );
         }
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-pdf-certificate-settings')){    

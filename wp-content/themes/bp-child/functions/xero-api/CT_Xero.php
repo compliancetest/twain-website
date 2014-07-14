@@ -18,9 +18,9 @@ class CT_Xero {
 
         $consumerKey    = get_option( 'xero_consumer_key' );
         $consumerSecret = get_option( 'xero_consumer_secret' );
-        $publicKey      = get_option( 'xero_public_key' );
-        $privateKey     = get_option( 'xero_private_key' );
-        
+        $publicKey      = get_option( 'xero_public_key_file' );
+        $privateKey     = get_option( 'xero_private_key_file' );
+
         if( ! $consumerKey || ! $consumerSecret || ! $privateKey || ! $publicKey ){
             throw new \Exception( 'Consumer key OR secret not setted up correctly! ');
         }
@@ -34,8 +34,8 @@ class CT_Xero {
                     // API versions
                     'core_version'    => '2.0',
                     'payroll_version' => '1.0',
-                    'rsa_private_key' => dirname(__FILE__).'/certs/privatekey.pem',
-                    'rsa_public_key'  => dirname(__FILE__).'/certs/publickey.cer'
+                    'rsa_private_key' => $privateKey,
+                    'rsa_public_key'  => $publicKey
                 )
         ) );
         $this->xero->config['access_token']        = $this->xero->config ['consumer_key'];
@@ -166,6 +166,7 @@ class CT_Xero {
         $where = array();
         if( $countactID ) $where = array( 'ContactID' => $countactID );
         $this->xero->request('GET', $this->xero->url('Contacts', 'core'), $where );
+        var_dump($this->xero->response);die;
         $response = $this->responseToArray();
         if( isset( $response['Contacts']['Contact'] ) && is_array( $response['Contacts']['Contact'] ) ){
             return $response['Contacts']['Contact'];
