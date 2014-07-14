@@ -167,8 +167,6 @@ class CT_Xero {
         if( $countactID ) $where = array( 'ContactID' => $countactID );
         $this->xero->request('GET', $this->xero->url('Contacts', 'core'), $where );
         $response = $this->responseToArray();
-        var_dump($this->xero->response);die;
-
         if( isset( $response['Contacts']['Contact'] ) && is_array( $response['Contacts']['Contact'] ) ){
             return $response['Contacts']['Contact'];
         }
