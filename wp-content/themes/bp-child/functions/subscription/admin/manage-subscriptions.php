@@ -5,6 +5,7 @@
 
 require_once(THE_FUNCTION . '/subscription/admin/users-subscriptions-list-table.php');
 require_once(THE_FUNCTION . '/subscription/admin/users-payments-logs-list-table.php');
+require_once(THE_FUNCTION . '/subscription/admin/charges-table.php');
 
 add_action('admin_menu', 'ct_add_manage_subscriptions_menu');
 
@@ -12,7 +13,8 @@ function ct_add_manage_subscriptions_menu()
 {
     add_menu_page("Payments", "Payments", "manage_options", "manage-payments", "ct_manage_subscriptions_users_list");
     add_submenu_page("manage-payments", "Users", "Users", "manage_options", "users", "ct_manage_subscriptions_users_list");
-    add_submenu_page("manage-payments", "Processing", "Processing", "manage_options", "processing", "ct_manage_subscriptions_trigger_processing");    
+    add_submenu_page("manage-payments", "Processing", "Processing", "manage_options", "processing", "ct_manage_subscriptions_trigger_processing");
+    add_submenu_page("manage-payments", "Generate Invoices", "Generate Invoices", "manage_options", "charges", "ct_manage_invoices");
     
     wp_enqueue_style("manage-payments", get_stylesheet_directory_uri() . "/functions/subscription/admin/manage-payments.css");
 }
@@ -412,6 +414,23 @@ function ct_manage_subscriptions_show_users_list()
         </form>
     </div>
     <?php       
+}
+
+function ct_manage_invoices()
+{
+    $listTable = new CT_Organisations_Charge_Table();
+    $listTable->prepare_items();
+    ?>
+    <div class="wrap">
+        <h2 style="float: left">Payments</h2>
+        <br clear="all" />
+        <form name="adminform" action="users.php?page=invoices" method="post">
+            <?php
+            echo $listTable->display();
+            ?>
+        </form>
+    </div>
+<?php
 }
 
 function ct_manage_subscriptions_show_user_detail()
