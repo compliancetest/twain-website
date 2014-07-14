@@ -12,14 +12,16 @@ class CT_Xero {
 
     const OAUTH_CALLBACK = 'oob';
 
-    const USER_AGENT = 'ComplianceTest Pty Ltd (Test)';
+    const USER_AGENT = 'ComplianceTest Pty Ltd';
 
     public function __construct(){
 
         $consumerKey    = get_option( 'xero_consumer_key' );
         $consumerSecret = get_option( 'xero_consumer_secret' );
+        $publicKey      = get_option( 'xero_public_key' );
+        $privateKey     = get_option( 'xero_private_key' );
         
-        if( ! $consumerKey || ! $consumerSecret ){
+        if( ! $consumerKey || ! $consumerSecret || ! $privateKey || ! $publicKey ){
             throw new \Exception( 'Consumer key OR secret not setted up correctly! ');
         }
         $this->xero = new XeroOAuth ( array_merge ( array (
@@ -165,6 +167,8 @@ class CT_Xero {
         if( $countactID ) $where = array( 'ContactID' => $countactID );
         $this->xero->request('GET', $this->xero->url('Contacts', 'core'), $where );
         $response = $this->responseToArray();
+        var_dump($this->xero->response);die;
+
         if( isset( $response['Contacts']['Contact'] ) && is_array( $response['Contacts']['Contact'] ) ){
             return $response['Contacts']['Contact'];
         }

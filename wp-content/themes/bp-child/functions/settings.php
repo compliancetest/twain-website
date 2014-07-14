@@ -56,6 +56,14 @@ function create_compliancetest_settings_page()
         //Save Options
         update_option('xero_consumer_key', $_POST['xero_consumer_key']);
         update_option('xero_consumer_secret', $_POST['xero_consumer_secret']);
+        if (!empty($_FILES) && is_uploaded_file($_FILES['xero_public_key']['tmp_name'])) {
+            move_uploaded_file( $_FILES['xero_public_key']['tmp_name'], dirname(__FILE__).'/xero-api/certs/publickey.cer' );
+            update_option('xero_public_key',  $_FILES['xero_public_key']['name'] );
+        }
+        if (!empty($_FILES) && is_uploaded_file($_FILES['xero_private_key']['tmp_name'])) {
+            move_uploaded_file( $_FILES['xero_private_key']['tmp_name'], dirname(__FILE__).'/xero-api/certs/privatekey.pem' );
+            update_option('xero_private_key', $_FILES['xero_private_key']['name'] );
+        }
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-pdf-certificate-settings')){    
         if (!empty($_FILES) && is_uploaded_file($_FILES['pdf_certificate']['tmp_name'])) {
@@ -348,7 +356,7 @@ function create_compliancetest_settings_page()
 
             <div id="ct-xero-settings">
                 <h3>Xero Settings</h3>
-                <form method="post" action="">
+                <form method="post" action="" enctype="multipart/form-data">
                     <table class="widefat">
                         <tr>
                             <th><label><b>Consumer Key:</b></label></th>
@@ -357,6 +365,22 @@ function create_compliancetest_settings_page()
                         <tr>
                             <th><label><b>Consumer Secret:</b></label></th>
                             <td><input type="text" name="xero_consumer_secret" id="xero_consumer_secret" value="<?php echo get_option('xero_consumer_secret')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Private key:</b></label></th>
+                            <td>
+                                <input type="file" name="xero_private_key" id="xero_private_key"/>
+                                <?php $xero_private_key_name = get_option('xero_private_key'); ?>
+                                <label><?php echo ($xero_private_key_name) ? ('(Currently '.$xero_private_key_name.')') : (''); ?></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Public key:</b></label></th>
+                            <td>
+                                <input type="file" name="xero_public_key" id="xero_public_key" />
+                                <?php $xero_public_key_name = get_option('xero_public_key'); ?>
+                                <label><?php echo ($xero_public_key_name) ? ('(Currently '.$xero_public_key_name.')') : (''); ?></label>
+                            </td>
                         </tr>
 
                     </table>
