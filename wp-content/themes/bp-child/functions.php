@@ -1075,7 +1075,7 @@ function is_organisation_admin()
     $current_user_id = get_current_user_id();
     
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->organisations WHERE admin_id = %d", $current_user_id));
-    
+    echo $wpdb->prepare("SELECT * FROM $wpdb->organisations WHERE admin_id = %d", $current_user_id);
     if ($row) {
         return true;
     }
