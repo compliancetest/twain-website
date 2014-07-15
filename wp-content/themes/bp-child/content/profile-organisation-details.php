@@ -8,10 +8,9 @@ if(!defined('ABSPATH')) {
     
     global $current_user;
     
-    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->organisations WHERE admin_id = %d", $current_user->ID));
+    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations WHERE admin_id = %d", $current_user->ID));
         
     $organisation = new CT_Organisation($row->id);
-    print_r($organisation);
 ?>
 <div class="left three_fifths">                
     <div class="grid-box" id="my_details">
