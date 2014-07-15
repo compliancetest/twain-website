@@ -3,36 +3,8 @@
  * Template Name: My Organisation
  */
 
-if (is_organisation_admin()) {
+if (!is_organisation_admin()) {
     
-    global $current_user;
-    
-    $userInfo = get_user_meta( $current_user->ID );
-    
-    $fname = $userInfo['first_name'][0];
-    $lname = $userInfo['last_name'][0];
-    $uemail = $current_user->user_email;
-    $phone = get_user_meta($current_user->ID, 'phone_number', true);
-    $timezone = get_user_meta($current_user->ID, 'timezone', true);
-    $dashboard_page_url = get_user_meta($current_user->ID, 'dashboard_page_url', true);
-    $dashboard_page_title = get_user_meta($current_user->ID, 'dashboard_page_title', true);
-    $dashboard_page_url = ($dashboard_page_url == '') ? ('/my-profile') : ($dashboard_page_url);
-    $dashboard_page_title = ($dashboard_page_title == '') ? ('Profile') : ($dashboard_page_title);
-    
-    $biography = get_user_meta($current_user->ID, 'description', true);
-    
-    $user_org = get_user_meta($current_user->ID, 'user_organisation', true);
-    $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
-    $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
-    $user_org_abn = get_user_meta($current_user->ID, 'user_organisation_abn', true);
-    
-    
-    $user = get_userdata( $current_user->ID );
-    $user_status = $user->user_status;
-
-    $capabilities = $user->{$wpdb->prefix . 'capabilities'};
-
-}else{
     wp_redirect(home_url());
     exit;
 }
