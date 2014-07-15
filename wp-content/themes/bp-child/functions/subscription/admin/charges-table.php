@@ -59,11 +59,11 @@ class CT_Organisations_Charge_Table extends WP_List_Table
         if($which == "top")
         {
             ?>
-            <div style="float: left;">
-                <?php
-                $this->search_box("Search", "search");
-                ?>
-            </div>
+<!--            <div style="float: left;">-->
+<!--                --><?php
+//                $this->search_box("Search", "search");
+//                ?>
+<!--            </div>-->
         <?php
         }
     }
@@ -74,27 +74,19 @@ class CT_Organisations_Charge_Table extends WP_List_Table
 
         switch($column_name)
         {
-            case 'username':
-                return get_avatar($item->ID, 22) . '<strong>' . $item->user_login . '</strong>' . $this->row_actions(array(
-                    "<a href='admin.php?page=users&action=detail&id=" . $item->ID . "'>Detail</a>"
-                ));
-            case 'name':
-                return $item->first_name . " " . $item->last_name;
-
-            case 'email':
-                return $item->user_email;
-
-            case 'payments_methods':
-                return !isset($item->cards) ? 0 : $item->cards;
-
-            case 'subscriptions':
-                return !isset($item->subscriptions) ? 0 : $item->subscriptions;
-
-            case 'total_ticket_hours':
-                return str_pad($item->total_ticket_hours_normal, 2, '0', STR_PAD_LEFT) . ' / ' . str_pad($item->total_ticket_hours_high, 2, '0', STR_PAD_LEFT) . ' / ' . str_pad($item->total_ticket_hours_urgent, 2, '0', STR_PAD_LEFT);
-            case 'pending_ticket_hours':
-                return $item->pending_ticket_hours_normal . '/' . $item->pending_ticket_hours_high . '/' . $item->pending_ticket_hours_urgent;
-
+            case 'organisation_id':
+                $organisation_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE id = %d", $item->organisation_id));
+                return "<a href='admin.php?page=add-organisation&id=" . $organisation_data->id . "'>".$organisation_data->organisation_name."</a>" .
+                $this->row_actions(array(
+                    "<a href='admin.php?page=add-charge&id=" . $item->id . "'>Edit</a>"
+                ));;
+            case 'item_code':
+                $item_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}xeroitems WHERE code = %s", $item->item_code));
+                return "<a href='admin.php?page=add-xeroitem&id=" . $item_data->id . "'>".$item_data->code."</a>";
+            case 'payment_id':
+                return $item->payment_id ? 'Invoice Me' : 'Credit Card';
+            case 'is_paid':
+                return $item->is_paid ? 'Paid' : 'Not Paid';
             default:
                 return $item->$column_name;
         }
@@ -106,7 +98,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
 
         $paged = $this->get_pagenum();
 
-        $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'code';
+        $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'organisation_id';
         $order   = isset($_REQUEST['order']) ? $_REQUEST['order'] : 'asc';
 
         // Query items for this table
