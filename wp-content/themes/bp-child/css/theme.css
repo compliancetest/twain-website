@@ -4554,7 +4554,8 @@ span.button_sign {
 #my_profile .grid-box .grid-box-header h5{
     font-weight: bold;
 }
-#my_profile .grid-box .btn-row{
+#my_profile .grid-box .btn-row, 
+#organisation-container .grid-box .btn-row {
     display: none;
 }
 
