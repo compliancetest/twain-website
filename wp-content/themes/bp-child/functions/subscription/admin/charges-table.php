@@ -29,6 +29,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             "end_date"        => __("End Date"),
             "reference_type"  => __("Reference Type"),
             "reference_id"    => __("Reference ID"),
+            "quantity"        => __("Quantity"),
             "invoice_identifier" => __("Invoice Identifier"),
             "is_paid" => __("Paid Status"),
             "comment" => __("Comment"),

@@ -3,6 +3,7 @@ CREATE TABLE `wp_organisations_charge` (
   `organisation_id` int(11) DEFAULT NULL,
   `payment_id` int(11) DEFAULT NULL,
   `item_code` varchar(255) DEFAULT NULL,
+  `quantity` INT NOT NULL,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
   `reference_type` enum('ticket','subscription') DEFAULT NULL,

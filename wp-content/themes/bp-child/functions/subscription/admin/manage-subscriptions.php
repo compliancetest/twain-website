@@ -511,6 +511,10 @@ function ct_add_charge()
                     </td>
                 </tr>
                 <tr>
+                    <th>Quantity</th>
+                    <td><input type="text" name="quantity" id="quantity" value="<?php echo $data['quantity'];?>" required="required"/></td>
+                </tr>
+                <tr>
                     <th>Start Date</th>
                     <td><input type="text" name="start_date" id="start_date" value="<?php echo $data['start_date'] ? $data['start_date'] : date( 'Y-m-d');?>" required="required"/></td>
                 </tr>

@@ -4,27 +4,29 @@
 */
 class CT_Charge
 {
-    var $id = null;
-    
-    var $organisation_id = null;
-    
-    var $payment_id = null;
-    
-    var $item_code = null;
-    
-    var $start_date = null;
-    
-    var $end_date = null;
-    
-    var $reference_type = null;
-    
-    var $reference_id = null;
-    
-    var $invoice_identifier = null;
-    
-    var $is_paid = null;
-    
-    var $comment = null;
+    public $id = null;
+
+    public $organisation_id = null;
+
+    public $payment_id = null;
+
+    public $item_code = null;
+
+    public $quantity = null;
+
+    public $start_date = null;
+
+    public $end_date = null;
+
+    public $reference_type = null;
+
+    public $reference_id = null;
+
+    public $invoice_identifier = null;
+
+    public $is_paid = null;
+
+    public $comment = null;
 
     public function __construct($id = null)
     {
