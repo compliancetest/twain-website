@@ -235,6 +235,7 @@ a:hover {
             #top_loged_actions .menu-coverage, 
             #top_loged_actions .menu-transactions, 
             #top_loged_actions .menu-support, 
+            #top_loged_actions .menu-organisation, 
             #top_loged_actions .menu-profile {
                 background-image: url(../images/ui-icon-sprites.png);
                 background-repeat: no-repeat;
@@ -284,6 +285,12 @@ a:hover {
             }
             #top_loged_actions .menu-support:hover {
                 background-position: 8px -594px;
+            }
+            #top_loged_actions .menu-organisation {
+                background-position: 8px -474px;
+            }
+            #top_loged_actions .menu-organisation:hover {
+                background-position: 8px -514px;
             }
             #top_loged_actions .menu-profile {
                 background-position: 8px -474px;
@@ -367,6 +374,12 @@ a:hover {
             }
             #top_loged_actions .leftmenu .menu-support:hover {
                 background-position: 136px -594px;
+            }
+            #top_loged_actions .leftmenu .menu-organisation {
+                background-position: 136px -474px;
+            }
+            #top_loged_actions .leftmenu .menu-organisation:hover {
+                background-position: 136px -514px;
             }
             #top_loged_actions .leftmenu .menu-profile {
                 background-position: 136px -474px;
@@ -7260,20 +7273,22 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     
 }
 .dashboard-tabs .tabs li {
-    
+    margin: 4px 7px 0 0;
 }
 .dashboard-tabs .tabs li.current_page_item {
     margin-top: 0px;
 }
 .dashboard-tabs .tabs li a {
+    padding-left: 3px;
+    padding-right: 3px;
 }
 .dashboard-tabs .tabs li.current_page_item a {
-    padding: 7px 5px;
+    padding: 7px 3px;
 }
 .dashboard-tabs .tabs li a span.menu-title {
     background: url(../images/tab_separator.png) left center no-repeat;
     font-family: 'Oswald', Arial, Helvetica sans-serif;
-    padding: 0 5px 0 10px;
+    padding: 0 3px 0 8px;
     font-size: 14px;
     line-height: 32px;
     display: inline-block;
@@ -7305,6 +7320,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .menu-coverage .menu-icon, 
 .dashboard-tabs .menu-transactions .menu-icon, 
 .dashboard-tabs .menu-support .menu-icon, 
+.dashboard-tabs .menu-organisation .menu-icon, 
 .dashboard-tabs .menu-profile .menu-icon {
     background-image: url(../images/ui-icon-sprites.png) !important;
     background-repeat: no-repeat;  
@@ -7363,6 +7379,13 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 
 .dashboard-tabs .menu-support.current_page_item .menu-icon {
     background-position: 5px -594px;
+}
+.dashboard-tabs .menu-organisation .menu-icon {
+    background-position: 5px -473px;
+}
+
+.dashboard-tabs .menu-organisation.current_page_item .menu-icon {
+    background-position: 5px -513px;
 }
 .dashboard-tabs .menu-profile .menu-icon {
     background-position: 5px -473px;
