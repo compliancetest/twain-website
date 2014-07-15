@@ -136,6 +136,28 @@ function cp_user_detail_edit()
     exit();
 }
 
+function cp_user_organisation_detail_edit()
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix ."organisations WHERE admin_id=%d AND id=%d", get_current_user_id(), $_REQUEST['organisation_id']);
+    $user_organisation_id = $wpdb->get_var($query);
+    
+    if ($user_organisation_id) {
+        $organisation = new CT_Organisation($user_organisation_id);
+        $organisationClass->bind($_POST);
+        $response = $organisationClass->save();
+        if (!is_string( $response )) {
+            echo 'success';
+        } else {
+            echo 'fail';
+        }
+    } else {
+        echo 'fail';
+    }
+    exit;
+}
+
 //Delete Payment Information
 function cp_delete_payment_method()
 {
