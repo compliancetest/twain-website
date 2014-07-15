@@ -459,6 +459,88 @@
             }
         })
         
+        // Organisation - transform divs in inputs at click on edit button
+        $('#organisation-container').on('click', '.gbh-btn-edit', function(){           
+            var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
+            var findInputs = $(thisParentId+' .grid-row input:visible').size();
+            jQuery(thisParentId).find('.message').remove();
+            if( findInputs == 0){
+
+                $(thisParentId+' .btn-row').fadeIn();
+                 $(thisParentId).addClass('grid-box-editing');
+                //transform all divs in inputs
+                $(thisParentId+' .grid-cell.in_input').each(function(){
+                   var thisTextVal = $(this).attr('data-value'); 
+                   var thisNameVal = $(this).attr('data-name'); 
+                   if($(this).attr('data-placeholder'))
+                       var thisPlaceholderValue = $(this).attr('data-placeholder');
+                   else
+                       var thisPlaceholderValue = '';
+                   
+                   if($(this).attr('data-type'))
+                       var dataType = $(this).attr('data-type');
+                   else
+                       var dataType = 'text';
+
+                   if(dataType == 'textarea')
+                       $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+                   else
+                       $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+
+                   $(this).hide();
+                });        
+            }
+
+            return false;
+        });
+
+        //Edit Cancel
+        $('#organisation-container').on('click', '.edit-cancel-btn', function(){
+            var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
+            var findInputs = $(thisParentId+' .grid-row input:visible').size();            
+            $(thisParentId).find('.message').remove();
+            //if( findInputs == 0){
+
+            $(thisParentId+' .btn-row').fadeIn();
+             $(thisParentId).addClass('grid-box-editing');
+            //transform all divs in inputs
+            $(thisParentId+' .grid-cell.in_input').each(function(){
+               $(this).next().remove();
+               $(this).show();
+            });
+            $(thisParentId+' .btn-row').hide();
+
+            return false;
+        });
+
+
+        //save my details updates
+        $('#organisation-container').on('click', '.process-btn', function(){
+
+            var form = $(this).parents('form');
+            form.find('.errors_msg').hide();
+            showGridBoxLoadingWrapper(form);
+            hideGridBoxResultMessage(form);
+            $.ajax({
+                url: '/my-profile',
+                data: form.serialize(),
+                type: 'POST',
+                success: function(rsp)
+                {
+                    hideGridBoxLoadingWrapper(form);
+                    if(rsp == 'success')
+                    {
+                        showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
+                        document.location.reload();
+                    }else{
+                        showGridBoxResultMessage(form, rsp, 'error');
+                    }
+                }
+            })
+            
+            return false;
+        });
+        
     });
     
 
