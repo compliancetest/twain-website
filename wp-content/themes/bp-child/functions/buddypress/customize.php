@@ -632,8 +632,10 @@ function getDashboardPages($type = 'page')
             if ($type == 'menu') {
                 $item['subpages'][] = array('title' => '+ Add', 'url' => home_url().'/test-suites');
             }
+        } elseif ($class == 'menu-organisation' && !is_organisation_admin()) {
+            continue;
         }
-        
+                
         $pages[] = $item;
     }
     
