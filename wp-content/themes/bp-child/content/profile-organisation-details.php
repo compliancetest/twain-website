@@ -113,7 +113,7 @@ if(!defined('ABSPATH')) {
     </div>                
     <div class="clear"></div>            
 </div>
-<?php $my_details_desc = get_post_meta($post->ID, 'my_details_desc', true);?>
+<?php $my_details_desc = get_post_meta($post->ID, 'my_organisation_desc', true);?>
 <?php if ($my_details_desc): ?>
 <div class="right two_fifths">
     <div class="gray_message_box radius9 light_gray_txt">
