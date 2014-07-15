@@ -39,6 +39,8 @@ function compliancetest_user_actions()
         cp_activate_email();
     }else if(wp_verify_nonce($cpAction,'my_details_edit')){
         cp_user_detail_edit();
+    }else if(wp_verify_nonce($cpAction,'organisation_detail_edit')){
+        cp_user_organisation_detail_edit();
     }else if(wp_verify_nonce($cpAction,'edit_payment_method')){
         cp_user_payment_edit();
     }else if(wp_verify_nonce($cpAction ,'save_payment_method')){
