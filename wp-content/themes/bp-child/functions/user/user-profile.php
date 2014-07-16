@@ -145,8 +145,8 @@ function cp_user_organisation_detail_edit()
     
     if ($user_organisation_id) {
         $organisation = new CT_Organisation($user_organisation_id);
-        $organisationClass->bind($_POST);
-        $response = $organisationClass->save();
+        $organisation->bind($_POST);
+        $response = $organisation->save();
         if (!is_string( $response )) {
             echo 'success';
         } else {
