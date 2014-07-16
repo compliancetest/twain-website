@@ -189,45 +189,31 @@ class CT_Xero {
             }
         }
         $xml = new SimpleXMLElement( '<Invoice></Invoice>' );
-        $xeroData = array(
-            'Type'    => 'ACCREC',
-            'Contact' => array(
-                'ContactID' => $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']))
-            ),
-            'Date'            => date('Y-m-d'),
-            'DueDate'         => date('Y-m-d', strtotime('+1 day')),
-            'LineAmountTypes' => 'Exclusive',
-            'LineItems' => '',
-            'CurrencyCode' => 'AUD'
-        );
-        $this->array2xml( $xeroData, $xml);
+        $xml->addChild( 'Type', 'ACCREC' );
+        $contact = $xml->addChild( 'Contact' );
+        $contact->addChild( 'ContactID', $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']) ) );
+        $xml->addChild( 'Date', date('Y-m-d') );
+        $xml->addChild( 'DueDate', date('Y-m-d', strtotime('+1 day')) );
+        $xml->addChild( 'LineAmountTypes', 'Exclusive' );
+        $xml->addChild( 'CurrencyCode', 'AUD' );
+        $line_items = $xml->addChild( 'LineItems' );
         /**
          * Get organisation charge table entries for current organisation with 'Invoice Me' payment type
          */
         $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id = 1 AND invoice_identifier = ''", $invoiceData['organisation_id']), ARRAY_A );
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
-                var_dump($entry);
-                $temp_xml = new SimpleXMLElement( '<LineItem></LineItem>' );
-                $temp_data = array( 'LineItem' => array(
-                        'ItemCode'    => $entry['item_code'],
-                        'Quantity'    => $entry['quantity']
-                    )
-                );
-                var_dump($temp_data);
-                $xml->addChild( 'LineItems', $temp_data );
+                $line_item = $line_items->addChild( 'LineItem' );
+                $line_item->addChild( 'ItemCode', $entry['item_code'] );
+                $line_item->addChild( 'Quantity', $entry['quantity'] );
             }
-            echo($xml->asXML());die;
         }
-        var_dump($charge_entries);die;
-        if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
-        $this->array2xml( $xeroData, $xml);
-        $xml = '<Invoices>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Invoices>';
-        $this->xero->request( 'GET', $this->xero->url('Invoices', 'core'), $where );
+        if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xml->addChild('ContactID', $contactData['contact_id'] );
+        $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
         if ($this->xero->response['code'] == 200) {
-            $invoices = $this->responseToArray();
-            var_dump($invoices);die;
+            return  $this->responseToArray();
         }
+        return false;
     }
     /**
      * @param $data Array with Contact details

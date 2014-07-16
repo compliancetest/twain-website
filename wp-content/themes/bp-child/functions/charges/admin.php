@@ -35,7 +35,9 @@ function ct_manage_invoices()
         </form>
     </div>
     <div class="wrap">
-        <a href="<?php echo admin_url()?>admin.php?page=charges&org-action=update-all">Generate / Update Invoices</a>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-all">Generate Invoices</a>
+        <div class="clear"></div>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-status">Update Invoices Status</a>
     </div>
 <?php
 }
@@ -179,15 +181,7 @@ function ct_process_charge_entry_admin_actions()
             if( $resp )
             {
                 echo 'Charge entry saved successfully';
-                ?>
-                <script type="text/javascript">
-                    setTimeout(function(){
-                        document.location.href = '<?php echo admin_url()?>admin.php?page=manage-charges';
-                    }, 1000);
-                </script>
-                <?php
-
-                exit;
+                redirect_and_exit();
             }else{
                 $_GET['org-message'] = $wpdb->last_error;
                 return;
@@ -196,13 +190,30 @@ function ct_process_charge_entry_admin_actions()
             $xero = new CT_Xero();
             //get entries without InvoiceID from wp_organisations_charge table
             $entries = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND payment_id = 1 GROUP BY organisation_id", ARRAY_A);
+            $counter = 0;
             if( $entries ){
                 foreach( $entries AS $entry ){
                     $invoice = $xero->upsertInvoiceMeInvoice( $entry );
+                    if( isset( $invoice['Invoices']['Invoice']['InvoiceID'] ) ){
+                        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_identifier = %s WHERE invoice_identifier = '' AND payment_id = 1 AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceID'], $entry['organisation_id'] ) );
+                        $counter++;
+                    }
                 }
             }
-            var_dump($entries);die;
+            echo 'Created '.$counter.' invoices';
+            redirect_then_exit();
         }
     }
 
+}
+function redirect_then_exit(){
+    ?>
+    <script type="text/javascript">
+        setTimeout(function(){
+            document.location.href = '<?php echo admin_url()?>admin.php?page=manage-charges';
+        }, 1000);
+    </script>
+    <?php
+
+    exit;
 }
