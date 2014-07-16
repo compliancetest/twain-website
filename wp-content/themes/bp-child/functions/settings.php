@@ -389,7 +389,7 @@ function create_compliancetest_settings_page()
                     </table>
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-xero-settings'); ?>
-                    <input type="hidden" name="tab_index" value="1">
+                    <input type="hidden" name="tab_index" value="7">
                 </form>
             </div>
 
