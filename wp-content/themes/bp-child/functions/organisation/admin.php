@@ -77,7 +77,7 @@ function ct_show_new_organisation()
             <table class="widefat" style="width: auto;">
                 <tr>
                     <th>Contact ID</th>
-                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40" required="required" <?php if( $id ):?> readonly="readonly"<?php endif;?>/></td>
+                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40" <?php if( $id ):?> readonly="readonly"<?php endif;?>/></td>
                 </tr>
                 <tr>
                     <th>Organisation Name</th>

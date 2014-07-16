@@ -82,6 +82,7 @@ class CT_Organisation
         $response = false;
         //remove empty values
         $data = array_diff( $data, array( '' ) );
+        $data = array_map( 'stripslashes_deep', $data );
         if( count( $data ) != 2 ){
             $response = $xero->upsertContact( $data );
         }

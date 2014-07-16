@@ -120,11 +120,8 @@ class CT_Xero {
      * @return array|string
      */
     public function upsertContact( $contactData ){
-        $requiredFields = array( 'contact_id' );
-        foreach( $requiredFields AS $requiredField ){
-            if( ! isset( $contactData[$requiredField] ) || empty( $contactData[$requiredField] ) ){
-                return 'Some required fields missed or empty';
-            }
+        if( count( $contactData ) < 2 ){
+            return 'Some required fields missed or empty';
         }
         $xml = new SimpleXMLElement( '<Contact></Contact>' );
         $xeroData = array(
