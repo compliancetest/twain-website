@@ -114,6 +114,11 @@ class CT_Xero {
         
     }
 
+    /**
+     * Function used to add / update Xero Contact
+     * @param $contactData Array with CT Organisation data
+     * @return array|string
+     */
     public function upsertContact( $contactData ){
         $requiredFields = array( 'contact_id' );
         foreach( $requiredFields AS $requiredField ){
@@ -162,6 +167,11 @@ class CT_Xero {
         return 'Xero Validation Error';
     }
 
+    /**
+     * Used to get Contact( if $countactID variable defined ) / All Contacts
+     * @param bool|string $countactID
+     * @return bool
+     */
     public function getContacts( $countactID = false ){
         $where = array();
         if( $countactID ) $where = array( 'ContactID' => $countactID );
@@ -173,6 +183,55 @@ class CT_Xero {
         return false;
     }
 
+    public function upsertInvoiceMeInvoice( $invoiceData ){
+        global $wpdb;
+        $requiredFields = array( 'organisation_id', 'item_code', 'quantity', 'start_date', 'end_date', 'reference_id' );
+        foreach( $requiredFields AS $requiredField ){
+            if( ! isset( $invoiceData[$requiredField] ) || empty( $invoiceData[$requiredField] ) ){
+                return 'Some required fields missed or empty';
+            }
+        }
+        $xml = new SimpleXMLElement( '<Invoice></Invoice>' );
+        $xeroData = array(
+            'Type'    => 'ACCREC',
+            'Contact' => array(
+                'ContactID' => $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']))
+            ),
+            'Date'            => date('Y-m-d'),
+            'DueDate'         => date('Y-m-d', strtotime('+1 day')),
+            'LineAmountTypes' => 'Exclusive',
+            'LineItems' => '',
+            'CurrencyCode' => 'AUD'
+        );
+        $this->array2xml( $xeroData, $xml);
+        /**
+         * Get organisation charge table entries for current organisation with 'Invoice Me' payment type
+         */
+        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id = 1 AND invoice_identifier = ''", $invoiceData['organisation_id']), ARRAY_A );
+        if( $charge_entries ){
+            foreach( $charge_entries AS $entry ){
+                var_dump($entry);
+                $temp_xml = new SimpleXMLElement( '<LineItem></LineItem>' );
+                $temp_data = array( 'LineItem' => array(
+                        'ItemCode'    => $entry['item_code'],
+                        'Quantity'    => $entry['quantity']
+                    )
+                );
+                var_dump($temp_data);
+                $xml->addChild( 'LineItems', $temp_data );
+            }
+            echo($xml->asXML());die;
+        }
+        var_dump($charge_entries);die;
+        if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
+        $this->array2xml( $xeroData, $xml);
+        $xml = '<Invoices>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Invoices>';
+        $this->xero->request( 'GET', $this->xero->url('Invoices', 'core'), $where );
+        if ($this->xero->response['code'] == 200) {
+            $invoices = $this->responseToArray();
+            var_dump($invoices);die;
+        }
+    }
     /**
      * @param $data Array with Contact details
      * @param $response - Xml with Contact details
