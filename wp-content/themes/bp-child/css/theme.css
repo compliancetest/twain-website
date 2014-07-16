@@ -4583,38 +4583,42 @@ span.button_sign {
     background-image: url(../images/notice-icon12.png);    
 }
 
-#my_profile input[type="text"], #my_profile input[type="password"]{
-background: #fff;
-width: 68%;
-padding: 4px 8px;
-border-radius: 3px;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
--o-border-radius: 3px;
+#my_profile input[type="text"], #my_profile input[type="password"],
+#organisation-container input[type="text"], #organisation-container input[type="password"] {
+    background: #fff;
+    width: 68%;
+    padding: 4px 8px;
+    border-radius: 3px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 3px;
 }
 
-#my_profile input[type="date"]{
-background: #fff;
-padding: 4px 15px;
-border-radius: 3px;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
--o-border-radius: 3px;
+#my_profile input[type="date"],
+#organisation-container input[type="date"] {
+    background: #fff;
+    padding: 4px 15px;
+    border-radius: 3px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 3px;
 }
 
-#my_profile input[type="radio"]{
+#my_profile input[type="radio"],
+#organisation-container input[type="radio"] {
     top: 3px;
     margin-right: 4px;
 }
 
-#my_profile textarea{
-background: #fff;
-padding: 4px 15px;
-border-radius: 3px;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
--o-border-radius: 3px;
-min-height: 70px;
+#my_profile textarea,
+#organisation-container textarea {
+    background: #fff;
+    padding: 4px 15px;
+    border-radius: 3px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 3px;
+    min-height: 70px;
 }
 #my_profile #my_details textarea, #my_profile #my_details select{
     padding: 4px 8px;
