@@ -24,7 +24,7 @@ if(!defined('ABSPATH')) {
                 <input type="hidden" name="organisation_id" value="<?php echo $organisation->id;?>">
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Organisation Name</label></div>
-                    <div data-name="first_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input"><?php echo $organisation->organisation_name;?></div>
+                    <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input"><?php echo $organisation->organisation_name;?></div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">
