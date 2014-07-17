@@ -7493,3 +7493,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #profile-error-content br {
     line-height: 26px;
 }
+.no-display {
+    display: none;
+}
