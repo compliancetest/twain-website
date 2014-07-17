@@ -87,9 +87,9 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             case 'payment_id':
                 return $item->payment_id ? 'Invoice Me' : 'Credit Card';
             case 'start_date':
-                return date( 'Y-m-d', strtotime( $item->start_date ) );
+                return $item->start_date !== '0000-00-00 00:00:00' ? date( 'Y-m-d', strtotime( $item->start_date ) ) : '';
             case 'end_date':
-                return date( 'Y-m-d', strtotime( $item->end_date ) );
+                return $item->end_date !== '0000-00-00 00:00:00' ? date( 'Y-m-d', strtotime( $item->end_date ) ) : '';
             case 'is_paid':
                 return $item->is_paid ? 'Paid' : 'Not Paid';
             default:

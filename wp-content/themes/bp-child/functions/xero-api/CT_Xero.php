@@ -180,9 +180,9 @@ class CT_Xero {
         return false;
     }
 
-    public function upsertInvoiceMeInvoice( $invoiceData ){
+    public function upsertInvoice( $invoiceData, $paymentType = 1 ){
         global $wpdb;
-        $requiredFields = array( 'organisation_id', 'item_code', 'quantity', 'start_date', 'end_date', 'reference_id' );
+        $requiredFields = array( 'organisation_id', 'item_code', 'quantity' );
         foreach( $requiredFields AS $requiredField ){
             if( ! isset( $invoiceData[$requiredField] ) || empty( $invoiceData[$requiredField] ) ){
                 return 'Some required fields missed or empty';
@@ -193,14 +193,14 @@ class CT_Xero {
         $contact = $xml->addChild( 'Contact' );
         $contact->addChild( 'ContactID', $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']) ) );
         $xml->addChild( 'Date', date('Y-m-d') );
-        $xml->addChild( 'DueDate', date('Y-m-d', strtotime('+1 day')) );
+        $xml->addChild( 'DueDate', date('Y-m-d', $paymentType == 1 ? strtotime('+1 day') : strtotime('+30 days') ) );
         $xml->addChild( 'LineAmountTypes', 'Exclusive' );
         $xml->addChild( 'CurrencyCode', 'AUD' );
         $line_items = $xml->addChild( 'LineItems' );
         /**
-         * Get organisation charge table entries for current organisation with 'Invoice Me' payment type
+         * Get organisation charge table entries for current organisation with '$paymentType' payment type
          */
-        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id = 1 AND invoice_identifier = ''", $invoiceData['organisation_id']), ARRAY_A );
+        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id = %d AND invoice_identifier = ''", $invoiceData['organisation_id'], $paymentType ), ARRAY_A );
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
                 $line_item = $line_items->addChild( 'LineItem' );
@@ -208,7 +208,7 @@ class CT_Xero {
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
             }
         }
-        if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xml->addChild('ContactID', $contactData['contact_id'] );
+        if( isset( $invoiceData['contact_id'] ) && ! empty( $invoiceData['contact_id'] ) ) $xml->addChild('ContactID', $invoiceData['contact_id'] );
         $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();

@@ -183,22 +183,31 @@ function ct_process_charge_entry_admin_actions()
             if( $resp )
             {
                 echo 'Charge entry saved successfully';
-                redirect_and_exit();
+                redirect_then_exit();
             }else{
                 $_GET['org-message'] = $wpdb->last_error;
                 return;
             }
         } elseif( $action == 'update-all'){
-            $xero = new CT_Xero();
-            //get entries without InvoiceID from wp_organisations_charge table
-            $entries = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND payment_id = 1 GROUP BY organisation_id", ARRAY_A);
+            /**
+             * 1) We get organisations IDs with empty 'invoice_identifier' field
+             */
+            $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' GROUP BY organisation_id", ARRAY_A);
             $counter = 0;
-            if( $entries ){
-                foreach( $entries AS $entry ){
-                    $invoice = $xero->upsertInvoiceMeInvoice( $entry );
-                    if( isset( $invoice['Invoices']['Invoice']['InvoiceID'] ) ){
-                        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_identifier = %s WHERE invoice_identifier = '' AND payment_id = 1 AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceID'], $entry['organisation_id'] ) );
-                        $counter++;
+            if( $organisations ){
+                foreach( $organisations AS $organisation ){
+                    /**
+                     * 2) We get organisation's payments types list and for each payment type create invoice
+                     */
+                    $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id'] ), ARRAY_A);
+                    foreach( $paymentTypes AS $paymentType ){
+                        $xero = new CT_Xero();
+                        $paymentID = $paymentType['payment_id'];
+                        $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
+                        if( isset( $invoice['Invoices']['Invoice']['InvoiceID'] ) ){
+                            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_identifier = %s, start_date = %s, end_date = %s WHERE invoice_identifier = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceID'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
+                            $counter++;
+                        }
                     }
                 }
             }
