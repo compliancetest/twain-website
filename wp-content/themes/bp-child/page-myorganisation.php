@@ -17,62 +17,29 @@ get_header();
     </div>
     <div class="container">
         <div class="column">
-        <?php
-            if(can_create_group()){
-        ?>
-        <a href="/communities/create" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Community</span></a>
-        <div class="clear"></div>
-        <div class="space10"></div>
-        <?php
-            }                    
-        ?>
-          <?php if($user_status == 3){?>
-                <div class="inner-warning">Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="<?php echo get_site_url()?>?cp-action=<?php echo wp_create_nonce('resend_email_verification')?>&uemail=<?php echo $current_user->user_email?>">link verification</a>)</span></div>
-            <?php }?>
-                
-            <input type="hidden" name="user_id" value="<?php echo $current_user->ID;?>"/>
-            
-            <?php 
-                include(dirname(__FILE__) . '/content/profile-organisation-details.php');
-            ?>            
-            
-            <div class="clear"></div>            
-            <div class="space25"></div>            
-            
-            <?php 
-                include(dirname(__FILE__) . '/content/profile-paymentmethod.php');
-            ?>
-            
-            <div class="clear"></div>
-            
-            <div class="space25"></div>
-            
-            <div class="column left three_fifths nopadding" style="display: none;">
-                <div class="grid-box">
-                    <div class="grid-box-header">
-                        <h5 class="left">My Organisation Members</h5>
-                        <?php if($user_status != 3){?>
-                            <a class="gbh-btn gbh-btn-add right" href="javascript: void(0);">Add<span class="simple_tooltip radius6">Add User<span></span></span></a>
-                        <?php }?>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="grid-box-body">
-                        <div class="grid-row grid-action-row">
-                            <div class="grid-cell width55P"><label>Fred Smith</label></div>
-                            <div class="grid-cell width20P">Tester</div>
-                            <div class="grid-cell width15P status-active">Active</div>
-                            <div class="grid-cell width10P grid-action-cell"><a href="#" class="gbh-btn gbh-btn-edit-grey">Edit</a></div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>            
-            <div class="right two_fifths"  style="display: none;"><!--this is temporary hidden--->
-                <div class="gray_message_box radius9 light_gray_txt">
-                    <div class="indicator"></div>
-                    <?php echo get_post_meta($post->ID, 'my_organization_members_desc', true);?>
+            <div id="item-nav">
+                <ul class="tabs">
+                    <li class="active">
+                        <a href="#" rel="organisation_profile" class="selected">
+                            <span class="left icon" id="icon_admin"></span>
+                            <span class="right text">Profile</span>
+                            <span class="tabactive"></span>
+                            <span class="clear"></span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <div id="item-body">
+                <div id="organisation_profile" class="tab-content white_bcg column">
+                    <input type="hidden" name="user_id" value="<?php echo $current_user->ID;?>"/>
+                    <?php 
+                        include(dirname(__FILE__) . '/content/profile-organisation-details.php');
+                    ?>            
+                    <div class="clear"></div>
                 </div>
             </div>
+            
             <div class="clear"></div>            
         </div>
         <div class="clear"></div>
