@@ -104,4 +104,31 @@ class CT_Organisation
         }
     }
     
+    public function save_force()
+    {
+        global $wpdb;
+        
+        $data = array();
+        
+        $variables = get_class_vars('CT_Organisation');
+        foreach(array_keys($variables) as $_m)
+        {
+            
+            if($_m == 'id')
+                continue;
+            $data[$_m] = $this->$_m;            
+        }
+                
+        //remove empty values
+        $data = array_map( 'stripslashes_deep', $data );
+        
+        if( ! $this->id) {
+            $result = $wpdb->insert($wpdb->prefix . "organisations", $data );
+        } else {
+            $result = $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
+        }
+        
+        return $result;
+    }
+    
 }
