@@ -86,6 +86,10 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                 return "<a href='admin.php?page=add-xeroitem&id=" . $item_data->id . "'>".$item_data->code."</a>";
             case 'payment_id':
                 return $item->payment_id ? 'Invoice Me' : 'Credit Card';
+            case 'start_date':
+                return date( 'Y-m-d', strtotime( $item->start_date ) );
+            case 'end_date':
+                return date( 'Y-m-d', strtotime( $item->end_date ) );
             case 'is_paid':
                 return $item->is_paid ? 'Paid' : 'Not Paid';
             default:

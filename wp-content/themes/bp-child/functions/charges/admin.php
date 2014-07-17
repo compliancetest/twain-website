@@ -120,14 +120,16 @@ function ct_add_charge()
                     <th>Quantity</th>
                     <td><input type="text" name="quantity" id="quantity" value="<?php echo $data['quantity'];?>" required="required"/></td>
                 </tr>
-                <tr>
-                    <th>Start Date</th>
-                    <td><input type="text" name="start_date" id="start_date" value="<?php echo $data['start_date'] ? $data['start_date'] : date( 'Y-m-d');?>" disabled="disabled"/></td>
-                </tr>
-                <tr>
-                    <th>End Date</th>
-                    <td><input type="text" name="end_date" id="end_date" value="<?php echo $data['end_date'] ? $data['end_date'] : date( 'Y-m-d', strtotime('+7 days') );?>" disabled="disabled"/></td>
-                </tr>
+                <?php if( $id ): ?>
+                    <tr>
+                        <th>Start Date</th>
+                        <td><input type="text" name="start_date" id="start_date" value="<?php echo date( 'Y-m-d', strtotime( $data['start_date'] ) );?>" disabled="disabled"/></td>
+                    </tr>
+                    <tr>
+                        <th>End Date</th>
+                        <td><input type="text" name="end_date" id="end_date" value="<?php echo date( 'Y-m-d', strtotime( $data['end_date'] ) );?>" disabled="disabled"/></td>
+                    </tr>
+                <?php endif;?>
                 <tr>
                     <th>Reference Type</th>
                     <td>
