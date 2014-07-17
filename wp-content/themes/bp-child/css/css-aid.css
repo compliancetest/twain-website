@@ -1441,6 +1441,21 @@ tr {
     background: #d1d1d1 url(../images/btn-sprites.png) no-repeat 8px -848px !important;    
     float: right;
 }
+.grid-box-body .grid-row-complex {
+    padding: 0px;
+}
+.grid-box-body .grid-row-complex > .grid-cell {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.grid-box-body .grid-row-complex > .grid-cell + .grid-cell {
+    border-left: solid 1px #b7b7b7;
+    box-sizing: border-box;
+}
+.grid-box-body .grid-row-complex > .grid-cell > label {
+    display: block;
+    padding: 10px;
+}
 /*** Grid Field Row***/
 .grid-box-body .field-row{
     padding-bottom: 12px;
