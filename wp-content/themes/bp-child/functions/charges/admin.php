@@ -213,6 +213,21 @@ function ct_process_charge_entry_admin_actions()
             }
             echo 'Created '.$counter.' invoices';
             redirect_then_exit();
+        } else if( $action == 'update-status' ){
+            $counter = 0;
+            $xero = new CT_Xero();
+            $invoicesIdList = $wpdb->get_results("SELECT invoice_identifier FROM {$wpdb->prefix}organisations_charge WHERE is_paid = 0 GROUP BY invoice_identifier", ARRAY_A);
+            if( $invoicesIdList ){
+                foreach( $invoicesIdList AS $invoice ){
+                    $invoiceData = $xero->getInvoice( $invoice['invoice_identifier'] );
+                    if( $invoiceData['Invoices']['Invoice']['Status'] === 'PAID' ){
+                        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET is_paid = 1 WHERE invoice_identifier = %s ", $invoice['invoice_identifier'] ) );
+                        $counter++;
+                    }
+                }
+            }
+            echo 'Updated '.$counter.' invoices';
+            redirect_then_exit();
         }
     }
 

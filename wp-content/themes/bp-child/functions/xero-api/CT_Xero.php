@@ -208,8 +208,20 @@ class CT_Xero {
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
             }
         }
-        if( isset( $invoiceData['contact_id'] ) && ! empty( $invoiceData['contact_id'] ) ) $xml->addChild('ContactID', $invoiceData['contact_id'] );
+        if( isset( $invoiceData['invoice_identifier'] ) && ! empty( $invoiceData['invoice_identifier'] ) ) $xml->addChild('InvoiceID', $invoiceData['invoice_identifier'] );
         $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
+        if ($this->xero->response['code'] == 200) {
+            return  $this->responseToArray();
+        }
+        return false;
+    }
+
+    public function getInvoice( $invoiceId = false ){
+        if( $invoiceId ){
+            $this->xero->request('GET', $this->xero->url('Invoices/'.$invoiceId, 'core'), array() );
+        } else {
+            $this->xero->request('GET', $this->xero->url('Invoices', 'core'), array() );
+        }
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();
         }

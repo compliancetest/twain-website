@@ -91,7 +91,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             case 'end_date':
                 return $item->end_date !== '0000-00-00 00:00:00' ? date( 'Y-m-d', strtotime( $item->end_date ) ) : '';
             case 'is_paid':
-                return $item->is_paid ? 'Paid' : 'Not Paid';
+                return $item->is_paid ? '<span style="color: green;">Paid</span>' : '<span style="color: red;">Not Paid</span>';
             default:
                 return $item->$column_name;
         }
