@@ -37,7 +37,7 @@ function ct_manage_invoices()
     <div class="wrap">
         <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-all">Generate Invoices</a>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-status">Update Invoices Status</a>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-status">Update "Invoice Me" Invoice Status</a>
     </div>
 <?php
 }
