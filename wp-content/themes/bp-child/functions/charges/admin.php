@@ -107,7 +107,7 @@ function ct_add_charge()
                                     $payment_method = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE organisation_id = %s", $data['organisation_id']), ARRAY_A );
                                     foreach( $payment_method AS $p_m ){ ?>
                                         <option value="<?php echo $p_m['id'];?>" <?php if( $p_m['id'] == $data['payment_id']):?>selected="selected" <?php endif;?>><?php echo $p_m['nickname'].' ('. ($p_m['invoice_me'] == 1 ? 'Invoice Me' : 'Credit Card' ).')';?></option>
-                                    <? }
+                                    <?php }
                                 }
                             ?>
                         </select>
