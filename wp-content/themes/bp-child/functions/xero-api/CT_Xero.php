@@ -210,9 +210,7 @@ class CT_Xero {
             }
         }
         if( isset( $invoiceData['invoice_identifier'] ) && ! empty( $invoiceData['invoice_identifier'] ) ) $xml->addChild('InvoiceID', $invoiceData['invoice_identifier'] );
-        var_dump($xml->asXML());die;
         $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
-        var_dump($xml->asXML());die;
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();
         }
