@@ -297,16 +297,16 @@ Template Name Posts: Test Suite
                     $butttonHTML = '';
                     $buttonClass = '';
                     
-                    $user_signup_fee = get_user_meta($user_id, 'signup_fee', true);
+                    /*$user_signup_fee = get_user_meta($user_id, 'signup_fee', true);
                     $user_monthly_fee = get_user_meta($user_id, 'monthly_fee', true);
                     
                     //Getting Monthly Fee and Signup Fee                        
                     if(isset($user_signup_fee[$suite->id]))
-                        $suite->signupPrice = doubleval($user_signup_fee[$suite->id]);
+                        $suite->signupPriceValue = doubleval($user_signup_fee[$suite->id]);
                     if(isset($user_monthly_fee[$suite->id]))
-                        $suite->monthlySubscriptionPrice = doubleval($user_monthly_fee[$suite->id]);
-                    
-                    if($suite->signupPrice == -1)
+                        $suite->monthlySubscriptionPriceValue = doubleval($user_monthly_fee[$suite->id]);
+                    */                    
+                    if($suite->signupPriceValue == -1)
                     {
                         $buttonHTML = '<span class="price-b">
                                         <span class="l"></span>
@@ -320,7 +320,7 @@ Template Name Posts: Test Suite
                     }else{
                         
                         //Getting User Signup Fee                    
-                        if($suite->signupPrice == 0 && $suite->monthlySubscriptionPrice == 0) ///
+                        if($suite->signupPriceValue == 0 && $suite->monthlySubscriptionPriceValue == 0) ///
                         {
                             $buttonHTML = '<span class="price-b">
                                             <span class="l"></span>
@@ -336,11 +336,11 @@ Template Name Posts: Test Suite
                             $buttonHTML = '<span class="price-b">
                                                 <span class="l"></span>
                                                 <span class="m">';
-                            if(!$suite->monthlySubscriptionPrice)
+                            if(!$suite->monthlySubscriptionPriceValue)
                             {
                                 $buttonHTML .= '<b>No</b><br />per month';
                             }else{
-                                $buttonHTML .= '<b>$' . $suite->monthlySubscriptionPrice . '</b><br />per month';
+                                $buttonHTML .= '<b>$' . $suite->monthlySubscriptionPriceValue . '</b><br />per month';
                             }
                             $buttonHTML .= '</span>
                                             <span class="r"></span>
@@ -349,8 +349,8 @@ Template Name Posts: Test Suite
                             $buttonHTML .= '<span class="price-b signup-price">
                                             <span class="l"></span>
                                             <span class="m">';
-                            if($suite->signupPrice > 0){
-                                $buttonHTML .= '<b>$' . $suite->signupPrice . '</b><br />sign-up fee';
+                            if($suite->signupPriceValue > 0){
+                                $buttonHTML .= '<b>$' . $suite->signupPriceValue . '</b><br />sign-up fee';
                             }else{ //No Price
                                 $buttonHTML .= '<b>No</b><br />sign-up fee';
                             }
@@ -374,7 +374,7 @@ Template Name Posts: Test Suite
                         </a>
                         <?php
                     }else{
-                        if($suite->signupPrice == -1){ //Contact Us
+                        if($suite->signupPriceValue == -1){ //Contact Us
                         ?>
                         <a href="/contact-us" class="suite-subscript-link  <?php echo $buttonClass?>">
                             <?php echo $buttonHTML; ?>
@@ -722,7 +722,7 @@ if(!$purchasedSubscription):
         <div class="popup-box-content grid-box-body">    
             <div class="field-row">
                 <h5>Confirm Existing Payment Method or Add New Card Details</h5>
-                <span class="focus-tooltip"><span></span>You are about to purchase a monthly Subscription to: <a href="<?php echo get_permalink()?>"><?php echo $suite->name?></a> for $<?php echo $suite->monthlySubscriptionPrice?> per month (you can cancel anytime)</span>
+                <span class="focus-tooltip"><span></span>You are about to purchase a monthly Subscription to: <a href="<?php echo get_permalink()?>"><?php echo $suite->name?></a> for $<?php echo $suite->monthlySubscriptionPriceValue?> per month (you can cancel anytime)</span>
             </div>
             <div class="field-row">
                 <div class="grid-cell">

@@ -774,3 +774,19 @@ function add_suite_family_mark_orderby_query($orderby, $object)
     
     return $orderby;
 }
+
+/**
+* Get Xero Items
+* 
+* @return array()
+* 
+*/
+function ct_get_xero_items()
+{
+    global $wpdb;
+    
+    $query = "SELECT * FROM {$wpdb->prefix}xeroitems ORDER BY `code` ASC";
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;    
+}

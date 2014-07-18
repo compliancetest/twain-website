@@ -102,7 +102,7 @@ class CT_Organisation
             //Update
             return $response;
         }
-    }
+    }   
     
     public function save_force()
     {

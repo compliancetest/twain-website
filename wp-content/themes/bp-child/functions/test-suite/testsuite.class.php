@@ -51,6 +51,8 @@ class TestSuite
     
     var $monthlySubscriptionPrice = 0;
     
+    var $monthlySubscriptionPriceValue = 0;
+    
     var $excerpt = '';
     
     var $community_id = null;
@@ -62,6 +64,8 @@ class TestSuite
     var $scenarios = array();
     
     var $signupPrice = 0;
+    
+    var $signupPriceValue = 0;
     
     //This will be same for all versions
     var $familyMark = null;
@@ -111,7 +115,9 @@ class TestSuite
         $this->version_major = $this->loadSingleValue('ts_version_major');
         $this->version_minor = $this->loadSingleValue('ts_version_minor');
         $this->version_patch = $this->loadSingleValue('ts_version_patch');
-        $this->signupPrice = doubleval($this->loadSingleValue('signup_price'));
+        $this->signupPrice = $this->loadSingleValue('signup_price');
+        $this->signupPriceValue = $this->getPriceFromXeroCode($this->signupPrice);
+        
         
         $this->version_major = !$this->version_major ? 0 : $this->version_major;
         $this->version_minor = !$this->version_minor ? 0 : $this->version_minor;
@@ -130,6 +136,8 @@ class TestSuite
         $this->monthlySubscriptionPrice = $this->loadSingleValue('monthly_subscription_price');
         if(!$this->monthlySubscriptionPrice)
             $this->monthlySubscriptionPrice = 0;
+        $this->monthlySubscriptionPriceValue = $this->getPriceFromXeroCode($this->monthlySubscriptionPrice);
+        
         
         $this->loadConformanceLevel();
         $this->loadTestCases();
@@ -542,5 +550,22 @@ class TestSuite
         
         return $availableTemplates;
         
+    }
+    
+    
+    public function getPriceFromXeroCode($code)
+    {
+        global $wpdb;
+ 
+        if($code == '0')
+            return 0;
+            
+        if($code == '-1')       
+            return -1;
+        
+        $query = $wpdb->prepare("SELECT unit_price FROM {$wpdb->prefix}xeroitems WHERE code=%s", $code);        
+        $price = $wpdb->get_var($query);
+        
+        return $price;
     }
 }

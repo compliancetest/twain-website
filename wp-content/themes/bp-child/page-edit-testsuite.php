@@ -35,6 +35,8 @@ if($suite->id)
 
 if(!$suite->community_id)
     $suite->community_id = isset($_GET['community_id']) ? htmlspecialchars($_GET['community_id']) : $groups[0]->id;
+
+$xeroItems = ct_get_xero_items();
 ?>
 <div class="content edit-item-wrapper" id="edit_test_suite_wrapper">    
     <div class="column container relative"> 
@@ -203,8 +205,14 @@ if(!$suite->community_id)
            <div class="grid-box-body">
                <div class="column">    
                    <div class="field-row">                    
-                       <div class="grid-cell">
-                           <input type="text" id="signup_price" name="signup_price" class="input" value="<?php echo $suite->signupPrice?>" />
+                       <div class="grid-cell">                       
+                           <select name="signup_price" id="signup_price" class="select">
+                                <option value="-1" <?php echo $suite->signupPrice == '-1' ? 'selected="selected"' :'' ?>>-1</option>
+                                <option value="0" <?php echo $suite->signupPrice == '0' ? 'selected="selected"' :'' ?>>0</option>
+                                <?php foreach($xeroItems as $xitem): ?>
+                                <option value="<?php echo $xitem->code?>" <?php echo $suite->signupPrice == $xitem->code ? 'selected="selected"' :'' ?>><?php echo $xitem->code?></option>
+                                <?php endforeach; ?>
+                           </select>
                        </div>
                        <div class="grid-cell">
                            <label class="light-desc"><i>Sign-up Price (-1: Negotiate price, 0: Free)</i></label>
@@ -212,8 +220,13 @@ if(!$suite->community_id)
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">                       
-                       <div class="grid-cell">
-                           <input type="text" id="monthly_subscription_price" name="monthly_subscription_price" class="input" value="<?php echo $suite->monthlySubscriptionPrice?>" />
+                       <div class="grid-cell">                           
+                           <select name="monthly_subscription_price" id="monthly_subscription_price" class="select">
+                                <option value="0" <?php echo $suite->monthlySubscriptionPrice == '0' ? 'selected="selected"' :'' ?>>0</option>
+                                <?php foreach($xeroItems as $xitem): ?>
+                                <option value="<?php echo $xitem->code?>" <?php echo $suite->monthlySubscriptionPrice == $xitem->code ? 'selected="selected"' :'' ?>><?php echo $xitem->code?></option>
+                                <?php endforeach; ?>
+                           </select>
                        </div>
                        <div class="grid-cell">
                            <label class="light-desc"><i>Monthly Subscription Price (0: Free)</i></label>
