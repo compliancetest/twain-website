@@ -61,22 +61,22 @@ if(!defined('ABSPATH')) {
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
-                            <div class="grid-cell width30P"><label>Address1</label></div>
+                            <div class="grid-cell width30P"><label>Address Line 1</label></div>
                             <div data-name="billing_address1" data-value="<?php echo $organisation->billing_address1;?>" class="grid-cell in_input"><?php echo $organisation->billing_address1;?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
-                            <div class="grid-cell width30P"><label>Address2</label></div>
+                            <div class="grid-cell width30P"><label>Address Line 2</label></div>
                             <div data-name="billing_address2" data-value="<?php echo $organisation->billing_address2;?>" class="grid-cell in_input"><?php echo $organisation->billing_address2;?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
-                            <div class="grid-cell width30P"><label>Address3</label></div>
+                            <div class="grid-cell width30P"><label>Address Line 3</label></div>
                             <div data-name="billing_address3" data-value="<?php echo $organisation->billing_address3;?>" class="grid-cell in_input"><?php echo $organisation->billing_address3;?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
-                            <div class="grid-cell width30P"><label>Address4</label></div>
+                            <div class="grid-cell width30P"><label>Address Line 4</label></div>
                             <div data-name="billing_address4" data-value="<?php echo $organisation->billing_address4;?>" class="grid-cell in_input"><?php echo $organisation->billing_address4;?></div>
                             <div class="clear"></div>
                         </div>
