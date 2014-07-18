@@ -285,7 +285,7 @@ function redirect_then_exit(){
             document.location.href = '<?php echo admin_url()?>admin.php?page=manage-charges';
         }, 1000);
     </script>
-    <?php
-
+<?php
     exit;
 }
+?>
