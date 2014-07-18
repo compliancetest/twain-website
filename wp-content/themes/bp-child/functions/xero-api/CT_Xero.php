@@ -182,6 +182,7 @@ class CT_Xero {
 
     public function upsertInvoice( $invoiceData, $paymentType = 1 ){
         global $wpdb;
+        $payment_method = $wpdb->get_row($wpdb->prepare("SELECT invoice_me FROM {$wpdb->prefix}users_cards WHERE id = %s", $invoiceData['payment_id']), ARRAY_A );
         $requiredFields = array( 'organisation_id', 'item_code', 'quantity' );
         foreach( $requiredFields AS $requiredField ){
             if( ! isset( $invoiceData[$requiredField] ) || empty( $invoiceData[$requiredField] ) ){
@@ -200,7 +201,7 @@ class CT_Xero {
         /**
          * Get organisation charge table entries for current organisation with '$paymentType' payment type
          */
-        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id = %d AND invoice_identifier = ''", $invoiceData['organisation_id'], $paymentType ), ARRAY_A );
+        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}users_cards WHERE organisation_id = %d AND invoice_me = %s AND status = 'Active' ) AND invoice_identifier = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $payment_method['invoice_me'] ), ARRAY_A );
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
                 $line_item = $line_items->addChild( 'LineItem' );
@@ -209,7 +210,9 @@ class CT_Xero {
             }
         }
         if( isset( $invoiceData['invoice_identifier'] ) && ! empty( $invoiceData['invoice_identifier'] ) ) $xml->addChild('InvoiceID', $invoiceData['invoice_identifier'] );
+        var_dump($xml->asXML());die;
         $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
+        var_dump($xml->asXML());die;
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();
         }

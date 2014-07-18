@@ -91,8 +91,9 @@ function ct_add_charge()
                     <th>Organisation</th>
                     <td>
                         <select name="organisation_id" id="organisation_id">
+                            <option></option>
                             <?php foreach( $organisations AS $organisation ):?>
-                                <option value="<?php echo $organisation['id'];?>" <?php if( $organisation['contact_id'] == $data['organisation_id']):?>selected="selected" <?php endif;?>><?php echo $organisation['organisation_name'];?></option>
+                                <option value="<?php echo $organisation['id'];?>" <?php if(  $data['organisation_id'] != '' && $organisation['id'] == $data['organisation_id']):?>selected="selected" <?php endif;?>><?php echo $organisation['organisation_name'];?></option>
                             <?php endforeach;?>
                         </select>
                     </td>
@@ -101,8 +102,14 @@ function ct_add_charge()
                     <th>Payment Method</th>
                     <td>
                         <select name="payment_id" id="payment_id">
-                            <option value="0" <?php if( 0 == $data['payment_id']):?>selected="selected" <?php endif;?>>Credit Card</option>
-                            <option value="1" <?php if( 1 == $data['payment_id']):?>selected="selected" <?php endif;?>>Invoice Me</option>
+                            <?php
+                                if( ! empty( $data['organisation_id'] ) ){
+                                    $payment_method = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE organisation_id = %s", $data['organisation_id']), ARRAY_A );
+                                    foreach( $payment_method AS $p_m ){ ?>
+                                        <option value="<?php echo $p_m['id'];?>" <?php if( $p_m['id'] == $data['payment_id']):?>selected="selected" <?php endif;?>><?php echo $p_m['nickname'].' ('. ($p_m['invoice_me'] == 1 ? 'Invoice Me' : 'Credit Card' ).')';?></option>
+                                    <? }
+                                }
+                            ?>
                         </select>
                     <td>
                 </tr>
@@ -120,7 +127,7 @@ function ct_add_charge()
                     <th>Quantity</th>
                     <td><input type="text" name="quantity" id="quantity" value="<?php echo $data['quantity'];?>" required="required"/></td>
                 </tr>
-                <?php if( $id ): ?>
+                <?php if( isset( $data['start_date'] ) && $data['start_date'] != '0000-00-00 00:00:00' ): ?>
                     <tr>
                         <th>Start Date</th>
                         <td><input type="text" name="start_date" id="start_date" value="<?php echo date( 'Y-m-d', strtotime( $data['start_date'] ) );?>" disabled="disabled"/></td>
@@ -161,6 +168,35 @@ function ct_add_charge()
             <input type="hidden" name="org-action" value="save-charge" />
         </form>
     </div>
+    <script>
+        jQuery(document).ready( function(){
+            jQuery('#organisation_id').on('change', function(){
+                jQuery.ajax({
+                    type : 'post',
+                    dataType: 'json',
+                    url: '/wp-admin/admin-ajax.php',
+                    data : { 'action' : 'get_payment_methods', 'org_id' : jQuery(this).val() },
+                    success: function( data ){
+                        jQuery('#payment_id').find('option')
+                            .remove()
+                            .end();
+                        if( data && data.length ){
+                            jQuery('#payment_id').find('option')
+                                .remove()
+                                .end();
+                            jQuery.each(data, function( key, value ) {
+                                jQuery('#payment_id')
+                                    .append(jQuery("<option/>", {
+                                    value: value.id,
+                                    text: ( value.nickname + ' (' + ( value.invoice_me == '0' ? 'Credit Card' : 'Invoice Me' )+')' )
+                                }));
+                            });
+                        }
+                    }
+                });
+            })
+        })
+    </script>
 <?php
 }
 
@@ -231,6 +267,16 @@ function ct_process_charge_entry_admin_actions()
         }
     }
 
+}
+add_action( 'wp_ajax_get_payment_methods', 'get_payment_methods_callback' );
+function get_payment_methods_callback() {
+    global $wpdb;
+    $organisationID = filter_var( $_POST['org_id'], FILTER_SANITIZE_NUMBER_INT );
+    if( empty( $organisationID ) ){
+        exit();
+    }
+    $paymentMethods = $wpdb->get_results( $wpdb->prepare( "SELECT id, nickname, invoice_me FROM {$wpdb->prefix}users_cards WHERE organisation_id = %d AND status = 'Active'", $organisationID ), ARRAY_A );
+    exit( json_encode( $paymentMethods ) );
 }
 function redirect_then_exit(){
     ?>

@@ -80,12 +80,11 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                 return "<a href='admin.php?page=add-organisation&id=" . $organisation_data->id . "'>".$organisation_data->organisation_name."</a>" .
                 $this->row_actions(array(
                     "<a href='admin.php?page=add-charge&id=" . $item->id . "'>Edit</a>"
-                ));;
+                ));
             case 'item_code':
                 $item_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}xeroitems WHERE code = %s", $item->item_code));
                 return "<a href='admin.php?page=add-xeroitem&id=" . $item_data->id . "'>".$item_data->code."</a>";
-            case 'payment_id':
-                return $item->payment_id ? 'Invoice Me' : 'Credit Card';
+
             case 'start_date':
                 return $item->start_date !== '0000-00-00 00:00:00' ? date( 'Y-m-d', strtotime( $item->start_date ) ) : '';
             case 'end_date':
@@ -93,6 +92,10 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             case 'is_paid':
                 return $item->is_paid ? '<span style="color: green;">Paid</span>' : '<span style="color: red;">Not Paid</span>';
             default:
+                if( $column_name == 'payment_id'){
+                    $payment_method = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE id = %s", $item->$column_name), ARRAY_A );
+                    return $payment_method['nickname'].' ('. ( $payment_method['invoice_me'] == '1' ? 'Invoice Me' : 'Credit Card' ).' )';
+                }
                 return $item->$column_name;
         }
     }
