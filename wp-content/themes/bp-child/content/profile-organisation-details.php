@@ -12,7 +12,7 @@ if(!defined('ABSPATH')) {
         
     $organisation = new CT_Organisation($row->id);
 ?>
-<div class="left four_sixths">                
+               
     <div class="grid-box" id="my_details">
         <div class="grid-box-header">
             <h5 class="left">Details</h5>
@@ -136,13 +136,4 @@ if(!defined('ABSPATH')) {
         </div>
     </div>                
     <div class="clear"></div>            
-</div>
-<?php $my_details_desc = get_post_meta($post->ID, 'my_organisation_desc', true);?>
-<?php if ($my_details_desc): ?>
-<div class="right two_sixths">
-    <div class="gray_message_box radius9 light_gray_txt">
-        <div class="indicator"></div>
-        <?php echo $my_details_desc;?>
-    </div>
-</div>
-<?php endif; ?>
+
