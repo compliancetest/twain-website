@@ -69,9 +69,10 @@ class CT_Xeroitems_List_Table extends WP_List_Table
         switch($column_name)
         {
             case 'code':
-                return $item->code . $this->row_actions(array(
-                    "<a href='admin.php?page=add-xeroitem&id=" . $item->id . "'>Edit</a>"
-                ));
+                return $item->code;
+//                . $this->row_actions(array(
+//                    "<a href='admin.php?page=add-xeroitem&id=" . $item->id . "'>Edit</a>"
+//                ));
             default:
                 return $item->$column_name;
         }
