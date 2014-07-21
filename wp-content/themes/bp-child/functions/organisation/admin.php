@@ -22,7 +22,7 @@ function ct_show_organisations_list()
     ?>
     <div class="wrap">
         <h2>Organisations</h2>        
-        <br clear="all" />
+        <?php flushMessages(); ?>        
         <form name="adminform" action="users.php?page=processing" method="post">
         <?php
             echo $listTable->display();
@@ -65,10 +65,8 @@ function ct_show_new_organisation()
     }
     ?>
     <div class="wrap">
-        <h2><?php echo $id ? 'Edit' : 'New'?> Organisation</h2>        
-        
+        <h2><?php echo $id ? 'Edit' : 'New'?> Organisation</h2>
         <?php flushMessages(); ?>
-        
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
             <table class="widefat" style="width: auto;">
