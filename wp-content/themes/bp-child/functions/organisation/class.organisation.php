@@ -2,6 +2,35 @@
 
 class CT_Organisation
 {
+    var $_fields = array(
+                            'id', 
+                            'organisation_name', 
+                            'organisation_domain', 
+                            'invoice_me', 
+                            
+                            'contact_first_name', 
+                            'contact_last_name', 
+                            'contact_email', 
+                            
+                            'abn', 
+                            
+                            'billing_address_attention',
+                            'billing_address1',
+                            'billing_address2',
+                            'billing_address3',
+                            'billing_address4',
+                            'billing_city',
+                            'billing_postcode',
+                            'billing_state',
+                            'billing_country',
+                            
+                            'phonenumber',
+                            'phonenumber_areacode',
+                            'phonenumber_countrycode',
+                            
+                            'contact_id'
+                         );
+    
     var $id = null;
     
     var $organisation_name = '';
@@ -31,8 +60,7 @@ class CT_Organisation
     
     var $contact_id = '';
     
-    var $admin_id = 0;
-    
+    var $admin_id = '';
     
     public function __construct($id = null)
     {
@@ -40,8 +68,11 @@ class CT_Organisation
         
         if($id)        
         {
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE id=%d", $id);
+            $query = $wpdb->prepare("SELECT o.*, om.user_id AS admin_id FROM {$wpdb->prefix}organisations AS o 
+                                     LEFT JOIN {$wpdb->prefix}organisations_members AS om ON om.organisation_id=o.id AND om.is_admin=1 
+                                     WHERE o.id=%d", $id);
             $row = $wpdb->get_row($query, ARRAY_A);
+            
             if($row)
             {
                 foreach(array_keys($row) as $_m)
@@ -54,12 +85,10 @@ class CT_Organisation
     
     public function bind($data)
     {
-        $variables = get_class_vars('CT_Organisation');
-        
-        foreach(array_keys($variables) as $_m)
+        foreach($data as $_m => $_v)
         {            
-            if(isset($data[$_m]))
-                $this->$_m = $data[$_m];
+            if(isset($this->$_m))
+                $this->$_m = $_v;
         }
     }
     
@@ -69,10 +98,8 @@ class CT_Organisation
         
         $data = array();
         
-        $variables = get_class_vars('CT_Organisation');
-        foreach(array_keys($variables) as $_m)
+        foreach($this->_fields as $_m)
         {
-            
             if($_m == 'id')
                 continue;
             $data[$_m] = $this->$_m;            
@@ -86,23 +113,41 @@ class CT_Organisation
         if( count( $data ) != 2 ){
             $response = $xero->upsertContact( $data );
         }
-        if( ! $this->id)
-        {
-            if( ! is_string( $response) ){
-                return $wpdb->insert($wpdb->prefix . "organisations", $data );
-            }
-            //Insert
-            return $response;
+        
+        //Updatnig organisations error on Xero
+        if( is_string( $response) ){            
+            addMessage($response, 'error');
+            return false;
         }
         else
-        {
-            if( ! is_string( $response) ){
-                return $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
+        {   
+            if( ! $this->id)
+            {
+                $data['contact_id'] = $response['Id'];
+                //Insert organisation to CT
+                if(!$wpdb->insert($wpdb->prefix . "organisations", $data ) )
+                {
+                    addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
+                    return false;
+                }
+                    
+                $this->id = $wpdb->insert_id;
             }
-            //Update
-            return $response;
+            else
+            {
+                if( !$wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id)) )
+                {
+                    addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
+                    return false;
+                }
+            }
+            
+            //Save Organisation Admin
+            $this->save_organisation_admin($this->id, $this->admin_id);
         }
-    }   
+        
+        return true;
+    }
     
     public function save_force()
     {
@@ -110,8 +155,7 @@ class CT_Organisation
         
         $data = array();
         
-        $variables = get_class_vars('CT_Organisation');
-        foreach(array_keys($variables) as $_m)
+        foreach($this->_fields as $_m)
         {
             
             if($_m == 'id')
@@ -129,6 +173,57 @@ class CT_Organisation
         }
         
         return $result;
+    }
+    
+    public function save_organisation_admin($organisation_id, $admin_id)
+    {
+        global $wpdb;
+        
+        if(!$admin_id)
+        {
+            return true;
+        }
+        
+        //Validate Admin id
+        $query = $wpdb->prepare("SELECT ID FROM {$wpdb->users} WHERE user_status=0 AND ID=%d", $admin_id);
+        $user_id = $wpdb->get_var($query);
+        
+        if(!$user_id)
+        {
+            addMessage("The admin id is not valid!", "error");
+            return false;
+        }
+        
+        //Demote old admin to member
+        $wpdb->delete( $wpdb->prefix . "organisations_members", 
+                       array('organisation_id' => $organisation_id, 'is_admin' => 1), array('%d', '%d')
+                     );
+        /*$wpdb->update( $wpdb->prefix . "organisations_members", 
+                       array('is_admin' => 0), 
+                       array('organisation_id' => $organisation_id, 'is_admin' => 1), array('%d'), array('%d', '%d')
+                     );*/
+        
+        //Check the user is member or not
+        $query = $wpdb->prepare("SELECT id, is_admin FROM {$wpdb->prefix}organisations_members WHERE organisation_id=%d AND user_id=%d", $organisation_id, $user_id);
+        $row = $wpdb->get_row($query);
+        
+        if(!$row)
+        {
+            //Insert Member
+            $wpdb->insert( $wpdb->prefix . "organisations_members", 
+                           array('organisation_id' => $organisation_id, 'user_id' => $user_id, 'is_admin' => 1, 'created_date' => date("Y-m-d H:i:s")),
+                           array('%d', '%d', '%d', '%s')
+                          );
+        } else if(!$row['is_admin']) {
+            $wpdb->update( $wpdb->prefix . "organisations_members", 
+                       array('is_admin' => 1), 
+                       array('id' => $row['id']), 
+                       array('%d'), 
+                       array('%d')
+                  );
+        }
+        
+        return true;
     }
     
 }

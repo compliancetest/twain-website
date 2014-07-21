@@ -65,20 +65,19 @@ function ct_show_new_organisation()
     }
     ?>
     <div class="wrap">
-        <h2><?php echo $id ? 'Edit' : 'New'?> Organisation</h2>
-        <?php if(isset($_GET['org-message'])){ ?>
-        <div id="message" class="updated below-h2"><p><?php echo $_GET['org-message']?></p></div>
-        <?php 
-        $_GET['org-message'] = null;
-        unset($_GET['org-message']);
-        } ?>
+        <h2><?php echo $id ? 'Edit' : 'New'?> Organisation</h2>        
+        
+        <?php flushMessages(); ?>
+        
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
             <table class="widefat" style="width: auto;">
+                <?php if( $id ):?> 
                 <tr>
                     <th>Contact ID</th>
-                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40" <?php if( $id ):?> readonly="readonly"<?php endif;?>/></td>
+                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40"readonly="readonly" /></td>
                 </tr>
+                <?php endif; ?>
                 <tr>
                     <th>Organisation Name</th>
                     <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>"/></td>
@@ -196,13 +195,12 @@ function ct_process_organisation_admin_actions()
             if(!isset($_POST['invoice_me']))
                 $_POST['invoice_me'] = 0;
             $organisationClass->bind($_POST);
-            $response = $organisationClass->save();
-            if( ! is_string( $response ) )
+            if( $organisationClass->save() )
             {
-                echo 'Organisation Saved.';
-                redirect_and_exit();
-            }else{
-                $_GET['org-message'] = $wpdb->last_error | $response;
+                addMessage('Organisation saved!', 'success');
+                wp_redirect('admin.php?page=manage-organisations');
+                exit;
+            }else{                                
                 return;
             }
         } else if( $action == 'reload-organisation-from' ){

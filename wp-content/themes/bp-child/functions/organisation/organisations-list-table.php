@@ -95,7 +95,7 @@ class CT_Organisations_List_Table extends WP_List_Table
                 return "(" . $item->phonenumber_countrycode . ") " . "(" . $item->phonenumber_areacode . ") " . $item->phonenumber;
             
             case 'organisation_admin':
-                return $item->admin_name . "(" . $item->admin_email . ")";
+                return !$item->admin_name ? '' : ( $item->admin_name . "(" . $item->admin_email . ")" );
             
             case 'invoice_me':
                 return $item->invoice_me ? 'Yes' : 'No';
@@ -128,7 +128,9 @@ class CT_Organisations_List_Table extends WP_List_Table
             "per_page"=>$this->per_pages
         ));
       
-        $query = "SELECT o.*, u.user_email AS admin_email, u.display_name AS admin_name FROM {$wpdb->prefix}organisations as o LEFT JOIN {$wpdb->users} as u on u.ID=o.admin_id ";
+        $query = "SELECT o.*, u.user_email AS admin_email, u.display_name AS admin_name FROM {$wpdb->prefix}organisations as o 
+                  LEFT JOIN {$wpdb->prefix}organisations_members AS om ON om.organisation_id=o.id AND om.is_admin=1
+                  LEFT JOIN {$wpdb->users} as u on u.ID=om.user_id ";
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         
