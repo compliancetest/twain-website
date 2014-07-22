@@ -10,7 +10,7 @@ if(!defined('ABSPATH')) {
     
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_members WHERE is_admin=1 AND user_id=%d", $current_user->ID));
         
-    $organisation = new CT_Organisation($row->id);
+    $organisation = new CT_Organisation($row->organisation_id);
 ?>
                
     <div class="grid-box" id="my_details">
