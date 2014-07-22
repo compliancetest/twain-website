@@ -140,9 +140,6 @@ $subscriptions =  getUserSubscriptions(null, true);
     </div>
     <a class="close_btn"></a>                
 </div>
-<?php
-if(count($subscriptions) > 0){
-?>
 
 <?php 
     $profileTypes = getCustomerProfileTypes(get_current_user_id());
@@ -257,7 +254,7 @@ if(count($subscriptions) > 0){
     </form>
 </div>
 <?php
-}else{ 
+if(count($subscriptions) == 0){
 ?>
 <div class="popup-box" id="need-subscription-box" style="display: none; width: 500px;">
     <div class="popup-box-header radius6 noradiusbottom">Need a subscription</div>        
