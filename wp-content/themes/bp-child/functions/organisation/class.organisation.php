@@ -135,7 +135,7 @@ class CT_Organisation
             }
             else
             {
-                if( !$wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id)) )
+                if( $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id)) === false )
                 {
                     addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
                     return false;
