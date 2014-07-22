@@ -1,0 +1,1 @@
+ALTER TABLE `wp_tickets` ADD `has_attachment` BOOLEAN NOT NULL DEFAULT FALSE AFTER `pending_amount`;

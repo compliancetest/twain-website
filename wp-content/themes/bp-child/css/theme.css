@@ -7220,7 +7220,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding: 18px 0 5px;
     border-top: solid 1px #cfcfcf;
 }
-#ticket-messages-list .ticket-message .ticket-attachments a{
+#ticket-messages-list .ticket-message .ticket-attachments a, .ticket-detail .ticket-attachments a{
     display: inline-block;
     background: url(../images/attachment-icon.png) no-repeat 0 0;
     line-height: 16px;

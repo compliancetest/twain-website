@@ -50,7 +50,15 @@
     <br />
     <div class="ticket-content">
         <?php echo apply_filters("the_content", $ticket->content); ?>
-    </div>        
+    </div>
+    <?php if( $ticket->has_attachment ): ?>
+        <div class="ticket-attachments">
+            <?php $attachments = getAttachmentsByTicketId( $ticket_id ); ?>
+            <?php foreach($attachments as $file): ?>
+                <a href="<?php echo get_site_url(null, null, 'https')?>/?ct-ticket-action=<?php echo wp_create_nonce('download-attachment')?>&file=<?php echo $file->token?>"><?php echo $file->file_name?></a><br />
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 <div class="ticket-term-detail">
     <p class="ticket-info" id="ticket-term-info">

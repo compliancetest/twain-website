@@ -61,7 +61,7 @@ function showSumitTicketBox()
         $purchasedTokens = ct_get_prepurchased_tokens($user_id);
     ?>
     <div class="popup-box edit-ticket-box" id="submit-ticket-box" style="display: none; width: 700px;">
-        <form name="ticketForm" id="ticketForm" action="" method="post">
+        <form name="ticketForm" id="ticketForm" action="" method="post" enctype="multipart/form-data">
             <div class="popup-box-header radius6 noradiusbottom">Submit a Request</div>        
                 <div class="popup-box-content grid-box-body">                
                     <div class="field-row">
@@ -104,7 +104,7 @@ function showSumitTicketBox()
                             
                         ?>
                     </div>
-                    
+
                     <?php if($purchasedTokens > 0): ?>
                     <div class="field-row" id="ticket-prepurchased-tokens-row">
                         <label>Prepurchased Tokens:</label>
@@ -113,18 +113,18 @@ function showSumitTicketBox()
                     </div>
                     <?php endif; ?>
                     
-                    <div class="field-row">
-                        <div class="grid-cell">
-                            <label>Payment Methods:</label>
-                            <select name="ticket-card-id" id="ticket-card-id" class="select">
-                                <option value="">- Select -</option>
-                                <?php foreach($cards as $c): ?>
-                                <option value="<?php echo $c->id?>"><?php echo chunk_split($c->card_number, 4)?>(<?php echo chunk_split($c->nickname, 4)?>)</option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="clear"></div>
-                    </div>   
+<!--                    <div class="field-row">-->
+<!--                        <div class="grid-cell">-->
+<!--                            <label>Payment Methods:</label>-->
+<!--                            <select name="ticket-card-id" id="ticket-card-id" class="select">-->
+<!--                                <option value="">- Select -</option>-->
+<!--                                --><?php //foreach($cards as $c): ?>
+<!--                                <option value="--><?php //echo $c->id?><!--">--><?php //echo chunk_split($c->card_number, 4)?><!--(--><?php //echo chunk_split($c->nickname, 4)?><!--)</option>-->
+<!--                                --><?php //endforeach; ?>
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <div class="clear"></div>-->
+<!--                    </div>   -->
                     
                     <div class="field-row" id="ticket-time-row" style="display: none;">
                         <div class="grid_cell width50P">
@@ -145,11 +145,14 @@ function showSumitTicketBox()
                         <span id="ticket-price"></span>
                         <span class="left10">(1 Token = $<?php echo get_option('token_price')?>)</span>
                         <div class="clear"></div>
-                    </div>                
-                                        
+                    </div>
+                    <div class="field-row">
+                        <div class="attachments-wrap"></div>
+                        <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>
+                    </div>
                 </div>
-                
-                <div class="popup-box-footer radius6 noradiustop">                    
+
+                <div class="popup-box-footer radius6 noradiustop">
                     <a href="#" class="action-btn process-btn submit-btn" id="submit-ticket-link"><span class="p"></span><span class="t">Submit Request</span></a>
                     <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                     <div class="clear"></div>                    

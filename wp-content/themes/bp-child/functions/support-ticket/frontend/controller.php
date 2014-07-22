@@ -119,13 +119,54 @@ function createSupportTicket()
         'last_updated' => date('Y-m-d H:i:s'),
         'solved_date' => '0000-00-00 00:00:00',
     );
-    
     if(!$wpdb->insert(TABLE_TICKETS, $data))
     {
         addMessage($wpdb->last_error, 'error');
         wp_redirect("/my-support-tickets");
         exit;
     }
+    $tID = $wpdb->insert_id;
+    //Upload Files
+    if(!is_dir(TICKET_ATTACHMENTS_DIR))
+    {
+        mkdir(TICKET_ATTACHMENTS_DIR, 0777);
+        //Add .htaccess to prevent direct access
+        $fp = fopen(TICKET_ATTACHMENTS_DIR . "/.htaccess", "w");
+        fwrite($fp, "deny from all");
+        fclose($fp);
+    }
+    $has_attachment = 0;
+    if($_FILES['attachments']['error'])
+    {
+        foreach($_FILES['attachments']['error'] as $i => $error)
+        {
+            if($error == UPLOAD_ERR_OK)
+            {
+                if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $tID))
+                    mkdir(TICKET_ATTACHMENTS_DIR . "/" . $tID, 0777);
+
+                $name = $_FILES['attachments']['name'][$i];
+                $k = 1;
+                while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
+                {
+                    $name = $k . "_" . $_FILES['attachments']['name'][$i];
+                    $k++;
+                }
+
+                if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
+                {
+                    //Store Data to the Table
+                    $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => sha1($tID . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand(0, 999999))));
+                    $has_attachment = 1;
+                }
+
+
+            }
+        }
+    }
+
+    if($has_attachment)
+        $wpdb->update(TABLE_TICKETS, array('has_attachment' => 1), array('id' => $tID));
     
     /***************** Begin Send Mail ***************************/
     $ticketDetail = getTicketById($wpdb->insert_id);
@@ -289,13 +330,25 @@ function getTicketMessagesByTicketId($ticket_id)
     return $rows;
 }
 
+/**
+ * This function used to get tickets attachments ( without ticket's messages attachments)
+ * @param $ticketID - integer
+ * @return mixed
+ */
+function getAttachmentsByTicketId( $ticketID )
+{
+    global $wpdb;
+    $rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . TABLE_TICKET_ATTACHMENTS . " WHERE ticket_id = %d AND message_id IS NULL", $ticketID ) );
+    return $rows;
+}
+
 function getAttachmentsByMessageId($message_id)
 {
     global $wpdb;
-    
+
     $query  = $wpdb->prepare("SELECT * FROM " . TABLE_TICKET_ATTACHMENTS . " WHERE message_id=%d", $message_id);
     $rows = $wpdb->get_results($query);
-    
+
     return $rows;
 }
 

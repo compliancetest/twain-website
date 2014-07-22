@@ -169,16 +169,16 @@ jQuery(document).ready(function(){
         return  false;
     });
     
-    jQuery('#add-attachment-link').click(function(){
-        jQuery('#new-message-wrap .attachments-wrap').append('<div class="file-item">' + 
+    jQuery('body').on('click', '#add-attachment-link', function(){
+        jQuery('.attachments-wrap').append('<div class="file-item">' +
                     '<input type="file" name="attachments[]" />' + 
                     '<a href="#" class="action-btn delete-btn icon-btn"><span class="p"></span></a>' +
-                '</div>');
+                '</div><div class="clear"></div>');
         customizeFileTag();
         return false;
     })
     
-    jQuery('#new-message-wrap .attachments-wrap').on('click', '.delete-btn', function(){
+    jQuery('body').on('click', '.attachments-wrap .delete-btn', function(){
         jQuery(this).parent().fadeOut("fast", function(){
             jQuery(this).remove();
         })
