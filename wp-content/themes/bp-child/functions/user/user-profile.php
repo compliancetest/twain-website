@@ -140,7 +140,7 @@ function cp_user_organisation_detail_edit()
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "organisations WHERE admin_id=%d AND id=%d", get_current_user_id(), $_REQUEST['organisation_id']);
+    $query = $wpdb->prepare("SELECT organisation_id FROM " . $wpdb->prefix . "organisations_members WHERE is_admin=1 AND user_id=%d AND organisation_id=%d", get_current_user_id(), $_REQUEST['organisation_id']);
     $user_organisation_id = $wpdb->get_var($query);
     
     if ($user_organisation_id) {
