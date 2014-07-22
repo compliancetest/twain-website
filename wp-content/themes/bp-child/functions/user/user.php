@@ -115,6 +115,16 @@ function getOrganisationID($user_id = null)
     return $organisation_id;
 }
 
+function getOrganisationById($organisation_id = null)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations WHERE id=%d", $organisation_id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;
+}
+
 function getUserCreditCards($user_id = null, $only_active = false)
 {
     global $wpdb;
