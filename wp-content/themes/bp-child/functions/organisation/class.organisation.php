@@ -139,10 +139,7 @@ class CT_Organisation
                     addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
                     return false;
                 }
-            }
-            
-            //Save Organisation Admin
-            $this->save_organisation_admin($this->id, $this->admin_id);
+            }            
         }
         
         return true;

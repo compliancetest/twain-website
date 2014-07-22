@@ -195,6 +195,9 @@ function ct_process_organisation_admin_actions()
             $organisationClass->bind($_POST);
             if( $organisationClass->save() )
             {
+                //Save Organisation Admin
+                $organisationClass->save_organisation_admin($organisationClass->id, $_POST['admin_id']);
+                
                 addMessage('Organisation saved!', 'success');
                 wp_redirect('admin.php?page=manage-organisations');
                 exit;
