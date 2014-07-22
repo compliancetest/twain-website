@@ -308,6 +308,8 @@
             $('#edit-card-form #email').val($('#edit-card-form #email').attr('data-default'));
             $('#my_payment').addClass('grid-box-editing');
             $('#my_payment').find('.message').remove();
+            $('#edit-card-form #invoice_me option:eq(0)').attr('selected', true);
+            $('#payment-cc-section').show();
             return false;
         });
         $('#cards-list .edit-payment-method').click(function(){
@@ -330,6 +332,11 @@
                     form.find('#card_cvc').val(rsp.CCCvn);
                     form.find('#id').val(link.attr('data-id'));
                     form.find('.cnumber-desc').show();
+                    if (rsp.invoice_me == 0) {
+                        $('#payment-cc-section').show();
+                    } else {
+                        $('#payment-cc-section').hide();
+                    }
                     $('#cards-list').hide();
                     $('#edit-card-form').fadeIn('fast');
                     $('#my_payment').addClass('grid-box-editing');
@@ -345,6 +352,13 @@
                 }
             })
             return false;
+        });
+        $('#edit-card-form #invoice_me').change(function(){
+            if ($(this).val() == 1) {
+                $('#payment-cc-section').hide();
+            } else {
+                $('#payment-cc-section').show();
+            }
         });
         $('#cards-list .delete-payment-method').click(function(){
             var link = $(this);
