@@ -229,6 +229,17 @@ Template Name Posts: Test Suite
 			<!--end tabs-->
             <div class="space15"></div>
             <?php 
+                
+                if (($organisation_id = ct_is_organisation_admin($user_id))) {
+                    if (ct_is_organisation_purchased_subscription($organisation_id, $suite->id)) {
+                        
+                    }
+                } else {
+                    
+                }
+                
+                
+                
                 global $wpdb;
                 
                 $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite->id);
@@ -812,8 +823,10 @@ if(!$purchasedSubscription):
                 </div>
                 <div class="clear"></div>
             </div>                
-        </div>        
-        <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('paid_subscription')?>" />
+        </div>
+        <?php
+            wp_nonce_field('purchase_subscribe', '_organisation_none');
+        ?>
         <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
         <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional' || $subscriptionType == 'organisation'): ?>      
         <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription</div>     

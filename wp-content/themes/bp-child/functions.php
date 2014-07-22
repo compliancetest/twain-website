@@ -158,6 +158,7 @@ require_once(THE_FUNCTION . '/gateways/gateways.php');
 
 //Organisations
 require_once(THE_FUNCTION . '/organisation/admin.php');
+require_once(THE_FUNCTION . '/organisation/index.php');
 
 //Xero Items
 require_once(THE_FUNCTION . '/xero-items/admin.php');
