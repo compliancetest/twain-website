@@ -4627,7 +4627,8 @@ span.button_sign {
 .grid-box-editing .grid-box-body .grid-row label{
     line-height: 24px;
 }
-#my_profile .grid-box #edit-card-form .btn-row{
+#my_profile .grid-box #edit-card-form .btn-row,
+#organisation-container .grid-box #edit-card-form .btn-row {
     display: block;
 }
 #cards-list .td-nickname{
