@@ -156,8 +156,8 @@ class CT_Xero {
         );
         if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
         $this->array2xml( $xeroData, $xml);
-        $xml = '<Contacts>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Contacts>';
-        $this->xero->request('POST', $this->xero->url('Contacts', 'core'), array(), $xml);
+        $xml = '<Contacts>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Contacts>';        
+        $this->xero->request('POST', $this->xero->url('Contacts', 'core'), array(), $xml);        
         if ( $this->xero->response['code'] == 200 ) {
             return $this->responseToArray();
         }

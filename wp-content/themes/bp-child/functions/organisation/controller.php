@@ -85,7 +85,7 @@ class CT_Organisation_Controller
         
         //Create Charge Table
         $charge_data = array(
-            array(            
+            array(
                 'organisation_id'       => $organisation_id,
                 'payment_id'            => $data['card_id'],
                 'item_code'             => $sign_price_code,
