@@ -8,6 +8,7 @@ if(!defined('ABSPATH'))
 
     $cards = getUserCreditCards();
     $organisation_id = getOrganisationID();
+    $organisation = getOrganisationById($organisation_id);
 ?>
 <div class="column left three_fifths nopadding">
     <div class="grid-box table-box" id="my_payment">
@@ -71,6 +72,7 @@ if(!defined('ABSPATH'))
                         <input type="text" name="nickname" id="nickname" value="" class="input" autocomplete="off" />                                    
                         <div class="clear"></div>
                     </div>
+                    <?php if ($organisation->invoice_me == 1): ?>
                     <div class="grid-row">
                         <div class="grid-cell width30P"><label>Payment Type</label></div>
                         <select name="invoice_me" id="invoice_me" class="select">
@@ -79,6 +81,9 @@ if(!defined('ABSPATH'))
                         </select>
                         <div class="clear"></div>
                     </div>
+                    <?php else: ?>
+                    <input type="hidden" name="invoice_me" value="0">
+                    <?php endif; ?>
                     <div id="payment-cc-section">
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Email</label></div>
