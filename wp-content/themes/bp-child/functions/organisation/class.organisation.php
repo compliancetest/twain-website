@@ -85,10 +85,11 @@ class CT_Organisation
     
     public function bind($data)
     {
-        foreach($data as $_m => $_v)
+        foreach($this->_fields as $_m)
         {            
-            if(isset($this->$_m))
-                $this->$_m = $_v;
+            if (isset($data[$_m])) {
+                $this->$_m = $data[$_m];
+            }
         }
     }
     
