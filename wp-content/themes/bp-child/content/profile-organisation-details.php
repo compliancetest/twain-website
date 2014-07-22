@@ -8,7 +8,7 @@ if(!defined('ABSPATH')) {
     
     global $current_user;
     
-    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations WHERE admin_id = %d", $current_user->ID));
+    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_members WHERE is_admin=1 AND user_id=%d", $current_user->ID));
         
     $organisation = new CT_Organisation($row->id);
 ?>
