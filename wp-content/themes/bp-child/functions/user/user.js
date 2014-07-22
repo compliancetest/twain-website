@@ -334,8 +334,10 @@
                     form.find('.cnumber-desc').show();
                     if (rsp.invoice_me == 0) {
                         $('#payment-cc-section').show();
+                        $('#edit-card-form #invoice_me option:eq(0)').attr('selected', true);
                     } else {
                         $('#payment-cc-section').hide();
+                        $('#edit-card-form #invoice_me option:eq(1)').attr('selected', true);
                     }
                     $('#cards-list').hide();
                     $('#edit-card-form').fadeIn('fast');
