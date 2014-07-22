@@ -4652,6 +4652,9 @@ span.button_sign {
 #edit-card-form{
     border: solid 1px #b7b7b7;
 }
+#payment-cc-section {
+    border-top: solid 1px #b7b7b7;
+}
 #my_community_memberships .td-name{
     width: 685px;
 }
