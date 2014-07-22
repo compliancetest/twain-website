@@ -102,7 +102,18 @@ function compliancetest_user_actions()
     }
 }
 
-
+function getOrganisationID($user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT organisation_id FROM " . $wpdb->prefix . "organisations_members WHERE user_id=%d And is_admin=1", $user_id);
+    $organisation_id = $wpdb->get_var($query);
+    
+    return $organisation_id;
+}
 
 function getUserCreditCards($user_id = null, $only_active = false)
 {
