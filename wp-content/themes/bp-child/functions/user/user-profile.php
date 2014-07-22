@@ -211,6 +211,7 @@ function cp_user_payment_edit()
     
     $id = $_REQUEST['id'];
     $card = getUserCardById($id, $user_id);
+    $result = array();
     
     if(!$card)
     {
@@ -218,16 +219,30 @@ function cp_user_payment_edit()
         exit;
     }
     
-    $result = getCustomerCardDetailById($card->customer_id);
-    
-    if(!$result || isset($result['faultstring'])) 
+    if ($card->invoice_me == 0)
     {
-        echo "There was an error while getting the information from eWay.";
-        exit;
+        $result = getCustomerCardDetailById($card->customer_id);
+        
+        if(!$result || isset($result['faultstring'])) 
+        {
+            echo "There was an error while getting the information from eWay.";
+            exit;
+        }
+        
+        $result['email'] = $card->email;
+    }
+    else
+    {
+        $result['email'] = '';
+        $result['card_number'] = '';
+        $result['name_on_card'] = '';
+        $result['card_expiry'] = '';
+        $result['card_cvc'] = '';
     }
     
     $result['nickname'] = $card->nickname;
-    $result['email'] = $card->email;
+    $result['invoice_me'] = $card->invoice_me;
+    $result['organisation_id'] = $card->organisation_id;
     
     echo json_encode($result);
     exit;
