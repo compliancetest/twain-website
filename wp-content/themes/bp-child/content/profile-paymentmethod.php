@@ -7,6 +7,7 @@ if(!defined('ABSPATH'))
     
 
     $cards = getUserCreditCards();
+    $organisation_id = getOrganisationID();
 ?>
 <div class="column left three_fifths nopadding">
     <div class="grid-box table-box" id="my_payment">
@@ -69,41 +70,51 @@ if(!defined('ABSPATH'))
                         <div class="grid-cell width30P"><label>Nickname</label></div>
                         <input type="text" name="nickname" id="nickname" value="" class="input" autocomplete="off" />                                    
                         <div class="clear"></div>
-                    </div>                    
-                    <div class="grid-row">
-                        <div class="grid-cell width30P"><label>Email</label></div>
-                        <input type="text" name="email" id="email" value="" data-default="<?php echo $current_user->user_email?>" class="input" autocomplete="off" />                                    
-                        <div class="grid-cell width30P">&nbsp;</div>
-                        <span class="desc">(Invoices will be sent to this email.)</span>
-                        <div class="clear"></div>
-                    </div>                    
-                    
-                    <div class="grid-row">
-                        <div class="grid-cell width30P"><label>Card Number</label></div>
-                        <input type="text" name="card_number" id="card_number" value="" class="input" autocomplete="off" /> 
-                        <small class="cnumber-desc"><i>(Don't change this if you want keep original number)</i></small>
-                        <div class="clear"></div> 
                     </div>
                     <div class="grid-row">
-                        <div class="grid-cell width30P"><label>Name on Card</label></div>
-                        <input type="text" name="name_on_card" id="name_on_card" value="" class="input" autocomplete="off" />                                    
+                        <div class="grid-cell width30P"><label>Payment Type</label></div>
+                        <select name="invoice_me" id="invoice_me" class="select">
+                            <option value="0">Credit Card</option>
+                            <option value="1">Invoice Me</option>
+                        </select>
                         <div class="clear"></div>
                     </div>
-                    <div class="grid-row">
-                        <div class="grid-cell width30P"><label>Expiry</label></div>
-                        <input type="text" name="card_expiry" id="card_expiry" value="" class="input small_input" placeholder="M / Y" autocomplete="off" /> 
-                        <div class="clear"></div> 
-                    </div>
-                    <div class="grid-row"> 
-                        <div class="grid-cell width30P"><label>CVC</label></div> 
-                        <input type="text" name="card_cvc" id="card_cvc" value="" class="input small_input" autocomplete="off" /> 
-                        <div class="clear"></div> 
+                    <div id="payment-cc-section">
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Email</label></div>
+                            <input type="text" name="email" id="email" value="" data-default="<?php echo $current_user->user_email?>" class="input" autocomplete="off" />                                    
+                            <div class="grid-cell width30P">&nbsp;</div>
+                            <span class="desc">(Invoices will be sent to this email.)</span>
+                            <div class="clear"></div>
+                        </div>                    
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Card Number</label></div>
+                            <input type="text" name="card_number" id="card_number" value="" class="input" autocomplete="off" /> 
+                            <small class="cnumber-desc"><i>(Don't change this if you want keep original number)</i></small>
+                            <div class="clear"></div> 
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Name on Card</label></div>
+                            <input type="text" name="name_on_card" id="name_on_card" value="" class="input" autocomplete="off" />                                    
+                            <div class="clear"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Expiry</label></div>
+                            <input type="text" name="card_expiry" id="card_expiry" value="" class="input small_input" placeholder="M / Y" autocomplete="off" /> 
+                            <div class="clear"></div> 
+                        </div>
+                        <div class="grid-row"> 
+                            <div class="grid-cell width30P"><label>CVC</label></div> 
+                            <input type="text" name="card_cvc" id="card_cvc" value="" class="input small_input" autocomplete="off" /> 
+                            <div class="clear"></div> 
+                        </div>
                     </div> 
                     <div class="grid-row btn-row">
                         <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
                         <a href="#" class="action-btn cancel-btn left15"><span class="p"></span><span class="t">Cancel</span></a>
                         <div class="clear"></div>
                     </div>
+                    <input type="hidden" name="organisation_id" id="organisation_id" value="" data-organisation-id="<?=$organisation_id?>"/>
                     <?php wp_nonce_field('save_payment_method', 'cp-action'); ?>
                     <input type="hidden" name="id" id="id" value="" />
                 </form>
