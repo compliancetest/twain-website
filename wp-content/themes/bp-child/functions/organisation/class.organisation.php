@@ -120,7 +120,7 @@ class CT_Organisation
             return false;
         }
         else
-        {       
+        {       var_dump($data);exit;
             $data['contact_id'] = $response['Contacts']['Contact']['ContactID'];        
             if( ! $this->id)
             {   //Insert organisation to CT
