@@ -37,6 +37,12 @@ get_header();
                         include(dirname(__FILE__) . '/content/profile-organisation-details.php');
                     ?>            
                     <div class="clear"></div>
+                    <div class="space25"></div>
+                    
+                    <?php 
+                        include(dirname(__FILE__) . '/content/profile-paymentmethod.php');
+                    ?>
+                    <div class="clear"></div>
                 </div>
             </div>
             
