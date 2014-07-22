@@ -93,7 +93,7 @@ function ct_show_new_organisation()
                     <td>
                         <?php
                             //Getting All users
-                            $users = get_users();
+                            $users = get_users('user_status=0');
                         ?>
                         <select name="admin_id" id="admin_id">
                             <option value="">- Select -</option>
