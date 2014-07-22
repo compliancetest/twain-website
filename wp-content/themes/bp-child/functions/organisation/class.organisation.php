@@ -125,7 +125,7 @@ class CT_Organisation
             {
                 $data['contact_id'] = $response['Id'];
                 //Insert organisation to CT
-                if(!$wpdb->insert($wpdb->prefix . "organisations", $data ) )
+                if( $wpdb->insert($wpdb->prefix . "organisations", $data ) === false )
                 {
                     addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
                     return false;
