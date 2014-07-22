@@ -5063,7 +5063,10 @@ span.button_sign {
     text-align: center;
 }
 #my_transaction_log .td-service{
-    width: 256px;    
+    width: 160px;
+}
+#my_transaction_log .td-message-part{
+    width: 85px;
 }
 #my_transaction_log .td-action{
     width: 205px;

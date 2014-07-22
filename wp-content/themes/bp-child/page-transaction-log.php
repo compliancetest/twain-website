@@ -224,8 +224,8 @@ if($filterCustomer){
                        <div class="td td-audit td-two-lines tocenter td-sortable">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=audit&order=<?php echo $orderBy == 'audit' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'audit'){ ?>class="<?php echo $order?>"<?php } ?>>Audit<br />Record <span class="sort"></span></a>
                        </div>                       
-                       <div class="td td-convsn td-sortable td-two-lines tocenter">
-                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Conversation ID</br>Part ID<span class="sort"></span></a>
+                       <div class="td td-convsn td-sortable tocenter">
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Conversation ID<span class="sort"></span></a>
                        </div>
                        <div class="td td-date td-sortable">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderBy == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'date'){ ?>class="<?php echo $order?>"<?php } ?>>Date/Time <span class="sort"></span></a>
@@ -293,14 +293,6 @@ if($filterCustomer){
                                         }else{
                                             echo $row->CONVERSATION_ID;
                                         }                                    
-                                   ?></br>
-                                   <?php
-                                   if(strlen($messages[$row->ID][0]->PART_ID) > 28)
-                                   {
-                                       echo '<span title="' . $messages[$row->ID][0]->PART_ID . '">' . substr($messages[$row->ID][0]->PART_ID, 0, 10) . "....." . substr($messages[$row->ID][0]->PART_ID, -10) . '</span>';
-                                   }else{
-                                       echo $messages[$row->ID][0]->PART_ID;
-                                   }
                                    ?>
                                </div>
                                <div class="td td-date tocenter">
@@ -317,11 +309,13 @@ if($filterCustomer){
                                                <div class="td td-action tocenter">Action</div>
                                                <div class="td td-message-outcome td-two-lines tocenter">Validation Status</div>
                                                <div class="td td-message-date">Date/Time</div>
+                                               <div class="td td-message-part tocenter">Part ID</div>
                                                <div class="td td-message-view">View</div>
                                                <div class="clear"></div>
                                            </div>
                                            <div class="tbody">
                                              <?php foreach($messages[$row->ID] as $message) {?>
+                                                <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
                                                <div class="tr">
                                                    <div class="td td-from"><?php echo cp_wrap($message->FROM_PARTY_ID, 15) ?></div>
                                                    <div class="td td-to"><?php echo cp_wrap($message->TO_PARTY_ID, 15)?></div>
@@ -339,7 +333,17 @@ if($filterCustomer){
                                                    <div class="td td-message-date">
                                                        <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
                                                    </div>
-                                                   <div class="td td-message-view">                                                   
+                                                   <div class="td td-message-part">
+                                                       <?php
+                                                       if(strlen($message->PART_ID) > 14)
+                                                       {
+                                                           echo '<span title="' . $message->PART_ID . '">' . substr($message->PART_ID, 0, 5) . "....." . substr($message->PART_ID, -5) . '</span>';
+                                                       }else{
+                                                           echo $message->PART_ID;
+                                                       }
+                                                       ?>
+                                                   </div>
+                                                   <div class="td td-message-view">
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
                                                       | 
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
