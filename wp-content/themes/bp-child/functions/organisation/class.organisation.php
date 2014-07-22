@@ -106,10 +106,9 @@ class CT_Organisation
         }
         $xero = new CT_Xero();
         $data['contact_id'] = strtolower( $data['contact_id'] );
-        $response = false;
-        //remove empty values
-        $data = array_diff( $data, array( '' ) );
-        $data = array_map( 'stripslashes_deep', $data );
+        
+        $response = false;        
+        
         if( count( $data ) != 2 ){
             $response = $xero->upsertContact( $data );
         }
@@ -120,7 +119,7 @@ class CT_Organisation
             return false;
         }
         else
-        {       var_dump($data);var_dump($_POST);exit;
+        {       
             $data['contact_id'] = $response['Contacts']['Contact']['ContactID'];        
             if( ! $this->id)
             {   //Insert organisation to CT
