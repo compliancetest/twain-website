@@ -310,6 +310,7 @@
             $('#my_payment').find('.message').remove();
             $('#edit-card-form #invoice_me option:eq(0)').attr('selected', true);
             $('#payment-cc-section').show();
+            $('#organisation_id').val($('#organisation_id').data('organisation-id'));
             return false;
         });
         $('#cards-list .edit-payment-method').click(function(){
@@ -332,6 +333,7 @@
                     form.find('#card_cvc').val(rsp.CCCvn);
                     form.find('#id').val(link.attr('data-id'));
                     form.find('.cnumber-desc').show();
+                    form.find('#organisation_id').val(rsp.organisation_id);
                     if (rsp.invoice_me == 0) {
                         $('#payment-cc-section').show();
                         $('#edit-card-form #invoice_me option:eq(0)').attr('selected', true);
