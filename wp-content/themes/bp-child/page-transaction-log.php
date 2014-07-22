@@ -225,7 +225,7 @@ if($filterCustomer){
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=audit&order=<?php echo $orderBy == 'audit' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'audit'){ ?>class="<?php echo $order?>"<?php } ?>>Audit<br />Record <span class="sort"></span></a>
                        </div>                       
                        <div class="td td-convsn td-sortable">
-                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Conversation ID <span class="sort"></span></a>
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Conversation ID / Part ID<span class="sort"></span></a>
                        </div>
                        <div class="td td-date td-sortable">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderBy == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'date'){ ?>class="<?php echo $order?>"<?php } ?>>Date/Time <span class="sort"></span></a>
@@ -293,7 +293,15 @@ if($filterCustomer){
                                         }else{
                                             echo $row->CONVERSATION_ID;
                                         }                                    
-                                   ?>                                   
+                                   ?></br>
+                                   <?php
+                                   if(strlen($messages[$row->ID][0]->PART_ID) > 28)
+                                   {
+                                       echo '<span title="' . $messages[$row->ID][0]->PART_ID . '">' . substr($messages[$row->ID][0]->PART_ID, 0, 10) . "....." . substr($messages[$row->ID][0]->PART_ID, -10) . '</span>';
+                                   }else{
+                                       echo $messages[$row->ID][0]->PART_ID;
+                                   }
+                                   ?>
                                </div>
                                <div class="td td-date tocenter">
                                    <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />                                   
@@ -335,6 +343,8 @@ if($filterCustomer){
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
                                                       | 
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
+                                                       <br>
+                                                       <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
                                                    </div>
                                                    <div class="clear"></div>
                                                </div>
@@ -527,7 +537,15 @@ if($filterCustomer){
             
             return false;
         })
-        
+        jQuery('.show_transaction_receipts').click(function(e){
+            e.preventDefault();
+            jQuery('#receipt_compliancetest').text(jQuery(this).data('ctreceipt'));
+            jQuery('#receipt_gateway').text(jQuery(this).data('gateway'));
+            jQuery('#view-transaction_details_box').showPopupBox({
+                closeWhenClickOveraly: false
+            });
+        });
+
        jQuery('#editLogForm').submit(function(){
             jQuery('#edit-transaction-log-box .loading').show();
             jQuery.ajax({
@@ -668,7 +686,28 @@ if($filterCustomer){
     </div>
     <div class="loading"></div>
     <a class="close_btn"></a>      
-</div> 
+</div>
+
+<div class="popup-box" id="view-transaction_details_box" style="display: none; width: 410px">
+    <div class="popup-box-header radius6 noradiusbottom">Receipt Identifiers</div>
+    <div class="popup-box-content">
+        <div class="space10"></div>
+        <div class="grid-box-body">
+            <div class="tbody">
+                <div><span class="bold">ComplianceTest: </span><span id="receipt_compliancetest"></span></div>
+                <div class="space10"></div>
+                <div><span class="bold">Gateway Network: </span><span id="receipt_gateway"></span></div>
+            </div>
+        </div>
+        <div class="space10"></div>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">
+        <a href="#" cp-type="inline"  class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+        <div class="clear"></div>
+    </div>
+    <div class="loading"></div>
+    <a class="close_btn"></a>
+</div>
 
 
 
