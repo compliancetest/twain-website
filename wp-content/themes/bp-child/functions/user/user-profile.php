@@ -268,6 +268,8 @@ function cp_user_payment_save()
     $name_on_card = trim($_POST['name_on_card']);
     $card_expiry = trim($_POST['card_expiry']);
     $card_cvc = trim($_POST['card_cvc']);
+    $invoice_me = trim($_POST['invoice_me']);
+    $organisation_id = trim($_POST['organisation_id']);
     
     $id = trim($_POST['id']);
     
@@ -282,6 +284,26 @@ function cp_user_payment_save()
     if(!$nickname)
     {
         return 'Please enter a nickname of this card!';
+    }
+    
+    if ($invoice_me == 1) 
+    {
+        if ($id) {
+            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active'), array('id' => $id));
+            return $id;
+        } else {
+            $wpdb->insert($wpdb->prefix . "users_cards", array(
+                'user_id' => $user_id,
+                'nickname' => $nickname,
+                'invoice_me' => $invoice_me,
+                'organisation_id' => $organisation_id,
+                'status' => 'Active',                
+                'created_date' => date('Y-m-d H:i:s')
+            ));    
+            $new_pm_id = $wpdb->insert_id;    
+            cp_update_user_cards_count($user_id);
+            return $new_pm_id;
+        }
     }
     
     $email_regex = '/^[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/'; 
