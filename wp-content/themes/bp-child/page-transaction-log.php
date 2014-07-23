@@ -303,10 +303,10 @@ if($filterCustomer){
                                    <div class="sub-table">
                                        <div class="table">
                                            <div class="thead tr">
-                                               <div class="td td-from tocenter">From</div>
-                                               <div class="td td-to tocenter">To</div>
-                                               <div class="td td-service tocenter">Service</div>
-                                               <div class="td td-action tocenter">Action</div>
+                                               <div class="td td-from td-two-lines tocenter">From</br>To</div>
+<!--                                               <div class="td td-to tocenter">To</div>-->
+                                               <div class="td td-service td-two-lines tocenter">Service</br>Action</div>
+<!--                                               <div class="td td-action tocenter">Action</div>-->
                                                <div class="td td-message-outcome td-two-lines tocenter">Validation Status</div>
                                                <div class="td td-message-date">Date/Time</div>
                                                <div class="td td-message-part tocenter">Part ID</div>
@@ -317,10 +317,10 @@ if($filterCustomer){
                                              <?php foreach($messages[$row->ID] as $message) {?>
                                                 <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
                                                <div class="tr">
-                                                   <div class="td td-from"><?php echo cp_wrap($message->FROM_PARTY_ID, 15) ?></div>
-                                                   <div class="td td-to"><?php echo cp_wrap($message->TO_PARTY_ID, 15)?></div>
-                                                   <div class="td td-service"><?php echo cp_wrap($message->SERVICE, 48) ?></div>
-                                                   <div class="td td-action"><?php echo $message->ACTION ?></div>
+                                                   <div class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15).'</br>'.cp_wrap($message->TO_PARTY_ID, 15) ?></div>
+<!--                                                   <div class="td td-to">--><?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
+                                                   <div class="td td-two-lines td-service tocenter"><?php echo cp_wrap($message->SERVICE, 48).'</br>'.$message->ACTION ?></div>
+<!--                                                   <div class="td td-action">--><?php //echo $message->ACTION ?><!--</div>-->
                                                    <div class="td td-message-outcome tocenter">
                                                        <?php if($message->MESSAGE_OUTCOME_CODE){ ?>
                                                        <span class="status-<?php echo strtolower($message->MESSAGE_OUTCOME_CODE) ?>"><?php echo $message->MESSAGE_OUTCOME_LABEL?></span>
