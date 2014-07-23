@@ -108,8 +108,8 @@ class CT_Organisation
         $xero = new CT_Xero();
         $data['contact_id'] = strtolower( $data['contact_id'] );
         
-        $response = false;        
-        
+        $response = false;
+        $data = stripslashes_deep( $data );
         if( count( $data ) != 2 ){
             $response = $xero->upsertContact( $data );
         }
