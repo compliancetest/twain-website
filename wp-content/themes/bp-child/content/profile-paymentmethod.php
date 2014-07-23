@@ -90,13 +90,6 @@ if(!defined('ABSPATH'))
                     <?php endif; ?>
                     <div id="payment-cc-section">
                         <div class="grid-row">
-                            <div class="grid-cell width30P"><label>Email</label></div>
-                            <input type="text" name="email" id="email" value="" data-default="<?php echo $current_user->user_email?>" class="input" autocomplete="off" />                                    
-                            <div class="grid-cell width30P">&nbsp;</div>
-                            <span class="desc">(Invoices will be sent to this email.)</span>
-                            <div class="clear"></div>
-                        </div>                    
-                        <div class="grid-row">
                             <div class="grid-cell width30P"><label>Card Number</label></div>
                             <input type="text" name="card_number" id="card_number" value="" class="input" autocomplete="off" /> 
                             <small class="cnumber-desc"><i>(Don't change this if you want keep original number)</i></small>
