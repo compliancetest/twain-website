@@ -15,7 +15,7 @@ if(!defined('ABSPATH')) {
                
     <div class="grid-box" id="my_details">
         <div class="grid-box-header">
-            <h5 class="left">Details</h5>
+            <h5 class="left">Billing Details</h5>
             <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
             <div class="clear"></div>
         </div>
