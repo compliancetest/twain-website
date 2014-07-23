@@ -44,7 +44,7 @@ function compliancetest_user_actions()
     }else if(wp_verify_nonce($cpAction,'edit_payment_method')){
         cp_user_payment_edit();
     }else if(wp_verify_nonce($cpAction ,'save_payment_method')){
-        $result = cp_user_payment_save();        
+        $result = cp_user_payment_save();
         if($result === true || is_int($result))
             echo "success";
         else
