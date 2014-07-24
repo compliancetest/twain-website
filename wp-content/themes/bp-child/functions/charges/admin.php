@@ -104,7 +104,7 @@ function ct_add_charge()
                         <select name="payment_id" id="payment_id">
                             <?php
                                 if( ! empty( $data['organisation_id'] ) ){
-                                    $payment_method = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE organisation_id = %s", $data['organisation_id']), ARRAY_A );
+                                    $payment_method = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %s", $data['organisation_id']), ARRAY_A );
                                     foreach( $payment_method AS $p_m ){ ?>
                                         <option value="<?php echo $p_m['id'];?>" <?php if( $p_m['id'] == $data['payment_id']):?>selected="selected" <?php endif;?>><?php echo $p_m['nickname'].' ('. ($p_m['invoice_me'] == 1 ? 'Invoice Me' : 'Credit Card' ).')';?></option>
                                     <?php }
@@ -275,7 +275,7 @@ function get_payment_methods_callback() {
     if( empty( $organisationID ) ){
         exit();
     }
-    $paymentMethods = $wpdb->get_results( $wpdb->prepare( "SELECT id, nickname, invoice_me FROM {$wpdb->prefix}users_cards WHERE organisation_id = %d AND status = 'Active'", $organisationID ), ARRAY_A );
+    $paymentMethods = $wpdb->get_results( $wpdb->prepare( "SELECT id, nickname, invoice_me FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND status = 'Active'", $organisationID ), ARRAY_A );
     exit( json_encode( $paymentMethods ) );
 }
 function redirect_then_exit(){

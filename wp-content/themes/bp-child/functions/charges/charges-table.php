@@ -93,7 +93,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                 return $item->is_paid ? '<span style="color: green;">Paid</span>' : '<span style="color: red;">Not Paid</span>';
             default:
                 if( $column_name == 'payment_id'){
-                    $payment_method = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE id = %s", $item->$column_name), ARRAY_A );
+                    $payment_method = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE id = %s", $item->$column_name), ARRAY_A );
                     return $payment_method['nickname'].' ('. ( $payment_method['invoice_me'] == '1' ? 'Invoice Me' : 'Credit Card' ).' )';
                 }
                 return $item->$column_name;

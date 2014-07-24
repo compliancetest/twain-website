@@ -123,7 +123,7 @@ class CT_Purchase
             $wpdb->update($wpdb->prefix . 'users_purchases', array('status' => 'Frozen', 'frozen_count' => 1), array('id' => $this->id));            
             
             //Update Card Status
-            //$wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
+            //$wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Suspended'), array('id' => $this->card_id));
                 
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE purchase_id=%d AND `status` != 'Unsubscribing'", $this->id);
             $subscriptions = $wpdb->get_results($query);

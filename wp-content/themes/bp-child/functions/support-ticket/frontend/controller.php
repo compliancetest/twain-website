@@ -898,7 +898,7 @@ function processTicketPayment($ticket_id)
         if(!$card_id)
         {
             //Getting Card Id from the user cards
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_cards WHERE user_id=%d AND status='Active' ORDER BY created_date DESC", $ticketDetail->customer_id);
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE user_id=%d AND status='Active' ORDER BY created_date DESC", $ticketDetail->customer_id);
             $card_id = $wpdb->get_var($query);
         }
         

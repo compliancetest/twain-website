@@ -537,7 +537,7 @@ function process_recurring_payment()
 {
     global $wpdb;
     
-    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='Active' AND p.expiry_date <= '" . date("Y-m-d") . "'";
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE p.`status`='Active' AND p.expiry_date <= '" . date("Y-m-d") . "'";
     $subscriptions = $wpdb->get_results($query);
     foreach($subscriptions as $row)
     {
@@ -562,7 +562,7 @@ function process_recurring_payment()
                 
             }else{
                 //Update Card Status                
-                $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $this->card_id));
+                $wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Suspended'), array('id' => $this->card_id));
                 
                 //Set the status to InArrears                
                 $purchase->inArrears();
@@ -581,7 +581,7 @@ function process_suspended_subscriptions()
 {
     global $wpdb;
     
-    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active'";
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active'";
     $subscriptions = $wpdb->get_results($query, ARRAY_A);
     foreach($subscriptions as $row)
     {
@@ -612,7 +612,7 @@ function process_suspended_subscriptions()
             
         }else{             
             //Set Card Status to Suspended
-            $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row['card_id']));
+            $wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Suspended'), array('id' => $row['card_id']));
         }
         
     }
@@ -640,7 +640,7 @@ function process_inarrear_frozen_subscriptions()
     $FrozenCount = get_option('frozen_count');
     
     //Move subscription of expired InArrears Cound InArrears to Frozen 
-    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='InArrears' AND `inarrears_count` > " . $InArrearsCount;
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE p.`status`='InArrears' AND `inarrears_count` > " . $InArrearsCount;
     $rows = $wpdb->get_results($query, ARRAY_A);
     foreach($rows as $row)
     {
@@ -650,7 +650,7 @@ function process_inarrear_frozen_subscriptions()
     }
     
     //Move subscription of expired InArrears Cound InArrears to Frozen 
-    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE p.`status`='Frozen' AND `frozen_count` > " . $FrozenCount;
+    $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE p.`status`='Frozen' AND `frozen_count` > " . $FrozenCount;
     $rows = $wpdb->get_results($query, ARRAY_A);
     foreach($rows as $row)
     {

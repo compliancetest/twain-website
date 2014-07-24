@@ -126,4 +126,34 @@ class CT_Organisation_Controller
         
     }
     
+    public function send_subscription_request($user_id, $suite_id)
+    {
+        global $wpdb;
+        
+        $organisation = ct_get_user_organisation($user_id);
+        $organisation_admin = ct_get_organisation_admin($organisation->id);
+        
+        if ($organisation_admin) {        
+            $requester = get_userdata($user_id);
+            
+            $email_data = array(
+                '[requester_name]' => $requester->first_name . " " . $requester->last_name,
+                '[requester_email]' => $requester->user_email,
+                '[suite_name]' => get_the_title($suite_id),
+                '[suite_url]' => get_permalink($suite_id),
+                '[admin_name]' => $organisation_admin->display_name,
+                '[admin_email]' => $organisation_admin->user_email
+            );
+            
+            cp_send_email(array('email' => $organisation_admin->user_email, 'name' => $organisation_admin->display_name), $email_data);
+            
+            return true;
+        } else {
+            $this->last_message = "There was an error while processing your request.";
+            return false;
+        }
+    }
+    
+    
+    
 }

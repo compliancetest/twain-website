@@ -133,9 +133,9 @@ function getUserCreditCards($user_id = null, $only_active = false)
         $user_id = get_current_user_id();
     
     if($only_active)
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d And `status`='Active'", $user_id);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_payment_methods WHERE user_id=%d And `status`='Active'", $user_id);
     else
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d", $user_id);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_payment_methods WHERE user_id=%d", $user_id);
     $rows = $wpdb->get_results($query);
     
     return $rows;
@@ -148,7 +148,7 @@ function getUserCardById($card_id, $user_id = null)
     if(!$user_id)
         $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d and id=%d", $user_id, $card_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_payment_methods WHERE user_id=%d and id=%d", $user_id, $card_id);
     $row = $wpdb->get_row($query);
     
     return $row;
@@ -625,7 +625,7 @@ function cp_update_user_cards_count($user_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_cards WHERE user_id=%d", $user_id);    
+    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}organisations_payment_methods WHERE user_id=%d", $user_id);    
     $cards = $wpdb->get_var($query);
     
     $wpdb->update($wpdb->prefix . "users_extra", array('cards' => $cards), array('userID' => $user_id));

@@ -56,7 +56,7 @@ class CT_Subscription
         {
             $query = $wpdb->prepare("SELECT s.*, p.monthly_fee, p.signup_fee, p.paid_amount, p.card_id, p.created_date, p.expiry_date,p.inarrears_count, p.frozen_count, c.customer_id FROM {$wpdb->prefix}users_subscriptions AS s
                                      LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id = s.purchase_id
-                                     LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id                                      
+                                     LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id                                      
                                      WHERE s.id=%d", $this->id);
             
             $row = $wpdb->get_row($query, ARRAY_A);

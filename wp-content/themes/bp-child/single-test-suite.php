@@ -228,181 +228,96 @@ Template Name Posts: Test Suite
             </div>
 			<!--end tabs-->
             <div class="space15"></div>
-            <?php 
-                
-                if (($organisation_id = ct_is_organisation_admin($user_id))) {
-                    if (ct_is_organisation_purchased_subscription($organisation_id, $suite->id)) {
-                        
-                    }
-                } else {
-                    
-                }
-                
-                
-                
-                global $wpdb;
-                
-                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d GROUP BY id", $user_id, $suite->id);
-                $subscription = $wpdb->get_row($query);
-                
-                $purchasedSubscription = false;
+            <?php                 
                 $subscriptionType = 'paid';
                 
-            if($subscription){ 
-                
-                $purchasedSubscription = true;
-                
-                
-                if($subscription->status == 'Active'):
-            ?>
-                <div class="message success">
-                    You have already purchased a subscription to this test suite.
-                    If you want to unsubscribe it, please click <a href="javascript: void(0)" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                </div>
-                <?php elseif($subscription->status == 'InArrears'): ?>
-                <div class="message notice">
-                    You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a href="<?php echo get_site_url(); ?>/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                </div>
-                <?php elseif($subscription->status == 'Frozen'): ?>
-                <div class="message error">
-                    You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                </div>
-                <?php elseif($subscription->status == 'Unsubscribing'): ?>
-                <div class="message notice">
-                    You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a href="/?_paymentnonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                </div>
-                <?php endif; 
-            }else{ 
-                //Check this user purchased a subscription to other versions
-                if(isPurchasedForOtherVersions($suite->familyMark))
-                {
-                    $subscriptionType = 'additional';
-                    ?>
-                    <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
-                        <span class="price-b">
-                            <span class="l"></span>
-                            <span class="m"> 
-                            Already<br />Purchased
-                            </span>
-                            <span class="r"></span>
-                        </span>
-                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                    </a>
-                    <?php
-                }else if(getOrganisationPurchaseId($suite->familyMark)){                    
-                    $subscriptionType = 'organisation';
-                    ?>
-                    <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
-                        <span class="price-b">
-                            <span class="l"></span>
-                            <span class="m"> 
-                            Already<br />Purchased
-                            </span>
-                            <span class="r"></span>
-                        </span>
-                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                    </a>
-                    <?php
-                }else{                    
-                    //Button HTML
-                    $butttonHTML = '';
-                    $buttonClass = '';
+                if (is_user_logged_in()) {
                     
-                    /*$user_signup_fee = get_user_meta($user_id, 'signup_fee', true);
-                    $user_monthly_fee = get_user_meta($user_id, 'monthly_fee', true);
-                    
-                    //Getting Monthly Fee and Signup Fee                        
-                    if(isset($user_signup_fee[$suite->id]))
-                        $suite->signupPriceValue = doubleval($user_signup_fee[$suite->id]);
-                    if(isset($user_monthly_fee[$suite->id]))
-                        $suite->monthlySubscriptionPriceValue = doubleval($user_monthly_fee[$suite->id]);
-                    */                    
-                    if($suite->signupPriceValue == -1)
-                    {
-                        $buttonHTML = '<span class="price-b">
-                                        <span class="l"></span>
-                                        <span class="m">
-                                            <b>Contact Us</b><br />for pricing
-                                        </span>
-                                        <span class="r"></span>
-                                    </span>';
-                        $buttonClass = ' contact-us-price';
-                        $subscriptionType = 'contact';
-                    }else{
-                        
-                        //Getting User Signup Fee                    
-                        if($suite->signupPriceValue == 0 && $suite->monthlySubscriptionPriceValue == 0) ///
-                        {
-                            $buttonHTML = '<span class="price-b">
-                                            <span class="l"></span>
-                                            <span class="m">
-                                                <b style="margin-top: 5px; display: block">Free</b>    
-                                            </span>
-                                            <span class="r"></span>
-                                        </span>';
-                            $subscriptionType = 'free';
-                        }else{
-                            
-                            
-                            $buttonHTML = '<span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">';
-                            if(!$suite->monthlySubscriptionPriceValue)
-                            {
-                                $buttonHTML .= '<b>No</b><br />per month';
-                            }else{
-                                $buttonHTML .= '<b>$' . $suite->monthlySubscriptionPriceValue . '</b><br />per month';
-                            }
-                            $buttonHTML .= '</span>
-                                            <span class="r"></span>
-                                        </span>';
-                            
-                            $buttonHTML .= '<span class="price-b signup-price">
-                                            <span class="l"></span>
-                                            <span class="m">';
-                            if($suite->signupPriceValue > 0){
-                                $buttonHTML .= '<b>$' . $suite->signupPriceValue . '</b><br />sign-up fee';
-                            }else{ //No Price
-                                $buttonHTML .= '<b>No</b><br />sign-up fee';
-                            }
-                            $buttonHTML .= '</span>
-                                            <span class="r"></span>
-                                        </span>';
-                            
-                            $buttonClass = ' has-signup-price';
-                        }
-                        
+                    if (($organisation_id = ct_is_organisation_admin($user_id))) { //Organisation Admin
+                        $subscription = ct_get_organisation_subscription($organisation_id, $suite->familyMark);
+                        $is_organisation_admin = true;
+                    } else {
+                        $subscription = ct_get_user_subscription($user_id, $suite->familyMark);
+                        $is_organisation_admin = false;
                     }
                     
-                    
-                    $buttonHTML .= '<span class="text-b"><b>ACCESS</b><br />Test Harness</span>';
-                    
-                    if(!is_user_logged_in())                 
-                    {
+                    if ($subscription) {
+                        if ($subscription->status == 'Active') {
                         ?>
-                        <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
-                            <?php echo $buttonHTML; ?>
-                        </a>
+                            <div class="message success">
+                                You have already purchased a subscription to this test suite.
+                                If you want to unsubscribe it, please click <a href="javascript: void(0)" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                            </div>
                         <?php
-                    }else{
-                        if($suite->signupPriceValue == -1){ //Contact Us
+                        } else if ($subscription->status == 'InArrears') {
                         ?>
-                        <a href="/contact-us" class="suite-subscript-link  <?php echo $buttonClass?>">
-                            <?php echo $buttonHTML; ?>
-                        </a>
+                            <div class="message notice">
+                                You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a href="<?php echo get_site_url(); ?>/?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                            </div>
                         <?php
-                        }else{
+                            
+                        } else if ($subscription->status == 'Frozen') {
                         ?>
-                        <a href="#subscribe-box" rel="custom-popup" cp-type="inline" class="suite-subscript-link <?php echo $buttonClass?>" cp-closeWhenClickOveraly=0>
-                            <?php echo $buttonHTML; ?>
-                        </a>
+                            <div class="message error">
+                                You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a href="/?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                            </div>
+                        <?php
+                            
+                        } else if ($subscription->status == 'Unsubscribing') {
+                        ?>
+                            <div class="message notice">
+                                You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a href="/?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
+                            </div>
                         <?php
                         }
-                    }                    
-                 
-                }
-                
-            } 
+                    } else {
+                        if ($is_organisation_admin) {
+                        ?>
+                            <a href="#go-to-test-suites-page" class="suite-subscript-link">
+                                <span class="price-b">
+                                    <span class="l"></span>
+                                    <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
+                                    <span class="r"></span>
+                                </span>
+                                <span class="price-b signup-price">
+                                    <span class="l"></span>
+                                    <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
+                                    <span class="r"></span>
+                                </span>
+                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                            </a>
+                        <?php
+                        } else if ($organisation = ct_get_user_organisation($user_id)) {
+                        ?>
+                            <a href="/index.php?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                            </a>
+                        <?php
+                        } else {
+                        ?>
+                            <a href="/index.php?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                <span class="price-b">
+                                    <span class="l"></span>
+                                    <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
+                                    <span class="r"></span>
+                                </span>
+                                <span class="price-b signup-price">
+                                    <span class="l"></span>
+                                    <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
+                                    <span class="r"></span>
+                                </span>
+                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                            </a>
+                        <?php
+                        }
+                    }                  
+                } else {
+            ?>
+                    <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>                        
+                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                    </a>
+            <?php
+                }                                
             ?>
             <div class="clear"></div>
             <div class="space20"></div>
@@ -688,34 +603,34 @@ Template Name Posts: Test Suite
                 ?>
                 
 			    </div>            
-            <div class="space10"></div>
-			<div class="pagination-wrapper">
-                <div class="pagination">
-                    <?php                                 
-                        $args = array(
-                            'base'         => get_permalink() . '%_%?',
-                            'format'       => 'page/%#%',
-                            'total'        => $get_query->max_num_pages,
-                            'current'      => $page,
-                            'show_all'     => False,
-                            'end_size'     => 5,
-                            'mid_size'     => 5,
-                            'prev_next'    => True,
-                            'prev_text'    => __('« Previous'),
-                            'next_text'    => __('Next »'),
-                            'type'         => 'plain',
-                            'add_args'     => false,
-                            'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)
-                        ); 
-                        echo paginate_links($args);
-                    ?>
-                </div>         
-            </div>
-            <?php else: ?>
-            <div class="grids" id="testcases-list">
-                <div class="tocenter padding10"><?php echo MESSAGE_WARNING_ANONYMOUS; ?></div>
-            </div>
-            <?php endif; ?>
+                <div class="space10"></div>
+			    <div class="pagination-wrapper">
+                    <div class="pagination">
+                        <?php                                 
+                            $args = array(
+                                'base'         => get_permalink() . '%_%?',
+                                'format'       => 'page/%#%',
+                                'total'        => $get_query->max_num_pages,
+                                'current'      => $page,
+                                'show_all'     => False,
+                                'end_size'     => 5,
+                                'mid_size'     => 5,
+                                'prev_next'    => True,
+                                'prev_text'    => __('« Previous'),
+                                'next_text'    => __('Next »'),
+                                'type'         => 'plain',
+                                'add_args'     => false,
+                                'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)
+                            ); 
+                            echo paginate_links($args);
+                        ?>
+                    </div>         
+                </div>
+                <?php else: ?>
+                <div class="grids" id="testcases-list">
+                    <div class="tocenter padding10"><?php echo MESSAGE_WARNING_ANONYMOUS; ?></div>
+                </div>
+                <?php endif; ?>
             <div class="space15"></div>
 		</div>
 			
@@ -825,7 +740,7 @@ if(!$purchasedSubscription):
             </div>                
         </div>
         <?php
-            wp_nonce_field('purchase_subscribe', '_organisation_none');
+            wp_nonce_field('purchase_subscribe', '_organisation_nonce');
         ?>
         <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
         <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional' || $subscriptionType == 'organisation'): ?>      

@@ -59,7 +59,7 @@ function ct_delete_user_data($user_id)
     //Delete Purchases
     $wpdb->delete($wpdb->prefix . "users_purchases", array('user_id' => $user_id));
     //Delete Payment Methods
-    $wpdb->delete($wpdb->prefix . "users_cards", array('user_id' => $user_id));
+    $wpdb->delete($wpdb->prefix . "organisations_payment_methods", array('user_id' => $user_id));
     //Delete Test Plans
     $wpdb->delete($wpdb->prefix . "test_plans", array('creator_id' => $user_id));
     //Delete Compliance Claims

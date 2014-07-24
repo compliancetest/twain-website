@@ -222,4 +222,32 @@ class CT_Organisation
         return true;
     }
     
+    
+    
+    public function get_subscriptions()
+    {
+        global $wpdb;
+        
+        if(isset($this->subscriptions))
+            return $this->subscriptions;
+        
+        $query = $wpdb->prepare("SELECT os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
+                            LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
+                            LEFT JOIN {$wpdb->users}test_suites AS t ON t.family_mark=os.suite_family_mark
+                            WHERE us.organisation_id=%d", $this->id);
+    
+        $this->subscriptions = $wpdb->get_results($query);
+        
+        return $this->subscriptions;
+    }
+    
+    public function get_payment_methods()
+    {
+        global $wpdb;
+        
+        if(isset($this->payment_methods))
+            return $this->payment_methods;
+            
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods FROM organisation_id=%d", $this->id);
+    }
 }

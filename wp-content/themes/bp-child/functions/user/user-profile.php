@@ -170,7 +170,7 @@ function cp_delete_payment_method()
     $user_id = get_current_user_id();
     $id = $_REQUEST['id'];
     
-    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix ."users_cards WHERE user_id=%d and id=%d", $user_id, $id);
+    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix ."organisations_payment_methods WHERE user_id=%d and id=%d", $user_id, $id);
     $id = $wpdb->get_var($query);
     if(!$id)
     {
@@ -186,7 +186,7 @@ function cp_delete_payment_method()
         exit;
     }
     
-    $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_cards WHERE id=" . $id);
+    $wpdb->query("DELETE FROM " . $wpdb->prefix . "organisations_payment_methods WHERE id=" . $id);
     
     cp_update_user_cards_count($user_id);
     
@@ -276,7 +276,7 @@ function cp_user_payment_save()
         
     if($id)
     {
-        $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "users_cards WHERE user_id=%d and id=%d", $user_id, $id);
+        $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "organisations_payment_methods WHERE user_id=%d and id=%d", $user_id, $id);
         $id = intval($wpdb->get_var($query));
         if(!$id){
             return "Invalid Request!";
@@ -290,10 +290,10 @@ function cp_user_payment_save()
     if ($invoice_me == 1) 
     {
         if ($id) {
-            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active'), array('id' => $id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active'), array('id' => $id));
             return $id;
         } else {
-            $wpdb->insert($wpdb->prefix . "users_cards", array(
+            $wpdb->insert($wpdb->prefix . "organisations_payment_methods", array(
                 'user_id' => $user_id,
                 'nickname' => $nickname,
                 'invoice_me' => $invoice_me,
@@ -469,7 +469,7 @@ function cp_user_payment_save()
             return 'There was an error while saving your payment information.';
         }else{
             //Success            
-            $query_result = $wpdb->insert($wpdb->prefix . "users_cards", array(
+            $query_result = $wpdb->insert($wpdb->prefix . "organisations_payment_methods", array(
                 'user_id' => $user_id,
                 'nickname' => $nickname,
                 'email' => $email,
@@ -517,9 +517,9 @@ function cp_user_payment_save()
         $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
         if($result == 'true')
         {
-            $wpdb->update($wpdb->prefix . "users_cards", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active'), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active'), array('id' => $card->id));
             
-            $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}users_cards AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
+            $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
             
             $subscriptions = $wpdb->get_results($query, ARRAY_A);
             foreach($subscriptions as $row)
@@ -555,7 +555,7 @@ function cp_user_payment_save()
                     
                 }else{             
                     //Set Card Status to Suspended
-                    $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row['card_id']));
+                    $wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Suspended'), array('id' => $row['card_id']));
                 }
                 
             }

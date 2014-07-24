@@ -17,19 +17,7 @@ get_header();
     </div>
     <div class="container">
         <div class="column">
-            <div id="item-nav">
-                <ul class="tabs">
-                    <li class="active">
-                        <a href="#" rel="organisation_profile" class="selected">
-                            <span class="left icon" id="icon_admin"></span>
-                            <span class="right text">Profile</span>
-                            <span class="tabactive"></span>
-                            <span class="clear"></span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="clear"></div>
-            </div>
+            <?php get_sidebar('organisation'); ?>
             <div id="item-body">
                 <div id="organisation_profile" class="tab-content white_bcg column">
                     <input type="hidden" name="user_id" value="<?php echo $current_user->ID;?>"/>

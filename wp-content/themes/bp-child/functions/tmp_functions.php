@@ -81,7 +81,7 @@ if(is_super_admin())
             }
             
             //Update Cards
-            $results = $wpdb->get_results("SELECT count(*) AS c, user_id FROM wp_users_cards GROUP BY user_id");
+            $results = $wpdb->get_results("SELECT count(*) AS c, user_id FROM wp_organisations_payment_methods GROUP BY user_id");
             foreach($results as $r)
             {
                 $wpdb->update($wpdb->prefix . "users_extra", array('cards' => $r->c), array('userID' => $r->user_id));

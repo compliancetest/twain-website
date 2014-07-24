@@ -140,7 +140,7 @@ function create_email_management_page()
                         <li><a href="#cancel-subscription">Cancel Paid Subscription</a></li>
                         <li><a href="#cancel-free-subscription">Cancel Free Subscription</a></li>
                         <li><a href="#cancel-additional-subscription">Cancel Subscription<br />to Additional Version</a></li>
-
+                        <li><a href="#request-subscription-to-admin">Request a Subscription<br />to Organisation Admin</a></li>
                         
                         <li class="tab-separator">Membership Section</li>
                         <li><a href="#membership-request-received">Membership Request Received</a></li>       
@@ -859,6 +859,37 @@ function create_email_management_page()
                                 <td class="tdlabel"><b>Content</b></td>
                                 <td>
                                     <?php wp_editor($cancel_additional_subscription_admin_email_content, 'cancel_additional_subscription_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+
+                <div id="request-subscription-to-admin">
+                    <?php
+                    $request_subscription_to_admin_email_title = get_option('request_subscription_to_admin_email_title');
+                    $request_subscription_to_admin_email_content = get_option('request_subscription_to_admin_email_content');
+                    ?>
+                    <h3>Send a Request to Organisation Admin</h3>
+                    <p><b>Short Codes:</b> [requester_name], [requester_name], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Organisation Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="request_subscription_to_admin_email_title" id="request_subscription_to_admin_email_title" value="<?php echo $request_subscription_to_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($request_subscription_to_admin_email_content, 'request_subscription_to_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -2386,6 +2417,11 @@ function save_email_templates()
           update_option('active_subscription2_admin_email_title', $active_subscription2_admin_email_title);          
           $active_subscription2_admin_email_content = stripslashes_deep($_POST['active_subscription2_admin_email_content']);          
           update_option('active_subscription2_admin_email_content', $active_subscription2_admin_email_content);
+          
+          $request_subscription_to_admin_email_title = htmlentities(stripslashes_deep($_POST['request_subscription_to_admin_email_title']));          
+          update_option('request_subscription_to_admin_email_title', $request_subscription_to_admin_email_title);          
+          $request_subscription_to_admin_email_content = stripslashes_deep($_POST['request_subscription_to_admin_email_content']);          
+          update_option('request_subscription_to_admin_email_content', $request_subscription_to_admin_email_content);
           
           
                               

@@ -8,11 +8,14 @@
 * 
 * @return organisation id or false
 */
-function ct_is_organisation_admin($user_id, $organisation_id = null)
+function ct_is_organisation_admin($user_id = null, $organisation_id = null)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d AND is_admin=1");
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d AND is_admin=1", $user_id);
     if($organisation_id) {
         $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
     }
@@ -20,6 +23,16 @@ function ct_is_organisation_admin($user_id, $organisation_id = null)
     $id = $wpdb->get_var($query);
     
     return $id;
+}
+
+function ct_get_organisation_admin($organisation_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT u.* FROM {$wpdb->prefix}organisations_members AS om LEFT JOIN {$wpdb->users} AS u ON u.ID=om.user_id WHERE om.organisation_id=%d AND om.user_id=u.ID", $organisation_id);
+    $data = $wpdb->get_row($query);
+    
+    return $data;
 }
 
 /**
@@ -41,15 +54,89 @@ function ct_is_organisation_purchased_subscription($organisation_id, $suite_id)
     return !$id ? false : $id;
 }
 
-
-function ct_get_organisation_subscription($organisation_id, $suite_id)
+/**
+* Get organisation subscription
+* 
+* @param Int $organisation_id
+* @param Int $suite_family_mark
+* 
+* @array or null
+*/
+function ct_get_organisation_subscription($organisation_id, $suite_family_mark)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions AS os
-                             LEFT JOIN {$wpdb->prefix}test_suites AS s ON s.family_mark=os.family_mark
-            WHERE os.organisation_id=%d AND s.suite_id=%d", $organisation_id, $suite_id);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions                             
+            WHERE organisation_id=%d AND suite_family_mark=%d", $organisation_id, $suite_family_mark);
     $data = $wpdb->get_row($query);
     
     return $data;
+}
+
+/**
+* Get user subscription
+* 
+* @param int $user_id
+* @param int $suite_family_mark
+* 
+* @return array or null
+*/
+function ct_get_user_subscription($user_id, $suite_family_mark)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * from {$wpdb->prefix}organisations_subscriptions 
+                            WHERE user_id=%d AND suite_family_mark=%d AND `status` != 'Unsubscribing'", $user_id, $suite_family_mark);
+       
+    $id = $wpdb->get_var($query);
+}
+
+/**
+* Get the organisation of $user_id
+* If $user_id is null, get the organisation of the current logged user
+* 
+* @param Int $user_id
+* 
+* @return Array or null
+*/
+function ct_get_user_organisation($user_id = null)
+{
+    global $wpdb;
+    
+    if(!$user_id)
+        $user_id = get_current_user_id();
+        
+    $data = get_userdata($user_id);
+    
+    //Getting domain
+    list($p, $domain) = explode("@",  $data->user_email);
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE organisation_domain=%s", $domain);
+    $data = $wpdb->get_row($query);
+    
+    return $data;    
+}
+
+function ct_get_organisation_unallocated_subscriptions($organisation_id, $suite_family_mark)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT count(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND suite_family_mark=%d AND user_id=0", $organisation_id, $suite_family_mark);
+    $c = $wpdb->get_var($query);
+    
+    return $c;
+}
+
+function ct_get_organisation_subscriptions($organisation_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
+                            LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
+                            LEFT JOIN {$wpdb->users}test_suites AS t ON t.family_mark=os.suite_family_mark
+                            WHERE us.organisation_id=%d", $organisation_id);
+    
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
 }

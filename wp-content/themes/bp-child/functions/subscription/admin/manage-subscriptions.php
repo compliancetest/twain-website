@@ -70,7 +70,7 @@ function ct_manage_subscriptions_trigger_processing_preview()
     
     $query = $wpdb->prepare("SELECT up.*, count(us.id) AS subscriptions, us.suite_id, uc.status AS card_status FROM {$wpdb->prefix}users_purchases AS up 
                             LEFT JOIN {$wpdb->prefix}users_subscriptions AS us ON up.id=us.purchase_id                       
-                            LEFT JOIN {$wpdb->prefix}users_cards AS uc ON up.card_id=uc.id                       
+                            LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS uc ON up.card_id=uc.id                       
                             WHERE up.expiry_date <= %s " . (!isset($_GET['check_suspended']) ? " AND uc.status='Active'" : "") . "
                             GROUP BY up.id
                             ", date("Y-m-d"));
@@ -209,7 +209,7 @@ function ct_manage_subscriptions_trigger_processing_run()
         //Processing Payments
         $query = $wpdb->prepare("SELECT up.*, count(us.id) AS subscriptions, us.suite_id, uc.status AS card_status, uc.customer_id FROM {$wpdb->prefix}users_purchases AS up 
             LEFT JOIN {$wpdb->prefix}users_subscriptions AS us ON up.id=us.purchase_id                       
-            LEFT JOIN {$wpdb->prefix}users_cards AS uc ON up.card_id=uc.id                       
+            LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS uc ON up.card_id=uc.id                       
             WHERE up.expiry_date <= %s " . (!isset($_GET['check_suspended']) ? " AND uc.status='Active'" : "") . "
             GROUP BY up.id
             ", date("Y-m-d"));
@@ -317,7 +317,7 @@ function ct_manage_subscriptions_trigger_processing_run()
                     $newExpiryDate = date("Y-m-01", strtotime("+1 MONTH", time()));
                     
                     if(!$row->card_status != 'Active')
-                        $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Active'), array('id' => $row->card_id));
+                        $wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Active'), array('id' => $row->card_id));
                     if(!$row->status != 'Active')
                         $purchaseObj->active();
                     
@@ -331,7 +331,7 @@ function ct_manage_subscriptions_trigger_processing_run()
                           
                     if($row->card_status == 'Active')
                     {
-                        $wpdb->update($wpdb->prefix . 'users_cards', array('status' => 'Suspended'), array('id' => $row->card_id));
+                        $wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Suspended'), array('id' => $row->card_id));
                         $newCardStatus = 'Suspended';
                     }
                     if($row->status == 'Active')
@@ -433,7 +433,7 @@ function ct_manage_subscriptions_show_user_detail()
     $userData = get_userdata($uid);
     
     //Getting User Payment Methods    
-    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE user_id=%d", $uid);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE user_id=%d", $uid);
     $cards = $wpdb->get_results($query);
     
     //Getting User Subscriptions
@@ -692,7 +692,7 @@ function ct_manage_subscriptions_update_card_by_ajax()
     
     
     //Getting Purchase ID
-    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_cards WHERE id=%d", $cid);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE id=%d", $cid);
     $card = $wpdb->get_row($query);
     
     if(!$card)
@@ -702,12 +702,12 @@ function ct_manage_subscriptions_update_card_by_ajax()
     
     if($status != $card->status)
     {
-        $wpdb->update($wpdb->prefix . "users_cards", array('status' => $status), array('id' => $card->id));
+        $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('status' => $status), array('id' => $card->id));
         /*if($status == 'Suspended')    
         {
-            $wpdb->update($wpdb->prefix . "users_cards", array('status' => 'Suspended'), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('status' => 'Suspended'), array('id' => $card->id));
         }else if($status == 'Active'){            
-            $wpdb->update($wpdb->prefix . "users_cards", array('status' => 'Active'), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('status' => 'Active'), array('id' => $card->id));
             
         }*/
     }
