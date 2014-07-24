@@ -238,6 +238,7 @@ function cp_user_payment_edit()
     }
     
     $result['nickname'] = $card->nickname;
+    $result['email'] = $card->email;
     $result['invoice_me'] = $card->invoice_me;
     $result['organisation_id'] = $card->organisation_id;
     
