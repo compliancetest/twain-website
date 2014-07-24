@@ -27,7 +27,7 @@
             <div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
                 <div class="width100P grid_cell suite_view">
                     <div class="left">
-                        <p><span class="normal">Product Name: </span><?php echo $product->name; ?></p>                
+                        <p><span class="normal">Product Name: </span><?php echo $product->name; ?></p>
                         <p><small>(<span class="normal">Product ID: </span> <?php echo $product->product_id; ?>)</small></p>                
                     </div>
                 <?php if(can_delete_product_and_service(get_the_ID())){ ?>
@@ -103,7 +103,7 @@
 ?>
 <div class="grid_row test_cases">
     <div class="grid_cell width45P">
-        <h4 class="blue_txt">Compliance Claims</h4>
+        <h4 class="blue_txt">Test Plans and Compliance Claims</h4>
     </div>
     <div class="grid_cell width30P right selecteds_single">
         <!--<span class="left padding5-10">Filter By: </span>

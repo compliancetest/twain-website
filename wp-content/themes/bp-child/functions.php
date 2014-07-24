@@ -1082,3 +1082,108 @@ function is_organisation_admin()
     
     return false;
 }
+function getTestSuitProducts( $productID ){
+    global $wpdb;
+    return $wpdb->get_results( $wpdb->prepare("SELECT suite_title FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id WHERE tp.product_id = %d ", $productID ));
+}
+function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
+    global $wpdb;
+    if( $withoutTestSuite ){
+        return $wpdb->get_var("SELECT GROUP_CONCAT(product_id SEPARATOR ',') FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id");
+    }
+    return $wpdb->get_var( $wpdb->prepare("SELECT GROUP_CONCAT(product_id SEPARATOR ',') FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id WHERE ts.suite_title = %s ", $name ));
+
+}
+
+function generateDataAndDownload( $data ){
+    global $wpdb;
+    ob_clean();
+    $outstream = fopen("php://output", "w");
+    header("Content-type: application/x-msdownload",true,200);
+    header("Content-Disposition: attachment; filename=productsLict.csv");
+    header("Expires: 0");
+    fputcsv($outstream, array(
+        'Product Name',
+        'Product ID',
+        'Product Owner',
+        'Product Version',
+        'Product Release Date',
+        'Visibility',
+        'Community Name',
+        'Test Suite Name',
+        'Test Suite Version',
+        'Issuer',
+        'Conformance Level',
+        'Role',
+        'Status',
+        'Test Plan date',
+        'Claim Date',
+        'Claim ID'
+    ));
+    foreach($data as $key => $result){
+        $product = new ProductAndService($result->ID);
+        $product->load();
+        $getItemTestPlans = $wpdb->get_results( $wpdb->prepare("SELECT ts.*, tp.level, tp.role FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id WHERE tp.product_id = %d ", $result->ID ));
+        if( count( $getItemTestPlans ) > 0 ){
+            foreach( $getItemTestPlans AS $testPlan ){
+                $suite = new TestSuite($testPlan->suite_id);
+                $suite->load();
+                $claims = getClaimsByProductId($result->ID);
+                $group = groups_get_group( array( 'group_id' => $suite->community_id ) );
+                if( $claims ){
+                    foreach( $claims AS $claim ){
+                        $tempArray = array(
+                            $product->name,
+                            $product->product_id,
+                            $product->owner,
+                            $product->version,
+                            date('d-M-y', strtotime( $product->release_date ) ),
+                            $product->visibility,
+                            $group->name,
+                            $suite->name,
+                            $suite->version,
+                            $claim->issuer,
+                            $claim->conformance_level,
+                            $claim->role,
+                            $claim->status,
+                            $suite->issueDate,
+                            date('d-M-y', strtotime( $claim->created_date ) ),
+                            $claim->claim_id
+                        );
+                        fputcsv( $outstream, $tempArray );
+                    }
+                } else {
+                    $tempArray = array(
+                        $product->name,
+                        $product->product_id,
+                        $product->owner,
+                        $product->version,
+                        date('d-M-y', strtotime( $product->release_date ) ),
+                        $product->visibility,
+                        $group->name,
+                        $suite->name,
+                        $suite->version,
+                        $suite->issuer,
+                        str_replace( ';;',' ', $testPlan->level ),
+                        str_replace( ';;',' ', $testPlan->role ),
+                        $suite->status,
+                        $suite->issueDate
+                    );
+                    fputcsv( $outstream, $tempArray );
+                }
+            }
+        } else {
+            $tempArray = array(
+                $product->name,
+                $product->product_id,
+                $product->owner,
+                $product->version,
+                date('d-M-y', strtotime( $product->release_date ) ),
+                $product->visibility,
+            );
+            fputcsv( $outstream, $tempArray );
+        }
+    }
+    fclose($outstream);
+    exit();
+}

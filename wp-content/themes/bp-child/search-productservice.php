@@ -31,8 +31,8 @@ if($term)
     
 //Getting Filter Params
 $filterType = getFilterParam('type');
-$filterOwner = getFilterParam('owner');
 $filterYear = getFilterParam('product_year');
+$filterTestSuite = getFilterParam('test_suite');
 
 foreach($filterType as $f)
 {
@@ -41,12 +41,20 @@ foreach($filterType as $f)
     $params[] = urlencode('type[]') . '=' . urlencode($f);
     $filterParams['type[]'] = $f;
 }
-foreach($filterOwner as $v)
+$postsIds = $notInPostIdsArray = array();
+foreach($filterTestSuite as $v)
 {
     $v = htmlspecialchars($v);
-    $args['meta_query'][] = array('key' => 'product_owner', 'value' => $v, 'compare' => '=');
-    $params[] = urlencode('owner[]') . '=' . urlencode($v);
-    $filterParams['owner[]'] = $v;
+    if( $v == 'None' ){
+        $tempPostIds = getProductsByTestSuiteName( $v, true );
+        $notInPostIdsArray = array_merge( $notInPostIdsArray, explode( ',', $tempPostIds ) );
+    } else {
+        $tempPostIds = getProductsByTestSuiteName( $v );
+        $postsIds = array_merge( $postsIds, explode( ',', $tempPostIds ) );
+    }
+//    $args['meta_query'][] = array('key' => 'post__in', 'value' => explode( ',', $productsIDS ), 'compare' => 'IN');
+    $params[] = urlencode('test_suite[]') . '=' . urlencode($v);
+    $filterParams['test_suite[]'] = $v;
 }
 foreach($filterYear as $v)
 {
@@ -59,10 +67,16 @@ foreach($filterYear as $v)
 
 //For Right Panels
 $caseTypes = array();
-$caseOwners = array();
+//$caseOwners = array();
 $caseIssueYears = array();
+$testSuites = array();
 
-    
+if( ! empty( $postsIds ) ){
+    $args['post__in'] = $postsIds;
+}
+if( ! empty( $notInPostIdsArray ) ){
+    $args['post__not_in'] = $notInPostIdsArray;
+}
 //For Filter Values
 $all_posts = new WP_Query($args);
 $allSuites = $all_posts->get_posts();
@@ -75,11 +89,14 @@ foreach($allSuites as $row)
     $productType = get_post_meta($row->ID, 'product_type', true);    
     $caseTypes[$productType] = isset($caseTypes[$productType]) ? $caseTypes[$productType] + 1 : 1;
     
-    $issuer = get_post_meta($row->ID, 'product_owner', true);
-    if(!$issuer)
-        $issuer = get_user_meta($row->post_author, 'user_organisation', ture);
-    $caseOwners[$issuer] = isset($caseOwners[$issuer]) ? $caseOwners[$issuer] + 1 : 1;
-    
+    $testSuiteProducts = getTestSuitProducts( $row->ID );
+    if( ! empty( $testSuiteProducts ) ){
+        foreach( $testSuiteProducts AS $testSuiteProduct ){
+            $testSuites[$testSuiteProduct->suite_title] = isset($testSuites[$testSuiteProduct->suite_title]) ? $testSuites[$testSuiteProduct->suite_title] + 1 : 1;
+        }
+    } else {
+        $testSuites['None'] = isset($testSuites['None']) ? $testSuites['None'] + 1 : 1;
+    }
     $tsYear = date('Y', strtotime($issueDate));
     $caseIssueYears[$tsYear] = isset($caseIssueYears[$tsYear]) ? $caseIssueYears[$tsYear] + 1 : 1;
 
@@ -88,10 +105,13 @@ foreach($allSuites as $row)
 //Getting Pagination Params
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $args['paged'] = $page;
-$args['posts_per_page'] = $posts_per_page;
 
+$args['posts_per_page'] = $posts_per_page;
 $get_posts = new WP_Query($args);
 $products = $get_posts->get_posts();
+if( isset( $_GET['download']) ){
+    generateDataAndDownload( $products );
+}
 ?>
 <div class="content container" id="search">      
     <div id="search_title_block" class="page-title-block column noshadow">                    
@@ -114,7 +134,10 @@ $products = $get_posts->get_posts();
         <?php if(count($params) > 0) {?>
         <a href="<?php echo get_permalink()?>" class="action-btn delete-grey-btn" id="clear-search-filter-btn"><span class="p"></span><span class="t">Clear All</span></a>
         <?php } ?>
-        <div class="clear"></div>        
+        <?php if (count($products) > 0) : ?>
+            <a href="<?php echo add_query_arg( 'download', '1' )?>" class="blue-btn action-btn icon-btn" style="margin-top: 20px; float: right;">Download Results</a>
+        <?php endif;?>
+        <div class="clear"></div>
     </div> <!-- end search_title_block -->
         
     <?php if(count($products) > 0) {?> 
@@ -245,12 +268,12 @@ $products = $get_posts->get_posts();
                         </div>
                     </div>
                     <div class="expandable">
-                        <h6 class="exp_title">Owner</h6>
+                        <h6 class="exp_title">Test Suite</h6>
                         <div class="exp_content">
                         <?php
-                            foreach ($caseOwners as $k => $v){
+                            foreach ($testSuites as $k => $v){
                         ?>
-                            <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="owner[]" <?php echo in_array($k, $filterOwner) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
+                            <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="test_suite[]" <?php echo in_array($k, $filterTestSuite) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
                             <div class="clear"></div>
                         <?php
                             }
