@@ -1186,3 +1186,4 @@ function generateDataAndDownload( $data ){
     fclose($outstream);
     exit();
 }
+?>
