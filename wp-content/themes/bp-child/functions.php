@@ -1098,9 +1098,9 @@ function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
 function generateDataAndDownload( $data ){
     global $wpdb;
     ob_clean();
-    $outstream = fopen("php://output", "w");
     header("Content-type: application/vnd.ms-excel");
     header("Content-Disposition: attachment; filename=productsLict.csv");
+    $outstream = fopen("php://output", "w");
     fputcsv($outstream, array(
         'Product Name',
         'Product ID',
