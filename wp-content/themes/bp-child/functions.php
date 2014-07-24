@@ -1096,9 +1096,13 @@ function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
 }
 
 function generateDataAndDownload( $data ){
-    global $wpdb;
     ob_clean();
-    header("Content-type: application/vnd.ms-excel");
+    global $wpdb;
+    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+    header("Content-Type: Application/octet-stream");
     header("Content-Disposition: attachment; filename=productsLict.csv");
     $outstream = fopen("php://output", "w");
     fputcsv($outstream, array(
@@ -1186,4 +1190,3 @@ function generateDataAndDownload( $data ){
     fclose($outstream);
     exit();
 }
-?>
