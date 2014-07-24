@@ -96,8 +96,8 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
     $emailData['[ticket_content]'] = apply_filters('the_content', $ticketDetail->content);    
     
     $emailData['[time_to_pay]'] = $ticketDetail->ttpay;        
-    $emailData['[time_to_response]'] = $ticketDetail->ttresolve;
-    $emailData['[time_to_resolve]'] = $ticketDetail->ttresponse;
+    $emailData['[time_to_response]'] = $ticketDetail->ttresponse;
+    $emailData['[time_to_resolve]'] = $ticketDetail->ttresolve;
     
     $emailData['[hourly_price]'] = intval($ticketDetail->price) > 0 ? $ticketDetail->price . ' Tokens/hr' : 'Free';
     $emailData['[ticket_total_price]'] = intval($ticketDetail->total_price) > 0 ? $ticketDetail->total_price . ' Tokens' : 'Free';    

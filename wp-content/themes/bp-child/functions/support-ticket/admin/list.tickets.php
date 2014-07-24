@@ -174,6 +174,9 @@ class CT_Tickets_Ticket_List_Table extends WP_List_Table
         if($paged > $totalPages)
             $paged = $totalPages; 
         
+        if($paged < 1)
+            $paged = 1;
+        
         $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, u.display_name AS customer_name, u.user_email as customer_email, u1.display_name AS support_name, u1.user_email AS support_email FROM " . $wpdb->prefix . "tickets AS t "
                 . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
                 . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
