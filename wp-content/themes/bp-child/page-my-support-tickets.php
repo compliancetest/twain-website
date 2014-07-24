@@ -23,7 +23,7 @@ if($ticket_id)
     }
     
     $is_support = ct_is_support($ticket_id);
-    if(!$is_support && $ticket->customer_id != $user_id ) //Permission Denied
+    if(!is_admin() && !is_super_admin() && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
     {
         addMessage("Invalid Request!", 'error');
         wp_redirect('/my-support-tickets');
