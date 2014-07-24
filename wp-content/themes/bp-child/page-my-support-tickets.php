@@ -18,7 +18,7 @@ if($ticket_id)
     if(!$ticket)    
     {
         addMessage("Invalid Request!", 'error');
-        wp_redirect('/my-support-tickets/7/');
+        wp_redirect('/my-support-tickets');
         exit;
     }
     
@@ -26,7 +26,7 @@ if($ticket_id)
     if(!$is_support && $ticket->customer_id != $user_id ) //Permission Denied
     {
         addMessage("Invalid Request!", 'error');
-        wp_redirect('/my-support-tickets/7/');
+        wp_redirect('/my-support-tickets');
         exit;
     }
 }
