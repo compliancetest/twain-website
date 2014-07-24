@@ -1096,6 +1096,7 @@ function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
 }
 
 function generateDataAndDownload( $data ){
+    phpinfo();
     ob_clean();
     ob_flush();
     global $wpdb;
