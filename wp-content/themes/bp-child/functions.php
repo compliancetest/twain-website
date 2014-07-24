@@ -1099,9 +1099,8 @@ function generateDataAndDownload( $data ){
     global $wpdb;
     ob_clean();
     $outstream = fopen("php://output", "w");
-    header("Content-type: application/x-msdownload",true,200);
+    header("Content-type: application/vnd.ms-excel");
     header("Content-Disposition: attachment; filename=productsLict.csv");
-    header("Expires: 0");
     fputcsv($outstream, array(
         'Product Name',
         'Product ID',
