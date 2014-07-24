@@ -181,8 +181,8 @@ class CT_Tickets_Ticket_List_Table extends WP_List_Table
                 . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
                 . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
                 . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
-                . "LEFT JOIN " . $wpdb->users . " AS U ON u.ID=t.customer_id "
-                . "LEFT JOIN " . $wpdb->users . " AS U1 ON u1.ID=t.support_id ";
+                . "LEFT JOIN " . $wpdb->users . " AS u ON u.ID=t.customer_id "
+                . "LEFT JOIN " . $wpdb->users . " AS u1 ON u1.ID=t.support_id ";
         
         $where = array();
         
