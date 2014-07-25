@@ -101,7 +101,9 @@ foreach($allSuites as $row)
     $testSuiteProducts = getTestSuitProducts( $row->ID );
     if( ! empty( $testSuiteProducts ) ){
         foreach( $testSuiteProducts AS $testSuiteProduct ){
-            $testSuites[$testSuiteProduct->suite_title] = isset($testSuites[$testSuiteProduct->suite_title]) ? $testSuites[$testSuiteProduct->suite_title] + 1 : 1;
+            if( ! empty( $testSuiteProduct->suite_title ) ){
+                $testSuites[$testSuiteProduct->suite_title] = isset($testSuites[$testSuiteProduct->suite_title]) ? $testSuites[$testSuiteProduct->suite_title] + 1 : 1;
+            }
         }
     } else {
         $testSuites['None'] = isset($testSuites['None']) ? $testSuites['None'] + 1 : 1;
