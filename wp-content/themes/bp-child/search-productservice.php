@@ -19,7 +19,16 @@ $posts_per_page = 10;
     
 //Search Test Suites
 $args = get_products_args();
-
+if( groups_is_user_admin_in_any_community( get_current_user_id() ) ){
+    unset( $args['post__in'] );
+    $args['meta_query']     = array(
+        array(
+            'key'     => 'product_visibility',
+            'value'   => array('Private', 'Public'),
+            'compare' => 'IN'
+        )
+    );
+}
 //Getting Search Query
 $term = trim(isset($_GET['q']) ? $_GET['q'] : '');
 

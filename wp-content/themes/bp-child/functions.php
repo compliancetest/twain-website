@@ -1190,3 +1190,13 @@ function generateDataAndDownload( $data ){
     fclose($outstream);
     exit();
 }
+function groups_is_user_admin_in_any_community( $user_id ){
+    global $wpdb;
+    $communities_ids = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}bp_groups");
+    foreach( $communities_ids AS $communities_id ){
+        if( groups_is_user_admin( $user_id, $communities_id->id ) ){
+            return true;
+        }
+    }
+    return false;
+}
