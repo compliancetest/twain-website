@@ -7498,3 +7498,19 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .no-display {
     display: none;
 }
+#organisation_subscriptions .td-suite{
+    width: 260px;
+}
+#organisation_subscriptions .td-nickname{
+    width: 180px;
+}
+#organisation_subscriptions .td-status{
+    width: 92px;
+    text-align: center;
+}
+#organisation_subscriptions .td-assignee{
+    width: 130px;
+}
+#organisation_subscriptions .td-action{
+    width: 150px;
+}

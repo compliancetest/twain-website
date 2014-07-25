@@ -22,41 +22,18 @@ function ct_process_organisation_action()
             
             $user_id = get_current_user_id();
             
-            //Check Card info
-            if(isset($_POST['card_id']) && $_POST['card_id'])
-            {
-                //Read Card Info
-                $card = getUserCardById($_POST['card_id']);
-            }
+            $payment_method = $_POST['payment_method'];
+            $nickname = $_POST['nickname'];
+            $family_mark =  $_POST['suite_family_mark'];
             
-            if(!$card)
-            {
-                $_POST['card_expiry'] = $_POST['exp_month'] . "/" . $_POST['exp_year'];
-                $_POST['id'] = '';
-                $card_id = cp_user_payment_save();
-                if(!is_int($card_id))
-                {
-                    //Card Error
-                    echo $card_id;
-                    exit;
-                }
-                
-                $card = getUserCardById($card_id);
-            }
+            $result = $controller->subscribe($family_mark, $payment_method, $nickname, $user_id);
             
-            if(!$card)
-            {
-                echo "Your card is not incorrect.";
-                exit;        
-            }
-            
-            $result = $controller->subscribe($user_id, $_POST);
             if ($result) {
-                echo 'success';
+                addMessage("You successfully purchased subscription.");
             } else {
-                echo $result;
+                addMessage($controller->last_message, 'error');
             }
-            
+            wp_redirect('/my-organisation/test-suites');
             exit;            
         } else if (wp_verify_nonce($action, "subscribe")) {
             $suite_id = $_GET['suite_id'];

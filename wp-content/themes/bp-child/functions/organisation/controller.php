@@ -12,7 +12,7 @@ class CT_Organisation_Controller
     * Create Subscriptions for Organisation
     * 
     */
-    public function subscribe($user_id, $data)
+    public function subscribe($family_mark, $payment_method, $nickname, $user_id)
     {
         global $wpdb;
         
@@ -25,46 +25,56 @@ class CT_Organisation_Controller
             return false;
         }
         
-        $suite_id = $data['suite_id'];
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $suite_id);
-        $suite_family_info = $wpdb->get_row($query);
         
-        if (!$suite_family_info) {
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $family_mark);
+        $suite_info = $wpdb->get_row($query);
+        
+        if (!$suite_info) {
             $this->last_message = "Test suite id is not correct.";
             return false;
         }
+        
+        $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id=%d AND id=%d", $organisation_id, $payment_method);
+        $payment_method = $wpdb->get_var($query);
+        
+        if (!$payment_method) {
+            $this->last_message = "Payment method is not valid.";
+            return false;
+        }
+        
+        if (!$nickname) {
+            $this->last_message = "Nickname should not be empty.";
+            return false;
+        }
+        
+        $query = $wpdb->prepare("SELECT count(os.id) FROM {$wpdb->prefix}organisations_subscriptions AS os                             
+            WHERE os.organisation_id=%d AND os.suite_family_mark=%d", $organisation_id, $suite_family_mark);
+        $pCount = $wpdb->get_var($query);
         
         //Check if the user already purchased
-        if( ct_is_organisation_purchased_subscription($organisation_id, $suite_id) )
+        if( $pCount > 0 )
         {
-            $this->last_message = "You already purchased a subscription to the test suite.";
-            return false;
-        }
-        
-        //The suite id should be the latest one of the major version
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE version_major=%d AND family_mark=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", 
-                                    $suite_family_info['version_major'], $suite_family_info['family_mark']);
-        $last_suite_id = $wpdb->get_var($query);
-        
-        if ($last_suite_id != $suite_id) {
-            $this->last_message = "Test suite id is not correct.";
-            return false;
+            $nickname .= ($pCount + 1);            
         }
         
         //Create Organisation Subscription
         $data = array(
             array(
+                'nickname'   =>  $nickname, 
                 'organisation_id'   =>  $organisation_id, 
                 'purchased_date'    =>  date('Y-m-d H:i:s'), 
                 'status'            =>  'Active', 
-                'suite_family_mark' =>  $suite_family_info['family_mark'], 
-                'payment_method'    =>  $data['card_id'], 
-                'user_id'           =>  $user_id 
+                'suite_family_mark' =>  $family_mark, 
+                'payment_method'    =>  $payment_method, 
+                'purchaser_id'      =>  $user_id,
+                'user_id'           =>  0
             ),
             array(
+                '%s',
                 '%d',
                 '%s',
                 '%s',
+                '%d',
                 '%d',
                 '%d',
                 '%d'
@@ -78,7 +88,7 @@ class CT_Organisation_Controller
         
         $subscription_id = $wpdb->insert_id;
         
-        $suite_class = new TestSuite($suite_family_info['suite_id']);
+        $suite_class = new TestSuite($suite_info->suite_id);
         
         $sign_price_code = $suite_class->loadSingleValue('signup_price');
         $monthly_price_code = $suite_class->loadSingleValue('monthly_subscription_price');
@@ -87,7 +97,7 @@ class CT_Organisation_Controller
         $charge_data = array(
             array(
                 'organisation_id'       => $organisation_id,
-                'payment_id'            => $data['card_id'],
+                'payment_id'            => $payment_method,
                 'item_code'             => $sign_price_code,
                 'quantity'              => 1,
                 'start_date'            => date("Y-m-d H:i:s"),
@@ -101,12 +111,12 @@ class CT_Organisation_Controller
             array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
         );
         
-        $wpdb->insert($wpdb->prefix . "organisations_charges", $charge_data[0], $charge_data[1]);
+        $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
         
         $charge_data = array(
             array(            
                 'organisation_id'       => $organisation_id,
-                'payment_id'            => $data['card_id'],
+                'payment_id'            => $payment_method,
                 'item_code'             => $monthly_price_code,
                 'quantity'              => 1,
                 'start_date'            => date("Y-m-d H:i:s"),
@@ -120,7 +130,7 @@ class CT_Organisation_Controller
             array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
         );
         
-        $wpdb->insert($wpdb->prefix . "organisations_charges", $charge_data[0], $charge_data[1]);
+        $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
         
         return true;
         

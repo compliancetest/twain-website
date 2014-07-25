@@ -233,8 +233,8 @@ class CT_Organisation
         
         $query = $wpdb->prepare("SELECT os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
                             LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
-                            LEFT JOIN {$wpdb->users}test_suites AS t ON t.family_mark=os.suite_family_mark
-                            WHERE us.organisation_id=%d", $this->id);
+                            LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
+                            WHERE os.organisation_id=%d", $this->id);
     
         $this->subscriptions = $wpdb->get_results($query);
         
@@ -248,6 +248,27 @@ class CT_Organisation
         if(isset($this->payment_methods))
             return $this->payment_methods;
             
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods FROM organisation_id=%d", $this->id);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id=%d", $this->id);
+        $rows = $wpdb->get_results($query);
+        
+        $this->payment_methods = $rows;
+        
+        return $this->payment_methods;
+    }
+    
+    /**
+    * Getting not subsbscribed test suites
+    * 
+    */
+    public function get_free_test_suites()
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("SELECT DISTINCT(t.family_mark), t.suite_title FROM {$wpdb->prefix}test_suites AS t 
+                                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.suite_family_mark=t.family_mark AND os.organisation_id=%d
+                                WHERE os.id IS NULL ORDER BY t.suite_title", $this->id);
+        $data = $wpdb->get_results($query);
+        
+        return $data;
     }
 }

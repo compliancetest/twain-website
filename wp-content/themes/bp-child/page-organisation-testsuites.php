@@ -3,12 +3,12 @@
  * Template Name: Organisation Test Suites
  */
 
-if (!($organisation = ct_is_organisation_admin())) {    
+if (!($organisation_id = ct_is_organisation_admin())) {    
     wp_redirect(home_url());
     exit;
 }
 
-$organisationClass = new CT_Organisation($organisation->id);
+$organisationClass = new CT_Organisation($organisation_id);
 
 get_header();
 
@@ -22,6 +22,9 @@ get_header();
             <?php get_sidebar('organisation'); ?>
             <div id="item-body">
                 <div id="organisation_test_suites" class="tab-content white_bcg column">
+                    <a href="#subscribe-box" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-type="inline"  class="action-btn process-btn submit-btn bottom8" id="purchase-subscribe"><span class="p"></span><span class="t">Purchase Subscription</span></a>
+                    <div class="clear"></div>
+                
                     <div class="grid-box table-box" id="organisation_subscriptions">
                         <div class="grid-box-header">
                             <h5>The Organisation Subscriptions</h5>
@@ -60,7 +63,7 @@ get_header();
                                         <?php echo $row->nickname; ?>
                                     </div>
                                     <div class="td td-assignee">
-                                        <?php echo $row->user_email; ?>
+                                        <?php echo !$row->user_email ? '-' : $row->user_email; ?>
                                     </div>                                    
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
@@ -113,92 +116,42 @@ get_header();
 </div> <!--end content-->
 
 <div class="popup-box" id="subscribe-box" style="display: none;">
-    <form name="paymentForm" id="paymentForm" action="">
+    <form name="paymentForm" id="paymentForm" action="" method="post">
         <div class="popup-box-header radius6 noradiusbottom">Purchase Subscription</div>        
         <div class="popup-box-content grid-box-body">    
             <div class="field-row">
-                <h5>Confirm Existing Payment Method</h5>
-                <span class="focus-tooltip"><span></span>You are about to purchase a monthly Subscription to: <a href="<?php echo get_permalink()?>"><?php echo $suite->name?></a> for $<?php echo $suite->monthlySubscriptionPriceValue?> per month (you can cancel anytime)</span>
-            </div>
+                <div class="grid-cell">
+                    <label>Test Suite</label>
+                    <select name="suite_family_mark" id="suite_family_mark" class="select">
+                        <option value="">Select a Test Suite</option>
+                        <?php foreach($organisationClass->get_free_test_suites() as $row){ ?>
+                        <option value="<?php echo $row->family_mark?>">
+                            <?php echo $row->suite_title ?>
+                        </option>
+                        <?php } ?>
+                    </select>                    
+                </div>
+                <div class="clear"></div>
+            </div>            
             <div class="field-row">
                 <div class="grid-cell">
-                    <label>Existing Card</label>
-                    <select name="card_id" id="card_id" class="select">
-                        <option value="">Select a Card</option>
-                        <?php foreach($userCards as $row){ ?>
+                    <label>Payment Method</label>
+                    <select name="payment_method" id="payment_method" class="select">
+                        <option value="">Select a Method</option>
+                        <?php foreach($organisationClass->get_payment_methods() as $row){ ?>
                         <option value="<?php echo $row->id?>">
                             <?php echo $row->nickname . " " . chunk_split(encrypt_card_number($row->card_number), 4)?>
                         </option>
                         <?php } ?>
                     </select>
+                    <a href="/my-organisation" class="left15">Add payment method</a>
                 </div>
                 <div class="clear"></div>
             </div>
-            <div class="add-new-border"><span>or add new</span></div>
             <div class="field-row">
                 <div class="grid-cell">
                     <label>Nickname</label>
-                    <input type="text" name="nickname" id="nickname" value="" class="input" maxlength="50" />
-                    <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Email</label>
-                    <input type="text" name="email" id="email" value="<?php echo $current_user->user_email ?>" class="input" maxlength="50" /> 
-                    <br />
-                    <span class="desc">(Invoices will be sent to this email.)</span>
-                </div>                
-                <div class="clear"></div>
-            </div>
-            
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Name on Card</label>
-                    <input type="text" name="name_on_card" id="name_on_card" value="" class="input" />
-                    <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Card Number</label>
-                    <input type="text" name="card_number" id="card_number" value="" class="input" />
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Expiry Date</label>
-                    <select name="exp_month" id="exp_month" class="select">
-                        <option value="">Month</option>
-                        <option value="1">Jan</option>
-                        <option value="2">Feb</option>
-                        <option value="3">Mar</option>
-                        <option value="4">Apr</option>
-                        <option value="5">May</option>
-                        <option value="6">Jun</option>
-                        <option value="7">Jul</option>
-                        <option value="8">Aug</option>
-                        <option value="9">Sep</option>
-                        <option value="10">Oct</option>
-                        <option value="11">Nov</option>
-                        <option value="12">Dec</option>
-                    </select>
-                    <select name="exp_year" id="exp_year" class="select">
-                        <option value="">Year</option>                        
-                        <?php for($i=0; $i < 20; $i++){ ?>
-                        <option value="<?php echo $i + date("y")?>"><?php echo $i + date("Y")?></option>
-                        <?php } ?>
-                    </select>                    
-                </div>                
-                <div class="clear"></div>
-            </div>            
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label class="left">CVC</label>
-                    <input type="text" name="card_cvc" id="card_cvc" placeholder="****" value="" class="input" />
+                    <input type="text" name="nickname" id="nickname" value="" class="input" maxlength="50" />                    
                 </div>                
                 <div class="clear"></div>
             </div>
@@ -212,29 +165,8 @@ get_header();
         <?php
             wp_nonce_field('purchase_subscribe', '_organisation_nonce');
         ?>
-        <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
-        <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional' || $subscriptionType == 'organisation'): ?>      
-        <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription</div>     
-        <div class="popup-box-content grid-box-body">    
-            <div class="field-row">
-                <div class="grid-cell">
-                    <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
-                </div>
-                <div class="clear"></div>
-            </div> 
-        </div>     
-        <?php if($subscriptionType == 'free'): ?>
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('free_subscription'); ?>" />
-        <?php elseif($subscriptionType == 'additional'): ?>
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('additional_subscription'); ?>" />
-        <?php elseif($subscriptionType == 'organisation'): ?>
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('organisation_subscription'); ?>" />
-        <?php endif; ?>
-            
-        <div class="loading loading-with-text"><div><b>PROCESSING SUBSCRIPTION</b><span>Please wait...</span></div></div>
-        <?php endif; ?>
-        
-        
+        <div class="loading loading-with-text"><div><b>PROCESSING YOUR SUBSCRIPTION</b><span>Please wait...</span></div></div>
+
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Submit</span></a>
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
@@ -250,6 +182,49 @@ jQuery(document).ready(function(){
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
+    })
+    
+    jQuery('#paymentForm').submit(function(){
+        jQuery('#subscribe-box .message').remove();
+        jQuery('#subscribe-box .input-error').removeClass('input-error');
+        jQuery('#subscribe-box .select-error').removeClass('select-error');
+        
+        var isValid = true;
+        
+        if(jQuery('#paymentForm #payment_method').val() == '')
+        {
+            jQuery('#paymentForm #payment_method').addClass('select-error');
+            isValid = false;            
+        }
+        
+        if(jQuery('#paymentForm #suite_family_mark').val() == '')
+        {
+            jQuery('#paymentForm #suite_family_mark').addClass('select-error');
+            isValid = false;            
+        }
+        
+        if(jQuery('#paymentForm #nickname').val() == '')
+        {
+            jQuery('#paymentForm #nickname').addClass('input-error');
+            isValid = false;            
+        }
+        
+        if(!isValid)
+        {
+            jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">Please complete fields in red.</div>');
+            return false;
+        }
+        
+        //Check Terms and condition
+        if(!jQuery('#subscribe-box #agree_customer_terms').prop('checked'))
+        {
+            jQuery('#subscribe-box .popup-box-footer').prepend('<div class="message error">You must agree to our Terms & Conditions.</div>');
+            return false;
+        }
+        
+        jQuery('#subscribe-box .loading').show();
+        
+        return isValid;
     })
 })
 </script>

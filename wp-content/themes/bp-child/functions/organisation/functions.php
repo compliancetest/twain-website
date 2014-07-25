@@ -15,7 +15,7 @@ function ct_is_organisation_admin($user_id = null, $organisation_id = null)
     if(!$user_id)
         $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d AND is_admin=1", $user_id);
+    $query = $wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d AND is_admin=1", $user_id);
     if($organisation_id) {
         $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
     }
@@ -42,13 +42,12 @@ function ct_get_organisation_admin($organisation_id)
 * @param Int $suite_id
 * @return subscription id or FALSE
 */
-function ct_is_organisation_purchased_subscription($organisation_id, $suite_id)
+function ct_is_organisation_purchased_subscription($organisation_id, $suite_family_mark)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions AS os
-                             LEFT JOIN {$wpdb->prefix}test_suites AS s ON s.family_mark=os.family_mark
-            WHERE os.organisation_id=%d AND s.suite_id=%d", $organisation_id, $suite_id);
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions AS os                             
+            WHERE os.organisation_id=%d AND os.suite_family_mark=%d", $organisation_id, $suite_family_mark);
     $id = $wpdb->get_var($query);
     
     return !$id ? false : $id;
@@ -140,3 +139,4 @@ function ct_get_organisation_subscriptions($organisation_id)
     
     return $rows;
 }
+
