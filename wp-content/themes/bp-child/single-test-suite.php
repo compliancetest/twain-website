@@ -237,43 +237,22 @@ Template Name Posts: Test Suite
                         $subscription = ct_get_organisation_subscription($organisation_id, $suite->familyMark);
                         $is_organisation_admin = true;
                     } else {
-                        $subscription = ct_get_user_subscription($user_id, $suite->familyMark);
+                        $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);                        
+                        $harness_detail = ct_get_suite_harness_detail($user_id, $suite->id);
+                        
+                        if ($subscription && !$harness_detail) {
+                            $organisationController = new CT_Organisation_Controller();                            
+                            $organisationController->create_user_harness_detail($user_id, $suite->id, $subscription->organisation_id, $subscription->id);
+                            
+                            
+                        }
                         $is_organisation_admin = false;
                     }
                     
-                    if ($subscription) {
-                        if ($subscription->status == 'Active') {
-                        ?>
-                            <div class="message success">
-                                You have already purchased a subscription to this test suite.
-                                If you want to unsubscribe it, please click <a href="javascript: void(0)" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                            </div>
-                        <?php
-                        } else if ($subscription->status == 'InArrears') {
-                        ?>
-                            <div class="message notice">
-                                You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a href="<?php echo get_site_url(); ?>/?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                            </div>
-                        <?php
-                            
-                        } else if ($subscription->status == 'Frozen') {
-                        ?>
-                            <div class="message error">
-                                You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a href="/?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                            </div>
-                        <?php
-                            
-                        } else if ($subscription->status == 'Unsubscribing') {
-                        ?>
-                            <div class="message notice">
-                                You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a href="/?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id ?>&return=<?php echo base64_encode($slug)?>" class="unsubscribe-link" data-status="<?php echo $subscription->status?>" data-id="<?php echo $subscription->id?>"><i>here</i></a>.
-                            </div>
-                        <?php
-                        }
-                    } else {
+                    if (!$subscription) {
                         if ($is_organisation_admin) {
                         ?>
-                            <a href="#go-to-test-suites-page" class="suite-subscript-link">
+                            <a href="<?php echo site_url()?>/my-organisation/test-suites" class="suite-subscript-link">
                                 <span class="price-b">
                                     <span class="l"></span>
                                     <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
@@ -289,13 +268,13 @@ Template Name Posts: Test Suite
                         <?php
                         } else if ($organisation = ct_get_user_organisation($user_id)) {
                         ?>
-                            <a href="/index.php?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
                                 <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                             </a>
                         <?php
                         } else {
                         ?>
-                            <a href="/index.php?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
                                 <span class="price-b">
                                     <span class="l"></span>
                                     <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
@@ -310,7 +289,35 @@ Template Name Posts: Test Suite
                             </a>
                         <?php
                         }
-                    }                  
+                    } else {
+                        if ($subscription->status == 'Active') {
+                        ?>
+                            <div class="message success">
+                                You have already purchased a subscription to this test suite.
+                                If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                            </div>
+                        <?php
+                        } else if ($subscription->status == 'InArrears') {
+                        ?>
+                            <div class="message notice">
+                                You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                            </div>
+                        <?php
+                            
+                        } else if ($subscription->status == 'Frozen') {
+                        ?>
+                            <div class="message error">
+                                You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                            </div>
+                        <?php                            
+                        } else if ($subscription->status == 'Unsubscribing') {
+                        ?>
+                            <div class="message notice">
+                                You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                            </div>
+                        <?php
+                        }
+                    }                 
                 } else {
             ?>
                     <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>                        
@@ -635,179 +642,6 @@ Template Name Posts: Test Suite
 		</div>
 			
 	</div> <!--end content container-->
-<?php
-if(!$purchasedSubscription):
-    
-    $userCards = getUserCreditCards(null, true);    
-?>
-
-<div class="popup-box" id="subscribe-box" style="display: none;">
-    <form name="paymentForm" id="paymentForm" action="">
-        <?php if($subscriptionType == 'paid'): ?>
-        <div class="popup-box-header radius6 noradiusbottom">Purchase Subscription</div>        
-        <div class="popup-box-content grid-box-body">    
-            <div class="field-row">
-                <h5>Confirm Existing Payment Method or Add New Card Details</h5>
-                <span class="focus-tooltip"><span></span>You are about to purchase a monthly Subscription to: <a href="<?php echo get_permalink()?>"><?php echo $suite->name?></a> for $<?php echo $suite->monthlySubscriptionPriceValue?> per month (you can cancel anytime)</span>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Existing Card</label>
-                    <select name="card_id" id="card_id" class="select">
-                        <option value="">Select a Card</option>
-                        <?php foreach($userCards as $row){ ?>
-                        <option value="<?php echo $row->id?>">
-                            <?php echo $row->nickname . " " . chunk_split(encrypt_card_number($row->card_number), 4)?>
-                        </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="add-new-border"><span>or add new</span></div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Nickname</label>
-                    <input type="text" name="nickname" id="nickname" value="" class="input" maxlength="50" />
-                    <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Email</label>
-                    <input type="text" name="email" id="email" value="<?php echo $current_user->user_email ?>" class="input" maxlength="50" /> 
-                    <br />
-                    <span class="desc">(Invoices will be sent to this email.)</span>
-                </div>                
-                <div class="clear"></div>
-            </div>
-            
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Name on Card</label>
-                    <input type="text" name="name_on_card" id="name_on_card" value="" class="input" />
-                    <!--<img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/valid-icon.png" class="valid-icon" />-->
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Card Number</label>
-                    <input type="text" name="card_number" id="card_number" value="" class="input" />
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label>Expiry Date</label>
-                    <select name="exp_month" id="exp_month" class="select">
-                        <option value="">Month</option>
-                        <option value="1">Jan</option>
-                        <option value="2">Feb</option>
-                        <option value="3">Mar</option>
-                        <option value="4">Apr</option>
-                        <option value="5">May</option>
-                        <option value="6">Jun</option>
-                        <option value="7">Jul</option>
-                        <option value="8">Aug</option>
-                        <option value="9">Sep</option>
-                        <option value="10">Oct</option>
-                        <option value="11">Nov</option>
-                        <option value="12">Dec</option>
-                    </select>
-                    <select name="exp_year" id="exp_year" class="select">
-                        <option value="">Year</option>                        
-                        <?php for($i=0; $i < 20; $i++){ ?>
-                        <option value="<?php echo $i + date("y")?>"><?php echo $i + date("Y")?></option>
-                        <?php } ?>
-                    </select>                    
-                </div>                
-                <div class="clear"></div>
-            </div>            
-            <div class="field-row">
-                <div class="grid-cell">
-                    <label class="left">CVC</label>
-                    <input type="text" name="card_cvc" id="card_cvc" placeholder="****" value="" class="input" />
-                </div>                
-                <div class="clear"></div>
-            </div>
-            <div class="field-row notice-txt">
-                <div class="grid-cell">
-                    <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
-                </div>
-                <div class="clear"></div>
-            </div>                
-        </div>
-        <?php
-            wp_nonce_field('purchase_subscribe', '_organisation_nonce');
-        ?>
-        <div class="loading loading-with-text"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>
-        <?php elseif($subscriptionType == 'free' || $subscriptionType == 'additional' || $subscriptionType == 'organisation'): ?>      
-        <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription</div>     
-        <div class="popup-box-content grid-box-body">    
-            <div class="field-row">
-                <div class="grid-cell">
-                    <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
-                </div>
-                <div class="clear"></div>
-            </div> 
-        </div>     
-        <?php if($subscriptionType == 'free'): ?>
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('free_subscription'); ?>" />
-        <?php elseif($subscriptionType == 'additional'): ?>
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('additional_subscription'); ?>" />
-        <?php elseif($subscriptionType == 'organisation'): ?>
-            <input type="hidden" name="_paymentnonce" value="<?php echo wp_create_nonce('organisation_subscription'); ?>" />
-        <?php endif; ?>
-            
-        <div class="loading loading-with-text"><div><b>PROCESSING SUBSCRIPTION</b><span>Please wait...</span></div></div>
-        <?php endif; ?>
-        
-        
-        <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Submit</span></a>
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-            <div class="clear"></div>
-        </div>
-        <a class="close_btn"></a>                        
-        <input type="hidden" name="suite_id" value="<?php echo $suite->id?>" />
-    </form>
-</div>
-<div class="popup-box" id="payment-success-box" style="display: none;">
-    <div class="popup-box-header radius6 noradiusbottom">Success!</div>        
-        <div class="popup-box-content grid-box-body">                
-            <?php if($subscriptionType == 'paid'): ?>
-            <p>Thank you for purchasing a subscription to the <?php echo $suite->name?> test suite. 
-            <br />Your payment has been successfully processed.
-            <?php else: ?>
-            <p>Thank you for subscribing to the <?php echo $suite->name?> test suite. 
-            <?php endif; ?>
-            Please refer to your Test Suites dashboard page for test harness access credentials and further configuration.</p>
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">                        
-            <a href="/my-test-suites" class="action-btn continue-btn"><span class="p"></span><span class="t">Goto My Dashboard</span></a>
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-            <div class="clear"></div>
-        </div>
-    <a class="close_btn"></a>
-</div>
-<div class="popup-box" id="has-subscribe-box" style="display: none; width: 300px;">
-    <div class="popup-box-header radius6 noradiusbottom">You are a Customer.</div>        
-        <div class="popup-box-content grid-box-body">    
-            <p>You already purchased a subscription for this test suite.</p>
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">                        
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
-            <div class="clear"></div>
-        </div>
-    <a class="close_btn"></a>
-</div>
-<?php
-else:
-    render_unsubscription_popup(get_permalink($suite->id));    
-endif;
-?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	jQuery('.change_ts').change(function(){

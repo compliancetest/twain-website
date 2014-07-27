@@ -414,3 +414,22 @@ function can_create_community_article($community_id, $user_id = null)
         
     return true;
 }
+
+function can_manage_organisation_subscription($organisation_id, $user_id = null)
+{
+    if (!$user_id)
+        $user_id = get_current_user_id();
+        
+    if (!$user_id)
+        return false;
+        
+    if (is_super_admin($user_id)) {
+        return true;
+    }
+    
+    if (ct_is_organisation_admin($user_id, $organisation_id)) {
+        return true;
+    }    
+    
+    return false;
+}

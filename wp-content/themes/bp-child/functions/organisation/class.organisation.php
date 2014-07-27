@@ -231,7 +231,7 @@ class CT_Organisation
         if(isset($this->subscriptions))
             return $this->subscriptions;
         
-        $query = $wpdb->prepare("SELECT os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
+        $query = $wpdb->prepare("SELECT DISTINCT(os.id), os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
                             LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
                             LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
                             WHERE os.organisation_id=%d", $this->id);
@@ -267,8 +267,23 @@ class CT_Organisation
         $query = $wpdb->prepare("SELECT DISTINCT(t.family_mark), t.suite_title FROM {$wpdb->prefix}test_suites AS t 
                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.suite_family_mark=t.family_mark AND os.organisation_id=%d
                                 WHERE os.id IS NULL ORDER BY t.suite_title", $this->id);
+        
         $data = $wpdb->get_results($query);
         
         return $data;
+    }
+    
+    public function get_organisation_members()
+    {
+        global $wpdb;
+        
+        if (isset($this->members)) {
+            return $this->members;
+        }
+        
+        $query = $wpdb->prepare("SELECT ID, user_email, display_name FROM {$wpdb->users} WHERE user_email like %s AND user_status=0 AND ID <> %d", '%@' . $this->organisation_domain, $this->admin_id);
+        $this->members = $wpdb->get_results($query);
+        
+        return $this->members;
     }
 }

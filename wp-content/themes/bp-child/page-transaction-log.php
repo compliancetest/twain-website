@@ -19,12 +19,19 @@ if(is_user_logged_in()){
         exit;
     }
     
-    
+    $user_subscriptions = ct_get_user_subscriptions($user->ID);
+    if($user_subscriptions)
+        $default_subscription = $user_subscriptions[0]->id;
+    else
+        $default_subscription = null;
 }else{
     wp_redirect(home_url());
     exit;
 }
 get_header();
+
+$filterSubscription = isset($_GET['subscription']) ? htmlspecialchars($_GET['subscription']) : $default_subscription;
+
 
 $filterProduct = isset($_GET['product']) ? htmlspecialchars($_GET['product']) : null;
 $filterSuite = isset($_GET['suite']) ? htmlspecialchars($_GET['suite']) : null;
@@ -49,16 +56,19 @@ $order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : ($orderBy ==
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
-$log_results = $esb->getUserTransactionLog($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer, $page, $limit, $orderBy, $order);
+$log_results = $esb->getUserTransactionLog($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer, $page, $limit, $orderBy, $order);
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 
-$tProducts = $esb->getFilterOptionsForProduct($filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
-$tSuites = $esb->getFilterOptionsForSuite($filterProduct, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
-$tCases = $esb->getFilterOptionsForCase($filterProduct, $filterSuite, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
-$tServices = $esb->getFilterOptionsForService($filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
-$tActions = $esb->getFilterOptionsForAction($filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate, $filterCustomer);
-$tPartyIDs = $esb->getFilterOptionsForPartId($filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate, $filterCustomer);
+$tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
+
+$tProducts = $esb->getFilterOptionsForProduct($filterSubscription, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
+$tSuites = $esb->getFilterOptionsForSuite($filterSubscription, $filterProduct, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
+$tCases = $esb->getFilterOptionsForCase($filterSubscription, $filterProduct, $filterSuite, $filterService, $filterAction, $filterPartyId, $filterDate);
+$tServices = $esb->getFilterOptionsForService($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate);
+$tActions = $esb->getFilterOptionsForAction($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate);
+$tPartyIDs = $esb->getFilterOptionsForPartId($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate);
+
 $tCustomers = getManagedCustomers();
 
 
@@ -101,6 +111,23 @@ if($filterCustomer){
         <div class="filter-box column">
             <div class="left right10"><label>Filter By:</label></div>
             <form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
+                <div class="left">
+                    <div class="styled_select">
+                        <label>Subscription: <?php if($filterSubscription != "" && $filterSubscription != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <select name="subscription" id="subscription" autocomplete="off">
+                            <option value="">- All -</option>
+                          <?php foreach($tSubscriptions as $s){ ?>                           
+                            <option value="<?php echo $s->id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
+                          <?php } ?>
+                        </select>
+                        
+                    </div>
+                    <div class="space10"></div>
+                    <div class="styled_select">
+                        <label>Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : formatDate($filterDate); ?>" />
+                    </div>
+                </div>
                 <div class="left">
                     <div class="styled_select">
                         <label>Product / Service: <?php if($filterProduct != "" && $filterProduct != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
@@ -158,8 +185,7 @@ if($filterCustomer){
                                         echo 'Not Assigned';
                                     }else{
                                         echo str_replace("_V", " v", $c->NAME);
-                                    }
-                                    
+                                    }                                    
                                 ?>
                             </option>
                           <?php } ?>
@@ -176,22 +202,8 @@ if($filterCustomer){
                         </select>
                     </div>
                 </div>
-                <div class="last-div left">
-                    <label>&nbsp;Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : formatDate($filterDate); ?>" />
-                    <?php if($tCustomers){ ?>
+                <div class="last-div right right13">                                        
                     <div class="space10"></div>
-                    <label>&nbsp;Customer <?php if($filterCustomer){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="customer" id="customer" class="select">
-                        <option value="">- All -</option>
-                        <?php foreach($tCustomers as $c){ ?>
-                        <option value="<?php echo $c->CUSTOMER_ID?>" <?php echo cp_selected($c->CUSTOMER_ID, $filterCustomer)?>><?php echo $c->CUSTOMER_NAME?></option>
-                        <?php } ?>
-                    </select>
-                    <div class="space10"></div>                    
-                    <?php }else{?>
-                    <div class="space25"></div>                    
-                    <?php } ?>
                     <a href="#" class="action-btn process-btn submit-btn" id="log-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>
                 </div>            
                 <div class="clear"></div>

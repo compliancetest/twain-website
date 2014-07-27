@@ -89,6 +89,9 @@
                         if($overlay.find('.loading').length < 1)
                             $overlay.append('<div class="loading"></div>');                            
                         loadImagePosition();
+                        if (opts.href.length > 0 && opts.href.charAt(0) == '#') {
+                            opts.href = '/index.php?' + opts.href.substr(1);                
+                        }
                         $overlay.find('.loading').show();
                         $.ajax({
                             url: opts.href,

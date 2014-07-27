@@ -188,7 +188,62 @@ class ManageESB
         return $ids;
     }
 
-
+    public function prepareTransactionWhereQuery($subscription_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    {
+        global $wpdb;
+        
+        $user_id = get_current_user_id();
+        
+        if ($subscription_id === "" || $subscription_id === null) {
+            $where[] = $wpdb->prepare(" c.CUSTOMER_ID=%d");
+        } else {
+            if (!is_super_admin()) {
+                //Getting Manageable Users' Subscriptions
+                $query = "
+                    SELECT DISTINCT(s.id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
+                    WHERE 
+                        s.user_id = bm.user_id AND bm.is_confirmed=1
+                        bm.user_id=%d OR 
+                        bm.group_id IN ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1))
+                ";
+                $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d", $user_id);
+            }
+        }
+        
+        if ($product_id !== null && $product_id != "") {
+            if($product_id == 0)
+                $where[] = " IFNULL(p.PRODUCT_WP_ID, 0) = 0";
+            else if($product_id != null)
+                $where[] = $wpdb->prepare(" p.PRODUCT_WP_ID=%d", $product_id);    
+        }
+        
+        if ($suite_id !== null && $suite_id != "") {
+            if($suite_id == 0)
+                $where[] = " IFNULL(s.TEST_SUITE_WP_ID, '') = ''";
+            else if($suite_id != null)
+                $where[] = $wpdb->prepare(" s.TEST_SUITE_WP_ID=%d", $suite_id);
+        }
+            
+        if ($case_id !== "" && $case_id !== null) {
+            $where[] = $wpdb->prepare(" cm.TEST_CASE_WP_ID=%d", $case_id);    
+        }
+            
+        if($date != null)
+            $where[] = $wpdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+                
+        if($service != null)    
+        {
+            $where[] = $wpdb->prepare(" m.SERVICE=%s", $service);
+        }
+            
+        if($action != null){
+            $where[] = $wpdb->prepare(" m.ACTION=%s", $action);
+        }
+            
+        if($partyid != null){
+            $where[] = $wpdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+    }
     
     public function  getUserTransactionLog($product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $customer_id = null, $page = 1, $limit = -1, $orderby = null, $order = 'asc')
     {
@@ -212,16 +267,6 @@ class ManageESB
             
             $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
         }        
-        
-        if($id)   
-        {
-            if(is_array($id))
-            {
-                $where[] = " c.ID in (" . implode(", ", $id) . ")";
-            }else{
-                $where[] = ManageESB::$esbdb->prepare(" AND c.ID=%d", $id);
-            }
-        }
         
         if($product_id !== null && $product_id != "")
         {
@@ -407,7 +452,7 @@ class ManageESB
     * @param String $partyid
     * @param Date $date
     */
-    public function getFilterOptionsForProduct($suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $customer_id = null)
+    public function getFilterOptionsForProduct($customer_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
     {
         global $wpdb;
         
@@ -423,16 +468,6 @@ class ManageESB
         
         $where = array();
                 
-        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
-        {
-            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
-            if(!$esbIDs)
-                return array();
-            
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
-        }
-        
-        
         if($suite_id !== null && $suite_id != "")
         {
             if($suite_id == 0)
@@ -447,17 +482,20 @@ class ManageESB
         if($date != null)
             $where[] = ManageESB::$esbdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
         
-        if($service != null)    
-        {
+        if ($service != null) {
             $where[] = ManageESB::$esbdb->prepare(" m.SERVICE=%s", $service);            
         }
             
-        if($action != null){
+        if ($action != null) {
             $where[] = ManageESB::$esbdb->prepare(" m.ACTION=%s", $action);
         }
             
-        if($partyid != null){
+        if ($partyid != null) {
             $where[] = ManageESB::$esbdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
+        }
+        
+        if ($customer_id != "" && $customer_id != null) {
+            $where[] = ManageESB::$esbdb->prepare("c.CUSTOMER_ID=%d", $customer_id);
         }
         
         if($where)
@@ -482,7 +520,7 @@ class ManageESB
     * @param Date $date
     * @param mixed $product_id
     */
-    public function getFilterOptionsForSuite($product_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    public function getFilterOptionsForSuite($customer_id = null, $product_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
     {
         global $wpdb;
         
@@ -498,13 +536,8 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
-        {
-            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
-            if(!$esbIDs)
-                return array();
-            
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+       if ($customer_id != "" && $customer_id != null) {
+            $where[] = ManageESB::$esbdb->prepare("c.CUSTOMER_ID=%d", $customer_id);
         }
         
         if($product_id !== null && $product_id != "")
@@ -556,7 +589,7 @@ class ManageESB
     * @param mixed $date
     * @return array
     */
-    public function getFilterOptionsForCase($product_id = null, $suite_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    public function getFilterOptionsForCase($customer_id = null, $product_id = null, $suite_id = null, $service = null, $action = null, $partyid = null, $date = null)
     {
         global $wpdb;
         
@@ -572,13 +605,8 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
-        {
-            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
-            if(!$esbIDs)
-                return array();
-            
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if ($customer_id != "" && $customer_id != null) {
+            $where[] = ManageESB::$esbdb->prepare("c.CUSTOMER_ID=%d", $customer_id);
         }
         
         if($product_id !== null && $product_id != "")
@@ -634,7 +662,7 @@ class ManageESB
     * @param mixed $partyid
     * @param mixed $date
     */
-    public function getFilterOptionsForService($product_id = null, $suite_id = null, $case_id = null, $action = null, $partyid = null, $date = null)
+    public function getFilterOptionsForService($customer_id=null, $product_id = null, $suite_id = null, $case_id = null, $action = null, $partyid = null, $date = null)
     {
         global $wpdb;
         
@@ -650,13 +678,8 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
-        {
-            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
-            if(!$esbIDs)
-                return array();
-            
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if ($customer_id != "" && $customer_id != null) {
+            $where[] = ManageESB::$esbdb->prepare("c.CUSTOMER_ID=%d", $customer_id);
         }
         
         if($product_id !== null && $product_id != "")
@@ -712,7 +735,7 @@ class ManageESB
     * @param mixed $date
     * @return array
     */
-    public function getFilterOptionsForAction($product_id = null, $suite_id = null, $case_id = null, $service = null, $partyid = null, $date = null)
+    public function getFilterOptionsForAction($customer_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $partyid = null, $date = null)
     {
         global $wpdb;
         
@@ -728,13 +751,8 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
-        {
-            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
-            if(!$esbIDs)
-                return array();
-            
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if ($customer_id != "" && $customer_id != null) {
+            $where[] = ManageESB::$esbdb->prepare("c.CUSTOMER_ID=%d", $customer_id);
         }
         
         if($product_id !== null && $product_id != "")
@@ -789,7 +807,7 @@ class ManageESB
     * @param mixed $action
     * @param mixed $date
     */
-    public function getFilterOptionsForPartId($product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $date = null)
+    public function getFilterOptionsForPartId($customer_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $date = null)
     {
         global $wpdb;
         
@@ -805,13 +823,8 @@ class ManageESB
                   LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if( ($customer_id !== null && $customer_id != "") || (!is_super_admin() || is_admin()) )
-        {
-            $esbIDs = $this->_getCustomerESBIds($user_id, $customer_id);
-            if(!$esbIDs)
-                return array();
-            
-            $where[] = "c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+        if ($customer_id != "" && $customer_id != null) {
+            $where[] = ManageESB::$esbdb->prepare("c.CUSTOMER_ID=%d", $customer_id);
         }
         
         if($product_id !== null && $product_id != "")

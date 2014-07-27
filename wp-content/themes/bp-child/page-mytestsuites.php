@@ -21,7 +21,6 @@ get_header();
                     <div class="thead tr">
                         <div class="td td-community">Community</div>
                         <div class="td td-suite">Test Suite</div>
-                        <div class="td td-fee">Fee</div>
                         <div class="td td-status tocenter">Status</div>
                         <div class="td td-action tocenter">Action</div>
                         <div class="clear"></div>
@@ -52,18 +51,6 @@ get_header();
                             <div class="td td-suite">
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
-                            <div class="td td-fee tocenter">
-                              <?php if($row->user_id != $row->purchaser_id)  : ?>
-                                <span class="has-tooltip">*<span class="simple_tooltip">This subscription is covered by an organisational licence<span></span></span></span>
-                              <?php elseif($prev_purchase_id == $row->purchase_id): ?>
-                                <span class="has-tooltip">*<span class="simple_tooltip">Use of all versions of a test suite is covered by a single subscription fee<span></span></span></span>
-                              <?php else: ?>
-                                $<?php 
-                                $monthlyFee = getSubscriptionMonthlyFee($row->id);                                
-                                echo $monthlyFee;
-                                ?>/month
-                              <?php endif; ?>                                                                
-                            </div>
                             <div class="td td-status">
                                 <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                     <?php echo $row->status?>
@@ -89,13 +76,12 @@ get_header();
                                 </span>
                             </div>
                             <div class="td td-action tocenter">
-                                <a href="/?cp-action=<?php echo wp_create_nonce('get-harness')?>&id=<?php echo $row->id?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
-                                <a href="javascript: void(0)" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip" data-status="<?php echo $row->status?>" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
+                                <a href="/?cp-action=<?php echo wp_create_nonce('get-harness')?>&id=<?php echo $row->id?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
+                                <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->parent_id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
                             </div>
                             <div class="clear"></div>
                         </div>
-                   <?php
-                                $prev_purchase_id = $row->purchase_id;
+                   <?php                                
                            }
                        }
                    ?>
@@ -116,8 +102,6 @@ get_header();
     </div>
     <div class="clear"></div>
 </div> <!--end content-->
-<?php render_unsubscription_popup(); ?>
-
 <script type="text/javascript">
 jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_subscriptions'));

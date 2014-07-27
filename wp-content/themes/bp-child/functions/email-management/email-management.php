@@ -3,6 +3,10 @@
 * Management Site Emails
 */
 
+$ct_email_templates = array(
+    
+);
+
 //Add New Menu
 add_action('admin_menu', 'add_email_management_page');
 function add_email_management_page()
@@ -11,7 +15,7 @@ function add_email_management_page()
 }
 
 function create_email_management_page()
-{
+{    
     ?>
     <script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/js/jquery-ui-1.10.3.custom.js"></script>
     <link href="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/css/jquery-ui-1.10.3.custom.css"  type="text/css" rel="stylesheet" />
@@ -126,6 +130,10 @@ function create_email_management_page()
                         <li><a href="#email-changed">Email Address Changed</a></li>
                         <li><a href="#changed-email-verification-success">Changed Email Address<br/> Verification Success</a></li>
                         
+                        <li class="tab-separator">Organisation Section</li>
+                        <li><a href="#send-organisation-signup-request">Send Organisation <br/>Signup Request</a></li>
+                        <li><a href="#request-subscription-to-admin">Request a Subscription<br />to Organisation Admin</a></li>
+                        
                         <li class="tab-separator">Subscription Section</li>
                         <li><a href="#purchase-subscription">Purchase Paid Subscription</a></li>
                         <li><a href="#purchase-signup-fee-only-subscription">Purchase Sign-up Fee Only<br />Subscription</a></li>
@@ -140,7 +148,7 @@ function create_email_management_page()
                         <li><a href="#cancel-subscription">Cancel Paid Subscription</a></li>
                         <li><a href="#cancel-free-subscription">Cancel Free Subscription</a></li>
                         <li><a href="#cancel-additional-subscription">Cancel Subscription<br />to Additional Version</a></li>
-                        <li><a href="#request-subscription-to-admin">Request a Subscription<br />to Organisation Admin</a></li>
+                        
                         
                         <li class="tab-separator">Membership Section</li>
                         <li><a href="#membership-request-received">Membership Request Received</a></li>       
@@ -865,14 +873,43 @@ function create_email_management_page()
                         
                     </table>
                 </div>
-
+                <div id="send-organisation-signup-request">
+                    <?php
+                    $send_organisation_signup_request_to_admin_email_title = get_option('send_organisation_signup_request_to_admin_email_title');
+                    $send_organisation_signup_request_to_admin_email_content = get_option('send_organisation_signup_request_to_admin_email_content');
+                    ?>
+                    <h3>Send a Signup Organisation Request to Site Admin</h3>
+                    <p><b>Short Codes:</b> [requester_name], [requester_email], [organisation], [organisation_website], [organisation_description], [organisation_abn], [website_url], [env]</p>
+                    <table class="widefat">
+                        <thead>
+                            <tr>
+                                <th colspan="2">For Site Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdlabel"><b>Title</b></td>
+                                <td>
+                                    <input type="text" size="50" name="send_organisation_signup_request_to_admin_email_title" id="send_organisation_signup_request_to_admin_email_title" value="<?php echo $send_organisation_signup_request_to_admin_email_title?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdlabel"><b>Content</b></td>
+                                <td>
+                                    <?php wp_editor($send_organisation_signup_request_to_admin_email_content, 'send_organisation_signup_request_to_admin_email_content', array('media_buttons' => false,  'editor_height' => 150)) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
                 <div id="request-subscription-to-admin">
                     <?php
                     $request_subscription_to_admin_email_title = get_option('request_subscription_to_admin_email_title');
                     $request_subscription_to_admin_email_content = get_option('request_subscription_to_admin_email_content');
                     ?>
                     <h3>Send a Request to Organisation Admin</h3>
-                    <p><b>Short Codes:</b> [requester_name], [requester_name], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email]</p>
+                    <p><b>Short Codes:</b> [requester_name], [requester_email], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email]</p>
                     <table class="widefat">
                         <thead>
                             <tr>
@@ -2423,6 +2460,11 @@ function save_email_templates()
           $request_subscription_to_admin_email_content = stripslashes_deep($_POST['request_subscription_to_admin_email_content']);          
           update_option('request_subscription_to_admin_email_content', $request_subscription_to_admin_email_content);
           
+          $send_organisation_signup_request_to_admin_email_title = htmlentities(stripslashes_deep($_POST['send_organisation_signup_request_to_admin_email_title']));          
+          update_option('send_organisation_signup_request_to_admin_email_title', $send_organisation_signup_request_to_admin_email_title);          
+          $send_organisation_signup_request_to_admin_email_content = stripslashes_deep($_POST['send_organisation_signup_request_to_admin_email_content']);          
+          update_option('send_organisation_signup_request_to_admin_email_content', $send_organisation_signup_request_to_admin_email_content);
+          
           
                               
           $password_changed_email_title = htmlentities(stripslashes_deep($_POST['password_changed_email_title']));          
@@ -2629,7 +2671,6 @@ function cp_send_email($to, $template_name, $data = array())
     $phpmailer->IsHTML(true);
     $phpmailer->Subject = $emailTitle;
     $phpmailer->Body = $emailContent;
-
 
     try{
         return $phpmailer->Send();    

@@ -428,7 +428,7 @@ jQuery(document).ready(function($) {
         })
     }
     
-    jQuery('body').on('click', 'a.submit-btn', function(){        
+    jQuery('body').on('click', 'a.submit-btn', function(){                
         jQuery(this).parents('form').submit();
         return false;
     });

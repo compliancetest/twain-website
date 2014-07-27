@@ -444,30 +444,6 @@
             return false;            
         });
 
-        
-        $('#my_subscriptions .unsubscribe-btn').each(function(){
-            var status = $(this).attr('data-status');
-            var id = $(this).attr('data-id');
-            
-            $(this).cplightbox({
-                type: 'inline',
-                href: '#unsubscription-confirm-box',
-                onStart: function(){
-                    $('#unsubscription-confirm-box #subscription-id').val(id);
-                    if(status != 'Active')
-                    {
-                        $('#unsubscription-confirm-box #delete-now').prop('checked', true);
-                        $('#unsubscription-confirm-box #delete-now').prop('disabled', true);
-                    }else{
-                        $('#unsubscription-confirm-box #delete-now').prop('checked', false);
-                    }
-                }
-            })
-        })
-        
-        $("#unsubscription-confirm-box form").submit(function(){
-            $(this).find('.loading').show();
-        })
         $(document).on('change', '#p_mode_agreement', function(){
             if($(this).val() == 'LIGHT')
             {

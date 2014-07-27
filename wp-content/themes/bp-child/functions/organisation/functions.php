@@ -80,14 +80,41 @@ function ct_get_organisation_subscription($organisation_id, $suite_family_mark)
 * 
 * @return array or null
 */
-function ct_get_user_subscription($user_id, $suite_family_mark)
+function ct_get_assigned_organisation_subscription($user_id, $suite_family_mark)
 {
     global $wpdb;
     
     $query = $wpdb->prepare("SELECT * from {$wpdb->prefix}organisations_subscriptions 
                             WHERE user_id=%d AND suite_family_mark=%d AND `status` != 'Unsubscribing'", $user_id, $suite_family_mark);
        
-    $id = $wpdb->get_var($query);
+    $data = $wpdb->get_row($query);
+    
+    return $data;
+}
+
+function ct_get_user_subscriptions($user_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT us.*, os.status, os.nickname from {$wpdb->prefix}users_subscriptions AS us
+                             LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=us.parent_id
+                            WHERE user_id=%d", $user_id);
+       
+    $data = $wpdb->get_results($query);
+    
+    return $data;
+}
+
+function ct_get_suite_harness_detail($user_id, $suite_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * from {$wpdb->prefix}users_subscriptions 
+                            WHERE user_id=%d AND suite_id=%d", $user_id, $suite_id);
+       
+    $data = $wpdb->get_row($query);
+    
+    return $data;
 }
 
 /**
@@ -112,7 +139,7 @@ function ct_get_user_organisation($user_id = null)
     
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE organisation_domain=%s", $domain);
     $data = $wpdb->get_row($query);
-    
+
     return $data;    
 }
 
@@ -132,7 +159,7 @@ function ct_get_organisation_subscriptions($organisation_id)
     
     $query = $wpdb->prepare("SELECT os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
                             LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
-                            LEFT JOIN {$wpdb->users}test_suites AS t ON t.family_mark=os.suite_family_mark
+                            LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
                             WHERE us.organisation_id=%d", $organisation_id);
     
     $rows = $wpdb->get_results($query);
@@ -140,3 +167,41 @@ function ct_get_organisation_subscriptions($organisation_id)
     return $rows;
 }
 
+function ct_get_organisation_subscription_by_id($subscription_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE id=%d", $subscription_id);
+    $data = $wpdb->get_row($query);
+    
+    return $data;
+}
+
+function ct_get_test_suites_without_version()
+{
+    global $wpdb;
+    
+    $query = "SELECT DISTINCT(family_mark), suite_title FROM {$wpdb->prefix}test_suites ORDER BY suite_title";
+    $data = $wpdb->get_results($query);
+    
+    return $data;
+}
+
+function ct_get_user_viewable_subscriptions($user_id)
+{
+    global $wpdb;
+    
+    $data = get_userdata($user_id);
+    
+    //Getting domain
+    list($p, $domain) = explode("@",  $data->user_email);
+    
+    $query = $wpdb->prepare("SELECT os.* FROM {$wpdb->prefix}organisations_subscriptions AS os
+                             LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
+                             WHERE o.organisation_domain=%s ORDER BY os.nickname", 
+                             $domain);
+                             
+    $data = $wpdb->get_results($query);
+    
+    return $data;
+}

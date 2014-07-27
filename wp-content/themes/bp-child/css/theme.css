@@ -4676,7 +4676,7 @@ span.button_sign {
     margin-left: -55px;
 }
 #my_subscriptions .td-community{
-    width: 120px;
+    width: 206px;
 }
 #my_subscriptions .td-suite{
     width: 519px;
@@ -7499,18 +7499,18 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: none;
 }
 #organisation_subscriptions .td-suite{
-    width: 260px;
+    width: 250px;
 }
 #organisation_subscriptions .td-nickname{
-    width: 180px;
+    width: 170px;
 }
 #organisation_subscriptions .td-status{
     width: 92px;
     text-align: center;
 }
 #organisation_subscriptions .td-assignee{
-    width: 130px;
+    width: 200px;
 }
 #organisation_subscriptions .td-action{
-    width: 150px;
+    width: 100px;
 }

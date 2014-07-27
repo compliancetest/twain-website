@@ -63,7 +63,7 @@ get_header();
                                         <?php echo $row->nickname; ?>
                                     </div>
                                     <div class="td td-assignee">
-                                        <?php echo !$row->user_email ? '-' : $row->user_email; ?>
+                                        <?php echo !$row->user_email ? '-' : ($row->display_name . " ({$row->user_email})"); ?>
                                     </div>                                    
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
@@ -90,9 +90,8 @@ get_header();
                                         </span>
                                     </div>
                                     <div class="td td-action tocenter">
-                                        <?php if($row->status != 'Unsubscribing'){ ?>
-                                        <a href="javascript: void(0)" class="action-btn unsubscribe-btn icon-btn left10 unsubscribe-link has-tooltip" data-status="<?php echo $row->status?>" data-id="<?php echo $row->id?>"><span class="p"></span><span class="simple_tooltip">Delete<span></span></span></a><br />                        
-                                        <?php } ?>
+                                        <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a>
+                                        <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -124,7 +123,8 @@ get_header();
                     <label>Test Suite</label>
                     <select name="suite_family_mark" id="suite_family_mark" class="select">
                         <option value="">Select a Test Suite</option>
-                        <?php foreach($organisationClass->get_free_test_suites() as $row){ ?>
+                        <?php $test_suites = ct_get_test_suites_without_version(); ?>
+                        <?php foreach($test_suites as $row){ ?>
                         <option value="<?php echo $row->family_mark?>">
                             <?php echo $row->suite_title ?>
                         </option>
@@ -223,6 +223,27 @@ jQuery(document).ready(function(){
         }
         
         jQuery('#subscribe-box .loading').show();
+        
+        return isValid;
+    })
+    
+    //Edit Subscription
+    jQuery('body').on('submit', '#updateSubscriptionForm', function(){
+        var isValid = true;
+        jQuery('#update-subscription-box .message').remove();
+        jQuery('#update-subscription-box .input-error').removeClass('input-error');
+        
+        if (jQuery('#updateSubscriptionForm #nickname').val() == '') {
+            jQuery('#updateSubscriptionForm #nickname').addClass('input-error');            
+            isValid = false;            
+        }
+        
+        if (!isValid) {
+            jQuery('#update-subscription-box .popup-box-footer').prepend('<div class="message error">Please complete fields in red.</div>');
+            return false;
+        }
+        
+        jQuery('#update-subscription-box .loading').show();
         
         return isValid;
     })

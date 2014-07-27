@@ -51,16 +51,23 @@ class CT_Organisation_Controller
             WHERE os.organisation_id=%d AND os.suite_family_mark=%d", $organisation_id, $suite_family_mark);
         $pCount = $wpdb->get_var($query);
         
-        //Check if the user already purchased
-        if( $pCount > 0 )
-        {
-            $nickname .= ($pCount + 1);            
-        }
+        //Nickname should be unique        
+        $n_nickname = $nickname;
+        $i = 0;
+        do {
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE nickname=%s", $n_nickname);
+            if (!$wpdb->get_var($query)) {
+                break;
+            }       
+            $i++;
+            $n_nickname = $nickname . "_" . $i;
+        } while (1);
+        
         
         //Create Organisation Subscription
         $data = array(
             array(
-                'nickname'   =>  $nickname, 
+                'nickname'   =>  $n_nickname, 
                 'organisation_id'   =>  $organisation_id, 
                 'purchased_date'    =>  date('Y-m-d H:i:s'), 
                 'status'            =>  'Active', 
@@ -155,7 +162,7 @@ class CT_Organisation_Controller
                 '[admin_email]' => $organisation_admin->user_email
             );
             
-            cp_send_email(array('email' => $organisation_admin->user_email, 'name' => $organisation_admin->display_name), $email_data);
+            cp_send_email(array('email' => $organisation_admin->user_email, 'name' => $organisation_admin->display_name), 'request_subscription_to_admin', $email_data);
             
             return true;
         } else {
@@ -164,6 +171,132 @@ class CT_Organisation_Controller
         }
     }
     
+    public function send_signup_organisation_request($user_id)
+    {
+        global $wpdb;
+        
+        $requester = get_userdata($user_id);
+        
+        $email_data = array(
+            '[requester_name]' => $requester->first_name . " " . $requester->last_name,
+            '[requester_email]' => $requester->user_email,
+            '[organisation]' => get_user_meta($user_id, 'user_organisation', true),
+            '[organisation_website]' => get_user_meta($user_id, 'user_organisation_web', true),
+            '[organisation_description]' => get_user_meta($user_id, 'user_organisation_desc', true),
+            '[organisation_abn]' => get_user_meta($user_id, 'user_organisation_abn', true)
+        );
+        
+        cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
+        
+        return true;
+        
+    }
+    
+    public function save_subscription($subscription_id, $nickname, $assignee)
+    {
+        global $wpdb;
+        
+        $n_nickname = $nickname;
+        $i = 0;
+        do {
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE id <> %d AND nickname=%s", $subscription_id, $n_nickname);
+            if (!$wpdb->get_var($query)) {
+                break;
+            }       
+            $i++;
+            $n_nickname = $nickname . "_" . $i;
+        } while (1);
+        
+        $wpdb->update($wpdb->prefix . "organisations_subscriptions", 
+                      array('nickname' => $n_nickname, 'user_id' => $assignee),
+                      array('id' => $subscription_id),
+                      array('%s', '%d'), array('%d')
+        );
+        
+        return true;
+    }
+    
+    public function allocate_subscription_to_user($user_id, $organisation_id, $family_mark)   
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND suite_family_mark=%d AND user_id=0 ORDER BY nickname LIMIT 1", $organisation_id, $family_mark);
+        $sid = $wpdb->get_var($query);
+        
+        if (!$sid) {
+            $this->last_message = "There is not unallocated subscription now. Please request a subscription from your organisation administrator.";
+            return false;
+        }
+        
+        //Assign it to the user
+        $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('user_id' => $user_id), array('id' => $sid), array('%d'), array('%d'));
+        
+        return $sid;
+    }
+    
+    public function create_user_harness_detail($user_id, $suite_id, $organisation_id, $parent_id)
+    {
+        global $wpdb;
+        
+        $data = array(
+            array(
+                'organisation_id' => $organisation_id,
+                'user_id' => $user_id,
+                'suite_id' => $suite_id,
+                'parent_id' => $parent_id,
+                'created_date' => date('Y-m-d H:i:s'),
+                'p_mode_agreement' => 'LIGHT',
+                'harness_endpoint_url' => HARNESS_ENDPOINT_URL, 
+                'harness_username' => "harness" . $user_id . "_" . $suite_id, 
+                'harness_password' => cp_generate_password(8),
+                'tester_username' => '',
+                'tester_password' => '',
+                'tester_endpoint_url' => '',            
+                'harness_key' => '',            
+                'harness_certificate' => '',            
+                'harness_certificate_p12' => '',            
+                'profile_id' => 0,            
+                'entity_id' => '',            
+                'entity_type' => '',            
+                'gateway_id' => 0,            
+                'alias' => ''
+            ),
+            array('%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s')
+        );
+        
+        $wpdb->insert($wpdb->prefix . "users_subscriptions", $data[0], $data[1]);
+    }
+    
+    public function delete_user_subscription($user_id, $subscription_id)
+    {
+        global $wpdb;
+        
+        //Remove harness detail
+        $wpdb->delete($wpdb->prefix . "users_subscriptions", array('user_id' => $user_id, 'parent_id' => $subscription_id), array('%d', '%d'));
+        
+        //Release the organisation subscription
+        $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('user_id' => 0), array('id' => $subscription_id), array('%d'), array('%d'));
+        
+    }
     
     
+    
+    public function delete_organisation_subscription($subscription_id)
+    {
+        global $wpdb;
+        
+        //Remove harness detail
+        $wpdb->delete($wpdb->prefix . "users_subscriptions", array('parent_id' => $subscription_id), array('%d'));
+        
+        //Delete the organisation subscription
+        $wpdb->delete($wpdb->prefix . "organisations_subscriptions", array('id' => $subscription_id), array('%d'));
+    }
+    
+    public function unsubscribe_organisation_subscription($subscription_id)
+    {
+        global $wpdb;
+        
+        //Release the organisation subscription
+        $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('status' => 'Unsubscribing'), array('id' => $subscription_id), array('%s'), array('%d'));
+    }
 }
