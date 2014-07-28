@@ -238,9 +238,10 @@ class ManageESB
         }
             
         if($date != null)
-            $where['date'] = $wpdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
-                
-        if($service != null)    
+//            $where['date'] = $wpdb->prepare(" DATE(c.CONVERSATION_TIMESTAMP)=%s", date("Y-m-d", strtotime($date)));
+        $where['date'] = $wpdb->prepare(" c.CONVERSATION_TIMESTAMP BETWEEN %s AND %s" , date( "Y-m-d H:i:s", getUTCTimeStamp( date("Y-m-d H:i:s", strtotime($date.' 00:00:00'))) ), date( "Y-m-d H:i:s", getUTCTimeStamp( date("Y-m-d H:i:s", strtotime($date.' 23:59:59')) )) );
+
+        if($service != null)
         {
             $where['service'] = $wpdb->prepare(" m.SERVICE=%s", $service);
             $message_where['service'] = $wpdb->prepare(" m.SERVICE=%s", $service);            
