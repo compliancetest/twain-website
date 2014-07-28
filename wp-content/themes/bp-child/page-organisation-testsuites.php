@@ -152,7 +152,7 @@ get_header();
                     <select name="payment_method" id="payment_method" class="select">
                         <option value="">Select a Method</option>
                         <?php foreach($organisationClass->get_payment_methods() as $row){ ?>
-                        <option value="<?php echo $row->id?>">
+                        <option value="<?php echo $row->id?>" <?php echo ($row->is_default=='1')?('selected="selected"'):(''); ?>>
                             <?php 
                                 echo $row->nickname;
                                 if (!$row->invoice_me)
