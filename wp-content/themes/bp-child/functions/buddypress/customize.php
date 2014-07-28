@@ -632,8 +632,14 @@ function getDashboardPages($type = 'page')
             if ($type == 'menu') {
                 $item['subpages'][] = array('title' => '+ Add', 'url' => home_url().'/test-suites');
             }
-        } elseif ($class == 'menu-organisation' && !is_organisation_admin()) {
-            continue;
+        } elseif ($class == 'menu-organisation') {
+            if (!is_organisation_admin()) {
+                continue;
+            } else {
+                $item['subpages'] = array();
+                $item['subpages'][] = array('title' => 'Subscriptions', 'url' => home_url().'/my-organisation/test-suites');
+                $item['subpages'][] = array('title' => 'Profile', 'url' => $item['url']);
+            }
         }
                 
         $pages[] = $item;
