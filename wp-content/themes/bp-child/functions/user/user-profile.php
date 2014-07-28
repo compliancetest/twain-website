@@ -476,7 +476,8 @@ function cp_user_payment_save()
                 'card_number' => encrypt_card_number($card_number),
                 'customer_id' => $result,                
                 'status' => 'Active',                
-                'created_date' => date('Y-m-d H:i:s')
+                'created_date' => date('Y-m-d H:i:s'),
+                'organisation_id' => $organisation_id
             ));        
             if(!$query_result)
                 $id = $wpdb->last_error;
