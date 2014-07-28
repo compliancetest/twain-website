@@ -909,7 +909,7 @@ function create_email_management_page()
                     $request_subscription_to_admin_email_content = get_option('request_subscription_to_admin_email_content');
                     ?>
                     <h3>Send a Request to Organisation Admin</h3>
-                    <p><b>Short Codes:</b> [requester_name], [requester_email], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email]</p>
+                    <p><b>Short Codes:</b> [requester_name], [requester_email], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email], [organisation_name]</p>
                     <table class="widefat">
                         <thead>
                             <tr>

@@ -83,7 +83,8 @@ function ct_process_organisation_action()
                   <form name="" action="<?php echo site_url() ?>/index.php" method="post">
                     <div class="popup-box-header radius6 noradiusbottom">Set Up An Account</div>
                     <div class="popup-box-content">                        
-                        To subscribe, an account for your Organisation will need to be created by our support team, and you will be assigned as the administrator. Would you like to proceed?
+                        To subscribe, an account for your Organisation will need to be created by our support team, and you will be assigned as the administrator. 
+                        Please ensure your organisation details are complete in your profile before proceeding. Would you like to proceed?
                         <?php wp_nonce_field('signup-organisation-account', '_organisation_nonce') ?>                        
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
@@ -172,6 +173,7 @@ function ct_process_organisation_action()
                       <form name="" action="<?php echo site_url() ?>/index.php" method="post">
                         <div class="popup-box-header radius6 noradiusbottom">Request A Subscription</div>
                         <div class="popup-box-content">                        
+                            There are currently no organisation subscriptions available to allocate to you.
                             Do you wish to request a subscription from your organisation administrator (<?php echo $organisation_admin->user_email?>)?
                             <?php wp_nonce_field('request-subscription', '_organisation_nonce') ?>                        
                             <input type="hidden" name="suite_id" value="<?php echo $suite_id?>" />
@@ -345,7 +347,7 @@ function ct_process_organisation_action()
             
             $subscription = ct_get_organisation_subscription_by_id($id);
             
-            if (!$subscription || !$user_id || ($subscription->user_id != $user_id && !ct_is_organisation_admin($user_id, $subscription->organisation_id))) {
+            if (!$subscription || !$user_id || $subscription->user_id != $user_id)  {
                 ?>
                 <div class="popup-box" style="display: none; width: 450px">
                     <div class="popup-box-header radius6 noradiusbottom">Invalid Request!</div>
@@ -363,18 +365,9 @@ function ct_process_organisation_action()
                     <form name="unsubscribe-form" action="/index.php" method="post">
                         <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
                         <div class="popup-box-content grid-box-body">    
-                            <p>Are you sure that you want to unsubscribe?</p>
-                            <?php if (ct_is_organisation_admin($user_id, $subscription->organisation-id)) {?>
-                            <p>If your subscription is active, it will not be removed until the end of the month, and you can continue to test as normal until then.</p>        
-                            <p>If you want the subscription removed immediately, please select the checkbox below.</p>
-                            <?php } ?>
+                            <p>Are you sure that you want to unsubscribe?</p>                            
                         </div>
-                        <div class="popup-box-footer radius6 noradiustop">              
-                            <?php if (ct_is_organisation_admin($user_id, $subscription->organisation_id)) {?>
-                            <label class="left">
-                                <input type="checkbox" id="delete-now" name="delete-now" <?php if($subscription->status == 'Unsubscribing'){ ?> disabled="disabled" checked="checked" <?php } ?> /> Unsubscribe immediately
-                            </label>
-                            <?php } ?>
+                        <div class="popup-box-footer radius6 noradiustop">      
                             <div class="right">
                                 <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">OK</span></a>            
                                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
@@ -399,6 +392,62 @@ function ct_process_organisation_action()
                 <?php
             }
             exit;
+        } else if(wp_verify_nonce($action, 'organisation-unsubscribe')) {
+            $user_id = get_current_user_id();
+            $id = $_REQUEST['id'];
+            
+            $subscription = ct_get_organisation_subscription_by_id($id);
+            
+            if (!$subscription || !$user_id || !ct_is_organisation_admin($user_id, $subscription->organisation_id)) {
+                ?>
+                <div class="popup-box" style="display: none; width: 450px">
+                    <div class="popup-box-header radius6 noradiusbottom">Invalid Request!</div>
+                    <div class="popup-box-content"><p class="message error">Your request is not valid.</p></div>                    
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <div class="clear"></div>
+                    </div>
+                    <a class="close_btn"></a>
+                </div>
+                <?php
+            } else {
+                ?>
+                <div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
+                    <form name="unsubscribe-form" action="/index.php" method="post">
+                        <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
+                        <div class="popup-box-content grid-box-body">    
+                            <p>Are you sure that you want to unsubscribe?</p>
+                            <p>If your subscription is active, it will not be removed until the end of the month, and you can continue to test as normal until then.</p>        
+                            <p>If you want the subscription removed immediately, please select the checkbox below.</p>
+                        </div>
+                        <div class="popup-box-footer radius6 noradiustop">              
+                            <label class="left">
+                                <input type="checkbox" id="delete-now" name="delete-now" <?php if($subscription->status == 'Unsubscribing'){ ?> disabled="disabled" checked="checked" <?php } ?> /> Unsubscribe immediately
+                            </label>
+                            <div class="right">
+                                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">OK</span></a>            
+                                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="loading loading-with-text radius6"><div><b>UNSUBSCRIBING</b><span>Please wait...</span></div></div>
+                        <a class="close_btn"></a>
+                        <input type="hidden" name="id" value="<?php echo $subscription->id?>" />    
+                        <?php wp_nonce_field('confirm-organisation-unsubscribe', '_organisation_nonce'); ?>
+                        <?php if($_REQUEST['return']){ ?>
+                        <input type="hidden" name="return" value="<?php echo $_REQUEST['return']?>" />
+                        <?php } ?>
+                    </form>
+                    <script type="text/javascript">
+                        jQuery('#unsubscription-confirm-box a.submit-btn').click(function(){
+                            jQuery(this).parents('form').find('.loading').show(); 
+                            jQuery(this).parents('form').submit();
+                        })
+                    </script>
+                </div>
+                <?php
+            }
+            exit;
         } else if(wp_verify_nonce($action, 'confirm-unsubscribe')) {
             $user_id = get_current_user_id();
             $id = $_POST['id'];
@@ -406,18 +455,32 @@ function ct_process_organisation_action()
             
             $return = isset($_POST['return']) ? base64_decode($_POST['return']) : get_site_url();
             
-            if (!$subscription || !$user_id || ($subscription->user_id != $user_id && !ct_is_organisation_admin($user_id, $subscription->organisation_id))) {
+            if (!$subscription || !$user_id || $subscription->user_id != $user_id) {
                 addMessage('Invalid Request!', 'error');
             } else {
-                if ($subscription->user_id == $user_id) {
-                    //Delete User Subscription
-                    $controller->delete_user_subscription($user_id, $subscription->id);
-                } else {
-                    if (isset($_POST['delte-now']) || $subscription->status == 'Unsubscribing')
-                        $controller->delete_organisation_subscription($subscription->id);
-                    else
-                        $controller->unsubscribe_organisation_subscription($subscription->id);
-                }
+                //Delete User Subscription
+                $controller->delete_user_subscription($user_id, $subscription->id);
+                addMessage('Your subscription has been cancelled');
+            }
+            
+            wp_redirect($return);
+            exit;
+            
+        } else if(wp_verify_nonce($action, 'confirm-organisation-unsubscribe')) {
+            $user_id = get_current_user_id();
+            $id = $_POST['id'];
+            $subscription = ct_get_organisation_subscription_by_id($id);
+            
+            $return = isset($_POST['return']) ? base64_decode($_POST['return']) : get_site_url();
+            
+            if (!$subscription || !$user_id || !ct_is_organisation_admin($user_id, $subscription->organisation_id)) {
+                addMessage('Invalid Request!', 'error');
+            } else {
+                if (isset($_POST['delete-now']) || $subscription->status == 'Unsubscribing')
+                    $controller->delete_organisation_subscription($subscription->id);
+                else
+                    $controller->unsubscribe_organisation_subscription($subscription->id);
+                
                 addMessage('Your subscription has been cancelled');
             }
             

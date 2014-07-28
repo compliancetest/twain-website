@@ -19,11 +19,18 @@ if(is_user_logged_in()){
         exit;
     }
     
-    $user_subscriptions = ct_get_user_subscriptions($user->ID);
-    if($user_subscriptions)
-        $default_subscription = $user_subscriptions[0]->id;
-    else
-        $default_subscription = null;
+    //Set Default Subscription
+    if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
+        $default_subscription = "all";
+    } else {
+        $user_subscriptions = ct_get_user_subscriptions($user->ID);
+        
+        if($user_subscriptions)
+            $default_subscription = $user_subscriptions[0]->id;
+        else
+            $default_subscription = -1;    
+    }
+    
 }else{
     wp_redirect(home_url());
     exit;
@@ -56,18 +63,21 @@ $order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : ($orderBy ==
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
-$log_results = $esb->getUserTransactionLog($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer, $page, $limit, $orderBy, $order);
+$esb->prepareTransactionWhereQuery($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+
+$log_results = $esb->getUserTransactionLog($page, $limit, $orderBy, $order);
+
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 
 $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
 
-$tProducts = $esb->getFilterOptionsForProduct($filterSubscription, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
-$tSuites = $esb->getFilterOptionsForSuite($filterSubscription, $filterProduct, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate);
-$tCases = $esb->getFilterOptionsForCase($filterSubscription, $filterProduct, $filterSuite, $filterService, $filterAction, $filterPartyId, $filterDate);
-$tServices = $esb->getFilterOptionsForService($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterAction, $filterPartyId, $filterDate);
-$tActions = $esb->getFilterOptionsForAction($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterPartyId, $filterDate);
-$tPartyIDs = $esb->getFilterOptionsForPartId($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterDate);
+$tProducts = $esb->getFilterOptionsForProduct();
+$tSuites = $esb->getFilterOptionsForSuite();
+$tCases = $esb->getFilterOptionsForCase();
+$tServices = $esb->getFilterOptionsForService();
+$tActions = $esb->getFilterOptionsForAction();
+$tPartyIDs = $esb->getFilterOptionsForPartId();
 
 $tCustomers = getManagedCustomers();
 
@@ -115,7 +125,9 @@ if($filterCustomer){
                     <div class="styled_select">
                         <label>Subscription: <?php if($filterSubscription != "" && $filterSubscription != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="subscription" id="subscription" autocomplete="off">
-                            <option value="">- All -</option>
+                          <?php if (is_super_admin() || ct_is_group_admin_or_support($user_id)): ?>
+                            <option value="all">- All -</option>
+                          <?php endif; ?>
                           <?php foreach($tSubscriptions as $s){ ?>                           
                             <option value="<?php echo $s->id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
                           <?php } ?>

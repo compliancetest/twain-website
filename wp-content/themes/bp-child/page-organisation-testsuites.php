@@ -22,9 +22,6 @@ get_header();
             <?php get_sidebar('organisation'); ?>
             <div id="item-body">
                 <div id="organisation_test_suites" class="tab-content white_bcg column">
-                    <a href="#subscribe-box" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-type="inline"  class="action-btn process-btn submit-btn bottom8" id="purchase-subscribe"><span class="p"></span><span class="t">Purchase Subscription</span></a>
-                    <div class="clear"></div>
-                
                     <div class="grid-box table-box" id="organisation_subscriptions">
                         <div class="grid-box-header">
                             <h5>The Organisation Subscriptions</h5>
@@ -63,7 +60,7 @@ get_header();
                                         <?php echo $row->nickname; ?>
                                     </div>
                                     <div class="td td-assignee">
-                                        <?php echo !$row->user_email ? '-' : ($row->display_name . " ({$row->user_email})"); ?>
+                                        <?php echo !$row->user_email ? '-' : $row->full_name; ?>
                                     </div>                                    
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
@@ -90,7 +87,7 @@ get_header();
                                         </span>
                                     </div>
                                     <div class="td td-action tocenter">
-                                        <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a>
+                                        <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe')?>&id=<?php echo $row->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a>
                                         <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
                                     </div>
                                     <div class="clear"></div>
@@ -105,6 +102,8 @@ get_header();
                         </div>                    
                     </div>
                     <div class="clear"></div>
+                    <a href="#subscribe-box" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-type="inline"  class="action-btn process-btn add-new-btn top10 has-tooltip" id="purchase-subscribe"><span class="p"></span><span class="t">Add</span><span class="simple_tooltip"><span></span>Purchase A Subscription</span></a>
+                    <div class="clear"></div>
                 </div>
             </div>
             <div class="clear"></div>            
@@ -116,8 +115,22 @@ get_header();
 
 <div class="popup-box" id="subscribe-box" style="display: none;">
     <form name="paymentForm" id="paymentForm" action="" method="post">
-        <div class="popup-box-header radius6 noradiusbottom">Purchase Subscription</div>        
+        <div class="popup-box-header radius6 noradiusbottom">Purchase A Subscription</div>        
         <div class="popup-box-content grid-box-body">    
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Community</label>
+                    <select name="community_id" id="community_id" class="select">                        
+                        <?php $communities = groups_get_groups(); ?>
+                        <?php foreach($communities['groups'] as $group){ ?>
+                        <option value="<?php echo $group->id?>">
+                            <?php echo bp_get_group_name($group) ?>
+                        </option>
+                        <?php } ?>
+                    </select>                    
+                </div>
+                <div class="clear"></div>
+            </div>            
             <div class="field-row">
                 <div class="grid-cell">
                     <label>Test Suite</label>
@@ -125,7 +138,7 @@ get_header();
                         <option value="">Select a Test Suite</option>
                         <?php $test_suites = ct_get_test_suites_without_version(); ?>
                         <?php foreach($test_suites as $row){ ?>
-                        <option value="<?php echo $row->family_mark?>">
+                        <option value="<?php echo $row->family_mark?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
                             <?php echo $row->suite_title ?>
                         </option>
                         <?php } ?>
@@ -140,7 +153,10 @@ get_header();
                         <option value="">Select a Method</option>
                         <?php foreach($organisationClass->get_payment_methods() as $row){ ?>
                         <option value="<?php echo $row->id?>">
-                            <?php echo $row->nickname . " " . chunk_split(encrypt_card_number($row->card_number), 4)?>
+                            <?php 
+                                echo $row->nickname;
+                                if (!$row->invoice_me)
+                                    echo " " . chunk_split(encrypt_card_number($row->card_number), 4)?>
                         </option>
                         <?php } ?>
                     </select>
@@ -150,7 +166,7 @@ get_header();
             </div>
             <div class="field-row">
                 <div class="grid-cell">
-                    <label>Nickname</label>
+                    <label>Subscription Nickname</label>
                     <input type="text" name="nickname" id="nickname" value="" class="input" maxlength="50" />                    
                 </div>                
                 <div class="clear"></div>
@@ -246,6 +262,17 @@ jQuery(document).ready(function(){
         jQuery('#update-subscription-box .loading').show();
         
         return isValid;
+    })
+    
+    function filter_test_suites()
+    {
+        jQuery('#subscribe-box #suite_family_mark').val('');
+        jQuery('#subscribe-box #suite_family_mark option:gt(1)').hide();
+        jQuery('#subscribe-box #suite_family_mark option[community-id="' + jQuery('#subscribe-box #community_id').val() + '"]').show();
+    }
+    filter_test_suites();
+    jQuery('#subscribe-box #community_id').change(function(){
+        filter_test_suites();
     })
 })
 </script>

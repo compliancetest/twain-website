@@ -98,7 +98,7 @@ function ct_get_user_subscriptions($user_id)
     
     $query = $wpdb->prepare("SELECT us.*, os.status, os.nickname from {$wpdb->prefix}users_subscriptions AS us
                              LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=us.parent_id
-                            WHERE user_id=%d", $user_id);
+                            WHERE us.user_id=%d", $user_id);
        
     $data = $wpdb->get_results($query);
     
@@ -181,7 +181,7 @@ function ct_get_test_suites_without_version()
 {
     global $wpdb;
     
-    $query = "SELECT DISTINCT(family_mark), suite_title FROM {$wpdb->prefix}test_suites ORDER BY suite_title";
+    $query = "SELECT family_mark, suite_title, suite_id FROM {$wpdb->prefix}test_suites GROUP BY family_mark ORDER BY suite_title";
     $data = $wpdb->get_results($query);
     
     return $data;
@@ -191,17 +191,58 @@ function ct_get_user_viewable_subscriptions($user_id)
 {
     global $wpdb;
     
-    $data = get_userdata($user_id);
+            
+    $user_data = get_userdata($user_id);
     
-    //Getting domain
-    list($p, $domain) = explode("@",  $data->user_email);
-    
-    $query = $wpdb->prepare("SELECT os.* FROM {$wpdb->prefix}organisations_subscriptions AS os
-                             LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
-                             WHERE o.organisation_domain=%s ORDER BY os.nickname", 
-                             $domain);
-                             
-    $data = $wpdb->get_results($query);
+    $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
+                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+                WHERE 
+                    s.user_id = bm.user_id AND bm.is_confirmed=1 
+                    AND
+                    (bm.user_id=%d OR bm.group_id 
+                        IN 
+                        ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                ORDER BY os.nickname
+                ", $user_id, $user_id);
+    if (is_super_admin()) {
+        $query = $wpdb->prepare("SELECT os.nickname, us.id FROM {$wpdb->prefix}users_subscriptions AS us
+                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
+                                 ORDER BY os.nickname", 
+                                 $domain);
+                                 
+        $data = $wpdb->get_results($query);
+    } else if(ct_is_group_admin_or_support($user_id)) {
+        $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
+                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+                WHERE 
+                    s.user_id = bm.user_id AND bm.is_confirmed=1 
+                    AND
+                    (bm.user_id=%d OR bm.group_id 
+                        IN 
+                        ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                ORDER BY os.nickname
+                ", $user_id, $user_id);
+        $data = $wpdb->get_results($query);    
+    } else {
+        //Getting domain
+        list($p, $domain) = explode("@",  $user_data->user_email);
+        
+        $query = $wpdb->prepare("SELECT os.nickname, us.id FROM {$wpdb->prefix}users_subscriptions AS us
+                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
+                                 LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
+                                 WHERE o.organisation_domain=%s  ORDER BY os.nickname", 
+                                 $domain);
+                                 
+        $data = $wpdb->get_results($query);
+    }
     
     return $data;
+}
+
+function ct_calculate_first_month_quantity($quantity)
+{
+    $remainedDay = (strtotime(date("Y-m-d", mktime(0, 0, 0, date('n') + 1, 1, date("Y")))) - strtotime(date("Y-m-d"))) / 86400;
+    $totalDay = date("t");
+    
+    return $quantity * ($remainedDay / $totalDay);
 }

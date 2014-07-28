@@ -233,20 +233,24 @@ Template Name Posts: Test Suite
                 
                 if (is_user_logged_in()) {
                     
-                    if (($organisation_id = ct_is_organisation_admin($user_id))) { //Organisation Admin
-                        $subscription = ct_get_organisation_subscription($organisation_id, $suite->familyMark);
-                        $is_organisation_admin = true;
-                    } else {
-                        $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);                        
-                        $harness_detail = ct_get_suite_harness_detail($user_id, $suite->id);
+                    $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark); 
+                    $is_organisation_admin = false;
+                    
+                    $harness_detail = ct_get_suite_harness_detail($user_id, $suite->id);
                         
-                        if ($subscription && !$harness_detail) {
-                            $organisationController = new CT_Organisation_Controller();                            
-                            $organisationController->create_user_harness_detail($user_id, $suite->id, $subscription->organisation_id, $subscription->id);
-                            
-                            
+                    if ($subscription && !$harness_detail) {
+                        $organisationController = new CT_Organisation_Controller();                            
+                        $organisationController->create_user_harness_detail($user_id, $suite->id, $subscription->organisation_id, $subscription->id);
+                    }
+                    
+                    if (!$subscription)
+                    {
+                        if ($organisation_id = ct_is_organisation_admin($user_id))
+                        {
+                            $organisation_subscription = ct_get_organisation_subscription($organisation_id, $suite->familyMark);    
+                            if (!$organisation_subscription )
+                                $is_organisation_admin = true;
                         }
-                        $is_organisation_admin = false;
                     }
                     
                     if (!$subscription) {
@@ -293,27 +297,26 @@ Template Name Posts: Test Suite
                         if ($subscription->status == 'Active') {
                         ?>
                             <div class="message success">
-                                You have already purchased a subscription to this test suite.
-                                If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                                You have currently been allocated a subscription to this test suite. If you want to release this subscription, click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
                             </div>
                         <?php
                         } else if ($subscription->status == 'InArrears') {
                         ?>
                             <div class="message notice">
-                                You have already purchased a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                                You have currently been allocated a subscription to this test suite. But there is a problem with the payment method associated with your subscription to this test suite.                    If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
                             </div>
                         <?php
                             
                         } else if ($subscription->status == 'Frozen') {
                         ?>
                             <div class="message error">
-                                You have already purchased a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                                You have currently been allocated a subscription to this test suite. But testing is frozen until the problem with the payment method associated with this subscription is resolved. If you want to unsubscribe it, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
                             </div>
                         <?php                            
                         } else if ($subscription->status == 'Unsubscribing') {
                         ?>
                             <div class="message notice">
-                                You have requested to be unsubscribed from this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
+                                You have currently been allocated a subscription to this test suite. This will occur at the end of the month. If you want to unsubscribe it immediately, please click <a  href="<?php echo get_permalink()?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $subscription->id?>&return=<?php echo base64_encode(get_permalink()) ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><i>here</i></a>.
                             </div>
                         <?php
                         }
@@ -321,6 +324,16 @@ Template Name Posts: Test Suite
                 } else {
             ?>
                     <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>                        
+                        <span class="price-b">
+                            <span class="l"></span>
+                            <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
+                            <span class="r"></span>
+                        </span>
+                        <span class="price-b signup-price">
+                            <span class="l"></span>
+                            <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
+                            <span class="r"></span>
+                        </span>
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                     </a>
             <?php

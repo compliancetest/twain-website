@@ -108,7 +108,7 @@ class CT_Organisation_Controller
                 'item_code'             => $sign_price_code,
                 'quantity'              => 1,
                 'start_date'            => date("Y-m-d H:i:s"),
-                'end_date'              => date("Y-m-d", strtotime('first day next month')),
+                'end_date'              => date("Y-m-d", strtotime('last day of this month')),
                 'reference_type'        => 'subscription',
                 'reference_id'          => $subscription_id,
                 'invoice_identifier'    => '',
@@ -125,16 +125,16 @@ class CT_Organisation_Controller
                 'organisation_id'       => $organisation_id,
                 'payment_id'            => $payment_method,
                 'item_code'             => $monthly_price_code,
-                'quantity'              => 1,
+                'quantity'              => ct_calculate_first_month_quantity(1),
                 'start_date'            => date("Y-m-d H:i:s"),
-                'end_date'              => date("Y-m-d", strtotime('first day next month')),
+                'end_date'              => date("Y-m-d", strtotime('last day of this month')),
                 'reference_type'        => 'subscription',
                 'reference_id'          => $subscription_id,
                 'invoice_identifier'    => '',
                 'is_paid'               => 0,
                 'comment'               => 'Monthly Subscription Fee'
             ),
-            array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+            array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
         );
         
         $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
@@ -154,6 +154,7 @@ class CT_Organisation_Controller
             $requester = get_userdata($user_id);
             
             $email_data = array(
+                '[organisation_name]' => $organisation->organisation_name,
                 '[requester_name]' => $requester->first_name . " " . $requester->last_name,
                 '[requester_email]' => $requester->user_email,
                 '[suite_name]' => get_the_title($suite_id),
