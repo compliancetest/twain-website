@@ -555,7 +555,7 @@ function saveHarnessDetails(id)
     jQuery.ajax({
         url: '/',
         data: jQuery('#harness-form').serialize(),
-        type: 'post',
+        type: 'POST',
         success: function(rsp){
             jQuery('#harness-detail-box' + id + ' .loading').hide();
             if(rsp == 'success')
@@ -572,7 +572,8 @@ function saveHarnessDetails(id)
             jQuery('#harness-detail-box' + id + ' .loading').hide();
             jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
         }
-    })
+    });
+    
     return false;
 }
 function saveVariableDefaults(obj)
