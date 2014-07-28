@@ -271,6 +271,7 @@ function cp_user_payment_save()
     $card_cvc = trim($_POST['card_cvc']);
     $invoice_me = trim($_POST['invoice_me']);
     $organisation_id = trim($_POST['organisation_id']);
+    $is_default = trim($_POST['is_default']);
     
     $id = intval(trim($_POST['id']));
         
@@ -290,7 +291,7 @@ function cp_user_payment_save()
     if ($invoice_me == 1) 
     {
         if ($id) {
-            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active'), array('id' => $id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active', 'is_default' => $is_default), array('id' => $id));
             return $id;
         } else {
             $wpdb->insert($wpdb->prefix . "organisations_payment_methods", array(
@@ -298,6 +299,7 @@ function cp_user_payment_save()
                 'nickname' => $nickname,
                 'invoice_me' => $invoice_me,
                 'organisation_id' => $organisation_id,
+                'is_default' => $is_default,
                 'status' => 'Active',                
                 'created_date' => date('Y-m-d H:i:s')
             ));    
@@ -475,9 +477,10 @@ function cp_user_payment_save()
                 'email' => $email,
                 'card_number' => encrypt_card_number($card_number),
                 'customer_id' => $result,                
-                'status' => 'Active',                
-                'created_date' => date('Y-m-d H:i:s'),
-                'organisation_id' => $organisation_id
+                'status' => 'Active',
+                'organisation_id' => $organisation_id,
+                'is_default' => $is_default,                
+                'created_date' => date('Y-m-d H:i:s')
             ));        
             if(!$query_result)
                 $id = $wpdb->last_error;
@@ -518,7 +521,7 @@ function cp_user_payment_save()
         $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
         if($result == 'true')
         {
-            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active'), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active', 'is_default' => $is_default), array('id' => $card->id));
             
             $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
             
