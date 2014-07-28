@@ -137,7 +137,7 @@ if($filterCustomer){
                     <div class="space10"></div>
                     <div class="styled_select">
                         <label>Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                        <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : formatDate($filterDate); ?>" />
+                        <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : $filterDate; ?>" />
                     </div>
                 </div>
                 <div class="left">
