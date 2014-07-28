@@ -58,8 +58,8 @@ if(!defined('ABSPATH'))
                         </span>
                     </div>
                     <div class="td td-action">
-                        <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('edit_payment_method')?>&id=<?php echo $card->id ?>" class="edit-payment-method action-btn edit-btn icon-btn has-tooltip" data-id="<?php echo $card->id?>"><span class="p"></span><span class="simple_tooltip radius6">Edit Card<span></span></span></a>
-                        <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete_payment_method')?>&id=<?php echo $card->id ?>" class="delete-payment-method action-btn delete-btn icon-btn has-tooltip left10" data-id="<?php echo $card->id?>"><span class="p"></span><span class="simple_tooltip radius6">Delete Card<span></span></span></a>
+                        <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('edit_payment_method')?>&id=<?php echo $card->id ?>" class="edit-payment-method action-btn edit-btn icon-btn has-tooltip" data-id="<?php echo $card->id?>"><span class="p"></span><span class="simple_tooltip radius6">Edit Payment Method<span></span></span></a>
+                        <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete_payment_method')?>&id=<?php echo $card->id ?>" class="delete-payment-method action-btn delete-btn icon-btn has-tooltip left10" data-id="<?php echo $card->id?>"><span class="p"></span><span class="simple_tooltip radius6">Delete Payment Method<span></span></span></a>
                         
                     </div>
                     <div class="clear"></div>
