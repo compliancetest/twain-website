@@ -241,6 +241,7 @@ function cp_user_payment_edit()
     $result['email'] = $card->email;
     $result['invoice_me'] = $card->invoice_me;
     $result['organisation_id'] = $card->organisation_id;
+    $result['is_default'] = $card->is_default;
     
     echo json_encode($result);
     exit;
