@@ -288,8 +288,14 @@ function cp_user_payment_save()
     {
         return 'Please enter a nickname of this card!';
     }
+    
     if ($invoice_me == 1) 
     {
+        if ($is_default == '1') 
+        {
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('is_default' => 0), array('organisation_id' => $organisation_id));
+        }
+        
         if ($id) {
             $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active', 'is_default' => $is_default), array('id' => $id));
             return $id;
@@ -470,7 +476,12 @@ function cp_user_payment_save()
         }else if(!$result){ 
             return 'There was an error while saving your payment information.';
         }else{
-            //Success            
+            //Success
+            if ($is_default == '1') 
+            {
+                $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('is_default' => 0), array('organisation_id' => $organisation_id));
+            }            
+            
             $query_result = $wpdb->insert($wpdb->prefix . "organisations_payment_methods", array(
                 'user_id' => $user_id,
                 'nickname' => $nickname,
@@ -521,6 +532,11 @@ function cp_user_payment_save()
         $result = $client->call('man:UpdateCustomer', $requestbody, '', $soapaction);    
         if($result == 'true')
         {
+            if ($is_default == '1') 
+            {
+                $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('is_default' => 0), array('organisation_id' => $organisation_id));
+            }
+            
             $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active', 'is_default' => $is_default), array('id' => $card->id));
             
             $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
