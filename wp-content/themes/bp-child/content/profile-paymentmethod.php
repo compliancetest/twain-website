@@ -26,6 +26,7 @@ if(!defined('ABSPATH'))
                <div class="td td-nickname">Nickname</div>
                <div class="td td-card-number">Card Number</div>
                <div class="td td-status tocenter">Status</div>
+               <div class="td td-default tocenter">Default?</div>
                <div class="td td-action tocenter">Action</div>
                <div class="clear"></div>
             </div>
@@ -56,6 +57,9 @@ if(!defined('ABSPATH'))
                                 <?php echo $card->status == 'Active' ? 'The last transaction attempted with this payment method was successful.' : 'A problem has been encountered in using this payment method. Please confirm the details are correct.'?>
                             <span></span></span>
                         </span>
+                    </div>
+                    <div class="td td-default tocenter">
+                        <?php echo ($card->is_default == '1') ? ('Yes') : (''); ?>
                     </div>
                     <div class="td td-action">
                         <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('edit_payment_method')?>&id=<?php echo $card->id ?>" class="edit-payment-method action-btn edit-btn icon-btn has-tooltip" data-id="<?php echo $card->id?>"><span class="p"></span><span class="simple_tooltip radius6">Edit Payment Method<span></span></span></a>
@@ -118,6 +122,14 @@ if(!defined('ABSPATH'))
                             <div class="clear"></div> 
                         </div>
                     </div> 
+                    <div class="grid-row">
+                        <div class="grid-cell width30P"><label>Is Default?</label></div>
+                        <select name="is_default" id="is_default" class="select">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <div class="clear"></div>
+                    </div>
                     <div class="grid-row btn-row">
                         <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Save</span></a>
                         <a href="#" class="action-btn cancel-btn left15"><span class="p"></span><span class="t">Cancel</span></a>
