@@ -309,6 +309,7 @@
             $('#my_payment').addClass('grid-box-editing');
             $('#my_payment').find('.message').remove();
             $('#edit-card-form #invoice_me option:eq(0)').attr('selected', true);
+            $('#edit-card-form #is_default option:eq(0)').attr('selected', true);
             $('#payment-cc-section').show();
             $('#organisation_id').val($('#organisation_id').data('organisation-id'));
             return false;
@@ -340,6 +341,11 @@
                     } else {
                         $('#payment-cc-section').hide();
                         $('#edit-card-form #invoice_me option:eq(1)').attr('selected', true);
+                    }
+                    if (rsp.is_default == '0') {
+                        $('#edit-card-form #is_default option:eq(0)').attr('selected', true);
+                    } else {
+                        $('#edit-card-form #is_default option:eq(1)').attr('selected', true);
                     }
                     $('#cards-list').hide();
                     $('#edit-card-form').fadeIn('fast');
