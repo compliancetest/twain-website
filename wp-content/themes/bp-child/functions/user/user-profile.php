@@ -749,7 +749,7 @@ function cp_get_customer_harness_detail()
                         </div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">                                    
-                        <a href="javascript: void(0)" class="action-btn process-btn submit-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">Confirm</span></a>            
+                        <a href="javascript:void(0)" class="action-btn process-btn" onclick="saveHarnessDetails('<?php echo $_REQUEST['id']?>')"><span class="p"></span><span class="t">Confirm</span></a>            
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>
@@ -977,7 +977,7 @@ function cp_get_customer_harness_detail_profile_data()
 function cp_save_customer_harness_detail()
 {
     global $wpdb, $CPRest;
-    
+
     $id = $_POST['id'];
     $user_id = get_current_user_id();
     
