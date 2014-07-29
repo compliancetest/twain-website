@@ -28,7 +28,7 @@ get_header();
                     <div class="space25"></div>
                     
                     <?php 
-                        include(dirname(__FILE__) . '/content/profile-paymentmethod.php');
+                        include(dirname(__FILE__) . '/content/organisation-paymentmethod.php');
                     ?>
                     <div class="clear"></div>
                 </div>
