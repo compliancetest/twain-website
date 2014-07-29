@@ -283,7 +283,7 @@ class CT_Organisation
             return $this->members;
         }
         
-        $query = $wpdb->prepare("SELECT ID, user_email, display_name FROM {$wpdb->users} WHERE user_email like %s AND user_status=0 AND ID <> %d", '%@' . $this->organisation_domain, $this->admin_id);
+        $query = $wpdb->prepare("SELECT ID, user_email, display_name FROM {$wpdb->users} WHERE user_email like %s AND user_status=0", '%@' . $this->organisation_domain);
         $this->members = $wpdb->get_results($query);
         
         return $this->members;

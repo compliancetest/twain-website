@@ -208,6 +208,15 @@ class CT_Organisation_Controller
             $n_nickname = $nickname . "_" . $i;
         } while (1);
         
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}organisations_subscriptions WHERE id=%d", $subscription_id);
+        $subscription = $wpdb->get_row($query);
+        
+        if ($assignee != $subscription->user_id) {
+            //Remove Old Subscription
+            $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}users_subscriptions WHERE parent_id=%d", $subscription_id);
+            $wpdb->prepare($query);
+        }
+        
         $wpdb->update($wpdb->prefix . "organisations_subscriptions", 
                       array('nickname' => $n_nickname, 'user_id' => $assignee),
                       array('id' => $subscription_id),
