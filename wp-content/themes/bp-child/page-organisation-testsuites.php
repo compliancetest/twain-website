@@ -24,7 +24,7 @@ get_header();
                 <div id="organisation_test_suites" class="tab-content white_bcg column">
                     <div class="grid-box table-box" id="organisation_subscriptions">
                         <div class="grid-box-header">
-                            <h5>The Organisation Subscriptions</h5>
+                            <h5>Subscriptions</h5>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-box-body">
