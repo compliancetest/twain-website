@@ -6001,7 +6001,7 @@ a.suite-subscript-link:hover{
     width: 460px;
 }
 #subscribe-box{
-    width: 600px;
+    width: 615px;
 }
 #subscribe-box .focus-tooltip{
     top: 52px;
@@ -6036,7 +6036,7 @@ a.suite-subscript-link:hover{
     position: relative;
 }
 #subscribe-box .field-row label{
-    width: 100px;
+    width: 140px;
     line-height: 25px;    
     float: left;
     padding-right: 15px;

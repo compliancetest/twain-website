@@ -267,7 +267,7 @@ jQuery(document).ready(function(){
     function filter_test_suites()
     {
         jQuery('#subscribe-box #suite_family_mark').val('');
-        jQuery('#subscribe-box #suite_family_mark option:gt(1)').hide();
+        jQuery('#subscribe-box #suite_family_mark option:gt(0)').hide();
         jQuery('#subscribe-box #suite_family_mark option[community-id="' + jQuery('#subscribe-box #community_id').val() + '"]').show();
     }
     filter_test_suites();
