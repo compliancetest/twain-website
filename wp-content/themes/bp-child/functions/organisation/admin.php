@@ -90,8 +90,9 @@ function ct_show_new_organisation()
                     <th>Organisation Administrator</th>
                     <td>
                         <?php
-                            //Getting All users
-                            $users = get_users('user_status=0');
+                            //Getting All Active users
+                            global $wpdb;
+                            $users = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}users WHERE user_status = 0 ORDER BY display_name ASC");
                         ?>
                         <select name="admin_id" id="admin_id">
                             <option value="">- Select -</option>
