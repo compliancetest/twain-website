@@ -385,10 +385,10 @@ class ManageESB
                      FROM " . $this->table_message_metadata . " AS m " . 
                      "LEFT JOIN " . $this->table_message_outcome_status . " AS ms ON ms.ID=m.MSH_MESSAGE_OUTCOME_STATUS_ID " . 
                      "LEFT JOIN " . $this->table_message_validation_results . " AS mv ON mv.MSH_MESSAGE_METADATA_ID=m.ID " . 
-                     "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . (isset($this->message_where) ? " AND " . implode(", ", $this->message_where) : "") .  " ORDER BY m.MSH_CONVERSATION_ID";
+                     "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . (!$this->message_where ? "" : " AND " . implode(", ", $this->message_where)) .  " ORDER BY m.MSH_CONVERSATION_ID";
             
             $results = ManageESB::$esbdb->get_results($query);
-echo $query;
+
             foreach($results as $m)
             {
                 if(!isset($messages[$m->MSH_CONVERSATION_ID]))
