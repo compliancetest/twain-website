@@ -243,6 +243,7 @@ class TestSuite
     {
         $roleNames = cp_get_post_meta($this->id, 'role_names', true);
         $roleDescs = cp_get_post_meta($this->id, 'role_descs', true);
+        $roleProfileTypes = cp_get_post_meta($this->id, 'role_profile_types', true);
         $roles = array();
         
         if(!$roleNames)
@@ -251,19 +252,52 @@ class TestSuite
         }else{        
             $arrName = explode('|', $roleNames);
             $arrDescs = explode('|', $roleDescs);
+            $arrProfileTypes = explode('|', $roleProfileTypes);
             
             foreach($arrName as $i=>$n)
             {
                 if(!$arrName[$i])
                     continue;
                 
-                $roles[] = array('name' => $arrName[$i], 'desc' => $arrDescs[$i]);
+                $roles[] = array('name' => $arrName[$i], 'desc' => $arrDescs[$i], 'profileTypes' => $arrProfileTypes[$i] );
             }
         }
         $this->roles = $roles;    
         return $roles;
     }
-    
+
+    /**
+     * @param $suitesIdsArray
+     * @return array
+     */
+    public function loadProfileTypesToRoles( $suitesIdsArray ){
+        $testSuitesRolesProfilesTypes = array();
+        $isEmpty = true;
+        foreach ( $suitesIdsArray as $test_suite ){
+            $suiteObj = new TestSuite( $test_suite );
+            $roles = $suiteObj->loadRoles();
+            foreach( $roles AS $role ){
+                if( ! isset( $testSuitesRolesProfilesTypes[$role['name']] ) ){
+                    $testSuitesRolesProfilesTypes[$role['name'] ] = array();
+                }
+                if( ! empty( $role['profileTypes'] ) ){
+                    $profileTypes = explode( ',', $role['profileTypes'] );
+                    foreach( $profileTypes AS $profileType ){
+                        if( ! in_array( $profileType, $testSuitesRolesProfilesTypes[$role['name']] ) ){
+                            $isEmpty = false;
+                            array_push( $testSuitesRolesProfilesTypes[$role['name']], $profileType );
+                        }
+                    }
+                }
+
+            }
+        }
+        if( $isEmpty ){
+            return array();
+        }
+        return $testSuitesRolesProfilesTypes;
+    }
+
     public function loadProfileTypes()
     {
         $types = cp_get_post_meta($this->id, 'ts_profile_types', true);

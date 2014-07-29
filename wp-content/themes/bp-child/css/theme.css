@@ -4739,7 +4739,7 @@ span.button_sign {
     text-align: center;
 }
 #my_test_data_profiles .td-profile-lookup{
-    width: 110px;   
+    width: 109px;
     text-align: center;
 }
 #my_test_data_profiles .td-action{
@@ -5711,7 +5711,10 @@ a.suite-subscript-link:hover{
 /*** Test Suite Edit Page ***/
 .grid-box-body .field-row .input{
     width: 278px;
-}    
+}
+.grid-box-body .field-row .input_roles{
+    width: 265px;
+}
 .grid-box-body .field-row .select{
     width: 278px;
     font-size: 12px;

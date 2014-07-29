@@ -81,7 +81,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                                 ?>
                                </a>                    
                            </div>
-                           <div class="td td-profile-type">
+                           <div class="td td-profile-lookup">
                                 <input type="checkbox" name="lookup" value="<?php echo $instance->id; ?>" <?php echo ($instance->lookup)?('checked'):(''); ?>>
                            </div>
                            <div class="td td-action">

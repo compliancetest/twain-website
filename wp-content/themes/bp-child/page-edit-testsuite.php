@@ -609,11 +609,15 @@ $xeroItems = ct_get_xero_items();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Name:</label>
-                           <input type="text" class="input" name="role_names[]" value="<?php echo $row['name']?>" />
+                           <input type="text" class="input_roles" name="role_names[]" value="<?php echo $row['name']?>" />
                        </div>
                        <div class="grid-cell">
                            <label>Description:</label>
-                           <input type="text" class="input medium-input" name="role_descs[]" value="<?php echo $row['desc']?>" />
+                           <input type="text" class="input_roles" name="role_descs[]" value="<?php echo $row['desc']?>" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Profile types:</label>
+                           <input type="text" class="input_roles" name="role_types[]" value="<?php echo $row['profileTypes']?>" />
                        </div>
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -626,11 +630,15 @@ $xeroItems = ct_get_xero_items();
                    <div class="field-row">
                        <div class="grid-cell">
                            <label>Name:</label>
-                           <input type="text" class="input" name="role_names[]" value="" />
+                           <input type="text" class="input_roles" name="role_names[]" value="" />
                        </div>
                        <div class="grid-cell">
                            <label>Description:</label>
-                           <input type="text" class="input medium-input" name="role_descs[]" value="" />
+                           <input type="text" class="input_roles" name="role_descs[]" value="" />
+                       </div>
+                       <div class="grid-cell">
+                           <label>Profile types:</label>
+                           <input type="text" class="input_roles" name="role_types[]" value="" />
                        </div>
                        <div class="grid-cell">
                            <label>&nbsp;</label>
@@ -803,12 +811,16 @@ $xeroItems = ct_get_xero_items();
             jQuery('#roles-box .btn-row').before('<div class="field-row">' + 
                        '<div class="grid-cell">' +
                            '<label>Name:</label>' +
-                           '<input type="text" class="input" name="role_names[]" value="" />' +
+                           '<input type="text" class="input_roles" name="role_names[]" value="" />' +
                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>Description:</label>' +
-                           '<input type="text" class="input medium-input" name="role_descs[]" value="" />' +
+                           '<input type="text" class="input_roles" name="role_descs[]" value="" />' +
                        '</div>' +
+                        '<div class="grid-cell">' +
+                            '<label>Profile types:</label>' +
+                            '<input type="text" class="input_roles" name="role_types[]" value="" />' +
+                        '</div>' +
                        '<div class="grid-cell">' +
                            '<label>&nbsp;</label>' +
                            '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +

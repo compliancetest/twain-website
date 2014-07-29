@@ -259,18 +259,19 @@ function getTestSuiteInfoForCase()
            <label>Tester Role:</label>                           
            <select name="choose_tester_role" class="select">
                <option>- Select -</option>
-               
+               <?php $changedRole = isset( $_POST['tester_role'] ) ? $_POST['tester_role'] :  $case->testerRole;?>
                <?php foreach($suiteRoles as $row) {?>
-               <option value="<?php echo $row?>" <?php echo $case->testerRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
+                    <option value="<?php echo $row?>" <?php echo $changedRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
                <?php } ?>
            </select>
        </div>
        <div class="grid-cell">
            <label>Harness Role:</label>
+           <?php $changedRole = isset( $_POST['harness_role'] ) ? $_POST['harness_role'] :  $case->testerRole;?>
            <select name="choose_harness_role" class="select">
                <option>- Select -</option>
                <?php foreach($suiteRoles as $row) {?>
-               <option value="<?php echo $row?>" <?php echo $case->harnessRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
+                    <option value="<?php echo $row?>" <?php echo $changedRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
                <?php } ?>
            </select>
        </div>
@@ -293,11 +294,47 @@ function getTestSuiteInfoForCase()
         ob_end_clean();
         
         //Getting Profile Instances
+        $testSuitesRolesProfilesTypes = array();
+        foreach ($_POST['suite_id'] as $test_suite){
+            $suiteObj = new TestSuite($test_suite);
+            $levels = $suiteObj->loadConformanceLevel();
+        }
         $profilesHTML = '';
         ob_start();
         $profileInstances = $case->getAvailableProfileInstances();
+        $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $_POST['suite_id'] );
+        $testSuitesRoles = array();
+        if( isset( $_POST['tester_role'] ) && ! empty( $_POST['tester_role'] ) ) $testSuitesRoles[] = $_POST['tester_role'];
+        if( isset( $_POST['harness_role'] ) && ! empty( $_POST['harness_role'] ) ) $testSuitesRoles[] = $_POST['harness_role'];
            foreach($profileInstances as $instance){
-           $instanceObj = json_decode(base64_decode($instance->content));
+               $profileTypeName = $instance->profile_type_title;
+               $pJSON = json_decode(base64_decode($instance->schema));
+               if($pJSON->Version)
+               {
+                   $version = array();
+                   foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                   {
+                       $version[] = $v;
+                   }
+                   $profileTypeName .= " v" . implode(".", $version);
+               }
+               if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
+                   continue;
+               }
+
+               if( ! empty( $testSuitesRolesProfilesTypes ) ){
+                   $isAllowed = false;
+                   foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                       if( ( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ) || cp_checked($instance->id, $case->profileInstances) ){
+                           $isAllowed = true;
+                       }
+                   }
+                   if( ! $isAllowed ) {
+                       continue;
+                   }
+               }
+                $instanceObj = json_decode(base64_decode($instance->content));
+
        ?>
            <div class="field-row">
                <div class="grid-cell width15P">

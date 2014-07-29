@@ -340,8 +340,10 @@ function saveSuite()
     //Save Roles    
     $roleNames = array();
     $roleDescs = array();
+    $roleProfileTypes = array();
     delete_post_meta($id, 'role_names');
     delete_post_meta($id, 'role_descs');
+    delete_post_meta($id, 'role_profile_types');
     
     if(isset($_POST['role_names']))
     {
@@ -351,6 +353,7 @@ function saveSuite()
             {
                 $roleNames[] = $rname;
                 $roleDescs[] = $_POST['role_descs'][$i];
+                $roleProfileTypes[] = trim( $_POST['role_types'][$i] );
             }
         }
         
@@ -358,6 +361,7 @@ function saveSuite()
         {
             add_post_meta($id, 'role_names', '|' . implode('|', $roleNames) . '|', true);
             add_post_meta($id, 'role_descs', '|' . implode('|', $roleDescs) . '|', true);
+            add_post_meta($id, 'role_profile_types', '|' . implode('|', $roleProfileTypes) . '|', true);
         }
     }
     

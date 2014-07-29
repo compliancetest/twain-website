@@ -400,25 +400,41 @@ get_header();
                    <div id="profile-instances">
                    <?php
                        $profileInstances = $case->getAvailableProfileInstances();
+                       $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
+                       $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
                        foreach($profileInstances as $instance){
+                           $profileTypeName = $instance->profile_type_title;
+                           $pJSON = json_decode(base64_decode($instance->schema));
+                           if($pJSON->Version)
+                           {
+                               $version = array();
+                               foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                               {
+                                   $version[] = $v;
+                               }
+                               $profileTypeName .= " v" . implode(".", $version);
+                           }
+                           if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
+                               continue;
+                           }
+                           if( ! empty( $testSuitesRolesProfilesTypes ) ){
+                               $isAllowed = false;
+                               foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                                   if( ( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ) || cp_checked($instance->id, $case->profileInstances) ){
+                                       $isAllowed = true;
+                                   }
+                               }
+                               if( ! $isAllowed ) {
+                                   continue;
+                               }
+                           }
                            $instanceObj = json_decode(base64_decode($instance->content));
                    ?>
                        <div class="field-row">
                            <div class="grid-cell width15P">
                                <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" <?php echo cp_checked($instance->id, $case->profileInstances) ?> />
                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
-                                <?php echo $instance->profile_name?>
-                                <?php
-                                    if($instanceObj->Profile->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        echo " v" . implode(".", $version);
-                                    }
-                                ?>
+                                    <?php echo $profileTypeName; ?>
                                </a>
                            </div>
                            <div class="grid-cell width10P">
@@ -679,7 +695,7 @@ jQuery(document).ready(function($){
         return false;
     })
     
-    jQuery('input[name="suite_id[]"]').change(function(){        
+    jQuery('body').on('change', 'input[name="suite_id[]"], select[name="choose_tester_role"], select[name="choose_harness_role"]', function(){
         if(jQuery('input[name="suite_id[]"]:checked').length < 1)
         {
             jQuery('#choose-conf-level-box .column').html('');
@@ -695,7 +711,7 @@ jQuery(document).ready(function($){
         jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1, #choose-scenarios-box .loading1').show();
         jQuery.ajax({
             url: '<?php echo get_site_url()?>',
-            data: jQuery('input[name="suite_id[]"]:checked').serialize() + '&_wpnonce=<?php echo wp_create_nonce('get-suite-info-for-case')?>&id=<?php echo $case->id?>',
+            data: jQuery('input[name="suite_id[]"]:checked').serialize() + '&tester_role=' + jQuery('select[name="choose_tester_role"]').val() + '&harness_role=' + jQuery('select[name="choose_harness_role"]').val() +'&_wpnonce=<?php echo wp_create_nonce('get-suite-info-for-case')?>&id=<?php echo $case->id?>',
             type: 'POST',
             dataType: 'xml',
             complete: function(){
