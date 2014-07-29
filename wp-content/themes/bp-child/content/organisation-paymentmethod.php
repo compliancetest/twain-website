@@ -98,7 +98,7 @@ if(!defined('ABSPATH'))
                             <div class="grid-cell width30P"><label>Email</label></div>
                             <input type="text" name="email" id="email" value="" data-default="<?php echo $organisation->contact_email; ?>" class="input" autocomplete="off" />                                    
                             <div class="grid-cell width30P">&nbsp;</div>
-                            <span class="desc">(Invoices will be sent to this email.)</span>
+                            <span class="desc">(Credit card payment notifications will be sent to this email.)</span>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
