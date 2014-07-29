@@ -234,7 +234,7 @@ class CT_Organisation
         $query = $wpdb->prepare("SELECT DISTINCT(os.id), os.*, u.user_email, CONCAT(um1.meta_value, ' ', um2.meta_value) AS full_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
                             LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
                             LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=u.ID AND um1.meta_key='first_name'
-                            LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='first_name'
+                            LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='last_name'
                             LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
                             WHERE os.organisation_id=%d", $this->id);
     

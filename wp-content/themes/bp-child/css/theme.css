@@ -319,6 +319,7 @@ a:hover {
                 border-top: 2px solid #666;
             }
             
+            #top_loged_actions .leftmenu .menu-organisation, 
             #top_loged_actions .leftmenu .menu-communities, 
             #top_loged_actions .leftmenu .menu-test-suites, 
             #top_loged_actions .leftmenu .menu-test-data, 
