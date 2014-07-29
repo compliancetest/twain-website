@@ -357,11 +357,11 @@ if($filterCustomer){
                                                    <div class="td td-message-date">
                                                        <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
                                                    </div>
-                                                   <div class="td td-message-part">
+                                                   <div class="td td-message-part tocenter">
                                                        <?php
-                                                       if(strlen($message->PART_ID) > 14)
+                                                       if(strlen($message->PART_ID) > 28)
                                                        {
-                                                           echo '<span title="' . $message->PART_ID . '">' . substr($message->PART_ID, 0, 5) . "....." . substr($message->PART_ID, -5) . '</span>';
+                                                           echo '<span title="' . $message->PART_ID . '">' . substr($message->PART_ID, 0, 10) . "....." . substr($message->PART_ID, -10) . '</span>';
                                                        }else{
                                                            echo $message->PART_ID;
                                                        }
