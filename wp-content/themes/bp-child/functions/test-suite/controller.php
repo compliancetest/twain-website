@@ -95,7 +95,7 @@ function process_testsuite_actions()
                 addMessage('The test suite was removed successfully.');                
             }            
         }
-        $redirectUrl = get_site_url() . '/' . base64_decode($_REQUEST['return']);
+        $redirectUrl = base64_decode($_REQUEST['return']);
         wp_redirect($redirectUrl);
         exit;    
     }else if(wp_verify_nonce($action, 'get-available-templates')){
@@ -121,7 +121,7 @@ function deleteTestSuite()
     
     $post = get_post($id);
 
-    $redirectUrl = get_site_url() . '/' . base64_decode($_REQUEST['return']);
+    $redirectUrl = base64_decode($_REQUEST['return']);
 
     $return = isset($_REQUEST['return']) ? $redirectUrl : "/";
     
@@ -528,6 +528,18 @@ function saveSuite()
         
         //Update Subscrition
 //        updateSubscribedSuiteId($suite->familyMark);
+        //Copy test plains to the new version
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_plans WHERE suite_id=%d", $suite->id);
+        $rows = $wpdb->get_results($query, ARRAY_A);
+        
+        foreach ($rows as $row) {
+            $t_data = $row;
+            $t_data['suite_id'] = $id;
+            $t_data['created_date'] = date('Y-m-d H:i:s');
+            unset($t_data['id']);
+            
+            $wpdb->insert($wpdb->prefix . "test_plans", $t_data);
+        }
     }
     
     //Send Notification Email
