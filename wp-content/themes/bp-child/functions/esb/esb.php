@@ -315,7 +315,7 @@ class ManageESB
                      "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID=c.PRODUCT_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
-        if (isset($this->message_where))
+        if ($this->message_where)
             $table_query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         if($limit > 0)
@@ -428,7 +428,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID 
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON c.PRODUCT_ID=p.PRODUCT_ID ";
                   
-        if (isset($this->message_where))
+        if ($this->message_where)
             $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
@@ -477,7 +477,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if (isset($this->message_where))
+        if ($this->message_where)
             $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
@@ -525,7 +525,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if (isset($this->message_where))
+        if ($this->message_where)
             $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
@@ -572,7 +572,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if (isset($this->message_where))
+        if ($this->message_where)
             $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
@@ -621,7 +621,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if (isset($this->message_where))
+        if ($this->message_where)
             $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
@@ -669,7 +669,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if (isset($this->message_where))
+        if ($this->message_where)
             $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
