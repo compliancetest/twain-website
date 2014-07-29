@@ -388,7 +388,7 @@ class ManageESB
                      "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . (isset($this->message_where) ? " AND " . implode(", ", $this->message_where) : "") .  " ORDER BY m.MSH_CONVERSATION_ID";
             
             $results = ManageESB::$esbdb->get_results($query);
-
+echo $query;
             foreach($results as $m)
             {
                 if(!isset($messages[$m->MSH_CONVERSATION_ID]))
