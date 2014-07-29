@@ -19,7 +19,7 @@ function getCreateTicketErrors()
     $content = stripslashes_deep(strip_tags(trim($_POST['question'])));
     
     $suite_id = $_POST['suite_id'];
-    $card_id = $_POST['ticket-card-id'];
+    $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
     $priority_id = $_POST['priority'];
     $category_id = $_POST['category'];
     
@@ -46,8 +46,9 @@ function getCreateTicketErrors()
         
         if($totalTokens > $purchasedTokens)
         {
-            if(!$card_id)
-                $error[] = 'Please select a payment method.';
+            if(!$card_id){
+                $error[] = 'At present, your organisation has not defined a payment method to be used for support tickets. Please talk to your administrator ( '.$wpdb->get_var($wpdb->prepare("SELECT contact_email FROM {$wpdb->prefix}organisations WHERE id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) ", get_current_user_id() ) ).' ).';
+            }
             else if(!($card = getUserCardById($card_id)))
                 $error[] = 'Please select a valid payment method';
         }
@@ -80,7 +81,6 @@ function createSupportTicket()
     $content = stripslashes_deep(strip_tags(trim($_POST['question'])));
     
     $suite_id = $_POST['suite_id'];
-    $card_id = $_POST['ticket-card-id'];
     $priority_id = $_POST['priority'];
     $category_id = $_POST['category'];
     
@@ -95,7 +95,7 @@ function createSupportTicket()
         wp_redirect("/my-support-tickets");
         exit;
     }
-    
+    $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
