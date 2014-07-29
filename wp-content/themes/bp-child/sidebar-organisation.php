@@ -3,7 +3,7 @@
         <li <?php echo is_page('test-suites') ? 'class="active"' : ''?>>
             <a href="/my-organisation/test-suites" rel="organisation_test_suties" <?php echo is_page('test-suites') ? 'class="selected"' : ''?>>
                 <span class="left icon" id="icon_test_suites"></span>
-                <span class="right text">Test Suites</span>
+                <span class="right text">Subscriptions</span>
                 <span class="tabactive"></span>
                 <span class="clear"></span>
             </a>
