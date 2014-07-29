@@ -123,7 +123,7 @@ if($filterCustomer){
             <form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
                 <div class="left">
                     <div class="styled_select">
-                        <label>Subscription: <?php if($filterSubscription != "" && $filterSubscription != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="subscription" id="subscription" autocomplete="off">
                           <?php if (is_super_admin() || ct_is_group_admin_or_support($user_id)): ?>
                             <option value="all">- All -</option>

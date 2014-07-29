@@ -455,32 +455,27 @@ function getManagedCustomerESBIDs($user_id = null)
 * 
 * @param mixed $user_id
 */
-function getUserAllCustomerESBIDs($user_id = null, $exclude_free_charge = false)
+function getUserAllCustomerESBIDs($user_id = null)
 {
     global $wpdb;
     
     if($user_id == null)
         $user_id = get_current_user_id();
     
-    if(!is_super_admin() && !is_admin())
-    {
-        $suite_ids = getAssignedSuiteIds($user_id);
-        if(!$suite_ids)            
-            $query = "SELECT s.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
-                      LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id 
-                      WHERE s.status='Active' AND s.user_id=$user_id";        
-        else
-            $query = "SELECT s.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
-                      LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id
-                      WHERE s.status='Active' AND (s.suite_id IN (" . implode(", ", $suite_ids) . ") OR s.user_id=$user_id)";        
+    if(!is_super_admin())
+    {                      
+        $query = $wpdb->prepare("SELECT DISTINCT(s.id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
+                        WHERE 
+                            s.user_id = bm.user_id AND bm.is_confirmed=1 
+                            AND
+                            (bm.user_id=%d OR bm.group_id 
+                                IN 
+                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                        ", $user_id, $user_id);
+        $s_ids = $wpdb->get_col($query);
     }else{
-        $query = "SELECT s.id as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS s 
-                  LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id  
-                  WHERE s.status='Active'";
+        $query = "SELECT s.id as CUSTOMER_ID FROM {$wpdb->prefix}users_subscriptions AS s ";
     }
-    
-    if($exclude_free_charge)
-        $query  .= " AND p.card_id > 0";
     
     $ids = $wpdb->get_col($query);
     
