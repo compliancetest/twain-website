@@ -115,7 +115,7 @@ class CT_Organisation
         }
         
         //Updatnig organisations error on Xero
-        if( is_string( $response) ){            
+        if( is_string( $response) ){
             addMessage($response, 'error');
             return false;
         }

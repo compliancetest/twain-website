@@ -70,12 +70,10 @@ function ct_show_new_organisation()
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
             <table class="widefat" style="width: auto;">
-                <?php if( $id ):?> 
                 <tr>
                     <th>Contact ID</th>
-                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40"readonly="readonly" /></td>
+                    <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40" <?php if ($id){?> readonly="readonly" <?php } ?> /></td>
                 </tr>
-                <?php endif; ?>
                 <tr>
                     <th>Organisation Name</th>
                     <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>"/></td>
