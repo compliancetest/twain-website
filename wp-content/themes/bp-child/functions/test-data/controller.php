@@ -403,6 +403,13 @@ function deleteProfileTypeInstance($action)
         $wpdb->delete($wpdb->prefix . "community_profile_instances", array('id' => $row->id));
         $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` - 1 WHERE id=%d AND `instances` > 0", $row->type_id));
         $wpdb->delete($wpdb->prefix . "community_profile_meta", array('profile_id' => $row->id));
+        
+        add_filter( 'query', 'wp_db_null_value' );
+        $wpdb->update($wpdb->prefix . "users_subscriptions", 
+            array('profile_id' => 'NULL', 'gateway_id' => 'NULL', 'entity_id' => '', 'entity_type' => '', 'alias' => ''),
+            array('profile_id' => $id)
+        );
+        remove_filter( 'query', 'wp_db_null_value' );
     }
     
     addMessage('Profile instance was removed.');
