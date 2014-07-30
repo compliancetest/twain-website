@@ -5055,9 +5055,9 @@ span.button_sign {
 }
 #my_transaction_log .thead .td-chk{ width: 15px; }
 #my_transaction_log .td-chk{ width: 15px; }
-#my_transaction_log .td-case{ width: 231px; }
+#my_transaction_log .td-case{ width: 251px; }
 #my_transaction_log .td-suite{ width: 180px; }
-#my_transaction_log .td-outcome{ width: 80px; }
+#my_transaction_log .td-outcome{ width: 60px; }
 #my_transaction_log .td-audit{
     width: 70px;
 }
