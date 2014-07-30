@@ -19,8 +19,29 @@ $posts_per_page = 10;
     
 //Search Test Suites
 $args = get_products_args();
-if( groups_is_user_admin_in_any_community( get_current_user_id() ) ){
+if( groups_is_user_admin_in_any_community( get_current_user_id() ) && ! is_super_admin( ) ){
+    $comm_test_plans = $wpdb->get_results( $wpdb->prepare( "SELECT product_id FROM {$wpdb->prefix}test_plans" ), ARRAY_A );
+    $comm_claims     = $wpdb->get_results( $wpdb->prepare( "SELECT product_id FROM {$wpdb->prefix}compliance_claims" ), ARRAY_A );
+    $p_post = new WP_Query( array( 'post_type' => 'product-service', 'meta_key' => 'product_visibility', 'meta_value' => 'Public', 'posts_per_page' => -1 ) );
+    $p_posts = $p_post->get_posts() ;
+    $idsArray = array();
+    foreach( $p_posts AS $p ){
+        if( ! in_array( $p->ID, $idsArray) ){
+            array_push( $idsArray, $p->ID );
+        }
+    }
     unset( $args['post__in'] );
+    foreach( $comm_test_plans AS $comm_test_plan ){
+        if( ! in_array( $comm_test_plan['product_id'], $idsArray) ){
+            array_push( $idsArray, $comm_test_plan['product_id'] );
+        }
+    }
+    foreach( $comm_claims AS $comm_claim ){
+        if( ! in_array( $comm_claim['product_id'], $idsArray) ){
+            array_push( $idsArray, $comm_claim['product_id'] );
+        }
+    }
+    $args['post__in'] = $idsArray;
     $args['meta_query']     = array(
         array(
             'key'     => 'product_visibility',
@@ -121,7 +142,11 @@ $args['posts_per_page'] = $posts_per_page;
 $get_posts = new WP_Query($args);
 $products = $get_posts->get_posts();
 if( isset( $_GET['download']) ){
-    generateDataAndDownload( $products );
+    $d_args = $args;
+    $d_args['paged'] = 1;
+    $d_args['posts_per_page'] = -1;
+    $posts_to_download = new WP_Query($d_args);
+    generateDataAndDownload( $posts_to_download->get_posts() );
 }
 ?>
 <div class="content container" id="search">      
