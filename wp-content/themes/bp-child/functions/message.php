@@ -427,7 +427,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
-    $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
+    $testSuitesRoles = array( $case->harnessRole );
     foreach($profileInstances as $instance){
         $profileTypeName = $instance->profile_type_title;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
@@ -477,7 +477,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
-    $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
+    $testSuitesRoles = array( $case->testerRole );
     foreach($profileInstances as $instance){
         $profileTypeName = $instance->profile_type_title;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
@@ -714,7 +714,7 @@ function showTriggerMessageBox()
                                 $case->load();
                                 $suiteObj = new TestSuite();
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
-                                $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
+                                $testSuitesRoles = array( $case->harnessRole );
                                 foreach($profileInstances as $instance){
                                     $profileTypeName = $instance->profile_type_title;
                                     if( ! $instance->lookup ){
@@ -744,7 +744,8 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php 
+                            <?php
+                                $testSuitesRoles = array( $case->testerRole );
                                 foreach($profileInstances as $instance){
                                     $profileTypeName = $instance->profile_type_title;
                                     if( ! $instance->lookup ){
@@ -761,7 +762,7 @@ function showTriggerMessageBox()
                                             continue;
                                         }
                                     }
-                                    echo _getProfileRow($instance, 'tester_profile', $current_tester_profile_id);                                
+                                    echo _getProfileRow($instance, 'tester_profile', $current_tester_profile_id);
                                 } 
                             ?>
                         </div>
