@@ -236,12 +236,12 @@ if($filterCustomer){
                        <div class="td td-product td-sortable">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=product&order=<?php echo $orderBy == 'product' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'product'){ ?>class="<?php echo $order?>"<?php } ?>>Product Name <span class="sort"></span></a>
                        </div>
-                       <div class="td td-case td-sortable">
+                       <div class="td td-case td-sortable td-two-lines tocenter">
+                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=suite&order=<?php echo $orderBy == 'suite' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'suite'){ ?>class="<?php echo $order?>"<?php } ?>>Test Suite <span class="sort"></span></a>
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=case&order=<?php echo $orderBy == 'case' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'case'){ ?>class="<?php echo $order?>"<?php } ?>>Test Case <span class="sort"></span></a>
                        </div>
-                       <div class="td td-suite td-sortable">
-                           <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=suite&order=<?php echo $orderBy == 'suite' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'suite'){ ?>class="<?php echo $order?>"<?php } ?>>Test Suite <span class="sort"></span></a>
-                       </div>
+<!--                       <div class="td td-suite td-sortable">-->
+<!--                       </div>-->
                        <div class="td td-outcome td-two-lines tocenter td-sortable">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=test_outcome&order=<?php echo $orderBy == 'test_outcome' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'test_outcome'){ ?>class="<?php echo $order?>"<?php } ?>>Test<br />Outcome <span class="sort"></span></a>
                        </div>
@@ -251,7 +251,7 @@ if($filterCustomer){
                        <div class="td td-convsn td-sortable tocenter">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Conversation ID<span class="sort"></span></a>
                        </div>
-                       <div class="td td-date td-sortable">
+                       <div class="td td-date td-sortable tocenter">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderBy == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'date'){ ?>class="<?php echo $order?>"<?php } ?>>Date/Time <span class="sort"></span></a>
                        </div>                       
 <!--                       <div class="td td-to tocenter">To</div>-->
@@ -276,29 +276,31 @@ if($filterCustomer){
                                    <a href="<?php echo get_permalink($row->PRODUCT_WP_ID)?>"><?php echo get_post_meta($row->PRODUCT_WP_ID, 'product_name', true)?></a>
                                    <?php } ?>
                                </div>
-                               <div class="td td-case">
-                                    <?php if(!$row->TEST_CASE_WP_ID) {?>
+                               <div class="td td-case tocenter">
+                                   <?php if($row->TEST_SUITE_WP_ID){ ?>
+                                       <a href="<?php echo get_permalink($row->TEST_SUITE_WP_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 25)?></a>
+                                   <?php }else if(!$row->TEST_SUITE_WP_ID && $row->TEST_CASE_WP_ID){ ?>
+                                       <?php
+                                       $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite');
+                                       if($tSuiteId && count($tSuiteId) == 1)
+                                       {
+                                           $esb->updateTestSuiteID($row->ID, $tSuiteId[0]);
+                                           ?>
+                                           <a href="<?php echo get_permalink($tSuiteId[0])?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 25)?></a>
+                                       <?php
+                                       }
+                                   } ?>
+                                   </br>
+                                   <?php if(!$row->TEST_CASE_WP_ID) {?>
                                     Not Assigned
                                     <?php }else{ ?>
                                     <a href="<?php echo get_permalink($row->TEST_CASE_WP_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 22)?></a>
                                     <?php } ?>
                                    
                                </div>
-                               <div class="td td-suite">
-                                    <?php if($row->TEST_SUITE_WP_ID){ ?>
-                                    <a href="<?php echo get_permalink($row->TEST_SUITE_WP_ID)?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 25)?></a>
-                                    <?php }else if(!$row->TEST_SUITE_WP_ID && $row->TEST_CASE_WP_ID){ ?>
-                                    <?php 
-                                        $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite'); 
-                                        if($tSuiteId && count($tSuiteId) == 1)
-                                        {
-                                            $esb->updateTestSuiteID($row->ID, $tSuiteId[0]);    
-                                            ?>
-                                            <a href="<?php echo get_permalink($tSuiteId[0])?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 25)?></a>
-                                            <?php
-                                        }
-                                    } ?>                                   
-                               </div>
+<!--                               <div class="td td-suite">-->
+<!---->
+<!--                               </div>-->
                                <div class="td td-outcome tocenter">
                                    <?php if($row->TEST_OUTCOME_CODE){ ?>
                                    <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>                                   
@@ -309,11 +311,11 @@ if($filterCustomer){
                                    <!--<a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>                                   -->
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
-                               <div class="td td-convsn">
+                               <div class="td td-convsn tocenter">
                                    <?php 
-                                        if(strlen($row->CONVERSATION_ID) > 28)
+                                        if(strlen($row->CONVERSATION_ID) > 58)
                                         {
-                                            echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 10) . "....." . substr($row->CONVERSATION_ID, -10) . '</span>';
+                                            echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 20) . "....." . substr($row->CONVERSATION_ID, -20) . '</span>';
                                         }else{
                                             echo $row->CONVERSATION_ID;
                                         }                                    
