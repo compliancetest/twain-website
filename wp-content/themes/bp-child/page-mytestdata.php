@@ -113,8 +113,8 @@ $subscriptions =  getUserSubscriptions(null, true);
                 </div>             
             </div>
             <div class="space10"></div>
-            <?php if(count($subscriptions) > 0) { ?>
-                <input type="hidden" id="update-lookup-action" value="<?php echo wp_create_nonce('update-profile-lookup')?>">
+            <input type="hidden" id="update-lookup-action" value="<?php echo wp_create_nonce('update-profile-lookup')?>">
+            <?php if(count($subscriptions) > 0) { ?>                
                 <a class="action-btn add-new-btn has-tooltip" id="add-new-test-data-link" href="#edit-profile-box">
             <?php } else { ?>
                 <a class="action-btn add-new-btn has-tooltip" href="#need-subscription-box" rel="custom-popup" cp-type="inline" >
