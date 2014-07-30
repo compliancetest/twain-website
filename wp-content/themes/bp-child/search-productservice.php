@@ -105,6 +105,11 @@ if( ! empty( $postsIds ) ){
     $args['post__in'] = $postsIds;
 }
 if( ! empty( $notInPostIdsArray ) ){
+    foreach( $notInPostIdsArray AS $notInPostIdValue ){
+        if(($key = array_search($notInPostIdValue, $args['post__in'])) !== false) {
+            unset($args['post__in'][$key]);
+        }
+    }
     $args['post__not_in'] = $notInPostIdsArray;
 }
 //For Filter Values

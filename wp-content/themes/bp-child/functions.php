@@ -1089,7 +1089,7 @@ function getTestSuitProducts( $productID ){
 function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
     global $wpdb;
     if( $withoutTestSuite ){
-        return $wpdb->get_var("SELECT GROUP_CONCAT(product_id SEPARATOR ',') FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id");
+        return $wpdb->get_var("SELECT GROUP_CONCAT(product_id SEPARATOR ',') FROM {$wpdb->prefix}test_plans AS tp JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id");
     }
     return $wpdb->get_var( $wpdb->prepare("SELECT GROUP_CONCAT(product_id SEPARATOR ',') FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id WHERE ts.suite_title = %s ", $name ));
 
