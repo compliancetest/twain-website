@@ -265,16 +265,18 @@ class CT_Organisation_Controller
                 'harness_key' => '',            
                 'harness_certificate' => '',            
                 'harness_certificate_p12' => '',            
-                'profile_id' => 0,            
+                'profile_id' => 'NULL',            
                 'entity_id' => '',            
                 'entity_type' => '',            
-                'gateway_id' => 0,            
+                'gateway_id' => 'NULL',            
                 'alias' => ''
             ),
-            array('%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s')
+            array('%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
         );
         
+        add_filter( 'query', 'wp_db_null_value' );
         $wpdb->insert($wpdb->prefix . "users_subscriptions", $data[0], $data[1]);
+        remove_filter( 'query', 'wp_db_null_value' );
     }
     
     public function delete_user_subscription($user_id, $subscription_id)
