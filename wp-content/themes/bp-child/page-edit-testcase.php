@@ -403,7 +403,7 @@ get_header();
                        $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
                        $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
                        foreach($profileInstances as $instance){
-                           $profileTypeName = $instance->profile_type_title;
+                           $profileTypeName = $generalProfileType = $instance->profile_type_title;
                            $pJSON = json_decode(base64_decode($instance->schema));
                            if($pJSON->Version)
                            {
@@ -420,7 +420,7 @@ get_header();
                            if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                $isAllowed = false;
                                foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                   if( ( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ) || cp_checked($instance->id, $case->profileInstances) ){
+                                   if( ( in_array( $cRoleName, $testSuitesRoles ) && in_array( $generalProfileType, $cProfilesTypes ) ) || cp_checked($instance->id, $case->profileInstances) ){
                                        $isAllowed = true;
                                    }
                                }

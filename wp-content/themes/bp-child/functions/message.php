@@ -429,16 +429,6 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     foreach($profileInstances as $instance){
         $profileTypeName = $instance->profile_type_title;
-        $pJSON = json_decode(base64_decode($instance->schema));
-        if($pJSON->Version)
-        {
-            $version = array();
-            foreach(get_object_vars($pJSON->Version) as $k=>$v)
-            {
-                $version[] = $v;
-            }
-            $profileTypeName .= " v" . implode(".", $version);
-        }
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -488,16 +478,6 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     foreach($profileInstances as $instance){
         $profileTypeName = $instance->profile_type_title;
-        $pJSON = json_decode(base64_decode($instance->schema));
-        if($pJSON->Version)
-        {
-            $version = array();
-            foreach(get_object_vars($pJSON->Version) as $k=>$v)
-            {
-                $version[] = $v;
-            }
-            $profileTypeName .= " v" . implode(".", $version);
-        }
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -734,16 +714,6 @@ function showTriggerMessageBox()
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
                                 foreach($profileInstances as $instance){
                                     $profileTypeName = $instance->profile_type_title;
-                                    $pJSON = json_decode(base64_decode($instance->schema));
-                                    if($pJSON->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        $profileTypeName .= " v" . implode(".", $version);
-                                    }
                                     if( ! $instance->lookup ){
                                         continue;
                                     }
@@ -774,16 +744,6 @@ function showTriggerMessageBox()
                             <?php 
                                 foreach($profileInstances as $instance){
                                     $profileTypeName = $instance->profile_type_title;
-                                    $pJSON = json_decode(base64_decode($instance->schema));
-                                    if($pJSON->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        $profileTypeName .= " v" . implode(".", $version);
-                                    }
                                     if( ! $instance->lookup ){
                                         continue;
                                     }
