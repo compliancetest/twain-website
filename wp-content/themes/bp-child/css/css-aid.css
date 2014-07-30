@@ -1666,7 +1666,15 @@ tr {
 .status-unverified{
     color: #666 !important;
 }
-
+.status-warning{
+    color: orange !important;
+}
+.status-duplicated{
+    color: #A9A9A9 !important;
+}
+.status-ignored {
+    color: #A9A9A9 !important;
+}
 
 /*** Create Common Button Styles ***/
 .action-btn{
