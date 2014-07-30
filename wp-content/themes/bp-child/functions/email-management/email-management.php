@@ -176,7 +176,7 @@ $ct_email_templates = array(
         ),  
         array(
             'menu'         => 'Active -> InArrears',
-            'title'         => 'Active -> InArrears',
+            'title'         => 'Subscription is in arrears',
             'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
             'fields' => array(
                             array(
@@ -191,7 +191,7 @@ $ct_email_templates = array(
         ),
         array(
             'menu'         => 'InArrears -> Frozen',
-            'title'         => 'InArrears -> Frozen',
+            'title'         => 'Subscription is frozen',
             'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
             'fields' => array(
                             array(
@@ -206,7 +206,7 @@ $ct_email_templates = array(
         ),
          array(
             'menu'         => 'InArrears -> Active',
-            'title'         => 'InArrears -> Active',
+            'title'         => 'Subscription is Active From InArrears',
             'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
             'fields' => array(
                             array(
@@ -221,7 +221,7 @@ $ct_email_templates = array(
         ),
          array(
             'menu'         => 'Frozen -> Active',
-            'title'         => 'Frozen -> Active',
+            'title'         => 'Subscription is Active from Frozen',
             'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
             'fields' => array(
                             array(
