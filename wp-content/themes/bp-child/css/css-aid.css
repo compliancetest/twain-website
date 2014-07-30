@@ -1669,7 +1669,7 @@ tr {
 .status-warning{
     color: #CC6600 !important;
 }
-.status-duplicated{
+.status-duplicate{
     color: #606060 !important;
 }
 .status-ignored {
