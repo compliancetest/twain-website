@@ -288,8 +288,12 @@ if($filterCustomer){
                                            ?>
                                            <a href="<?php echo get_permalink($tSuiteId[0])?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 25)?></a>
                                        <?php
+                                       } else {
+                                           echo 'Not Assigned';
                                        }
-                                   } ?>
+                                   } else {
+                                       echo 'Not Assigned';
+                                   }?>
                                    </br>
                                    <?php if(!$row->TEST_CASE_WP_ID) {?>
                                     Not Assigned
