@@ -423,7 +423,36 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
+    $case = new TestCase( $case_id );
+    $case->load();
+    $suiteObj = new TestSuite();
+    $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     foreach($profileInstances as $instance){
+        $profileTypeName = $instance->profile_type_title;
+        $pJSON = json_decode(base64_decode($instance->schema));
+        if($pJSON->Version)
+        {
+            $version = array();
+            foreach(get_object_vars($pJSON->Version) as $k=>$v)
+            {
+                $version[] = $v;
+            }
+            $profileTypeName .= " v" . implode(".", $version);
+        }
+        if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
+            continue;
+        }
+        if( ! empty( $testSuitesRolesProfilesTypes ) ){
+            $isAllowed = false;
+            foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                    $isAllowed = true;
+                }
+            }
+            if( ! $isAllowed ) {
+                continue;
+            }
+        }
         $html .= _getProfileRow($instance, 'harness_profile', $defaults);
     }
         
@@ -453,7 +482,36 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
+    $case = new TestCase( $case_id );
+    $case->load();
+    $suiteObj = new TestSuite();
+    $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     foreach($profileInstances as $instance){
+        $profileTypeName = $instance->profile_type_title;
+        $pJSON = json_decode(base64_decode($instance->schema));
+        if($pJSON->Version)
+        {
+            $version = array();
+            foreach(get_object_vars($pJSON->Version) as $k=>$v)
+            {
+                $version[] = $v;
+            }
+            $profileTypeName .= " v" . implode(".", $version);
+        }
+        if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
+            continue;
+        }
+        if( ! empty( $testSuitesRolesProfilesTypes ) ){
+            $isAllowed = false;
+            foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                    $isAllowed = true;
+                }
+            }
+            if( ! $isAllowed ) {
+                continue;
+            }
+        }
         $html .= _getProfileRow($instance, 'tester_profile', $defaults);
     }
     
@@ -474,7 +532,7 @@ function _getProfileRow($instance, $name, $defaults)
     $sVersion[] = $schemaObj->Version->Minor;
     if($schemaObj->Version->Patch)
         $sVersion[] = $schemaObj->Version->Patch;
-    
+
     $html .= '<div class="field-row">';
     $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
     $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
@@ -669,8 +727,37 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php 
-                                foreach($profileInstances as $instance){ 
+                            <?php
+                                $case = new TestCase( $cases[0]->ID );
+                                $case->load();
+                                $suiteObj = new TestSuite();
+                                $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
+                                foreach($profileInstances as $instance){
+                                    $profileTypeName = $instance->profile_type_title;
+                                    $pJSON = json_decode(base64_decode($instance->schema));
+                                    if($pJSON->Version)
+                                    {
+                                        $version = array();
+                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                                        {
+                                            $version[] = $v;
+                                        }
+                                        $profileTypeName .= " v" . implode(".", $version);
+                                    }
+                                    if( ! $instance->lookup ){
+                                        continue;
+                                    }
+                                    if( ! empty( $testSuitesRolesProfilesTypes ) ){
+                                        $isAllowed = false;
+                                        foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                                            if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                                                $isAllowed = true;
+                                            }
+                                        }
+                                        if( ! $isAllowed ) {
+                                            continue;
+                                        }
+                                    }
                                     echo _getProfileRow($instance, 'harness_profile', $current_harness_profile_id);
                                 } 
                             ?>
@@ -685,7 +772,32 @@ function showTriggerMessageBox()
                                 <div class="clear"></div>
                             </div>
                             <?php 
-                                foreach($profileInstances as $instance){ 
+                                foreach($profileInstances as $instance){
+                                    $profileTypeName = $instance->profile_type_title;
+                                    $pJSON = json_decode(base64_decode($instance->schema));
+                                    if($pJSON->Version)
+                                    {
+                                        $version = array();
+                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)
+                                        {
+                                            $version[] = $v;
+                                        }
+                                        $profileTypeName .= " v" . implode(".", $version);
+                                    }
+                                    if( ! $instance->lookup ){
+                                        continue;
+                                    }
+                                    if( ! empty( $testSuitesRolesProfilesTypes ) ){
+                                        $isAllowed = false;
+                                        foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                                            if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                                                $isAllowed = true;
+                                            }
+                                        }
+                                        if( ! $isAllowed ) {
+                                            continue;
+                                        }
+                                    }
                                     echo _getProfileRow($instance, 'tester_profile', $current_tester_profile_id);                                
                                 } 
                             ?>
