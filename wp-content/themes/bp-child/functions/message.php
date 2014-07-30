@@ -427,6 +427,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
+    $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
     foreach($profileInstances as $instance){
         $profileTypeName = $instance->profile_type_title;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
@@ -435,7 +436,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
         if( ! empty( $testSuitesRolesProfilesTypes ) ){
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -476,6 +477,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
+    $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
     foreach($profileInstances as $instance){
         $profileTypeName = $instance->profile_type_title;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
@@ -484,7 +486,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
         if( ! empty( $testSuitesRolesProfilesTypes ) ){
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -712,6 +714,7 @@ function showTriggerMessageBox()
                                 $case->load();
                                 $suiteObj = new TestSuite();
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
+                                $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
                                 foreach($profileInstances as $instance){
                                     $profileTypeName = $instance->profile_type_title;
                                     if( ! $instance->lookup ){
@@ -720,7 +723,7 @@ function showTriggerMessageBox()
                                     if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                         $isAllowed = false;
                                         foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                            if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                                            if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
                                                 $isAllowed = true;
                                             }
                                         }
@@ -750,7 +753,7 @@ function showTriggerMessageBox()
                                     if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                         $isAllowed = false;
                                         foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                            if( ( in_array( $profileTypeName, $cProfilesTypes ) ) ){
+                                            if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
                                                 $isAllowed = true;
                                             }
                                         }
