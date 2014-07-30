@@ -317,9 +317,9 @@ if($filterCustomer){
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-convsn tocenter">
                                    <?php 
-                                        if(strlen($row->CONVERSATION_ID) > 58)
+                                        if(strlen($row->CONVERSATION_ID) > 38)
                                         {
-                                            echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 20) . "....." . substr($row->CONVERSATION_ID, -20) . '</span>';
+                                            echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 15) . "....." . substr($row->CONVERSATION_ID, -15) . '</span>';
                                         }else{
                                             echo $row->CONVERSATION_ID;
                                         }                                    
@@ -349,7 +349,7 @@ if($filterCustomer){
                                                <div class="tr">
                                                    <div class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15).'</br>'.cp_wrap($message->TO_PARTY_ID, 15) ?></div>
 <!--                                                   <div class="td td-to">--><?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
-                                                   <div class="td td-two-lines td-service tocenter"><?php echo cp_wrap($message->SERVICE, 48).'</br>'.$message->ACTION ?></div>
+                                                   <div class="td td-two-lines td-service tocenter"><?php echo $message->SERVICE.'</br>'.$message->ACTION ?></div>
 <!--                                                   <div class="td td-action">--><?php //echo $message->ACTION ?><!--</div>-->
                                                    <div class="td td-message-outcome tocenter">
                                                        <?php if($message->MESSAGE_OUTCOME_CODE){ ?>
