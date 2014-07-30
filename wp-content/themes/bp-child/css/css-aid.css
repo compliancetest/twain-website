@@ -1667,13 +1667,13 @@ tr {
     color: #666 !important;
 }
 .status-warning{
-    color: orange !important;
+    color: #CC6600 !important;
 }
 .status-duplicated{
-    color: #A9A9A9 !important;
+    color: #606060 !important;
 }
 .status-ignored {
-    color: #A9A9A9 !important;
+    color: #606060 !important;
 }
 
 /*** Create Common Button Styles ***/
