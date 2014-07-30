@@ -429,7 +429,8 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( $case->harnessRole );
     foreach($profileInstances as $instance){
-        $profileTypeName = $instance->profile_type_title;
+        $pJSON = json_decode(base64_decode($instance->content));
+        $profileTypeName = $pJSON->Profile->Type;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -479,7 +480,8 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( $case->testerRole );
     foreach($profileInstances as $instance){
-        $profileTypeName = $instance->profile_type_title;
+        $pJSON = json_decode(base64_decode($instance->content));
+        $profileTypeName = $pJSON->Profile->Type;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -716,7 +718,8 @@ function showTriggerMessageBox()
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
                                 $testSuitesRoles = array( $case->harnessRole );
                                 foreach($profileInstances as $instance){
-                                    $profileTypeName = $instance->profile_type_title;
+                                    $pJSON = json_decode(base64_decode($instance->content));
+                                    $profileTypeName = $pJSON->Profile->Type;
                                     if( ! $instance->lookup ){
                                         continue;
                                     }
@@ -747,7 +750,8 @@ function showTriggerMessageBox()
                             <?php
                                 $testSuitesRoles = array( $case->testerRole );
                                 foreach($profileInstances as $instance){
-                                    $profileTypeName = $instance->profile_type_title;
+                                    $pJSON = json_decode(base64_decode($instance->content));
+                                    $profileTypeName = $pJSON->Profile->Type;
                                     if( ! $instance->lookup ){
                                         continue;
                                     }
