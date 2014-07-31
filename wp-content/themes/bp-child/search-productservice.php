@@ -194,10 +194,10 @@ if( isset( $_GET['download']) ){
                         <div class="grid_cell nopaddingtop width35P">Name</div>
                         <?php endif; ?>                        
                         <div class="grid_cell nopaddingtop width15P tocenter">Owner</div>
-                        <div class="grid_cell nopaddingtop width15P tocenter">Type</div>
+                        <div class="grid_cell nopaddingtop width20P tocenter">Type</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Date</div>
-                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Unverified<br />Claims</div>                        
-                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Tested<br />Claims</div>                        
+<!--                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Unverified<br />Claims</div>                        -->
+                        <div class="grid_cell nopaddingtop width15P tocenter two-lines">Tested<br />Claims</div>
                         <div class="clear"></div>                        
                     </div>
                     <div class="grid_body">
@@ -233,7 +233,7 @@ if( isset( $_GET['download']) ){
                             <div class="grid_cell width15P tocenter">
                                 <?php echo $owner?>
                             </div>           
-                            <div class="grid_cell width15P tocenter">
+                            <div class="grid_cell width20P tocenter">
                                 <?php echo $productType?>
                             </div>                                       
                             <div class="grid_cell width15P tocenter">
@@ -241,13 +241,13 @@ if( isset( $_GET['download']) ){
                                 echo date('M Y', strtotime($productDate));
                             ?>
                             </div>
-                            <div class="grid_cell width10P tocenter">
-                                <?php                             
-                                    $c = $product->getComplianceClaims('Self Assessed');
-                                    echo !$c ? 'None' : $c;
-                                ?>
-                            </div>                       
-                            <div class="grid_cell width10P tocenter">
+<!--                            <div class="grid_cell width10P tocenter">-->
+<!--                                --><?php //
+//                                    $c = $product->getComplianceClaims('Self Assessed');
+//                                    echo !$c ? 'None' : $c;
+//                                ?>
+<!--                            </div>                       -->
+                            <div class="grid_cell width15P tocenter">
                                 <?php                             
                                     $c = $product->getComplianceClaims('Verified');
                                     echo !$c ? 'None' : $c;
