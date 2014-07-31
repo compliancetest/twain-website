@@ -16,14 +16,9 @@ function showSumitTicketBox()
         $is_error = true;
         $error = 'Sorry, you need to purchase at least one subscription to create a support ticket.';
     }
-    
+
     if(!$is_error)
     {
-        //Getting Payments and subscribed test suites
-        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, up.monthly_fee, up.signup_fee, up.user_id AS purchaser_id FROM " . $wpdb->prefix . "users_subscriptions AS s 
-                                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id 
-                                 LEFT JOIN {$wpdb->prefix}users_purchases AS up ON up.id=s.purchase_id 
-                                 WHERE s.user_id=%d AND s.status = 'Active' ORDER BY suite_title", $user_id);
         $subscriptions = getUserSubscriptions($user_id);
         if(!$subscriptions)
         {
@@ -33,14 +28,6 @@ function showSumitTicketBox()
         
     }
     
-    if(!$is_error)
-    {
-        $cards = getUserCreditCards($user_id, true);  
-        if(!$cards)
-        {
-            $is_error = true;
-        }
-    }
     if($is_error){
     ?>
     <div class="popup-box edit-ticket-box" id="submit-ticket-box" style="display: none; width: 700px;">

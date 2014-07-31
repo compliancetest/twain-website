@@ -183,9 +183,9 @@ function ct_can_create_support_ticket($user_id = null)
         $user_id = get_current_user_id();        
     
     //Check if the user has purchasement or not
-    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_purchases WHERE user_id=%d", $user_id);
+    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d", $user_id);
     $count = $wpdb->get_var($query);
-    
+
     return $count > 0 ? true : false;
 }
 

@@ -267,7 +267,7 @@ function getUserSubscriptions($user_id = null, $all = false)
                                  WHERE s.user_id=%d AND os.status != 'Frozen'", $user_id);
     
     $query .= " ORDER BY suite_title";
-    
+
     $result = $wpdb->get_results($query);
     
     return $result;
