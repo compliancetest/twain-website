@@ -815,6 +815,22 @@ function getClaimsByProductId($product_id)
     
     return $rows;
 }
+function getClaimByTestPlanData( $data ){
+    global $wpdb;
+    $query = $wpdb->prepare("SELECT * FROM " . TABLE_CLAIM . " WHERE product_id = %d AND suite_id = %d AND conformance_level = %s AND creator_id = %d", $data['product_id'], $data['suite_id'], $data['level'], $data['creator_id']);
+    $rows = $wpdb->get_row($query);
+
+    return $rows;
+}
+function getTestPlansByProductId($product_id)
+{
+    global $wpdb;
+
+    $query = $wpdb->prepare("SELECT c.*, pm.meta_value as `issuer` FROM {$wpdb->prefix}test_plans AS c LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=c.suite_id AND pm.meta_key='ts_issuer'  WHERE product_id=%d", $product_id);
+    $rows = $wpdb->get_results($query);
+
+    return $rows;
+}
 
 function getClaimsBySuiteId($suite_id)
 {

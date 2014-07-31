@@ -100,6 +100,7 @@
 </div>
 <?php
     $claims = getClaimsByProductId($product->id);
+    $testPlans = getTestPlansByProductId($product->id);
 ?>
 <div class="grid_row test_cases">
     <div class="grid_cell width45P">
@@ -121,7 +122,7 @@
     <div class="clear"></div>
     <div id="double_border"></div>
     <?php
-        if(!$claims)
+        if(!$testPlans)
         {
     ?>
         <div class="tocenter">No Data Found!</div>
@@ -143,28 +144,33 @@
         </div>
         <div class="grids">
             <?php              
-                foreach($claims as $claim){
-                    $group = groups_get_group(array('group_id' => get_post_meta($claim->suite_id, 'community_id', true)));
-                    $claimID = getClaimID($claim->id, $claim->suite_id);
+                foreach($testPlans as $testPlan){
+                    if( ! get_the_title($testPlan->suite_id) ){
+                        continue;
+                    }
+                    $group = groups_get_group(array('group_id' => get_post_meta($testPlan->suite_id, 'community_id', true)));
+                    $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id , 'level' => str_replace( ';;', '', $testPlan->level ), 'creator_id' => $testPlan->creator_id ) );
             ?>
                     <div class="grid_row white_bcg tocenter">
-                        <div class="grid_cell nopaddingtop width22P toleft"><?php echo $claimID?></div>
-                        <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $claim->issuer?></a></div>
-                        <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
-                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->conformance_level?></div>  
+                        <div class="grid_cell nopaddingtop width22P toleft"><?php echo isset( $claim->claim_id ) ? $claim->claim_id : '';?></div>
+                        <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
+                        <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo get_the_title($testPlan->suite_id)?></a></div>
+                        <div class="grid_cell nopaddingtop width10P"><?php echo str_replace(';;', ' ', $testPlan->level);?></div>
                         
-                        <div class="grid_cell nopaddingtop width10P"><?php echo $claim->role?></div>                                              
+                        <div class="grid_cell nopaddingtop width10P"><?php echo str_replace(';;', ' ', $testPlan->role);?></div>
                         <div class="grid_cell nopaddingtop width12P">
-                            <?php if($claim->status == 'Verified'){ ?>
+                            <?php if( isset( $claim->status ) ){ ?>
                             <span class="status-certified"><?php echo $claim->status?></span>
                             <?php }else{ ?>
-                            <span class="status-unverified"><?php echo $claim->status?></span>
+                            <span class="status-unverified">In Progress</span>
                             <?php } ?>
                         </div>
-                        <div class="grid_cell nopaddingtop width10P toleft"><?php echo formatDate($claim->last_updated)?></div>    
+                        <div class="grid_cell nopaddingtop width10P toleft"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date)?></div>
                         <div class="grid_cell nopaddingtop width6P">
-                            <a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View PDF</a>
-                            <a href="<?php echo get_site_url()?>/?download-certificate=1&claim=<?php echo $claim->token?>" target="_blank">Download</a>
+                            <?php if( isset( $claim->claim_id ) ):?>
+                                <a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View PDF</a>
+                                <a href="<?php echo get_site_url()?>/?download-certificate=1&claim=<?php echo $claim->token?>" target="_blank">Download</a>
+                            <?php endif;?>
                         </div>
                         <div class="clear"></div>
                     </div>
