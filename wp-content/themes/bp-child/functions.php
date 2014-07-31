@@ -1190,12 +1190,18 @@ function generateDataAndDownload( $data ){
     fclose($outstream);
     exit();
 }
-function groups_is_user_admin_in_any_community( $user_id ){
+function groups_is_user_admin_in_any_community( $user_id, $communitiesList = false  ){
     global $wpdb;
     $communities_ids = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}bp_groups");
     foreach( $communities_ids AS $communities_id ){
-        if( groups_is_user_admin( $user_id, $communities_id->id ) ){
-            return true;
+        if( ! $communitiesList ){
+            if( groups_is_user_admin( $user_id, $communities_id->id ) ){
+                return true;
+            }
+        } else {
+            if( groups_is_user_admin( $user_id, $communities_id->id ) && in_array( $communities_id->id, $communitiesList ) ){
+                return true;
+            }
         }
     }
     return false;
