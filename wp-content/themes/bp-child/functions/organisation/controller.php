@@ -55,7 +55,7 @@ class CT_Organisation_Controller
         $n_nickname = $nickname;
         $i = 0;
         do {
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE nickname=%s", $n_nickname);
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE nickname=%s AND organisation_id=%d", $n_nickname, $organisation_id);            
             if (!$wpdb->get_var($query)) {
                 break;
             }       
@@ -197,10 +197,14 @@ class CT_Organisation_Controller
     {
         global $wpdb;
         
+        //Getting Detail
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE id = %d", $subscription_id);
+        $subscription = $wpdb->get_row($query);
+        
         $n_nickname = $nickname;
         $i = 0;
         do {
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE id <> %d AND nickname=%s", $subscription_id, $n_nickname);
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE id <> %d AND nickname=%s AND organisation_id=%d", $subscription_id, $n_nickname, $subscription->id);
             if (!$wpdb->get_var($query)) {
                 break;
             }       
