@@ -111,7 +111,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
         $totalItems = $wpdb->get_var($query);
 
         $totalPages = ceil($totalItems / $this->per_pages);
-        if($totalPages > $paged)
+        if($totalPages < $paged)
             $paged = $totalPages;
 
         $this->set_pagination_args(array(
@@ -119,6 +119,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             "total_pages" => $totalPages,
             "per_page"    => $this->per_pages
         ));
+        
         if( "$orderby $order" == 'organisation_id asc' ){
             $orderby = 'start_date DESC, item_code ASC';
             $order = '';
@@ -130,7 +131,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         $this->items = $wpdb->get_results($query);
-echo $query;
+
         $columns = $this->get_columns();
         $hidden = array();
         $sortable = $this->get_sortable_columns($orderby);
