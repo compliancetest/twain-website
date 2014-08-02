@@ -130,6 +130,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                     ";
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        
         $this->items = $wpdb->get_results($query);
 
         $columns = $this->get_columns();
