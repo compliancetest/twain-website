@@ -26,7 +26,7 @@ function ct_manage_invoices()
     $listTable->prepare_items();
     ?>
     <div class="wrap">
-        <h2 style="float: left">Charges</h2>
+        <h2>Charges</h2>
         <br clear="all" />
         <form name="adminform" action="users.php?page=invoices" method="post">
             <?php
