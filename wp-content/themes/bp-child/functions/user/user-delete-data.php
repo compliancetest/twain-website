@@ -55,11 +55,11 @@ function ct_delete_user_data($user_id)
     }
     
     //Delete Subscriptions
-    $wpdb->query("DELETE s FROM {$wpdb->prefix}users_subscriptions AS s LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id WHERE p.user_id=$user_id");
-    //Delete Purchases
-    $wpdb->delete($wpdb->prefix . "users_purchases", array('user_id' => $user_id));
-    //Delete Payment Methods
-    $wpdb->delete($wpdb->prefix . "organisations_payment_methods", array('user_id' => $user_id));
+    $wpdb->query("DELETE s FROM {$wpdb->prefix}users_subscriptions  WHERE user_id=$user_id");
+    
+    //Release the organisation_subscriptino from the allocation
+    $wpdb->query("UPDATE {$wpdb->prefix}organisations_subscriptions SET user_id=0 WHERE user_id=$user_id");
+    
     //Delete Test Plans
     $wpdb->delete($wpdb->prefix . "test_plans", array('creator_id' => $user_id));
     //Delete Compliance Claims
