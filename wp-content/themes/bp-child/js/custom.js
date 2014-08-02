@@ -433,9 +433,9 @@ jQuery(document).ready(function($) {
         return false;
     });
     
-    $('body').find('.grid-box-expandable').each(function(){            
+    $('body').find('.grid-box-expandable').each(function(){
         var table = $(this);
-        table.find('.gbh-btn-expandable').click(function(){          
+        table.find('.gbh-btn-expandable').click(function(){
             if(table.hasClass('grid-box-closed'))      
                 table.removeClass('grid-box-closed').addClass('grid-box-opened');
             else

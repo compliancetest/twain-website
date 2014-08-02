@@ -772,13 +772,19 @@ function showTriggerMessageBox()
                         </div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a href="#" class="action-btn process-btn submit-btn has-tooltip" id="send-message-link"><span class="p"></span><span class="t">Confirm</span><span class="simple_tooltip">Confirm Trigger Message<span></span></span></a>
+                        <a href="#" class="action-btn process-btn has-tooltip" id="send-message-link"><span class="p"></span><span class="t">Confirm</span><span class="simple_tooltip">Confirm Trigger Message<span></span></span></a>
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>
                 <a class="close_btn"></a>                        
-                <div class="loading loading-with-text radius6"><div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div></div>                
+                <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>                
                 <input type="hidden" name="ct-message-action" value="<?php echo wp_create_nonce('send-message')?>" />
+                <script type="text/javascript">
+                    jQuery('#send-message-link').click(function(){
+                        jQuery('#messageForm').submit();
+                        return false;
+                    })
+                </script>
             </form>
         </div>
         <?php

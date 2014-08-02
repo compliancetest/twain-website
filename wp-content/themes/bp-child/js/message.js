@@ -8,8 +8,17 @@ jQuery(document).ready(function(){
             //Custom Popup Box
             jQuery(obj).find("a[rel='custom-popup']").cplightbox({
                 closeWhenClickOveraly: false,
+                onLoad: function(obj){
+                    if(jQuery('#trigger-message-box .loading').length < 1)
+                        jQuery('#trigger-message-box').append('<div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>');
+                    jQuery('#trigger-message-box .loading b').html('LOADING DATA');
+                },
                 onAjaxSuccess: function(obj){
                     jQuery(obj).find("a[rel='custom-popup']").cplightbox();        
+                },
+                onClose: function(obj){
+                    if(jQuery('#trigger-message-box .loading').length < 1)
+                        jQuery('#trigger-message-box').append('<div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>');                    
                 }
             });
         },
@@ -336,9 +345,9 @@ jQuery(document).ready(function(){
             success: function(rsp){                
                 if(jQuery(rsp).find('status').text() == 'error')
                 {
-                    showTriggerMessageResultMessage(jQuery(rsp).find('error').text(), 'error');                    
+                    showTriggerMessageResultMessage(jQuery(rsp).find('error').text(), 'error');
                 }else{
-                    jQuery('option:selected', '#tm-prev-message').remove();                    
+                    jQuery('option:selected', '#tm-prev-message').remove();
                     showTriggerMessageResultMessage('The message has been sent.', 'success');
                 }
                 
