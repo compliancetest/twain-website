@@ -76,8 +76,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
         switch($column_name)
         {
             case 'organisation_id':
-                $organisation_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE id = %d", $item->organisation_id));
-                return "<a href='admin.php?page=add-organisation&id=" . $organisation_data->id . "'>".$organisation_data->organisation_name."</a>" .
+                return "<a href='admin.php?page=add-organisation&id=" . $item->organisation_id . "'>".$item->organisation_name."</a>" .
                 $this->row_actions(array(
                     "<a href='admin.php?page=add-charge&id=" . $item->id . "'>Edit</a>"
                 ));
@@ -126,7 +125,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             $orderby = 'start_date DESC, item_code ASC';
             $order = '';
         }
-        $query  = "SELECT * FROM {$wpdb->prefix}organisations_charge ";
+        $query  = "SELECT c.*, o.organisation_name FROM {$wpdb->prefix}organisations_charge AS c LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id=c.organisation_id ";
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         $this->items = $wpdb->get_results($query);
