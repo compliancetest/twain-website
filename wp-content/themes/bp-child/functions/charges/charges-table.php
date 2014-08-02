@@ -90,11 +90,9 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                 return $item->end_date !== '0000-00-00 00:00:00' ? date( 'Y-m-d', strtotime( $item->end_date ) ) : '';
             case 'is_paid':
                 return $item->is_paid ? '<span style="color: green;">Paid</span>' : '<span style="color: red;">Not Paid</span>';
+            case 'payment_id':
+                return $item->payment_method  . ' ('. ( $item->invoice_me == '1' ? 'Invoice Me' : 'Credit Card' ).' )';
             default:
-                if( $column_name == 'payment_id'){
-                    $payment_method = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE id = %s", $item->$column_name), ARRAY_A );
-                    return $payment_method['nickname'].' ('. ( $payment_method['invoice_me'] == '1' ? 'Invoice Me' : 'Credit Card' ).' )';
-                }
                 return $item->$column_name;
         }
     }
@@ -125,7 +123,10 @@ class CT_Organisations_Charge_Table extends WP_List_Table
             $orderby = 'start_date DESC, item_code ASC';
             $order = '';
         }
-        $query  = "SELECT c.*, o.organisation_name FROM {$wpdb->prefix}organisations_charge AS c LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id=c.organisation_id ";
+        $query  = "SELECT c.*, o.organisation_name, p.nickname AS payment_method, p.invoice_me FROM {$wpdb->prefix}organisations_charge AS c 
+                    LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id=c.organisation_id 
+                    LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS p ON c.payment_id =p.id
+                    ";
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         $this->items = $wpdb->get_results($query);
