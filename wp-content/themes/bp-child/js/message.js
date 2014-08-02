@@ -287,11 +287,7 @@ jQuery(document).ready(function(){
     
     /**
     * Send Message
-    */
-    jQuery('body').on('click', '#send-message-link', function(){
-        jQuery('#messageForm').submit();
-        return false;
-    })
+    */    
     jQuery('body').on('submit', '#messageForm', function(){
         
         jQuery('#trigger-message-box .popup-box-content').find('.message').remove();
