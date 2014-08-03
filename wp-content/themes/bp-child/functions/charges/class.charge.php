@@ -81,4 +81,9 @@ class CT_Charge
             return $wpdb->update($wpdb->prefix . "organisations_charge", array_merge( $data, array( 'id' => $this->id ) ), array('id' => $this->id));
         }
     }
+
+    public function getOrganisationsList(){
+        global $wpdb;
+        return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND is_paid = 0 GROUP BY organisation_id");
+    }
 }

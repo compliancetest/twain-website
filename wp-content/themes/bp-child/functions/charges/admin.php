@@ -34,11 +34,39 @@ function ct_manage_invoices()
             ?>
         </form>
     </div>
+    <?php
+        $chargesObject = new CT_Charge();
+    ?>
     <div class="wrap">
-        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-all">Generate Invoices</a>
+        <a href="#" id="custom_invoices_show">Generate Invoices for specific organisations</a>
+        <div class="clear"></div>
+        <form id="charges_for_custom_org" name="charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-specific" method="post" style="display: none;">
+            <table class="widefat" style="width: auto;">
+                <?php foreach( $chargesObject->getOrganisationsList() AS $organisation ):?>
+                    <?php
+                        $orgObject = new CT_Organisation( $organisation->organisation_id );
+                    ?>
+                    <tr>
+                        <th><?php echo $orgObject->organisation_name;?></th>
+                        <td><input type="checkbox" name="org_id[]" value="<?php echo $organisation->organisation_id;?>" /></td>
+                    </tr>
+                <?php endforeach;?>
+                <tr><td colspan="2"><input type="submit" value="Generate" class="button button-primary" /></td></tr>
+            </table>
+        </form>
+        <div class="clear"></div>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-all">Generate Invoices for ALL organisations</a>
         <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-status">Update "Invoice Me" Invoice Status</a>
     </div>
+    <script>
+        jQuery(document).ready(function(){
+            jQuery('#custom_invoices_show').on('click', function(e){
+                e.preventDefault();
+                jQuery('#charges_for_custom_org').toggle();
+            });
+        });
+    </script>
 <?php
 }
 /**
@@ -249,7 +277,30 @@ function ct_process_charge_entry_admin_actions()
             }
             echo 'Created '.$counter.' invoices';
             redirect_then_exit();
-        } else if( $action == 'update-status' ){
+        } else if( $action == 'update-specific' ){
+            if( ! empty( $_POST ) && isset( $_POST['org_id'] ) ){
+                $organisations = $_POST['org_id'];
+                $counter = 0;
+                if( $organisations ){
+                    foreach( $organisations AS $organisation ){
+                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND  organisation_id = %s GROUP BY payment_id", $organisation ), ARRAY_A);
+                        foreach( $paymentTypes AS $paymentType ){
+                            $xero = new CT_Xero();
+                            $paymentID = $paymentType['payment_id'];
+                            $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
+                            if( isset( $invoice['Invoices']['Invoice']['InvoiceID'] ) ){
+                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_identifier = %s, start_date = %s, end_date = %s WHERE invoice_identifier = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceID'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
+                                $counter++;
+                            }
+                        }
+                    }
+                }
+                echo 'Created '.$counter.' invoices';
+            } else {
+                echo 'Please select at least 1 organisation';
+            }
+            redirect_then_exit();
+        }else if( $action == 'update-status' ){
             $counter = 0;
             $xero = new CT_Xero();
             $invoicesIdList = $wpdb->get_results("SELECT invoice_identifier FROM {$wpdb->prefix}organisations_charge WHERE is_paid = 0 GROUP BY invoice_identifier", ARRAY_A);
