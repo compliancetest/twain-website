@@ -573,11 +573,15 @@ if($filterCustomer){
         })
         jQuery('.show_transaction_receipts').click(function(e){
             e.preventDefault();
+            jQuery('#view-transaction_details_box').width( 1200 );
             jQuery('#receipt_compliancetest').text(jQuery(this).data('ctreceipt'));
             jQuery('#receipt_gateway').text(jQuery(this).data('gateway'));
             jQuery('#view-transaction_details_box').showPopupBox({
                 closeWhenClickOveraly: false
             });
+            var additional_width = jQuery('#receipt_compliancetest').width();
+            if( jQuery('#receipt_gateway').width() > additional_width ) additional_width = jQuery('#receipt_gateway').width();
+            jQuery('#view-transaction_details_box').width( 180 + additional_width );
         });
 
        jQuery('#editLogForm').submit(function(){
