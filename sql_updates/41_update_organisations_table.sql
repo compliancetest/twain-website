@@ -1,0 +1,1 @@
+ALTER TABLE `wp_organisations` ADD `no_billing` BOOLEAN NOT NULL DEFAULT FALSE AFTER `contact_id` ;

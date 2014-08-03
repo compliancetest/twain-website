@@ -87,6 +87,10 @@ function ct_show_new_organisation()
                     <td><input type="checkbox" name="invoice_me" id="invoice_me" value="1" <?php echo $data['invoice_me'] == '1' ? 'checked="checked"' : ''?> /></td>
                 </tr>
                 <tr>
+                    <th>No billing</th>
+                    <td><input type="checkbox" name="no_billing" id="no_billing" value="1" <?php echo $data['no_billing'] == '1' ? 'checked="checked"' : ''?> /></td>
+                </tr>
+                <tr>
                     <th>Organisation Administrator</th>
                     <td>
                         <?php
@@ -191,6 +195,8 @@ function ct_process_organisation_admin_actions()
             $organisationClass = new CT_Organisation($_POST['id']);
             if(!isset($_POST['invoice_me']))
                 $_POST['invoice_me'] = 0;
+            if(!isset($_POST['no_billing']))
+                $_POST['no_billing'] = 0;
             $organisationClass->bind($_POST);
             if( $organisationClass->save() )
             {

@@ -74,7 +74,7 @@ function ct_add_charge()
     $query = "SELECT * FROM {$wpdb->prefix}organisations_charge";
     $accounts = $wpdb->get_results($query);
     $items = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}xeroitems", ARRAY_A);
-    $organisations = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations", ARRAY_A);
+    $organisations = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations WHERE no_billing = 0 ORDER BY organisation_name ASC", ARRAY_A);
     ?>
     <div class="wrap">
         <h2><?php echo $id ? 'Edit' : 'New'?> Charge Entry</h2>

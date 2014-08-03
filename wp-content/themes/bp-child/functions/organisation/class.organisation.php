@@ -28,7 +28,8 @@ class CT_Organisation
                             'phonenumber_areacode',
                             'phonenumber_countrycode',
                             
-                            'contact_id'
+                            'contact_id',
+                            'no_billing'
                          );
     
     var $id = null;
@@ -61,6 +62,8 @@ class CT_Organisation
     var $contact_id = '';
     
     var $admin_id = '';
+
+    public $no_billing = '';
     
     public function __construct($id = null)
     {
@@ -98,12 +101,11 @@ class CT_Organisation
         global $wpdb;
         
         $data = array();
-        
         foreach($this->_fields as $_m)
         {
             if($_m == 'id')
                 continue;
-            $data[$_m] = $this->$_m;            
+            $data[$_m] = $this->$_m;
         }
         $xero = new CT_Xero();
         $data['contact_id'] = strtolower( $data['contact_id'] );
