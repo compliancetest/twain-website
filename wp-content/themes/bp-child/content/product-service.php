@@ -149,8 +149,23 @@
                         continue;
                     }
                     $group = groups_get_group(array('group_id' => get_post_meta($testPlan->suite_id, 'community_id', true)));
-                    $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id , 'level' => str_replace( ';;', '', $testPlan->level ), 'creator_id' => $testPlan->creator_id ) );
+                    $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
             ?>
+                <?php if( $claim && ( $claim->conformance_level !== str_replace(';;', ' ', $testPlan->level) || $claim->role !== str_replace(';;', ' ', $testPlan->role) ) ):?>
+                    <div class="grid_row white_bcg tocenter">
+                        <div class="grid_cell nopaddingtop width22P toleft"></div>
+                        <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
+                        <div class="grid_cell nopaddingtop width20P toleft">
+                            <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
+                        </div>
+                        <div class="grid_cell nopaddingtop width10P"><?php echo str_replace(';;', ' ', $testPlan->level);?></div>
+                        <div class="grid_cell nopaddingtop width10P"><?php echo str_replace(';;', ' ', $testPlan->role);?></div>
+                        <div class="grid_cell nopaddingtop width12P"><span class="status-unverified">In Progress</span></div>
+                        <div class="grid_cell nopaddingtop width10P toleft"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date)?></div>
+                        <div class="grid_cell nopaddingtop width6P"></div>
+                        <div class="clear"></div>
+                    </div>
+                <?php endif;?>
                     <div class="grid_row white_bcg tocenter">
                         <div class="grid_cell nopaddingtop width22P toleft"><?php echo isset( $claim->claim_id ) ? $claim->claim_id : '';?></div>
                         <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
@@ -158,13 +173,13 @@
                             <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo isset( $claim->claim_id ) ? get_the_title( $testPlan->suite_id ): ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
                         </div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->conformance_level : str_replace(';;', ' ', $testPlan->level);?></div>
-                        
+
                         <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->role : str_replace(';;', ' ', $testPlan->role);?></div>
                         <div class="grid_cell nopaddingtop width12P">
                             <?php if( isset( $claim->status ) ){ ?>
-                            <span class="status-certified"><?php echo $claim->status?></span>
+                                <span class="status-certified"><?php echo $claim->status?></span>
                             <?php }else{ ?>
-                            <span class="status-unverified">In Progress</span>
+                                <span class="status-unverified">In Progress</span>
                             <?php } ?>
                         </div>
                         <div class="grid_cell nopaddingtop width10P toleft"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date)?></div>
