@@ -49,9 +49,13 @@ foreach($filterTestSuite as $v)
         $notInPostIdsArray = array_merge( $notInPostIdsArray, explode( ',', $tempPostIds ) );
     } else {
         $tempPostIds = getProductsByTestSuiteName( $v );
-        $postsIds = array_merge( $postsIds, explode( ',', $tempPostIds ) );
+        foreach( explode( ',', $tempPostIds ) AS $post__id ){
+            $t = get_post_meta( $post__id, 'product_visibility', true );
+            if( ( $t == 'Public' && ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) || ( ( $t == 'Private' || $t == 'Public' ) && ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) ){
+                array_push( $postsIds, $post__id );
+            }
+        }
     }
-//    $args['meta_query'][] = array('key' => 'post__in', 'value' => explode( ',', $productsIDS ), 'compare' => 'IN');
     $params[] = urlencode('test_suite[]') . '=' . urlencode($v);
     $filterParams['test_suite[]'] = $v;
 }
@@ -92,7 +96,6 @@ foreach($allSuites as $row)
     
     $productType = get_post_meta($row->ID, 'product_type', true);    
     $caseTypes[$productType] = isset($caseTypes[$productType]) ? $caseTypes[$productType] + 1 : 1;
-    
     $testSuiteProducts = getTestSuitProducts( $row->ID );
     if( ! empty( $testSuiteProducts ) ){
         foreach( $testSuiteProducts AS $testSuiteProduct ){
