@@ -154,7 +154,7 @@
                     <div class="grid_row white_bcg tocenter">
                         <div class="grid_cell nopaddingtop width22P toleft"><?php echo isset( $claim->claim_id ) ? $claim->claim_id : '';?></div>
                         <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
-                        <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo get_the_title($testPlan->suite_id)?></a></div>
+                        <div class="grid_cell nopaddingtop width20P toleft"><a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo ct_get_suite_max_version( $testPlan->suite_id, true )?></a></div>
                         <div class="grid_cell nopaddingtop width10P"><?php echo str_replace(';;', ' ', $testPlan->level);?></div>
                         
                         <div class="grid_cell nopaddingtop width10P"><?php echo str_replace(';;', ' ', $testPlan->role);?></div>

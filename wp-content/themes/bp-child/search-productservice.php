@@ -19,37 +19,6 @@ $posts_per_page = 10;
     
 //Search Test Suites
 $args = get_products_args();
-if( groups_is_user_admin_in_any_community( get_current_user_id() ) && ! is_super_admin( ) ){
-    $comm_test_plans = $wpdb->get_results( $wpdb->prepare( "SELECT product_id FROM {$wpdb->prefix}test_plans" ), ARRAY_A );
-    $comm_claims     = $wpdb->get_results( $wpdb->prepare( "SELECT product_id FROM {$wpdb->prefix}compliance_claims" ), ARRAY_A );
-    $p_post = new WP_Query( array( 'post_type' => 'product-service', 'meta_key' => 'product_visibility', 'meta_value' => 'Public', 'posts_per_page' => -1 ) );
-    $p_posts = $p_post->get_posts() ;
-    $idsArray = array();
-    foreach( $p_posts AS $p ){
-        if( ! in_array( $p->ID, $idsArray) ){
-            array_push( $idsArray, $p->ID );
-        }
-    }
-    unset( $args['post__in'] );
-    foreach( $comm_test_plans AS $comm_test_plan ){
-        if( ! in_array( $comm_test_plan['product_id'], $idsArray) ){
-            array_push( $idsArray, $comm_test_plan['product_id'] );
-        }
-    }
-    foreach( $comm_claims AS $comm_claim ){
-        if( ! in_array( $comm_claim['product_id'], $idsArray) ){
-            array_push( $idsArray, $comm_claim['product_id'] );
-        }
-    }
-    $args['post__in'] = $idsArray;
-    $args['meta_query']     = array(
-        array(
-            'key'     => 'product_visibility',
-            'value'   => array('Private', 'Public'),
-            'compare' => 'IN'
-        )
-    );
-}
 //Getting Search Query
 $term = trim(isset($_GET['q']) ? $_GET['q'] : '');
 
@@ -187,9 +156,9 @@ if( isset( $_GET['download']) ){
             <div class="column padding20-10">
                 <div class="grid dark_gray_txt">
                     <div class="grid_head grid_head_border">       
-                        <?php if(is_admin() || is_super_admin()): ?>
+                        <?php if(is_admin() || is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ): ?>
                         <div class="grid_cell nopaddingtop width25P">Name</div>
-                        <div class="grid_cell nopaddingtop width10P">Public</div>
+                        <div class="grid_cell nopaddingtop width10P">Visibility</div>
                         <?php else: ?>
                         <div class="grid_cell nopaddingtop width35P">Name</div>
                         <?php endif; ?>                        
@@ -216,7 +185,7 @@ if( isset( $_GET['download']) ){
                                 $group = groups_get_group( array( 'group_id' => $groupID ) )
                         ?>
                         <div class="grid_row grid_row_border">
-                            <?php if(is_admin() || is_super_admin()): ?>
+                            <?php if(is_admin() || is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() )): ?>
                             <div class="grid_cell width25P">
                                 <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
                                 <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>

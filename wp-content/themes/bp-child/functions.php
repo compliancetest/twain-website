@@ -1011,7 +1011,7 @@ function get_valid_full_url($url)
 function get_products_args(){
     $post_type = 'product-service';
 
-    if ( is_user_logged_in() && !is_super_admin()) {
+    if ( is_user_logged_in() && ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) {
 
         $all_public_posts = get_posts(array(
             'post_type' => $post_type,
@@ -1047,7 +1047,7 @@ function get_products_args(){
             'posts_per_page' => -1,
             'tax_query' => array('relation' => 'and'),
         );
-        if ( !is_super_admin() ) {
+        if ( ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) )) {
             $args['meta_key'] = 'product_visibility';
             $args['meta_value'] = 'Public';
         }
@@ -1126,7 +1126,7 @@ function generateDataAndDownload( $data ){
     foreach($data as $key => $result){
         $product = new ProductAndService($result->ID);
         $product->load();
-        $getItemTestPlans = $wpdb->get_results( $wpdb->prepare("SELECT ts.*, tp.level, tp.role FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id WHERE tp.product_id = %d ", $result->ID ));
+        $getItemTestPlans = getTestPlansByProductId($result->ID);
         if( count( $getItemTestPlans ) > 0 ){
             foreach( $getItemTestPlans AS $testPlan ){
                 $suite = new TestSuite($testPlan->suite_id);
@@ -1144,7 +1144,7 @@ function generateDataAndDownload( $data ){
                             $product->visibility,
                             $group->name,
                             $suite->name,
-                            $suite->version,
+                            ct_get_suite_max_version( $testPlan->suite_id ),
                             $claim->issuer,
                             $claim->conformance_level,
                             $claim->role,
@@ -1165,7 +1165,7 @@ function generateDataAndDownload( $data ){
                         $product->visibility,
                         $group->name,
                         $suite->name,
-                        $suite->version,
+                        ct_get_suite_max_version( $testPlan->suite_id ),
                         $suite->issuer,
                         str_replace( ';;',' ', $testPlan->level ),
                         str_replace( ';;',' ', $testPlan->role ),
