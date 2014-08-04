@@ -443,7 +443,7 @@ class ManageESB
         if($where)
             $query .= " WHERE " . implode(" AND ", $where);
         
-        $query .= ' ORDER BY pm.PRODUCT_TITLE ';
+        $query .= ' ORDER BY p.PRODUCT_TITLE ';
         
         $results = ManageESB::$esbdb->get_results($query);
         
@@ -572,8 +572,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if ($this->message_where)
-            $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+        $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
         
@@ -584,7 +583,7 @@ class ManageESB
         }
         
         //Remove Empty Fields
-        $where[] = " SERVICE IS NOT NULL ";
+        $where[] = " m.SERVICE IS NOT NULL ";
         
         if($where)
             $query .= " WHERE " . implode(" AND ", $where);
@@ -621,8 +620,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if ($this->message_where)
-            $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+        $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
         
@@ -669,8 +667,7 @@ class ManageESB
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
                 
-        if ($this->message_where)
-            $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+        $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
         
         $where = $this->where_query;
         
