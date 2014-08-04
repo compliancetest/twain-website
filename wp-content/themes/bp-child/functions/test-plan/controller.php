@@ -27,7 +27,7 @@ function certifyPlan()
     $plan = new TestPlan($planID);
     $plan->load();
     
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/test-suite-coverage";
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/my-products";
     
     if($plan->creator_id != $user_id)
     {
