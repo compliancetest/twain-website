@@ -816,7 +816,15 @@ function ct_get_suite_max_version( $suite_id, $return_suite_name = false ){
         return '';
     }
     if( $return_suite_name ){
-        return $rows->suite_title.' v'.$rows->version_major.'.'.$rows->version_minor.'.'.$rows->version_patch;
+        $str = $rows->suite_title.' v'.$rows->version_major.'.'.$rows->version_minor;
+        if( $rows->version_patch !== '0' ){
+            $str .= $str.'.'.$rows->version_patch;
+        }
+        return $str;
     }
-    return $rows->version_major.'.'.$rows->version_minor.'.'.$rows->version_patch;
+    $str = $rows->version_major.'.'.$rows->version_minor;
+    if( $rows->version_patch !== '0' ){
+        $str .= $str.'.'.$rows->version_patch;
+    }
+    return $str;
 }

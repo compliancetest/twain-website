@@ -169,7 +169,7 @@ if( isset( $_GET['download']) ){
                         <div class="grid_cell nopaddingtop width20P tocenter">Type</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Date</div>
 <!--                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Unverified<br />Claims</div>                        -->
-                        <div class="grid_cell nopaddingtop width15P tocenter two-lines">Claims</div>
+                        <div class="grid_cell nopaddingtop width15P tocenter">Claims</div>
                         <div class="clear"></div>                        
                     </div>
                     <div class="grid_body">
@@ -220,9 +220,20 @@ if( isset( $_GET['download']) ){
 //                                ?>
 <!--                            </div>                       -->
                             <div class="grid_cell width15P tocenter">
-                                <?php                             
-                                    $c = $product->getComplianceClaims('Verified');
-                                    echo !$c ? 'None' : $c;
+                                <?php
+                                    $testPlansClaimsCounter = 0;
+                                    $testPlans = getTestPlansByProductId($product->id);
+                                    foreach($testPlans as $testPlan){
+                                        if( ! get_the_title($testPlan->suite_id) ){
+                                            continue;
+                                        }
+                                        $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
+                                        if( $claim && ( $claim->conformance_level !== str_replace(';;', '', $testPlan->level) || $claim->role !== str_replace(';;', '', $testPlan->role) ) ){
+                                            $testPlansClaimsCounter++;
+                                        }
+                                        $testPlansClaimsCounter++;
+                                    }
+                                    echo !$testPlansClaimsCounter ? 'None' : $testPlansClaimsCounter;
                                 ?>
                             </div>                       
                             <div class="clear"></div>

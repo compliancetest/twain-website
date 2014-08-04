@@ -99,7 +99,6 @@
     </div>
 </div>
 <?php
-    $claims    = getClaimsByProductId($product->id);
     $testPlans = getTestPlansByProductId($product->id);
     $testPlansHtml = '';
 ?>
