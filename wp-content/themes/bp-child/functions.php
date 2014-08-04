@@ -1140,7 +1140,7 @@ function generateDataAndDownload( $data ){
                             $product->visibility,
                             $group->name,
                             $suite->name,
-                            ct_get_suite_max_version( $testPlan->suite_id ),
+                            isset( $claim->claim_id ) && ! empty( $claim->claim_id ) ?  get_the_title( $testPlan->suite_id ) : ct_get_suite_max_version( $testPlan->suite_id ),
                             $claim->issuer,
                             $claim->conformance_level,
                             $claim->role,
