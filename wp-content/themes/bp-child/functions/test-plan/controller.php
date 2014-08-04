@@ -60,16 +60,20 @@ function certifyPlan()
     //Create Compliance Claim
     if($all_verified)
     {
+        $all_success = true;
+        
         foreach($plan->level as $level)
         {
             foreach($plan->role as $role)
             {
                 $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
                 $oId = $wpdb->get_var($query);
-                _saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId);                
+                if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId))
+                    $all_success = false;
             }
         }
-        addMessage('The plan was certified successfully');
+        if($all_success)
+            addMessage('The plan was certified successfully');
         wp_redirect($return_success);
     }else{
         addMessage('You must complete the test plan before a claim can be made.', 'warning');
