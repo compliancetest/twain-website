@@ -29,6 +29,7 @@ get_header();
                         </div>
                         <div class="grid-box-body">
                             <div class="thead tr">
+                               <div class="td td-community">Community</div>
                                <div class="td td-suite">Test Suite</div>
                                <div class="td td-nickname">Nickname</div>
                                <div class="td td-assignee">Assignee</div>
@@ -53,6 +54,9 @@ get_header();
                                        
                            ?>
                                 <div class="tr">
+                                    <div class="td td-community">
+                                        <?php echo $row->community_name ?>
+                                    </div>
                                     <div class="td td-suite">
                                         <?php echo $row->suite_title ?>
                                     </div>
@@ -60,7 +64,8 @@ get_header();
                                         <?php echo $row->nickname; ?>
                                     </div>
                                     <div class="td td-assignee">
-                                        <?php echo !$row->user_email ? '-' : $row->full_name; ?>
+                                        <?php echo $row->full_name; ?>
+                                        <?php echo ($row->user_email)?('<br/>('.$row->user_email.')'):(''); ?>
                                     </div>                                    
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
