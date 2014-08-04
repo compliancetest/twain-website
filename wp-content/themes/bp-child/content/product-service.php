@@ -157,7 +157,7 @@
                         <div class="grid_cell nopaddingtop width20P toleft">
                             <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo isset( $claim->claim_id ) ? get_the_title( $testPlan->suite_id ): ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
                         </div>
-                        <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->level : str_replace(';;', ' ', $testPlan->level);?></div>
+                        <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->conformance_level : str_replace(';;', ' ', $testPlan->level);?></div>
                         
                         <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->role : str_replace(';;', ' ', $testPlan->role);?></div>
                         <div class="grid_cell nopaddingtop width12P">
