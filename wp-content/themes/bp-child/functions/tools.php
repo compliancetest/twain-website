@@ -442,6 +442,7 @@ function ct_duplicate_data()
                                             unset($pIns['id']);
                                             $wpdb->insert($wpdb->prefix . 'community_profile_instances', $pIns);
                                             $profile_instance_ids[$oPInsId] = $wpdb->insert_id;
+                                            $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $pIns['type_id']));
                                         }
                                     }
                                     
