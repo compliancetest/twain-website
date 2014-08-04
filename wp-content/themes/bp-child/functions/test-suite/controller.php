@@ -812,6 +812,9 @@ function ct_get_suite_max_version( $suite_id, $return_suite_name = false ){
     $current_suite_info = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_id = %d", $suite_id));
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_title = %s AND version_major = %d ORDER BY version_minor DESC, version_patch DESC", $current_suite_info->suite_title, $current_suite_info->version_major );
     $rows = $wpdb->get_row($query);
+    if( ! $rows ){
+        return '';
+    }
     if( $return_suite_name ){
         return $rows->suite_title.' '.$rows->version_major.'.'.$rows->version_minor.'.'.$rows->version_patch;
     }

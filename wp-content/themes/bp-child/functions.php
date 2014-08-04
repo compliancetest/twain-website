@@ -1098,12 +1098,8 @@ function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
 function generateDataAndDownload( $data ){
     ob_clean();
     global $wpdb;
-    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
-    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
-    header("Cache-Control: no-cache, must-revalidate");
-    header("Pragma: no-cache");
-    header("Content-Type: Application/octet-stream");
-    header("Content-Disposition: attachment; filename=productsLict.csv");
+    header("Content-type: application/x-msdownload",true,200);
+    header("Content-Disposition: attachment; filename=results.csv");
     $outstream = fopen("php://output", "w");
     fputcsv($outstream, array(
         'Product Name',
