@@ -151,7 +151,7 @@
                     $group = groups_get_group(array('group_id' => get_post_meta($testPlan->suite_id, 'community_id', true)));
                     $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
             ?>
-                <?php if( $claim && ( $claim->conformance_level !== str_replace(';;', ' ', $testPlan->level) || $claim->role !== str_replace(';;', ' ', $testPlan->role) ) ):?>
+                <?php if( $claim && ( $claim->conformance_level !== str_replace(';;', '', $testPlan->level) || $claim->role !== str_replace(';;', '', $testPlan->role) ) ):?>
                     <div class="grid_row white_bcg tocenter">
                         <div class="grid_cell nopaddingtop width22P toleft"></div>
                         <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
