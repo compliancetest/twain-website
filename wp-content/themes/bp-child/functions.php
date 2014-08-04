@@ -1161,7 +1161,7 @@ function generateDataAndDownload( $data ){
                         $product->visibility,
                         $group->name,
                         $suite->name,
-                        ct_get_suite_max_version( $testPlan->suite_id ),
+                        isset( $claim->claim_id ) && ! empty( $claim->claim_id ) ?  get_the_title( $testPlan->suite_id ) : ct_get_suite_max_version( $testPlan->suite_id ),
                         $suite->issuer,
                         str_replace( ';;',' ', $testPlan->level ),
                         str_replace( ';;',' ', $testPlan->role ),
