@@ -1169,6 +1169,7 @@ function generateProfile($profile_id, $community_id)
                 // Create new profile
                 $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
                 $new_profile_id = $wpdb->insert_id;
+                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
                 
                 $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$new_profile_id), '%d');
                 
