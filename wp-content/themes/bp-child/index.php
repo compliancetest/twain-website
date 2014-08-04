@@ -18,7 +18,7 @@ get_header();
 									<ul>
                                         <li><a id="communities">Communities</a></li>
 										<li><a id="test-suite">Test Suites</a></li>
-										<li><a id="product-service">Certified Products</a></li>
+										<li><a id="product-service">Products</a></li>
 									</ul>
 								</li>	
 							</ul>
