@@ -71,13 +71,7 @@ get_header();
                 include(dirname(__FILE__) . '/content/profile-mypicture.php');
             ?>
             
-            <div class="clear"></div>			
-			<div class="space25"></div>			
-            
-            <?php 
-                include(dirname(__FILE__) . '/content/profile-paymentmethod.php');
-            ?>
-			<div class="clear"></div>            
+            <div class="clear"></div>            
             <div class="space25"></div>
             
             <?php 
