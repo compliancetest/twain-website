@@ -99,8 +99,9 @@
     </div>
 </div>
 <?php
-    $claims = getClaimsByProductId($product->id);
+    $claims    = getClaimsByProductId($product->id);
     $testPlans = getTestPlansByProductId($product->id);
+    $testPlansHtml = '';
 ?>
 <div class="grid_row test_cases">
     <div class="grid_cell width45P">
@@ -152,6 +153,7 @@
                     $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
             ?>
                 <?php if( $claim && ( $claim->conformance_level !== str_replace(';;', '', $testPlan->level) || $claim->role !== str_replace(';;', '', $testPlan->role) ) ):?>
+                    <?php ob_start();?>
                     <div class="grid_row white_bcg tocenter">
                         <div class="grid_cell nopaddingtop width22P toleft"></div>
                         <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
@@ -165,34 +167,38 @@
                         <div class="grid_cell nopaddingtop width6P"></div>
                         <div class="clear"></div>
                     </div>
+                    <?php $testPlansHtml .= ob_get_clean();?>
                 <?php endif;?>
-                    <div class="grid_row white_bcg tocenter">
-                        <div class="grid_cell nopaddingtop width22P toleft"><?php echo isset( $claim->claim_id ) ? $claim->claim_id : '';?></div>
-                        <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
-                        <div class="grid_cell nopaddingtop width20P toleft">
-                            <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo isset( $claim->claim_id ) ? get_the_title( $testPlan->suite_id ): ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
-                        </div>
-                        <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->conformance_level : str_replace(';;', ' ', $testPlan->level);?></div>
+                    <?php if( ! isset( $claim->claim_id ) ) ob_start();?>
+                        <div class="grid_row white_bcg tocenter">
+                            <div class="grid_cell nopaddingtop width22P toleft"><?php echo isset( $claim->claim_id ) ? $claim->claim_id : '';?></div>
+                            <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
+                            <div class="grid_cell nopaddingtop width20P toleft">
+                                <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo isset( $claim->claim_id ) ? get_the_title( $testPlan->suite_id ): ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->conformance_level : str_replace(';;', ' ', $testPlan->level);?></div>
 
-                        <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->role : str_replace(';;', ' ', $testPlan->role);?></div>
-                        <div class="grid_cell nopaddingtop width12P">
-                            <?php if( isset( $claim->status ) ){ ?>
-                                <span class="status-certified"><?php echo $claim->status?></span>
-                            <?php }else{ ?>
-                                <span class="status-unverified">In Progress</span>
-                            <?php } ?>
+                            <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->role : str_replace(';;', ' ', $testPlan->role);?></div>
+                            <div class="grid_cell nopaddingtop width12P">
+                                <?php if( isset( $claim->status ) ){ ?>
+                                    <span class="status-certified"><?php echo $claim->status?></span>
+                                <?php }else{ ?>
+                                    <span class="status-unverified">In Progress</span>
+                                <?php } ?>
+                            </div>
+                            <div class="grid_cell nopaddingtop width10P toleft"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date)?></div>
+                            <div class="grid_cell nopaddingtop width6P">
+                                <?php if( isset( $claim->claim_id ) ):?>
+                                    <a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View PDF</a>
+                                    <a href="<?php echo get_site_url()?>/?download-certificate=1&claim=<?php echo $claim->token?>" target="_blank">Download</a>
+                                <?php endif;?>
+                            </div>
+                            <div class="clear"></div>
                         </div>
-                        <div class="grid_cell nopaddingtop width10P toleft"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date)?></div>
-                        <div class="grid_cell nopaddingtop width6P">
-                            <?php if( isset( $claim->claim_id ) ):?>
-                                <a href="<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View PDF</a>
-                                <a href="<?php echo get_site_url()?>/?download-certificate=1&claim=<?php echo $claim->token?>" target="_blank">Download</a>
-                            <?php endif;?>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
+                    <?php if( ! isset( $claim->claim_id ) ) $testPlansHtml .= ob_get_clean();?>
             <?php                            
                 }
+                echo $testPlansHtml;
           ?>
           </div>
           <?php            

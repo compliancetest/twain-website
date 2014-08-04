@@ -816,7 +816,7 @@ function ct_get_suite_max_version( $suite_id, $return_suite_name = false ){
         return '';
     }
     if( $return_suite_name ){
-        return $rows->suite_title.' '.$rows->version_major.'.'.$rows->version_minor.'.'.$rows->version_patch;
+        return $rows->suite_title.' v'.$rows->version_major.'.'.$rows->version_minor.'.'.$rows->version_patch;
     }
     return $rows->version_major.'.'.$rows->version_minor.'.'.$rows->version_patch;
 }

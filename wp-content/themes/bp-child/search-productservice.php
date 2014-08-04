@@ -169,7 +169,7 @@ if( isset( $_GET['download']) ){
                         <div class="grid_cell nopaddingtop width20P tocenter">Type</div>
                         <div class="grid_cell nopaddingtop width15P tocenter">Date</div>
 <!--                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Unverified<br />Claims</div>                        -->
-                        <div class="grid_cell nopaddingtop width15P tocenter two-lines">Tested<br />Claims</div>
+                        <div class="grid_cell nopaddingtop width15P tocenter two-lines">Claims</div>
                         <div class="clear"></div>                        
                     </div>
                     <div class="grid_body">
