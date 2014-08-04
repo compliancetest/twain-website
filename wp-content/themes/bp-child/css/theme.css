@@ -7510,8 +7510,11 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .no-display {
     display: none;
 }
+#organisation_subscriptions .td-community{
+    width: 140px;
+}
 #organisation_subscriptions .td-suite{
-    width: 250px;
+    width: 150px;
 }
 #organisation_subscriptions .td-nickname{
     width: 170px;
@@ -7521,8 +7524,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     text-align: center;
 }
 #organisation_subscriptions .td-assignee{
-    width: 200px;
+    width: 159px;
+    word-wrap: break-word;
 }
 #organisation_subscriptions .td-action{
-    width: 100px;
+    width: 80px;
 }
