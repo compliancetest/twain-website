@@ -856,7 +856,9 @@ function showUploadMessageBox()
             <form name="messageForm" id="uploadMessageForm" action="" enctype="multipart/form-data" method="post">
                 <div class="popup-box-header radius6 noradiusbottom">Upload Message</div>        
                     <div class="popup-box-content grid-box-body">                          
-                        <p>Send a message from our test harness to your system. Choose a test case, then select select a file.</p>
+                        <p>Manually load a test message to our system. It will be processed as if you had send it via a messaging channel.<br />
+                            <i>Please note that, at this time, this facility only supports the SuperStream Contributions Alternative File Format</i>
+                        </p>
                         <div class="info-section">
                             <div class="field-row">
                                 <div class="grid-cell width250">
