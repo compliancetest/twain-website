@@ -5063,6 +5063,7 @@ span.button_sign {
 }
 #my_transaction_log .td-convsn{
     width: 225px;
+    position: relative;
 }
 #my_transaction_log .td-date{
     width: 80px;
@@ -5129,6 +5130,7 @@ span.button_sign {
 #my_transaction_log .table-box .sub-table .table .tbody .td{
     min-height: 28px;
     padding: 3px 5px;
+    position: relative;
 }
 #edit-transaction-log-box .table-box .tbody .td{
     padding-top: 5px;
