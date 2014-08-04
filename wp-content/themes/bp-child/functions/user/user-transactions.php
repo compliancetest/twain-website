@@ -410,10 +410,19 @@ function getUserSubscribedCases($user_id = null)
     $select = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p ";
     
     $where = " WHERE p.post_type='test-case' AND p.post_status='publish' ";
-    if(!is_super_admin() && !is_admin())
+    if(!is_super_admin())
     {
-        $suite_ids = getUserAllSuiteIDs($user_id);
-    
+        $query = $wpdb->prepare("SELECT DISTINCT(s.suite_id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
+                        WHERE 
+                            s.user_id = bm.user_id AND bm.is_confirmed=1 
+                            AND
+                            (bm.user_id=%d OR bm.group_id 
+                                IN 
+                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                        ", $user_id, $user_id);
+        
+        $suite_ids = $wpdb->get_col($query);
+        
         if(!$suite_ids)
             return array();
         
