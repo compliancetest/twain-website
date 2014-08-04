@@ -462,6 +462,8 @@ function copyProfileInstance($action)
         ));
     }
     
+    $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
+    
     //------------------------------------------------------------------------------------------------------------------
     
     addMessage('Profile instance was copied.');
