@@ -84,6 +84,6 @@ class CT_Charge
 
     public function getOrganisationsList(){
         global $wpdb;
-        return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND is_paid = 0 GROUP BY organisation_id");
+        return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_charge AS c JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id WHERE invoice_identifier = '' AND is_paid = 0 AND o.no_billing = 0 GROUP BY organisation_id");
     }
 }
