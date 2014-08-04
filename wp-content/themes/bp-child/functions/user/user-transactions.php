@@ -433,14 +433,14 @@ function getUserSubscribedCases($user_id = null)
         
         foreach($suite_ids as $sid)
         {
-            $left_join .= " LEFT JOIN " . $wpdb->postmeta . " AS pm" . $sid . " ON p.ID=pm" . $sid . ".post_id AND pm" . $sid . ".meta_key='conformance_level_" . $sid . "' ";            
-            $where .= " AND pm" . $sid . ".meta_value!='" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE . "' ";    
+            $left_join .= " LEFT JOIN " . $wpdb->postmeta . " AS pm" . $sid . " ON p.ID=pm" . $sid . ".post_id AND pm" . $sid . ".meta_key='conformance_level_" . $sid . "' " 
+                            . " AND pm" . $sid . ".meta_value!='" . TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE . "' ";    
         }
         
     }
     
     $query = $select . $left_join . $where . " ORDER BY post_title";
-    echo $query;
+    
     $rows = $wpdb->get_results($query);
     
     return $rows;
