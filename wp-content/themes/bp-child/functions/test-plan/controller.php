@@ -27,7 +27,8 @@ function certifyPlan()
     $plan = new TestPlan($planID);
     $plan->load();
     
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/my-products";
+    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/test-suite-coverage";
+    $return_success = "/my-products";
     
     if($plan->creator_id != $user_id)
     {
@@ -69,11 +70,11 @@ function certifyPlan()
             }
         }
         addMessage('The plan was certified successfully');
+        wp_redirect($return_success);
     }else{
         addMessage('You must complete the test plan before a claim can be made.', 'warning');
+        wp_redirect($return);
     }
-    
-    wp_redirect($return);
     
     exit;
 }
