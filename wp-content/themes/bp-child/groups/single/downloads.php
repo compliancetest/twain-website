@@ -140,7 +140,7 @@ $group_license = groups_get_groupmeta(bp_get_group_id(), 'license_agreements');
         </div>
         <div class="popup-box-footer radius6 noradiustop">                   
             <div class="loading loading-with-text radius6"><div><b>DELETING FILE</b><span>Please wait...</span></div></div> 
-            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+            <a href="#" onclick="jQuery(this).parents('form').submit();" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
             <div class="clear"></div>
         </div>
