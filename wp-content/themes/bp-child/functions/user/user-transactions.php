@@ -420,7 +420,7 @@ function getUserSubscribedCases($user_id = null)
                                 IN 
                                 ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
                         ", $user_id, $user_id);
-        
+        echo $query;
         $suite_ids = $wpdb->get_col($query);
         
         if(!$suite_ids)
