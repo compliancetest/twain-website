@@ -82,8 +82,15 @@ class CT_Charge
         }
     }
 
-    public function getOrganisationsList(){
+    public function getOrganisationsList( $show_only_credit_card = false ){
         global $wpdb;
+        if( $show_only_credit_card ){
+            return $wpdb->get_results("SELECT c.*, o.* FROM {$wpdb->prefix}organisations_charge AS c
+                                      JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id
+                                      LEFT JOIN {$wpdb->prefix}xero_payments AS p ON p.invoice_id = c.invoice_identifier
+                                      WHERE invoice_identifier != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND p.invoice_id IS NULL
+                                      GROUP BY c.organisation_id");
+        }
         return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_charge AS c JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id WHERE invoice_identifier = '' AND is_paid = 0 AND o.no_billing = 0 GROUP BY organisation_id");
     }
 }

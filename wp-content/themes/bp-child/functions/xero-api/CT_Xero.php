@@ -217,6 +217,32 @@ class CT_Xero {
         return false;
     }
 
+    public function markInvoiceAsPaid( $invoiceID ){
+        var_dump($invoiceID);
+        $xml = new SimpleXMLElement( '<Invoice></Invoice>' );
+        $xml->addChild('InvoiceID', $invoiceID );
+        $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
+        var_dump($this->xero->response);die;
+        if ($this->xero->response['code'] == 200) {
+            return  $this->responseToArray();
+        }
+    }
+
+    public function createPayment( $paymentData ){
+        $xml = new SimpleXMLElement( '<Payment></Payment>' );
+        $invoice = $xml->addChild( 'Invoice' );
+        $invoice->addChild( 'InvoiceID', $paymentData['InvoiceID'] );
+        $account = $xml->addChild( 'Account' );
+        $account->addChild( 'Code', 650 );
+        $xml->addChild( 'Date', $paymentData['Date'] );
+        $xml->addChild( 'Amount', $paymentData['Amount'] );
+        $this->xero->request( 'POST', $this->xero->url('Payments', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
+        if ($this->xero->response['code'] == 200) {
+            return  $this->responseToArray();
+        }
+        return false;
+    }
+
     public function getInvoice( $invoiceId = false ){
         if( $invoiceId ){
             $this->xero->request('GET', $this->xero->url('Invoices/'.$invoiceId, 'core'), array() );
