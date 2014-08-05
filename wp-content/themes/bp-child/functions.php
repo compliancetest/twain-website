@@ -1134,7 +1134,7 @@ function generateDataAndDownload( $data ){
             foreach( $getItemTestPlans AS $testPlan ){
                 $suite = new TestSuite($testPlan->suite_id);
                 $suite->load();
-                $claim = getClaimByTestPlanData( array( 'product_id' => $result->id, 'suite_id' => $testPlan->suite_id ) );
+                $claim = getClaimByTestPlanData( array( 'product_id' => $result->ID, 'suite_id' => $testPlan->suite_id ) );
                 $group = groups_get_group( array( 'group_id' => $suite->community_id ) );
                 if( $claim && ( $claim->conformance_level !== str_replace(';;', '', $testPlan->level) || $claim->role !== str_replace(';;', '', $testPlan->role) ) ){
                     $tempArray = array(
@@ -1154,6 +1154,23 @@ function generateDataAndDownload( $data ){
                         $suite->issueDate,
                         date('d-M-y', strtotime( $claim->last_updated ) ),
                         $claim->claim_id
+                    );
+                    fputcsv( $outstream, $tempArray );
+                    $tempArray = array(
+                        $product->name,
+                        $product->product_id,
+                        $product->owner,
+                        $product->version,
+                        date('d-M-y', strtotime( $product->release_date ) ),
+                        $product->visibility,
+                        $group->name,
+                        $suite->name,
+                        isset( $claim->claim_id ) && ! empty( $claim->claim_id ) ?  get_the_title( $testPlan->suite_id ) : ct_get_suite_max_version( $testPlan->suite_id ),
+                        $suite->issuer,
+                        str_replace( ';;',' ', $testPlan->level ),
+                        str_replace( ';;',' ', $testPlan->role ),
+                        $suite->status,
+                        $suite->issueDate
                     );
                     fputcsv( $outstream, $tempArray );
                 } else if( $claim ){
