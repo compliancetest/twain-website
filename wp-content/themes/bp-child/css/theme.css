@@ -7532,3 +7532,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #organisation_subscriptions .td-action{
     width: 80px;
 }
+.td-convsn input[type="text"], 
+.td-message-part input[type="text"] {
+    display: none;
+    font-size: 11px;
+    width: 80%;
+    text-align: center;
+}
