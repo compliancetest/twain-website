@@ -335,8 +335,21 @@ Template Name Posts: Test Suite
                         }
                     }                 
                 } else {
+                    
             ?>
                     <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>                        
+                        <?php
+                        if ($suite->signupPrice == '-1') {
+                            ?>
+                            <span class="price-b">
+                                <span class="l"></span>
+                                <span class="m"><b>Contact Us</b><br />For Pricing</span>
+                                <span class="r"></span>
+                            </span>
+                            <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                            <?php
+                        } else {
+                            ?>
                         <span class="price-b">
                             <span class="l"></span>
                             <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
@@ -348,6 +361,7 @@ Template Name Posts: Test Suite
                             <span class="r"></span>
                         </span>
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                        <?php } ?>
                     </a>
             <?php
                 }                                
