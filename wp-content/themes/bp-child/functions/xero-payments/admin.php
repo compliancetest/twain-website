@@ -31,9 +31,6 @@ function ct_show_xero_payments_list()
         <div class="clear"></div>
         <form id="query_unpaid_invoices_form" name="query_unpaid_invoices_form" action="<?php echo admin_url()?>admin.php?page=manage-xero-payments&org-action=query_unpaid_invoices" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
-                <tr>
-                    <th colspan="2"><b>Note: </b>You can skip any organisation selecting  to create</br>payments entries for each non-paid approved invoice</th>
-                </tr>
                 <?php  $chargesObject = new CT_Charge();?>
                 <?php foreach( $chargesObject->getOrganisationsList( true ) AS $organisation ):?>
                     <?php
