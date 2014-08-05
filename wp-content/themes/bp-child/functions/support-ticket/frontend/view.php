@@ -140,7 +140,7 @@ function showSumitTicketBox()
                 </div>
 
                 <div class="popup-box-footer radius6 noradiustop">
-                    <a href="#" class="action-btn process-btn submit-btn" id="submit-ticket-link"><span class="p"></span><span class="t">Submit Request</span></a>
+                    <a href="#" class="action-btn process-btn" id="submit-ticket-link"><span class="p"></span><span class="t">Submit Request</span></a>
                     <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                     <div class="clear"></div>                    
                 </div>
