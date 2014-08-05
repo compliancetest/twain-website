@@ -254,44 +254,59 @@ Template Name Posts: Test Suite
                     }
                     
                     if (!$subscription) {
-                        if ($is_organisation_admin) {
-                        ?>
-                            <a href="<?php echo site_url()?>/my-organisation/test-suites" class="suite-subscript-link">
-                                <span class="price-b">
-                                    <span class="l"></span>
-                                    <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
-                                    <span class="r"></span>
-                                </span>
-                                <span class="price-b signup-price">
-                                    <span class="l"></span>
-                                    <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
-                                    <span class="r"></span>
-                                </span>
-                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                            </a>
-                        <?php
-                        } else if ($organisation = ct_get_user_organisation($user_id)) {
-                        ?>
-                            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                            </a>
-                        <?php
+                        if ($suite->signupPrice == '-1') {
+                            ?>
+                            <a href="<?php echo site_url()?>/contact-us" class="suite-subscript-link">
+                                    <span class="price-b">
+                                        <span class="l"></span>
+                                        <span class="m"><b>Contact Us</b><br />For Pricing</span>
+                                        <span class="r"></span>
+                                    </span>
+                                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                </a>
+                            <?php
                         } else {
-                        ?>
-                            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-                                <span class="price-b">
-                                    <span class="l"></span>
-                                    <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
-                                    <span class="r"></span>
-                                </span>
-                                <span class="price-b signup-price">
-                                    <span class="l"></span>
-                                    <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
-                                    <span class="r"></span>
-                                </span>
-                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                            </a>
-                        <?php
+                            
+                           
+                            if ($is_organisation_admin) {                                                        
+                            ?>
+                                <a href="<?php echo site_url()?>/my-organisation/test-suites" class="suite-subscript-link">
+                                    <span class="price-b">
+                                        <span class="l"></span>
+                                        <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
+                                        <span class="r"></span>
+                                    </span>
+                                    <span class="price-b signup-price">
+                                        <span class="l"></span>
+                                        <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
+                                        <span class="r"></span>
+                                    </span>
+                                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                </a>
+                            <?php
+                            } else if ($organisation = ct_get_user_organisation($user_id)) {
+                            ?>
+                                <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                </a>
+                            <?php
+                            } else {
+                            ?>
+                                <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                    <span class="price-b">
+                                        <span class="l"></span>
+                                        <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
+                                        <span class="r"></span>
+                                    </span>
+                                    <span class="price-b signup-price">
+                                        <span class="l"></span>
+                                        <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
+                                        <span class="r"></span>
+                                    </span>
+                                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                </a>
+                            <?php
+                            }
                         }
                     } else {
                         if ($subscription->status == 'Active') {
