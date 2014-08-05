@@ -1089,7 +1089,9 @@ function is_organisation_admin()
 }
 function getTestSuitProducts( $productID ){
     global $wpdb;
-    return $wpdb->get_results( $wpdb->prepare("SELECT suite_title FROM {$wpdb->prefix}test_plans AS tp LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id WHERE tp.product_id = %d ", $productID ));
+    return $wpdb->get_results( $wpdb->prepare("SELECT suite_title FROM {$wpdb->prefix}test_plans AS tp
+                                                LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id = tp.suite_id
+                                                WHERE tp.product_id = %d ", $productID ));
 }
 function getProductsByTestSuiteName( $name, $withoutTestSuite = false ){
     global $wpdb;
@@ -1151,7 +1153,7 @@ function generateDataAndDownload( $data ){
                             $claim->role,
                             $claim->status,
                             $suite->issueDate,
-                            date('d-M-y', strtotime( $claim->created_date ) ),
+                            date('d-M-y', strtotime( $claim->last_updated ) ),
                             $claim->claim_id
                         );
                         fputcsv( $outstream, $tempArray );
