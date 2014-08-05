@@ -92,7 +92,7 @@ class CT_Xeroitems_List_Table extends WP_List_Table
         $totalItems = $wpdb->get_var($query);
         
         $totalPages = ceil($totalItems / $this->per_pages);
-        if($totalPages > $paged)
+        if($totalPages < $paged)
             $paged = $totalPages;
         
         $this->set_pagination_args(array(

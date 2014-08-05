@@ -333,7 +333,7 @@ Template Name Posts: Test Suite
                             </div>
                         <?php
                         }
-                    }                 
+                    }
                 } else {
                     
             ?>
