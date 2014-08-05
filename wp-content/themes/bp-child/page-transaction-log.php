@@ -316,7 +316,6 @@ if($filterCustomer){
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-convsn tocenter">
-                                   <a href="#" class="zcliplink has-tooltip conv-id-entry" data-id="conv-id-<?php echo $row->ID?>"><span class="t">
                                    <?php 
                                         if(strlen($row->CONVERSATION_ID) > 38)
                                         {
@@ -325,7 +324,6 @@ if($filterCustomer){
                                             echo $row->CONVERSATION_ID;
                                         }                                    
                                    ?>
-                                   </span><span class="simple_tooltip radius6"><?php echo $row->CONVERSATION_ID; ?><br/>(Click to copy to clipboard)<span></a>
                                    <input type="hidden" id="conv-id-<?php echo $row->ID?>" value="<?php echo $row->CONVERSATION_ID; ?>">
                                </div>
                                <div class="td td-date tocenter">
@@ -367,7 +365,6 @@ if($filterCustomer){
                                                        <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
                                                    </div>
                                                    <div class="td td-message-part tocenter">
-                                                       <a href="#" class="zcliplink has-tooltip part-id-entry" data-id="part-id-<?php echo $message->ID?>"><span class="t">
                                                        <?php
                                                        if(strlen($message->PART_ID) > 28)
                                                        {
@@ -376,7 +373,6 @@ if($filterCustomer){
                                                            echo $message->PART_ID;
                                                        }
                                                        ?>
-                                                       </span><span class="simple_tooltip radius6"><?php echo $message->PART_ID; ?><br/>(Click to copy to clipboard)<span></a>
                                                        <input type="hidden" id="part-id-<?php echo $message->ID?>" value="<?php echo $message->PART_ID; ?>">
                                                    </div>
                                                    <div class="td td-message-view">
@@ -470,34 +466,9 @@ if($filterCustomer){
     </div>
     <div class="clear"></div>
  <script type="text/javascript">
-    function refreshZClipLink()
-    {
-        jQuery('#log-result-table .zcliplink').each(function(){
-            
-            if(!jQuery(this).data('zclipId'))
-            {
-                jQuery(this).zclip('remove');
-                jQuery(this).zclip({
-                    path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
-                    copy: function(){
-                        return jQuery('#' + jQuery(this).attr('data-id')).val();    
-                    },
-                    afterCopy: function(){
-                        if (jQuery(this).hasClass('conv-id-entry')) {
-                            alert("The Conversion ID has been copied to clipboard.\n" + jQuery('#' + jQuery(this).attr('data-id')).val());
-                        } else {
-                            alert("The Part ID has been copied to clipboard.\n" + jQuery('#' + jQuery(this).attr('data-id')).val());
-                        }
-                    }
-                })        
-            }
-        });
-    }
     
     jQuery(document).ready(function(){
         fixTdHeight(jQuery('#my_transaction_log .table-box'));
-        
-        refreshZClipLink();
 
         //Edit Log
         jQuery('#edit-log-link').click(function(){
@@ -689,8 +660,6 @@ if($filterCustomer){
         jQuery('#log-result-table .view-messages-link').click(function(){
             jQuery(this).parents('.tr').find('.sub-table').animate({'height': 'toggle'});
             jQuery(this).toggleClass('expanded');
-            
-            refreshZClipLink();
             
             return false;
         })
