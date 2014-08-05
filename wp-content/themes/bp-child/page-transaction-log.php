@@ -316,6 +316,7 @@ if($filterCustomer){
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-convsn tocenter">
+                                   <a href="javascript:void(0)">
                                    <?php 
                                         if(strlen($row->CONVERSATION_ID) > 38)
                                         {
@@ -324,7 +325,8 @@ if($filterCustomer){
                                             echo $row->CONVERSATION_ID;
                                         }                                    
                                    ?>
-                                   <input type="hidden" id="conv-id-<?php echo $row->ID?>" value="<?php echo $row->CONVERSATION_ID; ?>">
+                                   </a>
+                                   <input type="text" value="<?php echo $row->CONVERSATION_ID; ?>">
                                </div>
                                <div class="td td-date tocenter">
                                    <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />                                   
@@ -365,6 +367,7 @@ if($filterCustomer){
                                                        <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
                                                    </div>
                                                    <div class="td td-message-part tocenter">
+                                                       <a href="javascript:void(0)">
                                                        <?php
                                                        if(strlen($message->PART_ID) > 28)
                                                        {
@@ -373,7 +376,8 @@ if($filterCustomer){
                                                            echo $message->PART_ID;
                                                        }
                                                        ?>
-                                                       <input type="hidden" id="part-id-<?php echo $message->ID?>" value="<?php echo $message->PART_ID; ?>">
+                                                       </a>
+                                                       <input type="text" value="<?php echo $message->PART_ID; ?>">
                                                    </div>
                                                    <div class="td td-message-view">
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
@@ -470,6 +474,31 @@ if($filterCustomer){
     jQuery(document).ready(function(){
         fixTdHeight(jQuery('#my_transaction_log .table-box'));
 
+        jQuery('.td-convsn a, .td-message-part a').click(function(){
+            jQuery(this).hide();
+            jQuery(this).next().show();
+            jQuery(this).next().click();
+        });
+        
+        jQuery('.td-convsn input[type=text], .td-message-part input[type=text]').click(function(){
+            jQuery(this).select();
+        });
+        
+        jQuery('.td-convsn input[type=text], .td-message-part input[type=text]').blur(function(){
+            jQuery(this).hide();
+            jQuery(this).prev().show();
+        });
+        
+        jQuery('.td-convsn input[type=text], .td-message-part input[type=text]').keyup(function(e){
+            if (e.keyCode == 27) {
+                jQuery(this).hide();
+                jQuery(this).prev().show();
+            } else {
+                jQuery(this).select();
+                return false;
+            }
+        });
+        
         //Edit Log
         jQuery('#edit-log-link').click(function(){
             var checked = jQuery('#log-result-table .tbody input[type="checkbox"]:checked').length;
