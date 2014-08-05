@@ -322,7 +322,7 @@ function create_compliancetest_settings_page()
                         <?php submit_button()   ?>
                         <?php wp_nonce_field('save-mailchimp-all-list-settings'); ?>
                         <p>
-                            <a href="<?php echo get_site_url() ?>?ext-action=add-users-to-mailchimp" target="_blank" class="button">Sync All Users with the selected list</a>
+                            <a href="<?php echo admin_url() ?>?page=admin-actions&amp;admin-action=<?php echo wp_create_nonce('sync-users-to-mailchimp')?>" target="_blank" class="button">Sync All Users with the selected list</a>
                             <br />(You will need to save your change first.)        
                         </p>
                         <input type="hidden" name="tab_index" value="5">

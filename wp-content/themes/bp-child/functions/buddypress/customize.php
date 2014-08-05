@@ -41,7 +41,7 @@ function bp_groups_admin_edit_mailchimp_list($item)
     }
     ?>
     <p>
-        <a href="<?php echo get_site_url() ?>?ext-action=add-users-to-mailchimp3&id=<?php echo $item->id?>" target="_blank" class="button">Sync members with the selected list</a>
+        <a href="<?php echo admin_url() ?>?page=admin-actions&amp;admin-action=<?php echo wp_create_nonce('sync-users-to-mailchimp2')?>&id=<?php echo $item->id?>" target="_blank" class="button">Sync members with the selected list</a>
         <br />(You will need to save your change first.)        
     </p>
     <?php
