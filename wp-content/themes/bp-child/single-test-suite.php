@@ -266,9 +266,7 @@ Template Name Posts: Test Suite
                                 </a>
                             <?php
                         } else {
-                            
-                           
-                            if ($is_organisation_admin) {                                                        
+                            if ($is_organisation_admin) {
                             ?>
                                 <a href="<?php echo site_url()?>/my-organisation/test-suites" class="suite-subscript-link">
                                     <span class="price-b">
