@@ -1134,31 +1134,50 @@ function generateDataAndDownload( $data ){
             foreach( $getItemTestPlans AS $testPlan ){
                 $suite = new TestSuite($testPlan->suite_id);
                 $suite->load();
-                $claims = getClaimsByProductId($result->ID);
+                $claim = getClaimByTestPlanData( array( 'product_id' => $result->id, 'suite_id' => $testPlan->suite_id ) );
                 $group = groups_get_group( array( 'group_id' => $suite->community_id ) );
-                if( $claims ){
-                    foreach( $claims AS $claim ){
-                        $tempArray = array(
-                            $product->name,
-                            $product->product_id,
-                            $product->owner,
-                            $product->version,
-                            date('d-M-y', strtotime( $product->release_date ) ),
-                            $product->visibility,
-                            $group->name,
-                            $suite->name,
-                            isset( $claim->claim_id ) && ! empty( $claim->claim_id ) ?  get_the_title( $testPlan->suite_id ) : ct_get_suite_max_version( $testPlan->suite_id ),
-                            $claim->issuer,
-                            $claim->conformance_level,
-                            $claim->role,
-                            $claim->status,
-                            $suite->issueDate,
-                            date('d-M-y', strtotime( $claim->last_updated ) ),
-                            $claim->claim_id
-                        );
-                        fputcsv( $outstream, $tempArray );
-                    }
-                } else {
+                if( $claim && ( $claim->conformance_level !== str_replace(';;', '', $testPlan->level) || $claim->role !== str_replace(';;', '', $testPlan->role) ) ){
+                    $tempArray = array(
+                        $product->name,
+                        $product->product_id,
+                        $product->owner,
+                        $product->version,
+                        date('d-M-y', strtotime( $product->release_date ) ),
+                        $product->visibility,
+                        $group->name,
+                        $suite->name,
+                        isset( $claim->claim_id ) && ! empty( $claim->claim_id ) ?  get_the_title( $testPlan->suite_id ) : ct_get_suite_max_version( $testPlan->suite_id ),
+                        $claim->issuer,
+                        $claim->conformance_level,
+                        $claim->role,
+                        $claim->status,
+                        $suite->issueDate,
+                        date('d-M-y', strtotime( $claim->last_updated ) ),
+                        $claim->claim_id
+                    );
+                    fputcsv( $outstream, $tempArray );
+                } else if( $claim ){
+                    $tempArray = array(
+                        $product->name,
+                        $product->product_id,
+                        $product->owner,
+                        $product->version,
+                        date('d-M-y', strtotime( $product->release_date ) ),
+                        $product->visibility,
+                        $group->name,
+                        $suite->name,
+                        isset( $claim->claim_id ) && ! empty( $claim->claim_id ) ?  get_the_title( $testPlan->suite_id ) : ct_get_suite_max_version( $testPlan->suite_id ),
+                        $claim->issuer,
+                        $claim->conformance_level,
+                        $claim->role,
+                        $claim->status,
+                        $suite->issueDate,
+                        date('d-M-y', strtotime( $claim->last_updated ) ),
+                        $claim->claim_id
+                    );
+                    fputcsv( $outstream, $tempArray );
+                }
+                 else {
                     $tempArray = array(
                         $product->name,
                         $product->product_id,
