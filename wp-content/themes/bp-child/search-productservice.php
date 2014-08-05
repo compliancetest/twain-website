@@ -88,6 +88,7 @@ if( ! empty( $notInPostIdsArray ) ){
 //For Filter Values
 $all_posts = new WP_Query($args);
 $allSuites = $all_posts->get_posts();
+$processedIDs = array();
 
 foreach($allSuites as $row)
 {
@@ -99,7 +100,11 @@ foreach($allSuites as $row)
     $testSuiteProducts = getTestSuitProducts( $row->ID );
     if( ! empty( $testSuiteProducts ) ){
         foreach( $testSuiteProducts AS $testSuiteProduct ){
-            if( ! empty( $testSuiteProduct->suite_title ) ){
+                if( in_array( $testSuiteProduct->suite_title.$row->ID, $processedIDs )){
+                    continue;
+                }
+                array_push( $processedIDs, $testSuiteProduct->suite_title.$row->ID );
+                if( ! empty( $testSuiteProduct->suite_title ) ){
                 $testSuites[$testSuiteProduct->suite_title] = isset($testSuites[$testSuiteProduct->suite_title]) ? $testSuites[$testSuiteProduct->suite_title] + 1 : 1;
             }
         }
