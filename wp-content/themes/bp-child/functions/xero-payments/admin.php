@@ -176,7 +176,8 @@ function ct_process_xero_payment_admin_actions()
                     $payment = $xero->createPayment( array(
                         'InvoiceID' => $result['invoice_id'],
                         'Amount' => $result['amount'],
-                        'Date'   => date('Y-m-d')
+                        'Date'   => date('Y-m-d'),
+                        'Reference' => $result['reference']
                     ));
                     if( isset( $payment['Payments']['Payment']['PaymentID']) ){
                         $wpdb->update("{$wpdb->prefix}xero_payments",

@@ -225,6 +225,9 @@ class CT_Xero {
         $account->addChild( 'Code', 650 );
         $xml->addChild( 'Date', $paymentData['Date'] );
         $xml->addChild( 'Amount', $paymentData['Amount'] );
+        if( ! empty( $paymentData['Reference'] ) ){
+            $xml->addChild( 'Reference', $paymentData['Reference'] );
+        }
         $this->xero->request( 'POST', $this->xero->url('Payments', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();
