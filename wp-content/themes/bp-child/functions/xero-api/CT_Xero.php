@@ -217,17 +217,6 @@ class CT_Xero {
         return false;
     }
 
-    public function markInvoiceAsPaid( $invoiceID ){
-        var_dump($invoiceID);
-        $xml = new SimpleXMLElement( '<Invoice></Invoice>' );
-        $xml->addChild('InvoiceID', $invoiceID );
-        $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
-        var_dump($this->xero->response);die;
-        if ($this->xero->response['code'] == 200) {
-            return  $this->responseToArray();
-        }
-    }
-
     public function createPayment( $paymentData ){
         $xml = new SimpleXMLElement( '<Payment></Payment>' );
         $invoice = $xml->addChild( 'Invoice' );
