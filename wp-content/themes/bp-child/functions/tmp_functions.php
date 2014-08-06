@@ -311,7 +311,15 @@ if(is_super_admin())
             die("completed");
         }   
         
-             
+        if (isset($_GET['fix_profile_types_count']))
+        {
+            $rows = $wpdb->get_results("SELECT cpt.id, cpt.community_id, COUNT(cpt.id) as instance_count FROM " . $wpdb->prefix . "community_profile_types as cpt LEFT JOIN " . $wpdb->prefix . "community_profile_instances as cpi ON cpt.id=cpi.type_id AND cpt.community_id = cpi.community_id GROUP BY cpt.id");
+            
+            foreach ($rows as $row) {
+                $wpdb->update($wpdb->prefix . 'community_profile_types', array('instances' => $row->instance_count), array('id' => $row->id, 'community_id' => $row->community_id));
+            }
+            die("completed");
+        }
         
     }
     
