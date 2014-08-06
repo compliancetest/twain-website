@@ -5,3 +5,4 @@ ADD `date_paid` DATETIME NOT NULL AFTER `is_paid`;
 ALTER TABLE `wp_xero_payments` CHANGE `date` `date_added` DATE NOT NULL ;
 ALTER TABLE `wp_xero_payments` CHANGE `date_added` `date_added` DATETIME NOT NULL ;
 ALTER TABLE `wp_xero_payments` ADD `payment_id` VARCHAR( 255 ) NOT NULL ;
+ALTER TABLE `wp_xero_payments` DROP `is_reconciled` ;

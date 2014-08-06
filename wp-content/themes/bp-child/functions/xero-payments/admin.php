@@ -146,7 +146,6 @@ function ct_process_xero_payment_admin_actions()
                                     'date_added'        => date( 'Y-m-d' ),
                                     'amount'            => $invoiceData['Invoices']['Invoice']['Total'],
                                     'reference'         => '',
-                                    'is_reconciled'     => true,
                                     'organisation_id'   => $result->organisation_id,
                                     'payment_method_id' => $result->payment_id,
                                     'is_paid'           => false

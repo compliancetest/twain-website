@@ -26,7 +26,6 @@ class CT_Xero_Payments_Table extends WP_List_Table
             "date_added"        => __('Date Added'),
             "amount"            => __('Amount'),
             "reference"         => __("Reference"),
-            "is_reconciled"     => __("Is Reconsiled"),
             "organisation_id"   => __("Organisation"),
             "payment_method_id" => __("Payment Method ID"),
             "is_paid"           => __("Is Paid?"),
@@ -43,7 +42,6 @@ class CT_Xero_Payments_Table extends WP_List_Table
             "date"          => array("date", $orderby == 'date'),
             "amount"        => array("amount", $orderby == 'amount'),
             "reference"     => array("reference", $orderby == 'reference'),
-            "is_reconciled" => array("is_reconciled", $orderby == 'is_reconciled'),
             "reference"     => array("reference", $orderby == 'reference'),
             "organisation_id"   => array("organisation_id", $orderby == 'organisation_id'),
             "payment_method_id" => array("payment_method_id", $orderby == 'payment_method_id'),
@@ -79,8 +77,6 @@ class CT_Xero_Payments_Table extends WP_List_Table
         
         switch($column_name)
         {
-            case 'is_reconciled':
-                return $item->is_reconciled ? 'Yes' : 'No';
             case 'is_paid':
                 return $item->is_paid ? 'Yes' : 'No';
             case 'organisation_id':

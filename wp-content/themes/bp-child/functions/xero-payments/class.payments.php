@@ -16,8 +16,6 @@ class CT_Payments
 
     public $reference = null;
 
-    public $is_reconciled = null;
-
     public $organisation_id = null;
 
     public $payment_method_id = null;
