@@ -42,15 +42,19 @@ function ct_manage_invoices()
         <div class="clear"></div>
         <form id="charges_for_custom_org" name="charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-specific" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
-                <?php foreach( $chargesObject->getOrganisationsList() AS $organisation ):?>
-                    <?php
-                        $orgObject = new CT_Organisation( $organisation->organisation_id );
-                    ?>
-                    <tr>
-                        <th><?php echo $orgObject->organisation_name;?></th>
-                        <td><input type="checkbox" name="org_id[]" value="<?php echo $organisation->organisation_id;?>" /></td>
-                    </tr>
-                <?php endforeach;?>
+                <tr>
+                    <th>Organisations</th>
+                    <td>
+                        <select name="org_id[]">
+                            <?php foreach( $chargesObject->getOrganisationsList() AS $organisation ):?>
+                                <?php
+                                    $orgObject = new CT_Organisation( $organisation->organisation_id );
+                                ?>
+                                   <option value="<?php echo $organisation->organisation_id;?>"><?php echo $orgObject->organisation_name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
                 <tr><td colspan="2"><input type="submit" value="Generate" class="button button-primary" /></td></tr>
             </table>
         </form>

@@ -80,10 +80,6 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                 $this->row_actions(array(
                     "<a href='admin.php?page=add-charge&id=" . $item->id . "'>Edit</a>"
                 ));
-            case 'item_code':
-                $item_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}xeroitems WHERE code = %s", $item->item_code));
-                return "<a href='admin.php?page=add-xeroitem&id=" . $item_data->id . "'>".$item_data->code."</a>";
-
             case 'start_date':
                 return $item->start_date !== '0000-00-00 00:00:00' ? date( 'Y-m-d', strtotime( $item->start_date ) ) : '';
             case 'end_date':
