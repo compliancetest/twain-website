@@ -6,7 +6,6 @@ function ct_sync_users_to_mailchimp_page()
     //Getting Total Users
     $total_users = $wpdb->get_var("SELECT count(*) FROM {$wpdb->users} WHERE user_status=0");
     
-    ct_admin_action_page_css();
     ?>    
     <div class="wrap">    
         <div class="icon32" id="icon-tools"> <br /> </div>    
@@ -90,7 +89,6 @@ function ct_sync_users_to_mailchimp_page2()
     
     $group = groups_get_group(array('group_id' => $group_id));
     
-    ct_admin_action_page_css();
     ?>    
     <div class="wrap">    
         <div class="icon32" id="icon-tools"> <br /> </div>    

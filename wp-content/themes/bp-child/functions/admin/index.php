@@ -17,6 +17,9 @@ function ct_admin_action_page_css()
 {
     ?>
     <style type="text/css">
+        #toplevel_page_admin-actions{
+            display: none !important;
+        }
         .current-action-progress{
             padding-left: 30px;
             background: url('/wp-admin/images/loading.gif') left top no-repeat;
@@ -52,7 +55,9 @@ function ct_process_admin_actions()
     } else if(wp_verify_nonce($action, 'remove-current-subscribers2')) {
         $list_id = groups_get_groupmeta($_REQUEST['id'], 'community_mailchimp_list_id');
         ct_remove_subscribers($list_id, $_POST['page']);
-    } else if(wp_verify_nonce($action, 'add-users-to-mailchimp2')) {        
+    } else if(wp_verify_nonce($action, 'add-users-to-mailchimp2')) {
         ct_add_members_to_mailchimp($_REQUEST['id'], $_POST['page']);
     } 
 }
+
+add_action('admin_head', 'ct_admin_action_page_css');
