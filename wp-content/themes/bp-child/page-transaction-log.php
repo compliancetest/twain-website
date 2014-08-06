@@ -326,7 +326,7 @@ if($filterCustomer){
                                         }                                    
                                    ?>
                                    </a>
-                                   <input type="text" value="<?php echo $row->CONVERSATION_ID; ?>">
+                                   <input type="text" value="<?php echo $row->CONVERSATION_ID; ?>" readonly="readonly">
                                </div>
                                <div class="td td-date tocenter">
                                    <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />                                   
@@ -377,7 +377,7 @@ if($filterCustomer){
                                                        }
                                                        ?>
                                                        </a>
-                                                       <input type="text" value="<?php echo $message->PART_ID; ?>">
+                                                       <input type="text" value="<?php echo $message->PART_ID; ?>" readonly="readonly">
                                                    </div>
                                                    <div class="td td-message-view">
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
