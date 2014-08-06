@@ -139,6 +139,32 @@ class CT_Organisation_Controller
         
         $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
         
+        $user = get_userdata($user_id);
+        
+        //Sending Email
+        
+        $suite = new TestSuite($suite_family_mark);
+        $suite->load();
+        
+        $group = groups_get_group(array('group_id=' .  $suite->community_id));
+        $card = getUserCardById($payment_method);
+        
+        $paymentAmount = $suite->signupPriceValue + calculateFirstPaymentAmount($suite->monthlySubscriptionPriceValue);
+        
+        $emailData = array(
+            '[name]' => $user->first_name . " " . $user->last_name,
+            '[email]' => $user->user_email,
+            '[suite_name]' => $suite->title,
+            '[suite_url]' => get_permalink($suite_family_mark),
+            '[paid_amount]' => $paymentAmount,
+            '[signup_fee]' => $suite->signupPriceValue,
+            '[monthly_fee]' => $suite->monthlySubscriptionPriceValue,
+            '[community_url]' => bp_get_group_permalink($group),
+            '[payment_email]' => $card->email
+        );
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
+        cp_send_email_to_admin('purchase_subscription_admin', $emailData);        
+        
         return true;
         
     }
@@ -301,11 +327,33 @@ class CT_Organisation_Controller
     {
         global $wpdb;
         
+        $subscription = ct_get_organisation_subscription_by_id($subscription_id);
+        $organisation = new CT_Organisation($subscription->organisation_id);
+        
+        $orgAdmin = get_userdata($organisation->admin_id);
+        
+        $suite = new TestSuite($subscription->suite_family_mark);
+        $suite->load();
+        
         //Remove harness detail
         $wpdb->delete($wpdb->prefix . "users_subscriptions", array('parent_id' => $subscription_id), array('%d'));
         
         //Delete the organisation subscription
         $wpdb->delete($wpdb->prefix . "organisations_subscriptions", array('id' => $subscription_id), array('%d'));
+        
+        //Sending Cancel Unsubscribing Email        
+        $emailData = array(
+            '[name]' => $orgAdmin->first_name . " " . $orgAdmin->last_name,
+            '[email]' => $orgAdmin->user_email,
+            '[suite_name]' => $suite->name,
+            '[signup_fee]' => $suite->signupPriceValue,
+            '[monthly_fee]' => $suite->monthlySubscriptionPriceValue,
+            '[suite_url]' => get_permalink($subscription->suite_family_mark),
+        );
+        
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
+        cp_send_email_to_admin('cancel_subscription_admin', $emailData);
+
     }
     
     public function unsubscribe_organisation_subscription($subscription_id)
@@ -314,5 +362,27 @@ class CT_Organisation_Controller
         
         //Release the organisation subscription
         $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('status' => 'Unsubscribing'), array('id' => $subscription_id), array('%s'), array('%d'));
+        
+        $subscription = ct_get_organisation_subscription_by_id($subscription_id);
+        $organisation = new CT_Organisation($subscription->organisation_id);
+        
+        $orgAdmin = get_userdata($organisation->admin_id);
+        
+        $suite = new TestSuite($subscription->suite_family_mark);
+        $suite->load();
+        
+        //Sending Unsubscribing Email
+        $emailData = array(
+            '[name]' => $orgAdmin->first_name . " " . $orgAdmin->last_name,
+            '[email]' => $orgAdmin->user_email,
+            '[suite_name]' => $suite->name,
+            '[signup_fee]' => $suite->signupPriceValue,
+            '[monthly_fee]' => $suite->monthlySubscriptionPriceValue,
+            '[suite_url]' => get_permalink($subscription->suite_family_mark)
+        );
+
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
+        cp_send_email_to_admin('unsubscribing_admin', $emailData);
+        
     }
 }

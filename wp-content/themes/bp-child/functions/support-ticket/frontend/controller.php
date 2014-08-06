@@ -160,7 +160,6 @@ function createSupportTicket()
                     $has_attachment = 1;
                 }
 
-
             }
         }
     }

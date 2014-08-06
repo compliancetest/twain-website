@@ -246,3 +246,4 @@ function ct_calculate_first_month_quantity($quantity)
     
     return $quantity * ($remainedDay / $totalDay);
 }
+
