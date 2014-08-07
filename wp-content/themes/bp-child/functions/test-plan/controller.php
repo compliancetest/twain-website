@@ -72,9 +72,12 @@ function certifyPlan()
                     $all_success = false;
             }
         }
-        if($all_success)
+        if($all_success) {
             addMessage('The plan was certified successfully');
-        wp_redirect($return_success);
+            wp_redirect($return_success);
+        } else {
+            wp_redirect($return);
+        }
     }else{
         addMessage('You must complete the test plan before a claim can be made.', 'warning');
         wp_redirect($return);
