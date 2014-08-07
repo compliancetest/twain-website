@@ -101,43 +101,49 @@ class CT_Organisation_Controller
         $monthly_price_code = $suite_class->loadSingleValue('monthly_subscription_price');
         
         //Create Charge Table
-        $charge_data = array(
-            array(
-                'organisation_id'       => $organisation_id,
-                'payment_id'            => $payment_method,
-                'item_code'             => $sign_price_code,
-                'quantity'              => 1,
-                'start_date'            => date("Y-m-d H:i:s"),
-                'end_date'              => date("Y-m-d", strtotime('last day of this month')),
-                'reference_type'        => 'subscription',
-                'reference_id'          => $subscription_id,
-                'invoice_identifier'    => '',
-                'is_paid'               => 0,
-                'comment'               => ''
-            ),
-            array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
-        );
+        $query = $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id=%d", $organisation_id);
+        $no_billing = $wpdb->get_var($query);
         
-        $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
-        
-        $charge_data = array(
-            array(            
-                'organisation_id'       => $organisation_id,
-                'payment_id'            => $payment_method,
-                'item_code'             => $monthly_price_code,
-                'quantity'              => ct_calculate_first_month_quantity(1),
-                'start_date'            => date("Y-m-d H:i:s"),
-                'end_date'              => date("Y-m-d", strtotime('last day of this month')),
-                'reference_type'        => 'subscription',
-                'reference_id'          => $subscription_id,
-                'invoice_identifier'    => '',
-                'is_paid'               => 0,
-                'comment'               => ''
-            ),
-            array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
-        );
-        
-        $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+        if ($no_billing != '1')
+        {
+            $charge_data = array(
+                array(
+                    'organisation_id'       => $organisation_id,
+                    'payment_id'            => $payment_method,
+                    'item_code'             => $sign_price_code,
+                    'quantity'              => 1,
+                    'start_date'            => date("Y-m-d H:i:s"),
+                    'end_date'              => date("Y-m-d", strtotime('last day of this month')),
+                    'reference_type'        => 'subscription',
+                    'reference_id'          => $subscription_id,
+                    'invoice_identifier'    => '',
+                    'is_paid'               => 0,
+                    'comment'               => ''
+                ),
+                array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+            );
+            
+            $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+            
+            $charge_data = array(
+                array(            
+                    'organisation_id'       => $organisation_id,
+                    'payment_id'            => $payment_method,
+                    'item_code'             => $monthly_price_code,
+                    'quantity'              => ct_calculate_first_month_quantity(1),
+                    'start_date'            => date("Y-m-d H:i:s"),
+                    'end_date'              => date("Y-m-d", strtotime('last day of this month')),
+                    'reference_type'        => 'subscription',
+                    'reference_id'          => $subscription_id,
+                    'invoice_identifier'    => '',
+                    'is_paid'               => 0,
+                    'comment'               => ''
+                ),
+                array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+            );
+            
+            $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+        }
         
         $user = get_userdata($user_id);
         
