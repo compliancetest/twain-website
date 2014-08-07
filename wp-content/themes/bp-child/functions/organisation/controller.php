@@ -48,7 +48,7 @@ class CT_Organisation_Controller
         }
         
         $query = $wpdb->prepare("SELECT count(os.id) FROM {$wpdb->prefix}organisations_subscriptions AS os                             
-            WHERE os.organisation_id=%d AND os.suite_family_mark=%d", $organisation_id, $suite_family_mark);
+            WHERE os.organisation_id=%d AND os.suite_family_mark=%d", $organisation_id, $family_mark);
         $pCount = $wpdb->get_var($query);
         
         //Nickname should be unique        
@@ -149,7 +149,7 @@ class CT_Organisation_Controller
         
         //Sending Email
         
-        $suite = new TestSuite($suite_family_mark);
+        $suite = new TestSuite($family_mark);
         $suite->load();
         
         $group = groups_get_group(array('group_id=' .  $suite->community_id));
@@ -168,7 +168,7 @@ class CT_Organisation_Controller
             '[organisation]'    => $organisation->organisation_name,
             '[community_url]' => bp_get_group_permalink($group),
             '[payment_email]' => $card->email
-        );
+        );var_dump($emailData);exit;
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
         cp_send_email_to_admin('purchase_subscription_admin', $emailData);        
         
