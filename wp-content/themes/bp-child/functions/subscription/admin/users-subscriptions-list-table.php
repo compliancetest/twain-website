@@ -21,9 +21,9 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
     function get_columns()
     {
         return $column = array(
-            "organisation_name" => __("Organisation Name"),
+            "organisation_name" => __("Organisation"),
             "suite_title" => __('Test Suite'),
-            "nickname" => __('Nickname'),
+            "subscription_name" => __('Nickname'),
             "user_id" => __("User"),
             "status" => __("Status"),
             "created_date" => __("Subscribed Date"),
@@ -36,11 +36,10 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
         return $sortable = array(
             "organisation_name" => array("organisation_name", $orderby == 'organisation_name'),
             "suite_title" => array("suite_title", $orderby == 'suite_title'),
-            "nickname" => array("s.nickname", $orderby == 's.nickname'),
-            "created_date" => array("purchased_date", $orderby == 'purchased_date'),
-            "status" => array("status", $orderby == 'status'),
-            "payment_method" => array("payment_method", $orderby == 'payment_method'),
-            "user_id" => array("user_id", $orderby == 'user_id'),
+            "subscription_name" => array("os.nickname", $orderby == 'os.nickname'),
+            "created_date" => array("us.created_date", $orderby == 'us.created_date'),
+            "status" => array("os.status", $orderby == 'os.status'),            
+            "user_id" => array("us.user_id", $orderby == 'us.user_id'),
             "id" => array("ID", $orderby == 'ID')
         );
     }
@@ -99,8 +98,8 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
         {
             case 'organisation_name':
                 return $item->$column_name . $this->row_actions(array(
-                    "<a href='admin.php?page=add-organisation-subscription&id=" . $item->id . "'>Edit</a>",
-                    "<a href='admin.php?subscription_admin_action="  . wp_create_nonce('delete-organisation-subscription') ."&id=" . $item->id . "' onclick='return confirm(\"Are you sure you want to delete this subscription?\")'>Delete</a>",
+                    "<a href='admin.php?page=add-user-subscription&id=" . $item->id . "'>Edit</a>",
+                    "<a href='admin.php?subscription_admin_action="  . wp_create_nonce('delete-user-subscription') ."&id=" . $item->id . "' onclick='return confirm(\"Are you sure you want to delete this subscription?\")'>Delete</a>",
                 ));
             case 'user_id': 
                 return !$item->user_id ? "-" : get_user_meta($item->user_id, 'first_name', true) . " " . get_user_meta($item->user_id, 'last_name', true);
@@ -135,24 +134,25 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
         ));
       
         $query = "SELECT 
+                        us.id,
                         us.organisation_id, 
                         us.user_id, 
                         us.suite_id, 
                         us.created_date, 
                         os.nickname as subscription_name, 
+                        os.status, 
+                        p.post_title AS suite_title,
                         o.organisation_name, 
                         o.organisation_domain 
                   FROM {$wpdb->prefix}users_subscriptions as us
                   LEFT JOIN {$wpdb->posts} AS p ON p.ID=us.suite_id
                   LEFT JOIN {$wpdb->prefix}organisations_subscriptions as os ON os.id=us.parent_id             
                   LEFT JOIN {$wpdb->prefix}organisations AS o ON os.organisation_id=o.id             
-                  LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS p ON p.id=os.payment_method                  
+                  LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS pm ON pm.id=os.payment_method                  
                   WHERE 1 ";
                         
         if($_REQUEST['filter_organisation'])
             $query .= $wpdb->prepare(" AND os.organisation_id=%d", $_REQUEST['filter_organisation']);
-        if($_REQUEST['filter_suite'])
-            $query .= $wpdb->prepare(" AND os.suite_family_mark=%d", $_REQUEST['filter_suite']);
         if($_REQUEST['filter_status'])
             $query .= $wpdb->prepare(" AND os.status=%s", $_REQUEST['filter_status']);
         

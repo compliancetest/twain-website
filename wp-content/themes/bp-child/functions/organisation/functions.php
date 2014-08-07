@@ -256,3 +256,13 @@ function ct_get_payment_method_by_id($id)
     
     return $row;
 }
+
+function ct_get_user_subscription_by_id($subscription_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE id=%d", $subscription_id);
+    $data = $wpdb->get_row($query);
+    
+    return $data;
+}

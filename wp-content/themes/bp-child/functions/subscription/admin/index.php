@@ -34,6 +34,10 @@ function ct_process_subscriptions_admin_actions()
             ct_save_organisation_subscription_on_admin();    
         } else if (wp_verify_nonce($action, 'delete-organisation-subscription')) {
             ct_delete_organisation_subscription_on_admin();    
+        } else if (wp_verify_nonce($action, 'save-user-subscription')) {
+            ct_save_user_subscription_on_admin();      
+        } else if (wp_verify_nonce($action, 'delete-user-subscription')) {
+            ct_delete_user_subscription_on_admin();    
         } 
     }
 }

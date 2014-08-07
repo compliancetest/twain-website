@@ -74,11 +74,103 @@ function ct_delete_organisation_subscription_on_admin()
     $id = $_GET['id'];
     
     //Delete Users Subcription
-    $orgController = new CT_Organisation_Controller();
-    $orgController->delete_organisation_subscription($id);
+    /*$orgController = new CT_Organisation_Controller();
+    $orgController->delete_organisation_subscription($id);*/
+    //Remove harness detail
+    $wpdb->delete($wpdb->prefix . "users_subscriptions", array('parent_id' => $id), array('%d'));
+    
+    //Delete the organisation subscription
+    $wpdb->delete($wpdb->prefix . "organisations_subscriptions", array('id' => $id), array('%d'));
     
     addMessage("Organsation subscription was deleted");
     wp_redirect(admin_url() . 'admin.php?page=organisation-subscriptions');
+    exit;
+}
+
+add_action('wp_ajax_get_organisation_subscription_info_on_admin', 'ct_get_organisation_subscription_info_by_ajax');
+function ct_get_organisation_subscription_info_by_ajax()
+{
+    global $wpdb;
+    
+    if(!is_super_admin())    
+    {
+        die("Invalid Request");
+    }
+    
+    $id = $_POST['id'];
+    
+    $subscription = ct_get_organisation_subscription_by_id($id);
+    
+    $orgClass = new CT_Organisation($subscription->organisation_id);
+    $users = $orgClass->get_organisation_members();
+    
+    
+    $family_mark = $subscription->suite_family_mark;
+    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID WHERE t.family_mark=$family_mark ORDER BY p.post_title";
+    $test_suites = $wpdb->get_results($query);
+    
+    
+    
+    
+    $pHtml = '';
+    foreach($test_suites as $p){
+        $pHtml .= '<option value="' . $p->ID . '" >' . $p->post_title . '</option>';
+    }
+    
+    $uHtml = '';
+    foreach($users as $u){
+        $uHtml .= '<option value="' . $u->ID . '" ' . (isset($data) && $data->user_id == $u->ID ? 'selected="selected"' : '') . '>' . get_user_meta($u->ID, 'first_name', true) . " " . get_user_meta($u->ID, 'last_name', true) . ', ' . $u->user_email . '</option>';
+    }
+    
+    header('Content-type: application/xml');
+    echo '<result>';
+    echo '<suites><![CDATA[';
+    echo $pHtml;
+    echo ']]></suites>';
+    echo '<users><![CDATA[';
+    echo $uHtml;
+    echo ']]></users>';    
+    echo '</result>';
+    
+    exit;
+}
+
+function ct_save_user_subscription_on_admin()
+{
+    global $wpdb;
+    
+    $subscription = ct_get_organisation_subscription_by_id($_POST['organisation_subscription_id']);
+    
+    $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('user_id' => $_POST['user_id']), array('id' => $subscription->id), array('%d'), array('%d'));
+    
+    $controller = new CT_Organisation_Controller();
+    
+    if (!$_POST['id']) {
+        $controller->create_user_harness_detail($_POST['user_id'], $_POST['suite_id'], $subscription->organisation_id, $subscription->id);    
+    } else {
+        $wpdb->update($wpdb->prefix . "users_subscriptions", array('user_id' => $_POST['user_id'], 'parent_id' => $subscription->id, 'suite_id' => $_POST['suite_id']), array('id' => $_POST['id']), array('%d'), array('%d'));
+    }
+    
+    addMessage('Subscription saved successfully.');
+    wp_redirect(admin_url() . 'admin.php?page=user-subscriptions');
+    exit;
+}
+
+function ct_delete_user_subscription_on_admin()
+{
+    global $wpdb;
+    
+    $id = $_GET['id'];
+    
+    $data = $wpdb->get_row("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=" . $id);
+    
+    $wpdb->delete($wpdb->prefix . "users_subscriptions", array('id' => $id), array('%d'));
+    
+    //Delete the organisation subscription
+    $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('user_id' => 0), array('id' => $data->parent_id), array('%d'), array('%d'));
+    
+    addMessage("User subscription was deleted");
+    wp_redirect(admin_url() . 'admin.php?page=user-subscriptions');
     exit;
 }
 
