@@ -72,6 +72,9 @@ jQuery(document).ready(function(){
                 jQuery(rsp).find('template').each(function(idx){
                     jQuery('#tm-template').append('<option value="' + jQuery(this).find('uri').text() + '">' + jQuery(this).find('name').text() + '</option>');
                 });
+                if (jQuery(rsp).find('template').length == 1) {
+                    jQuery('#tm-template').find('option:eq(1)').attr('selected', true);
+                }
                 
                 jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());                
                 jQuery('#trigger-message-box .tester-profiles-section').html(jQuery(rsp).find('tester').text());
