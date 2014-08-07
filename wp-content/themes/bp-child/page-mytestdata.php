@@ -274,7 +274,6 @@ if(count($subscriptions) > 0){
 <?php
 }
 ?>
-<?php render_unsubscription_popup(); ?>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){

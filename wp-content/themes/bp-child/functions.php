@@ -116,7 +116,7 @@ require_once(THE_FUNCTION . '/subscription/class.subscription.php');
 require_once(THE_FUNCTION . '/subscription/controller.php');
 require_once(THE_FUNCTION . '/subscription/function.php');
 
-require_once(THE_FUNCTION . '/subscription/admin/manage-subscriptions.php');
+require_once(THE_FUNCTION . '/subscription/admin/index.php');
 
 //Charges admin section
 require_once(THE_FUNCTION . '/charges/admin.php');

@@ -105,4 +105,3 @@ if(!defined('ABSPATH'))
     </div>
 </div>
 <?php endif; ?>
-<?php render_unsubscription_popup(); ?>

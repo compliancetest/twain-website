@@ -132,7 +132,7 @@ $ct_email_templates = array(
         array(
             'menu'         => 'Organisation Subscription<br /> Purchased',
             'title'         => 'Organisation Subscription Purchased',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [signup_fee], [monthly_fee], [community_url], [payment_email]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [paid_amount],[community_url]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -147,7 +147,7 @@ $ct_email_templates = array(
         array(
             'menu'         => 'Unsubscribe Subscription',
             'title'         => 'Unsubscribe Subscription',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -162,7 +162,7 @@ $ct_email_templates = array(
         array(
             'menu'         => 'Organisation Subscription<br /> Cancelled',
             'title'         => 'Organisation Subscription Cancelled',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [paid_amount], [signup_fee], [monthly_fee]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -175,9 +175,24 @@ $ct_email_templates = array(
             )
         ),  
         array(
+            'menu'         => 'Allocate Subscription to User',
+            'title'         => 'Allocate Subscription to User',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name]',
+            'fields' => array(
+                            array(
+                                'title'         => 'For User',
+                                'id'            => 'allocate_subscription_to_user'                                
+                            ),
+                            array(
+                                'title'         => 'For Admin',
+                                'id'            => 'allocate_subscription_to_user_admin',
+                            )                            
+            )
+        ),  
+        array(
             'menu'         => 'Active -> InArrears',
             'title'         => 'Subscription is in arrears',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [monthly_fee], [method_nickname]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -192,7 +207,7 @@ $ct_email_templates = array(
         array(
             'menu'         => 'InArrears -> Frozen',
             'title'         => 'Subscription is frozen',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee], [method_nickname]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -207,7 +222,7 @@ $ct_email_templates = array(
          array(
             'menu'         => 'InArrears -> Active',
             'title'         => 'Subscription is Active From InArrears',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee], [method_nickname]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -222,7 +237,7 @@ $ct_email_templates = array(
          array(
             'menu'         => 'Frozen -> Active',
             'title'         => 'Subscription is Active from Frozen',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee], [method_nickname]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',

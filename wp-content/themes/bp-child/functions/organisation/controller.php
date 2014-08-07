@@ -154,11 +154,8 @@ class CT_Organisation_Controller
         $emailData = array(
             '[name]' => $user->first_name . " " . $user->last_name,
             '[email]' => $user->user_email,
-            '[suite_name]' => $suite->title,
-            '[suite_url]' => get_permalink($suite_family_mark),
+            '[suite_name]' => $suite->name,
             '[paid_amount]' => $paymentAmount,
-            '[signup_fee]' => $suite->signupPriceValue,
-            '[monthly_fee]' => $suite->monthlySubscriptionPriceValue,
             '[community_url]' => bp_get_group_permalink($group),
             '[payment_email]' => $card->email
         );
@@ -345,10 +342,7 @@ class CT_Organisation_Controller
         $emailData = array(
             '[name]' => $orgAdmin->first_name . " " . $orgAdmin->last_name,
             '[email]' => $orgAdmin->user_email,
-            '[suite_name]' => $suite->name,
-            '[signup_fee]' => $suite->signupPriceValue,
-            '[monthly_fee]' => $suite->monthlySubscriptionPriceValue,
-            '[suite_url]' => get_permalink($subscription->suite_family_mark),
+            '[suite_name]' => $suite->name
         );
         
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
@@ -375,10 +369,7 @@ class CT_Organisation_Controller
         $emailData = array(
             '[name]' => $orgAdmin->first_name . " " . $orgAdmin->last_name,
             '[email]' => $orgAdmin->user_email,
-            '[suite_name]' => $suite->name,
-            '[signup_fee]' => $suite->signupPriceValue,
-            '[monthly_fee]' => $suite->monthlySubscriptionPriceValue,
-            '[suite_url]' => get_permalink($subscription->suite_family_mark)
+            '[suite_name]' => $suite->name            
         );
 
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'unsubscribing', $emailData);
