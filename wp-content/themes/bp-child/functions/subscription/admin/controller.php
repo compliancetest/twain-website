@@ -71,7 +71,7 @@ function ct_delete_organisation_subscription_on_admin()
 {
     global $wpdb;
     
-    $id = $_POST['id'];
+    $id = $_GET['id'];
     
     //Delete Users Subcription
     $orgController = new CT_Organisation_Controller();

@@ -6,7 +6,7 @@
 
 require_once(ABSPATH . "/wp-admin/includes/class-wp-list-table.php");
 
-class CT_Users_Purchases_List_Table extends WP_List_Table
+class CT_User_Subscriptions_List_Table extends WP_List_Table
 {
     var $per_pages = 20;
     
@@ -21,26 +21,26 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
     function get_columns()
     {
         return $column = array(
-//            "cb" => "<input type='checkbox' />",            
-            "username" => __("Username"),
-            "name" => __('Name'),
-            "email" => __("Email"),
-            "payments_methods" => __("Payment Methods"),                                    
-            "subscriptions" => __("Subscriptions"),                        
-            "total_ticket_hours" => __("Total Ticket Hours<br />(Normal/High/Urgent)"),
-            "pending_ticket_hours" => __("Pending Ticket Hours<br />(Normal/High/Urgent)"),
-            "id" => __("ID"),  
+            "organisation_name" => __("Organisation Name"),
+            "suite_title" => __('Test Suite'),
+            "nickname" => __('Nickname'),
+            "user_id" => __("User"),
+            "status" => __("Status"),
+            "created_date" => __("Subscribed Date"),
+            "id" => __("ID")  
         );
     }
     
     function get_sortable_columns($orderby)
     {
         return $sortable = array(
-            "username" => array("login", $orderby == 'login'),
-            "name" => array("name", $orderby == 'name'),
-            "email" => array("email", $orderby == 'email'),
-            "payments_methods" => array("cards", $orderby == 'cards'),
-            "subscriptions" => array("subscriptions", $orderby == 'subscriptions'),
+            "organisation_name" => array("organisation_name", $orderby == 'organisation_name'),
+            "suite_title" => array("suite_title", $orderby == 'suite_title'),
+            "nickname" => array("s.nickname", $orderby == 's.nickname'),
+            "created_date" => array("purchased_date", $orderby == 'purchased_date'),
+            "status" => array("status", $orderby == 'status'),
+            "payment_method" => array("payment_method", $orderby == 'payment_method'),
+            "user_id" => array("user_id", $orderby == 'user_id'),
             "id" => array("ID", $orderby == 'ID')
         );
     }
@@ -56,18 +56,36 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
     {
           if($which == "top")
           {
+              global $wpdb;
+              
+              //Getting Organisations
+              $query = "SELECT organisation_name, id from {$wpdb->prefix}organisations ORDER BY organisation_name";
+              $organisations = $wpdb->get_results($query);
+              
+              $statuses = array('Active', 'InArrears', 'Fronzen', 'Unsubscribing');
               ?>
-              <div style="float: left;">
-              <?php              
-              $this->search_box("Search", "search");
-              ?>                  
-              <label style="margin-right: 10px">
-                  Show 
-                  <select name="filter_subscriptions" onchange="document.adminform.submit()">
-                      <option value="1" <?php echo isset($_REQUEST['filter_subscriptions']) && $_REQUEST['filter_subscriptions'] == 1 ? 'selected="selected"' : '' ?>>All Users</option>
-                      <option value="2" <?php echo !isset($_REQUEST['filter_subscriptions']) || $_REQUEST['filter_subscriptions'] == 2 ? 'selected="selected"' : '' ?>>Customers</option>
-                  </select>
-              </label>
+              <div style="float: left;">              
+                  <label style="margin-right: 10px">
+                      Organisations 
+                      <select name="filter_organisation">
+                          <option value="" <?php echo !$_REQUEST['filter_organisation']? 'selected="selected"' : '' ?>>All</option>
+                          <?php foreach($organisations as $org): ?>
+                          <option value="<?php echo $org->id?>" <?php echo $_REQUEST['filter_organisation'] == $org->id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
+                          <?php endforeach; ?>
+                      </select>
+                  </label>
+                  
+                  <label style="margin-right: 10px">
+                      Status 
+                      <select name="filter_status">
+                          <option value="" <?php echo !$_REQUEST['filter_status']? 'selected="selected"' : '' ?>>All</option>
+                          <?php foreach($statuses as $s): ?>
+                          <option value="<?php echo $s?>" <?php echo $_REQUEST['filter_status'] == $s ? 'selected="selected"' : '' ?>><?php echo $s?></option>
+                          <?php endforeach; ?>
+                      </select>
+                  </label>
+                  
+                  <input type="submit" value="Search" class="button-primary" >
               </div>              
               <?php
           }
@@ -79,27 +97,15 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
         
         switch($column_name)
         {
-            case 'username':
-                return get_avatar($item->ID, 22) . '<strong>' . $item->user_login . '</strong>' . $this->row_actions(array(
-                    "<a href='admin.php?page=users&action=detail&id=" . $item->ID . "'>Detail</a>"                    
+            case 'organisation_name':
+                return $item->$column_name . $this->row_actions(array(
+                    "<a href='admin.php?page=add-organisation-subscription&id=" . $item->id . "'>Edit</a>",
+                    "<a href='admin.php?subscription_admin_action="  . wp_create_nonce('delete-organisation-subscription') ."&id=" . $item->id . "' onclick='return confirm(\"Are you sure you want to delete this subscription?\")'>Delete</a>",
                 ));
-            case 'name':
-                return $item->first_name . " " . $item->last_name;
-            
-            case 'email':
-                return $item->user_email;
-            
-            case 'payments_methods':
-                return !isset($item->cards) ? 0 : $item->cards;
-            
-            case 'subscriptions':
-                return !isset($item->subscriptions) ? 0 : $item->subscriptions;
-            
-            case 'total_ticket_hours':
-                return str_pad($item->total_ticket_hours_normal, 2, '0', STR_PAD_LEFT) . ' / ' . str_pad($item->total_ticket_hours_high, 2, '0', STR_PAD_LEFT) . ' / ' . str_pad($item->total_ticket_hours_urgent, 2, '0', STR_PAD_LEFT);
-            case 'pending_ticket_hours':
-                return $item->pending_ticket_hours_normal . '/' . $item->pending_ticket_hours_high . '/' . $item->pending_ticket_hours_urgent;
-            
+            case 'user_id': 
+                return !$item->user_id ? "-" : get_user_meta($item->user_id, 'first_name', true) . " " . get_user_meta($item->user_id, 'last_name', true);
+            case 'payment_method': 
+                return $item->payment_method_name . "(" . (!$item->invoice_me ? $item->card_number : 'Invoice') . ")" ;
             default:
                 return $item->$column_name;
         }
@@ -107,94 +113,54 @@ class CT_Users_Purchases_List_Table extends WP_List_Table
     
     function prepare_items()
     {
-        global $role, $usersearch, $wpdb;
-
-        $usersearch = isset( $_REQUEST['s'] ) ? trim( $_REQUEST['s'] ) : '';
-
-        $role = isset( $_REQUEST['role'] ) ? $_REQUEST['role'] : '';
-
-        $per_page = 'users_per_page';
-        $users_per_page = $this->get_items_per_page( $per_page );
-
+        global $wpdb;
+        
         $paged = $this->get_pagenum();
         
-        $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'name';
+        $orderby = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'organisation_name';
         $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : 'asc';
-        
-        $filter_subscriptions = isset($_REQUEST['filter_subscriptions']) ? $_REQUEST['filter_subscriptions'] : 2;
-        
-        $args = array(
-            'number' => $users_per_page,
-            'offset' => ( $paged-1 ) * $users_per_page,
-            'role' => $role,
-            'search' => $usersearch,
-            'orderby' => $orderby,
-            'order' => $order,
-            'fields' => 'all_with_meta'
-        );
-
-        if ( '' !== $args['search'] )
-            $args['search'] = '*' . $args['search'] . '*';
 
         // Query the user IDs for this page
-        $wp_user_search = new WP_User_Query( $args );
+        $query = "SELECT count(*) FROM {$wpdb->prefix}organisations_subscriptions";
+        $totalItems = $wpdb->get_var($query);
         
-        //Add User Extra
-        $wp_user_search->query_from .= " LEFT JOIN {$wpdb->prefix}users_extra AS ue ON ue.userID={$wpdb->users}.ID  ";
+        $totalPages = ceil($totalItems / $this->per_pages);
+        if($totalPages < $paged)
+            $paged = $totalPages;
         
-        $wp_user_search->query_fields .= " ,ue.* ";
+        $this->set_pagination_args(array(
+            "total_items"=>$totalItems,
+            "total_pages"=>$totalPages,
+            "per_page"=>$this->per_pages
+        ));
+      
+        $query = "SELECT 
+                        us.organisation_id, 
+                        us.user_id, 
+                        us.suite_id, 
+                        us.created_date, 
+                        os.nickname as subscription_name, 
+                        o.organisation_name, 
+                        o.organisation_domain 
+                  FROM {$wpdb->prefix}users_subscriptions as us
+                  LEFT JOIN {$wpdb->posts} AS p ON p.ID=us.suite_id
+                  LEFT JOIN {$wpdb->prefix}organisations_subscriptions as os ON os.id=us.parent_id             
+                  LEFT JOIN {$wpdb->prefix}organisations AS o ON os.organisation_id=o.id             
+                  LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS p ON p.id=os.payment_method                  
+                  WHERE 1 ";
+                        
+        if($_REQUEST['filter_organisation'])
+            $query .= $wpdb->prepare(" AND os.organisation_id=%d", $_REQUEST['filter_organisation']);
+        if($_REQUEST['filter_suite'])
+            $query .= $wpdb->prepare(" AND os.suite_family_mark=%d", $_REQUEST['filter_suite']);
+        if($_REQUEST['filter_status'])
+            $query .= $wpdb->prepare(" AND os.status=%s", $_REQUEST['filter_status']);
         
-        if($orderby == 'cards' || $orderby == 'subscriptions')
-            $wp_user_search->query_orderby = ' ORDER BY ' . $orderby . ' ' . $order;
+        $query .= " ORDER BY $orderby $order ";
+        $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         
-        if($filter_subscriptions == 2)
-            $wp_user_search->query_where .= ' AND ue.subscriptions > 0 ';
-        
-        $wp_user_search->results = $wpdb->get_results("SELECT $wp_user_search->query_fields $wp_user_search->query_from $wp_user_search->query_where $wp_user_search->query_orderby $wp_user_search->query_limit");            
-        
-        if ( isset( $wp_user_search->query_vars['count_total'] ) && $wp_user_search->query_vars['count_total'] )
-            $wp_user_search->total_users = $wpdb->get_var( apply_filters( 'found_users_query', 'SELECT FOUND_ROWS()' ) );
-
-        if ( !$wp_user_search->results )
-        {
-            $results = array();
-        }else{
-            if ( 'all_with_meta' == $wp_user_search->query_vars['fields'] ) {
-                cache_users( $wp_user_search->results );
-
-                $r = array();
-                foreach ( $wp_user_search->results as $urow ){
-                    $r[ $urow->ID ] = new WP_User( $urow->ID, '', $wp_user_search->query_vars['blog_id'] );
-                    
-                    $r[ $urow->ID ]->subscriptions = $urow->subscriptions;
-                    $r[ $urow->ID ]->cards = $urow->cards;
-                    
-                    $r[ $urow->ID ]->total_ticket_hours_normal = $urow->total_ticket_hours_normal;
-                    $r[ $urow->ID ]->total_ticket_hours_high = $urow->total_ticket_hours_high;
-                    $r[ $urow->ID ]->total_ticket_hours_urgent = $urow->total_ticket_hours_urgent;
-                    $r[ $urow->ID ]->pending_ticket_hours_normal = $urow->pending_ticket_hours_normal;
-                    $r[ $urow->ID ]->pending_ticket_hours_high = $urow->pending_ticket_hours_high;
-                    $r[ $urow->ID ]->pending_ticket_hours_urgent = $urow->pending_ticket_hours_urgent;
-                }
-
-                $wp_user_search->results = $r;
-            } 
-            $results = $wp_user_search->get_results();
-        }
-        
-        $uids = array();
-        foreach($results as $u)
-        {
-            $uids[] = $u->ID;
-        }
-        
-        $this->items = $results;
-        
-        $this->set_pagination_args( array(
-            'total_items' => $wp_user_search->get_total(),
-            'per_page' => $users_per_page,
-        ) );
-        
+        $this->items = $wpdb->get_results($query);
+      
         $columns = $this->get_columns();
         $hidden = array();
         $sortable = $this->get_sortable_columns($orderby);          
