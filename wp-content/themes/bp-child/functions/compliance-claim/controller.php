@@ -176,15 +176,15 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
         
         
     }else{  //Edit Claim
-        $nId = $wpdb->update(TABLE_CLAIM, array(
+        $wpdb->update(TABLE_CLAIM, array(
             'suite_id'    =>  $suite_id,
             'conformance_level'    =>  $confLevel,
             'role'    =>  $role,
             'status'    =>  $status,
             'last_updated'    =>  date('Y-m-d H:i:s')
         ), array('id' => $claim->id));
-        print_r($claim);
-        echo $nId; exit;
+        
+        $nId = $claim->id;
     }
     if(!$nId)
     {
