@@ -113,7 +113,7 @@ class CT_Organisation_Controller
                 'reference_id'          => $subscription_id,
                 'invoice_identifier'    => '',
                 'is_paid'               => 0,
-                'comment'               => 'Subscription Signup Fee'
+                'comment'               => ''
             ),
             array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
         );
@@ -132,7 +132,7 @@ class CT_Organisation_Controller
                 'reference_id'          => $subscription_id,
                 'invoice_identifier'    => '',
                 'is_paid'               => 0,
-                'comment'               => 'Monthly Subscription Fee'
+                'comment'               => ''
             ),
             array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
         );
