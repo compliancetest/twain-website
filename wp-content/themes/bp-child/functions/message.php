@@ -675,7 +675,7 @@ function showTriggerMessageBox()
                                     <select name="product" id="tm-product" class="select">
                                         <option value="">Select a Product</option>
                                         <?php foreach($products as $p){ ?>
-                                        <option value="<?php echo $p->ID?>" <?php echo 0 && $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
+                                        <option value="<?php echo $p->ID?>" <?php echo ($p->ID == $current_product_id || count($products) == 1) ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>                    
@@ -686,7 +686,7 @@ function showTriggerMessageBox()
                                     <label for="tm-test-suite">Test Case</label>
                                     <select name="test-case" id="tm-test-case" class="select">
                                         <?php foreach($cases as $c){ ?>
-                                        <option value="<?php echo $c->ID?>" <?php echo $c->ID == $current_case_id ? 'selected="selected"' : '' ?>><?php echo $c->post_title ?></option>
+                                        <option value="<?php echo $c->ID?>" <?php echo ($c->ID == $current_case_id) ? 'selected="selected"' : '' ?>><?php echo $c->post_title ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -695,7 +695,7 @@ function showTriggerMessageBox()
                                     <select name="template" id="tm-template" class="select">
                                         <option value="">- Select -</option>
                                         <?php foreach($caseTemplates as $t){ ?>
-                                        <option value="<?php echo $t['url']?>"><?php echo $t['name']?></option>
+                                        <option value="<?php echo $t['url']?>" <?php echo (count($caseTemplates) == 1) ? 'selected="selected"' : '' ?>><?php echo $t['name']?></option>
                                         <?php } ?>
                                     </select>
                                 </div>                    
