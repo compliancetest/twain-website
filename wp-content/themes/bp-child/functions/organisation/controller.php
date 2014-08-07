@@ -219,7 +219,7 @@ class CT_Organisation_Controller
         
     }
     
-    public function save_subscription($subscription_id, $nickname, $assignee)
+    public function save_subscription($subscription_id, $nickname)
     {
         global $wpdb;
         
@@ -238,17 +238,17 @@ class CT_Organisation_Controller
             $n_nickname = $nickname . "_" . $i;
         } while (1);
         
-        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}organisations_subscriptions WHERE id=%d", $subscription_id);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE id=%d", $subscription_id);
         $subscription = $wpdb->get_row($query);
         
-        if ($assignee != $subscription->user_id) {
+/*        if ($assignee != $subscription->user_id) {
             //Remove Old Subscription
             $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}users_subscriptions WHERE parent_id=%d", $subscription_id);
             $wpdb->prepare($query);
-        }
+        }*/
         
         $wpdb->update($wpdb->prefix . "organisations_subscriptions", 
-                      array('nickname' => $n_nickname, 'user_id' => $assignee),
+                      array('nickname' => $n_nickname),
                       array('id' => $subscription_id),
                       array('%s', '%d'), array('%d')
         );

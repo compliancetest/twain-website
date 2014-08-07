@@ -261,7 +261,7 @@ function ct_process_organisation_action()
                             </div>                
                             <div class="clear"></div>
                         </div>
-                        <div class="field-row">
+                        <!--<div class="field-row">
                             <div class="grid-cell">
                                 <label>Assignee</label>
                                 <select name="user_id" id="user_id" class="select">
@@ -273,7 +273,7 @@ function ct_process_organisation_action()
                             </div>                
                             <div class="clear"></div>
                         </div>                        
-                        <?php wp_nonce_field('save-subscription', '_organisation_nonce') ?>                        
+                        --><?php wp_nonce_field('save-subscription', '_organisation_nonce') ?>                        
                         <input type="hidden" name="id" value="<?php echo $subscription->id?>" />                        
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
@@ -300,7 +300,7 @@ function ct_process_organisation_action()
             } else if(!$_POST['nickname']) {
                 addMessage('The subscription nickname should not be empty', 'error');
             } else {
-                $controller->save_subscription($subscription->id, $_POST['nickname'], $_POST['user_id']);
+                $controller->save_subscription($subscription->id, $_POST['nickname']);
                 addMessage('The subscription has been updated.');
             }
             
