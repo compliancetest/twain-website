@@ -27,8 +27,10 @@ function ct_process_subscriptions_admin_actions()
     if (isset($_REQUEST['subscription_admin_action'])) {
         $action = $_REQUEST['subscription_admin_action'];
         
-        if (wp_verify_nonce($action, 'save-subscription')) {
-            ct_save_subscription_on_admin();    
-        }
+        if (wp_verify_nonce($action, 'save-organisation-subscription')) {
+            ct_save_organisation_subscription_on_admin();    
+        } else if (wp_verify_nonce($action, 'delete-organisation-subscription')) {
+            ct_delete_organisation_subscription_on_admin();    
+        } 
     }
 }

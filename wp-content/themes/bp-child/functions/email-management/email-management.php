@@ -177,7 +177,7 @@ $ct_email_templates = array(
         array(
             'menu'         => 'Allocate Subscription to User',
             'title'         => 'Allocate Subscription to User',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name]',
+            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [community_url], [nickname], [organisation]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -190,66 +190,20 @@ $ct_email_templates = array(
             )
         ),  
         array(
-            'menu'         => 'Active -> InArrears',
-            'title'         => 'Subscription is in arrears',
+            'menu'         => 'Payment Processing Problem',
+            'title'         => 'Payment Processing Problem',
             'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [monthly_fee], [method_nickname]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
-                                'id'            => 'inarrears_subscription'                                
+                                'id'            => 'payment_processing_problem'                                
                             ),
                             array(
                                 'title'         => 'For Admin',
-                                'id'            => 'inarrears_subscription_admin',
+                                'id'            => 'payment_processing_problem_admin',
                             )                            
             )
-        ),
-        array(
-            'menu'         => 'InArrears -> Frozen',
-            'title'         => 'Subscription is frozen',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee], [method_nickname]',
-            'fields' => array(
-                            array(
-                                'title'         => 'For User',
-                                'id'            => 'frozen_subscription'                                
-                            ),
-                            array(
-                                'title'         => 'For Admin',
-                                'id'            => 'frozen_subscription_admin',
-                            )                            
-            )
-        ),
-         array(
-            'menu'         => 'InArrears -> Active',
-            'title'         => 'Subscription is Active From InArrears',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee], [method_nickname]',
-            'fields' => array(
-                            array(
-                                'title'         => 'For User',
-                                'id'            => 'active_subscription'                                
-                            ),
-                            array(
-                                'title'         => 'For Admin',
-                                'id'            => 'active_subscription_admin',
-                            )                            
-            )
-        ),
-         array(
-            'menu'         => 'Frozen -> Active',
-            'title'         => 'Subscription is Active from Frozen',
-            'shortcodes'    => '[name], [email], [website_url], [env], [suite_name], [suite_url], [monthly_fee], [method_nickname]',
-            'fields' => array(
-                            array(
-                                'title'         => 'For User',
-                                'id'            => 'active_subscription2'                                
-                            ),
-                            array(
-                                'title'         => 'For Admin',
-                                'id'            => 'active_subscription2_admin',
-                            )                            
-            )
-        ),
-        
+        )
     ),
     'Membership Section' => array(
         array(

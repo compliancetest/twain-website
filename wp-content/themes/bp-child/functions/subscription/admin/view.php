@@ -125,7 +125,7 @@ function ct_add_organisation_subscription()
                 </tr>
             </table>
             <?php
-                wp_nonce_field('save-subscription', 'subscription_admin_action');
+                wp_nonce_field('save-organisation-subscription', 'subscription_admin_action');
             ?>
             <input type="hidden" name="id" value="<?php echo $id?>" />
             <input type="hidden" name="page" value="add-organisation-subscriptions" />

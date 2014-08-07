@@ -263,16 +263,38 @@ class CT_Organisation_Controller
     {
         global $wpdb;
         
-        $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND suite_family_mark=%d AND user_id=0 ORDER BY nickname LIMIT 1", $organisation_id, $family_mark);
-        $sid = $wpdb->get_var($query);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND suite_family_mark=%d AND user_id=0 ORDER BY nickname LIMIT 1", $organisation_id, $family_mark);
+        $subscription = $wpdb->get_row($query);
         
-        if (!$sid) {
+        if (!$subscription) {
             $this->last_message = "There is not unallocated subscription now. Please request a subscription from your organisation administrator.";
             return false;
         }
         
         //Assign it to the user
-        $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('user_id' => $user_id), array('id' => $sid), array('%d'), array('%d'));
+        $wpdb->update($wpdb->prefix . "organisations_subscriptions", array('user_id' => $user_id), array('id' => $subscription->id), array('%d'), array('%d'));
+        
+        $user = get_userdata($user_id);
+        
+        $suite = new TestSuite($family_mark);
+        $suite->load();
+        
+        $group = groups_get_group(array('group_id' => $suite->community_id));
+        
+        $organisation = new CT_Organisation($organisation_id);
+        
+        //Send Email
+        $emailData = array(
+            '[name]'            => $user->first_name . " " . $user->last_name,
+            '[email]'           => $user->user_email,
+            '[suite_name]'      => $suite->name,
+            '[nickname]'        => $subscription->nickname,
+            '[organisation]'    => $organisation->organisation_name,
+            '[community_url]'   => bp_get_group_permalink($group)
+        );
+        
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'allocate_subscription_to_user', $emailData);
+        cp_send_email_to_admin('allocate_subscription_to_user_admin', $emailData);
         
         return $sid;
     }

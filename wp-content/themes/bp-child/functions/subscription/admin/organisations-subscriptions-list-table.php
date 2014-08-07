@@ -114,7 +114,7 @@ class CT_Organisation_Subscriptions_List_Table extends WP_List_Table
             case 'organisation_name':
                 return $item->$column_name . $this->row_actions(array(
                     "<a href='admin.php?page=add-organisation-subscription&id=" . $item->id . "'>Edit</a>",
-                    "<a href='admin.php?subscription_admin_action="  . wp_create_nonce('delete-organisation-subscription') ."&id=" . $item->id . "'>Delete</a>",
+                    "<a href='admin.php?subscription_admin_action="  . wp_create_nonce('delete-organisation-subscription') ."&id=" . $item->id . "' onclick='return confirm(\"Are you sure you want to delete this subscription?\")'>Delete</a>",
                 ));
             case 'user_id': 
                 return !$item->user_id ? "-" : get_user_meta($item->user_id, 'first_name', true) . " " . get_user_meta($item->user_id, 'last_name', true);

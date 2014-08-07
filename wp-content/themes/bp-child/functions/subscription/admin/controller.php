@@ -40,7 +40,7 @@ function ct_get_organisation_detail_by_ajax()
     exit;
 }
 
-function ct_save_subscription_on_admin()
+function ct_save_organisation_subscription_on_admin()
 {
     global $wpdb;
     
@@ -67,3 +67,13 @@ function ct_save_subscription_on_admin()
     exit;
 }
 
+function ct_delete_organisation_subscription_on_admin()
+{
+    global $wpdb;
+    
+    $id = $_POST['id'];
+    
+    //Delete Users Subcription
+    $orgController = new CT_Organisation_Controller();
+    $orgController->delete_organisation_subscription($id);
+}
