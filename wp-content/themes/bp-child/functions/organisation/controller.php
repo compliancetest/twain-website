@@ -157,11 +157,15 @@ class CT_Organisation_Controller
         
         $paymentAmount = $suite->signupPriceValue + calculateFirstPaymentAmount($suite->monthlySubscriptionPriceValue);
         
+        $organisation = new CT_Organisation($organisation_id);
+        
         $emailData = array(
             '[name]' => $user->first_name . " " . $user->last_name,
             '[email]' => $user->user_email,
             '[suite_name]' => $suite->name,
             '[paid_amount]' => $paymentAmount,
+            '[nickname]'        => $nickname,
+            '[organisation]'    => $organisation->organisation_name,
             '[community_url]' => bp_get_group_permalink($group),
             '[payment_email]' => $card->email
         );
@@ -370,6 +374,8 @@ class CT_Organisation_Controller
         $emailData = array(
             '[name]' => $orgAdmin->first_name . " " . $orgAdmin->last_name,
             '[email]' => $orgAdmin->user_email,
+            '[nickname]' => $subscription->nickname,
+            '[organisation]' => $organisation->organisation_name,
             '[suite_name]' => $suite->name
         );
         
@@ -393,10 +399,14 @@ class CT_Organisation_Controller
         $suite = new TestSuite($subscription->suite_family_mark);
         $suite->load();
         
+        $organisation = new CT_Organisation($subscription->organisation_id);
+        
         //Sending Unsubscribing Email
         $emailData = array(
             '[name]' => $orgAdmin->first_name . " " . $orgAdmin->last_name,
             '[email]' => $orgAdmin->user_email,
+            '[nickname]' => $subscription->nickname,
+            '[organisation]' => $organisation->organisation_name,
             '[suite_name]' => $suite->name            
         );
 

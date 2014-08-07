@@ -76,4 +76,9 @@ function ct_delete_organisation_subscription_on_admin()
     //Delete Users Subcription
     $orgController = new CT_Organisation_Controller();
     $orgController->delete_organisation_subscription($id);
+    
+    addMessage("Organsation subscription was deleted");
+    wp_redirect(admin_url() . 'admin.php?page=organisation-subscriptions');
+    exit;
 }
+
