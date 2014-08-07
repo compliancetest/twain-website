@@ -183,6 +183,7 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
             'status'    =>  $status,
             'last_updated'    =>  date('Y-m-d H:i:s')
         ), array('id' => $claim->id));
+        print_r($claim);
         echo $nId; exit;
     }
     if(!$nId)
