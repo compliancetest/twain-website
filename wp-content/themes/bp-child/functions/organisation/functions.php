@@ -247,3 +247,12 @@ function ct_calculate_first_month_quantity($quantity)
     return $quantity * ($remainedDay / $totalDay);
 }
 
+function ct_get_payment_method_by_id($id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payment_methods WHERE id=%d", $id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;
+}

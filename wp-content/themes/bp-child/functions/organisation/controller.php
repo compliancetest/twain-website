@@ -152,8 +152,8 @@ class CT_Organisation_Controller
         $suite = new TestSuite($family_mark);
         $suite->load();
         
-        $group = groups_get_group(array('group_id=' .  $suite->community_id));
-        $card = getUserCardById($payment_method);
+        $group = groups_get_group(array('group_id' => $suite->community_id));
+        $card = ct_get_payment_method_by_id($payment_method);
         
         $paymentAmount = $suite->signupPriceValue + calculateFirstPaymentAmount($suite->monthlySubscriptionPriceValue);
         
