@@ -356,7 +356,7 @@ class TestSuite
         return $result;
     }
     
-    public function loadTestCases($level = array(), $role = array())
+    public function loadTestCases($level = array(), $role = array(), $status = null)
     {        
         $args = array(
                 'post_type' => 'test-case',         
@@ -400,6 +400,11 @@ class TestSuite
             if(!is_array($role))
                 $role = array($role);
             $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $role, 'compare'=> 'IN');
+        }
+        
+        if (!empty($status)) 
+        {
+            $args['meta_query'][] = array('key' => 'test_case_status', 'value' => $status, 'compare'=> '=');
         }
         
         $case_query = new WP_Query($args);
