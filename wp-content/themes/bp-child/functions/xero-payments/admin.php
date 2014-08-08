@@ -52,9 +52,11 @@ function ct_show_xero_payments_list()
             </table>
         </form>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-xero-payments&org-action=mark_charges">Mark Charges As paid</a>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-xero-payments&org-action=<?php echo wp_create_nonce('mark_charges')?>">Mark Charges As paid</a>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-xero-payments&org-action=update_paid_invoices">Update Paid CC Invoices in Xero</a>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-xero-payments&org-action=<?php echo wp_create_nonce('update_paid_invoices')?>">Update Paid CC Invoices in Xero</a>
+        <div class="clear"></div>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-xero-payments&org-action=<?php echo wp_create_nonce('pay-cc-invoices')?>">Pay CC Invoices via eWay</a>        
     </div>
     <script>
         jQuery(document).ready(function(){
@@ -118,10 +120,13 @@ function ct_process_xero_payment_admin_actions()
 {
     global $wpdb;
     
+    if(!is_super_admin())
+        return;
+    
     if(isset($_REQUEST['org-action']))
     {
         $action = $_REQUEST['org-action'];
-        if( $action == 'query_unpaid_invoices' ){
+        if( wp_verify_nonce($action, 'query_unpaid_invoices') ){
             $paymentsCounter = $nonApprovedPaymentsCounter = 0;
             $xero_payments = new CT_Payments();
             $xero_api = new CT_Xero();
@@ -163,12 +168,12 @@ function ct_process_xero_payment_admin_actions()
             addMessage('Added: '.$paymentsCounter.' payments</br>Not Approved Invoices: '.$nonApprovedPaymentsCounter, 'success');
             wp_redirect('admin.php?page=manage-xero-payments');
             exit;
-        } else if( $action == 'mark_charges' ){
+        } else if( wp_verify_nonce($action, 'mark_charges') ){
             $wpdb->query("UPDATE {$wpdb->prefix}organisations_charge SET is_paid = 1 WHERE invoice_identifier IN ( SELECT invoice_id FROM {$wpdb->prefix}xero_payments WHERE is_paid = 1 )");
             addMessage('Done', 'success');
             wp_redirect('admin.php?page=manage-xero-payments');
             exit;
-        } else if( $action == 'update_paid_invoices' ){
+        } else if( wp_verify_nonce($action, 'update_paid_invoices') ){
             $xero = new CT_Xero();
             $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}xero_payments WHERE is_paid = 1 AND payment_id = ''", ARRAY_A );
             if( $results ){
@@ -204,6 +209,9 @@ function ct_process_xero_payment_admin_actions()
             addMessage('Done', 'success');
             wp_redirect('admin.php?page=manage-xero-payments');
             exit;
+        } else if( wp_verify_nonce($action, 'pay-cc-invoices') ){
+            /************Make Payment through eWay*****************/
+            //Getting unpaid payments
         }
     }
     

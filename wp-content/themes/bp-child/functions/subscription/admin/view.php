@@ -112,6 +112,7 @@ function ct_add_organisation_subscription()
                     <th>Assignee</th>
                     <td>
                         <select name="user_id" id="user_id">
+                            <option value="0">-</option>
                             <?php foreach($users as $u): ?>
                             <option value="<?php echo $u->ID?>" <?php echo isset($data) && $data->user_id == $u->ID ? 'selected="selected"' : '' ?>><?php echo get_user_meta($u->ID, 'first_name', true) . " " . get_user_meta($u->ID, 'last_name', true)?>, <?php echo $u->user_email?></option>
                             <?php endforeach; ?>
@@ -196,24 +197,22 @@ function ct_add_user_subscription()
        $data = ct_get_user_subscription_by_id($id);
     } 
     
+    //Getting Organisations
+    $query = "SELECT organisation_name, id from {$wpdb->prefix}organisations ORDER BY organisation_name";
+    $organisations = $wpdb->get_results($query);
+    
+    $org_id = isset($data) ? $data->organisation_id : $organisations[0]->id;
+    
     //Getting Organisation Subscriptions
-    $query = "SELECT nickname, id, suite_family_mark, organisation_id from {$wpdb->prefix}organisations_subscriptions ORDER BY organisation_id, nickname";
+    $query = "SELECT nickname, id, suite_family_mark, organisation_id from {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=$org_id ORDER BY organisation_id, nickname";
     $org_subscriptions = $wpdb->get_results($query);
     
-    //Getting Payment Methods
-    $family_mark = $org_subscriptions[0]->suite_family_mark;
-    $org_id = $org_subscriptions[0]->organisation_id;
-    if ($data) {
-        foreach($org_subscriptions as $s) {
-            if ($s->id == $data->parent_id) {
-                $family_mark = $s->suite_family_mark;
-                $org_id = $s->organisation_id;
-            }
-        }
-        
-    }
-
-    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID WHERE t.family_mark=$family_mark ORDER BY p.post_title";
+    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t 
+              LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID 
+              WHERE t.family_mark IN (
+                SELECT suite_family_mark FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=$org_id
+              )
+              ORDER BY p.post_title";
     $test_suites = $wpdb->get_results($query);
     
     
@@ -229,14 +228,24 @@ function ct_add_user_subscription()
         <form name="adminform" id="organisationform" action="admin.php" method="post">
             <table class="widefat" style="width: auto;">
                 <tr>
+                    <th>Organisation</th>
+                    <td>
+                        <select name="organisation_id" id="organisation_id">                          
+                          <?php foreach($organisations as $org): ?>
+                          <option value="<?php echo $org->id?>" <?php echo isset($data) && $data->organisation_id == $org->id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
+                          <?php endforeach; ?>
+                       </select>
+                       <img src='/wp-admin/images/loading.gif' id='get-org-info' style="display: none;" />
+                    </td>
+                </tr>                
+                <tr>
                     <th>Organisation Subscriptions</th>
                     <td>
                         <select name="organisation_subscription_id" id="organisation_subscription_id">                          
                           <?php foreach($org_subscriptions as $s): ?>
                           <option value="<?php echo $s->id?>" <?php echo isset($data) && $data->parent_id == $s->id ? 'selected="selected"' : '' ?>><?php echo $s->nickname?></option>
                           <?php endforeach; ?>
-                       </select>
-                       <img src='/wp-admin/images/loading.gif' id='get-org-info' style="display: none;" />
+                       </select>                
                     </td>
                 </tr>
                 <tr>
@@ -275,7 +284,7 @@ function ct_add_user_subscription()
         </form>
         <script type="text/javascript">
             (function($){
-                $('#organisation_subscription_id').change(function(){
+                $('#organisation_id').change(function(){
                     //Getting payment methods and assignee
                     var ajaxData = {
                         'action': 'get_organisation_subscription_info_on_admin',
@@ -288,6 +297,7 @@ function ct_add_user_subscription()
                         type: 'post',
                         dataType: 'xml',
                         success: function(rsp){
+                            $('#organisationform #organisation_subscription_id').html($(rsp).find('subscriptions').text());
                             $('#organisationform #suite_id').html($(rsp).find('suites').text());
                             $('#organisationform #user_id').html($(rsp).find('users').text());
                         },

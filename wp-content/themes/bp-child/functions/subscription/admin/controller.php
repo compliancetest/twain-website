@@ -22,7 +22,7 @@ function ct_get_organisation_detail_by_ajax()
         $pHtml .= '<option value="' . $p->id . '" ' .  (isset($data) && $data->payment_method == $p->id ? 'selected="selected"' : '') . '>' .  $p->nickname . '(' .  ($p->invoice_me == 0 ? chunk_split($p->card_number, 4) : 'Invoice') . ')</option>';
     }
     
-    $uHtml = '';
+    $uHtml = '<option value="0">-</option>';
     foreach($users as $u){
         $uHtml .= '<option value="' . $u->ID . '" ' . (isset($data) && $data->user_id == $u->ID ? 'selected="selected"' : '') . '>' . get_user_meta($u->ID, 'first_name', true) . " " . get_user_meta($u->ID, 'last_name', true) . ', ' . $u->user_email . '</option>';
     }
@@ -97,20 +97,25 @@ function ct_get_organisation_subscription_info_by_ajax()
         die("Invalid Request");
     }
     
-    $id = $_POST['id'];
+    $org_id = $_POST['id'];
     
-    $subscription = ct_get_organisation_subscription_by_id($id);
+    $orgClass = new CT_Organisation($org_id);
     
-    $orgClass = new CT_Organisation($subscription->organisation_id);
+    $subscriptions = $orgClass->get_subscriptions();
     $users = $orgClass->get_organisation_members();
     
-    
-    $family_mark = $subscription->suite_family_mark;
-    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID WHERE t.family_mark=$family_mark ORDER BY p.post_title";
+    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t 
+              LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID 
+              WHERE t.family_mark IN (
+                SELECT suite_family_mark FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=$org_id
+              )
+              ORDER BY p.post_title";
     $test_suites = $wpdb->get_results($query);
     
-    
-    
+    $sHtml = '';
+    foreach($subscriptions as $s){
+        $sHtml .= '<option value="' . $s->id . '" >' . $s->nickname . '</option>';
+    }
     
     $pHtml = '';
     foreach($test_suites as $p){
@@ -124,6 +129,9 @@ function ct_get_organisation_subscription_info_by_ajax()
     
     header('Content-type: application/xml');
     echo '<result>';
+    echo '<subscriptions><![CDATA[';
+    echo $sHtml;
+    echo ']]></subscriptions>';
     echo '<suites><![CDATA[';
     echo $pHtml;
     echo ']]></suites>';
