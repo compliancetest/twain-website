@@ -38,7 +38,7 @@ function certifyPlan()
     }
     
     $suite = new TestSuite($plan->suite_id);
-    $cases = $suite->loadTestCases($plan->level, $plan->role);                                   
+    $cases = $suite->loadTestCases($plan->level, $plan->role, 'Active');                                   
     
     //Getting Esb Customer ID
     $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "users_subscriptions WHERE suite_id=%d AND user_id=%d AND `status`='Active'", $plan->suite_id, $user_id);
