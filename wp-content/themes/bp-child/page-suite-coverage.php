@@ -67,7 +67,7 @@ $esb = new ManageESB();
                            <div class="td td-coverage">
                                <?php
                                    $suiteObj = new TestSuite($suite->suite_id);
-                                   $testCases = $suiteObj->loadTestCases(cp_explode($crow->level), cp_explode($crow->role));                                   
+                                   $testCases = $suiteObj->loadTestCases(cp_explode($crow->level), cp_explode($crow->role), 'Active');                                   
                                    
                                ?> 
                                <div class="coverage-progress">
