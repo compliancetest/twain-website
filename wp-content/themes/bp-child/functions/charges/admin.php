@@ -27,6 +27,7 @@ function ct_manage_invoices()
     ?>
     <div class="wrap">
         <h2>Charges</h2>
+        <?php flushMessages(); ?>
         <br clear="all" />
         <form name="adminform" action="users.php?page=invoices" method="post">
             <?php
@@ -40,7 +41,7 @@ function ct_manage_invoices()
     <div class="wrap">
         <a href="#" id="custom_invoices_show">Generate Invoices for specific organisations</a>
         <div class="clear"></div>
-        <form id="charges_for_custom_org" name="charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-specific" method="post" style="display: none;">
+        <form id="charges_for_custom_org" name="charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-specific' );?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
                 <tr>
                     <th>Organisations</th>
@@ -59,15 +60,46 @@ function ct_manage_invoices()
             </table>
         </form>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-all">Generate Invoices for ALL organisations</a>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-all' );?>">Generate Invoices for ALL organisations</a>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=update-status">Update "Invoice Me" Invoice Status</a>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-status' );?>">Update "Invoice Me" Invoice Status</a>
+        <div class="clear"></div>
+        <a href="#" id="monthly_custom_invoices_show">Generate Monthly Charges</a>
+        <div class="clear"></div>
+        <form id="monthly_charges_for_custom_org" name="monthly_charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'generate_monthly_charges' );?>" method="post" style="display: none;">
+            <table class="widefat" style="width: auto;">
+                <tr>
+                    <th>Organisations</th>
+                    <td>
+                        <?php
+                            global $wpdb;
+                            $organisationsWithSubscriptions = $wpdb->get_results("SELECT organisation_id, organisation_name
+                                                                                    FROM `wp_organisations_subscriptions` AS s
+                                                                                    JOIN wp_organisations AS o ON o.id = s.organisation_id
+                                                                                    WHERE o.no_billing = 0
+                                                                                    GROUP BY organisation_id");
+                        ?>
+                        <select name="org_id">
+                            <option value=""></option>
+                            <?php foreach( $organisationsWithSubscriptions AS $organisation ):?>
+                                <option value="<?php echo $organisation->organisation_id;?>"><?php echo $organisation->organisation_name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr><td colspan="2"><input type="submit" value="Generate" class="button button-primary" /></td></tr>
+            </table>
+        </form>
     </div>
     <script>
         jQuery(document).ready(function(){
             jQuery('#custom_invoices_show').on('click', function(e){
                 e.preventDefault();
                 jQuery('#charges_for_custom_org').toggle();
+            });
+            jQuery('#monthly_custom_invoices_show').on('click', function(e){
+                e.preventDefault();
+                jQuery('#monthly_charges_for_custom_org').toggle();
             });
         });
     </script>
@@ -256,7 +288,7 @@ function ct_process_charge_entry_admin_actions()
                 $_GET['org-message'] = $wpdb->last_error;
                 return;
             }
-        } elseif( $action == 'update-all'){
+        } elseif( wp_verify_nonce( $action, 'update-all' ) ){
             /**
              * 1) We get organisations IDs with empty 'invoice_identifier' field
              */
@@ -284,7 +316,7 @@ function ct_process_charge_entry_admin_actions()
             }
             echo 'Created '.$counter.' invoices';
             redirect_then_exit();
-        } else if( $action == 'update-specific' ){
+        } elseif( wp_verify_nonce( $action, 'update-specific' ) ){
             if( ! empty( $_POST ) && isset( $_POST['org_id'] ) ){
                 $organisations = $_POST['org_id'];
                 $counter = 0;
@@ -310,7 +342,7 @@ function ct_process_charge_entry_admin_actions()
                 echo 'Please select at least 1 organisation';
             }
             redirect_then_exit();
-        }else if( $action == 'update-status' ){
+        } elseif( wp_verify_nonce( $action, 'update-status' ) ){
             $counter = 0;
             $xero = new CT_Xero();
             $invoicesIdList = $wpdb->get_results("SELECT invoice_identifier FROM {$wpdb->prefix}organisations_charge WHERE is_paid = 0 GROUP BY invoice_identifier", ARRAY_A);
@@ -325,6 +357,66 @@ function ct_process_charge_entry_admin_actions()
             }
             echo 'Updated '.$counter.' invoices';
             redirect_then_exit();
+        } else if( wp_verify_nonce( $action, 'generate_monthly_charges' ) ){
+            $org_id_where = '';
+            if( isset( $_POST['org_id'] ) && ! empty( $_POST['org_id'] ) ){
+                $org_id_where = $wpdb->prepare( ' AND organisation_id = %d', $_POST['org_id'] );
+            }
+            $newChargesCounter = 0;
+            $subscriptionsList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE status = 'Active'".$org_id_where);
+            foreach( $subscriptionsList AS $subscription ){
+                $organisation = new CT_Organisation( $subscription->organisation_id );
+                if( $organisation->no_billing != '1' ){
+                    $suite = new TestSuite( $subscription->suite_family_mark );
+                    $suite->load();
+                    if( ! in_array( $suite->monthlySubscriptionPriceValue, array( 0, -1 ) ) ){
+                        if( $subscription->last_charge_date == '0000-00-00' ){
+                            $data = array(
+                                'organisation_id' => $subscription->organisation_id,
+                                'payment_id'      => $subscription->payment_method,
+                                'item_code'       => $suite->monthlySubscriptionPrice,
+                                'quantity'        => '1.00',
+                                'reference_type'  => 'Subscription',
+                                'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice))
+                            );
+                            $chargeClass = new CT_Charge();
+                            $chargeClass->bind($data);
+                            $chargeClass->save();
+                            $newChargesCounter++;
+                            $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                array('last_charge_date' => date('Y-m-d') ),
+                                array('id' => $subscription->id)
+                            );
+                        } else {
+                            $monthesCounter = 0;
+                            if( date( 'm', strtotime( $subscription->last_charge_date ) ) != date( 'm' ) ){
+                                while( date( 'm', strtotime( $subscription->last_charge_date ) ) != date('m', strtotime('-'.$monthesCounter.' month' ) ) ){
+                                    $data = array(
+                                        'organisation_id' => $subscription->organisation_id,
+                                        'payment_id'      => $subscription->payment_method,
+                                        'item_code'       => $suite->monthlySubscriptionPrice,
+                                        'quantity'        => '1.00',
+                                        'reference_type'  => 'Subscription',
+                                        'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice))
+                                    );
+                                    $chargeClass = new CT_Charge();
+                                    $chargeClass->bind($data);
+                                    $chargeClass->save();
+                                    $newChargesCounter++;
+                                    $monthesCounter++;
+                                }
+                                $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                    array('last_charge_date' => date('Y-m-d') ),
+                                    array('id' => $subscription->id)
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            addMessage('<b>Added '.$newChargesCounter.' entries to charge table</b>', 'success');
+            wp_redirect('admin.php?page=manage-charges');
+            exit();
         }
     }
 

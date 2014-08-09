@@ -30,9 +30,9 @@ function ct_show_organisations_list()
         </form>
     </div>
     <div class="wrap">
-        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=reload-organisation-from">Update Organisations From Xero</a>
+        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=<?php echo wp_create_nonce( 'reload-organisation-from' );?>">Update Organisations From Xero</a>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=reload-organisation-to">Load Organisations List To Xero</a>
+        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=<?php echo wp_create_nonce( 'reload-organisation-to' );?>">Load Organisations List To Xero</a>
     </div>
     <?php       
 }
@@ -209,7 +209,7 @@ function ct_process_organisation_admin_actions()
             }else{                                
                 return;
             }
-        } else if( $action == 'reload-organisation-from' ){
+        } else if( wp_verify_nonce( $action, 'reload-organisation-from' ) ){
             $xero = new CT_Xero();
             $contacts = $xero->getContacts();
             if( $contacts ){
@@ -262,7 +262,7 @@ function ct_process_organisation_admin_actions()
                 }
             }
             redirect_and_exit();
-        } else if( $action == 'reload-organisation-to'){
+        } else if( wp_verify_nonce( $action, 'reload-organisation-to' ) ){
             $organisations_list = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations");
             if( $organisations_list ){
                 foreach( $organisations_list AS $organisation ){

@@ -125,7 +125,9 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                     LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS p ON c.payment_id =p.id
                     ";
         $query .= " ORDER BY $orderby $order ";
-        $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        if( ($paged-1) * $this->per_pages > 0 ){
+            $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        }
         
         $this->items = $wpdb->get_results($query);
 
