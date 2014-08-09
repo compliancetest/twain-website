@@ -44,7 +44,7 @@ function ct_manage_invoices()
         <form id="charges_for_custom_org" name="charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-specific' );?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
                 <tr>
-                    <th>Organisations</th>
+                    <th>Organisation</th>
                     <td>
                         <select name="org_id[]">
                             <?php foreach( $chargesObject->getOrganisationsList() AS $organisation ):?>
@@ -69,7 +69,7 @@ function ct_manage_invoices()
         <form id="monthly_charges_for_custom_org" name="monthly_charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'generate_monthly_charges' );?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
                 <tr>
-                    <th>Organisations</th>
+                    <th>Organisation</th>
                     <td>
                         <?php
                             global $wpdb;
