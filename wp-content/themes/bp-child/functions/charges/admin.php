@@ -383,10 +383,6 @@ function ct_process_charge_entry_admin_actions()
                             $chargeClass->bind($data);
                             $chargeClass->save();
                             $newChargesCounter++;
-                            $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                                array('last_charge_date' => date('Y-m-d') ),
-                                array('id' => $subscription->id)
-                            );
                         } else {
                             $monthesCounter = 0;
                             if( date( 'm', strtotime( $subscription->last_charge_date ) ) != date( 'm' ) ){
@@ -405,16 +401,16 @@ function ct_process_charge_entry_admin_actions()
                                     $newChargesCounter++;
                                     $monthesCounter++;
                                 }
-                                $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                                    array('last_charge_date' => date('Y-m-d') ),
-                                    array('id' => $subscription->id)
-                                );
                             }
                         }
+                        $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                            array('last_charge_date' => date('Y-m-d') ),
+                            array('id' => $subscription->id)
+                        );
                     }
                 }
             }
-            addMessage('<b>Added '.$newChargesCounter.' entries to charge table</b>', 'success');
+            addMessage('<b>Added: '.$newChargesCounter.' entries</b>', 'success');
             wp_redirect('admin.php?page=manage-charges');
             exit();
         }
