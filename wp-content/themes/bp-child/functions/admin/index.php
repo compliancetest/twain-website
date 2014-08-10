@@ -59,6 +59,8 @@ function ct_process_admin_actions()
         ct_remove_subscribers($list_id, $_POST['page']);
     } else if(wp_verify_nonce($action, 'add-users-to-mailchimp2')) {
         ct_add_members_to_mailchimp($_REQUEST['id'], $_POST['page']);
+    } else if(wp_verify_nonce($action, 'process-cc-payment')) {
+        ct_process_cc_payment();
     } 
 }
 

@@ -173,7 +173,7 @@ function ct_process_cc_invoice_via_eway()
                                    FROM {$wpdb->prefix}organisations_payments AS p
                                    LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id=p.organisation_id
                                    LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS pm ON pm.id=p.payment_method_id
-                                   WHERE p.is_paid=0 ORDER BY p.date_added");
+                                   WHERE p.is_paid=0 AND pm.status = 'Active' ORDER BY p.date_added");
     
     ?>    
     <div class="wrap">    
@@ -213,31 +213,31 @@ function ct_process_cc_invoice_via_eway()
         //Remove Current Subscribers
         function ct_processing_payment(idx)
         {
-            if(idx >= jQuery('.xero-payment-tr').length)
+            if(idx > jQuery('.xero-payment-tr').length)
             {
-                return jQuery('#organisations-payments-table').after('<br /><b>Completed!</b>');
+                jQuery('#organisations-payments-table').after('<br /><b>Completed!</b>');
+                return;
             }
             
             var payment_id = jQuery('.xero-payment-tr').eq(idx - 1).attr('data-id');
+            
+            jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').html('Processing');
             
             jQuery.ajax({
                 url : '<?php echo admin_url()?>',
                 type : 'post',
                 data : {'admin-action': '<?php echo wp_create_nonce('process-cc-payment')?>', 'id': payment_id},
-                dataType: 'json',
-                success: function(jData){
-                    if(jData.total)
+                dataType: 'xml',
+                success: function(rsp){
+                    if(jQuery(rsp).find('status').text() == 'success')
                     {
-                        jQuery('#removing-subscribers').html('Removing Subscribers: ' + jData.total + ' users removed');
+                        jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').html('<b>Completed!</b>');
+                        jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').addClass('action-completed');                        
+                    } else {                        
+                        jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').html('<b>Failed!</b> (' + jQuery(rsp).find('msg').text() + ')');
+                        jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').addClass('action-completed');
                     }
-                    if (jData.status == 'continue') {
-                        removeCurrentSubscribers(jData.page)
-                    } else {
-                        jQuery('#removing-subscribers').append(' &mdash; <b>Completed!</b>');
-                        jQuery('#removing-subscribers').addClass('action-completed');
-                        jQuery('#add-users').html('Adding Members');                        
-                        addUsers(1);
-                    }
+                    ct_processing_payment(idx + 1);
                 },
                 error: function(err){
 //                    alert(err.responseText);

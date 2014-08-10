@@ -121,5 +121,60 @@ function ct_add_members_to_mailchimp($group_id, $page)
     exit;
 }
 
-
+function ct_process_cc_payment()
+{
+    global $wpdb;
+    
+    $id = $_REQUEST['id'];
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payments WHERE id=%d", $id);    
+    $payment = $wpdb->get_row($query);
+    
+    $payment_method = ct_get_payment_method_by_id($payment->payment_method_id);
+    
+    $result = processEwayPayment($payment_method->customer_id, $payment->amount, $payment->invoice_number);
+    
+    header("content-type: application/xml");
+    
+    if($result['ewayTrxnStatus'] == 'True')
+    {
+        $eWayReference = $result['ewayTrxnReference'];
+        //Save reference id
+        $wpdb->update($wpdb->prefix . "organisations_payments", 
+                      array("is_paid" => 1, "date_paid" => date("Y-m-d H:i:s"), "reference" => $eWayReference),
+                      array("id" =>  $payment->id),
+                      array("%d", "%s", "%s"),
+                      array("%d")
+        );
+        
+        echo '<result><status>success</status></result>';
+        
+    } else {
+        if(isset($result['ewayTrxnError']))
+            $error = $result['ewayTrxnError'];
+        else if(isset($result['faultstring']))
+            $error = $result['faultstring'];
+        
+        $orgClass = new CT_Organisation($payment->organisation_id);
+        $user = get_userdata($orgClass->admin_id);
+        
+        //Change Payment Method to inActive
+        $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('Status' => 'Suspended'), array('id' => $payment_method->id));
+        
+        //Sending Failure Message
+        $emailData = array(
+            '[name]'            => $user->first_name . " " . $user->last_name,
+            '[email]'           => $user->user_email,
+            '[paid_amount]'     => $payment->amount,
+            '[method_nickname]' => $payment_method->nickname,
+            '[organisation]'    => $orgClass->organisation_name,
+            '[invoice_identifier]' => $payment->invoice_number
+        );
+        cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'payment_processing_problem', $emailData);
+        cp_send_email_to_admin('payment_processing_problem_admin', $emailData);
+        
+        echo '<result><status>error</status><msg><![CDATA[' . $error . ']]></msg></result>';
+    }
+    exit;
+}
 
