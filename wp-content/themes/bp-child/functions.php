@@ -163,7 +163,7 @@ require_once(THE_FUNCTION . '/organisation/index.php');
 //Xero Items
 require_once(THE_FUNCTION . '/xero-items/admin.php');
 //Xero Payments
-require_once(THE_FUNCTION . '/xero-payments/admin.php');
+require_once(THE_FUNCTION . '/organisations-payments/admin.php');
 
 //Process Compliancetest Admin Actions 
 require_once(THE_FUNCTION . '/admin/index.php');

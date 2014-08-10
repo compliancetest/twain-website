@@ -41,7 +41,9 @@ function ct_process_admin_actions_page()
         ct_sync_users_to_mailchimp_page();
     } else if(wp_verify_nonce($action, 'sync-users-to-mailchimp2')) {
         ct_sync_users_to_mailchimp_page2();
-    }
+    } else if(wp_verify_nonce($action, 'pay-cc-invoices')) {
+        ct_process_cc_invoice_via_eway($_REQUEST['id'], $_POST['page']);
+    } 
 }
 
 add_action('admin_init', 'ct_process_admin_actions');

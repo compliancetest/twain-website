@@ -30,7 +30,7 @@ class CT_Payments
 
         if($id)
         {
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}xero_payments WHERE id=%d", $id);
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_payments WHERE id=%d", $id);
             $row = $wpdb->get_row($query, ARRAY_A);
             if($row)
             {
@@ -69,8 +69,8 @@ class CT_Payments
         }
         if(!$this->id)
         {
-            if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}xero_payments WHERE invoice_id = %s", $data['invoice_id'] ) ) ){
-                return $wpdb->insert($wpdb->prefix . "xero_payments", $data );
+            if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_payments WHERE invoice_id = %s", $data['invoice_id'] ) ) ){
+                return $wpdb->insert($wpdb->prefix . "organisations_payments", $data );
             }
             return false;
         }

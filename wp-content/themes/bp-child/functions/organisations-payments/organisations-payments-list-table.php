@@ -6,7 +6,7 @@
 
 require_once(ABSPATH . "/wp-admin/includes/class-wp-list-table.php");
 
-class CT_Xero_Payments_Table extends WP_List_Table
+class CT_Organisations_Payments_Table extends WP_List_Table
 {
     var $per_pages = 20;
     
@@ -103,7 +103,7 @@ class CT_Xero_Payments_Table extends WP_List_Table
         $order   = isset($_REQUEST['order']) ? $_REQUEST['order'] : 'asc';
 
         // Query items for this table
-        $query = "SELECT count(*) FROM {$wpdb->prefix}xero_payments";
+        $query = "SELECT count(*) FROM {$wpdb->prefix}organisations_payments";
         $totalItems = $wpdb->get_var($query);
         
         $totalPages = ceil($totalItems / $this->per_pages);
@@ -116,7 +116,7 @@ class CT_Xero_Payments_Table extends WP_List_Table
             "per_page"    => $this->per_pages
         ));
       
-        $query  = "SELECT * FROM {$wpdb->prefix}xero_payments ";
+        $query  = "SELECT * FROM {$wpdb->prefix}organisations_payments ";
         $query .= " ORDER BY $orderby $order ";
         $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
         

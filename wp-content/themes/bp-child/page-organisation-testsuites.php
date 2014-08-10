@@ -140,13 +140,7 @@ get_header();
                 <div class="grid-cell">
                     <label>Test Suite</label>
                     <select name="suite_family_mark" id="suite_family_mark" class="select">
-                        <option value="">Select a Test Suite</option>
-                        <?php $test_suites = ct_get_test_suites_without_version(); ?>
-                        <?php foreach($test_suites as $row){ ?>
-                        <option value="<?php echo $row->family_mark?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
-                            <?php echo $row->suite_title ?>
-                        </option>
-                        <?php } ?>
+                        <option value="">Select a Test Suite</option>                        
                     </select>                    
                 </div>
                 <div class="clear"></div>
@@ -195,6 +189,14 @@ get_header();
         </div>
         <a class="close_btn"></a>                        
         <input type="hidden" name="suite_id" value="<?php echo $suite->id?>" />
+        <select id="all_family_mark" style="display: none;">
+            <?php $test_suites = ct_get_test_suites_without_version(); ?>
+            <?php foreach($test_suites as $row){ ?>
+            <option value="<?php echo $row->family_mark?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
+                <?php echo $row->suite_title ?>
+            </option>
+            <?php } ?>
+        </select>
     </form>
 </div>
 <script type="text/javascript">
@@ -272,8 +274,14 @@ jQuery(document).ready(function(){
     function filter_test_suites()
     {
         jQuery('#subscribe-box #suite_family_mark').val('');
-        jQuery('#subscribe-box #suite_family_mark option:gt(0)').hide();
-        jQuery('#subscribe-box #suite_family_mark option[community-id="' + jQuery('#subscribe-box #community_id').val() + '"]').show();
+        
+        jQuery('#subscribe-box #suite_family_mark option:gt(0)').remove();
+        
+        jQuery('#subscribe-box #all_family_mark option').each(function(){
+            if(jQuery(this).attr('community-id') == jQuery('#subscribe-box #community_id').val())
+                jQuery('#subscribe-box #suite_family_mark').append(jQuery(this).clone());
+        })
+        
     }
     filter_test_suites();
     jQuery('#subscribe-box #community_id').change(function(){
