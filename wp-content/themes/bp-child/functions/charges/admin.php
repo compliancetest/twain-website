@@ -224,7 +224,7 @@ function ct_add_charge()
                 </tr>
                 <tr>
                     <th>Comment</th>
-                    <td><input type="text" name="comment" id="comment" value="<?php echo $data['comment']?>" required="required"/></td>
+                    <td><input type="text" name="comment" id="comment" value="<?php echo htmlentities( $data['comment'] )?>" required="required"/></td>
                 </tr>
                 <tr><td colspan="2"><input type="submit" value="Save Charge Entry" class="button button-primary" /></td></tr>
             </table>
@@ -278,6 +278,7 @@ function ct_process_charge_entry_admin_actions()
         {
             //Save Charge Entry
             $chargeClass = new CT_Charge($_POST['id']);
+            $_POST['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $_POST['item_code'])).PHP_EOL.'"('.$_POST['comment'].' - '.date('F Y').')"';
             $chargeClass->bind($_POST);
             $resp = $chargeClass->save();
             if( $resp )
@@ -378,7 +379,7 @@ function ct_process_charge_entry_admin_actions()
                                 'item_code'       => $suite->monthlySubscriptionPrice,
                                 'quantity'        => '1.00',
                                 'reference_type'  => 'Subscription',
-                                'comment'         => '"('.$subscription->nickname.' - $date$)"'
+                                'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice)).PHP_EOL.'"('.$subscription->nickname.' - '.date('F Y').')"'
                             );
                             $chargeClass = new CT_Charge();
                             $chargeClass->bind($data);
@@ -394,7 +395,7 @@ function ct_process_charge_entry_admin_actions()
                                         'item_code'       => $suite->monthlySubscriptionPrice,
                                         'quantity'        => '1.00',
                                         'reference_type'  => 'Subscription',
-                                        'comment'         => '"('.$subscription->nickname.' - $date$)"'
+                                        'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice)).PHP_EOL.'"('.$subscription->nickname.' - '.date('F Y').')"'
                                     );
                                     $chargeClass = new CT_Charge();
                                     $chargeClass->bind($data);
