@@ -22,7 +22,7 @@ class CT_Organisations_Payments_Table extends WP_List_Table
     {
         return $column = array(
             "cb"                => "<input type='checkbox' />",
-            "invoice_id"        => __("Invoice ID"),
+            "invoice_number"    => __("Invoice Number"),
             "date_added"        => __('Date Added'),
             "amount"            => __('Amount'),
             "reference"         => __("Reference"),
@@ -38,7 +38,7 @@ class CT_Organisations_Payments_Table extends WP_List_Table
     function get_sortable_columns( $orderby )
     {
         return $sortable = array(
-            "invoice_id"    => array("invoice_id", $orderby == 'invoice_id'),
+            "invoice_number"    => array("invoice_number", $orderby == 'invoice_number'),
             "date"          => array("date", $orderby == 'date'),
             "amount"        => array("amount", $orderby == 'amount'),
             "reference"     => array("reference", $orderby == 'reference'),

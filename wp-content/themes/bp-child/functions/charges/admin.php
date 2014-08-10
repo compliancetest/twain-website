@@ -215,8 +215,8 @@ function ct_add_charge()
                     <td><input type="text" name="reference_id" id="reference_id" value="<?php echo $data['reference_id']?>" required="required"/></td>
                 </tr>
                 <tr>
-                    <th>Invoice Identifier</th>
-                    <td><input type="text" name="invoice_identifier" id="invoice_identifier" value="<?php echo $data['invoice_identifier']?>" required="required" readonly="readonly"/></td>
+                    <th>Invoice Number</th>
+                    <td><input type="text" name="invoice_number" id="invoice_number" value="<?php echo $data['invoice_number']?>" required="required" readonly="readonly"/></td>
                 </tr>
                 <tr>
                     <th>Is Paid</th>
@@ -290,9 +290,9 @@ function ct_process_charge_entry_admin_actions()
             }
         } elseif( wp_verify_nonce( $action, 'update-all' ) ){
             /**
-             * 1) We get organisations IDs with empty 'invoice_identifier' field
+             * 1) We get organisations IDs with empty 'invoice_number' field
              */
-            $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' GROUP BY organisation_id", ARRAY_A);
+            $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' GROUP BY organisation_id", ARRAY_A);
             $counter = 0;
             if( $organisations ){
                 
@@ -303,13 +303,13 @@ function ct_process_charge_entry_admin_actions()
                     /**
                      * 2) We get organisation's payments types list and for each payment type create invoice
                      */
-                    $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id'] ), ARRAY_A);                    
+                    $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id'] ), ARRAY_A);
                     foreach( $paymentTypes AS $paymentType ){
                         $xero = new CT_Xero();
                         $paymentID = $paymentType['payment_id'];
                         $invoice = $xero->upsertInvoice( $paymentType, $paymentID );                        
-                        if( isset( $invoice['Invoices']['Invoice']['InvoiceID'] ) ){
-                            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_identifier = %s, start_date = %s, end_date = %s WHERE invoice_identifier = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceID'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
+                        if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
+                            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s, start_date = %s, end_date = %s WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
                             $counter++;
                         }
                     }
@@ -326,13 +326,13 @@ function ct_process_charge_entry_admin_actions()
                         if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation) ) === '1' ){
                             continue;
                         }
-                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_identifier = '' AND  organisation_id = %s GROUP BY payment_id", $organisation ), ARRAY_A);
+                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation ), ARRAY_A);
                         foreach( $paymentTypes AS $paymentType ){
                             $xero = new CT_Xero();
                             $paymentID = $paymentType['payment_id'];
                             $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
-                            if( isset( $invoice['Invoices']['Invoice']['InvoiceID'] ) ){
-                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_identifier = %s, start_date = %s, end_date = %s WHERE invoice_identifier = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceID'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
+                            if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
+                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s, start_date = %s, end_date = %s WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
                                 $counter++;
                             }
                         }
@@ -346,12 +346,12 @@ function ct_process_charge_entry_admin_actions()
         } elseif( wp_verify_nonce( $action, 'update-status' ) ){
             $counter = 0;
             $xero = new CT_Xero();
-            $invoicesIdList = $wpdb->get_results("SELECT invoice_identifier FROM {$wpdb->prefix}organisations_charge WHERE is_paid = 0 GROUP BY invoice_identifier", ARRAY_A);
+            $invoicesIdList = $wpdb->get_results("SELECT invoice_number FROM {$wpdb->prefix}organisations_charge WHERE is_paid = 0 GROUP BY invoice_number", ARRAY_A);
             if( $invoicesIdList ){
                 foreach( $invoicesIdList AS $invoice ){
-                    $invoiceData = $xero->getInvoice( $invoice['invoice_identifier'] );
+                    $invoiceData = $xero->getInvoice( $invoice['invoice_number'] );
                     if( $invoiceData['Invoices']['Invoice']['Status'] === 'PAID' ){
-                        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET is_paid = 1 WHERE invoice_identifier = %s ", $invoice['invoice_identifier'] ) );
+                        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET is_paid = 1 WHERE invoice_number = %s ", $invoice['invoice_number'] ) );
                         $counter++;
                     }
                 }
@@ -378,7 +378,7 @@ function ct_process_charge_entry_admin_actions()
                                 'item_code'       => $suite->monthlySubscriptionPrice,
                                 'quantity'        => '1.00',
                                 'reference_type'  => 'Subscription',
-                                'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice))
+                                'comment'         => '"('.$subscription->nickname.' - $date$)"'
                             );
                             $chargeClass = new CT_Charge();
                             $chargeClass->bind($data);
@@ -394,7 +394,7 @@ function ct_process_charge_entry_admin_actions()
                                         'item_code'       => $suite->monthlySubscriptionPrice,
                                         'quantity'        => '1.00',
                                         'reference_type'  => 'Subscription',
-                                        'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice))
+                                        'comment'         => '"('.$subscription->nickname.' - $date$)"'
                                     );
                                     $chargeClass = new CT_Charge();
                                     $chargeClass->bind($data);

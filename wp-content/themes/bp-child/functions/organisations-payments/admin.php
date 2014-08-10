@@ -18,7 +18,7 @@ function ct_show_xero_payments_list()
     $listTable->prepare_items();
     ?>
     <div class="wrap">
-        <h2>Xero Payments</h2>
+        <h2>Organisations Payments</h2>
         <?php flushMessages(); ?>
         <form name="adminform" action="users.php?page=processing" method="post">
         <?php
@@ -108,11 +108,11 @@ add_action( 'wp_ajax_get_invoices', 'get_invoices' );
 
 function get_invoices() {
     global $wpdb;
-    $results = $wpdb->get_results($wpdb->prepare("SELECT c.invoice_identifier AS id FROM {$wpdb->prefix}organisations_charge AS c
+    $results = $wpdb->get_results($wpdb->prepare("SELECT c.invoice_number AS id FROM {$wpdb->prefix}organisations_charge AS c
                                                                   JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id
-                                                                  LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_id = c.invoice_identifier
-                                                                  WHERE invoice_identifier != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND c.organisation_id IN( %d ) AND p.invoice_id IS NULL
-                                                                  GROUP BY invoice_identifier", implode(',', $_POST['org_id'])));
+                                                                  LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_number = c.invoice_number
+                                                                  WHERE c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND c.organisation_id IN( %d ) AND p.invoice_number IS NULL
+                                                                  GROUP BY c.invoice_number", implode(',', $_POST['org_id'])));
     exit( json_encode( $results ) );
 }
 add_action("admin_init", "ct_process_xero_payment_admin_actions");
@@ -134,19 +134,19 @@ function ct_process_xero_payment_admin_actions()
                 foreach( $_REQUEST['org_id'] AS $org_id ){
                     $results = $wpdb->get_results($wpdb->prepare("SELECT c.*,o.* FROM {$wpdb->prefix}organisations_charge AS c
                                                                   JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id
-                                                                  LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_id = c.invoice_identifier
-                                                                  WHERE invoice_identifier != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND c.organisation_id = %d AND p.invoice_id IS NULL
-                                                                  GROUP BY invoice_identifier", $org_id));
+                                                                  LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_number = c.invoice_number
+                                                                  WHERE c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND c.organisation_id = %d AND p.invoice_number IS NULL
+                                                                  GROUP BY c.invoice_number", $org_id));
                     if( $results ){
                         foreach( $results AS $result ){
-                            if( isset( $_REQUEST['invoices_numbers']) && $_REQUEST['invoices_numbers'] != $result->invoice_identifier ){
+                            if( isset( $_REQUEST['invoices_numbers']) && $_REQUEST['invoices_numbers'] != $result->invoice_number ){
                                 continue;
                             }
-                            $invoiceData = $xero_api->getInvoice( $result->invoice_identifier );
+                            $invoiceData = $xero_api->getInvoice( $result->invoice_number );
                             //we add only Approved invoices to Payments table
                             if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'AUTHORISED' ){
                                 $data = array(
-                                    'invoice_id'        => $result->invoice_identifier,
+                                    'invoice_number'        => $result->invoice_number,
                                     'account_code'      => 650,
                                     'date_added'        => date( 'Y-m-d' ),
                                     'amount'            => $invoiceData['Invoices']['Invoice']['Total'],
@@ -169,7 +169,7 @@ function ct_process_xero_payment_admin_actions()
             wp_redirect('admin.php?page=manage-organisations-payments');
             exit;
         } else if( wp_verify_nonce($action, 'mark_charges') ){
-            $wpdb->query("UPDATE {$wpdb->prefix}organisations_charge SET is_paid = 1 WHERE invoice_identifier IN ( SELECT invoice_id FROM {$wpdb->prefix}organisations_payments WHERE is_paid = 1 )");
+            $wpdb->query("UPDATE {$wpdb->prefix}organisations_charge SET is_paid = 1 WHERE invoice_number IN ( SELECT invoice_number FROM {$wpdb->prefix}organisations_payments WHERE is_paid = 1 )");
             addMessage('Done', 'success');
             wp_redirect('admin.php?page=manage-organisations-payments');
             exit;
@@ -179,7 +179,7 @@ function ct_process_xero_payment_admin_actions()
             if( $results ){
                 foreach( $results AS $result ){
                     $payment = $xero->createPayment( array(
-                        'InvoiceID' => $result['invoice_id'],
+                        'InvoiceNumber' => $result['invoice_number'],
                         'Amount' => $result['amount'],
                         'Date'   => date('Y-m-d'),
                         'Reference' => $result['reference']
@@ -191,7 +191,7 @@ function ct_process_xero_payment_admin_actions()
                                 'is_paid'    => 1,
                                 'date_paid'  => date('Y-m-d H:i:s')
                             ),
-                            array( 'invoice_id' => $result['invoice_id'] ),
+                            array( 'invoice_number' => $result['invoice_number'] ),
                             array( '%s', '%d', '%s' ),
                             array( '%s' )
                         );
@@ -199,7 +199,7 @@ function ct_process_xero_payment_admin_actions()
                             array(
                                 'is_paid'    => 1
                             ),
-                            array( 'invoice_identifier' => $result['invoice_id'] ),
+                            array( 'invoice_number' => $result['invoice_number'] ),
                             array( '%d' ),
                             array( '%s' )
                         );

@@ -1,0 +1,2 @@
+ALTER TABLE `wp_organisations_payments` CHANGE `invoice_id` `invoice_number` VARCHAR( 255 ) NOT NULL;
+ALTER TABLE `wp_organisations_charge` CHANGE `invoice_identifier` `invoice_number` VARCHAR( 255 ) NULL DEFAULT NULL;

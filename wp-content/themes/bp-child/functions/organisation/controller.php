@@ -116,7 +116,7 @@ class CT_Organisation_Controller
                     'end_date'              => date("Y-m-d", strtotime('last day of this month')),
                     'reference_type'        => 'subscription',
                     'reference_id'          => $subscription_id,
-                    'invoice_identifier'    => '',
+                    'invoice_number'    => '',
                     'is_paid'               => 0,
                     'comment'               => ''
                 ),
@@ -135,7 +135,7 @@ class CT_Organisation_Controller
                     'end_date'              => date("Y-m-d", strtotime('last day of this month')),
                     'reference_type'        => 'subscription',
                     'reference_id'          => $subscription_id,
-                    'invoice_identifier'    => '',
+                    'invoice_number'    => '',
                     'is_paid'               => 0,
                     'comment'               => ''
                 ),

@@ -195,21 +195,25 @@ class CT_Xero {
         $contact->addChild( 'ContactID', $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']) ) );
         $xml->addChild( 'Date', date('Y-m-d') );
         $xml->addChild( 'DueDate', date('Y-m-d', $paymentType == 1 ? strtotime('+1 day') : strtotime('+30 days') ) );
-        $xml->addChild( 'LineAmountTypes', 'Exclusive' );
+        $xml->addChild( 'LineAmountTypes', 'Inclusive' );
         $xml->addChild( 'CurrencyCode', 'AUD' );
         $line_items = $xml->addChild( 'LineItems' );
         /**
          * Get organisation charge table entries for current organisation with '$paymentType' payment type
          */
-        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND invoice_me = %s AND status = 'Active' ) AND invoice_identifier = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $payment_method['invoice_me'] ), ARRAY_A );
+        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND invoice_me = %s AND status = 'Active' ) AND invoice_number = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $payment_method['invoice_me'] ), ARRAY_A );
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
+                $line_item_desc = strpos( $entry['comment'], '$date$' ) !== false ?
+                    $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $entry['item_code'])).PHP_EOL.str_replace( '$date$', date('F Y'), $entry['comment'] ) :
+                    $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $entry['item_code'])).PHP_EOL.'"('.$entry['comment'].' - '.date('F Y').')"' ;
                 $line_item = $line_items->addChild( 'LineItem' );
                 $line_item->addChild( 'ItemCode', $entry['item_code'] );
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
+                $line_item->addChild( 'Description', $line_item_desc );
             }
         }
-        if( isset( $invoiceData['invoice_identifier'] ) && ! empty( $invoiceData['invoice_identifier'] ) ) $xml->addChild('InvoiceID', $invoiceData['invoice_identifier'] );
+        if( isset( $invoiceData['invoice_number'] ) && ! empty( $invoiceData['invoice_number'] ) ) $xml->addChild('InvoiceNumber', $invoiceData['invoice_number'] );
         $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();
@@ -220,7 +224,7 @@ class CT_Xero {
     public function createPayment( $paymentData ){
         $xml = new SimpleXMLElement( '<Payment></Payment>' );
         $invoice = $xml->addChild( 'Invoice' );
-        $invoice->addChild( 'InvoiceID', $paymentData['InvoiceID'] );
+        $invoice->addChild( 'InvoiceNumber', $paymentData['InvoiceNumber'] );
         $account = $xml->addChild( 'Account' );
         $account->addChild( 'Code', 650 );
         $xml->addChild( 'Date', $paymentData['Date'] );

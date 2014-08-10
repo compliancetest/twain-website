@@ -6,7 +6,7 @@ class CT_Payments
 {
     public $id = null;
 
-    public $invoice_id = null;
+    public $invoice_number = null;
 
     public $account_code = null;
 
@@ -69,7 +69,7 @@ class CT_Payments
         }
         if(!$this->id)
         {
-            if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_payments WHERE invoice_id = %s", $data['invoice_id'] ) ) ){
+            if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_payments WHERE invoice_number = %s", $data['invoice_number'] ) ) ){
                 return $wpdb->insert($wpdb->prefix . "organisations_payments", $data );
             }
             return false;
