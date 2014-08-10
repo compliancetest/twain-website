@@ -76,12 +76,73 @@
 </xsl:template>
 
 <!-- ************************************************************* Default Validation Results  ************************************************************* -->
+<xsl:template match="/event.02.data:Event">
+    <h2>ESB Validation Result</h2>
+    <b>MaximumSeverity.Code:</b> 
+    <xsl:apply-templates />
+</xsl:template>
+
 <xsl:template match="/event.02.data:EventItems">
     <h2>ESB Validation Result</h2>
     <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template name="eventItemTemplate" match="/event.02.data:EventItems/event.02.data:EventItem">
+    <div class="grid-box">
+        <div class="grid-box-header"><h3><xsl:value-of select="name()"/></h3></div>
+        <div class="grid-box-body">
+            <table cellpadding="0" cellspacing="0" class="format-table">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Error.Code)" /></td>
+                        <td><xsl:value-of select="event.02.data:Error.Code/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Severity.Code)" /></td>
+                        <td><xsl:value-of select="event.02.data:Severity.Code/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Short.Description)" /></td>
+                        <td><xsl:value-of select="event.02.data:Short.Description/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Detailed.Description)" /></td>
+                        <td><xsl:value-of select="event.02.data:Detailed.Description/text()" /></td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Parameters)" /></td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="format-table1">
+                                <tr>
+                                    <th>Identifier</th>
+                                    <th>Value</th>
+                                </tr>
+                                <xsl:for-each select="event.02.data:Parameters/event.02.data:Parameter">
+                                    <tr>
+                                        <td><div class="break-all"><xsl:value-of select="event.02.data:Parameter.Identifier/text()" /></div></td>
+                                        <td><xsl:value-of select="event.02.data:Parameter.Text/text()" /></td>
+                                    </tr>
+                                </xsl:for-each>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="name(event.02.data:Locations/event.02.data:Location.Instance.Identifier)" /></td>
+                        <td><xsl:value-of select="event.02.data:Locations/event.02.data:Location.Path.Text/text()" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</xsl:template>
+
+<xsl:template name="eventItemTemplate1" match="/event.02.data:Event/event.02.data:EventItems/event.02.data:EventItem">
     <div class="grid-box">
         <div class="grid-box-header"><h3><xsl:value-of select="name()"/></h3></div>
         <div class="grid-box-body">
