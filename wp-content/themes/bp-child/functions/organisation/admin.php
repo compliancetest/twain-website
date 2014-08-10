@@ -267,6 +267,9 @@ function ct_process_organisation_admin_actions()
             if( $organisations_list ){
                 foreach( $organisations_list AS $organisation ){
                     $xero = new CT_Xero();
+                    unset( $organisation->no_billing );
+                    unset( $organisation->invoice_me );
+                    unset( $organisation->id );
                     $xeroContact = $xero->upsertContact( (array) $organisation );
                     if( isset( $xeroContact['Contacts']['Contact']['ContactID'] ) ){
                         $wpdb->update("{$wpdb->prefix}organisations",

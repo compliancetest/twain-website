@@ -212,7 +212,7 @@ function ct_get_user_viewable_subscriptions($user_id)
                                  
         $data = $wpdb->get_results($query);
     } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
+        $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
                 WHERE 
                     s.user_id = bm.user_id AND bm.is_confirmed=1 
