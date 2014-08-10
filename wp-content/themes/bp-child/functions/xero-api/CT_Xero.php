@@ -182,7 +182,7 @@ class CT_Xero {
 
     public function upsertInvoice( $invoiceData, $paymentType = 1 ){
         global $wpdb;
-        $payment_method = $wpdb->get_row($wpdb->prepare("SELECT invoice_me FROM {$wpdb->prefix}organisations_payment_methods WHERE id = %s", $invoiceData['payment_id']), ARRAY_A );
+        $payment_method = $wpdb->get_var($wpdb->prepare("SELECT invoice_me FROM {$wpdb->prefix}organisations_payment_methods WHERE id = %s", $invoiceData['payment_id']) );
         $requiredFields = array( 'organisation_id', 'item_code', 'quantity' );
         foreach( $requiredFields AS $requiredField ){
             if( ! isset( $invoiceData[$requiredField] ) || empty( $invoiceData[$requiredField] ) ){
@@ -194,14 +194,14 @@ class CT_Xero {
         $contact = $xml->addChild( 'Contact' );
         $contact->addChild( 'ContactID', $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']) ) );
         $xml->addChild( 'Date', date('Y-m-d') );
-        $xml->addChild( 'DueDate', date('Y-m-d', $paymentType == 1 ? strtotime('+1 day') : strtotime('+30 days') ) );
+        $xml->addChild( 'DueDate', date('Y-m-d', $payment_method == 0 ? strtotime('+1 day') : strtotime('+30 days') ) );
         $xml->addChild( 'LineAmountTypes', 'Inclusive' );
         $xml->addChild( 'CurrencyCode', 'AUD' );
         $line_items = $xml->addChild( 'LineItems' );
         /**
          * Get organisation charge table entries for current organisation with '$paymentType' payment type
          */
-        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND invoice_me = %s AND status = 'Active' ) AND invoice_number = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $payment_method['invoice_me'] ), ARRAY_A );
+        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' ) AND invoice_number = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $invoiceData['payment_id'] ), ARRAY_A );
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
                 $line_item_desc = strpos( $entry['comment'], '$date$' ) !== false ?

@@ -307,7 +307,7 @@ function ct_process_charge_entry_admin_actions()
                     foreach( $paymentTypes AS $paymentType ){
                         $xero = new CT_Xero();
                         $paymentID = $paymentType['payment_id'];
-                        $invoice = $xero->upsertInvoice( $paymentType, $paymentID );                        
+                        $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
                         if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
                             $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s, start_date = %s, end_date = %s WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'], date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), date( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
                             $counter++;
