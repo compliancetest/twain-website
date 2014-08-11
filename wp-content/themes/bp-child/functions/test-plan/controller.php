@@ -61,23 +61,20 @@ function certifyPlan()
     if($all_verified)
     {
         $all_success = true;
+        $level = ';;' . implode(';;', $plan->level) . ';;';
+        $role = ';;' . implode(';;', $plan->role) . ';;';
         
-        foreach($plan->level as $level)
-        {
-            foreach($plan->role as $role)
-            {
-                $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
-                $oId = $wpdb->get_var($query);
-                if (!$oId) {
-                    if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId))
-                        $all_success = false;
-                }
+        $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
+        $oId = $wpdb->get_var($query);
+        if (!$oId) {
+            if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId)) {
+                wp_redirect($return);
+            } else {
+                addMessage('The plan was certified successfully');
+                wp_redirect($return_success);
             }
-        }
-        if($all_success) {
-            addMessage('The plan was certified successfully');
-            wp_redirect($return_success);
         } else {
+            addMessage('An existing claim for this test plan already exists. Please delete it if you wish to update your claim for this test plan.', 'warning');
             wp_redirect($return);
         }
     }else{
