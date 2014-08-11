@@ -146,9 +146,9 @@ function ct_process_xero_payment_admin_actions()
                             //we add only Approved invoices to Payments table
                             if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'AUTHORISED' ){
                                 $data = array(
-                                    'invoice_number'        => $result->invoice_number,
+                                    'invoice_number'    => $result->invoice_number,
                                     'account_code'      => 650,
-                                    'date_added'        => date( 'Y-m-d' ),
+                                    'date_added'        => gmdate( 'Y-m-d H:i:s' ),
                                     'amount'            => $invoiceData['Invoices']['Invoice']['Total'],
                                     'reference'         => '',
                                     'organisation_id'   => $result->organisation_id,
@@ -181,7 +181,7 @@ function ct_process_xero_payment_admin_actions()
                     $payment = $xero->createPayment( array(
                         'InvoiceNumber' => $result['invoice_number'],
                         'Amount' => $result['amount'],
-                        'Date'   => date('Y-m-d'),
+                        'Date'   => gmdate('Y-m-d'),
                         'Reference' => $result['reference']
                     ));
                     if( isset( $payment['Payments']['Payment']['PaymentID']) ){
@@ -189,7 +189,7 @@ function ct_process_xero_payment_admin_actions()
                             array(
                                 'payment_id' => $payment['Payments']['Payment']['PaymentID'],
                                 'is_paid'    => 1,
-                                'date_paid'  => date('Y-m-d H:i:s')
+                                'date_paid'  => gmdate('Y-m-d H:i:s')
                             ),
                             array( 'invoice_number' => $result['invoice_number'] ),
                             array( '%s', '%d', '%s' ),
