@@ -27,6 +27,10 @@ function ct_admin_action_page_css()
         .action-completed{
             background: url('/wp-admin/images/yes.png') left top no-repeat;
         }
+        .action-failed{
+            background: url('/wp-admin/images/no.png') left top no-repeat;
+        }
+        
     </style>
     <?php
 }

@@ -180,6 +180,8 @@ function editPlan()
                         <label>Level</label>
                         <?php                         
                             foreach($levels as $l){
+                                if($l['code'] == 'Default')
+                                    continue;
                         ?>
                          <span><input type="checkbox" name="level[]" class="level" value="<?php echo $l['code']?>" <?php echo $plan->level && in_array($l['code'], $plan->level) ? 'checked="checked"' : ''?>> <?php echo $l['code'] ?></span>
                         <?php 

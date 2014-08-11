@@ -235,7 +235,7 @@ function ct_process_cc_invoice_via_eway()
                         jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').addClass('action-completed');                        
                     } else {                        
                         jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').html('<b>Failed!</b> (' + jQuery(rsp).find('msg').text() + ')');
-                        jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').addClass('action-completed');
+                        jQuery('.xero-payment-tr').eq(idx - 1).find('.current-action-progress').addClass('action-failed');
                     }
                     ct_processing_payment(idx + 1);
                 },
