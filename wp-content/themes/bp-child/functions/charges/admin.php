@@ -194,11 +194,11 @@ function ct_add_charge()
                 <?php if( isset( $data['start_date'] ) && $data['start_date'] != '0000-00-00 00:00:00' ): ?>
                     <tr>
                         <th>Start Date</th>
-                        <td><input type="text" name="start_date" id="start_date" value="<?php echo date( 'Y-m-d', strtotime( $data['start_date'] ) );?>" disabled="disabled"/></td>
+                        <td><input type="text" name="start_date" id="start_date" value="<?php echo gmdate( 'Y-m-d', strtotime( $data['start_date'] ) );?>"/></td>
                     </tr>
                     <tr>
                         <th>End Date</th>
-                        <td><input type="text" name="end_date" id="end_date" value="<?php echo date( 'Y-m-d', strtotime( $data['end_date'] ) );?>" disabled="disabled"/></td>
+                        <td><input type="text" name="end_date" id="end_date" value="<?php echo gmdate( 'Y-m-d', strtotime( $data['end_date'] ) );?>"/></td>
                     </tr>
                 <?php endif;?>
                 <tr>
@@ -310,7 +310,7 @@ function ct_process_charge_entry_admin_actions()
                         $paymentID = $paymentType['payment_id'];
                         $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
                         if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s, start_date = %s, end_date = %s WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'], gmdate( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), gmdate( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
+                            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
                             $counter++;
                         }
                     }
@@ -333,7 +333,7 @@ function ct_process_charge_entry_admin_actions()
                             $paymentID = $paymentType['payment_id'];
                             $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
                             if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s, start_date = %s, end_date = %s WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'], gmdate( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['Date'] ) ), gmdate( 'Y-m-d', strtotime( $invoice['Invoices']['Invoice']['DueDate'] ) ), $paymentID, $paymentType['organisation_id'] ) );
+                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
                                 $counter++;
                             }
                         }
