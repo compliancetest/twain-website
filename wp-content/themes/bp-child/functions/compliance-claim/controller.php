@@ -343,11 +343,11 @@ function createClaimPDF($claim_id)
     </tr>
     <tr>
         <th>Conformance Level(s)</th>
-        <td>' . $claim->conformance_level . '</td>
+        <td>' . implode(cp_explode($claim->conformance_level), ", ") . '</td>
     </tr>
     <tr>
         <th>Role(s)</th>
-        <td>' . $claim->role . '</td>
+        <td>' . implode(cp_explode($claim->role), ", ") . '</td>
     </tr>
     <tr>
         <th>Status</th>
@@ -488,8 +488,8 @@ function createClaimPDF($claim_id)
                                 'compare' => '!='
                             );  
           
-    $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $claim->role, 'compare' => '=');               
-    $args['meta_query'][] = array('key' => 'conformance_level_'. $claim->suite_id, 'value' => $claim->conformance_level,'compare' => '=');
+    $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => cp_explode($claim->role), 'compare' => 'IN');               
+    $args['meta_query'][] = array('key' => 'conformance_level_'. $claim->suite_id, 'value' => cp_explode($claim->conformance_level),'compare' => 'IN');
     
     
     
