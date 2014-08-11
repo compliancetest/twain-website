@@ -205,10 +205,18 @@ function ct_add_charge()
                     <th>Reference Type</th>
                     <td>
                         <select name="reference_type" id="reference_type">
-                            <option value="subscription" <?php if( 'subscription' == $data['reference_type']):?>selected="selected" <?php endif;?>>Subscription</option>
                             <option value="ticket" <?php if( 'ticket' == $data['reference_type']):?>selected="selected" <?php endif;?>>Ticket</option>
+                            <option value="subscription" <?php if( 'subscription' == $data['reference_type']):?>selected="selected" <?php endif;?>>Subscription</option>
                         </select>
                     </td>
+                </tr>
+                <tr id="show_subscription" style="display: none;">
+                    <th>Subscription Nickname</th>
+                    <td>
+                        <select name="subsc_nickname" id="subsc_nickname">
+                            <option value=""></option>
+                        </select>
+                    <td>
                 </tr>
                 <tr>
                     <th>Reference ID</th>
@@ -255,10 +263,47 @@ function ct_add_charge()
                                     text: ( value.nickname + ' (' + ( value.invoice_me == '0' ? 'Credit Card' : 'Invoice Me' )+')' )
                                 }));
                             });
+                            update_subscriptions();
                         }
                     }
                 });
             })
+            jQuery('body').on('change', '#reference_type, #payment_id', function(){
+                update_subscriptions();
+            });
+            function update_subscriptions(){
+                jQuery('#show_subscription').hide();
+                if( jQuery('#reference_type').val() == 'subscription' ){
+                    jQuery.ajax({
+                        type : 'post',
+                        dataType: 'json',
+                        url: '/wp-admin/admin-ajax.php',
+                        data : { 'action' : 'get_org_subscriptions', 'org_id' : jQuery('#organisation_id').val(), 'payment_id' : jQuery('#payment_id').val() },
+                        success: function( data ){
+                            jQuery('#subsc_nickname').find('option')
+                                .remove()
+                                .end();
+                            if( data && data.length ){
+                                jQuery('#show_subscription').show();
+                                jQuery('#subsc_nickname').find('option')
+                                    .remove()
+                                    .end();
+                                jQuery.each(data, function( key, value ) {
+                                    jQuery('#subsc_nickname')
+                                        .append(jQuery("<option/>", {
+                                            value: value.id,
+                                            text: value.nickname
+                                        }));
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    jQuery('#subsc_nickname').find('option')
+                        .remove()
+                        .end();
+                }
+            }
         })
     </script>
 <?php
@@ -278,11 +323,24 @@ function ct_process_charge_entry_admin_actions()
         {
             //Save Charge Entry
             $chargeClass = new CT_Charge($_POST['id']);
+            if( $_POST['reference_type'] == 'subscription' ){
+                if( isset( $_POST['subsc_nickname'] ) ){
+                    $_POST['comment'] = $wpdb->get_var($wpdb->prepare("SELECT nickname FROM {$wpdb->prefix}organisations_subscriptions WHERE id = %d ", $_POST['subsc_nickname'] ) ).'_'.$_POST['comment'];
+                }
+            }
             $_POST['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $_POST['item_code'])).PHP_EOL.'"('.$_POST['comment'].' - '.gmdate('F Y').')"';
             $chargeClass->bind($_POST);
             $resp = $chargeClass->save();
             if( $resp )
             {
+                if( $_POST['reference_type'] == 'subscription' ){
+                    if( isset( $_POST['subsc_nickname'] ) ){
+                        $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                            array( 'last_charge_date' => $_POST['end_date'] ),
+                            array( 'id' => $_POST['subsc_nickname'] )
+                        );
+                    }
+                }
                 echo 'Charge entry saved successfully';
                 redirect_then_exit();
             }else{
@@ -428,6 +486,17 @@ function get_payment_methods_callback() {
     }
     $paymentMethods = $wpdb->get_results( $wpdb->prepare( "SELECT id, nickname, invoice_me FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND status = 'Active'", $organisationID ), ARRAY_A );
     exit( json_encode( $paymentMethods ) );
+}
+add_action( 'wp_ajax_get_org_subscriptions', 'get_org_subscriptions' );
+function get_org_subscriptions() {
+    global $wpdb;
+    $organisationID = filter_var( $_POST['org_id'], FILTER_SANITIZE_NUMBER_INT );
+    if( empty( $organisationID ) ){
+        exit();
+    }
+    $paymentID = filter_var( $_POST['payment_id'], FILTER_SANITIZE_NUMBER_INT );
+    $subscriptions = $wpdb->get_results( $wpdb->prepare( "SELECT id, nickname FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id = %d AND payment_method = %d AND status = 'Active'", $organisationID, $paymentID ), ARRAY_A );
+    exit( json_encode( $subscriptions ) );
 }
 function redirect_then_exit(){
     ?>
