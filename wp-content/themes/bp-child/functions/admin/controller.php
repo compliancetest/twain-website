@@ -138,7 +138,8 @@ function ct_process_cc_payment()
     
     if($result['ewayTrxnStatus'] == 'True')
     {
-        $eWayReference = $result['ewayTrxnReference'];
+        $eWayReference = $result['ewayTrxnNumber'];
+        
         //Save reference id
         $wpdb->update($wpdb->prefix . "organisations_payments", 
                       array("is_paid" => 1, "date_paid" => date("Y-m-d H:i:s"), "reference" => $eWayReference),
