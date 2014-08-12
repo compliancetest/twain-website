@@ -24,6 +24,8 @@ class CT_Payments
 
     public $date_paid = null;
 
+    public $payment_id = null;
+
     public function __construct($id = null)
     {
         global $wpdb;

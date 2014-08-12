@@ -160,6 +160,22 @@ function ct_process_xero_payment_admin_actions()
                                 $paymentsCounter++;
                             } else if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'DRAFT' ){
                                 $nonApprovedPaymentsCounter++;
+                            } else if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'PAID' ){
+                                $data = array(
+                                    'invoice_number'    => $result->invoice_number,
+                                    'account_code'      => 650,
+                                    'date_added'        => gmdate( 'Y-m-d H:i:s' ),
+                                    'amount'            => $invoiceData['Invoices']['Invoice']['Total'],
+                                    'reference'         => 'Paid In Xero',
+                                    'organisation_id'   => $result->organisation_id,
+                                    'payment_method_id' => $result->payment_id,
+                                    'is_paid'           => true,
+                                    'date_paid'         => date('Y-m-d H:i:s', strtotime($invoiceData['Invoices']['Invoice']['UpdatedDateUTC'])),
+                                    'payment_id'        => $invoiceData['Invoices']['Invoice']['Payments']['Payment']['PaymentID']
+                                );
+                                $xero_payments->bind( $data );
+                                $xero_payments->save();
+                                $paymentsCounter++;
                             }
                         }
                     }
@@ -193,14 +209,6 @@ function ct_process_xero_payment_admin_actions()
                             ),
                             array( 'invoice_number' => $result['invoice_number'] ),
                             array( '%s', '%d', '%s' ),
-                            array( '%s' )
-                        );
-                        $wpdb->update("{$wpdb->prefix}organisations_charge",
-                            array(
-                                'is_paid'    => 1
-                            ),
-                            array( 'invoice_number' => $result['invoice_number'] ),
-                            array( '%d' ),
                             array( '%s' )
                         );
                     }

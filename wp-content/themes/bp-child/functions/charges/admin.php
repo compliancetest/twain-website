@@ -325,10 +325,11 @@ function ct_process_charge_entry_admin_actions()
             $chargeClass = new CT_Charge($_POST['id']);
             if( $_POST['reference_type'] == 'subscription' ){
                 if( isset( $_POST['subsc_nickname'] ) ){
-                    $_POST['comment'] = $wpdb->get_var($wpdb->prepare("SELECT nickname FROM {$wpdb->prefix}organisations_subscriptions WHERE id = %d ", $_POST['subsc_nickname'] ) ).'_'.$_POST['comment'];
+                    //$_POST['comment'] = //$wpdb->get_var($wpdb->prepare("SELECT nickname FROM {$wpdb->prefix}organisations_subscriptions WHERE id = %d ", $_POST['subsc_nickname'] ) ).'_'.$_POST['comment'];
+                    $_POST['reference_id'] = $_POST['subsc_nickname'];
                 }
             }
-            $_POST['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $_POST['item_code'])).PHP_EOL.'"('.$_POST['comment'].' - '.gmdate('F Y').')"';
+//            $_POST['comment'] = gmdate('F Y');//$wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $_POST['item_code'])).PHP_EOL.'"('..')"';
             $chargeClass->bind($_POST);
             $resp = $chargeClass->save();
             if( $resp )
@@ -436,8 +437,9 @@ function ct_process_charge_entry_admin_actions()
                                 'payment_id'      => $subscription->payment_method,
                                 'item_code'       => $suite->monthlySubscriptionPrice,
                                 'quantity'        => '1.00',
-                                'reference_type'  => 'Subscription',
-                                'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice)).PHP_EOL.'"('.$subscription->nickname.' - '.gmdate('F Y').')"'
+                                'reference_type'  => 'subscription',
+                                'reference_id'    => $subscription->id,
+                                'comment'         => gmdate('F Y')
                             );
                             $chargeClass = new CT_Charge();
                             $chargeClass->bind($data);
@@ -452,8 +454,9 @@ function ct_process_charge_entry_admin_actions()
                                         'payment_id'      => $subscription->payment_method,
                                         'item_code'       => $suite->monthlySubscriptionPrice,
                                         'quantity'        => '1.00',
-                                        'reference_type'  => 'Subscription',
-                                        'comment'         => $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $suite->monthlySubscriptionPrice)).PHP_EOL.'"('.$subscription->nickname.' - '.gmdate('F Y').')"'
+                                        'reference_type'  => 'subscription',
+                                        'reference_id'    => $subscription->id,
+                                        'comment'         => gmdate('F Y')
                                     );
                                     $chargeClass = new CT_Charge();
                                     $chargeClass->bind($data);
