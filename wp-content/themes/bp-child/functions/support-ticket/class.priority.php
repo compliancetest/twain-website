@@ -77,13 +77,14 @@ class CT_TicketPriority
     
     public function getPrioritiesSelectboxHTML($name = 'ticket_priority', $id='ticket_priority', $default = null, $emptyOptionLabel = '- All -')
     {
+        $prices = get_tickets_prices();
         $priorities = $this->getPriorities('sort_number');
         $html = "<select name='$name' id='$id' class='select'>";
         if($emptyOptionLabel)
             $html .= "<option value=''>$emptyOptionLabel</option>";
-        foreach($priorities as $p)
+        foreach($priorities as $k => $p)
         {
-            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . intval($p->ttresolve) . "' ttresponse='" . intval($p->ttresponse) . "' price='" . $p->price . "'>$p->priority</option>";
+            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . intval($p->ttresolve) . "' ttresponse='" . intval($p->ttresponse) . "' price='" . $prices[$k+1] . "'>$p->priority</option>";
         }
         $html .= "</select>";
         

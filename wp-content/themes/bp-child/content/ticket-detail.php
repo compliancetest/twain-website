@@ -62,7 +62,7 @@
 </div>
 <div class="ticket-term-detail">
     <p class="ticket-info" id="ticket-term-info">
-        <span><b>Price/hr:</b> <?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
+        <span><b>Price/hr:</b> <?php echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?></span>
         <span><b>Effort:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
         <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>
         <span><b>Time to Respond:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
@@ -82,7 +82,7 @@
                 </span>                   
                 <span class="item" id="term_price">
                     <b>Price/hr:</b> 
-                    <span><?php echo $ticket->price > 0 ? $ticket->price . " Tokens/hr" : 'Free'?></span>
+                    <span><?php echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?></span>
                 </span>
                 <span class="item" id="term_ttpay">
                     <b>Effort:</b>

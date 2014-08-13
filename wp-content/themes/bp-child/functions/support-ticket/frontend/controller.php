@@ -96,6 +96,7 @@ function createSupportTicket()
         exit;
     }
     $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
+    $tickets_price = get_tickets_prices();
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
@@ -108,8 +109,8 @@ function createSupportTicket()
         'status_id' => TICKET_STATUS_NEW,
         'ttresolve' => $priority->ttresolve,
         'ttresponse' => $priority->ttresponse,        
-        'price' => $category->has_fee ? $priority->price : 0,
-        'total_price' => $category->has_fee ? $priority->price : 0,
+        'price' => $category->has_fee ? $tickets_price[$priority->id] : 0,
+        'total_price' => $category->has_fee ? $tickets_price[$priority->id] : 0,
         'term_accepted' => 0,
         'term_creator_id' => $user_id,
         'customer_new_messages' => 0,
@@ -466,7 +467,7 @@ function changeTicketTerm()
     $oldPriority = $ct_ticket_priority->getPriorityById($ticket->priority_id);
     
     $is_changed = false;
-    
+    $tickets_price = get_tickets_prices();
     //================================== Customer ==================================
     if($ticket->customer_id == $user_id)
     {
@@ -485,9 +486,8 @@ function changeTicketTerm()
             $message_type = 'term';
             
             $is_changed = true;
-            
             $ttpay = $ticket->ttpay;
-            $price = $category->has_fee ? $newPriority->price : 0;
+            $price = $category->has_fee ? $tickets_price[$newPriority->id] : 0;
             $ttresponse = $newPriority->ttresponse;
             $ttresolve = $newPriority->ttresolve;
             
@@ -521,7 +521,7 @@ function changeTicketTerm()
         $ttpay = $_POST['ttpay'];
         $ttresponse = $_POST['ttresponse'];
         $ttresolve = $_POST['ttresolve'];    
-        $price = $category->has_fee ? $newPriority->price : 0;
+        $price = $category->has_fee ? $tickets_price[$newPriority->id] : 0;
         
         if($ticket->ttpay != $ttpay || $ticket->ttresponse != $ttresponse || $ticket->ttresolve != $ttresolve)
         {            
@@ -556,7 +556,7 @@ function changeTicketTerm()
             exit;
         }
     }
-    
+    $tickets_price = get_tickets_prices();
     if($is_changed) //Term has been updated
     {
         //Update ticket status to feedback if it already has started
@@ -565,7 +565,7 @@ function changeTicketTerm()
             ct_update_ticket_status($ticket->id, TICKET_STATUS_FEEDBACK, 'Ticket term has been changed.');            
             $ticket->status_id = TICKET_STATUS_FEEDBACK;
         }
-        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * $price, 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
+        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * $tickets_price[$_POST['priority']], 'price' => $tickets_price[$_POST['priority']], 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
     }
     
     $ticket = getTicketById($ticket->id);

@@ -6,6 +6,7 @@ jQuery(document).ready(function(){
     
     //Change Priority and Type
     jQuery('body').on('change', '#ticket-priority', function(){
+        jQuery('.ticket_price_data').hide();
         if(jQuery(this).val() == '')
         {
             jQuery('#ttresponse').html('');
@@ -31,7 +32,7 @@ jQuery(document).ready(function(){
         {
             jQuery("#ticket-price-row").hide();    
         }else{
-            jQuery('#ticket-price').html(jQuery('#ticket-category option:selected').attr('has-fee') == 'no' ? 'Free' : (jQuery('#ticket-priority option:selected').attr('price') + ' Tokens/hr') );            
+            jQuery('#ticket-price').html(jQuery('#ticket-category option:selected').attr('has-fee') == 'no' ? 'Free' : '$' + (jQuery('#ticket-priority option:selected').attr('price')) );
             if(jQuery('#ticket-category option:selected').attr('has-fee') == 'no')
                     jQuery('#ticket-price').next().hide();
                 else
@@ -100,7 +101,7 @@ jQuery(document).ready(function(){
         }
         
         //Error if the payment method is not selected
-        if(form.find('#ticket-category option:selected').attr('has-fee') != 'no' && form.find('#prepurchased-tokens').val() == 0 && form.find('#ticket-card-id').val() == '')
+        if(form.find('#ticket-category option:selected').attr('has-fee') != 'no' && form.find('#ticket-card-id').val() == '')
         {
             form.find('#ticket-card-id').addClass('select-error');
             isValid = false;
@@ -120,10 +121,10 @@ jQuery(document).ready(function(){
                     {
                         forceCreateTicket = true;
                         form.find('#ct-ticket-validate-action').remove();
-                        form.find('#ct-ticket-create-action').attr('name', 'ct-ticket-action');                    
+                        form.find('#ct-ticket-create-action').attr('name', 'ct-ticket-action');
                         form.submit();
                     }else{
-                        form.find('.loading').hide();        
+                        form.find('.loading').hide();
                         form.find('.popup-box-content .message').remove();
                         form.find('.popup-box-content').append('<div class="message error" style="display: none">' + jQuery(rsp).find('error').text() + '</div>');
                         form.find('.popup-box-content .message').fadeIn();
@@ -158,7 +159,7 @@ jQuery(document).ready(function(){
         jQuery('#changeTermForm #term_ttresponse').find('input[type="text"]').val(ttresponse);
         if(jQuery('#changeTermForm #term_price').find('span').html() != 'Free')
         {
-            jQuery('#changeTermForm #term_price').find('span').html(price + " Tokens/hr");
+            jQuery('#changeTermForm #term_price').find('span').html('$'+price);
             jQuery('#changeTermForm #term_price').find('input[type="text"]').val(price);        
         }
     })

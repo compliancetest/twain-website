@@ -248,3 +248,13 @@ function ct_update_ticket_status($ticket_id, $new_status, $comment = '')
     $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticket_id, 'status_id' => $new_status, 'created_date' => date("Y-m-d H:i:s"), 'comment'=> $comment));
     $wpdb->update(TABLE_TICKETS, array('status_id' => $new_status, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticket_id));    
 }
+
+function get_tickets_prices(){
+    global $wpdb;
+    $res = $wpdb->get_results("SELECT unit_price FROM {$wpdb->prefix}xeroitems WHERE code IN('SUPPORT-N', 'SUPPORT-H', 'SUPPORT-U') ORDER BY unit_price ASC", ARRAY_A);
+    return array(
+        '1' => $res[0]['unit_price'],
+        '2' => $res[1]['unit_price'],
+        '3' => $res[2]['unit_price']
+    );
+}

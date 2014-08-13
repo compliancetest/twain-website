@@ -45,7 +45,6 @@ function showSumitTicketBox()
     </div>
     <?php
     }else{
-        $purchasedTokens = ct_get_prepurchased_tokens($user_id);
     ?>
     <div class="popup-box edit-ticket-box" id="submit-ticket-box" style="display: none; width: 700px;">
         <form name="ticketForm" id="ticketForm" action="" method="post" enctype="multipart/form-data">
@@ -92,27 +91,6 @@ function showSumitTicketBox()
                         ?>
                     </div>
 
-                    <?php if($purchasedTokens > 0): ?>
-                    <div class="field-row" id="ticket-prepurchased-tokens-row">
-                        <label>Prepurchased Tokens:</label>
-                        <span><?php echo $purchasedTokens ?> Tokens</span>
-                        <div class="clear"></div>
-                    </div>
-                    <?php endif; ?>
-                    
-<!--                    <div class="field-row">-->
-<!--                        <div class="grid-cell">-->
-<!--                            <label>Payment Methods:</label>-->
-<!--                            <select name="ticket-card-id" id="ticket-card-id" class="select">-->
-<!--                                <option value="">- Select -</option>-->
-<!--                                --><?php //foreach($cards as $c): ?>
-<!--                                <option value="--><?php //echo $c->id?><!--">--><?php //echo chunk_split($c->card_number, 4)?><!--(--><?php //echo chunk_split($c->nickname, 4)?><!--)</option>-->
-<!--                                --><?php //endforeach; ?>
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                        <div class="clear"></div>-->
-<!--                    </div>   -->
-                    
                     <div class="field-row" id="ticket-time-row" style="display: none;">
                         <div class="grid_cell width50P">
                             <label>Time to Respond:</label>
@@ -125,12 +103,12 @@ function showSumitTicketBox()
                             <div class="clear"></div>
                         </div>
                         <div class="clear"></div>
-                    </div>                
-                    
+                    </div>
+
                     <div class="field-row" id="ticket-price-row" style="display: none;">
                         <label>Price:</label>                    
                         <span id="ticket-price"></span>
-                        <span class="left10">(1 Token = $<?php echo get_option('token_price')?>)</span>
+<!--                        <span class="left10">(1 Token = $--><?php //echo get_option('token_price')?><!--)</span>-->
                         <div class="clear"></div>
                     </div>
                     <div class="field-row">
@@ -149,8 +127,6 @@ function showSumitTicketBox()
             
             <input type="hidden" id="ct-ticket-create-action" value="<?php echo wp_create_nonce('submit-ticket')?>" />
             <input type="hidden" name="ct-ticket-action" id="ct-ticket-validate-action" value="<?php echo wp_create_nonce('validate-ticket')?>" />
-            
-            <input type="hidden" name="prepurchased-tokens" id="prepurchased-tokens" value="<?php echo $purchasedTokens?>" />
         </form>
     </div>
     <?php
