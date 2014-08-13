@@ -27,7 +27,7 @@ function ct_show_xero_payments_list()
         </form>
     </div>
     <div class="wrap">
-        <a id="query_unpaid_invoices" href="#">Query Unpaid CC Invoices from Xero</a>
+        <a id="query_unpaid_invoices" href="#">Query Unpaid CC Invoices from Xero for specific organisations</a>
         <div class="clear"></div>
         <form id="query_unpaid_invoices_form" name="query_unpaid_invoices_form" action="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('query_unpaid_invoices')?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
@@ -51,6 +51,8 @@ function ct_show_xero_payments_list()
                 <tr><td colspan="2"><input type="submit" value="Generate" class="button button-primary" /></td></tr>
             </table>
         </form>
+        <div class="clear"></div>
+        <a href="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('query_unpaid_invoices')?>">Query Unpaid CC Invoices from Xero for ALL organisations</a>
         <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=admin-actions&admin-action=<?php echo wp_create_nonce('pay-cc-invoices')?>">Pay CC Invoices via eWay</a>
         <div class="clear"></div>
@@ -130,6 +132,13 @@ function ct_process_xero_payment_admin_actions()
             $paymentsCounter = $nonApprovedPaymentsCounter = 0;
             $xero_payments = new CT_Payments();
             $xero_api = new CT_Xero();
+            if( ! isset( $_REQUEST['org_id'] ) || empty( $_REQUEST['org_id'] ) ){
+                $chargesObject = new CT_Charge();
+                $_REQUEST['org_id'] = array();
+                foreach( $chargesObject->getOrganisationsList( true ) AS $org ){
+                    array_push( $_REQUEST['org_id'], $org->organisation_id );
+                }
+            }
             if( isset( $_REQUEST['org_id'] ) ){
                 foreach( $_REQUEST['org_id'] AS $org_id ){
                     $results = $wpdb->get_results($wpdb->prepare("SELECT c.*,o.* FROM {$wpdb->prefix}organisations_charge AS c
@@ -161,6 +170,7 @@ function ct_process_xero_payment_admin_actions()
                             } else if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'DRAFT' ){
                                 $nonApprovedPaymentsCounter++;
                             } else if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'PAID' ){
+                                $pid = isset( $invoiceData['Invoices']['Invoice']['Payments']['Payment']['PaymentID'] ) ? $invoiceData['Invoices']['Invoice']['Payments']['Payment']['PaymentID'] : 'No payment ID';
                                 $data = array(
                                     'invoice_number'    => $result->invoice_number,
                                     'account_code'      => 650,
@@ -171,7 +181,7 @@ function ct_process_xero_payment_admin_actions()
                                     'payment_method_id' => $result->payment_id,
                                     'is_paid'           => true,
                                     'date_paid'         => date('Y-m-d H:i:s', strtotime($invoiceData['Invoices']['Invoice']['UpdatedDateUTC'])),
-                                    'payment_id'        => $invoiceData['Invoices']['Invoice']['Payments']['Payment']['PaymentID']
+                                    'payment_id'        => $pid
                                 );
                                 $xero_payments->bind( $data );
                                 $xero_payments->save();
@@ -190,6 +200,7 @@ function ct_process_xero_payment_admin_actions()
             wp_redirect('admin.php?page=manage-organisations-payments');
             exit;
         } else if( wp_verify_nonce($action, 'update_paid_invoices') ){
+            $counter = 0;
             $xero = new CT_Xero();
             $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_payments WHERE is_paid = 1 AND payment_id = ''", ARRAY_A );
             if( $results ){
@@ -211,10 +222,28 @@ function ct_process_xero_payment_admin_actions()
                             array( '%s', '%d', '%s' ),
                             array( '%s' )
                         );
+                        $counter++;
+                    } else if( $payment === false ){
+                        $invoiceData = $xero->getInvoice( $result['invoice_number'] );
+                        if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'PAID' ){
+                            $pid = isset( $invoiceData['Invoices']['Invoice']['Payments']['Payment']['PaymentID'] ) ? $invoiceData['Invoices']['Invoice']['Payments']['Payment']['PaymentID'] : 'No payment ID';
+                            $wpdb->update("{$wpdb->prefix}organisations_payments",
+                                array(
+                                    'is_paid'    => 1,
+                                    'date_paid'  => date('Y-m-d H:i:s', strtotime($invoiceData['Invoices']['Invoice']['UpdatedDateUTC'])),
+                                    'payment_id' => $pid,
+                                    'reference'  => 'Paid In Xero'
+                                ),
+                                array( 'invoice_number' => $result['invoice_number'] ),
+                                array( '%d', '%s', '%s', '%s' ),
+                                array( '%s' )
+                            );
+                            $counter++;
+                        }
                     }
                 }
             }
-            addMessage('Done', 'success');
+            addMessage('Number of Updated invoices: '.$counter, 'success');
             wp_redirect('admin.php?page=manage-organisations-payments');
             exit;
         }
