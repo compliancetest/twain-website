@@ -363,9 +363,10 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
                     <form name="unsubscribe-form" action="/index.php" method="post">
-                        <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
+                        <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription Release</div>
                         <div class="popup-box-content grid-box-body">    
-                            <p>Are you sure that you want to unsubscribe?</p>                            
+                            <p>Releasing this subscription will make it available to other testers in your organisation. </p>
+                            <p>Are you sure that you want to release this subscription?</p>
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">      
                             <div class="right">
@@ -414,11 +415,11 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
                     <form name="unsubscribe-form" action="/index.php" method="post">
-                        <div class="popup-box-header radius6 noradiusbottom">Confirm unsubscribing</div>        
+                        <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription Cancellation</div>
                         <div class="popup-box-content grid-box-body">    
-                            <p>Are you sure that you want to unsubscribe?</p>
-                            <p>If your subscription is active, it will not be removed until the end of the month, and you can continue to test as normal until then.</p>        
-                            <p>If you want the subscription removed immediately, please select the checkbox below.</p>
+                            <p>Are you sure that you want to permanently cancel this subscription?</p>
+                            <p>If your subscription is active, it will not be removed until the end of the month, and testing can continue as normal until then.</p>
+                            <p>If you want the subscription cancelled immediately, please select the checkbox below.</p>
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">              
                             <label class="left">

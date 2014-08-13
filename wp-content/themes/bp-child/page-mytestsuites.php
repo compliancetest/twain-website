@@ -77,7 +77,7 @@ get_header();
                             </div>
                             <div class="td td-action tocenter">
                                 <a href="/?cp-action=<?php echo wp_create_nonce('get-harness')?>&id=<?php echo $row->id?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
-                                <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->parent_id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Unsubscribe<span></span></span></a><br />                        
+                                <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->parent_id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Release Subscription<span></span></span></a><br />
                             </div>
                             <div class="clear"></div>
                         </div>
