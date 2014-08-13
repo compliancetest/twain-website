@@ -52,11 +52,11 @@ function ct_show_xero_payments_list()
             </table>
         </form>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('mark_charges')?>">Mark Charges As paid</a>
+        <a href="<?php echo admin_url()?>admin.php?page=admin-actions&admin-action=<?php echo wp_create_nonce('pay-cc-invoices')?>">Pay CC Invoices via eWay</a>
         <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('update_paid_invoices')?>">Update Paid CC Invoices in Xero</a>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=admin-actions&admin-action=<?php echo wp_create_nonce('pay-cc-invoices')?>">Pay CC Invoices via eWay</a>        
+        <a href="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('mark_charges')?>">Mark Charges As paid</a>
     </div>
     <script>
         jQuery(document).ready(function(){
