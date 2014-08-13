@@ -241,7 +241,7 @@ function saveSuite()
     }
     
     //Check Version Updated or not
-    $version_updated = false;
+    $version_updated = false;    
     if( intval($suite->version_major) != intval($_POST['ts_version_major']) || intval($suite->version_minor) != intval($_POST['ts_version_minor']) || intval($suite->version_patch) != intval($_POST['ts_version_patch']) )
     {
         $version_updated =  true;
@@ -532,18 +532,12 @@ function saveSuite()
         
         //Update Subscrition
 //        updateSubscribedSuiteId($suite->familyMark);
-        //Copy test plains to the new version
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_plans WHERE suite_id=%d", $suite->id);
-        $rows = $wpdb->get_results($query, ARRAY_A);
-        
-        foreach ($rows as $row) {
-            $t_data = $row;
-            $t_data['suite_id'] = $id;
-            $t_data['created_date'] = date('Y-m-d H:i:s');
-            unset($t_data['id']);
-            
-            $wpdb->insert($wpdb->prefix . "test_plans", $t_data);
+        //Copy test plains to the new version        
+        if ($suite->version_major == $_POST['ts_version_major']) {
+            $query = $wpdb->prepare("UPDATE {$wpdb->prefix}test_plans SET suite_id=%d WHERE suite_id=%d", $id, $suite->id);            
+            $wpdb->query($query);
         }
+        
     }
     
     //Send Notification Email

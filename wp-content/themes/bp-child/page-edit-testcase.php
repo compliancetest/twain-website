@@ -403,6 +403,8 @@ get_header();
                        $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
                        $testSuitesRoles = array( $case->testerRole, $case->harnessRole );
                        foreach($profileInstances as $instance){
+                           $profileName = $instance->profile_name;
+                           
                            $profileTypeName = $generalProfileType = $instance->profile_type_title;
                            $pJSON = json_decode(base64_decode($instance->schema));
                            if($pJSON->Version)
@@ -434,7 +436,23 @@ get_header();
                            <div class="grid-cell width15P">
                                <input type="checkbox" name="profile_instances[]" value="<?php echo $instance->id?>" <?php echo cp_checked($instance->id, $case->profileInstances) ?> />
                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
-                                    <?php echo $profileTypeName; ?>
+                                    <?php 
+                                        echo $profileName; 
+                                        if($instanceObj->Profile->Version)
+                                        {
+                                            if(is_object($instanceObj->Profile->Version))
+                                            {
+                                                $version = array();
+                                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                                                {
+                                                    $version[] = $v;
+                                                }
+                                                echo " v" . implode(".", $version);
+                                            }else{
+                                                echo " v " . $instanceObj->Profile->Version;
+                                            }
+                                        }
+                                    ?>
                                </a>
                            </div>
                            <div class="grid-cell width10P">
@@ -442,19 +460,7 @@ get_header();
                            </div>
                            <div class="grid-cell width15P">
                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">
-                                   <?php echo $instance->profile_type_title; ?>
-                                   <?php
-                                   $pJSON = json_decode(base64_decode($instance->schema));
-                                   if($pJSON->Version)
-                                   {
-                                       $version = array();
-                                       foreach(get_object_vars($pJSON->Version) as $k=>$v)
-                                       {
-                                           $version[] = $v;
-                                       }
-                                       echo " v" . implode(".", $version);
-                                   }
-                                   ?>
+                                   <?php echo $profileTypeName; ?>                                   
                                </a>
                            </div>
                            <div class="grid-cell width45P">
