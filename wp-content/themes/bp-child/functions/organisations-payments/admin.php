@@ -201,10 +201,10 @@ function ct_process_xero_payment_admin_actions()
             exit;
         } else if( wp_verify_nonce($action, 'update_paid_invoices') ){
             $counter = 0;
-            $xero = new CT_Xero();
             $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_payments WHERE is_paid = 1 AND payment_id = ''", ARRAY_A );
             if( $results ){
                 foreach( $results AS $result ){
+                    $xero = new CT_Xero();
                     $payment = $xero->createPayment( array(
                         'InvoiceNumber' => $result['invoice_number'],
                         'Amount' => $result['amount'],
