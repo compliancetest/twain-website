@@ -244,7 +244,27 @@ function ct_send_ticket_message($ticket_id, $sender, $receiver, $message, $messa
 function ct_update_ticket_status($ticket_id, $new_status, $comment = '')
 {
     global $wpdb;
-    
+    if( $new_status == TICKET_STATUS_RESOLVED ){
+        $ticket_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tickets WHERE id = %d",$ticket_id ) );
+        if( $ticket_data ){
+            if( $ticket_data->total_price != 0 ){
+                if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE reference_type = 'ticket' AND reference_id = %d", $ticket_id) ) ){
+                    $data = array(
+                        'organisation_id' => $wpdb->get_var($wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}organisations_payment_methods WHERE id = %d", $ticket_data->card_id ) ),
+                        'payment_id'      => $ticket_data->card_id,
+                        'item_code'       => $wpdb->get_var($wpdb->prepare("SELECT code FROM {$wpdb->prefix}xeroitems WHERE unit_price = %d", $ticket_data->price ) ),
+                        'quantity'        => $ticket_data->ttpay.'.00',
+                        'reference_type'  => 'ticket',
+                        'reference_id'    => $ticket_id,
+                        'comment'         => 'Ticket #'.$ticket_id.' - '.$ticket_data->title
+                    );
+                    $chargeClass = new CT_Charge();
+                    $chargeClass->bind($data);
+                    $chargeClass->save();
+                }
+            }
+        }
+    }
     $wpdb->insert(TABLE_TICKET_STATUS_HISTORY, array('ticket_id' => $ticket_id, 'status_id' => $new_status, 'created_date' => date("Y-m-d H:i:s"), 'comment'=> $comment));
     $wpdb->update(TABLE_TICKETS, array('status_id' => $new_status, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticket_id));    
 }

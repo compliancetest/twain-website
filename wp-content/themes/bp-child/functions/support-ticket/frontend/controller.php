@@ -633,7 +633,7 @@ function sendTicketMessage()
     {        
         if(isset($_POST['resolved']) && $_POST['resolved'])
         {
-            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ;
             $status_changed = true;
             $new_status = TICKET_STATUS_RESOLVED;
             
