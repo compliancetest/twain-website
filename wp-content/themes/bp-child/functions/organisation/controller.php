@@ -137,7 +137,7 @@ class CT_Organisation_Controller
                     'reference_id'          => $subscription_id,
                     'invoice_number'    => '',
                     'is_paid'               => 0,
-                    'comment'               => ''
+                    'comment'               => date("F Y")
                 ),
                 array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
             );
