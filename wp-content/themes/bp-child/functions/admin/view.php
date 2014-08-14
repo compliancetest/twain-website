@@ -251,3 +251,99 @@ function ct_process_cc_invoice_via_eway()
     </script>
     <?php
 }
+
+function ct_cancel_unsubscribed_subscriptions()
+{
+    global $wpdb;
+    
+    //Getting Pending Payments
+    $subscriptions = $wpdb->get_results("SELECT
+                                        s.*,
+                                        o.organisation_name                                        
+                                   FROM {$wpdb->prefix}organisations_subscriptions AS s
+                                   LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id=s.organisation_id                                   
+                                   WHERE s.status = 'Unsubscribing' ORDER BY s.organisation_id, s.nickname");
+    
+    ?>    
+    <div class="wrap">    
+        <div class="icon32" id="icon-tools"> <br /> </div>    
+        <h2>Cancel Unsubscribed Subscriptions</h2>   
+        <p><b>Total Unsubscribed Subscriptions:</b> <?php echo count($subscriptions)?></p>
+        <table cellpadding="5" border="1" id="organisations-subscriptions-table">
+          <?php if(empty($subscriptions)): ?>
+            <tr><td>No data found.</td></tr>
+          <?php else: ?>
+            <tr>
+                <th>ID</th>
+                <th>Subscription</th>
+                <th>Organisation</th>
+                <th>Assignee</th>
+                <th>Purchased Date</th>
+                <th>Status</th>
+            </tr>
+            <?php foreach($subscriptions as $s): ?>            
+            <tr class="subscription-tr" data-id="<?php echo $s->id?>">
+                <td><?php echo $s->id?></td>
+                <td><?php echo $s->nickname?></td>
+                <td><?php echo $s->organisation_name?></td>                
+                <td>
+                    <?php 
+                        if (!empty($s->user_id)) { 
+                            echo get_user_meta($s->user_id, 'first_name', true) . " " . get_user_meta($s->user_id, 'last_name', true);
+                        } else {
+                            echo '-';
+                        }
+                        
+                    ?>
+                </td>
+                <td><?php echo $s->purchased_date?></td>
+                <td>
+                    <p class="current-action-progress">Pending</p>
+                </td>
+            </tr>
+            <?php endforeach; ?>            
+          <?php endif; ?>            
+        </table>
+    </div>
+    <script type="text/javascript">
+        //Remove Current Subscribers
+        function ct_cancel_unsubsribed_subscription(idx)
+        {
+            if(idx > jQuery('.subscription-tr').length)
+            {
+                jQuery('#organisations-subscriptions-table').after('<br /><b>Completed!</b>');
+                return;
+            }
+            
+            var sub_id = jQuery('.subscription-tr').eq(idx - 1).attr('data-id');
+            
+            jQuery('.subscription-tr').eq(idx - 1).find('.current-action-progress').html('Processing');
+            
+            jQuery.ajax({
+                url : '<?php echo admin_url()?>',
+                type : 'post',
+                data : {'admin-action': '<?php echo wp_create_nonce('process-cancel-subscription')?>', 'id': sub_id},
+                dataType: 'xml',
+                success: function(rsp){
+                    if(jQuery(rsp).find('status').text() == 'success')
+                    {
+                        jQuery('.subscription-tr').eq(idx - 1).find('.current-action-progress').html('<b>Completed!</b>');
+                        jQuery('.subscription-tr').eq(idx - 1).find('.current-action-progress').addClass('action-completed');                        
+                    } else {                        
+                        jQuery('.subscription-tr').eq(idx - 1).find('.current-action-progress').html('<b>Failed!</b> (' + jQuery(rsp).find('msg').text() + ')');
+                        jQuery('.subscription-tr').eq(idx - 1).find('.current-action-progress').addClass('action-failed');
+                    }
+                    ct_cancel_unsubsribed_subscription(idx + 1);
+                },
+                error: function(err){
+//                    alert(err.responseText);
+                }
+            });
+        }
+        
+        ct_cancel_unsubsribed_subscription(1);
+
+        
+    </script>
+    <?php
+}

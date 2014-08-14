@@ -100,7 +100,7 @@ class CT_Organisation_Subscriptions_List_Table extends WP_List_Table
                   </label>
                   
                   <input type="submit" value="Search" class="button-primary" >
-              </div>              
+              </div>             
               <?php
           }
     }

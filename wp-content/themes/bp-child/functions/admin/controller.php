@@ -179,3 +179,16 @@ function ct_process_cc_payment()
     exit;
 }
 
+function ct_process_cancel_subscription()
+{
+    global $wpdb;
+    
+    $id = $_POST['id'];
+    
+    $orgController = new CT_Organisation_Controller();
+    
+    $orgController->delete_organisation_subscription($id);
+    
+    echo '<result><status>success</status></result>';
+    exit;
+}

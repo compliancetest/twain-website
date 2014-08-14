@@ -47,6 +47,8 @@ function ct_process_admin_actions_page()
         ct_sync_users_to_mailchimp_page2();
     } else if(wp_verify_nonce($action, 'pay-cc-invoices')) {
         ct_process_cc_invoice_via_eway($_REQUEST['id'], $_POST['page']);
+    } else if(wp_verify_nonce($action, 'cancel-unsubscribed-subscriptions')) {
+        ct_cancel_unsubscribed_subscriptions();
     } 
 }
 
@@ -65,6 +67,8 @@ function ct_process_admin_actions()
         ct_add_members_to_mailchimp($_REQUEST['id'], $_POST['page']);
     } else if(wp_verify_nonce($action, 'process-cc-payment')) {
         ct_process_cc_payment();
+    } else if(wp_verify_nonce($action, 'process-cancel-subscription')) {
+        ct_process_cancel_subscription();
     } 
 }
 

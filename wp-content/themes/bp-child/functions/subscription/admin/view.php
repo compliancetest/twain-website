@@ -15,6 +15,7 @@ function ct_manage_organisation_subscriptions_list()
         <?php
             flushMessages();
         ?>
+        <a href="<?php echo admin_url()?>admin.php?page=admin-actions&admin-action=<?php echo wp_create_nonce('cancel-unsubscribed-subscriptions')?>" class="button-primary">Cancel Unsubscribed Subscriptions</a><br />
         <form name="adminform" action="admin.php" method="get">
             <?php
                 echo $listTable->display();
