@@ -69,7 +69,7 @@ function ct_process_admin_actions()
         ct_process_cc_payment();
     } else if(wp_verify_nonce($action, 'process-cancel-subscription')) {
         ct_process_cancel_subscription();
-    } 
+    }
 }
 
 add_action('admin_head', 'ct_admin_action_page_css');
