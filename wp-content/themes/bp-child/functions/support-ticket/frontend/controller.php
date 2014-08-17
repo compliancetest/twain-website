@@ -41,17 +41,11 @@ function getCreateTicketErrors()
         
     if($priority && $category && $category->has_fee == 1 && $priority->price > 0)
     {
-        $purchasedTokens = ct_get_prepurchased_tokens();
-        $totalTokens = $priority->price;
-        
-        if($totalTokens > $purchasedTokens)
-        {
-            if(!$card_id){
-                $error[] = 'At present, your organisation has not defined a payment method to be used for support tickets. Please talk to your administrator ( '.$wpdb->get_var($wpdb->prepare("SELECT contact_email FROM {$wpdb->prefix}organisations WHERE id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) ", get_current_user_id() ) ).' ).';
-            }
-            else if(!($card = getUserCardById($card_id)))
-                $error[] = 'Please select a valid payment method';
+        if(!$card_id){
+            $error[] = 'At present, your organisation has not defined a payment method to be used for support tickets. Please talk to your administrator ( '.$wpdb->get_var($wpdb->prepare("SELECT contact_email FROM {$wpdb->prefix}organisations WHERE id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) ", get_current_user_id() ) ).' ).';
         }
+        else if(!($card = getUserCardById($card_id)))
+            $error[] = 'Please select a valid payment method';
     }
 
     return $error;    
@@ -96,7 +90,6 @@ function createSupportTicket()
         exit;
     }
     $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
-    $tickets_price = get_tickets_prices();
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
@@ -109,8 +102,8 @@ function createSupportTicket()
         'status_id' => TICKET_STATUS_NEW,
         'ttresolve' => $priority->ttresolve,
         'ttresponse' => $priority->ttresponse,        
-        'price' => $category->has_fee ? $tickets_price[$priority->id] : 0,
-        'total_price' => $category->has_fee ? $tickets_price[$priority->id] : 0,
+        'price' => $category->has_fee ? get_ticket_price( $priority->id ) : 0,
+        'total_price' => $category->has_fee ? get_ticket_price($priority->id) : 0,
         'term_accepted' => 0,
         'term_creator_id' => $user_id,
         'customer_new_messages' => 0,
@@ -467,7 +460,6 @@ function changeTicketTerm()
     $oldPriority = $ct_ticket_priority->getPriorityById($ticket->priority_id);
     
     $is_changed = false;
-    $tickets_price = get_tickets_prices();
     //================================== Customer ==================================
     if($ticket->customer_id == $user_id)
     {
@@ -487,7 +479,7 @@ function changeTicketTerm()
             
             $is_changed = true;
             $ttpay = $ticket->ttpay;
-            $price = $category->has_fee ? $tickets_price[$newPriority->id] : 0;
+            $price = $category->has_fee ? get_ticket_price( $newPriority->id ) : 0;
             $ttresponse = $newPriority->ttresponse;
             $ttresolve = $newPriority->ttresolve;
             
@@ -521,7 +513,7 @@ function changeTicketTerm()
         $ttpay = $_POST['ttpay'];
         $ttresponse = $_POST['ttresponse'];
         $ttresolve = $_POST['ttresolve'];    
-        $price = $category->has_fee ? $tickets_price[$newPriority->id] : 0;
+        $price = $category->has_fee ? get_ticket_price( $newPriority->id ) : 0;
         
         if($ticket->ttpay != $ttpay || $ticket->ttresponse != $ttresponse || $ticket->ttresolve != $ttresolve)
         {            
@@ -556,7 +548,6 @@ function changeTicketTerm()
             exit;
         }
     }
-    $tickets_price = get_tickets_prices();
     if($is_changed) //Term has been updated
     {
         //Update ticket status to feedback if it already has started
@@ -565,7 +556,7 @@ function changeTicketTerm()
             ct_update_ticket_status($ticket->id, TICKET_STATUS_FEEDBACK, 'Ticket term has been changed.');            
             $ticket->status_id = TICKET_STATUS_FEEDBACK;
         }
-        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * $tickets_price[$_POST['priority']], 'price' => $tickets_price[$_POST['priority']], 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
+        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * get_ticket_price( $_POST['priority'] ), 'price' => get_ticket_price( $_POST['priority'] ), 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
     }
     
     $ticket = getTicketById($ticket->id);
@@ -750,19 +741,8 @@ function sendTicketMessage()
                 ct_send_ticket_email("ticket_closed", 'customer', $ticketDetail, $messageID);
                 ct_send_ticket_email("ticket_closed_support", 'support', $ticketDetail, $messageID);
                 ct_send_ticket_email("ticket_closed_admin", 'admin', $ticketDetail, $messageID);
-                
-                //Make Payment
-                if($ticketDetail->total_price > 0){
-                    $paymentSent = processTicketPayment($ticketDetail->id);
-                    if($paymentSent === true)
-                    {
-                        addMessage('Ticket has been closed and the payment has been processed succesfully.', 'success');
-                    }else{
-                        addMessage('Ticket has been closed, but there was an error while processing the payment.<br />Processing Payment Error: ' . $paymentSent, 'error');
-                    }
-                }else{
-                    addMessage('Ticket has been closed successfully.', 'success');
-                }
+
+                addMessage('Ticket has been closed successfully.', 'success');
                 
                 updateTicketHours($ticketDetail->id);                
             }       
@@ -832,120 +812,6 @@ function downloadAttachment()
     
 }
 
-
-function processTicketPayment($ticket_id)
-{
-    global $wpdb;
-    
-    $ticketDetail = getTicketById($ticket_id);
-    
-    $customerDetail = get_userdata($ticketDetail->customer_id);
-    $supportDetail = get_userdata($ticketDetail->support_id);
-    
-    $token_price = intval(get_option('token_price'));
-    
-    if($ticketDetail->total_price > 0)
-    {
-        //Check Prepurchased Tokens
-        $purchasedTokens = ct_get_prepurchased_tokens($ticketDetail->customer_id);    
-        
-        if($purchasedTokens > 0)
-        {
-            //If user have perpurchased tokens and it is bigger than the ticket price, we will use it.
-            $paidTokens = $purchasedTokens >= $ticketDetail->total_price ? $ticketDetail->total_price : $purchasedTokens;
-            $remainedTokens = $purchasedTokens - $paidTokens;
-            
-            //Update User Purchased Token
-            $wpdb->update($wpdb->prefix . "users_extra",  array('purchased_tokens' => $remainedTokens), array('userID'=> $customerDetail->ID));
-            
-            $wpdb->insert($wpdb->prefix . 'users_transactions', array(
-                "user_id" => $ticketDetail->customer_id,
-                "parent_id" => $ticketDetail->id,
-                "type" => 'ticket',
-                "trxn_number" => time(),
-                "amount" => $paidTokens,
-                "auth_code" => 'Token Payment',
-                "created_date" => date("Y-m-d H:i:s")
-            ));
-            
-            $ticketDetail->purchased_tokens = $purchasedTokens;
-            $ticketDetail->paid_tokens = $paidTokens;
-            $ticketDetail->remained_tokens = $remainedTokens;
-            
-            ct_send_ticket_email('ticket_payment_processed_by_tokens', 'customer', $ticketDetail);
-            ct_send_ticket_email('ticket_payment_processed_by_tokens_support', 'support', $ticketDetail);
-            ct_send_ticket_email('ticket_payment_processed_by_tokens_admin', 'admin', $ticketDetail);
-            
-            if($paidTokens == $ticketDetail->total_price)            
-                return true;
-            
-            $wpdb->update($wpdb->prefix . "tickets",  array('pending_amount' => $ticketDetail->total_price - $paidTokens), array('id' => $ticketDetail->id));
-            $ticketDetail->total_price = $ticketDetail->total_price - $paidTokens;
-            
-        }
-        
-        //Process payment with credit card
-        $card_id = $ticketDetail->card_id;
-        
-        if(!$card_id)
-        {
-            //Getting Card Id from the test suite subscriptions    
-            $query = $wpdb->prepare("SELECT p.card_id FROM {$wpdb->prefix}users_subscriptions AS s LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id WHERE s.suite_id=%d AND p.user_id=%d", $ticketDetail->suite_id, $ticketDetail->customer_id);
-            $card_id = $wpdb->get_var($query);
-        }
-        
-        if(!$card_id)
-        {
-            //Getting Card Id from the user cards
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE user_id=%d AND status='Active' ORDER BY created_date DESC", $ticketDetail->customer_id);
-            $card_id = $wpdb->get_var($query);
-        }
-        
-        if(!$card_id)
-        {
-            return "The payment method doesn't exist or has been suspended.";            
-        }
-        
-        $card = getUserCardById($card_id, $ticketDetail->customer_id);
-        $paid_amount = $ticketDetail->total_price * $token_price;
-        
-        $result = processEwayPayment($card->customer_id, $paid_amount, "The payment for ticket #" . str_pad($ticketDetail->id, 8, 0, STR_PAD_LEFT));    
-        if($result['ewayTrxnStatus'] == 'True')
-        {            
-            //Save Transaction
-            $wpdb->insert($wpdb->prefix . 'users_transactions', array(
-                "user_id" => $card->user_id,
-                "parent_id" => $ticketDetail->id,
-                "type" => 'ticket',
-                "trxn_number" => $result['ewayTrxnNumber'],
-                "amount" => $paid_amount,
-                "auth_code" => $result['ewayAuthCode'],
-                "created_date" => date("Y-m-d H:i:s")
-            ));
-            
-            $wpdb->update($wpdb->prefix . "tickets",  array('pending_amount' => 0), array('id' => $ticketDetail->id));
-            
-            $ticketDetail->paid_amount = $paid_amount;
-            
-            //Send Notification
-            ct_send_ticket_email('ticket_payment_processed_by_card', 'customer', $ticketDetail);
-            ct_send_ticket_email('ticket_payment_processed_by_card_support', 'support', $ticketDetail);
-            ct_send_ticket_email('ticket_payment_processed_by_card_admin', 'admin', $ticketDetail);
-            
-            return true;
-        }else{
-            
-            if(isset($result['ewayTrxnError']))
-                return $result['ewayTrxnError'];
-            else if(isset($result['faultstring']))
-                return $result['faultstring'];
-            
-            return false;
-        }
-    }
-    
-    return true;    
-}
 
 function updateTicketHours($ticket_id)
 {

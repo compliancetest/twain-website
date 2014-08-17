@@ -87,7 +87,7 @@ function ct_save_ticket_priority()
     {
         $ct_ticket_priority->addPriority(array(
             'priority' => $_POST['priority'],
-            'price' => $_POST['price'],
+            'item_code' => $_POST['item_code'],
             'ttresponse' => $_POST['ttresponse'],
             'ttresolve' => $_POST['ttresolve'],
             'sort_number' => $_POST['sort-number'],
@@ -95,7 +95,7 @@ function ct_save_ticket_priority()
     }else{
         $ct_ticket_priority->updatePriority($_POST['id'], array(
             'priority' => $_POST['priority'],
-            'price' => $_POST['price'],
+            'item_code' => $_POST['item_code'],
             'ttresponse' => $_POST['ttresponse'],
             'ttresolve' => $_POST['ttresolve'],
             'sort_number' => $_POST['sort-number'],

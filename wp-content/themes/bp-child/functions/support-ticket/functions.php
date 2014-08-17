@@ -99,8 +99,8 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
     $emailData['[time_to_response]'] = $ticketDetail->ttresponse;
     $emailData['[time_to_resolve]'] = $ticketDetail->ttresolve;
     
-    $emailData['[hourly_price]'] = intval($ticketDetail->price) > 0 ? $ticketDetail->price . ' Tokens/hr' : 'Free';
-    $emailData['[ticket_total_price]'] = intval($ticketDetail->total_price) > 0 ? $ticketDetail->total_price . ' Tokens' : 'Free';    
+    $emailData['[hourly_price]'] = intval($ticketDetail->price) > 0 ? $ticketDetail->price . ' $/hr' : 'Free';
+    $emailData['[ticket_total_price]'] = intval($ticketDetail->total_price) > 0 ? $ticketDetail->total_price . ' $' : 'Free';
     
     if(isset($ticketDetail->paid_amount))
         $emailData['[paid_amount]'] = $ticketDetail->paid_amount;
@@ -244,7 +244,7 @@ function ct_send_ticket_message($ticket_id, $sender, $receiver, $message, $messa
 function ct_update_ticket_status($ticket_id, $new_status, $comment = '')
 {
     global $wpdb;
-    if( $new_status == TICKET_STATUS_RESOLVED ){
+    if( $new_status == TICKET_STATUS_RESOLVED || $new_status == TICKET_STATUS_CLOSED ){
         $ticket_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tickets WHERE id = %d",$ticket_id ) );
         if( $ticket_data ){
             if( $ticket_data->total_price != 0 ){
@@ -269,12 +269,7 @@ function ct_update_ticket_status($ticket_id, $new_status, $comment = '')
     $wpdb->update(TABLE_TICKETS, array('status_id' => $new_status, 'last_updated' => date("Y-m-d H:i:s")), array('id' => $ticket_id));    
 }
 
-function get_tickets_prices(){
+function get_ticket_price( $priority_id ){
     global $wpdb;
-    $res = $wpdb->get_results("SELECT unit_price FROM {$wpdb->prefix}xeroitems WHERE code IN('SUPPORT-N', 'SUPPORT-H', 'SUPPORT-U') ORDER BY unit_price ASC", ARRAY_A);
-    return array(
-        '1' => $res[0]['unit_price'],
-        '2' => $res[1]['unit_price'],
-        '3' => $res[2]['unit_price']
-    );
+    return $wpdb->get_var($wpdb->prepare("SELECT unit_price FROM {$wpdb->prefix}xeroitems WHERE code = (SELECT item_code FROM {$wpdb->prefix}ticket_priorities WHERE id = %d)", $priority_id ) );
 }

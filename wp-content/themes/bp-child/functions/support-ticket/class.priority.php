@@ -77,14 +77,15 @@ class CT_TicketPriority
     
     public function getPrioritiesSelectboxHTML($name = 'ticket_priority', $id='ticket_priority', $default = null, $emptyOptionLabel = '- All -')
     {
-        $prices = get_tickets_prices();
+        global $wpdb;
         $priorities = $this->getPriorities('sort_number');
         $html = "<select name='$name' id='$id' class='select'>";
         if($emptyOptionLabel)
             $html .= "<option value=''>$emptyOptionLabel</option>";
         foreach($priorities as $k => $p)
         {
-            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . intval($p->ttresolve) . "' ttresponse='" . intval($p->ttresponse) . "' price='" . $prices[$k+1] . "'>$p->priority</option>";
+            $price = $wpdb->get_var($wpdb->prepare("SELECT unit_price FROM {$wpdb->prefix}xeroitems WHERE code = %s", $p->item_code));
+            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . " ttresolve='" . intval($p->ttresolve) . "' ttresponse='" . intval($p->ttresponse) . "' price='" . $price . "'>$p->priority</option>";
         }
         $html .= "</select>";
         

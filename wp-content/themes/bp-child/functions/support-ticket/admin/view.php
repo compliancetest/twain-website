@@ -112,7 +112,8 @@ function ct_ticket_display_categories()
 function ct_ticket_priorities()
 {
     global $ct_ticket_priority;
-    
+    global $wpdb;
+    $items = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}xeroitems");
     $listTable = new CT_Tickets_Priority_List_Table();
     $listTable->prepare_items();
     ?>
@@ -126,7 +127,6 @@ function ct_ticket_priorities()
                 <a href="admin.php?page=ct-tickets-priorities">Back to the priority list page</a>
             </p>
             <form id='editpriorityform' action="" method="post">
-                (1 Token = $<?php echo get_option('token_price')?>)
                 <table class="form-table">
                     <tbody>
                         <tr class="form-field form-required">
@@ -140,10 +140,14 @@ function ct_ticket_priorities()
                     </tr>
                     <tr class="form-field">
                         <th scope="row" valign="top">
-                            <label for="price">Price(Token / Hour)</label>
+                            <label for="item_code">Item Code</label>
                         </th>
                         <td>
-                            <input name="price" id="price" type="text" value="<?php echo $priority->price?>" size="40" maxlength="255" aria-required="true">
+                            <select name="item_code" id="item_code">
+                                <?php foreach( $items AS $item ):?>
+                                    <option value="<?php echo $item->code;?>" <?php if( $item->code == $priority->item_code):?>selected="selected" <?php endif;?>><?php echo $item->code;?></option>
+                                <?php endforeach;?>
+                            </select>
                         </td>
                     </tr>
                     <tr class="form-field">
@@ -198,9 +202,12 @@ function ct_ticket_priorities()
                                 <p>The name is how it appears on your site.</p>
                             </div>
                             <div class="form-field form-required">
-                                <label for="price">Price( $ Per Hour)</label>
-                                <input name="price" id="price" type="text" value="" size="40" maxlength="255" aria-required="true">
-                                <p>This is the fee to handle ticket.</p>
+                                <label for="price">Item Code</label>
+                                <select name="item_code" id="item_code">
+                                    <?php foreach( $items AS $item ):?>
+                                        <option value="<?php echo $item->code;?>" <?php if( $item->code == $priority->item_code):?>selected="selected" <?php endif;?>><?php echo $item->code;?></option>
+                                    <?php endforeach;?>
+                                </select>
                             </div>
                             <div class="form-field form-required">
                                 <label for="ttresponse">Time to Response(hours)</label>

@@ -20,7 +20,7 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
         return $column = array(
 //            "cb" => "<input type='checkbox' />",            
             "priority" => __("Priority"),
-            "price" => __('Price($/hr)'),
+            "item_code" => __('Item Code'),
             "ttresponse" => __("TTResponse"),
             "ttresolve" => __("TTResolve"),            
             "sort_number" => __("Sort Number"),            
@@ -33,7 +33,7 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
         return $sortable = array(
             "id" => array("id", $orderby == 'id'),
             "priority" => array("priority", $orderby == 'priority'),
-            "price" => array("price", $orderby == 'price'),
+            "item_code" => array("item_code", $orderby == 'item_code'),
             "ttresponse" => array("ttresponse", $orderby == 'ttresponse'),
             "ttresolve" => array("ttresolve", $orderby == 'ttresolve'),
             "sort_number" => array("sort_number", $orderby == 'sort_number')
