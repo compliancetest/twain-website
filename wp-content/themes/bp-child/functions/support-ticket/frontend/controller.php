@@ -93,6 +93,13 @@ function createSupportTicket()
     if( ! $card_id ){
         $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
     }
+    if( ! $card_id )
+    {
+        $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
+        if( ! $card_id ){
+            $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
+        }
+    }
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,

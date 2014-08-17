@@ -325,11 +325,9 @@ function ct_process_charge_entry_admin_actions()
             $chargeClass = new CT_Charge($_POST['id']);
             if( $_POST['reference_type'] == 'subscription' ){
                 if( isset( $_POST['subsc_nickname'] ) ){
-                    //$_POST['comment'] = //$wpdb->get_var($wpdb->prepare("SELECT nickname FROM {$wpdb->prefix}organisations_subscriptions WHERE id = %d ", $_POST['subsc_nickname'] ) ).'_'.$_POST['comment'];
                     $_POST['reference_id'] = $_POST['subsc_nickname'];
                 }
             }
-//            $_POST['comment'] = gmdate('F Y');//$wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $_POST['item_code'])).PHP_EOL.'"('..')"';
             $chargeClass->bind($_POST);
             $resp = $chargeClass->save();
             if( $resp )
@@ -352,7 +350,7 @@ function ct_process_charge_entry_admin_actions()
             /**
              * 1) We get organisations IDs with empty 'invoice_number' field
              */
-            $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' GROUP BY organisation_id", ARRAY_A);
+            $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND payment_id != 0 GROUP BY organisation_id", ARRAY_A);
             $counter = 0;
             if( $organisations ){
                 
@@ -386,7 +384,7 @@ function ct_process_charge_entry_admin_actions()
                         if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation) ) === '1' ){
                             continue;
                         }
-                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation ), ARRAY_A);
+                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = ''  AND payment_id != 0 AND  organisation_id = %s GROUP BY payment_id", $organisation ), ARRAY_A);
                         foreach( $paymentTypes AS $paymentType ){
                             $xero = new CT_Xero();
                             $paymentID = $paymentType['payment_id'];
