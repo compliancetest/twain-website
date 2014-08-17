@@ -59,6 +59,9 @@ class CT_Tickets_Priority_List_Table extends WP_List_Table
                     "<a href='admin.php?page=ct-tickets-priorities&ct-ticket-action=" . wp_create_nonce('delete-ticket-priority') . "&id=" . $item->id . "'>Delete</a>"
                     
                 ));
+            case 'item_code':
+                global $wpdb;
+                return $item->item_code . ' ( $'.$wpdb->get_var($wpdb->prepare("SELECT unit_price FROM {$wpdb->prefix}xeroitems WHERE code = (SELECT item_code FROM {$wpdb->prefix}ticket_priorities WHERE id = %d)", $item->id ) ).'/hr ) ';
             default:
                 return $item->$column_name;
         }

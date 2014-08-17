@@ -113,7 +113,7 @@ function ct_ticket_priorities()
 {
     global $ct_ticket_priority;
     global $wpdb;
-    $items = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}xeroitems");
+    $items = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}xeroitems WHERE code LIKE 'SUPPORT%'");
     $listTable = new CT_Tickets_Priority_List_Table();
     $listTable->prepare_items();
     ?>
@@ -145,7 +145,7 @@ function ct_ticket_priorities()
                         <td>
                             <select name="item_code" id="item_code">
                                 <?php foreach( $items AS $item ):?>
-                                    <option value="<?php echo $item->code;?>" <?php if( $item->code == $priority->item_code):?>selected="selected" <?php endif;?>><?php echo $item->code;?></option>
+                                    <option value="<?php echo $item->code;?>" <?php if( $item->code == $priority->item_code):?>selected="selected" <?php endif;?>><?php echo $item->code.' ( $'.$item->unit_price.'/hr )';?></option>
                                 <?php endforeach;?>
                             </select>
                         </td>
@@ -205,7 +205,7 @@ function ct_ticket_priorities()
                                 <label for="price">Item Code</label>
                                 <select name="item_code" id="item_code">
                                     <?php foreach( $items AS $item ):?>
-                                        <option value="<?php echo $item->code;?>" <?php if( $item->code == $priority->item_code):?>selected="selected" <?php endif;?>><?php echo $item->code;?></option>
+                                        <option value="<?php echo $item->code;?>"><?php echo $item->code.' ( $'.$item->unit_price.'/hr )';?></option>
                                     <?php endforeach;?>
                                 </select>
                             </div>
