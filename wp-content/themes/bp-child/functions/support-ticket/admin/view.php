@@ -371,7 +371,7 @@ function ct_ticket_display_tickets()
             <a href="<?php echo admin_url()?>admin.php?page=ct-tickets" class="back-to-supports right">Back to <b>Support Tickets</b></a>
             <br />
             <h2>Ticket #<?php echo $ticket->id?> (<?php echo apply_filters('the_title', $ticket->title)?>)</h2>
-            <span class="ticket-creator">Rasied by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo cp_get_user_display_name(intval($ticket->customer_id))?></b></a></span>
+            <span class="ticket-creator">Raised by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo cp_get_user_display_name(intval($ticket->customer_id))?></b></a></span>
             <br />
             <span class="ticket-priorities">
             Priority: 

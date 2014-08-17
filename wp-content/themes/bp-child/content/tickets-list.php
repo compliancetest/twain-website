@@ -65,7 +65,6 @@ $is_support = getManagedCustomerWPIDs() ? true : false;
     <div class="clear"></div>
 </div>
 <div id="tickets_list" class="column">
-    <a href="<?php echo get_site_url()?>?ct-ticket-action=<?php echo wp_create_nonce('show-submit-form')?>" class="action-btn process-btn submit-btn" id="submit-ticket-btn"><span class="p"></span><span class="t">SUBMIT A REQUEST</span></a>
     <div class="ticket-priorities right">
         <?php
             $priorities = $ct_ticket_priority->getPriorities('sort_number', 'desc');
@@ -180,7 +179,9 @@ $is_support = getManagedCustomerWPIDs() ? true : false;
        </div>
     </div>
     <div class="space10"></div>
-   <?php if($totalItems > 0) { ?>
+    <a href="<?php echo get_site_url()?>?ct-ticket-action=<?php echo wp_create_nonce('show-submit-form')?>" class="action-btn add-new-btn" id="submit-ticket-btn"><span class="p"></span><span class="t">Add</span></a>
+    <div class="space30"></div>
+    <?php if($totalItems > 0) { ?>
    <div class="pagination-wrapper">
         <div class="pagination-limit">
             <form method="get" action="<?php echo get_permalink()?>" name="pform">
