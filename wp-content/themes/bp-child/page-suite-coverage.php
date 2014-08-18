@@ -61,7 +61,7 @@ $esb = new ManageESB();
                    <?php }else{ ?>
                        <?php foreach($plans as $crow){ ?>
                        <div class="tr">
-                           <div class="td td-product"><?php echo $crow->product_name ?></div>
+                           <div class="td td-product"><?php echo $crow->product_name.' v'.get_post_meta( $crow->product_id, 'product_version', true ) ?></div>
                            <div class="td td-conflevel"><?php echo implode(cp_explode($crow->level), ", ") ?></div>
                            <div class="td td-role"><?php echo implode(cp_explode($crow->role), ", ")?></div>
                            <div class="td td-coverage">
@@ -117,9 +117,10 @@ $esb = new ManageESB();
                        <?php } ?>
                    <?php } ?>
                    </div>
-                   <?php if(is_customer($suite->suite_id)){ ?>
-                   <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn add-plan-btn"><span class="p"></span><span class="t">New Test Plan</span></a>
-                   <?php } ?>
+                   <?php if(is_customer($suite->suite_id)): ?>
+                       <div class="space10"></div>
+                       <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn add-plan-btn left"><span class="p"></span><span class="t">New Test Plan</span></a>
+                   <?php endif; ?>
                </div>
            </div>           
            <div class="clear"></div>

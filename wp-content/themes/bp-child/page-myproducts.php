@@ -48,7 +48,7 @@ get_header();
            <div class="grid-box grid-box-expandable table-box grid-box-opened">
                <div class="grid-box-header">
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product)?></b></a></h5>
+                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true )?></b></a></h5>
                    <?php if(is_admin() || is_super_admin()): ?>
                    <span class="left product-author">(<a href="<?php echo ct_get_user_profile_link($product->post_author) ?>"><?php echo cp_get_user_fullname($product->post_author)?></a>, <?php echo !get_post_meta($product->ID, 'product_visibility', true)  ? 'Public' : get_post_meta($product->ID, 'product_visibility', true)?>)</span>
                    <?php endif; ?>
