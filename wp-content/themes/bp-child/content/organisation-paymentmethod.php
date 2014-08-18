@@ -81,6 +81,11 @@ if(!defined('ABSPATH'))
                         <input type="text" name="nickname" id="nickname" value="" class="input" autocomplete="off" />                                    
                         <div class="clear"></div>
                     </div>
+                    <div class="grid-row">
+                        <div class="grid-cell width30P"><label>Customer Reference</label></div>
+                        <input type="text" name="customer_reference" id="customer_reference" value="" class="input" autocomplete="off" /> 
+                        <div class="clear"></div> 
+                    </div>
                     <?php if ($organisation->invoice_me == 1): ?>
                     <div class="grid-row">
                         <div class="grid-cell width30P"><label>Payment Type</label></div>

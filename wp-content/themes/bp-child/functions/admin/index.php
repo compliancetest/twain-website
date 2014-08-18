@@ -49,7 +49,7 @@ function ct_process_admin_actions_page()
         ct_process_cc_invoice_via_eway($_REQUEST['id'], $_POST['page']);
     } else if(wp_verify_nonce($action, 'cancel-unsubscribed-subscriptions')) {
         ct_cancel_unsubscribed_subscriptions();
-    } 
+    }
 }
 
 add_action('admin_init', 'ct_process_admin_actions');

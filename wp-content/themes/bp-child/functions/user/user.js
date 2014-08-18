@@ -328,6 +328,7 @@
                     var form = $('#edit-card-form');
                     form.find('#nickname').val(rsp.nickname);
                     form.find('#card_number').val(rsp.CCNumber);
+                    form.find('#customer_reference').val(rsp.customer_reference);
                     form.find('#name_on_card').val(rsp.CCName);
                     form.find('#card_expiry').val(rsp.CCExpiryMonth + "/" + rsp.CCExpiryYear);
                     form.find('#email').val(rsp.email);

@@ -242,6 +242,7 @@ function cp_user_payment_edit()
     $result['invoice_me'] = $card->invoice_me;
     $result['organisation_id'] = $card->organisation_id;
     $result['is_default'] = $card->is_default;
+    $result['customer_reference'] = $card->customer_reference;
     
     echo json_encode($result);
     exit;
@@ -273,6 +274,7 @@ function cp_user_payment_save()
     $invoice_me = trim($_POST['invoice_me']);
     $organisation_id = trim($_POST['organisation_id']);
     $is_default = trim($_POST['is_default']);
+    $customer_reference = trim($_POST['customer_reference']);
     
     $id = intval(trim($_POST['id']));
         
@@ -298,12 +300,13 @@ function cp_user_payment_save()
         }
         
         if ($id) {
-            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'status' => 'Active', 'is_default' => $is_default), array('id' => $id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'invoice_me' => $invoice_me, 'customer_reference' => $customer_reference, 'status' => 'Active', 'is_default' => $is_default), array('id' => $id));
             return $id;
         } else {
             $wpdb->insert($wpdb->prefix . "organisations_payment_methods", array(
                 'user_id' => $user_id,
                 'nickname' => $nickname,
+                'customer_reference' => $customer_reference,
                 'invoice_me' => $invoice_me,
                 'organisation_id' => $organisation_id,
                 'is_default' => $is_default,
@@ -486,6 +489,7 @@ function cp_user_payment_save()
             $query_result = $wpdb->insert($wpdb->prefix . "organisations_payment_methods", array(
                 'user_id' => $user_id,
                 'nickname' => $nickname,
+                'customer_reference' => $customer_reference,
                 'email' => $email,
                 'card_number' => encrypt_card_number($card_number),
                 'customer_id' => $result,                
@@ -538,7 +542,7 @@ function cp_user_payment_save()
                 $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('is_default' => 0), array('organisation_id' => $organisation_id));
             }
             
-            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'status' => 'Active', 'is_default' => $is_default), array('id' => $card->id));
+            $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'customer_reference' => $customer_reference, 'status' => 'Active', 'is_default' => $is_default), array('id' => $card->id));
             
             $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
             
