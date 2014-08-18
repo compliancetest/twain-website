@@ -27,7 +27,7 @@
             <div class="grid_cell <?php echo has_post_thumbnail() ? 'width90P' : 'width100P'?>">
                 <div class="width100P grid_cell suite_view">
                     <div class="left">
-                        <p><span class="normal">Product Name: </span><?php echo $product->name; ?></p>
+                        <p><span class="normal">Product Name: </span><?php echo $product->name.' v'.get_post_meta( $product->id, 'product_version', true ); ?></p>
                         <p><small>(<span class="normal">Product ID: </span> <?php echo $product->product_id; ?>)</small></p>                
                     </div>
                 <?php if(can_delete_product_and_service(get_the_ID())){ ?>
