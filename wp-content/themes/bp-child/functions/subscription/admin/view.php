@@ -208,11 +208,22 @@ function ct_add_user_subscription()
     $query = "SELECT nickname, id, suite_family_mark, organisation_id from {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=$org_id ORDER BY organisation_id, nickname";
     $org_subscriptions = $wpdb->get_results($query);
     
-    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t 
+    $query = "SELECT p.ID, p.post_title 
+              FROM
+                (
+                SELECT * FROM
+                  wp_test_suites 
+                ORDER BY suite_title,
+                  version_major,
+                  version_minor DESC,
+                  version_patch DESC 
+                )  AS t
               LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID 
               WHERE t.family_mark IN (
                 SELECT suite_family_mark FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=$org_id
               )
+              GROUP BY family_mark,
+                  version_major 
               ORDER BY p.post_title";
     $test_suites = $wpdb->get_results($query);
     

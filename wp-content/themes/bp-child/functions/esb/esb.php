@@ -188,7 +188,7 @@ class ManageESB
         return $ids;
     }
 
-    public function prepareTransactionWhereQuery($subscription_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    public function prepareTransactionWhereQuery($organisation_id = null, $subscription_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
     {
         global $wpdb;
         
@@ -198,7 +198,7 @@ class ManageESB
         $message_where = array();
         
         if ($subscription_id == 'all') { //All Subscriptions
-            if (!is_super_admin()) {
+            if (!is_super_admin() || ($organisation_id !== null && $organisation_id != 'all')) {
                 //Getting Manageable Users' Subscriptions
                 $query = $wpdb->prepare("SELECT DISTINCT(s.id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
                         WHERE 
@@ -208,6 +208,9 @@ class ManageESB
                                 IN 
                                 ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
                         ", $user_id, $user_id);
+                if ($organisation_id !== null && $organisation_id != "all") {
+                    $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
+                }
                 $s_ids = $wpdb->get_col($query);
                 if (!$s_ids)
                     return array();

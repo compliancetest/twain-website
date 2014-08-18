@@ -187,30 +187,21 @@ function ct_get_test_suites_without_version()
     return $data;
 }
 
-function ct_get_user_viewable_subscriptions($user_id)
+function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
 {
     global $wpdb;
     
             
     $user_data = get_userdata($user_id);
     
-    $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
-                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
-                WHERE 
-                    s.user_id = bm.user_id AND bm.is_confirmed=1 
-                    AND
-                    (bm.user_id=%d OR bm.group_id 
-                        IN 
-                        ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
-                ORDER BY os.nickname
-                ", $user_id, $user_id);
+    if($org_id == 'all')
+        $org_id = null;
+    
     if (is_super_admin()) {
-        $query = $wpdb->prepare("SELECT os.nickname, us.id FROM {$wpdb->prefix}users_subscriptions AS us
+        $query = "SELECT os.nickname, us.id FROM {$wpdb->prefix}users_subscriptions AS us
                                  LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
-                                 ORDER BY os.nickname", 
-                                 $domain);
-                                 
-        $data = $wpdb->get_results($query);
+                  WHERE 1
+                                 ";
     } else if(ct_is_group_admin_or_support($user_id)) {
         $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
@@ -220,9 +211,8 @@ function ct_get_user_viewable_subscriptions($user_id)
                     (bm.user_id=%d OR bm.group_id 
                         IN 
                         ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
-                ORDER BY os.nickname
                 ", $user_id, $user_id);
-        $data = $wpdb->get_results($query);    
+        
     } else {
         //Getting domain
         list($p, $domain) = explode("@",  $user_data->user_email);
@@ -230,10 +220,50 @@ function ct_get_user_viewable_subscriptions($user_id)
         $query = $wpdb->prepare("SELECT os.nickname, us.id FROM {$wpdb->prefix}users_subscriptions AS us
                                  LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
                                  LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
-                                 WHERE o.organisation_domain=%s  ORDER BY os.nickname", 
-                                 $domain);
-                                 
+                                 WHERE o.organisation_domain=%s ", 
+                                 $domain);                                 
+    }
+    
+    if ($org_id !== null) {
+        $query .= $wpdb->prepare(" AND os.organisation_id=%d", $org_id);
+    }
+    
+    $query .= " ORDER BY os.nickname ";
+    
+    $data = $wpdb->get_results($query);    
+    
+    return $data;
+}
+
+function ct_get_user_viewable_organisations($user_id = null)
+{
+    global $wpdb;
+    
+    if ($user_id == null)
+        $user_id = get_current_user_id();
+            
+    $user_data = get_userdata($user_id);
+    
+    if (is_super_admin()) {       
+        $query = "SELECT DISTINCT(o.id), o.organisation_name FROM {$wpdb->prefix}users_subscriptions AS us
+                                 LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = us.organisation_id
+                                 ORDER BY o.organisation_name
+                                 ";
         $data = $wpdb->get_results($query);
+        
+    } else if(ct_is_group_admin_or_support($user_id)) {
+        $query = $wpdb->prepare("SELECT DISTINCT(o.id), o.organisation_name FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
+                LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = s.organisation_id
+                WHERE 
+                    s.user_id = bm.user_id AND bm.is_confirmed=1 
+                    AND
+                    (bm.user_id=%d OR bm.group_id 
+                        IN 
+                        ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                ORDER BY o.organisation_name
+                ", $user_id, $user_id);
+        $data = $wpdb->get_results($query);    
+        
     }
     
     return $data;

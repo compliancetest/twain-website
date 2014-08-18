@@ -21,15 +21,22 @@ if(is_user_logged_in()){
     
     //Set Default Subscription
     if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
+        $tOrganisations = ct_get_user_viewable_organisations();
+        $default_organisation = "all";
         $default_subscription = "all";
-    } else {
-        $user_subscriptions = ct_get_user_subscriptions($user->ID);
+        $filterOrganisation = isset($_GET['organisation']) ? htmlspecialchars($_GET['organisation']) : $default_organisation;
         
-        if($user_subscriptions)
-            $default_subscription = $user_subscriptions[0]->id;
+        $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID, $filterOrganisation);        
+        
+    } else {
+        $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
+        if($tSubscriptions)
+            $default_subscription = $tSubscriptions[0]->id;
         else
-            $default_subscription = -1;    
+            $default_subscription = -1;
     }
+    
+    
     
 }else{
     wp_redirect(home_url());
@@ -63,14 +70,14 @@ $order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : ($orderBy ==
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
-$esb->prepareTransactionWhereQuery($filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+$esb->prepareTransactionWhereQuery(isset($filterOrganisation) ? $filterOrganisation : null, $filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
 
 $log_results = $esb->getUserTransactionLog($page, $limit, $orderBy, $order);
 
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 
-$tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
+
 
 $tProducts = $esb->getFilterOptionsForProduct();
 $tSuites = $esb->getFilterOptionsForSuite();
@@ -122,6 +129,24 @@ if($filterCustomer){
             <div class="left right10"><label>Filter By:</label></div>
             <form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
                 <div class="left">
+                    <?php
+                        if (isset($tOrganisations)) {
+                    ?>
+                        <div class="styled_select">
+                            <label>Organisation: <?php if($filterOrganisation != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                            <select name="organisation" id="organisation" autocomplete="off">
+                                <option value="all">- All -</option>
+                              <?php foreach($tOrganisations as $o){ ?>                           
+                                <option value="<?php echo $o->id?>" <?php echo $filterOrganisation != "" && $o->id == intval($filterOrganisation) ? "selected='selected'" : "" ?>><?php echo $o->organisation_name ?></option>
+                              <?php } ?>
+                            </select>
+                            
+                        </div>
+                        <div class="space10"></div>                        
+                    <?php
+                        }
+                        
+                    ?>
                     <div class="styled_select">
                         <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="subscription" id="subscription" autocomplete="off">

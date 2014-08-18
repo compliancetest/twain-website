@@ -104,11 +104,22 @@ function ct_get_organisation_subscription_info_by_ajax()
     $subscriptions = $orgClass->get_subscriptions();
     $users = $orgClass->get_organisation_members();
     
-    $query = "SELECT p.ID, p.post_title from {$wpdb->prefix}test_suites as t 
+    $query = "SELECT p.ID, p.post_title 
+              FROM
+                (
+                SELECT * FROM
+                  wp_test_suites 
+                ORDER BY suite_title,
+                  version_major,
+                  version_minor DESC,
+                  version_patch DESC 
+                )  AS t
               LEFT JOIN {$wpdb->posts} AS p ON t.suite_id=p.ID 
               WHERE t.family_mark IN (
                 SELECT suite_family_mark FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=$org_id
               )
+              GROUP BY family_mark,
+                  version_major 
               ORDER BY p.post_title";
     $test_suites = $wpdb->get_results($query);
     
