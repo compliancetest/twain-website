@@ -993,14 +993,14 @@ function cp_get_customer_harness_detail_profile_data()
     <div class="field-row">
         <div class="grid-cell">
             <label>Expected Entity Type:</label>
-            <input class="input" type="text" name="expected_entity_type" value="<?php echo $subscription_row->entity_id; ?>" readonly="readonly" disabled="disabled"/>
+            <input class="input" type="text" name="expected_entity_type" value="<?php echo $subscription_row->entity_type; ?>" readonly="readonly" disabled="disabled"/>
         </div>
         <div class="clear"></div>
     </div>
     <div class="field-row">
         <div class="grid-cell">
             <label>Expected Entity Value:</label>
-            <input class="input" type="text" name="expected_entity_value" value="<?php echo $subscription_row->entity_type; ?>" readonly="readonly" disabled="disabled"/>
+            <input class="input" type="text" name="expected_entity_value" value="<?php echo $subscription_row->entity_id; ?>" readonly="readonly" disabled="disabled"/>
         </div>
         <div class="clear"></div>
     </div>
