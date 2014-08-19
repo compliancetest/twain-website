@@ -3,48 +3,55 @@
 * Template Name:My Transaction Log
 */
 
-if(is_user_logged_in()){
-    global $current_user;
-    
-    $userInfo = get_user_meta( $current_user->ID );
-    
-    $user = get_userdata( $current_user->ID );
-    $user_status = $user->user_status;
-    
-    if($user_status == 3)
-    {
-        //Goto My Profile Page
-        addMessage('Please verify your email address.', 'warning');
-        wp_redirect('/my-profile');
-        exit;
-    }
-    
-    //Set Default Subscription
-    if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
-        $tOrganisations = ct_get_user_viewable_organisations();
-        $default_organisation = "all";
-        $default_subscription = "all";
-        $filterOrganisation = isset($_GET['organisation']) ? htmlspecialchars($_GET['organisation']) : $default_organisation;
-        
-        $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID, $filterOrganisation);        
-        
-    } else {
-        $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
-        if($tSubscriptions)
-            $default_subscription = $tSubscriptions[0]->id;
-        else
-            $default_subscription = -1;
-    }
-    
-    
-    
-}else{
+if(!is_user_logged_in()){
     wp_redirect(home_url());
     exit;
 }
-get_header();
+global $current_user;
 
-$filterSubscription = isset($_GET['subscription']) ? htmlspecialchars($_GET['subscription']) : $default_subscription;
+$userInfo = get_user_meta( $current_user->ID );
+
+$user = get_userdata( $current_user->ID );
+$user_status = $user->user_status;
+
+if($user_status == 3)
+{
+    //Goto My Profile Page
+    addMessage('Please verify your email address.', 'warning');
+    wp_redirect('/my-profile');
+    exit;
+}
+
+$tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
+
+//Set Default Subscription
+if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
+    $tOrganisations = ct_get_user_viewable_organisations();
+    
+    $default_organisation = isset($_GET['organisation']) ? htmlspecialchars($_GET['organisation']) : 'all';        
+    
+    $default_subscription = "all";
+    $filterSubscription = isset($_GET['subscription']) ? htmlspecialchars($_GET['subscription']) : $default_subscription;
+
+    if ($filterSubscription == 'all') {
+        $filterOrganisation = $default_organisation;
+    } else {
+        foreach ($tSubscriptions as $s) {
+            if ($s->id == $filterSubscription) {
+                $filterOrganisation = $s->organisation_id;
+                break;
+            }
+        }   
+    }
+} else {        
+    if($tSubscriptions)
+        $default_subscription = $tSubscriptions[0]->id;
+    else
+        $default_subscription = -1;
+    
+    $filterSubscription = isset($_GET['subscription']) ? htmlspecialchars($_GET['subscription']) : $default_subscription;
+}
+
 
 
 $filterProduct = isset($_GET['product']) ? htmlspecialchars($_GET['product']) : null;
@@ -118,7 +125,7 @@ if($filterCustomer){
     $params[] = 'customer=' . $filterCustomer;
 }
  
-
+get_header();
 ?>
 <div class="content" id="my_transaction_log">
     <div class="dashboard-tabs">
@@ -143,22 +150,43 @@ if($filterCustomer){
                             
                         </div>
                         <div class="space10"></div>                        
+                        <div class="styled_select">
+                            <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                            <select name="subscription" id="subscription" autocomplete="off">     
+                                <option value="all">- All -</option>
+                                <?php foreach($tSubscriptions as $s){ ?>                           
+                                    <?php 
+                                        if ($filterOrganisation != 'all' && $s->organisation_id != $filterOrganisation) {
+                                            continue;
+                                        }
+                                    ?>
+                                <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
+                                <?php } ?>                     
+                            </select>
+                            
+                            <select id="all_subscriptions" autocomplete="off" style="display: none;">
+                                <option value="all">- All -</option>
+                              <?php foreach($tSubscriptions as $s){ ?>                           
+                                <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>"><?php echo $s->nickname ?></option>
+                              <?php } ?>
+                            </select>
+                            
+                        </div>
                     <?php
-                        }
-                        
+                        } else {
                     ?>
-                    <div class="styled_select">
-                        <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                        <select name="subscription" id="subscription" autocomplete="off">
-                          <?php if (is_super_admin() || ct_is_group_admin_or_support($user_id)): ?>
-                            <option value="all">- All -</option>
-                          <?php endif; ?>
-                          <?php foreach($tSubscriptions as $s){ ?>                           
-                            <option value="<?php echo $s->id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
-                          <?php } ?>
-                        </select>
-                        
-                    </div>
+                        <div class="styled_select">
+                            <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                            <select name="subscription" id="subscription" autocomplete="off">                                                      
+                              <?php foreach($tSubscriptions as $s){ ?>                           
+                                <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
+                              <?php } ?>
+                            </select>                            
+                        </div>
+                    <?php   
+                        }
+                    ?>
+                    
                     <div class="space10"></div>
                     <div class="styled_select">
                         <label>Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
@@ -497,6 +525,26 @@ if($filterCustomer){
  <script type="text/javascript">
     
     jQuery(document).ready(function(){
+        
+        <?php if (isset($tOrganisations)): ?> //Has Organisation Filter
+            function update_subscription_filter()
+            {
+                //Remove Old Values
+                jQuery('#filterForm #subscription option').remove();
+                
+                //Selected Org Id
+                var org_id = jQuery('#filterForm #organisation').val();
+                
+                jQuery('#filterForm #all_subscriptions option').each(function(){
+                    if (org_id == 'all' || jQuery(this).val() == 'all' || jQuery(this).attr('data-org-id') == org_id) {
+                        jQuery('#filterForm #subscription').append(jQuery(this).clone());
+                    }    
+                })
+                
+            }
+            jQuery('#filterForm #organisation').change(update_subscription_filter);
+        <?php endif; ?>
+        
         fixTdHeight(jQuery('#my_transaction_log .table-box'));
 
         jQuery('.td-convsn a, .td-message-part a').click(function(){
