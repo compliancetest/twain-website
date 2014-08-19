@@ -11,7 +11,7 @@ if(!defined('ABSPATH'))
     $organisationClass = new CT_Organisation($organisation_id);
     $cards = $organisationClass->get_payment_methods();
 ?>
-<div class="column left three_fifths nopadding">
+<div class="column left four_sixths nopadding">
     <div class="grid-box table-box" id="my_payment">
         <div class="grid-box-header">
             <h5 class="left">Payment Methods</h5>
@@ -26,6 +26,7 @@ if(!defined('ABSPATH'))
             <div class="thead tr">
                <div class="td td-nickname">Nickname</div>
                <div class="td td-card-number">Card Number</div>
+               <div class="td td-reference">Reference</div>
                <div class="td td-status tocenter">Status</div>
                <div class="td td-default tocenter">Default?</div>
                <div class="td td-action tocenter">Action</div>
@@ -50,6 +51,9 @@ if(!defined('ABSPATH'))
                         <?php else: ?>
                             Invoice
                         <?php endif; ?>
+                    </div>
+                    <div class="td td-reference">
+                        <?php echo $card->customer_reference?>
                     </div>
                     <div class="td td-status tocenter">
                         <span class="status_btn status_<?php echo strtolower($card->status)?> has-tooltip">
@@ -151,7 +155,7 @@ if(!defined('ABSPATH'))
 </div>
 <?php $my_payment_method_desc = get_post_meta($post->ID, 'my_payment_method_desc', true);?>
 <?php if ($my_payment_method_desc): ?>
-<div class="right two_fifths">
+<div class="right two_sixths">
     <div class="gray_message_box radius9 light_gray_txt">
         <div class="indicator"></div>
         <?php echo $my_payment_method_desc;?>

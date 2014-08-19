@@ -4633,7 +4633,7 @@ span.button_sign {
     display: block;
 }
 #cards-list .td-nickname{
-    width: 126px;
+    width: 100px;
 }
 #cards-list .td-status{
     width: 80px;
@@ -4648,7 +4648,10 @@ span.button_sign {
     width: 53px;
 }
 #cards-list .td-card-number{
-    width: 125px;
+    width: 115px;
+}
+#cards-list .td-reference{
+    width: 76px;    
 }
 #cards-list .td-action{
     width: 60px;    
