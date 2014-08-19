@@ -191,6 +191,10 @@ class CT_Xero {
         }
         $xml = new SimpleXMLElement( '<Invoice></Invoice>' );
         $xml->addChild( 'Type', 'ACCREC' );
+        $payment_method_reference = $wpdb->get_var($wpdb->prepare("SELECT customer_reference FROM {$wpdb->prefix}organisations_payment_methods WHERE id = %s", $invoiceData['payment_id']) );
+        if( $payment_method_reference ){
+            $xml->addChild( 'Reference', $payment_method_reference );
+        }
         $contact = $xml->addChild( 'Contact' );
         $contact->addChild( 'ContactID', $wpdb->get_var( $wpdb->prepare("SELECT contact_id FROM {$wpdb->prefix}organisations WHERE id = %d", $invoiceData['organisation_id']) ) );
         $xml->addChild( 'Date', date('Y-m-d') );
