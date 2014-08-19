@@ -220,10 +220,12 @@ get_header();
                         <label>Test Suite: <?php if($filterSuite != "" && $filterSuite != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="suite" id="suite" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tSuites as $s){ ?>                           
-                            <option value="<?php echo !$s->ID ? 0 : $s->ID?>" <?php echo $filterSuite != "" && $s->ID == intval($filterSuite) ? "selected='selected'" : "" ?>>
-                                <?php echo !$s->NAME ? 'Not assigned' : $s->NAME?></option>                           
-                          <?php } ?>
+                            <?php if( is_array( $tSuites ) ):?>
+                              <?php foreach($tSuites as $s){ ?>
+                                <option value="<?php echo !$s->ID ? 0 : $s->ID?>" <?php echo $filterSuite != "" && $s->ID == intval($filterSuite) ? "selected='selected'" : "" ?>>
+                                    <?php echo !$s->NAME ? 'Not assigned' : $s->NAME?></option>
+                              <?php } ?>
+                            <?php endif;?>
                         </select>
                     </div>
                     <div class="space10"></div>
@@ -242,18 +244,20 @@ get_header();
                         <label>Test Case: <?php if($filterCase != "" && $filterCase != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="case" id="case" autocomplete="off">
                             <option value="">- All -</option>
-                          <?php foreach($tCases as $c){ ?>
-                            <option value="<?php echo !$c->ID ? 0 : $c->ID?>" <?php echo $filterCase != "" && $c->ID == intval($filterCase) ? "selected='selected'" : "" ?>>
-                                <?php 
-                                    if($c->NAME == 'DEFAULT')
-                                    {
-                                        echo 'Not Assigned';
-                                    }else{
-                                        echo str_replace("_V", " v", $c->NAME);
-                                    }                                    
-                                ?>
-                            </option>
-                          <?php } ?>
+                            <?php if( is_array( $tCases ) ):?>
+                                  <?php foreach($tCases as $c){ ?>
+                                    <option value="<?php echo !$c->ID ? 0 : $c->ID?>" <?php echo $filterCase != "" && $c->ID == intval($filterCase) ? "selected='selected'" : "" ?>>
+                                        <?php
+                                            if($c->NAME == 'DEFAULT')
+                                            {
+                                                echo 'Not Assigned';
+                                            }else{
+                                                echo str_replace("_V", " v", $c->NAME);
+                                            }
+                                        ?>
+                                    </option>
+                                  <?php } ?>
+                            <?php endif;?>
                         </select>
                     </div>
                     <div class="space10"></div>

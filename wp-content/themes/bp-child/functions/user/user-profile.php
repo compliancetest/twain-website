@@ -1126,45 +1126,95 @@ function generateProfile($profile_id, $community_id)
     /*if (!empty($profile->token_original)) {
         $profile_ref[$profile->token_original] = $profile->token;
     }*/
-    
-    foreach ($customDataGeneration as $customData) 
-    {
-        $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
-        $identifierValues = $customData->SourceProfiles->Values;
-        if ($identifierPath != 'Self') 
+    if( is_array( $customDataGeneration ) ){
+        foreach ($customDataGeneration as $customData)
         {
-            $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
+            $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
+            $identifierValues = $customData->SourceProfiles->Values;
+            if ($identifierPath != 'Self')
+            {
+                $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
+                if( is_array( $rows ) ){
+                    foreach ($rows as $row) {
+                        $content = json_decode(base64_decode($row['content']));
 
-            foreach ($rows as $row) {
-                $content = json_decode(base64_decode($row['content']));
-                
-                $row['profile_name'] .= ' (' . $profile->profile_name . ')';
-                $row['type'] = 'tester';
-                $token_original = $row['token'];
-                $row['token_original'] = $token_original;
-                $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
-                $row['created_date'] = date('Y-m-d F:i:s');
-                $row['purpose'] = $content->Profile->Purpose;
-                $row['creator_id'] = get_current_user_id();
-                $row['token_original'] = $token_original;
-                
-                $profile_ref[$token_original] = $row['token'];
-                unset($row['id']);
-                
-                foreach ($customData->Rules as $rule) {
-                    if ($rule->Type == 'Value') {
-                        
-                        $replacementPath = str_replace('.', '->', $rule->ReplacementPath);
-                        eval('$replacementValue = $profile_content->' . $replacementPath . ';');
-                        if ($replacementValue) {
-                            $content = json_decode(str_replace($rule->OriginalValue, $replacementValue, json_encode($content)));
+                        $row['profile_name'] .= ' (' . $profile->profile_name . ')';
+                        $row['type'] = 'tester';
+                        $token_original = $row['token'];
+                        $row['token_original'] = $token_original;
+                        $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
+                        $row['created_date'] = date('Y-m-d F:i:s');
+                        $row['purpose'] = $content->Profile->Purpose;
+                        $row['creator_id'] = get_current_user_id();
+                        $row['token_original'] = $token_original;
+
+                        $profile_ref[$token_original] = $row['token'];
+                        unset($row['id']);
+                        if( is_array( $customData->Rules ) ){
+                            foreach ($customData->Rules as $rule) {
+                                if ($rule->Type == 'Value') {
+
+                                    $replacementPath = str_replace('.', '->', $rule->ReplacementPath);
+                                    eval('$replacementValue = $profile_content->' . $replacementPath . ';');
+                                    if ($replacementValue) {
+                                        $content = json_decode(str_replace($rule->OriginalValue, $replacementValue, json_encode($content)));
+                                    }
+
+                                } else if ($rule->Type == 'Reference') {
+                                    // Replace $ref values with links of generated profiles
+                                    foreach ($content->Employers as $employer) {
+                                        $ref = explode('=', $employer->Profile->{'$ref'});
+
+                                        if (!isset($profile_ref[$ref[1]])) {
+                                            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
+                                            $temp_profile = $wpdb->get_row($query);
+                                            if (!empty($temp_profile)) {
+                                                $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                            }
+                                        }
+
+                                        if (isset($profile_ref[$ref[1]])) {
+                                            $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
+                                        }
+                                    }
+                                }
+                            }
                         }
-                            
-                    } else if ($rule->Type == 'Reference') {
-                        // Replace $ref values with links of generated profiles
-                        foreach ($content->Employers as $employer) {
+                        $content->Profile->Title .= ' (' . $profile->profile_name . ')';
+                        $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
+
+                        $row['content'] = base64_encode(stripcslashes(json_encode($content)));
+
+                        // Create new profile
+                        $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
+                        $new_profile_id = $wpdb->insert_id;
+                        $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
+
+                        $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$new_profile_id), '%d');
+
+                        // Generate meta values of new profile
+                        $profile_meta = getProfileMetaData($content);
+                        foreach ($profile_meta as $meta_key => $meta_value) {
+                            $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
+                                'profile_id' => $new_profile_id,
+                                'meta_key' => $meta_key,
+                                'meta_value' => $meta_value,
+                            ));
+                        }
+                    }
+                }
+            }
+            else // Self
+            {
+                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
+                $self_instance = $wpdb->get_row($query, ARRAY_A);
+                $self_content = json_decode(base64_decode($self_instance['content']));
+
+                foreach ($customData->Rules as $rule) {
+                    if ($rule->Type == 'Reference') {
+                        foreach ($self_content->Employers as $employer) {
                             $ref = explode('=', $employer->Profile->{'$ref'});
-                            
+
                             if (!isset($profile_ref[$ref[1]])) {
                                 $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
                                 $temp_profile = $wpdb->get_row($query);
@@ -1172,65 +1222,18 @@ function generateProfile($profile_id, $community_id)
                                     $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                 }
                             }
-                            
+
                             if (isset($profile_ref[$ref[1]])) {
                                 $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
                             }
                         }
                     }
                 }
-                $content->Profile->Title .= ' (' . $profile->profile_name . ')';
-                $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
-                
-                $row['content'] = base64_encode(stripcslashes(json_encode($content)));
-                
-                // Create new profile
-                $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
-                $new_profile_id = $wpdb->insert_id;
-                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
-                
-                $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$new_profile_id), '%d');
-                
-                // Generate meta values of new profile
-                $profile_meta = getProfileMetaData($content);
-                foreach ($profile_meta as $meta_key => $meta_value) {
-                    $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
-                        'profile_id' => $new_profile_id,
-                        'meta_key' => $meta_key,
-                        'meta_value' => $meta_value,
-                    ));
-                }
+
+                $self_instance['content'] = base64_encode(stripcslashes(json_encode($self_content)));
+
+                $wpdb->update($wpdb->prefix . "community_profile_instances", array('content' => $self_instance['content']), array('id' => $profile_id));
             }
-        }
-        else // Self
-        {
-            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
-            $self_instance = $wpdb->get_row($query, ARRAY_A);
-            $self_content = json_decode(base64_decode($self_instance['content']));
-            
-            foreach ($customData->Rules as $rule) {
-                if ($rule->Type == 'Reference') {
-                    foreach ($self_content->Employers as $employer) {
-                        $ref = explode('=', $employer->Profile->{'$ref'});
-                        
-                        if (!isset($profile_ref[$ref[1]])) {
-                            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
-                            $temp_profile = $wpdb->get_row($query);
-                            if (!empty($temp_profile)) {
-                                $profile_ref[$temp_profile->token_original] = $temp_profile->token;
-                            }
-                        }
-                        
-                        if (isset($profile_ref[$ref[1]])) {
-                            $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
-                        }
-                    }
-                }
-            }
-            
-            $self_instance['content'] = base64_encode(stripcslashes(json_encode($self_content)));
-            
-            $wpdb->update($wpdb->prefix . "community_profile_instances", array('content' => $self_instance['content']), array('id' => $profile_id));
         }
     }
 }
