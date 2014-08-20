@@ -566,6 +566,10 @@ if ( !class_exists('WordpressPopularPosts') ) {
 
 				global $wpdb, $post;
 
+                if( ! is_numeric( $post->ID) ){
+                   return $content;
+                }
+
 				$table = $wpdb->prefix . 'popularpostsdata';
 				$result = $wpdb->query("INSERT INTO {$table} (postid, day, last_viewed) VALUES ({$post->ID}, '{$this->now()}', '{$this->now()}') ON DUPLICATE KEY UPDATE last_viewed = '{$this->now()}', pageviews = pageviews + 1;");
 				$result2 = $wpdb->query("INSERT INTO {$table}cache (id, day, day_no_time) VALUES ({$post->ID}, '{$this->now()}', '{$this->curdate()}') ON DUPLICATE KEY UPDATE pageviews = pageviews + 1, day = '{$this->now()}', day_no_time = '{$this->curdate()}';");
