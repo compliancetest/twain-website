@@ -309,31 +309,75 @@ $case->load();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                            <?php
+                                $suiteObj = new TestSuite();
+                                $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
+                                $testSuitesRoles = array( $case->testerRole );
+                            ?>
                             <div class="grid_cell width20P left5P">
                                 <select class="select" id="tester-profile">
                                     <?php foreach($profileInstances as $instance): ?>
-                                        <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
-                                        <option value="<?php echo $instance->id ?>">
-                                            <?php echo $instance->profile_name; ?>
-                                            <?php
-                                            if($instanceObj->Profile->Version)
-                                            {
-                                                $version = array();
-                                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
-                                                {
-                                                    $version[] = $v;
-                                                }
-                                                echo " v" . implode(".", $version);
+                                        <?php
+                                            $pJSON = json_decode(base64_decode($instance->content));
+                                            $profileTypeName = $pJSON->Profile->Type;
+                                            if( ! $instance->lookup ){
+                                                continue;
                                             }
-                                            ?>
-                                        </option>
+                                        ?>
+                                        <?php if( ! empty( $testSuitesRolesProfilesTypes ) ){
+                                            $isAllowed = false;
+                                            foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                                                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                                                    $isAllowed = true;
+                                                }
+                                            }
+                                            if( ! $isAllowed ) {
+                                                continue;
+                                            }
+                                        }
+                                        ?>
+                                            <option value="<?php echo $instance->id ?>">
+                                                <?php echo $instance->profile_name; ?>
+                                                <?php
+                                                if($instanceObj->Profile->Version)
+                                                {
+                                                    $version = array();
+                                                    foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                                    {
+                                                        $version[] = $v;
+                                                    }
+                                                    echo " v" . implode(".", $version);
+                                                }
+                                                ?>
+                                            </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                            <?php
+                                $testSuitesRoles = array( $case->harnessRole );
+                            ?>
                             <div class="grid_cell width20P left5P">
                                 <select class="select" id="harness-profile">
                                     <?php foreach($profileInstances as $instance): ?>
-                                        <?php $instanceObj = json_decode(base64_decode($instance->content)); ?>
+                                        <?php
+                                        $pJSON = json_decode(base64_decode($instance->content));
+                                        $profileTypeName = $pJSON->Profile->Type;
+                                        if( ! $instance->lookup ){
+                                            continue;
+                                        }
+                                        ?>
+                                        <?php if( ! empty( $testSuitesRolesProfilesTypes ) ){
+                                            $isAllowed = false;
+                                            foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
+                                                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                                                    $isAllowed = true;
+                                                }
+                                            }
+                                            if( ! $isAllowed ) {
+                                                continue;
+                                            }
+                                        }
+                                        ?>
                                         <option value="<?php echo $instance->id?>">
                                             <?php echo $instance->profile_name; ?>
                                             <?php
