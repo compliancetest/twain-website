@@ -83,7 +83,7 @@ $case->load();
 							<p>Conformance Levels: <span>
                             <?php
                                 $lArr = array();
-                                if( is_array( $case->conformanceLevel[$test_suite_id] ) ) {
+                                if( isset( $case->conformanceLevel[$test_suite_id]) && is_iterable( $case->conformanceLevel[$test_suite_id] ) ) {
                                     foreach($case->conformanceLevel[$test_suite_id] as $level)
                                     {
 

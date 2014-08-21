@@ -373,9 +373,11 @@ class ManageESB
         
         //Getting Messages
         $ids = array();
-        foreach($rows as $row)
-            $ids[] = $row->ID;
-        
+        if( is_iterable( $rows) ){
+            foreach($rows as $row){
+                $ids[] = $row->ID;
+            }
+        }
         $messages = array();
         
         if($ids)
@@ -685,12 +687,14 @@ class ManageESB
         
         $rows = ManageESB::$esbdb->get_results($query);
         $results = array();
-        foreach($rows as $row)
-        {
-            if($row->FROM_PARTY_ID)
-                $results[] = $row->FROM_PARTY_ID;    
-            if($row->TO_PARTY_ID)
-                $results[] = $row->TO_PARTY_ID;    
+        if( is_iterable( $rows ) ){
+            foreach($rows as $row)
+            {
+                if($row->FROM_PARTY_ID)
+                    $results[] = $row->FROM_PARTY_ID;
+                if($row->TO_PARTY_ID)
+                    $results[] = $row->TO_PARTY_ID;
+            }
         }
         $results = array_unique($results);
         

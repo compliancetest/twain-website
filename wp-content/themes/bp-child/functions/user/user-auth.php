@@ -238,7 +238,7 @@ function cp_request_reset_password()
     $user_login = $user->user_login;
     $user_email = $user->user_email;
     
-    $key = $wpdb->get_var($wpdb->prepare("SELECT user_activation_key FROM $wpdb->users WHERE user_ = %s", $user_login));
+    $key = $wpdb->get_var($wpdb->prepare("SELECT user_activation_key FROM $wpdb->users WHERE user_login = %s", $user_login));
     if ( empty($key) ) {
         // Generate something random for a key...
         $key = wp_generate_password(20, false);

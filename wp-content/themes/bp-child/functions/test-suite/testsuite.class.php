@@ -273,23 +273,28 @@ class TestSuite
     public function loadProfileTypesToRoles( $suitesIdsArray ){
         $testSuitesRolesProfilesTypes = array();
         $isEmpty = true;
-        foreach ( $suitesIdsArray as $test_suite ){
-            $suiteObj = new TestSuite( $test_suite );
-            $roles = $suiteObj->loadRoles();
-            foreach( $roles AS $role ){
-                if( ! isset( $testSuitesRolesProfilesTypes[$role['name']] ) ){
-                    $testSuitesRolesProfilesTypes[$role['name'] ] = array();
-                }
-                if( ! empty( $role['profileTypes'] ) ){
-                    $profileTypes = explode( ',', $role['profileTypes'] );
-                    foreach( $profileTypes AS $profileType ){
-                        if( ! in_array( $profileType, $testSuitesRolesProfilesTypes[$role['name']] ) ){
-                            $isEmpty = false;
-                            array_push( $testSuitesRolesProfilesTypes[$role['name']], $profileType );
+        if( is_iterable( $suitesIdsArray ) ){
+            foreach ( $suitesIdsArray as $test_suite ){
+                $suiteObj = new TestSuite( $test_suite );
+                $roles = $suiteObj->loadRoles();
+                if( is_iterable( $roles ) ){
+                    foreach( $roles AS $role ){
+                        if( ! isset( $testSuitesRolesProfilesTypes[$role['name']] ) ){
+                            $testSuitesRolesProfilesTypes[$role['name'] ] = array();
+                        }
+                        if( ! empty( $role['profileTypes'] ) ){
+                            $profileTypes = explode( ',', $role['profileTypes'] );
+                            if( is_iterable( $profileTypes) ){
+                                foreach( $profileTypes AS $profileType ){
+                                    if( ! in_array( $profileType, $testSuitesRolesProfilesTypes[$role['name']] ) ){
+                                        $isEmpty = false;
+                                        array_push( $testSuitesRolesProfilesTypes[$role['name']], $profileType );
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-
             }
         }
         if( $isEmpty ){

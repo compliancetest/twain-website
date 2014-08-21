@@ -1126,7 +1126,7 @@ function generateProfile($profile_id, $community_id)
     /*if (!empty($profile->token_original)) {
         $profile_ref[$profile->token_original] = $profile->token;
     }*/
-    if( is_array( $customDataGeneration ) ){
+    if( is_iterable( $customDataGeneration ) ){
         foreach ($customDataGeneration as $customData)
         {
             $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
@@ -1134,7 +1134,7 @@ function generateProfile($profile_id, $community_id)
             if ($identifierPath != 'Self')
             {
                 $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
-                if( is_array( $rows ) ){
+                if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
                         $content = json_decode(base64_decode($row['content']));
 
@@ -1150,7 +1150,7 @@ function generateProfile($profile_id, $community_id)
 
                         $profile_ref[$token_original] = $row['token'];
                         unset($row['id']);
-                        if( is_array( $customData->Rules ) ){
+                        if( isset( $customData->Rules ) && is_iterable( $customData->Rules ) ){
                             foreach ($customData->Rules as $rule) {
                                 if ($rule->Type == 'Value') {
 
