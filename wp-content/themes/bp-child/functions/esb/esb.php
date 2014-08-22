@@ -382,16 +382,17 @@ class ManageESB
         
         if($ids)
         {
-            $query = "SELECT 
-                        DISTINCT(m.ID), 
-                        m.*, 
-                        ms.MESSAGE_OUTCOME_CODE, 
-                        ms.MESSAGE_OUTCOME_LABEL 
-                     FROM " . $this->table_message_metadata . " AS m " . 
-                     "LEFT JOIN " . $this->table_message_outcome_status . " AS ms ON ms.ID=m.MSH_MESSAGE_OUTCOME_STATUS_ID " . 
-                     "LEFT JOIN " . $this->table_message_validation_results . " AS mv ON mv.MSH_MESSAGE_METADATA_ID=m.ID " . 
+            $query = "SELECT
+                        DISTINCT(m.ID),
+                        m.ID, m.MSH_CONVERSATION_ID, m.MESSAGE_TIMESTAMP, m.FROM_PARTY_ID, m.TO_PARTY_ID, m.SERVICE, m.ACTION, m.MSH_MESSAGE_OUTCOME_STATUS_ID, m.MESSAGE_ID,
+                        m.ORIGINAL_MESSAGE_ID, m.REF_TO_MESSAGE_ID, m.PART_ID, m.ATTACHMENT_ID, m.UPLOAD_ID, m.CT_RECEIPT_MESSAGE_ID, m.GATEWAY_RECEIPT_MESSAGE_ID, m.FLAG,
+                        ms.MESSAGE_OUTCOME_CODE,
+                        ms.MESSAGE_OUTCOME_LABEL
+                      FROM " . $this->table_message_metadata . " AS m " .
+                     "LEFT JOIN " . $this->table_message_outcome_status . " AS ms ON ms.ID=m.MSH_MESSAGE_OUTCOME_STATUS_ID " .
+                     "LEFT JOIN " . $this->table_message_validation_results . " AS mv ON mv.MSH_MESSAGE_METADATA_ID=m.ID " .
                      "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . (!$this->message_where ? "" : " AND " . implode(" AND ", $this->message_where)) .  " ORDER BY m.MSH_CONVERSATION_ID";
-            
+
             $results = ManageESB::$esbdb->get_results($query);
 
             foreach($results as $m)
