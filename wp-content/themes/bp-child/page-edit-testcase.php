@@ -554,12 +554,18 @@ get_header();
                            <input type="radio" name="outcome_type" value="Positive" <?php echo $case->outcomeType == 'Positive' ? 'checked="checked"' : ''?> /> Positive
                            <input type="radio" name="outcome_type" value="Negative" <?php echo $case->outcomeType == 'Negative' ? 'checked="checked"' : ''?> /> Negative
                        </div>             
-                       <div class="grid-cell radio-cell">
+                       <div class="grid-cell testcase-radio-cell">
                            <label>Bulk:</label>
                            <input type="radio" name="bulk" value="Yes"  <?php echo $case->bulk == 'Yes' ? 'checked="checked"' : ''?> /> Yes
                            <input type="radio" name="bulk" value="No"  <?php echo $case->bulk == 'No' ? 'checked="checked"' : ''?> /> No
-                       </div>             
-                       
+                       </div>
+
+                       <div class="grid-cell testcase-radio-cell">
+                           <label>Optional:</label>
+                           <input type="radio" name="optional" value="Yes"  <?php echo $case->optional == 'Yes' ? 'checked="checked"' : ''?> /> Yes
+                           <input type="radio" name="optional" value="No"  <?php echo $case->optional == 'No' || empty( $case->optional ) ? 'checked="checked"' : ''?> /> No
+                       </div>
+
                        <div class="grid-cell">
                            <label>Test Pattern:</label>
                            <select name="message_count" id="message_count" class="select">

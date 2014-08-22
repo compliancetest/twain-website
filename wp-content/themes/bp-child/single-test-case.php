@@ -98,7 +98,7 @@ $case->load();
                             ?>
                             </span></p>
 						</div>						
-                        <div class="grid_cell width30P left">
+                        <div class="grid_cell width20P left">
 							<p>Outcome Type: <span><?php echo $case->outcomeType; ?></span></p>
 						</div>
 						<div class="grid_cell width15P left">
@@ -109,9 +109,14 @@ $case->load();
                             </div>
 						</div>
                         
-						<div class="grid_cell width15P left">	
+						<div class="grid_cell width10P left">
 							<p>Bulk: <span><?php echo $case->bulk; ?></span></p>
 						</div>
+
+                        <div class="grid_cell width15P left">
+                            <p>Optional: <span><?php echo $case->optional; ?></span></p>
+                        </div>
+
 						<div class="clear"></div>
 					</div>
                                         

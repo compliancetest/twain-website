@@ -573,6 +573,7 @@ function saveCase()
     
     cp_update_post_meta($id, 'outcome_type', $_POST['outcome_type']);
     cp_update_post_meta($id, 'bulk', $_POST['bulk']);
+    cp_update_post_meta($id, 'testcase_status', $_POST['optional']);
     cp_update_post_meta($id, 'message_count', $_POST['message_count']);
     cp_update_post_meta($id, 'test_case_status', $_POST['test_case_status']);
     

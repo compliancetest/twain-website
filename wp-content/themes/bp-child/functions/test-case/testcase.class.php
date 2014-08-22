@@ -134,6 +134,8 @@ class TestCase
         $this->bulk = $this->loadSingleValue('bulk');
         $this->testPattern = $this->loadSingleValue('message_count');
         $this->status = $this->loadSingleValue('test_case_status');
+        $this->optional = $this->loadSingleValue('testcase_status');
+        if( ! $this->optional ) $this->optional = 'No';
         
         $this->loadConformanceLevel();
         

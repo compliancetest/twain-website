@@ -89,7 +89,12 @@ $esb = new ManageESB();
                                                }
                                                
                                            }else{
-                                               $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
+                                               $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
+                                               if( $is_optional == 'No' || empty( $is_optional ) ){
+                                                    $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
+                                               } else {
+                                                   $normalBlobs .= '<span class="bubble optional_bubble">' . $tooltip . '</span>';
+                                               }
                                            }
                                        }
                                        echo $passedBlobs . $failedBlobs . $normalBlobs;

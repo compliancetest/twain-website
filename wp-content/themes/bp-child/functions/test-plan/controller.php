@@ -50,7 +50,9 @@ function certifyPlan()
     $all_verified = true;
     foreach($cases as $case)
     {
-        if(!isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass') 
+        $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
+        if( ! $is_optional ) $is_optional = 'No';
+        if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' )
         {
             $all_verified = false;   
             break; 

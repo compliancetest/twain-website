@@ -4915,6 +4915,16 @@ span.button_sign {
     background: url(../images/suite-progress-blob.png) no-repeat 0 0;
     position: relative;
 }
+.coverage-progress span.optional_bubble{
+    opacity: 90;
+    background: rgba(0,0,0,.5);
+    -moz-transition: all 1s;
+    -webkit-transition: all 1s;
+    transition: all 1s;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
 .coverage-progress span.pass{
     background-position: 0 -9px;
 }
@@ -5753,6 +5763,9 @@ a.suite-subscript-link:hover{
 }
 .edit-item-wrapper .field-row .radio-cell{
     width: 200px;
+}
+.edit-item-wrapper .field-row .testcase-radio-cell{
+    width: 170px;
 }
 .edit-item-wrapper .field-row .radio-cell label{
     margin-bottom: 5px;
