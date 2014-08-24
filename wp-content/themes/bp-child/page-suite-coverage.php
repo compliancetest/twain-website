@@ -75,10 +75,13 @@ $esb = new ManageESB();
                                        $passedBlobs = "";
                                        $failedBlobs = "";
                                        $normalBlobs = "";
-                                       
+
                                        foreach($testCases as $case)
                                        {
-                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span>';
+                                           $opt = '';
+                                           $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
+                                           if( $is_optional == 'Yes' ) $opt = ' (opt) ';
+                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span>';
                                            if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
@@ -89,7 +92,6 @@ $esb = new ManageESB();
                                                }
                                                
                                            }else{
-                                               $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
                                                if( $is_optional == 'No' || empty( $is_optional ) ){
                                                     $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
                                                } else {
