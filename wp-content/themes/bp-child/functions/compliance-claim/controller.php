@@ -232,7 +232,7 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
 function createClaimPDF($claim_id)
 {
     global $wpdb, $post;
-    
+
     require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
     require_once(THE_FUNCTION . '/tcpdf/config/tcpdf_config.php');
     // Include 2D barcode class
@@ -426,6 +426,9 @@ function createClaimPDF($claim_id)
         text-align:center;
         font-weight:bold;
     }
+    .test-cases-table tr td {
+        height: 100px !important;
+    }
     .test-cases-table th.test-outcome{
         line-height:10px;
     }
@@ -526,7 +529,7 @@ function createClaimPDF($claim_id)
         $esbResults = ManageESB::$esbdb->get_results($query);
         
     }
-    
+
     //Classify the results by Scenario
     $results = array();
     foreach($testCases as $row)
@@ -538,7 +541,7 @@ function createClaimPDF($claim_id)
                 if($erow->TEST_CASE_ID == $row->ID)
                 {
                     $row->OUTCOME = $erow->OUTCOME;
-                    $row->MSG_ID = $erow->MSG_ID;                    
+                    $row->MSG_ID = $erow->MSG_ID;
                 }
             }
         }
@@ -549,9 +552,15 @@ function createClaimPDF($claim_id)
     
     $first = true;
     $idx = 0;
-    
+    $rowsCounter = 0;
+    $fArr = array();
+    $caseStatus = $esb->getCaseStatus( $esbID, $claim->suite_id );
+
     foreach($results as $scId => $testCases)
-    { 
+    {
+        if( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$suite->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass'){
+            continue;
+        }
         $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
         if(!$tDesc){
             $rString = '';
@@ -567,10 +576,23 @@ function createClaimPDF($claim_id)
                 <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
                 <td class="test-intent">' . $rString . '</td>';        
         $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
-        
+
         if(isset($testCases[0]->MSG_ID))
         {
-            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a></td>';
+            $esb = new ManageESB();
+            $message = $esb->getMessageEnvelope($testCases[0]->MSG_ID);
+            $fileName = getcwd().'/wp-content/uploads/message_'.$scId.'.xml';
+            $myfile = fopen( $fileName, "w");
+            fwrite( $myfile, $message );
+            fclose( $myfile );
+            $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => $testCases[0]->scenarioCode, 'FS' => $fileName ) );
+            $pdf->Bookmark( '"'.$testCases[0]->scenarioCode.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*message_'.$scId.'.xml');
+            $rowsCounter++;
+            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
+            Click "'.$testCases[0]->scenarioCode.'" bookmark to see message (offline) <br> OR
+            <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
+            </td>';
+            array_push( $fArr, $fileName );
         }
         else
         {
@@ -595,16 +617,30 @@ function createClaimPDF($claim_id)
                     <td class="test-intent">' . $rString . '</td>';        
             $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[$i]->OUTCOME) ? $testCases[$i]->OUTCOME : '-') . '</td>';
             
-            if(isset($testCases[$i]->MSG_ID))
-                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;"><a href="' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '">'.  get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '</a></td>';
-            else
+            if(isset($testCases[$i]->MSG_ID)) {
+                $esb = new ManageESB();
+                $message = $esb->getMessageEnvelope($testCases[0]->MSG_ID);
+                $fileName = getcwd().'/wp-content/uploads/message_'.$scId.'.xml';
+                $myfile = fopen( $fileName, "w");
+                fwrite( $myfile, $message );
+                fclose( $myfile );
+                $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => $testCases[0]->scenarioCode, 'FS' => $fileName ) );
+                $pdf->Bookmark( '"'.$testCases[0]->scenarioCode.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*message_'.$scId.'.xml');
+                $rowsCounter++;
+                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
+                Click "'.$testCases[0]->scenarioCode.'" bookmark to see message (offline) <br> OR
+                <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
+                </td>';
+                array_push( $fArr, $fileName );
+            }
+            else{
                 $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+            }
             
             $test_cases_table_html .= '</tr>';    
             $idx++;
         }
     }
-    
     $test_cases_table_html .= '</table>';
     $pdf->SetFont('opensans', '', 13, '', true);
     
@@ -616,7 +652,10 @@ function createClaimPDF($claim_id)
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.
     $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
-    
+
+    foreach( $fArr AS $f ){
+        unlink( $f );
+    }
     //Save File
    /* if(!is_dir(ABSPATH . "claims"))
     {
