@@ -130,7 +130,6 @@ function w3_is_xml($content) {
  * @return bool
  */
 function w3_can_print_comment(&$buffer) {
-    return false;
     if (function_exists('apply_filters'))
         return apply_filters('w3tc_can_print_comment', w3_is_xml($buffer) && !defined('DOING_AJAX'));
     return w3_is_xml($buffer) && !defined('DOING_AJAX');
