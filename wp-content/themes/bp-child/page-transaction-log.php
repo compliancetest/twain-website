@@ -124,6 +124,12 @@ if($filterDate){
 if($filterCustomer){
     $params[] = 'customer=' . $filterCustomer;
 }
+if( isset( $filterSubscription ) ){
+    $params[] = 'subscription=' . $filterSubscription;
+}
+if( isset( $filterOrganisation ) ){
+    $params[] = 'organisation=' .$filterOrganisation ;
+}
  
 get_header();
 ?>

@@ -335,7 +335,10 @@ class TestSuite
             return array();
             
         $ids = $wpdb->escape($this->profileTypes);
-        
+
+        if( empty( $ids ) ){
+            return array();
+        }
         $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.type='harness' AND pt.id IN (" . implode(", ", $ids) . ")";        
         $rows = $wpdb->get_results($query);
         

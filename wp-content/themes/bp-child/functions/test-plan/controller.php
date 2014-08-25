@@ -46,7 +46,7 @@ function certifyPlan()
     
     $esb = new ManageESB();
     $caseStatus = $esb->getCaseStatus($esbUserId, $plan->suite_id);
-    
+
     $all_verified = true;
     foreach($cases as $case)
     {
@@ -54,7 +54,7 @@ function certifyPlan()
         if( ! $is_optional ) $is_optional = 'No';
         if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' )
         {
-            $all_verified = false;   
+            $all_verified = false;
             break; 
         }
     }

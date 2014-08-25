@@ -340,6 +340,13 @@ function saveProfileInstance($action)
     
     $profile_meta = getProfileMetaData($jsonObject);
     foreach ($profile_meta as $meta_key => $meta_value) {
+        if( is_array( $instance_id ) || $meta_key || $meta_value ){
+            error_log( 'Wrong data passed: ' );
+            error_log( serialize( $instance_id ) );
+            error_log( serialize( $meta_key ) );
+            error_log( serialize( $meta_value ) );
+            continue;
+        }
         $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
             'profile_id' => $instance_id,
             'meta_key' => $meta_key,
@@ -353,14 +360,16 @@ function saveProfileInstance($action)
 
 function getProfileMetaData($data, $meta_key = '', $level = 0) {
     $ret = array();
-    foreach ($data as $key => $value) {
-        if ($level == 0 && !in_array($key, array('Profile', 'Entity', 'Fund')))
-            continue;
-        if (!is_object($value)) {
-            $ret[($meta_key == '') ? ($key) : ($meta_key.'_'.$key)] = $value;
-            continue;
+    if( is_iterable( $data ) ){
+        foreach ($data as $key => $value) {
+            if ($level == 0 && !in_array($key, array('Profile', 'Entity', 'Fund')))
+                continue;
+            if (!is_object($value)) {
+                $ret[($meta_key == '') ? ($key) : ($meta_key.'_'.$key)] = $value;
+                continue;
+            }
+            $ret = array_merge($ret, getProfileMetaData($value, ($meta_key == '') ? ($key) : ($meta_key.'_'.$key), $level + 1));
         }
-        $ret = array_merge($ret, getProfileMetaData($value, ($meta_key == '') ? ($key) : ($meta_key.'_'.$key), $level + 1));
     }
     return $ret;
 }
