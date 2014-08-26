@@ -627,7 +627,7 @@ function saveCase()
     {
         if($version_updated)
         {
-            $familyMark = $wpdb->get_var("SELECT family_mark FROM {$wpdb->prefix}test_cases WHERE case_id=" . $case->id);
+            $familyMark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_cases WHERE case_id = %d ", $case->id ) );
         }else{
             $familyMark = $id;
         }

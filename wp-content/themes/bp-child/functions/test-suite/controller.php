@@ -478,7 +478,7 @@ function saveSuite()
         if(!$version_updated){
             $family_mark = $id;
         }else{
-            $family_mark = $wpdb->get_var("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=" . $suite->id);
+            $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id = %d ", $suite->id ));
         }
         
         $wpdb->insert($wpdb->prefix . "test_suites", 
