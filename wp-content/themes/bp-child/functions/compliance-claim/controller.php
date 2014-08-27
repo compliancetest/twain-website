@@ -558,7 +558,7 @@ function createClaimPDF($claim_id)
 
     foreach($results as $scId => $testCases)
     {
-        if( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$suite->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass'){
+        if( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass'){
             continue;
         }
         $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
