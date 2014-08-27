@@ -589,7 +589,7 @@ function createClaimPDF($claim_id)
             $pdf->Bookmark( '"'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*message_'.$testCases[0]->MSG_ID.'.xml');
             $rowsCounter++;
             $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
-            Click "'.$testCases[0]->scenarioCode.'" bookmark to see message (offline) <br> OR
+            Click "'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'" bookmark to see message (offline) <br> OR
             <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
             </td>';
             array_push( $fArr, $fileName );
@@ -620,7 +620,7 @@ function createClaimPDF($claim_id)
             if(isset($testCases[$i]->MSG_ID)) {
                 $esb = new ManageESB();
                 $message = $esb->getMessageEnvelope($testCases[0]->MSG_ID);
-                $fileName = getcwd().'/wp-content/uploads/message_'.$scId.'.xml';
+                $fileName = getcwd().'/wp-content/uploads/message_'.$testCases[$i]->MSG_ID.'.xml';
                 $myfile = fopen( $fileName, "w");
                 fwrite( $myfile, $message );
                 fclose( $myfile );
@@ -628,8 +628,8 @@ function createClaimPDF($claim_id)
                 $pdf->Bookmark( '"'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*message_'.$testCases[$i]->MSG_ID.'.xml');
                 $rowsCounter++;
                 $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
-                Click "'.$testCases[0]->scenarioCode.'" bookmark to see message (offline) <br> OR
-                <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
+                Click "'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'" bookmark to see message (offline) <br> OR
+                <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '</a> link to check message on our website
                 </td>';
                 array_push( $fArr, $fileName );
             }
