@@ -152,8 +152,10 @@
                     $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
                     $testPlan->level = trim( str_replace( ';;', ' ', $testPlan->level ) );
                     $testPlan->role = trim( str_replace( ';;', ' ', $testPlan->role ) );
-                    $claim->role = trim( str_replace( ';;', ' ', $claim->role ) );
-                    $claim->conformance_level = trim( str_replace( ';;', ' ', $claim->conformance_level ) );
+                    if( $claim ){
+                        $claim->role = trim( str_replace( ';;', ' ', $claim->role ) );
+                        $claim->conformance_level = trim( str_replace( ';;', ' ', $claim->conformance_level ) );
+                    }
             ?>
                 <?php if( $claim && ( $claim->conformance_level !== $testPlan->level || $claim->role !== $testPlan->role ) ):?>
                     <?php ob_start();?>
