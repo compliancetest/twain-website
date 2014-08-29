@@ -217,7 +217,20 @@ class ManageESB
                 
                 $where['subscription'] = " c.CUSTOMER_ID IN (" . implode(", ", $s_ids) . ")";
             }
-        } else {
+        } else if( $subscription_id == 'my' ){
+            //Getting Manageable Users' Subscriptions
+            $query = $wpdb->prepare("SELECT DISTINCT(s.id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d", $user_id );
+            if ($organisation_id !== null && $organisation_id != "all") {
+                $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
+            }
+            $s_ids = $wpdb->get_col($query);
+
+            if (!$s_ids){
+                $where['subscription'] = " c.CUSTOMER_ID = false ";
+            } else {
+                $where['subscription'] = " c.CUSTOMER_ID IN (" . implode(", ", $s_ids) . ")";
+            }
+        }else {
             $where['subscription'] = $wpdb->prepare(" c.CUSTOMER_ID=%d", $subscription_id);
             
         }

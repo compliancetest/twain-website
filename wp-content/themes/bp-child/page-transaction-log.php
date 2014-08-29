@@ -45,7 +45,7 @@ if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
     }
 } else {        
     if($tSubscriptions)
-        $default_subscription = $tSubscriptions[0]->id;
+        $default_subscription = 'all';
     else
         $default_subscription = -1;
     
@@ -162,6 +162,7 @@ get_header();
                             <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                             <select name="subscription" id="subscription" autocomplete="off">     
                                 <option value="all">- All -</option>
+                                <option value="my" <?php echo $filterSubscription != "" && $filterSubscription == 'my' ? "selected='selected'" : "" ?>>- My subscriptions -</option>
                                 <?php if( is_iterable( $tSubscriptions ) ):?>
                                     <?php foreach($tSubscriptions as $s){ ?>
                                         <?php
@@ -190,12 +191,14 @@ get_header();
                         <div class="styled_select">
                             <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                             <select name="subscription" id="subscription" autocomplete="off">
-                            <?php if( is_iterable( $tSubscriptions ) ):?>
-                              <?php foreach($tSubscriptions as $s){ ?>                           
-                                <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
-                              <?php } ?>
-                            <?php endif;?>
-                            </select>                            
+                                <option value="all">- All -</option>
+                                <option value="my"  <?php echo $filterSubscription != "" && $filterSubscription == 'my' ? "selected='selected'" : "" ?>>- My subscriptions -</option>
+                                <?php if( is_iterable( $tSubscriptions ) ):?>
+                                  <?php foreach($tSubscriptions as $s){ ?>
+                                    <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
+                                  <?php } ?>
+                                <?php endif;?>
+                            </select>
                         </div>
                     <?php   
                         }
