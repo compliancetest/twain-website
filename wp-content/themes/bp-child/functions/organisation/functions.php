@@ -198,12 +198,12 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
         $org_id = null;
     
     if (is_super_admin()) {
-        $query = "SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
+        $query = "SELECT os.nickname, os.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
                                  LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
                   WHERE 1
                                  ";
     } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT(s.id), os.nickname, s.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
+        $query = $wpdb->prepare("SELECT os.id, os.nickname, s.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
                 WHERE 
                     s.user_id = bm.user_id AND bm.is_confirmed=1 
@@ -211,7 +211,7 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
                     (bm.user_id=%d OR bm.group_id 
                         IN 
                         ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
-                ", $user_id, $user_id);
+                GROUP BY os.id", $user_id, $user_id);
         
     } else {
         //Getting domain
@@ -221,7 +221,7 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
                                  LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
                                  LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
                                  WHERE o.organisation_domain=%s ", 
-                                 $domain);                                 
+                                 $domain);
     }
     
     if ($org_id !== null) {
@@ -229,9 +229,9 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
     }
     
     $query .= " ORDER BY os.nickname ";
-    
-    $data = $wpdb->get_results($query);    
-    
+
+    $data = $wpdb->get_results($query);
+
     return $data;
 }
 

@@ -198,8 +198,7 @@ class ManageESB
         $message_where = array();
         
         if ($subscription_id == 'all') { //All Subscriptions
-            if (!is_super_admin() || ($organisation_id !== null && $organisation_id != 'all')) {
-                //Getting Manageable Users' Subscriptions
+            //Getting Manageable Users' Subscriptions
 //                $query = $wpdb->prepare("SELECT DISTINCT(s.id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
 //                        WHERE
 //                            s.user_id = bm.user_id AND bm.is_confirmed=1
@@ -208,16 +207,25 @@ class ManageESB
 //                                IN
 //                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
 //                        ", $user_id, $user_id);
+            if( ! is_super_admin() ) {
                 $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
-                if ($organisation_id !== null && $organisation_id != "all") {
-                    $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
+            } else {
+                $query = " SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions ";
+            }
+            if ($organisation_id !== null && $organisation_id != "all") {
+                if( ! is_super_admin() ) {
+                    $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
+                } else{
+                    $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
                 }
-                $s_ids = $wpdb->get_col($query);
-                if (!$s_ids)
-                    return array();
-                
+            }
+            $s_ids = $wpdb->get_col($query);
+            if (!$s_ids){
+                $where['subscription'] = " c.CUSTOMER_ID = false ";
+            } else {
                 $where['subscription'] = " c.CUSTOMER_ID IN (" . implode(", ", $s_ids) . ")";
             }
+
         } else if( $subscription_id == 'my' ){
             //Getting Manageable Users' Subscriptions
             $query = $wpdb->prepare("SELECT DISTINCT(parent_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d", $user_id );

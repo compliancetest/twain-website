@@ -149,7 +149,7 @@ get_header();
                             <label>Organisation: <?php if($filterOrganisation != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                             <select name="organisation" id="organisation" autocomplete="off">
                                 <option value="all">- All -</option>
-                                <?php if( is_iterable( $tSubscriptions ) ):?>
+                                <?php if( is_iterable( $tOrganisations ) ):?>
                                   <?php foreach($tOrganisations as $o){ ?>
                                     <option value="<?php echo $o->id?>" <?php echo $filterOrganisation != "" && $o->id == intval($filterOrganisation) ? "selected='selected'" : "" ?>><?php echo $o->organisation_name ?></option>
                                   <?php } ?>
@@ -177,6 +177,7 @@ get_header();
                             
                             <select id="all_subscriptions" autocomplete="off" style="display: none;">
                                 <option value="all">- All -</option>
+                                <option value="my">- My Subscriptions -</option>
                                 <?php if( is_iterable( $tSubscriptions ) ):?>
                                   <?php foreach($tSubscriptions as $s){ ?>
                                     <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>"><?php echo $s->nickname ?></option>
@@ -567,7 +568,7 @@ get_header();
                 var org_id = jQuery('#filterForm #organisation').val();
                 
                 jQuery('#filterForm #all_subscriptions option').each(function(){
-                    if (org_id == 'all' || jQuery(this).val() == 'all' || jQuery(this).attr('data-org-id') == org_id) {
+                    if (org_id == 'all' || jQuery(this).val() == 'all' || jQuery(this).val() == 'my' || jQuery(this).attr('data-org-id') == org_id) {
                         jQuery('#filterForm #subscription').append(jQuery(this).clone());
                     }    
                 })
