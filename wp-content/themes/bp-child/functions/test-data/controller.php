@@ -200,7 +200,7 @@ function updateSpecialChars($content)
 function saveProfileInstance($action)
 {
     global $wpdb;
-    
+
     $type_id = $_REQUEST['profile-type-id'];    
     $instance_id = $_REQUEST['instance-id'];
     $user_id = get_current_user_id();
@@ -256,7 +256,7 @@ function saveProfileInstance($action)
     
     //Getting Data
     $data = stripcslashes($_POST['data']);
-    
+
     $jsonData = base64_encode($data);
     $jsonObject = json_decode($data);
     /*$basePath = ABSPATH . "profiles";
@@ -299,7 +299,7 @@ function saveProfileInstance($action)
     $fp = fopen($basePath . "/" . $filename, "w");
     fwrite($fp, base64_decode($jsonData), strlen(base64_decode($jsonData)));
     fclose($fp);*/
-    
+
     if($instance_id)
     {
         $wpdb->update($wpdb->prefix . "community_profile_instances", 
@@ -335,9 +335,9 @@ function saveProfileInstance($action)
         $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $type_id));
           
     }
-    
+
     $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$instance_id), '%d');
-    
+
     $profile_meta = getProfileMetaData($jsonObject);
     foreach ($profile_meta as $meta_key => $meta_value) {
         if( is_array( $instance_id ) || is_array( $meta_key ) || is_array( $meta_value ) ){
@@ -360,7 +360,8 @@ function saveProfileInstance($action)
 
 function getProfileMetaData($data, $meta_key = '', $level = 0) {
     $ret = array();
-    if( is_iterable( $data ) ){
+
+    if( $data ){
         foreach ($data as $key => $value) {
             if ($level == 0 && !in_array($key, array('Profile', 'Entity', 'Fund')))
                 continue;
