@@ -233,9 +233,9 @@ class ManageESB
             }
         }else {
             $where['subscription'] = $wpdb->prepare(" c.CUSTOMER_ID=%d", $subscription_id);
-            
+
         }
-        
+
         if ($product_id !== null && $product_id != "") {
             if($product_id == 0)
                 $where['product'] = " IFNULL(p.PRODUCT_WP_ID, 0) = 0";

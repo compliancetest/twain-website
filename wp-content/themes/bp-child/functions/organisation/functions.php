@@ -216,8 +216,8 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
     } else {
         //Getting domain
         list($p, $domain) = explode("@",  $user_data->user_email);
-        
-        $query = $wpdb->prepare("SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
+
+        $query = $wpdb->prepare("SELECT os.nickname, os.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
                                  LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
                                  LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
                                  WHERE o.organisation_domain=%s ", 
