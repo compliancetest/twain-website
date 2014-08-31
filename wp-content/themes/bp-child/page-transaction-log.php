@@ -45,7 +45,7 @@ if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
     }
 } else {        
     if($tSubscriptions)
-        $default_subscription = 'all';
+        $default_subscription = 'my';
     else
         $default_subscription = -1;
     
@@ -189,7 +189,7 @@ get_header();
                         } else {
                     ?>
                         <div class="styled_select">
-                            <label>Subscription: <?php if($filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                            <label>Subscription: <?php if($filterSubscription != "my" && $filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                             <select name="subscription" id="subscription" autocomplete="off">
                                 <option value="all">- All -</option>
                                 <option value="my"  <?php echo $filterSubscription != "" && $filterSubscription == 'my' ? "selected='selected'" : "" ?>>- My Subscriptions -</option>
