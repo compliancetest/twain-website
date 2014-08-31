@@ -28,8 +28,9 @@ if( is_super_admin() ){
     }
 
     echo count($results) . ' profiles for searching.';
+} else{
+    exit('You havent access to perform this action');
 }
-exit('You havent access to perform this action');
 
 /*function getProfileMetaData($data, $meta_key = '', $level = 0) {
     $ret = array();
