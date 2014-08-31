@@ -208,7 +208,7 @@ class ManageESB
 //                                IN
 //                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
 //                        ", $user_id, $user_id);
-                $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}users_organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
+                $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
                 if ($organisation_id !== null && $organisation_id != "all") {
                     $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
                 }
