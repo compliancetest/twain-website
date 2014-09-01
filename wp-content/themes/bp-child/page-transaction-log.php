@@ -331,7 +331,11 @@ get_header();
                        <div class="td td-audit td-two-lines tocenter td-sortable">
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=audit&order=<?php echo $orderBy == 'audit' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'audit'){ ?>class="<?php echo $order?>"<?php } ?>>Audit<br />Record <span class="sort"></span></a>
                        </div>                       
-                       <div class="td td-convsn td-sortable tocenter">
+                       <div class="td td-convsn td-sortable tocenter<?php if( is_super_admin() || ct_is_group_admin_or_support($user_id) ):?> td-two-lines<?php endif;?>">
+                           <?php if( is_super_admin() || ct_is_group_admin_or_support($user_id) ):?>
+                               Organisation<br>
+                               Subscription Nickname<br>
+                           <?php endif;?>
                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'message'){ ?>class="<?php echo $order?>"<?php } ?>>Conversation ID<span class="sort"></span></a>
                        </div>
                        <div class="td td-date td-sortable tocenter">
@@ -398,9 +402,17 @@ get_header();
                                    <!--<a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>                                   -->
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
-                               <div class="td td-convsn tocenter">
+                               <div class="td td-convsn tocenter<?php if( is_super_admin() || ct_is_group_admin_or_support($user_id) ):?> td-two-lines<?php endif;?>">
                                    <a href="javascript:void(0)">
-                                   <?php 
+                                   <?php
+                                        if( is_super_admin() || ct_is_group_admin_or_support($user_id) ){
+                                            $organisation = ct_get_organisation_by_user_subscription_id( $row->CUSTOMER_ID );
+                                            echo $organisation ? $organisation->organisation_name : ' - ';
+                                            echo '<br>';
+                                            $subscription = ct_get_organisation_subscription_by_user_subscription_id( $row->CUSTOMER_ID );
+                                            echo $subscription ? $subscription->nickname : ' - ';
+                                            echo '<br>';
+                                        }
                                         if(strlen($row->CONVERSATION_ID) > 38)
                                         {
                                             echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 15) . "....." . substr($row->CONVERSATION_ID, -15) . '</span>';

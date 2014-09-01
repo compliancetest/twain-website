@@ -208,9 +208,9 @@ class ManageESB
 //                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
 //                        ", $user_id, $user_id);
             if( ! is_super_admin() ) {
-                $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
+                $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}users_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
             } else {
-                $query = " SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions ";
+                $query = " SELECT id FROM {$wpdb->prefix}users_subscriptions ";
             }
             if ($organisation_id !== null && $organisation_id != "all") {
                 if( ! is_super_admin() ) {
@@ -219,6 +219,7 @@ class ManageESB
                     $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
                 }
             }
+
             $s_ids = $wpdb->get_col($query);
             if (!$s_ids){
                 $where['subscription'] = " c.CUSTOMER_ID = false ";
@@ -228,7 +229,7 @@ class ManageESB
 
         } else if( $subscription_id == 'my' ){
             //Getting Manageable Users' Subscriptions
-            $query = $wpdb->prepare("SELECT DISTINCT(parent_id) FROM {$wpdb->prefix}users_subscriptions AS s WHERE user_id = %d", $user_id );
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions AS s WHERE user_id = %d", $user_id );
             if ($organisation_id !== null && $organisation_id != "all") {
                 $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
             }
@@ -361,8 +362,8 @@ class ManageESB
                         cm.TEST_CASE_ID, 
                         p.PRODUCT_WP_ID,
                         p.PRODUCT_TITLE,
-                        s.TEST_SUITE_TITLE, 
-                        s.TEST_SUITE_WP_ID, 
+                        s.TEST_SUITE_TITLE,
+                        s.TEST_SUITE_WP_ID,
                         ts.TEST_OUTCOME_CODE, 
                         ts.TEST_OUTCOME_LABEL ";
             $query .= $table_query;
@@ -380,8 +381,8 @@ class ManageESB
                         cm.TEST_CASE_WP_ID, 
                         p.PRODUCT_WP_ID,
                         p.PRODUCT_TITLE,
-                        s.TEST_SUITE_TITLE, 
-                        s.TEST_SUITE_WP_ID, 
+                        s.TEST_SUITE_TITLE,
+                        s.TEST_SUITE_WP_ID,
                         ts.TEST_OUTCOME_CODE, 
                         ts.TEST_OUTCOME_LABEL ";
             $query .= $table_query;
@@ -390,7 +391,6 @@ class ManageESB
                 $query .= " WHERE " . implode(" AND ", $this->where_query);
             $query .= $orderQuery;
         }        
-        
         $rows = ManageESB::$esbdb->get_results($query);
         
         //Getting Messages
