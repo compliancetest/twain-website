@@ -207,16 +207,31 @@ class ManageESB
 //                                IN
 //                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
 //                        ", $user_id, $user_id);
-            if( ! is_super_admin() ) {
-                $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}users_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
-            } else {
+            if( is_super_admin() ) {
                 $query = " SELECT id FROM {$wpdb->prefix}users_subscriptions ";
+            } elseif( ct_is_group_admin_or_support() ){
+                $query = '';
+                $subs = ct_get_user_viewable_organisations();
+                $subs_ids = array();
+                foreach( $subs AS $sub ){
+                    $subs_ids[] = $sub->id;
+                }
+                if( $subs_ids ){
+                    $query = "SELECT DISTINCT(id) FROM {$wpdb->prefix}users_subscriptions WHERE organisation_id IN( ".implode(',', $subs_ids)." ) ";
+                }
+            } else {
+                $query = $wpdb->prepare("SELECT DISTINCT(id) FROM {$wpdb->prefix}users_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d ) ", $user_id );
             }
             if ($organisation_id !== null && $organisation_id != "all") {
-                if( ! is_super_admin() ) {
-                    $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
-                } else{
+                if( is_super_admin() ) {
                     $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
+                } elseif( ct_is_group_admin_or_support() ){
+                    if( $subs_ids ){
+                        $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
+                    }
+                } else{
+                    $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
+
                 }
             }
 

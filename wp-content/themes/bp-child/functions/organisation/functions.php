@@ -279,7 +279,7 @@ function ct_get_user_viewable_organisations($user_id = null)
                         ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
                 ORDER BY o.organisation_name
                 ", $user_id, $user_id);
-        $data = $wpdb->get_results($query);    
+        $data = $wpdb->get_results($query);
         
     }
     
