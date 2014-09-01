@@ -227,7 +227,7 @@ class ManageESB
                     $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
                 } elseif( ct_is_group_admin_or_support() ){
                     if( $subs_ids ){
-                        $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
+                        $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
                     }
                 } else{
                     $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
