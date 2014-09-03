@@ -428,10 +428,6 @@ function ct_process_charge_entry_admin_actions()
                 if( $organisation->no_billing != '1' ){
                     $suite = new TestSuite( $subscription->suite_family_mark );
                     $suite->load();
-                    error_log( 'Organisation name: '.$organisation->organisation_name);
-                    error_log( 'Test suite ID: '.$subscription->suite_family_mark);
-                    error_log( 'Monthly subscription Xero code: '.$suite->monthlySubscriptionPrice);
-                    error_log( 'Monthly subscription price: '.$suite->monthlySubscriptionPriceValue);
                     if( ! in_array( $suite->monthlySubscriptionPriceValue, array( 0, -1 ) ) ){
                         if( $subscription->last_charge_date == '0000-00-00' ){
                             $data = array(
@@ -441,7 +437,9 @@ function ct_process_charge_entry_admin_actions()
                                 'quantity'        => '1.00',
                                 'reference_type'  => 'subscription',
                                 'reference_id'    => $subscription->id,
-                                'comment'         => gmdate('F Y')
+                                'comment'         => gmdate('F Y'),
+                                'start_date'      => gmdate('Y-m-01'),
+                                'end_date'        => gmdate('Y-m-t')
                             );
                             $chargeClass = new CT_Charge();
                             $chargeClass->bind($data);
@@ -458,7 +456,9 @@ function ct_process_charge_entry_admin_actions()
                                         'quantity'        => '1.00',
                                         'reference_type'  => 'subscription',
                                         'reference_id'    => $subscription->id,
-                                        'comment'         => gmdate('F Y')
+                                        'comment'         => gmdate('F Y'),
+                                        'start_date'      => gmdate('Y-m-01'),
+                                        'end_date'        => gmdate('Y-m-t')
                                     );
                                     $chargeClass = new CT_Charge();
                                     $chargeClass->bind($data);
