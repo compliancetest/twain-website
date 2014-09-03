@@ -82,6 +82,12 @@ function ct_manage_invoices()
                         <select name="org_id">
                             <option value="">--ALL--</option>
                             <?php foreach( $organisationsWithSubscriptions AS $organisation ):?>
+                                <?php
+                                    $is_charges = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_subscriptions WHERE organisation_id = %d AND last_charge_date < '".date('Y-m')."-01 00:00:00'", $organisation->organisation_id ) );
+                                    if( ! $is_charges ){
+                                        continue;
+                                    }
+                                ?>
                                 <option value="<?php echo $organisation->organisation_id;?>"><?php echo $organisation->organisation_name;?></option>
                             <?php endforeach;?>
                         </select>
@@ -456,7 +462,7 @@ function ct_process_charge_entry_admin_actions()
                                         'quantity'        => '1.00',
                                         'reference_type'  => 'subscription',
                                         'reference_id'    => $subscription->id,
-                                        'comment'         => gmdate('F Y'),
+                                        'comment'         => gmdate('F Y', strtotime('-'.$monthesCounter.' month' )),
                                         'start_date'      => gmdate('Y-m-01'),
                                         'end_date'        => gmdate('Y-m-t')
                                     );
@@ -468,11 +474,11 @@ function ct_process_charge_entry_admin_actions()
                                 }
                             }
                         }
-                        $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                            array('last_charge_date' => gmdate('Y-m-d') ),
-                            array('id' => $subscription->id)
-                        );
                     }
+                    $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                        array('last_charge_date' => gmdate('Y-m-d') ),
+                        array('id' => $subscription->id)
+                    );
                 }
             }
             addMessage('<b>Added: '.$newChargesCounter.' entries</b>', 'success');
