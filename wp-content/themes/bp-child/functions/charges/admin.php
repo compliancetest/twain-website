@@ -80,7 +80,7 @@ function ct_manage_invoices()
                                                                                     GROUP BY organisation_id");
                         ?>
                         <select name="org_id">
-                            <option value=""></option>
+                            <option value="">--ALL--</option>
                             <?php foreach( $organisationsWithSubscriptions AS $organisation ):?>
                                 <option value="<?php echo $organisation->organisation_id;?>"><?php echo $organisation->organisation_name;?></option>
                             <?php endforeach;?>
@@ -428,6 +428,10 @@ function ct_process_charge_entry_admin_actions()
                 if( $organisation->no_billing != '1' ){
                     $suite = new TestSuite( $subscription->suite_family_mark );
                     $suite->load();
+                    error_log( 'Organisation name: '.$organisation->organisation_name);
+                    error_log( 'Test suite ID: '.$subscription->suite_family_mark);
+                    error_log( 'Monthly subscription Xero code: '.$suite->monthlySubscriptionPrice);
+                    error_log( 'Monthly subscription price: '.$suite->monthlySubscriptionPriceValue);
                     if( ! in_array( $suite->monthlySubscriptionPriceValue, array( 0, -1 ) ) ){
                         if( $subscription->last_charge_date == '0000-00-00' ){
                             $data = array(
