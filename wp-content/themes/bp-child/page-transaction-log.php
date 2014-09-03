@@ -3,7 +3,7 @@
 * Template Name:My Transaction Log
 */
 
-if(!is_user_logged_in()){
+if( ! function_exists( 'is_user_logged_in' ) || ! is_user_logged_in() ){
     wp_redirect(home_url());
     exit;
 }
