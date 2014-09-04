@@ -143,6 +143,12 @@ class CT_Organisation_Controller
             );
             
             $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+
+            //update last_charge_date value
+            $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                array('last_charge_date' => gmdate('Y-m-d') ),
+                array('id' => $subscription_id )
+            );
         }
         
         $user = get_userdata($user_id);
