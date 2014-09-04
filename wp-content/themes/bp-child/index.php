@@ -1,7 +1,4 @@
-<?php
-get_header();
-?>
-<?php // echo get_theme_root(); ?>
+<?php get_header(); ?>
 		<div class="content">
             <div class="space20"></div>
 <!--            <h3 class="sub-title">Search for Test Suites or Certified Products</h3>-->
@@ -75,7 +72,35 @@ get_header();
 			</div><!-- end register -->
 			<div class="clear"></div>
 			<div class="space60"></div>
-<!--		<h3 class="sub-title">Browse and Join Any Compliance Community</h3>-->
+            <?php /*
+            <?php $groups_count = groups_get_total_group_count(); ?>
+            <?php if ( bp_has_groups() ) : ?>
+                <ul id="groups-list" class="item-list">
+                    <?php while ( bp_groups() ) : bp_the_group(); ?>
+                        <li>
+                            <div class="item-avatar">
+                                <?php
+                                    $args   = array(
+                                        'width'  => 150,
+                                        'height' => 150
+                                    );
+                                ?>
+                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_avatar($args); ?></a>
+                            </div>
+                            <div class="item">
+                                <div class="item-title"><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></div>
+
+                                <div class="item-desc"><?php bp_group_description_excerpt() ?></div>
+                            </div>
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+                <?php while ($groups_count > 0): ?>
+                    <div class="<?php echo $groups_count; ?>"></div>
+                    <?php $groups_count--; ?>
+                <?php endwhile; ?>
+            <?php endif; ?>
+ */?>
 		<div class="boxes">
 			<div class="box" id="box1">
 				<img src="<?php echo of_get_option('box_image1')?>" class="aligncenter">
@@ -101,9 +126,6 @@ get_header();
 		</div><!--end boxes-->
 			
 		<div class="space40"></div>	
-		<?php // get_sidebar('homepage'); ?>
-		<div class="space40"></div>	
+		<div class="space40"></div>
 		</div>	    
-<?php
-get_footer();
-?>
+<?php get_footer(); ?>

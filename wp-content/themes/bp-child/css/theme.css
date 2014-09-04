@@ -2760,11 +2760,13 @@ background-image: url(../images/white_gloss.png);
     text-shadow: 0px 1px 0px white;
     font-weight: 600;
 }
-p.copyright{
+.copyright{
     text-align: left;
+    float: left;
     color: #666;
     font-family: 'Open Sans', Arial, sans-serif;
-    margin: 10px 0 0;
+    font-weight: 600;
+    margin: 0 0 4px 0;
 }
 #footer-site-info {
     border-top: 6px solid #666;
@@ -2774,48 +2776,21 @@ p.copyright{
     margin-left: 100px;
     margin-right: 100px;
 }
-#footer-twitters{
+#footer-copyright{
     border-top: 6px solid #666;
     width: 445px;
-    min-height: 225px;
-    padding-top: 20px;
+    padding-top: 15px;
     float: left;
     position: relative;    
 }
-#footer-twitters .twitter-follow-button{
-    position: absolute;
-    top: 17px;
-    right: 0;
-}
-#footer-wrapper .footer #footer-twitters ul li{
-    padding-bottom: 8px;
-}
-#footer-wrapper .footer #footer-twitters ul li > a{
-    white-space: nowrap;
-    font-style: italic;
-}
-#footer-wrapper .footer #footer-twitters ul li span a{
-    color: #4682b3;
-}
-/*
-#partners {
-    border-top: 6px solid #666;
-    width: 580px;
-    padding-top: 25px;
+
+#footer-copyright .twitter-logo{
+    width: 24px;
+    height: 24px;
+    background: url("../images/twitter.png") no-repeat 0 0;
+    display:block;
     float: right;
 }
-
-    #partners img {
-        margin-right:20px;
-    }
-    
-    #partners h6 {
-        color: #666666;
-        text-shadow: none;
-        margin-right: 59px;
-        font-family: 'Open Sans', Arial, sans-serif;
-        font-weight: 400;
-    }*/
 
 /* *********** SIDEBAR ELEMENTS *************** */
 .sidebar_home{
