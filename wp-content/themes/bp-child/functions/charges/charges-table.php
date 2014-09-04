@@ -109,6 +109,15 @@ class CT_Organisations_Charge_Table extends WP_List_Table
         $totalPages = ceil($totalItems / $this->per_pages);
         if($totalPages < $paged)
             $paged = $totalPages;
+        if(empty($paged) || !is_numeric($paged) || $paged <= 0 )
+        {
+            $paged = 1;
+        }
+        if($paged > $totalPages)
+            $paged = $totalPages;
+
+        if($paged < 1)
+            $paged = 1;
 
         $this->set_pagination_args(array(
             "total_items" => $totalItems,
@@ -124,11 +133,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
                     LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id=c.organisation_id 
                     LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS p ON c.payment_id =p.id
                     ";
-        $query .= " ORDER BY $orderby $order ";
-        if( ($paged-1) * $this->per_pages > 0 ){
-            $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
-        }
-        
+        $query .= " ORDER BY $orderby $order LIMIT " . (($paged - 1) * $this->per_pages) . ", " . $this->per_pages;
         $this->items = $wpdb->get_results($query);
 
         $columns = $this->get_columns();

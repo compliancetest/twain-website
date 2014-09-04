@@ -47,6 +47,7 @@ function ct_manage_invoices()
                     <th>Organisation</th>
                     <td>
                         <select name="org_id[]">
+                            <option value="">-ALL-</option>
                             <?php foreach( $chargesObject->getOrganisationsList() AS $organisation ):?>
                                 <?php
                                     $orgObject = new CT_Organisation( $organisation->organisation_id );
@@ -59,8 +60,8 @@ function ct_manage_invoices()
                 <tr><td colspan="2"><input type="submit" value="Generate" class="button button-primary" /></td></tr>
             </table>
         </form>
-        <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-all' );?>">Generate Invoices for ALL organisations</a>
+<!--        <div class="clear"></div>-->
+<!--        <a href="--><?php //echo admin_url()?><!--admin.php?page=manage-charges&org-action=--><?php //echo wp_create_nonce( 'update-all' );?><!--">Generate Invoices for ALL organisations</a>-->
         <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-status' );?>">Update "Invoice Me" Invoice Status</a>
         <div class="clear"></div>
@@ -352,37 +353,8 @@ function ct_process_charge_entry_admin_actions()
                 $_GET['org-message'] = $wpdb->last_error;
                 return;
             }
-        } elseif( wp_verify_nonce( $action, 'update-all' ) ){
-            /**
-             * 1) We get organisations IDs with empty 'invoice_number' field
-             */
-            $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND payment_id != 0 GROUP BY organisation_id", ARRAY_A);
-            $counter = 0;
-            if( $organisations ){
-                
-                foreach( $organisations AS $organisation ){
-                    if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation['organisation_id']) ) === '1' ){
-                        continue;
-                    }
-                    /**
-                     * 2) We get organisation's payments types list and for each payment type create invoice
-                     */
-                    $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id'] ), ARRAY_A);
-                    foreach( $paymentTypes AS $paymentType ){
-                        $xero = new CT_Xero();
-                        $paymentID = $paymentType['payment_id'];
-                        $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
-                        if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
-                            $counter++;
-                        }
-                    }
-                }
-            }
-            echo 'Created '.$counter.' invoices';
-            redirect_then_exit();
         } elseif( wp_verify_nonce( $action, 'update-specific' ) ){
-            if( ! empty( $_POST ) && isset( $_POST['org_id'] ) ){
+            if( isset( $_POST['org_id'][0] ) && ! empty( $_POST['org_id'][0] ) ){
                 $organisations = $_POST['org_id'];
                 $counter = 0;
                 if( $organisations ){
@@ -404,7 +376,34 @@ function ct_process_charge_entry_admin_actions()
                 }
                 echo 'Created '.$counter.' invoices';
             } else {
-                echo 'Please select at least 1 organisation';
+                /**
+                 * 1) We get organisations IDs with empty 'invoice_number' field
+                 */
+                $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND payment_id != 0 GROUP BY organisation_id", ARRAY_A);
+                $counter = 0;
+                if( $organisations ){
+
+                    foreach( $organisations AS $organisation ){
+                        if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation['organisation_id']) ) === '1' ){
+                            continue;
+                        }
+                        /**
+                         * 2) We get organisation's payments types list and for each payment type create invoice
+                         */
+                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id'] ), ARRAY_A);
+                        foreach( $paymentTypes AS $paymentType ){
+                            $xero = new CT_Xero();
+                            $paymentID = $paymentType['payment_id'];
+                            $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
+                            if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
+                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
+                                $counter++;
+                            }
+                        }
+                    }
+                }
+                echo 'Created '.$counter.' invoices';
+                redirect_then_exit();
             }
             redirect_then_exit();
         } elseif( wp_verify_nonce( $action, 'update-status' ) ){
