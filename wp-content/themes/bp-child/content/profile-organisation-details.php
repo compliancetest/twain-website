@@ -52,7 +52,7 @@ if(!defined('ABSPATH')) {
                 </div>
                 <div class="grid-row grid-row-complex">
                     <div class="grid-cell width30P">
-                        <label>Secondary Billing Contact</label>
+                        <label>Secondary Contact</label>
                     </div>
                     <div class="grid-cell width70P">
                         <div class="grid-row">
