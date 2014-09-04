@@ -1,1 +1,0 @@
-ALTER TABLE `wp_ticket_priorities` CHANGE `price` `item_code` VARCHAR( 255 ) NULL ;

@@ -1,1 +1,0 @@
-ALTER TABLE `wp_community_profile_instances` ADD COLUMN `purpose` VARCHAR(50) AFTER `profile_name`;

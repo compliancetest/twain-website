@@ -1,1 +1,0 @@
-ALTER TABLE `wp_gateways` ADD COLUMN `alias_list` VARCHAR(300) DEFAULT '';

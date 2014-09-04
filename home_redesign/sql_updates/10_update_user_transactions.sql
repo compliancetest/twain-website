@@ -1,1 +1,0 @@
-ALTER TABLE wp_users_transactions CHANGE `suite_id` `purchase_id` INT (11);

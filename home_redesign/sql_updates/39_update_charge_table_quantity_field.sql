@@ -1,1 +1,0 @@
-ALTER TABLE `wp_organisations_charge` CHANGE `quantity` `quantity` DOUBLE(8,2);

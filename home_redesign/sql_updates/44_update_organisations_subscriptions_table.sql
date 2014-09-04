@@ -1,1 +1,0 @@
-ALTER TABLE `wp_organisations_subscriptions` ADD `last_charge_date` DATE NOT NULL
