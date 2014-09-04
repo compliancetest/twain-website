@@ -451,10 +451,14 @@ function ct_process_charge_entry_admin_actions()
                             $chargeClass->bind($data);
                             $chargeClass->save();
                             $newChargesCounter++;
+                            $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                array('last_charge_date' => gmdate('Y-m-d') ),
+                                array('id' => $subscription->id)
+                            );
                         } else {
                             $monthesCounter = 0;
                             if( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate( 'm' ) ){
-                                while( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate('m', strtotime('-'.$monthesCounter.' month' ) ) ){
+                                while( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate('m', strtotime('-'.$monthesCounter.' month' ) ) AND gmdate( 'Y', strtotime( $subscription->last_charge_date ) ) <= gmdate('Y', strtotime('-'.$monthesCounter.' month' ) ) ){
                                     $data = array(
                                         'organisation_id' => $subscription->organisation_id,
                                         'payment_id'      => $subscription->payment_method,
@@ -471,14 +475,15 @@ function ct_process_charge_entry_admin_actions()
                                     $chargeClass->save();
                                     $newChargesCounter++;
                                     $monthesCounter++;
+                                    $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                        array('last_charge_date' => gmdate('Y-m-d') ),
+                                        array('id' => $subscription->id)
+                                    );
                                 }
                             }
                         }
                     }
-                    $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                        array('last_charge_date' => gmdate('Y-m-d') ),
-                        array('id' => $subscription->id)
-                    );
+
                 }
             }
             addMessage('<b>Added: '.$newChargesCounter.' entries</b>', 'success');
