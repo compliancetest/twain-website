@@ -1,0 +1,3 @@
+<?php defined('ABSPATH') OR exit; ?>
+<p class="help"><?php _e("Need help? Email me directly at", "mailchimp-for-wp-pro"); ?> <a href="mailto:support%40dannyvankooten.com?subject=MailChimp%20for%20WP%20premium%20support&body=Hi%20Danny%2C%0A%0AMy%20website%3A%20<?php echo site_url(); ?>%0AMailChimp%20for%20WP%20v<?php echo MC4WP_VERSION_NUMBER; ?>%0AWordPress%20v<?php bloginfo('version'); ?>%0APHP%20v<?php echo phpversion(); ?>">support@dannyvankooten.com</a>. Please include your website URL and as many details as possible in the e-mail. Use the link if you're lazy. :)</p>
+<p class="help">What's next? Submit your feature requests or vote for new features using <a href="http://www.google.com/moderator/#15/e=20c6b7&t=20c6b7.40">this Google Moderator tool</a></p>

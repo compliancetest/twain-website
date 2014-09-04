@@ -1,0 +1,1 @@
+ALTER TABLE `wp_users_transactions` ADD COLUMN `type` VARCHAR(30) DEFAULT 'purchase_subscription';

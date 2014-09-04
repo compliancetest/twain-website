@@ -1,0 +1,46 @@
+{
+    "ProfileType" : "Fund",
+    "ProfileID" : "compliancetest.net/profile/fund/124",
+    "ProfilePurpose" : "Positive",
+    "ProfileName" : "CT Harness Fund 123",
+
+    "OrganisationName" : "CT Harness Superannuation",
+    "OrganisationABN" : 28342064803,
+
+    "FundAdministrator" : {
+             "OrganisationName" : "CT Harness Member Fund",
+             "OrganisationABN" : 31008414104},
+
+    "SuperannuationProducts": [
+        {
+            "ProductName": "CTSuperTrust",
+            "ProductUSI": "AMP0195AU" 
+        },
+        {
+            "ProductName": "SuperInvest",
+            "ProductUSI": "55446633772288" 
+        },
+        {
+            "ProductName": "SuperPension",
+            "ProductUSI": "99887766554433" 
+        } ],
+      "SuperFundMembers": [
+        {
+            "GivenName": "Kerrigan",
+            "FamilyName": "John",
+            "FundMemberID" : "KER214",
+            "PersonTFN":123456774
+         },
+        {
+            "GivenName": "Sapolete",
+            "FamilyName": "Adrian",
+            "FundMemberID" : "SAPO412",
+            "PersonTFN": 123456782
+         },
+        {
+            "GivenName": "Sutejo",
+            "FamilyName": "NOT APPLICABLE",
+            "FundMemberID" : "TEJO456",
+            "PersonTFN": 123456790
+         }  ]
+}

@@ -1,0 +1,1 @@
+ALTER TABLE `wp_community_profile_instances` ADD COLUMN `token_original` VARCHAR(255) DEFAULT '';

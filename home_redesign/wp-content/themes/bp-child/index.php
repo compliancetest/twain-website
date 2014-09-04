@@ -1,0 +1,131 @@
+<?php get_header(); ?>
+		<div class="content">
+            <div class="space20"></div>
+<!--            <h3 class="sub-title">Search for Test Suites or Certified Products</h3>-->
+			<div id="search-wrapper">				
+<!--				<div class="space7"></div>-->
+				
+				<div id="search_bar">                    
+				  <form  role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>/search"  class="nomargintop">
+					<input id="q" name="q" value="" type="text" placeholder="Search for..." autocomplete="off" class="inactive_s">
+					<div class="search_select_div">
+						<div class="search_select">
+							<ul>
+								<li><a id="choose_one" class="current_chosen">Test Suites</a>
+									<ul>
+                                        <li><a id="communities">Communities</a></li>
+										<li><a id="test-suite">Test Suites</a></li>
+										<li><a id="product-service">Products</a></li>
+									</ul>
+								</li>	
+							</ul>
+						</div>
+						<input type="hidden" value="test-suite" id="hidden_value"/>
+					</div>
+
+				   
+					<input type="submit" id="searchsubmit" value="SEARCH">
+					</form>
+
+					<div class="clear"></div>
+				</div><!-- end search_bar  -->
+<!--				<div class="space7"></div>-->
+			</div> <!-- END search-wrapper-->
+			<div class="space40"></div>
+			<!--<h3 class="sub-title">
+                Create a Test Suite or List Your Product
+                <br />
+                <small>Registered users only</small>
+            </h3>            -->
+			<div id="register">
+				<div id="left_side" >	
+					<div class="blue_box">
+						<h2><?php echo of_get_option('lregister_box_content'); ?></h2>
+						<div class="blue_box_button">	
+                            <?php if(is_user_logged_in()){ ?>
+                            <a href="/add-new-product-and-service"><?php echo of_get_option('lregister_box_link_content'); ?></a>
+                            <?php }else{ ?>
+							<a href="#require-registration" rel="custom-popup" data-type="inline"><?php echo of_get_option('lregister_box_link_content'); ?></a>
+                            <?php } ?>
+							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_left.png" id="shadow_blue_box_button_left" />
+							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_right.png" id="shadow_blue_box_button_right" />
+						</div><!-- end blue_box_button -->
+					</div><!-- end blue_box -->
+					<div class="clear"></div>	
+				</div><!-- end left_side-->
+				
+				<div id="right_side">
+					<div class="blue_box">
+						<h2><?php echo of_get_option('rregister_box_content'); ?></h2>
+						<div class="blue_box_button">	
+                            <?php if(is_user_logged_in()){ ?>
+							<a href="/add-new-test-suite"><?php echo of_get_option('rregister_box_link_content'); ?></a>
+                            <?php }else{ ?>
+                            <a href="#require-registration" rel="custom-popup" data-type="inline"><?php echo of_get_option('rregister_box_link_content'); ?></a>
+                            <?php } ?>
+							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_left.png" id="shadow_blue_box_button_left" />
+							<img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/shadow_blue_box_button_right.png" id="shadow_blue_box_button_right" />
+						</div><!-- end blue_box_button -->
+					</div><!-- end blue_box -->
+					<div class="clear"></div>	
+				</div><!-- end right_side-->
+			</div><!-- end register -->
+			<div class="clear"></div>
+			<div class="space60"></div>
+            <?php /*
+            <?php $groups_count = groups_get_total_group_count(); ?>
+            <?php if ( bp_has_groups() ) : ?>
+                <ul id="groups-list" class="item-list">
+                    <?php while ( bp_groups() ) : bp_the_group(); ?>
+                        <li>
+                            <div class="item-avatar">
+                                <?php
+                                    $args   = array(
+                                        'width'  => 150,
+                                        'height' => 150
+                                    );
+                                ?>
+                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_avatar($args); ?></a>
+                            </div>
+                            <div class="item">
+                                <div class="item-title"><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></div>
+
+                                <div class="item-desc"><?php bp_group_description_excerpt() ?></div>
+                            </div>
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+                <?php while ($groups_count > 0): ?>
+                    <div class="<?php echo $groups_count; ?>"></div>
+                    <?php $groups_count--; ?>
+                <?php endwhile; ?>
+            <?php endif; ?>
+ */?>
+		<div class="boxes">
+			<div class="box" id="box1">
+				<img src="<?php echo of_get_option('box_image1')?>" class="aligncenter">
+                <h3><?php echo of_get_option('box_title1') ;?></h3>
+                <p>
+                    <b><?php echo of_get_option('box_content_title1') ;?></b><br />
+                    <?php echo of_get_option('box_content1') ;?>
+                </p>
+				<a href="<?php echo of_get_option('box_linkto1') ;?>">Find out more</a>
+			</div><!--end box1-->
+			
+			<div class="box" id="box2">
+                <img src="<?php echo of_get_option('box_image2')?>" class="aligncenter">
+                <h3><?php echo of_get_option('box_title2') ;?></h3>
+                <p>
+                    <b><?php echo of_get_option('box_content_title2') ;?></b><br />
+                    <?php echo of_get_option('box_content2') ;?>
+                </p>
+                <a href="<?php echo of_get_option('box_linkto2') ;?>">Find out more</a>
+            </div><!--end box2-->
+			
+			<div class="clear"></div>
+		</div><!--end boxes-->
+			
+		<div class="space40"></div>	
+		<div class="space40"></div>
+		</div>	    
+<?php get_footer(); ?>

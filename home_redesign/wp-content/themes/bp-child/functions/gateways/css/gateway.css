@@ -1,0 +1,18 @@
+.mf_field_wrapper { margin: 0 6px 0; overflow: hidden; }
+.mf_field_wrapper label { display: block; clear: left; font-weight: bold; padding: .5em 0; }
+.mf_text { width: 95%; margin-left: 1px; }
+
+#alias-container {
+    padding: 10px 0 0 0;
+}
+#alias-container a {
+    margin: 0 20px 0 0;
+    padding: 0 20px 0 0;
+    background: url(icon_remove.png) 100% 50% no-repeat;
+    cursor: pointer;
+    font-size: 13px;
+}
+#alias-container a:hover {
+    background: url(icon_remove_over.png) 100% 50% no-repeat;
+    color: #FF0000;
+}

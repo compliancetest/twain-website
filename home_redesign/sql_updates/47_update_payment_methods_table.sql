@@ -1,0 +1,1 @@
+ALTER TABLE `wp_organisations_payment_methods` ADD COLUMN `customer_reference` VARCHAR(100);
