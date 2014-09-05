@@ -19,7 +19,7 @@ function getCreateTicketErrors()
     $content = stripslashes_deep(strip_tags(trim($_POST['question'])));
     
     $suite_id = $_POST['suite_id'];
-    $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
+    $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
     $priority_id = $_POST['priority'];
     $category_id = $_POST['category'];
     
@@ -89,15 +89,15 @@ function createSupportTicket()
         wp_redirect("/my-support-tickets");
         exit;
     }
-    $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
+    $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
     if( ! $card_id ){
-        $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
+        $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 1", get_current_user_id() ) );
     }
     if( ! $card_id )
     {
-        $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
+        $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
         if( ! $card_id ){
-            $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
+            $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
         }
     }
     $data = array(
@@ -468,7 +468,7 @@ function changeTicketTerm()
     
     $newPriority = $ct_ticket_priority->getPriorityById($_POST['priority']);
     $oldPriority = $ct_ticket_priority->getPriorityById($ticket->priority_id);
-    
+
     $is_changed = false;
     //================================== Customer ==================================
     if($ticket->customer_id == $user_id)
@@ -566,7 +566,7 @@ function changeTicketTerm()
             ct_update_ticket_status($ticket->id, TICKET_STATUS_FEEDBACK, 'Ticket term has been changed.');            
             $ticket->status_id = TICKET_STATUS_FEEDBACK;
         }
-        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * get_ticket_price( $_POST['priority'] ), 'price' => get_ticket_price( $_POST['priority'] ), 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
+        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * $price, 'price' => $price, 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
     }
     
     $ticket = getTicketById($ticket->id);
@@ -830,17 +830,20 @@ function updateTicketHours($ticket_id)
     $ticketDetail = getTicketById($ticket_id);
     
     $priority = $ct_ticket_priority->getPriorityById($ticketDetail->priority_id);
-    
-    if($ticketDetail->price > 0)
-    {
+
+    $category = $ct_ticket_category->getCategoryById($ticketDetail->category_id);
+
+    $price = $category->has_fee ? get_ticket_price( $priority->id ) : 0;
+
+    if( $price ){
         $totalTime = $ticketDetail->ttpay;
-        $pendingTime = $ticketDetail->pending_amount / $priority->price;
-        
+        $pendingTime = $ticketDetail->pending_amount / $price;
+
         $totalFieldID = 'total_ticket_hours_' . strtolower($priority->priority);
         $pendingFieldID = 'pending_ticket_hours_' . strtolower($priority->priority);
-        
+
         $query = "UPDATE {$wpdb->prefix}users_extra SET `" . $totalFieldID . "` = `" . $totalFieldID . "` + " . $totalTime . ", `" . $pendingFieldID . "` = `" . $pendingFieldID . "` + " . $pendingTime . " WHERE userID=" . $ticketDetail->customer_id;
-        
+
         $wpdb->query($query);
     }
 }
