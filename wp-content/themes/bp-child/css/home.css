@@ -3,6 +3,13 @@
     margin: 0 auto;
 }
 
+.wrapper:after{
+    display:block;
+    content:"";
+    clear:both;
+    height:0;
+}
+
 .homepage{
     background: #f6f6f6 url("../images/bg/homepage.png") repeat 0 0;
 }
@@ -79,4 +86,58 @@ input.inactive_s{
 }
 .customer-types-section .tabs-header li:first-child{
     margin-left: 0;
+}
+
+.customers-carousel-container{
+    position:relative;
+    border-top:1px solid #999;
+    background:url("../images/bg/our-customers_lbg.jpg") no-repeat 0 0;
+}
+
+.customers-carousel-container .controls a{
+    position:absolute;
+    top:42px;
+    background:url("../images/customers-nav.png") no-repeat 0 0;
+    width:13px;
+    height:19px;
+    text-indent:-9999px;
+}
+
+.customers-carousel-container .controls a.prev-slide{
+    left:-31px;
+}
+.customers-carousel-container .controls a.next-slide{
+    right:-31px;
+    background-position:-13px;
+}
+
+.customers-carousel{
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    background:url("../images/bg/our-customers_rbg.jpg") no-repeat 100% 0;
+}
+
+.customer-item{
+    padding:0 40px 0 0;
+    float:left;
+    text-align:center;
+}
+
+.customer-item .customer-name{
+    color:#666;
+    font-size:12px;
+    font-weight:600;
+    padding:11px 0 0 0;
+}
+
+.customer-item .customer-logo{
+    border-bottom:2px solid #999;
+    height:99px;
+}
+
+.customer-item .customer-logo img{
+    margin:15px 0 15px 0;
+    max-height:69px;
 }

@@ -3,6 +3,7 @@
  * Template Name: New Homepage Design
  */
     wp_enqueue_style( 'home', get_stylesheet_directory_uri() . '/css/home.css', '', '0.1');
+    wp_enqueue_script( 'lemmon_slider', get_stylesheet_directory_uri() . '/js/lemmon-slider.js', array('jquery'), '0.2');
 
     get_header('home');
 ?>
@@ -57,9 +58,11 @@
                     <li><a href="#standart-issuers-panel"><span class="icon"></span>Standards Issuers: <em>Create Test Suites</em></a></li>
                 </ul>
                 <div class="tabs-content">
-                    <div id="software-vendors-panel">Content 1</div>
-                    <div id="organisations-panel">Content 2</div>
-                    <div id="standart-issuers-panel">Content 3</div>
+                    <div class="wrapper">
+                        <div id="software-vendors-panel">Content 1</div>
+                        <div id="organisations-panel">Content 2</div>
+                        <div id="standart-issuers-panel">Content 3</div>
+                    </div>
                 </div>
             </div>
 
@@ -93,5 +96,44 @@
                     <?php endwhile; ?>
                 <?php endif; ?>
             </div>
+
+
+            <div class="our-customers">
+                <div class="wrapper">
+                    <div class="box-title">Our Customers</div>
+                    <?php
+                        $args = array( 'post_type' => 'customer', 'posts_per_page' => -1);
+                        $loop = new WP_Query( $args );
+                    ?>
+                    <div class="customers-carousel-container">
+                        <div class="customers-carousel">
+                            <ul>
+                                <?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
+                                    <li class="customer-item">
+                                        <div class="customer-logo">
+                                            <?php the_post_thumbnail(); ?>
+                                        </div>
+                                        <div class="customer-name"><?php the_title(); ?></div>
+                                    </li>
+                                <?php endwhile; ?>
+                                <?php wp_reset_query(); ?>
+                            </ul>
+                        </div>
+                        <div class="controls">
+                            <a href="#" class="prev-slide">Prev Slide</a>
+                            <a href="#" class="next-slide">Next Slide</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     </div>
+<script>
+    jQuery(function($) {
+        jQuery('.customer-types-section').tabs();
+        jQuery('.customers-carousel').lemmonSlider({
+            'infinite' : false
+        });
+    });
+</script>
 <?php get_footer('home'); ?>

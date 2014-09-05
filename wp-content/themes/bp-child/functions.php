@@ -106,6 +106,8 @@ require_once(THE_FUNCTION . '/test-plan/controller.php');
 //Test Patterns
 require_once(THE_FUNCTION . '/test-patterns/test-patterns.php');
 
+//Customers
+require_once(THE_FUNCTION . '/customer/customer-post.php');
 
 //Manage Login URLs
 require_once(THE_FUNCTION . '/login-redirect.php');
