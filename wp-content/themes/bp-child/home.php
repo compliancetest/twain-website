@@ -47,7 +47,6 @@
         </div>
     </div>
 
-
     <div class="customer-types-section">
         <ul class="tabs-header">
             <li><a href="#software-vendors-panel"><span class="tab-icon software-vendors-icon"></span>Software Vendors: <em>Certify your Products</em></a></li>
