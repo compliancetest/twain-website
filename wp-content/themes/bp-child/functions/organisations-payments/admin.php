@@ -38,7 +38,7 @@ function ct_show_xero_payments_list()
                 </tr>
                 <?php foreach( $chargesObject->getOrganisationsList( true ) AS $organisation ):?>
                     <?php
-                    $orgObject = new CT_Organisation( $organisation->organisation_id );
+                        $orgObject = new CT_Organisation( $organisation->organisation_id );
                     ?>
                     <tr>
                         <th><?php echo $orgObject->organisation_name;?></th>
