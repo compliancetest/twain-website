@@ -27,7 +27,7 @@ function ct_show_xero_payments_list()
         </form>
     </div>
     <div class="wrap">
-        <a id="query_unpaid_invoices" href="#">Query Unpaid CC Invoices from Xero for specific organisations</a>
+        <a id="query_unpaid_invoices" href="#">Query Unpaid CC Invoices from Xero</a>
         <div class="clear"></div>
         <form id="query_unpaid_invoices_form" name="query_unpaid_invoices_form" action="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('query_unpaid_invoices')?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
