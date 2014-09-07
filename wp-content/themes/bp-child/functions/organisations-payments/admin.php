@@ -32,6 +32,10 @@ function ct_show_xero_payments_list()
         <form id="query_unpaid_invoices_form" name="query_unpaid_invoices_form" action="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('query_unpaid_invoices')?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">
                 <?php  $chargesObject = new CT_Charge();?>
+                <tr>
+                    <th>--All--</th>
+                    <td><input type="checkbox" name="org_id[]" value="all" class="org_id"/></td>
+                </tr>
                 <?php foreach( $chargesObject->getOrganisationsList( true ) AS $organisation ):?>
                     <?php
                     $orgObject = new CT_Organisation( $organisation->organisation_id );
@@ -52,8 +56,6 @@ function ct_show_xero_payments_list()
             </table>
         </form>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('query_unpaid_invoices')?>">Query Unpaid CC Invoices from Xero for ALL organisations</a>
-        <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=admin-actions&admin-action=<?php echo wp_create_nonce('pay-cc-invoices')?>">Pay CC Invoices via eWay</a>
         <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('update_paid_invoices')?>">Update Paid CC Invoices in Xero</a>
@@ -71,6 +73,13 @@ function ct_show_xero_payments_list()
                     var searchIDs = jQuery(".org_id:checkbox:checked").map(function(){
                         return jQuery(this).val();
                     }).get();
+                    if( jQuery.inArray( 'all', searchIDs ) !== -1 ){
+                        jQuery('.org_id').attr( 'checked', false );
+                        jQuery( this ).attr( 'checked', true );
+                        jQuery('#invoices_numbers').find('option')
+                            .remove()
+                            .end();
+                    }
                     jQuery.ajax({
                         type : 'post',
                         dataType: 'json',
@@ -132,7 +141,7 @@ function ct_process_xero_payment_admin_actions()
             $paymentsCounter = $nonApprovedPaymentsCounter = 0;
             $xero_payments = new CT_Payments();
             $xero_api = new CT_Xero();
-            if( ! isset( $_REQUEST['org_id'] ) || empty( $_REQUEST['org_id'] ) ){
+            if( ! isset( $_REQUEST['org_id'] ) || empty( $_REQUEST['org_id'] ) || $_REQUEST['org_id'][0] == 'all' ){
                 $chargesObject = new CT_Charge();
                 $_REQUEST['org_id'] = array();
                 foreach( $chargesObject->getOrganisationsList( true ) AS $org ){
@@ -143,8 +152,9 @@ function ct_process_xero_payment_admin_actions()
                 foreach( $_REQUEST['org_id'] AS $org_id ){
                     $results = $wpdb->get_results($wpdb->prepare("SELECT c.*,o.* FROM {$wpdb->prefix}organisations_charge AS c
                                                                   JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id
+                                                                  JOIN {$wpdb->prefix}organisations_payment_methods AS pm ON pm.id = c.payment_id
                                                                   LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_number = c.invoice_number
-                                                                  WHERE c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND c.organisation_id = %d AND p.invoice_number IS NULL
+                                                                  WHERE c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND pm.invoice_me = 0 AND c.organisation_id = %d AND p.invoice_number IS NULL
                                                                   GROUP BY c.invoice_number", $org_id));
                     if( $results ){
                         foreach( $results AS $result ){

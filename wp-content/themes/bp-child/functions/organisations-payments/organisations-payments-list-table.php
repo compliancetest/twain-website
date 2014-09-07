@@ -118,7 +118,9 @@ class CT_Organisations_Payments_Table extends WP_List_Table
       
         $query  = "SELECT * FROM {$wpdb->prefix}organisations_payments ";
         $query .= " ORDER BY $orderby $order ";
-        $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        if( ($paged-1) * $this->per_pages > 0 ){
+            $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        }
         
         $this->items = $wpdb->get_results($query);
       
