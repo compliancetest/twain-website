@@ -152,7 +152,7 @@
                         success: function(data) {
                             $('.loading').hide();
                             if (data == 'success') {                                
-                                msgObj.removeClass('error').addClass('success').html('Thanks for your registration. A confirmation email has been sent to your email acount. Please verify your email address using the link it contains.').fadeIn('fast');                             
+                                msgObj.removeClass('error').addClass('success').html('Thanks for your registration. A confirmation email has been sent to your email account. Please verify your email address using the link it contains.').fadeIn('fast');
                                 setTimeout(function(){
                                     location.reload();
                                 },4000);                                
