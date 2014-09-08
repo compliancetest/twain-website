@@ -3,19 +3,19 @@
     wp_enqueue_script( 'lemmon_slider', get_stylesheet_directory_uri() . '/js/lemmon-slider.js', array('jquery'), '0.2');
 
     get_header('home');
+
+
+    $home_settings = get_option('home-settings');
 ?>
 <div class="homepage">
     <div class="home-collage">
         <div class="wrapper">
             <div class="home-collage-content">
-                <h2 class="home-collage-title">B2B Interoperability</h2>
-                <h3 class="home-collage-subtitle">Made Easy</h3>
-                <p class="home-collage-text">ComplianceTest supports end-to-end automation of B2B processes by providing:</p>
-                <ul class="home-collage-features">
-                    <li>A community-centric approach to standards compliance</li>
-                    <li>An automated self-service test harness</li>
-                    <li>A register of certified products and service end-points</li>
-                </ul>
+                <?php
+                ?>
+                <h2 class="home-collage-title"><?php echo $home_settings['top_banner_title']; ?></h2>
+                <h3 class="home-collage-subtitle"><?php echo $home_settings['top_banner_subtitle']; ?></h3>
+                <?php echo $home_settings['top_banner_description']; ?>
             </div>
             <div class="home-collage-video">
                 <img src="<?php echo get_stylesheet_directory_uri() ?>/images/temp/video.jpg" alt=""/>
@@ -108,48 +108,19 @@
 
         <div class="getting-started-box">
             <div class="home-box-title">Getting Started</div>
-            <div class="getting-started-description">
-                <a href="#" class="action-btn red-btn">View User Guide</a>
-                <p><strong>ComplianceTest Provides a fully automated self-service testing framework.</strong><br> Just follow the steps below to get confidence that your product or service will be interoperable with others.</p>
+            <div class="getting-started-description clearfix">
+                <a href="<?php echo $home_settings['user_guide_link']; ?>" class="action-btn red-btn">View User Guide</a>
+                <?php echo $home_settings['getting_started_steps_description']; ?>
             </div>
             <ul class="getting-started-steps clearfix">
-                <li class="first-step">
-                    <div class="step-title">Register and Join Community</div>
-                    <div class="step-description">
-                        <p>It's FREE – get access to the community forum and a wealth of implementation information</p>
-                    </div>
-                </li>
-                <li class="step_2">
-                    <div class="step-title">Subscribe and Make Test Plan</div>
-                    <div class="step-description">
-                        <p>Pick a monthly subscription plan and then we will generate a test plan for you.</p>
-                    </div>
-                </li>
-                <li class="step_3">
-                    <div class="step-title">Setup Your Test Data</div>
-                    <div class="step-description">
-                        <p>Download our test data profiles and configure your system</p>
-                    </div>
-                </li>
-                <li class="step_4">
-                    <div class="step-title">Run Tests and Fix Issues</div>
-                    <div class="step-description">
-                        <p>Run through the test plan. See all your transactions and detailed error messages</p>
-                    </div>
-                </li>
-                <li class="step_5">
-                    <div class="step-title">Make a verified Claim</div>
-                    <div class="step-description">
-                        <p>Once everything works, make a claim.  We’ll generate a certificate with full audit trail.</p>
-                    </div>
-                </li>
-                <li class="last-step">
-                    <div class="step-title">Ongoing Testing of New Versions</div>
-                    <div class="step-description">
-                        <p>Don’t stop there!<br>
-                          Keep testing as you release new versions of your product or sevice</p>
-                    </div>
-                </li>
+                <?php for ($i = 1; $i <= 6; $i++): ?>
+                    <li class="step_<?php echo $i; ?>">
+                        <div class="step-title"><?php echo $home_settings['step_'. $i .'_title']; ?></div>
+                        <div class="step-description">
+                            <p><?php echo $home_settings['step_'. $i .'_description']; ?></p>
+                        </div>
+                    </li>
+                <?php endfor; ?>
             </ul>
         </div>
 

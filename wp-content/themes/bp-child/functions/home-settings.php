@@ -1,5 +1,7 @@
 <?php
 
+$getting_started_steps = array('Step 1','Step 2','Step 3','Step 4','Step 5','Step 6');
+
 add_action( 'admin_menu', 'add_home_settings_menu' );
 
 
@@ -9,6 +11,8 @@ function add_home_settings_menu() {
 
 
 function create_home_settings_page() {
+    global $getting_started_steps;
+    $home_settings = get_option('home-settings');
     if ( !current_user_can( 'manage_options' ) )  {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
@@ -97,8 +101,8 @@ function create_home_settings_page() {
             border-bottom: 1px solid #e1e1e1;
         }
     </style>
-    <form name="adminform" method="post" action="admin.php" onsubmit="return saveEmailTemplates()">
-        <input type="hidden" name="tab" id="email-tab-idx" value="0" />
+    <form name="adminform" method="post" action="admin.php" onsubmit="return saveHomeSettings()">
+        <input type="hidden" name="tab" id="home-settings-tab-idx" value="0" />
         <div class="wrap">
             <h2></h2>
             <br />
@@ -127,25 +131,25 @@ function create_home_settings_page() {
                                 <tr>
                                     <td class="tdlabel"><b>Title</b></td>
                                     <td>
-                                        <input type="text" size="50" name="top_banner_title" id="top_banner_title" value="<?php echo $top_banner_title; ?>" />
+                                        <input type="text" size="50" name="top_banner_title" id="top_banner_title" value="<?php echo $home_settings['top_banner_title']; ?>" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="tdlabel"><b>SubTitle</b></td>
                                     <td>
-                                        <input type="text" size="50" name="top_banner_subtitle" id="top_banner_subtitle" value="<?php echo $top_banner_subtitle; ?>" />
+                                        <input type="text" size="50" name="top_banner_subtitle" id="top_banner_subtitle" value="<?php echo $home_settings['top_banner_subtitle']; ?>" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="tdlabel"><b>Description</b></td>
                                     <td>
-                                        <?php wp_editor($top_banner_description, 'top_banner_description', array('media_buttons' => false,  'editor_height' => 150)) ?>
+                                        <?php wp_editor($home_settings['top_banner_description'], 'top_banner_description', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="tdlabel"><b>Video</b></td>
                                     <td>
-                                        <input type="text" size="50" name="top_banner_video" id="top_banner_video" value="<?php echo $top_banner_video; ?>" />
+                                        <input type="text" size="50" name="top_banner_video" id="top_banner_video" value="<?php echo $home_settings['top_banner_video']; ?>" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -177,34 +181,40 @@ function create_home_settings_page() {
 
                     <!-- Getting Started Steps-->
                     <div id="getting-started-steps">
-                        <?php $steps_count = 6; ?>
                         <h3>Getting Started Steps</h3>
                         <table class="widefat">
                             <tbody>
                                 <tr>
                                     <td class="tdlabel"><b>Description</b></td>
                                     <td>
-                                        <?php wp_editor($getting_started_steps_description, 'getting_started_steps_description', array('media_buttons' => false,  'editor_height' => 150)) ?>
+                                        <?php wp_editor($home_settings['getting_started_steps_description'], 'getting_started_steps_description', array('media_buttons' => false,  'editor_height' => 150)) ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>User Guide Link</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="user_guide_link" id="user_guide_link" value="<?php echo $home_settings['user_guide_link'] ?>" />
                                     </td>
                                 </tr>
                                 <?php $i = 0 ?>
-                                <?php for ($i = 1; $i <= $steps_count; $i++): ?>
+                                <?php foreach ($getting_started_steps as $step): ?>
+                                    <?php $i++; ?>
                                     <tr>
-                                        <th colspan="2">Step <?php echo $i; ?></th>
+                                        <th colspan="2"><?php echo $step; ?></th>
                                     </tr>
                                     <tr>
                                         <td class="tdlabel"><b>Title</b></td>
                                         <td>
-                                            <input type="text" size="50" name="step_<?php echo $i; ?>_title" id="step_<?php echo $i; ?>_title" value="<?php echo $step_1_title; ?>" />
+                                            <input type="text" size="50" name="step_<?php echo $i; ?>_title" id="step_<?php echo $i; ?>_title" value="<?php echo $home_settings['step_'. $i .'_title'] ?>" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="tdlabel"><b>Description</b></td>
                                         <td>
-                                            <input type="text" size="50" name="step_<?php echo $i; ?>_description" id="step_<?php echo $i; ?>_description" value="<?php echo $step_1_description; ?>" />
+                                            <input type="text" size="50" name="step_<?php echo $i; ?>_description" id="step_<?php echo $i; ?>_description" value="<?php echo $home_settings['step_'. $i .'_description'] ?>" />
                                         </td>
                                     </tr>
-                                <?php endfor; ?>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -218,11 +228,11 @@ function create_home_settings_page() {
         jQuery(document).ready(function(){
             jQuery('#home-settings').tabs({"active": "<?php echo isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 0?>"});
         });
-        function saveEmailTemplates()
+        function saveHomeSettings()
         {
             //Getting Actived Tabs
-            var idx = jQuery('#email-templates-nav li.ui-state-default').index(jQuery('#email-templates-nav li.ui-tabs-active').get(0));
-            jQuery('#email-tab-idx').val(idx);
+            var idx = jQuery('#home-settings-nav li.ui-state-default').index(jQuery('#home-settings-nav li.ui-tabs-active').get(0));
+            jQuery('#home-settings-tab-idx').val(idx);
             return true;
         }
 
@@ -232,3 +242,51 @@ function create_home_settings_page() {
 
 <? }
 
+add_action('admin_init', 'save_home_settings');
+function save_home_settings()
+{
+
+    if(isset($_POST['home-settings']) && $_POST['home-settings'] == 'Save Changes')
+    {
+        check_admin_referer('home-settings');
+
+
+        /*Top banner data*/
+        save_home_settings_option('home-settings','top_banner_title', $_POST['top_banner_title']);
+        save_home_settings_option('home-settings','top_banner_subtitle', $_POST['top_banner_subtitle']);
+        save_home_settings_option('home-settings','top_banner_description', stripslashes($_POST['top_banner_description']));
+        save_home_settings_option('home-settings','top_banner_video', stripslashes($_POST['top_banner_video']));
+
+        /*Getting Started data*/
+        save_home_settings_option('home-settings','getting_started_steps_description', stripslashes($_POST['getting_started_steps_description']));
+        save_home_settings_option('home-settings','user_guide_link', stripslashes($_POST['user_guide_link']));
+        for ($i = 1; $i <= 6; $i++){
+            save_home_settings_option('home-settings','step_'. $i . '_title', stripslashes($_POST['step_'. $i . '_title']));
+            save_home_settings_option('home-settings','step_'. $i . '_description', stripslashes($_POST['step_'. $i . '_description']));
+        }
+        wp_redirect("/wp-admin/admin.php?page=home-settings&tab=" . (!$_REQUEST['tab'] ? 0 : $_REQUEST['tab']));
+    }
+}
+
+
+function save_home_settings_option($option_name, $key, $value) {
+    $options = get_option( $option_name );
+
+    if ( !$options ) {
+        add_option( $option_name, array($key => $value) );
+    } else {
+        $options[$key] = $value;
+        update_option( $option_name, $options );
+    }
+}
+
+
+function get_home_settings_option($option_name, $key, $default = false) {
+    $options = get_option($option_name);
+
+    if ( $options ) {
+        return (array_key_exists( $key, $options )) ? $options[$key] : $default;
+    }
+
+    return $default;
+}

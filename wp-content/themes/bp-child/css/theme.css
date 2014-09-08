@@ -7525,13 +7525,13 @@ input.inactive_s{
     vertical-align: middle;
 }
 
-.getting-started-steps li.first-step:hover .step-description{
+.getting-started-steps li.step_1:hover .step-description{
     left: -31px;
     width: 227px;
     background: url("../images/home/gettin-started_1_active.png") no-repeat 0 0;
 }
 
-.getting-started-steps li.last-step:hover .step-description{
+.getting-started-steps li.step_6:hover .step-description{
     right: 33px;
     width: 246px;
     background: url("../images/home/gettin-started_last_active.png") no-repeat 0 0;
@@ -7545,10 +7545,10 @@ input.inactive_s{
     vertical-align: middle;
 }
 
-.getting-started-steps li.first-step .step-description p{
+.getting-started-steps li.step_1 .step-description p{
     padding-left: 12px;
 }
-.getting-started-steps li.last-step .step-description p{
+.getting-started-steps li.step_6 .step-description p{
     padding-right: 10px;
 }
 
@@ -7576,11 +7576,11 @@ input.inactive_s{
 
 
 
-.getting-started-steps li.first-step{
+.getting-started-steps li.step_1{
     background: url("../images/home/gettin-started_1_inactive.png") no-repeat 0 0;
     width: 169px;
 }
-.getting-started-steps li.last-step{
+.getting-started-steps li.step_6{
     background: url("../images/home/gettin-started_last_inactive.png") no-repeat 0 0;
     width: 162px;
 }
