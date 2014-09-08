@@ -317,7 +317,7 @@ $case->load();
                             <?php
                                 $suiteObj = new TestSuite();
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
-                                $testSuitesRoles = array( $case->testerRole );
+                                $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
                             ?>
                             <div class="grid_cell width20P left5P">
                                 <select class="select" id="tester-profile">
@@ -332,7 +332,8 @@ $case->load();
                                         <?php if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                             $isAllowed = false;
                                             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                                                $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
+                                                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
                                                     $isAllowed = true;
                                                 }
                                             }
@@ -344,10 +345,10 @@ $case->load();
                                             <option value="<?php echo $instance->id ?>">
                                                 <?php echo $instance->profile_name; ?>
                                                 <?php
-                                                if($instanceObj->Profile->Version)
+                                                if($pJSON->Profile->Version)
                                                 {
                                                     $version = array();
-                                                    foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                                    foreach(get_object_vars($pJSON->Profile->Version) as $k=>$v)
                                                     {
                                                         $version[] = $v;
                                                     }
