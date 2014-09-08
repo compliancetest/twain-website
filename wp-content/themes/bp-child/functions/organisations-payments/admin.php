@@ -130,9 +130,6 @@ function ct_process_xero_payment_admin_actions()
         $action = $_REQUEST['org-action'];
         if( wp_verify_nonce($action, 'query_unpaid_invoices') ){
             $paymentsCounter = $nonApprovedPaymentsCounter = 0;
-            $xero_payments = new CT_Payments();
-            $xero_api = new CT_Xero();
-
             if( ! isset( $_REQUEST['org_id'] ) || empty( $_REQUEST['org_id'] ) || $_REQUEST['org_id'][0] == 'all' ){
                 $chargesObject = new CT_Charge();
                 $_REQUEST['org_id'] = array();
@@ -153,6 +150,8 @@ function ct_process_xero_payment_admin_actions()
                             if( isset( $_REQUEST['invoices_numbers']) && !empty( $_REQUEST['invoices_numbers'] ) && $_REQUEST['invoices_numbers'] != $result->invoice_number ){
                                 continue;
                             }
+                            $xero_api = new CT_Xero();
+                            $xero_payments = new CT_Payments();
                             $invoiceData = $xero_api->getInvoice( $result->invoice_number );
                             //we add only Approved invoices to Payments table
                             if( isset( $invoiceData['Invoices']['Invoice']['Status'] ) && $invoiceData['Invoices']['Invoice']['Status'] == 'AUTHORISED' ){
