@@ -39,7 +39,7 @@ function ct_manage_invoices()
         $chargesObject = new CT_Charge();
     ?>
     <div class="wrap">
-        <a href="#" id="custom_invoices_show">Generate Invoices for specific organisations</a>
+        <a href="#" id="custom_invoices_show">Generate Invoices</a>
         <div class="clear"></div>
         <form id="charges_for_custom_org" name="charges_for_custom_org" action="<?php echo admin_url()?>admin.php?page=manage-charges&org-action=<?php echo wp_create_nonce( 'update-specific' );?>" method="post" style="display: none;">
             <table class="widefat" style="width: auto;">

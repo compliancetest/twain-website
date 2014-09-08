@@ -30,30 +30,24 @@ function ct_show_xero_payments_list()
         <a id="query_unpaid_invoices" href="#">Query Unpaid CC Invoices from Xero</a>
         <div class="clear"></div>
         <form id="query_unpaid_invoices_form" name="query_unpaid_invoices_form" action="<?php echo admin_url()?>admin.php?page=manage-organisations-payments&org-action=<?php echo wp_create_nonce('query_unpaid_invoices')?>" method="post" style="display: none;">
-            <table class="widefat" style="width: auto;">
-                <?php  $chargesObject = new CT_Charge();?>
-                <tr>
-                    <th>--All--</th>
-                    <td><input type="checkbox" name="org_id[]" value="all" class="org_id"/></td>
-                </tr>
-                <?php foreach( $chargesObject->getOrganisationsList( true ) AS $organisation ):?>
-                    <?php
-                        $orgObject = new CT_Organisation( $organisation->organisation_id );
-                    ?>
-                    <tr>
-                        <th><?php echo $orgObject->organisation_name;?></th>
-                        <td><input type="checkbox" name="org_id[]" value="<?php echo $organisation->organisation_id;?>" class="org_id"/></td>
-                    </tr>
-                <?php endforeach;?>
-                <tr class="invoices_tr" style="display: none;">
-                    <th>Invoices</th>
-                    <td>
-                        <select name="invoices_numbers" id="invoices_numbers">
-                        </select>
-                    <td>
-                </tr>
-                <tr><td colspan="2"><input type="submit" value="Generate" class="button button-primary" /></td></tr>
-            </table>
+                <select name="org_id[]" id="org_id">
+                    <?php  $chargesObject = new CT_Charge();?>
+                        <option value="all">--All--</option>
+                    <?php foreach( $chargesObject->getOrganisationsList( true ) AS $organisation ):?>
+                        <?php
+                            $orgObject = new CT_Organisation( $organisation->organisation_id );
+                        ?>
+                        <option value="<?php echo $organisation->organisation_id;?>"><?php echo $orgObject->organisation_name;?></option>
+                    <?php endforeach;?>
+                </select>
+                <div class="clear"></div>
+                <div class="invoices_tr" style="display: none;">
+                    <span>Invoices</span>
+                    <div class="clear"></div>
+                    <select name="invoices_numbers" id="invoices_numbers"></select>
+                </div>
+                <div class="clear"></div>
+                <input id="submit_all" type="submit" value="Generate" class="button button-primary" style="display: none;" />
         </form>
         <div class="clear"></div>
         <a href="<?php echo admin_url()?>admin.php?page=admin-actions&admin-action=<?php echo wp_create_nonce('pay-cc-invoices')?>">Pay CC Invoices via eWay</a>
@@ -67,24 +61,15 @@ function ct_show_xero_payments_list()
             jQuery('#query_unpaid_invoices').on('click', function(e){
                 e.preventDefault();
                 jQuery('#query_unpaid_invoices_form').toggle();
+                jQuery('#submit_all').toggle();
             });
-            jQuery('.org_id').on('change', function(){
-                if( jQuery('.org_id:checked').length ){
-                    var searchIDs = jQuery(".org_id:checkbox:checked").map(function(){
-                        return jQuery(this).val();
-                    }).get();
-                    if( jQuery.inArray( 'all', searchIDs ) !== -1 ){
-                        jQuery('.org_id').attr( 'checked', false );
-                        jQuery( this ).attr( 'checked', true );
-                        jQuery('#invoices_numbers').find('option')
-                            .remove()
-                            .end();
-                    }
+            jQuery('#org_id').on('change', function(){
+                if( jQuery('#org_id').val() !== 'all' ){
                     jQuery.ajax({
                         type : 'post',
                         dataType: 'json',
                         url: '/wp-admin/admin-ajax.php',
-                        data : { 'action' : 'get_invoices', 'org_id' : searchIDs },
+                        data : { 'action' : 'get_invoices', 'org_id' : jQuery('#org_id').val() },
                         success: function( data ){
                             jQuery('#invoices_numbers').find('option')
                                 .remove()
@@ -93,6 +78,11 @@ function ct_show_xero_payments_list()
                                 jQuery('#invoices_numbers').find('option')
                                     .remove()
                                     .end();
+                                jQuery('#invoices_numbers')
+                                    .append(jQuery("<option/>", {
+                                        value: '',
+                                        text: '-All-'
+                                    }));
                                 jQuery.each(data, function( key, value ) {
                                     jQuery('#invoices_numbers')
                                         .append(jQuery("<option/>", {
@@ -100,10 +90,10 @@ function ct_show_xero_payments_list()
                                             text: ( value.id )
                                         }));
                                 });
+                                jQuery('.invoices_tr').show();
                             }
                         }
                     });
-                    jQuery('.invoices_tr').show();
                 } else {
                     jQuery('#invoices_numbers').find('option')
                         .remove()
@@ -121,9 +111,10 @@ function get_invoices() {
     global $wpdb;
     $results = $wpdb->get_results($wpdb->prepare("SELECT c.invoice_number AS id FROM {$wpdb->prefix}organisations_charge AS c
                                                                   JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id
+                                                                  JOIN {$wpdb->prefix}organisations_payment_methods AS pm ON pm.id = c.payment_id
                                                                   LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_number = c.invoice_number
-                                                                  WHERE c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND o.invoice_me = 0 AND c.organisation_id IN( %d ) AND p.invoice_number IS NULL
-                                                                  GROUP BY c.invoice_number", implode(',', $_POST['org_id'])));
+                                                                  WHERE c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND pm.invoice_me = 0 AND c.organisation_id = %d AND p.invoice_number IS NULL
+                                                                  GROUP BY c.invoice_number", $_POST['org_id']));
     exit( json_encode( $results ) );
 }
 add_action("admin_init", "ct_process_xero_payment_admin_actions");
@@ -141,6 +132,7 @@ function ct_process_xero_payment_admin_actions()
             $paymentsCounter = $nonApprovedPaymentsCounter = 0;
             $xero_payments = new CT_Payments();
             $xero_api = new CT_Xero();
+
             if( ! isset( $_REQUEST['org_id'] ) || empty( $_REQUEST['org_id'] ) || $_REQUEST['org_id'][0] == 'all' ){
                 $chargesObject = new CT_Charge();
                 $_REQUEST['org_id'] = array();
@@ -158,7 +150,7 @@ function ct_process_xero_payment_admin_actions()
                                                                   GROUP BY c.invoice_number", $org_id));
                     if( $results ){
                         foreach( $results AS $result ){
-                            if( isset( $_REQUEST['invoices_numbers']) && $_REQUEST['invoices_numbers'] != $result->invoice_number ){
+                            if( isset( $_REQUEST['invoices_numbers']) && !empty( $_REQUEST['invoices_numbers'] ) && $_REQUEST['invoices_numbers'] != $result->invoice_number ){
                                 continue;
                             }
                             $invoiceData = $xero_api->getInvoice( $result->invoice_number );
