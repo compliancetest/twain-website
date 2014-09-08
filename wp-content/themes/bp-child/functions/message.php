@@ -427,7 +427,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
-    $testSuitesRoles = array( $case->harnessRole );
+    $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
     foreach($profileInstances as $instance){
         $pJSON = json_decode(base64_decode($instance->content));
         $profileTypeName = $pJSON->Profile->Type;
@@ -437,7 +437,8 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
         if( ! empty( $testSuitesRolesProfilesTypes ) ){
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
+                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -478,7 +479,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
-    $testSuitesRoles = array( $case->testerRole );
+    $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
     foreach($profileInstances as $instance){
         $pJSON = json_decode(base64_decode($instance->content));
         $profileTypeName = $pJSON->Profile->Type;
@@ -488,7 +489,8 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
         if( ! empty( $testSuitesRolesProfilesTypes ) ){
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
+                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -719,7 +721,7 @@ function showTriggerMessageBox()
                                 $case->load();
                                 $suiteObj = new TestSuite();
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
-                                $testSuitesRoles = array( $case->harnessRole );
+                                $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
                                 foreach($profileInstances as $instance){
                                     $pJSON = json_decode(base64_decode($instance->content));
                                     $profileTypeName = $pJSON->Profile->Type;
@@ -729,7 +731,8 @@ function showTriggerMessageBox()
                                     if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                         $isAllowed = false;
                                         foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                            if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                                            $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
+                                            if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
                                                 $isAllowed = true;
                                             }
                                         }
@@ -751,7 +754,7 @@ function showTriggerMessageBox()
                                 <div class="clear"></div>
                             </div>
                             <?php
-                                $testSuitesRoles = array( $case->testerRole );
+                                $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
                                 foreach($profileInstances as $instance){
                                     $pJSON = json_decode(base64_decode($instance->content));
                                     $profileTypeName = $pJSON->Profile->Type;
@@ -761,7 +764,8 @@ function showTriggerMessageBox()
                                     if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                         $isAllowed = false;
                                         foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                            if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                                            $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
+                                            if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
                                                 $isAllowed = true;
                                             }
                                         }
