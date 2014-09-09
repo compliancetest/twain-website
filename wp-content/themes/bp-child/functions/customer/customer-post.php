@@ -29,8 +29,8 @@ function register_customer_post_type() {
 // Hook into the 'init' action
 add_action( 'init', 'register_customer_post_type', 0 );
 
-add_filter('manage_posts_columns', 'customers_columns', 5);
-add_action('manage_posts_custom_column', 'customers_custom_columns', 5, 2);
+add_filter('manage_customer_posts_columns', 'customers_columns', 5);
+add_action('manage_customer_posts_custom_column', 'customers_custom_columns', 5, 2);
 // ADD NEW COLUMN
 function customers_columns($defaults) {
     $defaults['featured_image'] = 'Customer Logo';
