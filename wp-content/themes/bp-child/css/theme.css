@@ -7202,7 +7202,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: block;
     content: "";
     float: left;
-    background:url("../images/home/blue-arrow.png") no-repeat 0 0;
+    background:url("../images/home-sprite.png") no-repeat 0 -617px;
     width: 17px;
     height: 17px;
     margin: 0 4px 0 6px;
@@ -7240,7 +7240,7 @@ input.inactive_s{
 }
 
 #searchsubmit{
-    background: #4b709a url("../images/home/search-submit.png") no-repeat 0 0;
+    background: #4b709a url("../images/home-sprite.png") no-repeat -187px -575px;
     width: 61px !important;
     height: 54px;
     -moz-border-radius: 30px 30px 30px 30px;
@@ -7276,8 +7276,11 @@ input.inactive_s{
     border-bottom: 1px solid #cecece;
 }
 
-.customer-types-section .tabs-content .ui-tabs-panel{
+.customer-types-section .tabs-content{
     padding: 20px 0;
+}
+.customer-types-section .tabs-content .ui-tabs-panel{
+    padding: 0;
 }
 
 .customer-types-section .tabs-header{
@@ -7324,7 +7327,7 @@ input.inactive_s{
 }
 
 .customer-types-section .tabs-header .tab-icon{
-    background: url("../images/home/tab-icons.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 0;
     display: block;
     width: 67px;
     height: 67px;
@@ -7334,13 +7337,13 @@ input.inactive_s{
     margin: 0 0 0 -34px;
 }
 
-.customer-types-section .tabs-header .software-vendors-icon{background-position: 0 0;}
-.customer-types-section .tabs-header .organisations-icon{background-position: -67px 0;}
-.customer-types-section .tabs-header .standard-issuers-icon{background-position: -134px 0;}
+.customer-types-section .tabs-header .software-vendors-icon{background-position: 0 -441px;}
+.customer-types-section .tabs-header .organisations-icon{background-position: -67px -441px;}
+.customer-types-section .tabs-header .standard-issuers-icon{background-position: -134px -441px;}
 
-.customer-types-section .tabs-header .ui-tabs-active .software-vendors-icon{background-position: 0 -67px;}
-.customer-types-section .tabs-header .ui-tabs-active .organisations-icon{background-position: -67px -67px;}
-.customer-types-section .tabs-header .ui-tabs-active .standard-issuers-icon{background-position: -134px -67px;}
+.customer-types-section .tabs-header .ui-tabs-active .software-vendors-icon{background-position: 0 -508px;}
+.customer-types-section .tabs-header .ui-tabs-active .organisations-icon{background-position: -67px -508px;}
+.customer-types-section .tabs-header .ui-tabs-active .standard-issuers-icon{background-position: -134px -508px;}
 
 .customer-types-section .tabs-header li.ui-tabs-active a{
     background: #fff;
@@ -7381,7 +7384,7 @@ input.inactive_s{
 }
 
 .tab-content-text .view-sample-btn{
-    background: url("../images/home/view-sample-btn.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 -575px;
     width: 187px;
     height: 42px;
     display: inline-block;
@@ -7404,7 +7407,7 @@ input.inactive_s{
 .customers-carousel-container .controls a{
     position:absolute;
     top:42px;
-    background:url("../images/customers-nav.png") no-repeat 0 0;
+    background:url("../images/home-sprite.png") no-repeat 0 -646px;
     width:13px;
     height:19px;
     text-indent:-9999px;
@@ -7415,7 +7418,7 @@ input.inactive_s{
 }
 .customers-carousel-container .controls a.next-slide{
     right:-31px;
-    background-position:-13px;
+    background-position:-13px -646px;
 }
 
 .customers-carousel{
@@ -7484,7 +7487,7 @@ input.inactive_s{
     float: left;
     height: 62px;
     width: 167px;
-    background: url("../images/home/gettin-started_inactive.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 -317px;
     margin: 0;
     padding: 0;
     cursor: default;
@@ -7519,22 +7522,31 @@ input.inactive_s{
     left: -47px;
     width: 247px;
     height: 85px;
-    background: url("../images/home/gettin-started_active.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 -85px;
     z-index: 100;
     display: table-cell;
     vertical-align: middle;
 }
 
+.getting-started-steps li.step_1{
+    background: url("../images/home-sprite.png") no-repeat 0 -255px;
+    width: 169px;
+}
+.getting-started-steps li.step_6{
+    background: url("../images/home-sprite.png") no-repeat 0 -379px;
+    width: 162px;
+}
+
 .getting-started-steps li.step_1:hover .step-description{
     left: -31px;
     width: 227px;
-    background: url("../images/home/gettin-started_1_active.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 0;
 }
 
 .getting-started-steps li.step_6:hover .step-description{
     right: 33px;
     width: 246px;
-    background: url("../images/home/gettin-started_last_active.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 -170px;
 }
 
 .getting-started-steps li .step-description p{
@@ -7572,19 +7584,6 @@ input.inactive_s{
     -ms-transform: rotate(4deg) scale(1) skew(1deg) translate(-1px);
 }
 
-
-
-
-
-.getting-started-steps li.step_1{
-    background: url("../images/home/gettin-started_1_inactive.png") no-repeat 0 0;
-    width: 169px;
-}
-.getting-started-steps li.step_6{
-    background: url("../images/home/gettin-started_last_inactive.png") no-repeat 0 0;
-    width: 162px;
-}
-
 .our-communities-box{
     margin: 0 0 46px 0;
 }
@@ -7598,7 +7597,7 @@ input.inactive_s{
     padding: 7px 20px 15px 20px;
 }
 
-.communities-list li{
+.communities-list .community-item{
     clear: both;
     display: none;
 }
@@ -7629,7 +7628,16 @@ input.inactive_s{
 }
 
 .communities-list .community-description p{
-    margin: 0;
+    margin: 0 0 2px 0;
+}
+
+.communities-list .community-description ul{
+    line-height: 16px;
+    list-style-image: none;
+    list-style-position: outside !important;
+    list-style-type: disc;
+    margin: 0 0 0 20px;
+    padding: 8px;
 }
 
 .community-pager{
@@ -7640,7 +7648,7 @@ input.inactive_s{
 }
 .community-pager li{
     display: inline-block;
-    background: url("../images/communities-slider-nav.png") no-repeat 0 0;
+    background: url("../images/home-sprite.png") no-repeat 0 -634px;
     width: 12px;
     height: 12px;
     cursor: pointer;
@@ -7652,7 +7660,7 @@ input.inactive_s{
     left: 0;
 }
 .community-pager li.active{
-    background-position: -12px 0;
+    background-position: -12px -634px;
 }
 
 .homepage .red-btn{

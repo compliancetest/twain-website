@@ -5,7 +5,7 @@ jQuery(function($) {
     });
 
     /*---Community slider---*/
-    $('.communities-list li:first-child').show();
+    $('.communities-list .community-item:first-child').show();
     $('.community-pager li:first-child').addClass('active');
 
 
@@ -14,8 +14,7 @@ jQuery(function($) {
         var active_community = $(this).index();
         console.log(active_community);
         $(this).addClass('active');
-        $('.communities-list li').hide();
-        $('.communities-list li:eq('+ active_community +')').show();
+        $('.communities-list .community-item').hide();
+        $('.communities-list .community-item:eq('+ active_community +')').show();
     });
-
 });

@@ -101,6 +101,33 @@ function create_home_settings_page() {
             border-bottom: 1px solid #e1e1e1;
         }
     </style>
+    <script>
+        jQuery(document).ready(function($){
+            var _custom_media = true,
+                _orig_send_attachment = wp.media.editor.send.attachment;
+
+            $('#customer-types-tabs .button').click(function(e) {
+                var send_attachment_bkp = wp.media.editor.send.attachment;
+                var button = $(this);
+                var id = button.attr('id').replace('_button', '');
+                _custom_media = true;
+                wp.media.editor.send.attachment = function(props, attachment){
+                    if ( _custom_media ) {
+                        $("#"+id).val(attachment.url);
+                    } else {
+                        return _orig_send_attachment.apply( this, [props, attachment] );
+                    };
+                }
+
+                wp.media.editor.open(button);
+                return false;
+            });
+
+            $('.add_media').on('click', function(){
+                _custom_media = false;
+            });
+        });
+    </script>
     <form name="adminform" method="post" action="admin.php" onsubmit="return saveHomeSettings()">
         <input type="hidden" name="tab" id="home-settings-tab-idx" value="0" />
         <div class="wrap">
@@ -163,15 +190,117 @@ function create_home_settings_page() {
                         <table class="widefat">
                             <tbody>
                                 <tr>
+                                    <th colspan="2">Tab 1</th>
+                                </tr>
+                                <tr>
                                     <td class="tdlabel"><b>Title</b></td>
                                     <td>
-                                        <input type="text" size="50" name="tab_title" id="tab_title" value="<?php echo $tab_title; ?>" />
+                                        <input type="text" size="50" name="tab_1_title" id="tab_1_title" value="<?php echo $home_settings['tab_1_title']; ?>" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="tdlabel"><b>SubTitle</b></td>
                                     <td>
-                                        <?php wp_editor($tab_description, 'tab_description', array('media_buttons' => false,  'editor_height' => 150)) ?>
+                                        <input type="text" size="50" name="tab_1_subtitle" id="tab_1_subtitle" value="<?php echo $home_settings['tab_1_subtitle']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Content</b></td>
+                                    <td>
+                                        <?php wp_editor($home_settings['tab_1_content'], 'tab_1_content', array('media_buttons' => true,  'editor_height' => 150)) ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Button link</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_1_button_link" id="tab_1_button_link" value="<?php echo $home_settings['tab_1_button_link']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Image</b></td>
+                                    <td>
+                                        <div class="uploader wp-media-buttons">
+                                            <input type="text" size="50" name="tab_1_image" id="tab_1_image" value="<?php echo $home_settings['tab_3_image']; ?>" />
+                                            <span class="add_media">
+                                                <a title="Add Media" class="button insert-media" id="tab_1_image_button" href="#"><span class="wp-media-buttons-icon"></span> Upload Image</a>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Tab 2</th>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Title</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_2_title" id="tab_2_title" value="<?php echo $home_settings['tab_2_title']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>SubTitle</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_2_subtitle" id="tab_2_subtitle" value="<?php echo $home_settings['tab_2_subtitle']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Content</b></td>
+                                    <td>
+                                        <?php wp_editor($home_settings['tab_2_content'], 'tab_2_content', array('media_buttons' => true,  'editor_height' => 150)) ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Button link</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_2_button_link" id="tab_2_button_link" value="<?php echo $home_settings['tab_2_button_link']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Image</b></td>
+                                    <td>
+                                        <div class="uploader wp-media-buttons">
+                                            <input type="text" size="50" name="tab_2_image" id="tab_2_image" value="<?php echo $home_settings['tab_2_image']; ?>" />
+                                            <span class="add_media">
+                                                <a title="Add Media" class="button insert-media" id="tab_2_image_button" href="#"><span class="wp-media-buttons-icon"></span> Upload Image</a>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Tab 3</th>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Title</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_3_title" id="tab_3_title" value="<?php echo $home_settings['tab_3_title']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>SubTitle</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_3_subtitle" id="tab_3_subtitle" value="<?php echo $home_settings['tab_3_subtitle']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Content</b></td>
+                                    <td>
+                                        <?php wp_editor($home_settings['tab_3_content'], 'tab_3_content', array('media_buttons' => true,  'editor_height' => 150)) ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Button link</b></td>
+                                    <td>
+                                        <input type="text" size="50" name="tab_3_button_link" id="tab_3_button_link" value="<?php echo $home_settings['tab_3_button_link']; ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdlabel"><b>Image</b></td>
+                                    <td>
+                                        <div class="uploader wp-media-buttons">
+                                            <input type="text" size="50" name="tab_3_image" id="tab_3_image" value="<?php echo $home_settings['tab_3_image']; ?>" />
+                                            <span class="add_media">
+                                                <a title="Add Media" class="button insert-media" id="tab_3_image_button" href="#"><span class="wp-media-buttons-icon"></span> Upload Image</a>
+                                            </span>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -263,6 +392,14 @@ function save_home_settings()
         for ($i = 1; $i <= 6; $i++){
             save_home_settings_option('home-settings','step_'. $i . '_title', stripslashes($_POST['step_'. $i . '_title']));
             save_home_settings_option('home-settings','step_'. $i . '_description', stripslashes($_POST['step_'. $i . '_description']));
+        }
+
+        for ($i = 1; $i <= 3; $i++){
+            save_home_settings_option('home-settings','tab_'. $i . '_title', stripslashes($_POST['tab_'. $i . '_title']));
+            save_home_settings_option('home-settings','tab_'. $i . '_subtitle', stripslashes($_POST['tab_'. $i . '_subtitle']));
+            save_home_settings_option('home-settings','tab_'. $i . '_content', stripslashes($_POST['tab_'. $i . '_content']));
+            save_home_settings_option('home-settings','tab_'. $i . '_image', stripslashes($_POST['tab_'. $i . '_image']));
+            save_home_settings_option('home-settings','tab_'. $i . '_button_link', stripslashes($_POST['tab_'. $i . '_button_link']));
         }
         wp_redirect("/wp-admin/admin.php?page=home-settings&tab=" . (!$_REQUEST['tab'] ? 0 : $_REQUEST['tab']));
     }
