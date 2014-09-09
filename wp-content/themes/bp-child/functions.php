@@ -170,7 +170,10 @@ require_once(THE_FUNCTION . '/organisations-payments/admin.php');
 //Process Compliancetest Admin Actions 
 require_once(THE_FUNCTION . '/admin/index.php');
 
-/* 
+//Process Compliancetest Admin Actions
+require_once(THE_FUNCTION . '/home-settings.php');
+
+/*
  * Loads the Options Panel
  *
  * If you're loading from a child theme use stylesheet_directory
