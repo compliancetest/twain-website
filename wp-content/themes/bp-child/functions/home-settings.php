@@ -369,7 +369,7 @@ function create_home_settings_page() {
 
 
 
-<? }
+<?php }
 
 add_action('admin_init', 'save_home_settings');
 function save_home_settings()
