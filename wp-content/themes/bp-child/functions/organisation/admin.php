@@ -121,6 +121,20 @@ function ct_show_new_organisation()
                     <th>Email Address</th>
                     <td><input type="text" name="contact_email" id="contact_email" value="<?php echo $data['contact_email']?>"/></td>
                 </tr>
+
+                <tr>
+                    <th>Secondary Billing Contact First Name</th>
+                    <td><input type="text" name="secondary_contact_first_name" id="secondary_contact_first_name" value="<?php echo $data['secondary_contact_first_name']?>"/></td>
+                </tr>
+                <tr>
+                    <th>Secondary Billing Contact Last Name</th>
+                    <td><input type="text" name="secondary_contact_last_name" id="secondary_contact_last_name" value="<?php echo $data['secondary_contact_last_name']?>"/></td>
+                </tr>
+                <tr>
+                    <th>Secondary Billing Contact Email Address</th>
+                    <td><input type="text" name="secondary_contact_email" id="secondary_contact_email" value="<?php echo $data['secondary_contact_email']?>"/></td>
+                </tr>
+
                 <tr>    
                     <th>ABN</th>
                     <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>"/></td>
