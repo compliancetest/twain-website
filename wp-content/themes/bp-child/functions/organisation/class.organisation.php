@@ -10,7 +10,10 @@ class CT_Organisation
                             
                             'contact_first_name', 
                             'contact_last_name', 
-                            'contact_email', 
+                            'contact_email',
+                            'secondary_contact_first_name',
+                            'secondary_contact_last_name',
+                            'secondary_contact_email',
                             
                             'abn', 
                             
@@ -41,6 +44,10 @@ class CT_Organisation
     var $contact_first_name = '';
     var $contact_last_name = '';
     var $contact_email = '';
+
+    public $secondary_contact_first_name = '';
+    public $secondary_contact_last_name = '';
+    public $secondary_contact_email = '';
     
     var $abn = '';
     

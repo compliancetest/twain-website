@@ -52,6 +52,29 @@ if(!defined('ABSPATH')) {
                 </div>
                 <div class="grid-row grid-row-complex">
                     <div class="grid-cell width30P">
+                        <label>Secondary Billing Contact</label>
+                    </div>
+                    <div class="grid-cell width70P">
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>First Name</label></div>
+                            <div data-name="secondary_contact_first_name" data-value="<?php echo $organisation->secondary_contact_first_name;?>" class="grid-cell in_input"><?php echo $organisation->secondary_contact_first_name;?></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Last Name</label></div>
+                            <div data-name="secondary_contact_last_name" data-value="<?php echo $organisation->secondary_contact_last_name;?>" class="grid-cell in_input"><?php echo $organisation->secondary_contact_last_name;?></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Email</label></div>
+                            <div data-name="secondary_contact_email" data-value="<?php echo $organisation->secondary_contact_email;?>" class="grid-cell in_input"><?php echo $organisation->secondary_contact_email;?></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="grid-row grid-row-complex">
+                    <div class="grid-cell width30P">
                         <label>Billing Address</label>
                     </div>
                     <div class="grid-cell width70P">
@@ -121,6 +144,19 @@ if(!defined('ABSPATH')) {
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Number</label></div>
                             <div data-name="phonenumber" data-value="<?php echo $organisation->phonenumber;?>" class="grid-cell in_input"><?php echo $organisation->phonenumber;?></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="grid-row grid-row-complex">
+                    <div class="grid-cell width30P">
+                        <label>ABN</label>
+                    </div>
+                    <div class="grid-cell width70P">
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>ABN Number</label></div>
+                            <div data-name="abn" data-value="<?php echo $organisation->abn;?>" class="grid-cell in_input"><?php echo $organisation->abn;?></div>
                             <div class="clear"></div>
                         </div>
                     </div>
