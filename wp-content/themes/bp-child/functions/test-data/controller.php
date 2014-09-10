@@ -341,10 +341,6 @@ function saveProfileInstance($action)
     $profile_meta = getProfileMetaData($jsonObject);
     foreach ($profile_meta as $meta_key => $meta_value) {
         if( is_array( $instance_id ) || is_array( $meta_key ) || is_array( $meta_value ) ){
-            error_log( 'Wrong data passed: ' );
-            error_log( serialize( $instance_id ) );
-            error_log( serialize( $meta_key ) );
-            error_log( serialize( $meta_value ) );
             continue;
         }
         $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
