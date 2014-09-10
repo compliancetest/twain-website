@@ -162,7 +162,9 @@ class CT_Organisation_Subscriptions_List_Table extends WP_List_Table
             $query .= $wpdb->prepare(" AND os.status=%s", $_REQUEST['filter_status']);
         
         $query .= " ORDER BY $orderby $order ";
-        $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        if( ( $paged - 1 ) * $this->per_pages > 0 ){
+            $query .= " LIMIT " . ($paged-1) * $this->per_pages .  ", {$this->per_pages} ";
+        }
         
         $this->items = $wpdb->get_results($query);
       
