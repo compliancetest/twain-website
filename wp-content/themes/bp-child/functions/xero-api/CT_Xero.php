@@ -154,6 +154,15 @@ class CT_Xero {
                                 )
                             )
         );
+        if( ! empty( $contactData['secondary_contact_first_name']) && ! empty( $contactData['secondary_contact_last_name'] ) && ! empty( $contactData['secondary_contact_email'] ) ){
+            $xeroData['ContactPersons']['ContactPerson'] = array(
+                'FirstName'        => $contactData['secondary_contact_first_name'],
+                'LastName'         => $contactData['secondary_contact_last_name'],
+                'EmailAddress'     => $contactData['secondary_contact_email'],
+                'IncludeInEmails'  => true
+            );
+
+        }
         if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
         $this->array2xml( $xeroData, $xml);
         $xml = '<Contacts>'.str_replace('<?xml version="1.0"?>', '', $xml->asXML()).'</Contacts>';
