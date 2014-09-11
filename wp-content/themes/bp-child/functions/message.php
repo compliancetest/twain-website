@@ -304,7 +304,7 @@ function getCaseTemplatesAndProfiles()
     $user_id = get_current_user_id();
     $suite_id = $_POST['suite_id'];
     $case_id = $_POST['case_id'];
-    
+
     $query = $wpdb->prepare("SELECT suite_id FROM " . $wpdb->prefix . "users_subscriptions WHERE user_id=%d AND suite_id=%d AND `status`='Active'", $user_id, $suite_id);
     $suite_id = $wpdb->get_var($query);
     
@@ -446,6 +446,12 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
                 continue;
             }
         }
+        if( isset( $_POST['show_my'] ) && $_POST['show_my'] == 'true' ){
+            error_log( $instance->creator_id, get_current_user_id() );
+            if( $instance->creator_id != get_current_user_id() ){
+                continue;
+            }
+        }
         $html .= _getProfileRow($instance, 'harness_profile', $defaults);
     }
         
@@ -495,6 +501,11 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
                 }
             }
             if( ! $isAllowed ) {
+                continue;
+            }
+        }
+        if( isset( $_POST['show_my'] ) && $_POST['show_my'] == 'true' ){
+            if( $instance->creator_id != get_current_user_id() ){
                 continue;
             }
         }
@@ -550,7 +561,7 @@ function _getTesterAndHarnessProfileInstances($case_id, $user_id)
 
 function showTriggerMessageBox()
 {
-    global $CPRest;
+    global $CPRest, $wpdb;
     
     $user_id = get_current_user_id();
     
@@ -657,6 +668,8 @@ function showTriggerMessageBox()
             $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);*/
             
             $profileInstances = _getTesterAndHarnessProfileInstances($current_case_id, $user_id);
+
+            $is_checked_by_default = $wpdb->get_var( $wpdb->prepare( "SELECT gateway_id FROM wp_users_subscriptions WHERE user_id = %d AND suite_id = %d ", get_current_user_id(), $current_suite_id ) );
             
         ?>
         <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">
@@ -705,7 +718,14 @@ function showTriggerMessageBox()
                                     </select>
                                 </div>                    
                                 <div class="clear"></div>
-                            </div> 
+                            </div>
+                            <div class="field-row">
+                                <div class="grid-cell width250">
+                                    <input type="checkbox" name="show_my" id="show_my" <?php if( $is_checked_by_default ):?> checked="checked"<?php endif;?>>
+                                    <span>Show only my profiles</span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
                         </div>                         
                         <div class="harness-profiles-section">
                             <h5>Harness Profiles</h5>
@@ -740,6 +760,11 @@ function showTriggerMessageBox()
                                             continue;
                                         }
                                     }
+                                    if( $is_checked_by_default ){
+                                        if( $instance->creator_id != get_current_user_id() ){
+                                            continue;
+                                        }
+                                    }
                                     echo _getProfileRow($instance, 'harness_profile', $current_harness_profile_id);
                                 } 
                             ?>
@@ -770,6 +795,11 @@ function showTriggerMessageBox()
                                             }
                                         }
                                         if( ! $isAllowed ) {
+                                            continue;
+                                        }
+                                    }
+                                    if( $is_checked_by_default ){
+                                        if( $instance->creator_id != get_current_user_id() ){
                                             continue;
                                         }
                                     }

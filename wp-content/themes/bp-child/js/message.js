@@ -97,15 +97,16 @@ jQuery(document).ready(function(){
     /**
     * Update Message Templates When Test Case is changed
     */
-    jQuery('body').on('change', '#tm-test-case', function(){
-        var case_id = this.value;
+    jQuery('body').on('change', '#tm-test-case, #show_my', function(){
+        var case_id = jQuery('#tm-test-case').val();
         var suite_id = jQuery('#tm-test-suite').val();
+        var show_my_profiles = jQuery('#show_my').is(':checked');
         jQuery('#trigger-message-box .loading-with-text b').html('LOADING DATA');
         jQuery('#trigger-message-box .loading-with-text').show();
         jQuery('#trigger-message-box .popup-box-content .message').fadeOut('fast');
         jQuery.ajax({
             url: '/',
-            data: {'ct-message-action': 'get-case-templates-and-profiles', 'suite_id': suite_id, 'case_id': case_id},
+            data: {'ct-message-action': 'get-case-templates-and-profiles', 'suite_id': suite_id, 'case_id': case_id, 'show_my': show_my_profiles },
             type: 'post',
             dataType: 'xml',
             complete: function(){
