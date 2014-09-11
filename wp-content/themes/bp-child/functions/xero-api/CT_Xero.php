@@ -174,7 +174,6 @@ class CT_Xero {
         if ( $this->xero->response['code'] == 200 ) {
             return $this->responseToArray();
         }
-        var_dump($this->xero->response['response']);die;
         return 'Xero Validation Error';
     }
 
