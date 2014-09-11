@@ -387,10 +387,10 @@ $case->load();
                                         <option value="<?php echo $instance->id?>">
                                             <?php echo $instance->profile_name; ?>
                                             <?php
-                                            if($instanceObj->Profile->Version)
+                                            if($pJSON->Profile->Version)
                                             {
                                                 $version = array();
-                                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                                foreach(get_object_vars($pJSON->Profile->Version) as $k=>$v)
                                                 {
                                                     $version[] = $v;
                                                 }
