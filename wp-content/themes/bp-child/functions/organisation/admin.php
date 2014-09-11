@@ -107,6 +107,10 @@ function ct_show_new_organisation()
                     </td>
                 </tr>
                 <tr>
+                    <th>ABN</th>
+                    <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>"/></td>
+                </tr>
+                <tr>
                     <td colspan="2"><b>Primary Contact</b></td>
                 </tr>
                 <tr>    
@@ -121,24 +125,22 @@ function ct_show_new_organisation()
                     <th>Email Address</th>
                     <td><input type="text" name="contact_email" id="contact_email" value="<?php echo $data['contact_email']?>"/></td>
                 </tr>
-
                 <tr>
-                    <th>Secondary Billing Contact First Name</th>
+                    <td colspan="2"><b>Secondary Contact</b></td>
+                </tr>
+                <tr>
+                    <th>First Name</th>
                     <td><input type="text" name="secondary_contact_first_name" id="secondary_contact_first_name" value="<?php echo $data['secondary_contact_first_name']?>"/></td>
                 </tr>
                 <tr>
-                    <th>Secondary Billing Contact Last Name</th>
+                    <th>Last Name</th>
                     <td><input type="text" name="secondary_contact_last_name" id="secondary_contact_last_name" value="<?php echo $data['secondary_contact_last_name']?>"/></td>
                 </tr>
                 <tr>
-                    <th>Secondary Billing Contact Email Address</th>
+                    <th>Email Address</th>
                     <td><input type="text" name="secondary_contact_email" id="secondary_contact_email" value="<?php echo $data['secondary_contact_email']?>"/></td>
                 </tr>
 
-                <tr>    
-                    <th>ABN</th>
-                    <td><input type="text" name="abn" id="abn" value="<?php echo $data['abn']?>"/></td>
-                </tr>
                 <tr><td colspan="2"><b>Billing Address</b></td></tr>
                 <tr>    
                     <th>Attention</th>
