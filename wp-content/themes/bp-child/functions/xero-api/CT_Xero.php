@@ -162,6 +162,10 @@ class CT_Xero {
                 'IncludeInEmails'  => true
             );
 
+        } else {
+            $xeroData['ContactPersons']['ContactPerson'] = array(
+                'FirstName'        => '',
+            );
         }
         if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
         $this->array2xml( $xeroData, $xml);
@@ -170,6 +174,7 @@ class CT_Xero {
         if ( $this->xero->response['code'] == 200 ) {
             return $this->responseToArray();
         }
+        var_dump($this->xero->response['response']);die;
         return 'Xero Validation Error';
     }
 
