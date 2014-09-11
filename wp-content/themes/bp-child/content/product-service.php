@@ -147,13 +147,16 @@
         </div>
         <div class="grids">
             <?php
+                $used_product = $used_suite = 0;
                 $processed_claims = array();
                 foreach($testPlans as $testPlan){
                     if( ! get_the_title($testPlan->suite_id) ){
                         continue;
                     }
                     $group = groups_get_group(array('group_id' => get_post_meta($testPlan->suite_id, 'community_id', true)));
-                    $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
+                    $claim = getClaimByRole( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ), $testPlan->level, $testPlan->role );
+                    $used_suite = $testPlan->suite_id;
+                    $used_product = $product->id;
                     if( in_array( $claim->id, $processed_claims ) ){
                         $claim = false;
                     } else{

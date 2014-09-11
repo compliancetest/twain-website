@@ -865,6 +865,15 @@ function getClaimByTestPlanData( $data ){
 
     return $rows;
 }
+function getClaimByRole( $data, $conformance_level, $role ){
+    global $wpdb;
+    $family_mark = $wpdb->get_var( $wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $data['suite_id'] ) );
+    $query = $wpdb->prepare("SELECT * FROM " . TABLE_CLAIM . " WHERE product_id = %d AND suite_id IN ( SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ) AND conformance_level = %s AND role = %s", $data['product_id'], $family_mark, $conformance_level, $role );
+
+    $rows = $wpdb->get_row($query);
+
+    return $rows;
+}
 function getTestPlansByProductId($product_id)
 {
     global $wpdb;

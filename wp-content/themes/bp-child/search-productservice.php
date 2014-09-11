@@ -226,7 +226,7 @@ if( isset( $_GET['download']) ){
                                         if( ! get_the_title($testPlan->suite_id) ){
                                             continue;
                                         }
-                                        $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
+                                        $claim = getClaimByRole( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ), $testPlan->level, $testPlan->role );
                                         if( in_array( $claim->id, $processed_claims ) ){
                                             $claim = false;
                                         } else{
