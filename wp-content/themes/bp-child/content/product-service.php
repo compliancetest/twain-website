@@ -3,12 +3,15 @@
 * Product Service Content
 */
 ?>
+<?php
+    $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
+?>
 <div class="page-title-block">
   <?php if(!$isAjax){ ?>
     <div class="grid_head column">
         <div class="grid_row nopadding"> 
             <h4 class="left">Product / Service Details</h4>
-            <a href="/my-products" class="left action-btn back-btn has-tooltip left15">
+            <a href="<?php echo $prev_page;?>" class="left action-btn back-btn has-tooltip left15">
                 <span class="p"></span>
                 <span class="t">Back</span>
                 <span class="simple_tooltip radius6" style="top: -27px;">Back to Products<span></span></span>
@@ -143,13 +146,19 @@
             </div>
         </div>
         <div class="grids">
-            <?php              
+            <?php
+                $processed_claims = array();
                 foreach($testPlans as $testPlan){
                     if( ! get_the_title($testPlan->suite_id) ){
                         continue;
                     }
                     $group = groups_get_group(array('group_id' => get_post_meta($testPlan->suite_id, 'community_id', true)));
                     $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
+                    if( in_array( $claim->id, $processed_claims ) ){
+                        $claim = false;
+                    } else{
+                        array_push( $processed_claims, $claim->id );
+                    }
                     $testPlan->level = trim( str_replace( ';;', ' ', $testPlan->level ) );
                     $testPlan->role = trim( str_replace( ';;', ' ', $testPlan->role ) );
                     if( $claim ){
@@ -179,7 +188,7 @@
                             <div class="grid_cell nopaddingtop width22P toleft"><?php echo isset( $claim->claim_id ) ? $claim->claim_id : '';?></div>
                             <div class="grid_cell nopaddingtop width10P toleft"><a href="<?php echo bp_get_group_permalink($group)?>"><?php echo $testPlan->issuer?></a></div>
                             <div class="grid_cell nopaddingtop width20P toleft">
-                                <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo isset( $claim->claim_id ) ? get_the_title( $testPlan->suite_id ): ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
+                                <a href="<?php echo get_permalink($testPlan->suite_id)?>"><?php echo isset( $claim->claim_id ) ? get_the_title( $claim->suite_id ): ct_get_suite_max_version( $testPlan->suite_id, true )?></a>
                             </div>
                             <div class="grid_cell nopaddingtop width10P"><?php echo isset( $claim->claim_id ) ?  $claim->conformance_level : $testPlan->level;?></div>
 

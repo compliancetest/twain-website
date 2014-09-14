@@ -221,12 +221,24 @@ if( isset( $_GET['download']) ){
                                 <?php
                                     $testPlansClaimsCounter = 0;
                                     $testPlans = getTestPlansByProductId($product->id);
+                                    $processed_claims = array();
                                     foreach($testPlans as $testPlan){
                                         if( ! get_the_title($testPlan->suite_id) ){
                                             continue;
                                         }
                                         $claim = getClaimByTestPlanData( array( 'product_id' => $product->id, 'suite_id' => $testPlan->suite_id ) );
-                                        if( $claim && ( $claim->conformance_level !== str_replace(';;', '', $testPlan->level) || $claim->role !== str_replace(';;', '', $testPlan->role) ) ){
+                                        if( in_array( $claim->id, $processed_claims ) ){
+                                            $claim = false;
+                                        } else{
+                                            array_push( $processed_claims, $claim->id );
+                                        }
+                                        $testPlan->level = trim( str_replace( ';;', ' ', $testPlan->level ) );
+                                        $testPlan->role = trim( str_replace( ';;', ' ', $testPlan->role ) );
+                                        if( $claim ){
+                                            $claim->role = trim( str_replace( ';;', ' ', $claim->role ) );
+                                            $claim->conformance_level = trim( str_replace( ';;', ' ', $claim->conformance_level ) );
+                                        }
+                                        if( $claim && ( $claim->conformance_level !== $testPlan->level || $claim->role !== $testPlan->role ) ){
                                             $testPlansClaimsCounter++;
                                         }
                                         $testPlansClaimsCounter++;

@@ -858,7 +858,9 @@ function getClaimsByProductId($product_id)
 }
 function getClaimByTestPlanData( $data ){
     global $wpdb;
-    $query = $wpdb->prepare("SELECT * FROM " . TABLE_CLAIM . " WHERE product_id = %d AND suite_id = %d", $data['product_id'], $data['suite_id'] );
+    $family_mark = $wpdb->get_var( $wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $data['suite_id'] ) );
+    $query = $wpdb->prepare("SELECT * FROM " . TABLE_CLAIM . " WHERE product_id = %d AND suite_id IN ( SELECT suite_id FROM wp_test_suites WHERE family_mark = %d )", $data['product_id'], $family_mark );
+
     $rows = $wpdb->get_row($query);
 
     return $rows;
