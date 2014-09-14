@@ -447,7 +447,6 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
             }
         }
         if( isset( $_POST['show_my'] ) && $_POST['show_my'] == 'true' ){
-            error_log( $instance->creator_id, get_current_user_id() );
             if( $instance->creator_id != get_current_user_id() ){
                 continue;
             }
