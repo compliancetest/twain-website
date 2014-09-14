@@ -719,6 +719,7 @@ function showTriggerMessageBox()
                                 </div>                    
                                 <div class="clear"></div>
                             </div>
+                            <div class="space10"></div>
                             <div class="field-row">
                                 <div class="grid-cell width250">
                                     <input type="checkbox" name="show_my" id="show_my" <?php if( $is_checked_by_default ):?> checked="checked"<?php endif;?>>
@@ -726,6 +727,7 @@ function showTriggerMessageBox()
                                 </div>
                             </div>
                             <div class="clear"></div>
+                            <div class="space10"></div>
                         </div>                         
                         <div class="harness-profiles-section">
                             <h5>Harness Profiles</h5>
