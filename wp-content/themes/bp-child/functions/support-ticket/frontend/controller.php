@@ -172,7 +172,7 @@ function createSupportTicket()
         $wpdb->update(TABLE_TICKETS, array('has_attachment' => 1), array('id' => $tID));
     
     /***************** Begin Send Mail ***************************/
-    $ticketDetail = getTicketById($wpdb->insert_id);
+    $ticketDetail = getTicketById( $tID );
     //Send Email Notification to the Customer
     ct_send_ticket_email('ticket_created', 'customer', $ticketDetail);    
     //Send Email Notification to Support
