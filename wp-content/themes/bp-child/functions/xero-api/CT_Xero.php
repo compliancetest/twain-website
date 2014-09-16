@@ -154,18 +154,20 @@ class CT_Xero {
                                 )
                             )
         );
-        if( ! empty( $contactData['secondary_contact_first_name']) && ! empty( $contactData['secondary_contact_last_name'] ) && ! empty( $contactData['secondary_contact_email'] ) ){
-            $xeroData['ContactPersons']['ContactPerson'] = array(
-                'FirstName'        => $contactData['secondary_contact_first_name'],
-                'LastName'         => $contactData['secondary_contact_last_name'],
-                'EmailAddress'     => $contactData['secondary_contact_email'],
-                'IncludeInEmails'  => true
-            );
+        if( ! empty( $contactData['contact_first_name']) && ! empty( $contactData['contact_last_name'] ) && ! empty( $contactData['contact_email'] ) ){
+            if( ! empty( $contactData['secondary_contact_first_name']) && ! empty( $contactData['secondary_contact_last_name'] ) && ! empty( $contactData['secondary_contact_email'] ) ){
+                $xeroData['ContactPersons']['ContactPerson'] = array(
+                    'FirstName'        => $contactData['secondary_contact_first_name'],
+                    'LastName'         => $contactData['secondary_contact_last_name'],
+                    'EmailAddress'     => $contactData['secondary_contact_email'],
+                    'IncludeInEmails'  => true
+                );
 
-        } else {
-            $xeroData['ContactPersons']['ContactPerson'] = array(
-                'FirstName'        => '',
-            );
+            } else {
+                $xeroData['ContactPersons']['ContactPerson'] = array(
+                    'FirstName'        => '',
+                );
+            }
         }
         if( isset( $contactData['contact_id'] ) && ! empty( $contactData['contact_id'] ) ) $xeroData['ContactID'] = $contactData['contact_id'];
         $this->array2xml( $xeroData, $xml);
@@ -174,7 +176,7 @@ class CT_Xero {
         if ( $this->xero->response['code'] == 200 ) {
             return $this->responseToArray();
         }
-        return 'Xero Validation Error';
+        return '<pre>'. htmlentities($this->xero->response['response']). '</pre>';
     }
 
     /**

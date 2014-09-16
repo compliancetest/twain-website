@@ -119,6 +119,12 @@ class CT_Organisation
         
         $response = false;
         $data = stripslashes_deep( $data );
+        if( isset( $data['contact_id'] ) && ! empty( $data['contact_id'] ) && empty( $data['organisation_name']) ){
+            if( ! $wpdb->get_row( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE contact_id = %s ", $data['contact_id'] ) ) ){
+                $wpdb->insert($wpdb->prefix . "organisations", $data );
+            }
+            return true;
+        }
         if( count( $data ) != 2 ){
             $response = $xero->upsertContact( $data );
         }
