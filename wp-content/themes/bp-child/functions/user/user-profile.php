@@ -933,10 +933,12 @@ function cp_get_customer_harness_detail_profile_data()
 ?>
     <?php 
         $hasABN = 0;
-        foreach ($profile_instance->Entity as $label=>$value) {
-            if (strtolower($label) == 'abn') {
-                $hasABN = 1;
-                break;
+        if( is_iterable( $profile_instance->Entity ) ){
+            foreach( $profile_instance->Entity AS $label => $value ) {
+                if( strtolower( $label ) == 'abn' ) {
+                    $hasABN = 1;
+                    break;
+                }
             }
         }
     ?>
