@@ -157,8 +157,51 @@ if(is_super_admin())
             echo "completed";
             exit;
         }
-        
-        
+
+        if(isset($_GET['fix_hided_cases']))
+        {
+            $query = "SELECT * FROM {$wpdb->prefix}test_cases WHERE family_mark = 0";
+            $cases = $wpdb->get_results($query);
+            $counter = 0;
+            $processed = array();
+            if( $cases ){
+                foreach($cases as $i=>$s)
+                {
+                    $counter++;
+                    array_push( $processed, $s->case_id );
+                    update_post_meta($s->case_id, 'hide_case', 0);
+                    $wpdb->update('wp_test_cases',
+                        array(
+                            'family_mark' => $s->case_id
+                        ),
+                        array(
+                            'case_id' => $s->case_id
+                        ),
+                        array( '%d' ),
+                        array( '%d' )
+                    );
+                }
+            }
+            echo '<pre>'.print_r( $processed, true ).'</pre>';
+            echo "completed ".$counter;
+            $processed = array();
+            $counter = 0;
+            $query = "SELECT * FROM wp_test_cases WHERE family_mark != case_id";
+            $r = $wpdb->get_results($query);
+            foreach( $r AS $case ){
+                if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_cases WHERE case_id = %d ", $case->family_mark ) ) ){
+                    $counter++;
+                    array_push( $processed, $case->case_id );
+                    update_post_meta($case->case_id, 'hide_case', 0);
+                } else{
+                    update_post_meta($case->case_id, 'hide_case', 0);
+                }
+            }
+            echo '<pre>'.print_r( $processed, true ).'</pre>';
+            echo "completed ".$counter;
+            exit;
+        }
+
         if(isset($_GET['fix_test_suite_configuration'])){
             $esb = new ManageESB();
             
