@@ -256,6 +256,12 @@ Template Name Posts: Test Suite
                     if (!$subscription) {
                         if ($suite->signupPrice == '-1') {
                             ?>
+                            <a id="pricing-plans-link" href="#pricing-plans" rel="custom-popup" data-type="inline">Popup</a>
+                            <script>
+                                jQuery(document).ready(function($){
+                                    $("#pricing-plans-link").click();
+                                });
+                            </script>
                             <a href="<?php echo site_url()?>/contact-us" class="suite-subscript-link">
                                     <span class="price-b">
                                         <span class="l"></span>
@@ -684,7 +690,9 @@ Template Name Posts: Test Suite
                 <?php endif; ?>
             <div class="space15"></div>
 		</div>
-			
+        <?php
+            include(dirname(__FILE__) . '/content/pricing-page.php');
+        ?>
 	</div> <!--end content container-->
 <script type="text/javascript">
 jQuery(document).ready(function($) {

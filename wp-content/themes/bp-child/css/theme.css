@@ -7530,3 +7530,55 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     width: 85%;
     text-align: center;
 }
+
+#pricing-plans .popup-box-footer{
+    background: none !important;
+    text-align: center;
+    box-shadow: none;
+}
+
+#pricing-plans .action-btn{
+    float: none;
+    display: inline-block;
+}
+
+#pricing-plans .pricing-plans-content{
+    background: #fff;
+    padding: 20px;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-bottomright: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-left-radius-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#pricing-plans .pricing-plans-header{
+    border-bottom: 1px solid #d7d7d7;
+    border-top: 1px solid #d3d3d3;
+    background: #f0f0f0;
+    padding: 1px 0 0 0;
+}
+
+.plan-levels{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 43px 0 0 158px;
+    border-color: transparent transparent transparent #007bff;
+    display: block;
+}
+
+.plans-pricing-table{
+    border: 1px solid #dfdfdf
+}
+
+.plans-pricing-table thead th{
+    background: none;
+    border: 1px solid #dfdfdf
+}
+
+.plans-pricing-table td, .plans-pricing-table tbody th{
+    background: none;
+    border: 1px solid #dfdfdf
+}
