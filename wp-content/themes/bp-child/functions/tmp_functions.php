@@ -158,7 +158,7 @@ if(is_super_admin())
             exit;
         }
 
-        if(isset($_GET['fix_hided_cases']))
+        if(isset($_GET['fix_hidden_cases']))
         {
             $query = "SELECT * FROM {$wpdb->prefix}test_cases WHERE family_mark = 0";
             $cases = $wpdb->get_results($query);
@@ -194,7 +194,13 @@ if(is_super_admin())
                     array_push( $processed, $case->case_id );
                     update_post_meta($case->case_id, 'hide_case', 0);
                 } else{
-                    update_post_meta($case->case_id, 'hide_case', 0);
+                    if( $case->case_id == $wpdb->get_var( $wpdb->prepare( "SELECT case_id FROM wp_test_cases WHERE family_mark = %d ORDER BY case_id DESC LIMIT 1", $case->family_mark)) ){
+                        $counter++;
+                        update_post_meta($case->case_id, 'hide_case', 0 );
+                    } else {
+                        $counter++;
+                        update_post_meta($case->case_id, 'hide_case', 1 );
+                    }
                 }
             }
             echo '<pre>'.print_r( $processed, true ).'</pre>';
