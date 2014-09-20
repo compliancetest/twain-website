@@ -10583,7 +10583,7 @@
 					var schemas = data.schemas();
 					var knownProperties = schemas.knownProperties();
 					
-					var shouldHideUndefined = knownProperties.length - schemas.requiredProperties().length > 20;
+					var shouldHideUndefined = knownProperties.length - schemas.requiredProperties().length > 120;
 					
 					var maxProperties = schemas.maxProperties();
 					var canAdd = (maxProperties == null || maxProperties > schemas.keys().length);
@@ -11332,7 +11332,7 @@
 					var indexSchemas = schemas.indexSchemas(0).getFull();
 					var itemTypes = indexSchemas.basicTypes();
 					if (itemTypes.length == 1 && itemTypes[0] == "object") {
-						if (indexSchemas.knownProperties().length < 20) {
+						if (indexSchemas.knownProperties().length < 120) {
 							return true;
 						}
 					}
