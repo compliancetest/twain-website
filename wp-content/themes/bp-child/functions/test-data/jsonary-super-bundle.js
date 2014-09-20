@@ -10582,7 +10582,6 @@
 				if (!data.readOnly()) {
 					var schemas = data.schemas();
 					var knownProperties = schemas.knownProperties();
-					
 					var shouldHideUndefined = knownProperties.length - schemas.requiredProperties().length > 120;
 					
 					var maxProperties = schemas.maxProperties();
@@ -10592,7 +10591,7 @@
 							drawProperty(key, subData);
 						}
 					}, drawProperty);
-	
+
 					if (canAdd && (schemas.allowedAdditionalProperties() || shouldHideUndefined)) {
                         
 						if (context.uiState.addInput) {
