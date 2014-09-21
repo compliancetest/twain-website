@@ -1,33 +1,36 @@
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
     <div class="popup-box-header radius6 noradiusbottom">Select Contributions Pricing Plan</div>
     <div class="pricing-plans-header">
-        <a href="#">&lt;</a>
-        <a href="#">&gt;</a>
+        <a href="#" class="plans-header-nav-prev">&lt;</a>
+        <a href="#" class="plans-header-nav-next">&gt;</a>
         <div class="plans-title-wrapper">
-            <ul>
-                <li><label><input type="radio" name="plan_name" />Employer Basic</label></li>
-                <li><label><input type="radio" name="plan_name" />Employer Standard</label></li>
-                <li><label><input type="radio" name="plan_name" />EmployerAdvanced</label></li>
-                <li><label><input type="radio" name="plan_name" />Fund/SMSF Standard</label></li>
-                <li><label><input type="radio" name="plan_name" />Fund/SMSF Advanced</label></li>
-                <li><label><input type="radio" name="plan_name" />Fund/SMSF Advanced Prepaid</label></li>
+            <ul class="plans-title-list">
+                <li><label><input type="radio" name="plan_name" />Employer<br> Basic</label></li>
+                <li><label><input type="radio" name="plan_name" />Employer<br> Standard</label></li>
+                <li><label><input type="radio" name="plan_name" />Employer<br>Advanced</label></li>
+                <li><label><input type="radio" name="plan_name" />Fund/SMSF<br> Standard</label></li>
+                <li><label><input type="radio" name="plan_name" />Fund/SMSF<br> Advanced</label></li>
+                <li><label><input type="radio" name="plan_name" />Fund/SMSF<br> Advanced Prepaid</label></li>
+                <li><label><input type="radio" name="plan_name" />All roles/levels<br> Advanced</label></li>
             </ul>
         </div>
     </div>
     <div class="pricing-plans-content">
         <div id="plan_1">
             <p class="plan-description">Functional testing for funds and SMSF Solution Providers, including support for large messages</p>
-            <ul>
-                <li><strong>Signup Fee</strong>$XXXX</li>
-                <li><strong>Monthly Fee</strong>$XXX</li>
-                <li><strong>Prepaid / year</strong>$XXXX</li>
+            <ul class="plan-subscription-prices">
+                <li><strong class="has-custom-tooltip" title="Once off fee charged when a subscription is initially purchased" data-tooltip-width="180" data-tooltip-height="32">Signup Fee</strong>$XXXX</li>
+                <li><strong class="has-custom-tooltip" title="Monthly Fee">Monthly Fee</strong>$XXX</li>
+                <li><strong class="has-custom-tooltip" data-tooltip-width="180" data-tooltip-height="32" title="Once off fee charged when a subscription is initially purchased">Prepaid / year</strong>$XXXX</li>
             </ul>
             <table class="plans-pricing-table">
                 <thead>
                     <tr>
                         <th>
-                            <div class="plan-levels">Levels</div>
-                            <div class="plan-roles">Roles</div>
+                            <div class="diagonal-delimiter">
+                                <div class="horizontal-row">Roles</div>
+                                <div class="vertical-row">Levels</div>
+                            </div>
                         </th>
                         <th>Employer</th>
                         <th>Fund</th>
@@ -37,34 +40,47 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th>B</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <th><span class="has-custom-tooltip" data-tooltip-content-id="#b-description" data-tooltip-width="276" data-tooltip-height="90">B</span>
+                            <div id="b-description" class="custom-tooltip-content">
+                                <p class="levels-tooltip-content">
+                                    The most basic conformance level designed to support the lowest entry level for Induction:<br>
+                                    - Basic registrations and contributions scenarios<br>
+                                    - No response messaging<br>
+                                    - Includes multi-fund employer<br>
+                                    - Clearing House
+                                </p>
+                            </div>
+                        </th>
+                        <td><span class="feature-available"></span></td>
+                        <td><span class="feature-available"></span></td>
+                        <td><span class="feature-unavailable"></span></td>
+                        <td><span class="feature-available"></span></td>
                     </tr>
                     <tr>
                         <th>A</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td><span class="feature-available"></span></td>
+                        <td><span class="feature-available"></span></td>
+                        <td><span class="feature-unavailable"></span></td>
+                        <td><span class="feature-available"></span></td>
                     </tr>
                     <tr>
                         <th>AA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td><span class="feature-available"></span></td>
+                        <td><span class="feature-available"></span></td>
+                        <td><span class="feature-unavailable"></span></td>
+                        <td><span class="feature-available"></span></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
-        <a href="javascript:void(0);" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Continue</span></a>
+        <a href="javascript:void(0);" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
         <a href="#" class="action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
         <div class="clear"></div>
     </div>
     <a class="close_btn"></a>
 </div>
+<script>
+    jQuery(document).ready(function($) {});
+</script>

@@ -26,7 +26,9 @@ Template Name Posts: Test Suite
     
     //Store Test Suite ID
     $_SESSION['test_suite_id'] = $suiteID;
-    
+
+    wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
+
   get_header();
       
 ?>
