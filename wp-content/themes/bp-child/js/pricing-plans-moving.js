@@ -1,18 +1,7 @@
 jQuery(document).ready(function($) {
 
     $('.plans-title-list li label').click(function(){
-        var previous = $('.plans-title-list li.active');
-        var current = $(this).parent();
-
-        previous.removeClass('active');
-        current.addClass('active');
-
-        setSiblings(current.index());
-
-        var shift_size = getShiftedSize(current);
-
-        moveSlider(shift_size);
-
+        run($(this));
         return false;
     });
 
@@ -41,6 +30,20 @@ jQuery(document).ready(function($) {
     });
 
 });
+
+function run(el){
+    var previous = jQuery('.plans-title-list li.active');
+    var current = el.parent();
+
+    previous.removeClass('active');
+    current.addClass('active');
+
+    setSiblings(current.index());
+
+    var shift_size = getShiftedSize(current);
+
+    moveSlider(shift_size);
+}
 
 function setSiblings(index){
     jQuery('.plans-title-list li').removeClass('sibling_1 sibling_2');
@@ -72,12 +75,16 @@ function getShiftedSize(el){
 
 }
 
-
 function moveSlider(size){
     jQuery('.plans-title-list').animate({
         left: size
     }, 100, function() {
-
+        showPlanDetails(jQuery('.plans-title-list li.active label'));
     });
 
+}
+
+function showPlanDetails(el){
+    jQuery('.plan-content').hide();
+    jQuery('#' + el.data('plan-container')).show().css({ opacity: 0.5 }).animate({ opacity: 1 });
 }

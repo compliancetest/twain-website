@@ -230,6 +230,15 @@ Template Name Posts: Test Suite
             </div>
 			<!--end tabs-->
             <div class="space15"></div>
+            <a id="pricing-plans-link" class="action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">Pricing Plans</a>
+            <script>
+                jQuery(document).ready(function($){
+                    $("#pricing-plans-link").cplightbox({
+                        onLoad: function() { jQuery('.plans-title-list li.active label').click()},
+                    });
+                });
+            </script>
+
             <?php                 
                 $subscriptionType = 'paid';
                 
@@ -254,16 +263,10 @@ Template Name Posts: Test Suite
                                 $is_organisation_admin = true;
                         }
                     }
-                    
+
                     if (!$subscription) {
                         if ($suite->signupPrice == '-1') {
                             ?>
-                            <a id="pricing-plans-link" href="#pricing-plans" rel="custom-popup" data-type="inline">Popup</a>
-                            <script>
-                                jQuery(document).ready(function($){
-                                    $("#pricing-plans-link").click();
-                                });
-                            </script>
                             <a href="<?php echo site_url()?>/contact-us" class="suite-subscript-link">
                                     <span class="price-b">
                                         <span class="l"></span>
