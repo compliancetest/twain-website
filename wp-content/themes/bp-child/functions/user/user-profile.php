@@ -933,10 +933,12 @@ function cp_get_customer_harness_detail_profile_data()
 ?>
     <?php 
         $hasABN = 0;
-        foreach ($profile_instance->Entity as $label=>$value) {
-            if (strtolower($label) == 'abn') {
-                $hasABN = 1;
-                break;
+        if( is_iterable( $profile_instance->Entity ) ){
+            foreach( $profile_instance->Entity AS $label => $value ) {
+                if( strtolower( $label ) == 'abn' ) {
+                    $hasABN = 1;
+                    break;
+                }
             }
         }
     ?>
@@ -980,16 +982,19 @@ function cp_get_customer_harness_detail_profile_data()
         </div>
         <div class="clear"></div>
     </div>
-    <?php foreach ($profile_instance->Entity as $label=>$value): ?>
-    <div class="field-row">
-        <div class="grid-cell">
-            <label><?php echo $label; ?>:</label>
-            <input class="input" type="text" name="profile_entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>" readonly="readonly" disabled="disabled"/>
-            <input type="hidden" name="entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>"/>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <?php endforeach; ?>
+
+    <?php if( is_iterable( $profile_instance->Entity ) ):?>
+        <?php foreach ($profile_instance->Entity as $label=>$value): ?>
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label><?php echo $label; ?>:</label>
+                    <input class="input" type="text" name="profile_entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>" readonly="readonly" disabled="disabled"/>
+                    <input type="hidden" name="entity_<?php echo strtolower(str_replace(' ', '_', $label)); ?>" value="<?php echo $value; ?>"/>
+                </div>
+                <div class="clear"></div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif;?>
     <div class="field-row">
         <div class="grid-cell">
             <label>Expected Entity Type:</label>
