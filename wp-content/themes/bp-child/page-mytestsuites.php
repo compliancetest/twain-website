@@ -21,6 +21,7 @@ get_header();
                     <div class="thead tr">
                         <div class="td td-community">Community</div>
                         <div class="td td-suite">Test Suite</div>
+                        <div class="td td-error-checking tocenter">Limited Error Checking</div>
                         <div class="td td-status tocenter">Status</div>
                         <div class="td td-action tocenter">Action</div>
                         <div class="clear"></div>
@@ -51,6 +52,7 @@ get_header();
                             <div class="td td-suite">
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
+                            <div class="td td-error-checking tocenter"><input class="update-error-checking" type="checkbox" value="<?php echo $row->id;?>" <?php echo ($row->limited_error_checking)?('checked'):(''); ?>></div>
                             <div class="td td-status">
                                 <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                     <?php echo $row->status?>
@@ -102,13 +104,24 @@ get_header();
     </div>
     <div class="clear"></div>
 </div> <!--end content-->
+<input type="hidden" id="update-error-checking-action" value="<?php echo wp_create_nonce('update-error-checking-action')?>">
 <script type="text/javascript">
 jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_subscriptions'));
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
-    })
+    });
+    jQuery('.update-error-checking').change(function(){
+        jQuery.ajax({
+            url: "/?cp-action="  + jQuery('#update-error-checking-action').val(),
+            data: 'id=' + jQuery(this).val() + '&status=' + ((jQuery(this).attr('checked') == 'checked')?(1):(0)),
+            type: 'post',
+            dataType: 'json',
+            success: function(rsp) {
+            }
+        });
+    });
 })
 </script>
 <?php

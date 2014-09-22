@@ -4666,7 +4666,10 @@ span.button_sign {
     width: 206px;
 }
 #my_subscriptions .td-suite{
-    width: 519px;
+    width: 347px;
+}
+#my_subscriptions .td-error-checking{
+    width: 150px;
 }
 #my_subscriptions .td-fee{
     width: 65px;
