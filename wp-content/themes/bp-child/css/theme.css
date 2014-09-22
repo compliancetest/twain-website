@@ -833,7 +833,34 @@ width: 28%;
     font-weight: normal !important;
 }
 
-.simple_tooltip {
+.has-custom-tooltip{
+    position: relative;
+}
+
+.plans-pricing-table tbody th .has-custom-tooltip{
+    display: block;
+    text-align: center;
+}
+
+.levels-tooltip-content{
+    text-align: left;
+    padding: 5px 15px;
+    color: #fff;
+    margin: 0;
+}
+
+.custom_simple_tooltip{
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    padding-bottom:2px;
+}
+
+.has-custom-tooltip:hover .custom_simple_tooltip{
+    display: block;
+}
+
+.simple_tooltip, .custom_simple_tooltip {
     background: #555;
     background: rgba(0, 0, 0, 0.7);
     color: white;
@@ -856,33 +883,36 @@ width: 28%;
     text-indent: 0;
 }
 
+.custom_simple_tooltip{
+    left: 50%;
+    top: -21px;
+}
+
 .simple_tooltip_pop {
-background: rgba(0, 0, 0, 0.7);
-color: white;
-position: absolute;
-display: none;
-width: 190px;
-top: 73px;
-left: -88px;
-text-align: center;
-margin-left: 89px;
-padding: 3px;
-border: 1px solid black;
-font-size: 10px;
-z-index: 995;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    position: absolute;
+    display: none;
+    width: 190px;
+    top: 73px;
+    left: -88px;
+    text-align: center;
+    margin-left: 89px;
+    padding: 3px;
+    border: 1px solid black;
+    font-size: 10px;
+    z-index: 995;
 }
 
 .simple_tooltip_pop span {
-width: 17px;
-height: 6px;
-background: url(../images/tooltip_pop.png) center center no-repeat;
-position: absolute;
-left: 50%;
-margin-left: -8px;
-/*bottom: 21px;*/
-top: -7px;
+    width: 17px;
+    height: 6px;
+    background: url(../images/tooltip_pop.png) center center no-repeat;
+    position: absolute;
+    left: 50%;
+    margin-left: -8px;
+    top: -7px;
 }
-
 
 .default_grid .expandable {
     background-image: url(../images/grid_expandable_c.png);
@@ -2014,14 +2044,14 @@ margin-bottom: 0px !important;
     top: 21px;  
 }
 
-.simple_tooltip span {
-width: 17px;
-height: 6px;
-background: url(../images/simple_tooltip_pointer.png) center center no-repeat;
-position: absolute;
-left: 50%;
-margin-left: -8px;
-bottom: -6px;
+.simple_tooltip span, .custom_simple_tooltip span {
+    width: 17px;
+    height: 6px;
+    background: url(../images/simple_tooltip_pointer.png) center center no-repeat;
+    position: absolute;
+    left: 50%;
+    margin-left: -8px;
+    bottom: -6px;
 }
 
 #append_filter{
@@ -2904,6 +2934,7 @@ background-image: url(../images/white_gloss.png);
 
 #log input[type="submit"]{
     background: #2690eb; /* for non-css3 browsers */
+/*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2690eb', endColorstr='#3577ad'); */
     background: -webkit-gradient(linear, left top, left bottom, from(#2690eb), to(#3577ad)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #2690eb,  #3577ad); /* for firefox 3.6+ */
     background: -o-linear-gradient(top,  #2690eb,  #3577ad);
@@ -2926,6 +2957,7 @@ background-image: url(../images/white_gloss.png);
 
 #log input[type="submit"]:hover{
     background: #2690eb; /* for non-css3 browsers */
+/*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3577ad', endColorstr='#2690eb'); */
     background: -webkit-gradient(linear, left top, left bottom, from(#3577ad), to(#2690eb)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #3577ad,  #2690eb); /* for firefox 3.6+ */
     background: -o-linear-gradient(top,  #3577ad,  #3577ad);
@@ -3289,7 +3321,7 @@ background-image: url(../images/white_gloss.png);
 
 #file_ts {
     display:none;
-}?
+}​
 
 #h115{ 
      height: 115px;
@@ -4561,6 +4593,7 @@ span.button_sign {
     top: -40px;
     left: -6px;
 }
+
 .filter-box #filterForm .left .clear-filter{
     position: absolute;
     color: #e33f3f;
@@ -7126,6 +7159,219 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     text-align: center;
 }
 
+#pricing-plans .popup-box-footer{
+    background: none !important;
+    text-align: center;
+    box-shadow: none;
+}
+
+#pricing-plans .action-btn{
+    float: none;
+    display: inline-block;
+}
+
+#pricing-plans .pricing-plans-content{
+    background: #fff;
+    padding: 20px;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-bottomright: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-left-radius-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#pricing-plans .pricing-plans-header{
+    border-bottom: 1px solid #d7d7d7;
+    border-top: 1px solid #d3d3d3;
+    background: #f0f0f0;
+    padding: 1px 0 0 0;
+    position: relative;
+}
+
+.plans-header-nav-prev,
+.plans-header-nav-next{
+    display: block;
+    background-image: url("../images/pricing-plan-sprite.png");
+    background-repeat: no-repeat;
+    width: 13px;
+    height: 19px;
+    position: absolute;
+    top: 22px;
+    text-indent: -99999px;
+}
+.plans-header-nav-prev{
+    background-position: 0 -42px;
+    left: -23px;
+}
+.plans-header-nav-next{
+    background-position: 0 -61px;
+    right: -23px;
+}
+
+.plans-title-wrapper{
+    overflow: hidden;
+    position: relative;
+    height: 65px;
+}
+
+.plans-title-list{
+    position: absolute;
+    left: 0;
+    top: 11px;
+    height: 60px;
+    width: 100000px;
+}
+
+.plans-title-list li{
+    float: left;
+    text-align: center;
+    color: #2c80e8;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 13px;
+    padding: 9px 14px 0 14px;
+}
+
+.plans-title-list li.active{
+    color: #e33f3f;
+    font-size: 20px;
+    line-height: 20px;
+    padding-top: 0px;
+}
+
+.plans-title-list li.sibling_1{
+    font-size: 15px;
+    line-height: 18px;
+    padding-top: 2px;
+}
+.plans-title-list li.sibling_2{
+    font-size: 13px;
+    line-height: 15px;
+    padding-top: 6px;
+}
+
+.plans-title-list li label{
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+    max-width: 180px;
+}
+
+.plans-title-list li input{
+    position: absolute;
+    visibility: hidden;
+}
+
+.plan-content{
+    display:none;
+}
+
+.plan-description{
+    text-align: center;
+    color: #555;
+    font-size:13px;
+}
+
+.plan-subscription-prices{
+    width: 100%;
+    text-align: center;
+    padding: 10px 0 15px 0;
+}
+
+.plan-subscription-prices li{
+    display: inline-block;
+    padding: 0 25px;
+    color: #2c80e8;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.plan-subscription-prices li strong{
+    color: #e33f3f;
+    position: relative;
+    display: block;
+}
+
+
+.plans-pricing-table{
+    border: 1px solid #dfdfdf
+}
+
+.plans-pricing-table tr{
+    background: none;
+}
+
+.plans-pricing-table thead th{
+    background: none;
+    border: 1px solid #dfdfdf;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.diagonal-delimiter {
+    position: relative;
+    display: block;
+    background: url("../images/table-diagonal-delimeter.png") no-repeat 0 0;
+    width: 156px;
+    height: 41px;
+    padding: 0;
+    color: #555;
+    font-weight: 400;
+}
+
+.diagonal-delimiter .horizontal-row{
+    position: absolute;
+    top: 5px;
+    left: 78px;
+    width: 78px;
+    text-align: center;
+}
+
+.diagonal-delimiter .vertical-row{
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 64px;
+    text-align: center;
+}
+
+.plans-pricing-table th{
+    color: #2c7fe7;
+    text-align: center;
+    font-weight: 700;
+}
+
+.plans-pricing-table td, .plans-pricing-table tbody th{
+    background: none;
+    border: 1px solid #dfdfdf;
+    padding: 10px 0;
+    line-height: 14px;
+    vertical-align: middle;
+}
+
+.plans-pricing-table td{
+    width: 130px;
+}
+
+.plans-pricing-table .feature-available,
+.plans-pricing-table .feature-unavailable{
+    display: block;
+    background-image: url("../images/pricing-plan-sprite.png");
+    background-repeat: no-repeat;
+    overflow: hidden;
+    width: 21px;
+    height: 21px;
+    margin: 0 auto;
+}
+.plans-pricing-table .feature-available{
+    background-position: 0 0;
+}
+.plans-pricing-table .feature-unavailable{
+    background-position: 0 -21px;
+}
 
 /* Homepage start
 ----------------------------------------------- */

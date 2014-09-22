@@ -26,7 +26,9 @@ Template Name Posts: Test Suite
     
     //Store Test Suite ID
     $_SESSION['test_suite_id'] = $suiteID;
-    
+
+    wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
+
   get_header();
       
 ?>
@@ -228,6 +230,15 @@ Template Name Posts: Test Suite
             </div>
 			<!--end tabs-->
             <div class="space15"></div>
+            <a id="pricing-plans-link" class="action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">Pricing Plans</a>
+            <script>
+                jQuery(document).ready(function($){
+                    $("#pricing-plans-link").cplightbox({
+                        onLoad: function() { jQuery('.plans-title-list li.active label').click()},
+                    });
+                });
+            </script>
+
             <?php                 
                 $subscriptionType = 'paid';
                 
@@ -252,7 +263,7 @@ Template Name Posts: Test Suite
                                 $is_organisation_admin = true;
                         }
                     }
-                    
+
                     if (!$subscription) {
                         if ($suite->signupPrice == '-1') {
                             ?>
@@ -684,7 +695,9 @@ Template Name Posts: Test Suite
                 <?php endif; ?>
             <div class="space15"></div>
 		</div>
-			
+        <?php
+            include(dirname(__FILE__) . '/content/pricing-page.php');
+        ?>
 	</div> <!--end content container-->
 <script type="text/javascript">
 jQuery(document).ready(function($) {
