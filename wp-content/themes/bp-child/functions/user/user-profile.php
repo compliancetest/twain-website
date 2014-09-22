@@ -1266,6 +1266,27 @@ function cp_save_suite_notify_changes()
         delete_user_meta($user_id, 'notify_suite_changes' . $suiteID);
 }
 
+function cp_save_limited_error_checking()
+{
+    global $wpdb;
+
+    $user_id = get_current_user_id();
+
+    $subscriptionId = intval($_POST['id']);
+    if( ! $subscriptionId )
+        return false;
+
+    $wpdb->update( 'wp_users_subscriptions',
+        array( 'limited_error_checking' => intval( $_POST['status'] ) ),
+        array(
+            'id'      => $subscriptionId,
+            'user_id' => $user_id
+        ),
+        array( '%d' ),
+        array( '%d', '%d' )
+    );
+    return true;
+}
 
 function ct_get_user_profile_link($user_id)
 {

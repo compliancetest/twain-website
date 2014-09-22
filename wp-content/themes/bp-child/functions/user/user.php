@@ -99,6 +99,8 @@ function compliancetest_user_actions()
         $result = cp_save_suite_notify_changes();        
         echo $result;
         exit;
+    }else if(wp_verify_nonce($cpAction, 'update-error-checking-action')){
+        exit( cp_save_limited_error_checking() );
     }
 }
 
