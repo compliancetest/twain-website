@@ -234,7 +234,7 @@ Template Name Posts: Test Suite
             <script>
                 jQuery(document).ready(function($){
                     $("#pricing-plans-link").cplightbox({
-                        onLoad: function() { jQuery('.plans-title-list li.active label').click()},
+                        onLoad: function() { jQuery('.plans-title-list li.active label').click()}
                     });
                 });
             </script>
