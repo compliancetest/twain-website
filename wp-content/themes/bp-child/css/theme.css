@@ -7159,12 +7159,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     text-align: center;
 }
 
-#pricing-plans .popup-box-footer{
-    background: none !important;
-    text-align: center;
-    box-shadow: none;
-}
-
 #pricing-plans .action-btn{
     float: none;
     display: inline-block;
@@ -7172,13 +7166,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 
 #pricing-plans .pricing-plans-content{
     background: #fff;
-    padding: 20px;
-    -moz-border-radius-bottomleft: 10px;
-    -moz-border-radius-bottomright: 10px;
-    -webkit-border-bottom-left-radius: 10px;
-    -webkit-border-bottom-left-radius-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    padding: 15px;
 }
 
 #pricing-plans .pricing-plans-header{

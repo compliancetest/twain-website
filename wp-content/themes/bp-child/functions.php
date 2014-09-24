@@ -164,6 +164,10 @@ require_once(THE_FUNCTION . '/organisation/index.php');
 
 //Xero Items
 require_once(THE_FUNCTION . '/xero-items/admin.php');
+
+//Pricing Plans
+require_once(THE_FUNCTION . '/pricing-plans/admin.php');
+require_once(THE_FUNCTION . '/pricing-plans/pricingplans.class.php');
 //Xero Payments
 require_once(THE_FUNCTION . '/organisations-payments/admin.php');
 
