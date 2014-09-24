@@ -1,7 +1,14 @@
 <?php
-    $read_only = false;
-    if( ! is_user_logged_in() ){
-        $read_only = true;
+    $read_only = true;
+    if( is_user_logged_in() ) {
+        $user_id = get_current_user_id();
+        $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);
+
+        if ( ! $subscription) {
+            if ($organisation_id = ct_is_organisation_admin($user_id)) {
+                $read_only = false;
+            }
+        }
     }
 ?>
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
@@ -90,7 +97,7 @@
 
     </div>
     <div class="popup-box-footer radius6 noradiustop">
-        <?php if( is_user_logged_in() ):?>
+        <?php if( ! $read_only ):?>
             <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" class=" submit_all action-btn process-btn submit-btn" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
         <?php endif;?>
         <a href="#" class="action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
