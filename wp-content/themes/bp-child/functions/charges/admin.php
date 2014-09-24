@@ -433,12 +433,13 @@ function ct_process_charge_entry_admin_actions()
                 if( $organisation->no_billing != '1' ){
                     $suite = new TestSuite( $subscription->suite_family_mark );
                     $suite->load();
-                    if( ! in_array( $suite->monthlySubscriptionPriceValue, array( 0, -1 ) ) ){
+                    if( $subscription->pricing_plan_id ){
+                        $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
                         if( $subscription->last_charge_date == '0000-00-00' ){
                             $data = array(
                                 'organisation_id' => $subscription->organisation_id,
                                 'payment_id'      => $subscription->payment_method,
-                                'item_code'       => $suite->monthlySubscriptionPrice,
+                                'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
                                 'quantity'        => '1.00',
                                 'reference_type'  => 'subscription',
                                 'reference_id'    => $subscription->id,
@@ -458,10 +459,11 @@ function ct_process_charge_entry_admin_actions()
                             $monthesCounter = 0;
                             if( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate( 'm' ) ){
                                 while( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate('m', strtotime('-'.$monthesCounter.' month' ) ) AND gmdate( 'Y', strtotime( $subscription->last_charge_date ) ) <= gmdate('Y', strtotime('-'.$monthesCounter.' month' ) ) ){
+                                    $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
                                     $data = array(
                                         'organisation_id' => $subscription->organisation_id,
                                         'payment_id'      => $subscription->payment_method,
-                                        'item_code'       => $suite->monthlySubscriptionPrice,
+                                        'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
                                         'quantity'        => '1.00',
                                         'reference_type'  => 'subscription',
                                         'reference_id'    => $subscription->id,

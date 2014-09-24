@@ -5,8 +5,8 @@
         <a href="#" class="plans-header-nav-next">&gt;</a>
         <div class="plans-title-wrapper">
             <ul class="plans-title-list">
-                <?php foreach( $pricing_plans = PricingPlan::getAllPlans() AS $k => $plan ): ?>
-                        <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>'><input type="radio" name="plan_name" /><?php echo preg_replace('/ /', '<br>', $plan->title );?></label></li>
+                <?php foreach( $pricing_plans = PricingPlan::getAllPlans( $suite->test_suite_plans ) AS $k => $plan ): ?>
+                        <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>'><input type="radio" name="plan_name" /><?php echo preg_replace('/ /', '<br>', $plan->title );?></label></li>
                 <?php endforeach;?>
             </ul>
         </div>
@@ -84,7 +84,7 @@
 
     </div>
     <div class="popup-box-footer radius6 noradiustop">
-        <a href="javascript:void(0);" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
+        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" class=" submit_all action-btn process-btn submit-btn" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
         <a href="#" class="action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
         <div class="clear"></div>
     </div>

@@ -66,8 +66,11 @@ class PricingPlan
         return $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d ", $this->id ) );
     }
 
-    public static function getAllPlans(){
+    public static function getAllPlans( $plans_ids = false ){
         global $wpdb;
+        if( $plans_ids && ! empty( $plans_ids ) ){
+            return $wpdb->get_results( "SELECT * FROM wp_pricing_plans WHERE id IN( ".implode( ',', $plans_ids )." ) " );
+        }
         return $wpdb->get_results("SELECT * FROM wp_pricing_plans" );
     }
 

@@ -230,12 +230,21 @@ Template Name Posts: Test Suite
             </div>
 			<!--end tabs-->
             <div class="space15"></div>
-            <a id="pricing-plans-link" class="action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">Pricing Plans</a>
+            <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline" style="display: none;">Pricing Plans</a>
             <script>
                 jQuery(document).ready(function($){
-                    $("#pricing-plans-link").cplightbox({
-                        onLoad: function() { jQuery('.plans-title-list li.active label').click()}
+                    $('.suite-subscript-link').on('click', function(e){
+                        e.preventDefault();
+                        $(".pricing-plans-link").cplightbox({
+                            onLoad: function() {
+                                jQuery('.plans-title-list li.active label').click();
+
+                            }
+                        });
+
                     });
+
+
                 });
             </script>
 
@@ -244,7 +253,7 @@ Template Name Posts: Test Suite
                 
                 if (is_user_logged_in()) {
                     
-                    $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark); 
+                    $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);
                     $is_organisation_admin = false;
                     
                     $harness_detail = ct_get_suite_harness_detail($user_id, $suite->id);
@@ -263,33 +272,20 @@ Template Name Posts: Test Suite
                                 $is_organisation_admin = true;
                         }
                     }
-
                     if (!$subscription) {
-                        if ($suite->signupPrice == '-1') {
-                            ?>
-                            <a href="<?php echo site_url()?>/contact-us" class="suite-subscript-link">
-                                    <span class="price-b">
-                                        <span class="l"></span>
-                                        <span class="m"><b>Contact Us</b><br />For Pricing</span>
-                                        <span class="r"></span>
-                                    </span>
-                                    <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                                </a>
-                            <?php
-                        } else {
                             if ($is_organisation_admin) {
                             ?>
-                                <a href="<?php echo site_url()?>/my-organisation/test-suites" class="suite-subscript-link">
-                                    <span class="price-b">
-                                        <span class="l"></span>
-                                        <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
-                                        <span class="r"></span>
-                                    </span>
-                                    <span class="price-b signup-price">
-                                        <span class="l"></span>
-                                        <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
-                                        <span class="r"></span>
-                                    </span>
+                                <a class="pricing-plans-link suite-subscript-link" href="#pricing-plans" data-type="inline">
+<!--                                    <span class="price-b">-->
+<!--                                        <span class="l"></span>-->
+<!--                                        <span class="m"><b>$--><?php //echo $suite->monthlySubscriptionPriceValue?><!--</b><br />per month</span>-->
+<!--                                        <span class="r"></span>-->
+<!--                                    </span>-->
+<!--                                    <span class="price-b signup-price">-->
+<!--                                        <span class="l"></span>-->
+<!--                                        <span class="m"><b>$--><?php //echo $suite->signupPriceValue?><!--</b><br />sign-up fee</span>-->
+<!--                                        <span class="r"></span>-->
+<!--                                    </span>-->
                                     <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                 </a>
                             <?php
@@ -301,22 +297,21 @@ Template Name Posts: Test Suite
                             <?php
                             } else {
                             ?>
-                                <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-                                    <span class="price-b">
-                                        <span class="l"></span>
-                                        <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
-                                        <span class="r"></span>
-                                    </span>
-                                    <span class="price-b signup-price">
-                                        <span class="l"></span>
-                                        <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
-                                        <span class="r"></span>
-                                    </span>
+                                <a class="pricing-plans-link suite-subscript-link" href="#pricing-plans" data-type="inline">
+<!--                                    <span class="price-b">-->
+<!--                                        <span class="l"></span>-->
+<!--                                        <span class="m"><b>$--><?php //echo $suite->monthlySubscriptionPriceValue?><!--</b><br />per month</span>-->
+<!--                                        <span class="r"></span>-->
+<!--                                    </span>-->
+<!--                                    <span class="price-b signup-price">-->
+<!--                                        <span class="l"></span>-->
+<!--                                        <span class="m"><b>$--><?php //echo $suite->signupPriceValue?><!--</b><br />sign-up fee</span>-->
+<!--                                        <span class="r"></span>-->
+<!--                                    </span>-->
                                     <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                 </a>
                             <?php
                             }
-                        }
                     } else {
                         if ($subscription->status == 'Active') {
                         ?>
@@ -348,36 +343,19 @@ Template Name Posts: Test Suite
                 } else {
                     
             ?>
-                    <?php
-                        if ($suite->signupPrice == '-1') {
-                    ?>
-                    <a href="<?php echo site_url()?>/contact-us" class="suite-subscript-link">                   
-                        <span class="price-b">
-                            <span class="l"></span>
-                            <span class="m"><b>Contact Us</b><br />For Pricing</span>
-                            <span class="r"></span>
-                        </span>
-                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>                    
-                    </a>
-                    <?php
-                        } else {                    
-                    ?>
-                    <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>                        
-                        <span class="price-b">
-                            <span class="l"></span>
-                            <span class="m"><b>$<?php echo $suite->monthlySubscriptionPriceValue?></b><br />per month</span>
-                            <span class="r"></span>
-                        </span>
-                        <span class="price-b signup-price">
-                            <span class="l"></span>
-                            <span class="m"><b>$<?php echo $suite->signupPriceValue?></b><br />sign-up fee</span>
-                            <span class="r"></span>
-                        </span>
+                    <a class="pricing-plans-link suite-subscript-link" href="#pricing-plans" data-type="inline">
+<!--                        <span class="price-b">-->
+<!--                            <span class="l"></span>-->
+<!--                            <span class="m"><b>$--><?php //echo $suite->monthlySubscriptionPriceValue?><!--</b><br />per month</span>-->
+<!--                            <span class="r"></span>-->
+<!--                        </span>-->
+<!--                        <span class="price-b signup-price">-->
+<!--                            <span class="l"></span>-->
+<!--                            <span class="m"><b>$--><?php //echo $suite->signupPriceValue?><!--</b><br />sign-up fee</span>-->
+<!--                            <span class="r"></span>-->
+<!--                        </span>-->
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                     </a>
-                    <?php
-                        }
-                    ?>
             <?php
                 }                                
             ?>
@@ -805,7 +783,7 @@ jQuery(document).ready(function($) {
         $(this).find('div').height($(this).parent().height() - 30);
     })
 
-    
+
 });
 
 function processDeleteCase(id)

@@ -12,7 +12,7 @@ class CT_Organisation_Controller
     * Create Subscriptions for Organisation
     * 
     */
-    public function subscribe($family_mark, $payment_method, $nickname, $user_id)
+    public function subscribe($family_mark, $payment_method, $nickname, $user_id, $pricing_plan_id )
     {
         global $wpdb;
         
@@ -74,13 +74,15 @@ class CT_Organisation_Controller
                 'suite_family_mark' =>  $family_mark, 
                 'payment_method'    =>  $payment_method, 
                 'purchaser_id'      =>  $user_id,
-                'user_id'           =>  0
+                'user_id'           =>  0,
+                'pricing_plan_id'   => $pricing_plan_id
             ),
             array(
                 '%s',
                 '%d',
                 '%s',
                 '%s',
+                '%d',
                 '%d',
                 '%d',
                 '%d',
@@ -96,9 +98,10 @@ class CT_Organisation_Controller
         $subscription_id = $wpdb->insert_id;
         
         $suite_class = new TestSuite($suite_info->suite_id);
-        
-        $sign_price_code = $suite_class->loadSingleValue('signup_price');
-        $monthly_price_code = $suite_class->loadSingleValue('monthly_subscription_price');
+
+        $pricing_plans = new PricingPlan( $pricing_plan_id );
+        $sign_price_code = $pricing_plans->attribute_itemcodes['Signup']->value;
+        $monthly_price_code = $pricing_plans->attribute_itemcodes['Monthly']->value;
         
         //Create Charge Table
         $query = $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id=%d", $organisation_id);
@@ -211,14 +214,15 @@ class CT_Organisation_Controller
         }
     }
     
-    public function send_signup_organisation_request($user_id)
+    public function send_signup_organisation_request($user_id, $pricing_plan_id)
     {
         global $wpdb;
         
         $requester = get_userdata($user_id);
-        
+
         $email_data = array(
             '[requester_name]' => $requester->first_name . " " . $requester->last_name,
+            '[plan_id]' => $pricing_plan_id,
             '[requester_email]' => $requester->user_email,
             '[organisation]' => get_user_meta($user_id, 'user_organisation', true),
             '[organisation_website]' => get_user_meta($user_id, 'user_organisation_web', true),
