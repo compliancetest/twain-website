@@ -1260,6 +1260,7 @@ function is_iterable( $var )
         || $var instanceof Traversable
         || $var instanceof Iterator
         || $var instanceof IteratorAggregate
+        || $var instanceof stdClass
     );
 }
 
