@@ -180,9 +180,9 @@ get_header();
             <div class="field-row">
                 <div class="grid-cell">
                     <label>Pricing Plan</label>
-                    <input type="text" id="pricing_plan_id_span" value="">
+                    <select id="pricing_plan_id_span"></select>
                     <input type="hidden" id="pricing_plan_id" name="pricing_plan_id" value="">
-                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Change</span></a>
+                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>
                     <script>
                         jQuery(document).ready(function($){
                             $('#suite_family_mark').on('change', function(e){
@@ -191,9 +191,27 @@ get_header();
                                 } else {
                                     var new_url = jQuery('.submit_all').attr('href').split('&suite_id');
                                     new_url = new_url[0] + '&suite_id='+ $('#suite_family_mark').val();
+
                                 }
+                                addSelectValues( new_url );
                                 jQuery('.submit_all').attr( 'href', new_url );
                                 jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
+                                $('#pricing_plan_id_span').on('change', function(){
+                                    $('#pricing_plan_id').val( $(this).val());
+                                });
+                                function addSelectValues( url ){
+                                    $.ajax({
+                                        url: new_url+'&get_all=1',
+                                        type: 'get',
+                                        dataType: 'json',
+                                        success: function(data){
+                                            $("#pricing_plan_id_span").prepend("<option value='' selected='selected'>Select pricing plan</option>");
+                                            $.each(data, function(i, value) {
+                                                $('#pricing_plan_id_span').append($('<option>').text(value).attr('value', i));
+                                            });
+                                        }
+                                    })
+                                }
                             });
                         });
                     </script>
