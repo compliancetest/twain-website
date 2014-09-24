@@ -2,6 +2,7 @@ jQuery(document).ready(function($) {
 
     $('.plans-title-list li label').click(function(){
         run($(this));
+        updateURL();
         return false;
     });
 
@@ -9,7 +10,7 @@ jQuery(document).ready(function($) {
     $('.plans-header-nav-prev').click(function(){
         var active = $('.plans-title-list li.active');
         if (active.index != 0){
-
+            updateURL();
             active.prev().find('label').click();
 
             return false;
@@ -20,7 +21,7 @@ jQuery(document).ready(function($) {
     $('.plans-header-nav-next').click(function(){
         var active = $('.plans-title-list li.active');
         if (active.index != 0){
-
+            updateURL();
             active.next().find('label').click();
 
             return false;
@@ -87,4 +88,15 @@ function moveSlider(size){
 function showPlanDetails(el){
     jQuery('.plan-content').hide();
     jQuery('#' + el.data('plan-container')).show().css({ opacity: 0.5 }).animate({ opacity: 1 });
+}
+
+function updateURL(){
+    if( jQuery('.submit_all').attr('href').indexOf( 'plan_id' ) == -1 ){
+        var new_url = jQuery('.submit_all').attr('href') + '&plan_id='+jQuery( '.plans-title-list li.active label').attr( 'data-plan-id');
+    } else {
+        var new_url = jQuery('.submit_all').attr('href').split('&plan_id');
+        new_url = new_url[0] + '&plan_id='+jQuery( '.plans-title-list li.active label').attr( 'data-plan-id');
+    }
+    jQuery('.submit_all').attr( 'href', new_url );
+    jQuery("a[rel='custom-popup']").off("click").cplightbox( {'href': new_url});
 }

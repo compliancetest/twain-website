@@ -1,0 +1,1 @@
+ALTER TABLE `wp_organisations_subscriptions` ADD `pricing_plan_id` INT NOT NULL ;

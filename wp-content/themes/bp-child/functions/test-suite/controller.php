@@ -364,7 +364,11 @@ function saveSuite()
             add_post_meta($id, 'role_profile_types', '|' . implode('|', $roleProfileTypes) . '|', true);
         }
     }
-    
+
+    //Save Pricing Plans
+    if( isset( $_POST['test_suite_plans'] ) ){
+        update_post_meta($id, 'test_suite_plans', implode( '|', $_POST['test_suite_plans'] ) );
+    }
     //Save Related Test Suites
     $ts = $_POST['ts'] ;
     $ts_desc = $_POST['ts_desc'];

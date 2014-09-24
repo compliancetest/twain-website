@@ -170,6 +170,29 @@ get_header();
                 </div>                
                 <div class="clear"></div>
             </div>
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Pricing Plan</label>
+                    <input type="text" id="pricing_plan_id_span" readonly="readonly">
+                    <input type="hidden" id="pricing_plan_id" name="pricing_plan_id" value="">
+                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Change</span></a>
+                    <script>
+                        jQuery(document).ready(function($){
+                            $('#suite_family_mark').on('change', function(e){
+                                if( jQuery('.submit_all').attr('href').indexOf( 'suite_id' ) == -1 ){
+                                    var new_url = jQuery('.submit_all').attr('href') + '&suite_id='+ $('#suite_family_mark').val();
+                                } else {
+                                    var new_url = jQuery('.submit_all').attr('href').split('&suite_id');
+                                    new_url = new_url[0] + '&suite_id='+ $('#suite_family_mark').val();
+                                }
+                                jQuery('.submit_all').attr( 'href', new_url );
+                                jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="clear"></div>
+            </div>
             <div class="field-row notice-txt">
                 <div class="grid-cell">
                     <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
@@ -230,6 +253,11 @@ jQuery(document).ready(function(){
         {
             jQuery('#paymentForm #nickname').addClass('input-error');
             isValid = false;            
+        }
+        if(jQuery('#pricing_plan_id_span').val() == '')
+        {
+            jQuery('#pricing_plan_id_span').addClass('input-error');
+            isValid = false;
         }
         
         if(!isValid)

@@ -25,8 +25,8 @@ function ct_process_organisation_action()
             $payment_method = $_POST['payment_method'];
             $nickname = $_POST['nickname'];
             $family_mark =  $_POST['suite_family_mark'];
-            
-            $result = $controller->subscribe($family_mark, $payment_method, $nickname, $user_id);
+            $pricing_plan_id = intval( $_POST['pricing_plan_id'] );
+            $result = $controller->subscribe($family_mark, $payment_method, $nickname, $user_id, $pricing_plan_id );
             
             if ($result) {
                 addMessage("You successfully purchased subscription.");
@@ -62,7 +62,7 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" style="display: none; width: 500px">
                     <div class="popup-box-header radius6 noradiusbottom">Invalid Request!</div>
-                    <div class="popup-box-content"><p class="message error">There is a problem to process your reqeust. Please refresh your page and try again.</p></div>                    
+                    <div class="popup-box-content"><p class="message error">There is a problem to process your request. Please refresh your page and try again.</p></div>
                     <div class="popup-box-footer radius6 noradiustop">
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
@@ -94,6 +94,7 @@ function ct_process_organisation_action()
                     </div>
                     <a class="close_btn"></a>
                     <input type="hidden" name="suite_id" value="<?php echo $suiteClass->id ?>" />
+                    <input type="hidden" class="pricing_plan_id" name="pricing_plan_id" value="<?php echo $_REQUEST['plan_id'];?>" />
                     <div class="loading loading-with-text"><div><b>SUBMITTING REQUEST</b><span>Please wait...</span></div></div>
                   </form>
                 </div>
@@ -205,7 +206,7 @@ function ct_process_organisation_action()
             {
                 addMessage("There is already the organisation that matches with your email address", "warning");                
             } else {
-                $controller->send_signup_organisation_request($user_id);
+                $controller->send_signup_organisation_request($user_id, intval( $_REQUEST['pricing_plan_id'] ) );
                 addMessage("Your request has been sent.");
             }
             wp_redirect(get_permalink($_POST['suite_id']));
@@ -488,6 +489,9 @@ function ct_process_organisation_action()
             wp_redirect($return);
             exit;
             
+        }  else if(wp_verify_nonce($action, 'get_price_plan')) {
+            include(dirname(__FILE__) . '/../../content/org-pricing-page.php');
+            exit;
         }
     } 
 }

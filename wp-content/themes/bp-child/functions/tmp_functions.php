@@ -208,6 +208,14 @@ if(is_super_admin())
             exit;
         }
 
+        if( isset( $_GET['update_test_suites'] ) ){
+            $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'test-suite'");
+            foreach( $posts AS $post ){
+                update_post_meta( $post->ID, 'test_suite_plans', '1|2|3|4|5|6|7' );
+            }
+            $wpdb->query("UPDATE wp_organisations_subscriptions SET pricing_plan_id = 4 ");
+            die;
+        }
         if(isset($_GET['fix_test_suite_configuration'])){
             $esb = new ManageESB();
             
