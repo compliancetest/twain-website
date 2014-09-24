@@ -33,6 +33,7 @@ get_header();
                                <div class="td td-suite">Test Suite</div>
                                <div class="td td-nickname">Nickname</div>
                                <div class="td td-assignee">Assignee</div>
+                               <div class="td td-plan">Plan Details</div>
                                <div class="td td-status tocenter">Status</div>
                                <div class="td td-action tocenter">Action</div>
                                <div class="clear"></div>
@@ -51,7 +52,7 @@ get_header();
                                }else{
                                    foreach($subscriptions as $row)
                                    {
-                                       
+
                            ?>
                                 <div class="tr">
                                     <div class="td td-community">
@@ -66,7 +67,13 @@ get_header();
                                     <div class="td td-assignee">
                                         <?php echo $row->full_name; ?>
                                         <?php echo ($row->user_email)?('<br/>('.$row->user_email.')'):(''); ?>
-                                    </div>                                    
+                                    </div>
+                                    <div class="td td-plan">
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark;?>&plan_id=<?php echo $row->pricing_plan_id;?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="26" rel="custom-popup" cp-type="ajax" cp-removeboxafterclose="1" cp-closewhenclickoveraly="0" style="margin-left: 23px;;">
+                                            <span class="p"></span>
+                                            <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
+                                        </a>
+                                    </div>
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                             <?php echo $row->status?>
@@ -173,7 +180,7 @@ get_header();
             <div class="field-row">
                 <div class="grid-cell">
                     <label>Pricing Plan</label>
-                    <input type="text" id="pricing_plan_id_span" readonly="readonly">
+                    <input type="text" id="pricing_plan_id_span" value="">
                     <input type="hidden" id="pricing_plan_id" name="pricing_plan_id" value="">
                     <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Change</span></a>
                     <script>

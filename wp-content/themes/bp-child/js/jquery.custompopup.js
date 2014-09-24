@@ -218,7 +218,9 @@
                         opts.onClose();
                         $overlay.hide();
                         if(opts.removeBoxAfterClose){
-                            opts.box.remove();
+                            if( opts.box ) {
+                                opts.box.remove();
+                            }
                             opts.box = null;
                         }else{
                             $('body').append(opts.box);

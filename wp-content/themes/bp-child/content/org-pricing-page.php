@@ -3,19 +3,24 @@
     $suite_id = $wpdb->get_var( $wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id DESC LIMIT 1", $_REQUEST['suite_id']) );
     $suite = new TestSuite( $suite_id );
     $suite->load();
+    $read_only = false;
+    if( isset( $_REQUEST['plan_id'] ) ){
+        $suite->test_suite_plans = array( intval( $_REQUEST['plan_id'] ) );
+        $read_only = true;
+    }
     wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
 ?>
 
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
     <?php if( ! empty( $suite->test_suite_plans ) ):?>
-        <div class="popup-box-header radius6 noradiusbottom">Select <?php $suite->name; ?> Pricing Plan</div>
+        <div class="popup-box-header radius6 noradiusbottom"><?php echo $read_only ? 'View' : 'Select';?> <?php $suite->name; ?> Pricing Plan</div>
         <div class="pricing-plans-header">
             <a href="#" class="plans-header-nav-prev">&lt;</a>
             <a href="#" class="plans-header-nav-next">&gt;</a>
             <div class="plans-title-wrapper">
                 <ul class="plans-title-list">
                     <?php foreach( $pricing_plans = PricingPlan::getAllPlans( $suite->test_suite_plans ) AS $k => $plan ): ?>
-                            <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>' data-plan-name='<?php echo $plan->title;?>'><input type="radio" name="plan_name" /><?php echo preg_replace('/ /', '<br>', $plan->title );?></label></li>
+                            <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>' data-plan-name='<?php echo $plan->title;?>'><input type="radio" name="plan_name" /><?php echo $plan->id == 6 ? preg_replace('/ /', '<br>', $plan->title , 1 ) : strrev( preg_replace('/ /', '>rb<', strrev( $plan->title ), 1 ) );?></label></li>
                     <?php endforeach;?>
                 </ul>
             </div>
@@ -93,7 +98,9 @@
 
         </div>
         <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="select_plan action-btn process-btn submit-btn"  cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
+            <?php if( ! $read_only ):?>
+                <a href="#" class="select_plan action-btn process-btn submit-btn"  cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
+            <?php endif;?>
             <a href="#" class="cancel_select_plan action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
         </div>
@@ -201,13 +208,13 @@
 
         jQuery('.plans-title-list li.active label').click();
 
-        $('.select_plan').on('click', function(e){
-            jQuery('#pricing_plan_id_span').val($('.plans-title-list li.active label').attr('data-plan-name'));
-            jQuery('#pricing_plan_id').val($('.plans-title-list li.active label').attr('data-plan-id'));
+        jQuery('.select_plan').on('click', function(e){
+            jQuery('#pricing_plan_id_span').val(jQuery('.plans-title-list li.active label').attr('data-plan-name'));
+            jQuery('#pricing_plan_id').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
             jQuery('#pricing-plans .close_btn').click()
             setTimeout("jQuery('#purchase-subscribe').click()", 500 );
         })
-        $('.cancel_select_plan').on('click', function(e){
+        jQuery('.cancel_select_plan').on('click', function(e){
             jQuery('#pricing-plans .close_btn').click()
             setTimeout("jQuery('#purchase-subscribe').click()", 500 );
         })
