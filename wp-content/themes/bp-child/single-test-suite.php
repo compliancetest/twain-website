@@ -318,7 +318,7 @@ Template Name Posts: Test Suite
                                             <span class="r"></span>
                                         </span>
                                     </a>
-                                    <a class="pricing-plans-link suite-subscript-link" href="#pricing-plans" data-type="inline">
+                                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
     <!--                                    <span class="price-b">-->
     <!--                                        <span class="l"></span>-->
     <!--                                        <span class="m"><b>$--><?php //echo $suite->monthlySubscriptionPriceValue?><!--</b><br />per month</span>-->
