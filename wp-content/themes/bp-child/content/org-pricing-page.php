@@ -8,6 +8,14 @@
         $suite->test_suite_plans = array( intval( $_REQUEST['plan_id'] ) );
         $read_only = true;
     }
+    if( isset( $_REQUEST['get_all'] ) ){
+        $response = array();
+        foreach( $suite->test_suite_plans AS $plan ){
+            $planData = new PricingPlan( $plan );
+            $response[$plan] = $planData->title;
+        }
+        exit( json_encode( $response ) );
+    }
     wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
 ?>
 
@@ -209,7 +217,7 @@
         jQuery('.plans-title-list li.active label').click();
 
         jQuery('.select_plan').on('click', function(e){
-            jQuery('#pricing_plan_id_span').val(jQuery('.plans-title-list li.active label').attr('data-plan-name'));
+            jQuery('#pricing_plan_id_span').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
             jQuery('#pricing_plan_id').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
             jQuery('#pricing-plans .close_btn').click()
             setTimeout("jQuery('#purchase-subscribe').click()", 500 );

@@ -233,6 +233,12 @@ Template Name Posts: Test Suite
 
             <script>
                 jQuery(document).ready(function($){
+                    $(".pricing-plans-link").cplightbox({
+                        onLoad: function() {
+                            jQuery('.plans-title-list li.active label').click();
+
+                        }
+                    });
                     $('.pricing-plans-link, .suite-subscript-link').on('click', function(){
                         $(".pricing-plans-link").cplightbox({
                             onLoad: function() {
@@ -242,7 +248,6 @@ Template Name Posts: Test Suite
                         });
 
                     });
-                    $('.pricing-plans-link').click();
 
                 });
             </script>
@@ -290,14 +295,14 @@ Template Name Posts: Test Suite
                             <?php
                             } else if ($organisation = ct_get_user_organisation($user_id)) {
                             ?>
-                                <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">Pricing Plans</a>
+                                <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">View Pricing Plans</a>
                                 <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
                                     <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                 </a>
                             <?php
                             } else {
                             ?>
-                                <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">Pricing Plans</a>
+                                <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">View Pricing Plans</a>
                                 <a class="pricing-plans-link suite-subscript-link" href="#pricing-plans" data-type="inline">
 <!--                                    <span class="price-b">-->
 <!--                                        <span class="l"></span>-->
@@ -344,7 +349,7 @@ Template Name Posts: Test Suite
                 } else {
                     
             ?>
-                    <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">Pricing Plans</a>
+                    <a class="pricing-plans-link action-btn blue-edit-btn" href="#pricing-plans" data-type="inline">View Pricing Plans</a>
                     <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                     </a>
