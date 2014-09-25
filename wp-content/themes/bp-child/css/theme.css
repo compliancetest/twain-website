@@ -5174,9 +5174,12 @@ body #bbpress-forums{
     margin-bottom: 0;
 }
 
+.test-suite-actions{
+    text-align:right;
+}
+
 a.suite-subscript-link{
-    display: block;
-    float: right;
+    display: inline-block;
     position: relative;
     height: 51px;
     border: solid 1px #7b1413;
@@ -5200,7 +5203,7 @@ a.suite-subscript-link{
 a.suite-subscript-link:hover{
     background: #c92d24;
 }
-.suite-subscript-link .price-b{
+.suite-subscript-link .price-b, .big-red-btn .price-b{
     display: block;
     position: relative;
     height: 61px;    
@@ -5210,19 +5213,19 @@ a.suite-subscript-link:hover{
     top: -5px;
     float: left;
 }
-.suite-subscript-link .price-b .l{
+.suite-subscript-link .price-b .l, .big-red-btn .price-b .l{
     width: 4px;
     height: 100%;
     float: left;
     background: url(../images/blue_box_left.png) no-repeat;
 }
-.suite-subscript-link .price-b .r{
+.suite-subscript-link .price-b .r, .big-red-btn .price-b .r{
     width: 4px;
     height: 100%;
     float: left;
     background: url(../images/blue_box_right.png) no-repeat;
 }
-.suite-subscript-link .price-b .m{
+.suite-subscript-link .price-b .m, .big-red-btn .price-b .m{
     height: 47px;
     float: left;
 /*    width: 82px;*/
@@ -7354,7 +7357,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .plans-pricing-table td{
-    width: 130px;
+    width: 135px;
 }
 
 .plans-pricing-table .feature-available,
@@ -7373,6 +7376,60 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .plans-pricing-table .feature-unavailable{
     background-position: 0 -21px;
 }
+
+.big-red-btn{
+    display: inline-block;
+    color: #fff;
+    position: relative;
+    height: 51px;
+    border: 1px solid #7b1413;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #9f1f1b;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cc2e27), to(#981716));
+    background: -webkit-linear-gradient(top, #cc2e27, #981716);
+    background: -moz-linear-gradient(top, #cc2e27, #981716);
+    background: -ms-linear-gradient(top, #cc2e27, #981716);
+    background: -o-linear-gradient(top, #cc2e27, #981716);
+    box-shadow: inset 0 2px 1px -1px #E1827D;
+    -moz-text-shadow: 0 -1px 0 #7b1413;
+    -webkit-text-shadow: 0 -1px 0 #7b1413;
+    -o-text-shadow: 0 -1px 0 #7b1413;
+    text-shadow: 0 -1px 0 #1D5C91;
+    font-size:22px;
+    color: #fff;
+    padding:0 12px;
+}
+
+.big-red-btn:hover{
+    background: #c92d24;
+}
+
+.big-red-btn .price-b{
+    font-size: 24px;
+    color:#fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
+    left:0;
+    font-weight:600;
+}
+
+.big-red-btn:hover .price-b .m{
+    background: #26659a;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#285d89), to(#237fce));
+    background: -webkit-linear-gradient(top, #285d89, #237fce);
+    background: -moz-linear-gradient(top, #285d89, #237fce);
+    background: -ms-linear-gradient(top, #285d89, #237fce);
+    background: -o-linear-gradient(top, #285d89, #237fce);
+}
+
+.big-red-btn .price-b .m{
+    padding:13px 10px 3px 10px;
+    font-size:20px;
+    line-height:18px;
+}
+
+
 
 /* Homepage start
 ----------------------------------------------- */
