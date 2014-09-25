@@ -1,12 +1,18 @@
+<?php
+    $read_only = false;
+    if( ! is_user_logged_in() ){
+        $read_only = true;
+    }
+?>
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
-    <div class="popup-box-header radius6 noradiusbottom">Select <?php the_title(); ?> Pricing Plan</div>
+    <div class="popup-box-header radius6 noradiusbottom"><?php if( $read_only ): ?>View <?php the_title(); ?> Pricing Plans<?php else:?>Select <?php the_title(); ?> Pricing Plan<?php endif;?></div>
     <div class="pricing-plans-header">
         <a href="#" class="plans-header-nav-prev">&lt;</a>
         <a href="#" class="plans-header-nav-next">&gt;</a>
         <div class="plans-title-wrapper">
             <ul class="plans-title-list">
                 <?php foreach( $pricing_plans = PricingPlan::getAllPlans( $suite->test_suite_plans ) AS $k => $plan ): ?>
-                        <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>'><input type="radio" name="plan_name" /><?php echo preg_replace('/ /', '<br>', $plan->title );?></label></li>
+                        <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>'><input type="radio" name="plan_name" /><?php echo $plan->id == 6 ? preg_replace('/ /', '<br>', $plan->title , 1 ) : strrev( preg_replace('/ /', '>rb<', strrev( $plan->title ), 1 ) );?></label></li>
                 <?php endforeach;?>
             </ul>
         </div>
@@ -84,7 +90,9 @@
 
     </div>
     <div class="popup-box-footer radius6 noradiustop">
-        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" class=" submit_all action-btn process-btn submit-btn" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
+        <?php if( is_user_logged_in() ):?>
+            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" class=" submit_all action-btn process-btn submit-btn" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
+        <?php endif;?>
         <a href="#" class="action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
         <div class="clear"></div>
     </div>

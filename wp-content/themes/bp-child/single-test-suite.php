@@ -354,7 +354,7 @@ Template Name Posts: Test Suite
 <!--                            <span class="m"><b>$--><?php //echo $suite->signupPriceValue?><!--</b><br />sign-up fee</span>-->
 <!--                            <span class="r"></span>-->
 <!--                        </span>-->
-                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                        <span class="text-b-nonlogged"><b>View Pricing Plans</b></span>
                     </a>
             <?php
                 }                                

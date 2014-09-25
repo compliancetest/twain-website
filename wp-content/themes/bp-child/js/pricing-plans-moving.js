@@ -91,12 +91,14 @@ function showPlanDetails(el){
 }
 
 function updateURL(){
-    if( jQuery('.submit_all').attr('href').indexOf( 'plan_id' ) == -1 ){
-        var new_url = jQuery('.submit_all').attr('href') + '&plan_id='+jQuery( '.plans-title-list li.active label').attr( 'data-plan-id');
-    } else {
-        var new_url = jQuery('.submit_all').attr('href').split('&plan_id');
-        new_url = new_url[0] + '&plan_id='+jQuery( '.plans-title-list li.active label').attr( 'data-plan-id');
+    if( jQuery('.submit_all').length ){
+        if (jQuery('.submit_all').attr('href').indexOf('plan_id') == -1) {
+            var new_url = jQuery('.submit_all').attr('href') + '&plan_id=' + jQuery('.plans-title-list li.active label').attr('data-plan-id');
+        } else {
+            var new_url = jQuery('.submit_all').attr('href').split('&plan_id');
+            new_url = new_url[0] + '&plan_id=' + jQuery('.plans-title-list li.active label').attr('data-plan-id');
+        }
+        jQuery('.submit_all').attr('href', new_url);
+        jQuery("a[rel='custom-popup']").off("click").cplightbox({'href': new_url});
     }
-    jQuery('.submit_all').attr( 'href', new_url );
-    jQuery("a[rel='custom-popup']").off("click").cplightbox( {'href': new_url});
 }

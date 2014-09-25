@@ -5260,6 +5260,15 @@ a.suite-subscript-link:hover{
     float: left;
     margin-left: 25px;
 }
+.suite-subscript-link .text-b-nonlogged{
+    padding-top: 17px;
+    height: 38px;
+    display: block;
+    line-height: 12px;
+    padding-right: 37px;
+    float: left;
+    margin-left: 25px;
+}
 .suite-subscript-link-oneline .price-b .m{
     padding-top: 20px;
     height: 41px;
@@ -7132,20 +7141,24 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: none;
 }
 #organisation_subscriptions .td-community{
-    width: 140px;
+    width: 120px;
 }
 #organisation_subscriptions .td-suite{
-    width: 150px;
+    width: 120px;
 }
 #organisation_subscriptions .td-nickname{
-    width: 170px;
+    width: 140px;
+}
+#organisation_subscriptions .td-plan{
+    width: 70px;
+    text-align: center;
 }
 #organisation_subscriptions .td-status{
     width: 92px;
     text-align: center;
 }
 #organisation_subscriptions .td-assignee{
-    width: 159px;
+    width: 147px;
     word-wrap: break-word;
 }
 #organisation_subscriptions .td-action{
@@ -7244,7 +7257,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     overflow: hidden;
     cursor: pointer;
     display: block;
-    max-width: 180px;
+    max-width: 200px;
 }
 
 .plans-title-list li input{
