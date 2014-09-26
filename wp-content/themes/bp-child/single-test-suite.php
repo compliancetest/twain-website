@@ -280,29 +280,19 @@ Template Name Posts: Test Suite
                             if ($is_organisation_admin) {
                             ?>
                                 <a class="pricing-plans-link suite-subscript-link" href="#pricing-plans" data-type="inline">
-<!--                                    <span class="price-b">-->
-<!--                                        <span class="l"></span>-->
-<!--                                        <span class="m"><b>$--><?php //echo $suite->monthlySubscriptionPriceValue?><!--</b><br />per month</span>-->
-<!--                                        <span class="r"></span>-->
-<!--                                    </span>-->
-<!--                                    <span class="price-b signup-price">-->
-<!--                                        <span class="l"></span>-->
-<!--                                        <span class="m"><b>$--><?php //echo $suite->signupPriceValue?><!--</b><br />sign-up fee</span>-->
-<!--                                        <span class="r"></span>-->
-<!--                                    </span>-->
                                     <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                 </a>
                             <?php
                             } else if ($organisation = ct_get_user_organisation($user_id)) {
                             ?>
                                 <div class="test-suite-actions">
-                                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                        <span class="price-b">
-                                            <span class="l"></span>
-                                            <span class="m">View Pricing<br>Plans</span>
-                                            <span class="r"></span>
-                                        </span>
-                                    </a>
+<!--                                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">-->
+<!--                                        <span class="price-b">-->
+<!--                                            <span class="l"></span>-->
+<!--                                            <span class="m">View Pricing<br>Plans</span>-->
+<!--                                            <span class="r"></span>-->
+<!--                                        </span>-->
+<!--                                    </a>-->
                                     <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
                                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                     </a>
@@ -319,16 +309,6 @@ Template Name Posts: Test Suite
                                         </span>
                                     </a>
                                     <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-    <!--                                    <span class="price-b">-->
-    <!--                                        <span class="l"></span>-->
-    <!--                                        <span class="m"><b>$--><?php //echo $suite->monthlySubscriptionPriceValue?><!--</b><br />per month</span>-->
-    <!--                                        <span class="r"></span>-->
-    <!--                                    </span>-->
-    <!--                                    <span class="price-b signup-price">-->
-    <!--                                        <span class="l"></span>-->
-    <!--                                        <span class="m"><b>$--><?php //echo $suite->signupPriceValue?><!--</b><br />sign-up fee</span>-->
-    <!--                                        <span class="r"></span>-->
-    <!--                                    </span>-->
                                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                     </a>
                                 </div>

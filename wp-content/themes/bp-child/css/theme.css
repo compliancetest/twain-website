@@ -7144,17 +7144,13 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: none;
 }
 #organisation_subscriptions .td-community{
-    width: 120px;
-}
-#organisation_subscriptions .td-suite{
-    width: 120px;
-}
-#organisation_subscriptions .td-nickname{
     width: 140px;
 }
-#organisation_subscriptions .td-plan{
-    width: 70px;
-    text-align: center;
+#organisation_subscriptions .td-suite{
+    width: 140px;
+}
+#organisation_subscriptions .td-nickname{
+    width: 160px;
 }
 #organisation_subscriptions .td-status{
     width: 92px;
@@ -7165,7 +7161,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     word-wrap: break-word;
 }
 #organisation_subscriptions .td-action{
-    width: 80px;
+    width: 110px;
 }
 .td-convsn input[type="text"], 
 .td-message-part input[type="text"] {

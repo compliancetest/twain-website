@@ -12,7 +12,7 @@
     }
 ?>
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
-    <div class="popup-box-header radius6 noradiusbottom"><?php if( $read_only ): ?>View <?php the_title(); ?> Pricing Plans<?php else:?>Select <?php the_title(); ?> Pricing Plan<?php endif;?></div>
+    <div class="popup-box-header radius6 noradiusbottom"><?php if( $read_only ): ?>View <?php echo $suite->name; ?> Pricing Plans<?php else:?>Select <?php echo $suite->name; ?> Pricing Plan<?php endif;?></div>
     <div class="pricing-plans-header">
         <a href="#" class="plans-header-nav-prev">&lt;</a>
         <a href="#" class="plans-header-nav-next">&gt;</a>
