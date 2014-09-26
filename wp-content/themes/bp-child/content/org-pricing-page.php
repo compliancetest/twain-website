@@ -21,7 +21,7 @@
 
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
     <?php if( ! empty( $suite->test_suite_plans ) ):?>
-        <div class="popup-box-header radius6 noradiusbottom"><?php echo $read_only ? 'View' : 'Select';?> <?php $suite->name; ?> Pricing Plan</div>
+        <div class="popup-box-header radius6 noradiusbottom"><?php echo $read_only ? 'View' : 'Select';?> <?php echo $suite->name; ?> Pricing Plan</div>
         <div class="pricing-plans-header">
             <a href="#" class="plans-header-nav-prev">&lt;</a>
             <a href="#" class="plans-header-nav-next">&gt;</a>

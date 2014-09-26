@@ -33,7 +33,6 @@ get_header();
                                <div class="td td-suite">Test Suite</div>
                                <div class="td td-nickname">Nickname</div>
                                <div class="td td-assignee">Assignee</div>
-                               <div class="td td-plan">Plan Details</div>
                                <div class="td td-status tocenter">Status</div>
                                <div class="td td-action tocenter">Action</div>
                                <div class="clear"></div>
@@ -68,12 +67,6 @@ get_header();
                                         <?php echo $row->full_name; ?>
                                         <?php echo ($row->user_email)?('<br/>('.$row->user_email.')'):(''); ?>
                                     </div>
-                                    <div class="td td-plan">
-                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark;?>&plan_id=<?php echo $row->pricing_plan_id;?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="26" rel="custom-popup" cp-type="ajax" cp-removeboxafterclose="1" cp-closewhenclickoveraly="0" style="margin-left: 23px;;">
-                                            <span class="p"></span>
-                                            <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
-                                        </a>
-                                    </div>
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                             <?php echo $row->status?>
@@ -100,6 +93,10 @@ get_header();
                                     </div>
                                     <div class="td td-action tocenter">
                                         <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe')?>&id=<?php echo $row->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Cancel Subscription<span></span></span></a>
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark;?>&plan_id=<?php echo $row->pricing_plan_id;?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip left10" data-id="26" rel="custom-popup" cp-type="ajax" cp-removeboxafterclose="1" cp-closewhenclickoveraly="0">
+                                            <span class="p"></span>
+                                            <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
+                                        </a>
                                         <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
                                     </div>
                                     <div class="clear"></div>
