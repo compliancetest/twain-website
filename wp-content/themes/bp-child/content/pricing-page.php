@@ -30,9 +30,15 @@
             <div class="plan-content" id="plan_<?php echo $k;?>">
                 <p class="plan-description"><?php echo $plan->description;?></p>
                 <ul class="plan-subscription-prices">
-                    <li><strong class="has-custom-tooltip" title="Once off fee charged when a subscription is initially purchased" data-tooltip-width="180" data-tooltip-height="34">Signup Fee</strong>$<?php echo $plan->getPriceByXeroCode( $plan->attribute_itemcodes['Signup']->value );?></li>
-                    <li><strong class="has-custom-tooltip" title="Monthly Fee" data-tooltip-height="20">Monthly Fee</strong>$<?php echo $plan->getPriceByXeroCode( $plan->attribute_itemcodes['Monthly']->value );?></li>
-                    <?php if( ! empty( $plan->attribute_period) ):?><li><strong class="has-custom-tooltip" title="Once off fee charged when a subscription is initially purchased" data-tooltip-width="180" data-tooltip-height="34">Prepaid / year</strong>$<?php echo $plan->getPriceByXeroCode( $plan->attribute_itemcodes['Monthly']->value ) * $plan->attribute_period ;?></li><?php endif;?>
+                    <?php
+                    $signupPrice  = $plan->getPriceByXeroCode( $plan->attribute_itemcodes['Signup']->value );
+                    $monthlyPrice = $plan->getPriceByXeroCode( $plan->attribute_itemcodes['Monthly']->value );
+                    ?>
+                    <?php if( $signupPrice ):?><li><strong class="has-custom-tooltip" title="Once off fee charged when a subscription is initially purchased" data-tooltip-width="180" data-tooltip-height="34">Signup Fee</strong>$<?php echo $signupPrice;?></li><?php endif;?>
+                    <?php if( $monthlyPrice ):?><li><strong class="has-custom-tooltip" title="Monthly Fee" data-tooltip-height="20">Monthly Fee</strong>$<?php echo $monthlyPrice;?></li><?php endif;?>
+                    <?php if( isset( $plan->attribute['Discount']->value ) ):?><li><strong class="has-custom-tooltip" title="Discount" data-tooltip-height="20">Discount</strong><?php echo $plan->attribute['Discount']->value;?>%</li><?php endif;?>
+                    <?php if( isset( $plan->attribute['Period']->value ) ):?><li><strong class="has-custom-tooltip" title="Period" data-tooltip-height="20">Period:</strong><?php echo $plan->attribute['Period']->value;?> monthes</li><?php endif;?>
+                    <?php if( ! empty( $plan->attribute['Period']->value) ):?><li><strong class="has-custom-tooltip" title="Once off fee charged when a subscription is initially purchased" data-tooltip-width="180" data-tooltip-height="34">Prepaid / year</strong>$<?php echo $plan->getPriceByXeroCode( $plan->attribute_itemcodes['Monthly']->value ) * $plan->attribute['Period']->value ;?></li><?php endif;?>
                 </ul>
                 <table class="plans-pricing-table">
                     <thead>

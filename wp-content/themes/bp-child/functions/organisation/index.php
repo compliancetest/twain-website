@@ -261,6 +261,23 @@ function ct_process_organisation_action()
                                 <input type="text" name="nickname" id="nickname" value="<?php echo $subscription->nickname?>" class="input" maxlength="50" />                    
                             </div>                
                             <div class="clear"></div>
+                            <div class="space20"></div>
+                            <div class="grid-cell">
+                                <label>Pricing Plan</label>
+                                <select id="pricing_plan_id" name="pricing_plan_id">
+                                    <?php
+                                        $suite = new TestSuite( $subscription->suite_family_mark );
+                                        $suite->load();
+                                    ?>
+                                    <?php foreach( $suite->test_suite_plans AS $pp ):?>
+                                        <?php $pricing_plan = new PricingPlan( $pp );?>
+                                            <option value="<?php echo $pricing_plan->id;?>"<?php if( $pricing_plan->id == $subscription->pricing_plan_id ):?> selected="selected"<?php endif;?> ><?php echo $pricing_plan->title;?></option>
+                                        <?php endforeach;?>
+                                </select>
+<!--                                <input type="hidden" id="pricing_plan_id_hidden" name="pricing_plan_id" value="">-->
+<!--                                <a href="--><?php //echo the_permalink() ?><!--?_organisation_nonce=--><?php //echo wp_create_nonce('get_price_plan') ?><!--&suite_id=--><?php //echo $subscription->suite_family_mark;?><!--" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>-->
+                            </div>
+                            <div class="clear"></div>
                         </div>
                         <!--<div class="field-row">
                             <div class="grid-cell">
@@ -301,7 +318,7 @@ function ct_process_organisation_action()
             } else if(!$_POST['nickname']) {
                 addMessage('The subscription nickname should not be empty', 'error');
             } else {
-                $controller->save_subscription($subscription->id, $_POST['nickname']);
+                $controller->save_subscription($subscription->id, $_POST['nickname'], $_POST['pricing_plan_id']);
                 addMessage('The subscription has been updated.');
             }
             

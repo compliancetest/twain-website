@@ -232,6 +232,7 @@ class CT_Xero {
                 $line_item->addChild( 'ItemCode', $entry['item_code'] );
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
                 $line_item->addChild( 'Description', $entry['comment'] );
+                if( $entry['discount'] > 0 ) $line_item->addChild( 'DiscountRate', $entry['discount'] );
             }
         }
         if( isset( $invoiceData['invoice_number'] ) && ! empty( $invoiceData['invoice_number'] ) ) $xml->addChild('InvoiceNumber', $invoiceData['invoice_number'] );
