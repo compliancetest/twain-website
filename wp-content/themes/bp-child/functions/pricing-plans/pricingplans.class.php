@@ -18,9 +18,10 @@ class PricingPlan
     public $attribute_itemcodes = array();
     public $attribute_roles     = array();
     public $attribute_levels    = array();
+    public $attribute_boolean   = array();
     public $attribute_billing   = '';
 
-    public $attribute_period = '';
+    public $attribute = array();
 
     public function __construct($id = null)
     {
@@ -39,19 +40,24 @@ class PricingPlan
 
         $pricing_plan_attributes = $this->getPricingPlanAttributes();
         foreach( $pricing_plan_attributes AS $attr ){
-            switch( $attr->type ){
-                case 'itemcode':
-                    $this->attribute_itemcodes[$attr->name] = $attr;
-                    break;
-                case 'string':
-                    $this->attribute_billing = $attr;
-                    break;
-                case 'role';
-                    $this->attribute_roles[$attr->name] = explode( ',', str_replace( ' ', '', $attr->value ) );
-                    break;
-                case 'number':
-                    $this->attribute_period = $attr->value;
-                    break;
+            if( $attr->visibility == 1 ) {
+                switch ($attr->type) {
+                    case 'itemcode':
+                        $this->attribute_itemcodes[$attr->name] = $attr;
+                        break;
+                    case 'string':
+                        $this->attribute_billing = $attr;
+                        break;
+                    case 'role';
+                        $this->attribute_roles[$attr->name] = explode(',', str_replace(' ', '', $attr->value));
+                        break;
+                    case 'number':
+                        $this->attribute[$attr->name] = $attr;
+                        break;
+                    case 'boolean':
+                        $this->attribute_boolean[$attr->name] = $attr->value;
+                        break;
+                }
             }
         }
     }
