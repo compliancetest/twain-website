@@ -117,7 +117,7 @@
             <?php if( ! $read_only ):?>
                 <a href="#" class="select_plan action-btn process-btn submit-btn"  cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
             <?php endif;?>
-            <a href="#" class="cancel_select_plan action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+            <a href="#" class="cancel_select_plan action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>
@@ -128,7 +128,7 @@
                 Please contact site administrator
             </div>
             <div class="popup-box-footer radius6 noradiustop">
-                <a href="#" class="cancel_select_plan action-btn cancel-btn" onclick="jQuery('#pricing-plans .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+                <a href="#" class="cancel_select_plan action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                 <div class="clear"></div>
             </div>
         </div>
