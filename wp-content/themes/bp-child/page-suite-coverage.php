@@ -78,6 +78,8 @@ $esb = new ManageESB();
 
                                        foreach($testCases as $case)
                                        {
+                                           $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_case_id = %d AND test_plan_id = %d ", $case->ID, $crow->id ) );
+                                           error_log($is_excluded);
                                            $opt = '';
                                            $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
                                            if( $is_optional == 'Yes' ) $opt = ' (opt) ';
@@ -92,12 +94,15 @@ $esb = new ManageESB();
                                                }
                                                
                                            }else{
-                                               if( $is_optional == 'No' || empty( $is_optional ) ){
-                                                    $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
+                                               if( ( $is_optional == 'No' || empty( $is_optional ) ) && ! $is_excluded ) {
+                                                   $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
+                                               } else if( $is_excluded ){
+                                                   $normalBlobs .= '<span class="bubble excluded_bubble">' . $tooltip . '</span>';
                                                } else {
                                                    $normalBlobs .= '<span class="bubble optional_bubble">' . $tooltip . '</span>';
                                                }
                                            }
+                                           $normalBlobs .= '<a href="?plan_id='.$crow->id.'&id='.$case->ID.'&_wpnonce='.wp_create_nonce('get_popup').'" cp-type="ajax" cp-removeBoxAfterClose=1 class="create_popup action-btn edit-btn edit-plan-btn icon-btn" style="display: none;"></a>';
                                        }
                                        echo $passedBlobs . $failedBlobs . $normalBlobs;
                                    ?>
@@ -191,6 +196,9 @@ jQuery(document).ready(function(){
     }, function(){
         jQuery(this).find('.simple_tooltip').hide();
     })
+    jQuery('.coverage-progress span.bubble').on('click', function(){
+        jQuery(this).next().click();
+    });
 })
 </script>
 <?php

@@ -4516,10 +4516,21 @@ span.button_sign {
     float: left;
     background: url(../images/suite-progress-blob.png) no-repeat 0 0;
     position: relative;
+    cursor: pointer;
 }
 .coverage-progress span.optional_bubble{
     opacity: 90;
     background: rgba(0,0,0,.5);
+    -moz-transition: all 1s;
+    -webkit-transition: all 1s;
+    transition: all 1s;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+.coverage-progress span.excluded_bubble{
+    opacity: 90;
+    background: rgba(255, 165, 0, 0.50);
     -moz-transition: all 1s;
     -webkit-transition: all 1s;
     transition: all 1s;
