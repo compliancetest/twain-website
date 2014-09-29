@@ -97,7 +97,7 @@ get_header();
                                             <span class="p"></span>
                                             <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
                                         </a>
-                                        <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
+                                        <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip edit_sub_<?php echo $row->id?>" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -195,6 +195,16 @@ get_header();
                                 jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
                                 $('#pricing_plan_id_span').on('change', function(){
                                     $('#pricing_plan_id').val( $(this).val());
+
+                                    if( jQuery('.submit_all').attr('href').indexOf( 'suite_id' ) == -1 ){
+                                        var new_url = jQuery('.submit_all').attr('href') + '&suite_id='+ $('#suite_family_mark').val();
+                                    } else {
+                                        var new_url = jQuery('.submit_all').attr('href').split('&suite_id');
+                                        new_url = new_url[0] + '&suite_id='+ $('#suite_family_mark').val();
+                                    }
+                                    new_url = new_url+'&pricing_plan_id='+jQuery('#pricing_plan_id').val();
+                                    jQuery('.submit_all').attr( 'href', new_url );
+                                    jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
                                 });
                                 function addSelectValues( url ){
                                     $.ajax({

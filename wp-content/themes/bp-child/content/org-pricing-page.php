@@ -28,7 +28,7 @@
             <div class="plans-title-wrapper">
                 <ul class="plans-title-list">
                     <?php foreach( $pricing_plans = PricingPlan::getAllPlans( $suite->test_suite_plans ) AS $k => $plan ): ?>
-                            <li <?php if( $k == 0 ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>' data-plan-name='<?php echo $plan->title;?>'><input type="radio" name="plan_name" /><?php echo $plan->id == 6 ? preg_replace('/ /', '<br>', $plan->title , 1 ) : strrev( preg_replace('/ /', '>rb<', strrev( $plan->title ), 1 ) );?></label></li>
+                            <li <?php if( ( isset( $_REQUEST['pricing_plan_id'] ) && $_REQUEST['pricing_plan_id'] == $plan->id ) || ( $k == 0 && ! isset( $_REQUEST['pricing_plan_id'] ) ) ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>' data-plan-name='<?php echo $plan->title;?>'><input type="radio" name="plan_name" /><?php echo $plan->id == 6 ? preg_replace('/ /', '<br>', $plan->title , 1 ) : strrev( preg_replace('/ /', '>rb<', strrev( $plan->title ), 1 ) );?></label></li>
                     <?php endforeach;?>
                 </ul>
             </div>
@@ -221,19 +221,53 @@
             jQuery('.plan-content').hide();
             jQuery('#' + el.data('plan-container')).show().css({ opacity: 0.5 }).animate({ opacity: 1 });
         }
-
         jQuery('.plans-title-list li.active label').click();
+        setTimeout("jQuery('.plans-title-list li.active label').click();", 500 );
 
-        jQuery('.select_plan').on('click', function(e){
-            jQuery('#pricing_plan_id_span').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
-            jQuery('#pricing_plan_id').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
-            jQuery('#pricing-plans .close_btn').click()
-            setTimeout("jQuery('#purchase-subscribe').click()", 500 );
-        })
-        jQuery('.cancel_select_plan').on('click', function(e){
-            jQuery('#pricing-plans .close_btn').click()
-            setTimeout("jQuery('#purchase-subscribe').click()", 500 );
-        })
+        <?php if( ! isset( $_REQUEST['is_edit'] ) ):?>
+            jQuery('.select_plan').on('click', function(e){
+                jQuery('#pricing_plan_id_span').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
+                jQuery('#pricing_plan_id').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
+                jQuery('#pricing-plans .close_btn').click();
+                if( jQuery('.submit_all').attr('href').indexOf( 'suite_id' ) == -1 ){
+                    var new_url = jQuery('.submit_all').attr('href') + '&suite_id='+ $('#suite_family_mark').val();
+                } else {
+                    var new_url = jQuery('.submit_all').attr('href').split('&suite_id');
+                    new_url = new_url[0] + '&suite_id='+ $('#suite_family_mark').val();
+                }
+                new_url = new_url+'&pricing_plan_id='+jQuery('#pricing_plan_id').val();
+                jQuery('.submit_all').attr( 'href', new_url );
+                jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
+
+                setTimeout("jQuery('#purchase-subscribe').click()", 500 );
+            })
+            jQuery('.cancel_select_plan').on('click', function(e){
+                jQuery('#pricing-plans .close_btn').click()
+                setTimeout("jQuery('#purchase-subscribe').click()", 500 );
+            })
+        <?php else:?>
+            <?php $sid = intval( $_REQUEST['sid'] );?>
+            jQuery('.select_plan').on('click', function(e){
+                jQuery('.pricing_plan_id').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
+                jQuery('#pricing_plan_id_hidden').val(jQuery('.plans-title-list li.active label').attr('data-plan-id'));
+                jQuery('#pricing-plans .close_btn').click();
+                if( jQuery('.edit_subsc').attr('href').indexOf( 'pricing_plan_id' ) == -1 ){
+                    var new_url = jQuery('.edit_subsc').attr('href') ;
+                } else {
+                    var new_url = jQuery('.edit_subsc').attr('href').split('&pricing_plan_id');
+                    new_url = new_url[0] ;
+                }
+                new_url = new_url+'&pricing_plan_id='+jQuery('#pricing_plan_id_hidden').val();
+                jQuery('.edit_subsc').attr( 'href', new_url );
+                jQuery(".edit_subsc").off("click").cplightbox( {'href': new_url});
+
+                setTimeout("jQuery('.edit_sub_<?php echo $sid;?>').click()", 500 );
+            })
+            jQuery('.cancel_select_plan').on('click', function(e){
+                jQuery('#pricing-plans .close_btn').click()
+                setTimeout("jQuery('.edit_sub_<?php echo $sid;?>').click()", 500 );
+            })
+        <?php endif;?>
     });
 </script>
 <?php exit();?>

@@ -111,7 +111,7 @@ class CT_Organisation_Controller
             if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute_period - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
-                $discount = $pricing_plans->attribute['Discount']->value;
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $organisation_id,
@@ -138,6 +138,7 @@ class CT_Organisation_Controller
                     array('id' => $subscription_id )
                 );
             } else {
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 if( isset( $prices['Signup']->value ) ) {
                     $charge_data = array(
                         array(
@@ -151,14 +152,15 @@ class CT_Organisation_Controller
                             'reference_id' => $subscription_id,
                             'invoice_number' => '',
                             'is_paid' => 0,
-                            'comment' => $n_nickname
+                            'comment' => $n_nickname,
+                            'discount' => $discount
                         ),
-                        array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+                        array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
                     );
 
                     $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
                 }
-                $quantity = $pricing_plans->attribute_boolean['Prorata'] == 1 ?  1 : ct_calculate_first_month_quantity(1);
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  ct_calculate_first_month_quantity(1) : 1;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $organisation_id,
@@ -171,9 +173,10 @@ class CT_Organisation_Controller
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
                         'is_paid'               => 0,
-                        'comment'               => $n_nickname.' - '.date("F Y")
+                        'comment'               => $n_nickname.' - '.date("F Y"),
+                        'discount'              => $discount
                     ),
-                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
                 );
 
                 $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
@@ -314,7 +317,7 @@ class CT_Organisation_Controller
             if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute_period - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
-                $discount = $pricing_plans->attribute['Discount']->value;
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $subscription->organisation_id,
@@ -341,6 +344,7 @@ class CT_Organisation_Controller
                     array('id' => $subscription_id )
                 );
             } else {
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 if( isset( $prices['Signup']->value ) ) {
                     $charge_data = array(
                         array(
@@ -354,14 +358,15 @@ class CT_Organisation_Controller
                             'reference_id' => $subscription_id,
                             'invoice_number' => '',
                             'is_paid' => 0,
-                            'comment' => $n_nickname
+                            'comment' => $n_nickname,
+                            'discount' => $discount
                         ),
-                        array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+                        array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
                     );
 
                     $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
                 }
-                $quantity = $pricing_plans->attribute_boolean['Prorata'] == 1 ?  1 : ct_calculate_first_month_quantity(1);
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  ct_calculate_first_month_quantity(1) : 1;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $subscription->organisation_id,
@@ -374,9 +379,10 @@ class CT_Organisation_Controller
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
                         'is_paid'               => 0,
-                        'comment'               => $n_nickname.' - '.date("F Y")
+                        'comment'               => $n_nickname.' - '.date("F Y"),
+                        'discount'              => $discount
                     ),
-                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
+                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d' )
                 );
 
                 $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
