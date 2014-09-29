@@ -19,6 +19,8 @@ class PricingPlan
     public $attribute_roles     = array();
     public $attribute_levels    = array();
     public $attribute_boolean   = array();
+    public $attribute_percent   = array();
+    public $attribute_all       = array();
     public $attribute_billing   = '';
 
     public $attribute = array();
@@ -40,24 +42,40 @@ class PricingPlan
 
         $pricing_plan_attributes = $this->getPricingPlanAttributes();
         foreach( $pricing_plan_attributes AS $attr ){
-            if( $attr->visibility == 1 ) {
-                switch ($attr->type) {
-                    case 'itemcode':
+            switch ($attr->type) {
+                case 'itemcode':
+                    if( $attr->visibility == 1 ) {
                         $this->attribute_itemcodes[$attr->name] = $attr;
-                        break;
-                    case 'string':
+                    }
+                    break;
+                case 'string':
+                    if( $attr->visibility == 1 ) {
                         $this->attribute_billing = $attr;
-                        break;
-                    case 'role';
-                        $this->attribute_roles[$attr->name] = explode(',', str_replace(' ', '', $attr->value));
-                        break;
-                    case 'number':
+                    }
+                    break;
+                case 'role';
+                    $this->attribute_roles[$attr->name] = explode(',', str_replace(' ', '', $attr->value));
+                    break;
+                case 'number':
+                    if( $attr->visibility == 1 ) {
                         $this->attribute[$attr->name] = $attr;
-                        break;
-                    case 'boolean':
+                    }
+                    break;
+                case 'boolean':
+                    if( $attr->visibility == 1 ) {
                         $this->attribute_boolean[$attr->name] = $attr->value;
-                        break;
-                }
+                    }
+                    break;
+                case 'percent':
+                    if( $attr->visibility == 1 ) {
+                        $this->attribute_percent[$attr->name] = $attr->value;
+                    }
+                    break;
+            }
+            if( $attr->type == 'itemcode' ){
+                $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $this->getPriceByXeroCode( $attr->value ) );
+            } else {
+                $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
             }
         }
     }
