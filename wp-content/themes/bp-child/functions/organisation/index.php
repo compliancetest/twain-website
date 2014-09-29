@@ -264,7 +264,7 @@ function ct_process_organisation_action()
                             <div class="space20"></div>
                             <div class="grid-cell">
                                 <label>Pricing Plan</label>
-                                <select id="pricing_plan_id" name="pricing_plan_id">
+                                <select id="pricing_plan_id" class="pricing_plan_id">
                                     <?php
                                         $suite = new TestSuite( $subscription->suite_family_mark );
                                         $suite->load();
@@ -274,8 +274,25 @@ function ct_process_organisation_action()
                                             <option value="<?php echo $pricing_plan->id;?>"<?php if( $pricing_plan->id == $subscription->pricing_plan_id ):?> selected="selected"<?php endif;?> ><?php echo $pricing_plan->title;?></option>
                                         <?php endforeach;?>
                                 </select>
-<!--                                <input type="hidden" id="pricing_plan_id_hidden" name="pricing_plan_id" value="">-->
-<!--                                <a href="--><?php //echo the_permalink() ?><!--?_organisation_nonce=--><?php //echo wp_create_nonce('get_price_plan') ?><!--&suite_id=--><?php //echo $subscription->suite_family_mark;?><!--" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>-->
+                                <input type="hidden" id="pricing_plan_id_hidden" name="pricing_plan_id" value="">
+                                <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $subscription->suite_family_mark;?>&is_edit=1&sid=<?php echo $subscription->id;?>&pricing_plan_id=<?php echo $subscription->pricing_plan_id;?>" class="edit_subsc" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>
+                                <script>
+                                    jQuery( document).ready( function( $ ){
+                                        jQuery(".edit_subsc").off("click").cplightbox( {'href': '<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $subscription->suite_family_mark;?>&is_edit=1&sid=<?php echo $subscription->id;?>&pricing_plan_id=<?php echo $subscription->pricing_plan_id;?>' });
+                                        $('.pricing_plan_id').on('change', function(){
+                                            $('#pricing_plan_id_hidden').val( $(this).val() )
+                                            if( jQuery('.edit_subsc').attr('href').indexOf( 'pricing_plan_id' ) == -1 ){
+                                                var new_url = jQuery('.edit_subsc').attr('href') ;
+                                            } else {
+                                                var new_url = jQuery('.edit_subsc').attr('href').split('&pricing_plan_id');
+                                                new_url = new_url[0] ;
+                                            }
+                                            new_url = new_url+'&pricing_plan_id='+$(this).val();
+                                            jQuery('.edit_subsc').attr( 'href', new_url );
+                                            jQuery(".edit_subsc").off("click").cplightbox( {'href': new_url});
+                                        })
+                                    })
+                                </script>
                             </div>
                             <div class="clear"></div>
                         </div>

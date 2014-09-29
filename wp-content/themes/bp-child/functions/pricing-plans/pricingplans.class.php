@@ -72,10 +72,12 @@ class PricingPlan
                     }
                     break;
             }
-            if( $attr->type == 'itemcode' ){
-                $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $this->getPriceByXeroCode( $attr->value ) );
-            } else {
-                $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+            if( $attr->visibility == 1 ) {
+                if ($attr->type == 'itemcode') {
+                    $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $this->getPriceByXeroCode($attr->value));
+                } else {
+                    $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+                }
             }
         }
     }

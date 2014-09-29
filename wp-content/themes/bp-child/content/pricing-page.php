@@ -4,11 +4,11 @@
         $user_id = get_current_user_id();
         $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);
 
-        if ( ! $subscription) {
-            if ($organisation_id = ct_is_organisation_admin($user_id)) {
-                $read_only = false;
-            }
-        }
+//        if ( ! $subscription) {
+//            if ($organisation_id = ct_is_organisation_admin($user_id)) {
+//                $read_only = false;
+//            }
+//        }
     }
 ?>
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
