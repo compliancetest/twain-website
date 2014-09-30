@@ -28,6 +28,8 @@ class CT_Charge
 
     public $comment = null;
 
+    public $discount = null;
+
     public function __construct($id = null)
     {
         global $wpdb;

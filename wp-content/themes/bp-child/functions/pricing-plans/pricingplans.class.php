@@ -89,7 +89,7 @@ class PricingPlan
 
     public function getPricingPlanAttributes(){
         global $wpdb;
-        return $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d ", $this->id ) );
+        return $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d ORDER BY `order` ASC", $this->id ) );
     }
 
     public static function getAllPlans( $plans_ids = false ){
