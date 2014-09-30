@@ -48,17 +48,22 @@ function certifyPlan()
     $caseStatus = $esb->getCaseStatus($esbUserId, $plan->suite_id);
 
     $all_verified = true;
+    $has_exclusions = 0;
     foreach($cases as $case)
     {
         $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
+        $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $case->ID ) );
         if( ! $is_optional ) $is_optional = 'No';
-        if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' )
+        if( $is_excluded ){
+            $has_exclusions = 1;
+        }
+        if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' && ! $is_excluded )
         {
             $all_verified = false;
             break; 
         }
     }
-    
+
     //Create Compliance Claim
     if($all_verified)
     {
@@ -69,7 +74,7 @@ function certifyPlan()
         $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
         $oId = $wpdb->get_var($query);
         if (!$oId) {
-            if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId)) {
+            if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId, $planID, $has_exclusions )) {
                 wp_redirect($return);
             } else {
                 addMessage('The plan was certified successfully');
@@ -201,8 +206,8 @@ function editPlan()
                 </div>            
             </div>
             <div class="popup-box-footer radius6 noradiustop">                        
-                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SUBMIT</span></a>
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Submit</span></a>
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
                 <div class="clear"></div>
             </div>
             <a class="close_btn"></a>                

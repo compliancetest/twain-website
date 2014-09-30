@@ -129,7 +129,7 @@ function makeClaim()
     exit;    
 }
 
-function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null)
+function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null, $planID, $has_exclusions )
 {
     global $wpdb;
     
@@ -165,13 +165,14 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
             'last_updated'    =>  date('Y-m-d H:i:s'),
             'token' => createClaimToken(),
             'certificate' => '', //This is empty for now. Ilia will need to update this
-            'audit'    =>  ''
+            'audit'    =>  '',
+            'has_exclusions' => $has_exclusions
         ));
         
         $claimID = $wpdb->insert_id;
         
         $wpdb->update(TABLE_CLAIM, array(
-            'claim_id'    =>  getClaimID($wpdb->insert_id, $suite_id)                
+            'claim_id'    =>  getClaimID($wpdb->insert_id, $suite_id)
         ), array('id' => $claimID));
         
         
@@ -193,9 +194,9 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
     }
     
     //Update DPF
-    $pdfString = createClaimPDF($claimID);
+    $pdfString = createClaimPDF($claimID, $planID);
     $wpdb->update(TABLE_CLAIM, array(
-            'certificate'    =>  $pdfString                
+            'certificate'    =>  $pdfString
         ), array('id' => $claimID));
     
     if($isNew)
@@ -229,7 +230,7 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
     return true;
 }
 
-function createClaimPDF($claim_id)
+function createClaimPDF($claim_id, $planID )
 {
     global $wpdb, $post;
 
@@ -414,7 +415,56 @@ function createClaimPDF($claim_id)
 
 
     $pdf->setTextShadow(array('enabled' => false));
-    
+    $skipped_test_cases = '<style>
+    .test-cases-table th {
+        background-color:#5a75b6;
+        color:#fff;
+        font-size:7pt;
+        vertical-align:middle;
+        line-height:18pt;
+        text-align:center;
+        font-weight:bold;
+    }
+    .test-cases-table tr td {
+        height: 100px !important;
+    }
+    .test-cases-table th.test-outcome{
+        line-height:10px;
+    }
+    .test-cases-table th.test-scenario{
+        text-align:left;
+    }
+    .test-cases-table td {
+        font-size:6pt;
+        line-height:6pt;
+        color:#000;
+    }
+    .test-cases-table .even td{
+        background-color:#f3f4f5;
+    }
+    .test-cases-table .odd td{
+        background-color:#ececed;
+    }
+    .test-cases-table td a{
+        font-size:10pt;
+    }
+    .test-cases-table td.test-scenario{
+        background-color:#e2e2e2;
+    }
+
+    .issued, .test-outcome, .supporting-evidence{
+        text-align:center;
+    }
+</style>
+<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
+    <tr><th colspan="5">Excluded Test Cases</th></tr>
+    <tr>
+        <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
+        <th class="test-case" style="width:12%;">Test Case</th>
+        <th class="issued" style="width:8%;">Issued</th>
+        <th class="test-intent" style="width:30%;">Test Intent Description</th>
+        <th class="test-reason" style="width:25%;">Reason</th>
+    </tr>';
     $test_cases_table_html = '
 <style>
     .test-cases-table th {
@@ -458,6 +508,7 @@ function createClaimPDF($claim_id)
     }
 </style>
 <table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
+    <tr><th colspan="6">Completed Test Cases</th></tr>
     <tr>
         <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
         <th class="test-case" style="width:12%;">Test Case</th>
@@ -558,94 +609,135 @@ function createClaimPDF($claim_id)
 
     foreach($results as $scId => $testCases)
     {
-        if( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass'){
+        $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $testCases[0]->ID ) );
+
+        if( ( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass' ) && ! $is_excluded ){
             continue;
         }
-        $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
-        if(!$tDesc){
-            $rString = '';
-        }else{
-            $htmlCut = new HtmlCutString($tDesc, 100);
-            $rString = $htmlCut->cut();    
-        }
-            
-           
-        $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
-                <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[0]->scenarioCode . ':</strong><br>' . $testCases[0]->scenarioDescription . '</td>
-                <td class="test-case">' . get_the_title($testCases[0]->ID) . '</td>
-                <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
-                <td class="test-intent">' . $rString . '</td>';        
-        $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
-
-        if(isset($testCases[0]->MSG_ID))
-        {
-            $esb = new ManageESB();
-            $message = $esb->getMessageEnvelope($testCases[0]->MSG_ID);
-            $fileName = getcwd().'/wp-content/uploads/'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'.xml';
-            $myfile = fopen( $fileName, "w");
-            fwrite( $myfile, $message );
-            fclose( $myfile );
-            $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID, 'FS' => $fileName ) );
-            $pdf->Bookmark( '"'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'.xml');
-            $rowsCounter = $rowsCounter + 2;
-            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
-            Click "'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'" bookmark to see message (offline) <br> OR
-            <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
-            </td>';
-            array_push( $fArr, $fileName );
-        }
-        else
-        {
-            $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
-        }
-        
-        $test_cases_table_html .= '</tr>';    
-        $idx++;
-        
-        for($i=1; $i < count($testCases); $i++)
-        {
-            $tDesc = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
+        if( $is_excluded ){
+            $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
             if(!$tDesc){
                 $rString = '';
             }else{
                 $htmlCut = new HtmlCutString($tDesc, 100);
-                $rString = $htmlCut->cut();    
+                $rString = $htmlCut->cut();
             }
-            $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">                    
+            $skipped_test_cases .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
+                <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[0]->scenarioCode . ':</strong><br>' . $testCases[0]->scenarioDescription . '</td>
+                <td class="test-case">' . get_the_title($testCases[0]->ID) . '</td>
+                <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
+                <td class="test-intent">' . $rString . '</td>';
+            $skipped_test_cases .= '<td class="test-reason">' . stripslashes( $is_excluded->reason ) . '</td>';
+
+            $skipped_test_cases .= '</tr>';
+            $idx++;
+
+            for($i=1; $i < count($testCases); $i++)
+            {
+                $tDesc = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
+                if(!$tDesc){
+                    $rString = '';
+                }else{
+                    $htmlCut = new HtmlCutString($tDesc, 100);
+                    $rString = $htmlCut->cut();
+                }
+                $skipped_test_cases .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
                     <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
                     <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
-                    <td class="test-intent">' . $rString . '</td>';        
-            $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[$i]->OUTCOME) ? $testCases[$i]->OUTCOME : '-') . '</td>';
-            
-            if(isset($testCases[$i]->MSG_ID)) {
+                    <td class="test-intent">' . $rString . '</td>';
+                $skipped_test_cases .= '<td class="test-reason">' .  stripcslashes( $is_excluded->reason ) . '</td>';
+
+                $skipped_test_cases .= '</tr>';
+                $idx++;
+            }
+        } else{
+            $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
+            if(!$tDesc){
+                $rString = '';
+            }else{
+                $htmlCut = new HtmlCutString($tDesc, 100);
+                $rString = $htmlCut->cut();
+            }
+            $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
+                <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[0]->scenarioCode . ':</strong><br>' . $testCases[0]->scenarioDescription . '</td>
+                <td class="test-case">' . get_the_title($testCases[0]->ID) . '</td>
+                <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
+                <td class="test-intent">' . $rString . '</td>';
+            $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
+
+            if(isset($testCases[0]->MSG_ID))
+            {
                 $esb = new ManageESB();
-                $message = $esb->getMessageEnvelope($testCases[$i]->MSG_ID);
-                $fileName = getcwd().'/wp-content/uploads/'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'.xml';
+                $message = $esb->getMessageEnvelope($testCases[0]->MSG_ID);
+                $fileName = getcwd().'/wp-content/uploads/'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'.xml';
                 $myfile = fopen( $fileName, "w");
                 fwrite( $myfile, $message );
                 fclose( $myfile );
-                $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID, 'FS' => $fileName ) );
-                $pdf->Bookmark( '"'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'.xml');
+                $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID, 'FS' => $fileName ) );
+                $pdf->Bookmark( '"'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'.xml');
                 $rowsCounter = $rowsCounter + 2;
                 $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
+            Click "'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'" bookmark to see message (offline) <br> OR
+            <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
+            </td>';
+                array_push( $fArr, $fileName );
+            }
+            else
+            {
+                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+            }
+
+            $test_cases_table_html .= '</tr>';
+            $idx++;
+
+            for($i=1; $i < count($testCases); $i++)
+            {
+                $tDesc = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
+                if(!$tDesc){
+                    $rString = '';
+                }else{
+                    $htmlCut = new HtmlCutString($tDesc, 100);
+                    $rString = $htmlCut->cut();
+                }
+                $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
+                    <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
+                    <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
+                    <td class="test-intent">' . $rString . '</td>';
+                $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[$i]->OUTCOME) ? $testCases[$i]->OUTCOME : '-') . '</td>';
+
+                if(isset($testCases[$i]->MSG_ID)) {
+                    $esb = new ManageESB();
+                    $message = $esb->getMessageEnvelope($testCases[$i]->MSG_ID);
+                    $fileName = getcwd().'/wp-content/uploads/'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'.xml';
+                    $myfile = fopen( $fileName, "w");
+                    fwrite( $myfile, $message );
+                    fclose( $myfile );
+                    $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID, 'FS' => $fileName ) );
+                    $pdf->Bookmark( '"'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'.xml');
+                    $rowsCounter = $rowsCounter + 2;
+                    $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
                 Click "'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'" bookmark to see message (offline) <br> OR
                 <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '</a> link to check message on our website
                 </td>';
-                array_push( $fArr, $fileName );
+                    array_push( $fArr, $fileName );
+                }
+                else{
+                    $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+                }
+
+                $test_cases_table_html .= '</tr>';
+                $idx++;
             }
-            else{
-                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
-            }
-            
-            $test_cases_table_html .= '</tr>';    
-            $idx++;
         }
     }
     $test_cases_table_html .= '</table>';
+    $skipped_test_cases .= '</table>';
     $pdf->SetFont('opensans', '', 13, '', true);
     
     if($results)
         $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', true);
+    if($results)
+        $pdf->writeHTMLCell(0, 0, '', '', $skipped_test_cases, 0, 1, 0, true, '', true);
         
     
         

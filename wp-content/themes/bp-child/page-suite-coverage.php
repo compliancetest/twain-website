@@ -79,10 +79,11 @@ $esb = new ManageESB();
                                        foreach($testCases as $case)
                                        {
                                            $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_case_id = %d AND test_plan_id = %d ", $case->ID, $crow->id ) );
-                                           $opt = '';
+                                           $opt = $exc = '';
                                            $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
                                            if( $is_optional == 'Yes' ) $opt = ' (opt) ';
-                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span>';
+                                           if( $is_excluded ) $exc = ' (excl) ';
+                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt .$exc. '</a><span></span></span>';
                                            if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')

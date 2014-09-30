@@ -106,20 +106,24 @@ function process_testcase_actions()
         exit;
     } else if( wp_verify_nonce( $action, 'save_exclusion' ) ){
         global $wpdb;
-        $plan_id = intval( $_REQUEST['plan_id'] );
-        $case_id = intval( $_REQUEST['case_id'] );
-        $reason  = $_REQUEST['case_exclude_reason'];
-        $wpdb->insert('wp_test_plans_excluded_cases',
-            array(
-                'test_plan_id'        => $plan_id,
-                'test_case_id'        => $case_id,
-                'reason'              => $reason,
-                'excluded_by_user_id' => get_current_user_id(),
-                'date'                => mktime()
-            ),
-            array( '%d', '%d', '%s', '%d', '%d' )
-        );
-        addMessage( 'Test Case Successfully excluded');
+        $plan_id = intval($_REQUEST['plan_id']);
+        $case_id = intval($_REQUEST['case_id']);
+        if( isset( $_REQUEST['case_exclude'] ) ) {
+            $reason = $_REQUEST['case_exclude_reason'];
+            $wpdb->insert('wp_test_plans_excluded_cases',
+                array(
+                    'test_plan_id' => $plan_id,
+                    'test_case_id' => $case_id,
+                    'reason' => $reason,
+                    'excluded_by_user_id' => get_current_user_id(),
+                    'date' => mktime()
+                ),
+                array('%d', '%d', '%s', '%d', '%d')
+            );
+        } else{
+            $wpdb->query( $wpdb->prepare( "DELETE FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $plan_id, $case_id ) );
+        }
+        addMessage('Success!');
     }
 }
 
@@ -886,7 +890,7 @@ function get_details_popup(){
                     <div class="popup-box-content">
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <label>Case Identifier: </label>
+                                    <label>Identifier: </label>
                                     <a target="_blank" href="<?php echo get_permalink($case->id);?>"><?php echo $case->name;?> </a>
                                 </div>
                                 <div class="clear"></div>
@@ -894,15 +898,15 @@ function get_details_popup(){
                             <div class="space10"></div>
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <label>Case Test Log: </label>
-                                    <a target="_blank" href="<?php echo get_site_url();?>/my-transaction-log?case=<?php echo $case->id;?>">View Test Log</a>
+                                    <label>Transaction Log: </label>
+                                    <a target="_blank" href="<?php echo get_site_url();?>/my-transaction-log?case=<?php echo $case->id;?>">View Audit Record</a>
                                 </div>
                                 <div class="clear"></div>
                             </div>
                             <div class="space10"></div>
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <label>Is Optional: </label>
+                                    <label>Optional: </label>
                                     <span><b><?php echo $is_optional;?></b></span>
                                 </div>
                                 <div class="clear"></div>
@@ -920,15 +924,15 @@ function get_details_popup(){
                                 <div class="field-row reason_div" style="display: none;">
                                     <div class="grid-cell">
                                         <label>Reason</label>
-                                        <input type="text" name="case_exclude_reason" class="case_exclude_reason">
+                                        <textarea name="case_exclude_reason" class="case_exclude_reason" rows="2" cols="40"></textarea>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
                             <?php elseif( $is_excluded ):?>
                                 <div class="field-row">
                                     <div class="grid-cell">
-                                        <label>Excluded: </label>
-                                        <b>Yes</b>
+                                        <label>Exclude</label>
+                                        <input type="checkbox" name="case_exclude" class="case_exclude" checked="checked">
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -936,7 +940,7 @@ function get_details_popup(){
                                 <div class="field-row reason_div">
                                     <div class="grid-cell">
                                         <label>Reason: </label>
-                                        <b><?php echo stripcslashes( $is_excluded->reason );?></b>
+                                        <textarea name="case_exclude_reason" class="case_exclude_reason" readonly="readonly" rows="2" cols="40"><?php echo stripcslashes( $is_excluded->reason );?></textarea>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -944,7 +948,7 @@ function get_details_popup(){
                                 <div class="field-row reason_div">
                                     <div class="grid-cell">
                                         <label>Date: </label>
-                                        <?php echo date( 'Y-m-d H:i:s', $is_excluded->date );?>
+                                        <?php echo formatDate( $is_excluded->date, 'Y-m-d H:i:s' );?>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -958,8 +962,8 @@ function get_details_popup(){
                     </div>
 
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a class="action-btn process-btn submit-btn" href="#" style="display: none;"><span class="p"></span><span class="t">SUBMIT</span></a>
-                        <a class="action-btn cancel-btn close-popup-btn" href="#"><span class="p"></span><span class="t">Close</span></a>
+                        <a class="action-btn process-btn submit-btn" href="#" style="display: none;"><span class="p"></span><span class="t">Submit</span></a>
+                        <a class="action-btn cancel-btn close-popup-btn" href="#"><span class="p"></span><span class="t">Cancel</span></a>
                         <div class="clear"></div>
                     </div>
             </form>
@@ -970,18 +974,18 @@ function get_details_popup(){
     <script>
         jQuery( document).ready(function(){
             jQuery('.case_exclude').on('change', function(){
-                jQuery('.reason_div').hide();
-                jQuery('.process-btn').hide();
-                if( jQuery(this).is(':checked') ){
-                    jQuery('.reason_div').show();
-                    jQuery('.process-btn').show();
-                }
+                jQuery('.reason_div').toggle();
+                jQuery('.process-btn').toggle();
+//                if( jQuery(this).is(':checked') ){
+//                    jQuery('.reason_div').show();
+//                    jQuery('.process-btn').show();
+//                }
             });
             jQuery('.process-btn').click(function(){
                 var is_valid = true;
                 jQuery('.case_exclude_reason').removeClass('input-error');
                 if( jQuery('.case_exclude').is(':checked') && ! jQuery('.case_exclude_reason').val() ){
-                    jQuery('.case_exclude_reason').addClass('input-error');
+                    jQuery('.case_exclude_reason').addClass('textarea-error');
                     return false;
                 }
                 jQuery('#save_case_exclusion').submit();
