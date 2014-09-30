@@ -109,15 +109,16 @@ class CT_Organisation_Controller
         if ($no_billing != '1')
         {
             if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
-                $due_date = strtotime( '+'.($pricing_plans->attribute_period - 1).' month');
+                $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
                 $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $organisation_id,
                         'payment_id'            => $payment_method,
                         'item_code'             => $prices['Monthly']->value,
-                        'quantity'              => $pricing_plans->attribute['Period']->value,
+                        'quantity'              => $quantity,
                         'start_date'            => date("Y-m-d H:i:s"),
                         'end_date'              => date( 'Y-m-d',  $due_date ),
                         'reference_type'        => 'subscription',
@@ -134,7 +135,7 @@ class CT_Organisation_Controller
 
                 //update last_charge_date value
                 $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                    array('last_charge_date' => gmdate('Y-m-d') ),
+                    array('last_charge_date' => gmdate('Y-m-d', $due_date ) ),
                     array('id' => $subscription_id )
                 );
             } else {
@@ -315,17 +316,18 @@ class CT_Organisation_Controller
         if( $no_billing != '1' && $subscription->pricing_plan_id != $pricing_plan_id)
         {
             if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
-                $due_date = strtotime( '+'.($pricing_plans->attribute_period - 1).' month');
+                $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
                 $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $subscription->organisation_id,
                         'payment_id'            => $subscription->payment_method,
                         'item_code'             => $prices['Monthly']->value,
-                        'quantity'              => $pricing_plans->attribute['Period']->value,
-                        'start_date'            => date("Y-m-d H:i:s"),
-                        'end_date'              => date( 'Y-m-d',  $due_date ),
+                        'quantity'              => $quantity,
+                        'start_date'            => gmdate("Y-m-d H:i:s"),
+                        'end_date'              => gmdate( 'Y-m-d',  $due_date ),
                         'reference_type'        => 'subscription',
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
@@ -340,7 +342,7 @@ class CT_Organisation_Controller
 
                 //update last_charge_date value
                 $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                    array('last_charge_date' => gmdate('Y-m-d') ),
+                    array('last_charge_date' => gmdate('Y-m-d', $due_date ) ),
                     array('id' => $subscription_id )
                 );
             } else {
