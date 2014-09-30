@@ -79,7 +79,6 @@ $esb = new ManageESB();
                                        foreach($testCases as $case)
                                        {
                                            $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_case_id = %d AND test_plan_id = %d ", $case->ID, $crow->id ) );
-                                           error_log($is_excluded);
                                            $opt = '';
                                            $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
                                            if( $is_optional == 'Yes' ) $opt = ' (opt) ';
