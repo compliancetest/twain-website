@@ -129,7 +129,7 @@ function makeClaim()
     exit;    
 }
 
-function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null, $planID, $has_exclusions )
+function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null, $planID = 0, $has_exclusions )
 {
     global $wpdb;
     
@@ -593,6 +593,10 @@ function createClaimPDF($claim_id, $planID )
                 {
                     $row->OUTCOME = $erow->OUTCOME;
                     $row->MSG_ID = $erow->MSG_ID;
+                    if( ! isset( $row->ALL_DATA ) ){
+                        $row->ALL_DATA = array();
+                    }
+                    array_push( $row->ALL_DATA, array( 'outcome' => $erow->OUTCOME, 'msg_id' => $erow->MSG_ID ) );
                 }
             }
         }
@@ -606,7 +610,6 @@ function createClaimPDF($claim_id, $planID )
     $rowsCounter = 11;
     $fArr = array();
     $caseStatus = $esb->getCaseStatus( $esbID, $claim->suite_id );
-
     foreach($results as $scId => $testCases)
     {
         $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $testCases[0]->ID ) );
@@ -615,33 +618,11 @@ function createClaimPDF($claim_id, $planID )
             continue;
         }
         if( $is_excluded ){
-            $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
-            if(!$tDesc){
-                $rString = '';
-            }else{
-                $htmlCut = new HtmlCutString($tDesc, 100);
-                $rString = $htmlCut->cut();
-            }
-            $skipped_test_cases .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
-                <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[0]->scenarioCode . ':</strong><br>' . $testCases[0]->scenarioDescription . '</td>
-                <td class="test-case">' . get_the_title($testCases[0]->ID) . '</td>
-                <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
-                <td class="test-intent">' . $rString . '</td>';
-            $skipped_test_cases .= '<td class="test-reason">' . stripslashes( $is_excluded->reason ) . '</td>';
-
-            $skipped_test_cases .= '</tr>';
-            $idx++;
-
-            for($i=1; $i < count($testCases); $i++)
+            for($i=0; $i < count($testCases); $i++)
             {
-                $tDesc = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
-                if(!$tDesc){
-                    $rString = '';
-                }else{
-                    $htmlCut = new HtmlCutString($tDesc, 100);
-                    $rString = $htmlCut->cut();
-                }
+                $rString = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
                 $skipped_test_cases .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
+                    <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>
                     <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
                     <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
                     <td class="test-intent">' . $rString . '</td>';
@@ -651,82 +632,38 @@ function createClaimPDF($claim_id, $planID )
                 $idx++;
             }
         } else{
-            $tDesc = get_post_meta($testCases[0]->ID ,'test_intent_description', true);
-            if(!$tDesc){
-                $rString = '';
-            }else{
-                $htmlCut = new HtmlCutString($tDesc, 100);
-                $rString = $htmlCut->cut();
-            }
-            $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
-                <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[0]->scenarioCode . ':</strong><br>' . $testCases[0]->scenarioDescription . '</td>
-                <td class="test-case">' . get_the_title($testCases[0]->ID) . '</td>
-                <td class="issued">' . formatDate(get_post_meta($testCases[0]->ID ,'published', true)) . '</td>
-                <td class="test-intent">' . $rString . '</td>';
-            $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[0]->OUTCOME) ? $testCases[0]->OUTCOME : '-') . '</td>';
-
-            if(isset($testCases[0]->MSG_ID))
-            {
-                $esb = new ManageESB();
-                $message = $esb->getMessageEnvelope($testCases[0]->MSG_ID);
-                $fileName = getcwd().'/wp-content/uploads/'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'.xml';
-                $myfile = fopen( $fileName, "w");
-                fwrite( $myfile, $message );
-                fclose( $myfile );
-                $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID, 'FS' => $fileName ) );
-                $pdf->Bookmark( '"'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'.xml');
-                $rowsCounter = $rowsCounter + 2;
-                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
-            Click "'.get_the_title($testCases[0]->ID).'_'.$testCases[0]->MSG_ID.'" bookmark to see message (offline) <br> OR
-            <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[0]->MSG_ID . '</a> link to check message on our website
-            </td>';
-                array_push( $fArr, $fileName );
-            }
-            else
-            {
-                $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
-            }
-
-            $test_cases_table_html .= '</tr>';
-            $idx++;
-
-            for($i=1; $i < count($testCases); $i++)
-            {
-                $tDesc = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
-                if(!$tDesc){
-                    $rString = '';
-                }else{
-                    $htmlCut = new HtmlCutString($tDesc, 100);
-                    $rString = $htmlCut->cut();
-                }
-                $test_cases_table_html .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
-                    <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
-                    <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
+            for($i=0; $i < count($testCases); $i++) {
+                foreach ($testCases[$i]->ALL_DATA AS $data) {
+                    $rString = get_post_meta($testCases[$i]->ID, 'test_intent_description', true);
+                    $test_cases_table_html .= '<tr class="' . ($idx % 2 == 0 ? 'odd' : 'even') . '">
+                    <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>
+                    <td class="test-case">' . (isset($testCases[$i]->ID) ? get_the_title($testCases[$i]->ID) : '') . '</td>
+                    <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID, 'published', true)) . '</td>
                     <td class="test-intent">' . $rString . '</td>';
-                $test_cases_table_html .= '<td class="test-outcome">' . (isset($testCases[$i]->OUTCOME) ? $testCases[$i]->OUTCOME : '-') . '</td>';
+                    $test_cases_table_html .= '<td class="test-outcome">' . (isset($data['outcome']) ? $data['outcome'] : '-') . '</td>';
 
-                if(isset($testCases[$i]->MSG_ID)) {
-                    $esb = new ManageESB();
-                    $message = $esb->getMessageEnvelope($testCases[$i]->MSG_ID);
-                    $fileName = getcwd().'/wp-content/uploads/'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'.xml';
-                    $myfile = fopen( $fileName, "w");
-                    fwrite( $myfile, $message );
-                    fclose( $myfile );
-                    $pdf->Annotation(0, $rowsCounter , 0, 0, $scId, array('Subtype'=>'FileAttachment', 'Name' => get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID, 'FS' => $fileName ) );
-                    $pdf->Bookmark( '"'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'"', 0, 0, $rowsCounter, 'B', array(128,0,255), 0, '*'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'.xml');
-                    $rowsCounter = $rowsCounter + 2;
-                    $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
-                Click "'.get_the_title($testCases[$i]->ID).'_'.$testCases[$i]->MSG_ID.'" bookmark to see message (offline) <br> OR
-                <a href="' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '">' . get_site_url() . '/message-envelope?id=' . $testCases[$i]->MSG_ID . '</a> link to check message on our website
+                    if (isset($testCases[$i]->MSG_ID)) {
+                        $esb = new ManageESB();
+                        $message = $esb->getMessageEnvelope( $data['msg_id'] );
+                        $fileName = getcwd() . '/wp-content/uploads/' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '.xml';
+                        $myfile = fopen($fileName, "w");
+                        fwrite($myfile, $message);
+                        fclose($myfile);
+                        $pdf->Annotation(0, $rowsCounter, 0, 0, $scId, array('Subtype' => 'FileAttachment', 'Name' => get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'], 'FS' => $fileName));
+                        $pdf->Bookmark('"' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '"', 0, 0, $rowsCounter, 'B', array(128, 0, 255), 0, '*' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '.xml');
+                        $rowsCounter = $rowsCounter + 2;
+                        $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">
+                Click "' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '" bookmark to see message (offline) <br> OR
+                <a href="' . get_site_url() . '/message-envelope?id=' . $data['msg_id'] . '">' . get_site_url() . '/message-envelope?id=' . $data['msg_id'] . '</a> link to check message on our website
                 </td>';
-                    array_push( $fArr, $fileName );
-                }
-                else{
-                    $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
-                }
+                        array_push($fArr, $fileName);
+                    } else {
+                        $test_cases_table_html .= '<td class="supporting-evidence" style="vertical-align:top;">-</td>';
+                    }
 
-                $test_cases_table_html .= '</tr>';
-                $idx++;
+                    $test_cases_table_html .= '</tr>';
+                    $idx++;
+                }
             }
         }
     }
@@ -736,8 +673,10 @@ function createClaimPDF($claim_id, $planID )
     
     if($results)
         $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', true);
-    if($results)
+    if($results) {
+        $pdf->AddPage();
         $pdf->writeHTMLCell(0, 0, '', '', $skipped_test_cases, 0, 1, 0, true, '', true);
+    }
         
     
         
@@ -748,16 +687,7 @@ function createClaimPDF($claim_id, $planID )
     foreach( $fArr AS $f ){
         unlink( $f );
     }
-    //Save File
-   /* if(!is_dir(ABSPATH . "claims"))
-    {
-        mkdir(ABSPATH . "claims", 0777);
-        $fp = fopen(ABSPATH . "claims/index.html", "w"); fclose($fp);
-    }
-    $fp = fopen(ABSPATH . "claims/" . $claim->token . ".pdf", "w"); 
-    fwrite($fp, $pdfString);
-    fclose($fp);*/
-    
+
     return $pdfString;
     //============================================================+
     // END OF FILE
