@@ -3,12 +3,6 @@
     if( is_user_logged_in() ) {
         $user_id = get_current_user_id();
         $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);
-
-//        if ( ! $subscription) {
-//            if ($organisation_id = ct_is_organisation_admin($user_id)) {
-//                $read_only = false;
-//            }
-//        }
     }
 ?>
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
@@ -32,13 +26,13 @@
                 <ul class="plan-subscription-prices">
                     <?php foreach( $plan->attribute_all AS $att_name => $att_value ):?>
                         <?php if( $att_value['type'] == 'itemcode' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>" data-tooltip-width="180" data-tooltip-height="34"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
+                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
                         <?php elseif( $att_value['type'] == 'number' || $att_value['type'] == 'string' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>" data-tooltip-width="180" data-tooltip-height="34"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
+                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
                         <?php elseif( $att_value['type'] == 'percent' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>" data-tooltip-width="180" data-tooltip-height="34"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
+                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                         <?php elseif( $att_value['type'] == 'boolean' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>" data-tooltip-width="180" data-tooltip-height="34"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
                         <?php endif;?>
                     <?php endforeach;?>
                 </ul>
@@ -52,11 +46,11 @@
                                 </div>
                             </th>
                             <th>
-                                <span class="has-custom-tooltip" title="An Australian Employer that has employees subject to mandatory superannuation guarantee legislation." data-tooltip-width="280" data-tooltip-height="35">Employer</span>
+                                <span class="has-custom-tooltip" title="An Australian Employer that has employees subject to mandatory superannuation guarantee legislation.">Employer</span>
                             </th>
-                            <th><span class="has-custom-tooltip" title="A superannuation fund to which employee contributions are paid." data-tooltip-width="240" data-tooltip-height="35">Fund</span></th>
-                            <th><span class="has-custom-tooltip" title="A financial intermediary that aggregates payments from multiple employers into single payments to funds." data-tooltip-width="260" data-tooltip-height="55">Clearing House</span></th>
-                            <th><span class="has-custom-tooltip" title="A Self-Managed Super Fund, identified by an ABN" data-tooltip-width="170" data-tooltip-height="34">SMSF</span></th>
+                            <th><span class="has-custom-tooltip" title="A superannuation fund to which employee contributions are paid.">Fund</span></th>
+                            <th><span class="has-custom-tooltip" title="A financial intermediary that aggregates payments from multiple employers into single payments to funds.">Clearing House</span></th>
+                            <th><span class="has-custom-tooltip" title="A Self-Managed Super Fund, identified by an ABN">SMSF</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,7 +60,7 @@
                         ?>
                         <?php foreach( $allowed_levels AS $key => $level ):?>
                             <tr>
-                                <th><span class="has-custom-tooltip" data-tooltip-content-id="#b-description" data-tooltip-width="276" data-tooltip-height="108"><?php echo $level;?></span></th>
+                                <th><span class="has-custom-tooltip" data-tooltip-content-id="#b-description"><?php echo $level;?></span></th>
                                 <?php foreach( $allowed_roles AS $it => $role ):?>
                                         <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
                                             <td><span class="feature-available"></span></td>
