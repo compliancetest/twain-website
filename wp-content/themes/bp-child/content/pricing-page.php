@@ -78,28 +78,6 @@
             </div>
         <?php endforeach;?>
 
-        <div style="display:none;">
-            <div id="b-description">
-                <p class="levels-tooltip-content">
-                    The most basic conformance level designed to support the lowest entry level for Induction:<br>
-                    - Basic registrations and contributions scenarios<br>
-                    - No response messaging<br>
-                    - Includes multi-fund employer<br>
-                    - Clearing House
-                </p>
-            </div>
-            <div id="a-description">
-                <p class="levels-tooltip-content">
-                    Expands on Conformance Level B to add: - "Progressive" and "Partial" response messages - "Warning" messages for business scenarios such as member identity mis-matches or fund specific mandatories.
-                </p>
-            </div>
-            <div id="aa-description" class="custom-tooltip-content">
-                <p class="levels-tooltip-content">
-                    Expands on Conformance Level A to add: - Large files (10,000 contributions) - Multiple Partial and multiple progressive error responses
-                </p>
-            </div>
-        </div>
-
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <?php if( ! $read_only ):?>
