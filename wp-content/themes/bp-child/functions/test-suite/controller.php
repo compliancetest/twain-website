@@ -367,7 +367,16 @@ function saveSuite()
 
     //Save Pricing Plans
     if( isset( $_POST['test_suite_plans'] ) ){
-        update_post_meta($id, 'test_suite_plans', implode( '|', $_POST['test_suite_plans'] ) );
+        $sequence = array();
+        foreach( $_POST['test_suite_plans'] AS $plan ){
+            if( isset( $_POST['pricing_plans_sequence_'.$plan] ) && ! empty( $_POST['pricing_plans_sequence_'.$plan] ) ){
+                $result_plans[$_POST['pricing_plans_sequence_'.$plan]] = $plan;
+                $sequence[$plan] = $_POST['pricing_plans_sequence_'.$plan];
+            }
+        }
+        ksort( $result_plans );
+        update_post_meta( $id, 'test_suite_plans_order', $sequence );
+        update_post_meta($id, 'test_suite_plans', implode( '|', $result_plans ) );
     }
     //Save Related Test Suites
     $ts = $_POST['ts'] ;
@@ -392,8 +401,8 @@ function saveSuite()
     update_post_meta($id, 'lvl_desc', $lvl_desc);
     
     //Subscription Price
-    cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
-    cp_update_post_meta($id, 'signup_price', $_POST['signup_price']);
+//    cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
+//    cp_update_post_meta($id, 'signup_price', $_POST['signup_price']);
     
     //Save Scenarios
     //Removed deleted scenarios

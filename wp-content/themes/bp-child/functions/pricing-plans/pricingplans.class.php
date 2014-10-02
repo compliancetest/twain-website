@@ -95,9 +95,22 @@ class PricingPlan
     public static function getAllPlans( $plans_ids = false ){
         global $wpdb;
         if( $plans_ids && ! empty( $plans_ids ) ){
-            return $wpdb->get_results( "SELECT * FROM wp_pricing_plans WHERE id IN( ".implode( ',', $plans_ids )." ) " );
+            $results = $wpdb->get_results( "SELECT * FROM wp_pricing_plans WHERE id IN( ".implode( ',', $plans_ids )." ) " );
+            //display plans in defined by admin order
+            $return = $multisort = array();
+            foreach( $results AS $result ){
+                $return[$result->id] = $result;
+            }
+            $response = array();
+            foreach( $plans_ids AS $plan_id ){
+                $response[] = $return[$plan_id];
+            }
+            return $response;
+
+        } else {
+            return $wpdb->get_results("SELECT * FROM wp_pricing_plans");
         }
-        return $wpdb->get_results("SELECT * FROM wp_pricing_plans" );
+
     }
 
     public function getPriceByXeroCode( $code ){
@@ -108,5 +121,22 @@ class PricingPlan
         }
         return $price;
     }
-    
+
+    public static function getPlanRolesAndLevels( $plans ){
+        global $wpdb;
+        $levels = '';
+        $roles_array = array();
+        $results = $wpdb->get_row( "SELECT *, count(*) AS count FROM wp_pricing_plans_attributes WHERE pricing_plan_id IN (".implode( ',', $plans ).") AND type='role' GROUP BY pricing_plan_id ORDER BY count DESC LIMIT 1" );
+        $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type='role' ORDER BY `order` ", $results->pricing_plan_id ) );
+        foreach( $results AS $result ){
+            array_push( $roles_array, $result->name );
+            if( strlen( $result->value ) > strlen( $levels ) ){
+                $levels = $result->value;
+            }
+        }
+        return array(
+            'levels' => explode( ',', str_replace( ' ', '', $levels ) ),
+            'roles'  => $roles_array
+        );
+    }
 }

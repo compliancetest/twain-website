@@ -204,16 +204,21 @@ $xeroItems = ct_get_xero_items();
             </div>
             <div class="grid-box-body">
                 <div class="column">
+                    <?php
+                    $pricing_plans = PricingPlan::getAllPlans();
+                    foreach($pricing_plans AS $plan ) { ?>
                     <div class="field-row">
-                        <div class="grid-cell checkbox-cell">
-                            <?php
-                            $pricing_plans = PricingPlan::getAllPlans();
-                            foreach($pricing_plans AS $plan ) { ?>
+                        <div class="grid-cell checkbox-cell width70P padding20-10">
                                 <label><input type="checkbox" name="test_suite_plans[]" value="<?php echo $plan->id?>" <?php echo in_array( $plan->id, $suite->test_suite_plans )  ? 'checked="checked"' : '' ?>> <?php echo $plan->title?></label>
-                            <?php } ?>
+                        </div>
+                        <div class="grid-cell width8P tocenter">
+                            <label>Order:</label>
+                            <input type="text" class="input width70P tocenter" name="pricing_plans_sequence_<?php echo $plan->id;?>" value="<?php echo isset( $suite->test_suite_plans_order[$plan->id] ) ? $suite->test_suite_plans_order[$plan->id] : '0';?>" />
                         </div>
                         <div class="clear"></div>
                     </div>
+                    <?php } ?>
+
                 </div>
             </div>
         </div>
