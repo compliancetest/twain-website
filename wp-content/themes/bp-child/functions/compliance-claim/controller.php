@@ -415,108 +415,6 @@ function createClaimPDF($claim_id, $planID )
 
 
     $pdf->setTextShadow(array('enabled' => false));
-    $skipped_test_cases = '<style>
-    .test-cases-table th {
-        background-color:#5a75b6;
-        color:#fff;
-        font-size:7pt;
-        vertical-align:middle;
-        line-height:18pt;
-        text-align:center;
-        font-weight:bold;
-    }
-    .test-cases-table tr td {
-        height: 100px !important;
-    }
-    .test-cases-table th.test-outcome{
-        line-height:10px;
-    }
-    .test-cases-table th.test-scenario{
-        text-align:left;
-    }
-    .test-cases-table td {
-        font-size:6pt;
-        line-height:6pt;
-        color:#000;
-    }
-    .test-cases-table .even td{
-        background-color:#f3f4f5;
-    }
-    .test-cases-table .odd td{
-        background-color:#ececed;
-    }
-    .test-cases-table td a{
-        font-size:10pt;
-    }
-    .test-cases-table td.test-scenario{
-        background-color:#e2e2e2;
-    }
-
-    .issued, .test-outcome, .supporting-evidence{
-        text-align:center;
-    }
-</style>
-<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
-    <tr><th colspan="5">Excluded Test Cases</th></tr>
-    <tr>
-        <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
-        <th class="test-case" style="width:12%;">Test Case</th>
-        <th class="issued" style="width:8%;">Issued</th>
-        <th class="test-intent" style="width:30%;">Test Intent Description</th>
-        <th class="test-reason" style="width:25%;">Reason</th>
-    </tr>';
-    $test_cases_table_html = '
-<style>
-    .test-cases-table th {
-        background-color:#5a75b6;
-        color:#fff;
-        font-size:7pt;
-        vertical-align:middle;
-        line-height:18pt;
-        text-align:center;
-        font-weight:bold;
-    }
-    .test-cases-table tr td {
-        height: 100px !important;
-    }
-    .test-cases-table th.test-outcome{
-        line-height:10px;
-    }
-    .test-cases-table th.test-scenario{
-        text-align:left;
-    }
-    .test-cases-table td {
-        font-size:6pt;
-        line-height:6pt;
-        color:#000;
-    }
-    .test-cases-table .even td{
-        background-color:#f3f4f5;
-    }
-    .test-cases-table .odd td{
-        background-color:#ececed;
-    }
-    .test-cases-table td a{
-        font-size:10pt;
-    }
-    .test-cases-table td.test-scenario{
-        background-color:#e2e2e2;
-    }
-
-    .issued, .test-outcome, .supporting-evidence{
-        text-align:center;
-    }
-</style>
-<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
-    <tr><th colspan="6">Completed Test Cases</th></tr>
-    <tr>
-        <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
-        <th class="test-case" style="width:12%;">Test Case</th>
-        <th class="issued" style="width:8%;">Issued</th>
-        <th class="test-intent" style="width:30%;">Test Intent Description</th>
-        <th class="test-outcome" style="width:8%;">Test<br/>Outcome</th>
-        <th class="supporting-evidence" style="width:17%;">Supporting Evidence</th>
-    </tr>';
     
     $post = get_post($claim->suite_id);
     
@@ -620,6 +518,58 @@ function createClaimPDF($claim_id, $planID )
         if( $is_excluded ){
             for($i=0; $i < count($testCases); $i++)
             {
+                if( ! isset( $skipped_test_cases ) ){
+                    $skipped_test_cases = '<style>
+                                            .test-cases-table th {
+                                                background-color:#5a75b6;
+                                                color:#fff;
+                                                font-size:7pt;
+                                                vertical-align:middle;
+                                                line-height:18pt;
+                                                text-align:center;
+                                                font-weight:bold;
+                                            }
+                                            .test-cases-table tr td {
+                                                height: 100px !important;
+                                            }
+                                            .test-cases-table th.test-outcome{
+                                                line-height:10px;
+                                            }
+                                            .test-cases-table th.test-scenario{
+                                                text-align:left;
+                                            }
+                                            .test-cases-table td {
+                                                font-size:6pt;
+                                                line-height:6pt;
+                                                color:#000;
+                                            }
+                                            .test-cases-table .even td{
+                                                background-color:#f3f4f5;
+                                            }
+                                            .test-cases-table .odd td{
+                                                background-color:#ececed;
+                                            }
+                                            .test-cases-table td a{
+                                                font-size:10pt;
+                                            }
+                                            .test-cases-table td.test-scenario{
+                                                background-color:#e2e2e2;
+                                            }
+
+                                            .issued, .test-outcome, .supporting-evidence{
+                                                text-align:center;
+                                            }
+                                        </style>
+                                        <table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
+                                            <tr><th colspan="5">Excluded Test Cases</th></tr>
+                                            <tr>
+                                                <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
+                                                <th class="test-case" style="width:12%;">Test Case</th>
+                                                <th class="issued" style="width:8%;">Issued</th>
+                                                <th class="test-intent" style="width:30%;">Test Intent Description</th>
+                                                <th class="test-reason" style="width:25%;">Reason</th>
+                                            </tr>';
+                }
                 $rString = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
                 $skipped_test_cases .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
                     <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>
@@ -634,6 +584,60 @@ function createClaimPDF($claim_id, $planID )
         } else{
             for($i=0; $i < count($testCases); $i++) {
                 foreach ($testCases[$i]->ALL_DATA AS $data) {
+                    if( ! isset( $test_cases_table_html ) ){
+                        $test_cases_table_html = '
+                                                <style>
+                                                    .test-cases-table th {
+                                                        background-color:#5a75b6;
+                                                        color:#fff;
+                                                        font-size:7pt;
+                                                        vertical-align:middle;
+                                                        line-height:18pt;
+                                                        text-align:center;
+                                                        font-weight:bold;
+                                                    }
+                                                    .test-cases-table tr td {
+                                                        height: 100px !important;
+                                                    }
+                                                    .test-cases-table th.test-outcome{
+                                                        line-height:10px;
+                                                    }
+                                                    .test-cases-table th.test-scenario{
+                                                        text-align:left;
+                                                    }
+                                                    .test-cases-table td {
+                                                        font-size:6pt;
+                                                        line-height:6pt;
+                                                        color:#000;
+                                                    }
+                                                    .test-cases-table .even td{
+                                                        background-color:#f3f4f5;
+                                                    }
+                                                    .test-cases-table .odd td{
+                                                        background-color:#ececed;
+                                                    }
+                                                    .test-cases-table td a{
+                                                        font-size:10pt;
+                                                    }
+                                                    .test-cases-table td.test-scenario{
+                                                        background-color:#e2e2e2;
+                                                    }
+
+                                                    .issued, .test-outcome, .supporting-evidence{
+                                                        text-align:center;
+                                                    }
+                                                </style>
+                                                <table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
+                                                    <tr><th colspan="6">Completed Test Cases</th></tr>
+                                                    <tr>
+                                                        <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
+                                                        <th class="test-case" style="width:12%;">Test Case</th>
+                                                        <th class="issued" style="width:8%;">Issued</th>
+                                                        <th class="test-intent" style="width:30%;">Test Intent Description</th>
+                                                        <th class="test-outcome" style="width:8%;">Test<br/>Outcome</th>
+                                                        <th class="supporting-evidence" style="width:17%;">Supporting Evidence</th>
+                                                    </tr>';
+                    }
                     $rString = get_post_meta($testCases[$i]->ID, 'test_intent_description', true);
                     $test_cases_table_html .= '<tr class="' . ($idx % 2 == 0 ? 'odd' : 'even') . '">
                     <td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>
@@ -667,14 +671,21 @@ function createClaimPDF($claim_id, $planID )
             }
         }
     }
-    $test_cases_table_html .= '</table>';
-    $skipped_test_cases .= '</table>';
+    if( isset( $test_cases_table_html ) ) {
+        $test_cases_table_html .= '</table>';
+    }
+    if( isset( $skipped_test_cases ) ) {
+        $skipped_test_cases .= '</table>';
+    }
     $pdf->SetFont('opensans', '', 13, '', true);
-    
-    if($results)
+
+    if( isset( $test_cases_table_html ) ) {
         $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', true);
-    if($results) {
-        $pdf->AddPage();
+        if( ! empty( $test_cases_table_html ) ){
+            $pdf->AddPage();
+        }
+    }
+    if( isset( $skipped_test_cases ) ) {
         $pdf->writeHTMLCell(0, 0, '', '', $skipped_test_cases, 0, 1, 0, true, '', true);
     }
         
