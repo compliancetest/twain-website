@@ -77,6 +77,7 @@ function certifyPlan()
             if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId, $planID, $has_exclusions )) {
                 wp_redirect($return);
             } else {
+                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans WHERE id = %d", $planID ) );
                 addMessage('The plan was certified successfully');
                 wp_redirect($return_success);
             }
