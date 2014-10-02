@@ -16,6 +16,9 @@
         }
         exit( json_encode( $response ) );
     }
+    $allowed = PricingPlan::getPlanRolesAndLevels( $suite->test_suite_plans );
+    $allowed_roles  = $allowed['roles'];
+    $allowed_levels = $allowed['levels'];
     wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
 ?>
 
@@ -60,19 +63,12 @@
                                         <div class="vertical-row">Levels</div>
                                     </div>
                                 </th>
-                                <th>
-                                    <span class="has-custom-tooltip" title="An Australian Employer that has employees subject to mandatory superannuation guarantee legislation.">Employer</span>
-                                </th>
-                                <th><span class="has-custom-tooltip" title="A superannuation fund to which employee contributions are paid.">Fund</span></th>
-                                <th><span class="has-custom-tooltip" title="A financial intermediary that aggregates payments from multiple employers into single payments to funds.">Clearing House</span></th>
-                                <th><span class="has-custom-tooltip" title="A Self-Managed Super Fund, identified by an ABN">SMSF</span></th>
+                                <?php foreach( $allowed_roles AS $role ):?>
+                                    <th><span><?php echo $role;?></span></th>
+                                <?php endforeach;?>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                                $allowed_roles  = array( 'Employer', 'Fund', 'Clearing House', 'SMSF' );
-                                $allowed_levels = array( 'A', 'B', 'AFF', 'BULK' );
-                            ?>
                             <?php foreach( $allowed_levels AS $key => $level ):?>
                                 <tr>
                                     <th><span class="has-custom-tooltip" data-tooltip-content-id="#b-description"><?php echo $level;?></span></th>
