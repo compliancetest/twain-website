@@ -20,6 +20,13 @@
     $allowed_roles  = $allowed['roles'];
     $allowed_levels = $allowed['levels'];
     wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
+    $roles_desc = $levels_desc = array();
+    foreach( $suite->roles AS $r ){
+        $roles_desc[$r['name']] = $r['desc'];
+    }
+    foreach( $suite->conformanceLevel AS $l ){
+        $levels_desc[$l['code']] = $l['desc'];
+    }
 ?>
 
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
@@ -64,14 +71,14 @@
                                     </div>
                                 </th>
                                 <?php foreach( $allowed_roles AS $role ):?>
-                                    <th><span><?php echo $role;?></span></th>
+                                    <th><span class="has-custom-tooltip" title='<?php echo $roles_desc[$role];?>'><?php echo $role;?></span></th>
                                 <?php endforeach;?>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach( $allowed_levels AS $key => $level ):?>
                                 <tr>
-                                    <th><span class="has-custom-tooltip" data-tooltip-content-id="#b-description"><?php echo $level;?></span></th>
+                                    <th><span class="has-custom-tooltip" title='<?php echo $levels_desc[$level];?>'><?php echo $level;?></span></th>
                                     <?php foreach( $allowed_roles AS $it => $role ):?>
                                             <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
                                                 <td><span class="feature-available"></span></td>
