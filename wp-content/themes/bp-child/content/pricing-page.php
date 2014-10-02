@@ -56,14 +56,14 @@
                                 </div>
                             </th>
                             <?php foreach( $allowed_roles AS $role ):?>
-                                <th><span class="has-custom-tooltip" title='<?php echo $roles_desc[$role];?>'><?php echo $role;?></span></th>
+                                <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-custom-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
                             <?php endforeach;?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach( $allowed_levels AS $key => $level ):?>
                             <tr>
-                                <th><span class="has-custom-tooltip" title='<?php echo $levels_desc[$level];?>'><?php echo $level;?></span></th>
+                                <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-custom-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
                                 <?php foreach( $allowed_roles AS $it => $role ):?>
                                         <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
                                             <td><span class="feature-available"></span></td>
