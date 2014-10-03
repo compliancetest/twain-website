@@ -50,8 +50,6 @@ function ct_delete_user_data($user_id)
         $query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $prow->suite_id);
         $familyMark = $wpdb->get_var($query);
         
-        //Decrease the joined_user
-        $wpdb->query("UPDATE {$wpdb->prefix}users_organisation_pricing SET `joined_count`=`joined_count` - 1 WHERE user_id=" . $prow->user_id . " AND family_mark=" . $familyMark);
     }
     
     //Delete Subscriptions

@@ -179,17 +179,7 @@ class CT_Subscription
         
         $suite = new TestSuite($this->suite_id);
         $suite->loadfamilyMark();
-        
-        //Check if Organisation Subscription Data exist
-        $query = "SELECT * FROM {$wpdb->prefix}users_organisation_subscriptions WHERE subscription_id=" . $this->id;
-        $orow = $wpdb->get_row($query);
-        if($orow)
-        {
-            $wpdb->delete($wpdb->prefix . "users_organisation_subscriptions", array('subscription_id=' . $this->id));
-            //Decrease the joined_user
-            $wpdb->query("UPDATE {$wpdb->prefix}users_organisation_pricing SET `joined_count`=`joined_count` - 1 WHERE user_id=" . $purchase->user_id . " AND family_mark=" . $suite->familyMark);
-        }
-        
+
         $user = get_userdata($this->user_id);
         
         $monthlyFee = getSubscriptionMonthlyFee($this, $this->user_id);
