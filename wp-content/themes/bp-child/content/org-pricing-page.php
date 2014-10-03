@@ -4,7 +4,9 @@
     $suite = new TestSuite( $suite_id );
     $suite->load();
     $read_only = false;
+    $suite_ids = false;
     if( isset( $_REQUEST['plan_id'] ) ){
+        $suite_ids = $suite->test_suite_plans;
         $suite->test_suite_plans = array( intval( $_REQUEST['plan_id'] ) );
         $read_only = true;
     }
@@ -16,7 +18,7 @@
         }
         exit( json_encode( $response ) );
     }
-    $allowed = PricingPlan::getPlanRolesAndLevels( $suite->test_suite_plans );
+    $allowed = PricingPlan::getPlanRolesAndLevels( $suite->test_suite_plans, $suite_ids );
     $allowed_roles  = $allowed['roles'];
     $allowed_levels = $allowed['levels'];
     wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
@@ -51,7 +53,11 @@
                     <ul class="plan-subscription-prices">
                         <?php foreach( $plan->attribute_all AS $att_name => $att_value ):?>
                             <?php if( $att_value['type'] == 'itemcode' ):?>
-                                <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
+                                <?php if( isset( $plan->attribute_all['Discount'] ) ):?>
+                                    <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo ( $att_value['value'] - ( $att_value['value'] * ( $plan->attribute_all['Discount']['value'] / 100 ) ) ) ;?></li>
+                                <?php else:?>
+                                    <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
+                                <?php endif;?>
                             <?php elseif( $att_value['type'] == 'number' || $att_value['type'] == 'string' ):?>
                                 <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
                             <?php elseif( $att_value['type'] == 'percent' ):?>
