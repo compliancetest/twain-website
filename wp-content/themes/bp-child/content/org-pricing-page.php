@@ -54,16 +54,16 @@
                         <?php foreach( $plan->attribute_all AS $att_name => $att_value ):?>
                             <?php if( $att_value['type'] == 'itemcode' ):?>
                                 <?php if( isset( $plan->attribute_all['Discount'] ) ):?>
-                                    <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo ( $att_value['value'] - ( $att_value['value'] * ( $plan->attribute_all['Discount']['value'] / 100 ) ) ) ;?></li>
+                                    <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo ( $att_value['value'] - ( $att_value['value'] * ( $plan->attribute_all['Discount']['value'] / 100 ) ) ) ;?></li>
                                 <?php else:?>
-                                    <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
+                                    <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
                                 <?php endif;?>
                             <?php elseif( $att_value['type'] == 'number' || $att_value['type'] == 'string' ):?>
-                                <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
                             <?php elseif( $att_value['type'] == 'percent' ):?>
-                                <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                             <?php elseif( $att_value['type'] == 'boolean' ):?>
-                                <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
                             <?php endif;?>
                         <?php endforeach;?>
                     </ul>
@@ -77,14 +77,14 @@
                                     </div>
                                 </th>
                                 <?php foreach( $allowed_roles AS $role ):?>
-                                    <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-custom-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
+                                    <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
                                 <?php endforeach;?>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach( $allowed_levels AS $key => $level ):?>
                                 <tr>
-                                    <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-custom-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
+                                    <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
                                     <?php foreach( $allowed_roles AS $it => $role ):?>
                                             <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
                                                 <td><span class="feature-available"></span></td>
@@ -130,85 +130,17 @@
             });
 
 
-            $('.plans-header-nav-prev').click(function(){
-                var active = $('.plans-title-list li.active');
-                if (active.index != 0){
-                    active.prev().find('label').click();
-
-                    return false;
-                }
-
-            });
-
-            $('.plans-header-nav-next').click(function(){
-                var active = $('.plans-title-list li.active');
-                if (active.index != 0){
-                    active.next().find('label').click();
-
-                    return false;
-
-                }
-
-            });
-
-        function run(el){
-            var previous = jQuery('.plans-title-list li.active');
-            var current = el.parent();
-
-            previous.removeClass('active');
-            current.addClass('active');
-
-            setSiblings(current.index());
-
-            var shift_size = getShiftedSize(current);
-
-            moveSlider(shift_size);
-        }
-
-        function setSiblings(index){
-            jQuery('.plans-title-list li').removeClass('sibling_1 sibling_2');
-
-            jQuery('.plans-title-list li:eq(' + (index+1) + ')').addClass('sibling_1');
-            if (index != 0){
-                jQuery('.plans-title-list li:eq(' + (index-1) + ')').addClass('sibling_1');
-            }
-            jQuery('.plans-title-list li:eq(' + (index+2) + ')').addClass('sibling_2');
-
-            if (index > 1){
-                jQuery('.plans-title-list li:eq(' + (index-2) + ')').addClass('sibling_2');
-            }
-
-        }
-        /**
-         * el is current element
-         */
-        function getShiftedSize(el){
-            var size = 0;
-            jQuery('.plans-title-list li').each(function(){
-                if (jQuery(this).index() < el.index()){
-                    size = size + jQuery(this).outerWidth();
-                }
-            });
-
-            size = (-size + 361) - el.outerWidth()/2 ;
-            return size;
-
-        }
-
-        function moveSlider(size){
-            jQuery('.plans-title-list').animate({
-                left: size
-            }, 100, function() {
-                showPlanDetails(jQuery('.plans-title-list li.active label'));
-            });
-
-        }
-
-        function showPlanDetails(el){
-            jQuery('.plan-content').hide();
-            jQuery('#' + el.data('plan-container')).show().css({ opacity: 0.5 }).animate({ opacity: 1 });
-        }
         jQuery('.plans-title-list li.active label').click();
+
+        jQuery('.has-tooltip').each(function(){
+            var tooltip_obj;
+            if (jQuery(this).find('.simple_tooltip').length == 0) {
+                tooltip_obj = '<span class="simple_tooltip radius6">' + jQuery(this).attr('title') + '<span></span></span>';
+                jQuery(this).append(tooltip_obj);
+                jQuery(this).attr('title', '');
+            }
+        });
+
         setTimeout("jQuery('.plans-title-list li.active label').click();", 500 );
 
         <?php if( ! isset( $_REQUEST['is_edit'] ) ):?>
