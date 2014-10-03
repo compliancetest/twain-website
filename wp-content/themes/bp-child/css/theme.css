@@ -833,11 +833,7 @@ width: 28%;
     font-weight: normal !important;
 }
 
-.has-custom-tooltip{
-    position: relative;
-}
-
-.plans-pricing-table tbody th .has-custom-tooltip{
+.plans-pricing-table tbody th .has-tooltip{
     display: block;
     text-align: center;
 }
@@ -849,18 +845,7 @@ width: 28%;
     margin: 0;
 }
 
-.custom_simple_tooltip{
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing:border-box;
-    padding-bottom:2px;
-}
-
-.has-custom-tooltip:hover .custom_simple_tooltip{
-    display: block;
-}
-
-.simple_tooltip, .custom_simple_tooltip {
+.simple_tooltip {
     background: #555;
     background: rgba(0, 0, 0, 0.7);
     color: white;
@@ -883,9 +868,12 @@ width: 28%;
     text-indent: 0;
 }
 
-.custom_simple_tooltip{
+#pricing-plans .simple_tooltip{
+    bottom: 25px;
+    top: auto !important;
+    width: 200px;
+    margin-left: -100px;
     left: 50%;
-    top: -21px;
 }
 
 .simple_tooltip_pop {
@@ -2044,7 +2032,7 @@ margin-bottom: 0px !important;
     top: 21px;  
 }
 
-.simple_tooltip span, .custom_simple_tooltip span {
+.simple_tooltip span {
     width: 17px;
     height: 6px;
     background: url(../images/simple_tooltip_pointer.png) center center no-repeat;
