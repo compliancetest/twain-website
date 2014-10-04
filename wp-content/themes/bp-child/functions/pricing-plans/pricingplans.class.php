@@ -122,7 +122,7 @@ class PricingPlan
         return $price;
     }
 
-    public static function getPlanRolesAndLevels( $plans, $suite_plans ){
+    public static function getPlanRolesAndLevels( $plans, $suite_plans = false ){
         global $wpdb;
         $levels = '';
         $roles_array = array();
