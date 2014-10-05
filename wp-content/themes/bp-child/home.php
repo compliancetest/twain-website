@@ -23,21 +23,7 @@
         <div id="search_bar">
             <form role="search" method="get" id="searchform" action="<?php get_bloginfo('url'); ?>/search">
                 <input id="q" name="q" value="" type="text" placeholder="Search the Registry" autocomplete="off" class="inactive_s">
-                <div class="search_select_div">
-                    <div class="search_select">
-                        <ul>
-                            <li>
-                                <a id="choose_one" class="current_chosen">Test Suites</a>
-                                <ul>
-                                    <li><a id="communities">Communities</a></li>
-                                    <li><a id="test-suite">Test Suites</a></li>
-                                    <li><a id="product-service">Products</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <input type="hidden" value="test-suite" id="hidden_value"/>
-                </div>
+                <input type="hidden" value="product-service" id="hidden_value"/>
                 <input type="submit" id="searchsubmit" value="SEARCH">
                 <div class="clear"></div>
             </form>
@@ -95,9 +81,15 @@
                 <?php for ($i = 1; $i <= 6; $i++): ?>
                     <li class="step_<?php echo $i; ?>">
                         <div class="step-title"><?php echo $home_settings['step_'. $i .'_title']; ?></div>
-                        <div class="step-description">
-                            <p><?php echo $home_settings['step_'. $i .'_description']; ?></p>
-                        </div>
+                        <?php if ($home_settings['step_'. $i .'_hyperlink']): ?>
+                            <a href="<?php echo $home_settings['step_'. $i .'_hyperlink']; ?>" class="step-description">
+                                <span class="inner-description"><?php echo $home_settings['step_'. $i .'_description']; ?></span>
+                            </a>
+                        <?php else: ?>
+                            <div class="step-description">
+                                <p class="inner-description"><?php echo $home_settings['step_'. $i .'_description']; ?></p>
+                            </div>
+                        <?php endif; ?>
                     </li>
                 <?php endfor; ?>
             </ul>
@@ -119,7 +111,7 @@
                             </div>
                             <div class="community-content">
                                 <div class="community-title"><a href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></div>
-                                <div class="community-description"><?php echo bp_group_description(); ?></div>
+                                <div class="community-description"><?php bp_group_description(); ?></div>
                                 <a href="<?php bp_group_permalink() ?>" class="action-btn red-btn">Community Homepage</a>
                             </div>
                         </li>
