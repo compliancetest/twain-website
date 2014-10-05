@@ -3793,8 +3793,28 @@ background-image: url(../images/white_gloss.png);
     padding-top: 10px
 }
 
-.product_datails p{
-    padding-bottom:7px;
+.suite_view .action-btn{
+    font-weight: 400;
+}
+
+.product_details{
+    font-size: 12px;
+    color: #666;
+    margin: 14px 0 0 0;
+}
+
+.product_details dt,
+.product_details dd{
+    display: inline-block;
+    padding-bottom: 7px;
+}
+
+.product_details dt{
+}
+
+.product_details dd{
+    padding-right: 19px;
+    font-weight: 700;
 }
 
 .grey-border-bottom {

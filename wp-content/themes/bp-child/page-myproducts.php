@@ -286,13 +286,13 @@ get_header();
         }
         
         //Custom popup for test case boxes
-        $('.view-product').each(function(){
-            $(this).cplightbox({
-                href: $(this).attr('href') + '?is_ajax=true',
-                removeBoxAfterClose: true,
-                type: 'ajax'                
-            })
-        })
+//        $('.view-product').each(function(){
+//            $(this).cplightbox({
+//                href: $(this).attr('href') + '?is_ajax=true',
+//                removeBoxAfterClose: true,
+//                type: 'ajax'
+//            })
+//        })
     })
 })(jQuery)
     
