@@ -9,7 +9,7 @@ if (!($organisation_id = ct_is_organisation_admin())) {
 }
 
 $organisationClass = new CT_Organisation($organisation_id);
-
+wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
 get_header();
 
 ?>

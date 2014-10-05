@@ -37,16 +37,16 @@
                     <?php foreach( $plan->attribute_all AS $att_name => $att_value ):?>
                         <?php if( $att_value['type'] == 'itemcode' ):?>
                             <?php if( isset( $plan->attribute_all['Discount'] ) ):?>
-                                <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo ( $att_value['value'] - ( $att_value['value'] * ( $plan->attribute_all['Discount']['value'] / 100 ) ) ) ;?></li>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo ( $att_value['value'] - ( $att_value['value'] * ( $plan->attribute_all['Discount']['value'] / 100 ) ) ) ;?></li>
                             <?php else:?>
-                                <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
                             <?php endif;?>
                         <?php elseif( $att_value['type'] == 'number' || $att_value['type'] == 'string' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
+                            <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
                         <?php elseif( $att_value['type'] == 'percent' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
+                            <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                         <?php elseif( $att_value['type'] == 'boolean' ):?>
-                            <li><strong class="has-custom-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                            <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
                         <?php endif;?>
                     <?php endforeach;?>
                 </ul>
@@ -60,14 +60,14 @@
                                 </div>
                             </th>
                             <?php foreach( $allowed_roles AS $role ):?>
-                                <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-custom-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
+                                <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
                             <?php endforeach;?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach( $allowed_levels AS $key => $level ):?>
                             <tr>
-                                <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-custom-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
+                                <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
                                 <?php foreach( $allowed_roles AS $it => $role ):?>
                                         <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
                                             <td><span class="feature-available"></span></td>
@@ -92,3 +92,10 @@
     </div>
     <a class="close_btn"></a>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        jQuery('#pricing-plans .simple_tooltip').each(function(){
+            jQuery(this).css("margin-left", '-' + jQuery(this).width()/2-5 + "px" );
+        });
+    });
+</script>
