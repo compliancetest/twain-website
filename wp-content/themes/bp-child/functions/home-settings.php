@@ -343,6 +343,12 @@ function create_home_settings_page() {
                                             <input type="text" size="50" name="step_<?php echo $i; ?>_description" id="step_<?php echo $i; ?>_description" value="<?php echo $home_settings['step_'. $i .'_description'] ?>" />
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="tdlabel"><b>Hyperlink</b></td>
+                                        <td>
+                                            <input type="text" size="50" name="step_<?php echo $i; ?>_hyperlink" id="step_<?php echo $i; ?>_hyperlink" value="<?php echo $home_settings['step_'. $i .'_hyperlink'] ?>" />
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -392,6 +398,7 @@ function save_home_settings()
         for ($i = 1; $i <= 6; $i++){
             save_home_settings_option('home-settings','step_'. $i . '_title', stripslashes($_POST['step_'. $i . '_title']));
             save_home_settings_option('home-settings','step_'. $i . '_description', stripslashes($_POST['step_'. $i . '_description']));
+            save_home_settings_option('home-settings','step_'. $i . '_hyperlink', stripslashes($_POST['step_'. $i . '_hyperlink']));
         }
 
         for ($i = 1; $i <= 3; $i++){
