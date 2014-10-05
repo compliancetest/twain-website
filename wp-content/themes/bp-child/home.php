@@ -15,7 +15,11 @@
                 <?php echo $home_settings['top_banner_description']; ?>
             </div>
             <div class="home-collage-video">
-                <img src="<?php echo get_stylesheet_directory_uri() ?>/images/temp/video.jpg" alt=""/>
+                <?php if($home_settings['top_banner_video']): ?>
+                    <?php echo $home_settings['top_banner_video']; ?>
+                <?php else:  ?>
+                    <img src="<?php echo get_stylesheet_directory_uri() ?>/images/temp/video.jpg" alt=""/>
+                <?php endif; ?>
             </div>
         </div>
     </div>
