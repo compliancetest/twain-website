@@ -176,7 +176,7 @@ function create_home_settings_page() {
                                 <tr>
                                     <td class="tdlabel"><b>Video</b></td>
                                     <td>
-                                        <input type="text" size="50" name="top_banner_video" id="top_banner_video" value="<?php echo $home_settings['top_banner_video']; ?>" />
+                                        <input type="text" size="50" name="top_banner_video" id="top_banner_video" value="<?php echo htmlspecialchars($home_settings['top_banner_video']); ?>" />
                                     </td>
                                 </tr>
                             </tbody>
