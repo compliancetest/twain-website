@@ -21,12 +21,22 @@ $posts_per_page = 10;
 $args = get_products_args();
 //Getting Search Query
 $term = trim(isset($_GET['q']) ? $_GET['q'] : '');
+$postsIds = $notInPostIdsArray = array();
 
-if($term)
-    $args['s'] = $term;
-
-if($term)
-    $params[] = 'q=' . $term;
+if($term) {
+    $t_args = $args;
+    unset($t_args['tax_query']);// = array('relation' => 'OR');
+    unset($t_args['meta_key']);
+    unset($t_args['meta_value']);
+    $t_args['meta_query']['relation'] = 'OR';
+    $t_args['meta_query'][] = array('key' => 'product_owner', 'value' => $term, 'compare' => 'LIKE');
+    $t_args['meta_query'][] = array('key' => 'product_name', 'value' => $term, 'compare' => 'LIKE');
+    $a_posts = new WP_Query($t_args);
+    $allP = $a_posts->get_posts();
+    foreach( $allP AS $one_post ){
+        array_push( $postsIds, $one_post->ID );
+    }
+}
     
 //Getting Filter Params
 $filterType = getFilterParam('type');
@@ -40,7 +50,6 @@ foreach($filterType as $f)
     $params[] = urlencode('type[]') . '=' . urlencode($f);
     $filterParams['type[]'] = $f;
 }
-$postsIds = $notInPostIdsArray = array();
 foreach($filterTestSuite as $v)
 {
     $v = htmlspecialchars($v);
