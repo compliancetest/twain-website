@@ -7840,7 +7840,7 @@ input.inactive_s{
     background: url("../images/home-sprite.png") no-repeat 0 -170px;
 }
 
-.getting-started-steps li .step-description p{
+.getting-started-steps li .step-description .inner-description{
     padding: 20px 31px 0 39px;
     color: #fff;
     line-height: 15px;
@@ -7848,10 +7848,10 @@ input.inactive_s{
     vertical-align: middle;
 }
 
-.getting-started-steps li.step_1 .step-description p{
+.getting-started-steps li.step_1 .step-description .inner-description{
     padding-left: 12px;
 }
-.getting-started-steps li.step_6 .step-description p{
+.getting-started-steps li.step_6 .step-description .inner-description{
     padding-right: 10px;
 }
 
