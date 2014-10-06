@@ -485,40 +485,6 @@ jQuery(document).ready(function($) {
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
     });
 
-
-    jQuery('.has-custom-tooltip').each(function(){
-        var tooltip_obj;
-        var tooltip_height;
-        var tooltip_width = 100;
-        var content = '';
-        if (jQuery(this).find('.custom_simple_tooltip').length == 0) {
-            if (jQuery(this).data('tooltip-width')) {
-                tooltip_width = jQuery(this).data('tooltip-width');
-            }
-            if (jQuery(this).data('tooltip-height')) {
-                tooltip_height = jQuery(this).data('tooltip-height');
-            }
-
-            if (jQuery(this).data('tooltip-content-id')) {
-                var content_id = jQuery(this).data('tooltip-content-id');
-                content = jQuery(content_id).html();
-            } else {
-                content = jQuery(this).attr('title');
-            }
-
-
-            if (tooltip_height != 'undefined'){
-                tooltip_obj = '<span class="custom_simple_tooltip" style="width: ' + tooltip_width + 'px; height: ' + tooltip_height + 'px; top: -' + (tooltip_height+8) + 'px; margin-left: -' + tooltip_width/2 + 'px;">' + content + '<span></span></span>';
-            } else {
-                tooltip_obj = '<span class="custom_simple_tooltip" style="width: ' + tooltip_width + 'px; margin-left: -' + tooltip_width/2 + 'px;">' + content + '<span></span></span>';
-            }
-
-            jQuery(this).append(tooltip_obj);
-            jQuery(this).attr('title', '');
-        }
-    });
-
-
     // Browse Dashboard Pages
     jQuery('#browse-dashboard-pages').click(function(e){
         e.stopPropagation();

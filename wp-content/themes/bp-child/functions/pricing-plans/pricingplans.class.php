@@ -122,11 +122,15 @@ class PricingPlan
         return $price;
     }
 
-    public static function getPlanRolesAndLevels( $plans ){
+    public static function getPlanRolesAndLevels( $plans, $suite_plans = false ){
         global $wpdb;
         $levels = '';
         $roles_array = array();
-        $results = $wpdb->get_row( "SELECT *, count(*) AS count FROM wp_pricing_plans_attributes WHERE pricing_plan_id IN (".implode( ',', $plans ).") AND type='role' GROUP BY pricing_plan_id ORDER BY count DESC LIMIT 1" );
+        if( $suite_plans ){
+            $results = $wpdb->get_row( "SELECT *, count(*) AS count FROM wp_pricing_plans_attributes WHERE pricing_plan_id IN (".implode( ',', $suite_plans ).") AND type='role' GROUP BY pricing_plan_id ORDER BY count DESC LIMIT 1" );
+        } else {
+            $results = $wpdb->get_row( "SELECT *, count(*) AS count FROM wp_pricing_plans_attributes WHERE pricing_plan_id IN (".implode( ',', $plans ).") AND type='role' GROUP BY pricing_plan_id ORDER BY count DESC LIMIT 1" );
+        }
         $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type='role' ORDER BY `order` ", $results->pricing_plan_id ) );
         foreach( $results AS $result ){
             array_push( $roles_array, $result->name );

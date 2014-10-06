@@ -968,7 +968,7 @@ function get_details_popup(){
                     </div>
             </form>
 
-        <div class="loading"></div>
+            <div class="loading loading-with-text radius6"><div><b>PROCESSING THE EXCLUSION</b><p>Please wait...</p></div></div>
             <a id="close-popup-community" class="close_btn"></a>
         </div>
     <script>
@@ -976,10 +976,6 @@ function get_details_popup(){
             jQuery('.case_exclude').on('change', function(){
                 jQuery('.reason_div').toggle();
                 jQuery('.process-btn').toggle();
-//                if( jQuery(this).is(':checked') ){
-//                    jQuery('.reason_div').show();
-//                    jQuery('.process-btn').show();
-//                }
             });
             jQuery('.process-btn').click(function(){
                 var is_valid = true;
@@ -988,6 +984,7 @@ function get_details_popup(){
                     jQuery('.case_exclude_reason').addClass('textarea-error');
                     return false;
                 }
+                jQuery('.loading').show();
                 jQuery('#save_case_exclusion').submit();
             });
         })
