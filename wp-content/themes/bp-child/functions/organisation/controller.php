@@ -12,7 +12,7 @@ class CT_Organisation_Controller
     * Create Subscriptions for Organisation
     * 
     */
-    public function subscribe($family_mark, $payment_method, $nickname, $user_id)
+    public function subscribe($family_mark, $payment_method, $nickname, $user_id, $pricing_plan_id )
     {
         global $wpdb;
         
@@ -74,13 +74,15 @@ class CT_Organisation_Controller
                 'suite_family_mark' =>  $family_mark, 
                 'payment_method'    =>  $payment_method, 
                 'purchaser_id'      =>  $user_id,
-                'user_id'           =>  0
+                'user_id'           =>  0,
+                'pricing_plan_id'   => $pricing_plan_id
             ),
             array(
                 '%s',
                 '%d',
                 '%s',
                 '%s',
+                '%d',
                 '%d',
                 '%d',
                 '%d',
@@ -96,59 +98,96 @@ class CT_Organisation_Controller
         $subscription_id = $wpdb->insert_id;
         
         $suite_class = new TestSuite($suite_info->suite_id);
-        
-        $sign_price_code = $suite_class->loadSingleValue('signup_price');
-        $monthly_price_code = $suite_class->loadSingleValue('monthly_subscription_price');
-        
+
+        $pricing_plans = new PricingPlan( $pricing_plan_id );
+        $prices = $pricing_plans->attribute_itemcodes;
+
         //Create Charge Table
         $query = $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id=%d", $organisation_id);
         $no_billing = $wpdb->get_var($query);
         
         if ($no_billing != '1')
         {
-            $charge_data = array(
-                array(
-                    'organisation_id'       => $organisation_id,
-                    'payment_id'            => $payment_method,
-                    'item_code'             => $sign_price_code,
-                    'quantity'              => 1,
-                    'start_date'            => date("Y-m-d H:i:s"),
-                    'end_date'              => date("Y-m-d", strtotime('last day of this month')),
-                    'reference_type'        => 'subscription',
-                    'reference_id'          => $subscription_id,
-                    'invoice_number'    => '',
-                    'is_paid'               => 0,
-                    'comment'               => ''
-                ),
-                array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
-            );
-            
-            $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
-            
-            $charge_data = array(
-                array(            
-                    'organisation_id'       => $organisation_id,
-                    'payment_id'            => $payment_method,
-                    'item_code'             => $monthly_price_code,
-                    'quantity'              => ct_calculate_first_month_quantity(1),
-                    'start_date'            => date("Y-m-d H:i:s"),
-                    'end_date'              => date("Y-m-d", strtotime('last day of this month')),
-                    'reference_type'        => 'subscription',
-                    'reference_id'          => $subscription_id,
-                    'invoice_number'    => '',
-                    'is_paid'               => 0,
-                    'comment'               => date("F Y")
-                ),
-                array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s')
-            );
-            
-            $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+            if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
+                $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
+                $due_date = strtotime( 'last day of this month', $due_date );
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+                $charge_data = array(
+                    array(
+                        'organisation_id'       => $organisation_id,
+                        'payment_id'            => $payment_method,
+                        'item_code'             => $prices['Monthly']->value,
+                        'quantity'              => $quantity,
+                        'start_date'            => date("Y-m-d H:i:s"),
+                        'end_date'              => date( 'Y-m-d',  $due_date ),
+                        'reference_type'        => 'subscription',
+                        'reference_id'          => $subscription_id,
+                        'invoice_number'        => '',
+                        'is_paid'               => 0,
+                        'comment'               => $n_nickname." - ".date("F Y")." to ".date( "F Y", $due_date ),
+                        'discount'              => $discount
+                    ),
+                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
+                );
 
-            //update last_charge_date value
-            $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                array('last_charge_date' => gmdate('Y-m-d') ),
-                array('id' => $subscription_id )
-            );
+                $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+
+                //update last_charge_date value
+                $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                    array('last_charge_date' => gmdate('Y-m-d', $due_date ) ),
+                    array('id' => $subscription_id )
+                );
+            } else {
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+                if( isset( $prices['Signup']->value ) ) {
+                    $charge_data = array(
+                        array(
+                            'organisation_id' => $organisation_id,
+                            'payment_id' => $payment_method,
+                            'item_code' => $prices['Signup']->value,
+                            'quantity' => 1,
+                            'start_date' => date("Y-m-d H:i:s"),
+                            'end_date' => date("Y-m-d", strtotime('last day of this month')),
+                            'reference_type' => 'subscription',
+                            'reference_id' => $subscription_id,
+                            'invoice_number' => '',
+                            'is_paid' => 0,
+                            'comment' => $n_nickname,
+                            'discount' => $discount
+                        ),
+                        array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
+                    );
+
+                    $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+                }
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  ct_calculate_first_month_quantity(1) : 1;
+                $charge_data = array(
+                    array(
+                        'organisation_id'       => $organisation_id,
+                        'payment_id'            => $payment_method,
+                        'item_code'             => $prices['Monthly']->value,
+                        'quantity'              => $quantity,
+                        'start_date'            => date("Y-m-d H:i:s"),
+                        'end_date'              => date("Y-m-d", strtotime('last day of this month')),
+                        'reference_type'        => 'subscription',
+                        'reference_id'          => $subscription_id,
+                        'invoice_number'        => '',
+                        'is_paid'               => 0,
+                        'comment'               => $n_nickname.' - '.date("F Y"),
+                        'discount'              => $discount
+                    ),
+                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
+                );
+
+                $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+
+                //update last_charge_date value
+                $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                    array('last_charge_date' => gmdate('Y-m-d') ),
+                    array('id' => $subscription_id )
+                );
+            }
         }
         
         $user = get_userdata($user_id);
@@ -211,14 +250,15 @@ class CT_Organisation_Controller
         }
     }
     
-    public function send_signup_organisation_request($user_id)
+    public function send_signup_organisation_request($user_id, $pricing_plan_id)
     {
         global $wpdb;
         
         $requester = get_userdata($user_id);
-        
+
         $email_data = array(
             '[requester_name]' => $requester->first_name . " " . $requester->last_name,
+            '[plan_id]' => $pricing_plan_id,
             '[requester_email]' => $requester->user_email,
             '[organisation]' => get_user_meta($user_id, 'user_organisation', true),
             '[organisation_website]' => get_user_meta($user_id, 'user_organisation_web', true),
@@ -232,7 +272,7 @@ class CT_Organisation_Controller
         
     }
     
-    public function save_subscription($subscription_id, $nickname)
+    public function save_subscription($subscription_id, $nickname, $pricing_plan_id )
     {
         global $wpdb;
         
@@ -261,11 +301,101 @@ class CT_Organisation_Controller
         }*/
         
         $wpdb->update($wpdb->prefix . "organisations_subscriptions", 
-                      array('nickname' => $n_nickname),
-                      array('id' => $subscription_id),
-                      array('%s', '%d'), array('%d')
+                      array(
+                          'nickname'        => $n_nickname,
+                          'pricing_plan_id' => $pricing_plan_id
+                      ),
+                      array( 'id' => $subscription_id ),
+                      array( '%s', '%d' ),
+                      array('%d')
         );
-        
+        $query = $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id=%d", $subscription->organisation_id );
+        $no_billing = $wpdb->get_var($query);
+        $pricing_plans = new PricingPlan( $pricing_plan_id );
+        $prices = $pricing_plans->attribute_itemcodes;
+        if( $no_billing != '1' && $subscription->pricing_plan_id != $pricing_plan_id)
+        {
+            if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
+                $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
+                $due_date = strtotime( 'last day of this month', $due_date );
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+                $charge_data = array(
+                    array(
+                        'organisation_id'       => $subscription->organisation_id,
+                        'payment_id'            => $subscription->payment_method,
+                        'item_code'             => $prices['Monthly']->value,
+                        'quantity'              => $quantity,
+                        'start_date'            => gmdate("Y-m-d H:i:s"),
+                        'end_date'              => gmdate( 'Y-m-d',  $due_date ),
+                        'reference_type'        => 'subscription',
+                        'reference_id'          => $subscription_id,
+                        'invoice_number'        => '',
+                        'is_paid'               => 0,
+                        'comment'               => $n_nickname." - ".date("F Y")." to ".date( "F Y", $due_date ),
+                        'discount'              => $discount
+                    ),
+                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
+                );
+
+                $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+
+                //update last_charge_date value
+                $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                    array('last_charge_date' => gmdate('Y-m-d', $due_date ) ),
+                    array('id' => $subscription_id )
+                );
+            } else {
+                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+                if( isset( $prices['Signup']->value ) ) {
+                    $charge_data = array(
+                        array(
+                            'organisation_id' => $subscription->organisation_id,
+                            'payment_id' => $subscription->payment_method,
+                            'item_code' => $prices['Signup']->value,
+                            'quantity' => 1,
+                            'start_date' => date("Y-m-d H:i:s"),
+                            'end_date' => date("Y-m-d", strtotime('last day of this month')),
+                            'reference_type' => 'subscription',
+                            'reference_id' => $subscription_id,
+                            'invoice_number' => '',
+                            'is_paid' => 0,
+                            'comment' => $n_nickname,
+                            'discount' => $discount
+                        ),
+                        array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
+                    );
+
+                    $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+                }
+                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  ct_calculate_first_month_quantity(1) : 1;
+                $charge_data = array(
+                    array(
+                        'organisation_id'       => $subscription->organisation_id,
+                        'payment_id'            => $subscription->payment_method,
+                        'item_code'             => $prices['Monthly']->value,
+                        'quantity'              => $quantity,
+                        'start_date'            => date("Y-m-d H:i:s"),
+                        'end_date'              => date("Y-m-d", strtotime('last day of this month')),
+                        'reference_type'        => 'subscription',
+                        'reference_id'          => $subscription_id,
+                        'invoice_number'        => '',
+                        'is_paid'               => 0,
+                        'comment'               => $n_nickname.' - '.date("F Y"),
+                        'discount'              => $discount
+                    ),
+                    array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d' )
+                );
+
+                $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
+
+                //update last_charge_date value
+                $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                    array('last_charge_date' => gmdate('Y-m-d') ),
+                    array('id' => $subscription_id )
+                );
+            }
+        }
         return true;
     }
     

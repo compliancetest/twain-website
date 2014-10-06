@@ -49,9 +49,9 @@ class TestSuite
     
     var $specDocuments = array();
     
-    var $monthlySubscriptionPrice = 0;
+//    var $monthlySubscriptionPrice = 0;
     
-    var $monthlySubscriptionPriceValue = 0;
+//    var $monthlySubscriptionPriceValue = 0;
     
     var $excerpt = '';
     
@@ -63,9 +63,12 @@ class TestSuite
     
     var $scenarios = array();
     
-    var $signupPrice = 0;
-    
-    var $signupPriceValue = 0;
+//    var $signupPrice = 0;
+//
+//    var $signupPriceValue = 0;
+
+    public $test_suite_plans = array();
+    public $test_suite_plans_order = array();
     
     //This will be same for all versions
     var $familyMark = null;
@@ -87,16 +90,15 @@ class TestSuite
     
     public function load($id = null)
     {
-        if($id !== null)   
+        if ($id !== null)
             $this->id = $id;
-        
-        if(!$this->id)
+
+        if (!$this->id)
             return;
-            
+
         //Load Informations
         $this->community_id = $this->loadSingleValue('community_id');
-        if(!$this->community_id)
-        {
+        if (!$this->community_id) {
             $this->id = null;
             return;
         }
@@ -104,41 +106,37 @@ class TestSuite
         $this->identifier = $this->loadSingleValue('ts_identifier');
         $this->issueDate = $this->loadSingleValue('ts_issue_date');
         $this->issuer = $this->loadSingleValue('ts_issuer');
-        
+
         $this->status = $this->loadSingleValue('ts_status');
-        if(!$this->status)
+        if (!$this->status)
             $this->status = 'Draft'; //Draft is default status
-        
+
         $this->revisionDescription = $this->loadSingleValue('ts_revision_description');
         $this->description = $this->loadSingleValue('ts_description', false);
-        
+
         $this->version_major = $this->loadSingleValue('ts_version_major');
         $this->version_minor = $this->loadSingleValue('ts_version_minor');
         $this->version_patch = $this->loadSingleValue('ts_version_patch');
-        $this->signupPrice = $this->loadSingleValue('signup_price');
-        $this->signupPriceValue = $this->getPriceFromXeroCode($this->signupPrice);
-        
-        
+
         $this->version_major = !$this->version_major ? 0 : $this->version_major;
         $this->version_minor = !$this->version_minor ? 0 : $this->version_minor;
         $this->version_patch = !$this->version_patch ? 0 : $this->version_patch;
-        
+
         $versions = array();
         $versions[] = $this->version_major;
         $versions[] = $this->version_minor;
-        if($this->version_patch)
+        if ($this->version_patch)
             $versions[] = $this->version_patch;
-        
-        
+
+
         $this->version = implode(".", $versions);
-        
+
         $this->initiatingMessage = $this->loadSingleValue('init_message');
-        $this->monthlySubscriptionPrice = $this->loadSingleValue('monthly_subscription_price');
-        if(!$this->monthlySubscriptionPrice)
-            $this->monthlySubscriptionPrice = 0;
-        $this->monthlySubscriptionPriceValue = $this->getPriceFromXeroCode($this->monthlySubscriptionPrice);
-        
-        
+        $pricing_plans = $this->loadSingleValue('test_suite_plans');
+        if ($pricing_plans){
+            $this->test_suite_plans = explode('|', $this->loadSingleValue('test_suite_plans'));
+        }
+        $this->test_suite_plans_order = $this->loadSingleValue('test_suite_plans_order');
         $this->loadConformanceLevel();
         $this->loadTestCases();
         $this->loadRelatedSuites();

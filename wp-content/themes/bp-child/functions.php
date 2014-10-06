@@ -164,13 +164,20 @@ require_once(THE_FUNCTION . '/organisation/index.php');
 
 //Xero Items
 require_once(THE_FUNCTION . '/xero-items/admin.php');
+
+//Pricing Plans
+require_once(THE_FUNCTION . '/pricing-plans/admin.php');
+require_once(THE_FUNCTION . '/pricing-plans/pricingplans.class.php');
 //Xero Payments
 require_once(THE_FUNCTION . '/organisations-payments/admin.php');
 
 //Process Compliancetest Admin Actions 
 require_once(THE_FUNCTION . '/admin/index.php');
 
-/* 
+//Process Compliancetest Admin Actions
+require_once(THE_FUNCTION . '/home-settings.php');
+
+/*
  * Loads the Options Panel
  *
  * If you're loading from a child theme use stylesheet_directory
