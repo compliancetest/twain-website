@@ -247,9 +247,15 @@ get_header();
         <select id="all_family_mark" style="display: none;">
             <?php $test_suites = ct_get_test_suites_without_version(); ?>
             <?php foreach($test_suites as $row){ ?>
-            <option value="<?php echo $row->family_mark?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
-                <?php echo $row->suite_title ?>
-            </option>
+            <?php
+                $s = new TestSuite( $row->family_mark );
+                $s->load();
+            ?>
+            <?php if(! empty( $s->test_suite_plans ) ):?>
+                <option value="<?php echo $row->family_mark?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
+                    <?php echo $row->suite_title ?>
+                </option>
+            <?php endif;?>
             <?php } ?>
         </select>
     </form>

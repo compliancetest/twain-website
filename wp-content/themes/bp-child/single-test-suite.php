@@ -280,13 +280,23 @@ Template Name Posts: Test Suite
                             if ( ct_is_organisation_admin( $user_id ) ) {
                             ?>
                                 <div class="test-suite-actions">
-                                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                    <?php if( ! empty( $suite->test_suite_plans ) ):?>
+                                        <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
                                             <span class="price-b">
                                                 <span class="l"></span>
                                                 <span class="m">View Pricing<br>Plans</span>
                                                 <span class="r"></span>
                                             </span>
-                                    </a>
+                                        </a>
+                                    <?php else:?>
+                                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <span class="price-b">
+                                                <span class="l"></span>
+                                                <span class="m">CONTACT US<br>For Pricing</span>
+                                                <span class="r"></span>
+                                            </span>
+                                        </a>
+                                    <?php endif;?>
                                     <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
                                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                     </a>
@@ -310,13 +320,23 @@ Template Name Posts: Test Suite
                             } else {
                             ?>
                                 <div class="test-suite-actions">
-                                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                        <span class="price-b">
-                                            <span class="l"></span>
-                                            <span class="m">View Pricing<br>Plans</span>
-                                            <span class="r"></span>
-                                        </span>
-                                    </a>
+                                    <?php if( ! empty( $suite->test_suite_plans ) ):?>
+                                        <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                            <span class="price-b">
+                                                <span class="l"></span>
+                                                <span class="m">View Pricing<br>Plans</span>
+                                                <span class="r"></span>
+                                            </span>
+                                        </a>
+                                        <?php else:?>
+                                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <span class="price-b">
+                                                <span class="l"></span>
+                                                <span class="m">CONTACT US<br>For Pricing</span>
+                                                <span class="r"></span>
+                                            </span>
+                                        </a>
+                                    <?php endif;?>
                                     <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
                                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                     </a>
@@ -355,13 +375,23 @@ Template Name Posts: Test Suite
                     
             ?>
                 <div class="test-suite-actions">
-                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                        <span class="price-b">
-                            <span class="l"></span>
-                            <span class="m">View Pricing<br> Plans</span>
-                            <span class="r"></span>
-                        </span>
-                    </a>
+                    <?php if( ! empty( $suite->test_suite_plans ) ):?>
+                        <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                            <span class="price-b">
+                                                <span class="l"></span>
+                                                <span class="m">View Pricing<br>Plans</span>
+                                                <span class="r"></span>
+                                            </span>
+                        </a>
+                    <?php else:?>
+                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <span class="price-b">
+                                                <span class="l"></span>
+                                                <span class="m">CONTACT US<br>For Pricing</span>
+                                                <span class="r"></span>
+                                            </span>
+                        </a>
+                    <?php endif;?>
                     <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>
                         <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                     </a>
