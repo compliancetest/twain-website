@@ -433,12 +433,13 @@ function ct_process_charge_entry_admin_actions()
                 if( $organisation->no_billing != '1' ){
                     $suite = new TestSuite( $subscription->suite_family_mark );
                     $suite->load();
-                    if( ! in_array( $suite->monthlySubscriptionPriceValue, array( 0, -1 ) ) ){
+                    if( $subscription->pricing_plan_id ){
+                        $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
                         if( $subscription->last_charge_date == '0000-00-00' ){
                             $data = array(
                                 'organisation_id' => $subscription->organisation_id,
                                 'payment_id'      => $subscription->payment_method,
-                                'item_code'       => $suite->monthlySubscriptionPrice,
+                                'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
                                 'quantity'        => '1.00',
                                 'reference_type'  => 'subscription',
                                 'reference_id'    => $subscription->id,
@@ -455,29 +456,58 @@ function ct_process_charge_entry_admin_actions()
                                 array('id' => $subscription->id)
                             );
                         } else {
-                            $monthesCounter = 0;
-                            if( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate( 'm' ) ){
-                                while( gmdate( 'm', strtotime( $subscription->last_charge_date ) ) != gmdate('m', strtotime('-'.$monthesCounter.' month' ) ) AND gmdate( 'Y', strtotime( $subscription->last_charge_date ) ) <= gmdate('Y', strtotime('-'.$monthesCounter.' month' ) ) ){
+                            $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
+                            if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
+                                if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
+                                    $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
+                                    $due_date = strtotime( 'last day of this month', $due_date );
+                                    $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                                     $data = array(
                                         'organisation_id' => $subscription->organisation_id,
                                         'payment_id'      => $subscription->payment_method,
-                                        'item_code'       => $suite->monthlySubscriptionPrice,
-                                        'quantity'        => '1.00',
+                                        'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
+                                        'quantity'        => $pricing_plans->attribute['Period']->value,
                                         'reference_type'  => 'subscription',
                                         'reference_id'    => $subscription->id,
-                                        'comment'         => gmdate('F Y', strtotime('-'.$monthesCounter.' month' )),
+                                        'comment'         => $subscription->nickname." - ".date("F Y")." to ".date( "F Y", $due_date ),
                                         'start_date'      => gmdate('Y-m-01'),
-                                        'end_date'        => gmdate('Y-m-t')
+                                        'end_date'        => gmdate( 'Y-m-d',  $due_date ),
+                                        'discount'        => $discount
                                     );
                                     $chargeClass = new CT_Charge();
                                     $chargeClass->bind($data);
                                     $chargeClass->save();
                                     $newChargesCounter++;
-                                    $monthesCounter++;
                                     $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
-                                        array('last_charge_date' => gmdate('Y-m-d') ),
+                                        array('last_charge_date' => gmdate( 'Y-m-d',  $due_date )),
                                         array('id' => $subscription->id)
                                     );
+                                }
+                            } else {
+                                if (gmdate('m', strtotime($subscription->last_charge_date)) != gmdate('m')) {
+                                    $monthesCounter = 0;
+                                    while (gmdate('m', strtotime($subscription->last_charge_date)) != gmdate('m', strtotime('-' . $monthesCounter . ' month')) AND gmdate('Y', strtotime($subscription->last_charge_date)) <= gmdate('Y', strtotime('-' . $monthesCounter . ' month'))) {
+                                        $data = array(
+                                            'organisation_id' => $subscription->organisation_id,
+                                            'payment_id' => $subscription->payment_method,
+                                            'item_code' => $pricing_plans->attribute_itemcodes['Monthly']->value,
+                                            'quantity' => '1.00',
+                                            'reference_type' => 'subscription',
+                                            'reference_id' => $subscription->id,
+                                            'comment' => $subscription->nickname.' - '.gmdate('F Y', strtotime('-' . $monthesCounter . ' month')),
+                                            'start_date' => gmdate('Y-m-01'),
+                                            'end_date' => gmdate('Y-m-t')
+                                        );
+                                        $chargeClass = new CT_Charge();
+                                        $chargeClass->bind($data);
+                                        $chargeClass->save();
+                                        $newChargesCounter++;
+                                        $monthesCounter++;
+                                        $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                            array('last_charge_date' => gmdate('Y-m-d')),
+                                            array('id' => $subscription->id)
+                                        );
+                                    }
                                 }
                             }
                         }

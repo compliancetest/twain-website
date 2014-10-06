@@ -223,15 +223,12 @@ class CT_Xero {
         $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' ) AND invoice_number = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $invoiceData['payment_id'] ), ARRAY_A );
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
-                if( $entry['reference_type'] == 'subscription') {
-                    $entry['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $entry['item_code'])).PHP_EOL.'( '.$wpdb->get_var($wpdb->prepare("SELECT nickname FROM {$wpdb->prefix}organisations_subscriptions WHERE id = %d", $entry['reference_id'])).' - '.$entry['comment'].' )';
-                } else {
-                    $entry['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $entry['item_code'])).PHP_EOL.'( '.$entry['comment'].' )';
-                }
+                $entry['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $entry['item_code'])).PHP_EOL.( ! empty( $entry['comment'] ) ? '( '.$entry['comment'].' )' : '' );
                 $line_item = $line_items->addChild( 'LineItem' );
                 $line_item->addChild( 'ItemCode', $entry['item_code'] );
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
                 $line_item->addChild( 'Description', $entry['comment'] );
+                if( $entry['discount'] > 0 ) $line_item->addChild( 'DiscountRate', $entry['discount'] );
             }
         }
         if( isset( $invoiceData['invoice_number'] ) && ! empty( $invoiceData['invoice_number'] ) ) $xml->addChild('InvoiceNumber', $invoiceData['invoice_number'] );

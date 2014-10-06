@@ -9,7 +9,7 @@ if (!($organisation_id = ct_is_organisation_admin())) {
 }
 
 $organisationClass = new CT_Organisation($organisation_id);
-
+wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
 get_header();
 
 ?>
@@ -51,7 +51,7 @@ get_header();
                                }else{
                                    foreach($subscriptions as $row)
                                    {
-                                       
+
                            ?>
                                 <div class="tr">
                                     <div class="td td-community">
@@ -66,7 +66,7 @@ get_header();
                                     <div class="td td-assignee">
                                         <?php echo $row->full_name; ?>
                                         <?php echo ($row->user_email)?('<br/>('.$row->user_email.')'):(''); ?>
-                                    </div>                                    
+                                    </div>
                                     <div class="td td-status">
                                         <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                             <?php echo $row->status?>
@@ -93,7 +93,11 @@ get_header();
                                     </div>
                                     <div class="td td-action tocenter">
                                         <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe')?>&id=<?php echo $row->id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Cancel Subscription<span></span></span></a>
-                                        <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark;?>&plan_id=<?php echo $row->pricing_plan_id;?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip left10" data-id="26" rel="custom-popup" cp-type="ajax" cp-removeboxafterclose="1" cp-closewhenclickoveraly="0">
+                                            <span class="p"></span>
+                                            <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
+                                        </a>
+                                        <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription')?>&id=<?php echo $row->id?>" class="action-btn edit-btn icon-btn left10 edit-link has-tooltip edit_sub_<?php echo $row->id?>" cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip">Edit Subscription<span></span></span></a>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -170,6 +174,57 @@ get_header();
                 </div>                
                 <div class="clear"></div>
             </div>
+            <div class="field-row">
+                <div class="grid-cell">
+                    <label>Pricing Plan</label>
+                    <select id="pricing_plan_id_span"></select>
+                    <input type="hidden" id="pricing_plan_id" name="pricing_plan_id" value="">
+                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>
+                    <script>
+                        jQuery(document).ready(function($){
+                            $('#suite_family_mark').on('change', function(e){
+                                if( jQuery('.submit_all').attr('href').indexOf( 'suite_id' ) == -1 ){
+                                    var new_url = jQuery('.submit_all').attr('href') + '&suite_id='+ $('#suite_family_mark').val();
+                                } else {
+                                    var new_url = jQuery('.submit_all').attr('href').split('&suite_id');
+                                    new_url = new_url[0] + '&suite_id='+ $('#suite_family_mark').val();
+
+                                }
+                                addSelectValues( new_url );
+                                jQuery('.submit_all').attr( 'href', new_url );
+                                jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
+                                $('#pricing_plan_id_span').on('change', function(){
+                                    $('#pricing_plan_id').val( $(this).val());
+
+                                    if( jQuery('.submit_all').attr('href').indexOf( 'suite_id' ) == -1 ){
+                                        var new_url = jQuery('.submit_all').attr('href') + '&suite_id='+ $('#suite_family_mark').val();
+                                    } else {
+                                        var new_url = jQuery('.submit_all').attr('href').split('&suite_id');
+                                        new_url = new_url[0] + '&suite_id='+ $('#suite_family_mark').val();
+                                    }
+                                    new_url = new_url+'&pricing_plan_id='+jQuery('#pricing_plan_id').val();
+                                    jQuery('.submit_all').attr( 'href', new_url );
+                                    jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
+                                });
+                                function addSelectValues( url ){
+                                    $.ajax({
+                                        url: new_url+'&get_all=1',
+                                        type: 'get',
+                                        dataType: 'json',
+                                        success: function(data){
+                                            $("#pricing_plan_id_span").prepend("<option value='' selected='selected'>Select pricing plan</option>");
+                                            $.each(data, function(i, value) {
+                                                $('#pricing_plan_id_span').append($('<option>').text(value).attr('value', i));
+                                            });
+                                        }
+                                    })
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="clear"></div>
+            </div>
             <div class="field-row notice-txt">
                 <div class="grid-cell">
                     <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
@@ -230,6 +285,11 @@ jQuery(document).ready(function(){
         {
             jQuery('#paymentForm #nickname').addClass('input-error');
             isValid = false;            
+        }
+        if(jQuery('#pricing_plan_id_span').val() == '')
+        {
+            jQuery('#pricing_plan_id_span').addClass('input-error');
+            isValid = false;
         }
         
         if(!isValid)

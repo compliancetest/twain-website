@@ -196,47 +196,33 @@ $xeroItems = ct_get_xero_items();
            </div>
        </div>
        <div class="space20"></div>
-       <div class="grid-box grid-box-expandable grid-box-opened">
-           <div class="grid-box-header">
-               <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Subscription Price</h5>
-               <div class="clear"></div>
-           </div>
-           <div class="grid-box-body">
-               <div class="column">    
-                   <div class="field-row">                    
-                       <div class="grid-cell">                       
-                           <select name="signup_price" id="signup_price" class="select">
-                                <option value="-1" <?php echo $suite->signupPrice == '-1' ? 'selected="selected"' :'' ?>>-1</option>
-                                <option value="0" <?php echo $suite->signupPrice == '0' ? 'selected="selected"' :'' ?>>0</option>
-                                <?php foreach($xeroItems as $xitem): ?>
-                                <option value="<?php echo $xitem->code?>" <?php echo $suite->signupPrice == $xitem->code ? 'selected="selected"' :'' ?>><?php echo $xitem->code?></option>
-                                <?php endforeach; ?>
-                           </select>
-                       </div>
-                       <div class="grid-cell">
-                           <label class="light-desc"><i>Sign-up Price (-1: Negotiate price, 0: Free)</i></label>
-                       </div> 
-                       <div class="clear"></div>
-                   </div>
-                   <div class="field-row">                       
-                       <div class="grid-cell">                           
-                           <select name="monthly_subscription_price" id="monthly_subscription_price" class="select">
-                                <option value="0" <?php echo $suite->monthlySubscriptionPrice == '0' ? 'selected="selected"' :'' ?>>0</option>
-                                <?php foreach($xeroItems as $xitem): ?>
-                                <option value="<?php echo $xitem->code?>" <?php echo $suite->monthlySubscriptionPrice == $xitem->code ? 'selected="selected"' :'' ?>><?php echo $xitem->code?></option>
-                                <?php endforeach; ?>
-                           </select>
-                       </div>
-                       <div class="grid-cell">
-                           <label class="light-desc"><i>Monthly Subscription Price (0: Free)</i></label>
-                       </div>
-                       <div class="clear"></div>
-                   </div>
-               </div>
-           </div>
-       </div>       
-       <div class="space20"></div>
+        <div class="grid-box grid-box-expandable grid-box-opened">
+            <div class="grid-box-header">
+                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+                <h5 class="left">Pricing Plans</h5>
+                <div class="clear"></div>
+            </div>
+            <div class="grid-box-body">
+                <div class="column">
+                    <?php
+                    $pricing_plans = PricingPlan::getAllPlans();
+                    foreach($pricing_plans AS $plan ) { ?>
+                    <div class="field-row">
+                        <div class="grid-cell checkbox-cell width70P padding20-10">
+                                <label><input type="checkbox" name="test_suite_plans[]" value="<?php echo $plan->id?>" <?php echo in_array( $plan->id, $suite->test_suite_plans )  ? 'checked="checked"' : '' ?>> <?php echo $plan->title?></label>
+                        </div>
+                        <div class="grid-cell width8P tocenter">
+                            <label>Order:</label>
+                            <input type="text" class="input width70P tocenter" name="pricing_plans_sequence_<?php echo $plan->id;?>" value="<?php echo isset( $suite->test_suite_plans_order[$plan->id] ) ? $suite->test_suite_plans_order[$plan->id] : '0';?>" />
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <?php } ?>
+
+                </div>
+            </div>
+        </div>
+        <div class="space20"></div>
        <div class="grid-box grid-box-expandable grid-box-opened" id="conf-level-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
