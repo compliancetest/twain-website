@@ -178,7 +178,7 @@ function cp_delete_payment_method()
         exit;
     }
     
-    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix ."users_purchases WHERE card_id=%d", $id);
+    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix ."organisations_payments WHERE payment_method_id=%d", $id);
     $count = $wpdb->get_var($query);
     if($count > 0)
     {
@@ -543,47 +543,6 @@ function cp_user_payment_save()
             }
             
             $wpdb->update($wpdb->prefix . "organisations_payment_methods", array('nickname' => $nickname, 'email' => $email, 'customer_reference' => $customer_reference, 'status' => 'Active', 'is_default' => $is_default), array('id' => $card->id));
-            
-            $query = "SELECT p.*, c.customer_id FROM {$wpdb->prefix}users_purchases AS p LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id WHERE (p.`status`='InArrears' OR p.`status`='Frozen') AND c.`status`='Active' AND p.user_id=" . $current_user->ID;
-            
-            $subscriptions = $wpdb->get_results($query, ARRAY_A);
-            foreach($subscriptions as $row)
-            {
-                //Monthly Billing
-                $currentPrice = get_post_meta($row['suite_id'], 'monthly_subscription_price', true);
-                if($row['monthly_fee'] < $currentPrice)
-                    $row['monthly_fee'] = $currentPrice;
-                
-                //Check User's Level Monthly Fee
-                /*$userMonthlyFees = get_user_meta($user->ID, 'monthly_fee', true);
-                if(isset($userMonthlyFees[$row['suite_id']]) && $userMonthlyFees[$row['suite_id']] < $currentPrice)
-                    $currentPrice = $userMonthlyFees[$row['suite_id']];*/
-                
-                $result = processEwayPayment($row['customer_id'], $row['monthly_fee']);
-                
-                $subscription = new CT_Subscription();
-                $subscription->bind($row);
-                
-                if($result['ewayTrxnStatus'] == 'True')
-                {            
-                    //Save Transaction
-                    $wpdb->insert($wpdb->prefix . 'users_transactions', array(
-                        "user_id" => $row['user_id'],
-                        "suite_id" => $row['suite_id'],
-                        "trxn_number" => $result['ewayTrxnNumber'],
-                        "amount" => $row['monthly_fee'],
-                        "auth_code" => $result['ewayAuthCode'],
-                        "created_date" => date("Y-m-d H:i:s")
-                    ));
-                    
-                    $subscription->active();
-                    
-                }else{             
-                    //Set Card Status to Suspended
-                    $wpdb->update($wpdb->prefix . 'organisations_payment_methods', array('status' => 'Suspended'), array('id' => $row['card_id']));
-                }
-                
-            }
             
             echo 'success';
         }else{

@@ -55,7 +55,7 @@ class CT_Subscription
         if($this->id)
         {
             $query = $wpdb->prepare("SELECT s.*, p.monthly_fee, p.signup_fee, p.paid_amount, p.card_id, p.created_date, p.expiry_date,p.inarrears_count, p.frozen_count, c.customer_id FROM {$wpdb->prefix}users_subscriptions AS s
-                                     LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id = s.purchase_id
+                                     LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.id = s.parent_id
                                      LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS c ON c.id=p.card_id                                      
                                      WHERE s.id=%d", $this->id);
             
@@ -91,13 +91,6 @@ class CT_Subscription
         {
             //Update subscription status
             $wpdb->update($wpdb->prefix . 'users_subscriptions', array('status' => 'Unsubscribing'), array('id' => $this->id));
-            
-            $remainingSubscriptions = getNumSubscriptions($this->purchase_id);
-            if(!$remainingSubscriptions)
-            {
-                //Remove Purchases
-                $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->purchase_id));            
-            }
             
             //Send Email Notification
             $user = get_userdata($this->user_id);
@@ -157,20 +150,8 @@ class CT_Subscription
     {
         global $wpdb;
         
-        $purchase = new CT_Purchase($this->purchase_id);
-        $purchase->load();
-        
         //Remove subscription
         $wpdb->delete($wpdb->prefix . 'users_subscriptions', array('id' => $this->id));
-        
-        $remainingSubscriptions = getNumSubscriptions($this->purchase_id);
-        if(!$remainingSubscriptions)
-        {
-            //Remove Purchases
-            $wpdb->delete($wpdb->prefix . 'users_purchases', array('id' => $this->purchase_id));
-            //Remove transactions
-            $wpdb->delete($wpdb->prefix . 'users_transactions', array('parent_id' => $this->purchase_id, 'type' => 'purchase_subscription'));            
-        }
         
         //Remove Test Plans
         $wpdb->delete($wpdb->prefix . 'test_plans', array('suite_id' => $this->suite_id, 'creator_id' => $this->user_id));

@@ -113,7 +113,6 @@ require_once(THE_FUNCTION . '/customer/customer-post.php');
 require_once(THE_FUNCTION . '/login-redirect.php');
 
 //Manage Subscription
-require_once(THE_FUNCTION . '/subscription/class.purchase.php');
 require_once(THE_FUNCTION . '/subscription/class.subscription.php');
 require_once(THE_FUNCTION . '/subscription/controller.php');
 require_once(THE_FUNCTION . '/subscription/function.php');

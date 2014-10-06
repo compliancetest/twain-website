@@ -36,22 +36,7 @@ function ct_delete_user_data($user_id)
         $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE CUSTOMER_ID in (" . implode(", ", $esbIds) . ")";            
         ManageESB::$esbdb->query($query);
     }
-    
-    //Delete Payment Logs
-    $wpdb->delete($wpdb->prefix . "users_transactions", array('user_id' => $user_id));
-    
-    //Decrease Joined User Count For Organisation Users    
-    $purchases = $wpdb->get_results("select s.suite_id, p.user_id FROM {$wpdb->prefix}users_subscriptions AS s LEFT JOIN {$wpdb->prefix}users_purchases AS p ON p.id=s.purchase_id WHERE s.user_id=$user_id");
-    foreach($purchases as $prow)
-    {
-        if($prow->user_id == $user_id)
-            continue;
-        
-        $query = $wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id=%d", $prow->suite_id);
-        $familyMark = $wpdb->get_var($query);
-        
-    }
-    
+
     //Delete Subscriptions
     $wpdb->query("DELETE s FROM {$wpdb->prefix}users_subscriptions  WHERE user_id=$user_id");
     
