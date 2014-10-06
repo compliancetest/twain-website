@@ -322,9 +322,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Ticket Created',            
             'title'         => 'Ticket Created',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [token_price]<small>($/token)</small> <br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content] <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -344,9 +344,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Ticket Updated',            
             'title'         => 'Ticket Updated',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -366,9 +366,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Ticket Started',            
             'title'         => 'Ticket Started',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -388,9 +388,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Ticket Resolved',            
             'title'         => 'Ticket Resolved',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -410,9 +410,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Ticket Closed',            
             'title'         => 'Ticket Closed',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small>',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
             'fields' => array(
                             array(
                                 'title'         => 'For User',
@@ -432,9 +432,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Payment Processed<br />With Credit Card',            
             'title'         => 'Payment processed by using customer credit cards',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small><br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]<br />
                                 [paid_tokens]<small>($)</small>, [paid_amount]<small>($)</small>',
             'fields' => array(
                             array(
@@ -455,9 +455,9 @@ $ct_email_templates = array(
         array(            
             'menu'          => 'Payment Processed<br />With Prepurchased Tokens',            
             'title'         => 'Payment processed by using prepurchased tokens',
-            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email], [token_price]<small>($/token)</small><br />
+            'shortcodes'    => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>(Tokens/hr)</small>, [ticket_total_price]<small>(Total Tokens)</small><br />
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]<br />
                                 [purchased_tokens], [paid_tokens], [remained_tokens]',
             'fields' => array(
                             array(
