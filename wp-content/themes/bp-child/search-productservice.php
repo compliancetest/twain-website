@@ -33,8 +33,12 @@ if($term) {
     $t_args['meta_query'][] = array('key' => 'product_name', 'value' => $term, 'compare' => 'LIKE');
     $a_posts = new WP_Query($t_args);
     $allP = $a_posts->get_posts();
-    foreach( $allP AS $one_post ){
-        array_push( $postsIds, $one_post->ID );
+    if( $allP ) {
+        foreach ($allP AS $one_post) {
+            array_push($postsIds, $one_post->ID);
+        }
+    } else{
+        $postsIds = array( -1 );
     }
 }
     
