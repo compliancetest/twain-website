@@ -7342,6 +7342,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     vertical-align: middle;
 }
 
+.plans-pricing-table td{
+    min-width: 100px;
+}
+
 .plans-pricing-table .feature-available,
 .plans-pricing-table .feature-unavailable{
     display: block;
