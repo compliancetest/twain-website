@@ -790,11 +790,12 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT m.PAYLOAD FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT m.PAYLOAD, m.S3_PAYLOAD_LOCATION, m.S3_PAYLOAD_CONTENT_LENGTH FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
-        $data = ManageESB::$esbdb->get_var($query);
+        $data = ManageESB::$esbdb->get_row($query);
         
         return $data;
+        
         
     }
     
@@ -868,13 +869,19 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT mv.VALIDATION_ERROR " . 
+        $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION " . 
                  "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                  "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ")";
         
-        $data = ManageESB::$esbdb->get_var($query);
+        $data = ManageESB::$esbdb->get_row($query);
         
-        return $data;
+        if(!$data->S3_VALIDATION_RESULTS_LOCATION)
+            return $data->VALIDATION_ERROR;
+        
+        //Getting XML FROM Amazon S3 URL
+        $result = ct_read_xml_from_amazon_s3($data->S3_VALIDATION_RESULTS_LOCATION);
+        
+        return $result;
     }
     
     
