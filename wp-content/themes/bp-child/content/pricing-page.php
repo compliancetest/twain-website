@@ -1,9 +1,5 @@
 <?php
     $read_only = true;
-    if( is_user_logged_in() ) {
-        $user_id = get_current_user_id();
-        $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);
-    }
     $allowed = PricingPlan::getPlanRolesAndLevels( $suite->test_suite_plans );
     $allowed_roles  = $allowed['roles'];
     $allowed_levels = $allowed['levels'];
@@ -59,24 +55,28 @@
                                     <div class="vertical-row">Levels</div>
                                 </div>
                             </th>
-                            <?php foreach( $allowed_roles AS $role ):?>
-                                <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
-                            <?php endforeach;?>
+                            <?php if( $allowed_roles ):?>
+                                <?php foreach( $allowed_roles AS $role ):?>
+                                    <th><span <?php if( isset( $roles_desc[$role] ) ):?>class="has-tooltip" title='<?php echo $roles_desc[$role];?>'<?php endif;?>><?php echo $role;?></span></th>
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach( $allowed_levels AS $key => $level ):?>
-                            <tr>
-                                <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
-                                <?php foreach( $allowed_roles AS $it => $role ):?>
-                                        <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
-                                            <td><span class="feature-available"></span></td>
-                                        <?php else:?>
-                                            <td><span class="feature-unavailable"></span></td>
-                                        <?php endif;?>
-                                <?php endforeach;?>
-                            </tr>
-                        <?php endforeach;?>
+                        <?php if( $allowed_levels ):?>
+                            <?php foreach( $allowed_levels AS $key => $level ):?>
+                                <tr>
+                                    <th><span <?php if( isset( $levels_desc[$level] ) ):?>class="has-tooltip" title='<?php echo $levels_desc[$level];?>'<?php endif;?>><?php echo $level;?></span></th>
+                                    <?php foreach( $allowed_roles AS $it => $role ):?>
+                                            <?php if( isset( $plan->attribute_roles[$role] ) && in_array( $level, $plan->attribute_roles[$role]) ):?>
+                                                <td><span class="feature-available"></span></td>
+                                            <?php else:?>
+                                                <td><span class="feature-unavailable"></span></td>
+                                            <?php endif;?>
+                                    <?php endforeach;?>
+                                </tr>
+                            <?php endforeach;?>
+                        <?php endif;?>
                     </tbody>
                 </table>
             </div>

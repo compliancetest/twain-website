@@ -127,8 +127,14 @@ class PricingPlan
         $levels = '';
         $roles_array = array();
         if( $suite_plans ){
+            if( ! $suite_plans ){
+                return false;
+            }
             $results = $wpdb->get_row( "SELECT *, count(*) AS count FROM wp_pricing_plans_attributes WHERE pricing_plan_id IN (".implode( ',', $suite_plans ).") AND type='role' GROUP BY pricing_plan_id ORDER BY count DESC LIMIT 1" );
         } else {
+            if( ! $plans ){
+                return false;
+            }
             $results = $wpdb->get_row( "SELECT *, count(*) AS count FROM wp_pricing_plans_attributes WHERE pricing_plan_id IN (".implode( ',', $plans ).") AND type='role' GROUP BY pricing_plan_id ORDER BY count DESC LIMIT 1" );
         }
         $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type='role' ORDER BY `order` ", $results->pricing_plan_id ) );

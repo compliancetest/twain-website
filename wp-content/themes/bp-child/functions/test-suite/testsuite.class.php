@@ -135,11 +135,6 @@ class TestSuite
         $pricing_plans = $this->loadSingleValue('test_suite_plans');
         if ($pricing_plans){
             $this->test_suite_plans = explode('|', $this->loadSingleValue('test_suite_plans'));
-        } else{
-            $pricing_plans = PricingPlan::getAllPlans();
-            foreach( $pricing_plans AS $pp ){
-                array_push( $this->test_suite_plans, $pp->id );
-            }
         }
         $this->test_suite_plans_order = $this->loadSingleValue('test_suite_plans_order');
         $this->loadConformanceLevel();
