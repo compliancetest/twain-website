@@ -7283,7 +7283,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: block;
 }
 
-
 .plans-pricing-table{
     border: 1px solid #dfdfdf
 }
@@ -7297,6 +7296,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     border: 1px solid #dfdfdf;
     padding: 0;
     vertical-align: middle;
+}
+.plans-pricing-table tbody th{
+    width: 156px;
 }
 
 .diagonal-delimiter {
@@ -7338,10 +7340,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding: 10px 0;
     line-height: 14px;
     vertical-align: middle;
-}
-
-.plans-pricing-table td{
-    width: 135px;
 }
 
 .plans-pricing-table .feature-available,
