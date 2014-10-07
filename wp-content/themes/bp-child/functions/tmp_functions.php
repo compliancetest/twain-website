@@ -25,21 +25,7 @@ if(is_super_admin())
             
             die("Done!");                        
         }
-        
-        if(isset($_GET['fix_organisation_joined_users']))
-        {
-            
-            //Delete Old Cases
-            $results = $wpdb->get_results("SELECT * FROM wp_users_purchases");
-            foreach($results as $r)
-            {
-                //Getting Counts
-                
-            }
-            
-            die("Done!");                        
-        }
-        
+
         
         if(isset($_GET['fix_profile_instances']))
         {

@@ -23,6 +23,9 @@ if(!defined('RECAPTCHA_PRIVATE_KEY'))
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
     define('DEFAULT_MAILCHIMP_LIST_ID', get_option('mailchimp_all_list_id'));
     
+if(!defined('MAX_XML_LENGTH'))
+    define('MAX_XML_LENGTH', 1024 * 1024 * 20); //20MByte
+    
 define('MESSAGE_WARNING_ANONYMOUS', 'You must be a registered member of the site to view this content. Registration is free - just go to the ComplianceTest home page and click on the Signup button.');
 define('MESSAGE_WARNING_REGISTERED', 'You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button.');
 define('MESSAGE_WARNING_COMMUNITY_MEMBER', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
@@ -113,7 +116,6 @@ require_once(THE_FUNCTION . '/customer/customer-post.php');
 require_once(THE_FUNCTION . '/login-redirect.php');
 
 //Manage Subscription
-require_once(THE_FUNCTION . '/subscription/class.purchase.php');
 require_once(THE_FUNCTION . '/subscription/class.subscription.php');
 require_once(THE_FUNCTION . '/subscription/controller.php');
 require_once(THE_FUNCTION . '/subscription/function.php');
@@ -1253,6 +1255,16 @@ function groups_is_user_admin_in_any_community( $user_id, $communitiesList = fal
         }
     }
     return false;
+}
+
+function ct_read_xml_from_amazon_s3($url)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    
+    return $result;
 }
 
 /**
