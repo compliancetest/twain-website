@@ -31,17 +31,19 @@ class JsonGenerator {
         if (!mkdir($this->folder_path)) {
             die('Failed to create folders...');
         }
-        
-        $this->generateProfileJson( 'Profile.Products' );
-        $this->generateProfileJson( 'Profile.Employers' );
-        
+        $sheets = $this->_excel->getSheetNames();
+        foreach ( $sheets as $sheet ) {
+            if( strpos( $sheet, 'Profile.' ) !== false ){
+                $this->generateProfileJson( $sheet );
+            }
+        }
         return $this->_createProfilesZip();
     }
 
     public function generateProfileJson( $sheetName ) {
         $this->excludeProfiles = array();
         $this->jsonArrays = array();
-        $profileFields = array('Type', 'Purpose', 'Title', 'Description', 'Version.Major', 'Version.Minor');
+        $profileFields = array('Type', 'Purpose', 'Title', 'Description', 'Version.Major', 'Version.Minor', 'Version.Patch');
         PHPExcel_Calculation::getInstance()->cyclicFormulaCount = 100000;
         try{
             $sheetData = $this->_excel->getSheetByName($sheetName)->toArray();
