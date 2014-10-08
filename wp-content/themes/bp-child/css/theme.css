@@ -7528,7 +7528,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: block;
 }
 
-
 .plans-pricing-table{
     border: 1px solid #dfdfdf
 }
@@ -7542,6 +7541,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     border: 1px solid #dfdfdf;
     padding: 0;
     vertical-align: middle;
+}
+.plans-pricing-table tbody th{
+    width: 156px;
 }
 
 .diagonal-delimiter {
@@ -7586,7 +7588,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .plans-pricing-table td{
-    width: 135px;
+    min-width: 100px;
 }
 
 .plans-pricing-table .feature-available,
