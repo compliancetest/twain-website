@@ -4,7 +4,7 @@
  */
 ?>
 <?php
-$prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
+$prev_page = wp_get_referer() ? wp_get_referer() : '/';
 ?>
 <div class="product-page">
     <div class="page-title-block">
@@ -16,8 +16,11 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     <span class="t">Back</span>
                 </a>
                 <div class="page-title-block-actions">
+                    <?php if(can_edit_product_and_service(get_the_ID())){ ?>
+                        <a href="/edit-service?id=<?php echo $service->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
+                    <?php } ?>
                     <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
-                    <a href="<?php echo addPrintParams(get_permalink(), 'product')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">Print</span></a>
+                    <a href="<?php echo addPrintParams(get_permalink(), 'service')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">Print</span></a>
                 </div>
             </div>
         <?php } ?>
@@ -31,46 +34,46 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                 <?php } ?>
                 <div class="product-info">
                     <div class="product-identifiers">
-                        <div class="product-name">Service Name: <strong>MLC MasterKey Business Super v1.0</strong></div>
-                        <div class="product-id">(Service ID: <strong>44928361101001</strong>)</div>
+                        <div class="product-name">Service Name: <strong><?php echo $service->service_name;?></strong></div>
+                        <div class="product-id">(Service ID: <strong><?php echo $service->service_id;?></strong>)</div>
                     </div>
                     <ul class="product-attributes">
-                        <li>Service Provider: <strong>NAB</strong>
-                        <li>Entity ID: <strong>44928361101001</strong></li>
-                        <li>ID Type: <strong>USI</strong></li>
-                        <li>Process: <strong><a href="#">Contributions v1.2</a></strong></li>
-                        <li>Role: <strong>Fund</strong></li>
-                        <li>Level: <strong>A</strong></li>
-                        <li>Protocol: <strong>ebMS3-Gateway</strong></li>
-                        <li>End-Point: <strong><a href="#">ClickSuper</a></strong></li>
-                        <li>End-Point-Type: <strong>Alias</strong></li>
+                        <li>Service Provider: <strong><a href="<?php echo get_permalink( $service->service_product_id );?>"><?php echo get_the_title( $service->service_product_id );?></a></strong></li>
+                        <li>Entity ID: <strong><?php echo $service->service_id;?></strong></li>
+<!--                        <li>ID Type: <strong>--><?php //echo $service->service_id;?><!--</strong></li>-->
+                        <li>Process: <strong><a href="<?php echo get_permalink( $service->service_suite_id );?>"><?php echo get_the_title( $service->service_suite_id );?></a></strong></li>
+                        <li>Role: <strong><?php echo implode( ', ', $service->service_roles );?></strong></li>
+                        <li>Level: <strong><?php echo implode( ', ', $service->service_levels );?></strong></li>
+                        <li>Protocol: <strong><?php echo $service->service_protocol ;?></strong></li>
+                        <li>End-Point: <strong><a href="<?php echo $service->service_endpoint;?>">Link</a></strong></li>
+                        <li>End-Point-Type: <strong><?php echo $service->service_endpoint_type;?></strong></li>
                     </ul>
-                    <div class="product-description">MLC Master Key Business Super (including Personal Super)</div>
+                    <div class="product-description"><?php echo $service->service_description;?></div>
                 </div>
             </div>
             <div class="tabs-contr">
                 <ul class="tab-nav">
+<!--                    <li class="active">-->
+<!--                        <a href="javascript: void(0)" rel="tab_related_services">Related Services</a>-->
+<!--                    </li>-->
                     <li class="active">
-                        <a href="javascript: void(0)" rel="tab_related_services">Related Services</a>
-                    </li>
-                    <li>
                         <a href="javascript: void(0)" rel="tab_uses_products">Uses Products</a>
                     </li>
                 </ul>
-                <div class="tab-content" id="tab_related_services" style="display: block;">
-                    <dl class="column related_products">
-                        <?php foreach ($product->relatedProducts as $rp): ?>
-                            <dt>Depends on:</dt>
-                            <dd><a href="<?php echo get_permalink($rp->related_product_id)?>">Service Name</a></dd>
-                        <?php endforeach; ?>
-                    </dl>
-                </div>
-                <div class="tab-content" id="tab_uses_products" style="display: none;">
+<!--                <div class="tab-content" id="tab_related_services" style="display: block;">-->
+<!--                    <dl class="column related_products">-->
+<!--                        --><?php //if( $product->relatedProducts ):?>
+<!--                            --><?php //foreach ($product->relatedProducts as $rp): ?>
+<!--                                <dt>Depends on:</dt>-->
+<!--                                <dd><a href="--><?php //echo get_permalink($rp->related_product_id)?><!--">Service Name</a></dd>-->
+<!--                            --><?php //endforeach; ?>
+<!--                        --><?php //endif;?>
+<!--                    </dl>-->
+<!--                </div>-->
+                <div class="tab-content" id="tab_uses_products" style="display: block;">
                     <dl class="column uses_products">
-                        <dt><a href="#">MLC MasterKey Business</a></dt>
-                        <dd>Owner: <a href="#">NAB</a></dd>
-                        <dt><a href="#">ClickSuper Gateway v1.1</a></dt>
-                        <dd>Owner: <a href="#">Westpac</a></dd>
+                        <dt><a href="<?php echo get_permalink( $service->service_product_id );?>"><?php echo get_the_title( $service->service_product_id );?></a></dt>
+                        <dd>Owner: <?php echo $service->service_owner;?></dd>
                     </dl>
                 </div>
             </div>

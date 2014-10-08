@@ -23,6 +23,8 @@ class ProductAndService
     var $visibility = '';
 
     var $relatedProducts = array();
+
+    public $relatedServices = array();
     
     public function loadSingleValue($key)
     {
@@ -54,6 +56,8 @@ class ProductAndService
         $this->visibility = $this->loadSingleValue('product_visibility');
 
         $this->loadRelatedProducts();
+
+        $this->loadRelatedServices();
     }
     
     public function loadRelatedProducts()
@@ -68,7 +72,12 @@ class ProductAndService
         
         return $this->relatedProducts;
     }
-    
+
+    public function loadRelatedServices(){
+        global $wpdb;
+        $this->relatedServices = $wpdb->get_results( $wpdb->prepare("SELECT post_id AS id FROM " . $wpdb->prefix . "postmeta WHERE meta_key = 'service_product_id' AND meta_value = %d", $this->id) );
+        return $this->relatedServices;
+    }
     public function getAvailableProducts()
     {
         $groups = groups_get_groups( array('user_id' => get_current_user_id()) );

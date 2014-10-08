@@ -13,7 +13,7 @@ $product->load();
 <html>
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Product / Service Details - <?php wp_title( '', true, 'right' ); ?></title>
+<title>Product Details - <?php wp_title( '', true, 'right' ); ?></title>
 </head>
 <body onload="print_page()">
 <style type="text/css">
@@ -45,7 +45,7 @@ $product->load();
         vertical-align: top;
     }
 </style>
-<h2 style="text-align: center;">Product / Service Details</h2>
+<h2 style="text-align: center;">Product Details</h2>
 <h3 style="border-bottom:solid 1px #999; line-height: 20px; padding-bottom: 8px; margin-bottom: 5px;">Product: <a href="<?php the_permalink()?>"><?php echo $product->name?></a></h3>
 <table class="noborder">
     <tr>

@@ -31,6 +31,9 @@ function cp_print_page()
         }else if($pageType == 'product'){
             require_once(THE_FUNCTION . "/print/print-product-service.php");
             exit;
+        }else if($pageType == 'service'){
+            require_once(THE_FUNCTION . "/print/print-service.php");
+            exit;
         }
     }
 }
