@@ -5,7 +5,7 @@ class CT_Organisation
     var $_fields = array(
                             'id', 
                             'organisation_name', 
-                            'organisation_domain', 
+                            'organisation_key', 
                             'invoice_me', 
                             
                             'contact_first_name', 
@@ -38,7 +38,7 @@ class CT_Organisation
     var $id = null;
     
     var $organisation_name = '';
-    var $organisation_domain = '';
+    var $organisation_key = '';
     var $invoice_me = 0;
     
     var $contact_first_name = '';
@@ -137,6 +137,10 @@ class CT_Organisation
         else
         {       
             $data['contact_id'] = $response['Contacts']['Contact']['ContactID'];        
+            
+            if(!$data['organisation_key'])
+                $data['organisation_key'] = ct_generate_organisation_key();
+            
             if( ! $this->id)
             {   //Insert organisation to CT
                 if( $wpdb->insert($wpdb->prefix . "organisations", $data ) === false )
@@ -178,12 +182,12 @@ class CT_Organisation
         $data = array_map( 'stripslashes_deep', $data );
         
         if( ! $this->id) {
-            $result = $wpdb->insert($wpdb->prefix . "organisations", $data );
+            $wpdb->insert($wpdb->prefix . "organisations", $data );
         } else {
-            $result = $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
+            $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id));
         }
         
-        return $result;
+        return 1;
     }
     
     public function save_organisation_admin($organisation_id, $admin_id)
@@ -301,7 +305,13 @@ class CT_Organisation
             return $this->members;
         }
         
-        $query = $wpdb->prepare("SELECT ID, user_email, display_name FROM {$wpdb->users} WHERE user_email like %s AND user_status=0 ORDER BY display_name", '%@' . $this->organisation_domain);
+        $query = $wpdb->prepare("SELECT DISTINCT(u.ID), u.user_email, u.display_name, CONCAT(um1.meta_value, ' ', um2.meta_value) AS full_name, m.is_admin, m.id AS membership_id
+                                FROM {$wpdb->prefix}organisations_members AS m
+                                LEFT JOIN {$wpdb->users} AS u ON u.ID=m.user_id 
+                                LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=u.ID AND um1.meta_key='first_name'
+                                LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='last_name'
+                                WHERE m.organisation_id =%d AND user_status=0 
+                                ORDER BY display_name", $this->id);
         $this->members = $wpdb->get_results($query);
         
         return $this->members;

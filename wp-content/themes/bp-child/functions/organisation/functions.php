@@ -131,13 +131,10 @@ function ct_get_user_organisation($user_id = null)
     
     if(!$user_id)
         $user_id = get_current_user_id();
-        
-    $data = get_userdata($user_id);
     
-    //Getting domain
-    list($p, $domain) = explode("@",  $data->user_email);
-    
-    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE organisation_domain=%s", $domain);
+    $query = $wpdb->prepare("SELECT o.* FROM {$wpdb->prefix}organisations_members AS m 
+                                LEFT JOIN {$wpdb->prefix}organisations AS o ON m.organisation_id=o.id
+                             WHERE m.user_id=%d", $user_id);
     $data = $wpdb->get_row($query);
 
     return $data;    
@@ -312,4 +309,40 @@ function ct_get_user_subscription_by_id($subscription_id)
     $data = $wpdb->get_row($query);
     
     return $data;
+}
+
+function ct_generate_organisation_key()
+{
+    global $wpdb;
+    
+    do{            
+        $str = md5(cp_generate_password() . time());    
+        
+        $query = $wpdb->prepare("SELECT count(*) FROM "  . $wpdb->prefix . "organisations WHERE id=%d", $str);
+        $id = $wpdb->get_var($query);
+        if(!$id)
+            break;
+    }while(1);    
+    
+    return $str;
+}
+
+function ct_get_user_organisation_membership($user_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_members WHERE user_id=%d", $user_id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;    
+}
+
+function ct_get_organisation_by_key($org_key)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE organisation_key=%s", $org_key);
+    $row = $wpdb->get_row($query);
+    
+    return $row;    
 }

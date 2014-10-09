@@ -1,0 +1,1 @@
+ALTER TABLE `wp_organisations` ADD COLUMN `organisation_key` VARCHAR(32) DEFAULT '' AFTER `organisation_name`;

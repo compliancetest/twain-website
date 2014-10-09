@@ -13,6 +13,20 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        //Create Organisation Membership Records for the subscribers
+        if(isset($_GET['fix_org_membership'])){
+            $results = $wpdb->get_results("SELECT organisation_id, user_id FROM wp_users_subscriptions");
+            foreach($results as $r){
+                $mid = $wpdb->get_var("SELECT id FROM wp_organisations_members WHERE organisation_id=" . $r->organisation_id . " AND user_id=" . $r->user_id);
+                if (!$mid) {
+                    //Create New Membership Record
+                    $wpdb->insert('wp_organisations_members', array('organisation_id' => $r->organisation_id, 'user_id' => $r->user_id,'is_admin' => 0, 'created_date' => date('Y-m-d H:i:s')));
+                }
+            }
+            
+            die('Completed!');
+        }
+        
         if(isset($_GET['fix_case_suite_link']))
         {
             

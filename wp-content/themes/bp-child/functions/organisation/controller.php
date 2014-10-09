@@ -550,4 +550,34 @@ class CT_Organisation_Controller
         cp_send_email_to_admin('unsubscribing_admin', $emailData);
         
     }
+    
+    public function add_membership($user_id, $organisation_id)
+    {
+        global $wpdb;
+        
+        $query = $wpdb->insert($wpdb->prefix . "organisations_members", array('organisation_id' => $organisation_id, 'user_id' => $user_id, 'is_admin' => 0, 'created_date' => date("Y-m-d H:i:s")));
+        $wpdb->query($query);
+        
+        return;
+    }
+    
+    public function delete_membership($user_id, $organisation_id)
+    {
+        global $wpdb;
+        
+        //Remove User Subscription with the organisation
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d AND parent_id IN 
+                        (SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND user_id=%d)", $user_id, $organisation_id, $user_id);
+        $wpdb->query($query);
+        
+        //De-allocate the organisation subscription
+        $query = $wpdb->prepare("UPDATE {$wpdb->prefix}organisations_subscriptions SET user_id=0 WHERE organisation_id=%d AND user_id=%d", $organisation_id, $user_id);
+        $wpdb->query($query);
+        
+        //Delete Membership Record
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}organisations_members WHERE organisation_id=%d AND user_id=%d", $organisation_id, $user_id);
+        $wpdb->query($query);
+        
+        return;
+    }
 }

@@ -21,12 +21,6 @@ if(is_user_logged_in()){
     
     $biography = get_user_meta($current_user->ID, 'description', true);
     
-    $user_org = get_user_meta($current_user->ID, 'user_organisation', true);
-    $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
-    $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
-    $user_org_abn = get_user_meta($current_user->ID, 'user_organisation_abn', true);
-    
-    
     $user = get_userdata( $current_user->ID );
     $user_status = $user->user_status;
 

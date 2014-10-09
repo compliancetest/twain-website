@@ -27,6 +27,11 @@ if(!defined('ABSPATH')) {
                     <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input"><?php echo $organisation->organisation_name;?></div>
                     <div class="clear"></div>
                 </div>
+                <div class="grid-row">
+                    <div class="grid-cell width30P"><label>Organisation Key</label></div>
+                    <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_key;?>" data-type="readonly" class="grid-cell in_input"><?php echo $organisation->organisation_key;?></div>
+                    <div class="clear"></div>
+                </div>
                 <div class="grid-row grid-row-complex">
                     <div class="grid-cell width30P">
                         <label>Primary Contact</label>

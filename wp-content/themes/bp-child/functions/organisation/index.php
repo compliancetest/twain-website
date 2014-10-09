@@ -526,6 +526,32 @@ function ct_process_organisation_action()
         }  else if(wp_verify_nonce($action, 'get_price_plan')) {
             include(dirname(__FILE__) . '/../../content/org-pricing-page.php');
             exit;
+        } else if(wp_verify_nonce($action, 'remove-membership')) {
+            global $wpdb;
+            
+            $id = $_POST['id'];
+            if (!is_user_logged_in() || !$id) {                
+                addMessage('Invalid Request!', 'error');
+            } else {
+                $user_id = get_current_user_id();
+            
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_members WHERE id=%d", $id);
+                $row = $wpdb->get_row($query);
+                
+                if (!$row) {
+                    addMessage('Invalid Request!', 'error');
+                } else if (!ct_is_organisation_admin($user_id, $row->organisation_id)) {
+                    addMessage('Permission Denied!', 'error');
+                } else if($row->is_admin == 1) {
+                    addMessage("You can't remove the organisation admin from the organisation.", 'error');
+                } else {                    
+                    $controller->delete_membership($row->user_id, $row->organisation_id);    
+                    addMessage("The user was removed successfully.");
+                }
+            }
+            
+            wp_redirect(get_site_url() . "/my-organisation/users");
+            exit;
         }
     } 
 }

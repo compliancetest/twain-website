@@ -565,15 +565,46 @@ function cp_user_organisation_edit()
     
     $user_id = $current_user->ID;
     
-    $user_organisation = htmlspecialchars($_POST['user_organisation']);
+    $org_membership = ct_get_user_organisation_membership($current_user->ID);
+    
+    if (!$org_membership) {
+        
+        $user_organisation = htmlspecialchars($_POST['user_organisation']);        
+        $user_organisation_abn = htmlspecialchars($_POST['user_organisation_abn']);
+        
+        update_user_meta($user_id, 'user_organisation', $user_organisation);        
+        update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);            
+    }
+    
     $user_organisation_web = htmlspecialchars($_POST['user_organisation_web']);
     $user_organisation_desc = htmlspecialchars($_POST['user_organisation_desc']);
-    $user_organisation_abn = htmlspecialchars($_POST['user_organisation_abn']);
-    
-    update_user_meta($user_id, 'user_organisation', $user_organisation);
     update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
     update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
-    update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);
+    
+    $organisation_key = isset($_POST['user_organisation_key']) ? htmlspecialchars($_POST['user_organisation_key']) : null;
+    
+    if ($organisation_key) {
+        //Getting Organisation with the key
+        $organisation = ct_get_organisation_by_key($organisation_key);
+        
+        if (!$organisation) {
+            echo 'Organisation key is not correct.';
+            exit;
+        }
+        
+        if(!$org_membership || (!$org_membership->is_admin && $org_membership->organisation_id != $organisation->id)){
+            
+            $org_controller = new CT_Organisation_Controller();
+            
+            //Remove Old Membership Record
+            if ($org_membership) {
+                $org_controller->delete_membership($user_id, $organisation->id);
+            }
+            
+            //Create New Membership Record
+            $org_controller->add_membership($user_id, $organisation->id);
+        }
+    }
     
     echo 'success';
     
@@ -1253,3 +1284,4 @@ function ct_get_user_profile_link($user_id)
     
     return apply_filters( 'bp_get_member_permalink', bp_core_get_user_domain( $user->ID, $user->user_nicename, $user->user_login ) );
 }
+
