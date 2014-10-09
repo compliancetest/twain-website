@@ -148,12 +148,17 @@ function cp_view_validation_log()
         </div>
         <div class="td td-result tocenter">
             <?php
-                if(!$row->VALIDATION_ERROR)
+                if(!$row->VALIDATION_ERROR && !$row->S3_VALIDATION_RESULTS_LOCATION){
                     echo '-';
-                else{
-                    echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">XML</a>' . ' &middot; '
-                    . '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';;
-                }
+                }else{
+                    if (!$row->S3_VALIDATION_RESULTS_LOCATION){
+                        echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">XML</a>';
+                    } else {
+                        echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" target="_blank">XML</a>';
+                    }
+                    echo ' &middot; ' . '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
+                } 
+                
             ?>
         </div>
         <div class="clear"></div>    

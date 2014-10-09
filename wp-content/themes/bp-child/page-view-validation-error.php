@@ -24,7 +24,11 @@ header("Content-type: application/xml");
 $xslt = get_site_url() . '/xslt/validation-result.xsl';
 
 if($mode == 'html'){
-    echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
+    if(strpos($message, '?>') === false)
+        echo '<?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>';
+    else
+        $message = str_replace('?>', '?><?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>', $message);
+    
 }
 echo $message;
 

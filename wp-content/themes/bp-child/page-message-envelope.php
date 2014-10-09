@@ -68,7 +68,7 @@ if($mode != 'html'){
         header("Content-type: application/xml");
         
         $xslt = get_site_url() . '/xslt/message-envelope.xsl';
-        $message = str_replace('?>', '?><?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>', $message);
+        $message_content = str_replace('?>', '?><?xml-stylesheet type="text/xsl" href="' . $xslt . '"?>', $message_content);
         echo $message_content;
     }
     

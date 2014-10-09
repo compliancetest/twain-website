@@ -228,14 +228,13 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
                 ", $user_id, $user_id);
         
     } else {
-        //Getting domain
-        list($p, $domain) = explode("@",  $user_data->user_email);
+        //Getting User Membership
+        $organisation = ct_get_user_organisation();
 
         $query = $wpdb->prepare("SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
-                                 LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
-                                 WHERE o.organisation_domain=%s ", 
-                                 $domain);
+                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id                                 
+                                 WHERE os.organisation_id=%d ", 
+                                 $organisation->id);
     }
     
     if ($org_id !== null) {

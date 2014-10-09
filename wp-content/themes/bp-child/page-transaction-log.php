@@ -476,7 +476,7 @@ get_header();
                                                        <input type="text" value="<?php echo $message->PART_ID; ?>" readonly="readonly">
                                                    </div>
                                                    <div class="td td-message-view">
-                                                      <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
+                                                      <a href="<?php echo $message->S3_PAYLOAD_LOCATION ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
                                                       | 
                                                       <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
                                                        <br>

@@ -436,7 +436,7 @@ class CT_Organisation_Controller
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'allocate_subscription_to_user', $emailData);
         cp_send_email_to_admin('allocate_subscription_to_user_admin', $emailData);
         
-        return $sid;
+        return $subscription->id;
     }
     
     public function create_user_harness_detail($user_id, $suite_id, $organisation_id, $parent_id)

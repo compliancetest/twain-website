@@ -373,7 +373,7 @@ function ct_process_organisation_action()
                 } else {
                     addMessage($controller->last_message, "error");                    
                 }
-            }
+            }            
             wp_redirect(get_permalink($suite_id));
             exit;
         } else if(wp_verify_nonce($action, 'unsubscribe')) {
