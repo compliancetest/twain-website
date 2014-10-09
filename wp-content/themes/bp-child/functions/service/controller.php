@@ -130,10 +130,9 @@ function deleteService()
             
     $id = $_REQUEST['id'];
     
-    $product = get_post($id );
+    $service = get_post($id );
     
-    if(!$product)
-    {
+    if( ! $service ){
         addMessage('Invalid Request!', 'error');
         return;
     }
@@ -142,26 +141,28 @@ function deleteService()
 
     $redirectUrl = get_site_url() . '/' . $return;
 
-    if(!can_delete_product_and_service($product->ID))
-    {
+    if(!can_delete_product_and_service( $service->ID ) ){
         addMessage('Permission Denied!', 'error');
         wp_redirect($redirectUrl);
         exit;
     }
-    
-    //Check if the product has cliams or not
-    $query = $wpdb->prepare("SELECT count(1) FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d", $id);
-    $count = $wpdb->get_var($query);
-    if($count > 0)
-    {
+    //dont allow to delete service until we implement agreemnets feature
+    if( true ){
+        addMessage("You can't delete the service.", "error");
+        wp_redirect($redirectUrl);
+        exit;
+    }
+    //todo check that service dont have aggrements
+    $count = $wpdb->get_var( $wpdb->prepare("SELECT count(1) FROM " . $wpdb->prefix . "compliance_claims WHERE product_id = %d ", $id ) );
+    if( $count > 0 ){
         addMessage("You can't delete the product/service, because it includes claims.", "error");
         wp_redirect($redirectUrl);
         exit;
     }
     
-    //Delete Product/Service
-    wp_delete_post($id);
-    addMessage("The product/service was deleted!");
+    //Delete Service
+    wp_delete_post( $id );
+    addMessage("The service was deleted!");
     wp_redirect($redirectUrl);
     exit;
 }
