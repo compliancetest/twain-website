@@ -91,4 +91,27 @@ class Service
         }
         return false;
     }
+
+    /**
+     *
+     */
+    public static function can_request_e2e(){
+
+    }
+
+    public static function get_user_services( $user_id = false ){
+        if( ! is_user_logged_in() && ! $user_id ){
+            return false;
+        }
+        if( ! $user_id ) $user_id = get_current_user_id();
+
+        $args = array(
+            'post_type' => 'service',
+            'posts_per_page' => -1,
+            'tax_query' => array('relation' => 'and'),
+        );
+        $args['meta_query'][] = array('key' => 'service_user_id', 'value' => $user_id, 'compare' => '=');
+
+        return get_posts( $args );
+    }
 }

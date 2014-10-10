@@ -28,7 +28,7 @@ if(is_user_logged_in()){
     exit;
 }
 
-$products = getUserProductsAndServices();
+$user_services = Service::get_user_services();
 
 wp_enqueue_style( 'jquery-custom-scroll', get_stylesheet_directory_uri() . '/css/jquery.jscrollpane.css', '', '2.0.19');
 wp_enqueue_script( 'jquery-mousewheel', get_stylesheet_directory_uri() . '/js/jquery.mousewheel.js', array('jquery'), '3.1.9');
@@ -44,143 +44,148 @@ get_header();
     <div class="container">
         <div class="column">
            <?php if(can_create_product_and_service()){ ?>
-           <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Service</span></a>
+                <a href="/add-new-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Service</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
            <?php } ?>
-           <div class="grid-box table-box grid-box-opened">
-               <div class="grid-box-header">
-                   <div class="grid-box-header-title left">
-                       <ul>
-                           <li>Service: <a href="#"><strong>Contributions v1.2</strong></a></li>
-                           <li>Entity: <strong>MLC Super</strong></li>
-                           <li>USI: <strong>1234567:123</strong></li>
-                           <li>Role: <strong>Fund</strong></li>
-                           <li>User Product: <strong>MLC Registry 1.0</strong></li>
-                       </ul>
-                   </div>
-                   <?php if(can_delete_product_and_service($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-delete right delete-product-link has-tooltip" href="#" title="Delete">Delete</a>
-                   <?php } ?>
-                   <?php if(can_edit_product_and_service($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-edit right has-tooltip" href="#" title="Edit">Edit</a>
-                   <?php } ?>
+            <?php if( $user_services ):?>
+                <?php foreach( $user_services AS $user_service ):?>
+                    <?php $serv = new Service( $user_service->ID ); $serv->load();?>
+                       <div class="grid-box table-box grid-box-opened">
+                           <div class="grid-box-header">
+                               <div class="grid-box-header-title left">
+                                   <ul>
+                                       <li>Service: <a href="<?php echo get_permalink( $serv->id );?>"><strong><?php echo get_the_title( $serv->id );?></strong></a></li>
+                                       <li>Owner: <strong><?php echo $serv->service_owner;?></strong></li>
+                                       <li>Service ID: <strong><?php echo $serv->service_id;?></strong></li>
+                                       <li>Role: <strong><?php echo implode( ', ', $serv->service_roles );?></strong></li>
+                                       <li>User Product: <a href="<?php echo get_permalink( $serv->service_product_id );?>"><strong><?php echo get_the_title( $serv->service_product_id );?></strong></a></li>
+                                   </ul>
+                               </div>
+                               <?php if(can_delete_product_and_service( $serv->id )){ ?>
+                               <a class="gbh-btn gbh-btn-delete right delete-product-link has-tooltip" href="#" title="Delete">Delete</a>
+                               <?php } ?>
+                               <?php if(can_edit_product_and_service( $serv->id ) ){ ?>
+                                    <a class="gbh-btn gbh-btn-edit right has-tooltip" href="/edit-service?id=<?php echo $serv->id?>" title="Edit">Edit</a>
+                               <?php } ?>
 
-                   <div class="clear"></div>
-               </div>
-               <div class="grid-box-body tocenter">
-                   <div class="thead tr clearfix">
-                       <div class="td td-agreement-id">Agreement ID</div>
-                       <div class="td td-entity-name">Entity Name</div>
-                       <div class="td td-identifier">Identifier</div>
-                       <div class="td td-type">Type</div>
-                       <div class="td td-protocol">Protocol</div>
-                       <div class="td td-end-point">End Point</div>
-                       <div class="td td-contact">Contact</div>
-                       <div class="td td-status">Status</div>
-                       <div class="td td-actions">Actions</div>
-                   </div>
-                   <div class="tbody">
-                       <?php
-                            /* If no agreements
-                           <div class="tr">
-                               <div class="td td-full">No agreement yet</div>
                                <div class="clear"></div>
-                           </div>*/
-                       ?>
-                       <div class="tr clearfix">
-                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:887653:01</a></div>
-                           <div class="td td-entity-name">BHP Steel Pty</div>
-                           <div class="td td-identifier">887653</div>
-                           <div class="td td-type">ABN</div>
-                           <div class="td td-protocol">ebMS3-GW</div>
-                           <div class="td td-end-point"><a href="#">Westpac</a></div>
-                           <div class="td td-contact">
-                               <?php $email = 'bob@bhp.com'; ?>
-                               <?php if (strlen($email) > 22): ?>
-                                   <div class="has-tooltip" title="<?php echo $email; ?>">
-                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
-                                   </div>
-                               <?php else: ?>
-                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
-                               <?php endif; ?>
                            </div>
-                           <div class="td td-status"><span class="status-pending">Pending</span></div>
-                           <div class="td td-actions">
-                               <a href="#">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup" rel="custom-popup">Reject</a>
+                           <div class="grid-box-body tocenter">
+                               <div class="thead tr clearfix">
+                                   <div class="td td-agreement-id">Agreement ID</div>
+                                   <div class="td td-entity-name">Entity Name</div>
+                                   <div class="td td-identifier">Identifier</div>
+                                   <div class="td td-type">Type</div>
+                                   <div class="td td-protocol">Protocol</div>
+                                   <div class="td td-end-point">End Point</div>
+                                   <div class="td td-contact">Contact</div>
+                                   <div class="td td-status">Status</div>
+                                   <div class="td td-actions">Actions</div>
+                               </div>
+                               <div class="tbody">
+                                   <?php if( true ):?>
+                                       <div class="tr">
+                                           <div class="td td-full">No agreement yet</div>
+                                           <div class="clear"></div>
+                                       </div>
+                                   <?php else: ?>
+                                       <div class="tr clearfix">
+                                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:887653:01</a></div>
+                                           <div class="td td-entity-name">BHP Steel Pty</div>
+                                           <div class="td td-identifier">887653</div>
+                                           <div class="td td-type">ABN</div>
+                                           <div class="td td-protocol">ebMS3-GW</div>
+                                           <div class="td td-end-point"><a href="#">Westpac</a></div>
+                                           <div class="td td-contact">
+                                               <?php $email = 'bob@bhp.com'; ?>
+                                               <?php if (strlen($email) > 22): ?>
+                                                   <div class="has-tooltip" title="<?php echo $email; ?>">
+                                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
+                                                   </div>
+                                               <?php else: ?>
+                                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
+                                               <?php endif; ?>
+                                           </div>
+                                           <div class="td td-status"><span class="status-pending">Pending</span></div>
+                                           <div class="td td-actions">
+                                               <a href="#">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup" rel="custom-popup">Reject</a>
+                                           </div>
+                                       </div>
+                                       <div class="tr clearfix">
+                                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:773645:02</a></div>
+                                           <div class="td td-entity-name">Woolworths Pty</div>
+                                           <div class="td td-identifier">773645</div>
+                                           <div class="td td-type">ABN</div>
+                                           <div class="td td-protocol">ebMS3-GW</div>
+                                           <div class="td td-end-point"><a href="#">OzEDI</a></div>
+                                           <div class="td td-contact">
+                                               <?php $email = 'david.schwarzenegger@ozedi.com'; ?>
+                                               <?php if (strlen($email) > 22): ?>
+                                                   <div class="has-tooltip" title="<?php echo $email; ?>">
+                                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
+                                                   </div>
+                                               <?php else: ?>
+                                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
+                                               <?php endif; ?>
+                                           </div>
+                                           <div class="td td-status"><span class="status-testing">Testing</span></div>
+                                           <div class="td td-actions">
+                                               <a href="#claim-popup" rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup" rel="custom-popup">Cancel</a>
+                                           </div>
+                                       </div>
+                                       <div class="tr clearfix">
+                                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:665385:01</a></div>
+                                           <div class="td td-entity-name">Coles Pty</div>
+                                           <div class="td td-identifier">665385</div>
+                                           <div class="td td-type">ABN</div>
+                                           <div class="td td-protocol">ebMS3-GW</div>
+                                           <div class="td td-end-point"><a href="#">Westpac</a></div>
+                                           <div class="td td-contact">
+                                               <?php $email = 'janes@coles.com'; ?>
+                                               <?php if (strlen($email) > 22): ?>
+                                                   <div class="has-tooltip" title="<?php echo $email; ?>">
+                                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
+                                                   </div>
+                                               <?php else: ?>
+                                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
+                                               <?php endif; ?>
+                                           </div>
+                                           <div class="td td-status"><span class="status-claimed">Claimed</span></div>
+                                           <div class="td td-actions">
+                                               <a href="#agreement-confirm-popup" rel="custom-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup" rel="custom-popup">Fail</a>
+                                           </div>
+                                       </div>
+                                       <div class="tr clearfix">
+                                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:553465:01</a></div>
+                                           <div class="td td-entity-name">Telstra Pty</div>
+                                           <div class="td td-identifier">Emp AB</div>
+                                           <div class="td td-type">ABN</div>
+                                           <div class="td td-protocol">ebMS3-GW</div>
+                                           <div class="td td-end-point"><a href="#">Westpac</a></div>
+                                           <div class="td td-contact">
+                                               <?php $email = 'bill@telstra.com'; ?>
+                                               <?php if (strlen($email) > 22): ?>
+                                                   <div class="has-tooltip" title="<?php echo $email; ?>">
+                                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
+                                                   </div>
+                                               <?php else: ?>
+                                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
+                                               <?php endif; ?>
+                                           </div>
+                                           <div class="td td-status"><span class="status-verified">Verified</span></div>
+                                           <div class="td td-actions">
+                                               <a href="#">View</a>
+                                           </div>
+                                       </div>
+                                   <?php endif;?>
+                               </div>
                            </div>
                        </div>
-                       <div class="tr clearfix">
-                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:773645:02</a></div>
-                           <div class="td td-entity-name">Woolworths Pty</div>
-                           <div class="td td-identifier">773645</div>
-                           <div class="td td-type">ABN</div>
-                           <div class="td td-protocol">ebMS3-GW</div>
-                           <div class="td td-end-point"><a href="#">OzEDI</a></div>
-                           <div class="td td-contact">
-                               <?php $email = 'david.schwarzenegger@ozedi.com'; ?>
-                               <?php if (strlen($email) > 22): ?>
-                                   <div class="has-tooltip" title="<?php echo $email; ?>">
-                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
-                                   </div>
-                               <?php else: ?>
-                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
-                               <?php endif; ?>
-                           </div>
-                           <div class="td td-status"><span class="status-testing">Testing</span></div>
-                           <div class="td td-actions">
-                               <a href="#claim-popup" rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup" rel="custom-popup">Cancel</a>
-                           </div>
-                       </div>
-                       <div class="tr clearfix">
-                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:665385:01</a></div>
-                           <div class="td td-entity-name">Coles Pty</div>
-                           <div class="td td-identifier">665385</div>
-                           <div class="td td-type">ABN</div>
-                           <div class="td td-protocol">ebMS3-GW</div>
-                           <div class="td td-end-point"><a href="#">Westpac</a></div>
-                           <div class="td td-contact">
-                               <?php $email = 'janes@coles.com'; ?>
-                               <?php if (strlen($email) > 22): ?>
-                                   <div class="has-tooltip" title="<?php echo $email; ?>">
-                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
-                                   </div>
-                               <?php else: ?>
-                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
-                               <?php endif; ?>
-                           </div>
-                           <div class="td td-status"><span class="status-claimed">Claimed</span></div>
-                           <div class="td td-actions">
-                               <a href="#agreement-confirm-popup" rel="custom-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup" rel="custom-popup">Fail</a>
-                           </div>
-                       </div>
-                       <div class="tr clearfix">
-                           <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup">1234567:553465:01</a></div>
-                           <div class="td td-entity-name">Telstra Pty</div>
-                           <div class="td td-identifier">Emp AB</div>
-                           <div class="td td-type">ABN</div>
-                           <div class="td td-protocol">ebMS3-GW</div>
-                           <div class="td td-end-point"><a href="#">Westpac</a></div>
-                           <div class="td td-contact">
-                               <?php $email = 'bill@telstra.com'; ?>
-                               <?php if (strlen($email) > 22): ?>
-                                   <div class="has-tooltip" title="<?php echo $email; ?>">
-                                       <a href="mailto:bob@bhp.com"><?php echo $email = substr($email,0,22)."..."; ?></a>
-                                   </div>
-                               <?php else: ?>
-                                   <a href="mailto:bob@bhp.com"><?php echo $email; ?></a>
-                               <?php endif; ?>
-                           </div>
-                           <div class="td td-status"><span class="status-verified">Verified</span></div>
-                           <div class="td td-actions">
-                               <a href="#">View</a>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-           <div class="clear"></div>
-           <div class="space20"></div>
+                       <div class="clear"></div>
+                       <div class="space20"></div>
+                <?php endforeach;?>
+            <?php endif;?>
         </div>
     </div>
     <div class="clear"></div>
