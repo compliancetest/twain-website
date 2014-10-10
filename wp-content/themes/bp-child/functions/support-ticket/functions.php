@@ -105,14 +105,14 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
     if(isset($ticketDetail->paid_amount))
         $emailData['[paid_amount]'] = $ticketDetail->paid_amount;
     
-    if(isset($ticketDetail->paid_tokens))
+/*    if(isset($ticketDetail->paid_tokens))
         $emailData['[paid_tokens]'] = $ticketDetail->paid_tokens;
     
     if(isset($ticketDetail->purchased_tokens))
         $emailData['[purchased_tokens]'] = $ticketDetail->purchased_tokens;
         
     if(isset($ticketDetail->remained_tokens))
-        $emailData['[remained_tokens]'] = $ticketDetail->remained_tokens;
+        $emailData['[remained_tokens]'] = $ticketDetail->remained_tokens;*/
     
     
     $emailData['[ticket_created]'] = formatDate($ticketDetail->created_date, "F d, Y h:i A", $email_type == 'customer' ? $ticketDetail->customer_id : $ticketDetail->support_id);

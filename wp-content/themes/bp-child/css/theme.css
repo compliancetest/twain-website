@@ -327,7 +327,8 @@ a:hover {
             #top_loged_actions .leftmenu .menu-coverage, 
             #top_loged_actions .leftmenu .menu-transactions, 
             #top_loged_actions .leftmenu .menu-support, 
-            #top_loged_actions .leftmenu .menu-profile {
+            #top_loged_actions .leftmenu .menu-profile,
+            #top_loged_actions .leftmenu .menu-agreements{
                 background-image: url(../images/ui-icon-sprites.png);
                 background-repeat: no-repeat;
                 padding: 6px 34px 6px 20px;
@@ -387,6 +388,12 @@ a:hover {
             }
             #top_loged_actions .leftmenu .menu-profile:hover {
                 background-position: 136px -514px;
+            }
+            #top_loged_actions .leftmenu .menu-agreements {
+                background-position: 136px -952px;
+            }
+            #top_loged_actions .leftmenu .menu-agreements:hover {
+                background-position: 136px -1018px;
             }
 /*
 #inputs input[type="text"] {
@@ -4632,12 +4639,23 @@ span.button_sign {
 }
 .status-verified{
     color: #369817;
+    text-shadow: 0 1px 0 rgba(255,255,255,.75);
 }
 .status-certified{
     color: #4aa31e;
+    text-shadow: 0 1px 0 rgba(255,255,255,.75);
 }
 .status-testing{
-    color: #e33f3f;
+    color: #104484;
+    text-shadow: 0 1px 0 rgba(255,255,255,.75);
+}
+.status-pending{
+    color: #696464;
+    text-shadow: 0 1px 0 rgba(255,255,255,.75);
+}
+.status-claimed{
+    color: #f66200;
+    text-shadow: 0 1px 0 rgba(255,255,255,.75);
 }
 #my_products .add-claim-btn,
 #test_suite_coverage .add-plan-btn{
@@ -4663,6 +4681,335 @@ span.button_sign {
     border-radius: 0 0 5px 5px;
     -moz-border-radius: 0 0 5px 5px;
     -webkit-border-radius: 0 0 5px 5px;
+}
+
+/*** My Agreements Page ***/
+#my-agreements .td-agreement-id{
+    width: 100px;
+}
+#my-agreements .td-entity-name{
+    width: 110px;
+    font-weight: 700;
+}
+#my-agreements .td-identifier{
+    width: 55px;
+}
+#my-agreements .td-type{
+    width: 40px;
+}
+#my-agreements .td-protocol{
+    width: 80px;
+}
+#my-agreements .td-end-point{
+    width: 80px;
+}
+#my-agreements .td-contact{
+    width: 155px;
+}
+
+#my-agreements .td-contact a{
+    display: block;
+    overflow: hidden;
+}
+
+#my-agreements .td-status{
+    width: 65px;
+}
+#my-agreements .td-actions{
+    width: 85px;
+}
+
+#my-agreements .grid-box-header-title li{
+    float: left;
+    margin-left: 30px;
+}
+#my-agreements .grid-box-header-title ul li:first-child{
+    margin-left: 0;
+}
+
+#my-agreements .container .simple_tooltip{
+    left: 50%;
+    width: auto;
+    min-width: 50px;
+}
+
+#my-agreements .status-testing{
+    color: #104484;
+}
+
+#agreement-details-popup .popup-box-content{
+    padding-left: 0;
+    padding-right: 0;
+    border: 0;
+}
+
+#agreement-details-popup .tab-nav{
+    padding: 0 20px 0 20px;
+    height: 35px;
+}
+
+#agreement-details-popup .tab-nav li a{
+    font-size: 13px;
+    line-height: 35px;
+    font-weight: 400;
+}
+#agreement-details-popup .tab-nav .active a{
+    font-weight: 700;
+}
+
+#agreement-details-popup .tab-content{
+    padding: 15px 20px;
+    border-bottom: 0;
+}
+
+.agreement-general-info{
+    font-size: 14px;
+}
+
+.agreement-general-info .common-info{
+    padding-bottom: 8px;
+}
+
+.agreement-general-info .common-info dt,
+.agreement-general-info .common-info dd{
+    padding: 0 0 10px 0;
+}
+
+.agreement-general-info .common-info dt{
+    float: left;
+    width: 75px;
+    font-weight: 700;
+}
+.agreement-general-info .common-info dd{
+    display: block;
+    margin: 0 0 0 75px;
+}
+
+.agreement-general-info .info-per-item{
+    border-top: 1px solid #ccc;
+    padding: 10px 0 0 0;
+}
+
+.agreement-general-info .info-per-item dl{
+    width: 220px;
+    float: left;
+    margin: 0 0 0 10px;
+}
+.agreement-general-info .info-per-item dl:first-child{
+    margin-left: 0;
+}
+
+.agreement-general-info .info-per-item dt{
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    margin: 8px 0 1px 0;
+    line-height: normal;
+}
+.agreement-general-info .info-per-item .item-title{
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 5px 0;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 700;
+}
+.agreement-general-info .info-per-item dd{
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 0 0 4px 0;
+}
+.agreement-general-info .info-per-item a{
+    font-weight: normal;
+    text-decoration: underline;
+}
+.agreement-general-info .info-per-item a:hover{
+    text-decoration: none;
+}
+
+#agreement-details-popup #tab_message_log{
+    padding-right: 6px;
+}
+
+.agreements-message-log-list{
+    padding: 0 0 35px 0;
+    max-height: 450px;
+    overflow: auto;
+}
+
+.agreements-message-log-list li{
+    font-size: 12px;
+    margin: 0 0 -35px 0;
+}
+
+.agreements-message-log-list .author-name{
+    font-weight: 700;
+    font-size: 14px;
+}
+.agreements-message-log-list .fund{
+    margin-right: 9px;
+}
+
+.agreements-message-log-list .fund .author-name{
+    text-align: right;
+    color: #288ce1;
+}
+
+.agreements-message-log-list .fund{
+    text-align: right;
+}
+
+.agreements-message-log-list .fund .message-body,
+.agreements-message-log-list .fund .message-date{
+    float: right;
+}
+
+.agreements-message-log-list .message-content{
+    display: inline-block;
+    width: 240px;
+}
+
+.agreements-message-log-list .message-body{
+    width: 220px;
+    -moz-border-radius: 0 5px 5px 5px;
+    -webkit-border-radius: 0 5px 5px 5px;
+    border-radius: 0 5px 5px 5px;
+    padding: 8px 9px;
+    margin: 8px 0 0 0;
+    position: relative;
+    box-sizing: border-box;
+    text-align: left;
+    line-height: 13px;
+}
+
+.agreements-message-log-list .employer .message-body{
+    background: #ebebeb;
+}
+.agreements-message-log-list .fund .message-body{
+    background: #288ce1;
+    color: #fff;
+    -moz-border-radius: 5px 0 5px 5px;
+    -webkit-border-radius: 5px 0 5px 5px;
+    border-radius: 5px 0 5px 5px;
+}
+
+.agreements-message-log-list .message-body .message-box-arrow{
+    display: block;
+    width: 9px;
+    height: 9px;
+    position: absolute;
+    top: -9px;
+    background-image: url("../images/message-box-arrows.png");
+    background-repeat: no-repeat;
+}
+
+.agreements-message-log-list .employer .message-body .message-box-arrow{
+    background-position: 0 0;
+    left: 0;
+}
+.agreements-message-log-list .fund .message-body .message-box-arrow{
+    background-position: -9px 0;
+    right: 0;
+}
+
+.agreements-message-log-list .message-date{
+    font-style: italic;
+    padding: 5px 0 6px 9px;
+    width: 220px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.claim-upload-box{
+    padding: 9px 0 6px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 15px 0;
+}
+
+.claim-upload-box .remove-icon{
+    vertical-align: middle;
+    margin: 0 0 0 5px;
+    cursor: pointer;
+}
+
+.claim-popup-box p{
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.claim-popup-box .note{
+    font-size: 12px;
+    font-style: italic;
+}
+
+.claim-upload-box .custom-file-tag .file-btn{
+    top: 0;
+    margin-right: 0;
+}
+
+.claim-upload-box .custom-file-tag{
+    float: right;
+}
+.claim-upload-box .custom-file-tag .file-label-wrap{
+    display: none;
+}
+
+.claim-popup-box .uploaded-files{
+    margin: 2px 50px 0 0;
+}
+
+.claim-popup-box .uploaded-files li{
+    display: inline-block;
+    margin: 0 5px 0 0;
+}
+
+.claim-test-scope h4{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.claim-test-scopes-list{
+    overflow: hidden;
+}
+
+.claim-test-scopes-list li{
+    width: 33%;
+    float: left;
+    padding: 5px 0;
+}
+
+.claim-test-scopes-list li input{
+    margin: 0 5px 0 0;
+    vertical-align: middle;
+}
+
+.remove-icon{
+    display: inline-block;
+    background: url("../images/remove-icon.png") no-repeat 0 0;
+    width: 10px;
+    height: 10px;
+}
+
+#deny-agreement-popup{
+    font-size: 14px;
+}
+
+.agreement-deny-reason{
+    border-top: 1px solid #ccc;
+    padding: 12px 0 0 0;
+    margin: 3px 0 0 0;
+}
+
+.agreement-deny-reason label{
+    font-size: 12px;
+}
+
+.agreement-deny-reason textarea{
+    width: 100%;
+    height: 85px;
+    margin: 5px 0 0 0;
+
 }
 
 /*** Test Suite Coverage ***/
@@ -7155,22 +7502,24 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     
 }
 .dashboard-tabs .tabs li {
-    margin: 4px 7px 0 0;
+    margin: 4px 0 0 5px;
+}
+.dashboard-tabs .tabs li:first-child{
+    margin-left: 0;
 }
 .dashboard-tabs .tabs li.current_page_item {
-    margin-top: 0px;
+    margin-top: 0;
 }
 .dashboard-tabs .tabs li a {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 .dashboard-tabs .tabs li.current_page_item a {
     padding: 7px 3px;
 }
 .dashboard-tabs .tabs li a span.menu-title {
-    background: url(../images/tab_separator.png) left center no-repeat;
     font-family: 'Oswald', Arial, Helvetica sans-serif;
-    padding: 0 3px 0 8px;
+    padding: 0 4px 0 0;
     font-size: 14px;
     line-height: 32px;
     display: inline-block;
@@ -7195,7 +7544,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     -moz-text-shadow: 0 1px 0 #002747;
     -webkit-text-shadow: 0 1px 0 #002747;
     -o-text-shadow: 0 1px 0 #002747;
-    background: url(../images/blue_separator.png) left center no-repeat;
 }
 .dashboard-tabs .menu-communities .menu-icon, 
 .dashboard-tabs .menu-test-suites .menu-icon, 
@@ -7205,7 +7553,8 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .menu-transactions .menu-icon, 
 .dashboard-tabs .menu-support .menu-icon, 
 .dashboard-tabs .menu-organisation .menu-icon, 
-.dashboard-tabs .menu-profile .menu-icon {
+.dashboard-tabs .menu-profile .menu-icon,
+.dashboard-tabs .menu-agreements .menu-icon {
     background-image: url(../images/ui-icon-sprites.png) !important;
     background-repeat: no-repeat;  
     display: inline-block;
@@ -7272,13 +7621,22 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .menu-organisation.current_page_item .menu-icon {
     background-position: 5px -910px;
 }
+
 .dashboard-tabs .menu-profile .menu-icon {
     background-position: 5px -473px;
 }
-
 .dashboard-tabs .menu-profile.current_page_item .menu-icon {
     background-position: 5px -513px;
 }
+
+.dashboard-tabs .menu-agreements .menu-icon {
+    background-position: 5px -952px;
+}
+.dashboard-tabs .menu-agreements.current_page_item .menu-icon {
+    background-position: 5px -1018px;
+}
+
+
 .table-bottom-btn {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -7528,7 +7886,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: block;
 }
 
-
 .plans-pricing-table{
     border: 1px solid #dfdfdf
 }
@@ -7542,6 +7899,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     border: 1px solid #dfdfdf;
     padding: 0;
     vertical-align: middle;
+}
+.plans-pricing-table tbody th{
+    width: 156px;
 }
 
 .diagonal-delimiter {
@@ -7586,7 +7946,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .plans-pricing-table td{
-    width: 135px;
+    min-width: 100px;
 }
 
 .plans-pricing-table .feature-available,
