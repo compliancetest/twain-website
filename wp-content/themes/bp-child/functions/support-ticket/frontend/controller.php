@@ -283,10 +283,11 @@ function getTicketById($ticket_id)
     
     $customer_ids = getManagedCustomerWPIDs($user_id);
     
-    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title FROM " . TABLE_TICKETS . " AS t "
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, xi.unit_price FROM " . TABLE_TICKETS . " AS t "
            . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
            . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
-           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id ";
+           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
+           . "LEFT JOIN " . $wpdb->prefix . "xeroitems AS xi ON xi.code=tp.item_code ";
     
     $customer_ids[] = $user_id;
     $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";

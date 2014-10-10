@@ -125,37 +125,6 @@ function isPurchasedForOtherVersions($familyMark, $user_id = null)
 }
 
 
-function getOrganisationPurchaseId($familyMark, $user_id = null)
-{
-    global $wpdb;
-    
-    if(!$user_id)
-        $user_id = get_current_user_id();
-    
-    if(!$user_id)
-        return false;
-        
-    $user = get_userdata($user_id);
-    
-    $user_domain = substr($user->user_email, strpos($user->user_email, '@'));
-    
-    $query = $wpdb->prepare("SELECT s.purchase_id, op.user_count, op.joined_count FROM {$wpdb->prefix}users_subscriptions AS s " .
-             "LEFT JOIN {$wpdb->prefix}test_suites AS ts ON s.suite_id=ts.suite_id " .
-             "LEFT JOIN {$wpdb->prefix}users_organisation_pricing AS op ON s.user_id=op.user_id AND ts.family_mark=op.family_mark " .
-             "LEFT JOIN {$wpdb->users} AS u ON s.user_id=u.ID " .
-             "WHERE op.family_mark=%d AND u.user_email LIKE %s", $familyMark, '%' . $user_domain);
-    
-    $prow = $wpdb->get_row($query);
-    
-    if(!$prow)
-        return false;
-    
-    if($prow->user_count <= $prow->joined_count)
-        return false;
-    
-    return $prow->purchase_id;
-}
-
 /**
 * Get Subscription Monthly Fee
 * 
@@ -199,23 +168,6 @@ function getSubscriptionMonthlyFee2($suite_id, $subMonthlyFee, $user_id = null)
         $monthlyFee = doubleval($userMonthlyFees[$suite_id]);
         
     return $monthlyFee;
-}
-
-function getExpiredPayments()
-{
-    global $wpdb;
-    
-    $cur_date = date("Y-m-d");
-    
-    $query = $wpdb->prepare("SELECT up.*, count(us.id) AS subscriptions, ts.family_mark FROM {$wpdb->prefix}users_purchases AS up 
-                            LEFT JOIN {$wpdb->prefix}users_subscriptions AS us ON up.id=us.purchase_id
-                            LEFT JOIN {$wpdb->prefix}test_suites AS ts ON ts.suite_id=us.suite_id
-                            WHERE up.expiry_date <= %s
-                            GROUP BY up.id
-                            ", $cur_date);
-    $rows = $wpdb->get_results($query);
-    
-    return $rows;
 }
 
 function ct_get_months($date1, $date2)
