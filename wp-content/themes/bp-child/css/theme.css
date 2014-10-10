@@ -327,7 +327,8 @@ a:hover {
             #top_loged_actions .leftmenu .menu-coverage, 
             #top_loged_actions .leftmenu .menu-transactions, 
             #top_loged_actions .leftmenu .menu-support, 
-            #top_loged_actions .leftmenu .menu-profile {
+            #top_loged_actions .leftmenu .menu-profile,
+            #top_loged_actions .leftmenu .menu-agreements{
                 background-image: url(../images/ui-icon-sprites.png);
                 background-repeat: no-repeat;
                 padding: 6px 34px 6px 20px;
@@ -387,6 +388,12 @@ a:hover {
             }
             #top_loged_actions .leftmenu .menu-profile:hover {
                 background-position: 136px -514px;
+            }
+            #top_loged_actions .leftmenu .menu-agreements {
+                background-position: 136px -952px;
+            }
+            #top_loged_actions .leftmenu .menu-agreements:hover {
+                background-position: 136px -1018px;
             }
 /*
 #inputs input[type="text"] {
@@ -4991,7 +4998,7 @@ span.button_sign {
 .agreement-deny-reason{
     border-top: 1px solid #ccc;
     padding: 12px 0 0 0;
-    margin: 13px 0 0 0;
+    margin: 3px 0 0 0;
 }
 
 .agreement-deny-reason label{
@@ -5000,9 +5007,9 @@ span.button_sign {
 
 .agreement-deny-reason textarea{
     width: 100%;
-    height: 88px;
+    height: 85px;
     margin: 5px 0 0 0;
-    min-height: 88px;
+
 }
 
 /*** Test Suite Coverage ***/
@@ -7495,22 +7502,24 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     
 }
 .dashboard-tabs .tabs li {
-    margin: 4px 7px 0 0;
+    margin: 4px 0 0 6px;
+}
+.dashboard-tabs .tabs li:first-child{
+    margin-left: 0;
 }
 .dashboard-tabs .tabs li.current_page_item {
-    margin-top: 0px;
+    margin-top: 0;
 }
 .dashboard-tabs .tabs li a {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 .dashboard-tabs .tabs li.current_page_item a {
     padding: 7px 3px;
 }
 .dashboard-tabs .tabs li a span.menu-title {
-    background: url(../images/tab_separator.png) left center no-repeat;
     font-family: 'Oswald', Arial, Helvetica sans-serif;
-    padding: 0 3px 0 8px;
+    padding: 0 4px 0 0;
     font-size: 14px;
     line-height: 32px;
     display: inline-block;
@@ -7535,7 +7544,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     -moz-text-shadow: 0 1px 0 #002747;
     -webkit-text-shadow: 0 1px 0 #002747;
     -o-text-shadow: 0 1px 0 #002747;
-    background: url(../images/blue_separator.png) left center no-repeat;
 }
 .dashboard-tabs .menu-communities .menu-icon, 
 .dashboard-tabs .menu-test-suites .menu-icon, 
