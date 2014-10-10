@@ -77,7 +77,7 @@ $user_test_suites = get_suites_with_claims();
 
                                 <div class="grid-cell styled_select">
                                     <label>Product:</label>
-                                    <select name="product_id" class="required">
+                                    <select name="product_id" class="required" id="product_id">
                                         <option value=""></option>
                                         <?php foreach( $user_products AS $user_product ):?>
                                         <option <?php if( isset( $service->service_product_id ) && $service->service_product_id == $user_product->ID ):?> selected="selected" <?php endif;?>value="<?php echo $user_product->ID;?>"><?php echo $user_product->product_name;?></option>
@@ -97,7 +97,7 @@ $user_test_suites = get_suites_with_claims();
                                                 continue;
                                             }
                                         ?>
-                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>"><?php echo $suite->title;?></option>
+                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" <?php if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ):?>style="display: none;"<?php endif;?>><?php echo $suite->title;?></option>
                                         <?php endforeach;?>
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Form data entry - ABN or USI.</span>
@@ -157,11 +157,18 @@ $user_test_suites = get_suites_with_claims();
                                     <label>Service Owner:</label>
                                     <input type="text" class="input required" name="service_owner" id="service_owner" value="<?php echo $service->service_owner?>" />
                                 </div>
-                                <?php foreach( $user_test_suites AS $suite_id ):?>
+                                <?php
+                                    $processed_suites = array();
+                                    foreach( $user_test_suites AS $suite_id ):?>
                                     <?php
                                     $suite = new TestSuite( $suite_id->suite_id );
                                     $suite->load();
                                     if( ! $suite->id ){
+                                        continue;
+                                    }
+                                    if( ! in_array( $suite->id, $processed_suites ) ){
+                                        array_push( $processed_suites, $suite->id );
+                                    } else{
                                         continue;
                                     }
                                     ?>
@@ -215,6 +222,11 @@ $user_test_suites = get_suites_with_claims();
                     $('.roles_div').filter( '[data-suiteid="'+$( this).val()+'"]').show();
                     $('.levels_div').filter( '[data-suiteid="'+$( this).val()+'"]').show();
                 }
+            });
+            $('#product_id').on('change', function(){
+                $('#suite_id').val('');
+                $('#suite_id option').hide();
+                $('#suite_id option').filter('[data-productid="'+$(this).val()+'"]').show();
             });
             jQuery(".validation-form .required").each(function(){
                 jQuery(this).parent().append('<span class="msg-required" style="display: none">This field is required.</span>');

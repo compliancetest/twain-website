@@ -851,6 +851,6 @@ function ct_get_suite_max_version( $suite_id, $return_suite_name = false ){
 
 function get_suites_with_claims(){
     global $wpdb;
-    $sql = 'SELECT suite_id FROM wp_compliance_claims GROUP BY suite_id';
+    $sql = 'SELECT suite_id, product_id FROM wp_compliance_claims';
     return $wpdb->get_results( $sql );
 }
