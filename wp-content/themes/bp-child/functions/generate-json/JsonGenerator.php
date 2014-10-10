@@ -98,6 +98,9 @@ class JsonGenerator {
         $temp = 1;
         $str = '$this->jsonArrays['.$keyNumber.']';
         foreach( $arrayKeys AS $key ){
+            if( $key == '$ref' ){
+                $key = '\$ref';
+            }
             if( preg_match( self::BRACKETS_REG, $key, $match) ){
                 $str .= '["'.$this->replaceBrackets($key).'"]'.$match[0].'';
             } else {
@@ -128,7 +131,12 @@ class JsonGenerator {
                 continue;
             }
             
-            $filename = @$profileData['Profile']['Type'].'.'.@$profileData['Profile']['Title'].'.'.@$profileData['Profile']['Version']['Major'].'.'.@$profileData['Profile']['Version']['Minor'].'.json';
+            $filename = @$profileData['Profile']['Type'].'.'.@$profileData['Profile']['Title'].'.'.@$profileData['Profile']['Version']['Major'].'.'.@$profileData['Profile']['Version']['Minor'];
+
+            if( isset( $profileData['Profile']['Version']['Patch'] ) && ! empty( $profileData['Profile']['Version']['Patch'] ) ){
+                $filename .= '.'.$profileData['Profile']['Version']['Patch'];
+            }
+            $filename .= '.json';
             
             if( $filename == '}.}.}.}.json' || $filename == '....json'){
                 continue;
