@@ -81,12 +81,14 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     <dl class="column product_services">
                         <?php if( $product->relatedServices ):?>
                             <?php foreach( $product->relatedServices AS $serv ):?>
-                                <dd><a href="<?php echo get_permalink( $serv->id );?>"><?php echo get_the_title( $serv->id );?></a></dd>
-                                <dt>Owner:</dt>
-                                <dd><?php echo get_post_meta( $serv->id, 'service_owner', true );?></dd>
-                                <dt>End-to-End Test Status:</dt>
-                                <dd class="status-verified">Verified</dd>
-                                <dd class="clear"></dd>
+                                <?php if( Service::has_assess( $serv->id ) ):?>
+                                    <dd><a href="<?php echo get_permalink( $serv->id );?>"><?php echo get_the_title( $serv->id );?></a></dd>
+                                    <dt>Owner:</dt>
+                                    <dd><?php echo get_post_meta( $serv->id, 'service_owner', true );?></dd>
+                                    <dt>End-to-End Test Status:</dt>
+                                    <dd class="status-verified">Verified</dd>
+                                    <dd class="clear"></dd>
+                                <?php endif;?>
                             <?php endforeach;?>
                         <?php endif;?>
                     </dl>

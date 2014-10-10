@@ -72,6 +72,7 @@ function saveService()
             addMessage($id->get_error_message(), 'error');            
             return;
         }
+        update_post_meta($id, 'service_user_id', get_current_user_id() );
     }else{
         if(!wp_update_post(array('ID' => $id, 'post_title' =>htmlspecialchars($_POST['service_name']), 'post_name' => sanitize_title(htmlspecialchars($_POST['service_name'])))))
         {
