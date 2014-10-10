@@ -95,7 +95,7 @@ class Service
     /**
      *
      */
-    public static function can_request_e2e(){
+    public static function can_request_e2e( $user_id, $service_id ){
 
     }
 

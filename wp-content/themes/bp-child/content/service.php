@@ -118,20 +118,34 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
     <div class="popup-box-header radius6 noradiusbottom">End-to-End Test Request</div>
     <div class="popup-box-content">
         <div class="form-horizontal">
+            <?php
+                $requester_services = Service::get_user_services();
+                $requester_profiles = getCustomerProfileInstances();
+            ?>
             <div class="field-row">
                 <label>Agreement ID:</label>
                 <div class="field-box">
-                    <input type="text" value="" id="agreement_id" class="input input-field">
+                    <input type="text" value="" id="agreement_id" class="input input-field" disabled="disabled" data-serviceid="<?php echo $service->service_id;?>">
                     <span class="info-icon has-tooltip" title="Some info"></span>
                 </div>
             </div>
             <div class="field-row">
                 <label>My Service:</label>
                 <div class="field-box">
-                    <select name="" id="" class="select input-field">
-                        <option value="">Option 1</option>
-                        <option value="">Option 2</option>
-                        <option value="">Option 3</option>
+                    <select name="requester_service" id="requester_service" class="select input-field">
+                        <option></option>
+                        <?php if( $requester_services ):?>
+                            <?php foreach( $requester_services AS $serv ):?>
+                                <?php
+                                    $s = new Service( $serv->ID );
+                                    $s->load();
+                                if( $s->service_id == $service->service_id ){
+                                    continue;
+                                }
+                                ?>
+                                <option value="<?php echo $s->id;?>"><?php echo $s->service_name;?></option>
+                            <?php endforeach;?>
+                        <?php endif;?>
                     </select>
                     <span class="info-icon has-tooltip" title="Some info"></span>
                 </div>
@@ -139,10 +153,11 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             <div class="field-row">
                 <label>My Profile:</label>
                 <div class="field-box">
-                    <select name="" id="" class="select input-field">
-                        <option value="">Option 1</option>
-                        <option value="">Option 2</option>
-                        <option value="">Option 3</option>
+                    <select name="requester_profiles" id="requester_profiles" class="select input-field">
+                        <option></option>
+                        <?php foreach( $requester_profiles AS $requester_profile ):?>
+                            <option value="<?php echo $requester_profiles[0]->id;?>"><?php echo $requester_profiles[0]->profile_name;?></option>
+                        <?php endforeach;?>
                     </select>
                     <span class="info-icon has-tooltip" title="Some info"></span>
                 </div>
@@ -164,6 +179,13 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
 </div>
 <script>
     jQuery(document).ready(function($){
+        $('#requester_service').on('change', function(){
+            if( $('#requester_service').val() ){
+                $('#agreement_id').val( $('#agreement_id').data( 'serviceid') + '.' + $('#requester_service').val() );
+            } else{
+                $('#agreement_id').val( '' );
+            }
+        });
         $(".e2e-test-request-link").cplightbox({
             onLoad: function(){
                 jQuery('.simple_tooltip').each(function(){
