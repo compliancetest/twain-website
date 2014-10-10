@@ -62,6 +62,10 @@ function certifyPlan()
             $all_verified = false;
             break; 
         }
+        if( isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID] ) && $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] == 'fail' && $is_excluded ){
+            $all_verified = false;
+            break;
+        }
     }
 
     //Create Compliance Claim
