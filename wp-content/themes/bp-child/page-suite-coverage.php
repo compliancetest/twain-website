@@ -72,12 +72,13 @@ $esb = new ManageESB();
                                ?> 
                                <div class="coverage-progress">
                                    <?php
-                                       $passedBlobs = "";
-                                       $failedBlobs = "";
-                                       $normalBlobs = "";
+
 
                                        foreach($testCases as $case)
                                        {
+                                           $passedBlobs = "";
+                                           $failedBlobs = "";
+                                           $normalBlobs = "";
                                            $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_case_id = %d AND test_plan_id = %d ", $case->ID, $crow->id ) );
                                            $opt = $exc = '';
                                            $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
@@ -88,23 +89,23 @@ $esb = new ManageESB();
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
                                                {
-                                                   $passedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
+                                                   $passedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
                                                }else{
-                                                   $failedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
+                                                   $failedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
                                                }
                                                
                                            }else{
                                                if( ( $is_optional == 'No' || empty( $is_optional ) ) && ! $is_excluded ) {
-                                                   $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
+                                                   $normalBlobs = '<span class="bubble">' . $tooltip . '</span>';
                                                } else if( $is_excluded ){
-                                                   $normalBlobs .= '<span class="bubble excluded_bubble">' . $tooltip . '</span>';
+                                                   $normalBlobs = '<span class="bubble excluded_bubble">' . $tooltip . '</span>';
                                                } else {
-                                                   $normalBlobs .= '<span class="bubble optional_bubble">' . $tooltip . '</span>';
+                                                   $normalBlobs = '<span class="bubble optional_bubble">' . $tooltip . '</span>';
                                                }
                                            }
                                            $normalBlobs .= '<a href="?plan_id='.$crow->id.'&id='.$case->ID.'&_wpnonce='.wp_create_nonce('get_popup').'" cp-type="ajax" cp-removeBoxAfterClose=1 class="create_popup action-btn edit-btn edit-plan-btn icon-btn" style="display: none;"></a>';
+                                           echo $passedBlobs . $failedBlobs . $normalBlobs;
                                        }
-                                       echo $passedBlobs . $failedBlobs . $normalBlobs;
                                    ?>
                                </div>    
                                <div class="clear"></div>
