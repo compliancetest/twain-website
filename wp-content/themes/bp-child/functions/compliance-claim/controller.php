@@ -512,7 +512,7 @@ function createClaimPDF($claim_id, $planID )
     {
         $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $testCases[0]->ID ) );
 
-        if( $is_excluded && isset(  $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] ) && $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] == 'pass' ){
+        if( isset(  $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] ) && $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] == 'pass' ){
             $is_excluded = false;
         }
         if( ( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass' ) && ! $is_excluded ){
