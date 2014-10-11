@@ -34,7 +34,7 @@ if($mode != 'html'){
     header("Content-type: application/xml");    
     echo $message_content;
 }else{
-    if($message->S3_PAYLOAD_CONTENT_LENGTH > MAX_XML_LENGTH)
+    if($message->S3_PAYLOAD_CONTENT_LENGTH > (get_option(s3_xml_max_size) * 1024 * 1024))
     {
         if( isset($_GET['download'])) {
             //Download File
