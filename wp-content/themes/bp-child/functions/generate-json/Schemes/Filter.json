@@ -1,0 +1,97 @@
+{
+	"$schema"							: "http://json-schema.org/draft-04/schema#",
+	"title"								: "Filter",
+	"Description"						: "A Filter is used to subset the data in particular test cases.",
+	"Version" : {
+		"Major"							: 1,
+		"Minor"							: 1
+	},
+	
+	"type" : "object",
+	"properties" : {
+		"Profile"						: {"$ref" : "#/definitions/Profile/Profile"},
+		"Filters"						: {"$ref" : "#/definitions/Filters/Filters"}
+	},
+	"required"							: ["Profile", "Filters"],	
+	
+   "definitions" : {
+		"Types" : {
+			"NonNegativeInteger"		: {"type" : "integer", "minimum" : 0},		
+			"NonEmptyString"			: {"type" : "string", "minLength" : 1}
+		},
+			
+		"Profile" : {
+			"Type"						: {"enum" : ["Filter"]},
+			
+			"Purpose"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+			
+			"Tag" : {
+				"type" : "object",
+				"properties" : {
+					"Name"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Value"				: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["Name", "Value"]
+			},
+			
+			
+			"Tags" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Profile/Tag"},
+				"minItems": 1
+
+			},
+			
+			"Version" : {
+				"type" : "object",
+				"properties" : {
+					"Major"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"},
+					"Minor"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"},
+					"Patch"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"}
+				},
+				"required"				: ["Major", "Minor"]
+			},
+			
+			"Profile" : {
+				"type" : "object",
+				"properties" : {
+					"Type"				: {"$ref" : "#/definitions/Profile/Type"},
+					"Purpose"			: {"$ref" : "#/definitions/Profile/Purpose"},
+					"Tags"			    : {"$ref" : "#/definitions/Profile/Tags"},					
+					"Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Version"			: {"$ref" : "#/definitions/Profile/Version"}
+				},
+				"required"				: ["Type", "Purpose", "Title", "Description", "Version"]
+			}
+		},
+		
+		"Filters" : {	
+
+			"Filter" : {
+				"type" : "object",
+				"properties" : {
+					"Type"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Values"            : {"$ref" : "#/definitions/Filters/Values"},
+                    "Operation"         : {"$ref" : "#/definitions/Filters/Operation"}
+				},
+	            "required"				: ["Type"]	
+            },
+		
+			"Filters" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Filters/Filter"},
+				"minItems": 1
+            },
+			
+			"Values" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+				"minItems": 0
+            },
+			
+			"Operation" : {"enum" : ["Select", "Exclude"], "default" : "Select"}
+	    }
+	}
+}
+		
