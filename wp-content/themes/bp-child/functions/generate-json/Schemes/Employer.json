@@ -4,10 +4,9 @@
 	"Description"						: "An employer is modelled as a set of employees making contributions to superannuation products. Products can be identified by ABN or USI.",
 	"Version" : {
 		"Major"							: 2,
-		"Minor"							: 5,
-		"Patch"							: 1
+		"Minor"							: 11
 	},
-	
+
 	"type" : "object",
 	"properties" : {
 		"Profile"						: {"$ref" : "#/definitions/Profile/Profile"},
@@ -15,36 +14,56 @@
 		"PayrollAdministration"			: {"$ref" : "#/definitions/PayrollAdministration/PayrollAdministration"},
 		"Employees"						: {"$ref" : "#/definitions/Employees/Employees"},
 		"ClearingHouses"				: {"$ref" : "#/definitions/ClearingHouses/ClearingHouses"},
-		"SuperannuationProducts"		: {"$ref" : "#/definitions/SuperannuationProducts/SuperannuationProducts"}
+		"SuperannuationProducts"		: {"$ref" : "#/definitions/SuperannuationProducts/SuperannuationProducts"},
+		"CustomProfilesGeneration"		: {"$ref" : "#/definitions/CustomProfilesGeneration/CustomProfilesGeneration"}
 	},
     "required"							: ["Profile", "Entity", "PayrollAdministration", "Employees", "SuperannuationProducts"],
-        
+
 	"definitions" : {
 		"Types" : {
 			"NonNegativeInteger"		: {"type" : "integer", "minimum" : 0},
-		
+
 			"MultipleOf8"				: {"allOf": [{"$ref" : "#/definitions/Types/NonNegativeInteger"}, { "multipleOf": 8}]},
 
 			"NonEmptyString"			: {"type" : "string", "minLength" : 1},
-		
+
 			"URI"						: {"type" : "string", "format" : "uri", "minLength" : 1},
-		
+
 			"Email"						: {"type" : "string", "format" : "email"},
 
 			"Boolean"					: {"type": "boolean"},
-        
+
 			"BooleanDefaultFalse"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": false }]},
-        
+
 			"BooleanDefaultTrue"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": true }]},
-			
-			"TimeUnit"					: {"enum" : ["seconds", "minutes", "hours", "days", "weeks"]}
+
+			"TimeUnit"					: {"enum" : ["seconds", "minutes", "hours", "days", "weeks"]},
+
+			"Date"						: {"$ref" : "#/definitions/Types/NonEmptyString"}
 		},
-			
+
 		"Profile" : {
 			"Type"						: {"enum" : ["Employer"]},
-			
-			"Purpose"					: {"enum" : ["Positive", "Negative"], "default" : "Positive"},
-			
+
+			"Purpose"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+
+			"Tag" : {
+				"type" : "object",
+				"properties" : {
+					"Name"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Value"				: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["Name", "Value"]
+			},
+
+
+			"Tags" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Profile/Tag"},
+				"minItems": 1
+
+			},
+
 			"Version" : {
 				"type" : "object",
 				"properties" : {
@@ -54,12 +73,13 @@
 				},
 				"required"				: ["Major", "Minor"]
 			},
-			
+
 			"Profile" : {
 				"type" : "object",
 				"properties" : {
 					"Type"				: {"$ref" : "#/definitions/Profile/Type"},
 					"Purpose"			: {"$ref" : "#/definitions/Profile/Purpose"},
+					"Tags"			    : {"$ref" : "#/definitions/Profile/Tags"},
 					"Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
 					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
 					"Version"			: {"$ref" : "#/definitions/Profile/Version"}
@@ -164,7 +184,7 @@
                 },
                 "required"				: ["Usage", "Line1", "Locality", "Country"]
             },
-            
+
             "Telephone" : {
                 "type": "object",
                 "properties":{
@@ -188,8 +208,8 @@
                 "properties": {
                     "Details"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "StartDate"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "EndDate"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                    "StartDate"			: {"$ref" : "#/definitions/Types/Date"},
+                    "EndDate"			: {"$ref" : "#/definitions/Types/Date"}
                 },
                 "required"				: ["Details", "Description"]
             },
@@ -200,7 +220,81 @@
                 "minItems" : 1
             },
 
-            "Contribution" : {
+            "StandardAmount": {
+                "type" : "object",
+                "properties" : {
+                    "Type"				: {"$ref" : "#/definitions/Employees/Type"},
+                    "Amount"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                },
+                "required"				: ["Type"]
+            },
+
+			"StandardAmounts" : {
+				"type": "array",
+				"items"					: {"$ref" : "#/definitions/Employees/StandardAmount"},
+				"minItems" : 1
+			},
+
+            "ContributionOtherAmount": {
+                "type" : "object",
+                "properties" : {
+                    "Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Amount"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                },
+                "required"				: ["Description"]
+            },
+
+			"ContributionOtherAmounts" : {
+				"type": "array",
+				"items"					: {"$ref" : "#/definitions/Employees/ContributionOtherAmount"},
+				"minItems" : 1
+			},
+
+			"ContributionOtherDetail": {
+				"type" : "object",
+				"properties" : {
+					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Text"				: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["Description"]
+			},
+
+			"ContributionOtherDetails" : {
+				"type": "array",
+				"items"					: {"$ref" : "#/definitions/Employees/ContributionOtherDetail"},
+				"minItems" : 1
+			},
+
+			"RegistrationOtherDetail": {
+				"type" : "object",
+				"properties" : {
+					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Text"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Startdate"			: {"$ref" : "#/definitions/Types/Date"},
+					"Enddate"			: {"$ref" : "#/definitions/Types/Date"}
+				},
+				"required"				: ["Description"]
+			},
+
+			"RegistrationOtherDetails" : {
+				"type": "array",
+				"items"					: {"$ref" : "#/definitions/Employees/RegistrationOtherDetail"},
+				"minItems" : 1
+			},
+
+            "Dynamic": {
+                "type": "object",
+                "properties": {
+                	"PayPeriodStartDate": {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"PayPeriodEndDate"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"EmploymentEndDate": {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"EmploymentEndReasonText": {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"AnnualSalaryforContributionsEffectiveEndDate": {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"MemberRegistrationAmendmentReasonText": {"$ref" : "#/definitions/Types/NonEmptyString"}
+                }
+            },
+
+			"Contribution" : {
                 "type": "object",
                 "properties":{
                     "FundABN"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
@@ -209,12 +303,18 @@
                     "Type"				: {"$ref" : "#/definitions/Employees/Types"},
                     "TFNNotProvided"	: {"$ref" : "#/definitions/Types/Boolean"},
                     "InsuranceOptOut"	: {"$ref" : "#/definitions/Types/Boolean"},
-                    "FundRegistrationDate": {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "FundRegistrationDate": {"$ref" : "#/definitions/Types/Date"},
                     "BenefitCategory"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "CommencementDate"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "OtherDetails"		: {"$ref" : "#/definitions/Employees/OtherDetails"}
+                    "CommencementDate"	: {"$ref" : "#/definitions/Types/Date"},
+                    "CeaseDate"         : {"$ref" : "#/definitions/Types/Date"},
+                    "OtherDetails"		: {"$ref" : "#/definitions/Employees/OtherDetails"},
+                    "StandardAmounts"		: {"$ref" : "#/definitions/Employees/StandardAmounts"},
+                    "ContributionOtherAmounts"		: {"$ref" : "#/definitions/Employees/ContributionOtherAmounts"},
+                    "ContributionOtherDetails"		: {"$ref" : "#/definitions/Employees/ContributionOtherDetails"},
+                    "RegistrationOtherDetails"	    : {"$ref" : "#/definitions/Employees/RegistrationOtherDetails"},
+                    "Dynamic"   		: {"$ref" : "#/definitions/Employees/Dynamic"}
                 },
-                "required"				: ["Type", "TFNNotProvided"]
+                "required"				: ["TFNNotProvided"]
             },
 
 			"Contributions" : {
@@ -229,23 +329,24 @@
                     "EmployeeID"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "Name"				: {"$ref" : "#/definitions/Employees/Name"},
                     "Sex"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "BirthDate"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "BirthDate"			: {"$ref" : "#/definitions/Types/Date"},
                     "Address"			: {"$ref" : "#/definitions/Employees/Address"},
                     "Email"				: {"$ref" : "#/definitions/Types/Email"},
                     "Telephone"			: {"$ref" : "#/definitions/Employees/Telephone"},
+                    "Telephone2"		: {"$ref" : "#/definitions/Employees/Telephone"},
                     "TFN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "EmploymentStartDate": {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "EmploymentStartDate": {"$ref" : "#/definitions/Types/Date"},
                     "AtWorkIndicator"	: {"$ref" : "#/definitions/Types/Boolean"},
                     "BenefitsSalary"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "ContributionsSalary": {"$ref" : "#/definitions/Types/NonEmptyString"},
-                    "ContributionsSalaryEffectiveStartDate": {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "ContributionsSalaryEffectiveStartDate": {"$ref" : "#/definitions/Types/Date"},
                     "InsuranceSalary"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "WeeklyHoursWorked"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "Occupation"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "EmploymentStatusCode": {"enum": ["Casual", "Contractor", "Full time", "Part time"]},
                     "Contributions"		: {"$ref" : "#/definitions/Employees/Contributions"}
                 },
-                "required"				: ["EmployeeID", "Name", "Sex", "BirthDate", "Address", "Email", "Telephone"]
+                "required"				: ["EmployeeID", "Name", "Sex", "BirthDate", "Address"]
 			},
 
 
@@ -273,9 +374,19 @@
                     "Method"			: {"enum": ["DirectCredit", "DirectDebit", "Bpay"]},
                     "BPAYReference"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "BPAYBiller"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Dynamic"	        : {"$ref" : "#/definitions/ClearingHouses/Payment/Dynamic"},
 					"Account"			: {"$ref" : "#/definitions/ClearingHouses/Account"}
                 },
-                "required"				: ["Method"]
+                "required"				: ["Method"],
+
+                "Dynamic" : {
+                    "type" : "object",
+                    "properties" : {
+                        "PaymentAmount"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                        "ReferenceNumber"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                        "TransactionDate"		: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                    }
+                }
             },
 
 			"ClearingHouse" : {
@@ -312,9 +423,20 @@
                     "Method"			: {"enum": ["DirectCredit", "DirectDebit", "Bpay"]},
                     "BPAYReference"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "BPAYBiller"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Dynamic"        	: {"$ref" : "#/definitions/SuperannuationProducts/Payment/Dynamic"},
 					"Account"			: {"$ref" : "#/definitions/SuperannuationProducts/Account"}
                 },
-                "required"				: ["Method"]
+                "required"				: ["Method"],
+
+                "Dynamic" : {
+                    "type" : "object",
+                    "properties" : {
+                        "PaymentAmount"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                        "ReferenceNumber"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                        "TransactionDate"		: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                    }
+                }
+
             },
 
 			"RegistrationMandatoryOverrides" : {
@@ -360,7 +482,7 @@
 					"ContributionMandatoryOtherDetails"	: {"$ref" : "#/definitions/SuperannuationProducts/ContributionMandatoryOtherDetails"}
 				}
 			},
-			
+
 			"SuperannuationProduct" : {
 				"type" : "object",
 				"properties" : {
@@ -381,6 +503,72 @@
 				"items"					: {"$ref" : "#/definitions/SuperannuationProducts/SuperannuationProduct"},
 				"minItems": 1
             }
-        }
+        },
+
+		"CustomProfilesGeneration" : {
+
+            "SourceProfilesValues" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                "minItems" : 1
+            },
+
+            "SourceProfiles": {
+            	"type" : "object",
+            	"properties" : {
+            		"IdentifierPath"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"Values"		 	: {"$ref" : "#/definitions/CustomProfilesGeneration/SourceProfilesValues"}
+            	},
+            	"required"				: ["IdentifierPath", "Values"]
+            },
+
+			"ValueRule" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "Type"				: {"enum" : ["Value"]},
+	            	"OriginalValue"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+	            	"ReplacementPath"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+        		"required"				: ["Type", "OriginalValue", "ReplacementPath"]
+			},
+
+			"ReferenceRule" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "Type"				: {"enum" : ["Reference"]}
+				},
+        		"required"				: ["Type"]
+			},
+
+			"Rule" : {
+
+	        	"oneOf" : [
+	   	       		{"$ref" : "#/definitions/CustomProfilesGeneration/ValueRule"},
+		       		{"$ref" : "#/definitions/CustomProfilesGeneration/ReferenceRule"}
+	       	    ]
+			},
+
+			"Rules" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/CustomProfilesGeneration/Rule"},
+                "minItems" : 1
+            },
+
+            "CustomProfilesSet": {
+            	"type" : "object",
+            	"properties" : {
+            		"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"SourceProfiles" 	: {"$ref" : "#/definitions/CustomProfilesGeneration/SourceProfiles"},
+            		"Rules" 			: {"$ref" : "#/definitions/CustomProfilesGeneration/Rules"}
+            	},
+            	"required"				: ["Description", "SourceProfiles"]
+            },
+
+            "CustomProfilesGeneration" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/CustomProfilesGeneration/CustomProfilesSet"},
+                "minItems" : 1
+            }
+		}
 	}
 }

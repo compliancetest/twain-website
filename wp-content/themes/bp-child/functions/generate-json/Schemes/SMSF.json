@@ -1,217 +1,396 @@
+
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "SMSF",
+    "$schema"							: "http://json-schema.org/draft-04/schema#",
+    "title"								: "Product",
+    "Description"						: "Product identified by a USI or a Self Managed Superannuation Fund (SMSF) identified by an ABN.",
     "Version": {
-        "Major" : 2,
-        "Minor" : 0
+    	"Major"							: 5,
+    	"Minor"							: 6
     },
-    "type": "object",
-    "properties": {
-        "Profile" : {
-            "type" : "object", 
-            "properties":{
-                "Type": { "enum": ["SMSF"]},
-                "Purpose": {
-                    "enum": ["Positive", "Negative"],
-                    "default" : "Positive" 
+
+    "type" : "object",
+	"properties" : {
+		"Profile"						: {"$ref" : "#/definitions/Profile/Profile"},
+		"Entity"						: {"$ref" : "#/definitions/Entity/Entity"},
+		"Fund"							: {"$ref" : "#/definitions/Fund/Fund"},
+		"FundAdministration"			: {"$ref" : "#/definitions/FundAdministration/FundAdministration"},
+		"Members"						: {"$ref" : "#/definitions/Members/Members"},
+		"Behaviours"					: {"$ref" : "#/definitions/Behaviours/Behaviours"},
+		"CustomProfilesGeneration"		: {"$ref" : "#/definitions/CustomProfilesGeneration/CustomProfilesGeneration"}
+	},
+    "required"							: ["Profile", "Entity", "Fund", "FundAdministration", "Members"],
+
+    "definitions" : {
+		"Types" : {
+			"NonNegativeInteger"		: {"type" : "integer", "minimum" : 0},
+
+			"NonNegativeAndZeroInteger"	: {"allOf": [{"$ref" : "#/definitions/Types/NonNegativeInteger"}, { "default": 0 }]},
+
+			"MultipleOf8"				: {"allOf": [{"$ref" : "#/definitions/Types/NonNegativeInteger"}, { "multipleOf": 8}]},
+
+			"NonEmptyString"			: {"type" : "string", "minLength" : 1},
+
+			"URI"						: {"type" : "string", "format" : "uri", "minLength" : 1},
+
+			"Email"						: {"type" : "string", "format" : "email"},
+
+			"Boolean"					: {"type": "boolean"},
+
+			"BooleanDefaultFalse"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": false }]},
+
+			"BooleanDefaultTrue"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": true }]},
+
+			"TimeUnit"					: {"enum" : ["seconds", "minutes", "hours", "days", "weeks"]},
+
+			"Date"						: {"$ref" : "#/definitions/Types/NonEmptyString"}
+		},
+
+		"Profile" : {
+			"Type"						: {"enum" : ["Product", "SMSF"]},
+
+			"Purpose"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+
+			"Tag" : {
+				"type" : "object",
+				"properties" : {
+					"Name"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Value"				: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["Name", "Value"]
+			},
+
+
+			"Tags" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Profile/Tag"},
+				"minItems": 1
+
+			},
+
+			"Version" : {
+				"type" : "object",
+				"properties" : {
+					"Major"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"},
+					"Minor"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"},
+					"Patch"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"}
+				},
+				"required"				: ["Major", "Minor"]
+			},
+
+			"Profile" : {
+				"type" : "object",
+				"properties" : {
+					"Type"				: {"$ref" : "#/definitions/Profile/Type"},
+					"Purpose"			: {"$ref" : "#/definitions/Profile/Purpose"},
+					"Tags"			    : {"$ref" : "#/definitions/Profile/Tags"},
+					"Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Version"			: {"$ref" : "#/definitions/Profile/Version"}
+				},
+				"required"				: ["Type", "Purpose", "Title", "Description", "Version"]
+			}
+		},
+
+		"Entity" : {
+			"USI" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "USI"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+	            	"ProductName"		: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+	        	"required"				: ["USI", "ProductName"]
+			},
+
+			"ABN" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "ABN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+	            	"MainName"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+        		"required"				: ["ABN", "MainName"]
+			},
+
+			"Entity" : {
+
+	        	"oneOf" : [
+	   	       		{"$ref" : "#/definitions/Entity/USI"},
+		       		{"$ref" : "#/definitions/Entity/ABN"}
+	       	    ]
+			}
+		},
+
+		"Fund" : {
+			"Fund" : {
+				"type" : "object",
+				"properties" : {
+	        	    "ABN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+	            	"MainName"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["ABN", "MainName"]
+			}
+		},
+
+		"FundAdministration" : {
+			"Contact" : {
+				"type" : "object",
+				"properties" : {
+					"FamilyName"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"GivenName"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"OtherGivenName"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["FamilyName", "GivenName"]
+			},
+
+			"Email"						: {"$ref" : "#/definitions/Types/Email"},
+
+			"Telephone" : {
+				"type": "object",
+				"properties" : {
+					"ServiceLine"		: {"enum" : ["01", "02"]},
+					"AreaCode"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Number"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["ServiceLine", "Number"]
+			},
+
+			"Account" : {
+				"type" : "object",
+				"properties" : {
+					"BSB"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Number"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"AccountName"		: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["BSB", "Number", "AccountName"]
+			},
+
+			"PaymentMethods" : {
+				"type" : "array",
+				"items"					: {"enum": ["DirectCredit", "Bpay"]},
+				"minItems" : 1
+			},
+
+			"Payment" : {
+                "type" : "object",
+                "properties" : {
+                    "Methods"			: {"$ref" : "#/definitions/FundAdministration/PaymentMethods"},
+                    "BPAYBiller"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Account"			: {"$ref" : "#/definitions/FundAdministration/Account"}
                 },
-                "Title": { "type": "string"},            
-                "Description": { "type": "string"},
-                "Version": {
-                    "type": "object",
-                    "properties": {
-                        "Major" : { 
-                            "type" : "integer",
-                            "minimum" : 0
-                        },
-                        "Minor" : { 
-                            "type" : "integer",
-                            "minimum" : 0
-                        },
-                           "Patch" : { 
-                            "type" : "integer",
-                            "minimum" : 0
-                        }
-                    },
-                    "required" : ["Major", "Minor"]
-                }
+                "required"				: ["Methods"]
             },
-            "required" : ["Type", "Purpose", "Title", "Description", "Version"]           
-        },
 
-        "Entity" : {
-            "type" : "object", 
-            "properties":{
-                "ABN": { "type": "string"},
-                "MainName": { "type": "string"}
-            },            
-            "required" : ["ABN", "MainName"]            
-        },
+            "Behaviours" : {
+                "type" : "object",
+                "properties" : {
+                    "ErrorReporting"	: {"enum": ["Partial", "Progressive"]},
+					"MultipartResponse"	: {"$ref" : "#/definitions/Types/Boolean"},
+                    "NumberOfResponse"  : {"$ref" : "#/definitions/Types/NonNegativeAndZeroInteger"},
+                    "GenerateDataMismatchWarnings" : {"$ref" : "#/definitions/Types/Boolean"}
+		        },
+                "required"				: ["ErrorReporting"]
+            },
 
-        "Fund" : {
-            "type" : "object", 
-            "properties":{
-                "ABN": { "type": "string"},
-                "MainName": { "type": "string"}
-            },            
-            "required" : ["ABN", "MainName"]
-        },
+            "FundAdministration" : {
+				"type" : "object",
+				"properties" : {
+					"ABN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"MainName"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Contact"			: {"$ref" : "#/definitions/FundAdministration/Contact"},
+					"Email"				: {"$ref" : "#/definitions/FundAdministration/Email"},
+					"Telephone"			: {"$ref" : "#/definitions/FundAdministration/Telephone"},
+					"Payment"			: {"$ref" : "#/definitions/FundAdministration/Payment"},
+					"Behaviours"		: {"$ref" : "#/definitions/FundAdministration/Behaviours"}
+				},
+				"required"				: ["ABN", "MainName", "Contact", "Email", "Telephone", "Payment", "Behaviours"]
+			}
+		},
 
-        "FundAdministration" : {
-            "type" : "object", 
-            "properties":{
-                "ABN": { "type": "string"},
-                "MainName": { "type": "string"},
-                "Contact" : {
-                    "type" : "object",
-                    "properties" : {
-                        "FamilyName": {"type": "string"},
-                        "GivenName": {"type": "string"},
-                        "OtherGivenName": {"type": "string"}
-                    },
-                    "required" : ["FamilyName", "GivenName"]
+		"Members" : {
+            "Name" : {
+                "type" : "object",
+                "properties" : {
+                    "Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "NameSuffix"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "FamilyName"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "GivenName"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "OtherGivenName"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
                 },
-                "Email" :{ 
-                    "type": "string",
-                      "format" : "email" 
-                },
-                "Telephone" : {
-                    "type": "object",
-                    "properties":{
-                        "ServiceLine" : {
-                             "enum": ["01", "02"]
-                        },
-                        "AreaCode" : {"type": "string"},
-                        "Number" : {"type": "string"}
-                    },
-                    "required" : ["ServiceLine", "Number"]
-                },
-                "Account" : {
-                       "properties":{
-                        "BSB": { "type": "string"},
-                        "Number": { "type": "string"},
-                        "AccountName": { "type": "string"}
-                    },
-                    "required" : ["BSB", "Number", "AccountName"]          
-                },
-                "Behaviours" : {
-                    "type" : "object", 
-                    "properties":{
-                        "ErrorReporting" : {
-                            "enum": ["Partial", "Progressive"],
-                            "default": "Partial" 
-                        }
-                    },             
-                    "required" : ["ErrorReporting"]
-                }
+                "required"				: ["FamilyName", "GivenName"]
+            },
 
-            },    
-            "required" : ["ABN", "MainName", "Contact", "Email", "Telephone", "Account", "Behaviours"]
-        },
-
-        "Members": {
-            "type": "array",
-            "items": {
+            "Address": {
                 "type": "object",
-                "properties":{
-                    "MemberID" : {"type": "string"},    
-                    "Name" : {
-                        "type" : "object",
-                        "properties" : {
-                            "Title" : {"type": "string"},
-                            "NameSuffix": {"type": "string"},
-                            "FamilyName": {"type": "string"},
-                            "GivenName": {"type": "string"},
-                            "OtherGivenName": {"type": "string"}
-                        },
-                        "required" : ["FamilyName", "GivenName"]
-                    },
-                    "Sex": {"type": "string"},
-                    "Birthdate": {"type": "string"},
-                    "Address": {
-                        "type": "object",
-                        "properties":{
-                            "Usage": {
-                                "enum": ["RES", "POS"]
-                            },
-                            "Line1" : {"type": "string"},
-                            "Line2" : {"type": "string"},
-                            "Line3" : {"type": "string"},
-                            "Line4" : {"type": "string"},
-                            "Locality": {"type": "string"},
-                            "PostCode": {"type": "string"},
-                            "StateOrTerritory": {"type": "string"},
-                            "Country": {"type": "string"}
-                        },
-                        "required" : ["Usage", "Line1", "Locality", "Country"]
-                    },
-                    "Email" :{ 
-                        "type": "string",
-                        "format": "email" 
-                    },
-                    "Telephone" : {
-                        "type": "object",
-                        "properties":{
-                            "ServiceLine" : {
-                                "enum": ["01", "02"]
-                            },
-                            "AreaCode" : {"type": "string"},
-                            "Number" : {"type": "string"}
-                        },
-                        "required" : ["ServiceLine", "Number"]
-                    },
-                    "TFN" : {"type": "string"},
-                    "TFNNotProvided" : {
-                        "type": "boolean",
-                        "default": "false" 
-                    }
+                "properties" : {
+                    "Usage"				: {"enum": ["RES", "POS"]},
+                    "Line1"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Line2"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Line3"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Line4"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Locality"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "PostCode"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "StateOrTerritory"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Country"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
                 },
-                "required" : ["MemberID", "Name", "Sex", "Birthdate", "Address", "Email", "Telephone"]
+                "required"				: ["Usage", "Line1", "Locality", "Country"]
             },
-            "minItems" : 1
-        },
 
-        "Behaviours" : {
-            "type" : "object", 
-            "properties":{
-                "RegistrationMandatoryOverrides" : {
-                    "type": "array",
-                    "items": {"type" : "string"},
-                    "minItems" : 1    
-                },    
-                "RegistrationMandatoryOtherDetails" : {
-                    "type": "array",
-                    "items": {
-                        "type" : "object",
-                        "properties" : {
-                            "Name" : {"type" : "string"},
-                            "Startdate" : {
-                                "type": "boolean",
-                                "default": false                                
-                            },
-                            "Enddate" : {
-                                "type": "boolean",
-                                "default": false                                
-                            }
-                        },
-                        "required" : ["Name"]
-                    },
-                    "minItems" : 1    
-                },    
-                "ContributionMandatoryOtherAmounts" : {
-                    "type": "array",
-                    "items": {"type" : "string"},
-                    "minItems" : 1    
-                },    
+            "Email"						: {"$ref" : "#/definitions/Types/Email"},
 
-                "ContributionMandatoryOtherDetails" : {
-                    "type": "array",
-                    "items": {"type" : "string"},
-                    "minItems" : 1    
-                }
-             }             
-        }
-    },
+			"Telephone" : {
+				"type": "object",
+				"properties" : {
+					"ServiceLine"		: {"enum" : ["01", "02"]},
+					"AreaCode"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Number"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["ServiceLine", "Number"]
+			},
 
-    "required": ["Profile", "Entity", "Fund", "FundAdministration", "Members"]    
+	        "Member" : {
+				"type" : "object",
+				"properties" : {
+					"MemberID"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Name"				: {"$ref" : "#/definitions/Members/Name"},
+					"Sex"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"BirthDate"			: {"$ref" : "#/definitions/Types/Date"},
+					"Address"			: {"$ref" : "#/definitions/Members/Address"},
+					"Email"				: {"$ref" : "#/definitions/Members/Email"},
+					"Telephone"			: {"$ref" : "#/definitions/Members/Telephone"},
+					"Telephone2"		: {"$ref" : "#/definitions/Members/Telephone"},
+                    "TFN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "TFNNotProvided"	: {"$ref" : "#/definitions/Types/Boolean"},
+                    "CommencementDate" : {"$ref" : "#/definitions/Types/Date"},
+                    "CeaseDate" : {"$ref" : "#/definitions/Types/Date"},
+                    "EmploymentStartDate": {"$ref" : "#/definitions/Types/Date"},
+                    "AtWorkIndicator" : {"$ref" : "#/definitions/Types/Boolean"},
+                    "BenefitsSalary" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "ContributionsSalary": {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "ContributionsSalaryEffectiveStartDate": {"$ref" : "#/definitions/Types/Date"},
+                    "InsuranceSalary" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "WeeklyHoursWorked" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Occupation" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "EmploymentStatusCode": {"enum": ["Casual", "Contractor", "Full time", "Part time"]}
+				},
+	        	"required"				: ["Name", "Sex", "BirthDate", "Address", "TFNNotProvided"]
+			},
+
+            "Members": {
+	            "type" : "array",
+	            "items"					: {"$ref" : "#/definitions/Members/Member"},
+	            "minItems" : 1
+	        }
+		},
+
+		"Behaviours" : {
+            "RegistrationMandatoryOverrides" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                "minItems" : 1
+            },
+
+            "RegistrationMandatoryOtherDetailsItem": {
+            	"type" : "object",
+            	"properties" : {
+            		"Name"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"Startdate" 		: {"$ref" : "#/definitions/Types/BooleanDefaultFalse"},
+            		"Enddate" 			: {"$ref" : "#/definitions/Types/BooleanDefaultFalse"}
+            	},
+            	"required"				: ["Name"]
+            },
+
+            "RegistrationMandatoryOtherDetails" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Behaviours/RegistrationMandatoryOtherDetailsItem"},
+                "minItems" : 1
+            },
+
+            "ContributionMandatoryOtherAmounts" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                "minItems" : 1
+            },
+
+            "ContributionMandatoryOtherDetails" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                "minItems" : 1
+            },
+
+            "Behaviours" : {
+				"type" : "object",
+				"properties" : {
+					"RegistrationMandatoryOverrides"	: {"$ref" : "#/definitions/Behaviours/RegistrationMandatoryOverrides"},
+					"RegistrationMandatoryOtherDetails"	: {"$ref" : "#/definitions/Behaviours/RegistrationMandatoryOtherDetails"},
+					"ContributionMandatoryOtherAmounts"	: {"$ref" : "#/definitions/Behaviours/ContributionMandatoryOtherAmounts"},
+					"ContributionMandatoryOtherDetails"	: {"$ref" : "#/definitions/Behaviours/ContributionMandatoryOtherDetails"}
+				}
+			}
+		},
+
+		"CustomProfilesGeneration" : {
+
+            "SourceProfilesValues" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                "minItems" : 1
+            },
+
+            "SourceProfiles": {
+            	"type" : "object",
+            	"properties" : {
+            		"IdentifierPath"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"Values"		 	: {"$ref" : "#/definitions/CustomProfilesGeneration/SourceProfilesValues"}
+            	},
+            	"required"				: ["IdentifierPath", "Values"]
+            },
+
+			"ValueRule" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "Type"				: {"enum" : ["Value"]},
+	            	"OriginalValue"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+	            	"ReplacementPath"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+        		"required"				: ["Type", "OriginalValue", "ReplacementPath"]
+			},
+
+			"ReferenceRule" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "Type"				: {"enum" : ["Reference"]}
+				},
+        		"required"				: ["Type"]
+			},
+
+			"Rule" : {
+
+	        	"oneOf" : [
+	   	       		{"$ref" : "#/definitions/CustomProfilesGeneration/ValueRule"},
+		       		{"$ref" : "#/definitions/CustomProfilesGeneration/ReferenceRule"}
+	       	    ]
+			},
+
+			"Rules" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/CustomProfilesGeneration/Rule"},
+                "minItems" : 1
+            },
+
+            "CustomProfilesSet": {
+            	"type" : "object",
+            	"properties" : {
+            		"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"SourceProfiles" 	: {"$ref" : "#/definitions/CustomProfilesGeneration/SourceProfiles"},
+            		"Rules" 			: {"$ref" : "#/definitions/CustomProfilesGeneration/Rules"}
+            	},
+            	"required"				: ["Description", "SourceProfiles"]
+            },
+
+            "CustomProfilesGeneration" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/CustomProfilesGeneration/CustomProfilesSet"},
+                "minItems" : 1
+            }
+		}
+    }
 }
