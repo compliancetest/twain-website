@@ -99,18 +99,30 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>44928361101:88765432:001</td>
-                <td><a href="#">Contributions v1.2</a></td>
-                <td>Bluescope Steel</td>
-                <td class="centered">B</td>
-                <td class="centered">Employer</td>
-                <td class="centered"><span class="status-unverified">In Progress</span></td>
-                <td class="centered">2014-11-12</td>
-                <td class="centered row-actions">
-                    <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
-                </td>
-            </tr>
+                <?php
+                    $agreements_model = new Agreement();
+                    $successfull_agreements = $agreements_model->get_service_agreements( $service->id, 'Verified' );
+                ?>
+                <?php if( $successfull_agreements ):?>
+                    <?php foreach( $successfull_agreements AS $agreement ):?>
+                        <tr>
+                            <td><?php echo $agreement->str_id;?></td>
+                            <td><a href="<?php echo $agreement->entry_status == 'Responder' ? get_permalink( $agreement->requester_service->id ) : get_permalink( $agreement->responder_service->id ) ;?>"><?php echo $agreement->entry_status == 'Requester' ? get_the_title( $agreement->requester_service->id ) : get_the_title( $agreement->responder_service->id ) ;?></a></td>
+                            <td><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner  ;?></td>
+                            <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_levels ) : implode( ', ', $agreement->responder_service->service_levels )  ;?></td>
+                            <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_roles ) : implode( ', ', $agreement->responder_service->service_roles )  ;?></td>
+                            <td class="centered">Sucess</td>
+                            <td class="centered"><?php echo formatDate( $agreement->claim_date );?></td>
+                            <td class="centered row-actions">
+                                <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                <?php else:?>
+                    <tr>
+                        <td colspan="8" class="centered">No data</td>
+                    </tr>
+                <?php endif;?>
             </tbody>
         </table>
     </div>
@@ -130,10 +142,11 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <div class="field-row">
                                 <label>Agreement ID:</label>
                                 <div class="field-box">
-                                    <input type="text" value="" id="agreement_id" class="input input-field" disabled="disabled" data-serviceid="<?php echo $service->service_id;?>">
+                                    <input type="text" value="" id="agreement_id" name="agreement_id" class="input input-field" data-serviceid="<?php echo $service->service_id;?>">
                                     <span class="info-icon has-tooltip" title="Some info"></span>
                                 </div>
                             </div>
+                            <input type="hidden" name="responder_service" value="<?php echo $service->id;?>">
                             <div class="field-row">
                                 <label>My Service:</label>
                                 <div class="field-box">
@@ -148,7 +161,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                                                     continue;
                                                 }
                                                 ?>
-                                                <option value="<?php echo $s->service_id;?>"><?php echo $s->service_name;?></option>
+                                                <option value="<?php echo $s->id;?>" data-serviceid="<?php echo $s->service_id;?>"><?php echo $s->service_name;?></option>
                                             <?php endforeach;?>
                                         <?php endif;?>
                                     </select>
@@ -170,9 +183,10 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <div class="field-row">
                                 <label>Message:</label>
                                 <div class="field-box">
-                                    <textarea name="" id="" cols="30" rows="10" class="textarea input-field"></textarea>
+                                    <textarea name="agreement_message" id="agreement_message" cols="30" rows="10" class="textarea input-field"></textarea>
                                 </div>
                             </div>
+                        <?php echo wp_nonce_field( 'save-agreement', '_psnonce');?>
                         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
                     <?php else:?>
                         In order to request an end-to-end test agreement, you must have already defined a complementary service. A complementary service is one that has been tested against the same test suite, to at least the same conformance level, and with a complementary (ie opposite) role.
@@ -180,9 +194,9 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">
-            <div class="loading loading-with-text radius6"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
+            <div class="loading loading-with-text radius6 loading_agreement"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
             <?php if( $can_request ):?>
-                <a href="#" class="action-btn process-btn submit-btn right"><span class="p"></span><span class="t">Confirm</span></a>
+                <a href="#" class="action-btn process-btn submit-btn right submit_agreement"><span class="p"></span><span class="t">Confirm</span></a>
             <?php endif;?>
             <a href="#" class="action-btn cancel-btn right" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
@@ -194,7 +208,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
     jQuery(document).ready(function($){
         $('#requester_service').on('change', function(){
             if( $('#requester_service').val() ){
-                $('#agreement_id').val( $('#agreement_id').data( 'serviceid') + '.' + $('#requester_service').val() );
+                $('#agreement_id').val( $('#agreement_id').data( 'serviceid') + '.' + $('option:selected', this).attr('data-serviceid') );
             } else{
                 $('#agreement_id').val( '' );
             }
@@ -207,6 +221,20 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                     jQuery(this).css({'top': tooltipTop, 'margin-left': tooltipLeft});
                 });
             }
+        });
+        jQuery('.submit_agreement').click(function(){
+            var is_valid = true;
+            jQuery('.case_exclude_reason').removeClass('input-error');
+            if( ! jQuery('#requester_service').val() ){
+                jQuery('#requester_service').addClass('select-error');
+                return false;
+            }
+            if( ! jQuery('#agreement_message').val() ){
+                jQuery('#agreement_message').addClass('select-error');
+                return false;
+            }
+            jQuery('.loading_agreement').show();
+            jQuery('#generate_agreement_form').submit();
         });
     });
 </script>
