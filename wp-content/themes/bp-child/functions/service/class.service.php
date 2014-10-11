@@ -96,10 +96,23 @@ class Service
      *
      */
     public static function can_request_e2e( $user_id, $service_id ){
-
+        if( count( $services = Service::get_user_services( $user_id, $service_id ) ) > 0 ){
+            $service = new Service( $service_id );
+            $service->load();
+            $can_request = false;
+            foreach( $services AS $s ){
+                $tem_service = new Service( $s->ID );
+                $tem_service->load();
+                if( $tem_service->service_roles != $service->service_roles ){
+                    $can_request  = true;
+                }
+            }
+            return $can_request;
+        }
+        return false;
     }
 
-    public static function get_user_services( $user_id = false ){
+    public static function get_user_services( $user_id = false, $exclude_service = false ){
         if( ! is_user_logged_in() && ! $user_id ){
             return false;
         }
@@ -110,6 +123,9 @@ class Service
             'posts_per_page' => -1,
             'tax_query' => array('relation' => 'and'),
         );
+        if( $exclude_service ){
+            $args['post__not_in'] = array( $exclude_service );
+        }
         $args['meta_query'][] = array('key' => 'service_user_id', 'value' => $user_id, 'compare' => '=');
 
         return get_posts( $args );

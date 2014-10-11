@@ -19,7 +19,9 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                     <?php if(can_edit_product_and_service(get_the_ID())){ ?>
                         <a href="/edit-service?id=<?php echo $service->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                     <?php } ?>
-                    <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
+                    <?php if( $service->service_user_id != get_current_user_id() ):?>
+                        <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
+                    <?php endif;?>
                     <a href="<?php echo addPrintParams(get_permalink(), 'service')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">Print</span></a>
                 </div>
             </div>
@@ -116,66 +118,77 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
 
 <div id="e2e-test-request" class="popup-box e2e-test-request-popup" style="display: none; width: 329px;">
     <div class="popup-box-header radius6 noradiusbottom">End-to-End Test Request</div>
-    <div class="popup-box-content">
-        <div class="form-horizontal">
-            <?php
-                $requester_services = Service::get_user_services();
-                $requester_profiles = getCustomerProfileInstances();
-            ?>
-            <div class="field-row">
-                <label>Agreement ID:</label>
-                <div class="field-box">
-                    <input type="text" value="" id="agreement_id" class="input input-field" disabled="disabled" data-serviceid="<?php echo $service->service_id;?>">
-                    <span class="info-icon has-tooltip" title="Some info"></span>
+    <form name="generate_agreement_form" id="generate_agreement_form" action="">
+        <div class="popup-box-content">
+            <?php $can_request = Service::can_request_e2e( get_current_user_id(), $service->id );?>
+                <div class="form-horizontal">
+                    <?php if( $can_request ):?>
+                            <?php
+                                $requester_services = Service::get_user_services( get_current_user_id(), $service->id);
+                                $requester_profiles = getCustomerProfileInstances();
+                            ?>
+                            <div class="field-row">
+                                <label>Agreement ID:</label>
+                                <div class="field-box">
+                                    <input type="text" value="" id="agreement_id" class="input input-field" disabled="disabled" data-serviceid="<?php echo $service->service_id;?>">
+                                    <span class="info-icon has-tooltip" title="Some info"></span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <label>My Service:</label>
+                                <div class="field-box">
+                                    <select name="requester_service" id="requester_service" class="select input-field">
+                                        <option></option>
+                                        <?php if( $requester_services ):?>
+                                            <?php foreach( $requester_services AS $serv ):?>
+                                                <?php
+                                                    $s = new Service( $serv->ID );
+                                                    $s->load();
+                                                if( $s->service_id == $service->service_id ){
+                                                    continue;
+                                                }
+                                                ?>
+                                                <option value="<?php echo $s->service_id;?>"><?php echo $s->service_name;?></option>
+                                            <?php endforeach;?>
+                                        <?php endif;?>
+                                    </select>
+                                    <span class="info-icon has-tooltip" title="Some info"></span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <label>My Profile:</label>
+                                <div class="field-box">
+                                    <select name="requester_profiles" id="requester_profiles" class="select input-field">
+                                        <option></option>
+                                        <?php foreach( $requester_profiles AS $requester_profile ):?>
+                                            <option value="<?php echo $requester_profile->id;?>"><?php echo $requester_profile->profile_name;?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                    <span class="info-icon has-tooltip" title="Some info"></span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <label>Message:</label>
+                                <div class="field-box">
+                                    <textarea name="" id="" cols="30" rows="10" class="textarea input-field"></textarea>
+                                </div>
+                            </div>
+                        <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
+                    <?php else:?>
+                        In order to request an end-to-end test agreement, you must have already defined a complementary service. A complementary service is one that has been tested against the same test suite, to at least the same conformance level, and with a complementary (ie opposite) role.
+                    <?php endif;?>
                 </div>
-            </div>
-            <div class="field-row">
-                <label>My Service:</label>
-                <div class="field-box">
-                    <select name="requester_service" id="requester_service" class="select input-field">
-                        <option></option>
-                        <?php if( $requester_services ):?>
-                            <?php foreach( $requester_services AS $serv ):?>
-                                <?php
-                                    $s = new Service( $serv->ID );
-                                    $s->load();
-                                if( $s->service_id == $service->service_id ){
-                                    continue;
-                                }
-                                ?>
-                                <option value="<?php echo $s->id;?>"><?php echo $s->service_name;?></option>
-                            <?php endforeach;?>
-                        <?php endif;?>
-                    </select>
-                    <span class="info-icon has-tooltip" title="Some info"></span>
-                </div>
-            </div>
-            <div class="field-row">
-                <label>My Profile:</label>
-                <div class="field-box">
-                    <select name="requester_profiles" id="requester_profiles" class="select input-field">
-                        <option></option>
-                        <?php foreach( $requester_profiles AS $requester_profile ):?>
-                            <option value="<?php echo $requester_profiles[0]->id;?>"><?php echo $requester_profiles[0]->profile_name;?></option>
-                        <?php endforeach;?>
-                    </select>
-                    <span class="info-icon has-tooltip" title="Some info"></span>
-                </div>
-            </div>
-            <div class="field-row">
-                <label>Message:</label>
-                <div class="field-box">
-                    <textarea name="" id="" cols="30" rows="10" class="textarea input-field"></textarea>
-                </div>
-            </div>
         </div>
-    </div>
-    <div class="popup-box-footer radius6 noradiustop">
-        <a href="#" class="action-btn process-btn submit-btn" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
-        <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
-        <div class="clear"></div>
-    </div>
-    <a class="close_btn"></a>
+        <div class="popup-box-footer radius6 noradiustop">
+            <div class="loading loading-with-text radius6"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
+            <?php if( $can_request ):?>
+                <a href="#" class="action-btn process-btn submit-btn right"><span class="p"></span><span class="t">Confirm</span></a>
+            <?php endif;?>
+            <a href="#" class="action-btn cancel-btn right" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
+    </form>
 </div>
 <script>
     jQuery(document).ready(function($){
