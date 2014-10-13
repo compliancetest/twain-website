@@ -96,7 +96,13 @@ get_header();
                                        <?php foreach( $service_agreements AS $agreement ):?>
                                            <div class="tr clearfix">
                                                <div class="td td-agreement-id"><a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('get-agreement-info-popup')?>&id=<?php echo $agreement->id?>" cp-type="ajax" rel="custom-popup">
-                                                       <?php echo $agreement->str_id;?></a>
+                                                       <?php if (strlen( $agreement->str_id ) > 16 ): ?>
+                                                           <div class="has-tooltip" title="<?php echo $agreement->str_id; ?>">
+                                                               <?php echo substr($agreement->str_id,0,16)."..."; ?>
+                                                           </div>
+                                                       <?php else: ?>
+                                                            <?php echo $agreement->str_id;?></a>
+                                                       <?php endif; ?>
                                                </div>
                                                <div class="td td-entity-name">
                                                    <?php if( $agreement->entry_status == 'Responder' ):?>

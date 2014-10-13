@@ -284,7 +284,7 @@ function get_agreement_info_popup(){
     </div>
     </div>
     <div class="tab-content agreements-message-log" id="tab_message_log_<?php echo $agreement->id;?>" style="display: none;">
-        <div class="agreements-message-log-list" style="height: 450px;">
+        <div class="agreements-message-log-list" style="height: 350px;">
             <ul>
                 <li class="employer">
                     <div class="author-name"><?php echo $pJSON->Profile->Type;?></div>
