@@ -376,11 +376,7 @@ get_header();
 
         $('rel[custom-popup]').cplightbox({});
 
-        $('.tab-nav a').click(function(){
-            $('.agreements-message-log-list').jScrollPane({
-                autoReinitialise: true
-            });
-        });
+
 
 
         $('#delete-service-box .process-btn').click(function(){

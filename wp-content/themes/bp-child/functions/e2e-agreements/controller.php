@@ -312,6 +312,53 @@ function get_agreement_info_popup(){
     </div>
     <a class="close_btn"></a>
     </div>
+    <script>
+        jQuery( document).ready( function($){
+            jQuery('.tabs-contr .tab-nav a').click(function(){
+                if($(this).parent().hasClass('active'))
+                    return false;
+                var rid = jQuery(this).attr('rel');
+                jQuery('.tabs-contr > .tab-content:visible').hide();
+                jQuery('.tabs-contr .tab-nav .active').removeClass('active');
+                $(this).parent().addClass('active');
+                $('#' + rid).show();
+                return false;
+            })
+            $('.tab-nav a').click(function(){
+                $('.agreements-message-log-list').jScrollPane({
+                    autoReinitialise: true
+                });
+            });
+            jQuery('.view-profile-instance-link').cplightbox({
+                type: 'ajax',
+                onLoad: function()
+                {
+                    jQuery('.popup-box:visible .zcliplink').each(function(){
+                        if(!jQuery(this).data('zclipId'))
+                        {
+                            jQuery('.popup-box:visible .zcliplink').zclip({
+                                path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
+                                copy: function(){
+                                    return jQuery('#' + jQuery(this).attr('data-id')).val();
+                                },
+                                afterCopy: function(){
+                                    jQuery('.popup-box:visible .zclipsucces-msg').fadeIn();
+                                    if(zclipTimer != null)
+                                    {
+                                        clearTimeout(zclipTimer);
+                                    }
+                                    zclipTimer = setTimeout(function(){
+                                        jQuery('.popup-box:visible .zclipsucces-msg').fadeOut('fast');
+                                    }, 2000);
+                                }
+                            })
+                        }
+                    })
+
+                }
+            })
+        })
+    </script>
 <?php
     exit;
 }
