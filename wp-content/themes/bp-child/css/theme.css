@@ -4737,27 +4737,27 @@ span.button_sign {
     color: #104484;
 }
 
-#agreement-details-popup .popup-box-content{
+.agreement-details-popup .popup-box-content{
     padding-left: 0;
     padding-right: 0;
     border: 0;
 }
 
-#agreement-details-popup .tab-nav{
+.agreement-details-popup .tab-nav{
     padding: 0 20px 0 20px;
     height: 35px;
 }
 
-#agreement-details-popup .tab-nav li a{
+.agreement-details-popup .tab-nav li a{
     font-size: 13px;
     line-height: 35px;
     font-weight: 400;
 }
-#agreement-details-popup .tab-nav .active a{
+.agreement-details-popup .tab-nav .active a{
     font-weight: 700;
 }
 
-#agreement-details-popup .tab-content{
+.agreement-details-popup .tab-content{
     padding: 15px 20px;
     border-bottom: 0;
 }
@@ -4827,7 +4827,7 @@ span.button_sign {
     text-decoration: none;
 }
 
-#agreement-details-popup #tab_message_log{
+.agreement-details-popup .agreements-message-log{
     padding-right: 6px;
 }
 

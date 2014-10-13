@@ -313,19 +313,19 @@ get_header();
                                                    <?php endif;?>
                                                </div>
                                            </div>
-                                           <div class="popup-box" id="agreement-details-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
+                                           <div class="popup-box agreement-details-popup" id="agreement-details-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                <div class="popup-box-header radius6 noradiusbottom">Agreement</div>
                                                <div class="popup-box-content">
                                                    <div class="tabs-contr">
                                                        <ul class="tab-nav">
                                                            <li class="active">
-                                                               <a href="javascript: void(0)" rel="tab_general_information">General Information</a>
+                                                               <a href="javascript: void(0)" rel="tab_general_information_<?php echo $agreement->id;?>">General Information</a>
                                                            </li>
                                                            <li>
-                                                               <a href="javascript: void(0)" rel="tab_message_log">Message Log</a>
+                                                               <a href="javascript: void(0)" rel="tab_message_log_<?php echo $agreement->id;?>">Message Log</a>
                                                            </li>
                                                        </ul>
-                                                       <div class="tab-content agreement-general-info" id="tab_general_information" style="display: block;">
+                                                       <div class="tab-content agreement-general-info" id="tab_general_information_<?php echo $agreement->id;?>" style="display: block;">
                                                            <dl class="common-info">
                                                                <dt>Status:</dt>
                                                                <dd><strong class="status-<?php echo strtolower( $agreement->status );?>"><?php echo $agreement->status;?></strong></dd>
@@ -379,7 +379,7 @@ get_header();
                                                                </dl>
                                                            </div>
                                                        </div>
-                                                       <div class="tab-content agreements-message-log" id="tab_message_log" style="display: none;">
+                                                       <div class="tab-content agreements-message-log" id="tab_message_log_<?php echo $agreement->id;?>" style="display: none;">
                                                            <div class="agreements-message-log-list" style="height: 450px;">
                                                                <ul>
                                                                    <li class="employer">
