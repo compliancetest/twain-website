@@ -212,15 +212,12 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
         $org_id = null;
     
     if (is_super_admin()) {
-        $query = "SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
-                  WHERE 1
-                                 ";
+        $query = "SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
+                  WHERE 1 ";
     } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT( s.id ), os.nickname, s.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
-                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+        $query = $wpdb->prepare("SELECT DISTINCT( os.id ), os.nickname, os.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}organisations_subscriptions AS os
                 WHERE 
-                    s.user_id = bm.user_id AND bm.is_confirmed=1 
+                    os.user_id = bm.user_id AND bm.is_confirmed=1 
                     AND
                     (bm.user_id=%d OR bm.group_id 
                         IN 
@@ -231,8 +228,7 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
         //Getting User Membership
         $organisation = ct_get_user_organisation();
 
-        $query = $wpdb->prepare("SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id                                 
+        $query = $wpdb->prepare("SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
                                  WHERE os.organisation_id=%d ", 
                                  $organisation->id);
     }
