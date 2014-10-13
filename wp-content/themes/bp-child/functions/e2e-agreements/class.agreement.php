@@ -45,13 +45,15 @@ class Agreement
         global $wpdb;
         $insert_id = $wpdb->insert( $this->_table,
             array(
-                'str_id'               => $data['agreement_id'],
-                'requester_service_id' => $data['requester_service'],
-                'responder_service_id' => $data['responder_service'],
-                'requestor_profile'    => @$data['requester_profiles'],
-                'status'               => 'Pending'
+                'str_id'                 => $data['agreement_id'],
+                'requester_service_id'   => $data['requester_service'],
+                'responder_service_id'   => $data['responder_service'],
+                'requestor_profile'      => @$data['requester_profiles'],
+                'status'                 => 'Pending',
+                'requestor_message'      => $data['agreement_message'],
+                'requestor_message_date' => gmmktime()
             ),
-            array( '%s', '%d', '%d', '%d', '%s' )
+            array( '%s', '%d', '%d', '%d', '%s', '%s' )
         );
         if( $wpdb->last_error ){
             addMessage( $wpdb->last_error, 'error' );

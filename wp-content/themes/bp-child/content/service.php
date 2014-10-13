@@ -19,7 +19,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                     <?php if(can_edit_product_and_service(get_the_ID())){ ?>
                         <a href="/edit-service?id=<?php echo $service->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                     <?php } ?>
-                    <?php if( $service->service_user_id != get_current_user_id() ):?>
+                    <?php if( is_user_logged_in() && $service->service_user_id != get_current_user_id() ):?>
                         <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
                     <?php endif;?>
                     <a href="<?php echo addPrintParams(get_permalink(), 'service')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">Print</span></a>
@@ -47,7 +47,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                         <li>Role: <strong><?php echo implode( ', ', $service->service_roles );?></strong></li>
                         <li>Level: <strong><?php echo implode( ', ', $service->service_levels );?></strong></li>
                         <li>Protocol: <strong><?php echo $service->service_protocol ;?></strong></li>
-                        <li>End-Point: <strong><a href="<?php echo $service->service_endpoint;?>">Link</a></strong></li>
+                        <li>End-Point: <strong><?php echo $service->service_endpoint;?></strong></li>
                         <li>End-Point-Type: <strong><?php echo $service->service_endpoint_type;?></strong></li>
                     </ul>
                     <div class="product-description"><?php echo $service->service_description;?></div>
@@ -101,7 +101,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             <tbody>
                 <?php
                     $agreements_model = new Agreement();
-                    $successfull_agreements = $agreements_model->get_service_agreements( $service->id, 'Verified' );
+                    $successfull_agreements = $agreements_model->get_service_agreements( $service->id );
                 ?>
                 <?php if( $successfull_agreements ):?>
                     <?php foreach( $successfull_agreements AS $agreement ):?>
@@ -111,7 +111,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner  ;?></td>
                             <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_levels ) : implode( ', ', $agreement->responder_service->service_levels )  ;?></td>
                             <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_roles ) : implode( ', ', $agreement->responder_service->service_roles )  ;?></td>
-                            <td class="centered">Sucess</td>
+                            <td class="centered"><?php echo $agreement->status;?></td>
                             <td class="centered"><?php echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
                                 <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
@@ -196,9 +196,9 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
         <div class="popup-box-footer radius6 noradiustop">
             <div class="loading loading-with-text radius6 loading_agreement"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
             <?php if( $can_request ):?>
-                <a href="#" class="action-btn process-btn submit-btn right submit_agreement"><span class="p"></span><span class="t">Confirm</span></a>
+                <a href="#" class="action-btn process-btn submit-btn submit_agreement"><span class="p"></span><span class="t">Confirm</span></a>
             <?php endif;?>
-            <a href="#" class="action-btn cancel-btn right" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>

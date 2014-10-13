@@ -95,7 +95,9 @@ get_header();
                                    <?php else: ?>
                                        <?php foreach( $service_agreements AS $agreement ):?>
                                            <div class="tr clearfix">
-                                               <div class="td td-agreement-id"><a href="#agreement-details-popup" rel="custom-popup"><?php echo $agreement->str_id;?></a></div>
+                                               <div class="td td-agreement-id"><a href="#agreement-details-popup-<?php echo $agreement->id;?>" rel="custom-popup">
+                                                       <?php echo $agreement->str_id;?></a>
+                                               </div>
                                                <div class="td td-entity-name">
                                                    <?php if( $agreement->entry_status == 'Responder' ):?>
                                                         <a href="<?php echo get_permalink( $agreement->requester_service->id );?>"><?php echo get_the_title( $agreement->requester_service->id );?></a>
@@ -122,7 +124,48 @@ get_header();
                                                <div class="td td-actions">
                                                    <?php if( $agreement->status == 'Pending' ):?>
                                                         <?php if( $agreement->entry_status == 'Responder' ):?>
-                                                            <a href="?_psnonce=<?php echo wp_create_nonce('accept-agreement');?>&id=<?php echo $agreement->id;?>">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Reject</a>
+                                                            <a href="#e2e-test-request-<?php echo $agreement->id;?>" rel="custom-popup">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Reject</a>
+
+                                                           <div id="e2e-test-request-<?php echo $agreement->id;?>" class="popup-box e2e-test-request-popup" style="display: none; width: 329px;">
+                                                               <div class="popup-box-header radius6 noradiusbottom">End-to-End Test Request</div>
+                                                               <form name="generate_agreement_form" id="e2e-test-request-<?php echo $agreement->id;?>-form" action="/" method="get">
+                                                                   <div class="popup-box-content">
+                                                                       <div class="form-horizontal">
+                                                                               <?php
+                                                                                    $responder_profiles = getCustomerProfileInstances();
+                                                                               ?>
+                                                                               <input type="hidden" name="" value="<?php echo $service->id;?>">
+                                                                               <div class="field-row">
+                                                                                   <label>My Profile:</label>
+                                                                                   <div class="field-box">
+                                                                                       <select name="responder_profiles" class="responder_profiles select input-field">
+                                                                                           <option></option>
+                                                                                           <?php foreach( $responder_profiles AS $responder_profile ):?>
+                                                                                               <option value="<?php echo $responder_profile->id;?>"><?php echo $responder_profile->profile_name;?></option>
+                                                                                           <?php endforeach;?>
+                                                                                       </select>
+                                                                                       <span class="info-icon has-tooltip" title="Some info"></span>
+                                                                                   </div>
+                                                                               </div>
+                                                                               <div class="field-row">
+                                                                                   <label>Message:</label>
+                                                                                   <div class="field-box">
+                                                                                       <textarea name="agreement_message" rows="5" cols="20" class="agreement_message textarea"></textarea>
+                                                                                   </div>
+                                                                               </div>
+                                                                               <?php echo wp_nonce_field( 'accept-agreement', '_psnonce');?>
+                                                                               <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
+                                                                       </div>
+                                                                   </div>
+                                                                   <div class="popup-box-footer radius6 noradiustop">
+                                                                       <div class="loading loading-with-text radius6 loading_agreement_acept"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
+                                                                       <a href="#" class="action-btn process-btn submit-btn save_append_agreement" data-id="e2e-test-request-<?php echo $agreement->id;?>-form"><span class="p"></span><span class="t">Confirm</span></a>
+                                                                       <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+                                                                       <div class="clear"></div>
+                                                                   </div>
+                                                                   <a class="close_btn"></a>
+                                                               </form>
+                                                           </div>
 
                                                            <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                                <div class="popup-box-header radius6 noradiusbottom">Confirm Reject</div>
@@ -270,6 +313,100 @@ get_header();
                                                    <?php endif;?>
                                                </div>
                                            </div>
+                                           <div class="popup-box" id="agreement-details-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
+                                               <div class="popup-box-header radius6 noradiusbottom">Agreement</div>
+                                               <div class="popup-box-content">
+                                                   <div class="tabs-contr">
+                                                       <ul class="tab-nav">
+                                                           <li class="active">
+                                                               <a href="javascript: void(0)" rel="tab_general_information">General Information</a>
+                                                           </li>
+                                                           <li>
+                                                               <a href="javascript: void(0)" rel="tab_message_log">Message Log</a>
+                                                           </li>
+                                                       </ul>
+                                                       <div class="tab-content agreement-general-info" id="tab_general_information" style="display: block;">
+                                                           <dl class="common-info">
+                                                               <dt>Status:</dt>
+                                                               <dd><strong class="status-<?php echo strtolower( $agreement->status );?>"><?php echo $agreement->status;?></strong></dd>
+                                                               <?php if( $agreement->date ):?>
+                                                                   <dt>Date:</dt>
+                                                                   <dd><?php echo $agreement->claim_date;?></dd>
+                                                               <?php endif;?>
+                                                               <?php if( $agreement->date ):?>
+                                                                   <dt>Scope:</dt>
+                                                                   <dd><?php echo str_replace( ';;', ', ', $agreement->scope );?></dd>
+                                                               <?php endif;?>
+                                                           </dl>
+                                                           <div class="info-per-item clearfix">
+                                                               <dl>
+                                                                   <?php
+                                                                        $profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->requestor_profile ) );
+                                                                        $pJSON = json_decode(base64_decode($profile->content));
+                                                                   ?>
+                                                                   <dt class="item-title"><?php echo $pJSON->Profile->Type;?></dt>
+                                                                   <dt>Organisation</dt>
+                                                                   <dd><?php echo $agreement->requester_service->service_owner;?></dd>
+                                                                   <dt>User</dt>
+                                                                   <dd><?php echo get_userdata( $agreement->requester_service->service_user_id )->data->display_name;?></dd>
+                                                                   <dt>Service</dt>
+                                                                   <dd><?php echo get_the_title( $agreement->requester_service->id );?></dd>
+                                                                   <dt>Profile</dt>
+                                                                   <dd><a href="#"><?php echo $profile->profile_name;?></a></dd>
+                                                                   <?php if( $agreement->requestor_audit_log_name ):?>
+                                                                       <dt>Audit Log</dt>
+                                                                       <dd><a href="#"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
+                                                                   <?php endif;?>
+                                                               </dl>
+                                                               <dl>
+                                                                   <?php
+                                                                        $resp_profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->responder_profile ) );
+                                                                        $resp_pJSON = json_decode(base64_decode($resp_profile->content));
+                                                                   ?>
+                                                                   <dt class="item-title"><?php echo isset( $resp_pJSON->Profile->Type ) ? $resp_pJSON->Profile->Type : 'No data';?></dt>
+                                                                   <dt>Organisation</dt>
+                                                                   <dd><?php echo $agreement->responder_service->service_owner;?></dd>
+                                                                   <dt>User</dt>
+                                                                   <dd><?php echo get_userdata( $agreement->responder_service->service_user_id )->data->display_name;?></dd>
+                                                                   <dt>Service</dt>
+                                                                   <dd><?php echo get_the_title( $agreement->responder_service->id );?></dd>
+                                                                   <dt>Profile</dt>
+                                                                   <dd><a href="#"><?php echo $profile->profile_name;?></a></dd>
+                                                                   <?php if( $agreement->responder_audit_log_name ):?>
+                                                                       <dt>Audit Log</dt>
+                                                                       <dd><a href="#"><?php echo $agreement->responder_audit_log_name;?></a></dd>
+                                                                   <?php endif;?>
+                                                               </dl>
+                                                           </div>
+                                                       </div>
+                                                       <div class="tab-content agreements-message-log" id="tab_message_log" style="display: none;">
+                                                           <div class="agreements-message-log-list" style="height: 450px;">
+                                                               <ul>
+                                                                   <li class="employer">
+                                                                       <div class="author-name"><?php echo $pJSON->Profile->Type;?></div>
+                                                                       <div class="message-content">
+                                                                           <div class="message-body"><span class="message-box-arrow"></span><?php echo $agreement->requestor_message;?></div>
+                                                                           <div class="message-date"><?php echo formatDate( $agreement->requestor_message_date );?></div>
+                                                                       </div>
+                                                                   </li>
+                                                                   <li class="fund">
+                                                                       <div class="author-name"><?php echo $resp_pJSON->Profile->Type;?></div>
+                                                                       <div class="message-content">
+                                                                           <div class="message-body"><span class="message-box-arrow"></span><?php echo $agreement->responder_message;?></div>
+                                                                           <div class="message-date"><?php echo formatDate( $agreement->responder_message_date );?></div>
+                                                                       </div>
+                                                                   </li>
+                                                               </ul>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <div class="popup-box-footer radius6 noradiustop">
+                                                   <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+                                                   <div class="clear"></div>
+                                               </div>
+                                               <a class="close_btn"></a>
+                                           </div>
                                        <?php endforeach;?>
                                    <?php endif;?>
                                </div>
@@ -302,139 +439,24 @@ get_header();
         <a class="close_btn"></a>
     </div>
 
-    <div class="popup-box" id="agreement-details-popup" style="display: none; width: 500px">
-        <div class="popup-box-header radius6 noradiusbottom">Agreement Title</div>
-        <div class="popup-box-content">
-            <div class="tabs-contr">
-                <ul class="tab-nav">
-                    <li class="active">
-                        <a href="javascript: void(0)" rel="tab_general_information">General Information</a>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0)" rel="tab_message_log">Message Log</a>
-                    </li>
-                </ul>
-                <div class="tab-content agreement-general-info" id="tab_general_information" style="display: block;">
-                    <dl class="common-info">
-                        <dt>Status:</dt>
-                        <dd><strong class="status-verified">Verified</strong></dd>
-                        <dt>Date:</dt>
-                        <dd>14-Nov-2014</dd>
-                        <dt>Scope:</dt>
-                        <dd>Registration, Contribution</dd>
-                    </dl>
-                    <div class="info-per-item clearfix">
-                        <dl>
-                            <dt class="item-title">Employer</dt>
-                            <dt>Organisation</dt>
-                            <dd>MLC Funds</dd>
-                            <dt>User</dt>
-                            <dd>Bob Brown</dd>
-                            <dt>Service</dt>
-                            <dd>MLC Masterkey Super Service</dd>
-                            <dt>Profile</dt>
-                            <dd><a href="#">MLC Member Test Data</a></dd>
-                            <dt>Audit Log</dt>
-                            <dd><a href="#">ContributionLog.zip</a></dd>
-                        </dl>
-                        <dl>
-                            <dt class="item-title">Fund</dt>
-                            <dt>Organisation</dt>
-                            <dd>SAP</dd>
-                            <dt>User</dt>
-                            <dd>Mary Black</dd>
-                            <dt>Service</dt>
-                            <dd>BHP Payroll Service</dd>
-                            <dt>Profile</dt>
-                            <dd><a href="#">BHP Employess Test Data</a></dd>
-                            <dt>Audit Log</dt>
-                            <dd><a href="#">PayRollLog.zip</a></dd>
-                        </dl>
-                    </div>
-                </div>
-                <div class="tab-content agreements-message-log" id="tab_message_log" style="display: none;">
-                    <div class="agreements-message-log-list" style="height: 450px;">
-                        <ul>
-                            <li class="employer">
-                                <div class="author-name">Employer</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.</div>
-                                    <div class="message-date">29 Sep 214, 11:50 AM</div>
-                                </div>
-                            </li>
-                            <li class="fund">
-                                <div class="author-name">Fund</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet.</div>
-                                    <div class="message-date">29 Sep 2014: 09:55 AM</div>
-                                </div>
-                            </li>
-                            <li class="employer">
-                                <div class="author-name">Employer</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.</div>
-                                    <div class="message-date">28 Sep 2014, 04:32 PM</div>
-                                </div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.</div>
-                                    <div class="message-date">28 Sep 2014, 03:11 PM</div>
-                                </div>
-                            </li>
-                            <li class="fund">
-                                <div class="author-name">Fund</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet.</div>
-                                    <div class="message-date">29 Sep 2014: 09:55 AM</div>
-                                </div>
-                            </li>
-                            <li class="employer">
-                                <div class="author-name">Employer</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.</div>
-                                    <div class="message-date">29 Sep 214, 11:50 AM</div>
-                                </div>
-                            </li>
-                            <li class="fund">
-                                <div class="author-name">Fund</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet.</div>
-                                    <div class="message-date">29 Sep 2014: 09:55 AM</div>
-                                </div>
-                            </li>
-                            <li class="employer">
-                                <div class="author-name">Employer</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.</div>
-                                    <div class="message-date">28 Sep 2014, 04:32 PM</div>
-                                </div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.</div>
-                                    <div class="message-date">28 Sep 2014, 03:11 PM</div>
-                                </div>
-                            </li>
-                            <li class="fund">
-                                <div class="author-name">Fund</div>
-                                <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet.</div>
-                                    <div class="message-date">29 Sep 2014: 09:55 AM</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-            <div class="clear"></div>
-        </div>
-        <a class="close_btn"></a>
-    </div>
+
 
 </div> <!--end content-->
 <script type="text/javascript">
 (function($){
     $(document).ready(function(){
+
+        jQuery('.save_append_agreement').on( 'click', function(){
+            var is_valid = true;
+            var form_id = $(this).data('id');
+            if( ! jQuery( '#' + form_id + ' .agreement_message').val() ){
+                jQuery( '#' + form_id + ' .agreement_message').addClass('textarea-error');
+                return false;
+            }
+            jQuery('.loading_agreement_acept').show();
+            jQuery( '#' + form_id ).submit();
+        });
+
         $('.delete-product-link').each(function(){
             var link = $(this).attr('href');
             $(this).cplightbox({

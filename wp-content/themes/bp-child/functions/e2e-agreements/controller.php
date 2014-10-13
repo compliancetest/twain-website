@@ -9,11 +9,18 @@ function process_agreement_actions()
     }else if(wp_verify_nonce($action, 'delete-agreement')){
         deleteAgreement();
     } else if( wp_verify_nonce($action, 'accept-agreement' ) ) {
-        $agreement_id = intval($_REQUEST['id']);
+        $agreement_id = intval($_REQUEST['agreement_id']);
         $wpdb->update('wp_e2e_agreement',
-            array('status' => 'Testing'),
-            array('id' => $agreement_id),
-            array('%s'),
+            array(
+                'status'                 => 'Testing',
+                'responder_profile'      => $_REQUEST['responder_profiles'],
+                'responder_message'      => $_REQUEST['agreement_message'],
+                'responder_message_date' => gmmktime()
+            ),
+            array(
+                'id' => $agreement_id
+            ),
+            array( '%s', '%s', '%s' ),
             array('%d')
         );
         addMessage('Success');
