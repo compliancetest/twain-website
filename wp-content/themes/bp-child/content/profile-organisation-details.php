@@ -22,14 +22,22 @@ if(!defined('ABSPATH')) {
         <div class="grid-box-body">
             <form action="#" method="post">
                 <input type="hidden" name="organisation_id" value="<?php echo $organisation->id;?>">
-                <div class="grid-row">
-                    <div class="grid-cell width30P"><label>Organisation Name</label></div>
-                    <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input"><?php echo $organisation->organisation_name;?></div>
-                    <div class="clear"></div>
-                </div>
-                <div class="grid-row">
-                    <div class="grid-cell width30P"><label>Organisation Key</label></div>
-                    <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_key;?>" data-type="readonly" class="grid-cell in_input"><?php echo $organisation->organisation_key;?></div>
+                <div class="grid-row grid-row-complex">
+                    <div class="grid-cell width30P">
+                        <label>Organisation</label>
+                    </div>
+                    <div class="grid-cell width70P">
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Name</label></div>
+                            <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input"><?php echo $organisation->organisation_name;?></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell width30P"><label>Key</label></div>
+                            <div data-name="organisation_key" data-value="<?php echo $organisation->organisation_key;?>" data-type="skip" class="grid-cell in_input"><?php echo $organisation->organisation_key;?></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row grid-row-complex">

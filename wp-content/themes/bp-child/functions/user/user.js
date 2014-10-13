@@ -201,7 +201,7 @@
                 $(thisParentId+' .btn-row').fadeIn();
                  $(thisParentId).addClass('grid-box-editing');
                 //transform all divs in inputs
-                $(thisParentId+' .grid-cell.in_input').each(function(){
+                $(thisParentId+' .grid-cell.in_input').each(function(){                    
                    var thisTextVal = $(this).attr('data-value'); 
                    var thisNameVal = $(this).attr('data-name'); 
                    if($(this).attr('data-placeholder'))
@@ -262,8 +262,12 @@
              $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
             $(thisParentId+' .grid-cell.in_input').each(function(){
-               $(this).next().remove();
-               $(this).show();
+                if ($(this).attr('data-type') == 'skip') {
+                    $(this).parent().show();                    
+                } else {
+                    $(this).next().remove();                
+                    $(this).show();
+                }                
             });
             
             $(thisParentId).find('.grid-hidden-row').hide();
@@ -481,11 +485,15 @@
                  $(thisParentId).addClass('grid-box-editing');
                 //transform all divs in inputs
                 $(thisParentId+' .grid-cell.in_input').each(function(){
-                   var thisTextVal = $(this).attr('data-value'); 
-                   var thisNameVal = $(this).attr('data-name'); 
-                   if($(this).attr('data-placeholder'))
+                    if ($(this).attr('data-type') == 'skip') {
+                       $(this).parent().hide();
+                       return;
+                    }
+                    var thisTextVal = $(this).attr('data-value'); 
+                    var thisNameVal = $(this).attr('data-name'); 
+                    if($(this).attr('data-placeholder'))
                        var thisPlaceholderValue = $(this).attr('data-placeholder');
-                   else
+                    else
                        var thisPlaceholderValue = '';
                    
                    if($(this).attr('data-type'))
@@ -518,8 +526,12 @@
              $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
             $(thisParentId+' .grid-cell.in_input').each(function(){
-               $(this).next().remove();
-               $(this).show();
+               if ($(this).attr('data-type') == 'skip') {
+                    $(this).parent().show();                    
+                } else {
+                    $(this).next().remove();                
+                    $(this).show();
+                }  
             });
             $(thisParentId+' .btn-row').hide();
 

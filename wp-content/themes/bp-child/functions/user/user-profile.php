@@ -583,7 +583,14 @@ function cp_user_organisation_edit()
     
     $organisation_key = isset($_POST['user_organisation_key']) ? htmlspecialchars($_POST['user_organisation_key']) : null;
     
-    if ($organisation_key) {
+    $org_controller = new CT_Organisation_Controller();
+    
+    if (!$organisation_key) {
+        //Remove Old Membership Record
+        if ($org_membership) {
+            $org_controller->delete_membership($user_id, $org_membership->organisation_id);
+        }
+    } else {
         //Getting Organisation with the key
         $organisation = ct_get_organisation_by_key($organisation_key);
         
@@ -593,9 +600,6 @@ function cp_user_organisation_edit()
         }
         
         if(!$org_membership || (!$org_membership->is_admin && $org_membership->organisation_id != $organisation->id)){
-            
-            $org_controller = new CT_Organisation_Controller();
-            
             //Remove Old Membership Record
             if ($org_membership) {
                 $org_controller->delete_membership($user_id, $organisation->id);

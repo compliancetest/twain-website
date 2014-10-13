@@ -94,7 +94,7 @@ get_header();
         <div class="loading loading-with-text"><div><b>REMOVING MEMBER</b><span>Please wait...</span></div></div>
 
         <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Ok</span></a>
+            <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
             <div class="clear"></div>
         </div>
