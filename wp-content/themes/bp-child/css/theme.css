@@ -236,7 +236,8 @@ a:hover {
             #top_loged_actions .menu-transactions, 
             #top_loged_actions .menu-support, 
             #top_loged_actions .menu-organisation, 
-            #top_loged_actions .menu-profile {
+            #top_loged_actions .menu-profile,
+            #top_loged_actions .menu-agreements{
                 background-image: url(../images/ui-icon-sprites.png);
                 background-repeat: no-repeat;
                 padding: 6px 20px 6px 34px;
@@ -298,7 +299,14 @@ a:hover {
             #top_loged_actions .menu-profile:hover {
                 background-position: 8px -514px;
             }
-            #top_loged_actions .dashboard-dropdown-menu {
+            #top_loged_actions .menu-agreements {
+                background-position: 8px -952px;
+            }
+            #top_loged_actions .menu-agreements:hover {
+                background-position: 8px -1018px;
+            }
+
+#top_loged_actions .dashboard-dropdown-menu {
                 margin-left: -5px;
                 margin-top: 0px;
             }
