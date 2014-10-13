@@ -90,10 +90,18 @@ require_once(THE_FUNCTION . '/test-case/testcase.class.php');
 require_once(THE_FUNCTION . '/test-case/add-meta-boxes.php');
 require_once(THE_FUNCTION . '/test-case/controller.php');
 
-//Products And Services
+//Products
 require_once(THE_FUNCTION . '/product-and-service/add-meta-boxes.php');
 require_once(THE_FUNCTION . '/product-and-service/class.productandservice.php');
 require_once(THE_FUNCTION . '/product-and-service/controller.php');
+
+//Services
+require_once(THE_FUNCTION . '/service/class.service.php');
+require_once(THE_FUNCTION . '/service/controller.php');
+
+//E2E Agreements
+require_once(THE_FUNCTION . '/e2e-agreements/class.agreement.php');
+require_once(THE_FUNCTION . '/e2e-agreements/controller.php');
 
 //Compliance Claim
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');

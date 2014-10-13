@@ -63,9 +63,9 @@ if(isset($_SESSION['product_data']))
     <div class="column container"> 
       <form name="psForm" id="psForm" action="" class="validation-form" method="post" enctype="multipart/form-data">
         <?php if($isNew){ ?>
-        <h2>Add New Product and Service</h2>
+        <h2>Add New Product</h2>
         <?php }else{ ?>
-        <h2>Edit Product and Service: <?php $product->name ?></h2>
+        <h2>Edit Product: <?php $product->name ?></h2>
         <?php } ?> 
         <div class="grid-box grid-box-expandable grid-box-opened" id="ps-info-box">
            <div class="grid-box-header">
@@ -89,7 +89,7 @@ if(isset($_SESSION['product_data']))
                        <div class="grid-cell radio-cell" id="ps-type-cell">
                            <label>Type:</label>                                               
                            <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo !$product->type || $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
-                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" <?php echo $product->type == 'Web Service' ? 'checked="checked"' : ''?> /> Web Service                                                          
+<!--                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" --><?php //echo $product->type == 'Web Service' ? 'checked="checked"' : ''?><!-- /> Web Service                                                          -->
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -212,7 +212,7 @@ if(isset($_SESSION['product_data']))
         <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">               
                <div class="btn-row nopaddingleft">
-                   <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE PRODUCT/SERVICE</span></a>
+                   <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE PRODUCT</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                    <div class="clear"></div>
                </div>

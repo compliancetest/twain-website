@@ -40,7 +40,7 @@ get_header();
     <div class="container"> <!--Temporary -->
         <div class="column">
            <?php if(can_create_product_and_service()){ ?>
-           <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Product or Service</span></a>
+           <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Product</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
            <?php } ?>
@@ -286,13 +286,13 @@ get_header();
         }
         
         //Custom popup for test case boxes
-        $('.view-product').each(function(){
-            $(this).cplightbox({
-                href: $(this).attr('href') + '?is_ajax=true',
-                removeBoxAfterClose: true,
-                type: 'ajax'                
-            })
-        })
+//        $('.view-product').each(function(){
+//            $(this).cplightbox({
+//                href: $(this).attr('href') + '?is_ajax=true',
+//                removeBoxAfterClose: true,
+//                type: 'ajax'
+//            })
+//        })
     })
 })(jQuery)
     

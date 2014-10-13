@@ -165,7 +165,7 @@ function saveProductService()
         $wpdb->insert($wpdb->prefix . "products_relationships", array('product_id' => $id, 'related_product_id' => $p, 'relationship' => $related_products_relations[$i]));
     }
         
-    addMessage('Product / Service was saved successfully');
+    addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
 }
@@ -200,14 +200,14 @@ function deleteProductService()
     $count = $wpdb->get_var($query);
     if($count > 0)
     {
-        addMessage("You can't delete the product/service, because it includes claims.", "error");
+        addMessage("You can't delete the product, because it includes claims.", "error");
         wp_redirect($redirectUrl);
         exit;
     }
     
     //Delete Product/Service
     wp_delete_post($id);
-    addMessage("The product/service was deleted!");
+    addMessage("The product was deleted!");
     wp_redirect($redirectUrl);
     exit;
 }

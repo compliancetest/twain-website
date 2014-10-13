@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `wp_e2e_agreement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `str_id` varchar(255) NOT NULL,
+  `requester_service_id` int(11) NOT NULL,
+  `responder_service_id` int(11) NOT NULL,
+  `requestor_profile` varchar(255) NOT NULL,
+  `requestor_message` text NOT NULL,
+  `requestor_message_date` bigint(20) NOT NULL,
+  `responder_profile` varchar(255) NOT NULL,
+  `responder_message` text NOT NULL,
+  `responder_message_date` bigint(20) NOT NULL,
+  `message_log` text NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `scope` varchar(255) NOT NULL,
+  `requestor_audit_log` mediumblob NOT NULL,
+  `requestor_audit_log_name` varchar(255) NOT NULL,
+  `requestor_audit_log_type` varchar(255) NOT NULL,
+  `responder_audit_log` mediumblob NOT NULL,
+  `responder_audit_log_name` varchar(255) NOT NULL,
+  `responder_audit_log_type` varchar(255) NOT NULL,
+  `claim_date` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB ;

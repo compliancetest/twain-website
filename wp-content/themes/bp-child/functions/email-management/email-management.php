@@ -514,6 +514,122 @@ $ct_email_templates = array(
                             )
             )
         ),
+    ),
+    'E2E Section' => array(
+        array(
+            'menu'          => 'E2E Test request',
+            'title'         => 'E2E Test request',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'fields' => array(
+                array(
+                    'title'         => 'For Sender',
+                    'id'            => 'e2e_request_sender',
+                ),
+                array(
+                    'title'         => 'For Receiver',
+                    'id'            => 'e2e_request_receiver',
+                ),
+                array(
+                    'title'         => 'For Admin',
+                    'id'            => 'e2e_request_admin',
+                )
+            )
+        ),
+        array(
+            'menu'          => 'E2E test request accepted',
+            'title'         => 'E2E test request accepted',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [test_suite]',
+            'fields' => array(
+                array(
+                    'title'         => 'For Sender',
+                    'id'            => 'e2e_request_accepted_sender',
+                ),
+                array(
+                    'title'         => 'For Receiver',
+                    'id'            => 'e2e_request_accepted_receiver',
+                ),
+                array(
+                    'title'         => 'For Admin',
+                    'id'            => 'e2e_request_accepted_admin',
+                )
+            )
+        ),
+        array(
+            'menu'          => 'E2E test request rejected',
+            'title'         => 'E2E test request rejected',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'fields' => array(
+                array(
+                    'title'         => 'For Sender',
+                    'id'            => 'e2e_request_rejected_sender',
+                ),
+                array(
+                    'title'         => 'For Receiver',
+                    'id'            => 'e2e_request_rejected_receiver',
+                ),
+                array(
+                    'title'         => 'For Admin',
+                    'id'            => 'e2e_request_rejected_admin',
+                )
+            )
+        ),
+        array(
+            'menu'          => 'E2E test claim made',
+            'title'         => 'E2E test claim made',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'fields' => array(
+                array(
+                    'title'         => 'For Sender',
+                    'id'            => 'e2e_claim_made_sender',
+                ),
+                array(
+                    'title'         => 'For Receiver',
+                    'id'            => 'e2e_claim_made_receiver',
+                ),
+                array(
+                    'title'         => 'For Admin',
+                    'id'            => 'e2e_claim_made_admin',
+                )
+            )
+        ),
+        array(
+            'menu'          => 'E2E test claim failed',
+            'title'         => 'E2E test claim failed',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'fields' => array(
+                array(
+                    'title'         => 'For Sender',
+                    'id'            => 'e2e_claim_failed_sender',
+                ),
+                array(
+                    'title'         => 'For Receiver',
+                    'id'            => 'e2e_claim_failed_receiver',
+                ),
+                array(
+                    'title'         => 'For Admin',
+                    'id'            => 'e2e_claim_failed_admin',
+                )
+            )
+        ),
+        array(
+            'menu'          => 'E2E test claim confirmed',
+            'title'         => 'E2E test claim confirmed',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'fields' => array(
+                array(
+                    'title'         => 'For Sender',
+                    'id'            => 'e2e_claim_confirmed_sender',
+                ),
+                array(
+                    'title'         => 'For Receiver',
+                    'id'            => 'e2e_claim_confirmed_receiver',
+                ),
+                array(
+                    'title'         => 'For Admin',
+                    'id'            => 'e2e_claim_confirmed_admin',
+                )
+            )
+        ),
     )
     
 );
