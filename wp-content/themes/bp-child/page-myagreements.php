@@ -191,7 +191,7 @@ get_header();
 
                                                         <?php endif;?>
                                                    <?php elseif( $agreement->status == 'Testing' ):?>
-                                                       <a href="? rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Cancel</a>
+                                                       <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Cancel</a>
 
                                                        <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                            <div class="popup-box-header radius6 noradiusbottom">Confirm Cancel</div>
@@ -325,26 +325,6 @@ get_header();
         </div>
     </div>
     <div class="clear"></div>
-
-
-    <div class="popup-box deny-agreement-popup" id="deny-agreement-popup" style="display: none; width: 500px">
-        <div class="popup-box-header radius6 noradiusbottom">Confirm [ACTION]</div>
-        <div class="popup-box-content">
-            <p>Are you sure you want to <strong>[ACTION]</strong> this agreement?</p>
-            <div class="agreement-deny-reason">
-                <label for="deny-reason-field">Let us know why:</label>
-                <textarea id="deny-reason-field" rows="5" cols="20"></textarea>
-            </div>
-        </div>
-        <div class="popup-box-footer radius6 noradiustop">
-            <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>
-            <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
-            <div class="clear"></div>
-        </div>
-        <a class="close_btn"></a>
-    </div>
-
 
 
 </div> <!--end content-->

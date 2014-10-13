@@ -43,6 +43,7 @@ class Agreement
 
     public function addEntry( $data ){
         global $wpdb;
+        Agreement::has_access( 'add-agreement', $data['responder_service'] );
         $insert_id = $wpdb->insert( $this->_table,
             array(
                 'str_id'                 => $data['agreement_id'],
@@ -109,5 +110,43 @@ class Agreement
             array_push( $agreements, $result );
         }
         return $agreements;
+    }
+
+    public static function has_access( $action, $service_id = false, $agreement_id = false ){
+        global $wpdb;
+        $can = true;
+        $error_message = 'Permission denied!';
+        switch( $action ){
+            case 'add-agreement':
+                $service = new Service( $service_id );
+                $service->load();
+                if( ! Service::can_request_e2e( get_current_user_id(), $service_id ) ){
+                    $error_message = 'You don\'t have permissions to request E2E testing';
+                    $can = false;
+                }
+                break;
+            case 'edit-agreement':
+                $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+                if( $agreement ){
+                    $requester_service = new Service( $agreement->requester_service_id );
+                    $requester_service->load();
+                    $responder_service = new Service( $agreement->responder_service_id );
+                    $responder_service->load();
+                    if( ! ( $requester_service->service_user_id == get_current_user_id() || $responder_service->service_user_id ) ){
+                        $error_message = 'You don\'t have permissions to perform this action';
+                        $can = false;
+                    }
+                }
+
+                break;
+            case 'delete-agreement':
+
+                break;
+        }
+        if( ! $can ){
+            addMessage( $error_message, 'error' );
+            wp_redirect( '/' );
+            exit();
+        }
     }
 }

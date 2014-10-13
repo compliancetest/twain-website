@@ -10,6 +10,9 @@ function process_agreement_actions()
         deleteAgreement();
     } else if( wp_verify_nonce($action, 'accept-agreement' ) ) {
         $agreement_id = intval($_REQUEST['agreement_id']);
+        $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+        $service->load();
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         $wpdb->update('wp_e2e_agreement',
             array(
                 'status'                 => 'Testing',
@@ -23,8 +26,6 @@ function process_agreement_actions()
             array( '%s', '%s', '%s' ),
             array('%d')
         );
-        $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
-        $service->load();
         //send notifications to sender, receiver and admin
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
@@ -47,12 +48,14 @@ function process_agreement_actions()
         exit;
     } else if( wp_verify_nonce($action, 'cancel-agreement' ) ) {
         $agreement_id = intval($_REQUEST['id']);
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
     } else if( wp_verify_nonce($action, 'claim_agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         if($_FILES["file"]["size"] > 0 ) {
             $fileName = $_FILES['file']['name'];
             $tmpName = $_FILES['file']['tmp_name'];
@@ -90,6 +93,7 @@ function process_agreement_actions()
         exit;
     } else if( wp_verify_nonce($action, 'confirm-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         if($_FILES["file"]["size"] > 0 ) {
             $fileName = $_FILES['file']['name'];
             $tmpName = $_FILES['file']['tmp_name'];
@@ -128,7 +132,7 @@ function process_agreement_actions()
     } else if( wp_verify_nonce($action, 'reject-pending-agreement' ) ){
         //todo send email with reason
         $agreement_id = intval($_REQUEST['agreement_id']);
-        //todo check permissions to perform any action
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         addMessage('Success');
         wp_redirect('/agreements/');
@@ -136,7 +140,7 @@ function process_agreement_actions()
     }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
         //todo send email with reason
         $agreement_id = intval($_REQUEST['agreement_id']);
-        //todo check permissions to perform any action
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         addMessage('Success');
         wp_redirect('/agreements/');
@@ -144,7 +148,7 @@ function process_agreement_actions()
     }else if( wp_verify_nonce($action, 'reject-failed-agreement' ) ){
         //todo send email with reason
         $agreement_id = intval($_REQUEST['agreement_id']);
-        //todo check permissions to perform any action
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
         $wpdb->update('wp_e2e_agreement',
             array(
                 'status'                    => 'Testing',
@@ -201,7 +205,6 @@ function process_agreement_actions()
 
 function saveAgreement()
 {
-    //todo need to send emails
     $agreementModel = new Agreement();
     $agreementModel->addEntry( $_REQUEST );
     addMessage( 'Testing request has been sent successfully' );
