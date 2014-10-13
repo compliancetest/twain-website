@@ -23,6 +23,25 @@ function process_agreement_actions()
             array( '%s', '%s', '%s' ),
             array('%d')
         );
+        $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+        $service->load();
+        //send notifications to sender, receiver and admin
+        $sender = get_userdata( get_current_user_id() );
+        $receiver = get_userdata( $service->service_user_id );
+        $email_data = array(
+            '[sender_name]'   => $sender->data->display_name,
+            '[receiver_name]' => $receiver->data->display_name,
+            '[agreement_url]' => home_url( '/service/service/'),
+            '[test_suite]'    => get_the_title( $service->service_suite_id )
+        );
+        //send email to requester
+        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_request_accepted_sender', $email_data );
+
+        //send email to receiver
+        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_request_accepted_receiver', $email_data );
+
+        //send email to admin
+        cp_send_email_to_admin( 'e2e_request_accepted_admin', $email_data );
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;

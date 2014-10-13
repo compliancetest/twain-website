@@ -352,7 +352,7 @@ get_header();
                                                                    <dt>Service</dt>
                                                                    <dd><?php echo get_the_title( $agreement->requester_service->id );?></dd>
                                                                    <dt>Profile</dt>
-                                                                   <dd><a href="#"><?php echo $profile->profile_name;?></a></dd>
+                                                                   <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
                                                                    <?php if( $agreement->requestor_audit_log_name ):?>
                                                                        <dt>Audit Log</dt>
                                                                        <dd><a href="#"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
@@ -371,7 +371,7 @@ get_header();
                                                                    <dt>Service</dt>
                                                                    <dd><?php echo get_the_title( $agreement->responder_service->id );?></dd>
                                                                    <dt>Profile</dt>
-                                                                   <dd><a href="#"><?php echo $profile->profile_name;?></a></dd>
+                                                                   <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
                                                                    <?php if( $agreement->responder_audit_log_name ):?>
                                                                        <dt>Audit Log</dt>
                                                                        <dd><a href="#"><?php echo $agreement->responder_audit_log_name;?></a></dd>

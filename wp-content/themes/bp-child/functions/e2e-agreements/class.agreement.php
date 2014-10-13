@@ -55,6 +55,26 @@ class Agreement
             ),
             array( '%s', '%d', '%d', '%d', '%s', '%s' )
         );
+        $service = new Service( $data['responder_service'] );
+        $service->load();
+        //send notifications to sender, receiver and admin
+        $sender = get_userdata( get_current_user_id() );
+        $receiver = get_userdata( $service->service_user_id );
+        $email_data = array(
+            '[sender_name]'   => $sender->data->display_name,
+            '[receiver_name]' => $receiver->data->display_name,
+            '[agreement_url]' => home_url( '/service/service/'),
+        );
+        //send email to requester
+        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_request_sender', $email_data );
+
+        $email_data['[message_text]'] = $data['agreement_message'];
+        //send email to receiver
+        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_request_receiver', $email_data );
+
+        //send email to admin
+        cp_send_email_to_admin( 'e2e_request_admin', $email_data );
+
         if( $wpdb->last_error ){
             addMessage( $wpdb->last_error, 'error' );
             wp_redirect( $_REQUEST['_wp_http_referer'] );
