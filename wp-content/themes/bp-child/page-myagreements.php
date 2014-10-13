@@ -421,7 +421,7 @@ get_header();
     <div class="clear"></div>
 
 
-    <div class="popup-box" id="deny-agreement-popup" style="display: none; width: 500px">
+    <div class="popup-box deny-agreement-popup" id="deny-agreement-popup" style="display: none; width: 500px">
         <div class="popup-box-header radius6 noradiusbottom">Confirm [ACTION]</div>
         <div class="popup-box-content">
             <p>Are you sure you want to <strong>[ACTION]</strong> this agreement?</p>
