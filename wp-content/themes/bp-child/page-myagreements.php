@@ -329,11 +329,11 @@ get_header();
                                                            <dl class="common-info">
                                                                <dt>Status:</dt>
                                                                <dd><strong class="status-<?php echo strtolower( $agreement->status );?>"><?php echo $agreement->status;?></strong></dd>
-                                                               <?php if( $agreement->date ):?>
+                                                               <?php if( $agreement->claim_date ):?>
                                                                    <dt>Date:</dt>
-                                                                   <dd><?php echo $agreement->claim_date;?></dd>
+                                                                   <dd><?php echo formatDate( $agreement->claim_date );?></dd>
                                                                <?php endif;?>
-                                                               <?php if( $agreement->date ):?>
+                                                               <?php if( $agreement->scope ):?>
                                                                    <dt>Scope:</dt>
                                                                    <dd><?php echo str_replace( ';;', ', ', $agreement->scope );?></dd>
                                                                <?php endif;?>
@@ -355,7 +355,7 @@ get_header();
                                                                    <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
                                                                    <?php if( $agreement->requestor_audit_log_name ):?>
                                                                        <dt>Audit Log</dt>
-                                                                       <dd><a href="#"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
+                                                                       <dd><a href="?_psnonce=<?php echo wp_create_nonce('get-agreement-file');?>&type=1&agreement_id=<?php echo $agreement->id;?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
                                                                    <?php endif;?>
                                                                </dl>
                                                                <dl>
@@ -374,7 +374,7 @@ get_header();
                                                                    <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
                                                                    <?php if( $agreement->responder_audit_log_name ):?>
                                                                        <dt>Audit Log</dt>
-                                                                       <dd><a href="#"><?php echo $agreement->responder_audit_log_name;?></a></dd>
+                                                                       <dd><a href="?_psnonce=<?php echo wp_create_nonce('get-agreement-file');?>&type=2&agreement_id=<?php echo $agreement->id;?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
                                                                    <?php endif;?>
                                                                </dl>
                                                            </div>
@@ -384,17 +384,21 @@ get_header();
                                                                <ul>
                                                                    <li class="employer">
                                                                        <div class="author-name"><?php echo $pJSON->Profile->Type;?></div>
-                                                                       <div class="message-content">
-                                                                           <div class="message-body"><span class="message-box-arrow"></span><?php echo $agreement->requestor_message;?></div>
-                                                                           <div class="message-date"><?php echo formatDate( $agreement->requestor_message_date );?></div>
-                                                                       </div>
+                                                                       <?php if( $agreement->requestor_message ):?>
+                                                                           <div class="message-content">
+                                                                               <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->requestor_message );?></div>
+                                                                               <div class="message-date"><?php echo formatDate( $agreement->requestor_message_date );?></div>
+                                                                           </div>
+                                                                       <?php endif;?>
                                                                    </li>
                                                                    <li class="fund">
                                                                        <div class="author-name"><?php echo $resp_pJSON->Profile->Type;?></div>
-                                                                       <div class="message-content">
-                                                                           <div class="message-body"><span class="message-box-arrow"></span><?php echo $agreement->responder_message;?></div>
-                                                                           <div class="message-date"><?php echo formatDate( $agreement->responder_message_date );?></div>
-                                                                       </div>
+                                                                       <?php if( $agreement->responder_message ):?>
+                                                                           <div class="message-content">
+                                                                               <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->responder_message );?></div>
+                                                                               <div class="message-date"><?php echo formatDate( $agreement->responder_message_date );?></div>
+                                                                           </div>
+                                                                       <?php endif;?>
                                                                    </li>
                                                                </ul>
                                                            </div>

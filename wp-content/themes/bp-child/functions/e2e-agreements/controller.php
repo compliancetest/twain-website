@@ -47,14 +47,12 @@ function process_agreement_actions()
         exit;
     } else if( wp_verify_nonce($action, 'cancel-agreement' ) ) {
         $agreement_id = intval($_REQUEST['id']);
-        //todo check permissions to perform any action
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
     } else if( wp_verify_nonce($action, 'claim_agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
-        //todo check permissions to perform any action
         if($_FILES["file"]["size"] > 0 ) {
             $fileName = $_FILES['file']['name'];
             $tmpName = $_FILES['file']['tmp_name'];
@@ -62,7 +60,6 @@ function process_agreement_actions()
 
             $fp = fopen($tmpName, 'r');
             $content = fread($fp, filesize($tmpName));
-            $content = addslashes($content);
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
                 $file_field = 'requestor_audit_log';
@@ -93,7 +90,6 @@ function process_agreement_actions()
         exit;
     } else if( wp_verify_nonce($action, 'confirm-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
-        //todo check permissions to perform any action
         if($_FILES["file"]["size"] > 0 ) {
             $fileName = $_FILES['file']['name'];
             $tmpName = $_FILES['file']['tmp_name'];
@@ -101,7 +97,6 @@ function process_agreement_actions()
 
             $fp = fopen($tmpName, 'r');
             $content = fread($fp, filesize($tmpName));
-            $content = addslashes($content);
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
                 $file_field = 'requestor_audit_log';
@@ -168,6 +163,36 @@ function process_agreement_actions()
         );
         addMessage('Success');
         wp_redirect('/agreements/');
+        exit;
+    } else if( wp_verify_nonce($action, 'get-agreement-file' ) ){
+        $agreement_id = intval( $_REQUEST['agreement_id'] );
+        //requester message
+        $log = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id=%d", $agreement_id ) );
+        if( ! $log )
+        {
+            echo "Invalid Request!";
+            exit;
+        }
+        $t = $_REQUEST['type'];
+        if( $t == '1' ){
+            $content_type = $log->requestor_audit_log_type;
+            $file_name    = $log->requestor_audit_log_name;
+            $content      = $log->requestor_audit_log;
+        } else {
+            $content_type = $log->responder_audit_log_type;
+            $file_name    = $log->responder_audit_log_name;
+            $content      = $log->responder_audit_log;
+        }
+//        var_dump( $_REQUEST, $content_type, $file_name);die;
+        header("Content-type: ".$content_type );
+        header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+        header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: no-cache");
+        header("Content-Type: Application/octet-stream");
+        header("Content-disposition: attachment; filename=".$file_name);
+
+        echo  $content ;
         exit;
     }
 }

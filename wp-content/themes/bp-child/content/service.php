@@ -107,12 +107,12 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                     <?php foreach( $successfull_agreements AS $agreement ):?>
                         <tr>
                             <td><?php echo $agreement->str_id;?></td>
-                            <td><a href="<?php echo $agreement->entry_status == 'Responder' ? get_permalink( $agreement->requester_service->id ) : get_permalink( $agreement->responder_service->id ) ;?>"><?php echo $agreement->entry_status == 'Requester' ? get_the_title( $agreement->requester_service->id ) : get_the_title( $agreement->responder_service->id ) ;?></a></td>
+                            <td><a href="<?php echo $agreement->entry_status == 'Responder' ? get_permalink( $agreement->requester_service->id ) : get_permalink( $agreement->responder_service->id ) ;?>"><?php echo $agreement->entry_status == 'Responder' ? get_the_title( $agreement->requester_service->id ) : get_the_title( $agreement->responder_service->id ) ;?></a></td>
                             <td><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner  ;?></td>
                             <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_levels ) : implode( ', ', $agreement->responder_service->service_levels )  ;?></td>
                             <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_roles ) : implode( ', ', $agreement->responder_service->service_roles )  ;?></td>
                             <td class="centered"><?php echo $agreement->status;?></td>
-                            <td class="centered"><?php echo formatDate( $agreement->claim_date );?></td>
+                            <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
                                 <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
                             </td>
