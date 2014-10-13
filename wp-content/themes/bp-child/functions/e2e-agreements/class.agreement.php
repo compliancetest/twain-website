@@ -83,10 +83,10 @@ class Agreement
         return $insert_id;
     }
 
-    public function get_service_agreements( $service_id, $status = false ){
+    public function get_service_agreements( $service_id, $agreement_id = false ){
         global $wpdb;
-        if( $status ){
-            $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE ( responder_service_id = %d OR requester_service_id = %d ) AND status = %s ", $service_id, $service_id, $status ) );
+        if( $agreement_id ){
+            $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         } else {
             $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE responder_service_id = %d OR requester_service_id = %d ", $service_id, $service_id));
         }
@@ -103,6 +103,9 @@ class Agreement
             $result->responder_service = $responder_service;
             //used to display correct data on the my agreements tab
             $result->entry_status = $result->requester_service_id == $service_id ? 'Requester' : 'Responder';
+            if( $agreement_id ){
+                return $result;
+            }
             array_push( $agreements, $result );
         }
         return $agreements;

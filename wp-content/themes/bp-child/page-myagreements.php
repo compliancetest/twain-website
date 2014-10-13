@@ -95,7 +95,7 @@ get_header();
                                    <?php else: ?>
                                        <?php foreach( $service_agreements AS $agreement ):?>
                                            <div class="tr clearfix">
-                                               <div class="td td-agreement-id"><a href="#agreement-details-popup-<?php echo $agreement->id;?>" rel="custom-popup">
+                                               <div class="td td-agreement-id"><a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('get-agreement-info-popup')?>&id=<?php echo $agreement->id?>" cp-type="ajax" rel="custom-popup">
                                                        <?php echo $agreement->str_id;?></a>
                                                </div>
                                                <div class="td td-entity-name">
@@ -191,7 +191,7 @@ get_header();
 
                                                         <?php endif;?>
                                                    <?php elseif( $agreement->status == 'Testing' ):?>
-                                                       <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Cancel</a>
+                                                       <a href="? rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Cancel</a>
 
                                                        <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                            <div class="popup-box-header radius6 noradiusbottom">Confirm Cancel</div>
@@ -308,109 +308,11 @@ get_header();
                                                                    <a class="close_btn"></a>
                                                                </form>
                                                            </div>
-
                                                        <?php endif;?>
                                                    <?php endif;?>
                                                </div>
                                            </div>
-                                           <div class="popup-box agreement-details-popup" id="agreement-details-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                               <div class="popup-box-header radius6 noradiusbottom">Agreement</div>
-                                               <div class="popup-box-content">
-                                                   <div class="tabs-contr">
-                                                       <ul class="tab-nav">
-                                                           <li class="active">
-                                                               <a href="javascript: void(0)" rel="tab_general_information_<?php echo $agreement->id;?>">General Information</a>
-                                                           </li>
-                                                           <li>
-                                                               <a href="javascript: void(0)" rel="tab_message_log_<?php echo $agreement->id;?>">Message Log</a>
-                                                           </li>
-                                                       </ul>
-                                                       <div class="tab-content agreement-general-info" id="tab_general_information_<?php echo $agreement->id;?>" style="display: block;">
-                                                           <dl class="common-info">
-                                                               <dt>Status:</dt>
-                                                               <dd><strong class="status-<?php echo strtolower( $agreement->status );?>"><?php echo $agreement->status;?></strong></dd>
-                                                               <?php if( $agreement->claim_date ):?>
-                                                                   <dt>Date:</dt>
-                                                                   <dd><?php echo formatDate( $agreement->claim_date );?></dd>
-                                                               <?php endif;?>
-                                                               <?php if( $agreement->scope ):?>
-                                                                   <dt>Scope:</dt>
-                                                                   <dd><?php echo str_replace( ';;', ', ', $agreement->scope );?></dd>
-                                                               <?php endif;?>
-                                                           </dl>
-                                                           <div class="info-per-item clearfix">
-                                                               <dl>
-                                                                   <?php
-                                                                        $profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->requestor_profile ) );
-                                                                        $pJSON = json_decode(base64_decode($profile->content));
-                                                                   ?>
-                                                                   <dt class="item-title"><?php echo $pJSON->Profile->Type;?></dt>
-                                                                   <dt>Organisation</dt>
-                                                                   <dd><?php echo $agreement->requester_service->service_owner;?></dd>
-                                                                   <dt>User</dt>
-                                                                   <dd><?php echo get_userdata( $agreement->requester_service->service_user_id )->data->display_name;?></dd>
-                                                                   <dt>Service</dt>
-                                                                   <dd><?php echo get_the_title( $agreement->requester_service->id );?></dd>
-                                                                   <dt>Profile</dt>
-                                                                   <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
-                                                                   <?php if( $agreement->requestor_audit_log_name ):?>
-                                                                       <dt>Audit Log</dt>
-                                                                       <dd><a href="?_psnonce=<?php echo wp_create_nonce('get-agreement-file');?>&type=1&agreement_id=<?php echo $agreement->id;?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
-                                                                   <?php endif;?>
-                                                               </dl>
-                                                               <dl>
-                                                                   <?php
-                                                                        $resp_profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->responder_profile ) );
-                                                                        $resp_pJSON = json_decode(base64_decode($resp_profile->content));
-                                                                   ?>
-                                                                   <dt class="item-title"><?php echo isset( $resp_pJSON->Profile->Type ) ? $resp_pJSON->Profile->Type : 'No data';?></dt>
-                                                                   <dt>Organisation</dt>
-                                                                   <dd><?php echo $agreement->responder_service->service_owner;?></dd>
-                                                                   <dt>User</dt>
-                                                                   <dd><?php echo get_userdata( $agreement->responder_service->service_user_id )->data->display_name;?></dd>
-                                                                   <dt>Service</dt>
-                                                                   <dd><?php echo get_the_title( $agreement->responder_service->id );?></dd>
-                                                                   <dt>Profile</dt>
-                                                                   <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
-                                                                   <?php if( $agreement->responder_audit_log_name ):?>
-                                                                       <dt>Audit Log</dt>
-                                                                       <dd><a href="?_psnonce=<?php echo wp_create_nonce('get-agreement-file');?>&type=2&agreement_id=<?php echo $agreement->id;?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
-                                                                   <?php endif;?>
-                                                               </dl>
-                                                           </div>
-                                                       </div>
-                                                       <div class="tab-content agreements-message-log" id="tab_message_log_<?php echo $agreement->id;?>" style="display: none;">
-                                                           <div class="agreements-message-log-list" style="height: 450px;">
-                                                               <ul>
-                                                                   <li class="employer">
-                                                                       <div class="author-name"><?php echo $pJSON->Profile->Type;?></div>
-                                                                       <?php if( $agreement->requestor_message ):?>
-                                                                           <div class="message-content">
-                                                                               <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->requestor_message );?></div>
-                                                                               <div class="message-date"><?php echo formatDate( $agreement->requestor_message_date );?></div>
-                                                                           </div>
-                                                                       <?php endif;?>
-                                                                   </li>
-                                                                   <li class="fund">
-                                                                       <div class="author-name"><?php echo $resp_pJSON->Profile->Type;?></div>
-                                                                       <?php if( $agreement->responder_message ):?>
-                                                                           <div class="message-content">
-                                                                               <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->responder_message );?></div>
-                                                                               <div class="message-date"><?php echo formatDate( $agreement->responder_message_date );?></div>
-                                                                           </div>
-                                                                       <?php endif;?>
-                                                                   </li>
-                                                               </ul>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                               <div class="popup-box-footer radius6 noradiustop">
-                                                   <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-                                                   <div class="clear"></div>
-                                               </div>
-                                               <a class="close_btn"></a>
-                                           </div>
+
                                        <?php endforeach;?>
                                    <?php endif;?>
                                </div>
