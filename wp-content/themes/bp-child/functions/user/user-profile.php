@@ -586,10 +586,9 @@ function cp_user_organisation_edit()
     $org_controller = new CT_Organisation_Controller();
     
     if (!$organisation_key) {
-        //Remove Old Membership Record
-        if ($org_membership) {
+        if($org_membership && !$org_membership->is_admin)
             $org_controller->delete_membership($user_id, $org_membership->organisation_id);
-        }
+        
     } else {
         //Getting Organisation with the key
         $organisation = ct_get_organisation_by_key($organisation_key);
@@ -599,14 +598,14 @@ function cp_user_organisation_edit()
             exit;
         }
         
-        if(!$org_membership || (!$org_membership->is_admin && $org_membership->organisation_id != $organisation->id)){
-            //Remove Old Membership Record
-            if ($org_membership) {
-                $org_controller->delete_membership($user_id, $organisation->id);
-            }
-            
+        if (!$org_membership) {
             //Create New Membership Record
             $org_controller->add_membership($user_id, $organisation->id);
+        } else {
+            if ($org_membership->organisation_id != $organisation->id && !$org_membership->is_admin) {
+                $org_controller->delete_membership($user_id, $org_membership->organisation_id);
+                $org_controller->add_membership($user_id, $organisation->id);
+            }
         }
     }
     
