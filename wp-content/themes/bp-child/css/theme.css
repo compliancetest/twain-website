@@ -3883,6 +3883,15 @@ body .tabs li {
             body .tabs li.active a  #icon_admin {
                 background: url(../images/sproket_icon_w.png) 2px 3px no-repeat;
             }
+            body .tabs li a  #icon_users {
+                background: url(../images/user_icon_g.png) 6px 4px no-repeat;
+                margin: 2px;
+                margin-right: 5px;
+            }
+
+            body .tabs li.active a  #icon_users {
+                background: url(../images/user_icon_w.png) 6px 4px no-repeat;
+            }
             body .tabs li.active a .tabactive{
             background: url(../images/tab_active.png) no-repeat;
             width: 16px;
