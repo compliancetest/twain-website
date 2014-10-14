@@ -637,6 +637,7 @@ function getDashboardPages($type = 'page')
                 continue;
             } else {
                 $item['subpages'] = array();
+                $item['subpages'][] = array('title' => 'Users', 'url' => home_url().'/my-organisation/users');
                 $item['subpages'][] = array('title' => 'Subscriptions', 'url' => home_url().'/my-organisation/test-suites');
                 $item['subpages'][] = array('title' => 'Profile', 'url' => $item['url']);
             }
