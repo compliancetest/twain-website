@@ -34,7 +34,7 @@ if($mode != 'html'){
     header("Content-type: application/xml");    
     echo $message_content;
 }else{
-    if($message->S3_PAYLOAD_CONTENT_LENGTH > (get_option(s3_xml_max_size) * 1024 * 1024))
+    if($message->S3_PAYLOAD_CONTENT_LENGTH > get_option('s3_xml_max_size'))
     {
         if( isset($_GET['download'])) {
             //Download File
@@ -54,7 +54,7 @@ if($mode != 'html'){
             <div class="content container"><!-- Start Content Container-->        
                 
                 <div class="content_inner column">
-                    HTML view is not available due to content size of <?php echo round($message->S3_PAYLOAD_CONTENT_LENGTH / (1024 * 1024)) ?> Mb. Please download and process locally.
+                    HTML view is not available due to content size of <?php echo size_format($message->S3_PAYLOAD_CONTENT_LENGTH) ?>. Please download and process locally.
                     Click <a href="<?php echo get_site_url()?>/message-envelope/?id=<?php echo $id?>&mode=html&download=1">here</a> to download.
                 </div>
                     

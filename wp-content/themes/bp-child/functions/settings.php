@@ -404,7 +404,7 @@ function create_compliancetest_settings_page()
                     <table class="widefat">
                         <tr>
                             <td><label><b>Price:</b></label></td>
-                            <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> MB</td>
+                            <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
                         </tr>
                     </table>   
                     <?php submit_button()   ?>
