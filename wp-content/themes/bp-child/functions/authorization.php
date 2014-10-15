@@ -273,8 +273,31 @@ function can_create_group($user_id = null)
     return false;
 }
 
+function can_edit_test_plan($suite_id, $product_id, $user_id = null)
+{    
+    global $wpdb;
+    
+    if(!$user_id)   
+        $user_id = get_current_user_id();
+    
+    //Check subscription
+    $query = $wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE suite_id=%d AND user_id=%d", $suite_id, $user_id);
+    $org_id = $wpdb->get_var($query);
+    
+    if (!$org_id) {
+        return false;
+    }
+    
+    //Check the organisation of the product    
+    //Return true for now
+    
+    
+    return true;
+    
+}
+
 /******************************************************************** Compliance Claim ***************************************************************/
-function can_make_compliance_claim($product_id, $user_id = null)
+function can_make_compliance_claim($organisation_id, $user_id = null)
 {
     if($user_id == null)
         $user_id = get_current_user_id();
@@ -284,16 +307,12 @@ function can_make_compliance_claim($product_id, $user_id = null)
     else
         return false;
     
-    //Check if the user is a system admin
-    if(user_can($user_id, 'make_compliance_claim'))
-    {
-        return true;
-    }
-    
     if(is_admin() || is_super_admin())
         return true;
     
-    if(is_customer())
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
+    if($user_membership->organisation_id == $organisation_id)
     {
         //Check if the product belong to the community that the customer subscribed.
         return true; //For Now
@@ -315,7 +334,9 @@ function can_edit_compliance_claim($claim_id, $user_id = null)
     $claim = new ComplianceClaim($claim_id);
     $claim->load();
     
-    if($claim->creator_id == $user_id)
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
+    if($claim->organisation_id == $user_membership->organisation_id)
         return true;
         
     return true;    
@@ -331,24 +352,20 @@ function can_delete_compliance_claim($claim_id, $user_id = null)
 /******************************************************************** Product / Service ***************************************************************/
 function can_create_product_and_service($user_id = null)
 {
-    if(is_user_logged_in())
-        return true;
-        
-    //if($user_id == null)
-//        $user_id = get_current_user_id();
-//    
-    //Check if the user is a system admin
-    //if(user_can($user_id, 'create_product_service'))
-//    {
-//        return true;
-//    }
-//    
-//    if(bp_is_group_admin($user_id) || is_customer($user_id))
-//    {
-//        return true;
-//    }
+    if(!$user_id)
+        $user_id = get_current_user_id();
     
-    return false;
+    if (!$user_id) {
+        return false;
+    }
+    
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
+    if (!$user_membership) {
+        return false; 
+    }
+    
+    return true;
 }
 
 function can_edit_product_and_service($product_service_id, $user_id = null)
@@ -356,11 +373,16 @@ function can_edit_product_and_service($product_service_id, $user_id = null)
     if($user_id == null)
         $user_id = get_current_user_id();
     
+    if (!$user_id) {
+        return false;
+    }
+    
     //Check if the user is a system admin
     if(user_can($user_id, 'edit_other_product_service'))
     {
         return true;
     }
+    
     $post = get_post($product_service_id);
     
     if($post->post_author == $user_id)

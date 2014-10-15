@@ -129,7 +129,7 @@ function makeClaim()
     exit;    
 }
 
-function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID = null, $planID = 0, $has_exclusions )
+function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, $status, $claimID = null, $planID = 0, $has_exclusions )
 {
     global $wpdb;
     
@@ -141,7 +141,7 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
     $claim->load();
     
     $is_allowed = false;
-    if(!$claimID && can_make_compliance_claim($productID))
+    if(!$claimID && can_make_compliance_claim($organisation_id))
         $is_allowed = true;
     else if(can_edit_compliance_claim($claimID))
         $is_allowed = true;
@@ -156,7 +156,7 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
     {
         $nId = $wpdb->insert(TABLE_CLAIM, array(
             'product_id'    =>  $productID,
-            'creator_id'    =>  $user_id,
+            'organisation_id'    =>  $organisation_id,
             'suite_id'    =>  $suite_id,
             'conformance_level'    =>  $confLevel,
             'role'    =>  $role,
@@ -941,7 +941,9 @@ function getTestPlansBySuiteId($suite_id, $user_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT p.*, pm.meta_value as `product_name` FROM " . $wpdb->prefix . "test_plans AS p LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.product_id AND pm.meta_key='product_name'  WHERE p.suite_id=%d AND p.creator_id=%d", $suite_id, $user_id);
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
+    $query = $wpdb->prepare("SELECT p.*, pm.meta_value as `product_name` FROM " . $wpdb->prefix . "test_plans AS p LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.product_id AND pm.meta_key='product_name'  WHERE p.suite_id=%d AND p.organisation_id=%d", $suite_id, $user_membership->organisation_id);
     $rows = $wpdb->get_results($query);
     
     

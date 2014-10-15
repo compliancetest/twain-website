@@ -113,9 +113,6 @@ get_header();
                    ?>  
                    </div>
                </div>
-               <?php if(0 && can_make_compliance_claim($product->ID)){ ?>
-               <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn process-btn add-claim-btn"><span class="p"></span><span class="t">New Compliance Claim</span></a>
-               <?php } ?>
            </div>
            <div id="obligation<?php echo $product->ID?>" style="display: none;">
                <?php 
