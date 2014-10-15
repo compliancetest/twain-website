@@ -13,6 +13,20 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        //Add Default Privileges
+        if(isset($_GET['fix_privileges'])){
+            $privileges = ct_get_privileges();
+            $results = $wpdb->get_results("SELECT * FROM wp_organisations_members");
+            foreach($results as $r){
+                foreach($privileges as $p){
+                    $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $r->user_id, "organisation_id" => $r->organisation_id, "privilege_id" => $p->id), array("%d", "%d", "%d"));   
+                }
+            }
+            
+            die('Completed!');
+        }
+        
+        
         //Create Organisation Membership Records for the subscribers
         if(isset($_GET['fix_org_membership'])){
             $results = $wpdb->get_results("SELECT organisation_id, user_id FROM wp_users_subscriptions");

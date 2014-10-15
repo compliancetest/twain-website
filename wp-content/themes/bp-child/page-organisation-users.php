@@ -32,6 +32,7 @@ get_header();
                                <div class="td td-name">Name</div>
                                <div class="td td-email">Email</div>
                                <div class="td td-roles tocenter">Role(s)</div>
+                               <div class="td td-privilege tocenter">Privilege</div>
                                <div class="td td-action tocenter">Action</div>
                                <div class="clear"></div>
                              </div>
@@ -49,16 +50,30 @@ get_header();
                                }else{
                                    foreach($members as $row)
                                    {
+                                       $privileges = ct_get_user_privileges($row->ID, $organisation_id);
                            ?>
                                 <div class="tr">
                                     <div class="td td-name"><?php echo $row->full_name?></div>
                                     <div class="td td-email"><?php echo $row->user_email?></div>
                                     <div class="td td-roles tocenter"><?php echo $row->is_admin ? 'Admin' : 'Member'?></div>
+                                    <div class="td td-privilege tocenter">
+                                        <?php
+                                            foreach($privileges as $p) {
+                                        ?>
+                                                <span class="has-tooltip"><?php echo $p->title?><span class="simple_tooltip"><?php echo $p->description?><span></span></span></span><br />
+                                        <?php
+                                            }
+                                        ?>
+                                    </div>
                                     <div class="td td-action tocenter">
                                         <a href="javascript: void(0)" data-id="<?php echo $row->membership_id?>" class="action-btn icon-btn delete-btn has-tooltip left15">
                                             <span class="p"></span>
                                             <span class="simple_tooltip">Delete Member<span></span></span>
                                         </a>
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('edit-privilege') ?>&user_id=<?php echo $row->ID;?>&organisation_id=<?php echo $organisation_id;?>" class="action-btn edit-btn has-tooltip icon-btn left10" data-id="26" rel="custom-popup" cp-type="ajax" cp-removeboxafterclose="1" cp-closewhenclickoveraly="0">
+                                            <span class="p"></span>
+                                            <span class="simple_tooltip">Edit Privilege<span></span></span>
+                                        </a>                                        
                                     </div>
                                     <div class="clear"></div>
                                 </div>

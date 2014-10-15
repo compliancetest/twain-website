@@ -345,3 +345,24 @@ function ct_get_organisation_by_key($org_key)
     
     return $row;    
 }
+
+function ct_get_user_privileges($user_id, $organisation_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT p.* FROM {$wpdb->prefix}users_privileges AS up LEFT JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id WHERE up.user_id=%d AND up.organisation_id=%d", $user_id, $organisation_id);
+    
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function ct_get_privileges()
+{
+    global $wpdb;
+    
+    $query = "SELECT * FROM {$wpdb->prefix}privileges ORDER BY title";
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}

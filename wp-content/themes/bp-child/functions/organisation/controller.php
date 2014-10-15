@@ -580,4 +580,22 @@ class CT_Organisation_Controller
         
         return;
     }
+    
+    public function remove_privilege($user_id)
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}users_privileges WHERE user_id=%d", $user_id);
+        $wpdb->query($query);
+        
+        return;
+    }
+    
+    public function add_privilege($user_id, $organisation_id, $privilege)
+    {
+        global $wpdb;
+        
+        $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $user_id, "organisation_id" => $organisation_id, "privilege_id" => $privilege), array("%d", "%d", "%d"));
+        
+    }
 }

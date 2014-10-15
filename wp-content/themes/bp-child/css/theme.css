@@ -8581,15 +8581,19 @@ input.inactive_s{
 ----------------------------------------------- */
 
 #organisation_users .td-name{
-    width: 270px;
+    width: 150px;
 }
 #organisation_users .td-email{
-    width: 330px;
+    width: 270px;
 }
 #organisation_users .td-roles{
-    width: 180px;
+    width: 100px;
 }
 #organisation_users .td-action{
-    width: 53px;
+    width: 92px;
+}
+
+#organisation_users .td-privilege{
+    width: 200px;
 }
 
