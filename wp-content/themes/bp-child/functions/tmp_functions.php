@@ -21,6 +21,8 @@ if(is_super_admin())
                 foreach($privileges as $p){
                     $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $r->user_id, "organisation_id" => $r->organisation_id, "privilege_id" => $p->id), array("%d", "%d", "%d"));   
                 }
+            }
+        }
 
         //Associate products with organisation
         if(isset($_GET['fix_test_plan_org_id'])){
