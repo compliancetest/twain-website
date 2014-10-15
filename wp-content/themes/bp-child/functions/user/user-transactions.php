@@ -138,6 +138,8 @@ function cp_view_validation_log()
         return '<p class="message error">Invalid Request!</p>';
     }
     
+    $html_render_limit = get_option('s3_xml_max_size');
+    
     ob_start();
     foreach($data as $row){
     ?>
@@ -156,7 +158,12 @@ function cp_view_validation_log()
                     } else {
                         echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" target="_blank">XML</a>';
                     }
-                    echo ' &middot; ' . '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
+                    echo ' &middot; ';
+                    if ($row->S3_VALIDATION_RESULT_CONTENT_LENGTH > $html_render_limit) {
+                        echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" class="html-view-error">HTML</a>';
+                    } else {
+                        echo '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
+                    }
                 } 
                 
             ?>
