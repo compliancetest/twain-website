@@ -45,11 +45,19 @@ class ManageESB
         /*if($suite_id != null)
             $this->addTestSuiteIDToLog($suite_id);*/
         
-        $query = ManageESB::$esbdb->prepare("SELECT s.TEST_SUITE_WP_ID, p.PRODUCT_WP_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
+        $query = "SELECT s.TEST_SUITE_WP_ID, p.PRODUCT_WP_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
                                             "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                                             "LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID=m.PRODUCT_ID " .
                                             "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=m.TEST_SUITE_CONFIGURATION_ID " .
-                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1 AND m.CUSTOMER_ID=%d", $customer_id);
+                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1";
+        
+        if (is_array($customer_id)) {
+            $customer_id = ManageESB::$esbdb->escape($customer_id);            
+            $query .= " AND m.CUSTOMER_ID IN (" . implode(", ", $customer_id) . ")";
+        } else {
+            $query .= ManageESB::$esbdb->prepare(" AND m.CUSTOMER_ID=%d", $customer_id);
+        }
+        
         
         if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND s.TEST_SUITE_WP_ID=%d", $suite_id);
@@ -61,7 +69,7 @@ class ManageESB
             $query .= ManageESB::$esbdb->prepare(" AND c.TEST_CASE_DB_ID=%d", $case_id);
         
         $rows = ManageESB::$esbdb->get_results($query);
-        
+    
         if(!$rows)
             return array();
     
@@ -244,7 +252,7 @@ class ManageESB
 
         } else if( $subscription_id == 'my' ){
             //Getting Manageable Users' Subscriptions
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions AS s WHERE user_id = %d", $user_id );
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions AS s WHERE user_id = %d", $user_id );
             if ($organisation_id !== null && $organisation_id != "all") {
                 $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
             }

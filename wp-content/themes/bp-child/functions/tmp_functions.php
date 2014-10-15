@@ -13,6 +13,40 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        //Associate products with organisation
+        if(isset($_GET['fix_test_plan_org_id'])){
+            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            foreach($results as $r){
+                if($r->organisation_id)
+                    $wpdb->update('wp_test_plans', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+            }
+            
+            die('Completed!');
+        }
+        
+        //Associate test plans with organisation
+        if(isset($_GET['fix_test_plan_org_id'])){
+            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            foreach($results as $r){
+                if($r->organisation_id)
+                    $wpdb->update('wp_test_plans', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+            }
+            
+            die('Completed!');
+        }
+        
+        //Associate compliance claims with organisation
+        if(isset($_GET['fix_claim_org_id'])){
+            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_compliance_claims AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            foreach($results as $r){
+                if($r->organisation_id)
+                    $wpdb->update('wp_compliance_claims', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+            }
+            
+            die('Completed!');
+        }
+        
+        
         //Create Organisation Membership Records for the subscribers
         if(isset($_GET['fix_org_membership'])){
             $results = $wpdb->get_results("SELECT organisation_id, user_id FROM wp_users_subscriptions");
@@ -26,6 +60,10 @@ if(is_super_admin())
             
             die('Completed!');
         }
+        
+        
+        
+        
         
         if(isset($_GET['fix_case_suite_link']))
         {

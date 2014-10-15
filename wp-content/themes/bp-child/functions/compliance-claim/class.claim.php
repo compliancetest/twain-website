@@ -7,7 +7,7 @@ class ComplianceClaim
     
     var $product_id = null;
     
-    var $creator_id = null;
+    var $organisation_id = null;
     
     var $suite_id = null;
     
@@ -44,7 +44,7 @@ class ComplianceClaim
         if($row)
         {
             $this->product_id = $row->product_id;
-            $this->creator_id = $row->creator_id;
+            $this->organisation_id = $row->organisation_id;
             $this->suite_id = $row->suite_id;
             $this->conformance_level = $row->conformance_level;
             $this->role = $row->role;
