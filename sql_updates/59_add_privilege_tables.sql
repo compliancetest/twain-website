@@ -1,8 +1,9 @@
 CREATE TABLE `wp_privileges` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) DEFAULT NULL,
-  `title` varchar(20) DEFAULT NULL,
+  `code` varchar(50) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
+  `order` int(11) DEFAULT 0,
   `is_default` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;

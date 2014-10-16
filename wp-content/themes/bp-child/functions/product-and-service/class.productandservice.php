@@ -18,6 +18,8 @@ class ProductAndService
     
     var $owner = '';
     
+    var $organisation_id = '';
+    
     var $descrition = '';
 
     var $visibility = '';
@@ -53,6 +55,7 @@ class ProductAndService
         $this->version = $this->loadSingleValue('product_version');
         $this->accessURL = $this->loadSingleValue('product_url');
         $this->descrition = $this->loadSingleValue('product_description');
+        $this->organisation_id = $this->loadSingleValue('product_organisation_id');
         $this->visibility = $this->loadSingleValue('product_visibility');
 
         $this->loadRelatedProducts();

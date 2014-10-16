@@ -6,8 +6,7 @@
 
 $psID = isset($_GET['id']) ? $_GET['id'] : null;
 
-if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null && !can_create_product_and_service()) )
-{
+if (!can_maintain_product_and_service(null, $psID)) {
     if(!$psID)
         addMessage('Sorry, you are not allowed to create a Product / Service.', 'error');
     else
@@ -30,6 +29,10 @@ get_header();
 
 $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
 
+$user_id = get_current_user_id();
+
+$user_organisation = ct_get_user_organisation($user_id);
+
 if(isset($_SESSION['product_data']))
 {
     $prevData = $_SESSION['product_data'];
@@ -42,6 +45,7 @@ if(isset($_SESSION['product_data']))
     $product->version = $prevData['product_version'];
     $product->owner = $prevData['product_owner'];
     $product->descrition = $prevData['product_description'];
+    $product->organisation_id = $prevData['product_organisation_id'];
 
     $product->relatedProducts = array();
     if($prevData['related-product'])
@@ -115,8 +119,8 @@ if(isset($_SESSION['product_data']))
                            </div>
                            <div class="has-focus-tooltip">
                                <label>Product Owner:</label>                    
-                               <input type="text" class="input required" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
-                               <span class="focus-tooltip"><span></span>Enter the owner of your product or service. By default, it is set to the same as the organisation name from your profile.</span>
+                               <input type="text" class="input required" name="product_owner" id="product_owner" readonly value="<?php echo $user_organisation->organisation_name?>" />
+                               <span class="focus-tooltip"><span></span>The owner of your product or service. It is set to the same as the organisation name from your profile.</span>
                            </div>
                        </div> 
                        <div class="grid-cell has-focus-tooltip">

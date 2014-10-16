@@ -346,7 +346,7 @@ function ct_get_user_privileges($user_id, $organisation_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT p.* FROM {$wpdb->prefix}users_privileges AS up LEFT JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id WHERE up.user_id=%d AND up.organisation_id=%d", $user_id, $organisation_id);
+    $query = $wpdb->prepare("SELECT p.* FROM {$wpdb->prefix}users_privileges AS up LEFT JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id WHERE up.user_id=%d AND up.organisation_id=%d ORDER BY p.`order`", $user_id, $organisation_id);
     
     $rows = $wpdb->get_results($query);
     
@@ -357,8 +357,32 @@ function ct_get_privileges()
 {
     global $wpdb;
     
-    $query = "SELECT * FROM {$wpdb->prefix}privileges ORDER BY title";
+    $query = "SELECT * FROM {$wpdb->prefix}privileges ORDER BY `order`";
     $rows = $wpdb->get_results($query);
     
     return $rows;
+}
+
+function ct_get_privilege_by_code($code)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}privileges WHERE code=%s", $code);
+    $id = $wpdb->get_var($query);
+    
+    return $id;
+}
+
+function ct_check_user_privilege($user_id, $organisation_id, $privilege)
+{
+    global $wpdb;
+    
+    $privilege_id = ct_get_privilege_by_code($privilege);
+    
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_privileges WHERE user_id=%d AND organisation_id=%d AND privilege_id=%d", $user_id, $organisation_id, $privilege_id);
+    
+    $id = $wpdb->get_var($query);
+    
+    return $id ? true : false;
+    
 }

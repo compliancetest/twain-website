@@ -579,17 +579,20 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" id="edit-privilege-box" style="display: none; width: 450px;">
                     <form name="privilege-form" action="/index.php" method="post">
-                        <div class="popup-box-header radius6 noradiusbottom">Edit User Privilege</div>
+                        <div class="popup-box-header radius6 noradiusbottom">Edit User Privileges</div>
                         <div class="popup-box-content grid-box-body">    
                         <?php foreach($privileges as $p){ ?>
-                            <p>
-                                <input type="checkbox" name="privilege[]" value="<?php echo $p->id ?>" <?php echo in_array($p->id, $checked_privileges) ? 'checked="checked"' : ''?>  /> 
-                                <span class="has-tooltip">
+                            <div class="field-row">
+                                <div class="grid-cell width5P">
+                                    <input type="checkbox" name="privilege[]" value="<?php echo $p->id ?>" <?php echo in_array($p->id, $checked_privileges) ? 'checked="checked"' : ''?>  /> 
+                                </div>
+                                <div class="grid-cell width90P">
                                     <?php echo $p->title?>
-                                    (<?php echo $p->description?>)
-                                    <!--<span class="simple_tooltip"><?php echo $p->description?><span></span></span>-->
-                                </span>
-                            </p>
+                                    <br />
+                                    <?php echo $p->description?>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
                         <?php } ?>
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">      

@@ -142,7 +142,7 @@ function editPlan()
     $plan = new TestPlan($planID);
     $plan->load();
     
-    if ($user_membership->organisation_id != $plan->organisation_id) {
+    if (!$user_membership || ($planID && $user_membership->organisation_id != $plan->organisation_id)) {
         ?>
         <div class="popup-box" id="make-plan-box" style="display: none;">
             <div class="popup-box-header radius6 noradiusbottom">Permission Error!</div>
