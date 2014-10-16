@@ -2,7 +2,7 @@
     <ul class="tabs no-ajax">
         <li <?php echo is_page('users') ? 'class="active"' : ''?>>
             <a href="/my-organisation/users" rel="organisation_users" <?php echo is_page('users') ? 'class="selected"' : ''?>>
-                <span class="left icon" id="icon_admin"></span>
+                <span class="left icon" id="icon_users"></span>
                 <span class="right text">Users</span>
                 <span class="tabactive"></span>
                 <span class="clear"></span>

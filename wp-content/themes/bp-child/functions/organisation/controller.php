@@ -558,6 +558,9 @@ class CT_Organisation_Controller
         $query = $wpdb->insert($wpdb->prefix . "organisations_members", array('organisation_id' => $organisation_id, 'user_id' => $user_id, 'is_admin' => 0, 'created_date' => date("Y-m-d H:i:s")));
         $wpdb->query($query);
         
+        //Add Default Privilege
+        $this->add_default_privileges($user_id, $organisation_id);
+        
         return;
     }
     
@@ -578,6 +581,38 @@ class CT_Organisation_Controller
         $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}organisations_members WHERE organisation_id=%d AND user_id=%d", $organisation_id, $user_id);
         $wpdb->query($query);
         
+        //Delete Privileges
+        $this->remove_privilege($user_id);
+        
         return;
+    }
+    
+    public function remove_privilege($user_id)
+    {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}users_privileges WHERE user_id=%d", $user_id);
+        $wpdb->query($query);
+        
+        return;
+    }
+    
+    public function add_privilege($user_id, $organisation_id, $privilege)
+    {
+        global $wpdb;
+        
+        $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $user_id, "organisation_id" => $organisation_id, "privilege_id" => $privilege), array("%d", "%d", "%d"));
+        
+    }
+    
+    public function add_default_privileges($user_id, $organisation_id)
+    {
+        global $wpdb;
+        
+        $query = "SELECT * FROM {$wpdb->prefix}privileges WHERE is_default=1";
+        $privileges = $wpdb->get_results($query);
+        foreach ($privileges as $p) {
+            $this->add_privilege($user_id, $organisation_id, $p->id);
+        }
     }
 }

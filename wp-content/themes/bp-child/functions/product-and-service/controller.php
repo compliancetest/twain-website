@@ -29,6 +29,8 @@ function saveProductService()
 {
     global $wpdb;
     
+    $user_id = get_current_user_id();
+    
     $_SESSION['product_data'] = null; unset($_SESSION['product_data']);
     
     $id = htmlspecialchars($_POST['id']);
@@ -37,12 +39,14 @@ function saveProductService()
     else
         $isNew = false;
     
-    if(($isNew && !can_create_product_and_service()) || (!$isNew && !can_edit_product_and_service($id)))
+    if (!can_maintain_product_and_service($user_id, $id)) 
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect(get_site_url());
         exit;
     }
+    
+    $user_organisation = ct_get_user_organisation($user_id);
     
     //Check Product ID duplication
     $product_id = htmlspecialchars($_POST['product_id']);
@@ -152,8 +156,10 @@ function saveProductService()
     $esb = new ManageESB();
     $esb->saveProductInfo($id, $product_id, $_POST['product_name']);
     
+    update_post_meta($id, 'product_organisation_id', $user_organisation->id);
+    
     update_post_meta($id, 'product_name', htmlspecialchars($_POST['product_name']));
-    update_post_meta($id, 'product_release_date', !$_POST['product_release_date'] ? date("Y-m-d H:i:s") : date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));
+    update_post_meta($id, 'product_release_date', !$_POST['product_release_date'] ? date("Y-m-d H:i:s") : date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));    
     update_post_meta($id, 'product_type', htmlspecialchars($_POST['product_type']));
     update_post_meta($id, 'product_version', htmlspecialchars($_POST['product_version']));
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));

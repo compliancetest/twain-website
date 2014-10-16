@@ -138,6 +138,8 @@ function cp_view_validation_log()
         return '<p class="message error">Invalid Request!</p>';
     }
     
+    $html_render_limit = get_option('s3_xml_max_size');
+    
     ob_start();
     foreach($data as $row){
     ?>
@@ -156,7 +158,12 @@ function cp_view_validation_log()
                     } else {
                         echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" target="_blank">XML</a>';
                     }
-                    echo ' &middot; ' . '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
+                    echo ' &middot; ';
+                    if ($row->S3_VALIDATION_RESULT_CONTENT_LENGTH > $html_render_limit) {
+                        echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" class="html-view-error">HTML</a>';
+                    } else {
+                        echo '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
+                    }
                 } 
                 
             ?>
@@ -353,48 +360,29 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
     if($user_id == null)
         $user_id = get_current_user_id();
     
-    if(is_admin() || is_super_admin($user_id)) //Get All Products and Services
-    {
-        $args = array(
-            'post_type' => 'product-service', 
-            'posts_per_page' => -1,
-        );
-    }else{
-//        $customerIDs = getManagedCustomerWPIDs($user_id);
-        $customerIDs = null;
-        if(!$customerIDs)
-        {
-            $args = array(
-                'post_type' => 'product-service', 
-                'posts_per_page' => -1,
-                'author' => $user_id
-            );
-        }else{
-            $customerIDs[] = $user_id;
-            $args = array(
-                'post_type' => 'product-service', 
-                'posts_per_page' => -1,
-                'author' => implode(",", $customerIDs)
-            );
-        }
+    //Getting User Membership
+    $membership = ct_get_user_organisation_membership($user_id);
+    
+    $args = array(
+        'post_type' => 'product-service', 
+        'posts_per_page' => -1,
+        'meta_query'    => array(
+                            array(
+                                'key' => 'product_organisation_id',
+                                'value' => $membership->organisation_id,
+                                'compare' => "=",
+                            )                        
+        )
+    );
+    
+    if (isset($exclusive)) {
+        $args['post__not_in'] = $exclusive;
     }
+    
     
     $rows = get_posts($args);
-    $results = array();
     
-    if(!$exclusive)
-    {        
-        $results = $rows;
-    }else{
-        foreach($rows as $row)
-        {
-            if(in_array($row->ID, $exclusive))
-                continue;
-            $results[] = $row;
-        }    
-    }
-    
-    return $results;
+    return $rows;
 }
 
 

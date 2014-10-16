@@ -30,6 +30,8 @@ if(is_user_logged_in()){
 
 $products = getUserProductsAndServices();
 
+$user_organisation = ct_get_user_organisation($current_user->ID);
+
 get_header();
 ?>
 <div class="content" id="my_products">
@@ -52,10 +54,10 @@ get_header();
                    <?php if(is_admin() || is_super_admin()): ?>
                    <span class="left product-author">(<a href="<?php echo ct_get_user_profile_link($product->post_author) ?>"><?php echo cp_get_user_fullname($product->post_author)?></a>, <?php echo !get_post_meta($product->ID, 'product_visibility', true)  ? 'Public' : get_post_meta($product->ID, 'product_visibility', true)?>)</span>
                    <?php endif; ?>
-                   <?php if(can_delete_product_and_service($product->ID)){ ?>
+                   <?php if(can_maintain_product_and_service($product->ID)){ ?>
                    <a class="gbh-btn gbh-btn-delete right delete-product-link" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode($slug) ?>">Delete<span class="simple_tooltip radius6">Delete<span></span></span></a>
                    <?php } ?>
-                   <?php if(can_edit_product_and_service($product->ID)){ ?>
+                   <?php if(can_maintain_product_and_service($current_user->ID, $product->ID)){ ?>
                    <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
                    <?php } ?>
                    
@@ -113,9 +115,6 @@ get_header();
                    ?>  
                    </div>
                </div>
-               <?php if(0 && can_make_compliance_claim($product->ID)){ ?>
-               <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('edit-claim')?>&product_id=<?php echo $product->ID?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn process-btn add-claim-btn"><span class="p"></span><span class="t">New Compliance Claim</span></a>
-               <?php } ?>
            </div>
            <div id="obligation<?php echo $product->ID?>" style="display: none;">
                <?php 

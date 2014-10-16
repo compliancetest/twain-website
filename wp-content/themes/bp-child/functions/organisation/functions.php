@@ -212,15 +212,12 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
         $org_id = null;
     
     if (is_super_admin()) {
-        $query = "SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
-                  WHERE 1
-                                 ";
+        $query = "SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
+                  WHERE 1 ";
     } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT( s.id ), os.nickname, s.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
-                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+        $query = $wpdb->prepare("SELECT DISTINCT( os.id ), os.nickname, os.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}organisations_subscriptions AS os
                 WHERE 
-                    s.user_id = bm.user_id AND bm.is_confirmed=1 
+                    os.user_id = bm.user_id AND bm.is_confirmed=1 
                     AND
                     (bm.user_id=%d OR bm.group_id 
                         IN 
@@ -231,8 +228,7 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
         //Getting User Membership
         $organisation = ct_get_user_organisation();
 
-        $query = $wpdb->prepare("SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id                                 
+        $query = $wpdb->prepare("SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
                                  WHERE os.organisation_id=%d ", 
                                  $organisation->id);
     }
@@ -344,4 +340,49 @@ function ct_get_organisation_by_key($org_key)
     $row = $wpdb->get_row($query);
     
     return $row;    
+}
+
+function ct_get_user_privileges($user_id, $organisation_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT p.* FROM {$wpdb->prefix}users_privileges AS up LEFT JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id WHERE up.user_id=%d AND up.organisation_id=%d ORDER BY p.`order`", $user_id, $organisation_id);
+    
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function ct_get_privileges()
+{
+    global $wpdb;
+    
+    $query = "SELECT * FROM {$wpdb->prefix}privileges ORDER BY `order`";
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function ct_get_privilege_by_code($code)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}privileges WHERE code=%s", $code);
+    $id = $wpdb->get_var($query);
+    
+    return $id;
+}
+
+function ct_check_user_privilege($user_id, $organisation_id, $privilege)
+{
+    global $wpdb;
+    
+    $privilege_id = ct_get_privilege_by_code($privilege);
+    
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_privileges WHERE user_id=%d AND organisation_id=%d AND privilege_id=%d", $user_id, $organisation_id, $privilege_id);
+    
+    $id = $wpdb->get_var($query);
+    
+    return $id ? true : false;
+    
 }

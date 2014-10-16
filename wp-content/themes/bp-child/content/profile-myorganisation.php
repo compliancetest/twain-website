@@ -35,7 +35,7 @@ if (!$org_membership) {
                 <?php if (!$org_membership || !$org_membership->is_admin) { ?>
                 <div class="grid-row grid-hidden-row">
                     <div class="grid-cell width30P"><label>Organisation Key</label></div>
-                    <div data-name="user_organisation" data-value="<?php echo $org_membership ? $org_detail->organisation_key : '';?>" class="grid-cell in_input width70P"><?php echo $org_membership ? $org_detail->organisation_key : '';?></div>
+                    <div data-name="user_organisation_key" data-value="<?php echo $org_membership ? $org_detail->organisation_key : '';?>" class="grid-cell in_input width70P"><?php echo $org_membership ? $org_detail->organisation_key : '';?></div>
                     <div class="clear"></div>
                 </div>
                 <?php } ?>
