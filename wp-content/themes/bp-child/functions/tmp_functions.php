@@ -14,6 +14,15 @@ if(is_super_admin())
         global $wpdb, $CPRest;
         
         //Add Default Privileges
+        if(isset($_GET['fix_product_organisation_id'])){
+            $results = $wpdb->get_results("SELECT p.ID, pm.organisation_id FROM wp_posts AS p LEFT JOIN wp_organisations_members AS pm ON pm.user_id=p.post_author WHERE p.post_type='product-service'");
+            foreach($results as $r){
+                update_post_meta($r->ID, 'product_organisation_id', $r->organisation_id);
+            }
+            die("Completed");
+        }
+
+        //Add Default Privileges
         if(isset($_GET['fix_privileges'])){
             $privileges = ct_get_privileges();
             $results = $wpdb->get_results("SELECT * FROM wp_organisations_members");
@@ -22,6 +31,7 @@ if(is_super_admin())
                     $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $r->user_id, "organisation_id" => $r->organisation_id, "privilege_id" => $p->id), array("%d", "%d", "%d"));   
                 }
             }
+            die("Completed");
         }
 
         //Associate products with organisation

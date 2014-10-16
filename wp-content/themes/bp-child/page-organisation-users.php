@@ -68,7 +68,7 @@ get_header();
                                     <div class="td td-action tocenter">                                        
                                         <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('edit-privilege') ?>&user_id=<?php echo $row->ID;?>&organisation_id=<?php echo $organisation_id;?>" class="action-btn edit-btn has-tooltip icon-btn left15" data-id="26" rel="custom-popup" cp-type="ajax" cp-removeboxafterclose="1" cp-closewhenclickoveraly="0">
                                             <span class="p"></span>
-                                            <span class="simple_tooltip">Edit Privilege<span></span></span>
+                                            <span class="simple_tooltip">Edit Privileges<span></span></span>
                                         </a>                           
                                         <a href="javascript: void(0)" data-id="<?php echo $row->membership_id?>" class="action-btn icon-btn delete-btn has-tooltip left10">
                                             <span class="p"></span>
