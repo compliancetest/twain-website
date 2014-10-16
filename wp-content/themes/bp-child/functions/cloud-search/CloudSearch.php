@@ -63,7 +63,6 @@ class CloudSearch {
         if( ! empty( $l ) ){
             $str['fq'] = ' ( and '.$l.' ) ';
         }
-        var_dump($str);
         if( ! isset( $str['q'] ) ){
             $str['q'] = 'matchall';
             $str['q.parser'] = 'structured';
