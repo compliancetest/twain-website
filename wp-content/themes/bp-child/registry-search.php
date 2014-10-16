@@ -8,139 +8,85 @@ get_header();
 global $post; 
 
 $baseURL = get_permalink();
-$params = array();
-$filterParams = array();
 
-$post_type = 'product-service';
 
-$posts_per_page = 25;
-    
-//Search Test Suites
-$args = get_products_args();
-//Getting Search Query
-$term = trim(isset($_GET['q']) ? $_GET['q'] : '');
-$postsIds = $notInPostIdsArray = array();
+function process_search( $search_params = array() ){
+    global $wpdb;
 
-if($term) {
-    $t_args = $args;
-    unset($t_args['tax_query']);// = array('relation' => 'OR');
-    unset($t_args['meta_key']);
-    unset($t_args['meta_value']);
-    $t_args['meta_query']['relation'] = 'OR';
-    $t_args['meta_query'][] = array('key' => 'product_owner', 'value' => $term, 'compare' => 'LIKE');
-    $t_args['meta_query'][] = array('key' => 'product_name', 'value' => $term, 'compare' => 'LIKE');
-    $a_posts = new WP_Query($t_args);
-    $allP = $a_posts->get_posts();
-    if( $allP ) {
-        foreach ($allP AS $one_post) {
-            array_push($postsIds, $one_post->ID);
+    $product_claims = $wpdb->get_results( "SELECT * FROM wp_compliance_claims" );
+    $service_claims = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement WHERE status = 'Verified'" );
+
+    $type_filter = $owner_filter = $suite_filter = $testtype_filter = $role_filter = $level_filter = $teststatus_filter = array( 'All' );
+
+    foreach( $product_claims AS $product_claim ){
+        if( ! isset( $product_claim['1']) ){
+            $product_claim['1'] = 'Product';
         }
-    } else{
-        $postsIds = array( -1 );
-    }
-}
-    
-//Getting Filter Params
-$filterType = getFilterParam('type');
-$filterYear = getFilterParam('product_year');
-$filterTestSuite = getFilterParam('test_suite');
-
-foreach($filterType as $f)
-{
-    $f = htmlspecialchars($f);
-    $args['meta_query'][] = array('key' => 'product_type', 'value' => $f, 'compare' => '=');
-    $params[] = urlencode('type[]') . '=' . urlencode($f);
-    $filterParams['type[]'] = $f;
-}
-foreach($filterTestSuite as $v)
-{
-    $v = htmlspecialchars($v);
-    if( $v == 'None' ){
-        $tempPostIds = getProductsByTestSuiteName( $v, true );
-        $notInPostIdsArray = array_merge( $notInPostIdsArray, explode( ',', $tempPostIds ) );
-    } else {
-        $tempPostIds = getProductsByTestSuiteName( $v );
-        foreach( explode( ',', $tempPostIds ) AS $post__id ){
-            $t = get_post_meta( $post__id, 'product_visibility', true );
-            if( ( $t == 'Public' && ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) || ( ( $t == 'Private' || $t == 'Public' ) && ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) ){
-                array_push( $postsIds, $post__id );
-            }
+        if( ! isset( $owner_filter[$product_claim->owner]) ){
+            $owner_filter['1'] = 'Product';
         }
-    }
-    $params[] = urlencode('test_suite[]') . '=' . urlencode($v);
-    $filterParams['test_suite[]'] = $v;
-}
-foreach($filterYear as $v)
-{
-    $v = htmlspecialchars($v);
-    $args['meta_query'][] = array('key' => 'product_release_date', 'value' => $v . "-", 'compare' => 'LIKE');
-    $params[] = urlencode('product_year[]') . '=' . urlencode($v);
-    $filterParams['product_year[]'] = $v;
-}
-
-
-//For Right Panels
-$caseTypes = array();
-//$caseOwners = array();
-$caseIssueYears = array();
-$testSuites = array();
-
-if( ! empty( $postsIds ) ){
-    $args['post__in'] = $postsIds;
-}
-if( ! empty( $notInPostIdsArray ) ){
-    foreach( $notInPostIdsArray AS $notInPostIdValue ){
-        if(($key = array_search($notInPostIdValue, $args['post__in'])) !== false) {
-            unset($args['post__in'][$key]);
+        if( ! isset( $suite_filter[$product_claim->suite_id]) ){
+            $suite_filter[$product_claim->suite_id] = get_the_title( $product_claim->suite_id );
         }
-    }
-    $args['post__not_in'] = $notInPostIdsArray;
-}
-//For Filter Values
-$all_posts = new WP_Query($args);
-$allSuites = $all_posts->get_posts();
-$processedIDs = array();
-
-foreach($allSuites as $row)
-{
-    $issueStatus = get_post_meta($row->ID, 'product_status', true);
-    $issueDate = get_post_meta($row->ID, 'product_release_date', true);
-    
-    $productType = get_post_meta($row->ID, 'product_type', true);    
-    $caseTypes[$productType] = isset($caseTypes[$productType]) ? $caseTypes[$productType] + 1 : 1;
-    $testSuiteProducts = getTestSuitProducts( $row->ID );
-    if( ! empty( $testSuiteProducts ) ){
-        foreach( $testSuiteProducts AS $testSuiteProduct ){
-                if( in_array( $testSuiteProduct->suite_title.$row->ID, $processedIDs )){
-                    continue;
+        if( ! isset( $testtype_filter['1']) ){
+            $testtype_filter['1'] = 'Product testing';
+        }
+        if( strpos( $role_filter, ';;' ) !== false ) {
+            $temp_roles = explode( ';;', trim( $product_claims->role, ';;' ) );
+            foreach( $temp_roles AS $temp_role ) {
+                if (!isset($role_filter[$temp_role])) {
+                    $role_filter[$temp_role] = $temp_role;
                 }
-                array_push( $processedIDs, $testSuiteProduct->suite_title.$row->ID );
-                if( ! empty( $testSuiteProduct->suite_title ) ){
-                $testSuites[$testSuiteProduct->suite_title] = isset($testSuites[$testSuiteProduct->suite_title]) ? $testSuites[$testSuiteProduct->suite_title] + 1 : 1;
             }
         }
-    } else {
-        $testSuites['None'] = isset($testSuites['None']) ? $testSuites['None'] + 1 : 1;
+        if( strpos( $level_filter, ';;' ) !== false ) {
+            $temp_levels = explode( ';;', trim( $product_claims->level, ';;' ) );
+            foreach( $temp_levels AS $temp_level ) {
+                if (!isset($level_filter[$temp_level])) {
+                    $level_filter[$temp_level] = $temp_level;
+                }
+            }
+        }
+        if( ! isset( $teststatus_filter[$product_claim->status]) ){
+            $teststatus_filter[$product_claim->status] = $product_claim->status;
+        }
     }
-    $tsYear = date('Y', strtotime($issueDate));
-    $caseIssueYears[$tsYear] = isset($caseIssueYears[$tsYear]) ? $caseIssueYears[$tsYear] + 1 : 1;
-
+    foreach( $service_claims AS $service_claim ){
+        if( ! isset( $type_filter['2']) ){
+            $type_filter['2'] = 'Service';
+        }
+        if( ! isset( $owner_filter[$service_claim->owner]) ){
+            $owner_filter['1'] = 'Product';
+        }
+        if( ! isset( $suite_filter[$product_claim->suite_id]) ){
+            $suite_filter[$product_claim->suite_id] = get_the_title( $product_claim->suite_id );
+        }
+        if( ! isset( $testtype_filter['1']) ){
+            $testtype_filter['1'] = 'Product testing';
+        }
+        if( strpos( $role_filter, ';;' ) !== false ) {
+            $temp_roles = explode( ';;', trim( $product_claims->role, ';;' ) );
+            foreach( $temp_roles AS $temp_role ) {
+                if (!isset($role_filter[$temp_role])) {
+                    $role_filter[$temp_role] = $temp_role;
+                }
+            }
+        }
+        if( strpos( $level_filter, ';;' ) !== false ) {
+            $temp_levels = explode( ';;', trim( $product_claims->level, ';;' ) );
+            foreach( $temp_levels AS $temp_level ) {
+                if (!isset($level_filter[$temp_level])) {
+                    $level_filter[$temp_level] = $temp_level;
+                }
+            }
+        }
+        if( ! isset( $teststatus_filter[$product_claim->status]) ){
+            $teststatus_filter[$product_claim->status] = $product_claim->status;
+        }
+    }
 }
+$posts_per_page = 25;
 
-//Getting Pagination Params
-$page = get_query_var('paged') ? get_query_var('paged') : 1;
-$args['paged'] = $page;
-
-$args['posts_per_page'] = $posts_per_page;
-$get_posts = new WP_Query($args);
-$products = $get_posts->get_posts();
-if( isset( $_GET['download']) ){
-    $d_args = $args;
-    $d_args['paged'] = 1;
-    $d_args['posts_per_page'] = -1;
-    $posts_to_download = new WP_Query($d_args);
-    generateDataAndDownload( $posts_to_download->get_posts() );
-}
 ?>
 <div class="content container" id="search">
     <div class="column search-results">
@@ -169,16 +115,16 @@ if( isset( $_GET['download']) ){
                     <ul class="search-filters-list clearfix">
                         <li class="first">
                             <label for="implementation-type-filter">Implementation Type</label>
-                            <select name="" id="implementation-type-filter" class="select">
+                            <select name="type_filter" id="implementation-type-filter" class="select">
                                 <option>All</option>
-                                <?php foreach ($caseTypes as $k => $v): ?>
+                                <?php foreach( $ty as $k => $v): ?>
                                     <option><?php echo $k; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </li>
                         <li>
                             <label for="owner-filter">Owner</label>
-                            <select name="" id="owner-filter" class="select">
+                            <select name="owner_filter" id="owner-filter" class="select">
                                 <option>All</option>
                                 <option>Value 1</option>
                                 <option>Value 2</option>
@@ -186,7 +132,7 @@ if( isset( $_GET['download']) ){
                         </li>
                         <li>
                             <label for="test-suite-filter">Test Suite</label>
-                            <select name="" id="test-suite-filter" class="select">
+                            <select name="suite_filter" id="test-suite-filter" class="select">
                                 <option>All</option>
                                 <?php foreach ($testSuites as $k => $v): ?>
                                     <option><?php echo $k; ?></option>
@@ -195,7 +141,7 @@ if( isset( $_GET['download']) ){
                         </li>
                         <li>
                             <label for="test-type-filter">Test Type</label>
-                            <select name="" id="test-type-filter" class="select">
+                            <select name="testtype_filter" id="test-type-filter" class="select">
                                 <option>All</option>
                                 <option>Value 1</option>
                                 <option>Value 2</option>
@@ -203,7 +149,7 @@ if( isset( $_GET['download']) ){
                         </li>
                         <li class="first">
                             <label for="role-filter">Role</label>
-                            <select name="" id="role-filter" class="select">
+                            <select name="role_filter" id="role-filter" class="select">
                                 <option>All</option>
                                 <option>Value 1</option>
                                 <option>Value 2</option>
@@ -211,7 +157,7 @@ if( isset( $_GET['download']) ){
                         </li>
                         <li>
                             <label for="level-filter">Level</label>
-                            <select name="" id="level-filter" class="select">
+                            <select name="level_filter" id="level-filter" class="select">
                                 <option>All</option>
                                 <option>Value 1</option>
                                 <option>Value 2</option>
@@ -219,7 +165,7 @@ if( isset( $_GET['download']) ){
                         </li>
                         <li>
                             <label for="test-status-filter">Test Status</label>
-                            <select name="" id="test-status-filter" class="select">
+                            <select name="teststatus_filter" id="test-status-filter" class="select">
                                 <option>All</option>
                                 <option>Value 1</option>
                                 <option>Value 2</option>

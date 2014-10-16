@@ -54,6 +54,7 @@ class ProductAndService
         $this->accessURL = $this->loadSingleValue('product_url');
         $this->descrition = $this->loadSingleValue('product_description');
         $this->visibility = $this->loadSingleValue('product_visibility');
+        $this->services_not_permitted = $this->loadSingleValue('services_not_permitted');
 
         $this->loadRelatedProducts();
 
