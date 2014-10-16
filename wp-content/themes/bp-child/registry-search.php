@@ -134,23 +134,23 @@ if( isset( $_POST['download']) ){
                 </div>
             </form>
 
-            <div class="search-results-count clearfix">
-                <div>
-                    <?php if( $results['hits']['found'] > 0):?>
-                        <p class="search-results-count-label">Showing <?php echo $results['hits']['start'] + 1?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
+            <?php if( $results['hits']['found'] > 0):?>
+                <div class="search-results-count clearfix">
+                    <p class="search-results-count-label">
+                        Showing <?php echo $results['hits']['start'] + 1?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
                         <?php if($term){ ?> for "<b><?php echo $term?></b>" <?php } ?>
-                        </p>
-                    <?php else: ?>
-                        <p class="no-data">No result found!</p>
+                    </p>
+                    <?php if (count($products) > 0): ?>
+                        <a href="<?php echo add_query_arg( 'download', '1' ); ?>" class="action-btn download-btn">
+                            <span class="p"></span>
+                            <span class="t">Download Results</span>
+                        </a>
                     <?php endif; ?>
                 </div>
-                <?php if (count($products) > 0): ?>
-                    <a href="<?php echo add_query_arg( 'download', '1' ); ?>" class="action-btn download-btn">
-                        <span class="p"></span>
-                        <span class="t">Download Results</span>
-                    </a>
-                <?php endif; ?>
-            </div>
+            <?php else: ?>
+                <p class="no-data">No result found!</p>
+            <?php endif; ?>
+
             <?php if( $results['hits']['found'] > 0 ): ?>
                 <div class="search-result-list-wrapper">
                     <table class="search-result-list">
