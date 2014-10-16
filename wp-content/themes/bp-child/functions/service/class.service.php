@@ -32,6 +32,8 @@ class Service
 
     public $service_version = '';
 
+    public $service_related_services = array();
+
     public function loadSingleValue($key)
     {
         return get_post_meta($this->id, $key, true);
@@ -65,6 +67,10 @@ class Service
         $this->service_suite_id = $this->loadSingleValue('service_suite_id');
         $this->service_owner = $this->loadSingleValue('service_owner');
         $this->service_user_id = $this->loadSingleValue('service_user_id');
+        $this->service_related_services = $this->loadSingleValue('related_services');
+        if( $this->service_related_services ){
+            $this->service_related_services = json_decode( $this->service_related_services );
+        }
     }
 
     public static function has_assess( $service_id, $user_id = false ){

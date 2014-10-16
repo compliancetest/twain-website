@@ -87,9 +87,7 @@ if(isset($_SESSION['product_data']))
                            <span class="focus-tooltip" style="left: 110%"><span></span>Enter the date that this version of your product or service was released to the market.</span>
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
-                           <label>Type:</label>                                               
-                           <input type="radio" name="product_type" id="product_type_software" value="Software Product" <?php echo !$product->type || $product->type == 'Software Product' ? 'checked="checked"' : ''?> /> Software Product
-<!--                           <input type="radio" name="product_type" id="product_type_product" value="Web Service" --><?php //echo $product->type == 'Web Service' ? 'checked="checked"' : ''?><!-- /> Web Service                                                          -->
+                           <input type="hidden" name="product_type" id="product_type_software" value="Software Product" />
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -142,7 +140,7 @@ if(isset($_SESSION['product_data']))
         <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Select Related Products / Services</h5>
+               <h5 class="left">Select Related Products</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -199,13 +197,13 @@ if(isset($_SESSION['product_data']))
                    </div>
                    <?php } ?>
                    <div class="btn-row">
-                       <a href="#" class="action-btn add-new-btn" id="add-related-product"><span class="p"></span><span class="t">Add Related Product</span></a>
+                       <a href="#" class="action-btn add-new-btn has-tooltip" id="add-related-product" title="Add Related Product"><span class="p"></span><span class="t">Add</span></a>
                        <div class="clear"></div>
                    </div>
                  <?php }else{ ?>
                    <div class="field-row noborderbottom">
                        <div class="grid-cell width100P">
-                           No Product/Service Found!
+                           No Product Found!
                        </div>
                    </div>
                  <?php }   ?>
