@@ -201,6 +201,15 @@ function deleteProductService()
         return;
     }
     
+    $user_id = get_current_user_id();
+    
+    if (!can_maintain_product_and_service($user_id, $id)) 
+    {
+        addMessage('Permission Denied!', 'error');
+        wp_redirect(get_site_url() . "/my-products");
+        exit;
+    }
+    
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
 
     $redirectUrl = get_site_url() . '/' . $return;

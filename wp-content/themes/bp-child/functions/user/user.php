@@ -100,7 +100,30 @@ function compliancetest_user_actions()
         exit;
     }else if(wp_verify_nonce($cpAction, 'update-error-checking-action')){
         exit( cp_save_limited_error_checking() );
+    }else if(wp_verify_nonce($cpAction, 'insufficient-privilege')){
+        $privilege = base64_decode($_REQUEST['privilege']);
+        display_insufficient_box($privilege);
     }
+}
+
+function display_insufficient_box($privilege)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT title FROM {$wpdb->prefix}privileges WHERE code=%s", $privilege);
+    $title = $wpdb->get_var($query);
+    ?>
+    <div class="popup-box" style="display: none; width: 450px">
+        <div class="popup-box-header radius6 noradiusbottom">Insufficient Privileges</div>
+        <div class="popup-box-content"><p class="message error">You do not have the "<?php echo $title?>" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.</p></div>                    
+        <div class="popup-box-footer radius6 noradiustop">
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
+    </div>
+    <?php
+    exit;
 }
 
 function getOrganisationID($user_id = null)

@@ -362,7 +362,9 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
     
     //Getting User Membership
     $membership = ct_get_user_organisation_membership($user_id);
-    
+    if (!$membership) {
+        return array();
+    }
     $args = array(
         'post_type' => 'product-service', 
         'posts_per_page' => -1,

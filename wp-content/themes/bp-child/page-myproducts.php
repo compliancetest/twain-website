@@ -41,25 +41,29 @@ get_header();
     
     <div class="container"> <!--Temporary -->
         <div class="column">
-           <?php if(can_create_product_and_service()){ ?>
+           <?php if(can_maintain_product_and_service($current_user->ID)){ ?>
            <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Product</span></a>
+           <?php } else { ?>
+           <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn" ><span class="p"></span><span class="t">New Product</span></a>
+           <?php } ?>
            <div class="clear"></div>
            <div class="space20"></div>
-           <?php } ?>
+           
            <?php foreach($products as $product){ ?>
            <div class="grid-box grid-box-expandable table-box grid-box-opened">
                <div class="grid-box-header">
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true )?></b></a></h5>
-                   <?php if(is_admin() || is_super_admin()): ?>
-                   <span class="left product-author">(<a href="<?php echo ct_get_user_profile_link($product->post_author) ?>"><?php echo cp_get_user_fullname($product->post_author)?></a>, <?php echo !get_post_meta($product->ID, 'product_visibility', true)  ? 'Public' : get_post_meta($product->ID, 'product_visibility', true)?>)</span>
-                   <?php endif; ?>
-                   <?php if(can_maintain_product_and_service($product->ID)){ ?>
-                   <a class="gbh-btn gbh-btn-delete right delete-product-link" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode($slug) ?>">Delete<span class="simple_tooltip radius6">Delete<span></span></span></a>
-                   <?php } ?>
+                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true )?></b></a></h5>                  
                    <?php if(can_maintain_product_and_service($current_user->ID, $product->ID)){ ?>
+                   <a class="gbh-btn gbh-btn-delete right delete-product-link" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode($slug) ?>">Delete<span class="simple_tooltip radius6">Delete<span></span></span></a>
+                   
                    <a class="gbh-btn gbh-btn-edit right" href="/edit-product-and-service?id=<?php echo $product->ID?>">Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
-                   <?php } ?>
+                   <?php } /*else { ?>
+                   <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="gbh-btn gbh-btn-delete right" >Delete<span class="simple_tooltip radius6">Delete<span></span></span></a>
+                   
+                   <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="gbh-btn gbh-btn-edit right" >Edit<span class="simple_tooltip radius6">Edit<span></span></span></a>
+                   
+                   <?php }*/ ?>
                    
                    <div class="clear"></div>
                </div>
