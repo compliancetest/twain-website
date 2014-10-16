@@ -176,6 +176,35 @@ class CloudSearch {
         die;
     }
 
+    public  function _delete_all_items(){
+        global $wpdb;
+
+        $data = array();
+        $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans" );
+        foreach( $test_plans AS $test_plan ){
+            array_push( $data, array( 'type' => 'delete', 'id' => 'test_plan_'.$test_plan->id ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        $data = array();
+        $claims = $wpdb->get_results( "SELECT * FROM wp_compliance_claims" );
+        foreach( $claims AS $claim ){
+            array_push( $data, array( 'type' => 'delete', 'id' => 'claim_'.$claim->id ) );
+        }
+
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        // step 3 - upload agreements
+
+        $data = array();
+        $agreements = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement" );
+        foreach( $agreements AS $agreement ){
+            array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_'.$agreement->id ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        die;
+    }
+
     public function cloud_search_update_test_plan( $plan_id ){
         global $wpdb;
         $data = array();
@@ -283,8 +312,9 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_delete_item( $id, $type ){
+        $data = array();
         array_push( $data, array( 'type' => 'delete', 'id' => $type.'_'.$id  ) );
-        return $this->_sendDataToSearchDomain( $data );
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
     }
     protected function _sendDataToSearchDomain( Array $rows ){
         $data = json_encode( $rows );

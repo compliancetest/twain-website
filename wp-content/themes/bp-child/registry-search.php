@@ -10,7 +10,6 @@ global $post;
 $baseURL = get_permalink();
 
 $cloud_search = new CloudSearch();
-
 $results = $cloud_search->search( $_POST );
 if( ! isset( $_POST['page'] ) ){
     $_POST['page'] = 1;
