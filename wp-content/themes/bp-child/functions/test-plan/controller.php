@@ -111,6 +111,8 @@ function deletePlan()
     {
         addMessage($wpdb->last_error, 'error');
     }else{
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
         addMessage("The plan was deleted.");
     }
     wp_redirect($return);
@@ -260,7 +262,8 @@ function makePlan()
     }
     
     //Serialize Level
-    
+    $cloud_search = new CloudSearch();
+
     if(!$planID) //Make Plan
     {
         $nId = $wpdb->insert($wpdb->prefix . "test_plans", array(
@@ -271,12 +274,15 @@ function makePlan()
             'role'    =>  cp_implode($_POST['role']),
             'created_date'    =>  date('Y-m-d H:i:s')
         ));
+        $cloud_search->cloud_search_update_test_plan( $nId );
+
     }else{  //Edit Claim
         $nId = $wpdb->update($wpdb->prefix . "test_plans", array(
             'product_id'    =>  $_POST['product_id'],
             'level'    =>  cp_implode($_POST['level']),
             'role'    =>  cp_implode($_POST['role'])
         ), array('id' => $plan->id));
+        $cloud_search->cloud_search_update_test_plan( $plan->id );
     }
     if(!$nId)
     {
@@ -284,6 +290,8 @@ function makePlan()
         wp_redirect('/test-suite-coverage');
         exit;
     }
+
+
     addMessage('Test Plan was saved successfully!');
     wp_redirect('/test-suite-coverage');
     exit;

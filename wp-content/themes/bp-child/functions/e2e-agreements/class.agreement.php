@@ -81,6 +81,8 @@ class Agreement
             wp_redirect( $_REQUEST['_wp_http_referer'] );
             exit;
         }
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $insert_id );
         return $insert_id;
     }
 

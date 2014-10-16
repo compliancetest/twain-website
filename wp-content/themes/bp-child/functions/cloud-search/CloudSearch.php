@@ -1,0 +1,308 @@
+<?php
+/**
+ * @author Ivan Solowjew
+ * @date: 10/16/14
+ */
+
+class CloudSearch {
+
+    public function __construct(){
+
+    }
+
+    public function add( $data ){
+
+    }
+
+
+    private $_documentEndpoint = 'http://doc-ct-test-pnwcwodbtymkun3vz3riofvzkq.ap-southeast-2.cloudsearch.amazonaws.com/2013-01-01/documents/batch';
+    private $_searchDomainURL = 'http://search-ct-test-pnwcwodbtymkun3vz3riofvzkq.ap-southeast-2.cloudsearch.amazonaws.com/2013-01-01/search?';
+
+    public function search( $params = false ){
+        $str = array();
+        $str['return'] = '_all_fields';
+        $str['facet.type'] = '{}';
+        $str['facet.test_type'] = '{}';
+        $str['facet.test_suite'] = '{}';
+        $str['facet.owner'] = '{}';
+        $str['facet.level'] = '{}';
+        $str['facet.role'] = '{}';
+        $str['facet.status'] = '{}';
+        $l = '';
+        $range_checked = false;
+        foreach( $params AS $k => $v ){
+            if( $k == 'q' ){
+                if( ! empty( $v ) ) {
+                    $str['q'] = $v;
+                }
+            }else if( $k == 'page' ){
+                if( $v != 1 ){
+                    $str['start'] = ( ( --$v * 10 ) + 1 ) ;
+                }
+            }else if( $k == 'date_from'  || $k == 'date_to' ){
+                if( ! $range_checked ) {
+                    if (isset($params['date_from']) && ! empty( $params['date_from'] )) {
+                        $from = "['".$params['date_from'].'T00:00:00Z'."'";
+                    } else{
+                        $from = '{';
+                    }
+                    if ( isset($params['date_to'] ) && ! empty( $params['date_to'] ) ) {
+                        $to = "'".$params['date_to'].'T23:23:59Z'."']";
+                    } else{
+                        $to = '}';
+                    }
+                    $l .= "(range field=date $from, $to   ) ";
+                    $range_checked = true;
+                }
+            }else {
+                if( $v !== 'All' ) {
+                    $l .= " (term field=" . $k . " '" . urldecode( $v ) . "') ";
+                }
+            }
+        }
+        if( ! empty( $l ) ){
+            $str['fq'] = ' ( and '.$l.' ) ';
+        }
+        var_dump($str);
+        if( ! isset( $str['q'] ) ){
+            $str['q'] = 'matchall';
+            $str['q.parser'] = 'structured';
+        }
+        $curl = curl_init( $this->_searchDomainURL . http_build_query( $str ) );
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        $res = json_decode( $resp, true );
+        return $res;
+    }
+
+    public  function _initial_upload(){
+        global $wpdb;
+
+        // step 1 - upload test plans
+
+        $data = array();
+        $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans" );
+        foreach( $test_plans AS $test_plan ){
+            $product = new ProductAndService( $test_plan->product_id );
+            $product->load();
+            $test_plan->level = trim( $test_plan->level, ';;' );
+            $test_plan->role = trim( $test_plan->role, ';;' );
+            if( strpos( $test_plan->role, ';;' ) ){
+                $roles = explode( ';;', $test_plan->role );
+            } else{
+                $roles = array( $test_plan->role );
+            }
+            if( strpos( $test_plan->level, ';;' ) ){
+                $levels = explode( ';;', $test_plan->level );
+            } else{
+                $levels = array( $test_plan->level );
+            }
+            $temp_data = array(
+                'name'        => $product->name,
+                'version'     => $product->version,
+                'owner'       => $product->owner,
+                'type'        => 'Software Product',
+                'test_suite'  => get_the_title( $test_plan->suite_id ),
+                'role'        => $roles,
+                'level'       => $levels,
+                'status'      => 'In Progress',
+                'test_type'   => 'Certification',
+                'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
+                'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $test_plan->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
+                'suite_id'    => $test_plan->suite_id,
+                'post_id'     => $product->id
+            );
+            array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        // step 2 - upload claims
+
+        $data = array();
+        $claims = $wpdb->get_results( "SELECT * FROM wp_compliance_claims" );
+        foreach( $claims AS $claim ){
+            $product = new ProductAndService( $claim->product_id );
+            $product->load();
+            $claim->level = trim( $claim->level, ';;' );
+            $claim->role = trim( $claim->role, ';;' );
+            if( strpos( $claim->role, ';;' ) ){
+                $roles = explode( ';;', $claim->role );
+            } else{
+                $roles = array( $claim->role );
+            }
+            if( strpos( $claim->level, ';;' ) ){
+                $levels = explode( ';;', $claim->level );
+            } else{
+                $levels = array( $claim->level );
+            }
+            $temp_data = array(
+                'name'        => $product->name,
+                'version'     => $product->version,
+                'owner'       => $product->owner,
+                'type'        => 'Software Product',
+                'test_suite'  => get_the_title( $claim->suite_id ),
+                'role'        => $roles,
+                'level'       => $levels,
+                'status'      => 'Verified',
+                'test_type'   => 'Certification',
+                'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $claim->created_date ) ).'Z',
+                'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $claim->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
+                'suite_id'    => $claim->suite_id,
+                'post_id'     => $product->id
+            );
+            array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
+        }
+
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        // step 3 - upload agreements
+
+        $data = array();
+        $agreements = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement" );
+        foreach( $agreements AS $agreement ){
+            $service = new Service( $agreement->requester_service_id );
+            $service->load();
+            $temp_data = array(
+                'name'        => $service->service_name,
+                'version'     => $service->service_version,
+                'owner'       => $service->service_owner,
+                'type'        => 'Web Service',
+                'test_suite'  => get_the_title( $service->service_suite_id ),
+                'role'        => $service->service_roles,
+                'level'       => $service->service_levels,
+                'status'      => $agreement->status,
+                'test_type'   => 'End to End',
+                'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
+                'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
+                'suite_id'    => $service->service_suite_id,
+                'post_id'     => $service->id
+            );
+            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        die;
+    }
+
+    public function cloud_search_update_test_plan( $plan_id ){
+        global $wpdb;
+        $data = array();
+        $test_plan = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE id = %d", $plan_id ) );
+        $product = new ProductAndService( $test_plan->product_id );
+        $product->load();
+        $test_plan->level = trim( $test_plan->level, ';;' );
+        $test_plan->role = trim( $test_plan->role, ';;' );
+        if( strpos( $test_plan->role, ';;' ) ){
+            $roles = explode( ';;', $test_plan->role );
+        } else{
+            $roles = array( $test_plan->role );
+        }
+        if( strpos( $test_plan->level, ';;' ) ){
+            $levels = explode( ';;', $test_plan->level );
+        } else{
+            $levels = array( $test_plan->level );
+        }
+        $temp_data = array(
+            'name'        => $product->name,
+            'version'     => $product->version,
+            'owner'       => $product->owner,
+            'type'        => 'Software Product',
+            'test_suite'  => get_the_title( $test_plan->suite_id ),
+            'role'        => $roles,
+            'level'       => $levels,
+            'status'      => 'In Progress',
+            'test_type'   => 'Certification',
+            'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
+            'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $test_plan->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
+            'suite_id'    => $test_plan->suite_id,
+            'post_id'     => $product->id
+        );
+        array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
+
+    public function cloud_search_update_claim( $claim_id ){
+        global $wpdb;
+        $data = array();
+        $claim = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE id = %d", $claim_id ) );
+        $product = new ProductAndService( $claim->product_id );
+        $product->load();
+        $claim->level = trim( $claim->level, ';;' );
+        $claim->role = trim( $claim->role, ';;' );
+        if( strpos( $claim->role, ';;' ) ){
+            $roles = explode( ';;', $claim->role );
+        } else{
+            $roles = array( $claim->role );
+        }
+        if( strpos( $claim->level, ';;' ) ){
+            $levels = explode( ';;', $claim->level );
+        } else{
+            $levels = array( $claim->level );
+        }
+        $temp_data = array(
+            'name'        => $product->name,
+            'version'     => $product->version,
+            'owner'       => $product->owner,
+            'type'        => 'Software Product',
+            'test_suite'  => get_the_title( $claim->suite_id ),
+            'role'        => $roles,
+            'level'       => $levels,
+            'status'      => 'Verified',
+            'test_type'   => 'Certification',
+            'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $claim->created_date ) ).'Z',
+            'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $claim->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
+            'suite_id'    => $claim->suite_id,
+            'post_id'     => $product->id
+        );
+        array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
+
+    public function cloud_search_update_agreement( $agreement_id ){
+        global $wpdb;
+        $data = array();
+        $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+        $service = new Service( $agreement->requester_service_id );
+        $service->load();
+        $temp_data = array(
+            'name'        => $service->service_name,
+            'version'     => $service->service_version,
+            'owner'       => $service->service_owner,
+            'type'        => 'Web Service',
+            'test_suite'  => get_the_title( $service->service_suite_id ),
+            'role'        => $service->service_roles,
+            'level'       => $service->service_levels,
+            'status'      => $agreement->status,
+            'test_type'   => 'End to End',
+            'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
+            'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
+            'suite_id'    => $service->service_suite_id,
+            'post_id'     => $service->id
+        );
+        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
+
+    /**
+     * Use this function to delete item from cloudSearch domain
+     *
+     * @param $id - primary key from entry table
+     * @param $type - enum ( 'agreement', 'claim', 'test_plan')
+     * @return mixed
+     */
+    public function cloud_search_delete_item( $id, $type ){
+        array_push( $data, array( 'type' => 'delete', 'id' => $type.'_'.$id  ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
+    protected function _sendDataToSearchDomain( Array $rows ){
+        $data = json_encode( $rows );
+        $ch = curl_init( $this->_documentEndpoint );
+        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt( $ch, CURLOPT_POSTFIELDS,  $data );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data))
+        );
+        return curl_exec( $ch );
+    }
+} 
