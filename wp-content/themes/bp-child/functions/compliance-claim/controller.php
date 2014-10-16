@@ -151,7 +151,8 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
         addMessage('Permission Denied!', 'error');
         return false;
     }
-    
+    $cloud_search = new CloudSearch();
+
     if(!$claimID) //Make Claim
     {
         $nId = $wpdb->insert(TABLE_CLAIM, array(
@@ -169,12 +170,14 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
         ));
         
         $claimID = $wpdb->insert_id;
-        
+
+
         $wpdb->update(TABLE_CLAIM, array(
             'claim_id'    =>  getClaimID($wpdb->insert_id, $suite_id)                
         ), array('id' => $claimID));
-        
-        
+        $cloud_search->cloud_search_update_claim( $claimID );
+
+
     }else{  //Edit Claim
         $wpdb->update(TABLE_CLAIM, array(
             'suite_id'    =>  $suite_id,
@@ -185,6 +188,7 @@ function _saveClaim($productID, $suite_id, $confLevel, $role, $status, $claimID 
         ), array('id' => $claim->id));
         
         $nId = $claim->id;
+        $cloud_search->cloud_search_update_claim( $claim->id );
     }
     if(!$nId)
     {

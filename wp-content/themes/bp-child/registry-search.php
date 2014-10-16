@@ -41,63 +41,77 @@ if( isset( $_POST['download']) ){
                                 <label for="implementation-type-filter">Implementation Type</label>
                                 <select name="type" id="implementation-type-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['type']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>" <?php if( isset( $_POST['type'] ) && $_POST['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['type']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>" <?php if( isset( $_POST['type'] ) && $_POST['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li>
                                 <label for="owner-filter">Owner</label>
                                 <select name="owner" id="owner-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['owner']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['owner'] ) && $_POST['owner'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['owner']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['owner'] ) && $_POST['owner'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li>
                                 <label for="test-suite-filter">Test Suite</label>
                                 <select name="test_suite" id="test-suite-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['test_suite']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['test_suite'] ) && $_POST['test_suite'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['test_suite']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['test_suite'] ) && $_POST['test_suite'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li>
                                 <label for="test-type-filter">Test Type</label>
                                 <select name="test_type" id="test-type-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['test_type']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['test_type'] ) && $_POST['test_type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['test_type']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['test_type'] ) && $_POST['test_type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li class="first">
                                 <label for="role-filter">Role</label>
                                 <select name="role" id="role-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['role']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['role'] ) && $_POST['role'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['role']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['role'] ) && $_POST['role'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li>
                                 <label for="level-filter">Level</label>
                                 <select name="level" id="level-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['level']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['level'] ) && $_POST['level'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['level']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['level'] ) && $_POST['level'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li>
                                 <label for="test-status-filter">Test Status</label>
                                 <select name="status" id="test-status-filter" class="select">
                                     <option>All</option>
-                                    <?php foreach ($results['facets']['status']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['status'] ) && $_POST['status'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
-                                    <?php endforeach; ?>
+                                    <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
+                                        <?php foreach ($results['facets']['status']['buckets'] AS $v): ?>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['status'] ) && $_POST['status'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </select>
                             </li>
                             <li>
@@ -124,8 +138,8 @@ if( isset( $_POST['download']) ){
                         Showing <?php echo $results['hits']['start'] + 1?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
                         <?php if($term){ ?> for "<b><?php echo $term?></b>" <?php } ?>
                     <?php else: ?>
-                <p class="no-data">No result found!</p>
-                <?php endif; ?>
+                        <p class="no-data">No result found!</p>
+                    <?php endif; ?>
                 </p>
                 <?php if (count($products) > 0): ?>
                     <a href="<?php echo add_query_arg( 'download', '1' ); ?>" class="action-btn download-btn">
@@ -152,28 +166,30 @@ if( isset( $_POST['download']) ){
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach( $results['hits']['hit'] as $row ): ?>
-                            <?php $row_data = $row['fields'];?>
-                            <tr>
-                                <td class="first"><a href="#" class="blue_txt"><?php echo $row_data['name']?></a></td>
-                                <td><?php echo $row_data['version']; ?></td>
-                                <td><?php echo $row_data['owner']; ?></td>
-                                <td>
-                                    <?php if ($row_data['type'] == 'Software Product'): ?>
-                                        Product
-                                    <?php else: ?>
-                                        Service
-                                    <?php endif; ?>
-                                </td>
-                                <td class="test-suite-column"><a href="#"><?php echo $row_data['test_suite'];?></a></td>
-                                <td><?php echo implode( ', ', $row_data['role'] );?></td>
-                                <td><?php echo implode( ', ', $row_data['level'] );?></td>
-                                <td><?php echo $row_data['status'];?></td>
-                                <td><?php echo $row_data['test_type'];?></td>
-                                <?php $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );?>
-                                <td class="last"><?php if( $claim_date != '1970-01-01') echo $claim_date;?></td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <?php if( $results['hits']['found'] > 0):?>
+                            <?php foreach( $results['hits']['hit'] as $row ): ?>
+                                <?php $row_data = $row['fields'];?>
+                                <tr>
+                                    <td class="first"><a href="<?php echo get_permalink( $row_data['post_id'] );?>" class="blue_txt"><?php echo $row_data['name']?></a></td>
+                                    <td><?php echo $row_data['version']; ?></td>
+                                    <td><?php echo $row_data['owner']; ?></td>
+                                    <td>
+                                        <?php if ($row_data['type'] == 'Software Product'): ?>
+                                            Product
+                                        <?php else: ?>
+                                            Service
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="test-suite-column"><a href="<?php echo get_permalink( $row_data['suite_id'] );?>"><?php echo $row_data['test_suite'];?></a></td>
+                                    <td><?php if( ! empty( $row_data['role'] ) ) echo implode( ', ', $row_data['role'] );?></td>
+                                    <td><?php if( ! empty( $row_data['level'] ) ) echo implode( ', ', $row_data['level'] );?></td>
+                                    <td><?php echo $row_data['status'];?></td>
+                                    <td><?php echo $row_data['test_type'];?></td>
+                                    <?php $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );?>
+                                    <td class="last"><?php if( $claim_date != '1970-01-01') echo $claim_date;?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif;?>
                         </tbody>
                     </table>
                     <div class="pagination-wrapper">

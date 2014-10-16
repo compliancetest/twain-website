@@ -1,22 +1,14 @@
 <?php
-/**
- * @author Ivan Solowjew
- * @date: 10/16/14
- */
 
 class CloudSearch {
 
+    private $_documentEndpoint = '';
+    private $_searchDomainURL = '';
+
     public function __construct(){
-
+        $this->_documentEndpoint = get_option( 'cloudsearch_document_endpoint' );
+        $this->_searchDomainURL = get_option( 'cloudsearch_search_endpoint' );
     }
-
-    public function add( $data ){
-
-    }
-
-
-    private $_documentEndpoint = 'http://doc-ct-test-pnwcwodbtymkun3vz3riofvzkq.ap-southeast-2.cloudsearch.amazonaws.com/2013-01-01/documents/batch';
-    private $_searchDomainURL = 'http://search-ct-test-pnwcwodbtymkun3vz3riofvzkq.ap-southeast-2.cloudsearch.amazonaws.com/2013-01-01/search?';
 
     public function search( $params = false ){
         $str = array();
@@ -47,11 +39,13 @@ class CloudSearch {
                         $from = '{';
                     }
                     if ( isset($params['date_to'] ) && ! empty( $params['date_to'] ) ) {
-                        $to = "'".$params['date_to'].'T23:23:59Z'."']";
+                        $to = "'".$params['date_to'].'T23:59:59Z'."']";
                     } else{
                         $to = '}';
                     }
-                    $l .= "(range field=date $from, $to   ) ";
+                    if( "$from, $to" !== '{, }') {
+                        $l .= "(range field=date $from, $to   ) ";
+                    }
                     $range_checked = true;
                 }
             }else {
