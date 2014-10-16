@@ -27,14 +27,16 @@ if( isset( $_POST['download']) ){
 ?>
     <div class="content container" id="search">
         <div class="column search-results">
-            <div class="search-results-filter">
-                <h4 class="filter-head">Filter By:</h4>
-                <div class="search-filters-box">
-                    <form name="form_filter" id="form_filter" action="<?php echo get_permalink()?>" method="post">
-                        <div class="search-result-form">
-                            <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_POST['q']) ? $_POST['q'] : '')) ?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
-                            <input type="submit" id="search_test_suite_submit" class="search-button" value="" />
-                        </div>
+            <form name="form_filter" id="form_filter" action="<?php echo get_permalink()?>" method="post">
+                <div class="search-result-form">
+                    <div class="searchform">
+                        <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_POST['q']) ? $_POST['q'] : '')) ?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
+                        <input type="submit" id="search_test_suite_submit" class="search-button" value="" />
+                    </div>
+                </div>
+                <div class="search-results-filter">
+                    <h4 class="filter-head">Filter By:</h4>
+                    <div class="search-filters-box">
                         <input type="hidden" name="page" value="<?php echo $page;?>">
                         <ul class="search-filters-list clearfix">
                             <li class="first">
@@ -128,19 +130,20 @@ if( isset( $_POST['download']) ){
                             <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Confirm</span></a>
                             <a href="<?php echo get_permalink(); ?>" class="action-btn clear-btn" id="clear-search-filter-btn"><span class="p"></span><span class="t">Clear</span></a>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
 
             <div class="search-results-count clearfix">
-                <p class="search-results-count-label">
+                <div>
                     <?php if( $results['hits']['found'] > 0):?>
-                        Showing <?php echo $results['hits']['start'] + 1?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
+                        <p class="search-results-count-label">Showing <?php echo $results['hits']['start'] + 1?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
                         <?php if($term){ ?> for "<b><?php echo $term?></b>" <?php } ?>
+                        </p>
                     <?php else: ?>
                         <p class="no-data">No result found!</p>
                     <?php endif; ?>
-                </p>
+                </div>
                 <?php if (count($products) > 0): ?>
                     <a href="<?php echo add_query_arg( 'download', '1' ); ?>" class="action-btn download-btn">
                         <span class="p"></span>
