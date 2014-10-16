@@ -596,7 +596,7 @@ function ct_process_organisation_action()
                         <?php } ?>
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">      
-                            <div class="right">
+                            <div class="left">
                                 <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>            
                                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                             </div>
