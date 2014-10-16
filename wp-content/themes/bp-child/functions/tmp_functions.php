@@ -437,6 +437,10 @@ if(is_super_admin())
             }
             die("completed");
         }
+        if( isset( $_GET['cloud_search_upload'] ) ){
+            $cloudSearch = new CloudSearch();
+            $cloudSearch->_initial_upload();
+        }
         
     }
     

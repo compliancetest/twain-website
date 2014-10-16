@@ -30,6 +30,8 @@ class Service
 
     public $service_user_id = '';
 
+    public $service_version = '';
+
     public function loadSingleValue($key)
     {
         return get_post_meta($this->id, $key, true);
