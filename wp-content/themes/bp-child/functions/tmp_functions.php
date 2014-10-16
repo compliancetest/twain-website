@@ -28,7 +28,8 @@ if(is_super_admin())
             $results = $wpdb->get_results("SELECT * FROM wp_organisations_members");
             foreach($results as $r){
                 foreach($privileges as $p){
-                    $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $r->user_id, "organisation_id" => $r->organisation_id, "privilege_id" => $p->id), array("%d", "%d", "%d"));   
+                    if($privileges->is_default)
+                        $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $r->user_id, "organisation_id" => $r->organisation_id, "privilege_id" => $p->id), array("%d", "%d", "%d"));   
                 }
             }
             die("Completed");
