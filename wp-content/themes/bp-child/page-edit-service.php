@@ -80,7 +80,11 @@ $user_test_suites = get_suites_with_claims();
                                     <select name="product_id" class="required" id="product_id">
                                         <option value=""></option>
                                         <?php foreach( $user_products AS $user_product ):?>
-                                        <option <?php if( isset( $service->service_product_id ) && $service->service_product_id == $user_product->ID ):?> selected="selected" <?php endif;?>value="<?php echo $user_product->ID;?>"><?php echo $user_product->product_name;?></option>
+                                            <?php
+                                                $product = new ProductAndService( $user_product->ID );
+                                                $product->load();
+                                            ?>
+                                            <option <?php if( isset( $service->service_product_id ) && $service->service_product_id == $user_product->ID ):?> selected="selected" <?php endif;?>value="<?php echo $user_product->ID;?>" data-permission="<?php echo $product->services_not_permitted;?>"><?php echo $user_product->product_name;?></option>
                                         <?php endforeach;?>
                                     </select>
                                 </div>
@@ -212,6 +216,18 @@ $user_test_suites = get_suites_with_claims();
         </div>
         <div class="clear"></div>
     </div>
+    <a id="show_permissions_popup" href="#cant_create_service" rel="custom-popup" style="display: none;"></a>
+    <div class="popup-box" id="cant_create_service" style="display: none; width: 500px">
+        <div class="popup-box-header radius6 noradiusbottom">Services Not Permitted</div>
+        <div class="popup-box-content">
+            <p>Creation of services for this product is not permitted. Please contact the site administrator for further information.</p>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
+    </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
 
@@ -238,6 +254,10 @@ $user_test_suites = get_suites_with_claims();
 
             var forceSubmit = false;
             jQuery('#psForm').submit(function(){
+                if( $('#product_id option:selected').data('permission') == '1' ){
+                    $('#show_permissions_popup').click();
+                    return false;
+                }
                 $('#psForm .grid-box-footer .message').remove();
                 var isValid = true;
                 var errorMsg = '';
