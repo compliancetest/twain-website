@@ -607,10 +607,23 @@ function cp_sort_test_suites($familyMark, $version_major)
     
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $familyMark, $version_major);
     $suites = $wpdb->get_results($query);
+    $old_ids = array();
+    $new_id = null;
+    
     foreach($suites as $i=>$s)
     {
+        if ($i > 0)
+            $old_ids[] = $s->suite_id;
+        else
+            $new_id = $s->suite_id;
+            
         update_post_meta($s->suite_id, 'hide_suite', $i > 0 ? 1 : 0);
     }
+    
+    
+    $esb = new ManageESB();
+    //Update Test Suite Ids for Audit Enabled Records
+    $esb->updateAuditRecordSuiteId($old_ids, $new_id);
 }
 
 /**

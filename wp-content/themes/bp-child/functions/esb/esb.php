@@ -988,5 +988,17 @@ class ManageESB
         return $id;
     }
     
+    public function updateAuditRecordSuiteId($old_id, $new_id)
+    {
+        //Getting Configuration ID 
+        $old_config_id = $this->getTestSuiteConfigurationID($old_id);
+        $new_config_id = $this->getTestSuiteConfigurationID($new_id);        
+        
+        $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=%d WHERE TEST_SUITE_CONFIGURATION_ID=%d AND AUDIT_RECORD=1", $new_config_id, $old_config_id);
+        
+        ManageESB::$esbdb->query($query);
+        
+        return;
+    }
     
 }
