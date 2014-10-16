@@ -125,6 +125,17 @@ function saveProductService()
     } else {
         $product_visibility = 'Private';
     }
+    if($_POST['services_not_permitted'])
+    {
+        if( $_POST['services_not_permitted'] == 'on' && is_super_admin() ){
+            $services_not_permitted = 1;
+            update_post_meta($id, 'services_not_permitted', $services_not_permitted );
+        }
+    } else {
+        if( is_super_admin() ){
+            update_post_meta($id, 'services_not_permitted', 0 );
+        }
+    }
 
     if($_POST['product_release_date'] != '' && !preg_match('@^[0-9]{4}-[0-9]{2}-[0-9]{2}$@', $_POST['product_release_date'])){
         addMessage('Date not valid', 'error');

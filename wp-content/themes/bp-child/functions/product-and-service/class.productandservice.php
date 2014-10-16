@@ -57,6 +57,7 @@ class ProductAndService
         $this->descrition = $this->loadSingleValue('product_description');
         $this->organisation_id = $this->loadSingleValue('product_organisation_id');
         $this->visibility = $this->loadSingleValue('product_visibility');
+        $this->services_not_permitted = $this->loadSingleValue('services_not_permitted');
 
         $this->loadRelatedProducts();
 

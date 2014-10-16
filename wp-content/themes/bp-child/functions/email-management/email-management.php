@@ -576,7 +576,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test claim made',
             'title'         => 'E2E test claim made',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
@@ -614,7 +614,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test claim confirmed',
             'title'         => 'E2E test claim confirmed',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
