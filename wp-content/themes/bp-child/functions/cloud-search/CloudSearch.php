@@ -29,7 +29,7 @@ class CloudSearch {
                 }
             }else if( $k == 'page' ){
                 if( $v != 1 ){
-                    $str['start'] = ( ( --$v * 10 ) + 1 ) ;
+                    $str['start'] = ( ( --$v * 10 ) ) ;
                 }
             }else if( $k == 'date_from'  || $k == 'date_to' ){
                 if( ! $range_checked ) {

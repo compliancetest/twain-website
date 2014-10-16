@@ -10,20 +10,19 @@ global $post;
 $baseURL = get_permalink();
 
 $cloud_search = new CloudSearch();
-$page = get_query_var('paged') ? get_query_var('paged') : 1;
-if( $page != 1 ){
-    $_POST['page'] = $page;
-}
 
 $results = $cloud_search->search( $_POST );
-
-if( isset( $_POST['download']) ){
-    $d_args = $args;
-    $d_args['paged'] = 1;
-    $d_args['posts_per_page'] = -1;
-    $posts_to_download = new WP_Query($d_args);
-    generateDataAndDownload( $posts_to_download->get_posts() );
+if( ! isset( $_POST['page'] ) ){
+    $_POST['page'] = 1;
 }
+$page = $_POST['page'];
+//if( isset( $_POST['download']) ){
+//    $d_args = $args;
+//    $d_args['paged'] = 1;
+//    $d_args['posts_per_page'] = -1;
+//    $posts_to_download = new WP_Query($d_args);
+//    generateDataAndDownload( $posts_to_download->get_posts() );
+//}
 ?>
     <div class="content container" id="search">
         <div class="column search-results">
@@ -37,7 +36,7 @@ if( isset( $_POST['download']) ){
                 <div class="search-results-filter">
                     <h4 class="filter-head">Filter By:</h4>
                     <div class="search-filters-box">
-                        <input type="hidden" name="page" value="<?php echo $page;?>">
+                        <input type="hidden" name="page" value="<?php echo $page;?>" id="page">
                         <ul class="search-filters-list clearfix">
                             <li class="first">
                                 <label for="implementation-type-filter">Implementation Type</label>
@@ -137,15 +136,15 @@ if( isset( $_POST['download']) ){
             <?php if( $results['hits']['found'] > 0):?>
                 <div class="search-results-count clearfix">
                     <p class="search-results-count-label">
-                        Showing <?php echo $results['hits']['start'] + 1?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
-                        <?php if($term){ ?> for "<b><?php echo $term?></b>" <?php } ?>
+                        Showing <?php echo $results['hits']['start'] + 1 ;?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
+                        <?php if(isset($_POST['q']) && ! empty( $_POST['q'] ) ){ ?> for "<b><?php echo $_POST['q']?></b>" <?php } ?>
                     </p>
-                    <?php if (count($products) > 0): ?>
-                        <a href="<?php echo add_query_arg( 'download', '1' ); ?>" class="action-btn download-btn">
-                            <span class="p"></span>
-                            <span class="t">Download Results</span>
-                        </a>
-                    <?php endif; ?>
+<!--                    --><?php //if (count($products) > 0): ?>
+<!--                        <a href="--><?php //echo add_query_arg( 'download', '1' ); ?><!--" class="action-btn download-btn">-->
+<!--                            <span class="p"></span>-->
+<!--                            <span class="t">Download Results</span>-->
+<!--                        </a>-->
+<!--                    --><?php //endif; ?>
                 </div>
             <?php else: ?>
                 <p class="no-data">No result found!</p>
@@ -221,4 +220,19 @@ if( isset( $_POST['download']) ){
             <?php endif; ?>
         </div>
     </div>
+<script>
+    jQuery( document).ready(function(){
+        jQuery('.page-numbers').on('click', function(e){
+            e.preventDefault();
+            var page_number = jQuery( this ).attr( 'href' ).split('/');
+            page_number = page_number[page_number.length - 1].replace( '?', '' );
+            if( page_number ) {
+                jQuery('#page').val(page_number);
+                jQuery('#form_filter').submit();
+            } else{
+                location.reload();
+            }
+        });
+    });
+</script>
 <?php get_footer() ?>
