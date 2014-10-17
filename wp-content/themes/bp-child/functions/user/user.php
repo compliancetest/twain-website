@@ -521,7 +521,7 @@ function getUserAllCustomerESBIDs($user_id = null)
     
     if(!is_super_admin())
     {                      
-        $query = $wpdb->prepare("SELECT DISTINCT(s.id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
+        $query = $wpdb->prepare("SELECT DISTINCT(s.parent_id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
                         WHERE 
                             s.user_id = bm.user_id AND bm.is_confirmed=1 
                             AND
@@ -531,7 +531,7 @@ function getUserAllCustomerESBIDs($user_id = null)
                         ", $user_id, $user_id);
         $s_ids = $wpdb->get_col($query);
     }else{
-        $query = "SELECT s.id as CUSTOMER_ID FROM {$wpdb->prefix}users_subscriptions AS s ";
+        $query = "SELECT DISTINCT(s.parent_id) as CUSTOMER_ID FROM {$wpdb->prefix}users_subscriptions AS s ";
     }
     
     $ids = $wpdb->get_col($query);

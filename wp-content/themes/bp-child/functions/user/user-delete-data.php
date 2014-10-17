@@ -33,7 +33,7 @@ function ct_delete_user_data($user_id)
     
     if($esbIds)
     {
-        $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE CUSTOMER_ID in (" . implode(", ", $esbIds) . ")";            
+        $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE ORGANISATION_SUBSCRIPTION_ID in (" . implode(", ", $esbIds) . ")";            
         ManageESB::$esbdb->query($query);
     }
 

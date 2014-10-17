@@ -53,9 +53,9 @@ class ManageESB
         
         if (is_array($customer_id)) {
             $customer_id = ManageESB::$esbdb->escape($customer_id);            
-            $query .= " AND m.CUSTOMER_ID IN (" . implode(", ", $customer_id) . ")";
+            $query .= " AND m.ORGANISATION_SUBSCRIPTION_ID IN (" . implode(", ", $customer_id) . ")";
         } else {
-            $query .= ManageESB::$esbdb->prepare(" AND m.CUSTOMER_ID=%d", $customer_id);
+            $query .= ManageESB::$esbdb->prepare(" AND m.ORGANISATION_SUBSCRIPTION_ID=%d", $customer_id);
         }
         
         
@@ -135,7 +135,7 @@ class ManageESB
             if(!$esbIDs)
                 return array();
             
-            $customer_id = " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";
+            $customer_id = " AND c.ORGANISATION_SUBSCRIPTION_ID in (" . implode(",", $esbIDs) . ")";
         }        
         
         $query = "SELECT c.*, tc.TEST_CASE_WP_ID AS TEST_CASE_DB_ID, s.TEST_SUITE_TITLE, s.TEST_SUITE_WP_ID, ts.TEST_OUTCOME_CODE, ts.TEST_OUTCOME_LABEL, p.PRODUCT_WP_ID FROM " . $this->table_conversation_metadata . " AS c " .
@@ -176,7 +176,7 @@ class ManageESB
         if($user_id == null)
             $user_id = get_current_user_id();
         
-        $query = "SELECT id FROM " . $wpdb->prefix . "users_subscriptions WHERE `status`='Active'";
+        $query = "SELECT distinct(parent_id) FROM " . $wpdb->prefix . "users_subscriptions WHERE `status`='Active'";
         
         if($customer_id != null)
             $query .= " AND " . $wpdb->prepare("user_id=%d", $customer_id);
@@ -245,9 +245,9 @@ class ManageESB
 
             $s_ids = $wpdb->get_col($query);
             if (!$s_ids){
-                $where['subscription'] = " c.CUSTOMER_ID = false ";
+                $where['subscription'] = " c.ORGANISATION_SUBSCRIPTION_ID = false ";
             } else {
-                $where['subscription'] = " c.CUSTOMER_ID IN (" . implode(", ", $s_ids) . ")";
+                $where['subscription'] = " c.ORGANISATION_SUBSCRIPTION_ID IN (" . implode(", ", $s_ids) . ")";
             }
 
         } else if( $subscription_id == 'my' ){
@@ -259,12 +259,12 @@ class ManageESB
             $s_ids = $wpdb->get_col($query);
 
             if (!$s_ids){
-                $where['subscription'] = " c.CUSTOMER_ID = false ";
+                $where['subscription'] = " c.ORGANISATION_SUBSCRIPTION_ID = false ";
             } else {
-                $where['subscription'] = " c.CUSTOMER_ID IN (" . implode(", ", $s_ids) . ")";
+                $where['subscription'] = " c.ORGANISATION_SUBSCRIPTION_ID IN (" . implode(", ", $s_ids) . ")";
             }
         }else {
-            $where['subscription'] = $wpdb->prepare(" c.CUSTOMER_ID=%d", $subscription_id);
+            $where['subscription'] = $wpdb->prepare(" c.ORGANISATION_SUBSCRIPTION_ID=%d", $subscription_id);
 
         }
 
@@ -798,7 +798,7 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT m.PAYLOAD, m.S3_PAYLOAD_LOCATION, m.S3_PAYLOAD_CONTENT_LENGTH FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT m.PAYLOAD, m.S3_PAYLOAD_LOCATION, m.S3_PAYLOAD_CONTENT_LENGTH FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.ORGANISATION_SUBSCRIPTION_ID in (" . implode(",", $esbIDs) . ")";                
         
         $data = ManageESB::$esbdb->get_row($query);
         
@@ -845,7 +845,7 @@ class ManageESB
                      "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                      "LEFT JOIN " . $this->table_message_validation_phases . " AS mvp ON mvp.ID = mv.MSH_MESSAGE_VALIDATION_PHASES_ID " .
                      "LEFT JOIN " . $this->table_message_validation_statuses . " AS mvs ON mvs.ID = mv.MSH_MESSAGE_VALIDATION_STATUSES_ID " .
-                     "WHERE m.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ") ORDER BY mvp.ORDER_ID";
+                     "WHERE m.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.ORGANISATION_SUBSCRIPTION_ID in (" . implode(", ", $esbIDs) . ") ORDER BY mvp.ORDER_ID";
                 
         }
         
@@ -879,7 +879,7 @@ class ManageESB
         
         $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION " . 
                  "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
-                 "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ")";
+                 "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.ORGANISATION_SUBSCRIPTION_ID in (" . implode(", ", $esbIDs) . ")";
         
         $data = ManageESB::$esbdb->get_row($query);
         

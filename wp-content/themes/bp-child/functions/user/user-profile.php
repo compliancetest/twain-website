@@ -563,7 +563,7 @@ function cp_user_organisation_edit()
     if(!is_user_logged_in())
         wp_redirect('/');
     
-    $user_id = $current_user->ID;
+    $user_id = get_current_user_id();
     
     $org_membership = ct_get_user_organisation_membership($current_user->ID);
     
