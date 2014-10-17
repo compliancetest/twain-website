@@ -76,7 +76,6 @@ class CloudSearch {
         $resp = curl_exec($curl);
         curl_close($curl);
         $res = json_decode( $resp, true );
-        var_dump($res);
         return $res;
     }
 
