@@ -11,12 +11,30 @@ function remove_suite_name_id_map($postid)
     $post = get_post($postid);
     
     if($post->post_type == 'test-suite')
-    {    
-        $esb = new ManageESB();
-        $esb->deleteTestSuiteInfo($postid);
-        
+    {   
         $suite = new TestSuite($postid);
-        $familyMark = $suite->loadfamilyMark();
+        $familyMark = $suite->loadfamilyMark(); 
+        
+        $esb = new ManageESB();
+        
+        //Update Audit Records
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC", $suite->familyMark, get_post_meta($postid, 'ts_version_major', true));
+        $suites = $wpdb->get_results($query);
+        
+        $old_ids = $postid;
+        $new_id = null;
+        
+        foreach($suites as $i=>$s)
+        {
+            if ($s->suite_id != $postid) {
+                $new_id = $s->suite_id;
+                break;    
+            }
+        }
+        
+        $esb->updateAuditRecordSuiteId($old_ids, $new_id);
+                
+        $esb->deleteTestSuiteInfo($postid);
         
         //Delete Conformance Level    
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'conformance_level_' . $postid));
@@ -619,7 +637,6 @@ function cp_sort_test_suites($familyMark, $version_major)
             
         update_post_meta($s->suite_id, 'hide_suite', $i > 0 ? 1 : 0);
     }
-    
     
     $esb = new ManageESB();
     //Update Test Suite Ids for Audit Enabled Records
