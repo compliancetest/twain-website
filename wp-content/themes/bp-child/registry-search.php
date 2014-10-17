@@ -10,25 +10,23 @@ global $post;
 $baseURL = get_permalink();
 
 $cloud_search = new CloudSearch();
-$results = $cloud_search->search( $_POST );
-if( ! isset( $_POST['page'] ) ){
-    $_POST['page'] = 1;
+$results = $cloud_search->search( $_GET );
+if( ! isset( $_GET['page'] ) ){
+    $_GET['page'] = 1;
 }
-$page = $_POST['page'];
-//if( isset( $_POST['download']) ){
-//    $d_args = $args;
-//    $d_args['paged'] = 1;
-//    $d_args['posts_per_page'] = -1;
-//    $posts_to_download = new WP_Query($d_args);
-//    generateDataAndDownload( $posts_to_download->get_posts() );
-//}
+$page = $_GET['page'];
+if( isset( $_GET['download']) ){
+    unset( $_GET['download']);
+    $results = $cloud_search->search( $_GET, true );
+    generate_and_download( $results );
+}
 ?>
     <div class="content container" id="search">
         <div class="column search-results">
-            <form name="form_filter" id="form_filter" action="<?php echo get_permalink()?>" method="post">
+            <form name="form_filter" id="form_filter" action="<?php echo get_permalink()?>" method="get">
                 <div class="search-result-form">
                     <div class="searchform">
-                        <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_POST['q']) ? $_POST['q'] : '')) ?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
+                        <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_GET['q']) ? $_GET['q'] : '')) ?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
                         <input type="submit" id="search_test_suite_submit" class="search-button" value="" />
                     </div>
                 </div>
@@ -43,7 +41,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['type']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>" <?php if( isset( $_POST['type'] ) && $_POST['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['type'] ) && $_GET['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -54,7 +52,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['owner']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['owner'] ) && $_POST['owner'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_GET['owner'] ) && $_GET['owner'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -65,7 +63,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['test_suite']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['test_suite'] ) && $_POST['test_suite'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_GET['test_suite'] ) && $_GET['test_suite'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -76,7 +74,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['test_type']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['test_type'] ) && $_POST['test_type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_GET['test_type'] ) && $_GET['test_type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -87,7 +85,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['role']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['role'] ) && $_POST['role'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_GET['role'] ) && $_GET['role'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -98,7 +96,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['level']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['level'] ) && $_POST['level'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_GET['level'] ) && $_GET['level'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -109,7 +107,7 @@ $page = $_POST['page'];
                                     <option>All</option>
                                     <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                         <?php foreach ($results['facets']['status']['buckets'] AS $v): ?>
-                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_POST['status'] ) && $_POST['status'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                            <option value="<?php echo $v['value'];?>"<?php if( isset( $_GET['status'] ) && $_GET['status'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
                                         <?php endforeach; ?>
                                     <?php endif;?>
                                 </select>
@@ -117,10 +115,10 @@ $page = $_POST['page'];
                             <li>
                                 <label>Claim Date Range</label>
                                 <div class="date-filter filter-from">
-                                    <input type="text" class="input datepicker" placeholder="From" name="date_from" <?php if( isset( $_POST['date_from'] ) ):?> value="<?php echo $_POST['date_from'];?>" <?php endif;?>/>
+                                    <input type="text" class="input datepicker" placeholder="From" name="date_from" <?php if( isset( $_GET['date_from'] ) ):?> value="<?php echo $_GET['date_from'];?>" <?php endif;?>/>
                                 </div>
                                 <div class="date-filter filter-to">
-                                    <input type="text" class="input datepicker" placeholder="To" name="date_to" <?php if( isset( $_POST['date_to'] ) ):?> value="<?php echo $_POST['date_to'];?>" <?php endif;?>/>
+                                    <input type="text" class="input datepicker" placeholder="To" name="date_to" <?php if( isset( $_GET['date_to'] ) ):?> value="<?php echo $_GET['date_to'];?>" <?php endif;?>/>
                                 </div>
                             </li>
                         </ul>
@@ -135,15 +133,15 @@ $page = $_POST['page'];
             <?php if( $results['hits']['found'] > 0):?>
                 <div class="search-results-count clearfix">
                     <p class="search-results-count-label">
-                        Showing <?php echo $results['hits']['start'] + 1 ;?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 10 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 10; ?> of <b><?php echo $results['hits']['found']?></b> Results
-                        <?php if(isset($_POST['q']) && ! empty( $_POST['q'] ) ){ ?> for "<b><?php echo $_POST['q']?></b>" <?php } ?>
+                        Showing <?php echo $results['hits']['start'] + 1 ;?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 25 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 25; ?> of <b><?php echo $results['hits']['found']?></b> Results
+                        <?php if(isset($_GET['q']) && ! empty( $_GET['q'] ) ){ ?> for "<b><?php echo $_GET['q']?></b>" <?php } ?>
                     </p>
-<!--                    --><?php //if (count($products) > 0): ?>
-<!--                        <a href="--><?php //echo add_query_arg( 'download', '1' ); ?><!--" class="action-btn download-btn">-->
-<!--                            <span class="p"></span>-->
-<!--                            <span class="t">Download Results</span>-->
-<!--                        </a>-->
-<!--                    --><?php //endif; ?>
+                    <?php if( $results['hits']['found'] > 0 ): ?>
+                        <a href="<?php echo add_query_arg( 'download', '1' ); ?>" class="action-btn download-btn">
+                            <span class="p"></span>
+                            <span class="t">Download Results</span>
+                        </a>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
                 <p class="no-data">No result found!</p>
@@ -199,7 +197,7 @@ $page = $_POST['page'];
                             $args = array(
                                 'base'         =>  get_permalink() . '%_%?',
                                 'format'       => 'page/%#%',
-                                'total'        => ceil( $results['hits']['found'] / 10 ),
+                                'total'        => ceil( $results['hits']['found'] / 25 ),
                                 'current'      => $page,
                                 'show_all'     => False,
                                 'end_size'     => 5,

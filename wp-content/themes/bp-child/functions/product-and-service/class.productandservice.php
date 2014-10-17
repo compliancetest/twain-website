@@ -26,6 +26,8 @@ class ProductAndService
 
     var $relatedProducts = array();
 
+    public $service_related_services = '';
+
     public $relatedServices = array();
     
     public function loadSingleValue($key)
@@ -58,6 +60,10 @@ class ProductAndService
         $this->organisation_id = $this->loadSingleValue('product_organisation_id');
         $this->visibility = $this->loadSingleValue('product_visibility');
         $this->services_not_permitted = $this->loadSingleValue('services_not_permitted');
+        $this->service_related_services = $this->loadSingleValue('related_services');
+        if( $this->service_related_services ){
+            $this->service_related_services = json_decode( $this->service_related_services );
+        }
 
         $this->loadRelatedProducts();
 

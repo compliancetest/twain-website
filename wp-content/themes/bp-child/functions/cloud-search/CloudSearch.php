@@ -10,7 +10,7 @@ class CloudSearch {
         $this->_searchDomainURL = get_option( 'cloudsearch_search_endpoint' );
     }
 
-    public function search( $params = false ){
+    public function search( $params = false, $full_results = false ){
         $str = array();
         $str['return'] = '_all_fields';
         $str['facet.type'] = '{}';
@@ -20,6 +20,11 @@ class CloudSearch {
         $str['facet.level'] = '{}';
         $str['facet.role'] = '{}';
         $str['facet.status'] = '{}';
+        if( $full_results ){
+            $str['size'] = 10000;
+        } else{
+            $str['size'] = 25;
+        }
         $l = '';
         $range_checked = false;
         foreach( $params AS $k => $v ){

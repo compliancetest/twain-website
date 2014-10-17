@@ -181,7 +181,19 @@ function saveProductService()
             continue;
         $wpdb->insert($wpdb->prefix . "products_relationships", array('product_id' => $id, 'related_product_id' => $p, 'relationship' => $related_products_relations[$i]));
     }
-        
+
+    //Save Related Products
+    $related_products = isset($_POST['related-service']) ? $_POST['related-service'] : array();
+    $related_products_relations = isset($_POST['related-service-relation']) ? $_POST['related-service-relation'] : array();
+    $r_prods = array();
+    foreach($related_products as $i => $p)
+    {
+        if(!$p)
+            continue;
+        array_push( $r_prods, array( 'related_service_id' => $p, 'relationship' => $related_products_relations[$i] ) );
+    }
+    update_post_meta($id, 'related_services', json_encode( $r_prods ) );
+
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;

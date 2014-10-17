@@ -121,17 +121,7 @@ function saveService()
     update_post_meta($id, 'service_levels', implode( ';;', $_POST['levels'] ) );
     update_post_meta($id, 'service_protocol', $_POST['protocol'] );
 
-    //Save Related Products
-    $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
-    $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();
-    $r_prods = array();
-    foreach($related_products as $i => $p)
-    {
-        if(!$p)
-            continue;
-        array_push( $r_prods, array( 'related_service_id' => $p, 'relationship' => $related_products_relations[$i] ) );
-    }
-    update_post_meta($id, 'related_services', json_encode( $r_prods ) );
+
     addMessage('Product / Service was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
