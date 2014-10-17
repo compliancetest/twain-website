@@ -34,7 +34,7 @@ class CloudSearch {
                 }
             }else if( $k == 'page' ){
                 if( $v != 1 ){
-                    $str['start'] = ( ( --$v * 10 ) ) ;
+                    $str['start'] = ( ( --$v * 25 ) ) ;
                 }
             }else if( $k == 'date_from'  || $k == 'date_to' ){
                 if( ! $range_checked ) {
@@ -96,6 +96,8 @@ class CloudSearch {
             } else{
                 $levels = array( $test_plan->level );
             }
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
+            $groups = groups_get_user_groups( $post_author );
             $temp_data = array(
                 'name'        => $product->name,
                 'version'     => $product->version,
@@ -109,7 +111,10 @@ class CloudSearch {
                 'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
                 'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $test_plan->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
                 'suite_id'    => $test_plan->suite_id,
-                'post_id'     => $product->id
+                'post_id'     => $product->id,
+                'visibility'  => $product->visibility == 'Public' ? 1 : 3,
+                'community_id' => $groups['groups'],
+                'user_id'     => $post_author
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
         }
@@ -133,6 +138,8 @@ class CloudSearch {
             } else{
                 $levels = array( $claim->level );
             }
+            $groups = groups_get_user_groups( $post_author );
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
             $temp_data = array(
                 'name'        => $product->name,
                 'version'     => $product->version,
@@ -146,7 +153,10 @@ class CloudSearch {
                 'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $claim->created_date ) ).'Z',
                 'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $claim->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
                 'suite_id'    => $claim->suite_id,
-                'post_id'     => $product->id
+                'post_id'     => $product->id,
+                'visibility'  => $product->visibility == 'Public' ? 1 : 3,
+                'community_id' => $groups['groups'],
+                'user_id'     => $post_author
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
         }
@@ -160,6 +170,15 @@ class CloudSearch {
         foreach( $agreements AS $agreement ){
             $service = new Service( $agreement->requester_service_id );
             $service->load();
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
+            if( $service->service_visibility == 'Public' ){
+                $v = 1;
+            } else if( $service->service_visibility == 'Community' ){
+                $v = 2;
+            } else {
+                $v = 3;
+            }
+            $groups = groups_get_user_groups( $post_author );
             $temp_data = array(
                 'name'        => $service->service_name,
                 'version'     => $service->service_version,
@@ -173,7 +192,10 @@ class CloudSearch {
                 'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
                 'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
                 'suite_id'    => $service->service_suite_id,
-                'post_id'     => $service->id
+                'post_id'     => $service->id,
+                'visibility'  => $v,
+                'community_id' => $groups['groups'],
+                'user_id'     => $post_author
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         }
@@ -228,6 +250,8 @@ class CloudSearch {
         } else{
             $levels = array( $test_plan->level );
         }
+        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
+        $groups = groups_get_user_groups( $post_author );
         $temp_data = array(
             'name'        => $product->name,
             'version'     => $product->version,
@@ -241,7 +265,10 @@ class CloudSearch {
             'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
             'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $test_plan->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
             'suite_id'    => $test_plan->suite_id,
-            'post_id'     => $product->id
+            'post_id'     => $product->id,
+            'visibility'  => $product->visibility == 'Public' ? 1 : 3,
+            'community_id' => $groups['groups'],
+            'user_id'     => $post_author
         );
         array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
         return $this->_sendDataToSearchDomain( $data );
@@ -265,6 +292,8 @@ class CloudSearch {
         } else{
             $levels = array( $claim->level );
         }
+        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
+        $groups = groups_get_user_groups( $post_author );
         $temp_data = array(
             'name'        => $product->name,
             'version'     => $product->version,
@@ -278,7 +307,10 @@ class CloudSearch {
             'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $claim->created_date ) ).'Z',
             'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $claim->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
             'suite_id'    => $claim->suite_id,
-            'post_id'     => $product->id
+            'post_id'     => $product->id,
+            'visibility'  => $product->visibility == 'Public' ? 1 : 3,
+            'community_id' => $groups['groups'],
+            'user_id'     => $post_author
         );
         array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
         return $this->_sendDataToSearchDomain( $data );
@@ -290,6 +322,15 @@ class CloudSearch {
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         $service = new Service( $agreement->requester_service_id );
         $service->load();
+        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
+        if( $service->service_visibility == 'Public' ){
+            $v = 1;
+        } else if( $service->service_visibility == 'Community' ){
+            $v = 2;
+        } else {
+            $v = 3;
+        }
+        $groups = groups_get_user_groups( $post_author );
         $temp_data = array(
             'name'        => $service->service_name,
             'version'     => $service->service_version,
@@ -303,7 +344,10 @@ class CloudSearch {
             'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
             'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
             'suite_id'    => $service->service_suite_id,
-            'post_id'     => $service->id
+            'post_id'     => $service->id,
+            'visibility'  => $v,
+            'community_id' => $groups['groups'],
+            'user_id'     => $post_author
         );
         array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         return $this->_sendDataToSearchDomain( $data );
