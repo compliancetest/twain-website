@@ -43,6 +43,8 @@ function process_agreement_actions()
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_request_accepted_admin', $email_data );
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
@@ -70,6 +72,9 @@ function process_agreement_actions()
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_request_rejected_admin', $email_data );
+
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
 
         addMessage('Success');
         wp_redirect('/agreements/');
@@ -128,6 +133,10 @@ function process_agreement_actions()
             //send email to admin
             cp_send_email_to_admin( 'e2e_claim_made_admin', $email_data );
         }
+
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
+
         addMessage( 'Success' );
         wp_redirect('/agreements/');
         exit;
@@ -188,6 +197,10 @@ function process_agreement_actions()
             //send email to admin
             cp_send_email_to_admin( 'e2e_claim_confirmed_admin', $email_data );
         }
+
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
+
         addMessage( 'Success' );
         wp_redirect('/agreements/');
         exit;
@@ -216,6 +229,10 @@ function process_agreement_actions()
         //send email to admin
         cp_send_email_to_admin( 'e2e_request_rejected_admin', $email_data );
 
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
+
+
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
@@ -223,6 +240,10 @@ function process_agreement_actions()
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
+
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
@@ -268,6 +289,9 @@ function process_agreement_actions()
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_claim_failed_admin', $email_data );
+
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_update_agreement( $agreement_id );
 
         addMessage('Success');
         wp_redirect('/agreements/');

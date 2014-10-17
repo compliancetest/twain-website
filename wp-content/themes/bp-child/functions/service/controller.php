@@ -120,6 +120,8 @@ function saveService()
     update_post_meta($id, 'service_roles', implode( ';;', $_POST['roles'] ) );
     update_post_meta($id, 'service_levels', implode( ';;', $_POST['levels'] ) );
     update_post_meta($id, 'service_protocol', $_POST['protocol'] );
+
+
     addMessage('Product / Service was saved successfully');
     wp_redirect(get_permalink($id));
     exit;

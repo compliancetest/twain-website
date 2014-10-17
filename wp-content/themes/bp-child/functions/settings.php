@@ -84,6 +84,9 @@ function create_compliancetest_settings_page()
             update_option('pdf_private_key', $private_key);
             update_option('pdf_private_key_name', $_FILES['pdf_private_key']['name']);
         }
+    } else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-cloudsearch-settings')){
+        update_option('cloudsearch_search_endpoint', $_POST['cloudsearch_search_endpoint']);
+        update_option('cloudsearch_document_endpoint', $_POST['cloudsearch_document_endpoint']);
     }
     
 ?>
@@ -186,6 +189,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
                 <li><a href="#ct-xero-settings">Xero Settings</a></li>
                 <li><a href="#ct-s3-xml-max-size">S3 XML Size Settings</a></li>
+                <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
             </ul>
         </div>
         <div id="compliancetest-settings-wrapper">
@@ -395,6 +399,26 @@ function create_compliancetest_settings_page()
                     </table>
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-xero-settings'); ?>
+                    <input type="hidden" name="tab_index" value="7">
+                </form>
+            </div>
+
+            <div id="ct-cloudsearch-settings">
+                <h3>CloudSearch Settings</h3>
+                <form method="post" action="" enctype="multipart/form-data">
+                    <table class="widefat">
+                        <tr>
+                            <th><label><b>Search EndPoint:</b></label></th>
+                            <td><input type="text" name="cloudsearch_search_endpoint" id="cloudsearch_search_endpoint" value="<?php echo get_option('cloudsearch_search_endpoint')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Document EndPoint:</b></label></th>
+                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="<?php echo get_option('cloudsearch_document_endpoint')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+
+                    </table>
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-cloudsearch-settings'); ?>
                     <input type="hidden" name="tab_index" value="7">
                 </form>
             </div>

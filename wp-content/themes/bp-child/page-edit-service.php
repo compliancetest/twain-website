@@ -28,7 +28,7 @@ else
 
 get_header();
 
-$myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
+$myServices = getUserServices(null, $isNew ? array() : array($psID));
 
 if( isset($_SESSION['service_data'] ) )
 {
@@ -199,6 +199,7 @@ $user_test_suites = get_suites_with_claims();
                     </div>
                 </div>
                 <div class="space20"></div>
+
                 <div class="grid-box">
                     <div class="grid-box-footer nobackground noshadow">
                         <div class="btn-row nopaddingleft">
@@ -230,6 +231,8 @@ $user_test_suites = get_suites_with_claims();
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
+
+
 
             $('#suite_id').on('change', function(){
                 $('.roles_div').hide();

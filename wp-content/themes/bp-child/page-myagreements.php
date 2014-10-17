@@ -45,9 +45,10 @@ get_header();
         <div class="column">
            <?php if(can_create_product_and_service()){ ?>
                 <a href="/add-new-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Service</span></a>
+           <?php } ?>
+           <a href="/search-registry/?&type=Web%20Service" class="action-btn add-new-btn" style="margin-left: 10px;"><span class="p"></span><span class="t">Search</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
-           <?php } ?>
             <?php if( $user_services ):?>
                 <?php foreach( $user_services AS $user_service ):?>
                     <?php $serv = new Service( $user_service->ID ); $serv->load();?>
