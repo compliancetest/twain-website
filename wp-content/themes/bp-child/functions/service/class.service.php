@@ -10,7 +10,7 @@ class Service
 
     public $service_endpoint = '';
 
-    public $service_endpoint_type = '';
+//    public $service_endpoint_type = '';
 
     public $service_description = '';
 
@@ -56,7 +56,7 @@ class Service
         $this->service_name = $this->loadSingleValue('service_name');
         $this->service_id = $this->loadSingleValue('service_id');
         $this->service_endpoint = $this->loadSingleValue('service_endpoint');
-        $this->service_endpoint_type = $this->loadSingleValue('service_endpoint_type');
+//        $this->service_endpoint_type = $this->loadSingleValue('service_endpoint_type');
         $this->service_description = $this->loadSingleValue('service_description');
         $this->service_visibility = $this->loadSingleValue('service_visibility');
         $this->service_roles = explode( ';;', $this->loadSingleValue('service_roles' ) );
@@ -67,7 +67,7 @@ class Service
         $this->service_suite_id = $this->loadSingleValue('service_suite_id');
         $this->service_owner = $this->loadSingleValue('service_owner');
         $this->service_user_id = $this->loadSingleValue('service_user_id');
-
+        $this->service_type = $this->loadSingleValue( 'service_type' );
     }
 
     public static function has_assess( $service_id, $user_id = false ){

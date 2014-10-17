@@ -35,8 +35,9 @@ if( isset($_SESSION['service_data'] ) )
     $prevData = $_SESSION['service_data'];
     //Restore the previous form data
     $service->service_name = $prevData['service_name'];
+//    $service->service_endpoint = $prevData['service_endpoint'];
+//    $service->service_endpoint_type = $prevData['service_endpoint_type'];
     $service->service_endpoint = $prevData['service_endpoint'];
-    $service->service_endpoint_type = $prevData['service_endpoint_type'];
     $service->service_description = $prevData['service_description'];
     $service->service_owner = $prevData['service_owner'];
     $service->service_visibility = $prevData['service_visibility'];
@@ -104,29 +105,35 @@ $user_test_suites = get_suites_with_claims();
                                             <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" <?php if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ):?>style="display: none;"<?php endif;?>><?php echo $suite->title;?></option>
                                         <?php endforeach;?>
                                     </select>
-                                    <span class="focus-tooltip" style="left: 110%"><span></span>Form data entry - ABN or USI.</span>
+                                    <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
                                 </div>
+
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
                                 <div class="grid-cell has-focus-tooltip">
-                                    <label>Service ID:</label>
+                                    <label>Entity ID:</label>
                                     <input type="text" class="input required" name="service_id" id="service_id" value="<?php echo $service->service_id;?>" />
-                                    <span class="focus-tooltip" style="left: 110%"><span></span>Form data entry - ABN or USI.</span>
-                                </div>
-                                <div class="grid-cell has-focus-tooltip">
-                                    <label>EndPoint URL:</label>
-                                    <input type="text" class="input required" name="product_url" id="product_url" value="<?php echo $service->service_endpoint?>" />
-                                    <span class="focus-tooltip"><span></span>Provide a link to the page on your website that describes this product or service.</span>
+                                    <span class="focus-tooltip" style="left: 110%"><span></span>The identifier of the organisation that is the service provider.</span>
                                 </div>
                                 <div class="grid-cell styled_select">
-                                    <label>EndPoint Type:</label>
+                                    <label>EndPoint:</label>
+                                    <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
                                     <select name="endpoint_type" class="required">
                                         <option></option>
-                                        <option <?php if( $service->service_endpoint_type == 'Alias' ):?> selected="selected" <?php endif;?> value="Alias">Alias</option>
-                                        <option <?php if( $service->service_endpoint_type == 'URL' ):?> selected="selected" <?php endif;?> value="URL">URL</option>
-                                        <option <?php if( $service->service_endpoint_type == 'eMail' ):?> selected="selected" <?php endif;?> value="eMail">eMail</option>
+                                        <?php foreach( $endpoints AS $endpoint ):?>
+                                            <option <?php if( $service->service_endpoint == $endpoint->gateway_id ):?> selected="selected" <?php endif;?> value="<?php echo $endpoint->gateway_id;?>"><?php echo $endpoint->name;?></option>
+                                        <?php endforeach;?>
                                     </select>
+                                </div>
+                                <div class="grid-cell styled_select has-focus-tooltip">
+                                    <label>IDType:</label>
+                                    <select name="type" id="type" class="required">
+                                        <option></option>
+                                        <option <?php if( isset( $service->service_type ) && $service->service_type == 'ABN' ):?>selected="selected"<?php endif;?> value="ABN" >ABN</option>
+                                        <option <?php if( isset( $service->service_type ) && $service->service_type == 'USI' ):?>selected="selected"<?php endif;?> value="USI" >USI</option>
+                                    </select>
+                                    <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -144,15 +151,14 @@ $user_test_suites = get_suites_with_claims();
                                     <div class="styled_select">
                                         <label>Protocol:</label>
                                         <select name="protocol">
-                                            <option <?php if( $service->service_protocol == 'AS4-Gateway' ):?> selected="selected" <?php endif;?> value="AS4-Gateway">AS4-Gateway</option>
-                                            <option <?php if( $service->service_protocol == 'AS4-LightClient' ):?> selected="selected" <?php endif;?> value="AS4-LightClient">AS4-LightClient</option>
+                                            <option selected="selected" value="AS4-Gateway">AS4-Gateway</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="grid-cell has-focus-tooltip">
                                     <label>Description:</label>
                                     <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $service->service_description?></textarea>
-                                    <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
+                                    <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -231,9 +237,6 @@ $user_test_suites = get_suites_with_claims();
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
-
-
-
             $('#suite_id').on('change', function(){
                 $('.roles_div').hide();
                 $('.levels_div').hide();
@@ -286,13 +289,13 @@ $user_test_suites = get_suites_with_claims();
 
 
                 //Validate product URL
-                if (jQuery("#product_url").val() != '' && !isValidUrl(jQuery("#product_url").val())){
-                    isValid = false;
-                    jQuery("#product_url").addClass('input-error');
-                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please enter valid access url.</div>');
-                    $('#psForm .grid-box-footer .message').fadeIn('fast');
-                    return false;
-                }
+//                if (jQuery("#product_url").val() != '' && !isValidUrl(jQuery("#product_url").val())){
+//                    isValid = false;
+//                    jQuery("#product_url").addClass('input-error');
+//                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please enter valid access url.</div>');
+//                    $('#psForm .grid-box-footer .message').fadeIn('fast');
+//                    return false;
+//                }
 
                 //Product ID Validation
                 if($('#psForm #service_id').val() != '')

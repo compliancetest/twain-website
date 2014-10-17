@@ -43,9 +43,6 @@ get_header();
 
     <div class="container">
         <div class="column">
-           <?php if(can_create_product_and_service()){ ?>
-                <a href="/add-new-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Service</span></a>
-           <?php } ?>
            <a href="/search-registry/?&type=Web%20Service" class="action-btn add-new-btn" style="margin-left: 10px;"><span class="p"></span><span class="t">Search</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
@@ -113,9 +110,10 @@ get_header();
                                                    <?php endif;?>
                                                </div>
                                                <div class="td td-identifier"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_id : $agreement->responder_service->service_id;?></div>
-                                               <div class="td td-type"><?php echo $agreement->entry_status == 'Responder' ? ( strlen( $agreement->requester_service->service_id ) == 11 ? 'ABN' : 'USI' ) : ( strlen( $agreement->responder_service->service_id ) == 11 ? 'ABN' : 'USI' );?></div>
+                                               <div class="td td-type"><?php echo $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type );?></div>
                                                <div class="td td-protocol"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_protocol : $agreement->responder_service->service_protocol;?></div>
-                                               <div class="td td-end-point"><a href="#"><div class="td td-protocol"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?></div></a></div>
+                                               <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint ) );?>
+                                               <div class="td td-end-point"><a href="<?php echo $gateway->test_url;?>"><?php echo $gateway->name;?></div>
                                                <div class="td td-contact">
                                                    <?php $user_id = ( $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_user_id : $agreement->responder_service->service_user_id ); ?>
                                                    <?php $email = get_user_by( 'id', $user_id )->data->user_email; ?>
