@@ -360,22 +360,27 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
     if($user_id == null)
         $user_id = get_current_user_id();
     
-    //Getting User Membership
-    $membership = ct_get_user_organisation_membership($user_id);
-    if (!$membership) {
-        return array();
-    }
     $args = array(
         'post_type' => 'product-service', 
-        'posts_per_page' => -1,
-        'meta_query'    => array(
+        'posts_per_page' => -1
+    );
+    
+    if (!is_super_admin()) {
+        //Getting User Membership
+        $membership = ct_get_user_organisation_membership($user_id);
+        if (!$membership) {
+            return array();
+        }
+        
+        $args['meta_query'] = array(
                             array(
                                 'key' => 'product_organisation_id',
                                 'value' => $membership->organisation_id,
                                 'compare' => "=",
-                            )                        
-        )
-    );
+                            )   
+        );
+    } 
+    
     
     if (isset($exclusive)) {
         $args['post__not_in'] = $exclusive;

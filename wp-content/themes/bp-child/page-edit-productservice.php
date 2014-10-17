@@ -6,24 +6,21 @@
 
 $psID = isset($_GET['id']) ? $_GET['id'] : null;
 
-if (!can_maintain_product_and_service(null, $psID)) {
-    if(!$psID)
-        addMessage('Sorry, you are not allowed to create a Product / Service.', 'error');
-    else
-        addMessage('Sorry, you are not allowed to edit the Product / Service', 'error');
-        
-    wp_redirect("/");
-    exit;
-}
-
 $isNew = true;
 
 $product = new ProductAndService($psID);
 $product ->load();
-if(!$product ->id)
+if(!$product->id)
     $isNew = true;
 else
     $isNew = false;
+
+if (($isNew || !is_super_admin()) && !can_maintain_product_and_service(null, $product->id)) {    
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+        
+    wp_redirect("/");
+    exit;
+}
 
 get_header();
 
@@ -119,7 +116,19 @@ if(isset($_SESSION['product_data']))
                            </div>
                            <div class="has-focus-tooltip">
                                <label>Product Owner:</label>                    
+                               <?php 
+                                   if(is_super_admin()) { 
+                                       $organisations = ct_get_all_organisations();
+                               ?>
+                               <select name="product_owner" id="product_owner" class="select">
+                                   <option value="">- Select Organisation -</option>
+                                   <?php foreach($organisations as $org): ?>
+                                   <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
+                                   <?php endforeach; ?>
+                               </select>                                   
+                               <?php }else{ ?>
                                <input type="text" class="input required" name="product_owner" id="product_owner" readonly value="<?php echo $user_organisation->organisation_name?>" />
+                               <?php } ?>
                                <span class="focus-tooltip"><span></span>The owner of your product or service. It is set to the same as the organisation name from your profile.</span>
                            </div>
                        </div> 

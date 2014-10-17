@@ -209,7 +209,7 @@ function ct_process_organisation_action()
                 $controller->send_signup_organisation_request($user_id, intval( $_REQUEST['pricing_plan_id'] ) );
                 addMessage("Your request has been sent.");
             }
-            wp_redirect(get_permalink($_POST['suite_id']));
+            wp_redirect(isset($_POST['suite_id']) ? get_permalink($_POST['suite_id']) : base64_decode($_POST['return']));
             exit;
         } else if(wp_verify_nonce($action, 'request-subscription')) { //Send Request a subscription to the organisation admin
             if (!is_user_logged_in()) {

@@ -1,4 +1,17 @@
 <?php
+/**
+* Get All Organisations
+* 
+*/
+function ct_get_all_organisations()
+{
+    global $wpdb;
+    
+    $query = "SELECT * FROM {$wpdb->prefix}organisations ORDER BY organisation_name";
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
 
 /**
 * Check the user is an organisation admin
@@ -342,6 +355,16 @@ function ct_get_organisation_by_key($org_key)
     return $row;    
 }
 
+function ct_get_organisation_by_id($id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE id=%s", $id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;    
+}
+
 function ct_get_user_privileges($user_id, $organisation_id)
 {
     global $wpdb;
@@ -363,21 +386,27 @@ function ct_get_privileges()
     return $rows;
 }
 
-function ct_get_privilege_by_code($code)
+function ct_get_privilege_by_code($code, $field)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}privileges WHERE code=%s", $code);
-    $id = $wpdb->get_var($query);
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}privileges WHERE code=%s", $code);
+    $row = $wpdb->get_row($query);
     
-    return $id;
+    if (!$row)    
+        $value = null;
+    else
+        $value = $row->$field;
+    
+    return $value;
 }
+
 
 function ct_check_user_privilege($user_id, $organisation_id, $privilege)
 {
     global $wpdb;
     
-    $privilege_id = ct_get_privilege_by_code($privilege);
+    $privilege_id = ct_get_privilege_by_code($privilege, 'id');
     
     $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_privileges WHERE user_id=%d AND organisation_id=%d AND privilege_id=%d", $user_id, $organisation_id, $privilege_id);
     
@@ -386,3 +415,4 @@ function ct_check_user_privilege($user_id, $organisation_id, $privilege)
     return $id ? true : false;
     
 }
+
