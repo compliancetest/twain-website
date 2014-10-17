@@ -990,11 +990,16 @@ class ManageESB
     
     public function updateAuditRecordSuiteId($old_id, $new_id)
     {
-        //Getting Configuration ID 
-        $old_config_id = $this->getTestSuiteConfigurationID($old_id);
-        $new_config_id = $this->getTestSuiteConfigurationID($new_id);        
+        if(!is_array($old_id)) {
+            $old_id = array($old_id);
+        }
+        $query = "SELECT ID FROM " . $this->table_test_suite_configuration . " WHERE TEST_SUITE_WP_ID IN (" . implode(",", $old_id) . ")"  ;
+        $old_config_id = ManageESB::$esbdb->get_col($query);
         
-        $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=%d WHERE TEST_SUITE_CONFIGURATION_ID=%d AND AUDIT_RECORD=1", $new_config_id, $old_config_id);
+        $new_config_id = $this->getTestSuiteConfigurationID($new_id);
+        
+        $query = "UPDATE " . $this->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=" . $new_config_id . " WHERE TEST_SUITE_CONFIGURATION_ID IN (" . implode(
+        ",", $old_config_id) . ") AND AUDIT_RECORD=1";
         
         ManageESB::$esbdb->query($query);
         
