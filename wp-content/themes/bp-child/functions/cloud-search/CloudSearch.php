@@ -27,6 +27,11 @@ class CloudSearch {
         }
         $l = '';
         $range_checked = false;
+        if( is_user_logged_in() ) {
+            $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";//( term field=user_id ".get_current_user_id()." )
+        } else{
+            $l .= "  ( term field=visibility 1 )";
+        }
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
                 if( ! empty( $v ) ) {
@@ -71,6 +76,7 @@ class CloudSearch {
         $resp = curl_exec($curl);
         curl_close($curl);
         $res = json_decode( $resp, true );
+        var_dump($res);
         return $res;
     }
 
