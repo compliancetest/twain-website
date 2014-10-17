@@ -199,79 +199,7 @@ $user_test_suites = get_suites_with_claims();
                     </div>
                 </div>
                 <div class="space20"></div>
-                <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box">
-                    <div class="grid-box-header">
-                        <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                        <h5 class="left">Service Implementations</h5>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="grid-box-body">
-                        <div class="column">
-                            <?php if($myServices){ ?>
-                                <?php foreach($service->service_related_services as $row){ ?>
-                                    <div class="field-row">
-                                        <div class="grid-cell radio-cell width55P">
-                                            <label>Related Service Implementation: </label>
-                                            <select class="combobox select" name="related-product[]">
-                                                <option value=""></option>
-                                                <?php foreach($myServices as $p){ ?>
-                                                    <option value="<?php echo $p->ID?>" <?php echo $p->ID == $row->related_service_id ? 'selected="selected"' : '' ?>><?php echo get_the_title( $p->ID )?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell width30P">
-                                            <label>RelationShip: </label>
-                                            <select class="select" name="related-product-relation[]">
-                                                <option value="Depends On" <?php echo $row->relationship == 'Depends On' ? 'selected="selected"' : '' ?>>Depends On</option>
-                                                <option value="Newer Version Of" <?php echo $row->relationship == 'Newer Version Of' ? 'selected="selected"' : '' ?>>Newer Version Of</option>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell right">
-                                            <label>&nbsp;</label>
-                                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                <?php } ?>
-                                <?php if($isNew && !$product->relatedProducts){ ?>
-                                    <div class="field-row new-row">
-                                        <div class="grid-cell width55P">
-                                            <label>Related Service Implementation: </label>
-                                            <select class="combobox select" name="related-product[]">
-                                                <option value=""></option>
-                                                <?php foreach($myServices as $p){ ?>
-                                                    <option value="<?php echo $p->ID?>"><?php echo get_the_title($p->ID)?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell width30P">
-                                            <label>RelationShip: </label>
-                                            <select class="select" name="related-product-relation[]">
-                                                <option value="Depends On">Depends On</option>
-                                                <option value="Newer Version Of">Newer Version Of</option>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell right">
-                                            <label>&nbsp;</label>
-                                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                <?php } ?>
-                                <div class="btn-row">
-                                    <a href="#" class="action-btn add-new-btn has-tooltip" id="add-related-product" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
-                                    <div class="clear"></div>
-                                </div>
-                            <?php }else{ ?>
-                                <div class="field-row noborderbottom">
-                                    <div class="grid-cell width100P">
-                                        No Service Found!
-                                    </div>
-                                </div>
-                            <?php }   ?>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="grid-box">
                     <div class="grid-box-footer nobackground noshadow">
                         <div class="btn-row nopaddingleft">
@@ -304,45 +232,7 @@ $user_test_suites = get_suites_with_claims();
     <script type="text/javascript">
         jQuery(document).ready(function($){
 
-            jQuery('#add-related-product').click(function(){
-                jQuery('#ps-related-box .btn-row').before('<div class="field-row new-row">' +
-                '<div class="grid-cell width55P">' +
-                '<label>Related Service Implementation: </label>' +
-                '<select class="combobox select" name="related-product[]">' +
-                '<option value=""></option>' +
-                <?php foreach($myServices as $p){ ?>
-                '<option value="<?php echo $p->ID?>"><?php echo str_replace("'", "&#39;", get_the_title( $p->ID ))?></option>' +
-                <?php } ?>
-                '</select>' +
-                '</div>' +
-                '<div class="grid-cell width30P">' +
-                '<label>RelationShip: </label>' +
-                '<select class="select" name="related-product-relation[]">' +
-                '<option value="Depends On">Depends On</option>' +
-                '<option value="Newer Version Of">Newer Version Of</option>' +
-                '</select>' +
-                '</div>' +
-                '<div class="grid-cell right">' +
-                '<label>&nbsp;</label>' +
-                '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
-                '</div>' +
-                '<div class="clear"></div>' +
-                '</div>');
-                jQuery('#ps-related-box .combobox:last').combobox();
-                return false;
-            });
-            jQuery('#ps-related-box').on('click', '.blue-delete-btn', function(){
-                //if(jQuery(this).parents('.field-row').hasClass('new-row'))
-//        {
-                jQuery(this).parents('.field-row').fadeOut('fast', function(){
-                    jQuery(this).remove();
-                })
-//        }
 
-                return false;
-            })
-
-            jQuery('#ps-related-box .combobox').combobox();
 
             $('#suite_id').on('change', function(){
                 $('.roles_div').hide();
