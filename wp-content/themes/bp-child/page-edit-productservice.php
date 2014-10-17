@@ -81,7 +81,7 @@ if(isset($_SESSION['product_data']))
                        <div class="grid-cell has-focus-tooltip">
                            <label>Name:</label>         
                            <input type="text" class="input required" name="product_name" id="product_name" value="<?php echo $product->name?>" />
-                           <span class="focus-tooltip"><span></span>Enter your product or service name as it is known in the marketplace.</span>                           
+                           <span class="focus-tooltip"><span></span>Enter your product or service name as it is known in the marketplace.</span>
                        </div>                       
                        <div class="grid-cell has-focus-tooltip">
                            <label>Release Date:</label>  
@@ -95,7 +95,7 @@ if(isset($_SESSION['product_data']))
                    </div>
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">                           
-                           <label>Product ID:</label>                    
+                           <label>Product ID:</label>
                            <input type="text" class="input" name="product_id" id="product_id" value="<?php echo $product->product_id?>" />
                            <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. If a Product ID is not provided, we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})</span>
                        </div>                   
@@ -212,80 +212,69 @@ if(isset($_SESSION['product_data']))
                </div>
            </div>
         </div>
-        <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box-serv">
-            <div class="grid-box-header">
-                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                <h5 class="left">Service Implementations</h5>
-                <div class="clear"></div>
-            </div>
-            <div class="grid-box-body">
-                <div class="column">
-                    <?php if($myServices){ ?>
-                        <?php foreach($product->service_related_services as $row){ ?>
-                            <div class="field-row">
-                                <div class="grid-cell radio-cell width55P">
-                                    <label>Related Service Implementation: </label>
-                                    <select class="combobox select" name="related-product[]">
-                                        <option value=""></option>
-                                        <?php foreach($myServices as $p){ ?>
-                                            <option value="<?php echo $p->ID?>" <?php echo $p->ID == $row->related_service_id ? 'selected="selected"' : '' ?>><?php echo get_the_title( $p->ID )?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="grid-cell width30P">
-                                    <label>RelationShip: </label>
-                                    <select class="select" name="related-product-relation[]">
-                                        <option value="Depends On" <?php echo $row->relationship == 'Depends On' ? 'selected="selected"' : '' ?>>Depends On</option>
-                                        <option value="Newer Version Of" <?php echo $row->relationship == 'Newer Version Of' ? 'selected="selected"' : '' ?>>Newer Version Of</option>
-                                    </select>
-                                </div>
-                                <div class="grid-cell right">
-                                    <label>&nbsp;</label>
-                                    <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                                </div>
+          <?php if( ! $isNew ): ?>
+              <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box-serv">
+                    <div class="grid-box-header">
+                        <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+                        <h5 class="left">Service Implementations</h5>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="grid-box-body">
+                        <div class="column">
+                            <?php
+                                $args = array(
+                                    'post_type' => 'service',
+                                    'posts_per_page' => -1,
+                                    'author' => get_current_user_id(),
+                                    'meta_key' => 'service_product_id',
+                                    'meta_value' => $product->id,
+                                );
+                                $posts = get_posts($args);
+                            ?>
+                            <input type="hidden" value="" name="services_to_delete" id="services_to_delete">
+                            <?php if( $posts ):?>
+                                <?php foreach( $posts AS $post ):?>
+                                    <div class="field-row">
+                                            <div class="grid-cell width30P">
+                                                <label><?php echo get_the_title( $post->ID );?> </label>
+                                            </div>
+                                            <div class="grid-cell width30P">
+                                                <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
+                                            </div>
+                                            <div class="grid-cell right">
+                                                <a href="#" class="action-btn blue-delete-btn icon-btn delete_service" data-serviceid="<?php echo $post->ID;?>"><span class="p"></span></a>
+                                            </div>
+                                    </div>
+                                    <div class="padding10"></div>
+                                    <div class="clear"></div>
+                                <?php endforeach;?>
+
+                            <?php endif;?>
+                            <div class="btn-row">
+                                <?php if( $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id ) ) ):?>
+                                    <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+                                <?php else:?>
+                                    <a href="#cant_add_popup" rel="custom-popup" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+
+                                    <div class="popup-box" id="cant_add_popup" style="display: none; width: 500px">
+                                        <div class="popup-box-header radius6 noradiusbottom">New Service Implementation</div>
+                                            <div class="popup-box-content">
+                                                <p>You need to have made a claim for this product before you can create service implementations for it</p>
+                                            </div>
+                                            <div class="popup-box-footer radius6 noradiustop">
+                                                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                                                <div class="clear"></div>
+                                            </div>
+                                            <a class="close_btn"></a>
+                                    </div>
+                                <?php endif;?>
                                 <div class="clear"></div>
                             </div>
-                        <?php } ?>
-                        <?php if($isNew && !$product->service_related_services){ ?>
-                            <div class="field-row new-row">
-                                <div class="grid-cell width55P">
-                                    <label>Related Service Implementation: </label>
-                                    <select class="combobox select" name="related-service[]">
-                                        <option value=""></option>
-                                        <?php foreach($myServices as $p){ ?>
-                                            <option value="<?php echo $p->ID?>"><?php echo get_the_title($p->ID)?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="grid-cell width30P">
-                                    <label>RelationShip: </label>
-                                    <select class="select" name="related-service-relation[]">
-                                        <option value="Depends On">Depends On</option>
-                                        <option value="Newer Version Of">Newer Version Of</option>
-                                    </select>
-                                </div>
-                                <div class="grid-cell right">
-                                    <label>&nbsp;</label>
-                                    <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        <?php } ?>
-                        <div class="btn-row">
-                            <a href="#" class="action-btn add-new-btn has-tooltip" id="add-related-service" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
-                            <div class="clear"></div>
                         </div>
-                    <?php }else{ ?>
-                        <div class="field-row noborderbottom">
-                            <div class="grid-cell width100P">
-                                No Service Found!
-                            </div>
-                        </div>
-                    <?php }   ?>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="grid-box">
+          <?php endif;?>
+          <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">               
                <div class="btn-row nopaddingleft">
                    <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE PRODUCT</span></a>
@@ -334,56 +323,26 @@ jQuery(document).ready(function($){
     jQuery('#ps-related-box').on('click', '.blue-delete-btn', function(){
         //if(jQuery(this).parents('.field-row').hasClass('new-row'))
 //        {
+
             jQuery(this).parents('.field-row').fadeOut('fast', function(){
                 jQuery(this).remove();                
             })
 //        }
         
         return false;
-    })
-
-    jQuery('#ps-related-box .combobox').combobox();
-
-    jQuery('#add-related-service').click(function(){
-        jQuery('#ps-related-box-serv .btn-row').before('<div class="field-row new-row">' +
-        '<div class="grid-cell width55P">' +
-        '<label>Related Service Implementation: </label>' +
-        '<select class="combobox select" name="related-service[]">' +
-        '<option value=""></option>' +
-        <?php foreach($myServices as $p){ ?>
-        '<option value="<?php echo $p->ID?>"><?php echo str_replace("'", "&#39;", get_the_title( $p->ID ))?></option>' +
-        <?php } ?>
-        '</select>' +
-        '</div>' +
-        '<div class="grid-cell width30P">' +
-        '<label>RelationShip: </label>' +
-        '<select class="select" name="related-service-relation[]">' +
-        '<option value="Depends On">Depends On</option>' +
-        '<option value="Newer Version Of">Newer Version Of</option>' +
-        '</select>' +
-        '</div>' +
-        '<div class="grid-cell right">' +
-        '<label>&nbsp;</label>' +
-        '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
-        '</div>' +
-        '<div class="clear"></div>' +
-        '</div>');
-        jQuery('#ps-related-box-serv .combobox:last').combobox();
-        return false;
     });
-    jQuery('#ps-related-box-serv').on('click', '.blue-delete-btn', function(){
-        //if(jQuery(this).parents('.field-row').hasClass('new-row'))
-//        {
+
+    jQuery('.delete_service').on('click', function(){
+        jQuery('#services_to_delete').val( jQuery('#services_to_delete').val() +','+jQuery(this).attr( 'data-serviceid'))
         jQuery(this).parents('.field-row').fadeOut('fast', function(){
             jQuery(this).remove();
         })
-//        }
-
         return false;
     })
 
     jQuery('#ps-related-box .combobox').combobox();
-    
+
+
     jQuery(".validation-form .required").each(function(){
         jQuery(this).parent().append('<span class="msg-required" style="display: none">This field is required.</span>');
     })
