@@ -21,7 +21,11 @@ $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gate
                         <a href="/edit-service?id=<?php echo $service->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                     <?php } ?>
                     <?php if( is_user_logged_in() && $service->service_user_id != get_current_user_id() ):?>
-                        <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
+                        <?php if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ):?>
+                            <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn green-btn"><span class="t">Request E2E Test</span></a>
+                        <?php else:?>
+                            <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
+                        <?php endif;?>
                     <?php endif;?>
                     <a href="<?php echo addPrintParams(get_permalink(), 'service')?>" class="action-btn print-btn print-page-btn" id="print-product-btn"><span class="p"></span><span class="t">Print</span></a>
                 </div>
@@ -227,7 +231,7 @@ $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gate
                     jQuery(this).css({'top': tooltipTop, 'margin-left': tooltipLeft});
                 });
             }
-        });
+         });
         jQuery('.submit_agreement').click(function(){
             var is_valid = true;
             jQuery('.case_exclude_reason').removeClass('input-error');

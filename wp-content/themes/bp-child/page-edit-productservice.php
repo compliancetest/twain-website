@@ -265,7 +265,11 @@ if(isset($_SESSION['product_data']))
                             <?php endif;?>
                             <div class="btn-row">
                                 <?php if( $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id ) ) ):?>
-                                    <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+                                    <?php if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ):?>
+                                        <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Add</span></a>
+                                    <?php else:?>
+                                        <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+                                    <?php endif;?>
                                 <?php else:?>
                                     <a href="#cant_add_popup" rel="custom-popup" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
 
