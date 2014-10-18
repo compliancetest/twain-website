@@ -193,10 +193,17 @@ function saveProductService()
         $services = explode( ',', trim( $_POST['services_to_delete'], ',' ) );
         if( ! empty( $services ) ){
             foreach( $services AS $service ){
-                wp_delete_post( $service );
+                if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id = %d OR responder_service_id = %d ", $service, $service ) ) ){
+                    wp_delete_post( $service );
+                } else{
+                    addMessage( "Can't delete '".get_the_title( $service )."' service, because it has agreements", 'error' );
+                }
             }
         }
     }
+    $cloud_search = new CloudSearch();
+    $cloud_search->cloud_search_update_product( $id );
+
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
@@ -242,6 +249,10 @@ function deleteProductService()
     
     //Delete Product/Service
     wp_delete_post($id);
+
+    $cloud_search = new CloudSearch();
+    $cloud_search->cloud_search_delete_item( $id, 'product' );
+
     addMessage("The product was deleted!");
     wp_redirect($redirectUrl);
     exit;
