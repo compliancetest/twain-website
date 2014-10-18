@@ -27,7 +27,11 @@ if(is_user_logged_in()){
     wp_redirect(home_url());
     exit;
 }
-
+if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
+    addMessage("You can't access this page", 'warning');
+    wp_redirect('/my-profile');
+    exit;
+}
 $user_services = Service::get_user_services();
 
 wp_enqueue_style( 'jquery-custom-scroll', get_stylesheet_directory_uri() . '/css/jquery.jscrollpane.css', '', '2.0.19');
