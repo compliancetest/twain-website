@@ -65,9 +65,6 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                         </li>
                         <?php $is_active = false;?>
                     <?php endif;?>
-                    <li <?php if( $is_active ):?>class="active"<?php endif;?> >
-                        <a href="javascript: void(0)" rel="tab_service_implementations">Service Implementations</a>
-                    </li>
                 </ul>
                 <?php if( $product->relatedProducts ):?>
                     <div class="tab-content" id="tab_related_products" style="display: block;">
@@ -79,22 +76,6 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                         </dl>
                     </div>
                 <?php endif;?>
-                <div class="tab-content" id="tab_service_implementations" <?php if( ! $is_active ):?>style="display: none;"<?php else:?>style="display: block;"<?php endif;?>>
-                    <dl class="column product_services">
-                        <?php if( $product->relatedServices ):?>
-                            <?php foreach( $product->relatedServices AS $serv ):?>
-                                <?php if( Service::has_assess( $serv->id ) ):?>
-                                    <dd><a href="<?php echo get_permalink( $serv->id );?>"><?php echo get_the_title( $serv->id );?></a></dd>
-                                    <dt>Owner:</dt>
-                                    <dd><?php echo get_post_meta( $serv->id, 'service_owner', true );?></dd>
-                                    <dt>End-to-End Test Status:</dt>
-                                    <dd class="status-verified">Verified</dd>
-                                    <dd class="clear"></dd>
-                                <?php endif;?>
-                            <?php endforeach;?>
-                        <?php endif;?>
-                    </dl>
-                </div>
             </div>
         </div>
     </div>

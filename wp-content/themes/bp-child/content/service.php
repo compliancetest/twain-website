@@ -5,6 +5,7 @@
 ?>
 <?php
 $prev_page = wp_get_referer() ? wp_get_referer() : '/';
+$gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $service->service_endpoint ) );
 ?>
 <div class="product-page">
     <div class="page-title-block">
@@ -42,13 +43,12 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                     <ul class="product-attributes">
                         <li>Service Provider: <strong><a href="<?php echo get_permalink( $service->service_product_id );?>"><?php echo get_the_title( $service->service_product_id );?></a></strong></li>
                         <li>Entity ID: <strong><?php echo $service->service_id;?></strong></li>
-<!--                        <li>ID Type: <strong>--><?php //echo $service->service_id;?><!--</strong></li>-->
+                        <li>ID Type: <strong><?php echo $service->service_type;?></strong></li>
                         <li>Process: <strong><a href="<?php echo get_permalink( $service->service_suite_id );?>"><?php echo get_the_title( $service->service_suite_id );?></a></strong></li>
                         <li>Role: <strong><?php echo implode( ', ', $service->service_roles );?></strong></li>
                         <li>Level: <strong><?php echo implode( ', ', $service->service_levels );?></strong></li>
                         <li>Protocol: <strong><?php echo $service->service_protocol ;?></strong></li>
-                        <li>End-Point: <strong><?php echo $service->service_endpoint;?></strong></li>
-                        <li>End-Point-Type: <strong><?php echo $service->service_endpoint_type;?></strong></li>
+                        <li>End-Point: <strong><a href="<?php echo $gateway->test_url;?>"><?php echo $gateway->name;?></a></strong></li>
                     </ul>
                     <div class="product-description"><?php echo $service->service_description;?></div>
                 </div>
