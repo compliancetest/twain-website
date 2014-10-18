@@ -248,7 +248,7 @@ class CloudSearch {
         foreach( $posts AS $post ){
             $service = new Service( $post->ID );
             $service->load();
-            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $post->ID ) );
             $groups = groups_get_user_groups( $post_author );
             if( $service->service_visibility == 'Public' ){
                 $v = 1;
@@ -261,15 +261,15 @@ class CloudSearch {
                 'name'        => $service->service_name,
                 'version'     => $service->service_version,
                 'owner'       => $service->service_owner,
-                'type'        => 'Software Product',
+                'type'        => 'Web Service',
                 'test_type'   => 'End to End',
                 'for_search'  => $service->service_description. ' + '.$service->service_owner.' + Service + Certification + ',
-                'post_id'     => $service->id,
+                'post_id'     => $post->ID,
                 'visibility'  => $v,
                 'community_id' => $groups['groups'],
                 'user_id'     => $post_author
             );
-            array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$service->id, 'fields' => $temp_data ) );
+            array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$post->ID, 'fields' => $temp_data ) );
         }
         var_dump( $this->_sendDataToSearchDomain( $data ) );
         die;
@@ -520,7 +520,7 @@ class CloudSearch {
             'name'        => $service->service_name,
             'version'     => $service->service_version,
             'owner'       => $service->service_owner,
-            'type'        => 'Software Product',
+            'type'        => 'Web Service',
             'test_type'   => 'End to End',
             'for_search'  => $service->service_description. ' + '.$service->service_owner.' + Service + Certification + ',
             'post_id'     => $service->id,

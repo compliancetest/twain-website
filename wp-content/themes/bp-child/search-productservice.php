@@ -10,11 +10,16 @@ global $post;
 $baseURL = get_permalink();
 
 $cloud_search = new CloudSearch();
-$results = $cloud_search->search( $_GET );
-if( ! isset( $_GET['page'] ) ){
-    $_GET['page'] = 1;
+$params = array();
+if( $_GET ){
+    foreach( $_GET AS $k => $v ){
+        $params[] = urlencode($k) . '=' . urlencode($v);
+    }
 }
-$page = $_GET['page'];
+$page = get_query_var('paged') ? get_query_var('paged') : 1;
+$_GET['page'] = $page;
+$results = $cloud_search->search( $_GET );
+
 if( isset( $_GET['download']) ){
     unset( $_GET['download']);
     $results = $cloud_search->search( $_GET, true );
@@ -23,7 +28,7 @@ if( isset( $_GET['download']) ){
 ?>
 <div class="content container" id="search">
     <div class="column search-results">
-        <form name="form_filter" id="form_filter" action="<?php echo get_permalink()?>" method="get">
+        <form name="form_filter" id="form_filter" action="/products-and-services/" method="get">
             <div class="search-result-form">
                 <div class="searchform">
                     <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_GET['q']) ? $_GET['q'] : '')) ?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
@@ -33,7 +38,6 @@ if( isset( $_GET['download']) ){
             <div class="search-results-filter">
                 <h4 class="filter-head">Filter By:</h4>
                 <div class="search-filters-box">
-                    <input type="hidden" name="page" value="<?php echo $page;?>" id="page">
                     <ul class="search-filters-list clearfix">
                         <li class="first">
                             <label for="implementation-type-filter">Implementation Type</label>
@@ -207,6 +211,7 @@ if( isset( $_GET['download']) ){
                             'next_text'    => __('Next »'),
                             'type'         => 'plain',
                             'add_args'     => false,
+                            'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)
                         );
 
                         echo paginate_links($args);
@@ -218,18 +223,19 @@ if( isset( $_GET['download']) ){
     </div>
 </div>
 <script>
-    jQuery( document).ready(function(){
-        jQuery('.page-numbers').on('click', function(e){
-            e.preventDefault();
-            var page_number = jQuery( this ).attr( 'href' ).split('/');
-            page_number = page_number[page_number.length - 1].replace( '?', '' );
-            if( page_number ) {
-                jQuery('#page').val(page_number);
-                jQuery('#form_filter').submit();
-            } else{
-                location.reload();
-            }
-        });
-    });
+//    jQuery( document).ready(function(){
+//        jQuery('.page-numbers').on('click', function(e){
+//            e.preventDefault();
+//            var page_number = jQuery( this ).attr( 'href' ).split('/');
+//            page_number = page_number[page_number.length - 1].replace( '?', '' );
+//            if( page_number ) {
+//                jQuery('#page_v').val(page_number);
+//                jQuery('#form_filter').submit();
+//            } else{
+//                location.reload();
+//            }
+//            return false;
+//        });
+//    });
 </script>
 <?php get_footer() ?>
