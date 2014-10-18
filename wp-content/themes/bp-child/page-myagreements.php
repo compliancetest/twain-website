@@ -28,8 +28,8 @@ if(is_user_logged_in()){
     exit;
 }
 if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
-    addMessage("You can't access this page", 'warning');
-    wp_redirect('/my-profile');
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+    wp_redirect("/");
     exit;
 }
 $user_services = Service::get_user_services();

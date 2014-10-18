@@ -652,6 +652,7 @@ function getDashboardPages($type = 'page')
 // Get Dashboard Menu HTML
 function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $level = 0)
 {
+    global $wpdb;
     if (!is_array($pages) || count($pages) == 0) {
         return '';
     }
@@ -659,7 +660,9 @@ function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $l
     $html = '<ul class="dropdown-menu '.(($level==0)?($menu_class):('')).'">';
     
     foreach ($pages as $page) {
-        
+        if( $page['title'] == 'Agreements' && ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
+            continue;
+        }
         $class = isset($page['class']) ? ($page['class']) : ('');
         $url = $page['url'];
         $title = $page['title'];
