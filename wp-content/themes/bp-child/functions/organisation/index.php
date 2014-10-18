@@ -632,9 +632,11 @@ function ct_process_organisation_action()
                 addMessage("Invalid Reqeust!", "error");
             } else {
                 $controller->remove_privilege($member_id);
-                foreach($_POST['privilege'] as $privilege)
-                {
-                    $controller->add_privilege($member_id, $membership->organisation_id, $privilege);
+                if ($_POST['privilege']) {
+                    foreach($_POST['privilege'] as $privilege)
+                    {
+                        $controller->add_privilege($member_id, $membership->organisation_id, $privilege);
+                    }
                 }
                 addMessage("Successfully Saved!");
             }
