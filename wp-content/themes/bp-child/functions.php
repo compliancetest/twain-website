@@ -1303,6 +1303,16 @@ function groups_is_user_admin_in_any_community( $user_id, $communitiesList = fal
     return false;
 }
 
+function ct_read_xml_from_amazon_s3($url)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    
+    return $result;
+}
+
 /**
  * Determine if a variable is iterable. i.e. can be used to loop over.
  *

@@ -3883,6 +3883,15 @@ body .tabs li {
             body .tabs li.active a  #icon_admin {
                 background: url(../images/sproket_icon_w.png) 2px 3px no-repeat;
             }
+            body .tabs li a  #icon_users {
+                background: url(../images/user_icon_g.png) 2px 4px no-repeat;
+                margin: 2px;
+                margin-right: 5px;
+            }
+
+            body .tabs li.active a  #icon_users {
+                background: url(../images/user_icon_w.png) 2px 4px no-repeat;
+            }
             body .tabs li.active a .tabactive{
             background: url(../images/tab_active.png) no-repeat;
             width: 16px;
@@ -5103,16 +5112,13 @@ span.button_sign {
     float: left;
     background: url(../images/suite-progress-blob.png) no-repeat 0 0;
     position: relative;
+    cursor: pointer;
 }
 .coverage-progress span.optional_bubble{
-    opacity: 90;
-    background: rgba(0,0,0,.5);
-    -moz-transition: all 1s;
-    -webkit-transition: all 1s;
-    transition: all 1s;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+    background-position: 0 -36px;
+}
+.coverage-progress span.excluded_bubble{
+    background-position: 0 -27px;
 }
 .coverage-progress span.pass{
     background-position: 0 -9px;
@@ -8573,6 +8579,24 @@ input.inactive_s{
 }
 /* Homepage end
 ----------------------------------------------- */
+
+#organisation_users .td-name{
+    width: 150px;
+}
+#organisation_users .td-email{
+    width: 270px;
+}
+#organisation_users .td-roles{
+    width: 100px;
+}
+#organisation_users .td-action{
+    width: 92px;
+}
+
+#organisation_users .td-privilege{
+    width: 200px;
+}
+
 
 /* Search Results Updated */
 .search-results{

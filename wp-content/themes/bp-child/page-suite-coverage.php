@@ -29,7 +29,7 @@ $esb = new ManageESB();
             <?php if (count($mysuites) > 0): ?>
            <?php foreach($mysuites as $suite){ ?>
            <?php
-               $caseStatus = $esb->getCaseStatus($suite->id, $suite->suite_id);
+               $caseStatus = $esb->getCaseStatus($suite->parent_id, $suite->suite_id);
                
            ?>
            <div class="grid-box table-box">
@@ -72,34 +72,40 @@ $esb = new ManageESB();
                                ?> 
                                <div class="coverage-progress">
                                    <?php
-                                       $passedBlobs = "";
-                                       $failedBlobs = "";
-                                       $normalBlobs = "";
+
 
                                        foreach($testCases as $case)
                                        {
-                                           $opt = '';
+                                           $passedBlobs = "";
+                                           $failedBlobs = "";
+                                           $normalBlobs = "";
+                                           $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_case_id = %d AND test_plan_id = %d ", $case->ID, $crow->id ) );
+                                           $opt = $exc = '';
                                            $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
                                            if( $is_optional == 'Yes' ) $opt = ' (opt) ';
-                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt . '</a> | <a href="' . get_site_url() . "/my-transaction-log?case=" . $case->ID .'">View Test Log</a><span></span></span>';
+                                           if( $is_excluded ) $exc = ' (excl) ';
+                                           $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt .$exc. '</a><span></span></span>';
                                            if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
                                                {
-                                                   $passedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
+                                                   $passedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
                                                }else{
-                                                   $failedBlobs .= '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
+                                                   $failedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
                                                }
                                                
                                            }else{
-                                               if( $is_optional == 'No' || empty( $is_optional ) ){
-                                                    $normalBlobs .= '<span class="bubble">' . $tooltip . '</span>';
+                                               if( ( $is_optional == 'No' || empty( $is_optional ) ) && ! $is_excluded ) {
+                                                   $normalBlobs = '<span class="bubble">' . $tooltip . '</span>';
+                                               } else if( $is_excluded ){
+                                                   $normalBlobs = '<span class="bubble excluded_bubble">' . $tooltip . '</span>';
                                                } else {
-                                                   $normalBlobs .= '<span class="bubble optional_bubble">' . $tooltip . '</span>';
+                                                   $normalBlobs = '<span class="bubble optional_bubble">' . $tooltip . '</span>';
                                                }
                                            }
+                                           $normalBlobs .= '<a href="?plan_id='.$crow->id.'&id='.$case->ID.'&_wpnonce='.wp_create_nonce('get_popup').'" cp-type="ajax" cp-removeBoxAfterClose=1 class="create_popup action-btn edit-btn edit-plan-btn icon-btn" style="display: none;"></a>';
+                                           echo $passedBlobs . $failedBlobs . $normalBlobs;
                                        }
-                                       echo $passedBlobs . $failedBlobs . $normalBlobs;
                                    ?>
                                </div>    
                                <div class="clear"></div>
@@ -191,6 +197,9 @@ jQuery(document).ready(function(){
     }, function(){
         jQuery(this).find('.simple_tooltip').hide();
     })
+    jQuery('.coverage-progress span.bubble').on('click', function(){
+        jQuery(this).next().click();
+    });
 })
 </script>
 <?php

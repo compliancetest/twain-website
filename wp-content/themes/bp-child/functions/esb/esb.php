@@ -45,11 +45,19 @@ class ManageESB
         /*if($suite_id != null)
             $this->addTestSuiteIDToLog($suite_id);*/
         
-        $query = ManageESB::$esbdb->prepare("SELECT s.TEST_SUITE_WP_ID, p.PRODUCT_WP_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
+        $query = "SELECT s.TEST_SUITE_WP_ID, p.PRODUCT_WP_ID, ts.*, c.TEST_CASE_ID, c.TEST_CASE_WP_ID as TEST_CASE_DB_ID FROM " . $this->table_conversation_metadata . " AS m " .
                                             "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=m.MSH_TEST_OUTCOME_STATUS_ID " .
                                             "LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID=m.PRODUCT_ID " .
                                             "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=m.TEST_SUITE_CONFIGURATION_ID " .
-                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1 AND m.CUSTOMER_ID=%d", $customer_id);
+                                            "LEFT JOIN " . $this->table_test_case_configuration . " AS c ON c.ID=m.TEST_CASE_CONFIGURATION_ID WHERE m.AUDIT_RECORD=1";
+        
+        if (is_array($customer_id)) {
+            $customer_id = ManageESB::$esbdb->escape($customer_id);            
+            $query .= " AND m.CUSTOMER_ID IN (" . implode(", ", $customer_id) . ")";
+        } else {
+            $query .= ManageESB::$esbdb->prepare(" AND m.CUSTOMER_ID=%d", $customer_id);
+        }
+        
         
         if($suite_id != null)
             $query .= ManageESB::$esbdb->prepare(" AND s.TEST_SUITE_WP_ID=%d", $suite_id);
@@ -61,7 +69,7 @@ class ManageESB
             $query .= ManageESB::$esbdb->prepare(" AND c.TEST_CASE_DB_ID=%d", $case_id);
         
         $rows = ManageESB::$esbdb->get_results($query);
-        
+    
         if(!$rows)
             return array();
     
@@ -244,7 +252,7 @@ class ManageESB
 
         } else if( $subscription_id == 'my' ){
             //Getting Manageable Users' Subscriptions
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions AS s WHERE user_id = %d", $user_id );
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions AS s WHERE user_id = %d", $user_id );
             if ($organisation_id !== null && $organisation_id != "all") {
                 $query .= $wpdb->prepare(" AND s.organisation_id=%d", $organisation_id);
             }
@@ -421,7 +429,7 @@ class ManageESB
         {
             $query = "SELECT
                         DISTINCT(m.ID),
-                        m.ID, m.MSH_CONVERSATION_ID, m.MESSAGE_TIMESTAMP, m.FROM_PARTY_ID, m.TO_PARTY_ID, m.SERVICE, m.ACTION, m.MSH_MESSAGE_OUTCOME_STATUS_ID, m.MESSAGE_ID,
+                        m.ID, m.MSH_CONVERSATION_ID, m.MESSAGE_TIMESTAMP, m.S3_PAYLOAD_LOCATION, m.S3_PAYLOAD_CONTENT_LENGTH, m.FROM_PARTY_ID, m.TO_PARTY_ID, m.SERVICE, m.ACTION, m.MSH_MESSAGE_OUTCOME_STATUS_ID, m.MESSAGE_ID,
                         m.ORIGINAL_MESSAGE_ID, m.REF_TO_MESSAGE_ID, m.PART_ID, m.ATTACHMENT_ID, m.UPLOAD_ID, m.CT_RECEIPT_MESSAGE_ID, m.GATEWAY_RECEIPT_MESSAGE_ID, m.FLAG,
                         ms.MESSAGE_OUTCOME_CODE,
                         ms.MESSAGE_OUTCOME_LABEL
@@ -790,11 +798,12 @@ class ManageESB
         if(!$esbIDs)
             return array();
         
-        $query = "SELECT m.PAYLOAD FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
+        $query = "SELECT m.PAYLOAD, m.S3_PAYLOAD_LOCATION, m.S3_PAYLOAD_CONTENT_LENGTH FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c WHERE m.MSH_CONVERSATION_ID=c.ID AND m.ID=" . intval($id) . " AND c.CUSTOMER_ID in (" . implode(",", $esbIDs) . ")";                
         
-        $data = ManageESB::$esbdb->get_var($query);
+        $data = ManageESB::$esbdb->get_row($query);
         
         return $data;
+        
         
     }
     
@@ -868,13 +877,19 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT mv.VALIDATION_ERROR " . 
+        $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION " . 
                  "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                  "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.CUSTOMER_ID in (" . implode(", ", $esbIDs) . ")";
         
-        $data = ManageESB::$esbdb->get_var($query);
+        $data = ManageESB::$esbdb->get_row($query);
         
-        return $data;
+        if(!$data->S3_VALIDATION_RESULTS_LOCATION)
+            return $data->VALIDATION_ERROR;
+        
+        //Getting XML FROM Amazon S3 URL
+        $result = ct_read_xml_from_amazon_s3($data->S3_VALIDATION_RESULTS_LOCATION);
+        
+        return $result;
     }
     
     
@@ -973,5 +988,22 @@ class ManageESB
         return $id;
     }
     
+    public function updateAuditRecordSuiteId($old_id, $new_id)
+    {
+        if(!is_array($old_id)) {
+            $old_id = array($old_id);
+        }
+        $query = "SELECT ID FROM " . $this->table_test_suite_configuration . " WHERE TEST_SUITE_WP_ID IN (" . implode(",", $old_id) . ")"  ;
+        $old_config_id = ManageESB::$esbdb->get_col($query);
+        
+        $new_config_id = $this->getTestSuiteConfigurationID($new_id);
+        
+        $query = "UPDATE " . $this->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=" . $new_config_id . " WHERE TEST_SUITE_CONFIGURATION_ID IN (" . implode(
+        ",", $old_config_id) . ") AND AUDIT_RECORD=1";
+        
+        ManageESB::$esbdb->query($query);
+        
+        return;
+    }
     
 }

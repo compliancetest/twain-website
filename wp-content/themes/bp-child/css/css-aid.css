@@ -1408,6 +1408,9 @@ tr {
     background: -o-linear-gradient(top, #FCFCFC, #F2F2F2);
     border-top: solid 1px #b7b7b7;
 }
+.grid-hidden-row{
+    display: none;
+}
 .grid-box-body .grid-row:first-child{
     border: none;
 }

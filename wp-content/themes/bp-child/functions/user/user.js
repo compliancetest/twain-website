@@ -201,7 +201,7 @@
                 $(thisParentId+' .btn-row').fadeIn();
                  $(thisParentId).addClass('grid-box-editing');
                 //transform all divs in inputs
-                $(thisParentId+' .grid-cell.in_input').each(function(){
+                $(thisParentId+' .grid-cell.in_input').each(function(){                    
                    var thisTextVal = $(this).attr('data-value'); 
                    var thisNameVal = $(this).attr('data-name'); 
                    if($(this).attr('data-placeholder'))
@@ -216,31 +216,38 @@
 
                    if(dataType == 'textarea')
                        $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+                   else if(dataType == 'readonly')
+                       $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" />');
                    else
                        $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
 
                    $(this).hide();
                 });        
+                $(thisParentId).find('.grid-hidden-row').show();
             }
-
-            $("#timezone").val(timezoneText.attr('data-value'));
-            timezoneText.hide();
-            $("#timezone").show();
-            $("#dashboard-pages").show();
             
-            $('#dashboard-page-path').data('title', $('#dashboard-page-path').html());
-            $('input[name=dashboard_page_url]').data('title', $('input[name=dashboard_page_url]').val());
-            $('input[name=dashboard_page_title]').data('title', $('input[name=dashboard_page_title]').val());
+            if ($(thisParentId).find('#timezone').length > 0) {
+                $("#timezone").val(timezoneText.attr('data-value'));
+                timezoneText.hide();
+                $("#timezone").show();
+            }
             
-            $('#dashboard-pages .dashboard-pages-dropdown a').click(function(){
-                $('input[name=dashboard_page_url]').val($(this).attr('href'));
-                $('input[name=dashboard_page_title]').val($(this).data('title'));
-                $('#dashboard-page-path').html($(this).data('title'));
-                $('#dashboard-pages').removeClass('open');
+            if ($(thisParentId).find('#dashboard-pages').length > 0) {
+                $("#dashboard-pages").show();
                 
-                return false;
-            });
-
+                $('#dashboard-page-path').data('title', $('#dashboard-page-path').html());
+                $('input[name=dashboard_page_url]').data('title', $('input[name=dashboard_page_url]').val());
+                $('input[name=dashboard_page_title]').data('title', $('input[name=dashboard_page_title]').val());
+                
+                $('#dashboard-pages .dashboard-pages-dropdown a').click(function(){
+                    $('input[name=dashboard_page_url]').val($(this).attr('href'));
+                    $('input[name=dashboard_page_title]').val($(this).data('title'));
+                    $('#dashboard-page-path').html($(this).data('title'));
+                    $('#dashboard-pages').removeClass('open');
+                    
+                    return false;
+                });
+            }
            return false;
         });
 
@@ -255,9 +262,16 @@
              $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
             $(thisParentId+' .grid-cell.in_input').each(function(){
-               $(this).next().remove();
-               $(this).show();
+                if ($(this).attr('data-type') == 'skip') {
+                    $(this).parent().show();                    
+                } else {
+                    $(this).next().remove();                
+                    $(this).show();
+                }                
             });
+            
+            $(thisParentId).find('.grid-hidden-row').hide();
+            
             $(thisParentId+' .btn-row').hide();
 
             $("#timezone").hide();
@@ -471,11 +485,15 @@
                  $(thisParentId).addClass('grid-box-editing');
                 //transform all divs in inputs
                 $(thisParentId+' .grid-cell.in_input').each(function(){
-                   var thisTextVal = $(this).attr('data-value'); 
-                   var thisNameVal = $(this).attr('data-name'); 
-                   if($(this).attr('data-placeholder'))
+                    if ($(this).attr('data-type') == 'skip') {
+                       $(this).parent().hide();
+                       return;
+                    }
+                    var thisTextVal = $(this).attr('data-value'); 
+                    var thisNameVal = $(this).attr('data-name'); 
+                    if($(this).attr('data-placeholder'))
                        var thisPlaceholderValue = $(this).attr('data-placeholder');
-                   else
+                    else
                        var thisPlaceholderValue = '';
                    
                    if($(this).attr('data-type'))
@@ -485,6 +503,8 @@
 
                    if(dataType == 'textarea')
                        $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+                   else if(dataType == 'readonly')
+                       $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" />');
                    else
                        $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
 
@@ -506,8 +526,12 @@
              $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
             $(thisParentId+' .grid-cell.in_input').each(function(){
-               $(this).next().remove();
-               $(this).show();
+               if ($(this).attr('data-type') == 'skip') {
+                    $(this).parent().show();                    
+                } else {
+                    $(this).next().remove();                
+                    $(this).show();
+                }  
             });
             $(thisParentId+' .btn-row').hide();
 

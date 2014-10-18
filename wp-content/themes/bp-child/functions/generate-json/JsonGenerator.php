@@ -31,17 +31,19 @@ class JsonGenerator {
         if (!mkdir($this->folder_path)) {
             die('Failed to create folders...');
         }
-        
-        $this->generateProfileJson( 'Profile.Products' );
-        $this->generateProfileJson( 'Profile.Employers' );
-        
+        $sheets = $this->_excel->getSheetNames();
+        foreach ( $sheets as $sheet ) {
+            if( strpos( $sheet, 'Profile.' ) !== false ){
+                $this->generateProfileJson( $sheet );
+            }
+        }
         return $this->_createProfilesZip();
     }
 
     public function generateProfileJson( $sheetName ) {
         $this->excludeProfiles = array();
         $this->jsonArrays = array();
-        $profileFields = array('Type', 'Purpose', 'Title', 'Description', 'Version.Major', 'Version.Minor');
+        $profileFields = array('Type', 'Purpose', 'Title', 'Description', 'Version.Major', 'Version.Minor', 'Version.Patch');
         PHPExcel_Calculation::getInstance()->cyclicFormulaCount = 100000;
         try{
             $sheetData = $this->_excel->getSheetByName($sheetName)->toArray();
@@ -96,6 +98,9 @@ class JsonGenerator {
         $temp = 1;
         $str = '$this->jsonArrays['.$keyNumber.']';
         foreach( $arrayKeys AS $key ){
+            if( $key == '$ref' ){
+                $key = '\$ref';
+            }
             if( preg_match( self::BRACKETS_REG, $key, $match) ){
                 $str .= '["'.$this->replaceBrackets($key).'"]'.$match[0].'';
             } else {
@@ -126,7 +131,12 @@ class JsonGenerator {
                 continue;
             }
             
-            $filename = @$profileData['Profile']['Type'].'.'.@$profileData['Profile']['Title'].'.'.@$profileData['Profile']['Version']['Major'].'.'.@$profileData['Profile']['Version']['Minor'].'.json';
+            $filename = @$profileData['Profile']['Type'].'.'.@$profileData['Profile']['Title'].'.'.@$profileData['Profile']['Version']['Major'].'.'.@$profileData['Profile']['Version']['Minor'];
+
+            if( isset( $profileData['Profile']['Version']['Patch'] ) && ! empty( $profileData['Profile']['Version']['Patch'] ) ){
+                $filename .= '.'.$profileData['Profile']['Version']['Patch'];
+            }
+            $filename .= '.json';
             
             if( $filename == '}.}.}.}.json' || $filename == '....json'){
                 continue;

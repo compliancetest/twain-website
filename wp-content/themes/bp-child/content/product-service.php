@@ -2,8 +2,9 @@
 /**
  * Service Content
  */
-?>
-<?php
+
+ $user_id = get_current_user_id();
+ 
 $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
 ?>
 <div class="product-page">
@@ -31,11 +32,12 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                 <div class="product-info">
                     <div class="product-identifiers">
                         <div class="product-actions">
-                            <?php if(can_delete_product_and_service(get_the_ID())){ ?>
+                            <?php if(is_super_admin() || can_maintain_product_and_service($user_id, $product->id)){ ?>
                                 <a href="<?php get_permalink()?>?id=<?php echo $product->id?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode("/my-products") ?>" class="action-btn delete-btn right left10"><span class="p"></span><span class="t">Delete</span></a>
-                            <?php } ?>
-                            <?php if(can_edit_product_and_service(get_the_ID())){ ?>
                                 <a href="/edit-product-and-service?id=<?php echo $product->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
+                            <?php } else { ?>
+                                <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn right left10"><span class="p"></span><span class="t">Delete</span></a>
+                                <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                             <?php } ?>
                         </div>
                         <div class="product-name">Product Name: <strong><?php echo $product->name.' v'.get_post_meta( $product->id, 'product_version', true ); ?></strong></div>

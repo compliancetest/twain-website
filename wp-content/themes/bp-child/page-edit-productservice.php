@@ -6,29 +6,29 @@
 
 $psID = isset($_GET['id']) ? $_GET['id'] : null;
 
-if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null && !can_create_product_and_service()) )
-{
-    if(!$psID)
-        addMessage('Sorry, you are not allowed to create a Product / Service.', 'error');
-    else
-        addMessage('Sorry, you are not allowed to edit the Product / Service', 'error');
+$isNew = true;
+
+$product = new ProductAndService($psID);
+$product ->load();
+if(!$product->id)
+    $isNew = true;
+else
+    $isNew = false;
+
+if (($isNew || !is_super_admin()) && !can_maintain_product_and_service(null, $product->id)) {    
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
         
     wp_redirect("/");
     exit;
 }
 
-$isNew = true;
-
-$product = new ProductAndService($psID);
-$product ->load();
-if(!$product ->id)
-    $isNew = true;
-else
-    $isNew = false;
-
 get_header();
 
 $myProducts = getUserProductsAndServices(null, $isNew ? array() : array($psID));
+
+$user_id = get_current_user_id();
+
+$user_organisation = ct_get_user_organisation($user_id);
 
 $myServices = getUserServices(null, array() );
 
@@ -44,6 +44,7 @@ if(isset($_SESSION['product_data']))
     $product->version = $prevData['product_version'];
     $product->owner = $prevData['product_owner'];
     $product->descrition = $prevData['product_description'];
+    $product->organisation_id = $prevData['product_organisation_id'];
 
     $product->relatedProducts = array();
     if($prevData['related-product'])
@@ -115,8 +116,20 @@ if(isset($_SESSION['product_data']))
                            </div>
                            <div class="has-focus-tooltip">
                                <label>Product Owner:</label>                    
-                               <input type="text" class="input required" name="product_owner" id="product_owner" value="<?php echo !$product->owner ? get_user_meta(get_current_user_id(), 'user_organisation', true) : $product->owner?>" />
-                               <span class="focus-tooltip"><span></span>Enter the owner of your product or service. By default, it is set to the same as the organisation name from your profile.</span>
+                               <?php 
+                                   if(is_super_admin()) { 
+                                       $organisations = ct_get_all_organisations();
+                               ?>
+                               <select name="product_owner" id="product_owner" class="select">
+                                   <option value="">- Select Organisation -</option>
+                                   <?php foreach($organisations as $org): ?>
+                                   <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
+                                   <?php endforeach; ?>
+                               </select>                                   
+                               <?php }else{ ?>
+                               <input type="text" class="input required" name="product_owner" id="product_owner" readonly value="<?php echo $user_organisation->organisation_name?>" />
+                               <?php } ?>
+                               <span class="focus-tooltip"><span></span>The owner of your product or service. It is set to the same as the organisation name from your profile.</span>
                            </div>
                        </div> 
                        <div class="grid-cell has-focus-tooltip">

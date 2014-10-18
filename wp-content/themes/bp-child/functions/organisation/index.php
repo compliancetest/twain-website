@@ -209,7 +209,7 @@ function ct_process_organisation_action()
                 $controller->send_signup_organisation_request($user_id, intval( $_REQUEST['pricing_plan_id'] ) );
                 addMessage("Your request has been sent.");
             }
-            wp_redirect(get_permalink($_POST['suite_id']));
+            wp_redirect(isset($_POST['suite_id']) ? get_permalink($_POST['suite_id']) : base64_decode($_POST['return']));
             exit;
         } else if(wp_verify_nonce($action, 'request-subscription')) { //Send Request a subscription to the organisation admin
             if (!is_user_logged_in()) {
@@ -373,7 +373,7 @@ function ct_process_organisation_action()
                 } else {
                     addMessage($controller->last_message, "error");                    
                 }
-            }
+            }            
             wp_redirect(get_permalink($suite_id));
             exit;
         } else if(wp_verify_nonce($action, 'unsubscribe')) {
@@ -525,6 +525,121 @@ function ct_process_organisation_action()
             
         }  else if(wp_verify_nonce($action, 'get_price_plan')) {
             include(dirname(__FILE__) . '/../../content/org-pricing-page.php');
+            exit;
+        } else if(wp_verify_nonce($action, 'remove-membership')) {
+            global $wpdb;
+            
+            $id = $_POST['id'];
+            if (!is_user_logged_in() || !$id) {                
+                addMessage('Invalid Request!', 'error');
+            } else {
+                $user_id = get_current_user_id();
+            
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_members WHERE id=%d", $id);
+                $row = $wpdb->get_row($query);
+                
+                if (!$row) {
+                    addMessage('Invalid Request!', 'error');
+                } else if (!ct_is_organisation_admin($user_id, $row->organisation_id)) {
+                    addMessage('Permission Denied!', 'error');
+                } else if($row->is_admin == 1) {
+                    addMessage("You can't remove the organisation admin from the organisation.", 'error');
+                } else {                    
+                    $controller->delete_membership($row->user_id, $row->organisation_id);    
+                    addMessage("The user was removed successfully.");
+                }
+            }
+            
+            wp_redirect(get_site_url() . "/my-organisation/users");
+            exit;
+        } else if(wp_verify_nonce($action, 'edit-privilege')) {
+            $user_id = get_current_user_id();
+            $member_id = $_REQUEST['user_id'];
+            
+            $membership = ct_get_user_organisation_membership($member_id);
+            
+            if (!$member_id || !$membership || !ct_is_organisation_admin($user_id, $membership->organisation_id)) {
+                ?>
+                <div class="popup-box" style="display: none; width: 450px">
+                    <div class="popup-box-header radius6 noradiusbottom">Invalid Request!</div>
+                    <div class="popup-box-content"><p class="message error">Your request is not valid.</p></div>                    
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <div class="clear"></div>
+                    </div>
+                    <a class="close_btn"></a>
+                </div>
+                <?php
+            } else {
+                $privileges = ct_get_privileges();
+                $current_privileges = ct_get_user_privileges($member_id, $membership->organisation_id);
+                $checked_privileges = array();
+                foreach($current_privileges as $cp)
+                    $checked_privileges[] = $cp->id;
+                ?>
+                <div class="popup-box" id="edit-privilege-box" style="display: none; width: 450px;">
+                    <form name="privilege-form" action="/index.php" method="post">
+                        <div class="popup-box-header radius6 noradiusbottom">Edit User Privileges</div>
+                        <div class="popup-box-content grid-box-body">    
+                        <?php foreach($privileges as $p){ ?>
+                            <div class="field-row">
+                                <div class="grid-cell width5P">
+                                    <input type="checkbox" name="privilege[]" value="<?php echo $p->id ?>" <?php echo in_array($p->id, $checked_privileges) ? 'checked="checked"' : ''?>  /> 
+                                </div>
+                                <div class="grid-cell width90P">
+                                    <?php echo $p->title?>
+                                    <br />
+                                    <?php echo $p->description?>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        <?php } ?>
+                        </div>
+                        <div class="popup-box-footer radius6 noradiustop">      
+                            <div class="left">
+                                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+                                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="loading loading-with-text radius6"><div><b>SAVING DATA</b><span>Please wait...</span></div></div>
+                        <a class="close_btn"></a>
+                        <input type="hidden" name="user_id" value="<?php echo $member_id?>" />    
+                        <input type="hidden" name="organisation_id" value="<?php echo $membership->organisation_id?>" />    
+                        <?php wp_nonce_field('save-privilege', '_organisation_nonce'); ?>
+                        <?php if($_REQUEST['return']){ ?>
+                        <input type="hidden" name="return" value="<?php echo $_REQUEST['return']?>" />
+                        <?php } ?>
+                    </form>
+                    <script type="text/javascript">
+                        jQuery('#edit-privilege-box a.submit-btn').click(function(){
+                            jQuery(this).parents('form').find('.loading').show(); 
+                            jQuery(this).parents('form').submit();
+                        })
+                    </script>
+                </div>
+                <?php
+            }
+            exit;
+        } else if(wp_verify_nonce($action, 'save-privilege')) {
+            $user_id = get_current_user_id();
+            
+            $member_id = $_REQUEST['user_id'];
+            
+            $membership = ct_get_user_organisation_membership($member_id);
+            
+            if (!$member_id || !$membership || !ct_is_organisation_admin($user_id, $membership->organisation_id)) {
+                addMessage("Invalid Reqeust!", "error");
+            } else {
+                $controller->remove_privilege($member_id);
+                foreach($_POST['privilege'] as $privilege)
+                {
+                    $controller->add_privilege($member_id, $membership->organisation_id, $privilege);
+                }
+                addMessage("Successfully Saved!");
+            }
+            
+            wp_redirect(get_site_url() . "/my-organisation/users/");
             exit;
         }
     } 

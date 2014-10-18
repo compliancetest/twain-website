@@ -1,0 +1,183 @@
+{
+	"$schema"							: "http://json-schema.org/draft-04/schema#",
+	"title"								: "TICK",
+	"Description"						: "TFN Integrity check services.",
+	"Version" : {
+		"Major"							: 1,
+		"Minor"							: 1
+	},
+	
+	"type" : "object",
+	"properties" : {
+		"Profile"						: {"$ref" : "#/definitions/Profile/Profile"},
+		"Persons"						: {"$ref" : "#/definitions/Persons/Persons"}
+	},
+    "required" : ["Profile", "Persons"],
+        
+	"definitions" : {
+		"Types" : {
+			"NonNegativeInteger"		: {"type" : "integer", "minimum" : 0},
+		
+			"MultipleOf8"				: {"allOf": [{"$ref" : "#/definitions/Types/NonNegativeInteger"}, { "multipleOf": 8}]},
+
+			"NonEmptyString"			: {"type" : "string", "minLength" : 1},
+		
+			"URI"						: {"type" : "string", "format" : "uri", "minLength" : 1},
+		
+			"Email"						: {"type" : "string", "format" : "email"},
+
+			"Boolean"					: {"type": "boolean"},
+        
+			"BooleanDefaultFalse"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": false }]},
+        
+			"BooleanDefaultTrue"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": true }]},
+			
+			"TimeUnit"					: {"enum" : ["seconds", "minutes", "hours", "days", "weeks"]}
+		},
+			
+		"Profile" : {
+			"Type"						: {"enum" : ["SuperTICK", "EmployerTICK"]},
+			
+			"Purpose"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+			
+			"Version" : {
+				"type" : "object",
+				"properties" : {
+					"Major"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"},
+					"Minor"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"},
+					"Patch"				: {"$ref" : "#/definitions/Types/NonNegativeInteger"}
+				},
+				"required" : ["Major", "Minor"]
+			},
+			
+			"Profile" : {
+				"type" : "object",
+				"properties" : {
+					"Type"				: {"$ref" : "#/definitions/Profile/Type"},
+					"Purpose"			: {"$ref" : "#/definitions/Profile/Purpose"},
+					"Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Version"			: {"$ref" : "#/definitions/Profile/Version"}
+				},
+				"required" : ["Type", "Purpose", "Title", "Description", "Version"]
+			}
+		},
+
+		"PayrollAdministration" : {
+			"Contact" : {
+				"type" : "object",
+				"properties" : {
+					"FamilyName"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"GivenName"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"OtherGivenName"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required" : ["FamilyName", "GivenName"]
+			},
+
+			"Email"						: {"$ref" : "#/definitions/Types/Email"},
+
+			"Telephone" : {
+				"type": "object",
+				"properties":{
+					"ServiceLine"		: {"enum" : ["01", "02"]},
+					"AreaCode"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Number"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required" : ["ServiceLine", "Number"]
+			},
+
+			"Account" : {
+				"type" : "object",
+				"properties" : {
+					"BSB"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Number"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"AccountName"		: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required" : ["BSB", "Number", "AccountName"]
+			},
+
+			"Behaviours" : {
+				"type" : "object",
+				"properties":{
+					"ElectronicErrorMessaging" : {"$ref" : "#/definitions/Types/Boolean"},
+					"EmployerIsPayer"	: {"$ref" : "#/definitions/Types/BooleanDefaultTrue"}
+				},
+				"required" : ["ElectronicErrorMessaging"]
+			},
+
+			"PayrollAdministration" : {
+				"type" : "object",
+				"properties":{
+					"ABN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"MainName"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Contact"			: {"$ref" : "#/definitions/PayrollAdministration/Contact"},
+					"Email"				: {"$ref" : "#/definitions/PayrollAdministration/Email"},
+					"Telephone"			: {"$ref" : "#/definitions/PayrollAdministration/Telephone"},
+					"Account"			: {"$ref" : "#/definitions/PayrollAdministration/Account"},
+					"Behaviours"		: {"$ref" : "#/definitions/PayrollAdministration/Behaviours"}
+				},
+				"required" : ["ABN", "MainName", "Contact", "Email", "Telephone", "Account", "Behaviours"]
+			}
+		},
+
+        "Persons": {
+            "Name" : {
+                "type" : "object",
+                "properties" : {
+                    "Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "NameSuffix"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "FamilyName"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "GivenName"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "OtherGivenName"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                },
+                "required" : ["FamilyName", "GivenName"]
+            },
+
+            "Address": {
+                "type": "object",
+                "properties":{
+                    "Usage"				: {"enum": ["RES", "POS"]},
+                    "Line1"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Line2"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Line3"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Line4"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Locality"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "PostCode"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "StateOrTerritory"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Country"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                },
+                "required" : ["Usage", "Line1", "Locality", "Country"]
+            },
+            
+            "Telephone" : {
+                "type": "object",
+                "properties":{
+                    "ServiceLine"		: {"enum": ["01", "02"]},
+                    "AreaCode"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Number"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
+                },
+                "required" : ["ServiceLine", "Number"]
+            },
+
+			"Person" : {
+                "type": "object",
+                "properties":{
+                    "TFN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Name"				: {"$ref" : "#/definitions/Persons/Name"},
+                    "Sex"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "BirthDate"			: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Address"			: {"$ref" : "#/definitions/Persons/Address"},
+                    "Email"				: {"$ref" : "#/definitions/Types/Email"},
+                    "Telephone"			: {"$ref" : "#/definitions/Persons/Telephone"}
+                },
+                "required" : ["TFN", "Name", "BirthDate"]
+			},
+
+			"Persons" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Persons/Person"},
+				"minItems": 1
+			}
+		}
+	}
+}

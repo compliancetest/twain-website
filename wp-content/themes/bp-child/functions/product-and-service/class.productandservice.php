@@ -18,6 +18,8 @@ class ProductAndService
     
     var $owner = '';
     
+    var $organisation_id = '';
+    
     var $descrition = '';
 
     var $visibility = '';
@@ -49,10 +51,17 @@ class ProductAndService
         $this->product_id = $this->loadSingleValue('product_id');
         $this->release_date = $this->loadSingleValue('product_release_date');
         $this->type = $this->loadSingleValue('product_type');
+        $this->organisation_id = $this->loadSingleValue('product_organisation_id');
+        
         $this->owner = $this->loadSingleValue('product_owner');
+        
+        $organisation = ct_get_organisation_by_id($this->organisation_id);
+        if($organisation)
+            $this->owner = $organisation->organisation_name;
+            
         $this->version = $this->loadSingleValue('product_version');
         $this->accessURL = $this->loadSingleValue('product_url');
-        $this->descrition = $this->loadSingleValue('product_description');
+        $this->descrition = $this->loadSingleValue('product_description');        
         $this->visibility = $this->loadSingleValue('product_visibility');
         $this->services_not_permitted = $this->loadSingleValue('services_not_permitted');
 

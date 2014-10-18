@@ -24,13 +24,15 @@ function certifyPlan()
     
     $user_id = get_current_user_id();
     
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
     $plan = new TestPlan($planID);
     $plan->load();
     
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/test-suite-coverage";
     $return_success = "/my-products";
     
-    if($plan->creator_id != $user_id)
+    if($plan->organisation_id != $user_membership->organisation_id)
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect($return);
@@ -41,24 +43,33 @@ function certifyPlan()
     $cases = $suite->loadTestCases($plan->level, $plan->role, 'Active');                                   
     
     //Getting Esb Customer ID
-    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "users_subscriptions WHERE suite_id=%d AND user_id=%d AND `status`='Active'", $plan->suite_id, $user_id);
-    $esbUserId = $wpdb->get_var($query);
+    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "organisations_subscriptions WHERE suite_family_mark=%d AND organisation_id=%d AND `status`='Active'", $suite->familyMark, $plan->organisation_id);
+    $esbUserIds = $wpdb->get_col($query);
     
     $esb = new ManageESB();
-    $caseStatus = $esb->getCaseStatus($esbUserId, $plan->suite_id);
+    $caseStatus = $esb->getCaseStatus($esbUserIds, $plan->suite_id);
 
     $all_verified = true;
+    $has_exclusions = 0;
     foreach($cases as $case)
     {
         $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
+        $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $case->ID ) );
         if( ! $is_optional ) $is_optional = 'No';
-        if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' )
+        if( $is_excluded ){
+            $has_exclusions = 1;
+        }
+        if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' && ! $is_excluded )
         {
             $all_verified = false;
             break; 
         }
+        if( isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID] ) && $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] == 'fail' && $is_excluded ){
+            $all_verified = false;
+            break;
+        }
     }
-    
+
     //Create Compliance Claim
     if($all_verified)
     {
@@ -69,9 +80,10 @@ function certifyPlan()
         $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
         $oId = $wpdb->get_var($query);
         if (!$oId) {
-            if(!_saveClaim($plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId)) {
+            if(!_saveClaim($plan->organisation_id, $plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId, $planID, $has_exclusions )) {
                 wp_redirect($return);
             } else {
+                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans WHERE id = %d", $planID ) );
                 addMessage('The plan was certified successfully');
                 wp_redirect($return_success);
             }
@@ -126,17 +138,13 @@ function editPlan()
     
     $user_id = get_current_user_id();
     
+    //Getting User Organisation Id
+    $user_membership = ct_get_user_organisation_membership($user_id);
+       
     $plan = new TestPlan($planID);
     $plan->load();
     
-    $is_allowed = false;
-    if(!$planID && is_customer($suiteID, $user_id))
-        $is_allowed = true;
-    else if($planID && $plan->creator_id == $user_id)
-        $is_allowed = true;
-    
-    if(!$is_allowed)
-    {
+    if (!$user_membership || ($planID && $user_membership->organisation_id != $plan->organisation_id)) {
         ?>
         <div class="popup-box" id="make-plan-box" style="display: none;">
             <div class="popup-box-header radius6 noradiusbottom">Permission Error!</div>
@@ -151,6 +159,7 @@ function editPlan()
             <div class="loading" style="display: none;"></div>
         </div>
         <?php
+        exit;
     }
     
     
@@ -203,8 +212,8 @@ function editPlan()
                 </div>            
             </div>
             <div class="popup-box-footer radius6 noradiustop">                        
-                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SUBMIT</span></a>
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Submit</span></a>
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
                 <div class="clear"></div>
             </div>
             <a class="close_btn"></a>                
@@ -231,6 +240,9 @@ function makePlan()
     $plan = new TestPlan($planID);
     $plan->load();
     
+    //Getting User Organisation Id
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
     if(!$suiteID || !$_POST['product_id'] || !$_POST['level'] || !$_POST['role'])
     {
         addMessage('Invalid Request!', 'error');
@@ -241,20 +253,7 @@ function makePlan()
     $product = get_post($_POST['product_id']);
     
     //Product/Service
-    if(!is_super_admin() && !is_admin() && $user_id != $product->post_author)
-    {
-        addMessage('Permission Denied!', 'error');
-        wp_redirect('/test-suite-coverage');
-        exit;
-    }
-    
-    $is_allowed = false;
-    if(!$planID && is_customer($suiteID, $user_id))
-        $is_allowed = true;
-    else if($planID && $plan->creator_id == $user_id)
-        $is_allowed = true;
-    
-    if(!$is_allowed)
+    if(!$user_membership || !can_edit_test_plan($suiteID, $_POST['product_id']))
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect('/test-suite-coverage');
@@ -268,7 +267,7 @@ function makePlan()
     {
         $nId = $wpdb->insert($wpdb->prefix . "test_plans", array(
             'suite_id'    =>  $suiteID,
-            'creator_id'    =>  $user_id,
+            'organisation_id'    =>  $user_membership->organisation_id,
             'product_id'    =>  $_POST['product_id'],
             'level'    =>  cp_implode($_POST['level']),
             'role'    =>  cp_implode($_POST['role']),

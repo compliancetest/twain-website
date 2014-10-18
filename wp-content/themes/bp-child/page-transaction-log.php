@@ -22,6 +22,8 @@ if($user_status == 3)
     exit;
 }
 
+$html_render_limit = get_option('s3_xml_max_size');
+
 $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
 
 //Set Default Subscription
@@ -476,9 +478,13 @@ get_header();
                                                        <input type="text" value="<?php echo $message->PART_ID; ?>" readonly="readonly">
                                                    </div>
                                                    <div class="td td-message-view">
-                                                      <a href="/message-envelope?id=<?php echo $message->ID?>" target="_blank">XML</a> 
+                                                      <a href="<?php echo $message->S3_PAYLOAD_LOCATION ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
                                                       | 
-                                                      <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
+                                                      <?php if($message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
+                                                        <a href="<?php echo $message->S3_PAYLOAD_LOCATION?>" class="html-view-error">HTML</a>
+                                                      <?php } else { ?>
+                                                        <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
+                                                      <?php } ?>
                                                        <br>
                                                        <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
                                                    </div>
@@ -569,6 +575,22 @@ get_header();
  <script type="text/javascript">
     
     jQuery(document).ready(function(){
+        
+        jQuery('a.html-view-error').each(function(){
+            jQuery(this).click(function(){
+                return false;
+            })
+            
+            var s_url = jQuery(this).attr("href");
+            
+            jQuery(this).cplightbox({
+                type: 'inline',
+                href: '#html-render-limit-error-box',
+                onStart: function(){
+                    jQuery('#html-render-limit-error-box .popup-box-content a').attr("href", s_url);
+                }
+            })
+        })
         
         <?php if (isset($tOrganisations)): ?> //Has Organisation Filter
             function update_subscription_filter()
@@ -713,6 +735,21 @@ get_header();
                         },
                         onLoad: function(){
                             fixTdHeight(jQuery('#view-validation-log-box .table-box'));
+                            jQuery('#view-validation-log-box a.html-view-error').each(function(){
+                                jQuery(this).click(function(){
+                                    return false;
+                                })
+                                
+                                var s_url = jQuery(this).attr("href");
+                                
+                                jQuery(this).cplightbox({
+                                    type: 'inline',
+                                    href: '#html-render-limit-error-box',
+                                    onStart: function(){
+                                        jQuery('#html-render-limit-error-box .popup-box-content a').attr("href", s_url);
+                                    }
+                                })
+                            })
                         }
                     });
                 }
@@ -897,7 +934,19 @@ get_header();
     <a class="close_btn"></a>
 </div>
 
-
+<div class="popup-box" id="html-render-limit-error-box" style="display: none; width: 410px">
+    <div class="popup-box-header radius6 noradiusbottom">HTML View Not Available</div>
+    <div class="popup-box-content"> 
+        HTML View is not available due to content size of 25 kB. Click <a href="#" target="_blank">here</a> to download and process locally
+       <div class="space10"></div>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">                                                    
+        <a href="#" cp-type="inline"  class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+        <div class="clear"></div>
+    </div>
+    <div class="loading"></div>
+    <a class="close_btn"></a>      
+</div>
 
 <?php
 get_footer();

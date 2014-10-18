@@ -45,6 +45,11 @@ function create_compliancetest_settings_page()
         update_option('token_price', $_POST['token_price']);
         
     }
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
+        //Save Options
+        update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
+        
+    }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
         update_option('esb_host', $_POST['esb_host']);
@@ -183,6 +188,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
                 <li><a href="#ct-xero-settings">Xero Settings</a></li>
+                <li><a href="#ct-s3-xml-max-size">S3 XML Size Settings</a></li>
                 <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
             </ul>
         </div>
@@ -416,7 +422,20 @@ function create_compliancetest_settings_page()
                     <input type="hidden" name="tab_index" value="7">
                 </form>
             </div>
-
+            <div id="ct-s3-xml-max-size">
+                <h3>S3 XML Maximum Size Settings</h3>
+                <form method="post" action="">
+                    <table class="widefat">
+                        <tr>
+                            <td><label><b>HTML Render Limit:</b></label></td>
+                            <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
+                        </tr>
+                    </table>   
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-xml-size-limit'); ?>
+                    <input type="hidden" name="tab_index" value="8">
+                </form>
+            </div>
         </div>
     </div>
     

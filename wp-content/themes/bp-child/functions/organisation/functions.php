@@ -1,4 +1,17 @@
 <?php
+/**
+* Get All Organisations
+* 
+*/
+function ct_get_all_organisations()
+{
+    global $wpdb;
+    
+    $query = "SELECT * FROM {$wpdb->prefix}organisations ORDER BY organisation_name";
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
 
 /**
 * Check the user is an organisation admin
@@ -131,13 +144,10 @@ function ct_get_user_organisation($user_id = null)
     
     if(!$user_id)
         $user_id = get_current_user_id();
-        
-    $data = get_userdata($user_id);
     
-    //Getting domain
-    list($p, $domain) = explode("@",  $data->user_email);
-    
-    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE organisation_domain=%s", $domain);
+    $query = $wpdb->prepare("SELECT o.* FROM {$wpdb->prefix}organisations_members AS m 
+                                LEFT JOIN {$wpdb->prefix}organisations AS o ON m.organisation_id=o.id
+                             WHERE m.user_id=%d", $user_id);
     $data = $wpdb->get_row($query);
 
     return $data;    
@@ -215,15 +225,12 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
         $org_id = null;
     
     if (is_super_admin()) {
-        $query = "SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
-                  WHERE 1
-                                 ";
+        $query = "SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
+                  WHERE 1 ";
     } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT( s.id ), os.nickname, s.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
-                LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+        $query = $wpdb->prepare("SELECT DISTINCT( os.id ), os.nickname, os.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}organisations_subscriptions AS os
                 WHERE 
-                    s.user_id = bm.user_id AND bm.is_confirmed=1 
+                    os.user_id = bm.user_id AND bm.is_confirmed=1 
                     AND
                     (bm.user_id=%d OR bm.group_id 
                         IN 
@@ -231,14 +238,12 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
                 ", $user_id, $user_id);
         
     } else {
-        //Getting domain
-        list($p, $domain) = explode("@",  $user_data->user_email);
+        //Getting User Membership
+        $organisation = ct_get_user_organisation();
 
-        $query = $wpdb->prepare("SELECT os.nickname, us.id, us.organisation_id FROM {$wpdb->prefix}users_subscriptions AS us
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON us.parent_id = os.id
-                                 LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id
-                                 WHERE o.organisation_domain=%s ", 
-                                 $domain);
+        $query = $wpdb->prepare("SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
+                                 WHERE os.organisation_id=%d ", 
+                                 $organisation->id);
     }
     
     if ($org_id !== null) {
@@ -313,3 +318,101 @@ function ct_get_user_subscription_by_id($subscription_id)
     
     return $data;
 }
+
+function ct_generate_organisation_key()
+{
+    global $wpdb;
+    
+    do{            
+        $str = md5(cp_generate_password() . time());    
+        
+        $query = $wpdb->prepare("SELECT count(*) FROM "  . $wpdb->prefix . "organisations WHERE id=%d", $str);
+        $id = $wpdb->get_var($query);
+        if(!$id)
+            break;
+    }while(1);    
+    
+    return $str;
+}
+
+function ct_get_user_organisation_membership($user_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_members WHERE user_id=%d", $user_id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;    
+}
+
+function ct_get_organisation_by_key($org_key)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE organisation_key=%s", $org_key);
+    $row = $wpdb->get_row($query);
+    
+    return $row;    
+}
+
+function ct_get_organisation_by_id($id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations WHERE id=%s", $id);
+    $row = $wpdb->get_row($query);
+    
+    return $row;    
+}
+
+function ct_get_user_privileges($user_id, $organisation_id)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT p.* FROM {$wpdb->prefix}users_privileges AS up LEFT JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id WHERE up.user_id=%d AND up.organisation_id=%d ORDER BY p.`order`", $user_id, $organisation_id);
+    
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function ct_get_privileges()
+{
+    global $wpdb;
+    
+    $query = "SELECT * FROM {$wpdb->prefix}privileges ORDER BY `order`";
+    $rows = $wpdb->get_results($query);
+    
+    return $rows;
+}
+
+function ct_get_privilege_by_code($code, $field)
+{
+    global $wpdb;
+    
+    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}privileges WHERE code=%s", $code);
+    $row = $wpdb->get_row($query);
+    
+    if (!$row)    
+        $value = null;
+    else
+        $value = $row->$field;
+    
+    return $value;
+}
+
+
+function ct_check_user_privilege($user_id, $organisation_id, $privilege)
+{
+    global $wpdb;
+    
+    $privilege_id = ct_get_privilege_by_code($privilege, 'id');
+    
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_privileges WHERE user_id=%d AND organisation_id=%d AND privilege_id=%d", $user_id, $organisation_id, $privilege_id);
+    
+    $id = $wpdb->get_var($query);
+    
+    return $id ? true : false;
+    
+}
+

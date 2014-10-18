@@ -78,10 +78,12 @@ function ct_show_new_organisation()
                     <th>Organisation Name</th>
                     <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>"/></td>
                 </tr>
+                <?php if($id){ ?>
                 <tr>    
-                    <th>Organisation Domain</th>
-                    <td><input type="text" name="organisation_domain" id="organisation_domain" value="<?php echo $data['organisation_domain']?>"/></td>
+                    <th>Organisation Key</th>
+                    <td><input type="text" name="organisation_key" id="organisation_key" size="40" value="<?php echo $data['organisation_key']?>" readonly="readonly" disabled="disabled" /></td>
                 </tr>
+                <?php } ?>
                 <tr>    
                     <th>Invoice Me</th>
                     <td><input type="checkbox" name="invoice_me" id="invoice_me" value="1" <?php echo $data['invoice_me'] == '1' ? 'checked="checked"' : ''?> /></td>

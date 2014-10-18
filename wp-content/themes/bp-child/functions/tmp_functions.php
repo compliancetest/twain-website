@@ -13,6 +13,80 @@ if(is_super_admin())
     function process_tmp_function(){
         global $wpdb, $CPRest;
         
+        //Add Default Privileges
+        if(isset($_GET['fix_product_organisation_id'])){
+            $results = $wpdb->get_results("SELECT p.ID, pm.organisation_id FROM wp_posts AS p LEFT JOIN wp_organisations_members AS pm ON pm.user_id=p.post_author WHERE p.post_type='product-service'");
+            foreach($results as $r){
+                update_post_meta($r->ID, 'product_organisation_id', $r->organisation_id);
+            }
+            die("Completed");
+        }
+
+        //Add Default Privileges
+        if(isset($_GET['fix_privileges'])){
+            $privileges = ct_get_privileges();
+            $results = $wpdb->get_results("SELECT * FROM wp_organisations_members");
+            foreach($results as $r){
+                foreach($privileges as $p){
+                    if($p->is_default)
+                        $wpdb->insert($wpdb->prefix . "users_privileges", array("user_id" => $r->user_id, "organisation_id" => $r->organisation_id, "privilege_id" => $p->id), array("%d", "%d", "%d"));   
+                }
+            }
+            die("Completed");
+        }
+
+        //Associate products with organisation
+        if(isset($_GET['fix_test_plan_org_id'])){
+            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            foreach($results as $r){
+                if($r->organisation_id)
+                    $wpdb->update('wp_test_plans', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+            }
+            
+            die('Completed!');
+        }
+        
+        //Associate test plans with organisation
+        if(isset($_GET['fix_test_plan_org_id'])){
+            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            foreach($results as $r){
+                if($r->organisation_id)
+                    $wpdb->update('wp_test_plans', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+            }
+            
+            die('Completed!');
+        }
+        
+        //Associate compliance claims with organisation
+        if(isset($_GET['fix_claim_org_id'])){
+            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_compliance_claims AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            foreach($results as $r){
+                if($r->organisation_id)
+                    $wpdb->update('wp_compliance_claims', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+            }
+            
+            die('Completed!');
+        }
+        
+        
+        //Create Organisation Membership Records for the subscribers
+        if(isset($_GET['fix_org_membership'])){
+            $results = $wpdb->get_results("SELECT organisation_id, user_id FROM wp_users_subscriptions");
+            foreach($results as $r){
+                $mid = $wpdb->get_var("SELECT id FROM wp_organisations_members WHERE organisation_id=" . $r->organisation_id . " AND user_id=" . $r->user_id);
+                if (!$mid) {
+                    //Create New Membership Record
+                    $wpdb->insert('wp_organisations_members', array('organisation_id' => $r->organisation_id, 'user_id' => $r->user_id,'is_admin' => 0, 'created_date' => date('Y-m-d H:i:s')));
+                }
+            }
+            
+            die('Completed!');
+        }
+        
+        
+        
+        
+        
         if(isset($_GET['fix_case_suite_link']))
         {
             

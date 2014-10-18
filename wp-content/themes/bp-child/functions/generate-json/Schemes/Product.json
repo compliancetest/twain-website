@@ -1,10 +1,11 @@
+
 {
     "$schema"							: "http://json-schema.org/draft-04/schema#",
     "title"								: "Product",
     "Description"						: "Product identified by a USI or a Self Managed Superannuation Fund (SMSF) identified by an ABN.",
     "Version": {
-    	"Major"							: 4,
-    	"Minor"							: 1
+    	"Major"							: 5,
+    	"Minor"							: 6
     },
 
     "type" : "object",
@@ -14,38 +15,58 @@
 		"Fund"							: {"$ref" : "#/definitions/Fund/Fund"},
 		"FundAdministration"			: {"$ref" : "#/definitions/FundAdministration/FundAdministration"},
 		"Members"						: {"$ref" : "#/definitions/Members/Members"},
-		"Behaviours"					: {"$ref" : "#/definitions/Behaviours/Behaviours"}
+		"Behaviours"					: {"$ref" : "#/definitions/Behaviours/Behaviours"},
+		"CustomProfilesGeneration"		: {"$ref" : "#/definitions/CustomProfilesGeneration/CustomProfilesGeneration"}
 	},
     "required"							: ["Profile", "Entity", "Fund", "FundAdministration", "Members"],
 
     "definitions" : {
 		"Types" : {
 			"NonNegativeInteger"		: {"type" : "integer", "minimum" : 0},
-		
+
+			"NonNegativeAndZeroInteger"	: {"allOf": [{"$ref" : "#/definitions/Types/NonNegativeInteger"}, { "default": 0 }]},
+
 			"MultipleOf8"				: {"allOf": [{"$ref" : "#/definitions/Types/NonNegativeInteger"}, { "multipleOf": 8}]},
 
 			"NonEmptyString"			: {"type" : "string", "minLength" : 1},
-		
+
 			"URI"						: {"type" : "string", "format" : "uri", "minLength" : 1},
-		
+
 			"Email"						: {"type" : "string", "format" : "email"},
 
 			"Boolean"					: {"type": "boolean"},
-        
+
 			"BooleanDefaultFalse"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": false }]},
-        
+
 			"BooleanDefaultTrue"		: {"allOf": [{"$ref" : "#/definitions/Types/Boolean"}, { "default": true }]},
-			
+
 			"TimeUnit"					: {"enum" : ["seconds", "minutes", "hours", "days", "weeks"]},
-			
+
 			"Date"						: {"$ref" : "#/definitions/Types/NonEmptyString"}
 		},
-			
+
 		"Profile" : {
 			"Type"						: {"enum" : ["Product", "SMSF"]},
-			
-			"Purpose"					: {"enum" : ["Positive", "Negative"], "default" : "Positive"},
-			
+
+			"Purpose"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+
+			"Tag" : {
+				"type" : "object",
+				"properties" : {
+					"Name"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
+					"Value"				: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+				"required"				: ["Name", "Value"]
+			},
+
+
+			"Tags" : {
+				"type" : "array",
+				"items"					: {"$ref" : "#/definitions/Profile/Tag"},
+				"minItems": 1
+
+			},
+
 			"Version" : {
 				"type" : "object",
 				"properties" : {
@@ -55,12 +76,13 @@
 				},
 				"required"				: ["Major", "Minor"]
 			},
-			
+
 			"Profile" : {
 				"type" : "object",
 				"properties" : {
 					"Type"				: {"$ref" : "#/definitions/Profile/Type"},
 					"Purpose"			: {"$ref" : "#/definitions/Profile/Purpose"},
+					"Tags"			    : {"$ref" : "#/definitions/Profile/Tags"},
 					"Title"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
 					"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
 					"Version"			: {"$ref" : "#/definitions/Profile/Version"}
@@ -71,25 +93,25 @@
 
 		"Entity" : {
 			"USI" : {
-           		"type" : "object", 
+           		"type" : "object",
 	        	"properties" : {
 	        	    "USI"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
 	            	"ProductName"		: {"$ref" : "#/definitions/Types/NonEmptyString"}
-				},        	
-	        	"required"				: ["USI", "ProductName"]        	
+				},
+	        	"required"				: ["USI", "ProductName"]
 			},
 
 			"ABN" : {
-           		"type" : "object", 
+           		"type" : "object",
 	        	"properties" : {
 	        	    "ABN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
 	            	"MainName"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
-				},        	
-        		"required"				: ["ABN", "MainName"]        	
+				},
+        		"required"				: ["ABN", "MainName"]
 			},
 
 			"Entity" : {
-				
+
 	        	"oneOf" : [
 	   	       		{"$ref" : "#/definitions/Entity/USI"},
 		       		{"$ref" : "#/definitions/Entity/ABN"}
@@ -99,15 +121,15 @@
 
 		"Fund" : {
 			"Fund" : {
-				"type" : "object", 
+				"type" : "object",
 				"properties" : {
 	        	    "ABN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
 	            	"MainName"			: {"$ref" : "#/definitions/Types/NonEmptyString"}
-				},        	
+				},
 				"required"				: ["ABN", "MainName"]
 			}
 		},
-		
+
 		"FundAdministration" : {
 			"Contact" : {
 				"type" : "object",
@@ -144,9 +166,9 @@
 			"PaymentMethods" : {
 				"type" : "array",
 				"items"					: {"enum": ["DirectCredit", "Bpay"]},
-				"minItems" : 1	
+				"minItems" : 1
 			},
-				
+
 			"Payment" : {
                 "type" : "object",
                 "properties" : {
@@ -158,10 +180,13 @@
             },
 
             "Behaviours" : {
-                "type" : "object", 
+                "type" : "object",
                 "properties" : {
-                    "ErrorReporting"	: {"enum": ["Partial", "Progressive"]}
-		        },	     	
+                    "ErrorReporting"	: {"enum": ["Partial", "Progressive"]},
+					"MultipartResponse"	: {"$ref" : "#/definitions/Types/Boolean"},
+                    "NumberOfResponse"  : {"$ref" : "#/definitions/Types/NonNegativeAndZeroInteger"},
+                    "GenerateDataMismatchWarnings" : {"$ref" : "#/definitions/Types/Boolean"}
+		        },
                 "required"				: ["ErrorReporting"]
             },
 
@@ -231,12 +256,22 @@
 					"Address"			: {"$ref" : "#/definitions/Members/Address"},
 					"Email"				: {"$ref" : "#/definitions/Members/Email"},
 					"Telephone"			: {"$ref" : "#/definitions/Members/Telephone"},
+					"Telephone2"		: {"$ref" : "#/definitions/Members/Telephone"},
                     "TFN"				: {"$ref" : "#/definitions/Types/NonEmptyString"},
                     "TFNNotProvided"	: {"$ref" : "#/definitions/Types/Boolean"},
-                    "EffectiveFrom"		: {"$ref" : "#/definitions/Types/Date"},
-                    "EffectiveTo"		: {"$ref" : "#/definitions/Types/Date"}
+                    "CommencementDate" : {"$ref" : "#/definitions/Types/Date"},
+                    "CeaseDate" : {"$ref" : "#/definitions/Types/Date"},
+                    "EmploymentStartDate": {"$ref" : "#/definitions/Types/Date"},
+                    "AtWorkIndicator" : {"$ref" : "#/definitions/Types/Boolean"},
+                    "BenefitsSalary" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "ContributionsSalary": {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "ContributionsSalaryEffectiveStartDate": {"$ref" : "#/definitions/Types/Date"},
+                    "InsuranceSalary" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "WeeklyHoursWorked" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "Occupation" : {"$ref" : "#/definitions/Types/NonEmptyString"},
+                    "EmploymentStatusCode": {"enum": ["Casual", "Contractor", "Full time", "Part time"]}
 				},
-	        	"required"				: ["MemberID", "Name", "Sex", "BirthDate", "Address", "Email", "Telephone", "TFNNotProvided"]
+	        	"required"				: ["Name", "Sex", "BirthDate", "Address", "TFNNotProvided"]
 			},
 
             "Members": {
@@ -245,13 +280,13 @@
 	            "minItems" : 1
 	        }
 		},
-		
+
 		"Behaviours" : {
             "RegistrationMandatoryOverrides" : {
                 "type" : "array",
                 "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                "minItems" : 1	
-            },	
+                "minItems" : 1
+            },
 
             "RegistrationMandatoryOtherDetailsItem": {
             	"type" : "object",
@@ -266,19 +301,19 @@
             "RegistrationMandatoryOtherDetails" : {
                 "type" : "array",
                 "items"					: {"$ref" : "#/definitions/Behaviours/RegistrationMandatoryOtherDetailsItem"},
-                "minItems" : 1	
-            },	
+                "minItems" : 1
+            },
 
             "ContributionMandatoryOtherAmounts" : {
                 "type" : "array",
                 "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                "minItems" : 1	
-            },	
+                "minItems" : 1
+            },
 
             "ContributionMandatoryOtherDetails" : {
                 "type" : "array",
                 "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
-                "minItems" : 1	
+                "minItems" : 1
             },
 
             "Behaviours" : {
@@ -290,6 +325,72 @@
 					"ContributionMandatoryOtherDetails"	: {"$ref" : "#/definitions/Behaviours/ContributionMandatoryOtherDetails"}
 				}
 			}
+		},
+
+		"CustomProfilesGeneration" : {
+
+            "SourceProfilesValues" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/Types/NonEmptyString"},
+                "minItems" : 1
+            },
+
+            "SourceProfiles": {
+            	"type" : "object",
+            	"properties" : {
+            		"IdentifierPath"	: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"Values"		 	: {"$ref" : "#/definitions/CustomProfilesGeneration/SourceProfilesValues"}
+            	},
+            	"required"				: ["IdentifierPath", "Values"]
+            },
+
+			"ValueRule" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "Type"				: {"enum" : ["Value"]},
+	            	"OriginalValue"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+	            	"ReplacementPath"	: {"$ref" : "#/definitions/Types/NonEmptyString"}
+				},
+        		"required"				: ["Type", "OriginalValue", "ReplacementPath"]
+			},
+
+			"ReferenceRule" : {
+           		"type" : "object",
+	        	"properties" : {
+	        	    "Type"				: {"enum" : ["Reference"]}
+				},
+        		"required"				: ["Type"]
+			},
+
+			"Rule" : {
+
+	        	"oneOf" : [
+	   	       		{"$ref" : "#/definitions/CustomProfilesGeneration/ValueRule"},
+		       		{"$ref" : "#/definitions/CustomProfilesGeneration/ReferenceRule"}
+	       	    ]
+			},
+
+			"Rules" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/CustomProfilesGeneration/Rule"},
+                "minItems" : 1
+            },
+
+            "CustomProfilesSet": {
+            	"type" : "object",
+            	"properties" : {
+            		"Description"		: {"$ref" : "#/definitions/Types/NonEmptyString"},
+            		"SourceProfiles" 	: {"$ref" : "#/definitions/CustomProfilesGeneration/SourceProfiles"},
+            		"Rules" 			: {"$ref" : "#/definitions/CustomProfilesGeneration/Rules"}
+            	},
+            	"required"				: ["Description", "SourceProfiles"]
+            },
+
+            "CustomProfilesGeneration" : {
+                "type" : "array",
+                "items"					: {"$ref" : "#/definitions/CustomProfilesGeneration/CustomProfilesSet"},
+                "minItems" : 1
+            }
 		}
     }
 }
