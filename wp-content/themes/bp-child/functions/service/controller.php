@@ -104,7 +104,7 @@ function saveService()
     }
 
     update_post_meta($id, 'service_id', $product_id);
-    if( $_POST['type'] == 'USI' ){
+    if( $_POST['type'] == 'ABN' ){
         update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type_alias']));
     } else{
         update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type']));

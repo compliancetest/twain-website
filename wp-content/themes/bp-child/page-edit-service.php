@@ -129,7 +129,7 @@ $user_test_suites = get_suites_with_claims();
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
                                 </div>
-                                <div class="grid-cell styled_select gateways_list gateways" <?php if( $service->service_type == 'USI' ):?>style="display: none;"<?php endif;?>>
+                                <div class="grid-cell styled_select gateways_list gateways" <?php if( $service->service_type == 'ABN' ):?>style="display: none;"<?php endif;?>>
                                     <label>Gateway:</label>
                                     <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
                                     <select name="endpoint_type" class="required" id="gateways">
@@ -139,7 +139,7 @@ $user_test_suites = get_suites_with_claims();
                                         <?php endforeach;?>
                                     </select>
                                 </div>
-                                <div class="grid-cell styled_select gateways_list aliases" <?php if( $service->service_type == 'ABN' ):?>style="display: none;"<?php endif;?>>
+                                <div class="grid-cell styled_select gateways_list aliases" <?php if( $service->service_type == 'USI' ):?>style="display: none;"<?php endif;?>>
                                     <label>Alias:</label>
                                     <?php $aliases = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
                                     <select name="endpoint_type_alias" class="required" id="aliases">
@@ -301,10 +301,10 @@ $user_test_suites = get_suites_with_claims();
                     }
                 });
                 jQuery(this).find('select.required').each(function(){
-                    if( jQuery(this).attr( 'id' ) == 'gateways' &&  jQuery('#type').val() == 'URI' ){
+                    if( jQuery(this).attr( 'id' ) == 'gateways' &&  jQuery('#type').val() == 'ABN' ){
                         return false;
                     }
-                    if( jQuery(this).attr( 'id' ) == 'aliases' &&  jQuery('#type').val() == 'ABN' ){
+                    if( jQuery(this).attr( 'id' ) == 'aliases' &&  jQuery('#type').val() == 'URI' ){
                         return false;
                     }
                     if(jQuery(this).val() == ''){
