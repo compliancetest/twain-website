@@ -16,7 +16,11 @@ if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null &&
     wp_redirect("/");
     exit;
 }
-
+if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+    wp_redirect("/");
+    exit;
+}
 $isNew = true;
 
 $service = new Service( $psID );
@@ -116,16 +120,6 @@ $user_test_suites = get_suites_with_claims();
                                     <input type="text" class="input required" name="service_id" id="service_id" value="<?php echo $service->service_id;?>" />
                                     <span class="focus-tooltip" style="left: 110%"><span></span>The identifier of the organisation that is the service provider.</span>
                                 </div>
-                                <div class="grid-cell styled_select">
-                                    <label>EndPoint:</label>
-                                    <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
-                                    <select name="endpoint_type" class="required">
-                                        <option></option>
-                                        <?php foreach( $endpoints AS $endpoint ):?>
-                                            <option <?php if( $service->service_endpoint == $endpoint->gateway_id ):?> selected="selected" <?php endif;?> value="<?php echo $endpoint->gateway_id;?>"><?php echo $endpoint->name;?></option>
-                                        <?php endforeach;?>
-                                    </select>
-                                </div>
                                 <div class="grid-cell styled_select has-focus-tooltip">
                                     <label>IDType:</label>
                                     <select name="type" id="type" class="required">
@@ -134,6 +128,16 @@ $user_test_suites = get_suites_with_claims();
                                         <option <?php if( isset( $service->service_type ) && $service->service_type == 'USI' ):?>selected="selected"<?php endif;?> value="USI" >USI</option>
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
+                                </div>
+                                <div class="grid-cell styled_select">
+                                    <label>Gateway:</label>
+                                    <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
+                                    <select name="endpoint_type" class="required">
+                                        <option></option>
+                                        <?php foreach( $endpoints AS $endpoint ):?>
+                                            <option <?php if( $service->service_endpoint == $endpoint->gateway_id ):?> selected="selected" <?php endif;?> value="<?php echo $endpoint->gateway_id;?>"><?php echo $endpoint->name;?></option>
+                                        <?php endforeach;?>
+                                    </select>
                                 </div>
                                 <div class="clear"></div>
                             </div>

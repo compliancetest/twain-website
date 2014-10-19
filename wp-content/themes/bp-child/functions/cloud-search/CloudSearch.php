@@ -79,6 +79,10 @@ class CloudSearch {
         return $res;
     }
 
+    /**
+     * Function used to upload all items to CloudSearch domain.
+     * You can delete uploaded items using _delete_all_items method
+     */
     public  function _initial_upload(){
         global $wpdb;
 
@@ -205,18 +209,88 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         }
         var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        //step 4 upload products
+        $data = array();
+        $args = array(
+            'post_type' => 'product-service',
+            'posts_per_page' => -1
+        );
+        $posts = get_posts($args);
+        foreach( $posts AS $post ){
+            $product = new ProductAndService( $post->ID );
+            $product->load();
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
+            $groups = groups_get_user_groups( $post_author );
+            $temp_data = array(
+                'name'        => $product->name,
+                'version'     => $product->version,
+                'owner'       => $product->owner,
+                'type'        => 'Software Product',
+                'test_type'   => 'Certification',
+                'for_search'  => $product->descrition. ' + '.$product->owner.' + Software Product + Certification + ',
+                'post_id'     => $product->id,
+                'visibility'  => $product->visibility == 'Public' ? 1 : 3,
+                'community_id' => $groups['groups'],
+                'user_id'     => $post_author
+            );
+            array_push( $data, array( 'type' => 'add', 'id' => 'product_'.$product->id, 'fields' => $temp_data ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        //step 5 upload services
+        $data = array();
+        $args = array(
+            'post_type' => 'service',
+            'posts_per_page' => -1
+        );
+        $posts = get_posts($args);
+        foreach( $posts AS $post ){
+            $service = new Service( $post->ID );
+            $service->load();
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $post->ID ) );
+            $groups = groups_get_user_groups( $post_author );
+            if( $service->service_visibility == 'Public' ){
+                $v = 1;
+            } else if( $service->service_visibility == 'Community' ){
+                $v = 2;
+            } else {
+                $v = 3;
+            }
+            $temp_data = array(
+                'name'        => $service->service_name,
+                'version'     => $service->service_version,
+                'owner'       => $service->service_owner,
+                'type'        => 'Web Service',
+                'test_type'   => 'End to End',
+                'for_search'  => $service->service_description. ' + '.$service->service_owner.' + Service + Certification + ',
+                'post_id'     => $post->ID,
+                'visibility'  => $v,
+                'community_id' => $groups['groups'],
+                'user_id'     => $post_author
+            );
+            array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$post->ID, 'fields' => $temp_data ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
         die;
     }
 
+    /**
+     * Use this function to delete all local items ( test plans, claims, agreements, products, services )
+     * from CloudSearch domain. You can use _initial_upload function to re-upload all items
+     */
     public  function _delete_all_items(){
         global $wpdb;
 
+        // delete test plans
         $data = array();
         $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans" );
         foreach( $test_plans AS $test_plan ){
             array_push( $data, array( 'type' => 'delete', 'id' => 'test_plan_'.$test_plan->id ) );
         }
         var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        // delete products claims
 
         $data = array();
         $claims = $wpdb->get_results( "SELECT * FROM wp_compliance_claims" );
@@ -226,17 +300,45 @@ class CloudSearch {
 
         var_dump( $this->_sendDataToSearchDomain( $data ) );
 
-        // step 3 - upload agreements
-
+        //delete agreements
         $data = array();
         $agreements = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement" );
         foreach( $agreements AS $agreement ){
             array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_'.$agreement->id ) );
         }
         var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        //delete products
+        $data = array();
+        $args = array(
+            'post_type' => 'product-service',
+            'posts_per_page' => -1
+        );
+        $posts = get_posts($args);
+        foreach( $posts AS $post ){
+            array_push( $data, array( 'type' => 'delete', 'id' => 'product_'.$post->ID ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        //delete services
+        $data = array();
+        $args = array(
+            'post_type' => 'service',
+            'posts_per_page' => -1
+        );
+        $posts = get_posts($args);
+        foreach( $posts AS $post ){
+            array_push( $data, array( 'type' => 'delete', 'id' => 'service_'.$post->ID ) );
+        }
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
         die;
     }
 
+    /**
+     * @param $plan_id - integer. Plan ID from wp_test_plans table
+     * @return mixed
+     */
     public function cloud_search_update_test_plan( $plan_id ){
         global $wpdb;
         $data = array();
@@ -279,6 +381,10 @@ class CloudSearch {
         return $this->_sendDataToSearchDomain( $data );
     }
 
+    /**
+     * @param $claim_id - integet. Claim ID value from wp_compliance_claims
+     * @return mixed
+     */
     public function cloud_search_update_claim( $claim_id ){
         global $wpdb;
         $data = array();
@@ -321,6 +427,10 @@ class CloudSearch {
         return $this->_sendDataToSearchDomain( $data );
     }
 
+    /**
+     * @param $agreement_id - integer. Agreement ID value from wp_e2e_agreement table
+     * @return mixed
+     */
     public function cloud_search_update_agreement( $agreement_id ){
         global $wpdb;
         $data = array();
@@ -359,16 +469,79 @@ class CloudSearch {
     }
 
     /**
+     * Function used to update product info in CloudSearch domain
+     * @param $product_id - integer. Post ID from wp_posts table
+     * @return mixed
+     */
+    public function cloud_search_update_product( $product_id ){
+        global $wpdb;
+        $data = array();
+        $product = new ProductAndService( $product_id );
+        $product->load();
+        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
+        $groups = groups_get_user_groups( $post_author );
+        $temp_data = array(
+            'name'        => $product->name,
+            'version'     => $product->version,
+            'owner'       => $product->owner,
+            'type'        => 'Software Product',
+            'test_type'   => 'Certification',
+            'for_search'  => $product->descrition. ' + '.$product->owner.' + Software Product + Certification + ',
+            'post_id'     => $product->id,
+            'visibility'  => $product->visibility == 'Public' ? 1 : 3,
+            'community_id' => $groups['groups'],
+            'user_id'     => $post_author
+        );
+        array_push( $data, array( 'type' => 'add', 'id' => 'product_'.$product_id, 'fields' => $temp_data ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
+
+    /**
+     * Use this function to update service data in CloudSearch domain.
+     *
+     * @param $service_id - integer. Post ID from wp_posts table
+     * @return mixed
+     */
+    public function cloud_search_update_service( $service_id ){
+        global $wpdb;
+        $data = array();
+        $service = new Service( $service_id );
+        $service->load();
+        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
+        $groups = groups_get_user_groups( $post_author );
+        if( $service->service_visibility == 'Public' ){
+            $v = 1;
+        } else if( $service->service_visibility == 'Community' ){
+            $v = 2;
+        } else {
+            $v = 3;
+        }
+        $temp_data = array(
+            'name'        => $service->service_name,
+            'version'     => $service->service_version,
+            'owner'       => $service->service_owner,
+            'type'        => 'Web Service',
+            'test_type'   => 'End to End',
+            'for_search'  => $service->service_description. ' + '.$service->service_owner.' + Service + Certification + ',
+            'post_id'     => $service->id,
+            'visibility'  => $v,
+            'community_id' => $groups['groups'],
+            'user_id'     => $post_author
+        );
+        array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$service->id, 'fields' => $temp_data ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
+    /**
      * Use this function to delete item from cloudSearch domain
      *
      * @param $id - primary key from entry table
-     * @param $type - enum ( 'agreement', 'claim', 'test_plan')
+     * @param $type - enum ( 'agreement', 'claim', 'test_plan', 'product', 'service')
      * @return mixed
      */
     public function cloud_search_delete_item( $id, $type ){
         $data = array();
         array_push( $data, array( 'type' => 'delete', 'id' => $type.'_'.$id  ) );
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        return $this->_sendDataToSearchDomain( $data );
     }
     protected function _sendDataToSearchDomain( Array $rows ){
         $data = json_encode( $rows );
