@@ -408,7 +408,7 @@ get_header();
                                    <a href="javascript:void(0)">
                                    <?php
                                         if( is_super_admin() || ct_is_group_admin_or_support($user_id) ){
-                                            $organisation = ct_get_organisation_by_subscription_id( $row->ORGANISATION_SUBSCRIPTION_ID );
+                                            $organisation = ct_get_organisation_by_subscription_id( $row->ORGANISATION_SUBSCRIPTION_ID );                                            
                                             echo $organisation ? $organisation->organisation_name : ' - ';
                                             echo '<br>';
                                             $subscription = ct_get_organisation_subscription_by_id( $row->ORGANISATION_SUBSCRIPTION_ID );

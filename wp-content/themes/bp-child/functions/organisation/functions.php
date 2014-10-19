@@ -199,7 +199,7 @@ function ct_get_organisation_subscription_by_user_subscription_id( $user_subscri
 function ct_get_organisation_by_subscription_id( $subscription_id ){
     global $wpdb;
 
-    $query = $wpdb->prepare("SELECT o.* FROM {$wpdb->prefix}organisations_subscriptions AS os LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id  WHERE os.id=%d", $user_subscription_id);
+    $query = $wpdb->prepare("SELECT o.* FROM {$wpdb->prefix}organisations_subscriptions AS os LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = os.organisation_id  WHERE os.id=%d", $subscription_id);
     $data = $wpdb->get_row($query);
     
 
