@@ -104,13 +104,17 @@ function saveService()
     }
 
     update_post_meta($id, 'service_id', $product_id);
-    
+    if( $_POST['type'] == 'USI' ){
+        update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type_alias']));
+    } else{
+        update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type']));
+    }
+
     //Update Product Name ID Map Table on ESB
 //    $esb = new ManageESB();
 //    $esb->saveProductInfo($id, $product_id, $_POST['product_name']);
     update_post_meta($id, 'service_uniq_name', htmlspecialchars($_POST['service_name'].'_'.$_POST['service_id']));
     update_post_meta($id, 'service_name', htmlspecialchars($_POST['service_name']));
-    update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type']));
     update_post_meta($id, 'service_type', htmlspecialchars($_POST['type']));
     update_post_meta($id, 'service_description', htmlspecialchars($_POST['product_description']));
     update_post_meta($id, 'service_owner', htmlspecialchars($_POST['service_owner']));

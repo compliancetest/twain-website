@@ -129,13 +129,26 @@ $user_test_suites = get_suites_with_claims();
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
                                 </div>
-                                <div class="grid-cell styled_select">
+                                <div class="grid-cell styled_select gateways_list gateways" <?php if( $service->service_type == 'USI' ):?>style="display: none;"<?php endif;?>>
                                     <label>Gateway:</label>
                                     <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
-                                    <select name="endpoint_type" class="required">
+                                    <select name="endpoint_type" class="required" id="gateways">
                                         <option></option>
                                         <?php foreach( $endpoints AS $endpoint ):?>
                                             <option <?php if( $service->service_endpoint == $endpoint->gateway_id ):?> selected="selected" <?php endif;?> value="<?php echo $endpoint->gateway_id;?>"><?php echo $endpoint->name;?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                                <div class="grid-cell styled_select gateways_list aliases" <?php if( $service->service_type == 'ABN' ):?>style="display: none;"<?php endif;?>>
+                                    <label>Alias:</label>
+                                    <?php $aliases = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
+                                    <select name="endpoint_type_alias" class="required" id="aliases">
+                                        <option></option>
+                                        <?php foreach( $aliases AS $aliase ):?>
+                                            <?php $al = explode( '|', $aliase->alias_list );?>
+                                            <?php foreach( $al AS $a ):?>
+                                                <option <?php if( $service->service_endpoint == $a ):?> selected="selected" <?php endif;?> value="<?php echo $a;?>"><?php echo $a;?></option>
+                                            <?php endforeach;?>
                                         <?php endforeach;?>
                                     </select>
                                 </div>
@@ -261,7 +274,16 @@ $user_test_suites = get_suites_with_claims();
             jQuery('#psForm .input').focus(function(){
                 $(this).removeClass('input-error');
             })
-
+            jQuery('#type').on('change', function(){
+                jQuery('.gateways_list').hide();
+               if( jQuery(this).val() ){
+                   if( jQuery(this).val() == 'USI' ){
+                        jQuery('.aliases').show();
+                   } else if( jQuery(this).val() == 'ABN' ){
+                       jQuery('.gateways').show();
+                   }
+               }
+            });
             var forceSubmit = false;
             jQuery('#psForm').submit(function(){
                 if( $('#product_id option:selected').data('permission') == '1' ){
@@ -279,6 +301,12 @@ $user_test_suites = get_suites_with_claims();
                     }
                 });
                 jQuery(this).find('select.required').each(function(){
+                    if( jQuery(this).attr( 'id' ) == 'gateways' &&  jQuery('#type').val() == 'URI' ){
+                        return false;
+                    }
+                    if( jQuery(this).attr( 'id' ) == 'aliases' &&  jQuery('#type').val() == 'ABN' ){
+                        return false;
+                    }
                     if(jQuery(this).val() == ''){
                         isValid = false;
                         jQuery(this).addClass('select-error');
