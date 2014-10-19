@@ -99,19 +99,26 @@ function resend_email_verification(){
     
     $userData = get_user_by_email($_GET['uemail']);
     
-    $activation_key =  md5($userData->user_email);
-    $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID = " . $userData->ID);
+    if($userData){
+    
+        $activation_key =  md5($userData->user_email);
+        
+        $query = $wpdb->prepare("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID = %d", $userData->ID);
+        
+        $wpdb->query($query);
 
-    $data = array(
-        '[name]' => get_user_meta($userData->ID, 'first_name', true) . " " . get_user_meta($userData->ID, 'last_name', true),
-        '[username]' => $userData->user_login,
-        '[email]' => $userData->user_email,
-        '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
-    );
+        $data = array(
+            '[name]' => get_user_meta($userData->ID, 'first_name', true) . " " . get_user_meta($userData->ID, 'last_name', true),
+            '[username]' => $userData->user_login,
+            '[email]' => $userData->user_email,
+            '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
+        );
 
-    cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'verify', $data);
+        cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'verify', $data);
+    }
     
     echo 'success';
+    
     exit();
 }
 
