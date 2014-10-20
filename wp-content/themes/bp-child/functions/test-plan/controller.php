@@ -43,12 +43,15 @@ function certifyPlan()
     $cases = $suite->loadTestCases($plan->level, $plan->role, 'Active');                                   
     
     //Getting Esb Customer ID
-    $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "organisations_subscriptions WHERE suite_family_mark=%d AND organisation_id=%d AND `status`='Active'", $suite->familyMark, $plan->organisation_id);
+    $query = $wpdb->prepare("SELECT parent_id FROM " . $wpdb->prefix . "users_subscriptions WHERE suite_id=%d AND organisation_id=%d AND user_id=%d", $plan->suite_id, $plan->organisation_id, $user_id);
     $esbUserIds = $wpdb->get_col($query);
     
-    $esb = new ManageESB();
-    $caseStatus = $esb->getCaseStatus($esbUserIds, $plan->suite_id);
-
+    if (!$esbUserIds) {
+        $caseStatus = array();    
+    } else {    
+        $esb = new ManageESB();
+        $caseStatus = $esb->getCaseStatus($esbUserIds, $plan->suite_id);
+    }
     $all_verified = true;
     $has_exclusions = 0;
     foreach($cases as $case)

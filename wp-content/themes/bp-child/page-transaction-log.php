@@ -95,9 +95,6 @@ $tServices = $esb->getFilterOptionsForService();
 $tActions = $esb->getFilterOptionsForAction();
 $tPartyIDs = $esb->getFilterOptionsForPartId();
 
-$tCustomers = getManagedCustomers();
-
-
 $params = array();                 
     
 $tbodyHTML = '';
