@@ -179,7 +179,7 @@ get_header();
                                 <option value="my">- My Subscriptions -</option>
                                 <?php if( is_iterable( $tSubscriptions ) ):?>
                                   <?php foreach($tSubscriptions as $s){ ?>
-                                    <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>"><?php echo $s->nickname ?></option>
+                                    <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>"><?php echo stripslashes( $s->nickname )?></option>
                                   <?php } ?>
                                 <?php endif;?>
                             </select>

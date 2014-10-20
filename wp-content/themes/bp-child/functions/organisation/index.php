@@ -258,7 +258,7 @@ function ct_process_organisation_action()
                         <div class="field-row">
                             <div class="grid-cell">
                                 <label>Nickname</label>
-                                <input type="text" name="nickname" id="nickname" value="<?php echo $subscription->nickname?>" class="input" maxlength="50" />                    
+                                <input type="text" name="nickname" id="nickname" value="<?php echo stripslashes( $subscription->nickname );?>" class="input" maxlength="50" />
                             </div>                
                             <div class="clear"></div>
                             <div class="space20"></div>

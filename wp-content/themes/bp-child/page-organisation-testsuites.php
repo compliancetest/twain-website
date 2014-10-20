@@ -61,7 +61,7 @@ get_header();
                                         <?php echo $row->suite_title ?>
                                     </div>
                                     <div class="td td-nickname">
-                                        <?php echo $row->nickname; ?>
+                                        <?php echo stripslashes( $row->nickname ); ?>
                                     </div>
                                     <div class="td td-assignee">
                                         <?php echo $row->full_name; ?>
