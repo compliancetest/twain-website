@@ -343,6 +343,9 @@ class CloudSearch {
         global $wpdb;
         $data = array();
         $test_plan = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE id = %d", $plan_id ) );
+        if( ! $test_plan ){
+            return $this->cloud_search_delete_item( $plan_id, 'test_plan' );
+        }
         $product = new ProductAndService( $test_plan->product_id );
         $product->load();
         $test_plan->level = trim( $test_plan->level, ';;' );
@@ -389,6 +392,9 @@ class CloudSearch {
         global $wpdb;
         $data = array();
         $claim = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE id = %d", $claim_id ) );
+        if( ! $claim ){
+            return $this->cloud_search_delete_item( $claim_id, 'claim' );
+        }
         $product = new ProductAndService( $claim->product_id );
         $product->load();
         $claim->level = trim( $claim->level, ';;' );
@@ -435,6 +441,9 @@ class CloudSearch {
         global $wpdb;
         $data = array();
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+        if( ! $agreement ){
+            return $this->cloud_search_delete_item( $agreement_id, 'agreement' );
+        }
         $service = new Service( $agreement->requester_service_id );
         $service->load();
         $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
@@ -478,6 +487,9 @@ class CloudSearch {
         $data = array();
         $product = new ProductAndService( $product_id );
         $product->load();
+        if( ! $product->id ){
+            return $this->cloud_search_delete_item( $product_id, 'product' );
+        }
         $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
         $groups = groups_get_user_groups( $post_author );
         $temp_data = array(
@@ -507,6 +519,9 @@ class CloudSearch {
         $data = array();
         $service = new Service( $service_id );
         $service->load();
+        if( ! $service_id->id ){
+            return $this->cloud_search_delete_item( $service_id, 'service' );
+        }
         $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
         $groups = groups_get_user_groups( $post_author );
         if( $service->service_visibility == 'Public' ){
