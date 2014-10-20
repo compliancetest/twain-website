@@ -115,6 +115,12 @@ $is_support = getManagedCustomerWPIDs() ? true : false;
                if($totalItems > 0){
                    foreach($tickets as $ticket)
                    {
+                       $is_support = ct_is_support( $ticket->id );
+                       $userGroups = groups_get_user_groups( $ticket->customer_id);
+                       if(!is_admin() && !is_super_admin() && !groups_is_user_admin_in_any_community( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
+                       {
+                           continue;
+                       }
                        $new_messages = false;
                        if($ticket->customer_id == get_current_user_id() && $ticket->customer_new_messages > 0)
                            $new_messages = $ticket->customer_new_messages;
