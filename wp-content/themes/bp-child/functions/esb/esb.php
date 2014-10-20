@@ -242,7 +242,7 @@ class ManageESB
 
                 }
             }
-
+echo $query;
             $s_ids = $wpdb->get_col($query);
             if (!$s_ids){
                 $where['subscription'] = " c.ORGANISATION_SUBSCRIPTION_ID = false ";
