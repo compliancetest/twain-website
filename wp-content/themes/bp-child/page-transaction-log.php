@@ -82,7 +82,7 @@ $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $esb->prepareTransactionWhereQuery(isset($filterOrganisation) ? $filterOrganisation : null, $filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
 
 $log_results = $esb->getUserTransactionLog($page, $limit, $orderBy, $order);
-
+var_dump($log_results);
 $results = $log_results['data'];
 $messages = $log_results['messages'];
 

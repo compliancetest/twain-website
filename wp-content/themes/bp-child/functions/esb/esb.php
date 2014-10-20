@@ -451,7 +451,7 @@ class ManageESB
         
         if(!isset($totalItems))
             $totalItems = count($rows);
-        
+        var_dump($rows);
         return array('total' => $totalItems, 'data' => $rows, 'messages' => $messages);
         
     }
