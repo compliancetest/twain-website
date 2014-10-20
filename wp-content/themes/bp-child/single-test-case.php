@@ -7,12 +7,13 @@ if(!isset($_REQUEST['is_ajax']))
 {
     get_header();
 }
+$case = new TestCase(get_the_ID());
+$case->load();
 $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
 $community_id = get_post_meta($test_suite_id, "community_id", true);
 
 
-$case = new TestCase(get_the_ID());
-$case->load();
+
 ?>
 <?php if(!isset($_REQUEST['is_ajax'])){ ?>
 	<div class="content container">
@@ -125,8 +126,10 @@ $case->load();
                     <div class="grid_row white_bcg noborderbottom">
                         <div class="grid_cell width10P left size13 bold dark_blue_txt">Scenario:</div>
                         <div class="grid_cell width90P left redactor_editor"> 
-                            <?php 
-                                $scenarioDetail = $case->getScenario($test_suite_id);
+                            <?php
+                                $family_mark = $wpdb->get_var( $wpdb->prepare( "SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $test_suite_id ) );
+                                $temp_test_suite = $wpdb->get_var( $wpdb->prepare( "SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id desc LIMIT 1", $family_mark ) );
+                                $scenarioDetail = $case->getScenario($temp_test_suite);
                                 echo '<p class="bottom8"><b>' . $scenarioDetail->code . '</b></p>';
                                 echo $scenarioDetail->description;
                             ?>
