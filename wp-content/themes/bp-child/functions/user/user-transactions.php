@@ -367,18 +367,18 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
     
     if (!is_super_admin()) {
         //Getting User Membership
-//        $membership = ct_get_user_organisation_membership($user_id);
-//        if (!$membership) {
-//            return array();
-//        }
-//
-//        $args['meta_query'] = array(
-//                            array(
-//                                'key' => 'product_organisation_id',
-//                                'value' => $membership->organisation_id,
-//                                'compare' => "=",
-//                            )
-//        );
+        $membership = ct_get_user_organisation_membership($user_id);
+        if (!$membership) {
+            return array();
+        }
+
+        $args['meta_query'] = array(
+                            array(
+                                'key' => 'product_organisation_id',
+                                'value' => $membership->organisation_id,
+                                'compare' => "=",
+                            )
+        );
     } 
     
     

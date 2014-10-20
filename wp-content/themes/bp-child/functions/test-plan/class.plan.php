@@ -15,6 +15,8 @@ class TestPlan
     
     var $role = null;
     
+    var $organisation_subscription_id = null;
+    
     var $organisation_id = null;
     
     var $created_date = null;
@@ -30,7 +32,8 @@ class TestPlan
     {
         global $wpdb;
         
-        $query = $wpdb->prepare("SELECT p.*, pm.meta_value as suiteName, ppm.meta_value as productName FROM " . $wpdb->prefix . "test_plans as p " . 
+        $query = $wpdb->prepare("SELECT p.*, pm.meta_value as suiteName, ppm.meta_value as productName, os.organisation_id FROM " . $wpdb->prefix . "test_plans as p " . 
+                                "LEFT JOIN " . $wpdb->prefix . "organisations_subscriptions AS os on os.id=p.organisation_subscription_id " . 
                                 "LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.suite_id AND pm.meta_key='ts_name' " . 
                                 "LEFT JOIN " . $wpdb->postmeta . " as ppm on ppm.post_id=p.product_id AND ppm.meta_key='product_name' " . 
                                 "WHERE p.id=%d", $this->id);
@@ -45,8 +48,11 @@ class TestPlan
             $this->role = cp_explode($row->role);
             $this->created_date = $row->created_date;
             $this->organisation_id = $row->organisation_id;
+            $this->organisation_subscription_id = $row->organisation_subscription_id;
             $this->product_name = $row->productName;
             $this->suite_name = $row->suiteName;
+        } else {
+            $this->id = null;
         }
         
         return $row;

@@ -37,21 +37,10 @@ if(is_super_admin())
 
         //Associate products with organisation
         if(isset($_GET['fix_test_plan_org_id'])){
-            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
+            $results = $wpdb->get_results("SELECT p.id, os.`id` AS subscription_id FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
             foreach($results as $r){
-                if($r->organisation_id)
-                    $wpdb->update('wp_test_plans', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
-            }
-            
-            die('Completed!');
-        }
-        
-        //Associate test plans with organisation
-        if(isset($_GET['fix_test_plan_org_id'])){
-            $results = $wpdb->get_results("SELECT p.id, os.`organisation_id` FROM wp_test_plans AS p LEFT JOIN wp_organisations_subscriptions AS os ON os.`user_id`=p.`creator_id`");
-            foreach($results as $r){
-                if($r->organisation_id)
-                    $wpdb->update('wp_test_plans', array('organisation_id' => $r->organisation_id), array('id' => $r->id));
+                if($r->subscription_id)
+                    $wpdb->update('wp_test_plans', array('organisation_subscription_id' => $r->subscription_id), array('id' => $r->id));
             }
             
             die('Completed!');

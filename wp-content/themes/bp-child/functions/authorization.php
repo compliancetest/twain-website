@@ -273,29 +273,6 @@ function can_create_group($user_id = null)
     return false;
 }
 
-function can_edit_test_plan($suite_id, $product_id, $user_id = null)
-{    
-    global $wpdb;
-    
-    if(!$user_id)   
-        $user_id = get_current_user_id();
-    
-    //Check subscription
-    $query = $wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE suite_id=%d AND user_id=%d", $suite_id, $user_id);
-    $org_id = $wpdb->get_var($query);
-    
-    if (!$org_id) {
-        return false;
-    }
-    
-    //Check the organisation of the product    
-    //Return true for now
-    
-    
-    return true;
-    
-}
-
 /******************************************************************** Compliance Claim ***************************************************************/
 function can_make_compliance_claim($organisation_id, $user_id = null)
 {

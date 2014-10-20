@@ -946,9 +946,10 @@ function getTestPlansBySuiteId($suite_id, $user_id)
 {
     global $wpdb;
     
-    $user_membership = ct_get_user_organisation_membership($user_id);
-    
-    $query = $wpdb->prepare("SELECT p.*, pm.meta_value as `product_name` FROM " . $wpdb->prefix . "test_plans AS p LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.product_id AND pm.meta_key='product_name'  WHERE p.suite_id=%d AND p.organisation_id=%d", $suite_id, $user_membership->organisation_id);
+    $query = $wpdb->prepare("SELECT p.*, pm.meta_value as `product_name` FROM " . $wpdb->prefix . "test_plans AS p 
+                                LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.product_id AND pm.meta_key='product_name'  
+                                LEFT JOIN " . $wpdb->prefix . "users_subscriptions as um on um.parent_id=p.organisation_subscription_id
+                            WHERE p.suite_id=%d AND um.user_id=%d", $suite_id, $user_id);
     $rows = $wpdb->get_results($query);
     
     
