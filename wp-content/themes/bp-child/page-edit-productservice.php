@@ -155,7 +155,7 @@ if(isset($_SESSION['product_data']))
         <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Select Related Products</h5>
+               <h5 class="left">Related Products</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -266,7 +266,7 @@ if(isset($_SESSION['product_data']))
                             <div class="btn-row">
                                 <?php if( $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id ) ) ):?>
                                     <?php if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ):?>
-                                        <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Add</span></a>
+                                        <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip"  title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
                                     <?php else:?>
                                         <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
                                     <?php endif;?>
