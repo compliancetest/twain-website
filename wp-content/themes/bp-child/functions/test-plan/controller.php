@@ -44,7 +44,7 @@ function certifyPlan()
     
     //Getting Esb Customer ID
     $query = $wpdb->prepare("SELECT parent_id FROM " . $wpdb->prefix . "users_subscriptions WHERE suite_id=%d AND organisation_id=%d AND user_id=%d", $plan->suite_id, $plan->organisation_id, $user_id);
-    $esbUserIds = $wpdb->get_col($query);
+    $esbUserIds = $wpdb->get_var($query);
     
     if (!$esbUserIds) {
         $caseStatus = array();    

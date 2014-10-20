@@ -467,11 +467,10 @@ function createClaimPDF($claim_id, $planID )
     $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d AND suite_id=%d", $claim->creator_id, $claim->suite_id);
     $esbID = $wpdb->get_var($query);
     
+    $esb = new ManageESB();
+    
     if($esbID)
     {
-        //Getting Case Status
-        $esb = new ManageESB();
-        
         $query = "SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
                  "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
                  "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
@@ -511,6 +510,9 @@ function createClaimPDF($claim_id, $planID )
     $idx = 0;
     $rowsCounter = 11;
     $fArr = array();
+    
+    
+    
     $caseStatus = $esb->getCaseStatus( $esbID, $claim->suite_id );
     foreach($results as $scId => $testCases)
     {
@@ -653,8 +655,7 @@ function createClaimPDF($claim_id, $planID )
                     <td class="test-intent">' . $rString . '</td>';
                     $test_cases_table_html .= '<td class="test-outcome">' . (isset($data['outcome']) ? $data['outcome'] : '-') . '</td>';
 
-                    if (isset($testCases[$i]->MSG_ID)) {
-                        $esb = new ManageESB();
+                    if (isset($testCases[$i]->MSG_ID)) {                        
                         $message = $esb->getMessageEnvelope( $data['msg_id'] );
                         $fileName = getcwd() . '/wp-content/uploads/' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '.xml';
                         $myfile = fopen($fileName, "w");
