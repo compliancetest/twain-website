@@ -228,7 +228,7 @@ class ManageESB
                     $query = "SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE id IN( ".implode(',', $subs_ids)." ) ";
                 }
             } else {
-                $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}organisations_subscriptions WHERE user_id = %d ) ", $user_id );
+                $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}organisations_members WHERE user_id = %d ) ", $user_id );                
             }
             if ($organisation_id !== null && $organisation_id != "all") {
                 if( is_super_admin() ) {

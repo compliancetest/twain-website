@@ -53,20 +53,24 @@ function certifyPlan()
     foreach($cases as $case)
     {
         $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
-        $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $case->ID ) );
+        $is_excluded = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $case->ID ) );
         if( ! $is_optional ) $is_optional = 'No';
+        
         if( $is_excluded ){
             $has_exclusions = 1;
         }
-        if( ( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) || $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] != 'pass' ) && $is_optional == 'No' && ! $is_excluded )
-        {
-            $all_verified = false;
-            break; 
-        }
-        if( isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID] ) && $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] == 'fail' && $is_excluded ){
+        
+        //If result is fail, can't certify
+        if (isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) && $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] == 'fail'){
             $all_verified = false;
             break;
         }
+        
+        if ($is_optional != 'Yes' && !$is_excluded && !isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID])) {
+            $all_verified = false;
+            break;
+        }
+        
     }
 
     //Create Compliance Claim
@@ -83,9 +87,9 @@ function certifyPlan()
                 wp_redirect($return);
             } else {
                 //Delete Plan
-                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans WHERE id = %d", $planID ) );
+                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans WHERE id = %d", $planID ) );
                 //Delete Exclude Plan ID
-                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans WHERE test_plan_id = %d ", $planID ) );
+                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
                 
                 addMessage('The plan was certified successfully');
                 wp_redirect($return_success);
@@ -130,6 +134,9 @@ function deletePlan()
     {
         addMessage($wpdb->last_error, 'error');
     }else{
+        //Delete Exclude Items
+        $wpdb->delete($wpdb->prefix . "test_plans_excluded_cases", array('test_plan_id' => $planID));
+        
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
         addMessage("The plan was deleted.");
