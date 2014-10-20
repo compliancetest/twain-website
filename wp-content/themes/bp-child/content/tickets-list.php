@@ -34,6 +34,7 @@ if($filterCategory)
 
 $is_support = getManagedCustomerWPIDs() ? true : false;
 
+$show_community = $is_support || is_super_admin() ? true : false;
 ?>
 <div class="filter-box column">
     <div class="left right10"><label>Filter By:</label></div>
@@ -96,8 +97,8 @@ $is_support = getManagedCustomerWPIDs() ? true : false;
                <div class="td td-ticket-requested td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=created_date&order=<?php echo $orderBy == 'created_date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'created_date'){ ?>class="<?php echo $order?>"<?php } ?>>Requested <span class="sort"></span></a>
                </div>
-               <div class="td td-ticket-type td-sortable tocenter">
-                   <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=category_id&order=<?php echo $orderBy == 'category_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'category_id'){ ?>class="<?php echo $order?>"<?php } ?>>Type <span class="sort"></span></a>
+               <div class="td td-ticket-type td-sortable tocenter <?php if( $show_community ):?>td-two-lines<?php endif;?>">
+                   <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=category_id&order=<?php echo $orderBy == 'category_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'category_id'){ ?>class="<?php echo $order?>"<?php } ?>>Type <?php if( $show_community ):?><br>Community<?php endif;?><span class="sort"></span></a>
                </div>
                <div class="td td-ticket-status td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=status_id&order=<?php echo $orderBy == 'status_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'status_id'){ ?>class="<?php echo $order?>"<?php } ?>>Status <span class="sort"></span></a>
@@ -159,7 +160,7 @@ $is_support = getManagedCustomerWPIDs() ? true : false;
                             </div>                            
                             <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
-                            <div class="td td-ticket-type"><?php echo $ticket->category_title ?></div>
+                            <div class="td td-ticket-type <?php if( $show_community ):?>td-two-lines tocenter<?php endif;?>"><?php echo $ticket->category_title ?><?php if( $show_community ):?><br><?php $community = groups_get_group(array('group_id' => get_post_meta($ticket->suite_id, 'community_id', true ))); echo bp_get_group_name($community);;?><?php endif;?></div>
                             <div class="td td-ticket-status tocenter">
                                 <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">
                                 <?php echo $ticket->status_title ?>
