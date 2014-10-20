@@ -77,7 +77,7 @@ $user_test_suites = get_suites_with_claims();
                                 <div class="grid-cell has-focus-tooltip">
                                     <label>Name:</label>
                                     <input type="text" class="input required" name="service_name" id="service_name" value="<?php echo $service->service_name?>" />
-                                    <span class="focus-tooltip"><span></span>Enter your service name as it is known in the marketplace.</span>
+                                    <span class="focus-tooltip"><span></span>Enter the service name you would like to appear in search results.</span>
                                 </div>
 
                                 <div class="grid-cell styled_select">
@@ -98,11 +98,17 @@ $user_test_suites = get_suites_with_claims();
                                     <label>Test Suite:</label>
                                     <select name="suite_id" id="suite_id" class="required">
                                         <option></option>
+                                        <?php $suites_in_list = array();?>
                                         <?php foreach( $user_test_suites AS $suite_id ):?>
                                         <?php
                                             $suite = new TestSuite( $suite_id->suite_id );
                                             $suite->load();
                                             if( ! $suite->id ){
+                                                continue;
+                                            }
+                                            if( ! in_array( $suite_id->suite_id.$suite_id->product_id, $suites_in_list ) ){
+                                                array_push( $suites_in_list, $suite_id->suite_id.$suite_id->product_id );
+                                            } else{
                                                 continue;
                                             }
                                         ?>
@@ -121,7 +127,7 @@ $user_test_suites = get_suites_with_claims();
                                     <span class="focus-tooltip" style="left: 110%"><span></span>The identifier of the organisation that is the service provider.</span>
                                 </div>
                                 <div class="grid-cell styled_select has-focus-tooltip">
-                                    <label>IDType:</label>
+                                    <label>Type:</label>
                                     <select name="type" id="type" class="required">
                                         <option></option>
                                         <option <?php if( isset( $service->service_type ) && $service->service_type == 'ABN' ):?>selected="selected"<?php endif;?> value="ABN" >ABN</option>
@@ -129,7 +135,7 @@ $user_test_suites = get_suites_with_claims();
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
                                 </div>
-                                <div class="grid-cell styled_select gateways_list gateways" <?php if( $service->service_type == 'ABN' ):?>style="display: none;"<?php endif;?>>
+                                <div class="grid-cell styled_select gateways_list gateways" <?php if( empty( $service->service_type ) || $service->service_type == 'ABN' ):?>style="display: none;"<?php endif;?>>
                                     <label>Gateway:</label>
                                     <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
                                     <select name="endpoint_type" class="required" id="gateways">
@@ -139,7 +145,7 @@ $user_test_suites = get_suites_with_claims();
                                         <?php endforeach;?>
                                     </select>
                                 </div>
-                                <div class="grid-cell styled_select gateways_list aliases" <?php if( $service->service_type == 'USI' ):?>style="display: none;"<?php endif;?>>
+                                <div class="grid-cell styled_select gateways_list aliases" <?php if( empty( $service->service_type ) || $service->service_type == 'USI' ):?>style="display: none;"<?php endif;?>>
                                     <label>Alias:</label>
                                     <?php $aliases = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
                                     <select name="endpoint_type_alias" class="required" id="aliases">
@@ -165,10 +171,10 @@ $user_test_suites = get_suites_with_claims();
                                         </select>
                                         <div class="space10"></div>
                                     </div>
-                                    <div class="styled_select">
+                                    <div class="styled_select" style="display: none;">
                                         <label>Protocol:</label>
                                         <select name="protocol">
-                                            <option selected="selected" value="AS4-Gateway">AS4-Gateway</option>
+                                            <option selected="selected" value="Gateway">Gateway</option>
                                         </select>
                                     </div>
                                 </div>
@@ -180,9 +186,10 @@ $user_test_suites = get_suites_with_claims();
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
-                                <div class="grid-cell">
+                                <div class="grid-cell has-focus-tooltip">
                                     <label>Service Owner:</label>
                                     <input type="text" class="input required" name="service_owner" id="service_owner" value="<?php echo $service->service_owner?>" />
+                                    <span class="focus-tooltip">Enter the name of the organisation responsible for the service.</span>
                                 </div>
                                 <?php
                                     $processed_suites = array();
@@ -210,6 +217,7 @@ $user_test_suites = get_suites_with_claims();
                                         <div class="grid-cell">
                                             <label>Levels:</label>
                                             <?php foreach( $suite->conformanceLevel AS $level ):?>
+                                                <?php if( $level['code'] == 'Default' ) continue;?>
                                                 <div class="levels_div" data-suiteid="<?php echo $suite->id;?>" <?php if( $isNew || $suite->id !== $service->service_suite_id ):?>style="display: none;"<?php endif;?>>
                                                     <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $level['code'], $service->service_levels ) ):?>checked="checked" <?php endif;?> value="<?php echo $level['code'];?>"><?php echo $level['code'];?>
                                                 </div>
@@ -277,9 +285,9 @@ $user_test_suites = get_suites_with_claims();
             jQuery('#type').on('change', function(){
                 jQuery('.gateways_list').hide();
                if( jQuery(this).val() ){
-                   if( jQuery(this).val() == 'USI' ){
+                   if( jQuery(this).val() == 'ABN' ){
                         jQuery('.aliases').show();
-                   } else if( jQuery(this).val() == 'ABN' ){
+                   } else if( jQuery(this).val() == 'USI' ){
                        jQuery('.gateways').show();
                    }
                }
@@ -304,7 +312,7 @@ $user_test_suites = get_suites_with_claims();
                     if( jQuery(this).attr( 'id' ) == 'gateways' &&  jQuery('#type').val() == 'ABN' ){
                         return false;
                     }
-                    if( jQuery(this).attr( 'id' ) == 'aliases' &&  jQuery('#type').val() == 'URI' ){
+                    if( jQuery(this).attr( 'id' ) == 'aliases' &&  jQuery('#type').val() == 'USI' ){
                         return false;
                     }
                     if(jQuery(this).val() == ''){
