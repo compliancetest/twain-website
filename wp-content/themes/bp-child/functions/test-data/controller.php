@@ -259,46 +259,6 @@ function saveProfileInstance($action)
 
     $jsonData = base64_encode($data);
     $jsonObject = json_decode($data);
-    /*$basePath = ABSPATH . "profiles";
-    
-    //Save File
-    if(!is_dir($basePath))
-    {
-        mkdir($basePath, 0775);
-        //Add Index.html
-        $fp = fopen($basePath . "/index.html", "w");        
-        fclose($fp);        
-    }
-    
-    
-    $basePath  = $basePath . "/" . $instance_type;
-    //Save File
-    if(!is_dir($basePath))
-    {
-        mkdir($basePath, 0775);
-        //Add Index.html
-        $fp = fopen($basePath . "/index.html", "w");        
-        fclose($fp);        
-    }
-    
-    //Remove Old File
-    if($instance_id && $profile_instance)
-    {
-        @unlink($basePath . "/" . $profile_instance->filename );
-    }
-    
-    $filename = sanitize_file_name($jsonObject->Profile->Title) . ".json";
-    
-    $idx = 2;
-    while(file_exists($basePath . "/" . $filename))
-    {
-        $filename = sanitize_file_name($jsonObject->Profile->Title) . "-$idx.json";
-        $idx++;
-    }
-    
-    $fp = fopen($basePath . "/" . $filename, "w");
-    fwrite($fp, base64_decode($jsonData), strlen(base64_decode($jsonData)));
-    fclose($fp);*/
 
     if($instance_id)
     {
@@ -454,7 +414,7 @@ function copyProfileInstance($action)
     
     //$content->Profile->Title .= '(copy)';
     //$row['profile_name'] .= '(copy)';
-    $row['content'] = base64_encode(stripcslashes(json_encode($content)));
+    $row['content'] = base64_encode(json_encode($content));
     
     $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
     $new_profile_id = $wpdb->insert_id;
