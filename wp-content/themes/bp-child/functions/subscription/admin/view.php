@@ -82,7 +82,7 @@ function ct_add_organisation_subscription()
                 
                 <tr>
                     <th>Nickname</th>
-                    <td><input type="text" name="nickname" id="nickname" value="<?php echo isset($data) ? $data->nickname : ''?>" size="40"  /></td>
+                    <td><input type="text" name="nickname" id="nickname" value="<?php echo isset($data) ? stripslashes( $data->nickname ): ''?>" size="40"  /></td>
                 </tr>  
                 <tr>
                     <th>Status</th>
