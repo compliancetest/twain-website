@@ -463,27 +463,25 @@ function createClaimPDF($claim_id, $planID )
     remove_filter('posts_orderby', 'add_scenario_orderby_query');
     remove_filter('posts_fields_request', 'add_scenario_fields_query');
     
-    //Getting Customer Subscription ID
-    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d AND suite_id=%d", $claim->creator_id, $claim->suite_id);
-    $esbID = $wpdb->get_var($query);
+    $plan = new TestPlan($planID);
+    $plan->load();
     
     $esb = new ManageESB();
+    $testCaseStatuses = $esb->getCaseStatus($plan->organisation_subscription_id, $suite->id);
     
-    if($esbID)
-    {
-        $query = "SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
-                 "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
-                 "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
-                 "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
-                 "LEFT JOIN " . $esb->table_test_case_configuration . " AS cc ON c.TEST_CASE_CONFIGURATION_ID=cc.ID " .                 
-                 " WHERE c.customer_id=$esbID AND sc.TEST_SUITE_WP_ID={$claim->suite_id} AND c.PRODUCT_ID='" . get_post_meta($claim->product_id, 'product_id', true) . "'";
-        
-        $esbResults = ManageESB::$esbdb->get_results($query);
-        
-    }
+    $query = ManageESB::$esbdb->prepare("SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG,m.S3_PAYLOAD_LOCATION AS MSG_URL, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
+             "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
+             "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
+             "LEFT JOIN " . $esb->table_product_configuration . " AS p ON p.PRODUCT_ID=c.PRODUCT_ID " .
+             "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
+             "LEFT JOIN " . $esb->table_test_case_configuration . " AS cc ON c.TEST_CASE_CONFIGURATION_ID=cc.ID " .                 
+             " WHERE c.AUDIT_RECORD=1 AND c.ORGANISATION_SUBSCRIPTION_ID=%d AND sc.TEST_SUITE_WP_ID=%d AND p.PRODUCT_WP_ID=%d", $plan->organisation_subscription_id, $suite->id, $plan->product_id);
+    
+    $esbResults = ManageESB::$esbdb->get_results($query);        
 
     //Classify the results by Scenario
     $results = array();
+    
     foreach($testCases as $row)
     {
         if(isset($esbResults))
@@ -494,10 +492,10 @@ function createClaimPDF($claim_id, $planID )
                 {
                     $row->OUTCOME = $erow->OUTCOME;
                     $row->MSG_ID = $erow->MSG_ID;
-                    if( ! isset( $row->ALL_DATA ) ){
-                        $row->ALL_DATA = array();
+                    if( ! isset( $row->messages ) ){
+                        $row->messages = array();
                     }
-                    array_push( $row->ALL_DATA, array( 'outcome' => $erow->OUTCOME, 'msg_id' => $erow->MSG_ID ) );
+                    $row->messages[] = array( 'outcome' => $erow->OUTCOME, 'msg_id' => $erow->MSG_ID, 'msg' => $erow->MSG, 'msg_url' => $erow->MSG_URL  );
                 }
             }
         }
@@ -516,68 +514,72 @@ function createClaimPDF($claim_id, $planID )
     $caseStatus = $esb->getCaseStatus( $esbID, $claim->suite_id );
     foreach($results as $scId => $testCases)
     {
-        $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $testCases[0]->ID ) );
-
-        if( isset(  $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] ) && $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] == 'pass' ){
-            $is_excluded = false;
-        }
-        if( ( ! isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID]) || $caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID] != 'pass' ) && ! $is_excluded ){
-            continue;
-        }
-        if( $is_excluded ){
-            for($i=0; $i < count($testCases); $i++)
-            {
-                if( ! isset( $skipped_test_cases ) ){
+        
+        for($i=0; $i < count($testCases); $i++) {
+            $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $testCases[$i]->ID ) );
+            $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
+            
+            /*if ((!$is_excluded || $is_optional  == 'Yes') && !isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[0]->ID])) {
+                continue;
+            }*/
+            
+            if ( isset($caseStatus[$claim->suite_id][$claim->product_id][$testCases[$i]->ID]) && $caseStatus[$claim->suite_id][$claim->product_id][$testCases[$i]->ID] == 'pass') {
+                $is_excluded = false;
+                $is_optional = 'No';
+            }    
+            
+            if ($is_excluded) {
+                if (!isset($skipped_test_cases)) {
                     $skipped_test_cases = '<style>
-                                            .test-cases-table th {
-                                                background-color:#5a75b6;
-                                                color:#fff;
-                                                font-size:7pt;
-                                                vertical-align:middle;
-                                                line-height:18pt;
-                                                text-align:center;
-                                                font-weight:bold;
-                                            }
-                                            .test-cases-table tr td {
-                                                height: 100px !important;
-                                            }
-                                            .test-cases-table th.test-outcome{
-                                                line-height:10px;
-                                            }
-                                            .test-cases-table th.test-scenario{
-                                                text-align:left;
-                                            }
-                                            .test-cases-table td {
-                                                font-size:6pt;
-                                                line-height:6pt;
-                                                color:#000;
-                                            }
-                                            .test-cases-table .even td{
-                                                background-color:#f3f4f5;
-                                            }
-                                            .test-cases-table .odd td{
-                                                background-color:#ececed;
-                                            }
-                                            .test-cases-table td a{
-                                                font-size:10pt;
-                                            }
-                                            .test-cases-table td.test-scenario{
-                                                background-color:#e2e2e2;
-                                            }
+                            .test-cases-table th {
+                                background-color:#5a75b6;
+                                color:#fff;
+                                font-size:7pt;
+                                vertical-align:middle;
+                                line-height:18pt;
+                                text-align:center;
+                                font-weight:bold;
+                            }
+                            .test-cases-table tr td {
+                                height: 100px !important;
+                            }
+                            .test-cases-table th.test-outcome{
+                                line-height:10px;
+                            }
+                            .test-cases-table th.test-scenario{
+                                text-align:left;
+                            }
+                            .test-cases-table td {
+                                font-size:6pt;
+                                line-height:6pt;
+                                color:#000;
+                            }
+                            .test-cases-table .even td{
+                                background-color:#f3f4f5;
+                            }
+                            .test-cases-table .odd td{
+                                background-color:#ececed;
+                            }
+                            .test-cases-table td a{
+                                font-size:10pt;
+                            }
+                            .test-cases-table td.test-scenario{
+                                background-color:#e2e2e2;
+                            }
 
-                                            .issued, .test-outcome, .supporting-evidence{
-                                                text-align:center;
-                                            }
-                                        </style>
-                                        <table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
-                                            <tr><th colspan="5">Excluded Test Cases</th></tr>
-                                            <tr>
-                                                <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
-                                                <th class="test-case" style="width:12%;">Test Case</th>
-                                                <th class="issued" style="width:8%;">Issued</th>
-                                                <th class="test-intent" style="width:30%;">Test Intent Description</th>
-                                                <th class="test-reason" style="width:25%;">Reason</th>
-                                            </tr>';
+                            .issued, .test-outcome, .supporting-evidence{
+                                text-align:center;
+                            }
+                        </style>
+                        <table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
+                            <tr><th colspan="5">Excluded Test Cases</th></tr>
+                            <tr>
+                                <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
+                                <th class="test-case" style="width:12%;">Test Case</th>
+                                <th class="issued" style="width:8%;">Issued</th>
+                                <th class="test-intent" style="width:30%;">Test Intent Description</th>
+                                <th class="test-reason" style="width:25%;">Reason</th>
+                            </tr>';
                 }
                 $rString = get_post_meta($testCases[$i]->ID ,'test_intent_description', true);
                 $skipped_test_cases .= '<tr class="' . ($idx %2 ==0 ? 'odd' : 'even') . '">
@@ -589,10 +591,8 @@ function createClaimPDF($claim_id, $planID )
 
                 $skipped_test_cases .= '</tr>';
                 $idx++;
-            }
-        } else{
-            for($i=0; $i < count($testCases); $i++) {
-                foreach ($testCases[$i]->ALL_DATA AS $data) {
+            } else if ($is_optional != 'Yes') {
+                foreach ($testCases[$i]->messages AS $data) {
                     if( ! isset( $test_cases_table_html ) ){
                         $test_cases_table_html = '
                                                 <style>
@@ -678,6 +678,7 @@ function createClaimPDF($claim_id, $planID )
                 }
             }
         }
+
     }
     if( isset( $test_cases_table_html ) ) {
         $test_cases_table_html .= '</table>';

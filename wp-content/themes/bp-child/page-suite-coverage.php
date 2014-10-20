@@ -117,7 +117,7 @@ $esb = new ManageESB();
                               <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>&id=<?php echo $crow->id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn edit-plan-btn icon-btn"><span class="p"></span>
                                   <span class="simple_tooltip radius6">Edit Plan<span></span></span>
                               </a>
-                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('delete-plan')?>&id=<?php echo $crow->id?>" onclick="return confirm('Are you sure you want to delete this plan?')" class="action-btn delete-btn icon-btn left5"><span class="p"></span>
+                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('delete-plan')?>&id=<?php echo $crow->id?>" class="delete-plan-link action-btn delete-btn icon-btn left5"><span class="p"></span>
                                   <span class="simple_tooltip radius6">Delete Plan<span></span></span>
                               </a>                              
                               <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-grey-btn icon-btn left5">
@@ -150,6 +150,19 @@ $esb = new ManageESB();
 	<div class="clear"></div>
 			
 </div> <!--end content-->
+<div class="popup-box" id="delete-plan-box" style="display: none; width: 500px">
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+    <div class="popup-box-content"> 
+        Are you sure that you want to delete this plan?
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">                   
+        <div class="loading loading-with-text radius6"><div><b>DELETING PLAN</b><span>Please wait...</span></div></div> 
+        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>                
+</div>    
 <script type="text/javascript">
 jQuery(document).ready(function(){
     jQuery('#test_suite_coverage .grid-box-body .tbody').each(function(){
@@ -200,6 +213,20 @@ jQuery(document).ready(function(){
     jQuery('.coverage-progress span.bubble').on('click', function(){
         jQuery(this).next().click();
     });
+    
+    jQuery('.delete-plan-link').each(function(){
+        var link = jQuery(this).attr('href');
+        jQuery(this).cplightbox({
+            type: 'inline',
+            href: '#delete-plan-box',
+            onStart: function(){
+                jQuery('#delete-plan-box .process-btn').attr('href', link);
+            }
+        })
+    })
+    jQuery('#delete-plan-box .process-btn').click(function(){
+        jQuery('#delete-plan-box .loading').show();
+    })
 })
 </script>
 <?php
