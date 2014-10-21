@@ -103,6 +103,9 @@ require_once(THE_FUNCTION . '/service/controller.php');
 require_once(THE_FUNCTION . '/e2e-agreements/class.agreement.php');
 require_once(THE_FUNCTION . '/e2e-agreements/controller.php');
 
+//Processes
+require_once(THE_FUNCTION . '/processes/class.process.php');
+
 //CloudSearc
 require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
 
