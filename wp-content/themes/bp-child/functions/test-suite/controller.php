@@ -327,6 +327,7 @@ function saveSuite()
     cp_update_post_meta($id, 'ts_version_major', $_POST['ts_version_major']);
     cp_update_post_meta($id, 'ts_version_minor', $_POST['ts_version_minor']);
     cp_update_post_meta($id, 'ts_version_patch', $_POST['ts_version_patch']);
+    cp_update_post_meta($id, 'ts_process', $_POST['process']);
     update_post_meta($id, 'ts_description', $_POST['ts_description']);
     
     $property_name_data = $_POST['message_template_name']; 

@@ -171,6 +171,18 @@ $xeroItems = ct_get_xero_items();
                        </div>
                        <div class="clear"></div>
                    </div>
+                   <div class="field-row">
+                       <div class="grid-cell">
+                           <label for="process">Process: </label>
+                           <select name="process" id="process" class="select">
+                               <option value=""></option>
+                               <?php foreach( Process::get_all() as $row){ ?>
+                                   <option value="<?php echo $row->id?>" <?php echo cp_selected($row->id, $suite->process)?>><?php echo Process::get_full_name( $row );?></option>
+                               <?php } ?>
+                           </select>
+                       </div>
+                       <div class="clear"></div>
+                   </div>
                </div>
            </div>
        </div>

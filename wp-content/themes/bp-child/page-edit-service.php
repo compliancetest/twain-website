@@ -78,6 +78,8 @@ $user_test_suites = get_suites_with_claims();
                                     <label>Name:</label>
                                     <input type="text" class="input required" name="service_name" id="service_name" value="<?php echo $service->service_name?>" />
                                     <span class="focus-tooltip"><span></span>Enter the service name you would like to appear in search results.</span>
+                                    <br>
+                                    <label class="default_name" <?php if( $service->service_name ):?>style="display: none;" <?php endif;?>>Default: <span class="process_value">{Process Identifier}</span>:<span class="process_role">{Role}</span></label>
                                 </div>
 
                                 <div class="grid-cell styled_select">
@@ -112,7 +114,7 @@ $user_test_suites = get_suites_with_claims();
                                                 continue;
                                             }
                                         ?>
-                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" <?php if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ):?>style="display: none;"<?php endif;?>><?php echo $suite->title;?></option>
+                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" data-process="<?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>" <?php if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ):?>style="display: none;"<?php endif;?>><?php echo $suite->title;?></option>
                                         <?php endforeach;?>
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
@@ -157,6 +159,10 @@ $user_test_suites = get_suites_with_claims();
                                             <?php endforeach;?>
                                         <?php endforeach;?>
                                     </select>
+                                </div>
+                                <div class="grid-cell">
+                                    <label>Process:</label>
+                                    <input type="text" class="input" name="service_process" id="service_process" value="<?php if( $service->service_suite_id ) echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>" readonly="readonly"/>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -210,7 +216,7 @@ $user_test_suites = get_suites_with_claims();
                                             <label>Roles:</label>
                                             <?php foreach( $suite->roles AS $role ):?>
                                                 <div class="roles_div" data-suiteid="<?php echo $suite->id;?>" <?php if( $isNew || $suite->id !== $service->service_suite_id ):?>style="display: none;"<?php endif;?>>
-                                                    <input type="checkbox" name="roles[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $role['name'], $service->service_roles ) ):?>checked="checked" <?php endif;?>value="<?php echo $role['name'];?>"><?php echo $role['name'];?>
+                                                    <input type="radio" name="roles[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $role['name'], $service->service_roles ) ):?>checked="checked" <?php endif;?>value="<?php echo $role['name'];?>"><?php echo $role['name'];?>
                                                 </div>
                                             <?php endforeach;?>
                                         </div>
@@ -219,7 +225,7 @@ $user_test_suites = get_suites_with_claims();
                                             <?php foreach( $suite->conformanceLevel AS $level ):?>
                                                 <?php if( $level['code'] == 'Default' ) continue;?>
                                                 <div class="levels_div" data-suiteid="<?php echo $suite->id;?>" <?php if( $isNew || $suite->id !== $service->service_suite_id ):?>style="display: none;"<?php endif;?>>
-                                                    <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $level['code'], $service->service_levels ) ):?>checked="checked" <?php endif;?> value="<?php echo $level['code'];?>"><?php echo $level['code'];?>
+                                                    <input type="radio" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $level['code'], $service->service_levels ) ):?>checked="checked" <?php endif;?> value="<?php echo $level['code'];?>"><?php echo $level['code'];?>
                                                 </div>
                                             <?php endforeach;?>
                                         </div>
@@ -269,12 +275,37 @@ $user_test_suites = get_suites_with_claims();
                     $('.roles_div').filter( '[data-suiteid="'+$( this).val()+'"]').show();
                     $('.levels_div').filter( '[data-suiteid="'+$( this).val()+'"]').show();
                 }
+                if( $(this).val() ){
+                    $('#service_process').val( $('#suite_id option:selected').attr('data-process') );
+                } else{
+                    $('#service_process').val( '' );
+                }
+                change_values();
+            });
+            $('input[name="roles[]"]').on('change', function(){
+                change_values();
             });
             $('#product_id').on('change', function(){
                 $('#suite_id').val('');
                 $('#suite_id option').hide();
                 $('#suite_id option').filter('[data-productid="'+$(this).val()+'"]').show();
             });
+            $('#service_name').on('change', function(){
+                change_values();
+            });
+            function change_values(){
+                if( $('#service_name').val() ){
+                    $('.default_name').hide();
+                } else{
+                    $('.default_name').show();
+                    if( $('#service_process').val() ){
+                        $('.process_value').html( $('#service_process').val() );
+                    }
+                    if( $('#suite_id').val() ){
+                        $('.process_role').html( $('.roles_div').filter( '[data-suiteid="'+$('#suite_id').val()+'"]').find('input:checked').val() );
+                    }
+                }
+            }
             jQuery(".validation-form .required").each(function(){
                 jQuery(this).parent().append('<span class="msg-required" style="display: none">This field is required.</span>');
             })
