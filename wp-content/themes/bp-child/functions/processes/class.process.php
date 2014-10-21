@@ -32,6 +32,9 @@ class Process
     }
 
     public static function get_full_name( $process ){
+        if( ! $process ){
+            return '';
+        }
         $full_name = $process->title.' v'.$process->version_major.'.'.$process->version_minor;
         if( $process->patch_version ){
             $full_name .= '.'.$process->patch_version;
