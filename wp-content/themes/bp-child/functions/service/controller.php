@@ -63,7 +63,9 @@ function saveService()
             
         exit;
     }
-    
+    if( $_POST['service_name'] == '' ){
+        $_POST['service_name'] = str_replace( ' ', '_', $_POST['service_process'] ).':'.$_POST['roles'][0];
+    }
     if($isNew)
     {
         $id = wp_insert_post(array('post_title' => htmlspecialchars($_POST['service_name']), 'post_type'=>'service', 'post_status' => 'publish'), true);

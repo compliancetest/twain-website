@@ -47,7 +47,7 @@ get_header();
 
     <div class="container">
         <div class="column">
-           <a href="/search-registry/?&type=Web%20Service" class="action-btn add-new-btn" style="margin-left: 10px;"><span class="p"></span><span class="t">Search</span></a>
+           <a href="/products-and-services/?&type=Web%20Service" class="action-btn add-new-btn" style="margin-left: 10px;"><span class="p"></span><span class="t">Search</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
             <?php if( $user_services ):?>
@@ -55,13 +55,18 @@ get_header();
                     <?php $serv = new Service( $user_service->ID ); $serv->load();?>
                        <div class="grid-box table-box grid-box-opened">
                            <div class="grid-box-header">
-                               <div class="grid-box-header-title left">
+                               <div class="grid-box-header-title left" style="font-size: 12px;">
                                    <ul>
                                        <li>Service: <a href="<?php echo get_permalink( $serv->id );?>"><strong><?php echo get_the_title( $serv->id );?></strong></a></li>
                                        <li>Owner: <strong><?php echo $serv->service_owner;?></strong></li>
-                                       <li>Service ID: <strong><?php echo $serv->service_id;?></strong></li>
+                                       <?php
+                                            $suite = new TestSuite( $serv->service_suite_id );
+                                            $suite->load();
+                                       ?>
+                                       <li>Process: <strong><?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?></strong></li>
                                        <li>Role: <strong><?php echo implode( ', ', $serv->service_roles );?></strong></li>
-                                       <li>User Product: <a href="<?php echo get_permalink( $serv->service_product_id );?>"><strong><?php echo get_the_title( $serv->service_product_id );?></strong></a></li>
+<!--                                       <li>ServiceID: <strong>--><?php //echo $serv->service_type.':'.$serv->service_id;?><!--</strong></li>-->
+                                       <li>Product: <a href="<?php echo get_permalink( $serv->service_product_id );?>"><strong><?php echo get_the_title( $serv->service_product_id );?></strong></a></li>
                                    </ul>
                                </div>
                                <?php if(can_delete_product_and_service( $serv->id )){ ?>
@@ -76,10 +81,10 @@ get_header();
                            <div class="grid-box-body tocenter">
                                <div class="thead tr clearfix">
                                    <div class="td td-agreement-id">Agreement ID</div>
-                                   <div class="td td-entity-name">Entity Name</div>
-                                   <div class="td td-identifier">Identifier</div>
-                                   <div class="td td-type">Type</div>
-                                   <div class="td td-protocol">Protocol</div>
+                                   <div class="td td-entity-name">Service</div>
+                                   <div class="td td-identifier">Owner</div>
+                                   <div class="td td-type">Role</div>
+                                   <div class="td td-protocol">Identifier</div>
                                    <div class="td td-end-point">End Point</div>
                                    <div class="td td-contact">Contact</div>
                                    <div class="td td-status">Status</div>
@@ -113,8 +118,8 @@ get_header();
                                                        <a href="<?php echo get_permalink( $agreement->responder_service->id );?>"><?php echo get_the_title( $agreement->responder_service->id );?></a>
                                                    <?php endif;?>
                                                </div>
-                                               <div class="td td-identifier"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_id : $agreement->responder_service->service_id;?></div>
-                                               <div class="td td-type"><?php echo $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type );?></div>
+                                               <div class="td td-identifier"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner;?></div>
+                                               <div class="td td-type"><?php echo $agreement->entry_status == 'Responder' ? ( implode( ', ', $agreement->requester_service->service_roles )  ) : (  implode( ', ', $agreement->responder_service->service_roles ) );?></div>
                                                <div class="td td-protocol"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_protocol : $agreement->responder_service->service_protocol;?></div>
                                                <?php if( ( $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type ) ) == 'ABN' ):?>
                                                     <div class="td td-end-point"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?></div>
