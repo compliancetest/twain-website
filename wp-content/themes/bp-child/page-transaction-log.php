@@ -873,7 +873,7 @@ get_header();
        <div class="space10"></div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">                                                    
-        <a href="#make-claim-box" cp-type="inline"  class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE</span></a>
+        <a href="#make-claim-box" cp-type="inline"  class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
         <a href="#make-claim-box" cp-type="inline"  class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
         <div class="clear"></div>
     </div>
