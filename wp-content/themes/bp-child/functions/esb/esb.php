@@ -228,7 +228,7 @@ class ManageESB
                     $query = "SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE id IN( ".implode(',', $subs_ids)." ) ";
                 }
             } else {
-                $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}organisations_members WHERE user_id = %d ) ", $user_id );                
+                $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}organisations_subscriptions WHERE user_id = %d ) ", $user_id );
             }
             if ($organisation_id !== null && $organisation_id != "all") {
                 if( is_super_admin() ) {
@@ -999,7 +999,7 @@ class ManageESB
         $new_config_id = $this->getTestSuiteConfigurationID($new_id);
         
         $query = "UPDATE " . $this->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=" . $new_config_id . " WHERE TEST_SUITE_CONFIGURATION_ID IN (" . implode(
-        ",", $old_config_id) . ") AND AUDIT_RECORD=1";
+        ",", $old_config_id) . ")";
         
         ManageESB::$esbdb->query($query);
         
