@@ -519,7 +519,7 @@ class CloudSearch {
         $data = array();
         $service = new Service( $service_id );
         $service->load();
-        if( ! $service_id->id ){
+        if( ! $service->id ){
             return $this->cloud_search_delete_item( $service_id, 'service' );
         }
         $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
