@@ -56,6 +56,16 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     <div class="product-description"><?php echo $product->descrition; ?></div>
                 </div>
             </div>
+            <?php
+                $args = array(
+                    'post_type' => 'service',
+                    'posts_per_page' => -1,
+                    'author' => get_current_user_id(),
+                    'meta_key' => 'service_product_id',
+                    'meta_value' => $product->id,
+                );
+                $services = get_posts($args);
+            ?>
             <div class="tabs-contr">
                 <ul class="tab-nav">
                     <?php $is_active = true;?>
@@ -65,17 +75,33 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                         </li>
                         <?php $is_active = false;?>
                     <?php endif;?>
+                    <?php if( $services ):?>
+                        <li <?php if( $is_active ):?>class="active"<?php endif;?>>
+                            <a href="javascript: void(0)" rel="tab_related_services">Service Implementations</a>
+                        </li>
+                    <?php endif;?>
                 </ul>
-                <?php if( $product->relatedProducts ):?>
-                    <div class="tab-content" id="tab_related_products" style="display: block;">
-                        <dl class="column related_products">
-                            <?php foreach ($product->relatedProducts as $rp): ?>
-                                <dt><?php echo $rp->relationship ?>:</dt>
-                                <dd><a href="<?php echo get_permalink($rp->related_product_id)?>"><?php echo $rp->product_name ?></a></dd>
-                            <?php endforeach; ?>
-                        </dl>
-                    </div>
-                <?php endif;?>
+                    <?php if( $product->relatedProducts ):?>
+                        <div class="tab-content" id="tab_related_products" style="display: block;">
+                            <dl class="column related_products">
+                                <?php foreach ($product->relatedProducts as $rp): ?>
+                                    <dt><?php echo $rp->relationship ?>:</dt>
+                                    <dd><a href="<?php echo get_permalink($rp->related_product_id)?>"><?php echo $rp->product_name ?></a></dd>
+                                <?php endforeach; ?>
+                            </dl>
+                        </div>
+                    <?php endif;?>
+                    <?php if( $services ):?>
+                        <div class="tab-content" id="tab_related_services" <?php if( $is_active ):?>style="display: block;"<?php else:?> style="display: none;"<?php endif;?>>
+                            <dl class="column related_products">
+                                <?php foreach ($services AS $s): ?>
+                                    <?php $serv = new Service( $s->ID ); $serv->load();?>
+                                    <dt><?php echo $serv->service_owner ?>:</dt>
+                                    <dd><a href="<?php echo get_permalink( $serv->id )?>"><?php echo get_the_title( $serv->id ) ?></a></dd>
+                                <?php endforeach; ?>
+                            </dl>
+                        </div>
+                    <?php endif;?>
             </div>
         </div>
     </div>

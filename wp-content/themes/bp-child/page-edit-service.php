@@ -76,7 +76,7 @@ $user_test_suites = get_suites_with_claims();
                             <div class="field-row">
                                 <div class="grid-cell has-focus-tooltip">
                                     <label>Name:</label>
-                                    <input type="text" class="input required" name="service_name" id="service_name" value="<?php echo $service->service_name?>" />
+                                    <input type="text" class="input" name="service_name" id="service_name" value="<?php echo $service->service_name?>" />
                                     <span class="focus-tooltip"><span></span>Enter the service name you would like to appear in search results.</span>
                                     <br>
                                     <label class="default_name" <?php if( $service->service_name ):?>style="display: none;" <?php endif;?>>Default: <span class="process_value">{Process Identifier}</span>:<span class="process_role">{Role}</span></label>
@@ -119,7 +119,10 @@ $user_test_suites = get_suites_with_claims();
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
                                 </div>
-
+                                <div class="grid-cell">
+                                    <label>Process:</label>
+                                    <input type="text" class="input" name="service_process" id="service_process" value="<?php if( $service->service_suite_id ) echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>" readonly="readonly"  style="width: 200px;"/>
+                                </div>
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
@@ -160,10 +163,7 @@ $user_test_suites = get_suites_with_claims();
                                         <?php endforeach;?>
                                     </select>
                                 </div>
-                                <div class="grid-cell">
-                                    <label>Process:</label>
-                                    <input type="text" class="input" name="service_process" id="service_process" value="<?php if( $service->service_suite_id ) echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>" readonly="readonly"/>
-                                </div>
+
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
@@ -187,7 +187,7 @@ $user_test_suites = get_suites_with_claims();
                                 <div class="grid-cell has-focus-tooltip">
                                     <label>Description:</label>
                                     <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $service->service_description?></textarea>
-                                    <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
+                                    <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your service. This information is displayed to users who may be searching ComplianceTest for certified products.</span>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -200,35 +200,42 @@ $user_test_suites = get_suites_with_claims();
                                 <?php
                                     $processed_suites = array();
                                     foreach( $user_test_suites AS $suite_id ):?>
-                                    <?php
-                                    $suite = new TestSuite( $suite_id->suite_id );
-                                    $suite->load();
-                                    if( ! $suite->id ){
-                                        continue;
-                                    }
-                                    if( ! in_array( $suite->id, $processed_suites ) ){
-                                        array_push( $processed_suites, $suite->id );
-                                    } else{
-                                        continue;
-                                    }
-                                    ?>
-                                        <div class="grid-cell">
-                                            <label>Roles:</label>
-                                            <?php foreach( $suite->roles AS $role ):?>
-                                                <div class="roles_div" data-suiteid="<?php echo $suite->id;?>" <?php if( $isNew || $suite->id !== $service->service_suite_id ):?>style="display: none;"<?php endif;?>>
-                                                    <input type="radio" name="roles[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $role['name'], $service->service_roles ) ):?>checked="checked" <?php endif;?>value="<?php echo $role['name'];?>"><?php echo $role['name'];?>
-                                                </div>
-                                            <?php endforeach;?>
-                                        </div>
-                                        <div class="grid-cell">
-                                            <label>Levels:</label>
-                                            <?php foreach( $suite->conformanceLevel AS $level ):?>
-                                                <?php if( $level['code'] == 'Default' ) continue;?>
-                                                <div class="levels_div" data-suiteid="<?php echo $suite->id;?>" <?php if( $isNew || $suite->id !== $service->service_suite_id ):?>style="display: none;"<?php endif;?>>
-                                                    <input type="radio" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( $isNew || $suite->id !== $service->service_suite_id  ) || in_array( $level['code'], $service->service_levels ) ):?>checked="checked" <?php endif;?> value="<?php echo $level['code'];?>"><?php echo $level['code'];?>
-                                                </div>
-                                            <?php endforeach;?>
-                                        </div>
+                                        <?php
+                                        $suite = new TestSuite( $suite_id->suite_id );
+                                        $suite->load();
+                                        if( ! $suite->id ){
+                                            continue;
+                                        }
+                                        if( ! in_array( $suite->id, $processed_suites ) ){
+                                            array_push( $processed_suites, $suite->id );
+                                        } else{
+                                            continue;
+                                        }
+                                            $claims = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE suite_id = %d ", $suite->id ) );
+                                        ?>
+                                            <div class="grid-cell">
+                                                <label>Roles:</label>
+                                                <?php foreach( $claims AS $claim ):?>
+                                                    <?php $roles = explode( ';;', trim( $claim->role, ';;' ) );?>
+                                                    <?php foreach( $roles AS $role ):?>
+                                                        <div class="roles_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
+                                                            <input type="radio" name="roles[]" <?php if(  ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>"><?php echo $role;?>
+                                                        </div>
+                                                    <?php endforeach;?>
+                                                <?php endforeach;?>
+                                            </div>
+                                            <div class="grid-cell">
+                                                <label>Levels:</label>
+                                                <?php foreach( $claims AS $claim ):?>
+                                                    <?php $levels = explode( ';;', trim( $claim->conformance_level, ';;' ) );?>
+                                                    <?php foreach( $levels AS $level ):?>
+                                                        <?php if( $level == 'Default' ) continue;?>
+                                                        <div class="levels_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
+                                                            <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>"><?php echo $level;?>
+                                                        </div>
+                                                    <?php endforeach;?>
+                                                <?php endforeach;?>
+                                            </div>
                                     <?php endforeach;?>
                                 <div class="clear"></div>
                             </div>
@@ -240,7 +247,7 @@ $user_test_suites = get_suites_with_claims();
                 <div class="grid-box">
                     <div class="grid-box-footer nobackground noshadow">
                         <div class="btn-row nopaddingleft">
-                            <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE SERVICE</span></a>
+                            <a href="#" class="action-btn process-btn submit-btn has-tooltip" title="Save Service"><span class="p"></span><span class="t">Confirm</span></a>
                             <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                             <div class="clear"></div>
                         </div>
@@ -268,12 +275,12 @@ $user_test_suites = get_suites_with_claims();
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
-            $('#suite_id').on('change', function(){
+            $('#suite_id, #product_id').on('change', function(){
                 $('.roles_div').hide();
                 $('.levels_div').hide();
-                if( $( this).val() ){
-                    $('.roles_div').filter( '[data-suiteid="'+$( this).val()+'"]').show();
-                    $('.levels_div').filter( '[data-suiteid="'+$( this).val()+'"]').show();
+                if( $( this).val() && $('#product_id').val() ){
+                    $('.roles_div').filter( '[data-suiteid="'+$( this).val()+'_'+ $('#product_id').val() +'"]').show();
+                    $('.levels_div').filter( '[data-suiteid="'+$( this).val()+'_'+ $('#product_id').val() +'"]').show();
                 }
                 if( $(this).val() ){
                     $('#service_process').val( $('#suite_id option:selected').attr('data-process') );
@@ -302,7 +309,7 @@ $user_test_suites = get_suites_with_claims();
                         $('.process_value').html( $('#service_process').val() );
                     }
                     if( $('#suite_id').val() ){
-                        $('.process_role').html( $('.roles_div').filter( '[data-suiteid="'+$('#suite_id').val()+'"]').find('input:checked').val() );
+                        $('.process_role').html( $('.roles_div').filter( '[data-suiteid="'+$('#suite_id').val()+'_'+ $('#product_id').val() +'"]').find('input:checked').val() );
                     }
                 }
             }

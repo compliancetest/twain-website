@@ -181,7 +181,7 @@ if(isset($_SESSION['product_data']))
                        </div>
                        <div class="grid-cell right">
                            <label>&nbsp;</label>
-                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           <a href="#" class="action-btn delete-btn icon-btn has-tooltip" title="Delete Related Product"><span class="p"></span></a>
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -206,7 +206,7 @@ if(isset($_SESSION['product_data']))
                        </div>
                        <div class="grid-cell right">
                            <label>&nbsp;</label>
-                           <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                           <a href="#" class="action-btn delete-btn icon-btn has-tooltip" title="Delete Related Product"><span class="p"></span></a>
                        </div>
                        <div class="clear"></div>
                    </div>
@@ -252,10 +252,10 @@ if(isset($_SESSION['product_data']))
                                                 <label><?php echo get_the_title( $post->ID );?> </label>
                                             </div>
                                             <div class="grid-cell width30P">
-                                                <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                                             </div>
                                             <div class="grid-cell right">
-                                                <a href="#" class="action-btn blue-delete-btn icon-btn delete_service" data-serviceid="<?php echo $post->ID;?>"><span class="p"></span></a>
+                                                <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
                                             </div>
                                     </div>
                                     <div class="padding10"></div>
@@ -294,7 +294,7 @@ if(isset($_SESSION['product_data']))
           <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">               
                <div class="btn-row nopaddingleft">
-                   <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">SAVE PRODUCT</span></a>
+                   <a href="#" class="action-btn process-btn submit-btn has-tooltip" title="Save Product"><span class="p"></span><span class="t">Confirm</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                    <div class="clear"></div>
                </div>
@@ -330,14 +330,14 @@ jQuery(document).ready(function($){
                        '</div>' +
                        '<div class="grid-cell right">' +
                            '<label>&nbsp;</label>' +
-                           '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                           '<a href="#" class="action-btn delete-btn icon-btn has-tooltip" title="Delete Related Product"><span class="p"></span></a>' +
                        '</div>' +
                        '<div class="clear"></div>' +
                    '</div>');
         jQuery('#ps-related-box .combobox:last').combobox();
         return false;
     });
-    jQuery('#ps-related-box').on('click', '.blue-delete-btn', function(){
+    jQuery('#ps-related-box').on('click', '.delete-btn', function(){
         //if(jQuery(this).parents('.field-row').hasClass('new-row'))
 //        {
 
