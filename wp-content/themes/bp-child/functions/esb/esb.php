@@ -1008,7 +1008,7 @@ class ManageESB
     
     public function getTransactionCountBySuiteId($suite_id)
     {
-        $suite_conf_id = $this->getTestSuiteConfigurationID($new_id);
+        $suite_conf_id = $this->getTestSuiteConfigurationID($suite_id);
         
         $query = ManageESB::$esbdb->prepare("SELECT count(ID) FROM " . $this->table_conversation_metadata . " WHERE TEST_SUITE_CONFIGURATION_ID=%d", $suite_conf_id);
         
