@@ -428,7 +428,7 @@ $ct_email_templates = array(
                             ),
                                                   
             )
-        ),
+        )/*,
         array(            
             'menu'          => 'Payment Processed<br />With Credit Card',            
             'title'         => 'Payment processed by using customer credit cards',
@@ -474,7 +474,7 @@ $ct_email_templates = array(
                             ),
                                                   
             )
-        ),
+        )*/,
         
     ),
     'Forum Section' => array(
