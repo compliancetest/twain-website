@@ -14,6 +14,17 @@ if(is_super_admin())
         global $wpdb, $CPRest;
         
         //Add Default Privileges
+        if(isset($_GET['fix_org_key'])){
+            $results = $wpdb->get_results("SELECT * FROM wp_organisations WHERE organisation_key is null OR organisation_key = '' ");
+            foreach($results as $r){
+                $key = ct_generate_organisation_key();
+                $wpdb->update('wp_organisations', array('organisation_key' => $key), array('id' => $r->id));
+            }
+            die("Completed");
+        }
+
+        
+        //Add Default Privileges
         if(isset($_GET['fix_product_organisation_id'])){
             $results = $wpdb->get_results("SELECT p.ID, pm.organisation_id FROM wp_posts AS p LEFT JOIN wp_organisations_members AS pm ON pm.user_id=p.post_author WHERE p.post_type='product-service'");
             foreach($results as $r){
