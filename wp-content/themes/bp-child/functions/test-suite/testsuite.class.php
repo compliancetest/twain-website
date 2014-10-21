@@ -69,6 +69,8 @@ class TestSuite
 
     public $test_suite_plans = array();
     public $test_suite_plans_order = array();
+
+    public $process = '';
     
     //This will be same for all versions
     var $familyMark = null;
@@ -137,6 +139,9 @@ class TestSuite
             $this->test_suite_plans = explode('|', $this->loadSingleValue('test_suite_plans'));
         }
         $this->test_suite_plans_order = $this->loadSingleValue('test_suite_plans_order');
+
+        $this->process = $this->loadSingleValue('ts_process');
+
         $this->loadConformanceLevel();
         $this->loadTestCases();
         $this->loadRelatedSuites();
