@@ -93,7 +93,7 @@ function process_testsuite_actions()
                 $query = $wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}test_suites WHERE version_major=%d AND family_mark=%d", $versionMajor, $familyMark);
                 $suites = $wpdb->get_var($query);
                 
-                if (count($suites) > 1) {
+                if ($suites > 1) {
                     wp_delete_post($_REQUEST['suite_id']);                
                     addMessage('The test suite was removed successfully.');
                 } else {
@@ -110,19 +110,19 @@ function process_testsuite_actions()
                     
                     if ($subscriptions > 0 || $test_plans > 0 || $transactions > 0) {
                         if ($subscriptions > 0 && $test_plans > 0 && $transactions > 0) {
-                            $message = "The test suite can be deleted because {$transactions} trasnactions, {$subscriptions} subscriptions and {$test_plans} test plans still reference it.";
+                            $message = "The test suite can't be deleted because {$transactions} transactions, {$subscriptions} subscriptions and {$test_plans} test plans still reference it.";
                         } else if($subscriptions > 0 && $test_plans > 0) {
-                            $message = "The test suite can be deleted because {$subscriptions} subscriptions and {$test_plans} test plans still reference it.";
+                            $message = "The test suite can't be deleted because {$subscriptions} subscriptions and {$test_plans} test plans still reference it.";
                         } else if($transactions > 0 && $test_plans > 0) {
-                            $message = "The test suite can be deleted because {$transactions} trasnactions and {$test_plans} test plans still reference it.";
+                            $message = "The test suite can't be deleted because {$transactions} transactions and {$test_plans} test plans still reference it.";
                         } else if ($subscriptions > 0 && $transactions > 0) {
-                            $message = "The test suite can be deleted because {$transactions} trasnactions and {$subscriptions} subscriptions still reference it.";
+                            $message = "The test suite can't be deleted because {$transactions} transactions and {$subscriptions} subscriptions still reference it.";
                         } else if ($subscriptions > 0) {
-                            $message = "The test suite can be deleted because {$subscriptions} subscriptions still reference it.";
+                            $message = "The test suite can't be deleted because {$subscriptions} subscriptions still reference it.";
                         } else if ($test_plans > 0) {
-                            $message = "The test suite can be deleted because {$test_plans} test plans still reference it.";
+                            $message = "The test suite can't be deleted because {$test_plans} test plans still reference it.";
                         } else if ($transactions > 0) {
-                            $message = "The test suite can be deleted because {$transactions} trasnactions still reference it.";
+                            $message = "The test suite can't be deleted because {$transactions} transactions still reference it.";
                         }                        
                         addMessage($message, 'error');
                     } else {
