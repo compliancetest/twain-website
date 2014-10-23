@@ -64,9 +64,9 @@
     <p class="ticket-info" id="ticket-term-info">
         <span><b>Price/hr:</b> <?php echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?></span>
         <span><b>Effort:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
-        <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>
         <span><b>Time to Respond:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
-        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="t">Change</span><span class="simple_tooltip"><span></span>Change Term</span></a>
+        <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>        
+        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="t">Edit</span><span class="simple_tooltip"><span></span>Edit Term</span></a>
         <?php if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id): ?>
         <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="t">Accept</span><span class="simple_tooltip"><span></span>Accept Term</span></a>
         <?php endif; ?>
@@ -74,6 +74,14 @@
     <div id="change-term-contr" style="display: none;">
         <form name="changeTermForm" id="changeTermForm" method="post">
             <div class="term-row">     
+                <?php if(is_super_admin() || $is_support): ?>
+                <span class="item">
+                    <b>Type:</b>
+                    <?php
+                        echo $ct_ticket_category->getCategoriesSelectboxHTML('category', 'ticket-category', $ticket->category_id, null);
+                    ?>
+                </span>  
+                <?php endif; ?>                 
                 <span class="item">
                     <b>Priority:</b>
                     <?php
@@ -92,14 +100,6 @@
                      <span><?php echo $ticket->ttpay?></span> hours
                     <?php endif; ?>
                 </span>
-                <span class="item" id="term_ttresolve">
-                    <b>Time to Resolve:</b>                                        
-                    <?php if($is_support): ?>                     
-                     <input type="text" name="ttresolve" id="ttresolve" value="<?php echo $ticket->ttresolve?>" class="input-text" /> hours
-                    <?php else: ?>
-                     <span><?php echo $ticket->ttresolve?></span> hours                    
-                    <?php endif; ?>
-                </span>
                 <span class="item" id="term_ttresponse">
                     <b>Time to Respond:</b>
                     <?php if($is_support): ?>                     
@@ -108,6 +108,15 @@
                      <span><?php echo $ticket->ttresponse?></span> hours                    
                     <?php endif; ?>                    
                 </span>
+                <span class="item" id="term_ttresolve">
+                    <b>Time to Resolve:</b>                                        
+                    <?php if($is_support): ?>                     
+                     <input type="text" name="ttresolve" id="ttresolve" value="<?php echo $ticket->ttresolve?>" class="input-text" /> hours
+                    <?php else: ?>
+                     <span><?php echo $ticket->ttresolve?></span> hours                    
+                    <?php endif; ?>
+                </span>
+                
             </div>
             <div class="field-row">
                 <label><b>Comments:</b><br />(Optional)</label>

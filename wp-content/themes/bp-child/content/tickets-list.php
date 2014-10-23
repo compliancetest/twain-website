@@ -115,8 +115,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
            <?php
                if($totalItems > 0){
                    foreach($tickets as $ticket)
-                   {
-                       $is_support = ct_is_support( $ticket->id );
+                   {                       
                        $userGroups = groups_get_user_groups( $ticket->customer_id);
                        if(!is_admin() && !is_super_admin() && !groups_is_user_admin_in_any_community( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
                        {
@@ -156,7 +155,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                                 <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo $ticket->customer_name; ?></a>
                             </div>
                             <div class="td td-ticket-org td-sortable">
-                                <?php echo $ticket->organisation; ?>
+                                <?php echo $ticket->organisation1 ? $ticket->organisation1 : $ticket->organisation; ?>
                             </div>                            
                             <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>

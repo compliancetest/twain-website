@@ -39,7 +39,7 @@ function ct_is_support($ticket_id, $support_id = null)
     
     if(!$support_id)
         return false;
-    
+        
     //Getting Ticket Details
     $ticketDetail = getTicketById($ticket_id);
     

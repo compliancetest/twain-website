@@ -100,10 +100,11 @@ function createSupportTicket()
             $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
         }
     }
+    $community_id = get_post_meta($suite_id, 'community_id', true);
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
-        'suite_id' => $suite_id,
+        'community_id' => $community_id,
         'card_id' => !$card_id ? 0 : $card_id,
         'title' => $subject,
         'content' => $content,
@@ -203,10 +204,12 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     
     $customer_ids = getManagedCustomerWPIDs($user_id);
     
-    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, u.display_name AS customer_name, um.meta_value as organisation FROM " . TABLE_TICKETS . " AS t "
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, u.display_name AS customer_name, um.meta_value as organisation, o.organisation_name AS organisation1 FROM " . TABLE_TICKETS . " AS t "
            . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
            . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
            . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
+           . "LEFT JOIN " . $wpdb->prefix . "organisations_members AS m ON m.user_id=t.customer_id "
+           . "LEFT JOIN " . $wpdb->prefix . "organisations AS o ON o.id=m.organisation_id "
            . "LEFT JOIN " . $wpdb->users . " AS u ON t.customer_id=u.ID "
            . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' ";
     
@@ -470,6 +473,11 @@ function changeTicketTerm()
     $newPriority = $ct_ticket_priority->getPriorityById($_POST['priority']);
     $oldPriority = $ct_ticket_priority->getPriorityById($ticket->priority_id);
 
+    if (is_super_admin() || ct_is_support($ticket_id)) {
+        $newCategory = $ct_ticket_category->getCategoryById($_POST['category']);
+        $oldCategory = $ct_ticket_category->getCategoryById($ticket->category_id);
+    }
+    
     $is_changed = false;
     //================================== Customer ==================================
     if($ticket->customer_id == $user_id)
@@ -520,11 +528,17 @@ function changeTicketTerm()
             $message .=  "Status: <i>" . $oldPriority->priority . "</i> -&gt; <i>" . $newPriority->priority . "</i>\r\n";
             $is_changed = true;
         }
+        if($newCategory->id != $ticket->category_id)
+        {
+            $message .=  "Type: <i>" . $oldCategory->category_title . "</i> -&gt; <i>" . $newCategory->category_title . "</i>\r\n";
+            $is_changed = true;
+        }
+        
         
         $ttpay = $_POST['ttpay'];
         $ttresponse = $_POST['ttresponse'];
         $ttresolve = $_POST['ttresolve'];    
-        $price = $category->has_fee ? get_ticket_price( $newPriority->id ) : 0;
+        $price = $newCategory->has_fee ? get_ticket_price( $newPriority->id ) : 0;
         
         if($ticket->ttpay != $ttpay || $ticket->ttresponse != $ttresponse || $ticket->ttresolve != $ttresolve)
         {            
@@ -567,7 +581,7 @@ function changeTicketTerm()
             ct_update_ticket_status($ticket->id, TICKET_STATUS_FEEDBACK, 'Ticket term has been changed.');            
             $ticket->status_id = TICKET_STATUS_FEEDBACK;
         }
-        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * $price, 'price' => $price, 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
+        $wpdb->update(TABLE_TICKETS, array('ttpay' => $ttpay, 'ttresolve' => $ttresolve, 'ttresponse' => $ttresponse, 'total_price' => $ttpay * $price, 'price' => $price, 'term_accepted' => 0, 'priority_id' => $_POST['priority'], 'category_id' => isset($newCategory) ? $newCategory->id : $ticket->category_id, 'term_creator_id' => $user_id, 'support_id' => $ticket->support_id, 'last_updated' => date("Y-m-d H:i:s"), 'status_id' => $ticket->status_id), array('id' => $ticket->id));
     }
     
     $ticket = getTicketById($ticket->id);

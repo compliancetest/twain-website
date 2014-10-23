@@ -22,7 +22,7 @@ class Service
 
     public $service_roles = array();
 
-    public $service_levels = '';
+    public $service_levels = array();
 
     public $service_protocol = '';
 

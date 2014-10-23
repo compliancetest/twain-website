@@ -14,6 +14,16 @@ if(is_super_admin())
         global $wpdb, $CPRest;
         
         //Add Default Privileges
+        if(isset($_GET['fix_ticket_community_id'])){
+            $results = $wpdb->get_results("SELECT * FROM wp_tickets WHERE community_id=0 ");
+            foreach($results as $r){
+                
+                $wpdb->update('wp_tickets', array('community_id' => get_post_meta($r->suite_id, 'community_id', true)), array('id' => $r->id));
+            }
+            die("Completed");
+        }
+
+        //Add Default Privileges
         if(isset($_GET['fix_org_key'])){
             $results = $wpdb->get_results("SELECT * FROM wp_organisations WHERE organisation_key is null OR organisation_key = '' ");
             foreach($results as $r){
