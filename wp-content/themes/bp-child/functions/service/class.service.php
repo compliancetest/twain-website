@@ -20,7 +20,7 @@ class Service
 
     public $service_suite_id = '';
 
-    public $service_roles = '';
+    public $service_roles = array();
 
     public $service_levels = '';
 

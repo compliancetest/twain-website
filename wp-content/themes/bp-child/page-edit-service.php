@@ -79,12 +79,12 @@ $user_test_suites = get_suites_with_claims();
                                     <input type="text" class="input" name="service_name" id="service_name" value="<?php echo $service->service_name?>" />
                                     <span class="focus-tooltip"><span></span>Enter the service name you would like to appear in search results.</span>
                                     <br>
-                                    <label class="default_name" <?php if( $service->service_name ):?>style="display: none;" <?php endif;?>>Default: <span class="process_value">{Process Identifier}</span>:<span class="process_role">{Role}</span></label>
+                                    <label class="default_name" <?php if( $service->service_name ):?>style="display: none;" <?php endif;?>>Default: <span class="process_value">{Process}</span>:<span class="process_role">{Role}</span></label>
                                 </div>
 
                                 <div class="grid-cell styled_select">
                                     <label>Product:</label>
-                                    <select name="product_id" class="required" id="product_id">
+                                    <select name="product_id" class="required select" style="width: 150px" id="product_id">
                                         <option value=""></option>
                                         <?php foreach( $user_products AS $user_product ):?>
                                             <?php
@@ -98,7 +98,7 @@ $user_test_suites = get_suites_with_claims();
 
                                 <div class="grid-cell styled_select has-focus-tooltip">
                                     <label>Test Suite:</label>
-                                    <select name="suite_id" id="suite_id" class="required">
+                                    <select name="suite_id" id="suite_id" class="required select" style="width: 150px">
                                         <option></option>
                                         <?php $suites_in_list = array();?>
                                         <?php foreach( $user_test_suites AS $suite_id ):?>
@@ -133,7 +133,7 @@ $user_test_suites = get_suites_with_claims();
                                 </div>
                                 <div class="grid-cell styled_select has-focus-tooltip">
                                     <label>Type:</label>
-                                    <select name="type" id="type" class="required">
+                                    <select name="type" id="type" class="required select width250">
                                         <option></option>
                                         <option <?php if( isset( $service->service_type ) && $service->service_type == 'ABN' ):?>selected="selected"<?php endif;?> value="ABN" >ABN</option>
                                         <option <?php if( isset( $service->service_type ) && $service->service_type == 'USI' ):?>selected="selected"<?php endif;?> value="USI" >USI</option>
@@ -143,7 +143,7 @@ $user_test_suites = get_suites_with_claims();
                                 <div class="grid-cell styled_select gateways_list gateways" <?php if( empty( $service->service_type ) || $service->service_type == 'ABN' ):?>style="display: none;"<?php endif;?>>
                                     <label>Gateway:</label>
                                     <?php $endpoints = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
-                                    <select name="endpoint_type" class="required" id="gateways">
+                                    <select name="endpoint_type" class="required select width250" id="gateways">
                                         <option></option>
                                         <?php foreach( $endpoints AS $endpoint ):?>
                                             <option <?php if( $service->service_endpoint == $endpoint->gateway_id ):?> selected="selected" <?php endif;?> value="<?php echo $endpoint->gateway_id;?>"><?php echo $endpoint->name;?></option>
@@ -153,7 +153,7 @@ $user_test_suites = get_suites_with_claims();
                                 <div class="grid-cell styled_select gateways_list aliases" <?php if( empty( $service->service_type ) || $service->service_type == 'USI' ):?>style="display: none;"<?php endif;?>>
                                     <label>Alias:</label>
                                     <?php $aliases = $wpdb->get_results(  "SELECT * FROM wp_gateways" );?>
-                                    <select name="endpoint_type_alias" class="required" id="aliases">
+                                    <select name="endpoint_type_alias" class="required select" id="aliases">
                                         <option></option>
                                         <?php foreach( $aliases AS $aliase ):?>
                                             <?php $al = explode( '|', $aliase->alias_list );?>
@@ -170,7 +170,7 @@ $user_test_suites = get_suites_with_claims();
                                 <div class="grid-cell" style="width: 278px;">
                                     <div class="styled_select">
                                         <label>Visibility:</label>
-                                        <select name="visibility">
+                                        <select name="visibility" class="select">
                                             <option <?php if( $service->service_visibility == 'Public' ):?> selected="selected" <?php endif;?> value="Public">Public</option>
                                             <option <?php if( $service->service_visibility == 'Community' ):?> selected="selected" <?php endif;?> value="Community">Community</option>
                                             <option <?php if( $service->service_visibility == 'Private' ):?> selected="selected" <?php endif;?> value="Private">Private</option>
@@ -179,21 +179,21 @@ $user_test_suites = get_suites_with_claims();
                                     </div>
                                     <div class="styled_select" style="display: none;">
                                         <label>Protocol:</label>
-                                        <select name="protocol">
+                                        <select name="protocol" class="select">
                                             <option selected="selected" value="Gateway">Gateway</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="grid-cell has-focus-tooltip">
+                                <div class="grid-cell has-focus-tooltip width60P">
                                     <label>Description:</label>
                                     <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $service->service_description?></textarea>
-                                    <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your service. This information is displayed to users who may be searching ComplianceTest for certified products.</span>
+                                    <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your service. This information is displayed to users who may be searching ComplianceTest for Services with which to test.</span>
                                 </div>
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
                                 <div class="grid-cell has-focus-tooltip">
-                                    <label>Service Owner:</label>
+                                    <label>Owner:</label>
                                     <input type="text" class="input required" name="service_owner" id="service_owner" value="<?php echo $service->service_owner?>" />
                                     <span class="focus-tooltip">Enter the name of the organisation responsible for the service.</span>
                                 </div>
@@ -219,7 +219,10 @@ $user_test_suites = get_suites_with_claims();
                                                     <?php $roles = explode( ';;', trim( $claim->role, ';;' ) );?>
                                                     <?php foreach( $roles AS $role ):?>
                                                         <div class="roles_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
-                                                            <input type="radio" name="roles[]" <?php if(  ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>"><?php echo $role;?>
+                                                            <span class="radio-checkbox-holder">
+                                                                <input type="radio" name="roles[]" <?php if(  ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>">
+                                                                <span><?php echo $role;?></span>
+                                                            </span>
                                                         </div>
                                                     <?php endforeach;?>
                                                 <?php endforeach;?>
@@ -231,7 +234,10 @@ $user_test_suites = get_suites_with_claims();
                                                     <?php foreach( $levels AS $level ):?>
                                                         <?php if( $level == 'Default' ) continue;?>
                                                         <div class="levels_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
-                                                            <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>"><?php echo $level;?>
+                                                            <span class="radio-checkbox-holder">
+                                                                <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>">
+                                                                <span><?php echo $level;?></span>
+                                                            </span>
                                                         </div>
                                                     <?php endforeach;?>
                                                 <?php endforeach;?>
@@ -275,6 +281,11 @@ $user_test_suites = get_suites_with_claims();
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
+            $('#product_description').redactor({
+                  air: true,
+                  minHeight: 80
+                  
+            });
             $('#suite_id, #product_id').on('change', function(){
                 $('.roles_div').hide();
                 $('.levels_div').hide();

@@ -47,7 +47,7 @@ function saveService()
     $product_id = htmlspecialchars($_POST['service_id']);
 
     //Check Product ID duplication
-    $query = $wpdb->prepare("SELECT count(distinct(post_id)) FROM $wpdb->postmeta WHERE post_id != %d AND meta_key='service_uniq_name' AND meta_value=%s", $id, htmlspecialchars($_POST['service_name'].'_'.$_POST['service_id']));
+    $query = $wpdb->prepare("SELECT count(distinct(post_id)) FROM $wpdb->postmeta WHERE post_id != %d AND meta_key='service_uniq_name' AND meta_value=%s", $id, stripslashes_deep($_POST['service_name'].'_'.$_POST['service_id']));
     $count = $wpdb->get_var($query);
     
     if($count > 0)
@@ -68,7 +68,7 @@ function saveService()
     }
     if($isNew)
     {
-        $id = wp_insert_post(array('post_title' => htmlspecialchars($_POST['service_name']), 'post_type'=>'service', 'post_status' => 'publish'), true);
+        $id = wp_insert_post(array('post_title' => $_POST['service_name'], 'post_type'=>'service', 'post_status' => 'publish'), true);
         if(is_wp_error($id))
         {
             addMessage($id->get_error_message(), 'error');            
@@ -76,7 +76,7 @@ function saveService()
         }
         update_post_meta($id, 'service_user_id', get_current_user_id() );
     }else{
-        if(!wp_update_post(array('ID' => $id, 'post_title' =>htmlspecialchars($_POST['service_name']), 'post_name' => sanitize_title(htmlspecialchars($_POST['service_name'])))))
+        if(!wp_update_post(array('ID' => $id, 'post_title' =>$_POST['service_name'], 'post_name' => sanitize_title($_POST['service_name']))))
         {
             addMessage('There was an error while updating the test suite.', true);
             return;
@@ -101,25 +101,25 @@ function saveService()
     $service_visibility = "Community";
     if($_POST['visibility'])
     {
-        $service_visibility = htmlspecialchars( $_POST['visibility'] );
+        $service_visibility =  $_POST['visibility'];
 
     }
 
     update_post_meta($id, 'service_id', $product_id);
     if( $_POST['type'] == 'ABN' ){
-        update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type_alias']));
+        update_post_meta($id, 'service_endpoint', $_POST['endpoint_type_alias']);
     } else{
-        update_post_meta($id, 'service_endpoint', htmlspecialchars($_POST['endpoint_type']));
+        update_post_meta($id, 'service_endpoint', $_POST['endpoint_type']);
     }
 
     //Update Product Name ID Map Table on ESB
 //    $esb = new ManageESB();
 //    $esb->saveProductInfo($id, $product_id, $_POST['product_name']);
-    update_post_meta($id, 'service_uniq_name', htmlspecialchars($_POST['service_name'].'_'.$_POST['service_id']));
-    update_post_meta($id, 'service_name', htmlspecialchars($_POST['service_name']));
-    update_post_meta($id, 'service_type', htmlspecialchars($_POST['type']));
-    update_post_meta($id, 'service_description', htmlspecialchars($_POST['product_description']));
-    update_post_meta($id, 'service_owner', htmlspecialchars($_POST['service_owner']));
+    update_post_meta($id, 'service_uniq_name', $_POST['service_name'].'_'.$_POST['service_id']);
+    update_post_meta($id, 'service_name', $_POST['service_name']);
+    update_post_meta($id, 'service_type', $_POST['type']);
+    update_post_meta($id, 'service_description', stripslashes_deep($_POST['product_description']));
+    update_post_meta($id, 'service_owner', $_POST['service_owner']);
     update_post_meta($id, 'service_visibility', $service_visibility);
     update_post_meta($id, 'service_product_id', intval( $_POST['product_id'] ) );
     update_post_meta($id, 'service_suite_id', intval( $_POST['suite_id'] ) );

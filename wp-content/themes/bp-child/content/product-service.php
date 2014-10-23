@@ -61,10 +61,16 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     'post_type' => 'service',
                     'posts_per_page' => -1,
                     'author' => get_current_user_id(),
-                    'meta_key' => 'service_product_id',
-                    'meta_value' => $product->id,
+                    'meta_query' => array(
+                        array(
+                            'key' => 'service_product_id',
+                            'value' => $product->id,
+                        )
+                    )
+                    
                 );
                 $services = get_posts($args);
+                
             ?>
             <div class="tabs-contr">
                 <ul class="tab-nav">
@@ -96,8 +102,8 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                             <dl class="column related_products">
                                 <?php foreach ($services AS $s): ?>
                                     <?php $serv = new Service( $s->ID ); $serv->load();?>
-                                    <dt><?php echo $serv->service_owner ?>:</dt>
-                                    <dd><a href="<?php echo get_permalink( $serv->id )?>"><?php echo get_the_title( $serv->id ) ?></a></dd>
+                                    <dt><a href="<?php echo get_permalink( $serv->id )?>"><?php echo get_the_title( $serv->id ) ?></a></dt>
+                                    <dd><label>Owner:</label> <?php echo $serv->service_owner ?></dd>
                                 <?php endforeach; ?>
                             </dl>
                         </div>
