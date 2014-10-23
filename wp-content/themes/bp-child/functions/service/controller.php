@@ -128,7 +128,7 @@ function saveService()
     update_post_meta($id, 'service_protocol', $_POST['protocol'] );
 
     $cloud_search = new CloudSearch();
-    $cloud_search->cloud_search_update_service( $id );
+    var_dump($cloud_search->cloud_search_update_service( $id ));die;
 
     addMessage('Product / Service was saved successfully');
     wp_redirect(get_permalink($id));
