@@ -66,15 +66,16 @@ get_header();
                                        <li>Process: <strong><?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?></strong></li>
                                        <li>Role: <strong><?php echo implode( ', ', $serv->service_roles );?></strong></li>
 <!--                                       <li>ServiceID: <strong>--><?php //echo $serv->service_type.':'.$serv->service_id;?><!--</strong></li>-->
-                                       <li>Product: <a href="<?php echo get_permalink( $serv->service_product_id );?>"><strong><?php echo get_the_title( $serv->service_product_id );?></strong></a></li>
+                                       <li>Type: <strong><?php echo $serv->service_type;?></strong></li>
+                                       <li>Product: <a href="<?php echo get_permalink( $serv->service_product_id );?>"><strong><?php echo get_the_title( $serv->service_product_id ) . ' v'.get_post_meta( $serv->service_product_id, 'product_version', true );?></strong></a></li>
                                    </ul>
                                </div>
-                               <?php if(can_delete_product_and_service( $serv->id )){ ?>
+                               <?php /*if(can_delete_product_and_service( $serv->id )){ ?>
                                <a class="gbh-btn gbh-btn-delete right delete-product-link has-tooltip" href="#" title="Delete">Delete</a>
                                <?php } ?>
                                <?php if(can_edit_product_and_service( $serv->id ) ){ ?>
                                     <a class="gbh-btn gbh-btn-edit right has-tooltip" href="/edit-service?id=<?php echo $serv->id?>" title="Edit">Edit</a>
-                               <?php } ?>
+                               <?php }*/ ?>
 
                                <div class="clear"></div>
                            </div>

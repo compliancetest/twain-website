@@ -115,7 +115,7 @@ if(isset($_SESSION['product_data']))
                                <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
                            </div>
                            <div class="has-focus-tooltip">
-                               <label>Product Owner:</label>                    
+                               <label>Owner:</label>                    
                                <?php 
                                    if(is_super_admin()) { 
                                        $organisations = ct_get_all_organisations();
@@ -132,7 +132,7 @@ if(isset($_SESSION['product_data']))
                                <span class="focus-tooltip"><span></span>The owner of your product or service. It is set to the same as the organisation name from your profile.</span>
                            </div>
                        </div> 
-                       <div class="grid-cell has-focus-tooltip">
+                       <div class="grid-cell has-focus-tooltip width60P">
                             <label>Description:</label>
                             <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $product->descrition?></textarea>
                             <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
@@ -239,8 +239,12 @@ if(isset($_SESSION['product_data']))
                                     'post_type' => 'service',
                                     'posts_per_page' => -1,
                                     'author' => get_current_user_id(),
-                                    'meta_key' => 'service_product_id',
-                                    'meta_value' => $product->id,
+                                    'meta_query' => array(
+                                        array(
+                                            'key' => 'service_product_id',
+                                            'meta_value' => $product->id,
+                                        )
+                                    )
                                 );
                                 $posts = get_posts($args);
                             ?>
@@ -310,6 +314,12 @@ if(isset($_SESSION['product_data']))
 </div>
 <script type="text/javascript">
 jQuery(document).ready(function($){
+    $('#product_description').redactor({
+          air: true,
+          minHeight: 80
+          
+    });
+    
     jQuery('#add-related-product').click(function(){
         jQuery('#ps-related-box .btn-row').before('<div class="field-row new-row">' + 
                        '<div class="grid-cell width55P">' +

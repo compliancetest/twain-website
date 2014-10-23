@@ -3480,11 +3480,19 @@ background-image: url(../images/white_gloss.png);
     float: left;
     width: 15%;
 }
+.product-page #tab_related_services .related_products dt{
+    float: left;
+    width: 24%;
+    font-weight: bold;
+}
 .product-page .related_products dd{
     display: block;
     margin: 0 0 0 15%;
 }
-
+.product-page #tab_related_services .related_products dd label{
+    display: inline-block;
+    width: 8%;
+}
 .product-page .product_services dt,
 .product-page .product_services dd{
     display: inline-block;
@@ -8822,4 +8830,13 @@ input.inactive_s{
 
 .search-result-list-wrapper .pagination-wrapper{
     margin: 20px 0 0 0;
+}
+.radio-checkbox-holder{
+    line-height: 24px;
+    display: inline-block;
+}
+.radio-checkbox-holder input{
+    position: relative;
+    top: 3px;
+    margin-right: 5px;
 }
