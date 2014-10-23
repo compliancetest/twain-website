@@ -40,12 +40,16 @@ if( isset( $_GET['download']) ){
                 <div class="search-filters-box">
                     <ul class="search-filters-list clearfix">
                         <li class="first">
-                            <label for="implementation-type-filter">Implementation Type</label>
+                            <label for="implementation-type-filter">Type</label>
                             <select name="type" id="implementation-type-filter" class="select">
                                 <option>All</option>
                                 <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
                                     <?php foreach ($results['facets']['type']['buckets'] AS $v): ?>
-                                        <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['type'] ) && $_GET['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value']; ?></option>
+                                        <?php if ($v['value'] == 'Web Service'):?>
+                                            <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['type'] ) && $_GET['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo 'Service'; ?></option>
+                                        <?php else: ?>
+                                            <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['type'] ) && $_GET['type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo 'Product'; ?></option>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php endif;?>
                             </select>
@@ -156,7 +160,7 @@ if( isset( $_GET['download']) ){
                 <table class="search-result-list">
                     <thead>
                     <tr>
-                        <th class="first">Product / Service Name</th>
+                        <th class="first">Product / Service</th>
                         <th>Version</th>
                         <th>Owner</th>
                         <th>Type</th>
