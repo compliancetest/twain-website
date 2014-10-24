@@ -44,8 +44,8 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 <?php } ?>
                 <div class="product-info">
                     <div class="product-identifiers">
-                        <div class="product-name">Service Name: <strong><?php echo $service->service_name;?></strong></div>
-                        <div class="product-id">(Service ID: <strong><?php echo $service->service_type.':'.$service->service_id;?></strong>)</div>
+                        <div class="product-name">Name: <strong><?php echo $service->service_name;?></strong></div>
+                        <div class="product-id">(ID: <strong><?php echo $service->service_type.':'.$service->service_id;?></strong>)</div>
                     </div>
                     <?php
                         $suite = new TestSuite( $service->service_suite_id );

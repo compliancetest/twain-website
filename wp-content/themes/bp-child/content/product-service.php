@@ -40,14 +40,14 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                                 <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                             <?php } ?>
                         </div>
-                        <div class="product-name">Product Name: <strong><?php echo $product->name.' v'.get_post_meta( $product->id, 'product_version', true ); ?></strong></div>
-                        <div class="product-id">(Product ID: <strong><?php echo $product->product_id; ?>)</strong></div>
+                        <div class="product-name">Name: <strong><?php echo $product->name.' v'.get_post_meta( $product->id, 'product_version', true ); ?></strong></div>
+                        <div class="product-id">(ID: <strong><?php echo $product->product_id; ?>)</strong></div>
                     </div>
                     <ul class="product-attributes">
                         <li>Owner: <strong><?php echo $product->owner; ?></strong>
                         <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
-                        <li>Product Version: <strong><?php echo $product->version; ?></strong></li>
-                        <li>Type: <strong><?php echo $product->type; ?></strong></li>
+                        <li>Version: <strong><?php echo $product->version; ?></strong></li>
+                        <!--<li>Type: <strong><?php echo $product->type; ?></strong></li>-->
                         <?php if($product->accessURL): ?>
                             <li>Access URL: <strong><a href="<?php echo get_valid_full_url($product->accessURL)?>" target="_blank"><?php echo $product->accessURL; ?></a></strong></li>
                         <?php endif; ?>

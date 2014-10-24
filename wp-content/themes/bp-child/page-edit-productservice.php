@@ -96,7 +96,7 @@ if(isset($_SESSION['product_data']))
                    </div>
                    <div class="field-row">
                        <div class="grid-cell has-focus-tooltip">                           
-                           <label>Product ID:</label>
+                           <label>ID:</label>
                            <input type="text" class="input" name="product_id" id="product_id" value="<?php echo $product->product_id?>" />
                            <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. If a Product ID is not provided, we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})</span>
                        </div>                   
