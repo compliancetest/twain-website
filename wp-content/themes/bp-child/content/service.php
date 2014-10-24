@@ -52,7 +52,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                         $suite->load();
                     ?>    
                     <ul class="product-attributes">
-                        <li>Service Owner: <strong><a href="<?php echo get_permalink( $service->service_product_id );?>"><?php echo get_the_title( $service->service_product_id );?></a></strong></li>
+                        <li>Owner: <strong><?php echo $service->service_owner?></strong></li>
                         <li>Process: <strong><?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) ) ;?></strong></li>
                         <li>Role: <strong><?php echo implode( ', ', $service->service_roles );?></strong></li>
                         <li>Level: <strong><?php echo implode( ', ', $service->service_levels );?></strong></li>

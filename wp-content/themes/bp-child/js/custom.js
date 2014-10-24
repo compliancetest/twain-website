@@ -464,10 +464,10 @@ jQuery(document).ready(function($) {
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');
     })
     
-    jQuery('.has-focus-tooltip').on('mouseenter', ' .redactor_textarea', function(){
+    jQuery('.has-focus-tooltip').on('click', ' .redactor_textarea', function(){
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeIn('fast');        
     })
-    jQuery('.has-focus-tooltip').on('mouseleave', ' .redactor_textarea', function(){
+    jQuery('.has-focus-tooltip').on('focusout', ' .redactor_textarea', function(){
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');        
     })
     

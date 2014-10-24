@@ -44,7 +44,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                         <div class="product-id">(Product ID: <strong><?php echo $product->product_id; ?>)</strong></div>
                     </div>
                     <ul class="product-attributes">
-                        <li>Product Owner: <strong><?php echo $product->owner; ?></strong>
+                        <li>Owner: <strong><?php echo $product->owner; ?></strong>
                         <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
                         <li>Product Version: <strong><?php echo $product->version; ?></strong></li>
                         <li>Type: <strong><?php echo $product->type; ?></strong></li>
@@ -59,8 +59,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
             <?php
                 $args = array(
                     'post_type' => 'service',
-                    'posts_per_page' => -1,
-                    'author' => get_current_user_id(),
+                    'posts_per_page' => -1,                    
                     'meta_query' => array(
                         array(
                             'key' => 'service_product_id',
@@ -69,6 +68,14 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     )
                     
                 );
+                if (is_user_logged_in()) {
+                    $args['author'] = get_current_user_id();
+                } else {
+                    $args['meta_query'][] = array(
+                        'key' => 'service_visibility',
+                        'value' => 'Public',
+                    );
+                }
                 $services = get_posts($args);
                 
             ?>

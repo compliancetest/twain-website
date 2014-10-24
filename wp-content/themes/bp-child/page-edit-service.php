@@ -113,8 +113,29 @@ $user_test_suites = get_suites_with_claims();
                                             } else{
                                                 continue;
                                             }
+                                            if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ) {
+                                                continue;
+                                            }
                                         ?>
-                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" data-process="<?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>" <?php if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ):?>style="display: none;"<?php endif;?>><?php echo $suite->title;?></option>
+                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" data-process="<?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>"><?php echo $suite->title;?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                    <?php $suites_in_list = array();?>
+                                    <select id="all_suites_id" class="required select" style="display: none">
+                                        <?php foreach( $user_test_suites AS $suite_id ):?>
+                                            <?php
+                                                $suite = new TestSuite( $suite_id->suite_id );
+                                                $suite->load();
+                                                if( ! $suite->id ){
+                                                    continue;
+                                                }
+                                                if( ! in_array( $suite_id->suite_id.$suite_id->product_id, $suites_in_list ) ){
+                                                    array_push( $suites_in_list, $suite_id->suite_id.$suite_id->product_id );
+                                                } else{
+                                                    continue;
+                                                }
+                                            ?>
+                                            <option value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" data-process="<?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>"><?php echo $suite->title;?></option>
                                         <?php endforeach;?>
                                     </select>
                                     <span class="focus-tooltip" style="left: 110%"><span></span>Test suite name.</span>
@@ -286,7 +307,29 @@ $user_test_suites = get_suites_with_claims();
                   minHeight: 80
                   
             });
-            $('#suite_id, #product_id').on('change', function(){
+            $('#product_id').on('change', function(){
+                $('#suite_id option:gt(0)').remove();
+                
+                $('#all_suites_id option').each(function(){
+                    if ($(this).attr('data-productid') == $('#product_id').val()) {
+                        $('#suite_id').append($(this).clone());
+                    }
+                })
+                
+                $('.roles_div').hide();
+                $('.levels_div').hide();
+                if( $( this).val() && $('#product_id').val() ){
+                    $('.roles_div').filter( '[data-suiteid="'+$( this).val()+'_'+ $('#product_id').val() +'"]').show();
+                    $('.levels_div').filter( '[data-suiteid="'+$( this).val()+'_'+ $('#product_id').val() +'"]').show();
+                }
+                if( $(this).val() ){
+                    $('#service_process').val( $('#suite_id option:selected').attr('data-process') );
+                } else{
+                    $('#service_process').val( '' );
+                }
+                change_values();
+            });
+            $('#suite_id').on('change', function(){
                 $('.roles_div').hide();
                 $('.levels_div').hide();
                 if( $( this).val() && $('#product_id').val() ){
