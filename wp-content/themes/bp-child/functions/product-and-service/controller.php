@@ -170,7 +170,7 @@ function saveProductService()
     update_post_meta($id, 'product_type', htmlspecialchars($_POST['product_type']));
     update_post_meta($id, 'product_version', htmlspecialchars($_POST['product_version']));
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));
-    update_post_meta($id, 'product_description', htmlspecialchars($_POST['product_description']));
+    update_post_meta($id, 'product_description', stripslashes_deep($_POST['product_description']));
     
     update_post_meta($id, 'product_visibility', $product_visibility);
 

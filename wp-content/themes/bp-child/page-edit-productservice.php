@@ -117,7 +117,7 @@ if(isset($_SESSION['product_data']))
                            <div class="has-focus-tooltip">
                                <label>Owner:</label>                    
                                <?php 
-                                   if(is_super_admin()) { 
+                                   if(is_super_admin()) {
                                        $organisations = ct_get_all_organisations();
                                ?>
                                <select name="product_owner" id="product_owner" class="select">
