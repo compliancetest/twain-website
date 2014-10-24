@@ -28,13 +28,14 @@ if(!$message){
     exit;
 }
 
-$message_content = !$message->S3_PAYLOAD_LOCATION ? $message->PAYLOAD : ct_read_xml_from_amazon_s3($message->S3_PAYLOAD_LOCATION);
+$message_content = $message->PAYLOAD;
+//$message_content = !$message->S3_PAYLOAD_LOCATION ? $message->PAYLOAD : ct_read_xml_from_amazon_s3($message->S3_PAYLOAD_LOCATION);
 
 if($mode != 'html'){    
     header("Content-type: application/xml");    
     echo $message_content;
 }else{
-    if($message->S3_PAYLOAD_CONTENT_LENGTH > get_option('s3_xml_max_size'))
+    if(0 && $message->S3_PAYLOAD_CONTENT_LENGTH > get_option('s3_xml_max_size'))
     {
         if( isset($_GET['download'])) {
             //Download File
