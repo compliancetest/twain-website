@@ -211,7 +211,7 @@ class CloudSearch {
         var_dump( $this->_sendDataToSearchDomain( $data ) );
 
         //step 4 upload products
-        $data = array();
+        /*$data = array();
         $args = array(
             'post_type' => 'product-service',
             'posts_per_page' => -1
@@ -236,7 +236,7 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'product_'.$product->id, 'fields' => $temp_data ) );
         }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        var_dump( $this->_sendDataToSearchDomain( $data ) );*/
 
         //step 5 upload services
         $data = array();
@@ -309,7 +309,7 @@ class CloudSearch {
         var_dump( $this->_sendDataToSearchDomain( $data ) );
 
         //delete products
-        $data = array();
+       /* $data = array();
         $args = array(
             'post_type' => 'product-service',
             'posts_per_page' => -1
@@ -318,7 +318,7 @@ class CloudSearch {
         foreach( $posts AS $post ){
             array_push( $data, array( 'type' => 'delete', 'id' => 'product_'.$post->ID ) );
         }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        var_dump( $this->_sendDataToSearchDomain( $data ) );*/
 
         //delete services
         $data = array();
