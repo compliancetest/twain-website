@@ -19,6 +19,8 @@ if(!defined('RECAPTCHA_PUBLIC_KEY'))
 if(!defined('RECAPTCHA_PRIVATE_KEY'))
     define('RECAPTCHA_PRIVATE_KEY', get_option('recaptcha_private_key'));
 
+if(!defined('SEARCH_RESULTS_LIMIT'))
+    define('SEARCH_RESULTS_LIMIT', 10);
 
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
     define('DEFAULT_MAILCHIMP_LIST_ID', get_option('mailchimp_all_list_id'));

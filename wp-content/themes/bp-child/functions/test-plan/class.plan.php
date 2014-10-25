@@ -9,6 +9,8 @@ class TestPlan
     
     var $suite_id = null;
     
+    var $creator_id = null;
+    
     var $product_id = null;
     
     var $level = null;
@@ -47,6 +49,7 @@ class TestPlan
             $this->level = cp_explode($row->level);
             $this->role = cp_explode($row->role);
             $this->created_date = $row->created_date;
+            $this->creator_id = $row->creator_id;
             $this->organisation_id = $row->organisation_id;
             $this->organisation_subscription_id = $row->organisation_subscription_id;
             $this->product_name = $row->productName;

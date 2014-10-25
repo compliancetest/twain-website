@@ -304,11 +304,12 @@ function makePlan()
         $nId = $wpdb->insert($wpdb->prefix . "test_plans", array(
             'suite_id'    =>  $suiteID,
             'organisation_subscription_id'    =>  $user_subscription->parent_id,
+            'creator_id'    =>  $user_id,
             'product_id'    =>  $productID,
             'level'    =>  cp_implode($_POST['level']),
             'role'    =>  cp_implode($_POST['role']),
             'created_date'    =>  date('Y-m-d H:i:s')
-        ), array("%d", "%d", "%d", "%s", "%s", "%s"));
+        ), array("%d", "%d", "%d","%d", "%s", "%s", "%s"));
         $cloud_search->cloud_search_update_test_plan( $nId );
 
     }else{  //Edit Claim

@@ -8795,6 +8795,7 @@ input.inactive_s{
     padding: 6px 15px 7px 15px;
     text-align: center;
     white-space: nowrap;
+    position: relative;
 }
 
 .search-result-list tbody{
@@ -8839,4 +8840,29 @@ input.inactive_s{
     position: relative;
     top: 3px;
     margin-right: 5px;
+}
+.search-result-list thead th .sort{
+    display: inline-block;
+    width: 9px;
+    height: 6px;
+    background: url(../images/order1.png) no-repeat 0 -6px;
+    position: absolute;
+    top: 13px;
+    right: 4px;
+    display: none;
+}
+.search-result-list thead th a.desc .sort{
+    background-position: 0 0;
+}
+.search-result-list thead th a:hover .sort{
+    display: block;
+}
+.search-result-list thead th a.current .sort{
+    display: block;
+}
+.search-result-list thead th a.asc:hover .sort{
+    background-position: 0 0;
+}
+.search-result-list thead th a.desc:hover .sort{
+    background-position: 0 -6px;
 }

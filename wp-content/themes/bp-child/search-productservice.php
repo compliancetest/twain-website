@@ -11,11 +11,19 @@ $baseURL = get_permalink();
 
 $cloud_search = new CloudSearch();
 $params = array();
+$params1 = array();
 if( $_GET ){
     foreach( $_GET AS $k => $v ){
         $params[] = urlencode($k) . '=' . urlencode($v);
+        if ($k != 'orderby' && $k != 'order') {
+            $params1[] = urlencode($k) . '=' . urlencode($v);
+        }
     }
 }
+
+$orderby = isset($_GET['orderby']) ? $_GET['orderby'] : 'name';
+$order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
 $results = $cloud_search->search( $_GET );
@@ -110,7 +118,7 @@ if( isset( $_GET['download']) ){
                             </select>
                         </li>
                         <li>
-                            <label for="test-status-filter">Test Status</label>
+                            <label for="test-status-filter">Status</label>
                             <select name="status" id="test-status-filter" class="select">
                                 <option>All</option>
                                 <?php if( is_array( $results['facets']['owner']['buckets'] ) ):?>
@@ -121,7 +129,7 @@ if( isset( $_GET['download']) ){
                             </select>
                         </li>
                         <li>
-                            <label>Claim Date Range</label>
+                            <label>Date</label>
                             <div class="date-filter filter-from">
                                 <input type="text" class="input datepicker" placeholder="From" name="date_from" <?php if( isset( $_GET['date_from'] ) ):?> value="<?php echo $_GET['date_from'];?>" <?php endif;?>/>
                             </div>
@@ -136,12 +144,12 @@ if( isset( $_GET['download']) ){
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="page" />
         </form>
-
         <?php if( $results['hits']['found'] > 0):?>
             <div class="search-results-count clearfix">
                 <p class="search-results-count-label">
-                    Showing <?php echo $results['hits']['start'] + 1 ;?> - <?php echo $results['hits']['found'] < ( $results['hits']['start'] + 1 ) * 25 ?  $results['hits']['found'] : ( $results['hits']['start'] + 1 ) * 25; ?> of <b><?php echo $results['hits']['found']?></b> Results
+                    Showing <?php echo $results['hits']['start'] + 1 ;?> - <?php echo $results['hits']['start'] +  count($results['hits']['hit']) ?> of <b><?php echo $results['hits']['found']?></b> Results
                     <?php if(isset($_GET['q']) && ! empty( $_GET['q'] ) ){ ?> for "<b><?php echo $_GET['q']?></b>" <?php } ?>
                 </p>
                 <?php if( $results['hits']['found'] > 0 ): ?>
@@ -160,16 +168,18 @@ if( isset( $_GET['download']) ){
                 <table class="search-result-list">
                     <thead>
                     <tr>
-                        <th class="first">Product / Service</th>
+                        <th class="first">                            
+                            <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=name&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'name'){ ?>class="current <?php echo $order?>"<?php } ?>>Product / Service <span class="sort"></span></a>
+                        </th>
                         <th>Version</th>
-                        <th>Owner</th>
+                        <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=owner&order=<?php echo $orderby == 'owner' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'owner'){ ?>class="current <?php echo $order?>"<?php } ?>>Owner <span class="sort"></span></a></th>
                         <th>Type</th>
-                        <th>Test Suite</th>
+                        <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=test_suite&order=<?php echo $orderby == 'test_suite' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'test_suite'){ ?>class="current <?php echo $order?>"<?php } ?>>Test Suite <span class="sort"></span></a></th>
                         <th>Role</th>
                         <th>Level</th>
-                        <th>Test Status</th>
+                        <th>Status</th>
                         <th>Test Type</th>
-                        <th class="last">Claim Date</th>
+                        <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'date'){ ?>class="current <?php echo $order?>"<?php } ?>>Date <span class="sort"></span></a></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -205,7 +215,7 @@ if( isset( $_GET['download']) ){
                         $args = array(
                             'base'         =>  get_permalink() . '%_%?',
                             'format'       => 'page/%#%',
-                            'total'        => ceil( $results['hits']['found'] / 25 ),
+                            'total'        => ceil( $results['hits']['found'] / SEARCH_RESULTS_LIMIT ),
                             'current'      => $page,
                             'show_all'     => False,
                             'end_size'     => 5,
