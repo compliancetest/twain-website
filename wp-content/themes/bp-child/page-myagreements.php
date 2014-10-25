@@ -66,7 +66,7 @@ get_header();
                                        <li>Process: <strong><?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?></strong></li>
                                        <li>Role: <strong><?php echo implode( ', ', $serv->service_roles );?></strong></li>
 <!--                                       <li>ServiceID: <strong>--><?php //echo $serv->service_type.':'.$serv->service_id;?><!--</strong></li>-->
-                                       <li><strong><?php echo $serv->service_type.':'.$serv->service_id ?></strong></li>
+                                       <li><?php echo $serv->service_type.':'.$serv->service_id ?></li>
                                        <li>Product: <a href="<?php echo get_permalink( $serv->service_product_id );?>"><strong><?php echo get_the_title( $serv->service_product_id ) . ' v'.get_post_meta( $serv->service_product_id, 'product_version', true );?></strong></a></li>
                                    </ul>
                                </div>

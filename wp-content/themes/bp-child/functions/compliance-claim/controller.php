@@ -155,7 +155,7 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
 
     if(!$claimID) //Make Claim
     {
-        $nId = $wpdb->insert(TABLE_CLAIM, array(
+        $wpdb->insert(TABLE_CLAIM, array(
             'product_id'    =>  $productID,
             'organisation_id'    =>  $organisation_id,
             'suite_id'    =>  $suite_id,
@@ -171,7 +171,12 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
         ));
         
         $claimID = $wpdb->insert_id;
-
+        
+        if (!$claimID) {
+            addMessage($wpdb->last_error, 'error');
+            return false;
+        }
+        
 
         $wpdb->update(TABLE_CLAIM, array(
             'claim_id'    =>  getClaimID($wpdb->insert_id, $suite_id)
@@ -188,13 +193,7 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
             'last_updated'    =>  date('Y-m-d H:i:s')
         ), array('id' => $claim->id));
         
-        $nId = $claim->id;
         $cloud_search->cloud_search_update_claim( $claim->id );
-    }
-    if(!$nId)
-    {
-        addMessage($wpdb->last_error, 'error');
-        return false;
     }
     
     //Update DPF

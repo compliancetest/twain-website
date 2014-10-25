@@ -23,7 +23,7 @@ class CloudSearch {
         if( $full_results ){
             $str['size'] = 10000;
         } else{
-            $str['size'] = 25;
+            $str['size'] = SEARCH_RESULTS_LIMIT;
         }
         $l = '';
         $range_checked = false;
@@ -32,6 +32,9 @@ class CloudSearch {
         } else{
             $l .= "  ( term field=visibility 1 )";
         }
+        
+        $str['sort'] = 'name asc';                
+        
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
                 if( ! empty( $v ) ) {
@@ -39,8 +42,12 @@ class CloudSearch {
                 }
             }else if( $k == 'page' ){
                 if( $v != 1 ){
-                    $str['start'] = ( ( --$v * 25 ) ) ;
+                    $str['start'] = ( ( --$v * SEARCH_RESULTS_LIMIT ) ) ;
                 }
+            }else if( $k == 'orderby' ){
+                    $str['sort'] = $v . " " . (isset($params['order']) ? $params['order'] : 'asc');
+            }else if( $k == 'order' ){
+                    
             }else if( $k == 'date_from'  || $k == 'date_to' ){
                 if( ! $range_checked ) {
                     if (isset($params['date_from']) && ! empty( $params['date_from'] )) {
@@ -105,6 +112,7 @@ class CloudSearch {
             } else{
                 $levels = array( $test_plan->level );
             }
+            
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
             $groups = groups_get_user_groups( $post_author );
             $temp_data = array(
@@ -127,6 +135,7 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
         }
+        
         var_dump( $this->_sendDataToSearchDomain( $data ) );
         // step 2 - upload claims
 
@@ -135,17 +144,17 @@ class CloudSearch {
         foreach( $claims AS $claim ){
             $product = new ProductAndService( $claim->product_id );
             $product->load();
-            $claim->level = trim( $claim->level, ';;' );
+            $claim->conformance_level = trim( $claim->conformance_level, ';;' );
             $claim->role = trim( $claim->role, ';;' );
             if( strpos( $claim->role, ';;' ) ){
                 $roles = explode( ';;', $claim->role );
             } else{
                 $roles = array( $claim->role );
             }
-            if( strpos( $claim->level, ';;' ) ){
-                $levels = explode( ';;', $claim->level );
+            if( strpos( $claim->conformance_level, ';;' ) ){
+                $levels = explode( ';;', $claim->conformance_level );
             } else{
-                $levels = array( $claim->level );
+                $levels = array( $claim->conformance_level );
             }
             $groups = groups_get_user_groups( $post_author );
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
