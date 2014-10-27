@@ -658,7 +658,7 @@ function createClaimPDF($claim_id, $planID )
                         $message = $esb->getMessageEnvelope( $data['msg_id'] );
                         $fileName = getcwd() . '/wp-content/uploads/' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '.xml';
                         $myfile = fopen($fileName, "w");
-                        fwrite($myfile, $message);
+                        fwrite($myfile, $message->PAYLOAD);
                         fclose($myfile);
                         $pdf->Annotation(0, $rowsCounter, 0, 0, $scId, array('Subtype' => 'FileAttachment', 'Name' => get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'], 'FS' => $fileName));
                         $pdf->Bookmark('"' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '"', 0, 0, $rowsCounter, 'B', array(128, 0, 255), 0, '*' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '.xml');
