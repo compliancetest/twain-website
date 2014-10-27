@@ -520,18 +520,29 @@ function getUserAllCustomerESBIDs($user_id = null)
         $user_id = get_current_user_id();
     
     if(!is_super_admin())
-    {                      
-        $query = $wpdb->prepare("SELECT DISTINCT(s.parent_id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
-                        WHERE 
-                            s.user_id = bm.user_id AND bm.is_confirmed=1 
-                            AND
-                            (bm.user_id=%d OR bm.group_id 
-                                IN 
-                                ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
-                        ", $user_id, $user_id);
-        $s_ids = $wpdb->get_col($query);
+    {   
+        $org_ids = array();
+        
+        $user_membership = ct_get_user_organisation_membership($user_id);
+        if ($user_membership) {
+            $org_ids[] = $user_membership->organisation_id;
+        }
+                           
+        if ( ct_is_group_admin_or_support() ){
+            $orgs = ct_get_user_viewable_organisations();
+            foreach( $orgs AS $org ){
+                $org_ids[] = $org->id;
+            }
+        }
+        
+        if (!$org_ids) {
+            return array();
+        }
+        
+        $query = "SELECT id AS CUSTOMER_ID FROM {$wpdb->prefix}organisations_subscriptions WHERE  organisation_id IN (" . implode(", ", $org_ids) . ")";
+        
     }else{
-        $query = "SELECT DISTINCT(s.parent_id) as CUSTOMER_ID FROM {$wpdb->prefix}users_subscriptions AS s ";
+        $query = "SELECT DISTINCT(s.parent_id) as CUSTOMER_ID FROM {$wpdb->prefix}organisations_subscriptions AS s ";
     }
     
     $ids = $wpdb->get_col($query);
