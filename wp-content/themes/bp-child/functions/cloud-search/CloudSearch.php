@@ -318,7 +318,9 @@ class CloudSearch {
         var_dump( $this->_sendDataToSearchDomain( $data ) );
 
         //delete products
+
         /*$data = array();
+
         $args = array(
             'post_type' => 'product-service',
             'posts_per_page' => -1

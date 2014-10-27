@@ -1271,22 +1271,24 @@ function generate_and_download( $data ){
         'Test Type',
         'Claim Date'
     ));
-    foreach( $data['hits']['hit'] as $row ){
-            $row_data = $row['fields'];
-            $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
-            $tempArray = array(
-                $row_data['name'],
-                $row_data['version'],
-                $row_data['owner'],
-                $row_data['type'],
-                $row_data['test_suite'],
-                ! empty( $row_data['role'] )  ? implode( ', ', $row_data['role'] ) : '',
-                ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
-                $row_data['status'],
-                $row_data['test_type'],
-                $claim_date != '1970-01-01' ? $claim_date : ''
-            );
-            fputcsv( $outstream, $tempArray );
+    if (is_array($data['hits']['hit'])) {
+        foreach( $data['hits']['hit'] as $row ){
+                $row_data = $row['fields'];
+                $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
+                $tempArray = array(
+                    $row_data['name'],
+                    $row_data['version'],
+                    $row_data['owner'],
+                    $row_data['type'],
+                    $row_data['test_suite'],
+                    ! empty( $row_data['role'] )  ? implode( ', ', $row_data['role'] ) : '',
+                    ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
+                    $row_data['status'],
+                    $row_data['test_type'],
+                    $claim_date != '1970-01-01' ? $claim_date : ''
+                );
+                fputcsv( $outstream, $tempArray );
+        }
     }
     fclose($outstream);
     exit();

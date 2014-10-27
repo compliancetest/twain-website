@@ -202,6 +202,7 @@ function saveProductService()
         }
     }
     $cloud_search = new CloudSearch();
+
     //$cloud_search->cloud_search_update_product( $id );
 
     addMessage('Product was saved successfully');
@@ -251,6 +252,7 @@ function deleteProductService()
     wp_delete_post($id);
 
     $cloud_search = new CloudSearch();
+
     //$cloud_search->cloud_search_delete_item( $id, 'product' );
 
     addMessage("The product was deleted!");
