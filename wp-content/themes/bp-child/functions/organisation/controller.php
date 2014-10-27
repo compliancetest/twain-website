@@ -556,7 +556,6 @@ class CT_Organisation_Controller
         global $wpdb;
         
         $query = $wpdb->insert($wpdb->prefix . "organisations_members", array('organisation_id' => $organisation_id, 'user_id' => $user_id, 'is_admin' => 0, 'created_date' => date("Y-m-d H:i:s")), array("%d", "%d", "%d", "%s"));
-        $wpdb->query($query);
         
         //Add Default Privilege
         $this->add_default_privileges($user_id, $organisation_id);

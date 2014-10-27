@@ -219,13 +219,13 @@ class ManageESB
                 $query = " SELECT id FROM {$wpdb->prefix}organisations_subscriptions ";
             } elseif( ct_is_group_admin_or_support() ){
                 $query = '';
-                $subs = ct_get_user_viewable_organisations();
-                $subs_ids = array();
-                foreach( $subs AS $sub ){
-                    $subs_ids[] = $sub->id;
+                $orgs = ct_get_user_viewable_organisations();
+                $org_ids = array();
+                foreach( $orgs AS $org ){
+                    $org_ids[] = $org->id;
                 }
-                if( $subs_ids ){
-                    $query = "SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE id IN( ".implode(',', $subs_ids)." ) ";
+                if( $org_ids ){
+                    $query = "SELECT DISTINCT(id) FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( ".implode(',', $org_ids)." ) ";
                 }
             } else {
                 $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id IN( SELECT DISTINCT(organisation_id) FROM {$wpdb->prefix}organisations_subscriptions WHERE user_id = %d ) ", $user_id );
@@ -234,7 +234,7 @@ class ManageESB
                 if( is_super_admin() ) {
                     $query .= $wpdb->prepare(" WHERE organisation_id=%d", $organisation_id);
                 } elseif( ct_is_group_admin_or_support() ){
-                    if( $subs_ids ){
+                    if( $org_ids ){
                         $query .= $wpdb->prepare(" AND organisation_id=%d", $organisation_id);
                     }
                 } else{
