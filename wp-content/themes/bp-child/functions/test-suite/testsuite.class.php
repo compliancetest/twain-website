@@ -419,7 +419,23 @@ class TestSuite
         }
         
         $case_query = new WP_Query($args);
+        
+        $case_query->post = get_post($this->id);
+        
+        //Add Order by Scenaro 
+        $case_query->set('suppress_filters', false);
+        
+        
+        add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
+        add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
+        add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
+        
         $this->testCases = $case_query->get_posts();
+        
+        //Remove Filters
+        remove_filter('posts_join_paged', 'add_scenario_join_query');
+        remove_filter('posts_orderby', 'add_scenario_orderby_query');
+        remove_filter('posts_fields_request', 'add_scenario_fields_query');
         
         return $this->testCases;
     }

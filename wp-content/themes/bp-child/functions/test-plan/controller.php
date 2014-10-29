@@ -87,9 +87,9 @@ function certifyPlan()
                 wp_redirect($return);
             } else {
                 //Delete Plan
-                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans WHERE id = %d", $planID ) );
+//                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans WHERE id = %d", $planID ) );
                 //Delete Exclude Plan ID
-                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
+//                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
                 
                 addMessage('The plan was certified successfully');
                 wp_redirect($return_success);

@@ -630,7 +630,14 @@ function createClaimPDF($claim_id, $planID )
             $message_cols = count($testCases[$i]->messages);
             
             if($i == 0) {
-                $general_cases_table_html .= '<td class="test-scenario" rowspan="' . (count($testCases) + ($message_cols > 1 ? ($message_cols - 1) : 0)) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>';
+                $totalRows = count($testCases);
+                //Getting Total Rows
+                for($k=0; $k < count($testCases) ; $k++) {
+                    if (isset($testCases[$k]->messages) && count($testCases[$k]->messages) > 1) {
+                        $totalRows += count($testCases[$k]->messages) -1;
+                    }
+                }
+                $general_cases_table_html .= '<td class="test-scenario" rowspan="' . $totalRows . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>';
             }
             
             if (isset($testCases[$i]->messages)) {                
