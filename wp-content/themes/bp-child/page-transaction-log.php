@@ -475,14 +475,14 @@ get_header();
                                                        <input type="text" value="<?php echo $message->PART_ID; ?>" readonly="readonly">
                                                    </div>
                                                    <div class="td td-message-view">
-                                                      <a href="<?php echo "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
-                                                      <!--<a href="<?php echo $message->S3_PAYLOAD_LOCATION ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> -->
+                                                      <!--<a href="<?php echo "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> -->
+                                                      <a href="<?php echo $message->S3_PAYLOAD_LOCATION ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
                                                       | 
-                                                      <?php /*if($message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
+                                                      <?php if($message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
                                                         <a href="<?php echo $message->S3_PAYLOAD_LOCATION?>" class="html-view-error">HTML</a>
-                                                      <?php } else {*/ ?>
+                                                      <?php } else { ?>
                                                         <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
-                                                      <?php //} ?>
+                                                      <?php } ?>
                                                        <br>
                                                        <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
                                                    </div>
