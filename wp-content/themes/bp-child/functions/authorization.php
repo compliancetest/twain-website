@@ -358,6 +358,40 @@ function can_maintain_product_and_service($user_id = null, $product_id = null)
     return true;
 }
 
+function can_maintain_service($user_id = null, $service_id = null)
+{
+    global $wpdb;
+        
+    if(!$user_id)
+        $user_id = get_current_user_id();
+    
+    if (!$user_id) {
+        return false;
+    }
+    
+    $user_membership = ct_get_user_organisation_membership($user_id);
+    
+    if (!$user_membership) {
+        return false; 
+    }
+    
+    //Check User Privilege
+    if (!ct_check_user_privilege($user_id, $user_membership->organisation_id, "MAINTAIN_PRODUCTS")) {
+        return false;
+    }
+    
+/*    if ($service_id) {
+        //Getting Product Organisation
+        $product_org_id = get_post_meta($service_id, "product_organisation_id", true);
+        
+        if ($product_org_id != $user_membership->organisation_id) {
+            return false;
+        }
+    }*/
+    
+    return true;
+}
+
 /******************************************************************** Product / Service ***************************************************************/
 function can_create_product_and_service($user_id = null)
 {

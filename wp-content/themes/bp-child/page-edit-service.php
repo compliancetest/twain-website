@@ -6,21 +6,6 @@
 
 $psID = isset($_GET['id']) ? $_GET['id'] : null;
 
-if( ($psID != null && !can_edit_product_and_service($psID)) || ($psID == null && !can_create_product_and_service()) )
-{
-    if(!$psID)
-        addMessage('Sorry, you are not allowed to create a Service.', 'error');
-    else
-        addMessage('Sorry, you are not allowed to edit the Service', 'error');
-
-    wp_redirect("/");
-    exit;
-}
-if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
-    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
-    wp_redirect("/");
-    exit;
-}
 $isNew = true;
 
 $service = new Service( $psID );
@@ -29,7 +14,13 @@ if( ! $service->id )
     $isNew = true;
 else
     $isNew = false;
-
+    
+if (($isNew || !is_super_admin()) && !can_maintain_service(null, $service->id)) {    
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+        
+    wp_redirect("/");
+    exit;
+}
 get_header();
 
 $myServices = getUserServices(null, $isNew ? array() : array($psID));
