@@ -257,7 +257,7 @@ function createClaimPDF($claim_id, $planID )
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
     // Set auto page breaks
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_FOOTER);
+    $pdf->SetAutoPageBreak(TRUE, 20);
 
     // Set image scale factor
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -588,6 +588,7 @@ function createClaimPDF($claim_id, $planID )
             if ($is_excluded ) {
                 if (!isset($excluded_cases[$scId]))
                     $excluded_cases[$scId] = array();
+                $testCases[$i]->excluded_reason = $is_excluded->reason;
                 $excluded_cases[$scId][] = $testCases[$i];
             } else if($is_optional != 'Yes') {
                 if (!isset($general_cases[$scId]))
@@ -615,7 +616,7 @@ function createClaimPDF($claim_id, $planID )
                     <td class="test-case">' . get_the_title($testCases[$i]->ID) . '</td>
                     <td class="issued">' . formatDate(get_post_meta($testCases[$i]->ID ,'published', true)) . '</td>
                     <td class="test-intent">' . $t_desc . '</td>
-                    <td class="test-reason">' .  stripcslashes( $is_excluded->reason ) . '</td>
+                    <td class="test-reason">' .  apply_filters('the_content', $testCases[$i]->excluded_reason ) . '</td>
                 </tr>';
         }
     }
