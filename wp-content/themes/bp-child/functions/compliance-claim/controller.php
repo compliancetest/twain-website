@@ -682,10 +682,14 @@ function createClaimPDF($claim_id, $planID )
     if( $general_cases_table_html != '' ) {        
         $general_cases_table_html = $cases_table_css . '<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">' . $cases_table_header . $general_cases_table_html . '</table>';
         
-        $pdf->writeHTMLCell(0, 0, '', '', $general_cases_table_html, 0, 1, 0, true, '', true);        
-        $pdf->AddPage();        
+        $pdf->writeHTMLCell(0, 0, '', '', $general_cases_table_html, 0, 1, 0, true, '', true);                
     }
     if( $excluded_cases_table_html .= '' ) {
+        
+        if( $general_cases_table_html != '' ) {        
+            $pdf->AddPage();
+        }
+        
         $excluded_cases_table_html = $cases_table_css . '<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">' . $excluded_cases_table_header . $excluded_cases_table_html . '</table>';
         $pdf->writeHTMLCell(0, 0, '', '', $excluded_cases_table_html, 0, 1, 0, true, '', true);
     }
