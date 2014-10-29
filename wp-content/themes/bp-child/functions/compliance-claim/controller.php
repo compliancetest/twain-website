@@ -257,7 +257,7 @@ function createClaimPDF($claim_id, $planID )
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
     // Set auto page breaks
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_FOOTER);
 
     // Set image scale factor
     $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -622,7 +622,8 @@ function createClaimPDF($claim_id, $planID )
     
     //General Cases
     foreach ($general_cases as $scId => $testCases) {
-        for($i=0; $i < count($testCases); $i++) {
+        
+        for($i=0; $i < count($testCases) ; $i++) {
             $rString = get_post_meta($testCases[$i]->ID, 'test_intent_description', true);
             $general_cases_table_html .= '<tr class="' . ($idx % 2 == 0 ? 'odd' : 'even') . '">';
             
@@ -684,10 +685,11 @@ function createClaimPDF($claim_id, $planID )
         
         $pdf->writeHTMLCell(0, 0, '', '', $general_cases_table_html, 0, 1, 0, true, '', true);                
     }
-    if( $excluded_cases_table_html .= '' ) {
+    
+    if( $excluded_cases_table_html != '' ) {
         
         if( $general_cases_table_html != '' ) {        
-            $pdf->AddPage();
+            $pdf->AddPage();        
         }
         
         $excluded_cases_table_html = $cases_table_css . '<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">' . $excluded_cases_table_header . $excluded_cases_table_html . '</table>';
