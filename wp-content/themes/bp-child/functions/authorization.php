@@ -380,14 +380,15 @@ function can_maintain_service($user_id = null, $service_id = null)
         return false;
     }
     
-/*    if ($service_id) {
+    if ($service_id) {
         //Getting Product Organisation
-        $product_org_id = get_post_meta($service_id, "product_organisation_id", true);
+        $product_id = get_post_meta($service_id, "service_product_id", true);
+        $product_org_id = get_post_meta($product_id, "product_organisation_id", true);
         
         if ($product_org_id != $user_membership->organisation_id) {
             return false;
         }
-    }*/
+    }
     
     return true;
 }
