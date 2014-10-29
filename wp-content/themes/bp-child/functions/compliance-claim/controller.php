@@ -625,12 +625,14 @@ function createClaimPDF($claim_id, $planID )
         for($i=0; $i < count($testCases); $i++) {
             $rString = get_post_meta($testCases[$i]->ID, 'test_intent_description', true);
             $general_cases_table_html .= '<tr class="' . ($idx % 2 == 0 ? 'odd' : 'even') . '">';
+            
+            $message_cols = count($testCases[$i]->messages);
+            
             if($i == 0) {
-                $general_cases_table_html .= '<td class="test-scenario" rowspan="' . count($testCases) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>';
+                $general_cases_table_html .= '<td class="test-scenario" rowspan="' . (count($testCases) + ($message_cols > 1 ? ($message_cols - 1) : 0)) . '"><strong>' . $testCases[$i]->scenarioCode . ':</strong><br>' . $testCases[$i]->scenarioDescription . '</td>';
             }
             
-            if (isset($testCases[$i]->messages)) {
-                $message_cols = count($testCases[$i]->messages);
+            if (isset($testCases[$i]->messages)) {                
             
                 $general_cases_table_html .= '<td class="test-case" rowspan="' . $message_cols . '">' . (isset($testCases[$i]->ID) ? get_the_title($testCases[$i]->ID) : '') . '</td>
                                             <td class="issued" rowspan="' . $message_cols . '">' . formatDate(get_post_meta($testCases[$i]->ID, 'published', true)) . '</td>
