@@ -137,7 +137,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><?php echo $agreement->status;?></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
-                                <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
+                                <a href="#">View</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
                             </td>
                         </tr>
                     <?php endforeach;?>
