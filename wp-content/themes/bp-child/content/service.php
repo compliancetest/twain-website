@@ -134,10 +134,12 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner  ;?></td>
                             <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_levels ) : implode( ', ', $agreement->responder_service->service_levels )  ;?></td>
                             <td class="centered"><?php echo $agreement->entry_status == 'Responder' ? implode( ', ', $agreement->requester_service->service_roles ) : implode( ', ', $agreement->responder_service->service_roles )  ;?></td>
-                            <td class="centered"><?php echo $agreement->status;?></td>
+                            <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
+                                <?php if(strtolower($agreement->status) == 'verified') { ?>
                                 <a href="#">View</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php endforeach;?>
