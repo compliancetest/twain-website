@@ -60,7 +60,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                         <li>Protocol: <strong><?php echo $service->service_protocol ;?></strong></li>
                         <?php if( $service->service_type == 'USI' ):?>
                             <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $service->service_endpoint ) );?>
-                            <li>End-Point: <strong><?php echo $gateway->name;?></strong></li>
+                            <li>End-Point: <strong><a href="<?php echo $gateway->test_url;?>"><?php echo $gateway->name;?></a></strong></li>
                         <?php else:?>
                             <li>Alias: <strong><?php echo $service->service_endpoint;?></strong></li>
                         <?php endif;?>
@@ -137,11 +137,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
-                                <?php if (strtolower($agreement->status) == 'verified') { ?>
                                 <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
-                                <?php } else { ?>
-                                -
-                                <?php } ?>
                             </td>
                         </tr>
                     <?php endforeach;?>
