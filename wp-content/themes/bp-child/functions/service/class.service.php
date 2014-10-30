@@ -101,7 +101,9 @@ class Service
      *
      */
     public static function can_request_e2e( $user_id, $service_id ){
-        if( count( $services = Service::get_user_services( $user_id, $service_id ) ) > 0 ){
+        $services = Service::get_user_services( $user_id, $service_id );
+        
+        if ( is_array($services) && count( $services ) > 0 ) {
             $service = new Service( $service_id );
             $service->load();
             $can_request = false;

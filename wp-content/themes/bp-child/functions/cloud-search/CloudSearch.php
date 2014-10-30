@@ -408,17 +408,17 @@ class CloudSearch {
         }
         $product = new ProductAndService( $claim->product_id );
         $product->load();
-        $claim->level = trim( $claim->level, ';;' );
+        $claim->conformance_level = trim( $claim->conformance_level, ';;' );
         $claim->role = trim( $claim->role, ';;' );
         if( strpos( $claim->role, ';;' ) ){
             $roles = explode( ';;', $claim->role );
         } else{
             $roles = array( $claim->role );
         }
-        if( strpos( $claim->level, ';;' ) ){
-            $levels = explode( ';;', $claim->level );
+        if( strpos( $claim->conformance_level, ';;' ) ){
+            $levels = explode( ';;', $claim->conformance_level );
         } else{
-            $levels = array( $claim->level );
+            $levels = array( $claim->conformance_level );
         }
         $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
         $groups = groups_get_user_groups( $post_author );
