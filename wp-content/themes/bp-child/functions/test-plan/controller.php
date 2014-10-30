@@ -310,6 +310,9 @@ function makePlan()
             'role'    =>  cp_implode($_POST['role']),
             'created_date'    =>  date('Y-m-d H:i:s')
         ), array("%d", "%d", "%d","%d", "%s", "%s", "%s"));
+        
+        $nId = $wpdb->insert_id;
+        
         $cloud_search->cloud_search_update_test_plan( $nId );
 
     }else{  //Edit Claim
