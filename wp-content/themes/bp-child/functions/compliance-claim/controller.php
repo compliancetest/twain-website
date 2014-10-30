@@ -104,6 +104,8 @@ function deleteClaim()
     {
         addMessage($wpdb->last_error, 'error');
     }else{
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_delete_item( $claimID, 'claim' );
         addMessage("The claim was deleted.");
     }
     wp_redirect($return);
