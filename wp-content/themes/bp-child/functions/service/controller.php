@@ -177,3 +177,20 @@ function deleteService()
     wp_redirect($redirectUrl);
     exit;
 }
+
+function getServiceContactList($service_id)
+{
+    global $wpdb;
+    
+    $product_id = get_post_meta($service_id, 'service_product_id', true);
+    $org_id = get_post_meta($product_id, 'product_organisation_id', true);
+    
+    $query = $wpdb->prepare("SELECT DISTINCT(u.ID), u.user_email FROM {$wpdb->prefix}organisations_members AS om 
+                INNER JOIN {$wpdb->prefix}users_privileges AS up ON up.user_id=om.user_id
+                INNER JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id AND p.code='MAINTAIN_PRODUCTS'
+                INNER JOIN {$wpdb->users} AS u ON u.ID=om.user_id WHERE om.organisation_id=%d", $org_id);
+    
+    $results = $wpdb->get_results($query);
+    
+    return $results;
+}
