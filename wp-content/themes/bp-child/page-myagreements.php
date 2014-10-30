@@ -53,9 +53,6 @@ get_header();
             <?php if( $user_services ):?>
                 <?php foreach( $user_services AS $user_service ):?>
                     <?php $serv = new Service( $user_service->ID ); $serv->load();?>
-                    <?php
-                        $contactList = getServiceContactList($user_service->ID);
-                    ?>
                        <div class="grid-box table-box grid-box-opened">
                            <div class="grid-box-header">
                                <div class="grid-box-header-title left" style="font-size: 12px;">
@@ -132,17 +129,6 @@ get_header();
                                                    <div class="td td-end-point"><a href="<?php echo $gateway->test_url;?>"><?php echo $gateway->name;?></div>
                                                <?php endif;?>
                                                <div class="td td-contact">
-                                                   <?php
-                                                        foreach($contactList as $u) {
-                                                            if (strlen( $u->user_email ) > 22): ?>
-                                                               <div class="has-tooltip" title="<?php echo $u->user_email; ?>">
-                                                                   <a href="mailto:<?php echo $u->user_email;?>"><?php echo $u->user_email = substr($u->user_email,0,22)."..."; ?></a>
-                                                               </div>
-                                                           <?php else: ?>
-                                                               <a href="mailto:<?php echo $u->user_email;?>"><?php echo $u->user_email; ?></a>
-                                                           <?php endif; 
-                                                        }
-                                                    ?> 
                                                    <?php $user_id = ( $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_user_id : $agreement->responder_service->service_user_id ); ?>
                                                    <?php $email = get_user_by( 'id', $user_id )->data->user_email; ?>
                                                    <?php if (strlen( $email ) > 22): ?>
@@ -429,8 +415,6 @@ get_header();
             $( this).prev( '.uploaded-files li a').html( '' );
             $( this).hide();
         });
-        
-        fixTdHeight('#my-agreements .tbody');
     })
 })(jQuery)
     
