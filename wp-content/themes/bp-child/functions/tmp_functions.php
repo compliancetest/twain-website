@@ -450,10 +450,12 @@ if(is_super_admin())
         if( isset( $_GET['cloud_search_upload'] ) ){
             $cloudSearch = new CloudSearch();
             $cloudSearch->_initial_upload();
+            die("completed");
         }
         if( isset( $_GET['cloud_search_delete'] ) ){
             $cloudSearch = new CloudSearch();
             $cloudSearch->_delete_all_items();
+            die("completed");
         }
         
     }

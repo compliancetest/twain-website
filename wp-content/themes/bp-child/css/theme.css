@@ -4663,7 +4663,7 @@ span.button_sign {
     color: #fff;
 }
 .status-verified{
-    color: #369817;
+    color: #369817 !important;
     text-shadow: 0 1px 0 rgba(255,255,255,.75);
 }
 .status-certified{

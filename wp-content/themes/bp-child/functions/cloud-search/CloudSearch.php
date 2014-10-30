@@ -291,6 +291,19 @@ class CloudSearch {
     public  function _delete_all_items(){
         global $wpdb;
 
+        //Remove All Results
+        $results = $this->search( array(), true );
+        
+        $data = array();
+        
+        foreach( $results['hits']['hit'] as $row ) {
+            array_push( $data, array( 'type' => 'delete', 'id' =>$row['id'] ) );
+        }
+        
+        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        
+        die("Completed"); 
+        
         // delete test plans
         $data = array();
         $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans" );
