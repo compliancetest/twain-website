@@ -159,8 +159,8 @@ get_header();
                                                         <?php if( $agreement->entry_status == 'Responder' ):?>
                                                             <a href="#e2e-test-request-<?php echo $agreement->id;?>" rel="custom-popup">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Reject</a>
 
-                                                           <div id="e2e-test-request-<?php echo $agreement->id;?>" class="popup-box e2e-test-request-popup" style="display: none; width: 329px;">
-                                                               <div class="popup-box-header radius6 noradiusbottom">End-to-End Test Request</div>
+                                                           <div id="e2e-test-request-<?php echo $agreement->id;?>" class="popup-box e2e-test-request-popup" style="display: none; width: 450px;">
+                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Acceptance</div>
                                                                <form name="generate_agreement_form" id="e2e-test-request-<?php echo $agreement->id;?>-form" action="/" method="get">
                                                                    <div class="popup-box-content">
                                                                        <div class="form-horizontal">
@@ -174,16 +174,33 @@ get_header();
                                                                                        <select name="responder_profiles" class="responder_profiles select input-field">
                                                                                            <option></option>
                                                                                            <?php foreach( $responder_profiles AS $responder_profile ):?>
-                                                                                               <option value="<?php echo $responder_profile->id;?>"><?php echo $responder_profile->profile_name;?></option>
+                                                                                                <?php
+                                                                                                    $instanceObj = json_decode(base64_decode($responder_profile->content));                                                                                                                
+                                                                                                ?>
+                                                                                               <option value="<?php echo $responder_profile->id;?>">
+                                                                                                    <?php 
+                                                                                                        echo $responder_profile->profile_name;
+                                                                                                        if($instanceObj->Profile->Version)
+                                                                                                        {
+                                                                                                            $version = array();
+                                                                                                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                                                                                                            {
+                                                                                                                $version[] = $v;
+                                                                                                            }
+                                                                                                            echo " v" . implode(".", $version);
+                                                                                                        }
+                                                                                                    ?>
+                                                                                               </option>
                                                                                            <?php endforeach;?>
                                                                                        </select>
-                                                                                       <span class="info-icon has-tooltip" title="Some info"></span>
+                                                                                       <span class="info-icon has-tooltip" title="Optional data to be used during testing representing the state of your service"></span>
                                                                                    </div>
                                                                                </div>
                                                                                <div class="field-row">
                                                                                    <label>Message:</label>
                                                                                    <div class="field-box">
-                                                                                       <textarea name="agreement_message" rows="5" cols="20" class="agreement_message textarea"></textarea>
+                                                                                       <textarea name="agreement_message" rows="5" cols="20" class="agreement_message textarea input-field"></textarea>
+                                                                                       <span class="info-icon has-tooltip" title="Text to be included in an email accepting the end-to-end test request"></span>
                                                                                    </div>
                                                                                </div>
                                                                                <?php echo wp_nonce_field( 'accept-agreement', '_psnonce');?>
