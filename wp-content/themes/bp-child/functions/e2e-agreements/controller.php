@@ -327,6 +327,20 @@ function process_agreement_actions()
         exit;
     } else if( wp_verify_nonce($action, 'get-agreement-info-popup' ) ){
         get_agreement_info_popup();
+    }else if( wp_verify_nonce($action, 'get-agreement-id' ) ){
+        $requester_service_id = $_POST['requester_service'];
+        $responder_service_id = $_POST['responder_service'];
+        
+        $new_id = get_post_meta($requester_service_id, 'service_id', true) . "." . get_post_meta($responder_service_id, 'service_id', true);
+        
+        //Check Duplication
+        $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}e2e_agreement WHERE str_id=%s", $new_id);
+        $seq = $wpdb->get_var($query);
+        
+        if( $seq > 0 )
+            $new_id .= "." . str_pad($seq, 2, 0, STR_PAD_LEFT);
+        echo $new_id;
+        exit;
     }
 }
 

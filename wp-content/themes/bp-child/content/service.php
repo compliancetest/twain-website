@@ -137,7 +137,13 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
+<<<<<<< HEAD
                                 <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
+=======
+                                <?php if(strtolower($agreement->status) == 'verified') { ?>
+                                <a href="#">View</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
+                                <?php } ?>
+>>>>>>> issue4376
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -151,7 +157,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
     </div>
 </div>
 
-<div id="e2e-test-request" class="popup-box e2e-test-request-popup" style="display: none; width: 329px;">
+<div id="e2e-test-request" class="popup-box e2e-test-request-popup" style="display: none; width: 450px;">
     <div class="popup-box-header radius6 noradiusbottom">End-to-End Test Request</div>
     <form name="generate_agreement_form" id="generate_agreement_form" action="">
         <div class="popup-box-content">
@@ -165,13 +171,13 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <div class="field-row">
                                 <label>Agreement ID:</label>
                                 <div class="field-box">
-                                    <input type="text" value="" id="agreement_id" name="agreement_id" class="input input-field" data-serviceid="<?php echo $service->service_id;?>">
-                                    <span class="info-icon has-tooltip" title="Some info"></span>
+                                    <input type="text" value="" id="agreement_id" name="agreement_id" class="input input-field" readonly="readonly" data-serviceid="<?php echo $service->service_id;?>">
+                                    <span class="info-icon has-tooltip" title="Identifier for proposed test agreement"></span>
                                 </div>
                             </div>
                             <input type="hidden" name="responder_service" value="<?php echo $service->id;?>">
                             <div class="field-row">
-                                <label>My Service:</label>
+                                <label>Service:</label>
                                 <div class="field-box">
                                     <select name="requester_service" id="requester_service" class="select input-field">
                                         <option></option>
@@ -188,31 +194,48 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                                             <?php endforeach;?>
                                         <?php endif;?>
                                     </select>
-                                    <span class="info-icon has-tooltip" title="Some info"></span>
+                                    <span class="info-icon has-tooltip" title="Which of your services to be tested"></span>
                                 </div>
                             </div>
                             <div class="field-row">
-                                <label>My Profile:</label>
+                                <label>Profile:</label>
                                 <div class="field-box">
                                     <select name="requester_profiles" id="requester_profiles" class="select input-field">
                                         <option></option>
                                         <?php foreach( $requester_profiles AS $requester_profile ):?>
-                                            <option value="<?php echo $requester_profile->id;?>"><?php echo $requester_profile->profile_name;?></option>
+                                        <?php
+                                            $instanceObj = json_decode(base64_decode($requester_profile->content));                                                                                                                
+                                        ?>
+                                            <option value="<?php echo $requester_profile->id;?>">
+                                                <?php 
+                                                    echo $requester_profile->profile_name;
+                                                    
+                                                    if($instanceObj->Profile->Version)
+                                                    {
+                                                        $version = array();
+                                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
+                                                        {
+                                                            $version[] = $v;
+                                                        }
+                                                        echo " v" . implode(".", $version);
+                                                    }
+                                                ?>
+                                            </option>
                                         <?php endforeach;?>
                                     </select>
-                                    <span class="info-icon has-tooltip" title="Some info"></span>
+                                    <span class="info-icon has-tooltip" title="Optional data to be used during testing representing the state of your service"></span>
                                 </div>
                             </div>
                             <div class="field-row">
                                 <label>Message:</label>
                                 <div class="field-box">
                                     <textarea name="agreement_message" id="agreement_message" cols="30" rows="10" class="textarea input-field"></textarea>
+                                    <span class="info-icon has-tooltip" title="Text to be included in an email requesting an end-to-end test"></span>
                                 </div>
                             </div>
                         <?php echo wp_nonce_field( 'save-agreement', '_psnonce');?>
-                        <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
                     <?php else:?>
-                        In order to request an end-to-end test agreement, you must have already defined a complementary service. A complementary service is one that has been tested against the same test suite, to at least the same conformance level, and with a complementary (ie opposite) role.
+                        In order to request an end-to-end test agreement, you must have already defined a complementary service. A complementary service is one that has been tested against the same test suite, and with a complementary (ie opposite) role.
                     <?php endif;?>
                 </div>
         </div>
@@ -220,8 +243,10 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             <div class="loading loading-with-text radius6 loading_agreement"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
             <?php if( $can_request ):?>
                 <a href="#" class="action-btn process-btn submit-btn submit_agreement"><span class="p"></span><span class="t">Confirm</span></a>
+                <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+            <?php else:?>
+                <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
             <?php endif;?>
-            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>
@@ -229,9 +254,22 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
 </div>
 <script>
     jQuery(document).ready(function($){
-        $('#requester_service').on('change', function(){
+        $('#requester_service').on('change', function(){                       
+            //Getting Agreements ID
             if( $('#requester_service').val() ){
-                $('#agreement_id').val( $('#agreement_id').data( 'serviceid') + '.' + $('option:selected', this).attr('data-serviceid') );
+                $('#e2e-test-request .loading').show();
+                var requester_service = $('#requester_service').val();
+                var responder_service = '<?php echo $service->id?>';
+                
+                $.ajax({
+                    url: '<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('get-agreement-id')?>',
+                    data: {requester_service: requester_service, responder_service: responder_service},
+                    type: 'post',
+                    success: function(rsp) {
+                        $('#e2e-test-request .loading').hide();
+                        $('#agreement_id').val( rsp );    
+                    }
+                })
             } else{
                 $('#agreement_id').val( '' );
             }
@@ -250,13 +288,16 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             jQuery('.case_exclude_reason').removeClass('input-error');
             if( ! jQuery('#requester_service').val() ){
                 jQuery('#requester_service').addClass('select-error');
-                return false;
+                is_valid = false;
             }
             if( ! jQuery('#agreement_message').val() ){
-                jQuery('#agreement_message').addClass('select-error');
+                jQuery('#agreement_message').addClass('textarea-error');
+                is_valid = false;
+            }
+            if(!is_valid){
                 return false;
             }
-            jQuery('.loading_agreement').show();
+            jQuery('.loading b').html('PROCESSING').show();
             jQuery('#generate_agreement_form').submit();
         });
     });
