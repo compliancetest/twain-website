@@ -370,7 +370,7 @@ get_header();
 <script type="text/javascript">
 (function($){
     $(document).ready(function(){
-
+        fixTdHeight($('#my-agreements .table-box'));
         jQuery('.save_append_agreement').on( 'click', function(){
             var is_valid = true;
             var form_id = $(this).data('id');
