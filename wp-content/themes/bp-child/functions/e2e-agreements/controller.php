@@ -107,7 +107,7 @@ function process_agreement_actions()
             $wpdb->update('wp_e2e_agreement',
                 array(
                     'status'     => 'Claimed',
-                    'scope'      => implode( ';;', @$_REQUEST['scope'] ),
+                    'scope'      => @implode( ';;', @$_REQUEST['scope'] ),
                     $file_field  => $content,
                     $name_field  => $fileName,
                     $type_field  => $fileType
@@ -247,7 +247,7 @@ function process_agreement_actions()
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
         $cloud_search = new CloudSearch();
-        $cloud_search->cloud_search_update_agreement( $agreement_id );
+        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
 
         addMessage('Success');
         wp_redirect('/agreements/');

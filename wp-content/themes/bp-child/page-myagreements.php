@@ -87,7 +87,7 @@ get_header();
                                    <div class="td td-type">Role</div>
                                    <div class="td td-protocol">Identifier</div>
                                    <div class="td td-end-point">End Point</div>
-                                   <div class="td td-contact">Contact</div>
+                                   <div class="td td-contact">Contact(s)</div>
                                    <div class="td td-status">Status</div>
                                    <div class="td td-actions">Actions</div>
                                </div>
@@ -157,7 +157,7 @@ get_header();
                                                                                ?>
                                                                                <input type="hidden" name="" value="<?php echo $service->id;?>">
                                                                                <div class="field-row">
-                                                                                   <label>My Profile:</label>
+                                                                                   <label>Profile:</label>
                                                                                    <div class="field-box">
                                                                                        <select name="responder_profiles" class="responder_profiles select input-field">
                                                                                            <option></option>
@@ -301,7 +301,7 @@ get_header();
                                                            <a href="#agreement-confirm-popup-<?php echo $agreement->id;?>" rel="agree-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Fail</a>
 
                                                            <div class="popup-box claim-popup-box" id="agreement-confirm-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm</div>
+                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Claim</div>
                                                                <form id="agreement-confirm-popup-<?php echo $agreement->id;?>-form" action="/" method="post" enctype="multipart/form-data">
                                                                    <div class="popup-box-content">
                                                                        <p>Please upload screenshots from your business system as an audit record of the successful test.</p>
@@ -313,6 +313,7 @@ get_header();
                                                                            </ul>
                                                                        </div>
                                                                    </div>
+                                                                   <input type="hidden" value="1" id="respond">
                                                                    <div class="popup-box-footer radius6 noradiustop">
                                                                        <div class="loading loading-with-text radius6"><div><b>CONFIRMING AGREEMENT</b><span>Please wait...</span></div></div>
                                                                        <a href="#" class="action-btn process-btn agreement_claim_confirm" data-id="agreement-confirm-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
@@ -424,7 +425,7 @@ get_header();
                 $('#'+ form_id + ' .popup-box-footer').prepend('<p class="message error">Please select file to upload.</p>');
                 return false;
             }
-            if( $( '#' + form_id + ' .claim-test-scopes-list input[type="checkbox"]:checked').length == 0 ){
+            if( $( '#' + form_id + ' .claim-test-scopes-list input[type="checkbox"]:checked').length == 0 && $('#respond').val() != '1' ){
                 $('#'+ form_id + ' .popup-box-footer').prepend('<p class="message error">You need to select at least one on the test scope.</p>');
                 return false;
             }

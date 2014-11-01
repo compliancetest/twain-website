@@ -138,7 +138,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
                                 <?php if(strtolower($agreement->status) == 'verified') { ?>
-                                <a href="#">View</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
+                                <a href="#e2e-test-soon" rel="agree-popup">View</a>&nbsp;|&nbsp;<a href="#e2e-test-soon" rel="agree-popup">Download</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -151,6 +151,22 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             </tbody>
         </table>
     </div>
+</div>
+
+<div id="e2e-test-soon" class="popup-box" style="display: none; width: 300px;">
+    <div class="popup-box-header radius6 noradiusbottom">Certificates Coming Soon</div>
+        <div class="popup-box-content">
+            <div class="form-horizontal">
+                <div class="field-row">
+                    The facility to obtain a certificate for this agreement will be available shortly
+                </div>
+            </div>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">
+            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
 </div>
 
 <div id="e2e-test-request" class="popup-box e2e-test-request-popup" style="display: none; width: 450px;">
@@ -279,6 +295,15 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 });
             }
          });
+        $("[rel='agree-popup']").cplightbox({
+            onLoad: function(){
+                jQuery('.simple_tooltip').each(function(){
+                    var tooltipLeft = -1 * jQuery(this).width()/2;
+                    var tooltipTop = -1 * jQuery(this).outerHeight() - 6;
+                    jQuery(this).css({'top': tooltipTop, 'margin-left': tooltipLeft});
+                });
+            }
+        });
         jQuery('.submit_agreement').click(function(){
             var is_valid = true;
             jQuery('.case_exclude_reason').removeClass('input-error');

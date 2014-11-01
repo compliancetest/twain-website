@@ -120,13 +120,14 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
     </div>
     <?php
     $testPlans = getTestPlansByProductId($product->id);
+    $product_claims = getClaimsByProductId($product->id);
     $testPlansHtml = '';
     ?>
     <div class="claims-list-wrapper">
         <div class="claims-list-title">
             <h4 class="blue_txt">Test Plans and Compliance Claims</h4>
         </div>
-        <?php if(!$testPlans): ?>
+        <?php if(!$testPlans && !$product_claims): ?>
             <div class="no-data">No Data Found!</div>
         <?php else: ?>
             <table class="claims-list">
@@ -146,7 +147,26 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                 <?php
                 $used_product = $used_suite = 0;
                 $processed_claims = array();
-
+                foreach( $product_claims AS $product_claim ){
+                    $group = groups_get_group(array('group_id' => get_post_meta( $product_claim->suite_id, 'community_id', true)));
+                    array_push( $processed_claims, $product_claim->id );
+                    $product_claim->conformance_level = trim( str_replace( ';;', ' ', $product_claim->conformance_level ) );
+                    $product_claim->role = trim( str_replace( ';;', ' ', $product_claim->role ) );
+                    ob_start();?>
+                    <tr>
+                        <td><?php echo isset( $product_claim->claim_id ) ? $product_claim->claim_id : ''; ?></td>
+                        <td><a href="<?php echo bp_get_group_permalink($group); ?>"><?php echo $product_claim->issuer; ?></a></td>
+                        <td><a href="<?php echo get_permalink($product_claim->suite_id); ?>"><?php echo ct_get_suite_max_version( $product_claim->suite_id, true ); ?></a></td>
+                        <td class="centered"><?php echo $product_claim->conformance_level; ?></td>
+                        <td class="centered"><?php echo $product_claim->role; ?></td>
+                        <td class="centered"><span class="status-unverified">Verified</span></td>
+                        <td class="centered"><?php echo isset( $product_claim->last_updated ) ? formatDate( $product_claim->last_updated ) : formatDate($product_claim->created_date); ?></td>
+                        <td class="centered row-actions">
+                            <a href="<?php echo get_site_url(); ?>/claims/<?php echo $product_claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $product_claim->token?>.pdf', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?download-certificate=1&claim=<?php echo $product_claim->token; ?>" target="_blank">Download</a>
+                        </td>
+                    </tr>
+                <?php $testPlansHtml .= ob_get_clean();
+                }
                 foreach($testPlans as $testPlan):
                     if( ! get_the_title($testPlan->suite_id) ){
                         continue;
