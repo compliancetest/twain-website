@@ -30,16 +30,16 @@ function process_agreement_actions()
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
         $email_data = array(
-            '[sender_name]'   => $sender->data->display_name,
-            '[receiver_name]' => $receiver->data->display_name,
+            '[sender_name]'   => $sender->display_name,
+            '[receiver_name]' => $receiver->display_name,
             '[agreement_url]' => home_url( '/agreements/'),
             '[test_suite]'    => get_the_title( $service->service_suite_id )
         );
         //send email to requester
-        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_request_accepted_sender', $email_data );
+        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_request_accepted_sender', $email_data );
 
         //send email to receiver
-        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_request_accepted_receiver', $email_data );
+        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_request_accepted_receiver', $email_data );
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_request_accepted_admin', $email_data );
@@ -59,16 +59,16 @@ function process_agreement_actions()
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
         $email_data = array(
-            '[sender_name]'   => $sender->data->display_name,
-            '[receiver_name]' => $receiver->data->display_name,
+            '[sender_name]'   => $sender->display_name,
+            '[receiver_name]' => $receiver->display_name,
             '[agreement_url]' => home_url( '/agreements/'),
             '[message_text]'  => $_REQUEST['deny-reason-field']
         );
         //send email to requester
-        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_request_rejected_sender', $email_data );
+        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_request_rejected_sender', $email_data );
 
         //send email to receiver
-        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_request_rejected_receiver', $email_data );
+        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_request_rejected_receiver', $email_data );
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_request_rejected_admin', $email_data );
@@ -94,13 +94,16 @@ function process_agreement_actions()
                 $file_field = 'requestor_audit_log';
                 $name_field = 'requestor_audit_log_name';
                 $type_field = 'requestor_audit_log_type';
-                $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+                $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
             } else{
                 $file_field = 'responder_audit_log';
                 $name_field = 'responder_audit_log_name';
                 $type_field = 'responder_audit_log_type';
-                $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+                $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
             }
+            $service = new Service($service_id);
+            $service->load();
+
             $wpdb->update('wp_e2e_agreement',
                 array(
                     'status'     => 'Claimed',
@@ -120,15 +123,15 @@ function process_agreement_actions()
             $sender = get_userdata( get_current_user_id() );
             $receiver = get_userdata( $service->service_user_id );
             $email_data = array(
-                '[sender_name]'   => $sender->data->display_name,
-                '[receiver_name]' => $receiver->data->display_name,
+                '[sender_name]'   => $sender->display_name,
+                '[receiver_name]' => $receiver->display_name,
                 '[agreement_url]' => home_url( '/agreements/')
             );
             //send email to requester
-            cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_claim_made_sender', $email_data );
+            cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_claim_made_sender', $email_data );
 
             //send email to receiver
-            cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_claim_made_receiver', $email_data );
+            cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_claim_made_receiver', $email_data );
 
             //send email to admin
             cp_send_email_to_admin( 'e2e_claim_made_admin', $email_data );
@@ -184,15 +187,15 @@ function process_agreement_actions()
             $sender = get_userdata( get_current_user_id() );
             $receiver = get_userdata( $service->service_user_id );
             $email_data = array(
-                '[sender_name]'   => $sender->data->display_name,
-                '[receiver_name]' => $receiver->data->display_name,
+                '[sender_name]'   => $sender->display_name,
+                '[receiver_name]' => $receiver->display_name,
                 '[agreement_url]' => home_url( '/agreements/')
             );
             //send email to requester
-            cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_claim_confirmed_sender', $email_data );
+            cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_claim_confirmed_sender', $email_data );
 
             //send email to receiver
-            cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_claim_confirmed_receiver', $email_data );
+            cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_claim_confirmed_receiver', $email_data );
 
             //send email to admin
             cp_send_email_to_admin( 'e2e_claim_confirmed_admin', $email_data );
@@ -207,24 +210,26 @@ function process_agreement_actions()
     } else if( wp_verify_nonce($action, 'reject-pending-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
-
+        
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
+        
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
+        
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
         $email_data = array(
-            '[sender_name]'   => $sender->data->display_name,
-            '[receiver_name]' => $receiver->data->display_name,
+            '[sender_name]'   => $sender->display_name,
+            '[receiver_name]' => $receiver->display_name,
             '[agreement_url]' => home_url( '/agreements/'),
             '[message_text]'  => $_REQUEST['deny-reason-field']
         );
         //send email to requester
-        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_request_rejected_sender', $email_data );
+        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_request_rejected_sender', $email_data );
 
         //send email to receiver
-        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_request_rejected_receiver', $email_data );
+        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_request_rejected_receiver', $email_data );
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_request_rejected_admin', $email_data );
@@ -276,16 +281,16 @@ function process_agreement_actions()
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
         $email_data = array(
-            '[sender_name]'   => $sender->data->display_name,
-            '[receiver_name]' => $receiver->data->display_name,
+            '[sender_name]'   => $sender->display_name,
+            '[receiver_name]' => $receiver->display_name,
             '[agreement_url]' => home_url( '/agreements/'),
             '[message_text]'  => $_REQUEST['deny-reason-field']
         );
         //send email to requester
-        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_claim_failed_sender', $email_data );
+        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_claim_failed_sender', $email_data );
 
         //send email to receiver
-        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_claim_failed_receiver', $email_data );
+        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_claim_failed_receiver', $email_data );
 
         //send email to admin
         cp_send_email_to_admin( 'e2e_claim_failed_admin', $email_data );
@@ -390,11 +395,16 @@ function get_agreement_info_popup(){
             $profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->requestor_profile ) );
             $pJSON = json_decode(base64_decode($profile->content));
             ?>
-            <dt class="item-title"><?php echo $pJSON->Profile->Type;?></dt>
-            <dt>Organisation</dt>
+            <dt class="item-title"><?php echo get_post_meta($agreement->requester_service_id, 'service_roles', true) ;?></dt>
+            <dt>Owner</dt>
             <dd><?php echo $agreement->requester_service->service_owner;?></dd>
             <dt>User</dt>
-            <dd><?php echo get_userdata( $agreement->requester_service->service_user_id )->data->display_name;?></dd>
+            <?php $contacts = get_service_contacts($agreement->requester_service_id) ;?>
+            <dd>
+                <?php foreach($contacts as $urow): ?>
+                <?php echo $urow->display_name; ?><br />
+                <?php endforeach; ?>
+            </dd>
             <dt>Service</dt>
             <dd><?php echo get_the_title( $agreement->requester_service->id );?></dd>
             <dt>Profile</dt>
@@ -409,11 +419,11 @@ function get_agreement_info_popup(){
             $resp_profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->responder_profile ) );
             $resp_pJSON = json_decode(base64_decode($resp_profile->content));
             ?>
-            <dt class="item-title"><?php echo isset( $resp_pJSON->Profile->Type ) ? $resp_pJSON->Profile->Type : 'No data';?></dt>
-            <dt>Organisation</dt>
+            <dt class="item-title"><?php echo get_post_meta($agreement->responder_service_id, 'service_roles', true) ;?></dt>
+            <dt>Owner</dt>
             <dd><?php echo $agreement->responder_service->service_owner;?></dd>
             <dt>User</dt>
-            <dd><?php echo get_userdata( $agreement->responder_service->service_user_id )->data->display_name;?></dd>
+            <dd><?php echo get_userdata( $agreement->responder_service->service_user_id )->display_name;?></dd>
             <dt>Service</dt>
             <dd><?php echo get_the_title( $agreement->responder_service->id );?></dd>
             <dt>Profile</dt>
@@ -429,7 +439,7 @@ function get_agreement_info_popup(){
         <div class="agreements-message-log-list" style="height: 350px;">
             <ul>
                 <li class="employer">
-                    <div class="author-name"><?php echo $pJSON->Profile->Type;?></div>
+                    <div class="author-name"><?php echo get_post_meta($agreement->requester_service_id, 'service_roles', true) ;?></div>
                     <?php if( $agreement->requestor_message ):?>
                         <div class="message-content">
                             <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->requestor_message );?></div>
@@ -438,7 +448,7 @@ function get_agreement_info_popup(){
                     <?php endif;?>
                 </li>
                 <li class="fund">
-                    <div class="author-name"><?php echo $resp_pJSON->Profile->Type;?></div>
+                    <div class="author-name"><?php echo get_post_meta($agreement->responder_service_id, 'service_roles', true) ;?></div>
                     <?php if( $agreement->responder_message ):?>
                         <div class="message-content">
                             <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->responder_message );?></div>

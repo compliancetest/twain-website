@@ -103,7 +103,7 @@ get_header();
                                    <?php else: ?>
                                        <?php foreach( $service_agreements AS $agreement ):?>
                                            <div class="tr clearfix">
-                                               <div class="td td-agreement-id"><a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('get-agreement-info-popup')?>&id=<?php echo $agreement->id?>" cp-type="ajax" rel="custom-popup">
+                                               <div class="td td-agreement-id"><a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('get-agreement-info-popup')?>&id=<?php echo $agreement->id?>" cp-type="ajax" rel="agree-popup">
                                                        <?php if (strlen( $agreement->str_id ) > 16 ): ?>
                                                            <div class="has-tooltip" title="<?php echo $agreement->str_id; ?>">
                                                                <?php echo substr($agreement->str_id,0,16)."..."; ?>
@@ -129,21 +129,23 @@ get_header();
                                                    <div class="td td-end-point"><a href="<?php echo $gateway->test_url;?>"><?php echo $gateway->name;?></div>
                                                <?php endif;?>
                                                <div class="td td-contact">
-                                                   <?php $user_id = ( $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_user_id : $agreement->responder_service->service_user_id ); ?>
-                                                   <?php $email = get_user_by( 'id', $user_id )->data->user_email; ?>
-                                                   <?php if (strlen( $email ) > 22): ?>
-                                                       <div class="has-tooltip" title="<?php echo $email; ?>">
-                                                           <a href="mailto:<?php echo $email;?>"><?php echo $email = substr($email,0,22)."..."; ?></a>
-                                                       </div>
-                                                   <?php else: ?>
-                                                       <a href="mailto:<?php echo $email;?>"><?php echo $email; ?></a>
-                                                   <?php endif; ?>
+                                                   
+                                                   <?php $contacts = get_service_contacts($agreement->entry_status == 'Responder' ? $agreement->requester_service_id : $agreement->responder_service_id) ;?>
+                                                   <?php foreach($contacts as $urow): ?>
+                                                       <?php if (strlen( $urow->user_email ) > 22): ?>
+                                                           <div class="has-tooltip" title="<?php echo $urow->user_email; ?>">
+                                                               <a href="mailto:<?php echo $urow->user_email;?>"><?php echo $urow->user_email = substr($urow->user_email,0,22)."..."; ?></a>
+                                                           </div>
+                                                       <?php else: ?>
+                                                           <a href="mailto:<?php echo $urow->user_email;?>"><?php echo $urow->user_email; ?></a>
+                                                       <?php endif; ?>
+                                                   <?php endforeach; ?>
                                                </div>
                                                <div class="td td-status"><span class="status-<?php echo strtolower( $agreement->status );?>"><?php echo $agreement->status;?></span></div>
                                                <div class="td td-actions">
                                                    <?php if( $agreement->status == 'Pending' ):?>
                                                         <?php if( $agreement->entry_status == 'Responder' ):?>
-                                                            <a href="#e2e-test-request-<?php echo $agreement->id;?>" rel="custom-popup">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Reject</a>
+                                                            <a href="#e2e-test-request-<?php echo $agreement->id;?>" rel="agree-popup">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Reject</a>
 
                                                            <div id="e2e-test-request-<?php echo $agreement->id;?>" class="popup-box e2e-test-request-popup" style="display: none; width: 450px;">
                                                                <div class="popup-box-header radius6 noradiusbottom">Confirm Acceptance</div>
@@ -227,7 +229,7 @@ get_header();
 
                                                         <?php endif;?>
                                                    <?php elseif( $agreement->status == 'Testing' ):?>
-                                                       <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="custom-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Cancel</a>
+                                                       <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="agree-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Cancel</a>
 
                                                        <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                            <div class="popup-box-header radius6 noradiusbottom">Confirm Cancel</div>
@@ -253,18 +255,19 @@ get_header();
 
                                                        <div class="popup-box" id="claim-popup-box-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                            <div class="popup-box-header radius6 noradiusbottom">Upload Audit Logs</div>
-                                                           <form id="claim-popup-box-<?php echo $agreement->id;?>-form" action="/" method="post" enctype="multipart/form-data">
+                                                           <form id="claim-popup-box-<?php echo $agreement->id;?>-form" class="make-claim-form" action="/" method="post" enctype="multipart/form-data">
                                                                <div class="popup-box-content">
                                                                    <p>Please upload screenshots from your business system as an audit record of the successful test.</p>
                                                                    <p class="note">Please zip the files if more than one.</p>
                                                                    <div class="claim-upload-box clearfix">
+                                                                       <span class="info-icon has-tooltip right top5 left5" title="Please select at least one zip file"></span>
                                                                        <input type="file" name="file" class="left input-file claim_file"  />
                                                                        <ul class="uploaded-files">
                                                                            <li><a href="#"></a><span class="remove-icon" style="display: none;"></span></li>
-                                                                       </ul>
+                                                                       </ul>                                                                       
                                                                    </div>
                                                                    <div class="claim-test-scope">
-                                                                       <h4>Test scope:</h4>
+                                                                       <h4>Test scope: <span class="info-icon has-tooltip right left5" title="You must select at least one"></span></h4>
                                                                        <?php
                                                                             $suite_id = $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_suite_id : $agreement->responder_service->service_suite_id;
                                                                             $suite = new TestSuite( $suite_id );
@@ -295,7 +298,7 @@ get_header();
                                                        </div>
                                                    <?php elseif( $agreement->status == 'Claimed' ):?>
                                                        <?php if( ( $agreement->entry_status == 'Requester' && empty( $agreement->requestor_audit_log_name ) ) || (  $agreement->entry_status == 'Responder' && empty( $agreement->responder_audit_log_name ) ) ):?>
-                                                           <a href="#agreement-confirm-popup-<?php echo $agreement->id;?>" rel="custom-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="custom-popup">Fail</a>
+                                                           <a href="#agreement-confirm-popup-<?php echo $agreement->id;?>" rel="agree-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Fail</a>
 
                                                            <div class="popup-box claim-popup-box" id="agreement-confirm-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
                                                                <div class="popup-box-header radius6 noradiusbottom">Confirm</div>
@@ -389,8 +392,16 @@ get_header();
                 }
             })
         });
-
-        $('rel[custom-popup]').cplightbox({});
+                               
+        $("[rel='agree-popup']").cplightbox({
+            onLoad: function(){
+                jQuery('.simple_tooltip').each(function(){
+                    var tooltipLeft = -1 * jQuery(this).width()/2;
+                    var tooltipTop = -1 * jQuery(this).outerHeight() - 6;
+                    jQuery(this).css({'top': tooltipTop, 'margin-left': tooltipLeft});
+                });                
+            }
+        });
 
 
 
@@ -398,16 +409,26 @@ get_header();
         $('#delete-service-box .process-btn').click(function(){
             $('#delete-agreement-box .loading').show();
         });
+        
         jQuery('#my-agreements .container .simple_tooltip').each(function(){
-            jQuery(this).css("margin-left", '-' + jQuery(this).width()/2-5 + "px" );
+            jQuery(this).css("margin-left", '-' + jQuery(this).outerWidth()/2-5 + "px" );
         });
 
         $('.claim_agreement_confirm, .agreement_claim_confirm').on( 'click', function(){
             var is_valid = true;
             var form_id = $(this).data('id');
+            //Remove error messages
+            $('#'+ form_id).find('.message').remove();
+            
             if( ! $( '#' + form_id + ' .claim_file').val() ){
+                $('#'+ form_id + ' .popup-box-footer').prepend('<p class="message error">Please select file to upload.</p>');
                 return false;
             }
+            if( $( '#' + form_id + ' .claim-test-scopes-list input[type="checkbox"]:checked').length == 0 ){
+                $('#'+ form_id + ' .popup-box-footer').prepend('<p class="message error">You need to select at least one on the test scope.</p>');
+                return false;
+            }
+            
             $( '#' + form_id + ' .loading').show();
             $( '#' + form_id + '-form').submit();
         })
@@ -432,7 +453,9 @@ get_header();
             $( this).prev( '.uploaded-files li a').html( '' );
             $( this).hide();
         });
-    })
+        
+        
+    })                           
 })(jQuery)
     
 </script>

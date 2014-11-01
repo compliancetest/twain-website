@@ -177,3 +177,19 @@ function deleteService()
     wp_redirect($redirectUrl);
     exit;
 }
+
+function get_service_contacts($service_id)
+{
+    global $wpdb;
+    
+    $product_id = get_post_meta($service_id, 'service_product_id', true);
+    $org_id = get_post_meta($product_id, 'product_organisation_id', true);
+    
+    $query = $wpdb->prepare("SELECT u.user_email, u.ID, u.display_name FROM {$wpdb->prefix}organisations_members AS os
+             INNER JOIN {$wpdb->prefix}users_privileges AS up ON up.user_id=os.user_id
+             INNER JOIN {$wpdb->prefix}privileges AS p ON p.id=up.privilege_id AND p.code='MAKE_AGREEMENTS'
+             INNER JOIN {$wpdb->users} AS u ON u.ID=os.user_id WHERE os.organisation_id=%d", $org_id);
+    $users = $wpdb->get_results($query);
+    
+    return $users;
+}

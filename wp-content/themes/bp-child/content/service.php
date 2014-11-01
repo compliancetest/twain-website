@@ -137,13 +137,9 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
-<<<<<<< HEAD
-                                <a href="#">View PDF</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
-=======
                                 <?php if(strtolower($agreement->status) == 'verified') { ?>
                                 <a href="#">View</a>&nbsp;|&nbsp;<a href="#" target="_blank">Download</a>
                                 <?php } ?>
->>>>>>> issue4376
                             </td>
                         </tr>
                     <?php endforeach;?>
