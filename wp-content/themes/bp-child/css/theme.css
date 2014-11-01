@@ -300,10 +300,10 @@ a:hover {
                 background-position: 8px -514px;
             }
             #top_loged_actions .menu-agreements {
-                background-position: 8px -952px;
+                background-position: 8px -1077px;
             }
             #top_loged_actions .menu-agreements:hover {
-                background-position: 8px -1018px;
+                background-position: 8px -1126px;
             }
 
 #top_loged_actions .dashboard-dropdown-menu {
@@ -398,10 +398,10 @@ a:hover {
                 background-position: 136px -514px;
             }
             #top_loged_actions .leftmenu .menu-agreements {
-                background-position: 136px -952px;
+                background-position: 136px -1077px;
             }
             #top_loged_actions .leftmenu .menu-agreements:hover {
-                background-position: 136px -1018px;
+                background-position: 136px -1126px;
             }
 /*
 #inputs input[type="text"] {
@@ -7651,10 +7651,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .dashboard-tabs .menu-agreements .menu-icon {
-    background-position: 5px -952px;
+    background-position: 5px -1076px;
 }
 .dashboard-tabs .menu-agreements.current_page_item .menu-icon {
-    background-position: 5px -1018px;
+    background-position: 5px -1127px;
 }
 
 

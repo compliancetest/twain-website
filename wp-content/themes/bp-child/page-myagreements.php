@@ -126,7 +126,7 @@ get_header();
                                                     <div class="td td-end-point"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?></div>
                                                <?php else:?>
                                                    <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint ) );?>
-                                                   <div class="td td-end-point"><a href="<?php echo $gateway->test_url;?>"><?php echo $gateway->name;?></div>
+                                                   <div class="td td-end-point"><?php echo $gateway->name;?></div>
                                                <?php endif;?>
                                                <div class="td td-contact">
                                                    
