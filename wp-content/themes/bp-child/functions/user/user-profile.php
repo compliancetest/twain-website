@@ -243,7 +243,7 @@ function cp_user_payment_edit()
     $result['organisation_id'] = $card->organisation_id;
     $result['is_default'] = $card->is_default;
     $result['customer_reference'] = $card->customer_reference;
-    
+    $result = stripslashes_deep( $result );
     echo json_encode($result);
     exit;
 }
