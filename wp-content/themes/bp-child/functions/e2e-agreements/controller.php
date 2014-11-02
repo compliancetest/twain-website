@@ -1,4 +1,20 @@
 <?php
+
+add_action('template_redirect', 'ct_agreement_certification_view');
+//Display Agreement Certificate
+function ct_agreement_certification_view()
+{
+    if(get_query_var('pagename') == 'agreement-certificate')
+    {
+        global $wpdb;
+        $token = str_replace( ".pdf", "", get_query_var('claim') );
+        $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT certificate FROM wp_e2e_agreement WHERE token=%s ", $token ) );
+        header("Content-type: application/pdf");
+        echo $certificate;
+        exit;
+    }
+}
+
 add_action('init', 'process_agreement_actions');
 function process_agreement_actions()
 {
@@ -163,22 +179,40 @@ function process_agreement_actions()
                 $name_field = 'responder_audit_log_name';
                 $type_field = 'responder_audit_log_type';
             }
+            //generate PDF
+
+            $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+            $service->load();
+
             $wpdb->update('wp_e2e_agreement',
                 array(
-                    'status'     => 'Verified',
-                    $file_field  => $content,
-                    $name_field  => $fileName,
-                    $type_field  => $fileType,
-                    'claim_date' => gmmktime()
+                    'status'      => 'Verified',
+                    $file_field   => $content,
+                    $name_field   => $fileName,
+                    $type_field   => $fileType,
+                    'claim_date'  => gmmktime(),
+                    'claim_id'    => getClaimID( null, $service->service_suite_id ),
+                    'token'       => createClaimToken()
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' ),
                 array( '%d' )
             );
-            $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
-            $service->load();
+
+            $pdfString = create_agreement_pdf( $agreement_id );
+
+            $wpdb->update('wp_e2e_agreement',
+                array(
+                    'certificate' => $pdfString
+                ),
+                array(
+                    'id' => $agreement_id
+                ),
+                array( '%s' ),
+                array( '%d' )
+            );
 
             if( get_current_user_id() == $service->service_user_id ){
                 $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
@@ -346,6 +380,21 @@ function process_agreement_actions()
             $new_id .= "." . str_pad($seq, 2, 0, STR_PAD_LEFT);
         echo $new_id;
         exit;
+    } else if( wp_verify_nonce($action, 'get-agreement-pdf' ) ){
+            global $wpdb;
+            $token = str_replace( ".pdf", "", $_GET['claim'] );
+            $certificate = $wpdb->get_var( $wpdb->prepare("SELECT certificate FROM wp_e2e_agreement WHERE token= %s ", $token ) );
+            if( ! $certificate){
+                exit( "Invalid Request!" );
+            }
+            header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+            header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+            header("Cache-Control: no-cache, must-revalidate");
+            header("Pragma: no-cache");
+            header("Content-Type: Application/octet-stream");
+            header("Content-disposition: attachment; filename=" . $token . ".pdf");
+            echo $certificate;
+            exit;
     }
 }
 
@@ -516,4 +565,257 @@ function get_agreement_info_popup(){
     </script>
 <?php
     exit;
+}
+
+function create_agreement_pdf( $agreement_id ){
+
+        global $wpdb;
+        require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
+        require_once(THE_FUNCTION . '/tcpdf/config/tcpdf_config.php');
+        // Include 2D barcode class
+        require_once(THE_FUNCTION . '/tcpdf/tcpdf_barcodes_2d.php');
+
+        // Create new PDF document
+        $pdf = new CPPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // Set document meta information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('ComplianceTest');
+        $pdf->SetTitle('ComplianceTest Certificate');
+        $pdf->SetSubject('ComplianceTest Certificate');
+
+        // Set margins
+        $pdf->SetMargins(12, 29, 12, true);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // Set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, 20);
+
+        // Set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set certificate file
+        $certificate = get_option('pdf_certificate');
+        $private_key = get_option('pdf_private_key');
+
+        // set additional information
+        $info = array(
+            'Location' => 'Australia',
+            'ContactInfo' => 'http://www.compliancetest.net',
+        );
+
+        // set document signature
+        $pdf->setSignature($certificate, $private_key, '', '', 2, $info);
+
+        // Set font
+        $pdf->SetFont('opensans', '', 13, '', true);
+
+        // Set line-height
+        $pdf->setCellHeightRatio(1);
+
+        // Add a page
+        // This method has several options, check the source code documentation for more information.
+        $pdf->AddPage();
+
+        $title = '<h1 style="color: #000; font-size: 48pt; font-weight: bold; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
+        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has successfully completed the indicated test suite using the specified product or service version. The test suite has been designed to meet the compliance requirements of the reference specification issuer.<br></p>';
+
+        //Getting Claim Defaults
+        $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+        $requester_service = new Service( $agreement->requester_service_id );
+        $requester_service->load();
+
+        $responder_service = new Service( $agreement->responder_service_id );
+        $responder_service->load();
+
+        $certificate_data_info = '
+            <style>
+                table.certificate-info th {
+                    border-bottom: 0.2em solid #959595;
+                    font-weight: normal;
+                    margin-left: 2pt;
+                    width: 35%;
+                    font-size:13pt;
+                    color:#262626;
+                }
+                table.certificate-info td {
+                    border-bottom: 0.2em solid #959595;
+                    font-weight: bold;
+                    width:63%;
+                    font-size:13pt;
+                    color:#000;
+                }
+            </style>
+            <br><br>
+            <table cellspacing="5" cellpadding="5" class="certificate-info" width="100%">
+                <tr>
+                    <th>Test Scope</th>
+                    <td>' . str_replace( ';;', ', ', $agreement->scope ) . '</td>
+                </tr>
+                <tr>
+                    <th>Issued To</th>
+                    <td>' . $responder_service->service_owner . '</td>
+                </tr>
+                <tr>
+                    <th>Service</th>
+                    <td><a href="' . get_permalink( $responder_service->id ) .'">' . get_the_title( $responder_service->id ) . '</a></td>
+                </tr>
+                <tr>
+                    <th>Service Version</th>
+                    <td>' . $responder_service->service_version . '</td>
+                </tr>
+                <tr>
+                    <th>Test Suite</th>
+                    <td><a href="' . get_permalink( $responder_service->service_suite_id ) .'">' . get_the_title( $responder_service->service_suite_id ) . '</a></td>
+                </tr>
+                <tr>
+                    <th>Specification Issuer</th>
+                    <td>' . $requester_service->service_owner . '</td>
+                </tr>
+                <tr>
+                    <th>Role(s)</th>
+                    <td>' . implode( ', ', $requester_service->service_roles ) . '</td>
+                </tr>
+                <tr>
+                    <th>Agreement ID</th>
+                    <td>'. $agreement->claim_id .'</td>
+                </tr>
+                <tr>
+                    <th>Date of Claim</th>
+                    <td>' . formatDate( $agreement->claim_date, 'd F Y') . '</td>
+                </tr>
+            </table>
+            ';
+
+
+        $pdf->SetFont('opensansb', '', 13, '', true);
+
+        $pdf->setHtmlLinksStyle(array(91, 117, 182));
+
+        // Print text using writeHTMLCell()
+        $pdf->writeHTMLCell(0, 0, '', '', $title, 0, 1, 0, false, 'C', true);
+
+
+        $pdf->SetFont('opensans', '', 13, '', true);
+        // Print text using writeHTMLCell()
+        $pdf->writeHTMLCell(0, 0, '', '', $description, 0, 1, 0, false, '', false);
+
+        // Print text using writeHTMLCell()
+        $compliance_tested_image = K_PATH_IMAGES . "compliance-tested.png";
+        $pdf->Image($compliance_tested_image, '', '', 120, '', 'PNG', '', 'N', false, 300, 'C', false, false, 1, false, false, false);
+
+        // define active area for signature appearance
+        $pdf->setSignatureAppearance(45, 72, 121, 29);
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+        // Print text using writeHTMLCell()
+        $pdf->writeHTMLCell('', '', '', '', $certificate_data_info, 0, 1, 0, true, '', true);
+
+        // Styles for QR code
+        $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
+
+        // QRCODE,H : QR-CODE Best error correction
+        $pdf->write2DBarcode( get_site_url() . '/claims/' . $agreement->id . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
+
+        $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/agreement/' . $agreement->token . ".pdf" . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a></div>';
+
+        $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
+        // ---------------------------------------------------------
+
+
+        // ---------------------------------------------------------
+        $pdf->SetMargins(3.8, 24.5, 3.8, true);
+
+        // Add a page
+        // This method has several options, check the source code documentation for more information.
+        $pdf->AddPage();
+
+
+        $pdf->setTextShadow(array('enabled' => false));
+
+        $services_table_styles = '<style>
+                            .test-cases-table th {
+                                background-color:#5a75b6;
+                                color:#fff;
+                                font-size:7pt;
+                                vertical-align:middle;
+                                line-height:18pt;
+                                text-align:center;
+                                font-weight:bold;
+                            }
+                            .test-cases-table th.test-scenario{
+                                text-align:left;
+                            }
+                            .test-cases-table td {
+                                font-size:7pt;
+                                line-height:7pt;
+                                color:#000;
+                            }
+                            .test-cases-table .even td{
+                                background-color:#f3f4f5;
+                            }
+                            .test-cases-table .odd td{
+                                background-color:#ececed;
+                            }
+                            .test-cases-table td a{
+                                font-size:10pt;
+                            }
+                            .test-cases-table td.test-scenario{
+                                background-color:#e2e2e2;
+                            }
+
+                            .issued, .test-outcome {
+                                text-align:center;
+                            }
+                        </style>';
+        $services_table = '<tr><th colspan="6">Audit Record</th></tr>
+                           <tr>
+                                <th class="test-scenario" style="width:25%; vertical-align:middle;">Entity</th>
+                                <th class="test-case" style="width:25%;">Entity ID</th>
+                                <th class="issued" style="width:25%;">Service Name</th>
+                                <th class="test-intent" style="width:25%;">Audit Files</th>
+                           </tr>';
+    $responder_file = getcwd() . '/wp-content/uploads/'.$agreement->reqsponder_audit_log_name;
+
+    $file_location = getcwd() . '/wp-content/uploads/'.$agreement->requestor_audit_log_name;
+    $requestor_file = fopen( $file_location, "w");
+    fwrite( $requestor_file , $agreement->requestor_audit_log );
+    fclose( $requestor_file );
+
+    $pdf->Annotation(0, 1, 0, 0, 1, array('Subtype' => 'FileAttachment', 'Name' => $agreement->requestor_audit_log_name, 'FS' => $file_location));
+    $pdf->Bookmark( $agreement->requestor_audit_log_name, 0, 0, 1, 'B', array(128, 0, 255), 0, '*' . $file_location );
+    $services_table .= '<tr class="odd">
+                                <td class="test-scenario" style="width:25%; font-weight: bold;">'. $requester_service->service_owner.'</td>
+                                <td class="test-case" style="width:25%;">'. $requester_service->service_id.'</td>
+                                <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
+                                <td class="test-intent" style="width:25%;">
+                                    Click "' . $agreement->requestor_audit_log_name . '" bookmark to see message (offline) <br> OR
+                                    <a href="">' . get_site_url() . '/message-envelope?id=' . 0 . '</a> link to check message on our website
+                                </td>
+                           </tr>'.
+                            '<tr class="even">
+                                <td class="test-scenario" style="width:25%; font-weight: bold;">'. $responder_service->service_owner.'</td>
+                                <td class="test-case" style="width:25%;">'. $responder_service->service_id.'</td>
+                                <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
+                                <td class="test-intent" style="width:25%;">'. $agreement->requestor_audit_log_name.'</td>
+                           </tr>';
+
+
+        $pdf->SetFont('opensans', '', 13, '', true);
+
+        $general_cases_table_html =  $services_table_styles. '<table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">' . $services_table . '</table>';
+
+        $pdf->writeHTMLCell(0, 0, '', '', $general_cases_table_html, 0, 1, 0, true, '', true);
+
+        $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
+
+//        foreach( $fArr AS $f ){
+//            unlink( $f );
+//        }
+
+        return $pdfString;
 }

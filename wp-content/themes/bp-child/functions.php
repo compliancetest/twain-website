@@ -935,7 +935,9 @@ function add_cp_custom_rewrites()
     //Add Ticket Rewrite Rules
     add_rewrite_rule('^my-support-tickets/([0-9]*)$','index.php?pagename=my-support-tickets&ticket=$matches[1]', 'top');    
     //Add Claim Rewrite Rules
-    add_rewrite_rule('^claims/(.*)$','index.php?pagename=claim-certificate&claim=$matches[1]', 'top');    
+    add_rewrite_rule('^claims/(.*)$','index.php?pagename=claim-certificate&claim=$matches[1]', 'top');
+    //Add Agreement Rewrite Rules
+    add_rewrite_rule('^agreement/(.*)$','index.php?pagename=agreement-certificate&claim=$matches[1]', 'top');
 }
 
 add_filter('query_vars', 'add_custom_query_var');

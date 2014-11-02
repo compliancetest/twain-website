@@ -349,6 +349,8 @@ get_header();
                                                                </form>
                                                            </div>
                                                        <?php endif;?>
+                                                   <?php elseif( $agreement->status == 'Verified' && $agreement->certificate != '' ):?>
+                                                       <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
                                                    <?php endif;?>
                                                </div>
                                            </div>
