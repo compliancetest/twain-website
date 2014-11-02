@@ -48,13 +48,24 @@ class Agreement
             array(
                 'str_id'                 => $data['agreement_id'],
                 'requester_service_id'   => $data['requester_service'],
+                'requestor_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_service_id'   => $data['responder_service'],
                 'requestor_profile'      => @$data['requester_profiles'],
                 'status'                 => 'Pending',
                 'requestor_message'      => $data['agreement_message'],
                 'requestor_message_date' => gmmktime()
             ),
-            array( '%s', '%d', '%d', '%d', '%s', '%s' )
+            array( '%s', '%d', '%s', '%d', '%d', '%s', '%s' )
+        );
+        $wpdb->insert( 'wp_e2e_agreement_log',
+            array(
+                'agreement_id'    => $wpdb->insert_id,
+                'sent_by'         => 1,
+                'sent_by_user_id' => get_current_user_id(),
+                'message'         => $data['agreement_message'],
+                'date'            => gmmktime()
+            ),
+            array( '%d', '%d', '%d', '%s', '%d' )
         );
         $service = new Service( $data['responder_service'] );
         $service->load();

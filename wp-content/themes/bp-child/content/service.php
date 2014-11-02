@@ -163,7 +163,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>
