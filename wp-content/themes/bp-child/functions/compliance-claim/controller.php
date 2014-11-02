@@ -8,7 +8,7 @@ if(!defined('TABLE_CLAIM'))
 add_action('template_redirect', 'ct_claim_certification_view');
 //Display Claim Certificate
 function ct_claim_certification_view()
-{    
+{
     if(get_query_var('pagename') == 'claim-certificate')
     {
         global $wpdb;

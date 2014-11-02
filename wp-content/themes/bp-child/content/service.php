@@ -137,8 +137,8 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
-                                <?php if(strtolower($agreement->status) == 'verified') { ?>
-                                <a href="#e2e-test-soon" rel="agree-popup">View</a>&nbsp;|&nbsp;<a href="#e2e-test-soon" rel="agree-popup">Download</a>
+                                <?php if( strtolower( $agreement->status ) == 'verified' && $agreement->certificate != '' ) { ?>
+                                    <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -163,7 +163,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
             </div>
         </div>
         <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Close</span></a>
+            <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>
