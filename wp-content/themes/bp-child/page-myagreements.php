@@ -47,7 +47,7 @@ get_header();
 
     <div class="container">
         <div class="column">
-           <a href="/products-and-services/?&type=Web%20Service" class="action-btn add-new-btn" style="margin-left: 10px;"><span class="p"></span><span class="t">Search</span></a>
+           <a href="/products-and-services/?&type=Web%20Service" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Find Services"><span class="p"></span><span class="t">Search</span></a>
            <div class="clear"></div>
            <div class="space20"></div>
             <?php if( $user_services ):?>
@@ -206,12 +206,12 @@ get_header();
                                                            </div>
 
                                                            <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Reject</div>
+                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Agreement Rejection</div>
                                                                <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
                                                                    <div class="popup-box-content">
                                                                        <p>Are you sure you want to <strong>Reject</strong> this agreement?</p>
                                                                        <div class="agreement-deny-reason">
-                                                                           <label>Let us know why:</label>
+                                                                           <label>Reason for rejection:</label>
                                                                            <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                        </div>
                                                                        <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
@@ -328,12 +328,12 @@ get_header();
                                                            </div>
 
                                                            <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Reject</div>
+                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Failure of Claim</div>
                                                                <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
                                                                    <div class="popup-box-content">
-                                                                       <p>Are you sure you want to <strong>Reject</strong> this agreement?</p>
+                                                                       <p>Are you sure you want to fail this claim? The agreement will not be rejected but will be returned to a state where further testing can be undertaken.</p>
                                                                        <div class="agreement-deny-reason">
-                                                                           <label>Let us know why:</label>
+                                                                           <label>Reason for failing the claim:</label>
                                                                            <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                        </div>
                                                                        <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
@@ -362,6 +362,9 @@ get_header();
                        <div class="space20"></div>
                 <?php endforeach;?>
             <?php endif;?>
+           <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <div class="clear"></div>
+           <div class="space10"></div>
         </div>
     </div>
     <div class="clear"></div>

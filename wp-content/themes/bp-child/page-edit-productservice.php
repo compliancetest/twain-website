@@ -283,7 +283,7 @@ if(isset($_SESSION['product_data']))
                                                 <p>You need to have made a claim for this product before you can create service implementations for it</p>
                                             </div>
                                             <div class="popup-box-footer radius6 noradiustop">
-                                                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                                                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
                                                 <div class="clear"></div>
                                             </div>
                                             <a class="close_btn"></a>

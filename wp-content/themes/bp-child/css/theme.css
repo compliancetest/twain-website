@@ -4873,6 +4873,7 @@ span.button_sign {
 }
 .agreements-message-log-list .fund{
     margin-right: 9px;
+    margin-bottom: 10px;
 }
 
 .agreements-message-log-list .fund .author-name{
@@ -4909,6 +4910,7 @@ span.button_sign {
 
 .agreements-message-log-list .employer .message-body{
     background: #ebebeb;
+    margin-bottom: 10px;
 }
 .agreements-message-log-list .fund .message-body{
     background: #288ce1;

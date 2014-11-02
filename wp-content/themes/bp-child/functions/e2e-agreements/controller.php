@@ -17,6 +17,7 @@ function process_agreement_actions()
             array(
                 'status'                 => 'Testing',
                 'responder_profile'      => $_REQUEST['responder_profiles'],
+                'responder_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_message'      => $_REQUEST['agreement_message'],
                 'responder_message_date' => gmmktime()
             ),
@@ -25,6 +26,16 @@ function process_agreement_actions()
             ),
             array( '%s', '%s', '%s' ),
             array('%d')
+        );
+        $wpdb->insert( 'wp_e2e_agreement_log',
+            array(
+                'agreement_id'    => $agreement_id,
+                'sent_by'         => 2,
+                'sent_by_user_id' => get_current_user_id(),
+                'message'         => $_REQUEST['agreement_message'],
+                'date'            => gmmktime()
+            ),
+            array( '%d', '%d', '%d', '%s', '%d' )
         );
         //send notifications to sender, receiver and admin
         $sender = get_userdata( get_current_user_id() );
@@ -274,10 +285,24 @@ function process_agreement_actions()
 
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
+        $sent_by = 1;
         if( get_current_user_id() == $service->service_user_id ){
             $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
             $service->load();
+            $sent_by = 2;
         }
+
+        $wpdb->insert( 'wp_e2e_agreement_log',
+            array(
+                'agreement_id'    => $agreement_id,
+                'sent_by'         => $sent_by,
+                'sent_by_user_id' => get_current_user_id(),
+                'message'         => $_REQUEST['deny-reason-field'],
+                'date'            => gmmktime()
+            ),
+            array( '%d', '%d', '%d', '%s', '%d' )
+        );
+
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
         $email_data = array(
@@ -363,6 +388,7 @@ function get_agreement_info_popup(){
     global $wpdb;
     $agreement_model = new Agreement();
     $agreement = $agreement_model->get_service_agreements( false, intval( $_REQUEST['id'] ) );
+    $logs = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_e2e_agreement_log WHERE agreement_id = %d ", intval( $_REQUEST['id'] ) ) );
     ?>
     <div class="popup-box agreement-details-popup" id="agreement-details-popup" style="display: none; width: 500px">
        <div class="popup-box-header radius6 noradiusbottom">Agreement</div>
@@ -398,15 +424,10 @@ function get_agreement_info_popup(){
             <dt class="item-title"><?php echo get_post_meta($agreement->requester_service_id, 'service_roles', true) ;?></dt>
             <dt>Owner</dt>
             <dd><?php echo $agreement->requester_service->service_owner;?></dd>
-            <dt>User</dt>
-            <?php $contacts = get_service_contacts($agreement->requester_service_id) ;?>
-            <dd>
-                <?php foreach($contacts as $urow): ?>
-                <?php echo $urow->display_name; ?><br />
-                <?php endforeach; ?>
-            </dd>
             <dt>Service</dt>
             <dd><?php echo get_the_title( $agreement->requester_service->id );?></dd>
+            <dt>Claimant</dt>
+            <dd><?php if( in_array( $agreement->status, array('Verified', 'Claimed' ) ) )  echo $agreement->requestor_name;?></dd>
             <dt>Profile</dt>
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
             <?php if( $agreement->requestor_audit_log_name ):?>
@@ -422,10 +443,10 @@ function get_agreement_info_popup(){
             <dt class="item-title"><?php echo get_post_meta($agreement->responder_service_id, 'service_roles', true) ;?></dt>
             <dt>Owner</dt>
             <dd><?php echo $agreement->responder_service->service_owner;?></dd>
-            <dt>User</dt>
-            <dd><?php echo get_userdata( $agreement->responder_service->service_user_id )->display_name;?></dd>
             <dt>Service</dt>
             <dd><?php echo get_the_title( $agreement->responder_service->id );?></dd>
+            <dt>Claimant</dt>
+            <dd><?php if( in_array( $agreement->status, array('Verified', 'Claimed' ) ) ) echo $agreement->responder_name;?></dd>
             <dt>Profile</dt>
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
             <?php if( $agreement->responder_audit_log_name ):?>
@@ -438,24 +459,23 @@ function get_agreement_info_popup(){
     <div class="tab-content agreements-message-log" id="tab_message_log_<?php echo $agreement->id;?>" style="display: none;">
         <div class="agreements-message-log-list" style="height: 350px;">
             <ul>
-                <li class="employer">
-                    <div class="author-name"><?php echo get_post_meta($agreement->requester_service_id, 'service_roles', true) ;?></div>
-                    <?php if( $agreement->requestor_message ):?>
-                        <div class="message-content">
-                            <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->requestor_message );?></div>
-                            <div class="message-date"><?php echo formatDate( $agreement->requestor_message_date );?></div>
-                        </div>
-                    <?php endif;?>
-                </li>
-                <li class="fund">
-                    <div class="author-name"><?php echo get_post_meta($agreement->responder_service_id, 'service_roles', true) ;?></div>
-                    <?php if( $agreement->responder_message ):?>
-                        <div class="message-content">
-                            <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $agreement->responder_message );?></div>
-                            <div class="message-date"><?php echo formatDate( $agreement->responder_message_date );?></div>
-                        </div>
-                    <?php endif;?>
-                </li>
+                <?php if( $logs ):?>
+                    <?php foreach( $logs AS $log ):?>
+                        <?php
+                            $css_class = $log->sent_by == '1' ? 'employer' : 'fund';
+                            $profile_name = $log->sent_by == '1' ? get_post_meta($agreement->requester_service_id, 'service_roles', true) : get_post_meta($agreement->responder_service_id, 'service_roles', true);
+                        ?>
+                        <li class="<?php echo $css_class;?>">
+                            <div class="author-name"><?php echo $profile_name ;?></div>
+                                <div class="message-content">
+                                    <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $log->message );?></div>
+                                    <div class="message-date"><?php echo formatDate( $log->date, 'Y-m-d H:i:s' );?></div>
+                                </div>
+                            <div class="clear"></div>
+                            <div class="padding20"></div>
+                        </li>
+                    <?php endforeach;?>
+                <?php endif;?>
             </ul>
         </div>
     </div>
