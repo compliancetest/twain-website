@@ -651,6 +651,43 @@ function create_agreement_pdf( $agreement_id ){
             <br><br>
             <table cellspacing="5" cellpadding="5" class="certificate-info" width="100%">
                 <tr>
+                    <td colspan="5" style="text-align: right; border-bottom: none;">
+                        <table style="font-size: small;">
+                            <tr>
+                                <td style="text-align: right; border-bottom: none;">Interoperability verified between:</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table style="font-size: small; font-weight: normal;">
+                            <tr>
+                                <td><b>'. $requester_service->service_owner.'</b></td>
+                            </tr>
+                             <tr>
+                                <td>'. $requester_service->service_type.': '.$requester_service->service_id.'</td>
+                             </tr>
+                             <tr>
+                                <td>Service: '. $requester_service->service_name.'</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                     <table style="font-size: small;font-weight: normal;">
+                             <tr>
+                                <td><b>'. $responder_service->service_owner.'</b></td>
+                            </tr>
+                             <tr>
+                                <td>'. $responder_service->service_type.': '.$responder_service->service_id.'</td>
+                             </tr>
+                             <tr>
+                                <td>Service: '. $responder_service->service_name.'</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
                     <th>Test Scope</th>
                     <td>' . str_replace( ';;', ', ', $agreement->scope ) . '</td>
                 </tr>
@@ -719,7 +756,7 @@ function create_agreement_pdf( $agreement_id ){
         $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
 
         // QRCODE,H : QR-CODE Best error correction
-        $pdf->write2DBarcode( get_site_url() . '/claims/' . $agreement->id . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
+        $pdf->write2DBarcode( get_site_url() . '/agreement/' . $agreement->token . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
         $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/agreement/' . $agreement->token . ".pdf" . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a></div>';
 
@@ -772,36 +809,49 @@ function create_agreement_pdf( $agreement_id ){
                                 text-align:center;
                             }
                         </style>';
-        $services_table = '<tr><th colspan="6">Audit Record</th></tr>
+        $services_table = '<tr><th colspan="4">Audit Record</th></tr>
                            <tr>
                                 <th class="test-scenario" style="width:25%; vertical-align:middle;">Entity</th>
                                 <th class="test-case" style="width:25%;">Entity ID</th>
                                 <th class="issued" style="width:25%;">Service Name</th>
                                 <th class="test-intent" style="width:25%;">Audit Files</th>
                            </tr>';
-    $responder_file = getcwd() . '/wp-content/uploads/'.$agreement->reqsponder_audit_log_name;
+    $agreement->requestor_audit_log_name = str_replace( array( ' ', ':', '-' ), '', $agreement->requestor_audit_log_name );
+    $agreement->responder_audit_log_name = str_replace( array( ' ', ':', '-' ), '', $agreement->responder_audit_log_name );
 
-    $file_location = getcwd() . '/wp-content/uploads/'.$agreement->requestor_audit_log_name;
-    $requestor_file = fopen( $file_location, "w");
+    $requester_file_location = getcwd() . '/wp-content/uploads/'.$agreement->requestor_audit_log_name;
+    $requestor_file = fopen( $requester_file_location, "w");
     fwrite( $requestor_file , $agreement->requestor_audit_log );
     fclose( $requestor_file );
 
-    $pdf->Annotation(0, 1, 0, 0, 1, array('Subtype' => 'FileAttachment', 'Name' => $agreement->requestor_audit_log_name, 'FS' => $file_location));
-    $pdf->Bookmark( $agreement->requestor_audit_log_name, 0, 0, 1, 'B', array(128, 0, 255), 0, '*' . $file_location );
+    $responder_file_location = getcwd() . '/wp-content/uploads/'.$agreement->responder_audit_log_name;
+    $responder_file = fopen( $responder_file_location, "w");
+    fwrite( $responder_file , $agreement->responder_audit_log );
+    fclose( $responder_file );
+
+    $pdf->Annotation(0, 1, 0, 0, 1, array('Subtype' => 'FileAttachment', 'Name' => $agreement->requestor_audit_log_name, 'FS' => $requester_file_location ) );
+    $pdf->Bookmark( $agreement->requestor_audit_log_name, 0, 0, 1, 'B', array(128, 0, 255), 0, '*' . $agreement->requestor_audit_log_name );
+
+    $pdf->Annotation(0, 1, 0, 0, 1, array('Subtype' => 'FileAttachment', 'Name' => $agreement->responder_audit_log_name, 'FS' => $responder_file_location ) );
+    $pdf->Bookmark( $agreement->responder_audit_log_name, 0, 0, 1, 'B', array(128, 0, 255), 0, '*' . $agreement->responder_audit_log_name );
+
     $services_table .= '<tr class="odd">
                                 <td class="test-scenario" style="width:25%; font-weight: bold;">'. $requester_service->service_owner.'</td>
-                                <td class="test-case" style="width:25%;">'. $requester_service->service_id.'</td>
+                                <td class="test-case" style="width:25%;">'. $requester_service->service_type.':'.$requester_service->service_id.'</td>
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
-                                    Click "' . $agreement->requestor_audit_log_name . '" bookmark to see message (offline) <br> OR
-                                    <a href="">' . get_site_url() . '/message-envelope?id=' . 0 . '</a> link to check message on our website
+                                Click "' . $agreement->requestor_audit_log_name . '" bookmark to see attachment (offline) <br> OR
+                                    <a href="' . get_site_url() . '/agreement/' . $agreement->token . '.pdf">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
                                 <td class="test-scenario" style="width:25%; font-weight: bold;">'. $responder_service->service_owner.'</td>
-                                <td class="test-case" style="width:25%;">'. $responder_service->service_id.'</td>
+                                <td class="test-case" style="width:25%;">'. $responder_service->service_type.':'.$responder_service->service_id.'</td>
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
-                                <td class="test-intent" style="width:25%;">'. $agreement->requestor_audit_log_name.'</td>
+                                <td class="test-intent" style="width:25%;">
+                                     Click "' . $agreement->responder_audit_log_name . '" bookmark to see attachment (offline) <br> OR
+                                    <a href="' . get_site_url() . '/agreement/' . $agreement->token . '.pdf">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a> link to download attachment on our website
+                                </td>
                            </tr>';
 
 
@@ -813,9 +863,8 @@ function create_agreement_pdf( $agreement_id ){
 
         $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
 
-//        foreach( $fArr AS $f ){
-//            unlink( $f );
-//        }
+        unlink( $requester_file_location );
+        unlink( $responder_file_location );
 
         return $pdfString;
 }
