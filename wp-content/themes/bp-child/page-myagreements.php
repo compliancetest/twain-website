@@ -364,7 +364,11 @@ get_header();
                        <div class="space20"></div>
                 <?php endforeach;?>
             <?php endif;?>
-           <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <?php if( check_user_has_make_agreement_priv() ):?>
+                <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <?php else:?>
+               <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <?php endif;?>
            <div class="clear"></div>
            <div class="space10"></div>
         </div>
