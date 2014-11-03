@@ -619,13 +619,16 @@ function create_agreement_pdf( $agreement_id ){
         $pdf->AddPage();
 
         $title = '<h1 style="color: #000; font-size: 48pt; font-weight: bold; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
-        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has successfully completed the indicated test suite using the specified product or service version. The test suite has been designed to meet the compliance requirements of the reference specification issuer.<br></p>';
+        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has completed and end-to-end interoperability test between the two parties defined below. Both parties have confirmed that the test was successful for the scope described.<br></p>';
 
         //Getting Claim Defaults
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
         $requester_service = new Service( $agreement->requester_service_id );
         $requester_service->load();
+
+        $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
+        $requester_test_suite->load();
 
         $responder_service = new Service( $agreement->responder_service_id );
         $responder_service->load();
@@ -700,7 +703,7 @@ function create_agreement_pdf( $agreement_id ){
                     <td><a href="' . get_permalink( $responder_service->id ) .'">' . get_the_title( $responder_service->id ) . '</a></td>
                 </tr>
                 <tr>
-                    <th>Service Version</th>
+                    <th>Version</th>
                     <td>' . $responder_service->service_version . '</td>
                 </tr>
                 <tr>
@@ -709,7 +712,7 @@ function create_agreement_pdf( $agreement_id ){
                 </tr>
                 <tr>
                     <th>Specification Issuer</th>
-                    <td>' . $requester_service->service_owner . '</td>
+                    <td>' . $requester_test_suite->issuer . '</td>
                 </tr>
                 <tr>
                     <th>Role(s)</th>
