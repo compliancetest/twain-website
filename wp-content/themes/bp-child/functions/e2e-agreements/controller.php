@@ -743,7 +743,7 @@ function create_agreement_pdf( $agreement_id ){
         $pdf->writeHTMLCell(0, 0, '', '', $description, 0, 1, 0, false, '', false);
 
         // Print text using writeHTMLCell()
-        $compliance_tested_image = K_PATH_IMAGES . "compliance-tested.png";
+        $compliance_tested_image = K_PATH_IMAGES . "agreement_logo_large.png";
         $pdf->Image($compliance_tested_image, '', '', 120, '', 'PNG', '', 'N', false, 300, 'C', false, false, 1, false, false, false);
 
         // define active area for signature appearance
@@ -866,8 +866,8 @@ function create_agreement_pdf( $agreement_id ){
 
         $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
 
-        unlink( $requester_file_location );
-        unlink( $responder_file_location );
+        @unlink( $requester_file_location );
+        @unlink( $responder_file_location );
 
         return $pdfString;
 }

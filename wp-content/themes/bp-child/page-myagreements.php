@@ -448,8 +448,8 @@ get_header();
         });
 
         $('.claim_file').on('change', function(){
-            $( this).parents('.claim-upload-box').find('.uploaded-files li a').html( $('.file-value').text() );
-            $( this).parents('.claim-upload-box').find('.uploaded-files li .remove-icon').show();
+            jQuery( this).parents('.claim-upload-box').find('.uploaded-files li a').html( jQuery('.file-value').text().replace( /Choose File/gi, '' ) );
+            jQuery( this).parents('.claim-upload-box').find('.uploaded-files li .remove-icon').show();
         });
         $('.remove-icon').on('click', function(){
             $('.claim_file').val( '' );
