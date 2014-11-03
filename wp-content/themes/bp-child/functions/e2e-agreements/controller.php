@@ -23,9 +23,18 @@ function process_agreement_actions()
     //new request for e2e testing
     if(wp_verify_nonce($action, 'save-agreement')){
         saveAgreement();
-//    }else if(wp_verify_nonce($action, 'delete-agreement')){
-//        deleteAgreement();
-    //accept e2e testing request
+    }else if(wp_verify_nonce($action, 'delete-agreement')){
+        if( is_super_admin() ){
+            $agreement_id = intval($_REQUEST['id']);
+            $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+            $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
+            addMessage('Success!');
+        }else{
+            addMessage('Forbidden!', 'error');
+        }
+        wp_redirect( wp_get_referer() );
+        exit;
+        //accept e2e testing request
     } else if( wp_verify_nonce($action, 'accept-agreement' ) ) {
         $agreement_id = intval($_REQUEST['agreement_id']);
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
