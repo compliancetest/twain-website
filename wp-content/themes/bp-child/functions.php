@@ -103,6 +103,7 @@ require_once(THE_FUNCTION . '/service/controller.php');
 
 //E2E Agreements
 require_once(THE_FUNCTION . '/e2e-agreements/class.agreement.php');
+require_once(THE_FUNCTION . '/e2e-agreements/class.agreement.log.php');
 require_once(THE_FUNCTION . '/e2e-agreements/controller.php');
 
 //Processes

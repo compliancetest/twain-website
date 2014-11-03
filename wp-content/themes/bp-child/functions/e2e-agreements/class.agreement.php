@@ -57,16 +57,13 @@ class Agreement
             ),
             array( '%s', '%d', '%s', '%d', '%d', '%s', '%s' )
         );
-        $wpdb->insert( 'wp_e2e_agreement_log',
-            array(
-                'agreement_id'    => $wpdb->insert_id,
-                'sent_by'         => 1,
-                'sent_by_user_id' => get_current_user_id(),
-                'message'         => $data['agreement_message'],
-                'date'            => gmmktime()
-            ),
-            array( '%d', '%d', '%d', '%s', '%d' )
-        );
+        AgreementLog::add_entry( array(
+            'agreement_id' => $wpdb->insert_id,
+            'sent_by'      => 1,
+            'message'      => $data['agreement_message'],
+            'state'        => 'Request'
+
+        ));
         $service = new Service( $data['responder_service'] );
         $service->load();
         //send notifications to sender, receiver and admin

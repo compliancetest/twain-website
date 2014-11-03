@@ -43,16 +43,13 @@ function process_agreement_actions()
             array( '%s', '%s', '%s' ),
             array('%d')
         );
-        $wpdb->insert( 'wp_e2e_agreement_log',
-            array(
-                'agreement_id'    => $agreement_id,
-                'sent_by'         => 2,
-                'sent_by_user_id' => get_current_user_id(),
-                'message'         => $_REQUEST['agreement_message'],
-                'date'            => gmmktime()
-            ),
-            array( '%d', '%d', '%d', '%s', '%d' )
-        );
+        AgreementLog::add_entry( array(
+            'agreement_id' => $agreement_id,
+            'sent_by'      => 2,
+            'message'      => $_REQUEST['agreement_message'],
+            'state'        => 'Accept'
+
+        ));
         //send notifications to sender, receiver and admin
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
@@ -82,6 +79,8 @@ function process_agreement_actions()
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
 
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
 
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
@@ -122,11 +121,13 @@ function process_agreement_actions()
                 $name_field = 'requestor_audit_log_name';
                 $type_field = 'requestor_audit_log_type';
                 $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
+                $sent_by = 1;
             } else{
                 $file_field = 'responder_audit_log';
                 $name_field = 'responder_audit_log_name';
                 $type_field = 'responder_audit_log_type';
                 $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
+                $sent_by = 2;
             }
             $service = new Service($service_id);
             $service->load();
@@ -145,6 +146,14 @@ function process_agreement_actions()
                 array( '%s', '%s', '%s', '%s', '%s' ),
                 array( '%d' )
             );
+
+            AgreementLog::add_entry( array(
+                'agreement_id' => $agreement_id,
+                'sent_by'      => $sent_by,
+                'message'      => '',
+                'state'        => 'Claim'
+
+            ));
 
             $service->load();
             $sender = get_userdata( get_current_user_id() );
@@ -185,10 +194,12 @@ function process_agreement_actions()
                 $file_field = 'requestor_audit_log';
                 $name_field = 'requestor_audit_log_name';
                 $type_field = 'requestor_audit_log_type';
+                $sent_by = 1;
             } else{
                 $file_field = 'responder_audit_log';
                 $name_field = 'responder_audit_log_name';
                 $type_field = 'responder_audit_log_type';
+                $sent_by = 2;
             }
             //generate PDF
 
@@ -211,6 +222,14 @@ function process_agreement_actions()
                 array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' ),
                 array( '%d' )
             );
+
+            AgreementLog::add_entry( array(
+                'agreement_id' => $agreement_id,
+                'sent_by'      => $sent_by,
+                'message'      => '',
+                'state'        => 'Claim Accept'
+
+            ));
 
             $pdfString = create_agreement_pdf( $agreement_id );
 
@@ -319,23 +338,20 @@ function process_agreement_actions()
 
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
-        $sent_by = 1;
+        $sent_by = 2;
         if( get_current_user_id() == $service->service_user_id ){
             $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
             $service->load();
-            $sent_by = 2;
+            $sent_by = 1;
         }
 
-        $wpdb->insert( 'wp_e2e_agreement_log',
-            array(
-                'agreement_id'    => $agreement_id,
-                'sent_by'         => $sent_by,
-                'sent_by_user_id' => get_current_user_id(),
-                'message'         => $_REQUEST['deny-reason-field'],
-                'date'            => gmmktime()
-            ),
-            array( '%d', '%d', '%d', '%s', '%d' )
-        );
+        AgreementLog::add_entry( array(
+            'agreement_id' => $agreement_id,
+            'sent_by'      => $sent_by,
+            'message'      => $_REQUEST['deny-reason-field'],
+            'state'        => 'Claim Fail'
+
+        ));
 
         $sender = get_userdata( get_current_user_id() );
         $receiver = get_userdata( $service->service_user_id );
@@ -437,7 +453,7 @@ function get_agreement_info_popup(){
     global $wpdb;
     $agreement_model = new Agreement();
     $agreement = $agreement_model->get_service_agreements( false, intval( $_REQUEST['id'] ) );
-    $logs = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_e2e_agreement_log WHERE agreement_id = %d ", intval( $_REQUEST['id'] ) ) );
+    $logs = AgreementLog::get_agreement_log( intval( $_REQUEST['id'] ) );
     ?>
     <div class="popup-box agreement-details-popup" id="agreement-details-popup" style="display: none; width: 500px">
        <div class="popup-box-header radius6 noradiusbottom">Agreement</div>
@@ -514,10 +530,12 @@ function get_agreement_info_popup(){
                             $css_class = $log->sent_by == '1' ? 'employer' : 'fund';
                             $profile_name = $log->sent_by == '1' ? get_post_meta($agreement->requester_service_id, 'service_roles', true) : get_post_meta($agreement->responder_service_id, 'service_roles', true);
                         ?>
-                        <li class="<?php echo $css_class;?>">
-                            <div class="author-name"><?php echo $profile_name ;?></div>
+                        <li class="<?php echo $css_class;?>" style="margin-bottom: 10px;">
+                            <div class="author-name"><?php echo $profile_name.' ('.$log->state.')<br>'.$log->sent_by_user ;?></div>
                                 <div class="message-content">
-                                    <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $log->message );?></div>
+                                    <?php if( ! empty( $log->message ) ):?>
+                                        <div class="message-body"><span class="message-box-arrow"></span><?php echo stripcslashes( $log->message );?></div>
+                                    <?php endif;?>
                                     <div class="message-date"><?php echo formatDate( $log->date, 'Y-m-d H:i:s' );?></div>
                                 </div>
                             <div class="clear"></div>
