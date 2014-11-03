@@ -20,10 +20,12 @@ function process_agreement_actions()
 {
     global $wpdb;
     $action = isset($_REQUEST['_psnonce']) ? $_REQUEST['_psnonce'] : null;
+    //new request for e2e testing
     if(wp_verify_nonce($action, 'save-agreement')){
         saveAgreement();
-    }else if(wp_verify_nonce($action, 'delete-agreement')){
-        deleteAgreement();
+//    }else if(wp_verify_nonce($action, 'delete-agreement')){
+//        deleteAgreement();
+    //accept e2e testing request
     } else if( wp_verify_nonce($action, 'accept-agreement' ) ) {
         $agreement_id = intval($_REQUEST['agreement_id']);
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
@@ -50,54 +52,34 @@ function process_agreement_actions()
             'state'        => 'Accept'
 
         ));
+        $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         //send notifications to sender, receiver and admin
-        $sender = get_userdata( get_current_user_id() );
-        $receiver = get_userdata( $service->service_user_id );
-        $email_data = array(
-            '[sender_name]'   => $sender->display_name,
-            '[receiver_name]' => $receiver->display_name,
-            '[agreement_url]' => home_url( '/agreements/'),
-            '[test_suite]'    => get_the_title( $service->service_suite_id )
+        Agreement::send_agreement_email( 'accept', get_current_user_id(), $service->service_user_id, array('text'                => $_REQUEST['agreement_message'],
+                                                                                                'sender_service_id'   =>  $agreement->responder_service_id,
+                                                                                                'receiver_service_id' => $service->id )
         );
-        //send email to requester
-        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_request_accepted_sender', $email_data );
-
-        //send email to receiver
-        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_request_accepted_receiver', $email_data );
-
-        //send email to admin
-        cp_send_email_to_admin( 'e2e_request_accepted_admin', $email_data );
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_update_agreement( $agreement_id );
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
+    //reject e2e testing
     } else if( wp_verify_nonce($action, 'cancel-agreement' ) ) {
         $agreement_id = intval($_REQUEST['id']);
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
 
+        $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
 
-        $sender = get_userdata( get_current_user_id() );
-        $receiver = get_userdata( $service->service_user_id );
-        $email_data = array(
-            '[sender_name]'   => $sender->display_name,
-            '[receiver_name]' => $receiver->display_name,
-            '[agreement_url]' => home_url( '/agreements/'),
-            '[message_text]'  => $_REQUEST['deny-reason-field']
+        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array('text'                => $_REQUEST['deny-reason-field'],
+                                                                                                'sender_service_id'   => $agreement->responder_service_id,
+                                                                                                'receiver_service_id' => $service->id )
         );
-        //send email to requester
-        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_request_rejected_sender', $email_data );
-
-        //send email to receiver
-        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_request_rejected_receiver', $email_data );
-
-        //send email to admin
-        cp_send_email_to_admin( 'e2e_request_rejected_admin', $email_data );
 
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_update_agreement( $agreement_id );
@@ -105,6 +87,7 @@ function process_agreement_actions()
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
+    //claim accepted e2e testing agreement
     } else if( wp_verify_nonce($action, 'claim_agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
@@ -156,21 +139,13 @@ function process_agreement_actions()
             ));
 
             $service->load();
-            $sender = get_userdata( get_current_user_id() );
-            $receiver = get_userdata( $service->service_user_id );
-            $email_data = array(
-                '[sender_name]'   => $sender->display_name,
-                '[receiver_name]' => $receiver->display_name,
-                '[agreement_url]' => home_url( '/agreements/')
+
+            $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+            Agreement::send_agreement_email( 'claim', get_current_user_id(), $service->service_user_id, array('text'                => $_REQUEST['deny-reason-field'],
+                                                                                                    'sender_service_id'   => $agreement->responder_service_id == $service_id ? $agreement->requester_service_id : $agreement->responder_service_id,
+                                                                                                    'receiver_service_id' => $service_id )
             );
-            //send email to requester
-            cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_claim_made_sender', $email_data );
-
-            //send email to receiver
-            cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_claim_made_receiver', $email_data );
-
-            //send email to admin
-            cp_send_email_to_admin( 'e2e_claim_made_admin', $email_data );
         }
 
         $cloud_search = new CloudSearch();
@@ -179,6 +154,7 @@ function process_agreement_actions()
         addMessage( 'Success' );
         wp_redirect('/agreements/');
         exit;
+    //accept claim
     } else if( wp_verify_nonce($action, 'confirm-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
@@ -248,61 +224,18 @@ function process_agreement_actions()
                 $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
                 $service->load();
             }
-            $sender = get_userdata( get_current_user_id() );
-            $receiver = get_userdata( $service->service_user_id );
-            $email_data = array(
-                '[sender_name]'   => $sender->display_name,
-                '[receiver_name]' => $receiver->display_name,
-                '[agreement_url]' => home_url( '/agreements/')
+            $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+            Agreement::send_agreement_email( 'confirm_claim', get_current_user_id(), $service->service_user_id, array('text'         => '',
+                                                                                                    'sender_service_id'   => $agreement->responder_service_id == $service->id ? $agreement->requester_service_id : $agreement->responder_service_id,
+                                                                                                    'receiver_service_id' => $service->id )
             );
-            //send email to requester
-            cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_claim_confirmed_sender', $email_data );
-
-            //send email to receiver
-            cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_claim_confirmed_receiver', $email_data );
-
-            //send email to admin
-            cp_send_email_to_admin( 'e2e_claim_confirmed_admin', $email_data );
         }
 
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_update_agreement( $agreement_id );
 
         addMessage( 'Success' );
-        wp_redirect('/agreements/');
-        exit;
-    } else if( wp_verify_nonce($action, 'reject-pending-agreement' ) ){
-        $agreement_id = intval($_REQUEST['agreement_id']);
-        Agreement::has_access( 'edit-agreement', false, $agreement_id );
-        
-        $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
-        $service->load();
-        
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
-
-        
-        $sender = get_userdata( get_current_user_id() );
-        $receiver = get_userdata( $service->service_user_id );
-        $email_data = array(
-            '[sender_name]'   => $sender->display_name,
-            '[receiver_name]' => $receiver->display_name,
-            '[agreement_url]' => home_url( '/agreements/'),
-            '[message_text]'  => $_REQUEST['deny-reason-field']
-        );
-        //send email to requester
-        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_request_rejected_sender', $email_data );
-
-        //send email to receiver
-        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_request_rejected_receiver', $email_data );
-
-        //send email to admin
-        cp_send_email_to_admin( 'e2e_request_rejected_admin', $email_data );
-
-        $cloud_search = new CloudSearch();
-        $cloud_search->cloud_search_update_agreement( $agreement_id );
-
-
-        addMessage('Success');
         wp_redirect('/agreements/');
         exit;
     }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
@@ -316,6 +249,7 @@ function process_agreement_actions()
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
+    //reject claim
     }else if( wp_verify_nonce($action, 'reject-failed-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
@@ -352,23 +286,12 @@ function process_agreement_actions()
             'state'        => 'Claim Fail'
 
         ));
+        $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
-        $sender = get_userdata( get_current_user_id() );
-        $receiver = get_userdata( $service->service_user_id );
-        $email_data = array(
-            '[sender_name]'   => $sender->display_name,
-            '[receiver_name]' => $receiver->display_name,
-            '[agreement_url]' => home_url( '/agreements/'),
-            '[message_text]'  => $_REQUEST['deny-reason-field']
+        Agreement::send_agreement_email( 'reject_claim', get_current_user_id(), $service->service_user_id, array('text'                 => $_REQUEST['deny-reason-field'],
+                                                                                                        'sender_service_id'   => $agreement->responder_service_id == $service->id ? $agreement->requester_service_id : $agreement->responder_service_id,
+                                                                                                        'receiver_service_id' => $service->id )
         );
-        //send email to requester
-        cp_send_email( array('name' => $sender->display_name, 'email' => $sender->user_email), 'e2e_claim_failed_sender', $email_data );
-
-        //send email to receiver
-        cp_send_email( array('name' => $receiver->display_name, 'email' => $receiver->user_email), 'e2e_claim_failed_receiver', $email_data );
-
-        //send email to admin
-        cp_send_email_to_admin( 'e2e_claim_failed_admin', $email_data );
 
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_update_agreement( $agreement_id );
