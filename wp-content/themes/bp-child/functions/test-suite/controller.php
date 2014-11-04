@@ -26,32 +26,7 @@ function remove_suite_name_id_map($postid)
         //Delete From Suite Map Table
         $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
         
-        cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
         
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", $familyMark, $major_version);
-        $next_suite_id = $wpdb->get_var($query);
-        
-        $esb = new ManageESB();
-        
-        if ($next_suite_id) {
-            //Update Subscriptions, Test Plans, Transactions
-            $query = $wpdb->update($wpdb->prefix . "users_subscriptions", 
-                                    array('suite_id' => $next_suite_id), 
-                                    array('suite_id' => $postid),
-                                    array('%d'),
-                                    array('%d')
-                                    );
-            $query = $wpdb->update($wpdb->prefix . "test_plans", 
-                                    array('suite_id' => $next_suite_id), 
-                                    array('suite_id' => $postid),
-                                    array('%d'),
-                                    array('%d')
-                                    );
-            $esb->updateAuditRecordSuiteId($postid, $next_suite_id);
-            
-        } 
-        
-        $esb->deleteTestSuiteInfo($postid);
         
     }
 }
@@ -186,7 +161,33 @@ function deleteTestSuite()
         exit;
     }
     
+    cp_sort_test_suites($familyMark, get_post_meta($id, 'ts_version_major', true));
+        
+    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", $familyMark, $major_version);
+    $next_suite_id = $wpdb->get_var($query);
+    
     $esb = new ManageESB();
+    
+    if ($next_suite_id) {
+        //Update Subscriptions, Test Plans, Transactions
+        $query = $wpdb->update($wpdb->prefix . "users_subscriptions", 
+                                array('suite_id' => $next_suite_id), 
+                                array('suite_id' => $id),
+                                array('%d'),
+                                array('%d')
+                                );
+        $query = $wpdb->update($wpdb->prefix . "test_plans", 
+                                array('suite_id' => $next_suite_id), 
+                                array('suite_id' => $id),
+                                array('%d'),
+                                array('%d')
+                                );
+        $esb->updateAuditRecordSuiteId($id, $next_suite_id);
+        
+    } 
+    
+    $esb->deleteTestSuiteInfo($id);
+    
     $esb->deleteTestSuiteNameIDMap($id);
     
     addMessage("The test suite was deleted");
