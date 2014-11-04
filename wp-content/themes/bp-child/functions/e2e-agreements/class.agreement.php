@@ -200,7 +200,7 @@ class Agreement
         $receiver_service->load();
 
         $email_data = array(
-            '[env]'              => get_home_url(),
+            '[env]'              => strpos( get_home_url(), 'test.compliancetest' ) === false ? 'production' : 'test',
             '[sender_owner]'     => $sender_service->service_owner,
             '[sender_service]'   => $sender_service->service_name,
             '[sender_name]'      => cp_get_user_fullname( $sender_id ),
@@ -208,7 +208,7 @@ class Agreement
             '[receiver_service]' => $receiver_service->service_name,
             '[receiver_name]'    => cp_get_user_fullname( $receiver_service->service_user_id ),
             '[agreement_url]'    => home_url( '/agreement/'),
-            '[message_text]'     => $data['text']
+            '[message_text]'     => stripslashes( $data['text'] )
         );
         //send email to requesters
         //get sender organisation
