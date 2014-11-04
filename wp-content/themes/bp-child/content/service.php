@@ -119,6 +119,9 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 <th class="centered">Status</th>
                 <th class="centered">Date</th>
                 <th class="centered">Certificate</th>
+                <?php if( is_super_admin() ):?>
+                    <th class="centered">Action</th>
+                <?php endif;?>
             </tr>
             </thead>
             <tbody>
@@ -141,6 +144,11 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                                     <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
                                 <?php } ?>
                             </td>
+                            <?php if( is_super_admin() ):?>
+                                <td class="centered">
+                                    <a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('delete-agreement')?>&id=<?php echo $agreement->id?>" class="action-btn delete-btn icon-btn delete_service has-tooltip right" href="#"><span class="p"></span><span class="simple_tooltip radius6" style="top: -40px;">Delete Agreement<span></span></span></a>
+                                </td>
+                            <?php endif;?>
                         </tr>
                     <?php endforeach;?>
                 <?php else:?>

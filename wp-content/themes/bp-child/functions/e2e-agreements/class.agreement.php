@@ -44,9 +44,13 @@ class Agreement
     public function addEntry( $data ){
         global $wpdb;
         Agreement::has_access( 'add-agreement', $data['responder_service'] );
+        $counter = 1;
+        do{
+            $temp_agreement_id = $data['agreement_id'].'.'.$counter++;
+        } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $temp_agreement_id ) ) );
         $wpdb->insert( $this->_table,
             array(
-                'str_id'                 => $data['agreement_id'],
+                'str_id'                 => $temp_agreement_id,
                 'requester_service_id'   => $data['requester_service'],
                 'requestor_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_service_id'   => $data['responder_service'],
@@ -196,7 +200,7 @@ class Agreement
         $receiver_service->load();
 
         $email_data = array(
-            '[env]'              => get_home_url(),
+            '[env]'              => strpos( get_home_url(), 'test.compliancetest' ) === false ? 'production' : 'test',
             '[sender_owner]'     => $sender_service->service_owner,
             '[sender_service]'   => $sender_service->service_name,
             '[sender_name]'      => cp_get_user_fullname( $sender_id ),
@@ -204,7 +208,7 @@ class Agreement
             '[receiver_service]' => $receiver_service->service_name,
 //            '[receiver_name]'    => cp_get_user_fullname( $receiver_service->service_user_id ),
             '[agreement_url]'    => home_url( '/agreement/'),
-            '[message_text]'     => $data['text']
+            '[message_text]'     => stripslashes( $data['text'] )
         );
         //send email to requesters
         //get sender organisation
