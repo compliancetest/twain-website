@@ -44,9 +44,13 @@ class Agreement
     public function addEntry( $data ){
         global $wpdb;
         Agreement::has_access( 'add-agreement', $data['responder_service'] );
+        $counter = 1;
+        do{
+            $temp_agreement_id = $data['agreement_id'].'.'.$counter++;
+        } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $temp_agreement_id ) ) );
         $wpdb->insert( $this->_table,
             array(
-                'str_id'                 => $data['agreement_id'],
+                'str_id'                 => $temp_agreement_id,
                 'requester_service_id'   => $data['requester_service'],
                 'requestor_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_service_id'   => $data['responder_service'],
