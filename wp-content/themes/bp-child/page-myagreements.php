@@ -215,7 +215,7 @@ get_header();
                                                                            <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                        </div>
                                                                        <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                       <?php echo wp_nonce_field( 'reject-pending-agreement', '_psnonce' );?>
+                                                                       <?php echo wp_nonce_field( 'cancel-agreement', '_psnonce' );?>
                                                                    </div>
                                                                    <div class="popup-box-footer radius6 noradiustop">
                                                                        <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>
@@ -232,12 +232,12 @@ get_header();
                                                        <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="agree-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Cancel</a>
 
                                                        <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                           <div class="popup-box-header radius6 noradiusbottom">Confirm Cancel</div>
+                                                           <div class="popup-box-header radius6 noradiusbottom">Confirm Agreement Cancellation</div>
                                                            <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
                                                                <div class="popup-box-content">
                                                                    <p>Are you sure you want to <strong>Cancel</strong> this agreement?</p>
                                                                    <div class="agreement-deny-reason">
-                                                                       <label>Let us know why:</label>
+                                                                       <label>Reason for cancellation:</label>
                                                                        <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                    </div>
                                                                    <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
@@ -364,7 +364,11 @@ get_header();
                        <div class="space20"></div>
                 <?php endforeach;?>
             <?php endif;?>
-           <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <?php if( check_user_has_make_agreement_priv() ):?>
+                <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <?php else:?>
+               <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+           <?php endif;?>
            <div class="clear"></div>
            <div class="space10"></div>
         </div>
@@ -451,8 +455,8 @@ get_header();
         });
 
         $('.claim_file').on('change', function(){
-            $( this).parents('.claim-upload-box').find('.uploaded-files li a').html( $('.file-value').text() );
-            $( this).parents('.claim-upload-box').find('.uploaded-files li .remove-icon').show();
+            jQuery( this).parents('.claim-upload-box').find('.uploaded-files li a').html( jQuery('.file-value').text().replace( /Choose File/gi, '' ) );
+            jQuery( this).parents('.claim-upload-box').find('.uploaded-files li .remove-icon').show();
         });
         $('.remove-icon').on('click', function(){
             $('.claim_file').val( '' );

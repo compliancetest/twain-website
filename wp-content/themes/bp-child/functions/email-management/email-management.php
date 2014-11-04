@@ -519,7 +519,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E Test request',
             'title'         => 'E2E Test request',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'shortcodes'    => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
@@ -538,7 +538,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test request accepted',
             'title'         => 'E2E test request accepted',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [test_suite]',
+            'shortcodes'    => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
@@ -557,7 +557,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test request rejected',
             'title'         => 'E2E test request rejected',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'shortcodes'    => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
@@ -576,7 +576,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test claim made',
             'title'         => 'E2E test claim made',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url]',
+            'shortcodes'    => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
@@ -595,7 +595,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test claim failed',
             'title'         => 'E2E test claim failed',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url], [message_text]',
+            'shortcodes'    => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',
@@ -614,7 +614,7 @@ $ct_email_templates = array(
         array(
             'menu'          => 'E2E test claim confirmed',
             'title'         => 'E2E test claim confirmed',
-            'shortcodes'    => '[sender_name], [receiver_name],[agreement_url]',
+            'shortcodes'    => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
             'fields' => array(
                 array(
                     'title'         => 'For Sender',

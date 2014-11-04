@@ -44,9 +44,13 @@ class Agreement
     public function addEntry( $data ){
         global $wpdb;
         Agreement::has_access( 'add-agreement', $data['responder_service'] );
-        $insert_id = $wpdb->insert( $this->_table,
+        $counter = 1;
+        do{
+            $temp_agreement_id = $data['agreement_id'].'.'.$counter++;
+        } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $temp_agreement_id ) ) );
+        $wpdb->insert( $this->_table,
             array(
-                'str_id'                 => $data['agreement_id'],
+                'str_id'                 => $temp_agreement_id,
                 'requester_service_id'   => $data['requester_service'],
                 'requestor_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_service_id'   => $data['responder_service'],
@@ -57,35 +61,19 @@ class Agreement
             ),
             array( '%s', '%d', '%s', '%d', '%d', '%s', '%s' )
         );
-        $wpdb->insert( 'wp_e2e_agreement_log',
-            array(
-                'agreement_id'    => $wpdb->insert_id,
-                'sent_by'         => 1,
-                'sent_by_user_id' => get_current_user_id(),
-                'message'         => $data['agreement_message'],
-                'date'            => gmmktime()
-            ),
-            array( '%d', '%d', '%d', '%s', '%d' )
-        );
+        $insert_id = $wpdb->insert_id;
+        AgreementLog::add_entry( array(
+            'agreement_id' => $insert_id,
+            'sent_by'      => 1,
+            'message'      => $data['agreement_message'],
+            'state'        => 'Request'
+
+        ));
+
         $service = new Service( $data['responder_service'] );
         $service->load();
         //send notifications to sender, receiver and admin
-        $sender = get_userdata( get_current_user_id() );
-        $receiver = get_userdata( $service->service_user_id );
-        $email_data = array(
-            '[sender_name]'   => $sender->data->display_name,
-            '[receiver_name]' => $receiver->data->display_name,
-            '[agreement_url]' => home_url( '/service/service/'),
-        );
-        //send email to requester
-        cp_send_email( array('name' => $sender->data->display_name, 'email' => $sender->data->user_email), 'e2e_request_sender', $email_data );
-
-        $email_data['[message_text]'] = $data['agreement_message'];
-        //send email to receiver
-        cp_send_email( array('name' => $receiver->data->display_name, 'email' => $receiver->data->user_email), 'e2e_request_receiver', $email_data );
-
-        //send email to admin
-        cp_send_email_to_admin( 'e2e_request_admin', $email_data );
+        Agreement::send_agreement_email( 'request', get_current_user_id(), $service->service_user_id, array( 'text' => $data['agreement_message'], 'sender_service_id' => $data['requester_service'], 'receiver_service_id' => $data['responder_service'] ) );
 
         if( $wpdb->last_error ){
             addMessage( $wpdb->last_error, 'error' );
@@ -161,5 +149,105 @@ class Agreement
             wp_redirect( '/' );
             exit();
         }
+    }
+
+    public static function send_agreement_email( $template, $sender_id, $receiver_id, $data = array() ){
+
+        global $wpdb;
+
+        $templates = array(
+            'request' => array(
+                'sender'   => 'e2e_request_sender',
+                'receiver' => 'e2e_request_receiver',
+                'admin'    => 'e2e_request_admin',
+            ),
+            'accept' => array(
+                'sender'   => 'e2e_request_accepted_sender',
+                'receiver' => 'e2e_request_accepted_receiver',
+                'admin'    => 'e2e_request_accepted_admin',
+            ),
+            'reject' => array(
+                'sender'   => 'e2e_request_rejected_sender',
+                'receiver' => 'e2e_request_rejected_receiver',
+                'admin'    => 'e2e_request_rejected_admin',
+            ),
+            'claim' => array(
+                'sender'   => 'e2e_claim_made_sender',
+                'receiver' => 'e2e_claim_made_receiver',
+                'admin'    => 'e2e_claim_made_admin',
+            ),
+            'cancel' => array(
+                'sender'   => 'e2e_request_rejected_sender',
+                'receiver' => 'e2e_request_rejected_receiver',
+                'admin'    => 'e2e_request_rejected_admin',
+            ),
+            'confirm_claim' => array(
+                'sender'   => 'e2e_claim_confirmed_sender',
+                'receiver' => 'e2e_claim_confirmed_receiver',
+                'admin'    => 'e2e_claim_confirmed_admin',
+            ),
+            'reject_claim' => array(
+                'sender'   => 'e2e_claim_failed_sender',
+                'receiver' => 'e2e_claim_failed_receiver',
+                'admin'    => 'e2e_claim_failed_admin',
+            ),
+        );
+
+        $sender_service = new Service( $data['sender_service_id'] );
+        $sender_service->load();
+
+        $receiver_service = new Service( $data['receiver_service_id'] );
+        $receiver_service->load();
+
+        $email_data = array(
+            '[env]'              => get_home_url(),
+            '[sender_owner]'     => $sender_service->service_owner,
+            '[sender_service]'   => $sender_service->service_name,
+            '[sender_name]'      => cp_get_user_fullname( $sender_id ),
+            '[receiver_owner]'   => $receiver_service->service_owner,
+            '[receiver_service]' => $receiver_service->service_name,
+            '[receiver_name]'    => cp_get_user_fullname( $receiver_service->service_user_id ),
+            '[agreement_url]'    => home_url( '/agreement/'),
+            '[message_text]'     => $data['text']
+        );
+        //send email to requesters
+        //get sender organisation
+        $organisation = ct_get_user_organisation( $sender_id );
+        //users with MAKE_AGREEMENT permission
+        $sender_users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $organisation->id ) );
+        if( $sender_users ){
+            foreach( $sender_users AS $u ){
+                $email_data['email_receiver_name'] = cp_get_user_fullname( $u->user_id );
+                cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
+            }
+
+        } else{
+            //get organisation admin and send him email
+            $admin_user = ct_get_organisation_admin( $organisation->id );
+            $email_data['email_receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
+            cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
+        }
+
+        //send email to requesters
+
+        $receiver_organisation = ct_get_user_organisation( $receiver_id );
+        //users with MAKE_AGREEMENT permission
+        $receiver_users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $receiver_organisation->id ) );
+        if( $receiver_users ){
+            foreach( $receiver_users AS $u ){
+                $email_data['email_receiver_name'] = cp_get_user_fullname( $u->user_id );
+                cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
+            }
+
+        } else{
+            //get organisation admin and send him email
+            $admin_user = ct_get_organisation_admin( $receiver_organisation->id );
+            $email_data['email_receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
+            cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
+        }
+
+        //send email to admin
+        cp_send_email_to_admin( $templates[$template]['admin'], $email_data );
+
     }
 }

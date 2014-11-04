@@ -417,3 +417,24 @@ function ct_check_user_privilege($user_id, $organisation_id, $privilege)
     
 }
 
+function check_user_has_make_agreement_priv(){
+    $user_id = get_current_user_id();
+    if( ! $user_id ){
+        return false;
+    }
+    if( is_super_admin( )){
+        return true;
+    }
+    $user_membership = ct_get_user_organisation_membership($user_id);
+
+    if( ! $user_membership ) {
+        return false;
+    }
+
+    //Check User Privilege
+    if( ! ct_check_user_privilege($user_id, $user_membership->organisation_id, "MAKE_AGREEMENTS")) {
+        return false;
+    }
+    return true;
+}
+

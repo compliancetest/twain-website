@@ -24,7 +24,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                         <?php endif;?>
                     <?php } ?>
                     <?php if( is_user_logged_in() && $service->service_user_id != get_current_user_id() ):?>
-                        <?php if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ):?>
+                        <?php if( ! check_user_has_make_agreement_priv() ):?>
                             <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn green-btn"><span class="t">Request E2E Test</span></a>
                         <?php else:?>
                             <a href="#e2e-test-request" class="action-btn green-btn e2e-test-request-link">Request E2E Test</a>
@@ -119,6 +119,9 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 <th class="centered">Status</th>
                 <th class="centered">Date</th>
                 <th class="centered">Certificate</th>
+                <?php if( is_super_admin() ):?>
+                    <th class="centered">Action</th>
+                <?php endif;?>
             </tr>
             </thead>
             <tbody>
@@ -141,6 +144,11 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                                     <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
                                 <?php } ?>
                             </td>
+                            <?php if( is_super_admin() ):?>
+                                <td class="centered">
+                                    <a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('delete-agreement')?>&id=<?php echo $agreement->id?>" class="action-btn delete-btn icon-btn delete_service has-tooltip right" href="#"><span class="p"></span><span class="simple_tooltip radius6" style="top: -40px;">Delete Agreement<span></span></span></a>
+                                </td>
+                            <?php endif;?>
                         </tr>
                     <?php endforeach;?>
                 <?php else:?>

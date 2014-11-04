@@ -238,7 +238,7 @@ if(isset($_SESSION['product_data']))
                                 $args = array(
                                     'post_type' => 'service',
                                     'posts_per_page' => -1,
-                                    'author' => get_current_user_id(),
+//                                    'author' => get_current_user_id(),
                                     'meta_query' => array(
                                         array(
                                             'key' => 'service_product_id',
@@ -258,8 +258,13 @@ if(isset($_SESSION['product_data']))
                                             <div class="grid-cell width30P">
                                             </div>
                                             <div class="grid-cell right">
-                                                <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
-                                                <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
+                                                <?php if( check_user_has_make_agreement_priv() ):?>
+                                                    <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                    <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
+                                                <?php else:?>
+                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
+                                                <?php endif;?>
                                             </div>
                                     </div>
                                     <div class="padding10"></div>
@@ -269,8 +274,8 @@ if(isset($_SESSION['product_data']))
                             <?php endif;?>
                             <div class="btn-row">
                                 <?php if( $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id ) ) ):?>
-                                    <?php if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ):?>
-                                        <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip"  title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+                                    <?php if( ! check_user_has_make_agreement_priv() ):?>
+                                        <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip"  title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
                                     <?php else:?>
                                         <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
                                     <?php endif;?>
