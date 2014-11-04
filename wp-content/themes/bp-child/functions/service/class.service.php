@@ -130,8 +130,8 @@ class Service
         if( ! $user_id ) $user_id = get_current_user_id();
 
         $organisation = ct_get_user_organisation( $user_id );
-        //users with MAKE_AGREEMENT permission
-        $users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $organisation->id ) );
+        //users all org users
+        $users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_organisations_members WHERE organisation_id = %d ", $organisation->id ) );
 
         $users_array = array();
         array_push( $users_array, $user_id );
