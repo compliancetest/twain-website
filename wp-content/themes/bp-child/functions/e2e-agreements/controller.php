@@ -109,17 +109,19 @@ function process_agreement_actions()
             $content = fread($fp, filesize($tmpName));
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
-                $file_field = 'requestor_audit_log';
-                $name_field = 'requestor_audit_log_name';
-                $type_field = 'requestor_audit_log_type';
-                $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
-                $sent_by = 1;
+                $file_field   = 'requestor_audit_log';
+                $name_field   = 'requestor_audit_log_name';
+                $type_field   = 'requestor_audit_log_type';
+                $r_name_field = 'requestor_name';
+                $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
+                $sent_by      = 1;
             } else{
-                $file_field = 'responder_audit_log';
-                $name_field = 'responder_audit_log_name';
-                $type_field = 'responder_audit_log_type';
-                $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
-                $sent_by = 2;
+                $file_field   = 'responder_audit_log';
+                $name_field   = 'responder_audit_log_name';
+                $type_field   = 'responder_audit_log_type';
+                $r_name_field = 'responder_name';
+                $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
+                $sent_by      = 2;
             }
             $service = new Service($service_id);
             $service->load();
@@ -130,12 +132,13 @@ function process_agreement_actions()
                     'scope'      => @implode( ';;', @$_REQUEST['scope'] ),
                     $file_field  => $content,
                     $name_field  => $fileName,
-                    $type_field  => $fileType
+                    $type_field  => $fileType,
+                    $r_name_field => cp_get_user_fullname( get_current_user_id() ),
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -169,21 +172,23 @@ function process_agreement_actions()
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
         if($_FILES["file"]["size"] > 0 ) {
             $fileName = $_FILES['file']['name'];
-            $tmpName = $_FILES['file']['tmp_name'];
+            $tmpName  = $_FILES['file']['tmp_name'];
             $fileType = $_FILES['file']['type'];
 
             $fp = fopen($tmpName, 'r');
             $content = fread($fp, filesize($tmpName));
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
-                $file_field = 'requestor_audit_log';
-                $name_field = 'requestor_audit_log_name';
-                $type_field = 'requestor_audit_log_type';
+                $file_field   = 'requestor_audit_log';
+                $name_field   = 'requestor_audit_log_name';
+                $type_field   = 'requestor_audit_log_type';
+                $r_name_field = 'requestor_name';
                 $sent_by = 1;
             } else{
-                $file_field = 'responder_audit_log';
-                $name_field = 'responder_audit_log_name';
-                $type_field = 'responder_audit_log_type';
+                $file_field   = 'responder_audit_log';
+                $name_field   = 'responder_audit_log_name';
+                $type_field   = 'responder_audit_log_type';
+                $r_name_field = 'responder_name';
                 $sent_by = 2;
             }
             //generate PDF
@@ -197,6 +202,7 @@ function process_agreement_actions()
                     $file_field   => $content,
                     $name_field   => $fileName,
                     $type_field   => $fileType,
+                    $r_name_field => cp_get_user_fullname( get_current_user_id() ),
                     'claim_date'  => gmmktime(),
                     'claim_id'    => getClaimID( null, $service->service_suite_id ),
                     'token'       => createClaimToken()
@@ -204,7 +210,7 @@ function process_agreement_actions()
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -344,15 +350,12 @@ function process_agreement_actions()
         $responder_service_id = $_POST['responder_service'];
         
         $new_id = get_post_meta($requester_service_id, 'service_id', true) . "." . get_post_meta($responder_service_id, 'service_id', true);
-        
         //Check Duplication
-        $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}e2e_agreement WHERE str_id=%s", $new_id);
-        $seq = $wpdb->get_var($query);
-        
-        if( $seq > 0 )
-            $new_id .= "." . str_pad($seq, 2, 0, STR_PAD_LEFT);
-        echo $new_id;
-        exit;
+        $counter = 1;
+        do{
+            $result = $new_id.'.'.str_pad( $counter++, 2, 0, STR_PAD_LEFT);
+        } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $result ) ) );
+        exit( $result );
     } else if( wp_verify_nonce($action, 'get-agreement-pdf' ) ){
             global $wpdb;
             $token = str_replace( ".pdf", "", $_GET['claim'] );
@@ -589,7 +592,7 @@ function create_agreement_pdf( $agreement_id ){
         $pdf->AddPage();
 
         $title = '<h1 style="color: #000; font-size: 48pt; font-weight: bold; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
-        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has completed and end-to-end interoperability test between the two parties defined below. Both parties have confirmed that the test was successful for the scope described.<br></p>';
+        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has completed an end-to-end interoperability test between the two parties defined below. Both parties have confirmed that the test was successful for the scope described.<br></p>';
 
         //Getting Claim Defaults
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );

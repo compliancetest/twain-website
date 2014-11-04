@@ -238,13 +238,13 @@ if(isset($_SESSION['product_data']))
                                 $args = array(
                                     'post_type' => 'service',
                                     'posts_per_page' => -1,
-//                                    'author' => get_current_user_id(),
                                     'meta_query' => array(
                                         array(
                                             'key' => 'service_product_id',
-                                            'meta_value' => $product->id,
+                                            'value' => $product->id,
                                         )
                                     )
+
                                 );
                                 $posts = get_posts($args);
                             ?>
@@ -262,7 +262,7 @@ if(isset($_SESSION['product_data']))
                                                     <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
                                                     <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
                                                 <?php else:?>
-                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
                                                     <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
                                                 <?php endif;?>
                                             </div>
