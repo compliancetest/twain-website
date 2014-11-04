@@ -26,6 +26,10 @@ function process_agreement_actions()
     }else if(wp_verify_nonce($action, 'delete-agreement')){
         if( is_super_admin() ){
             $agreement_id = intval($_REQUEST['id']);
+            //delete item from CloudSearch domain
+            $cloud_search = new CloudSearch();
+            $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+            //delete local data
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
             addMessage('Success!');
