@@ -43,14 +43,9 @@ class Agreement
 
     public function addEntry( $data ){
         global $wpdb;
-        Agreement::has_access( 'add-agreement', $data['responder_service'] );
-        $counter = 1;
-        do{
-            $temp_agreement_id = $data['agreement_id'].'.'.$counter++;
-        } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $temp_agreement_id ) ) );
         $wpdb->insert( $this->_table,
             array(
-                'str_id'                 => $temp_agreement_id,
+                'str_id'                 => $data['agreement_id'],
                 'requester_service_id'   => $data['requester_service'],
                 'requestor_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_service_id'   => $data['responder_service'],
@@ -118,14 +113,6 @@ class Agreement
         $can = true;
         $error_message = 'Permission denied!';
         switch( $action ){
-            case 'add-agreement':
-                $service = new Service( $service_id );
-                $service->load();
-                if( ! Service::can_request_e2e( get_current_user_id(), $service_id ) ){
-                    $error_message = 'You don\'t have permissions to request E2E testing';
-                    $can = false;
-                }
-                break;
             case 'edit-agreement':
                 $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
                 if( $agreement ){
@@ -133,7 +120,8 @@ class Agreement
                     $requester_service->load();
                     $responder_service = new Service( $agreement->responder_service_id );
                     $responder_service->load();
-                    if( ! ( $requester_service->service_user_id == get_current_user_id() || $responder_service->service_user_id ) ){
+
+                    if( ! ( ct_get_user_organisation( $requester_service->service_user_id ) == ct_get_user_organisation( get_current_user_id() ) || ct_get_user_organisation( $responder_service->service_user_id ) == ct_get_user_organisation( get_current_user_id() ) ) ){
                         $error_message = 'You don\'t have permissions to perform this action';
                         $can = false;
                     }
@@ -217,15 +205,15 @@ class Agreement
         $sender_users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $organisation->id ) );
         if( $sender_users ){
             foreach( $sender_users AS $u ){
-                $email_data['receiver_name'] = cp_get_user_fullname( $u->user_id );
-                cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
+                $email_data['[receiver_name]'] = cp_get_user_fullname( $u->user_id );
+                cp_send_email( array('name' => $email_data['[receiver_name]'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
             }
 
         } else{
             //get organisation admin and send him email
             $admin_user = ct_get_organisation_admin( $organisation->id );
-            $email_data['receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
-            cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
+            $email_data['[receiver_name]'] = cp_get_user_fullname( $admin_user->user_id );
+            cp_send_email( array('name' => $email_data['[receiver_name]'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
         }
 
         //send email to requesters
@@ -235,15 +223,15 @@ class Agreement
         $receiver_users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $receiver_organisation->id ) );
         if( $receiver_users ){
             foreach( $receiver_users AS $u ){
-                $email_data['receiver_name'] = cp_get_user_fullname( $u->user_id );
-                cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
+                $email_data['[receiver_name]'] = cp_get_user_fullname( $u->user_id );
+                cp_send_email( array('name' => $email_data['[receiver_name]'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
             }
 
         } else{
             //get organisation admin and send him email
             $admin_user = ct_get_organisation_admin( $receiver_organisation->id );
-            $email_data['receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
-            cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
+            $email_data['[receiver_name]'] = cp_get_user_fullname( $admin_user->user_id );
+            cp_send_email( array('name' => $email_data['[receiver_name]'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
         }
 
         //send email to admin
