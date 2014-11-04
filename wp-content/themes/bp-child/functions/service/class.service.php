@@ -100,9 +100,12 @@ class Service
     /**
      *
      */
-    public static function can_request_e2e( $user_id, $service_id ){
-        $services = Service::get_user_services( $user_id, $service_id );
-        
+    public static function can_request_e2e( $user_id, $service_id, $service_publisher = false ){
+        $services = Service::get_services( $user_id, $service_id );
+
+        if( ct_get_user_organisation( $user_id ) == ct_get_user_organisation( $service_publisher ) ){
+            return false;
+        }
         if ( is_array($services) && count( $services ) > 0 ) {
             $service = new Service( $service_id );
             $service->load();
@@ -119,12 +122,24 @@ class Service
         return false;
     }
 
-    public static function get_user_services( $user_id = false, $exclude_service = false ){
+    public static function get_services( $user_id = false, $exclude_service = false ){
+        global $wpdb;
         if( ! is_user_logged_in() && ! $user_id ){
             return false;
         }
         if( ! $user_id ) $user_id = get_current_user_id();
 
+        $organisation = ct_get_user_organisation( $user_id );
+        //users with MAKE_AGREEMENT permission
+        $users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $organisation->id ) );
+
+        $users_array = array();
+        array_push( $users_array, $user_id );
+        if( $users ){
+            foreach( $users AS $u ){
+                array_push( $users_array, $u->user_id );
+            }
+        }
         $args = array(
             'post_type' => 'service',
             'posts_per_page' => -1,
@@ -133,7 +148,9 @@ class Service
         if( $exclude_service ){
             $args['post__not_in'] = array( $exclude_service );
         }
-        $args['meta_query'][] = array('key' => 'service_user_id', 'value' => $user_id, 'compare' => '=');
+        if( ! is_super_admin() ) {
+            $args['meta_query'][] = array('key' => 'service_user_id', 'value' => $users_array, 'compare' => 'IN');
+        }
 
         return get_posts( $args );
     }

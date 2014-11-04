@@ -202,7 +202,7 @@ class Agreement
             '[sender_name]'      => cp_get_user_fullname( $sender_id ),
             '[receiver_owner]'   => $receiver_service->service_owner,
             '[receiver_service]' => $receiver_service->service_name,
-            '[receiver_name]'    => cp_get_user_fullname( $receiver_service->service_user_id ),
+//            '[receiver_name]'    => cp_get_user_fullname( $receiver_service->service_user_id ),
             '[agreement_url]'    => home_url( '/agreement/'),
             '[message_text]'     => $data['text']
         );
@@ -213,15 +213,15 @@ class Agreement
         $sender_users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $organisation->id ) );
         if( $sender_users ){
             foreach( $sender_users AS $u ){
-                $email_data['email_receiver_name'] = cp_get_user_fullname( $u->user_id );
-                cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
+                $email_data['receiver_name'] = cp_get_user_fullname( $u->user_id );
+                cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
             }
 
         } else{
             //get organisation admin and send him email
             $admin_user = ct_get_organisation_admin( $organisation->id );
-            $email_data['email_receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
-            cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
+            $email_data['receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
+            cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['sender'], $email_data );
         }
 
         //send email to requesters
@@ -231,15 +231,15 @@ class Agreement
         $receiver_users = $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_users_privileges WHERE organisation_id = %d AND privilege_id = 4 ", $receiver_organisation->id ) );
         if( $receiver_users ){
             foreach( $receiver_users AS $u ){
-                $email_data['email_receiver_name'] = cp_get_user_fullname( $u->user_id );
-                cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
+                $email_data['receiver_name'] = cp_get_user_fullname( $u->user_id );
+                cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $u->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
             }
 
         } else{
             //get organisation admin and send him email
             $admin_user = ct_get_organisation_admin( $receiver_organisation->id );
-            $email_data['email_receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
-            cp_send_email( array('name' => $email_data['email_receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
+            $email_data['receiver_name'] = cp_get_user_fullname( $admin_user->user_id );
+            cp_send_email( array('name' => $email_data['receiver_name'], 'email' => get_userdata( $admin_user->user_id )->data->user_email ), $templates[$template]['receiver'], $email_data );
         }
 
         //send email to admin
