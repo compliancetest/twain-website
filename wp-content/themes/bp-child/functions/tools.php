@@ -569,7 +569,7 @@ function ct_duplicate_data()
                                     {
                                         ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap);
                                     }
-                                    var_dump($profile_instance_ids);
+                                    //var_dump($profile_instance_ids);
                                     //Update Profile Types
                                     foreach($profile_instance_ids as $oid => $nid)
                                     {
