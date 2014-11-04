@@ -85,9 +85,7 @@ function process_agreement_actions()
 
         $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
 
         Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array('text'                => $_REQUEST['deny-reason-field'],
                                                                                                 'sender_service_id'   => $agreement->responder_service_id,
@@ -97,6 +95,10 @@ function process_agreement_actions()
         //delete item from CloudSearch domain
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
 
         addMessage('Success');
         wp_redirect('/agreements/');
