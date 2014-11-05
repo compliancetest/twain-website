@@ -20,13 +20,12 @@ function remove_suite_name_id_map($postid)
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'conformance_level_' . $postid));
         //Delete Scenarios
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'scenario_' . $postid));
+        
         //Delete Scenarios
-        $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
+        //$wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
         
         //Delete From Suite Map Table
         $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
-        
-        
         
     }
 }
@@ -665,7 +664,8 @@ function cp_sort_test_suites($familyMark, $version_major)
     
     $esb = new ManageESB();
     //Update Test Suite Ids for Audit Enabled Records
-    $esb->updateAuditRecordSuiteId($old_ids, $new_id);
+    if (!empty($old_ids) && !empty($new_id))
+        $esb->updateAuditRecordSuiteId($old_ids, $new_id);
 }
 
 /**
