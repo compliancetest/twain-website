@@ -122,8 +122,7 @@ function createSupportTicket()
         'last_message_id' => 0,
         'created_date' => date('Y-m-d H:i:s'),
         'last_updated' => date('Y-m-d H:i:s'),
-        'solved_date' => '0000-00-00 00:00:00',
-        'suite_id' => $suite_id
+        'solved_date' => '0000-00-00 00:00:00'
     );
     if(!$wpdb->insert(TABLE_TICKETS, $data))
     {
