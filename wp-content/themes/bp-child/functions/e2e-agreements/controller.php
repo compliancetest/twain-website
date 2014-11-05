@@ -78,7 +78,7 @@ function process_agreement_actions()
         exit;
     //reject e2e testing
     } else if( wp_verify_nonce($action, 'cancel-agreement' ) ) {
-        $agreement_id = intval($_REQUEST['id']);
+        $agreement_id = intval($_REQUEST['agreement_id']);
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
@@ -86,12 +86,10 @@ function process_agreement_actions()
         $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
 
-
-        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array('text'                => $_REQUEST['deny-reason-field'],
+        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array('text'     => $_REQUEST['deny-reason-field'],
                                                                                                 'sender_service_id'   => $agreement->responder_service_id,
-                                                                                                'receiver_service_id' => $service->id )
+                                                                                                'receiver_service_id' =>  $agreement->responder_service_id == $service->id ? $agreement->requester_service_id : $agreement->responder_service_id )
         );
-
         //delete item from CloudSearch domain
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
