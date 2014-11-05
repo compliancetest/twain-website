@@ -17,7 +17,7 @@
             jQuery('.dashboard-tabs .menu-organisation').remove();
         </script>
     <?php endif; ?>
-    <?php if ( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ): ?>
+    <?php if ( ! check_user_has_make_agreement_priv() ): ?>
         <script type="text/javascript">
             jQuery('.dashboard-tabs .menu-agreements').remove();
         </script>

@@ -660,7 +660,7 @@ function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $l
     $html = '<ul class="dropdown-menu '.(($level==0)?($menu_class):('')).'">';
     
     foreach ($pages as $page) {
-        if( $page['title'] == 'Agreements' && ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
+        if( $page['title'] == 'Agreements' && ! check_user_has_make_agreement_priv() ){
             continue;
         }
         $class = isset($page['class']) ? ($page['class']) : ('');

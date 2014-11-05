@@ -27,12 +27,12 @@ if(is_user_logged_in()){
     wp_redirect(home_url());
     exit;
 }
-if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ){
+if( ! check_user_has_make_agreement_priv() ){
     addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
     wp_redirect("/");
     exit;
 }
-$user_services = Service::get_user_services();
+$user_services = Service::get_services();
 
 wp_enqueue_style( 'jquery-custom-scroll', get_stylesheet_directory_uri() . '/css/jquery.jscrollpane.css', '', '2.0.19');
 wp_enqueue_script( 'jquery-mousewheel', get_stylesheet_directory_uri() . '/js/jquery.mousewheel.js', array('jquery'), '3.1.9');
@@ -82,11 +82,11 @@ get_header();
                            <div class="grid-box-body tocenter">
                                <div class="thead tr clearfix">
                                    <div class="td td-agreement-id">Agreement ID</div>
-                                   <div class="td td-entity-name">Service</div>
-                                   <div class="td td-identifier">Owner</div>
+                                   <div class="td td-entity-name td-two-lines">Service<br>Owner</div>
+<!--                                   <div class="td td-identifier"></div>-->
                                    <div class="td td-type">Role</div>
-                                   <div class="td td-protocol">Identifier</div>
-                                   <div class="td td-end-point">End Point</div>
+                                   <div class="td td-protocol td-two-lines">Identifier<br>End Point</div>
+<!--                                   <div class="td td-end-point"></div>-->
                                    <div class="td td-contact">Contact(s)</div>
                                    <div class="td td-status">Status</div>
                                    <div class="td td-actions">Actions</div>
@@ -104,9 +104,9 @@ get_header();
                                        <?php foreach( $service_agreements AS $agreement ):?>
                                            <div class="tr clearfix">
                                                <div class="td td-agreement-id"><a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('get-agreement-info-popup')?>&id=<?php echo $agreement->id?>" cp-type="ajax" rel="agree-popup">
-                                                       <?php if (strlen( $agreement->str_id ) > 16 ): ?>
+                                                       <?php if (strlen( $agreement->str_id ) > 30 ): ?>
                                                            <div class="has-tooltip" title="<?php echo $agreement->str_id; ?>">
-                                                               <?php echo substr($agreement->str_id,0,16)."..."; ?>
+                                                               <?php echo substr($agreement->str_id,0,30)."..."; ?>
                                                            </div>
                                                        <?php else: ?>
                                                             <?php echo $agreement->str_id;?></a>
@@ -118,16 +118,21 @@ get_header();
                                                    <?php else:?>
                                                        <a href="<?php echo get_permalink( $agreement->responder_service->id );?>"><?php echo get_the_title( $agreement->responder_service->id );?></a>
                                                    <?php endif;?>
+                                                   </br>
+                                                   <?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner;?>
                                                </div>
-                                               <div class="td td-identifier"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_owner : $agreement->responder_service->service_owner;?></div>
+<!--                                               <div class="td td-identifier"></div>-->
                                                <div class="td td-type"><?php echo $agreement->entry_status == 'Responder' ? ( implode( ', ', $agreement->requester_service->service_roles )  ) : (  implode( ', ', $agreement->responder_service->service_roles ) );?></div>
-                                               <div class="td td-protocol"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_protocol : $agreement->responder_service->service_protocol;?></div>
-                                               <?php if( ( $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type ) ) == 'ABN' ):?>
-                                                    <div class="td td-end-point"><?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?></div>
-                                               <?php else:?>
-                                                   <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint ) );?>
-                                                   <div class="td td-end-point"><?php echo $gateway->name;?></div>
-                                               <?php endif;?>
+                                               <div class="td td-protocol">
+                                                   <?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_protocol : $agreement->responder_service->service_protocol;?><br>
+                                                   <?php if( ( $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type ) ) == 'ABN' ):?>
+                                                       <?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?>
+                                                   <?php else:?>
+                                                       <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint ) );?>
+                                                       <?php echo $gateway->name;?>
+                                                   <?php endif;?>
+                                               </div>
+
                                                <div class="td td-contact">
                                                    
                                                    <?php $contacts = get_service_contacts($agreement->entry_status == 'Responder' ? $agreement->requester_service_id : $agreement->responder_service_id) ;?>
@@ -142,80 +147,113 @@ get_header();
                                                    <?php endforeach; ?>
                                                </div>
                                                <div class="td td-status"><span class="status-<?php echo strtolower( $agreement->status );?>"><?php echo $agreement->status;?></span></div>
-                                               <div class="td td-actions">
-                                                   <?php if( $agreement->status == 'Pending' ):?>
-                                                        <?php if( $agreement->entry_status == 'Responder' ):?>
-                                                            <a href="#e2e-test-request-<?php echo $agreement->id;?>" rel="agree-popup">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Reject</a>
+                                               <div class="td td-actions centered">
 
-                                                           <div id="e2e-test-request-<?php echo $agreement->id;?>" class="popup-box e2e-test-request-popup" style="display: none; width: 450px;">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Acceptance</div>
-                                                               <form name="generate_agreement_form" id="e2e-test-request-<?php echo $agreement->id;?>-form" action="/" method="get">
-                                                                   <div class="popup-box-content">
-                                                                       <div class="form-horizontal">
-                                                                               <?php
-                                                                                    $responder_profiles = getCustomerProfileInstances();
-                                                                               ?>
-                                                                               <input type="hidden" name="" value="<?php echo $service->id;?>">
-                                                                               <div class="field-row">
-                                                                                   <label>Profile:</label>
-                                                                                   <div class="field-box">
-                                                                                       <select name="responder_profiles" class="responder_profiles select input-field">
-                                                                                           <option></option>
-                                                                                           <?php foreach( $responder_profiles AS $responder_profile ):?>
-                                                                                                <?php
-                                                                                                    $instanceObj = json_decode(base64_decode($responder_profile->content));                                                                                                                
-                                                                                                ?>
-                                                                                               <option value="<?php echo $responder_profile->id;?>">
-                                                                                                    <?php 
-                                                                                                        echo $responder_profile->profile_name;
-                                                                                                        if($instanceObj->Profile->Version)
-                                                                                                        {
-                                                                                                            $version = array();
-                                                                                                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
-                                                                                                            {
-                                                                                                                $version[] = $v;
-                                                                                                            }
-                                                                                                            echo " v" . implode(".", $version);
-                                                                                                        }
+                                                    <?php if( is_super_admin() ):?>
+
+                                                        <a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('delete-agreement')?>&id=<?php echo $agreement->id?>" class="action-btn delete-btn icon-btn delete_service has-tooltip centered" href="#" style="margin-left: 30px; margin-top: 10px;"><span class="p"></span><span class="simple_tooltip radius6" style="top: -40px;">Delete Agreement<span></span></span></a>
+
+                                                    <?php else:?>
+
+                                                       <?php if( $agreement->status == 'Pending' ):?>
+                                                            <?php if( $agreement->entry_status == 'Responder' ):?>
+                                                                <a href="#e2e-test-request-<?php echo $agreement->id;?>" rel="agree-popup">Accept</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Reject</a>
+
+                                                               <div id="e2e-test-request-<?php echo $agreement->id;?>" class="popup-box e2e-test-request-popup" style="display: none; width: 450px;">
+                                                                   <div class="popup-box-header radius6 noradiusbottom">Confirm Acceptance</div>
+                                                                   <form name="generate_agreement_form" id="e2e-test-request-<?php echo $agreement->id;?>-form" action="/" method="get">
+                                                                       <div class="popup-box-content">
+                                                                           <div class="form-horizontal">
+                                                                                   <?php
+                                                                                        $responder_profiles = getCustomerProfileInstances();
+                                                                                   ?>
+                                                                                   <input type="hidden" name="" value="<?php echo $service->id;?>">
+                                                                                   <div class="field-row">
+                                                                                       <label>Profile:</label>
+                                                                                       <div class="field-box">
+                                                                                           <select name="responder_profiles" class="responder_profiles select input-field">
+                                                                                               <option></option>
+                                                                                               <?php foreach( $responder_profiles AS $responder_profile ):?>
+                                                                                                    <?php
+                                                                                                        $instanceObj = json_decode(base64_decode($responder_profile->content));
                                                                                                     ?>
-                                                                                               </option>
-                                                                                           <?php endforeach;?>
-                                                                                       </select>
-                                                                                       <span class="info-icon has-tooltip" title="Optional data to be used during testing representing the state of your service"></span>
+                                                                                                   <option value="<?php echo $responder_profile->id;?>">
+                                                                                                        <?php
+                                                                                                            echo $responder_profile->profile_name;
+                                                                                                            if($instanceObj->Profile->Version)
+                                                                                                            {
+                                                                                                                $version = array();
+                                                                                                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
+                                                                                                                {
+                                                                                                                    $version[] = $v;
+                                                                                                                }
+                                                                                                                echo " v" . implode(".", $version);
+                                                                                                            }
+                                                                                                        ?>
+                                                                                                   </option>
+                                                                                               <?php endforeach;?>
+                                                                                           </select>
+                                                                                           <span class="info-icon has-tooltip" title="Optional data to be used during testing representing the state of your service"></span>
+                                                                                       </div>
                                                                                    </div>
-                                                                               </div>
-                                                                               <div class="field-row">
-                                                                                   <label>Message:</label>
-                                                                                   <div class="field-box">
-                                                                                       <textarea name="agreement_message" rows="5" cols="20" class="agreement_message textarea input-field"></textarea>
-                                                                                       <span class="info-icon has-tooltip" title="Text to be included in an email accepting the end-to-end test request"></span>
+                                                                                   <div class="field-row">
+                                                                                       <label>Message:</label>
+                                                                                       <div class="field-box">
+                                                                                           <textarea name="agreement_message" rows="5" cols="20" class="agreement_message textarea input-field"></textarea>
+                                                                                           <span class="info-icon has-tooltip" title="Text to be included in an email accepting the end-to-end test request"></span>
+                                                                                       </div>
                                                                                    </div>
-                                                                               </div>
-                                                                               <?php echo wp_nonce_field( 'accept-agreement', '_psnonce');?>
-                                                                               <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
+                                                                                   <?php echo wp_nonce_field( 'accept-agreement', '_psnonce');?>
+                                                                                   <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
+                                                                           </div>
                                                                        </div>
-                                                                   </div>
-                                                                   <div class="popup-box-footer radius6 noradiustop">
-                                                                       <div class="loading loading-with-text radius6 loading_agreement_acept"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
-                                                                       <a href="#" class="action-btn process-btn submit-btn save_append_agreement" data-id="e2e-test-request-<?php echo $agreement->id;?>-form"><span class="p"></span><span class="t">Confirm</span></a>
-                                                                       <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
-                                                                       <div class="clear"></div>
-                                                                   </div>
-                                                                   <a class="close_btn"></a>
-                                                               </form>
-                                                           </div>
+                                                                       <div class="popup-box-footer radius6 noradiustop">
+                                                                           <div class="loading loading-with-text radius6 loading_agreement_acept"><div><b>PROCESSING</b><span>Please wait...</span></div></div>
+                                                                           <a href="#" class="action-btn process-btn submit-btn save_append_agreement" data-id="e2e-test-request-<?php echo $agreement->id;?>-form"><span class="p"></span><span class="t">Confirm</span></a>
+                                                                           <a href="#" class="action-btn cancel-btn" onclick="jQuery('.popup-box .close_btn').click()"><span class="p"></span><span class="t">Cancel</span></a>
+                                                                           <div class="clear"></div>
+                                                                       </div>
+                                                                       <a class="close_btn"></a>
+                                                                   </form>
+                                                               </div>
+
+                                                               <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
+                                                                   <div class="popup-box-header radius6 noradiusbottom">Confirm Agreement Rejection</div>
+                                                                   <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
+                                                                       <div class="popup-box-content">
+                                                                           <p>Are you sure you want to <strong>Reject</strong> this agreement?</p>
+                                                                           <div class="agreement-deny-reason">
+                                                                               <label>Reason for rejection:</label>
+                                                                               <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
+                                                                           </div>
+                                                                           <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
+                                                                           <?php echo wp_nonce_field( 'cancel-agreement', '_psnonce' );?>
+                                                                       </div>
+                                                                       <div class="popup-box-footer radius6 noradiustop">
+                                                                           <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>
+                                                                           <a href="#" class="action-btn process-btn reject_pending" data-id="deny-agreement-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
+                                                                           <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                                                                           <div class="clear"></div>
+                                                                       </div>
+                                                                       <a class="close_btn"></a>
+                                                                   </form>
+                                                               </div>
+
+                                                            <?php endif;?>
+                                                       <?php elseif( $agreement->status == 'Testing' ):?>
+                                                           <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="agree-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Cancel</a>
 
                                                            <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Agreement Rejection</div>
+                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Agreement Cancellation</div>
                                                                <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
                                                                    <div class="popup-box-content">
-                                                                       <p>Are you sure you want to <strong>Reject</strong> this agreement?</p>
+                                                                       <p>Are you sure you want to <strong>Cancel</strong> this agreement?</p>
                                                                        <div class="agreement-deny-reason">
-                                                                           <label>Reason for rejection:</label>
+                                                                           <label>Reason for cancellation:</label>
                                                                            <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                        </div>
                                                                        <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                       <?php echo wp_nonce_field( 'cancel-agreement', '_psnonce' );?>
+                                                                       <?php echo wp_nonce_field( 'reject-claimed-agreement', '_psnonce' );?>
                                                                    </div>
                                                                    <div class="popup-box-footer radius6 noradiustop">
                                                                        <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>
@@ -227,131 +265,106 @@ get_header();
                                                                </form>
                                                            </div>
 
-                                                        <?php endif;?>
-                                                   <?php elseif( $agreement->status == 'Testing' ):?>
-                                                       <a href="#claim-popup-box-<?php echo $agreement->id;?>" rel="agree-popup">Claim</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Cancel</a>
-
-                                                       <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                           <div class="popup-box-header radius6 noradiusbottom">Confirm Agreement Cancellation</div>
-                                                           <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
-                                                               <div class="popup-box-content">
-                                                                   <p>Are you sure you want to <strong>Cancel</strong> this agreement?</p>
-                                                                   <div class="agreement-deny-reason">
-                                                                       <label>Reason for cancellation:</label>
-                                                                       <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
-                                                                   </div>
-                                                                   <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                   <?php echo wp_nonce_field( 'reject-claimed-agreement', '_psnonce' );?>
-                                                               </div>
-                                                               <div class="popup-box-footer radius6 noradiustop">
-                                                                   <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>
-                                                                   <a href="#" class="action-btn process-btn reject_pending" data-id="deny-agreement-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
-                                                                   <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                                                                   <div class="clear"></div>
-                                                               </div>
-                                                               <a class="close_btn"></a>
-                                                           </form>
-                                                       </div>
-
-                                                       <div class="popup-box" id="claim-popup-box-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                           <div class="popup-box-header radius6 noradiusbottom">Upload Audit Logs</div>
-                                                           <form id="claim-popup-box-<?php echo $agreement->id;?>-form" class="make-claim-form" action="/" method="post" enctype="multipart/form-data">
-                                                               <div class="popup-box-content">
-                                                                   <p>Please upload screenshots from your business system as an audit record of the successful test.</p>
-                                                                   <p class="note">Please zip the files if more than one.</p>
-                                                                   <div class="claim-upload-box clearfix">
-                                                                       <span class="info-icon has-tooltip right top5 left5" title="Please select at least one zip file"></span>
-                                                                       <input type="file" name="file" class="left input-file claim_file"  />
-                                                                       <ul class="uploaded-files">
-                                                                           <li><a href="#"></a><span class="remove-icon" style="display: none;"></span></li>
-                                                                       </ul>                                                                       
-                                                                   </div>
-                                                                   <div class="claim-test-scope">
-                                                                       <h4>Test scope: <span class="info-icon has-tooltip right left5" title="You must select at least one"></span></h4>
-                                                                       <?php
-                                                                            $suite_id = $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_suite_id : $agreement->responder_service->service_suite_id;
-                                                                            $suite = new TestSuite( $suite_id );
-                                                                            $suite->load();
-                                                                            $scope = explode( ',', $suite->initiatingMessage );
-                                                                       ?>
-                                                                       <ul class="claim-test-scopes-list">
-                                                                           <?php foreach( $scope AS $s ):?>
-                                                                               <li>
-                                                                                   <label><input type="checkbox" name="scope[]" value="<?php echo trim( $s );?>"/><?php echo trim( $s );?></label>
-                                                                               </li>
-                                                                               <div class="clear"></div>
-                                                                          <?php endforeach;?>
-                                                                       </ul>
-                                                                   </div>
-                                                                   <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                   <input type="hidden" name="role" value="<?php echo $agreement->entry_status;?>">
-                                                                   <?php echo wp_nonce_field( 'claim_agreement', '_psnonce' );?>
-                                                               </div>
-                                                               <div class="popup-box-footer radius6 noradiustop">
-                                                                   <div class="loading loading-with-text radius6"><div><b>SUBMITTING AGREEMENT</b><span>Please wait...</span></div></div>
-                                                                   <a href="#" class="action-btn process-btn claim_agreement_confirm" data-id="claim-popup-box-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
-                                                                   <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                                                                   <div class="clear"></div>
-                                                               </div>
-                                                               <a class="close_btn"></a>
-                                                           </form>
-                                                       </div>
-                                                   <?php elseif( $agreement->status == 'Claimed' ):?>
-                                                       <?php if( ( $agreement->entry_status == 'Requester' && empty( $agreement->requestor_audit_log_name ) ) || (  $agreement->entry_status == 'Responder' && empty( $agreement->responder_audit_log_name ) ) ):?>
-                                                           <a href="#agreement-confirm-popup-<?php echo $agreement->id;?>" rel="agree-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Fail</a>
-
-                                                           <div class="popup-box claim-popup-box" id="agreement-confirm-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Claim</div>
-                                                               <form id="agreement-confirm-popup-<?php echo $agreement->id;?>-form" action="/" method="post" enctype="multipart/form-data">
+                                                           <div class="popup-box" id="claim-popup-box-<?php echo $agreement->id;?>" style="display: none; width: 500px">
+                                                               <div class="popup-box-header radius6 noradiusbottom">Upload Audit Logs</div>
+                                                               <form id="claim-popup-box-<?php echo $agreement->id;?>-form" class="make-claim-form" action="/" method="post" enctype="multipart/form-data">
                                                                    <div class="popup-box-content">
                                                                        <p>Please upload screenshots from your business system as an audit record of the successful test.</p>
                                                                        <p class="note">Please zip the files if more than one.</p>
                                                                        <div class="claim-upload-box clearfix">
-                                                                           <input type="file" name="file" class="left input-file claim_file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />
+                                                                           <span class="info-icon has-tooltip right top5 left5" title="Please select at least one zip file"></span>
+                                                                           <input type="file" name="file" class="left input-file claim_file"  />
                                                                            <ul class="uploaded-files">
                                                                                <li><a href="#"></a><span class="remove-icon" style="display: none;"></span></li>
                                                                            </ul>
                                                                        </div>
-                                                                   </div>
-                                                                   <input type="hidden" value="1" id="respond">
-                                                                   <div class="popup-box-footer radius6 noradiustop">
-                                                                       <div class="loading loading-with-text radius6"><div><b>CONFIRMING AGREEMENT</b><span>Please wait...</span></div></div>
-                                                                       <a href="#" class="action-btn process-btn agreement_claim_confirm" data-id="agreement-confirm-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
-                                                                       <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                                                                       <div class="clear"></div>
-                                                                   </div>
-                                                                   <a class="close_btn"></a>
-                                                                   <?php echo wp_nonce_field( 'confirm-agreement', '_psnonce');?>
-                                                                   <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                   <input type="hidden" name="role" value="<?php echo $agreement->entry_status;?>">
-                                                               </form>
-                                                           </div>
-
-                                                           <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
-                                                               <div class="popup-box-header radius6 noradiusbottom">Confirm Failure of Claim</div>
-                                                               <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
-                                                                   <div class="popup-box-content">
-                                                                       <p>Are you sure you want to fail this claim? The agreement will not be rejected but will be returned to a state where further testing can be undertaken.</p>
-                                                                       <div class="agreement-deny-reason">
-                                                                           <label>Reason for failing the claim:</label>
-                                                                           <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
+                                                                       <div class="claim-test-scope">
+                                                                           <h4>Test scope: <span class="info-icon has-tooltip right left5" title="You must select at least one"></span></h4>
+                                                                           <?php
+                                                                                $suite_id = $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_suite_id : $agreement->responder_service->service_suite_id;
+                                                                                $suite = new TestSuite( $suite_id );
+                                                                                $suite->load();
+                                                                                $scope = explode( ',', $suite->initiatingMessage );
+                                                                           ?>
+                                                                           <ul class="claim-test-scopes-list">
+                                                                               <?php foreach( $scope AS $s ):?>
+                                                                                   <li>
+                                                                                       <label><input type="checkbox" name="scope[]" value="<?php echo trim( $s );?>"/><?php echo trim( $s );?></label>
+                                                                                   </li>
+                                                                                   <div class="clear"></div>
+                                                                              <?php endforeach;?>
+                                                                           </ul>
                                                                        </div>
                                                                        <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                       <?php echo wp_nonce_field( 'reject-failed-agreement', '_psnonce' );?>
+                                                                       <input type="hidden" name="role" value="<?php echo $agreement->entry_status;?>">
+                                                                       <?php echo wp_nonce_field( 'claim_agreement', '_psnonce' );?>
                                                                    </div>
                                                                    <div class="popup-box-footer radius6 noradiustop">
-                                                                       <div class="loading loading-with-text radius6"><div><b>UPDATING AGREEMENT</b><span>Please wait...</span></div></div>
-                                                                       <a href="#" class="action-btn process-btn reject_pending" data-id="deny-agreement-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
+                                                                       <div class="loading loading-with-text radius6"><div><b>SUBMITTING AGREEMENT</b><span>Please wait...</span></div></div>
+                                                                       <a href="#" class="action-btn process-btn claim_agreement_confirm" data-id="claim-popup-box-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
                                                                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
                                                                        <div class="clear"></div>
                                                                    </div>
                                                                    <a class="close_btn"></a>
                                                                </form>
                                                            </div>
+                                                       <?php elseif( $agreement->status == 'Claimed' ):?>
+                                                           <?php if( ( $agreement->entry_status == 'Requester' && empty( $agreement->requestor_audit_log_name ) ) || (  $agreement->entry_status == 'Responder' && empty( $agreement->responder_audit_log_name ) ) ):?>
+                                                               <a href="#agreement-confirm-popup-<?php echo $agreement->id;?>" rel="agree-popup">Confirm</a>&nbsp;|&nbsp;<a href="#deny-agreement-popup-<?php echo $agreement->id;?>" rel="agree-popup">Fail</a>
+
+                                                               <div class="popup-box claim-popup-box" id="agreement-confirm-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
+                                                                   <div class="popup-box-header radius6 noradiusbottom">Confirm Claim</div>
+                                                                   <form id="agreement-confirm-popup-<?php echo $agreement->id;?>-form" action="/" method="post" enctype="multipart/form-data">
+                                                                       <div class="popup-box-content">
+                                                                           <p>Please upload screenshots from your business system as an audit record of the successful test.</p>
+                                                                           <p class="note">Please zip the files if more than one.</p>
+                                                                           <div class="claim-upload-box clearfix">
+                                                                               <input type="file" name="file" class="left input-file claim_file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />
+                                                                               <ul class="uploaded-files">
+                                                                                   <li><a href="#"></a><span class="remove-icon" style="display: none;"></span></li>
+                                                                               </ul>
+                                                                           </div>
+                                                                       </div>
+                                                                       <input type="hidden" value="1" id="respond">
+                                                                       <div class="popup-box-footer radius6 noradiustop">
+                                                                           <div class="loading loading-with-text radius6"><div><b>CONFIRMING AGREEMENT</b><span>Please wait...</span></div></div>
+                                                                           <a href="#" class="action-btn process-btn agreement_claim_confirm" data-id="agreement-confirm-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
+                                                                           <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                                                                           <div class="clear"></div>
+                                                                       </div>
+                                                                       <a class="close_btn"></a>
+                                                                       <?php echo wp_nonce_field( 'confirm-agreement', '_psnonce');?>
+                                                                       <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
+                                                                       <input type="hidden" name="role" value="<?php echo $agreement->entry_status;?>">
+                                                                   </form>
+                                                               </div>
+
+                                                               <div class="popup-box" id="deny-agreement-popup-<?php echo $agreement->id;?>" style="display: none; width: 500px">
+                                                                   <div class="popup-box-header radius6 noradiusbottom">Confirm Failure of Claim</div>
+                                                                   <form id="deny-agreement-popup-<?php echo $agreement->id;?>-form" method="post" action="/">
+                                                                       <div class="popup-box-content">
+                                                                           <p>Are you sure you want to fail this claim? The agreement will not be rejected but will be returned to a state where further testing can be undertaken.</p>
+                                                                           <div class="agreement-deny-reason">
+                                                                               <label>Reason for failing the claim:</label>
+                                                                               <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
+                                                                           </div>
+                                                                           <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
+                                                                           <?php echo wp_nonce_field( 'reject-failed-agreement', '_psnonce' );?>
+                                                                       </div>
+                                                                       <div class="popup-box-footer radius6 noradiustop">
+                                                                           <div class="loading loading-with-text radius6"><div><b>UPDATING AGREEMENT</b><span>Please wait...</span></div></div>
+                                                                           <a href="#" class="action-btn process-btn reject_pending" data-id="deny-agreement-popup-<?php echo $agreement->id;?>"><span class="p"></span><span class="t">Confirm</span></a>
+                                                                           <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                                                                           <div class="clear"></div>
+                                                                       </div>
+                                                                       <a class="close_btn"></a>
+                                                                   </form>
+                                                               </div>
+                                                           <?php endif;?>
+                                                       <?php elseif( $agreement->status == 'Verified' && $agreement->certificate != '' ):?>
+                                                           <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
                                                        <?php endif;?>
-                                                   <?php elseif( $agreement->status == 'Verified' && $agreement->certificate != '' ):?>
-                                                       <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
-                                                   <?php endif;?>
+                                                    <?php endif;?>
                                                </div>
                                            </div>
 

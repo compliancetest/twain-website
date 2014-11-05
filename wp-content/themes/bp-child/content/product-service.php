@@ -68,9 +68,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     )
                     
                 );
-                if (is_user_logged_in()) {
-                    $args['author'] = get_current_user_id();
-                } else {
+                if( ! is_user_logged_in()) {
                     $args['meta_query'][] = array(
                         'key' => 'service_visibility',
                         'value' => 'Public',
