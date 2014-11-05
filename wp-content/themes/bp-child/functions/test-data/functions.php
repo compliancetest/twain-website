@@ -20,6 +20,9 @@ function getCustomerProfileTypes($customer_id)
     
     $community_ids = getUserSubscribedCommunities($customer_id);
     
+    if(!$community_ids)
+        return array();
+        
     $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id IN (" . implode(", ", $community_ids) . ")";
     $rows = $wpdb->get_results($query);
     
