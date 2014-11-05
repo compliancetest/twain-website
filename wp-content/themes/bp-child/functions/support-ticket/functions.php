@@ -139,7 +139,7 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
         if($messageDetail->has_attachment)
         {
              $emailData['[message]'] .= "<br />";
-             $attachments = getAttachmentsByMessageId($message->id);
+             $attachments = getAttachmentsByMessageId($message_id);
              foreach($attachments as $file){
                 $emailData['[message]'] .= '<a href="' . get_site_url(null, null, 'https') .'/?action=' . wp_create_nonce('download-ticket-attachment') .'&file=' . $file->token . '">' . $file->file_name . '</a><br />';
              }
@@ -156,14 +156,14 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
         if(!$ticketDetail->support_id)
         {
             $community_id = get_post_meta($ticketDetail->suite_id, 'community_id', true);
-            cp_send_email_to_support($community_id, $email_id, $emailData);            
+            cp_send_email_to_support($community_id, $email_id, $emailData);
         }else{
             cp_send_email(array('name' => cp_get_user_display_name($supportDetail), 'email' => $supportDetail->user_email), $email_id, $emailData);
         }
         
     }else if($email_type == 'admin'){
         $community_id = get_post_meta($ticketDetail->suite_id, 'community_id', true);
-        cp_send_email_to_community_admin($community_id, $email_id, $emailData);        
+        cp_send_email_to_community_admin($community_id, $email_id, $emailData);
     }
     
 }
