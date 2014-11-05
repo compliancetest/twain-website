@@ -898,10 +898,10 @@ function cp_send_email($to, $template_name, $data = array())
     
     if(isset($to['name']))
     {
-        $phpmailer->AddAddress($to['email'], $to['name']);        
+        $phpmailer->AddAddress($to['email'], $to['name']);
     }else{
         foreach($to as $u)
-            $phpmailer->AddAddress($u['email'], $u['name']);        
+            $phpmailer->AddAddress($u['email'], $u['name']);
     }
     
     $phpmailer->IsSMTP();
@@ -910,7 +910,7 @@ function cp_send_email($to, $template_name, $data = array())
     $phpmailer->Body = $emailContent;
 
     try{
-        return $phpmailer->Send();    
+        return $phpmailer->Send();
     }catch(Exception $e){
         return false;
     }
@@ -974,7 +974,7 @@ function cp_send_email_to_support($communities, $template_name, $data = array())
         $fname = get_user_meta($u->ID, 'first_name', true);
         $lname = get_user_meta($u->ID, 'last_name', true);
         $to[] = array('name' => $fname . " " . $lname, 'email' => $u->user_email);
-    }    
+    }
     
     cp_send_email($to, $template_name, $data);
 }
