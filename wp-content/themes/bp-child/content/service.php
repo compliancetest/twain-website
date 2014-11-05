@@ -17,13 +17,13 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 </a>
                 <div class="page-title-block-actions">
                     <?php if(can_edit_product_and_service(get_the_ID())){ ?>
-                        <?php if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_privileges WHERE user_id = %d AND privilege_id = 4 ", get_current_user_id() ) ) ):?>
+                        <?php if( ! check_user_has_make_agreement_priv() ):?>
                             <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                         <?php else:?>
                             <a href="/edit-service?id=<?php echo $service->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                         <?php endif;?>
                     <?php } ?>
-                    <?php if( is_user_logged_in() && $service->service_user_id != get_current_user_id() ):?>
+                    <?php if( is_user_logged_in() && $service->service_user_id != get_current_user_id() && ct_get_user_organisation( get_current_user_id() ) != ct_get_user_organisation( $service->service_user_id )):?>
                         <?php if( ! check_user_has_make_agreement_priv() ):?>
                             <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn green-btn"><span class="t">Request E2E Test</span></a>
                         <?php else:?>
@@ -119,9 +119,6 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                 <th class="centered">Status</th>
                 <th class="centered">Date</th>
                 <th class="centered">Certificate</th>
-                <?php if( is_super_admin() ):?>
-                    <th class="centered">Action</th>
-                <?php endif;?>
             </tr>
             </thead>
             <tbody>
@@ -140,15 +137,18 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
-                                <?php if( strtolower( $agreement->status ) == 'verified' && $agreement->certificate != '' ) { ?>
-                                    <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
+                                <?php if( strtolower( $agreement->status ) == 'verified' ) { ?>
+                                    <?php if( $agreement->entry_status == 'Requester' ):?>
+                                        <?php if( $agreement->requester_token != '' ):?>
+                                            <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->requester_token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->requester_token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->requester_token; ?>">Download</a>
+                                        <?php endif;?>
+                                    <?php else:?>
+                                        <?php if( $agreement->responder_token != '' ):?>
+                                            <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->responder_token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->responder_token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->responder_token; ?>">Download</a>
+                                        <?php endif;?>
+                                    <?php endif;?>
                                 <?php } ?>
                             </td>
-                            <?php if( is_super_admin() ):?>
-                                <td class="centered">
-                                    <a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('delete-agreement')?>&id=<?php echo $agreement->id?>" class="action-btn delete-btn icon-btn delete_service has-tooltip right" href="#"><span class="p"></span><span class="simple_tooltip radius6" style="top: -40px;">Delete Agreement<span></span></span></a>
-                                </td>
-                            <?php endif;?>
                         </tr>
                     <?php endforeach;?>
                 <?php else:?>
@@ -181,11 +181,11 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
     <div class="popup-box-header radius6 noradiusbottom">End-to-End Test Request</div>
     <form name="generate_agreement_form" id="generate_agreement_form" action="">
         <div class="popup-box-content">
-            <?php $can_request = Service::can_request_e2e( get_current_user_id(), $service->id );?>
+            <?php $can_request = Service::can_request_e2e( get_current_user_id(), $service->id, $service->service_user_id );?>
                 <div class="form-horizontal">
                     <?php if( $can_request ):?>
                             <?php
-                                $requester_services = Service::get_user_services( get_current_user_id(), $service->id);
+                                $requester_services = Service::get_services( get_current_user_id(), $service->id);
                                 $requester_profiles = getCustomerProfileInstances();
                             ?>
                             <div class="field-row">

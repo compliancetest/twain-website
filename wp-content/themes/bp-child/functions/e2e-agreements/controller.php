@@ -8,7 +8,10 @@ function ct_agreement_certification_view()
     {
         global $wpdb;
         $token = str_replace( ".pdf", "", get_query_var('claim') );
-        $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT certificate FROM wp_e2e_agreement WHERE token=%s ", $token ) );
+        $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT requester_certificate FROM wp_e2e_agreement WHERE requester_token = %s ", $token ) );
+        if( ! $certificate ){
+            $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT responder_certificate FROM wp_e2e_agreement WHERE responder_token = %s ", $token ) );
+        }
         header("Content-type: application/pdf");
         echo $certificate;
         exit;
@@ -26,6 +29,10 @@ function process_agreement_actions()
     }else if(wp_verify_nonce($action, 'delete-agreement')){
         if( is_super_admin() ){
             $agreement_id = intval($_REQUEST['id']);
+            //delete item from CloudSearch domain
+            $cloud_search = new CloudSearch();
+            $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+            //delete local data
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
             addMessage('Success!');
@@ -72,26 +79,60 @@ function process_agreement_actions()
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
-    //reject e2e testing
+    //cancel e2e testing
     } else if( wp_verify_nonce($action, 'cancel-agreement' ) ) {
-        $agreement_id = intval($_REQUEST['id']);
+        $agreement_id = intval($_REQUEST['agreement_id']);
+        $requester_service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+        $requester_service->load();
+        $responder_service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+        $responder_service->load();
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
+
+        if( ct_get_user_organisation( get_current_user_id() ) == ct_get_user_organisation( $requester_service->service_user_id ) ){
+            $responder_user_id    = $responder_service->service_user_id;
+            $requester_service_id = $requester_service->id;
+            $responder_service_id = $responder_service->id;
+        } else{
+            $responder_user_id    = $requester_service->service_user_id;
+            $requester_service_id = $responder_service->id;
+            $responder_service_id = $requester_service->id;
+        }
+        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $responder_user_id, array('text'     => $_REQUEST['deny-reason-field'],
+                                                                                                'sender_service_id'   => $requester_service_id,
+                                                                                                'receiver_service_id' => $responder_service_id
+        ));
+        //delete item from CloudSearch domain
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
+
+        addMessage('Success');
+        wp_redirect('/agreements/');
+        exit;
+        //cancel e2e testing
+    } else if( wp_verify_nonce($action, 'reject-agreement' ) ) {
+        $agreement_id = intval($_REQUEST['agreement_id']);
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
 
         $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
+
+        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array( 'text'                => $_REQUEST['deny-reason-field'],
+                                                                                                            'sender_service_id'   => $agreement->responder_service_id,
+                                                                                                            'receiver_service_id' => $agreement->requester_service_id
+        ));
+        //delete item from CloudSearch domain
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
         $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
-
-        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array('text'                => $_REQUEST['deny-reason-field'],
-                                                                                                'sender_service_id'   => $agreement->responder_service_id,
-                                                                                                'receiver_service_id' => $service->id )
-        );
-
-        $cloud_search = new CloudSearch();
-        $cloud_search->cloud_search_update_agreement( $agreement_id );
 
         addMessage('Success');
         wp_redirect('/agreements/');
@@ -109,17 +150,19 @@ function process_agreement_actions()
             $content = fread($fp, filesize($tmpName));
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
-                $file_field = 'requestor_audit_log';
-                $name_field = 'requestor_audit_log_name';
-                $type_field = 'requestor_audit_log_type';
-                $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
-                $sent_by = 1;
+                $file_field   = 'requestor_audit_log';
+                $name_field   = 'requestor_audit_log_name';
+                $type_field   = 'requestor_audit_log_type';
+                $r_name_field = 'requestor_name';
+                $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
+                $sent_by      = 1;
             } else{
-                $file_field = 'responder_audit_log';
-                $name_field = 'responder_audit_log_name';
-                $type_field = 'responder_audit_log_type';
-                $service_id = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
-                $sent_by = 2;
+                $file_field   = 'responder_audit_log';
+                $name_field   = 'responder_audit_log_name';
+                $type_field   = 'responder_audit_log_type';
+                $r_name_field = 'responder_name';
+                $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
+                $sent_by      = 2;
             }
             $service = new Service($service_id);
             $service->load();
@@ -130,12 +173,13 @@ function process_agreement_actions()
                     'scope'      => @implode( ';;', @$_REQUEST['scope'] ),
                     $file_field  => $content,
                     $name_field  => $fileName,
-                    $type_field  => $fileType
+                    $type_field  => $fileType,
+                    $r_name_field => cp_get_user_fullname( get_current_user_id() ),
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -169,21 +213,23 @@ function process_agreement_actions()
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
         if($_FILES["file"]["size"] > 0 ) {
             $fileName = $_FILES['file']['name'];
-            $tmpName = $_FILES['file']['tmp_name'];
+            $tmpName  = $_FILES['file']['tmp_name'];
             $fileType = $_FILES['file']['type'];
 
             $fp = fopen($tmpName, 'r');
             $content = fread($fp, filesize($tmpName));
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
-                $file_field = 'requestor_audit_log';
-                $name_field = 'requestor_audit_log_name';
-                $type_field = 'requestor_audit_log_type';
+                $file_field   = 'requestor_audit_log';
+                $name_field   = 'requestor_audit_log_name';
+                $type_field   = 'requestor_audit_log_type';
+                $r_name_field = 'requestor_name';
                 $sent_by = 1;
             } else{
-                $file_field = 'responder_audit_log';
-                $name_field = 'responder_audit_log_name';
-                $type_field = 'responder_audit_log_type';
+                $file_field   = 'responder_audit_log';
+                $name_field   = 'responder_audit_log_name';
+                $type_field   = 'responder_audit_log_type';
+                $r_name_field = 'responder_name';
                 $sent_by = 2;
             }
             //generate PDF
@@ -197,14 +243,16 @@ function process_agreement_actions()
                     $file_field   => $content,
                     $name_field   => $fileName,
                     $type_field   => $fileType,
+                    $r_name_field => cp_get_user_fullname( get_current_user_id() ),
                     'claim_date'  => gmmktime(),
                     'claim_id'    => getClaimID( null, $service->service_suite_id ),
-                    'token'       => createClaimToken()
+                    'requester_token'       => createClaimToken(),
+                    'responder_token'       => createClaimToken()
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%d', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -216,16 +264,20 @@ function process_agreement_actions()
 
             ));
 
-            $pdfString = create_agreement_pdf( $agreement_id );
+            $req_pdf = create_agreement_pdf( $agreement_id );
+            $res_pdf = create_agreement_pdf( $agreement_id, true );
 
             $wpdb->update('wp_e2e_agreement',
                 array(
-                    'certificate' => $pdfString
+
+                    'responder_certificate' => $res_pdf,
+                    'requester_certificate' => $req_pdf,
+
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s' ),
+                array( '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -247,17 +299,19 @@ function process_agreement_actions()
         addMessage( 'Success' );
         wp_redirect('/agreements/');
         exit;
-    }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
-        $agreement_id = intval($_REQUEST['agreement_id']);
-        Agreement::has_access( 'edit-agreement', false, $agreement_id );
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
-
-        $cloud_search = new CloudSearch();
-        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
-
-        addMessage('Success');
-        wp_redirect('/agreements/');
-        exit;
+//    }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
+//        $agreement_id = intval($_REQUEST['agreement_id']);
+//        Agreement::has_access( 'edit-agreement', false, $agreement_id );
+//
+//        $cloud_search = new CloudSearch();
+//        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+//        //delete local data
+//        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+//        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
+//
+//        addMessage('Success');
+//        wp_redirect('/agreements/');
+//        exit;
     //reject claim
     }else if( wp_verify_nonce($action, 'reject-failed-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
@@ -282,7 +336,7 @@ function process_agreement_actions()
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
         $sent_by = 2;
-        if( get_current_user_id() == $service->service_user_id ){
+        if( ct_get_user_organisation( get_current_user_id() ) == ct_get_user_organisation( $service->service_user_id ) ){
             $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
             $service->load();
             $sent_by = 1;
@@ -344,19 +398,19 @@ function process_agreement_actions()
         $responder_service_id = $_POST['responder_service'];
         
         $new_id = get_post_meta($requester_service_id, 'service_id', true) . "." . get_post_meta($responder_service_id, 'service_id', true);
-        
         //Check Duplication
-        $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}e2e_agreement WHERE str_id=%s", $new_id);
-        $seq = $wpdb->get_var($query);
-        
-        if( $seq > 0 )
-            $new_id .= "." . str_pad($seq, 2, 0, STR_PAD_LEFT);
-        echo $new_id;
-        exit;
+        $counter = 1;
+        do{
+            $result = $new_id.'.'.str_pad( $counter++, 2, 0, STR_PAD_LEFT);
+        } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $result ) ) );
+        exit( $result );
     } else if( wp_verify_nonce($action, 'get-agreement-pdf' ) ){
             global $wpdb;
             $token = str_replace( ".pdf", "", $_GET['claim'] );
-            $certificate = $wpdb->get_var( $wpdb->prepare("SELECT certificate FROM wp_e2e_agreement WHERE token= %s ", $token ) );
+            $certificate = $wpdb->get_var( $wpdb->prepare("SELECT requester_certificate FROM wp_e2e_agreement WHERE requester_token= %s ", $token ) );
+            if( ! $certificate ){
+                $certificate = $wpdb->get_var( $wpdb->prepare("SELECT responder_certificate FROM wp_e2e_agreement WHERE responder_token= %s ", $token ) );
+            }
             if( ! $certificate){
                 exit( "Invalid Request!" );
             }
@@ -537,7 +591,7 @@ function get_agreement_info_popup(){
     exit;
 }
 
-function create_agreement_pdf( $agreement_id ){
+function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         global $wpdb;
         require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
@@ -589,21 +643,33 @@ function create_agreement_pdf( $agreement_id ){
         $pdf->AddPage();
 
         $title = '<h1 style="color: #000; font-size: 48pt; font-weight: bold; line-height: 42pt; text-transform: uppercase;">CERTIFICATE</h1>';
-        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has completed and end-to-end interoperability test between the two parties defined below. Both parties have confirmed that the test was successful for the scope described.<br></p>';
+        $description = '<p style="font-size: 13pt; line-height:16pt;"><br>This certificate confirms that the holder has completed an end-to-end interoperability test between the two parties defined below. Both parties have confirmed that the test was successful for the scope described.<br></p>';
 
         //Getting Claim Defaults
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
-        $requester_service = new Service( $agreement->requester_service_id );
-        $requester_service->load();
+        if( $for_another ){
+            $requester_service = new Service( $agreement->responder_service_id );
+            $requester_service->load();
 
-        $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
-        $requester_test_suite->load();
+            $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
+            $requester_test_suite->load();
 
-        $responder_service = new Service( $agreement->responder_service_id );
-        $responder_service->load();
+            $responder_service = new Service( $agreement->requester_service_id );
+            $responder_service->load();
+        } else{
+            $requester_service = new Service( $agreement->requester_service_id );
+            $requester_service->load();
 
-        $certificate_data_info = '
+            $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
+            $requester_test_suite->load();
+
+            $responder_service = new Service( $agreement->responder_service_id );
+            $responder_service->load();
+        }
+
+
+         $certificate_data_info = '
             <style>
                 table.certificate-info th {
                     border-bottom: 0.2em solid #959595;
@@ -728,6 +794,8 @@ function create_agreement_pdf( $agreement_id ){
         // Styles for QR code
         $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
 
+        $agreement->token = $for_another ? $agreement->responder_token : $agreement->requester_token;
+
         // QRCODE,H : QR-CODE Best error correction
         $pdf->write2DBarcode( get_site_url() . '/agreement/' . $agreement->token . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
@@ -814,7 +882,7 @@ function create_agreement_pdf( $agreement_id ){
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                 Click "' . $agreement->requestor_audit_log_name . '" bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '/agreement/' . $agreement->token . '.pdf">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a> link to download attachment on our website
+                                    <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
@@ -823,7 +891,7 @@ function create_agreement_pdf( $agreement_id ){
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click "' . $agreement->responder_audit_log_name . '" bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '/agreement/' . $agreement->token . '.pdf">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a> link to download attachment on our website
+                                     <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>';
 

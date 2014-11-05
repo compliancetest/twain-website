@@ -60,38 +60,69 @@ function ct_duplicate_data()
                }else{
                    if(wp_verify_nonce($action, 'start-copy-data'))                   
                    {
-                       
+                      
                        //Getting Data from the Source Site
                        
                        $query = "SELECT * FROM " . $wpdb->prefix . "bp_groups";
-                       $sourceCommunities = $wpdb->get_results($query, ARRAY_A);
+                       $destCommunities = $wpdb->get_results($query, ARRAY_A);
                        
-                       $query = "SELECT * FROM " . $wpdb->posts . " WHERE post_type  = 'test-suite' ORDER BY post_title";
-                       $sourceSuites = $wpdb->get_results($query, ARRAY_A);
+                       $query = "SELECT p.*, pm.meta_value AS community_id FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON pm.post_id=p.ID AND pm.meta_key='community_id' WHERE post_type  = 'test-suite' ORDER BY community_id, post_title";
+                       $results = $wpdb->get_results($query, ARRAY_A);
+                       
+                       $destSuites = array();
+                       foreach($results as $r) {
+                           if (!isset($r['community_id']))    
+                               $destSuites[$r['community_id']] = array();
+                           $destSuites[$r['community_id']][] = $r;
+                       }
                        
                        //1. Communities
                        $query = "SELECT * FROM " . $wpdb->prefix . "bp_groups";
-                       $communities = $new_wpdb->get_results($query, ARRAY_A);
+                       $sourceCommunities = $new_wpdb->get_results($query, ARRAY_A);
                        
                        //2. Test Suites, Test Case and Products
-                       $query = "SELECT * FROM " . $wpdb->posts . " WHERE post_type  = 'test-suite' ORDER BY post_title";
-                       $suites = $new_wpdb->get_results($query, ARRAY_A);
+                       $query = "SELECT p.*, pm.meta_value AS community_id FROM " . $wpdb->posts . " AS p LEFT JOIN " . $wpdb->postmeta . " AS pm ON pm.post_id=p.ID AND pm.meta_key='community_id' WHERE post_type  = 'test-suite' ORDER BY community_id, post_title";
+                       $resuls = $new_wpdb->get_results($query, ARRAY_A);
+                       $sourceSuites = array();
+                       foreach($results as $r) {
+                           if (!isset($r['community_id']))    
+                               $sourceSuites[$r['community_id']] = array();
+                           $sourceSuites[$r['community_id']][] = $r;
+                       }
                        
-                       $query = "SELECT * FROM " . $wpdb->posts . " WHERE post_type = 'test-case' ORDER BY post_title";
-                       $cases = $new_wpdb->get_results($query, ARRAY_A);
+                       /*$query = "SELECT * FROM " . $wpdb->posts . " WHERE post_type = 'test-case' ORDER BY post_title";
+                       $cases = $new_wpdb->get_results($query, ARRAY_A);*/
                        
                        $query = "SELECT * FROM " . $wpdb->posts . " WHERE post_type = 'product-service' ORDER BY post_title";
                        $products = $new_wpdb->get_results($query, ARRAY_A);
                        ?>
+                       <style type="text/css">
+                            .community-tr > td{
+                                border-bottom: solid 1px #ccc;
+                                border-top: solid 1px #ccc;
+                                vertical-align: middle;
+                            }
+                            .community-suite-tr > td{
+                                position: relative;
+                            }
+                            .community-suite-tr .wrap{
+                                position: absolute;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(255, 255, 255, 0.4);
+                                left: 0;
+                                top: 0;
+                            }
+                       </style>
                         <br />
-                        <h3>Select data copied from the source site</h3>
+                        <h2>Select data copied from the source site</h2>
                         <form action="" method="post" id="copyDataForm">
                             <input type="hidden" name="page" value="duplicate_data" />
                             <input type="hidden" name="action" value="<?php echo wp_create_nonce('complete-duplicate-data')?>" />
                             <div class="articles">
-                                <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Communities</h4> <a href="#" class="check-all">Select All</a>
+                                <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Communities</h4> <!--<a href="#" class="check-all">Select All</a>-->
                                 <div style="clear:both; font-weight: bold;">(The test suites, test cases and test data that belong to the community will be copied together.)</div>
-                                <table class="widefat" style="width: auto;">
+                                <table class="widefat" style="width: auto; border-collapse: collapse;">
                                     <thead>
                                         <tr>
                                             <th>Community</th>
@@ -100,8 +131,8 @@ function ct_duplicate_data()
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($communities as $c): ?>
-                                        <tr>
+                                        <?php foreach($sourceCommunities as $c): ?>
+                                        <tr class="community-tr" id="community-tr<?php echo $c['id']?>" data-id='<?php echo $c['id']?>'>
                                             <td>
                                                 <label><input type="checkbox" name="community_ids[]" value="<?php echo $c['id']?>" /> (ID: #<?php echo $c['id']?>) <?php echo $c['name']?></label>
                                             </td>
@@ -112,12 +143,43 @@ function ct_duplicate_data()
                                             <td>
                                                 <select name="updated_community<?php echo $c['id']?>" class="updated_community" disabled="disabled">
                                                     <option>Select Community</option>
-                                                    <?php foreach($sourceCommunities as $sc): ?>
+                                                    <?php foreach($destCommunities as $sc): ?>
                                                     <option value="<?php echo $sc['id']?>"><?php echo $sc['name']?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </td>
-                                        </tr>                                        
+                                        </tr>   
+                                        <?php /*
+                                        <tr class='community-suite-tr' id="community-suite-tr<?php echo $c['id']?>" style="display: none;">
+                                            <td colspan="3" style="padding-left: 20px">
+                                                <h4 style="margin: 0;">Test Suites</h4>
+                                                <table>
+                                                    <?php foreach($sourceSuites[$c['id']] as $s): ?>                                
+                                                    <tr>
+                                                        <td>
+                                                            <label><input type="checkbox" name="suite_ids[]" value="<?php echo $s['ID']?>" /> (ID: #<?php echo $s['ID']?>) <?php echo $s['post_title']?></label>
+                                                        </td>
+                                                        <td>
+                                                            <label><input type="radio" name="suite_copy_method<?php echo $s['ID']?>" value="copy" checked="checked" class="suite_copy_method" /> Copy</label>
+                                                            
+                                                            <label><input type="radio" name="suite_copy_method<?php echo $s['ID']?>" value="update" class="suite_copy_method" /> Update</label>
+                                                        </td>
+                                                        <td>
+                                                            <select name="updated_suite<?php echo $s['ID']?>" class="updated_suite" disabled="disabled">
+                                                                <option value="">Select Suite</option>
+                                                                <?php foreach($destSuites[$c['id']] as $sc): ?>
+                                                                <option value="<?php echo $sc['ID']?>"><?php echo $sc['post_title']?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </td>
+                                                    </tr> 
+                                                    <?php endforeach; ?>
+                                                </table>
+                                                <div class="wrap"></div>
+                                            </td>
+                                        </tr>
+                                        */
+                                        ?>                                     
                                         <?php endforeach; ?>        
                                     </tbody>
                                 </table>
@@ -125,58 +187,7 @@ function ct_duplicate_data()
                             </div>
                             <br />
                             
-                            <!--<div class="articles">
-                                <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Test Suites</h4> <a href="#" class="check-all">Select All</a>
-                                <div style="clear:both; font-weight: bold;">(The test cases that are assigned to the test suite will be copied together.)</div>
-                                <table class="widefat" style="width: auto;">
-                                    <thead>
-                                        <tr>
-                                            <th>Test Suite</th>                                            
-                                            <th>Assigned to</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php foreach($suites as $c): ?>                                
-                                    <tr>
-                                        <td>
-                                            <label><input type="checkbox" name="suite_ids[]" value="<?php echo $c['ID']?>" /> (ID: #<?php echo $c['ID']?>) <?php echo $c['post_title']?></label>
-                                        </td>
-                                        <td>
-                                            <select name="dest_community<?php echo $c['ID']?>">
-                                                <option>Select Community</option>
-                                                <?php foreach($sourceCommunities as $sc): ?>
-                                                <option value="<?php echo $sc['id']?>"><?php echo $sc['name']?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>
-                                    </tr> 
-                                    <?php endforeach; ?>
-                                    </tbody>
-                                </table>                                
-                            </div>
-                            <br />
-                            <div class="articles">
-                                <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Test Cases</h4><a href="#" class="check-all">Select All</a>
-                                <br clear="all" />
-                                <table class="widefat" style="width: auto;">
-                                    <thead>
-                                        <tr>
-                                            <th>Test Case</th>              
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php foreach($cases as $c): ?>
-                                    <tr>
-                                        <td>
-                                            <label><input type="checkbox" name="case_ids[]" value="<?php echo $c['ID']?>" /> (ID: #<?php echo $c['ID']?>) <?php echo $c['post_title']?></label>
-                                        </td>
-                                    </tr> 
-                                    <?php endforeach; ?>
-                                    </tbody>
-                                </table>           
-                            </div>
                             
-                            <br />-->
                             <div class="articles">
                                 <h4 style="float: left; margin-top: 0; margin-bottom: 5px; margin-right: 10px;">Select Products and Services</h4><a href="#" class="check-all">Select All</a>
                                 <table class="widefat" style="width: auto;">
@@ -215,19 +226,56 @@ function ct_duplicate_data()
                                     }
                                     return false;
                                 });
+                               /* $('.community-tr input[type="checkbox"]').change(function(){
+                                    if (this.checked) {
+                                        showCommunitySelect(this.value);
+                                    } else {
+                                        hideCommunitySelect(this.value);
+                                    }
+                                })
+                                
+                                function showCommunitySelect(cid)
+                                {
+                                    $('#community-suite-tr' + cid).show();
+                                    $('#community-suite-tr' + cid + ' input[type="checkbox"]').prop('checked', true);
+                                }
+                                function hideCommunitySelect(cid)
+                                {
+                                    $('#community-suite-tr' + cid).hide();
+                                    $('#community-suite-tr' + cid + ' input[type="checkbox"]').prop('checked', false);
+                                }*/
+                                
                                 $('input.copy_method').click(function(){                                    
                                     if($(this).val() == 'copy')
                                     {
                                         $(this).parent().parent().parent().find('select.updated_community').prop('disabled', true);
+                                        /*$(this).parents('tr').next().find('.wrap').show();
+                                        
+                                        $(this).parents('tr').next().find('input[type="checkbox"]').prop('checked', true);
+                                        $(this).parents('tr').next().find('input.suite_copy_method[value="copy"]').prop('checked', true);
+                                        $(this).parents('tr').next().find('select.updated_suite').val('').prop('disabled', true);*/
+                                        
                                     }else{
+                                        
                                         $(this).parent().parent().parent().find('select.updated_community').prop('disabled', false);
+//                                        $(this).parents('tr').next().find('.wrap').hide();
                                     }
                                 });
+                                /*$('input.suite_copy_method').click(function(){                                    
+                                    if($(this).val() == 'copy')
+                                    {
+                                        $(this).parent().parent().parent().find('select.updated_suite').val('').prop('disabled', true);
+                                    }else{
+                                        $(this).parent().parent().parent().find('select.updated_suite').prop('disabled', false);
+                                    }
+                                });*/
+                                //Toggle Community Selection
                             })
                         </script>
                        <?php
                    }else if(wp_verify_nonce($action, 'complete-duplicate-data')){
-                
+                       
+                        
                     ?>
                             <h3>Start Copy Data</h3>
                             <?php
@@ -335,6 +383,20 @@ function ct_duplicate_data()
                                 //Getting Side Admins
                                 $admins = get_users(array('role' => 'administrator'));
                                 
+                                //Keep Suites Names AND Ids
+                                $query = "SELECT family_mark, suite_title FROM wp_test_suites GROUP BY family_mark ORDER BY suite_title";
+                                $old_suites_family_marks = $wpdb->get_results($query);
+                                
+                                //Getting Suite Titles and Ids
+                                $query = "SELECT * FROM wp_test_suites ORDER BY suite_title, version_major, version_minor, version_patch";
+                                $old_suites = $wpdb->get_results($query);
+                                
+                                //Getting Old Test Suite Configuration Table
+                                $esb = new ManageESB();
+                                $query = "SELECT * FROM " . $esb->table_test_suite_configuration . " ORDER BY TEST_SUITE_WP_ID";
+                                $esb_suite_configurations = ManageESB::$esbdb->get_results($query);
+                                
+
                                 if(!$communities)
                                 {
                                     //Remove Trash Posts
@@ -507,7 +569,7 @@ function ct_duplicate_data()
                                     {
                                         ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap);
                                     }
-                                    
+                                    //var_dump($profile_instance_ids);
                                     //Update Profile Types
                                     foreach($profile_instance_ids as $oid => $nid)
                                     {
@@ -515,12 +577,150 @@ function ct_duplicate_data()
                                     }
                                     
                                 }
-                            }
-                            echo '<br />Completed!<br /><a href="/wp-admin/tools.php?page=duplicate_data">Back</a>';
-                            exit;                
+                                
+                                
+                                
+                               //Getting New Test Suites Family Marks and Suites
+                                $query = "SELECT family_mark, suite_title FROM wp_test_suites GROUP BY family_mark ORDER BY suite_title";
+                                $new_suites_family_marks = $wpdb->get_results($query);
+                                
+                                //Getting Suite Titles and Ids
+                                $query = "SELECT * FROM wp_test_suites ORDER BY suite_title, version_major, version_minor, version_patch";
+                                $new_suites = $wpdb->get_results($query);
+
+                            ?>
+                                <h3>Update Suites For Subscriptions, Test Plans, Claims, Conversations, Services</h3>
+                                <form action="" method="post">
+                                    <input type="hidden" name="page" value="duplicate_data" />
+                                    <input type="hidden" name="action" value="<?php echo wp_create_nonce('conform-update-suite-ids')?>" />
+                                    <table>
+                                        <tr>
+                                            <td valign="top">
+                                                <h4>Update Suites</h4>
+                                                <table cellpadding="5" border="1" class="widefat" style="width: auto; border-collapse: collapse;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Old Suite</th>
+                                                            <th>New Suite</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach($old_suites_family_marks as  $orow): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <?php echo $orow->suite_title ?>
+                                                                <input type="hidden" name="old_family_mark[]" value="<?php echo $orow->family_mark ?>" />
+                                                            </td>
+                                                            <td>
+                                                                <select name="new_family_mark[]">
+                                                                    <?php foreach ($new_suites_family_marks as  $nrow) :?>
+                                                                    <option value="<?php echo $nrow->family_mark?>"><?php echo $nrow->suite_title?></option>
+                                                                    <?php endforeach; ?>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <?php endforeach; ?>
+                                                    </tbody>                                
+                                                </table>  
+                                            </td>
+                                            <td valign="top">
+                                                <h4>Update Suites Versions</h4>
+                                                <table cellpadding="5" border="1" class="widefat" style="width: auto; border-collapse: collapse;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Old Suite</th>
+                                                            <th>New Suite</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach($old_suites as  $orow): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <?php echo $orow->suite_title . ' v' . $orow->version_major . '.' . $orow->version_minor  . ($orow->version_patch > 0 ? ".{$orow->version_patch}" : "")?>
+                                                                <input type="hidden" name="old_suites[]" value="<?php echo $orow->suite_id ?>" />
+                                                            </td>
+                                                            <td>
+                                                                <select name="new_suites[]">
+                                                                    <?php foreach ($new_suites as  $nrow) :?>
+                                                                    <option value="<?php echo $nrow->suite_id?>"><?php echo $nrow->suite_title . ' v' . $nrow->version_major . '.' . $nrow->version_minor  . ($nrow->version_patch > 0 ? ".{$nrow->version_patch}" : "")?></option>
+                                                                    <?php endforeach; ?>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <?php endforeach; ?>
+                                                    </tbody>                                
+                                                </table>    
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    
+                                           
+                                    <br />
+                                    <input type="submit" class="button button-primary" value="Update" />
+                                    
+                                    <?php foreach ($esb_suite_configurations as $row): ?>
+                                    <input type="hidden" name="esb_suite<?php echo $row->TEST_SUITE_WP_ID?>" value="<?php echo $row->ID?>" />
+                                    <?php endforeach; ?>
+                                    
+                                </form>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function(){
+                                        jQuery('html, body').animate({
+                                            'scrollTop' : jQuery(document).height()
+                                        }, 'slow');
+                                    })
+                                </script>
+                                <?php
+                            }else{
+                                echo '<br />Completed!<br /><a href="/wp-admin/tools.php?page=duplicate_data">Back</a>';
+                                exit; 
+                            }               
                     }
                    
                }
+                
+            }else if(wp_verify_nonce($action, 'conform-update-suite-ids')){
+                //Update family Marks for organisation subscriptions
+                $old_family_marks = $_POST['old_family_mark'];
+                $new_family_marks = $_POST['new_family_mark'];
+                for ($i=0; $i < count($old_family_marks); $i++) {
+                    $query = $wpdb->prepare('UPDATE wp_organisations_subscriptions SET suite_family_mark=%d WHERE suite_family_mark=%d', $new_family_marks[$i],  $old_family_marks[$i]);
+                    $wpdb->query($query);
+                }
+                
+                $esb = new ManageESB();
+                
+                $old_suites = $_POST['old_suites'];
+                $new_suites = $_POST['new_suites'];
+                
+                for ($i=0; $i < count($old_suites); $i++) {
+                    //Update User Subscriptions
+                    $query = $wpdb->prepare('UPDATE wp_users_subscriptions SET suite_id=%d WHERE suite_id=%d', $new_suites[$i],  $old_suites[$i]);                    
+                    $wpdb->query($query);
+                    //Update Test Plans
+                    $query = $wpdb->prepare('UPDATE wp_test_plans SET suite_id=%d WHERE suite_id=%d', $new_suites[$i],  $old_suites[$i]);                    
+                    $wpdb->query($query);
+                    //Update Claims
+                    $query = $wpdb->prepare('UPDATE wp_compliance_claims SET suite_id=%d WHERE suite_id=%d', $new_suites[$i],  $old_suites[$i]);                    
+                    $wpdb->query($query);
+                    //Updating Services
+                    $query = $wpdb->prepare('UPDATE wp_postmeta SET meta_value=%d WHERE meta_key="service_suite_id" AND meta_value=%d', $new_suites[$i],  $old_suites[$i]);                    
+                    $wpdb->query($query);
+                    
+                    //Update Conversations
+                    if(isset($_POST['esb_suite' . $old_suites[$i]])) {
+                        $old_esb_id = $_POST['esb_suite' . $old_suites[$i]];
+                        $new_esb_id = $esb->getTestSuiteConfigurationID($new_suites[$i]);
+                        $query = "UPDATE " . $esb->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=" . $new_esb_id . " WHERE TEST_SUITE_CONFIGURATION_ID=" . $old_esb_id;
+                        
+                        ManageESB::$esbdb->query($query);
+                    }
+                }
+                
+                echo '<br />Completed!<br /><a href="/wp-admin/tools.php?page=duplicate_data">Back</a>';
+                exit; 
+                
             }else{
                 ?>
                 <form action="" method="post">
@@ -540,7 +740,7 @@ function ct_duplicate_data()
                             <td><b>Username</b></td>
                             <td><input type="text" name="username" value="<?php echo $_POST['username']?>" autocomplete="off" /></td>
                         </tr>                
-                        <tr>
+                        <tr>                         
                             <td><b>Password</b></td>
                             <td><input type="text" name="password" value="<?php echo $_POST['password']?>" autocomplete="off" /></td>
                         </tr>                

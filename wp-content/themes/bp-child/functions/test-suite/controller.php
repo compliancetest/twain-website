@@ -20,38 +20,12 @@ function remove_suite_name_id_map($postid)
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'conformance_level_' . $postid));
         //Delete Scenarios
         $wpdb->delete($wpdb->postmeta, array('meta_key'=> 'scenario_' . $postid));
+        
         //Delete Scenarios
-        $wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
+        //$wpdb->delete($wpdb->prefix . "test_suites_scenarios", array('suite_id' => $postid));
         
         //Delete From Suite Map Table
         $wpdb->delete($wpdb->prefix . "test_suites", array('suite_id'=> $postid));
-        
-        cp_sort_test_suites($familyMark, get_post_meta($postid, 'ts_version_major', true));
-        
-        $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", $familyMark, $major_version);
-        $next_suite_id = $wpdb->get_var($query);
-        
-        $esb = new ManageESB();
-        
-        if ($next_suite_id) {
-            //Update Subscriptions, Test Plans, Transactions
-            $query = $wpdb->update($wpdb->prefix . "users_subscriptions", 
-                                    array('suite_id' => $next_suite_id), 
-                                    array('suite_id' => $postid),
-                                    array('%d'),
-                                    array('%d')
-                                    );
-            $query = $wpdb->update($wpdb->prefix . "test_plans", 
-                                    array('suite_id' => $next_suite_id), 
-                                    array('suite_id' => $postid),
-                                    array('%d'),
-                                    array('%d')
-                                    );
-            $esb->updateAuditRecordSuiteId($postid, $next_suite_id);
-            
-        } 
-        
-        $esb->deleteTestSuiteInfo($postid);
         
     }
 }
@@ -93,10 +67,9 @@ function process_testsuite_actions()
                 $query = $wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}test_suites WHERE version_major=%d AND family_mark=%d", $versionMajor, $familyMark);
                 $suites = $wpdb->get_var($query);
                 
-                if ($suites > 1) {
-                    wp_delete_post($_REQUEST['suite_id']);                
-                    addMessage('The test suite was removed successfully.');
-                } else {
+                $has_error = false;
+                    
+                if($suites <= 1) {
                     //Check Transactions, Subscriptions and Test Plans
                     $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_subscriptions WHERE suite_id=%d", $suite->id);
                     $subscriptions = $wpdb->get_var($query);
@@ -125,12 +98,42 @@ function process_testsuite_actions()
                             $message = "The test suite can't be deleted because {$transactions} transactions still reference it.";
                         }                        
                         addMessage($message, 'error');
-                    } else {
-                        wp_delete_post($_REQUEST['suite_id']);                
-                        addMessage('The test suite was removed successfully.');
-                    }
+                        $has_error = true;
+                    } 
                 }
                 
+                if (!$has_error) {
+                    wp_delete_post($_REQUEST['suite_id']);        
+                    
+                    cp_sort_test_suites($familyMark, $versionMajor);
+        
+                    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", $familyMark, $versionMajor);
+                    $next_suite_id = $wpdb->get_var($query);
+                    
+                    $esb = new ManageESB();
+                    
+                    if ($next_suite_id) {
+                        //Update Subscriptions, Test Plans, Transactions
+                        $query = $wpdb->update($wpdb->prefix . "users_subscriptions", 
+                                                array('suite_id' => $next_suite_id), 
+                                                array('suite_id' => $_REQUEST['suite_id']),
+                                                array('%d'),
+                                                array('%d')
+                                                );
+                        $query = $wpdb->update($wpdb->prefix . "test_plans", 
+                                                array('suite_id' => $next_suite_id), 
+                                                array('suite_id' => $_REQUEST['suite_id']),
+                                                array('%d'),
+                                                array('%d')
+                                                );
+                        $esb->updateAuditRecordSuiteId($_REQUEST['suite_id'], $next_suite_id);
+                        
+                    } 
+                    
+                    $esb->deleteTestSuiteInfo($_REQUEST['suite_id']);                    
+                        
+                    addMessage('The test suite was removed successfully.');
+                }
                 
             }            
         }
@@ -171,13 +174,17 @@ function deleteTestSuite()
         wp_redirect($return);
         exit;
     }
-    
+        
     if(!can_delete_suite($id))
     {
         addMessage("Permission Denied!", 'error');
         wp_redirect($return);
         exit;
     }
+    
+    $suite = new TestSuite($id);
+    $familyMark = $suite->loadfamilyMark(); 
+    $major_version = get_post_meta($id, 'ts_version_major', true);
     
     if(!wp_delete_post($id, true))
     {
@@ -186,7 +193,33 @@ function deleteTestSuite()
         exit;
     }
     
+    cp_sort_test_suites($familyMark, $major_version);
+        
+    $query = $wpdb->prepare("SELECT suite_id FROM {$wpdb->prefix}test_suites WHERE family_mark = %d AND version_major=%d ORDER BY version_minor DESC, version_patch DESC LIMIT 1", $familyMark, $major_version);
+    $next_suite_id = $wpdb->get_var($query);
+    
     $esb = new ManageESB();
+    
+    if ($next_suite_id) {
+        //Update Subscriptions, Test Plans, Transactions
+        $query = $wpdb->update($wpdb->prefix . "users_subscriptions", 
+                                array('suite_id' => $next_suite_id), 
+                                array('suite_id' => $id),
+                                array('%d'),
+                                array('%d')
+                                );
+        $query = $wpdb->update($wpdb->prefix . "test_plans", 
+                                array('suite_id' => $next_suite_id), 
+                                array('suite_id' => $id),
+                                array('%d'),
+                                array('%d')
+                                );
+        $esb->updateAuditRecordSuiteId($id, $next_suite_id);
+        
+    } 
+    
+    $esb->deleteTestSuiteInfo($id);
+    
     $esb->deleteTestSuiteNameIDMap($id);
     
     addMessage("The test suite was deleted");
@@ -664,7 +697,8 @@ function cp_sort_test_suites($familyMark, $version_major)
     
     $esb = new ManageESB();
     //Update Test Suite Ids for Audit Enabled Records
-    $esb->updateAuditRecordSuiteId($old_ids, $new_id);
+    if (!empty($old_ids) && !empty($new_id))
+        $esb->updateAuditRecordSuiteId($old_ids, $new_id);
 }
 
 /**

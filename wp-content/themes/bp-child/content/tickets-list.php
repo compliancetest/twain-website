@@ -159,7 +159,12 @@ $show_community = $is_support || is_super_admin() ? true : false;
                             </div>                            
                             <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
-                            <div class="td td-ticket-type <?php if( $show_community ):?>td-two-lines tocenter<?php endif;?>"><?php echo $ticket->category_title ?><?php if( $show_community ):?><br><?php $community = groups_get_group(array('group_id' => get_post_meta($ticket->suite_id, 'community_id', true ))); echo bp_get_group_name($community);;?><?php endif;?></div>
+                            <div class="td td-ticket-type <?php if( $show_community ):?>td-two-lines tocenter<?php endif;?>">
+                                <?php echo $ticket->category_title ?>
+                                <?php if( $show_community ):?>
+                                    <br><?php $community = groups_get_group(array('group_id' => $ticket->community_id)); echo bp_get_group_name($community);;?>
+                                <?php endif;?>
+                            </div>
                             <div class="td td-ticket-status tocenter">
                                 <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">
                                 <?php echo $ticket->status_title ?>
