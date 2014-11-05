@@ -989,10 +989,14 @@ class ManageESB
     }
     
     public function updateAuditRecordSuiteId($old_id, $new_id)
-    {       
+    {   
+        if (!$old_id || !$new_id)    
+            return;
+            
         if(!is_array($old_id)) {
             $old_id = array($old_id);
         }
+        
         $query = "SELECT ID FROM " . $this->table_test_suite_configuration . " WHERE TEST_SUITE_WP_ID IN (" . implode(",", $old_id) . ")"  ;
         $old_config_id = ManageESB::$esbdb->get_col($query);
         
