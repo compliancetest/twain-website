@@ -8,7 +8,10 @@ function ct_agreement_certification_view()
     {
         global $wpdb;
         $token = str_replace( ".pdf", "", get_query_var('claim') );
-        $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT certificate FROM wp_e2e_agreement WHERE token=%s ", $token ) );
+        $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT requester_certificate FROM wp_e2e_agreement WHERE requester_token = %s ", $token ) );
+        if( ! $certificate ){
+            $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT responder_certificate FROM wp_e2e_agreement WHERE responder_token = %s ", $token ) );
+        }
         header("Content-type: application/pdf");
         echo $certificate;
         exit;
@@ -243,12 +246,13 @@ function process_agreement_actions()
                     $r_name_field => cp_get_user_fullname( get_current_user_id() ),
                     'claim_date'  => gmmktime(),
                     'claim_id'    => getClaimID( null, $service->service_suite_id ),
-                    'token'       => createClaimToken()
+                    'requester_token'       => createClaimToken(),
+                    'responder_token'       => createClaimToken()
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -260,16 +264,20 @@ function process_agreement_actions()
 
             ));
 
-            $pdfString = create_agreement_pdf( $agreement_id );
+            $req_pdf = create_agreement_pdf( $agreement_id );
+            $res_pdf = create_agreement_pdf( $agreement_id, true );
 
             $wpdb->update('wp_e2e_agreement',
                 array(
-                    'certificate' => $pdfString
+
+                    'responder_certificate' => $res_pdf,
+                    'requester_certificate' => $req_pdf,
+
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s' ),
+                array( '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -399,7 +407,10 @@ function process_agreement_actions()
     } else if( wp_verify_nonce($action, 'get-agreement-pdf' ) ){
             global $wpdb;
             $token = str_replace( ".pdf", "", $_GET['claim'] );
-            $certificate = $wpdb->get_var( $wpdb->prepare("SELECT certificate FROM wp_e2e_agreement WHERE token= %s ", $token ) );
+            $certificate = $wpdb->get_var( $wpdb->prepare("SELECT requester_certificate FROM wp_e2e_agreement WHERE requester_token= %s ", $token ) );
+            if( ! $certificate ){
+                $certificate = $wpdb->get_var( $wpdb->prepare("SELECT responder_certificate FROM wp_e2e_agreement WHERE responder_token= %s ", $token ) );
+            }
             if( ! $certificate){
                 exit( "Invalid Request!" );
             }
@@ -580,7 +591,7 @@ function get_agreement_info_popup(){
     exit;
 }
 
-function create_agreement_pdf( $agreement_id ){
+function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         global $wpdb;
         require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
@@ -637,16 +648,28 @@ function create_agreement_pdf( $agreement_id ){
         //Getting Claim Defaults
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
-        $requester_service = new Service( $agreement->requester_service_id );
-        $requester_service->load();
+        if( $for_another ){
+            $requester_service = new Service( $agreement->responder_service_id );
+            $requester_service->load();
 
-        $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
-        $requester_test_suite->load();
+            $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
+            $requester_test_suite->load();
 
-        $responder_service = new Service( $agreement->responder_service_id );
-        $responder_service->load();
+            $responder_service = new Service( $agreement->requester_service_id );
+            $responder_service->load();
+        } else{
+            $requester_service = new Service( $agreement->requester_service_id );
+            $requester_service->load();
 
-        $certificate_data_info = '
+            $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
+            $requester_test_suite->load();
+
+            $responder_service = new Service( $agreement->responder_service_id );
+            $responder_service->load();
+        }
+
+
+         $certificate_data_info = '
             <style>
                 table.certificate-info th {
                     border-bottom: 0.2em solid #959595;
@@ -771,6 +794,8 @@ function create_agreement_pdf( $agreement_id ){
         // Styles for QR code
         $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
 
+        $agreement->token = $for_another ? $agreement->responder_token : $agreement->requester_token;
+
         // QRCODE,H : QR-CODE Best error correction
         $pdf->write2DBarcode( get_site_url() . '/agreement/' . $agreement->token . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
@@ -857,7 +882,7 @@ function create_agreement_pdf( $agreement_id ){
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                 Click "' . $agreement->requestor_audit_log_name . '" bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '/agreement/' . $agreement->token . '.pdf">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a> link to download attachment on our website
+                                    <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
@@ -866,7 +891,7 @@ function create_agreement_pdf( $agreement_id ){
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click "' . $agreement->responder_audit_log_name . '" bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '/agreement/' . $agreement->token . '.pdf">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a> link to download attachment on our website
+                                     <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>';
 
