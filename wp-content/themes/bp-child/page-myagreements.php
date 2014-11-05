@@ -227,7 +227,7 @@ get_header();
                                                                                <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                            </div>
                                                                            <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                           <?php echo wp_nonce_field( 'cancel-agreement', '_psnonce' );?>
+                                                                           <?php echo wp_nonce_field( 'reject-agreement', '_psnonce' );?>
                                                                        </div>
                                                                        <div class="popup-box-footer radius6 noradiustop">
                                                                            <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>
@@ -253,7 +253,7 @@ get_header();
                                                                            <textarea class="deny-reason-field" name="deny-reason-field" rows="5" cols="20"></textarea>
                                                                        </div>
                                                                        <input type="hidden" name="agreement_id" value="<?php echo $agreement->id;?>">
-                                                                       <?php echo wp_nonce_field( 'reject-claimed-agreement', '_psnonce' );?>
+                                                                       <?php echo wp_nonce_field( 'cancel-agreement', '_psnonce' );?>
                                                                    </div>
                                                                    <div class="popup-box-footer radius6 noradiustop">
                                                                        <div class="loading loading-with-text radius6"><div><b>DELETING AGREEMENT</b><span>Please wait...</span></div></div>

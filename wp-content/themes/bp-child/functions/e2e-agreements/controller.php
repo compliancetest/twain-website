@@ -76,8 +76,41 @@ function process_agreement_actions()
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
-    //reject e2e testing
+    //cancel e2e testing
     } else if( wp_verify_nonce($action, 'cancel-agreement' ) ) {
+        $agreement_id = intval($_REQUEST['agreement_id']);
+        $requester_service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+        $requester_service->load();
+        $responder_service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+        $responder_service->load();
+        Agreement::has_access( 'edit-agreement', false, $agreement_id );
+
+        if( ct_get_user_organisation( get_current_user_id() ) == ct_get_user_organisation( $requester_service->service_user_id ) ){
+            $responder_user_id    = $responder_service->service_user_id;
+            $requester_service_id = $requester_service->id;
+            $responder_service_id = $responder_service->id;
+        } else{
+            $responder_user_id    = $requester_service->service_user_id;
+            $requester_service_id = $responder_service->id;
+            $responder_service_id = $requester_service->id;
+        }
+        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $responder_user_id, array('text'     => $_REQUEST['deny-reason-field'],
+                                                                                                'sender_service_id'   => $requester_service_id,
+                                                                                                'receiver_service_id' => $responder_service_id
+        ));
+        //delete item from CloudSearch domain
+        $cloud_search = new CloudSearch();
+        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
+
+        addMessage('Success');
+        wp_redirect('/agreements/');
+        exit;
+        //cancel e2e testing
+    } else if( wp_verify_nonce($action, 'reject-agreement' ) ) {
         $agreement_id = intval($_REQUEST['agreement_id']);
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
@@ -86,10 +119,10 @@ function process_agreement_actions()
         $agreement = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
 
 
-        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array('text'     => $_REQUEST['deny-reason-field'],
-                                                                                                'sender_service_id'   => $agreement->responder_service_id,
-                                                                                                'receiver_service_id' =>  $agreement->responder_service_id == $service->id ? $agreement->requester_service_id : $agreement->responder_service_id )
-        );
+        Agreement::send_agreement_email( 'cancel', get_current_user_id(), $service->service_user_id, array( 'text'                => $_REQUEST['deny-reason-field'],
+                                                                                                            'sender_service_id'   => $agreement->responder_service_id,
+                                                                                                            'receiver_service_id' => $agreement->requester_service_id
+        ));
         //delete item from CloudSearch domain
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
@@ -258,19 +291,19 @@ function process_agreement_actions()
         addMessage( 'Success' );
         wp_redirect('/agreements/');
         exit;
-    }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
-        $agreement_id = intval($_REQUEST['agreement_id']);
-        Agreement::has_access( 'edit-agreement', false, $agreement_id );
-
-        $cloud_search = new CloudSearch();
-        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
-        //delete local data
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
-        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
-
-        addMessage('Success');
-        wp_redirect('/agreements/');
-        exit;
+//    }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
+//        $agreement_id = intval($_REQUEST['agreement_id']);
+//        Agreement::has_access( 'edit-agreement', false, $agreement_id );
+//
+//        $cloud_search = new CloudSearch();
+//        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+//        //delete local data
+//        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+//        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
+//
+//        addMessage('Success');
+//        wp_redirect('/agreements/');
+//        exit;
     //reject claim
     }else if( wp_verify_nonce($action, 'reject-failed-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
@@ -295,7 +328,7 @@ function process_agreement_actions()
         $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $service->load();
         $sent_by = 2;
-        if( get_current_user_id() == $service->service_user_id ){
+        if( ct_get_user_organisation( get_current_user_id() ) == ct_get_user_organisation( $service->service_user_id ) ){
             $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
             $service->load();
             $sent_by = 1;
