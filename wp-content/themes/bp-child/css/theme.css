@@ -4707,6 +4707,17 @@ span.button_sign {
     -moz-border-radius: 0 0 5px 5px;
     -webkit-border-radius: 0 0 5px 5px;
 }
+/*** My Agreements Page - admin view ***/
+#my-agreements .td-admin-id{
+    width: 180px;
+}
+#my-agreements .td-requester-data{
+    width: 250px;
+    /*font-weight: 700;*/
+}
+#my-agreements .td-responder-data{
+    width: 255px;
+}
 
 /*** My Agreements Page ***/
 #my-agreements .td-agreement-id{

@@ -46,7 +46,7 @@ function ct_is_support($ticket_id, $support_id = null)
     if(!$ticketDetail)
         return false;
     
-    $community_id = get_post_meta($ticketDetail->suite_id, 'community_id', true);
+    $community_id = $ticketDetail->community_id;
     
     return groups_is_user_mod( $support_id, $community_id ) || groups_is_user_admin( $support_id, $community_id );
     
@@ -155,14 +155,14 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
     }else if($email_type == 'support'){
         if(!$ticketDetail->support_id)
         {
-            $community_id = get_post_meta($ticketDetail->suite_id, 'community_id', true);
+            $community_id = $ticketDetail->community_id;
             cp_send_email_to_support($community_id, $email_id, $emailData);
         }else{
             cp_send_email(array('name' => cp_get_user_display_name($supportDetail), 'email' => $supportDetail->user_email), $email_id, $emailData);
         }
         
     }else if($email_type == 'admin'){
-        $community_id = get_post_meta($ticketDetail->suite_id, 'community_id', true);
+        $community_id = $ticketDetail->community_id;
         cp_send_email_to_community_admin($community_id, $email_id, $emailData);
     }
     

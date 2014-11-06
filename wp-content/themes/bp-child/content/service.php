@@ -137,8 +137,16 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                             <td class="centered"><span class="status-<?php echo strtolower($agreement->status)?>"><?php echo $agreement->status;?></span></td>
                             <td class="centered"><?php if( $agreement->claim_date ) echo formatDate( $agreement->claim_date );?></td>
                             <td class="centered row-actions">
-                                <?php if( strtolower( $agreement->status ) == 'verified' && $agreement->certificate != '' ) { ?>
-                                    <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->token; ?>">Download</a>
+                                <?php if( strtolower( $agreement->status ) == 'verified' ) { ?>
+                                    <?php if( $agreement->entry_status == 'Requester' ):?>
+                                        <?php if( $agreement->requester_token != '' ):?>
+                                            <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->requester_token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->requester_token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->requester_token; ?>">Download</a>
+                                        <?php endif;?>
+                                    <?php else:?>
+                                        <?php if( $agreement->responder_token != '' ):?>
+                                            <a href="<?php echo get_site_url(); ?>/agreement/<?php echo $agreement->responder_token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/agreement/<?php echo $agreement->responder_token?>.pdf', '', 'height=600');return false;"">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?_psnonce=<?php echo wp_create_nonce( 'get-agreement-pdf' );?>&claim=<?php echo $agreement->responder_token; ?>">Download</a>
+                                        <?php endif;?>
+                                    <?php endif;?>
                                 <?php } ?>
                             </td>
                         </tr>
