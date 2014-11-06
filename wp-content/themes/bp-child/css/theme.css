@@ -3796,6 +3796,7 @@ body .tabs li {
             body .tabs li a  #icon_test_suites {
                 background: url(../images/issuer_sprite.png) -1px 1px no-repeat;
                 margin: 2px;
+                margin-right: 0;
             }
             
                 body .tabs li.active a  #icon_test_suites {
@@ -3887,7 +3888,7 @@ body .tabs li {
             body .tabs li a  #icon_admin {
                 background: url(../images/sproket_icon_g.png) 2px 3px no-repeat;
                 margin: 2px;
-                margin-right: 5px;
+                margin-right: 0;
             }
 
             body .tabs li.active a  #icon_admin {
@@ -3896,7 +3897,7 @@ body .tabs li {
             body .tabs li a  #icon_users {
                 background: url(../images/user_icon_g.png) 2px 4px no-repeat;
                 margin: 2px;
-                margin-right: 5px;
+                margin-right: 0;
             }
 
             body .tabs li.active a  #icon_users {
