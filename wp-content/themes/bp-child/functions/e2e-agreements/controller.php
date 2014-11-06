@@ -864,7 +864,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
     $req_links = $res_links = array();
 
-    $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name( $requester_service->service_name.'-'.$agreement->requester_audit_log_name );
+    $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name( $requester_service->service_name.'-'.$agreement->requestor_audit_log_name );
     $requestor_file = fopen($requester_file_location, "w");
     fwrite($requestor_file, $agreement->requestor_audit_log);
     fclose($requestor_file);
@@ -888,19 +888,19 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
     foreach( $res_files AS $res_file ){
         $pdf->Annotation(0, 1, 0, 0, 1, array('Subtype' => 'FileAttachment', 'Name' => $res_file['name'], 'FS' => $res_file['location'] ) );
         $pdf->Bookmark( $res_file['name'], 0, 0, 1, 'B', array(128, 0, 255), 0, '*' . $res_file['name'] );
-        $res_links[] = 'Click "' . $res_file['name'] . '" bookmark to see attachment (offline)';
+        $res_links[] = '"'.$res_file['name'].'"';
     }
     foreach( $req_files AS $req_file ){
         $pdf->Annotation(0, 1, 0, 0, 1, array('Subtype' => 'FileAttachment', 'Name' => $req_file['name'], 'FS' => $req_file['location'] ) );
         $pdf->Bookmark( $req_file['name'], 0, 0, 1, 'B', array(128, 0, 255), 0, '*' . $req_file['name'] );
-        $req_links[] = 'Click "' . $req_file['name'] . '" bookmark to see attachment (offline)';
+        $req_links[] = '"'.$req_file['name'].'"';
     }
     $services_table .= '<tr class="odd">
                                 <td class="test-scenario" style="width:25%; font-weight: bold;">'. $requester_service->service_owner.'</td>
                                 <td class="test-case" style="width:25%;">'. $requester_service->service_type.':'.$requester_service->service_id.'</td>
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
-                                     '.implode( '<br>', $req_links ).'<br> OR
+                                     Click '.implode( ' OR <br>', $req_links ).'  bookmark to see attachment (offline) <br> OR
                                     <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
@@ -909,7 +909,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="test-case" style="width:25%;">'. $responder_service->service_type.':'.$responder_service->service_id.'</td>
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
-                                     '.implode( '<br>', $res_links ).'<br> OR
+                                     Click '.implode( ' OR <br>', $res_links ).' bookmark to see attachment (offline) <br> OR
                                      <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>';
@@ -922,12 +922,12 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
 
-//        foreach( $req_files AS $req_file ){
-//            @unlink( $req_file['location'] );
-//        }
-//        foreach( $res_files AS $res_file ){
-//            @unlink( $res_file['location'] );
-//        }
+        foreach( $req_files AS $req_file ){
+            @unlink( $req_file['location'] );
+        }
+        foreach( $res_files AS $res_file ){
+            @unlink( $res_file['location'] );
+        }
         return $pdfString;
 }
 
@@ -938,16 +938,19 @@ function save_sip_files( $zip_name, $service_name  ){
     {
         while ($zip_entry = zip_read($zip))
         {
+            $file_name = clean_file_name( $service_name.'-'.zip_entry_name( $zip_entry ) );
+            if( strpos( $file_name, '/' ) !== false ){
+                continue;
+            }
             if (zip_entry_open($zip, $zip_entry))
             {
-                $file_name = clean_file_name( $service_name.'-'.zip_entry_name( $zip_entry ) );
-                $contents = zip_entry_read($zip_entry);
-                $file_location = getcwd() . '/wp-content/uploads/'.$file_name;
-                $file = fopen( $file_location, "w");
+                $contents = zip_entry_read( $zip_entry, zip_entry_filesize( $zip_entry ) );
+                $file_location = getcwd() . '/wp-content/uploads/' . $file_name;
+                $file = fopen( $file_location, "w" );
                 fwrite( $file , $contents );
                 fclose( $file );
-                $files[] = array( 'location' => $file_location, 'name' => $file_name );
                 zip_entry_close($zip_entry);
+                $files[] = array( 'location' => $file_location, 'name' => $file_name );
             }
         }
         zip_close($zip);
@@ -959,5 +962,5 @@ function save_sip_files( $zip_name, $service_name  ){
 function clean_file_name( $file_name ){
     $lastDot = strrpos( $file_name, "." );
     $file_name = str_replace(".", "_", substr($file_name, 0, $lastDot)) . substr($file_name, $lastDot);
-    return str_replace( array( ' ', ':', ';', '-' ), '_', $file_name );
+    return str_replace( array( ' ', ':', ';' ), '_', $file_name );
 }
