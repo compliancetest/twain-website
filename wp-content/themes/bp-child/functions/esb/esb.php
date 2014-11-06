@@ -982,7 +982,8 @@ class ManageESB
     
     public function getTestSuiteConfigurationID($suite_id)
     {
-        $query = "SELECT ID FROM " . $this->table_test_suite_configuration . " WHERE TEST_SUITE_WP_ID=" . $suite_id;
+        
+        $query = ManageESB::$esbdb->prepare("SELECT ID FROM " . $this->table_test_suite_configuration . " WHERE TEST_SUITE_WP_ID=%d", $suite_id);
         $id = ManageESB::$esbdb->get_var($query);
         
         return $id;
