@@ -542,7 +542,7 @@ function getUserAllCustomerESBIDs($user_id = null)
         $query = "SELECT id AS CUSTOMER_ID FROM {$wpdb->prefix}organisations_subscriptions WHERE  organisation_id IN (" . implode(", ", $org_ids) . ")";
         
     }else{
-        $query = "SELECT DISTINCT(s.parent_id) as CUSTOMER_ID FROM {$wpdb->prefix}organisations_subscriptions AS s ";
+        $query = "SELECT DISTINCT(s.id) as CUSTOMER_ID FROM {$wpdb->prefix}organisations_subscriptions AS s ";
     }
     
     $ids = $wpdb->get_col($query);

@@ -3752,6 +3752,8 @@ body .tabs li {
 
     body .tabs li a {
         padding: 5px;
+        padding-left: 2px;
+        padding-right: 2px;
         display: block;
         font-family: 'Open Sans', Arial, sans-serif;
         color: #666;
@@ -3759,7 +3761,7 @@ body .tabs li {
         -moz-text-shadow: 0 1px 0 #fff;
         -webkit-text-shadow: 0 1px 0 #fff;
         -o-text-shadow: 0 1px 0 #fff;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: normal;
     }
     
@@ -3769,7 +3771,7 @@ body .tabs li {
         
         body .tabs li a span.text {
             line-height: 28px;
-            padding: 0 15px;
+            padding: 0 4px;
             background: url(../images/tab_separator.png) left center no-repeat;
             font-family: 'Oswald', Arial, Helvetica sans-serif;
         }
@@ -3787,13 +3789,14 @@ body .tabs li {
             }
         
             body .tabs li a .icon {
-                width: 27px;
-                height: 27px;
+                width: 24px;
+                height: 24px;
             }
             
             body .tabs li a  #icon_test_suites {
                 background: url(../images/issuer_sprite.png) -1px 1px no-repeat;
                 margin: 2px;
+                margin-right: 0;
             }
             
                 body .tabs li.active a  #icon_test_suites {
@@ -3885,7 +3888,7 @@ body .tabs li {
             body .tabs li a  #icon_admin {
                 background: url(../images/sproket_icon_g.png) 2px 3px no-repeat;
                 margin: 2px;
-                margin-right: 5px;
+                margin-right: 0;
             }
 
             body .tabs li.active a  #icon_admin {
@@ -3894,7 +3897,7 @@ body .tabs li {
             body .tabs li a  #icon_users {
                 background: url(../images/user_icon_g.png) 2px 4px no-repeat;
                 margin: 2px;
-                margin-right: 5px;
+                margin-right: 0;
             }
 
             body .tabs li.active a  #icon_users {
