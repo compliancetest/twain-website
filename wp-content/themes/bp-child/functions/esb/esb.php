@@ -991,8 +991,10 @@ class ManageESB
     
     public function updateAuditRecordSuiteId($old_id, $new_id)
     {   
-        if (!$old_id || !$new_id)    
+        if (!$old_id || !$new_id)
+        {
             return;
+        }
             
         if(!is_array($old_id)) {
             $old_id = array($old_id);
@@ -1004,7 +1006,9 @@ class ManageESB
         $new_config_id = $this->getTestSuiteConfigurationID($new_id);
         
         if(!$new_config_id || !$old_config_id)
+        {
             return;        
+        }
            
         $query = "UPDATE " . $this->table_conversation_metadata . " SET TEST_SUITE_CONFIGURATION_ID=" . $new_config_id . " WHERE TEST_SUITE_CONFIGURATION_ID IN (" . implode(
         ",", $old_config_id) . ")";
