@@ -362,7 +362,7 @@ function process_agreement_actions()
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
-    } else if( wp_verify_nonce($action, 'get-agreement-file' ) ){
+    } else if( wp_verify_nonce($action, 'get-agreement-file' ) || $_REQUEST['_psnonce'] == 'get-agreement-file' ){
         $agreement_id = intval( $_REQUEST['agreement_id'] );
         //requester message
         $log = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id=%d", $agreement_id ) );
@@ -901,7 +901,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $req_links ).'  bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
+                                    <a href="' . get_site_url() . '?_psnonce=get-agreement-file&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
@@ -910,7 +910,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $res_links ).' bookmark to see attachment (offline) <br> OR
-                                     <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
+                                     <a href="' . get_site_url() . '?_psnonce=get-agreement-file&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>';
 
