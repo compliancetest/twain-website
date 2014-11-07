@@ -732,19 +732,19 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                 </tr>
                 <tr>
                     <th>Issued To</th>
-                    <td>' . $responder_service->service_owner . '</td>
+                    <td>' . $requester_service->service_owner . '</td>
                 </tr>
                 <tr>
                     <th>Service</th>
-                    <td><a href="' . get_permalink( $responder_service->id ) .'">' . get_the_title( $responder_service->id ) . '</a></td>
+                    <td><a href="' . get_permalink( $requester_service->id ) .'">' . get_the_title( $requester_service->id ) . '</a></td>
                 </tr>
                 <tr>
                     <th>Version</th>
-                    <td>' . $responder_service->service_version . '</td>
+                    <td>' . $requester_service->service_version . '</td>
                 </tr>
                 <tr>
                     <th>Test Suite</th>
-                    <td><a href="' . get_permalink( $responder_service->service_suite_id ) .'">' . get_the_title( $responder_service->service_suite_id ) . '</a></td>
+                    <td><a href="' . get_permalink( $requester_service->service_suite_id ) .'">' . get_the_title( $requester_service->service_suite_id ) . '</a></td>
                 </tr>
                 <tr>
                     <th>Specification Issuer</th>
