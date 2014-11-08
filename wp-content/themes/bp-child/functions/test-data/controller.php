@@ -414,7 +414,7 @@ function copyProfileInstance($action)
     
     //$content->Profile->Title .= '(copy)';
     //$row['profile_name'] .= '(copy)';
-    $row['content'] = base64_encode(json_encode($content));
+    $row['content'] = base64_encode( stripslashes( json_encode($content ) ) );
     
     $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
     $new_profile_id = $wpdb->insert_id;
