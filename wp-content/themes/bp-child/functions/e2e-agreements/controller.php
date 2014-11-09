@@ -864,21 +864,26 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
     $req_links = $res_links = array();
 
-    $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name( $requester_service->service_name.'-'.$agreement->requestor_audit_log_name );
+    if( $for_another ){
+        $temp_service = $requester_service;
+        $requester_service = $responder_service;
+        $responder_service = $temp_service;
+    }
+    $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name($requester_service->service_name . '-' . $agreement->requestor_audit_log_name);
     $requestor_file = fopen($requester_file_location, "w");
     fwrite($requestor_file, $agreement->requestor_audit_log);
     fclose($requestor_file);
+
+    $responder_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name($responder_service->service_name . '-' . $agreement->responder_audit_log_name);
+    $responder_file = fopen($responder_file_location, "w");
+    fwrite($responder_file, $agreement->responder_audit_log);
+    fclose($responder_file);
 
     if( strpos( $agreement->requestor_audit_log_name, '.zip' ) !== false ){
         $req_files = save_sip_files( $requester_file_location, $requester_service->service_name ) ;
     } else{
         $req_files[] = array( 'location' => $requester_file_location, 'name' => clean_file_name( $requester_service->service_name.'-'.$agreement->requestor_audit_log_name ) );
     }
-
-    $responder_file_location = getcwd() . '/wp-content/uploads/'.clean_file_name( $responder_service->service_name.'-'.$agreement->responder_audit_log_name ) ;
-    $responder_file = fopen( $responder_file_location, "w");
-    fwrite( $responder_file , $agreement->responder_audit_log );
-    fclose( $responder_file );
 
     if( strpos( $agreement->responder_audit_log_name, '.zip' ) !== false ){
         $res_files = save_sip_files( $responder_file_location, $responder_service->service_name ) ;
