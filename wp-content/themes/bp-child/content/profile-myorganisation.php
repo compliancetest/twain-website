@@ -33,9 +33,10 @@ if (!$org_membership) {
         <div class="grid-box-body">
             <form action="#" method="post">
                 <?php if (!$org_membership || !$org_membership->is_admin) { ?>
-                <div class="grid-row grid-hidden-row">
+                <div class="grid-row has-focus-tooltip">
                     <div class="grid-cell width30P"><label>Organisation Key</label></div>
-                    <div data-name="user_organisation_key" data-value="<?php echo $org_membership ? $org_detail->organisation_key : '';?>" class="grid-cell in_input width70P"><?php echo $org_membership ? $org_detail->organisation_key : '';?></div>
+                    <div data-name="user_organisation_key" data-value="<?php echo $org_membership ? $org_detail->organisation_key : '';?>" class="grid-cell in_input width70P"><?php echo $org_membership ? '*******************' : '-';?></div>
+                    <span class="focus-tooltip">If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation on ComplianceTest. If not, you will be asked if you'd like to register your organisation when attempting to access the harness details on a test suite summary page.</span>
                     <div class="clear"></div>
                 </div>
                 <?php } ?>

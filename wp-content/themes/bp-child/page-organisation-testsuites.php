@@ -157,7 +157,7 @@ get_header();
                         <?php foreach($organisationClass->get_payment_methods() as $row){ ?>
                         <option value="<?php echo $row->id?>" <?php echo ($row->is_default=='1')?('selected="selected"'):(''); ?>>
                             <?php 
-                                echo $row->nickname;
+                                echo stripslashes( $row->nickname );
                                 if (!$row->invoice_me)
                                     echo " " . chunk_split(encrypt_card_number($row->card_number), 4)?>
                         </option>

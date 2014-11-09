@@ -457,12 +457,12 @@ jQuery(document).ready(function($) {
     })
     
     //Focus Tooltip
-    jQuery('.has-focus-tooltip input[type="text"], .has-focus-tooltip textarea').focus(function(){
+    jQuery('.has-focus-tooltip').on('focus', 'input[type="text"], textarea', function(){
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeIn('fast');
-    })
-    jQuery('.has-focus-tooltip input[type="text"], .has-focus-tooltip textarea').blur(function(){
+    });
+    jQuery('.has-focus-tooltip').on('blur', 'input[type="text"], textarea', function(){
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');
-    })
+    });
     
     jQuery('.has-focus-tooltip').on('click', ' .redactor_textarea', function(){
         jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeIn('fast');        

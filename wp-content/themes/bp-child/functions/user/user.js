@@ -99,6 +99,9 @@
         
         //User Register
         $('#reg_user').on('click', function(){
+            
+            $('#registration-popup #reg input.input-error').removeClass('input-error');
+            
             var form = $('#formreg');
             var firstname = $("#first_name_id").val();
             var lastname =    $("#last_name_id").val();
@@ -114,23 +117,26 @@
             var noError = true;
             
             var msgObj = $('#registration-popup #reg .message');
-            if(firstname && lastname && email && user && organisation && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
-                if (email != email_confirm){
+            if(firstname && lastname && email && user /*&& organisation*/ && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
+                if (email != email_confirm) {
                     msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('Emails don\'t match!').fadeIn('fast');
-                    return false;
                     noError = false;
+                    $("#email_id, #confirm_email_id").addClass('input-error');
+                    return false;                    
                 }
                 if (user_pass != user_pass_confirm){
                     msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('Passwords don\'t match!').fadeIn('fast');
-                    return false;
                     noError = false;
+                    $("#user_pass_id, #user_pass_confirm_id").addClass('input-error');
+                    return false;                    
                 }
                 if(!emailReg.test(email)){  
                     msgObj.hide();
                     msgObj.removeClass('success').addClass('error').html('Please enter a valid e-mail address!').fadeIn('fast');
                     noError = false;
+                    $("#email_id, #confirm_email_id").addClass('input-error');
                     return false;
                 }
                 
@@ -169,6 +175,14 @@
                 }
                      
             }else{
+                $('#registration-popup #reg input.required').each(function(){
+                    if (this.value == '') {
+                        $(this).addClass('input-error');
+                    }
+                })
+                if ($("#recaptcha_response_field").val() == '') {
+                    $("#recaptcha_response_field").addClass('input-error');
+                }
                 msgObj.hide();
                 msgObj.removeClass('success').addClass('error').html('Please fill in all fields!').fadeIn('fast');
                 return false;

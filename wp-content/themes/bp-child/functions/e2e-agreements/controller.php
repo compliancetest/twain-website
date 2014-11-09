@@ -362,7 +362,7 @@ function process_agreement_actions()
         addMessage('Success');
         wp_redirect('/agreements/');
         exit;
-    } else if( wp_verify_nonce($action, 'get-agreement-file' ) ){
+    } else if( wp_verify_nonce($action, 'get-agreement-file' ) || $_REQUEST['_psnonce'] == 'get-agreement-file' ){
         $agreement_id = intval( $_REQUEST['agreement_id'] );
         //requester message
         $log = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id=%d", $agreement_id ) );
@@ -732,19 +732,19 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                 </tr>
                 <tr>
                     <th>Issued To</th>
-                    <td>' . $responder_service->service_owner . '</td>
+                    <td>' . $requester_service->service_owner . '</td>
                 </tr>
                 <tr>
                     <th>Service</th>
-                    <td><a href="' . get_permalink( $responder_service->id ) .'">' . get_the_title( $responder_service->id ) . '</a></td>
+                    <td><a href="' . get_permalink( $requester_service->id ) .'">' . get_the_title( $requester_service->id ) . '</a></td>
                 </tr>
                 <tr>
                     <th>Version</th>
-                    <td>' . $responder_service->service_version . '</td>
+                    <td>' . $requester_service->service_version . '</td>
                 </tr>
                 <tr>
                     <th>Test Suite</th>
-                    <td><a href="' . get_permalink( $responder_service->service_suite_id ) .'">' . get_the_title( $responder_service->service_suite_id ) . '</a></td>
+                    <td><a href="' . get_permalink( $requester_service->service_suite_id ) .'">' . get_the_title( $requester_service->service_suite_id ) . '</a></td>
                 </tr>
                 <tr>
                     <th>Specification Issuer</th>
@@ -864,21 +864,26 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
     $req_links = $res_links = array();
 
-    $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name( $requester_service->service_name.'-'.$agreement->requestor_audit_log_name );
+    if( $for_another ){
+        $temp_service = $requester_service;
+        $requester_service = $responder_service;
+        $responder_service = $temp_service;
+    }
+    $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name($requester_service->service_name . '-' . $agreement->requestor_audit_log_name);
     $requestor_file = fopen($requester_file_location, "w");
     fwrite($requestor_file, $agreement->requestor_audit_log);
     fclose($requestor_file);
+
+    $responder_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name($responder_service->service_name . '-' . $agreement->responder_audit_log_name);
+    $responder_file = fopen($responder_file_location, "w");
+    fwrite($responder_file, $agreement->responder_audit_log);
+    fclose($responder_file);
 
     if( strpos( $agreement->requestor_audit_log_name, '.zip' ) !== false ){
         $req_files = save_sip_files( $requester_file_location, $requester_service->service_name ) ;
     } else{
         $req_files[] = array( 'location' => $requester_file_location, 'name' => clean_file_name( $requester_service->service_name.'-'.$agreement->requestor_audit_log_name ) );
     }
-
-    $responder_file_location = getcwd() . '/wp-content/uploads/'.clean_file_name( $responder_service->service_name.'-'.$agreement->responder_audit_log_name ) ;
-    $responder_file = fopen( $responder_file_location, "w");
-    fwrite( $responder_file , $agreement->responder_audit_log );
-    fclose( $responder_file );
 
     if( strpos( $agreement->responder_audit_log_name, '.zip' ) !== false ){
         $res_files = save_sip_files( $responder_file_location, $responder_service->service_name ) ;
@@ -901,7 +906,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $req_links ).'  bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
+                                    <a href="' . get_site_url() . '?_psnonce=get-agreement-file&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
@@ -910,7 +915,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $res_links ).' bookmark to see attachment (offline) <br> OR
-                                     <a href="' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
+                                     <a href="' . get_site_url() . '?_psnonce=get-agreement-file&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
                                 </td>
                            </tr>';
 

@@ -232,7 +232,7 @@ $user_test_suites = get_suites_with_claims();
                                                     <?php foreach( $roles AS $role ):?>
                                                         <div class="roles_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
                                                             <span class="radio-checkbox-holder">
-                                                                <input type="radio" name="roles[]" <?php if(  ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>">
+                                                                <input type="radio" name="roles[]" <?php if( is_array( $service->service_roles ) && ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>">
                                                                 <span><?php echo $role;?></span>
                                                             </span>
                                                         </div>
@@ -247,7 +247,7 @@ $user_test_suites = get_suites_with_claims();
                                                         <?php if( $level == 'Default' ) continue;?>
                                                         <div class="levels_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
                                                             <span class="radio-checkbox-holder">
-                                                                <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>">
+                                                                <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( is_array( $service->service_levels ) && ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>">
                                                                 <span><?php echo $level;?></span>
                                                             </span>
                                                         </div>
