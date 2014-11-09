@@ -9,6 +9,9 @@
         $suite_ids = $suite->test_suite_plans;
         $suite->test_suite_plans = array( intval( $_REQUEST['plan_id'] ) );
         $read_only = true;
+        if( isset( $_REQUEST['voucher'] ) ){
+            $voucher_data = PricingPlan::getVoucherByName( intval( $_REQUEST['plan_id'] ), $_REQUEST['voucher'] );
+        }
     }
     if( isset( $_REQUEST['get_all'] ) ){
         $response = array();
@@ -28,6 +31,16 @@
     }
     foreach( $suite->conformanceLevel AS $l ){
         $levels_desc[$l['code']] = $l['desc'];
+    }
+    if( isset( $voucher_data ) ){
+        $applied_voucher = $voucher_data->name;
+        $affected_plans = array( intval( $_REQUEST['plan_id'] ) => array( 'id' => $voucher_data->id ) );
+    } else {
+        $applied_voucher = get_user_meta(get_current_user_id(), 'applied_voucher', true);
+        $affected_plans = get_user_meta(get_current_user_id(), 'applied_voucher_plans', true);
+        if ($affected_plans) {
+            $affected_plans = json_decode($affected_plans, true);
+        }
     }
 ?>
 
@@ -53,29 +66,31 @@
                     <ul class="plan-subscription-prices">
                         <?php foreach( $plan->attribute_all AS $att_name => $att_value ):?>
                             <?php if( $att_value['type'] == 'itemcode' ):?>
-                                <?php if( isset( $plan->attribute_all['Discount'] ) ):?>
-                                    <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo ( $att_value['value'] - ( $att_value['value'] * ( $plan->attribute_all['Discount']['value'] / 100 ) ) ) ;?></li>
-                                <?php else:?>
-                                    <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<?php echo $att_value['value'];?></li>
-                                <?php endif;?>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<span class="itemcode_<?php echo $p->id;?>" data-initprice="<?php echo $att_value['value'];?>"><?php echo $att_value['value'] - ( $att_value['value'] * PricingPlan::getPlanFinalDiscount( $p->id, $applied_voucher ) / 100 );?></span></li>
                             <?php elseif( $att_value['type'] == 'number' || $att_value['type'] == 'string' ):?>
                                 <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
                             <?php elseif( $att_value['type'] == 'percent' ):?>
                                 <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                             <?php elseif( $att_value['type'] == 'boolean' ):?>
                                 <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                            <?php elseif( $att_value['type'] == 'discount' ):?>
+                                <li class="discount_<?php echo $att_value['id'];?> discount" <?php if( $att_name != $applied_voucher || ! is_array( $affected_plans ) || ! array_key_exists( $p->id, $affected_plans ) || ( $read_only && $affected_plans[$_REQUEST['plan_id']]['id'] != $att_value['id'] ) ) :?>style="display: none;"<?php endif;?>><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                             <?php endif;?>
                         <?php endforeach;?>
                     </ul>
-                    <div class="voucher-code">
-                        <label>Enter your Voucher Code:</label>
-                        <div class="voucher-field-wrap">
-                            <input type="text" placeholder="VOUCHERCODE" class="voucher-field" />
-                            <div class="voucher-error" style="display: none;">Error message</div>
-                            <div class="voucher-success" style="display: none;">Success message</div>
+
+                    <?php if( isset( $plan->attribute_all['Vouchers'] ) && ! $read_only):?>
+                        <div class="voucher-code">
+                            <label>Enter your Voucher Code:</label>
+                            <div class="voucher-field-wrap">
+                                <input type="text" placeholder="VOUCHERCODE" class="voucher-field" <?php if( $applied_voucher ) :?> value="<?php echo $applied_voucher;?>"<?php endif;?> data-planid="<?php echo $p->id;?>"/>
+                                <div class="voucher-error" style="display: none;">The voucher entered is not applicable <br> to any of the plans for this test suite</div>
+                                <div class="voucher-success" style="display: none;">Success!</div>
+                            </div>
+                            <a class="action-btn process-btn submit-btn apply_voucher" href="#" data-planid="<?php echo $p->id;?>"><span class="p"></span><span class="t">Apply</span></a>
                         </div>
-                        <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Apply</span></a>
-                    </div>
+                    <?php endif;?>
+
                     <table class="plans-pricing-table">
                         <thead>
                             <tr>
@@ -133,6 +148,29 @@
 <script>
     jQuery(document).ready(function($){
 
+        $('.apply_voucher').on('click', function(){
+            $('.voucher-error').hide();
+            $('.voucher-success').hide();
+            var input_values = $(this).attr('data-planid');
+            $.ajax({
+               type: 'post',
+                url: '/',
+                dataType: 'json',
+                data: { '_organisation_nonce' : 'apply_voucher', 'voucher_name' : $('body').find(".voucher-field[data-planid='" + input_values + "']").val() },
+                success: function( data ){
+                    if( data.error ){
+                        $('.voucher-error').show().fadeOut( 5000 );;
+                    } else{
+                        $('.voucher-success').show().fadeOut( 2000 );
+                        $('.discount').hide();
+                        jQuery.each( data, function( i, val ) {
+                            $('.discount_' + val.id).show();
+                            $('.itemcode_' + i).text( $('.itemcode_' + i).data( 'initprice' ) - ( $('.itemcode_' + i).data( 'initprice' ) * val.discount / 100 ) );
+                        });
+                    }
+                }
+            });
+        })
             $('.plans-title-list li label').click(function(){
                 run($(this));
                 return false;
@@ -170,8 +208,10 @@
                 setTimeout("jQuery('#purchase-subscribe').click()", 500 );
             })
             jQuery('.cancel_select_plan').on('click', function(e){
-                jQuery('#pricing-plans .close_btn').click()
-                setTimeout("jQuery('#purchase-subscribe').click()", 500 );
+                jQuery('#pricing-plans .close_btn').click();
+                <?php if( ! $read_only ):?>
+                    setTimeout("jQuery('#purchase-subscribe').click()", 500 );
+                <?php endif;?>
             })
         <?php else:?>
             <?php $sid = intval( $_REQUEST['sid'] );?>

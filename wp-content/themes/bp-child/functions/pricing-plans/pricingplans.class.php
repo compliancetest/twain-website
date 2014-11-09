@@ -74,9 +74,9 @@ class PricingPlan
             }
             if( $attr->visibility == 1 ) {
                 if ($attr->type == 'itemcode') {
-                    $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $this->getPriceByXeroCode($attr->value));
+                    $this->attribute_all[$attr->title] = array( 'id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $this->getPriceByXeroCode($attr->value));
                 } else {
-                    $this->attribute_all[$attr->title] = array('type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+                    $this->attribute_all[$attr->title] = array( 'id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
                 }
             }
         }
@@ -148,5 +148,37 @@ class PricingPlan
             'levels' => explode( ',', str_replace( ' ', '', $levels ) ),
             'roles'  => $roles_array
         );
+    }
+
+    public static function getPlanFinalDiscount( $pricingPlanId, $voucherName = false ){
+        global $wpdb;
+        $totalDiscount = 0;
+        //check discount
+        if( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND name = 'Discount' ", $pricingPlanId ) ) ){
+            $totalDiscount = $row->value;
+        }
+        if( $voucherName ) {
+            //check voucher discount
+            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s ", $pricingPlanId, $voucherName ))) {
+                $totalDiscount += $voucher->value;
+            }
+        }
+        return $totalDiscount;
+    }
+    public static function getVoucherDiscount( $pricingPlanId, $voucherName = false ){
+        global $wpdb;
+        $totalDiscount = 0;
+        if( $voucherName ) {
+            //check voucher discount
+            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s ", $pricingPlanId, $voucherName ))) {
+                $totalDiscount = $voucher->value;
+            }
+        }
+        return $totalDiscount;
+    }
+
+    public static function getVoucherByName( $pricingPlanId, $voucherName ){
+        global $wpdb;
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s ", $pricingPlanId, $voucherName ) );
     }
 }

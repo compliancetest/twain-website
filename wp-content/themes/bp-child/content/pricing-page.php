@@ -46,15 +46,19 @@
                         <?php endif;?>
                     <?php endforeach;?>
                 </ul>
-                <div class="voucher-code">
-                    <label>Enter your Voucher Code:</label>
-                    <div class="voucher-field-wrap">
-                        <input type="text" placeholder="VOUCHERCODE" class="voucher-field" />
-                        <div class="voucher-error" style="display: none;">Error message</div>
-                        <div class="voucher-success" style="display: none;">Success message</div>
-                    </div>
-                    <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Apply</span></a>
-                </div>
+
+<!--                --><?php //if( isset( $plan->attribute_all['Vouchers'] ) && ! $read_only):?>
+<!--                    <div class="voucher-code">-->
+<!--                        <label>Enter your Voucher Code:</label>-->
+<!--                        <div class="voucher-field-wrap">-->
+<!--                            <input type="text" placeholder="VOUCHERCODE" class="voucher-field" />-->
+<!--                            <div class="voucher-error" style="display: none;">Error message</div>-->
+<!--                            <div class="voucher-success" style="display: none;">Success!</div>-->
+<!--                        </div>-->
+<!--                        <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Apply</span></a>-->
+<!--                    </div>-->
+<!--                --><?php //endif;?>
+
                 <table class="plans-pricing-table">
                     <thead>
                         <tr>
