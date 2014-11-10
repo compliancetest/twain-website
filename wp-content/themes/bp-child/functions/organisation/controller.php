@@ -26,7 +26,7 @@ class CT_Organisation_Controller
         }
         
         
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $family_mark);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_id=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $family_mark);
         $suite_info = $wpdb->get_row($query);
         
         if (!$suite_info) {
