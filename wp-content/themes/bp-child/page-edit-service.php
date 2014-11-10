@@ -210,6 +210,7 @@ $user_test_suites = get_suites_with_claims();
                                     <span class="focus-tooltip">Enter the name of the organisation responsible for the service.</span>
                                 </div>
                                 <?php
+                                    $roles_html = $levels_html = '';
                                     $processed_suites = array();
                                     foreach( $user_test_suites AS $suite_id ):?>
                                         <?php
@@ -225,36 +226,59 @@ $user_test_suites = get_suites_with_claims();
                                         }
                                             $claims = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE suite_id = %d ", $suite->id ) );
                                         ?>
-                                            <div class="grid-cell">
-                                                <label>Roles:</label>
-                                                <?php foreach( $claims AS $claim ):?>
-                                                    <?php $roles = explode( ';;', trim( $claim->role, ';;' ) );?>
-                                                    <?php foreach( $roles AS $role ):?>
-                                                        <div class="roles_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
-                                                            <span class="radio-checkbox-holder">
-                                                                <input type="radio" name="roles[]" <?php if( is_array( $service->service_roles ) && ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>">
-                                                                <span><?php echo $role;?></span>
-                                                            </span>
-                                                        </div>
+                                            <?php $processed_roles = array();?>
+                                            <?php ob_start();?>
+                                                    <?php foreach( $claims AS $claim ):?>
+                                                        <?php $roles = explode( ';;', trim( $claim->role, ';;' ) );?>
+                                                        <?php foreach( $roles AS $role ):?>
+                                                        <?php
+                                                            if( in_array( $role.$claim->product_id, $processed_roles ) ) {
+                                                                continue;
+                                                            }else{
+                                                                array_push( $processed_roles, $role.$claim->product_id );
+                                                            }
+                                                        ?>
+                                                            <div class="roles_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
+                                                                <span class="radio-checkbox-holder">
+                                                                    <input type="radio" name="roles[]" <?php if( is_array( $service->service_roles ) && ( in_array( $role, $service->service_roles ) && $service->service_product_id == $claim->product_id  ) ):?> checked="checked" <?php endif;?>value="<?php echo $role;?>">
+                                                                    <span><?php echo $role;?></span>
+                                                                </span>
+                                                            </div>
+                                                        <?php endforeach;?>
                                                     <?php endforeach;?>
-                                                <?php endforeach;?>
-                                            </div>
-                                            <div class="grid-cell">
-                                                <label>Levels:</label>
-                                                <?php foreach( $claims AS $claim ):?>
-                                                    <?php $levels = explode( ';;', trim( $claim->conformance_level, ';;' ) );?>
-                                                    <?php foreach( $levels AS $level ):?>
-                                                        <?php if( $level == 'Default' ) continue;?>
-                                                        <div class="levels_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
-                                                            <span class="radio-checkbox-holder">
-                                                                <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( is_array( $service->service_levels ) && ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>">
-                                                                <span><?php echo $level;?></span>
-                                                            </span>
-                                                        </div>
+                                                <?php $roles_html .= ob_get_clean();?>
+
+                                                <?php $processed_levels = array();?>
+                                                <?php ob_start();?>
+                                                    <?php foreach( $claims AS $claim ):?>
+                                                        <?php $levels = explode( ';;', trim( $claim->conformance_level, ';;' ) );?>
+                                                        <?php foreach( $levels AS $level ):?>
+                                                            <?php
+                                                                if( in_array( $level.$claim->product_id, $processed_levels ) ) {
+                                                                    continue;
+                                                                }else{
+                                                                    array_push( $processed_levels, $level.$claim->product_id );
+                                                                }
+                                                            ?>
+                                                            <?php if( $level == 'Default' ) continue;?>
+                                                            <div class="levels_div" data-suiteid="<?php echo $suite->id.'_'.$claim->product_id;?>" <?php if( $isNew || ( $suite->id !== $service->service_suite_id || $claim->product_id != $service->service_product_id ) ):?>style="display: none;"<?php endif;?>>
+                                                                <span class="radio-checkbox-holder">
+                                                                    <input type="checkbox" data-suiteid="<?php echo $suite->id;?>" name="levels[]" <?php if( is_array( $service->service_levels ) && ( in_array( $level, $service->service_levels ) && $service->service_product_id == $claim->product_id ) ):?>checked="checked" <?php endif;?> value="<?php echo $level;?>">
+                                                                    <span><?php echo $level;?></span>
+                                                                </span>
+                                                            </div>
+                                                        <?php endforeach;?>
                                                     <?php endforeach;?>
-                                                <?php endforeach;?>
-                                            </div>
+                                                <?php $levels_html .= ob_get_clean();?>
                                     <?php endforeach;?>
+                                        <div class="grid-cell">
+                                            <label>Roles:</label>
+                                                <?php echo $roles_html;?>
+                                        </div>
+                                        <div class="grid-cell">
+                                            <label>Levels:</label>
+                                                <?php echo $levels_html;?>
+                                        </div>
                                 <div class="clear"></div>
                             </div>
                         </div>
