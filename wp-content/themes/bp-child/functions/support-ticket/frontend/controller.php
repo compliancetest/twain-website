@@ -122,7 +122,7 @@ function createSupportTicket()
         'last_message_id' => 0,
         'created_date' => date('Y-m-d H:i:s'),
         'last_updated' => date('Y-m-d H:i:s'),
-        'solved_date' => '0000-00-00 00:00:00'
+        'solved_date' => '0000-00-00 00:00:00',
     );
     if(!$wpdb->insert(TABLE_TICKETS, $data))
     {
@@ -181,7 +181,7 @@ function createSupportTicket()
     //Send Email Notification to Admin
     ct_send_ticket_email('ticket_created_admin', 'admin', $ticketDetail);    
     /***************** End Send Mail *****************************/
-
+    
     addMessage('Your ticket has been submitted successfully.');
     wp_redirect("/my-support-tickets");
     exit;
