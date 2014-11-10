@@ -414,13 +414,13 @@ function ct_duplicate_data()
                                     $wpdb->query($query);
                                     
                                     $query = "SELECT * FROM wp_pricing_plans";
-                                    $results = $new_wpdb->get_results($query);
+                                    $results = $new_wpdb->get_results($query, ARRAY_A);
                                     foreach( $results as $row) {
                                         $wpdb->insert('wp_pricing_plans', $row);
                                     }
                                     
                                     $query = "SELECT * FROM wp_pricing_plans_attributes";
-                                    $results = $new_wpdb->get_results($query);
+                                    $results = $new_wpdb->get_results($query, ARRAY_A);
                                     foreach( $results as $row) {
                                         $wpdb->insert('wp_pricing_plans_attributes', $row);
                                     }

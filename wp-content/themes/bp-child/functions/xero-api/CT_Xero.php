@@ -128,6 +128,7 @@ class CT_Xero {
             'Name'                      => $contactData['organisation_name'],
             'FirstName'                 => $contactData['contact_first_name'],
             'LastName'                  => $contactData['contact_last_name'],
+            'Website'                   => $contactData['organisation_website'],
             'EmailAddress'              => $contactData['contact_email'],
             'TaxNumber'                 => $contactData['abn'],
             'AccountsReceivableTaxType' => 'OUTPUT',

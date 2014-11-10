@@ -7,16 +7,17 @@ if(!defined('ABSPATH'))
     
 $org_membership = ct_get_user_organisation_membership($current_user->ID);
 
-$user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
-$user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
-
 if (!$org_membership) {
     $user_org = get_user_meta($current_user->ID, 'user_organisation', true);    
     $user_org_abn = get_user_meta($current_user->ID, 'user_organisation_abn', true);            
+    $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
+    $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
 } else {
     $org_detail = new CT_Organisation($org_membership->organisation_id);
     $user_org = $org_detail->organisation_name;
     $user_org_abn = $org_detail->abn;
+    $user_org_web = $org_detail->organisation_website;
+    $user_org_desc = $org_detail->organisation_description;
 }
     
 ?>
@@ -25,7 +26,7 @@ if (!$org_membership) {
     <div class="grid-box" id="my_org">
         <div class="grid-box-header">
             <h5 class="left">My Organisation</h5>
-            <?php if($user_status != 3){?>
+            <?php if($user_status != 3 && !$org_membership->is_admin){?>
                 <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
             <?php }?>
             <div class="clear"></div>
@@ -47,12 +48,12 @@ if (!$org_membership) {
                 </div>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Website</label></div>
-                    <div data-name="user_organisation_web" data-value="<?php echo $user_org_web;?>" class="grid-cell in_input"><?php echo !$user_org_web ? '-' : $user_org_web;?></div>
+                    <div data-name="user_organisation_web" data-value="<?php echo $user_org_web;?>" <?php echo $org_membership ? 'data-type="readonly"' : ''?>  class="grid-cell in_input"><?php echo !$user_org_web ? '-' : $user_org_web;?></div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Description</label></div>
-                    <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>" class="grid-cell in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
+                    <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>" <?php echo $org_membership ? 'data-type="readonly"' : ''?>  class="grid-cell width70P in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">

@@ -571,15 +571,14 @@ function cp_user_organisation_edit()
         
         $user_organisation = htmlspecialchars($_POST['user_organisation']);        
         $user_organisation_abn = htmlspecialchars($_POST['user_organisation_abn']);
+        $user_organisation_web = htmlspecialchars($_POST['user_organisation_web']);
+        $user_organisation_desc = htmlspecialchars($_POST['user_organisation_desc']);
         
         update_user_meta($user_id, 'user_organisation', $user_organisation);        
-        update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);            
+        update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);       
+        update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
+        update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);         
     }
-    
-    $user_organisation_web = htmlspecialchars($_POST['user_organisation_web']);
-    $user_organisation_desc = htmlspecialchars($_POST['user_organisation_desc']);
-    update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
-    update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
     
     $organisation_key = isset($_POST['user_organisation_key']) ? htmlspecialchars($_POST['user_organisation_key']) : null;
     
