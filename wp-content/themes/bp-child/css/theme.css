@@ -290,7 +290,8 @@ a:hover {
             #top_loged_actions .menu-organisation {
                 background-position: 8px -871px;
             }
-            #top_loged_actions .menu-organisation:hover {
+            #top_loged_actions .menu-organisation:hover,
+            #top_loged_actions .menu-organisation.over{
                 background-position: 8px -910px;
             }
             #top_loged_actions .menu-profile {
