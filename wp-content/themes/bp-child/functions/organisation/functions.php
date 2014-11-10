@@ -209,7 +209,7 @@ function ct_get_test_suites_without_version()
 {
     global $wpdb;
     
-    $query = "SELECT family_mark, suite_title, suite_id FROM {$wpdb->prefix}test_suites GROUP BY family_mark ORDER BY suite_title";
+    $query = "SELECT family_mark, suite_title, max(suite_id) AS suite_id FROM {$wpdb->prefix}test_suites GROUP BY family_mark ORDER BY suite_title";
     $data = $wpdb->get_results($query);
     
     return $data;

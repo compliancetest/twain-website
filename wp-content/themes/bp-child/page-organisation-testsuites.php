@@ -248,11 +248,10 @@ get_header();
             <?php $test_suites = ct_get_test_suites_without_version(); ?>
             <?php foreach($test_suites as $row){ ?>
             <?php
-                $s = new TestSuite( $row->family_mark );
-                $s->load();
+                $_pricing_plan = get_post_meta($row->suite_id, 'test_suite_plans', true);
             ?>
-            <?php if(! empty( $s->test_suite_plans ) ):?>
-                <option value="<?php echo $row->family_mark?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
+            <?php if(! empty( $_pricing_plan ) ):?>
+                <option value="<?php echo $row->suite_id?>" community-id="<?php echo get_post_meta($row->suite_id, 'community_id', true) ?>">
                     <?php echo $row->suite_title ?>
                 </option>
             <?php endif;?>
