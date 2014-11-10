@@ -207,12 +207,17 @@ get_header();
                                     jQuery(".submit_all").off("click").cplightbox( {'href': new_url});
                                 });
                                 function addSelectValues( url ){
+                                    $('#subscribe-box .loading').show();
                                     $.ajax({
                                         url: new_url+'&get_all=1',
                                         type: 'get',
                                         dataType: 'json',
+                                        complete: function(){
+                                            $('#subscribe-box .loading').hide();
+                                        },
                                         success: function(data){
-                                            $("#pricing_plan_id_span").prepend("<option value='' selected='selected'>Select pricing plan</option>");
+                                            $("#pricing_plan_id_span").html("");
+                                            $("#pricing_plan_id_span").append("<option value='' selected='selected'>Select pricing plan</option>");
                                             $.each(data, function(i, value) {
                                                 $('#pricing_plan_id_span').append($('<option>').text(value).attr('value', i));
                                             });
@@ -235,7 +240,7 @@ get_header();
         <?php
             wp_nonce_field('purchase_subscribe', '_organisation_nonce');
         ?>
-        <div class="loading loading-with-text"><div><b>PROCESSING YOUR SUBSCRIPTION</b><span>Please wait...</span></div></div>
+        <div class="loading loading-with-text"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>
 
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Submit</span></a>
