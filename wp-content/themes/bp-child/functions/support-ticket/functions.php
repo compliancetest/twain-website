@@ -163,7 +163,7 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
         
     }else if($email_type == 'admin'){
         $community_id = $ticketDetail->community_id;
-        cp_send_email_to_community_admin($community_id, $email_id, $emailData);
+        cp_send_email_to_community_admin($community_id, $email_id, $emailData);        
     }
     
 }
