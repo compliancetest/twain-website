@@ -124,6 +124,7 @@
             <?php endforeach;?>
 
         </div>
+        <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>
         <div class="popup-box-footer radius6 noradiustop">
             <?php if( ! $read_only ):?>
                 <a href="#" class="select_plan action-btn process-btn submit-btn"  cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Confirm</span></a>
@@ -152,6 +153,7 @@
             $('.voucher-error').hide();
             $('.voucher-success').hide();
             var input_values = $(this).attr('data-planid');
+            $('.loading').show();
             $.ajax({
                type: 'post',
                 url: '/',
@@ -168,6 +170,7 @@
                             $('.itemcode_' + i).text( $('.itemcode_' + i).data( 'initprice' ) - ( $('.itemcode_' + i).data( 'initprice' ) * val.discount / 100 ) );
                         });
                     }
+                    $('.loading').hide();
                 }
             });
         })
