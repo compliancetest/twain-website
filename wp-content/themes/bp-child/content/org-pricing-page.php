@@ -191,7 +191,6 @@
         $('.plans-header-nav-prev').on('click', function(){
             var active = $('.plans-title-list li.active');
             if (active.index != 0){
-                updateURL();
                 active.prev().find('label').click();
 
                 return false;
@@ -202,7 +201,6 @@
         $('.plans-header-nav-next').on('click', function(){
             var active = $('.plans-title-list li.active');
             if (active.index != 0){
-                updateURL();
                 active.next().find('label').click();
 
                 return false;
