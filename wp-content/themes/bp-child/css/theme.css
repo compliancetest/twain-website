@@ -7911,6 +7911,48 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     display: block;
 }
 
+.voucher-code{
+    background: #ebebeb;
+    padding: 8px 15px;
+    margin: 0 -15px 25px -15px;
+    position: relative;
+    text-align: center;
+}
+
+#pricing-plans .voucher-code .action-btn{
+    vertical-align: top;
+}
+
+.voucher-code label{
+    background: url("../images/icons/label.png") no-repeat 0 50%;
+    padding: 0 0 0 27px;
+    display: inline-block;
+    margin: 0 7px 0 0;
+    font-size: 13px;
+    line-height: 24px;
+    vertical-align: top;
+}
+
+.voucher-code .voucher-field-wrap{
+    display: inline-block;
+    text-align: left;
+}
+
+.voucher-code .voucher-error{
+    color: #b61313;
+}
+.voucher-code .voucher-success{
+    color: #37a215;
+}
+
+.voucher-code .voucher-field{
+    width: 143px;
+    margin: 0 7px 0 0;
+    display: inline-block;
+    vertical-align: top;
+    padding-bottom: 3px;
+}
+
 .plans-pricing-table{
     border: 1px solid #dfdfdf
 }

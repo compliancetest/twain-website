@@ -27,14 +27,33 @@ function ct_process_organisation_action()
             $family_mark =  $_POST['suite_family_mark'];
             $pricing_plan_id = intval( $_POST['pricing_plan_id'] );
             $result = $controller->subscribe($family_mark, $payment_method, $nickname, $user_id, $pricing_plan_id );
-            
+
+            delete_user_meta( get_current_user_id(), 'applied_voucher_plans' );
+            delete_user_meta( get_current_user_id(), 'applied_voucher' );
+
             if ($result) {
                 addMessage("You successfully purchased subscription.");
             } else {
                 addMessage($controller->last_message, 'error');
             }
             wp_redirect('/my-organisation/test-suites');
-            exit;            
+            exit;
+        } else if ( $action == 'apply_voucher') {
+            global $wpdb;
+            if( $rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE type = 'discount' AND name = %s ", $_POST['voucher_name']) ) ){
+                $response = array();
+                foreach( $rows AS $row ){
+                    $response[$row->pricing_plan_id] = array(
+                        'id'       => $row->id,
+                        'discount' => PricingPlan::getPlanFinalDiscount( $row->pricing_plan_id, $_POST['voucher_name'] )
+                    );
+                }
+                update_user_meta( get_current_user_id(), 'applied_voucher_plans', json_encode( $response ) );
+                update_user_meta( get_current_user_id(), 'applied_voucher', $_POST['voucher_name']  );
+                exit( json_encode( $response ) );
+            } else{
+                exit( json_encode( array( 'error' => 'Error' ) ) );
+            }
         } else if (wp_verify_nonce($action, "subscribe")) {
             $suite_id = $_GET['suite_id'];
             

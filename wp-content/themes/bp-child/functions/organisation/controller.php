@@ -26,7 +26,7 @@ class CT_Organisation_Controller
         }
         
         
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE family_mark=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $family_mark);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_id=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $family_mark);
         $suite_info = $wpdb->get_row($query);
         
         if (!$suite_info) {
@@ -62,8 +62,13 @@ class CT_Organisation_Controller
             $i++;
             $n_nickname = $nickname . "_" . $i;
         } while (1);
-        
-        
+
+        $applied_voucher    = get_user_meta( get_current_user_id(), 'applied_voucher', true );
+        $voucher_comment = '';
+        if( $applied_voucher ){
+            $voucher_comment = ', voucher: '.$applied_voucher;
+        }
+
         //Create Organisation Subscription
         $data = array(
             array(
@@ -75,7 +80,8 @@ class CT_Organisation_Controller
                 'payment_method'    =>  $payment_method, 
                 'purchaser_id'      =>  $user_id,
                 'user_id'           =>  0,
-                'pricing_plan_id'   => $pricing_plan_id
+                'pricing_plan_id'   => $pricing_plan_id,
+                'voucher'           => $applied_voucher
             ),
             array(
                 '%s',
@@ -86,7 +92,8 @@ class CT_Organisation_Controller
                 '%d',
                 '%d',
                 '%d',
-                '%d'
+                '%d',
+                '%s'
             )
         );
         
@@ -105,14 +112,16 @@ class CT_Organisation_Controller
         //Create Charge Table
         $query = $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id=%d", $organisation_id);
         $no_billing = $wpdb->get_var($query);
-        
+
+        $discount = PricingPlan::getPlanFinalDiscount( $pricing_plan_id, $applied_voucher );
+
         if ($no_billing != '1')
         {
             if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
                 $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
-                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+//                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $organisation_id,
@@ -125,7 +134,7 @@ class CT_Organisation_Controller
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
                         'is_paid'               => 0,
-                        'comment'               => $n_nickname." - ".date("F Y")." to ".date( "F Y", $due_date ),
+                        'comment'               => $n_nickname." - ".date("F Y")." to ".date( "F Y", $due_date ).$voucher_comment,
                         'discount'              => $discount
                     ),
                     array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
@@ -139,7 +148,7 @@ class CT_Organisation_Controller
                     array('id' => $subscription_id )
                 );
             } else {
-                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+//                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 if( isset( $prices['Signup']->value ) ) {
                     $charge_data = array(
                         array(
@@ -154,7 +163,7 @@ class CT_Organisation_Controller
                             'invoice_number' => '',
                             'is_paid' => 0,
                             'comment' => $n_nickname,
-                            'discount' => $discount
+                            'discount' => $discount.$voucher_comment
                         ),
                         array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
                     );
@@ -174,7 +183,7 @@ class CT_Organisation_Controller
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
                         'is_paid'               => 0,
-                        'comment'               => $n_nickname.' - '.date("F Y"),
+                        'comment'               => $n_nickname.' - '.date("F Y").$voucher_comment,
                         'discount'              => $discount
                     ),
                     array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
@@ -290,7 +299,15 @@ class CT_Organisation_Controller
             $i++;
             $n_nickname = $nickname . "_" . $i;
         } while (1);
-        
+
+        $applied_voucher    = get_user_meta( get_current_user_id(), 'applied_voucher', true );
+        $voucher_comment = '';
+        if( $applied_voucher ){
+            $voucher_comment = ', voucher: '.$applied_voucher;
+        }
+
+        $discount = PricingPlan::getPlanFinalDiscount( $pricing_plan_id, $applied_voucher );
+
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE id=%d", $subscription_id);
         $subscription = $wpdb->get_row($query);
         
@@ -303,10 +320,11 @@ class CT_Organisation_Controller
         $wpdb->update($wpdb->prefix . "organisations_subscriptions", 
                       array(
                           'nickname'        => $n_nickname,
-                          'pricing_plan_id' => $pricing_plan_id
+                          'pricing_plan_id' => $pricing_plan_id,
+                          'voucher'         => $applied_voucher
                       ),
                       array( 'id' => $subscription_id ),
-                      array( '%s', '%d' ),
+                      array( '%s', '%d', '%s' ),
                       array('%d')
         );
         $query = $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id=%d", $subscription->organisation_id );
@@ -319,7 +337,7 @@ class CT_Organisation_Controller
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
                 $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
-                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+//                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $subscription->organisation_id,
@@ -332,7 +350,7 @@ class CT_Organisation_Controller
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
                         'is_paid'               => 0,
-                        'comment'               => $n_nickname." - ".date("F Y")." to ".date( "F Y", $due_date ),
+                        'comment'               => $n_nickname." - ".date("F Y")." to ".date( "F Y", $due_date ).$voucher_comment,
                         'discount'              => $discount
                     ),
                     array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
@@ -346,7 +364,7 @@ class CT_Organisation_Controller
                     array('id' => $subscription_id )
                 );
             } else {
-                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+//                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 if( isset( $prices['Signup']->value ) ) {
                     $charge_data = array(
                         array(
@@ -360,7 +378,7 @@ class CT_Organisation_Controller
                             'reference_id' => $subscription_id,
                             'invoice_number' => '',
                             'is_paid' => 0,
-                            'comment' => $n_nickname,
+                            'comment' => $n_nickname.$voucher_comment,
                             'discount' => $discount
                         ),
                         array('%d', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d')
@@ -381,7 +399,7 @@ class CT_Organisation_Controller
                         'reference_id'          => $subscription_id,
                         'invoice_number'        => '',
                         'is_paid'               => 0,
-                        'comment'               => $n_nickname.' - '.date("F Y"),
+                        'comment'               => $n_nickname.' - '.date("F Y").$voucher_comment,
                         'discount'              => $discount
                     ),
                     array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d' )
