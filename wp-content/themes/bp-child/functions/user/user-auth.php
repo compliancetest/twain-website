@@ -70,7 +70,7 @@ function compliancetest_create_new_user(){
 
         if(isset($_POST['organisation_key']))
         {
-            $organisation_key = htmlspecialchars($_POST['user_organisation_key']);
+            $organisation_key = htmlspecialchars($_POST['organisation_key']);
     
             $org_controller = new CT_Organisation_Controller();
             $organisation = ct_get_organisation_by_key($organisation_key);
