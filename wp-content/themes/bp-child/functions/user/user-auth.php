@@ -68,7 +68,17 @@ function compliancetest_create_new_user(){
         $activation_key =  md5($_POST['user_email']);
         $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
 
-        update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
+        if(isset($_POST['organisation_key']))
+        {
+            $organisation_key = htmlspecialchars($_POST['user_organisation_key']);
+    
+            $org_controller = new CT_Organisation_Controller();
+            $organisation = ct_get_organisation_by_key($organisation_key);
+            if ($organisation) {
+                $org_controller->add_membership($user_id, $organisation->id);
+            }
+        }
+        
         update_user_meta ($user_id, 'phone_number', $_POST['contact_phone']);
         //Default Value
         update_user_meta ($user_id, 'timezone', 'UTC');
@@ -434,8 +444,8 @@ if(!is_user_logged_in())
                                 <div class="clear"></div>
 
                                 <div class="field has-focus-tooltip">
-                                    <label for="organisation_id">Organisation</label>
-                                    <input type="text" class="" title="" name="organisation" id="organisation_id">
+                                    <label for="organisation_id">Organisation Key</label>
+                                    <input type="text" class="" title="" name="organisation_key" id="organisation_key">
                                     <span class="focus-tooltip"><span></span>If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.</span>
                                 </div>
                                 <div class="field">

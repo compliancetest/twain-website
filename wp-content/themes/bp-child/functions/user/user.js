@@ -108,7 +108,7 @@
             var email = $("#email_id").val();
             var email_confirm = $("#confirm_email_id").val();
             var user = $("#user_login_id").val();
-            var organisation = $("#organisation_id").val();
+            var organisation = $("#organisation_key").val();
             var contact_phone = $("#contact_phone_id").val();
             var user_pass = $("#user_pass_id").val();
             var user_pass_confirm = $("#user_pass_confirm_id").val();
