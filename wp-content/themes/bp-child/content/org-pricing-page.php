@@ -79,7 +79,7 @@
                         <?php endforeach;?>
                     </ul>
 
-                    <?php if( isset( $plan->attribute_all['Vouchers'] ) && ! $read_only):?>
+                    <?php if( PricingPlan::isSupportVouchers( $plan->id ) && ! $read_only):?>
                         <div class="voucher-code">
                             <label>Enter your Voucher Code:</label>
                             <div class="voucher-field-wrap">

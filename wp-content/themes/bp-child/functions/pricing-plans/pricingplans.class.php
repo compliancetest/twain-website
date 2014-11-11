@@ -181,4 +181,9 @@ class PricingPlan
         global $wpdb;
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s ", $pricingPlanId, $voucherName ) );
     }
+
+    public static function isSupportVouchers( $pricingPlanId ){
+        global $wpdb;
+        return ( boolean ) $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'boolean' AND name = 'Vouchers' ", $pricingPlanId ) );
+    }
 }
