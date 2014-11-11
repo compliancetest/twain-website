@@ -112,7 +112,7 @@ get_header();
                                                 $suite = new TestSuite( $serv->service_suite_id );
                                                 $suite->load();
                                            ?>
-                                           <li>Process: <strong><?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?></strong></li>
+                                           <li>Suite: <strong><a href="<?php echo get_permalink( $service->service_suite_id  );?>"><?php echo get_the_title( $serv->service_suite_id  ) ;?></strong></a></li>
                                            <li>Role: <strong><?php echo implode( ', ', $serv->service_roles );?></strong></li>
     <!--                                       <li>ServiceID: <strong>--><?php //echo $serv->service_type.':'.$serv->service_id;?><!--</strong></li>-->
                                            <li><?php echo $serv->service_type ?>: <strong><?php echo $serv->service_id ?></strong></li>
