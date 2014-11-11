@@ -134,7 +134,7 @@ get_header();
                                        <div class="td td-entity-name td-two-lines">Service<br>Owner</div>
     <!--                                   <div class="td td-identifier"></div>-->
                                        <div class="td td-type">Role</div>
-                                       <div class="td td-protocol td-two-lines">Identifier<br>End Point</div>
+<!--                                       <div class="td td-protocol td-two-lines">Identifier<br>End Point</div>-->
     <!--                                   <div class="td td-end-point"></div>-->
                                        <div class="td td-contact">Contact(s)</div>
                                        <div class="td td-status">Status</div>
@@ -172,23 +172,23 @@ get_header();
                                                    </div>
     <!--                                               <div class="td td-identifier"></div>-->
                                                    <div class="td td-type"><?php echo $agreement->entry_status == 'Responder' ? ( implode( ', ', $agreement->requester_service->service_roles )  ) : (  implode( ', ', $agreement->responder_service->service_roles ) );?></div>
-                                                   <div class="td td-protocol">
-                                                       <?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_protocol : $agreement->responder_service->service_protocol;?><br>
-                                                       <?php if( ( $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type ) ) == 'ABN' ):?>
-                                                           <?php echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?>
-                                                       <?php else:?>
-                                                           <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint ) );?>
-                                                           <?php echo $gateway->name;?>
-                                                       <?php endif;?>
-                                                   </div>
+<!--                                                   <div class="td td-protocol">-->
+<!--                                                       --><?php //echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_protocol : $agreement->responder_service->service_protocol;?><!--<br>-->
+<!--                                                       --><?php //if( ( $agreement->entry_status == 'Responder' ? ( $agreement->requester_service->service_type  ) : (  $agreement->responder_service->service_type ) ) == 'ABN' ):?>
+<!--                                                           --><?php //echo $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint;?>
+<!--                                                       --><?php //else:?>
+<!--                                                           --><?php //$gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $agreement->entry_status == 'Responder' ? $agreement->requester_service->service_endpoint : $agreement->responder_service->service_endpoint ) );?>
+<!--                                                           --><?php //echo $gateway->name;?>
+<!--                                                       --><?php //endif;?>
+<!--                                                   </div>-->
 
                                                    <div class="td td-contact">
 
                                                        <?php $contacts = get_service_contacts($agreement->entry_status == 'Responder' ? $agreement->requester_service_id : $agreement->responder_service_id) ;?>
                                                        <?php foreach($contacts as $urow): ?>
-                                                           <?php if (strlen( $urow->user_email ) > 22): ?>
+                                                           <?php if (strlen( $urow->user_email ) > 30): ?>
                                                                <div class="has-tooltip" title="<?php echo $urow->user_email; ?>">
-                                                                   <a href="mailto:<?php echo $urow->user_email;?>"><?php echo $urow->user_email = substr($urow->user_email,0,22)."..."; ?></a>
+                                                                   <a href="mailto:<?php echo $urow->user_email;?>"><?php echo $urow->user_email = substr($urow->user_email,0,30)."..."; ?></a>
                                                                </div>
                                                            <?php else: ?>
                                                                <a href="mailto:<?php echo $urow->user_email;?>"><?php echo $urow->user_email; ?></a>

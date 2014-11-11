@@ -4712,17 +4712,17 @@ span.button_sign {
 
 /*** My Agreements Page ***/
 #my-agreements .td-agreement-id{
-    width: 180px;
+    width: 200px;
 }
 #my-agreements .td-entity-name{
-    width: 140px;
+    width: 170px;
     /*font-weight: 700;*/
 }
 #my-agreements .td-identifier{
     width: 55px;
 }
 #my-agreements .td-type{
-    width: 60px;
+    width: 80px;
 }
 #my-agreements .td-protocol{
     width: 80px;
@@ -4731,7 +4731,7 @@ span.button_sign {
     width: 80px;
 }
 #my-agreements .td-contact{
-    width: 185px;
+    width: 215px;
 }
 
 #my-agreements .td-contact a{
