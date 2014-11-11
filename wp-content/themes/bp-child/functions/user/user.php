@@ -354,10 +354,14 @@ function getUserSubscribedCommunities($user_id = null)
 {
     global $wpdb;
     
-    $purchases = getUserSubscriptions($customer_id);
+    $purchases = getUserSubscriptions( $user_id );
     $community_ids = array();
-    foreach($purchases as $r)
-        $community_ids[] = get_post_meta($r->suite_id, 'community_id', true);
+    foreach($purchases as $r) {
+        $temp_community_id = get_post_meta($r->suite_id, 'community_id', true);
+        if( ! empty( $temp_community_id ) ) {
+            $community_ids[] = $temp_community_id;
+        }
+    }
     
     $community_ids = array_unique($community_ids);
     

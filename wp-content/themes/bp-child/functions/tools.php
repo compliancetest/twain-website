@@ -406,6 +406,24 @@ function ct_duplicate_data()
                                     {
                                         wp_delete_post($t);
                                     }
+                                } else {
+                                    //Remove Pricing Plans
+                                    $query = "DELETE FROM wp_pricing_plans";
+                                    $wpdb->query($query);
+                                    $query = "DELETE FROM wp_pricing_plans_attributes";
+                                    $wpdb->query($query);
+                                    
+                                    $query = "SELECT * FROM wp_pricing_plans";
+                                    $results = $new_wpdb->get_results($query, ARRAY_A);
+                                    foreach( $results as $row) {
+                                        $wpdb->insert('wp_pricing_plans', $row);
+                                    }
+                                    
+                                    $query = "SELECT * FROM wp_pricing_plans_attributes";
+                                    $results = $new_wpdb->get_results($query, ARRAY_A);
+                                    foreach( $results as $row) {
+                                        $wpdb->insert('wp_pricing_plans_attributes', $row);
+                                    }
                                 }
                                 
                                 foreach($communities as $community)
@@ -577,8 +595,6 @@ function ct_duplicate_data()
                                     }
                                     
                                 }
-                                
-                                
                                 
                                //Getting New Test Suites Family Marks and Suites
                                 $query = "SELECT family_mark, suite_title FROM wp_test_suites GROUP BY family_mark ORDER BY suite_title";

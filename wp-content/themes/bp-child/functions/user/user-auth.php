@@ -68,7 +68,17 @@ function compliancetest_create_new_user(){
         $activation_key =  md5($_POST['user_email']);
         $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
 
-        update_user_meta ($user_id, 'user_organisation', $_POST['organisation']);
+        if(isset($_POST['organisation_key']))
+        {
+            $organisation_key = htmlspecialchars($_POST['organisation_key']);
+    
+            $org_controller = new CT_Organisation_Controller();
+            $organisation = ct_get_organisation_by_key($organisation_key);
+            if ($organisation) {
+                $org_controller->add_membership($user_id, $organisation->id);
+            }
+        }
+        
         update_user_meta ($user_id, 'phone_number', $_POST['contact_phone']);
         //Default Value
         update_user_meta ($user_id, 'timezone', 'UTC');
@@ -415,47 +425,48 @@ if(!is_user_logged_in())
                             <form id="formreg" action="" method="post">
                                 <div class="field">
                                     <label for="first_name_id">First Name</label>
-                                    <input type="text" class="" title="" name="first_name" id="first_name_id">
+                                    <input type="text" class="required" title="" name="first_name" id="first_name_id">
                                 </div>
                                 <div class="field">
                                     <label for="last_name_id">Last Name</label>
-                                    <input type="text" class="" title="" name="last_name" id="last_name_id">
+                                    <input type="text" class="required" title="" name="last_name" id="last_name_id">
                                 </div>
                                 <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="email_id">Email</label>
-                                    <input type="email" class="" title="" name="user_email" id="email_id">
+                                    <input type="email" class="required" title="" name="user_email" id="email_id">
                                 </div>
                                 <div class="field">
                                     <label for="confirm_email_id">Confirm Email</label>
-                                    <input type="text" class="" title="" name="user_email_confirm" id="confirm_email_id">
+                                    <input type="text" class="required" title="" name="user_email_confirm" id="confirm_email_id">
                                 </div>
                                 <div class="clear"></div>
 
-                                <div class="field">
-                                    <label for="organisation_id">Organisation</label>
-                                    <input type="text" class="" title="" name="organisation" id="organisation_id">
+                                <div class="field has-focus-tooltip">
+                                    <label for="organisation_id">Organisation Key</label>
+                                    <input type="text" class="" title="" name="organisation_key" id="organisation_key">
+                                    <span class="focus-tooltip"><span></span>If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.</span>
                                 </div>
                                 <div class="field">
                                     <label for="contact_phone_id">Contact Phone Number</label>
-                                    <input type="text" class="" title="" name="contact_phone" id="contact_phone_id">
+                                    <input type="text" class="required" title="" name="contact_phone" id="contact_phone_id">
                                 </div>
                                 <div class="clear"></div>
                                 
                                 <div class="field">
                                     <label for="user_login_id">Username</label>
-                                    <input type="text" class="" title="" name="user_login" id="user_login_id">
+                                    <input type="text" class="required" title="" name="user_login" id="user_login_id">
                                 </div>     
                                 <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="user_pass">Password</label>
-                                    <input type="password" class="" title="" name="user_pass" id="user_pass_id">
+                                    <input type="password" class="required" title="" name="user_pass" id="user_pass_id">
                                 </div>
                                 <div class="field">
                                     <label for="user_pass_confirm_id">Confirm Password</label>
-                                    <input type="password" class="" title="" name="user_pass_confirm" id="user_pass_confirm_id">
+                                    <input type="password" class="required" title="" name="user_pass_confirm" id="user_pass_confirm_id">
                                 </div>
                                 <div class="clear"></div>   
                                 <div class="field captcha-field">

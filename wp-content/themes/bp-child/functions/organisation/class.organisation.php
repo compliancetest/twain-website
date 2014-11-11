@@ -5,6 +5,8 @@ class CT_Organisation
     var $_fields = array(
                             'id', 
                             'organisation_name', 
+                            'organisation_description', 
+                            'organisation_website', 
                             'organisation_key', 
                             'invoice_me', 
                             
@@ -39,6 +41,8 @@ class CT_Organisation
     
     var $organisation_name = '';
     var $organisation_key = '';
+    var $organisation_description = '';
+    var $organisation_website = '';
     var $invoice_me = 0;
     
     var $contact_first_name = '';

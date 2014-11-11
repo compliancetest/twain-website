@@ -53,17 +53,17 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/';
                     ?>    
                     <ul class="product-attributes">
                         <li>Owner: <strong><?php echo $service->service_owner?></strong></li>
-                        <li>Process: <strong><?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) ) ;?></strong></li>
+                        <li>Suite: <strong><a href="<?php echo get_permalink( $service->service_suite_id  );?>"><?php echo get_the_title( $service->service_suite_id  ) ;?></strong></a></li>
                         <li>Role: <strong><?php echo implode( ', ', $service->service_roles );?></strong></li>
                         <li>Level: <strong><?php echo implode( ', ', $service->service_levels );?></strong></li>
                                             
-                        <li>Protocol: <strong><?php echo $service->service_protocol ;?></strong></li>
-                        <?php if( $service->service_type == 'USI' ):?>
-                            <?php $gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $service->service_endpoint ) );?>
-                            <li>End-Point: <strong><?php echo $gateway->name;?></strong></li>
-                        <?php else:?>
-                            <li>Alias: <strong><?php echo $service->service_endpoint;?></strong></li>
-                        <?php endif;?>
+<!--                        <li>Protocol: <strong>--><?php //echo $service->service_protocol ;?><!--</strong></li>-->
+<!--                        --><?php //if( $service->service_type == 'USI' ):?>
+<!--                            --><?php //$gateway = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_gateways WHERE gateway_id = %d ", $service->service_endpoint ) );?>
+<!--                            <li>End-Point: <strong>--><?php //echo $gateway->name;?><!--</strong></li>-->
+<!--                        --><?php //else:?>
+<!--                            <li>Alias: <strong>--><?php //echo $service->service_endpoint;?><!--</strong></li>-->
+<!--                        --><?php //endif;?>
                     </ul>
                     <div class="product-description"><?php echo $service->service_description;?></div>
                 </div>

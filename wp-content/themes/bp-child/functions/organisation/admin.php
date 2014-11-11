@@ -57,7 +57,7 @@ function ct_show_new_organisation()
         foreach($data as $_m=>$_v)
         {            
             $data[$_m] = $organisationClass->$_m;
-        }    
+        }            
     }
     else
     {
@@ -84,6 +84,19 @@ function ct_show_new_organisation()
                     <td><input type="text" name="organisation_key" id="organisation_key" size="40" value="<?php echo $data['organisation_key']?>" readonly="readonly" disabled="disabled" /></td>
                 </tr>
                 <?php } ?>
+                <tr>    
+                    <th valign="top">Organisation Description</th>
+                    <td>
+                        <?php
+//                            echo wp_editor($data['organisation_description'], 'organisation_description', array('height' => 100));
+                        ?>
+                        <input type="text" name="organisation_description" id="organisation_description" value="<?php echo $data['organisation_description']?>" size="40" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Website</th>
+                    <td><input type="text" name="organisation_website" id="organisation_website" value="<?php echo $data['organisation_website']?>" size="40" /></td>
+                </tr>
                 <tr>    
                     <th>Invoice Me</th>
                     <td><input type="checkbox" name="invoice_me" id="invoice_me" value="1" <?php echo $data['invoice_me'] == '1' ? 'checked="checked"' : ''?> /></td>

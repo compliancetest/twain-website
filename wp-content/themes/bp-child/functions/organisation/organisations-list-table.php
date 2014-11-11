@@ -25,6 +25,7 @@ class CT_Organisations_List_Table extends WP_List_Table
             "organisation_name" => __("Organisation Name"),
             "organisation_key" => __('Organisation Key'),
             "organisation_admin" => __('Organisation Admin'),
+            "organisation_website" => __('Website'),
             "invoice_me" => __("Invoice Me"),                                    
             "contact_first_name" => __("First Name"),                        
             "contact_last_name" => __("Last Name"),                        
@@ -42,6 +43,7 @@ class CT_Organisations_List_Table extends WP_List_Table
         return $sortable = array(
             "organisation_name" => array("organisation_name", $orderby == 'organisation_name'),
             "organisation_key" => array("organisation_key", $orderby == 'organisation_key'),
+            "organisation_website" => array("organisation_website", $orderby == 'organisation_website'),
             "invoice_me" => array("invoice_me", $orderby == 'invoice_me'),
             "contact_first_name" => array("contact_first_name", $orderby == 'contact_first_name'),
             "contact_last_name" => array("contact_last_name", $orderby == 'contact_last_name'),

@@ -1,6 +1,7 @@
 <?php
     global $wpdb;
-    $suite_id = $wpdb->get_var( $wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id DESC LIMIT 1", $_REQUEST['suite_id']) );
+//    $suite_id = $wpdb->get_var( $wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id DESC LIMIT 1", $_REQUEST['suite_id']) );
+    $suite_id = $_REQUEST['suite_id'];
     $suite = new TestSuite( $suite_id );
     $suite->load();
     $read_only = false;
