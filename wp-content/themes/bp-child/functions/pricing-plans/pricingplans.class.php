@@ -154,12 +154,12 @@ class PricingPlan
         global $wpdb;
         $totalDiscount = 0;
         //check discount
-        if( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND name = 'Discount' ", $pricingPlanId ) ) ){
+        if( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND name = 'Discount'  AND visibility = 1", $pricingPlanId ) ) ){
             $totalDiscount = $row->value;
         }
         if( $voucherName ) {
             //check voucher discount
-            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s ", $pricingPlanId, $voucherName ))) {
+            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s  AND visibility = 1", $pricingPlanId, $voucherName ))) {
                 $totalDiscount += $voucher->value;
             }
         }
@@ -170,7 +170,7 @@ class PricingPlan
         $totalDiscount = 0;
         if( $voucherName ) {
             //check voucher discount
-            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s ", $pricingPlanId, $voucherName ))) {
+            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s AND visibility = 1", $pricingPlanId, $voucherName ))) {
                 $totalDiscount = $voucher->value;
             }
         }

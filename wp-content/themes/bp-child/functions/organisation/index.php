@@ -40,7 +40,7 @@ function ct_process_organisation_action()
             exit;
         } else if ( $action == 'apply_voucher') {
             global $wpdb;
-            if( $rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE type = 'discount' AND name = %s ", $_POST['voucher_name']) ) ){
+            if( $rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_pricing_plans_attributes WHERE type = 'discount' AND name = %s AND visibility = 1", $_POST['voucher_name']) ) ){
                 $response = array();
                 foreach( $rows AS $row ){
                     $response[$row->pricing_plan_id] = array(

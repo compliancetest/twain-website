@@ -1,5 +1,4 @@
 jQuery(document).ready(function($) {
-
     $('.plans-title-list li label').click(function(){
         run($(this));
         updateURL();
@@ -7,7 +6,7 @@ jQuery(document).ready(function($) {
     });
 
 
-    $('.plans-header-nav-prev').click(function(){
+    $('.plans-header-nav-prev').on('click', function(){
         var active = $('.plans-title-list li.active');
         if (active.index != 0){
             updateURL();
@@ -18,7 +17,7 @@ jQuery(document).ready(function($) {
 
     });
 
-    $('.plans-header-nav-next').click(function(){
+    $('.plans-header-nav-next').on('click', function(){
         var active = $('.plans-title-list li.active');
         if (active.index != 0){
             updateURL();

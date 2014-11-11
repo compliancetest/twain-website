@@ -430,6 +430,11 @@ function ct_process_charge_entry_admin_actions()
             $subscriptionsList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE status = 'Active'".$org_id_where);
             foreach( $subscriptionsList AS $subscription ){
                 $organisation = new CT_Organisation( $subscription->organisation_id );
+                $discount = PricingPlan::getPlanFinalDiscount( $subscription->pricing_plan_id, $subscription->voucher );
+                $voucher_comment = '';
+                if( ! empty( $subscription->voucher ) ){
+                    $voucher_comment = ', voucher: '.$subscription->voucher;
+                }
                 if( $organisation->no_billing != '1' ){
                     $suite = new TestSuite( $subscription->suite_family_mark );
                     $suite->load();
@@ -443,9 +448,10 @@ function ct_process_charge_entry_admin_actions()
                                 'quantity'        => '1.00',
                                 'reference_type'  => 'subscription',
                                 'reference_id'    => $subscription->id,
-                                'comment'         => gmdate('F Y'),
+                                'comment'         => gmdate('F Y').$voucher_comment,
                                 'start_date'      => gmdate('Y-m-01'),
-                                'end_date'        => gmdate('Y-m-t')
+                                'end_date'        => gmdate('Y-m-t'),
+                                'discount'        => $discount
                             );
                             $chargeClass = new CT_Charge();
                             $chargeClass->bind($data);
@@ -461,7 +467,7 @@ function ct_process_charge_entry_admin_actions()
                                 if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
                                     $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                                     $due_date = strtotime( 'last day of this month', $due_date );
-                                    $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
+//                                    $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                                     $data = array(
                                         'organisation_id' => $subscription->organisation_id,
                                         'payment_id'      => $subscription->payment_method,
@@ -469,7 +475,7 @@ function ct_process_charge_entry_admin_actions()
                                         'quantity'        => $pricing_plans->attribute['Period']->value,
                                         'reference_type'  => 'subscription',
                                         'reference_id'    => $subscription->id,
-                                        'comment'         => $subscription->nickname." - ".date("F Y")." to ".date( "F Y", $due_date ),
+                                        'comment'         => $subscription->nickname." - ".date("F Y")." to ".date( "F Y", $due_date ).$voucher_comment,
                                         'start_date'      => gmdate('Y-m-01'),
                                         'end_date'        => gmdate( 'Y-m-d',  $due_date ),
                                         'discount'        => $discount
@@ -494,9 +500,10 @@ function ct_process_charge_entry_admin_actions()
                                             'quantity' => '1.00',
                                             'reference_type' => 'subscription',
                                             'reference_id' => $subscription->id,
-                                            'comment' => $subscription->nickname.' - '.gmdate('F Y', strtotime('-' . $monthesCounter . ' month')),
+                                            'comment' => $subscription->nickname.' - '.gmdate('F Y', strtotime('-' . $monthesCounter . ' month')).$voucher_comment,
                                             'start_date' => gmdate('Y-m-01'),
-                                            'end_date' => gmdate('Y-m-t')
+                                            'end_date' => gmdate('Y-m-t'),
+                                            'discount' => $discount
                                         );
                                         $chargeClass = new CT_Charge();
                                         $chargeClass->bind($data);

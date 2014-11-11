@@ -25,7 +25,6 @@
     $allowed = PricingPlan::getPlanRolesAndLevels( $suite->test_suite_plans, $suite_ids );
     $allowed_roles  = $allowed['roles'];
     $allowed_levels = $allowed['levels'];
-    wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1');
     $roles_desc = $levels_desc = array();
     foreach( $suite->roles AS $r ){
         $roles_desc[$r['name']] = $r['desc'];
@@ -76,6 +75,9 @@
                                 <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
                             <?php elseif( $att_value['type'] == 'discount' ):?>
                                 <li class="discount_<?php echo $att_value['id'];?> discount" <?php if( $att_name != $applied_voucher || ! is_array( $affected_plans ) || ! array_key_exists( $p->id, $affected_plans ) || ( $read_only && $affected_plans[$_REQUEST['plan_id']]['id'] != $att_value['id'] ) ) :?>style="display: none;"<?php endif;?>><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
+                            <?php endif;?>
+                            <?php if( $read_only && $applied_voucher && $voucher_data->visibility == 0 ):?>
+                                <li><strong class="has-tooltip" title="<?php echo $voucher_data->description;?>"><?php echo $voucher_data->title;?></strong><?php echo $voucher_data->value;?>%</li>
                             <?php endif;?>
                         <?php endforeach;?>
                     </ul>
@@ -147,6 +149,7 @@
         </div>
     <?php endif;?>
 </div>
+<?php     wp_enqueue_script( 'plans-moving', get_stylesheet_directory_uri() . '/js/pricing-plans-moving.js', array('jquery'), '0.0.1'); ?>
 <script>
     jQuery(document).ready(function($){
 
@@ -154,17 +157,19 @@
             $('.voucher-error').hide();
             $('.voucher-success').hide();
             var input_values = $(this).attr('data-planid');
+            var v_name = $('body').find(".voucher-field[data-planid='" + input_values + "']").val();
             $('.loading').show();
             $.ajax({
                type: 'post',
                 url: '/',
                 dataType: 'json',
-                data: { '_organisation_nonce' : 'apply_voucher', 'voucher_name' : $('body').find(".voucher-field[data-planid='" + input_values + "']").val() },
+                data: { '_organisation_nonce' : 'apply_voucher', 'voucher_name' : v_name },
                 success: function( data ){
                     if( data.error ){
-                        $('.voucher-error').show().fadeOut( 5000 );;
+                        $('.voucher-error').show().fadeOut( 9000 );;
                     } else{
-                        $('.voucher-success').show().fadeOut( 2000 );
+                        $('.voucher-field').val( v_name );
+                        $('.voucher-success').show().fadeOut( 4000 );
                         $('.discount').hide();
                         jQuery.each( data, function( i, val ) {
                             $('.discount_' + val.id).show();
@@ -182,6 +187,29 @@
 
 
         jQuery('.plans-title-list li.active label').click();
+
+        $('.plans-header-nav-prev').on('click', function(){
+            var active = $('.plans-title-list li.active');
+            if (active.index != 0){
+                updateURL();
+                active.prev().find('label').click();
+
+                return false;
+            }
+
+        });
+
+        $('.plans-header-nav-next').on('click', function(){
+            var active = $('.plans-title-list li.active');
+            if (active.index != 0){
+                updateURL();
+                active.next().find('label').click();
+
+                return false;
+
+            }
+
+        });
 
         jQuery('.has-tooltip').each(function(){
             var tooltip_obj;
