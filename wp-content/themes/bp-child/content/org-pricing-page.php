@@ -1,4 +1,6 @@
 <?php
+    delete_user_meta( get_current_user_id(), 'applied_voucher_plans' );
+    delete_user_meta( get_current_user_id(), 'applied_voucher' );
     global $wpdb;
 //    $suite_id = $wpdb->get_var( $wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id DESC LIMIT 1", $_REQUEST['suite_id']) );
     $suite_id = $_REQUEST['suite_id'];
@@ -66,7 +68,7 @@
                     <ul class="plan-subscription-prices">
                         <?php foreach( $plan->attribute_all AS $att_name => $att_value ):?>
                             <?php if( $att_value['type'] == 'itemcode' ):?>
-                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<span class="itemcode_<?php echo $p->id;?>" data-initprice="<?php echo $att_value['value'];?>"><?php echo $att_value['value'] - ( $att_value['value'] * PricingPlan::getPlanFinalDiscount( $p->id, $applied_voucher ) / 100 );?></span></li>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong>$<span class="itemcode_<?php echo $p->id;?> itemcode" data-initprice="<?php echo $att_value['value'];?>"><?php echo $att_value['value'] - ( $att_value['value'] * PricingPlan::getPlanFinalDiscount( $p->id, $applied_voucher ) / 100 );?></span></li>
                             <?php elseif( $att_value['type'] == 'number' || $att_value['type'] == 'string' ):?>
                                 <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?></li>
                             <?php elseif( $att_value['type'] == 'percent' ):?>
@@ -166,6 +168,10 @@
                 data: { '_organisation_nonce' : 'apply_voucher', 'voucher_name' : v_name },
                 success: function( data ){
                     if( data.error ){
+                        $('.discount').hide();
+                        $('.itemcode').each( function( i, val ) {
+                            $( this ).text( $( this ).data( 'initprice' ) );
+                        });
                         $('.voucher-error').show().fadeOut( 9000 );;
                     } else{
                         $('.voucher-field').val( v_name );
@@ -198,6 +204,9 @@
 
         });
 
+        $('.voucher-field').on( 'keyup', function(){
+            $('.voucher-field').val( $(this).val() );
+        });
         $('.plans-header-nav-next').on('click', function(){
             var active = $('.plans-title-list li.active');
             if (active.index != 0){

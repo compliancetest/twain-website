@@ -52,6 +52,8 @@ function ct_process_organisation_action()
                 update_user_meta( get_current_user_id(), 'applied_voucher', $_POST['voucher_name']  );
                 exit( json_encode( $response ) );
             } else{
+                delete_user_meta( get_current_user_id(), 'applied_voucher_plans' );
+                delete_user_meta( get_current_user_id(), 'applied_voucher' );
                 exit( json_encode( array( 'error' => 'Error' ) ) );
             }
         } else if (wp_verify_nonce($action, "subscribe")) {
