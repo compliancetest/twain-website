@@ -72,29 +72,33 @@ class Service
 
     public static function has_assess( $service_id, $user_id = false ){
         global $wpdb;
+        $response = false;
         $service = new Service( $service_id );
         $service->load();
         if( $service->service_visibility != 'Public' && ! is_user_logged_in() ){
-            return false;
+            $response = false;
         }
         if( ! $user_id ){
             $user_id = get_current_user_id();
         }
 
         if( $service->service_visibility == 'Public' ){
-            return true;
+            $response = true;
         }
         // service has private access
         if( $service->service_visibility == 'Private' && ( $user_id == $service->service_user_id || is_super_admin() ) ){
-            return true;
+            $response = true;
         }
         // both users has same community
         if( $service->service_visibility == 'Community' ){
             if( $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d AND group_id IN( SELECT group_id FROM wp_bp_groups_members WHERE user_id = %d )", $user_id, $service->service_user_id ) ) ){
-                return true;
+                $response = true;
             }
         }
-        return false;
+        if( ! $response ){
+            addMessage( 'The visibility settings defined by the service owner prevent the display of further information.', 'error' );
+        }
+        return $response;
     }
 
     /**
