@@ -488,9 +488,35 @@ jQuery(document).ready(function($) {
             jQuery(this).attr('title', '');
         }
     });
-    
+
     jQuery('.simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6});
+    });
+
+
+    jQuery('.field-tooltip').focus(function(){
+        var tooltip_obj,
+            parentContainer = jQuery(this).parent('.has-field-tooltip'),
+            fieldWidth = jQuery(this).outerWidth(),
+            fieldHeight = jQuery(this).outerHeight();
+
+        if (parentContainer.find('.simple_tooltip').length == 0) {
+            tooltip_obj = '<span class="simple_tooltip" style="width:'+ fieldWidth + 'px; margin-left: ' + -(fieldWidth/2) + 'px; bottom:' + (fieldHeight+20) + 'px; ">' + jQuery(this).data('tooltip-content') + '<span></span></span>';
+            jQuery(this).after(tooltip_obj);
+        }
+        jQuery(this).next('.simple_tooltip').show();
+    });
+
+    jQuery('.field-tooltip').blur(function(){
+        jQuery(this).parent('.has-field-tooltip').find('.simple_tooltip').hide();
+    });
+
+
+    jQuery('.has-defined-tooltip').click(function(){
+        jQuery(this).find('.simple_tooltip').show();
+    });
+    jQuery('.has-defined-tooltip').focusout(function(){
+        jQuery(this).find('.simple_tooltip').hide();
     });
 
     // Browse Dashboard Pages

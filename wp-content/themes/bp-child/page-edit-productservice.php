@@ -79,15 +79,17 @@ if(isset($_SESSION['product_data']))
            <div class="grid-box-body">
                <div class="column">
                    <div class="field-row">
-                       <div class="grid-cell has-focus-tooltip">
-                           <label>Name:</label>         
-                           <input type="text" class="input required" name="product_name" id="product_name" value="<?php echo $product->name?>" />
-                           <span class="focus-tooltip"><span></span>Enter your product or service name as it is known in the marketplace.</span>
-                       </div>                       
-                       <div class="grid-cell has-focus-tooltip">
-                           <label>Release Date:</label>  
-                           <input type="text" class="input datepicker" name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? formatDate(date('Y-m-d')) : formatDate($product->release_date)?>" />
-                           <span class="focus-tooltip" style="left: 110%"><span></span>Enter the date that this version of your product or service was released to the market.</span>
+                       <div class="grid-cell">
+                           <label>Name:</label>
+                           <div class="has-field-tooltip">
+                                <input type="text" class="input required field-tooltip" data-tooltip-content="Enter your product or service name as it is known in the marketplace." name="product_name" id="product_name" value="<?php echo $product->name?>" />
+                           </div>
+                       </div>
+                       <div class="grid-cell">
+                           <label>Release Date:</label>
+                           <div class="has-field-tooltip">
+                               <input type="text" class="input datepicker field-tooltip" data-tooltip-content="Enter the date that this version of your product or service was released to the market." name="product_release_date" id="product_release_date" value="<?php echo !$product->release_date ? formatDate(date('Y-m-d')) : formatDate($product->release_date)?>" />
+                           </div>
                        </div>
                        <div class="grid-cell radio-cell" id="ps-type-cell">
                            <input type="hidden" name="product_type" id="product_type_software" value="Software Product" />
@@ -95,47 +97,51 @@ if(isset($_SESSION['product_data']))
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
-                       <div class="grid-cell has-focus-tooltip">                           
+                       <div class="grid-cell">
                            <label>ID:</label>
-                           <input type="text" class="input" name="product_id" id="product_id" value="<?php echo $product->product_id?>" />
-                           <span class="focus-tooltip"><span></span>Enter the unique id of your product or service. If a Product ID is not provided, we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})</span>
-                       </div>                   
-                       <div class="grid-cell has-focus-tooltip">
-                           <label>Access URL:</label>     
-                           <input type="text" class="input medium-input" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" />
-                           <span class="focus-tooltip"><span></span>Provide a link to the page on your website that describes this product or service.</span>
-                       </div>      
+                           <div class="has-field-tooltip">
+                                <input type="text" class="input field-tooltip" name="product_id" id="product_id" value="<?php echo $product->product_id?>" data-tooltip-content="Enter the unique id of your product or service. If a Product ID is not provided, we will generate it by using product owner, name and version. ({owner}_{product name}_{product version})" />
+                           </div>
+                       </div>
+                       <div class="grid-cell">
+                           <label>Access URL:</label>
+                           <div class="has-field-tooltip">
+                               <input type="text" class="input medium-input field-tooltip" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" data-tooltip-content="Provide a link to the page on your website that describes this product or service." />
+                           </div>
+                       </div>
                        <div class="clear"></div>
                    </div>
                    <div class="field-row">
                        <div class="grid-cell">      
-                           <div class="has-focus-tooltip">
-                               <label>Version:</label>                    
-                               <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version?>" />
-                               <span class="focus-tooltip"><span></span>Enter the version of your product or service. Want to test multiple versions? Create a product for each.</span>
-                           </div>
-                           <div class="has-focus-tooltip">
-                               <label>Owner:</label>                    
-                               <?php 
+                               <label>Version:</label>
+                               <div class="has-defined-tooltip product-version-field">
+                                   <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version?>" />
+                                   <span style="width: 278px; margin-left: -139px; bottom: 52px; display: none;" class="simple_tooltip">Enter the version of your product or service. Want to test multiple versions? Create a product for each.<span></span></span>
+                               </div>
+
+                               <label>Owner:</label>
+                               <div class="has-field-tooltip">
+                               <?php
                                    if(is_super_admin()) {
                                        $organisations = ct_get_all_organisations();
                                ?>
-                               <select name="product_owner" id="product_owner" class="select">
-                                   <option value="">- Select Organisation -</option>
-                                   <?php foreach($organisations as $org): ?>
-                                   <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
-                                   <?php endforeach; ?>
-                               </select>                                   
+                                   <select name="product_owner" id="product_owner" class="select field-tooltip" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile.">
+                                       <option value="">- Select Organisation -</option>
+                                       <?php foreach($organisations as $org): ?>
+                                       <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
+                                       <?php endforeach; ?>
+                                   </select>
                                <?php }else{ ?>
-                               <input type="text" class="input required" name="product_owner" id="product_owner" readonly value="<?php echo $user_organisation->organisation_name?>" />
+                                   <input type="text" class="input required field-tooltip" name="product_owner" id="product_owner" readonly value="<?php echo $user_organisation->organisation_name?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
                                <?php } ?>
-                               <span class="focus-tooltip"><span></span>The owner of your product or service. It is set to the same as the organisation name from your profile.</span>
+                               </div>
                            </div>
-                       </div> 
-                       <div class="grid-cell has-focus-tooltip width60P">
+                       <div class="grid-cell width60P">
                             <label>Description:</label>
-                            <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $product->descrition?></textarea>
-                            <span class="focus-tooltip"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
+                            <div class="has-defined-tooltip">
+                                <textarea cols="" rows="" class="textarea field-tooltip" id="product_description" name="product_description"><?php echo $product->descrition?></textarea>
+                                <span class="simple_tooltip" style="width:540px; margin-left: -270px; bottom: 115px;"><span></span>Provide a few paragraphs to describe your product or service. This information is displayed to users who may be searching CompliacneTest for certified products.</span>
+                            </div>
                        </div>
                        <div class="clear"></div>
                    </div>

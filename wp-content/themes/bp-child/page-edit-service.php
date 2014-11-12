@@ -68,23 +68,29 @@ $user_test_suites = get_suites_with_claims();
                                 <b style="font-size: larger;">Owning Entity</b>
                             </div>
                             <div class="field-row">
-                                <div class="grid-cell has-tooltip" title="The business entity that hosts this service - eg an employer name or fund product name.">
+                                <div class="grid-cell">
                                     <label>Entity Name:</label>
-                                    <input type="text" class="input required" name="service_owner" id="service_owner" value="<?php echo $service->service_owner?>"/>
+                                    <div class="has-field-tooltip">
+                                        <input type="text" class="input required field-tooltip" name="service_owner" id="service_owner" value="<?php echo $service->service_owner?>" data-tooltip-content="The business entity that hosts this service - eg an employer name or fund product name." />
+                                    </div>
                                 </div>
 
-                                <div class="grid-cell has-tooltip" title="The unique identifier for the entity - eg an employer ABN or fund product USI.">
+                                <div class="grid-cell">
                                     <label>Entity Identifier:</label>
-                                    <input type="text" class="input required" name="service_id" id="service_id" value="<?php echo $service->service_id;?>" />
+                                    <div class="has-field-tooltip">
+                                        <input type="text" class="input required field-tooltip" name="service_id" id="service_id" value="<?php echo $service->service_id;?>" data-tooltip-content="The unique identifier for the entity - eg an employer ABN or fund product USI." />
+                                    </div>
                                 </div>
 
-                                <div class="grid-cell styled_select has-tooltip" title="The type of identifier for the entity - please select the appropriate code">
+                                <div class="grid-cell styled_select">
                                     <label>Entity Type:</label>
-                                    <select name="type" id="type" class="required select width250">
-                                        <option></option>
-                                        <option <?php if( isset( $service->service_type ) && $service->service_type == 'ABN' ):?>selected="selected"<?php endif;?> value="ABN" >ABN</option>
-                                        <option <?php if( isset( $service->service_type ) && $service->service_type == 'USI' ):?>selected="selected"<?php endif;?> value="USI" >USI</option>
-                                    </select>
+                                    <div class="has-field-tooltip">
+                                        <select name="type" id="type" class="required select width250 field-tooltip" data-tooltip-content="The type of identifier for the entity - please select the appropriate code">
+                                            <option></option>
+                                            <option <?php if( isset( $service->service_type ) && $service->service_type == 'ABN' ):?>selected="selected"<?php endif;?> value="ABN" >ABN</option>
+                                            <option <?php if( isset( $service->service_type ) && $service->service_type == 'USI' ):?>selected="selected"<?php endif;?> value="USI" >USI</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="padding20"></div>
                                 <div class="clear"></div>
@@ -98,26 +104,31 @@ $user_test_suites = get_suites_with_claims();
 
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <div class="has-tooltip" title="A name for the service - if left blank this will default to the 'suite:role' you select below - eg Contributions_v1.3:Fund">
-                                        <label>Service Name:</label>
-                                        <input type="text" class="input" name="service_name" id="service_name" value="<?php echo $service->service_name?>" />
+                                    <label>Service Name:</label>
+                                    <div class="has-field-tooltip">
+                                        <input type="text" class="input field-tooltip" name="service_name" id="service_name" value="<?php echo $service->service_name?>" data-tooltip-content="A name for the service - if left blank this will default to the 'suite:role' you select below - eg Contributions_v1.3:Fund" />
                                     </div>
                                     <br>
                                     <label class="default_name" <?php if( $service->service_name ):?>style="display: none;" <?php endif;?>>Default: <span class="process_value">{Suite}</span>:<span class="process_role">{Role}</span></label>
-                                    <div class="styled_select has-tooltip" style="margin-top: 10px;" title="'Public' means anyone can see this service, 'Community' means visibility is limited to community members, 'Private' means that the service is only visible to your own organisation">
+                                    <div class="styled_select" style="margin-top: 10px">
                                         <label>Visibility:</label>
-                                        <select name="visibility" class="select">
-                                            <option <?php if( $service->service_visibility == 'Public' ):?> selected="selected" <?php endif;?> value="Public">Public</option>
-                                            <option <?php if( $service->service_visibility == 'Community' ):?> selected="selected" <?php endif;?> value="Community">Community</option>
-                                            <option <?php if( $service->service_visibility == 'Private' ):?> selected="selected" <?php endif;?> value="Private">Private</option>
-                                        </select>
+                                        <div class="has-field-tooltip">
+                                            <select name="visibility" class="select field-tooltip" data-tooltip-content="'Public' means anyone can see this service, 'Community' means visibility is limited to community members, 'Private' means that the service is only visible to your own organisation">
+                                                <option <?php if( $service->service_visibility == 'Public' ):?> selected="selected" <?php endif;?> value="Public">Public</option>
+                                                <option <?php if( $service->service_visibility == 'Community' ):?> selected="selected" <?php endif;?> value="Community">Community</option>
+                                                <option <?php if( $service->service_visibility == 'Private' ):?> selected="selected" <?php endif;?> value="Private">Private</option>
+                                            </select>
+                                        </div>
                                         <div class="space10"></div>
                                     </div>
                                 </div>
 
-                                <div class="grid-cell has-tooltip width60P" title="Enter a brief description including any special instructions or limitations - eg 'Our SuperStream Contributions service. Contributions must include Member ID (SuperannuationFundDetails.MemberClient.Identifier) and registrations must include insurance salary (SuperannuationFundDetails.AnnualSalaryforInsurance.Amount)">
+                                <div class="grid-cell width60P">
                                     <label>Service Description:</label>
-                                    <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $service->service_description?></textarea>
+                                    <div class="has-defined-tooltip">
+                                        <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $service->service_description?></textarea>
+                                        <span style="width: 535px; margin-left: -270px; bottom: 112px; display: none;" class="simple_tooltip">Enter a brief description including any special instructions or limitations - eg 'Our SuperStream Contributions service. Contributions must include Member ID (SuperannuationFundDetails.MemberClient.Identifier) and registrations must include insurance salary (SuperannuationFundDetails.AnnualSalaryforInsurance.Amount)<span></span></span>
+                                    </div>
                                 </div>
 
 <!--                                <div class="grid-cell">-->
@@ -128,44 +139,48 @@ $user_test_suites = get_suites_with_claims();
                             </div>
                             <div class="field-row">
 
-                                <div class="grid-cell styled_select has-tooltip" title="Choose a certified software product which has been used as the basis for this service - eg your payroll solution or your fund registry solution">
+                                <div class="grid-cell styled_select">
                                     <label>Based on Certified Software Product:</label>
-                                    <select name="product_id" class="required select" style="width: 280px" id="product_id">
-                                        <option value=""></option>
-                                        <?php foreach( $user_products AS $user_product ):?>
-                                            <?php
-                                            $product = new ProductAndService( $user_product->ID );
-                                            $product->load();
-                                            ?>
-                                            <option <?php if( isset( $service->service_product_id ) && $service->service_product_id == $user_product->ID ):?> selected="selected" <?php endif;?>value="<?php echo $user_product->ID;?>" data-permission="<?php echo $product->services_not_permitted;?>"><?php echo $user_product->product_name;?></option>
-                                        <?php endforeach;?>
-                                    </select>
+                                    <div class="has-field-tooltip">
+                                        <select name="product_id" class="required select field-tooltip" style="width: 280px" id="product_id" data-tooltip-content="Choose a certified software product which has been used as the basis for this service - eg your payroll solution or your fund registry solution">
+                                            <option value=""></option>
+                                            <?php foreach( $user_products AS $user_product ):?>
+                                                <?php
+                                                $product = new ProductAndService( $user_product->ID );
+                                                $product->load();
+                                                ?>
+                                                <option <?php if( isset( $service->service_product_id ) && $service->service_product_id == $user_product->ID ):?> selected="selected" <?php endif;?>value="<?php echo $user_product->ID;?>" data-permission="<?php echo $product->services_not_permitted;?>"><?php echo $user_product->product_name;?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
                                 </div>
 
-                                <div class="grid-cell styled_select has-tooltip" title="This list is pre-populated based on the certifications of the supporting product - if there is no value shown then the product has not yet been certified">
+                                <div class="grid-cell styled_select">
                                     <label>Supports Test Suite:</label>
-                                    <select name="suite_id" id="suite_id" class="required select" style="width: 150px">
-                                        <option></option>
-                                        <?php $suites_in_list = array();?>
-                                        <?php foreach( $user_test_suites AS $suite_id ):?>
-                                            <?php
-                                            $suite = new TestSuite( $suite_id->suite_id );
-                                            $suite->load();
-                                            if( ! $suite->id ){
-                                                continue;
-                                            }
-                                            if( ! in_array( $suite_id->suite_id.$suite_id->product_id, $suites_in_list ) ){
-                                                array_push( $suites_in_list, $suite_id->suite_id.$suite_id->product_id );
-                                            } else{
-                                                continue;
-                                            }
-                                            if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ) {
-                                                continue;
-                                            }
-                                            ?>
-                                            <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" data-process="<?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>"><?php echo $suite->title;?></option>
-                                        <?php endforeach;?>
-                                    </select>
+                                    <div class="has-field-tooltip">
+                                        <select name="suite_id" id="suite_id" class="required select field-tooltip" style="width: 150px" data-tooltip-content="This list is pre-populated based on the certifications of the supporting product - if there is no value shown then the product has not yet been certified">
+                                            <option></option>
+                                            <?php $suites_in_list = array();?>
+                                            <?php foreach( $user_test_suites AS $suite_id ):?>
+                                                <?php
+                                                $suite = new TestSuite( $suite_id->suite_id );
+                                                $suite->load();
+                                                if( ! $suite->id ){
+                                                    continue;
+                                                }
+                                                if( ! in_array( $suite_id->suite_id.$suite_id->product_id, $suites_in_list ) ){
+                                                    array_push( $suites_in_list, $suite_id->suite_id.$suite_id->product_id );
+                                                } else{
+                                                    continue;
+                                                }
+                                                if( $service->service_suite_id != $suite_id->suite_id || $service->service_product_id != $suite_id->product_id ) {
+                                                    continue;
+                                                }
+                                                ?>
+                                                <option <?php if( isset( $service->service_suite_id ) && $service->service_suite_id == $suite_id->suite_id ):?>selected="selected"<?php endif;?> value="<?php echo $suite_id->suite_id;?>" data-productid="<?php echo $suite_id->product_id;?>" data-process="<?php echo Process::get_full_name( Process::get_process_by_id( $suite->process ) );?>"><?php echo $suite->title;?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
                                     <?php $suites_in_list = array();?>
                                     <select id="all_suites_id" class="required select" style="display: none">
                                         <?php foreach( $user_test_suites AS $suite_id ):?>
@@ -334,15 +349,6 @@ $user_test_suites = get_suites_with_claims();
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
-
-            jQuery('.has-tooltip').each(function(){
-                var tooltip_obj;
-                if (jQuery(this).find('.simple_tooltip').length == 0) {
-                    tooltip_obj = '<span class="simple_tooltip radius6">' + jQuery(this).attr('title') + '<span></span></span>';
-                    jQuery(this).append(tooltip_obj);
-                    jQuery(this).attr('title', '');
-                }
-            });
 
             $('#product_description').redactor({
                   air: true,

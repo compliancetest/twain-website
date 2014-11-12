@@ -918,6 +918,17 @@ width: 28%;
     top: -7px;
 }
 
+.has-field-tooltip,
+.has-defined-tooltip{
+    position: relative;
+}
+
+.has-field-tooltip .simple_tooltip, .has-defined-tooltip .simple_tooltip{
+    top: auto !important;
+    left: 50%;
+    box-sizing: border-box;
+}
+
 .default_grid .expandable {
     background-image: url(../images/grid_expandable_c.png);
     background-position: center center;
