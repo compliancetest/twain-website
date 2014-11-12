@@ -7709,7 +7709,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 #edit_product_service_wrapper .simple_tooltip{
     position: absolute;
-    width: 250px;
+    width: 340px;
     left: 50%;
     margin: 0 0 0 -125px;
     font-weight: normal;

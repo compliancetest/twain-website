@@ -85,7 +85,7 @@ class Agreement
         if( $agreement_id ){
             $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         } else {
-            $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE responder_service_id = %d OR requester_service_id = %d ", $service_id, $service_id));
+            $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE responder_service_id = %d OR requester_service_id = %d ORDER BY str_id ASC", $service_id, $service_id));
         }
         if( ! $results ){
             return false;
