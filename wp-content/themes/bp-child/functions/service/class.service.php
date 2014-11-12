@@ -144,6 +144,8 @@ class Service
             'post_type' => 'service',
             'posts_per_page' => -1,
             'tax_query' => array('relation' => 'and'),
+            'orderby' => 'title',
+            'order' => 'ASC'
         );
         if( $exclude_service ){
             $args['post__not_in'] = array( $exclude_service );

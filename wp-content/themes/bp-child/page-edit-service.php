@@ -104,7 +104,7 @@ $user_test_suites = get_suites_with_claims();
                                     </div>
                                     <br>
                                     <label class="default_name" <?php if( $service->service_name ):?>style="display: none;" <?php endif;?>>Default: <span class="process_value">{Suite}</span>:<span class="process_role">{Role}</span></label>
-                                    <div class="styled_select has-tooltip" style="margin-top: 10px;" title="'Public' means anyone can see this service, 'Community' means visibility is limited to SuperStream community members, 'Private' means that the service is only visible to your own organisation">
+                                    <div class="styled_select has-tooltip" style="margin-top: 10px;" title="'Public' means anyone can see this service, 'Community' means visibility is limited to community members, 'Private' means that the service is only visible to your own organisation">
                                         <label>Visibility:</label>
                                         <select name="visibility" class="select">
                                             <option <?php if( $service->service_visibility == 'Public' ):?> selected="selected" <?php endif;?> value="Public">Public</option>
