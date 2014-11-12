@@ -117,10 +117,10 @@ class CT_Organisation_Controller
 
         if ($no_billing != '1')
         {
-            if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
+            if( isset( $pricing_plans->attribute['Period']->value ) ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
-                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $quantity = ( isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
 //                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
