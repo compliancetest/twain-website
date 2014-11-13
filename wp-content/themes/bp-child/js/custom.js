@@ -455,23 +455,7 @@ jQuery(document).ready(function($) {
         $('#' + rid).show();
         return false;
     })
-    
-    //Focus Tooltip
-    jQuery('.has-focus-tooltip').on('focus', 'input[type="text"], textarea', function(){
-        jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeIn('fast');
-    });
-    jQuery('.has-focus-tooltip').on('blur', 'input[type="text"], textarea', function(){
-        jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');
-    });
-    
-    jQuery('.has-focus-tooltip').on('click', ' .redactor_textarea', function(){
-        jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeIn('fast');        
-    })
-    jQuery('.has-focus-tooltip').on('focusout', ' .redactor_textarea', function(){
-        jQuery(this).parents('.has-focus-tooltip').find('.focus-tooltip').fadeOut('fast');        
-    })
-    
-    
+
     //Fix the footer Position
     if(jQuery('body').height() > jQuery('#wrapper').height())
     {
