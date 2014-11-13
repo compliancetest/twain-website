@@ -440,10 +440,10 @@ get_header();
                                                <div class="td td-message-view">View</div>
                                                <div class="clear"></div>
                                            </div>
-                                           <div class="tbody">
+                                           <div class="tbody">                                           
                                            <?php if( isset( $messages[$row->ID] ) && is_iterable( $messages[$row->ID] ) ):?>
                                              <?php foreach($messages[$row->ID] as $message) {?>
-                                                <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
+                                                <?php //if( $message->FLAG === 'IS_EMPTY' ) continue;?>
                                                <div class="tr">
                                                    <div class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15).'</br>'.cp_wrap($message->TO_PARTY_ID, 15) ?></div>
 <!--                                                   <div class="td td-to">--><?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
@@ -475,16 +475,23 @@ get_header();
                                                        <input type="text" value="<?php echo $message->PART_ID; ?>" readonly="readonly">
                                                    </div>
                                                    <div class="td td-message-view">
-                                                      <!--<a href="<?php echo "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> -->
-                                                      <a href="<?php echo ($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_LOCATION) ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
-                                                      | 
-                                                      <?php if($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
-                                                        <a href="<?php echo $message->S3_PAYLOAD_LOCATION?>" class="html-view-error">HTML</a>
-                                                      <?php } else { ?>
-                                                        <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
+                                                       <?php
+                                                           if ($message->FLAG == 'IS_EMPTY' && $message->PAYLOAD) {
+                                                               echo '-';
+                                                           } else {
+                                                       ?>   
+                                                          <!--<a href="<?php echo "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> -->
+                                                          <a href="<?php echo ($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_LOCATION) ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
+                                                          | 
+                                                          <?php if($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
+                                                            <a href="<?php echo $message->S3_PAYLOAD_LOCATION?>" class="html-view-error">HTML</a>
+                                                          <?php } else { ?>
+                                                            <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
+                                                          <?php } ?>
                                                       <?php } ?>
                                                        <br>
                                                        <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
+                                                       
                                                    </div>
                                                    <div class="clear"></div>
                                                </div>

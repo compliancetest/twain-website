@@ -28,7 +28,7 @@ if(!$message){
     exit;
 }
 
-$message_content = !$message->S3_PAYLOAD_LOCATION ? $message->PAYLOAD : ct_read_xml_from_amazon_s3($message->S3_PAYLOAD_LOCATION);
+$message_content = ($message->FLAG == 'IS_EMPTY' || !$message->S3_PAYLOAD_LOCATION) ? $message->PAYLOAD : ct_read_xml_from_amazon_s3($message->S3_PAYLOAD_LOCATION);
 
 if($mode != 'html'){    
     header("Content-type: application/xml");    

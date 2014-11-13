@@ -150,7 +150,7 @@ function cp_view_validation_log()
         </div>
         <div class="td td-result tocenter">
             <?php
-                if(!$row->VALIDATION_ERROR && (!$row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION)){
+                if(!$row->VALIDATION_ERROR && ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION)){
                     echo '-';
                 }else{
                     if ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION){
