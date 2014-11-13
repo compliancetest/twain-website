@@ -443,10 +443,11 @@ if(!is_user_logged_in())
                                 </div>
                                 <div class="clear"></div>
 
-                                <div class="field has-focus-tooltip">
+                                <div class="field">
                                     <label for="organisation_id">Organisation Key</label>
-                                    <input type="text" class="" title="" name="organisation_key" id="organisation_key">
-                                    <span class="focus-tooltip"><span></span>If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.</span>
+                                    <div class="has-field-tooltip" style="width: 165px;">
+                                        <input type="text" class="field-tooltip" title="" name="organisation_key" id="organisation_key" data-tooltip-content="If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.">
+                                    </div>
                                 </div>
                                 <div class="field">
                                     <label for="contact_phone_id">Contact Phone Number</label>

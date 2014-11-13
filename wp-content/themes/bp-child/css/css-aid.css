@@ -2294,36 +2294,6 @@ tr {
     border-right: none;
 }
 
-/*** Simple Tooltip ***/
-.has-focus-tooltip{
-    position: relative;
-}
-.focus-tooltip{
-    color: #2a2a2a;
-    font-size: 12px;
-    padding: 10px;
-    line-height: 1.2em;
-    position: absolute;
-    left: 103%;
-    top: 50%;
-    display: block;
-    background: #f4f4f4;
-    border: solid 1px #ebebeb;
-    z-index: 10;
-    width: 170px;    
-    display: none;
-}
-.focus-tooltip span{
-    display: block;
-    width: 9px;
-    height: 8px;
-    background: url(../images/tooltip_arrow.png) no-repeat;
-    position: absolute;
-    left: -8px;
-    top: -1px;
-    z-index: 20;
-}
-
 /** For Static Content Pages ***/
 .content_inner{
     line-height: 1.3em;
