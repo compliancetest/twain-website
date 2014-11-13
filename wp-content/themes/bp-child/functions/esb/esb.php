@@ -877,13 +877,13 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION " . 
+        $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION, m.FLAG " . 
                  "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                  "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.ORGANISATION_SUBSCRIPTION_ID in (" . implode(", ", $esbIDs) . ")";
         
         $data = ManageESB::$esbdb->get_row($query);
         
-        if(!$data->S3_VALIDATION_RESULTS_LOCATION)
+        if($data->FLAG == 'IS_EMPTY' || !$data->S3_VALIDATION_RESULTS_LOCATION)
             return $data->VALIDATION_ERROR;
         
         //Getting XML FROM Amazon S3 URL
