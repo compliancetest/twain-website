@@ -71,12 +71,21 @@ class PricingPlan
                         $this->attribute_percent[$attr->name] = $attr->value;
                     }
                     break;
+                case 'discount':
+                    if( $attr->visibility == 1 ) {
+                        $this->attribute_percent[$attr->name] = $attr->value;
+                    }
+                    break;
             }
             if( $attr->visibility == 1 ) {
                 if ($attr->type == 'itemcode') {
                     $this->attribute_all[$attr->title] = array( 'id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $this->getPriceByXeroCode($attr->value));
                 } else {
-                    $this->attribute_all[$attr->title] = array( 'id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+                    if( $attr->type == 'discount' ){
+                        $this->attribute_all[$attr->name] = array('id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+                    } else {
+                        $this->attribute_all[$attr->title] = array('id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+                    }
                 }
             }
         }
