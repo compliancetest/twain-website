@@ -829,7 +829,7 @@ class ManageESB
             if(!$esbIDs)
                 return null;
             
-            $query = "SELECT mv.*, mvp.PHASE_CODE, mvp.PHASE_LABEL, mvs.STATUS_CODE, mvs.STATUS_LABEL " . 
+            $query = "SELECT mv.*, mvp.PHASE_CODE, mvp.PHASE_LABEL, mvs.STATUS_CODE, mvs.STATUS_LABEL, m.FLAG " . 
                      "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                      "LEFT JOIN " . $this->table_message_validation_phases . " AS mvp ON mvp.ID = mv.MSH_MESSAGE_VALIDATION_PHASES_ID " .
                      "LEFT JOIN " . $this->table_message_validation_statuses . " AS mvs ON mvs.ID = mv.MSH_MESSAGE_VALIDATION_STATUSES_ID " .

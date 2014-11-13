@@ -150,16 +150,16 @@ function cp_view_validation_log()
         </div>
         <div class="td td-result tocenter">
             <?php
-                if(!$row->VALIDATION_ERROR && !$row->S3_VALIDATION_RESULTS_LOCATION){
+                if(!$row->VALIDATION_ERROR && (!$row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION)){
                     echo '-';
                 }else{
-                    if (!$row->S3_VALIDATION_RESULTS_LOCATION){
+                    if ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION){
                         echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">XML</a>';
                     } else {
                         echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" target="_blank">XML</a>';
                     }
                     echo ' &middot; ';
-                    if ($row->S3_VALIDATION_RESULT_CONTENT_LENGTH > $html_render_limit) {
+                    if ($row->FLAG != 'IS_EMPTY' && $row->S3_VALIDATION_RESULT_CONTENT_LENGTH > $html_render_limit) {
                         echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" class="html-view-error">HTML</a>';
                     } else {
                         echo '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
