@@ -829,7 +829,7 @@ class ManageESB
             if(!$esbIDs)
                 return null;
             
-            $query = "SELECT mv.*, mvp.PHASE_CODE, mvp.PHASE_LABEL, mvs.STATUS_CODE, mvs.STATUS_LABEL, m.FLAG " . 
+            $query = "SELECT mv.*, mvp.PHASE_CODE, mvp.PHASE_LABEL, mvs.STATUS_CODE, mvs.STATUS_LABEL, mv.FLAG " . 
                      "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                      "LEFT JOIN " . $this->table_message_validation_phases . " AS mvp ON mvp.ID = mv.MSH_MESSAGE_VALIDATION_PHASES_ID " .
                      "LEFT JOIN " . $this->table_message_validation_statuses . " AS mvs ON mvs.ID = mv.MSH_MESSAGE_VALIDATION_STATUSES_ID " .
@@ -877,7 +877,7 @@ class ManageESB
         if(!$esbIDs)
             return null;
         
-        $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION, m.FLAG " . 
+        $query = "SELECT mv.VALIDATION_ERROR, mv.S3_VALIDATION_RESULTS_LOCATION, mv.FLAG " . 
                  "FROM " . $this->table_message_metadata . " AS m, " . $this->table_conversation_metadata . " AS c, " . $this->table_message_validation_results . " AS mv " .
                  "WHERE mv.ID=" . intval($id) . " AND m.MSH_CONVERSATION_ID=c.ID AND m.ID=mv.MSH_MESSAGE_METADATA_ID AND c.ORGANISATION_SUBSCRIPTION_ID in (" . implode(", ", $esbIDs) . ")";
         

@@ -476,9 +476,9 @@ get_header();
                                                    </div>
                                                    <div class="td td-message-view">
                                                       <!--<a href="<?php echo "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> -->
-                                                      <a href="<?php echo $message->S3_PAYLOAD_LOCATION ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
+                                                      <a href="<?php echo ($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_LOCATION) ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID?>" target="_blank">XML</a> 
                                                       | 
-                                                      <?php if($message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
+                                                      <?php if($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
                                                         <a href="<?php echo $message->S3_PAYLOAD_LOCATION?>" class="html-view-error">HTML</a>
                                                       <?php } else { ?>
                                                         <a href="/message-envelope?id=<?php echo $message->ID?>&mode=html" target="_blank">HTML</a>
