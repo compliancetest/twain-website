@@ -287,6 +287,8 @@ function ct_process_organisation_action()
                                 <label>Pricing Plan</label>
                                 <select id="pricing_plan_id" class="pricing_plan_id">
                                     <?php
+                                        global $wpdb;
+                                        $subscription->suite_family_mark = $wpdb->get_var( $wpdb->prepare( "SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id DESC LIMIT 1", $subscription->suite_family_mark ) );
                                         $suite = new TestSuite( $subscription->suite_family_mark );
                                         $suite->load();
                                     ?>

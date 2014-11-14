@@ -24,8 +24,8 @@ class CT_Organisation_Controller
             $this->last_message = "Only an organisation admin can purchase subscription.";
             return false;
         }
-        
-        
+
+        $family_mark = $wpdb->get_var( $wpdb->prepare( "SELECT family_mark FROM wp_test_suites WHERE suite_id = %d", $family_mark ) );
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}test_suites WHERE suite_id=%d ORDER BY version_major DESC, version_minor DESC, version_patch DESC LIMIT 1", $family_mark);
         $suite_info = $wpdb->get_row($query);
         
@@ -331,7 +331,7 @@ class CT_Organisation_Controller
         $no_billing = $wpdb->get_var($query);
         $pricing_plans = new PricingPlan( $pricing_plan_id );
         $prices = $pricing_plans->attribute_itemcodes;
-        if( $no_billing != '1' && $subscription->pricing_plan_id != $pricing_plan_id)
+        if( $no_billing != '1' && ( ( $subscription->pricing_plan_id != $pricing_plan_id ) || ( $applied_voucher != $subscription->voucher ) ) )
         {
             if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
