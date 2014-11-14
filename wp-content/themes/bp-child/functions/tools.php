@@ -808,6 +808,43 @@ function ct_duplicate_data()
                 </table>                
             </form>
         </div>
+
+        <h2>Copy Services data to wp_services table</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('populate_wp_services')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Populate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'populate_wp_services')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                        $args = array(
+                                            'post_type' => 'service',
+                                            'posts_per_page' => -1,
+                                            'tax_query' => array('relation' => 'and')
+                                        );
+                                        $posts = get_posts( $args );
+                                        $posts_processed = 0;
+                                        foreach( $posts AS $post ) {
+                                            save_wp_service( $post->ID );
+                                            $posts_processed++;
+                                        }
+
+                                        echo 'Processed ' . $posts_processed . ' services.';
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
     </div>
     <?php
 }

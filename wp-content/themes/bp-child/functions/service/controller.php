@@ -127,6 +127,7 @@ function saveService()
     update_post_meta($id, 'service_levels', implode( ';;', $_POST['levels'] ) );
     update_post_meta($id, 'service_protocol', $_POST['protocol'] );
 
+    save_wp_service( $id );
     $cloud_search = new CloudSearch();
     $cloud_search->cloud_search_update_service( $id );
 
@@ -135,6 +136,50 @@ function saveService()
     exit;
 }
 
+function save_wp_service( $service_id ){
+    global $wpdb;
+    $post_meta = get_post_meta( $service_id );
+    $product_meta = get_post_meta( $post_meta['service_product_id'][0] );
+    if( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_services WHERE wp_post_id = %d ", $service_id ) ) ){
+        $wpdb->update( 'wp_services',
+            array(
+                'wp_post_id'          => $service_id,
+                'owner_name'          => $post_meta['service_owner'][0],
+                'owner_identifier'    => $post_meta['service_id'][0],
+                'owner_type'          => $post_meta['service_type'][0],
+                'service_name'        => $post_meta['service_name'][0],
+                'service_description' => $post_meta['service_description'][0],
+                'service_visibility'  => $post_meta['service_visibility'][0],
+                'product_id'          => $post_meta['service_product_id'][0],
+                'test_suite_id'       => $post_meta['service_suite_id'][0],
+                'roles'               => $post_meta['service_roles'][0],
+                'levels'              => $post_meta['service_levels'][0],
+                'organisation_id'     => $product_meta['product_organisation_id'][0]
+            ),
+            array( 'id' => $row->id ),
+            array( '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d' ),
+            array( '%d' )
+        );
+    } else{
+        $wpdb->insert( 'wp_services',
+            array(
+                'wp_post_id'          => $service_id,
+                'owner_name'          => $post_meta['service_owner'][0],
+                'owner_identifier'    => $post_meta['service_id'][0],
+                'owner_type'          => $post_meta['service_type'][0],
+                'service_name'        => $post_meta['service_name'][0],
+                'service_description' => $post_meta['service_description'][0],
+                'service_visibility'  => $post_meta['service_visibility'][0],
+                'product_id'          => $post_meta['service_product_id'][0],
+                'test_suite_id'       => $post_meta['service_suite_id'][0],
+                'roles'               => $post_meta['service_roles'][0],
+                'levels'              => $post_meta['service_levels'][0],
+                'organisation_id'     => $product_meta['product_organisation_id'][0]
+            ),
+            array( '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d' )
+        );
+    }
+}
 function deleteService()
 {
     global $wpdb;
