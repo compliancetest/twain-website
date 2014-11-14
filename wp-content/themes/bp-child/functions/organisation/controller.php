@@ -114,7 +114,6 @@ class CT_Organisation_Controller
         $no_billing = $wpdb->get_var($query);
 
         $discount = PricingPlan::getPlanFinalDiscount( $pricing_plan_id, $applied_voucher );
-        var_dump($pricing_plans->attribute_all['Prorata']);
         if ($no_billing != '1')
         {
             if( isset( $pricing_plans->attribute['Period']->value ) ){
