@@ -88,6 +88,9 @@ class PricingPlan
                     }
                 }
             }
+            if( $attr->type == 'boolean' && $attr->visibility == 0 ){
+                $this->attribute_all[$attr->name] = array( 'id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value, 'visibility' => $attr->visibility);
+            }
         }
     }
     

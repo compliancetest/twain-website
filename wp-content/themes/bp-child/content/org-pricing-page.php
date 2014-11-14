@@ -74,7 +74,9 @@
                             <?php elseif( $att_value['type'] == 'percent' ):?>
                                 <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                             <?php elseif( $att_value['type'] == 'boolean' ):?>
-                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                                <?php if( $att_value['visibility'] == '1' ):?>
+                                    <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                                <?php endif;?>
                             <?php elseif( $att_value['type'] == 'discount' ):?>
                                 <li class="discount_<?php echo $att_value['id'];?> discount" <?php if( $att_name != $applied_voucher || ! is_array( $affected_plans ) || ! array_key_exists( $p->id, $affected_plans ) || ( $read_only && $affected_plans[$_REQUEST['plan_id']]['id'] != $att_value['id'] ) ) :?>style="display: none;"<?php endif;?>><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_value['title'];?></strong><?php echo $att_value['value'];?>%</li>
                             <?php endif;?>

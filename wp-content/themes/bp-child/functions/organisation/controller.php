@@ -114,13 +114,13 @@ class CT_Organisation_Controller
         $no_billing = $wpdb->get_var($query);
 
         $discount = PricingPlan::getPlanFinalDiscount( $pricing_plan_id, $applied_voucher );
-
+        var_dump($pricing_plans->attribute_all['Prorata']);
         if ($no_billing != '1')
         {
             if( isset( $pricing_plans->attribute['Period']->value ) ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
-                $quantity = ( isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
 //                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
@@ -170,7 +170,7 @@ class CT_Organisation_Controller
 
                     $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
                 }
-                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  ct_calculate_first_month_quantity(1) : 1;
+                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $organisation_id,
@@ -336,7 +336,7 @@ class CT_Organisation_Controller
             if( isset( $pricing_plans->attribute['Period']->value ) ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
-                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
 //                $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                 $charge_data = array(
                     array(
@@ -386,7 +386,7 @@ class CT_Organisation_Controller
 
                     $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
                 }
-                $quantity = isset( $pricing_plans->attribute_boolean['Prorata'] ) && $pricing_plans->attribute_boolean['Prorata'] == '1' ?  ct_calculate_first_month_quantity(1) : 1;
+                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $subscription->organisation_id,
