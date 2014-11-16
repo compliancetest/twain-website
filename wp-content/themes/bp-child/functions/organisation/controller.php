@@ -332,6 +332,9 @@ class CT_Organisation_Controller
         $prices = $pricing_plans->attribute_itemcodes;
         if( $no_billing != '1' && ( ( $subscription->pricing_plan_id != $pricing_plan_id ) || ( $applied_voucher != $subscription->voucher ) ) )
         {
+            if( $subscription->pricing_plan_id == $pricing_plan_id && ! empty( $subscription->voucher ) && empty( $applied_voucher ) ){
+                return true;
+            }
             if( isset( $pricing_plans->attribute['Period']->value ) ){
                 $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
                 $due_date = strtotime( 'last day of this month', $due_date );
