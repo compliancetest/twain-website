@@ -169,7 +169,7 @@ class CT_Organisation_Controller
 
                     $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
                 }
-                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  ct_calculate_first_month_quantity( 1 )  : 1;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $organisation_id,
@@ -385,7 +385,7 @@ class CT_Organisation_Controller
 
                     $wpdb->insert($wpdb->prefix . "organisations_charge", $charge_data[0], $charge_data[1]);
                 }
-                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  $pricing_plans->attribute['Period']->value - ( 1 - ct_calculate_first_month_quantity( 1 ) ) : $pricing_plans->attribute['Period']->value;
+                $quantity = ( isset( $pricing_plans->attribute_all['Prorata'] ) && $pricing_plans->attribute_all['Prorata']['value'] == '1' ) ?  ct_calculate_first_month_quantity( 1 ) : 1;
                 $charge_data = array(
                     array(
                         'organisation_id'       => $subscription->organisation_id,

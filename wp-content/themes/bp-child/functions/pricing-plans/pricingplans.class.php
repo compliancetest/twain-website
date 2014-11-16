@@ -84,7 +84,7 @@ class PricingPlan
                     if( $attr->type == 'discount' ){
                         $this->attribute_all[$attr->name] = array('id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value, 'title' => $attr->title );
                     } else {
-                        $this->attribute_all[$attr->title] = array('id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value);
+                        $this->attribute_all[$attr->title] = array('id' => $attr->id, 'type' => $attr->type, 'desc' => $attr->description, 'value' => $attr->value, 'visibility' => $attr->visibility);
                     }
                 }
             }
