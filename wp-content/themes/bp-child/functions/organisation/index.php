@@ -297,7 +297,7 @@ function ct_process_organisation_action()
                                             <option value="<?php echo $pricing_plan->id;?>"<?php if( $pricing_plan->id == $subscription->pricing_plan_id ):?> selected="selected"<?php endif;?> ><?php echo $pricing_plan->title;?></option>
                                         <?php endforeach;?>
                                 </select>
-                                <input type="hidden" id="pricing_plan_id_hidden" name="pricing_plan_id" value="">
+                                <input type="hidden" id="pricing_plan_id_hidden" name="pricing_plan_id" value="<?php echo $subscription->pricing_plan_id;?>">
                                 <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $subscription->suite_family_mark;?>&is_edit=1&sid=<?php echo $subscription->id;?>&pricing_plan_id=<?php echo $subscription->pricing_plan_id;?>" class="edit_subsc" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>
                                 <script>
                                     jQuery( document).ready( function( $ ){
