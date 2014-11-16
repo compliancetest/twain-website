@@ -193,7 +193,10 @@ function saveProductService()
         $services = explode( ',', trim( $_POST['services_to_delete'], ',' ) );
         if( ! empty( $services ) ){
             foreach( $services AS $service ){
-                if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id = %d OR responder_service_id = %d ", $service, $service ) ) ){
+                if( ! Service::has_agreements( $service) ){
+                    $cs = new CloudSearch();
+                    $cs->cloud_search_delete_item( $service, 'service' );
+                    $wpdb->query( $wpdb->prepare("DELETE FROM wp_services WHERE wp_post_id = %d ", $service ) );
                     wp_delete_post( $service );
                 } else{
                     addMessage( "Can't delete '".get_the_title( $service )."' service, because it has agreements", 'error' );

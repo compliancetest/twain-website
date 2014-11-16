@@ -101,6 +101,10 @@ class Service
         return $response;
     }
 
+    public static function has_agreements( $service_id ){
+        global $wpdb;
+        return (boolean) $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE requester_service_id = %d OR wp_e2e_agreement.responder_service_id = %d ", $service_id, $service_id ) );
+    }
     /**
      *
      */

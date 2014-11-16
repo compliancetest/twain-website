@@ -265,7 +265,9 @@ if(isset($_SESSION['product_data']))
                                             </div>
                                             <div class="grid-cell right">
                                                 <?php if( check_user_has_make_agreement_priv() ):?>
-                                                    <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                    <?php if( ! Service::has_agreements( $post->ID ) ):?>
+                                                        <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                    <?php endif;?>
                                                     <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
                                                 <?php else:?>
                                                     <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
