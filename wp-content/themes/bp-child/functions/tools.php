@@ -831,6 +831,8 @@ function ct_duplicate_data()
                                         );
                                         $posts = get_posts( $args );
                                         $posts_processed = 0;
+                                        global $wpdb;
+                                        $wpdb->query("TRUNCATE wp_services;");
                                         foreach( $posts AS $post ) {
                                             save_wp_service( $post->ID );
                                             $posts_processed++;
