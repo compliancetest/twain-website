@@ -64,7 +64,7 @@ function saveService()
         exit;
     }
     if( $_POST['service_name'] == '' ){
-        $_POST['service_name'] = str_replace( ' ', '_', $_POST['service_process'] ).':'.$_POST['roles'][0];
+        $_POST['service_name'] = str_replace( ' ', '_', get_the_title( $_POST['suite_id'] ) ).':'.$_POST['roles'][0];
     }
     if($isNew)
     {
@@ -123,8 +123,8 @@ function saveService()
     update_post_meta($id, 'service_visibility', $service_visibility);
     update_post_meta($id, 'service_product_id', intval( $_POST['product_id'] ) );
     update_post_meta($id, 'service_suite_id', intval( $_POST['suite_id'] ) );
-    update_post_meta($id, 'service_roles', implode( ';;', $_POST['roles'] ) );
-    update_post_meta($id, 'service_levels', implode( ';;', $_POST['levels'] ) );
+    update_post_meta($id, 'service_roles', implode( ';;', array_unique( $_POST['roles'] ) ) );
+    update_post_meta($id, 'service_levels', implode( ';;', array_unique( $_POST['levels'] ) ) );
     update_post_meta($id, 'service_protocol', $_POST['protocol'] );
 
     save_wp_service( $id );

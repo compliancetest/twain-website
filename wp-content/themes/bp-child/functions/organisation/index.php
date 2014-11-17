@@ -335,7 +335,8 @@ function ct_process_organisation_action()
                         <input type="hidden" name="id" value="<?php echo $subscription->id?>" />                        
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Save</span></a>
+                        <a href="#" class="action-btn process-btn submit-btn has-tooltip">
+                            <span class="simple_tooltip radius6" style="margin-left: -15px;">Save Subscription<span></span></span><span class="p"></span><span class="t">Confirm</span></a>
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                         <div class="clear"></div>
                     </div>

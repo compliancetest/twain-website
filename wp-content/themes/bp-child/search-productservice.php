@@ -180,6 +180,9 @@ if( isset( $_GET['download']) ){
                         <th>Status</th>
                         <th>Test Type</th>
                         <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'date'){ ?>class="current <?php echo $order?>"<?php } ?>>Date <span class="sort"></span></a></th>
+                        <?php if( is_super_admin() ): ?>
+                            <th>Action</th>
+                        <?php endif; ?>
                     </tr>
                     </thead>
                     <tbody>
@@ -204,6 +207,9 @@ if( isset( $_GET['download']) ){
                                 <td><?php echo $row_data['test_type'];?></td>
                                 <?php $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );?>
                                 <td class="last"><?php if( $claim_date != '1970-01-01') echo $claim_date;?></td>
+                                <?php if( is_super_admin() ): ?>
+                                    <td class="remove_entry"><a href="/?_psnonce=<?php echo wp_create_nonce('get-delete-search-entry');?>&id=<?php echo $row['id'];?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn delete_search_entry has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete <?php echo $row_data['name'];?><span></span></span><span class="p"></span></a></td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif;?>

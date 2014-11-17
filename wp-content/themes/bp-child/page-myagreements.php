@@ -47,7 +47,10 @@ get_header();
 
     <div class="container">
         <div class="column">
-           <a href="/products-and-services/?&type=Web%20Service" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Find Services"><span class="p"></span><span class="t">Search</span></a>
+            <a id="bbp_search_submit" href="/products-and-services/?&type=Web%20Service" class="action-btn file-btn inline-btn has-tooltip" title="Find Services">
+                <span class="p"></span><span class="t">Search</span>
+            </a>
+<!--           <a  class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" ><span class="p"></span><span class="t">Search</span></a>-->
            <div class="clear"></div>
            <div class="space20"></div>
                <?php if( is_super_admin() ):?>
@@ -435,9 +438,9 @@ get_header();
                     <?php endforeach;?>
                 <?php endif;?>
                <?php if( check_user_has_make_agreement_priv() ):?>
-                   <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+                   <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
                <?php else:?>
-                   <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip" style="margin-left: 10px;" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
+                   <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip" title="Add Service"><span class="p"></span><span class="t">Add</span></a>
                <?php endif;?>
                <div class="clear"></div>
                <div class="space10"></div>

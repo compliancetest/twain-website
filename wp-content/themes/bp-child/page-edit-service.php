@@ -321,7 +321,7 @@ $user_test_suites = get_suites_with_claims();
                 <div class="grid-box">
                     <div class="grid-box-footer nobackground noshadow">
                         <div class="btn-row nopaddingleft">
-                            <a href="#" class="action-btn process-btn submit-btn has-tooltip" title="Save Service"><span class="p"></span><span class="t">Confirm</span></a>
+                            <a href="#" class="action-btn process-btn submit-btn has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -50px; width: 90px;">Save Service<span></span></span><span class="p"></span><span class="t">Confirm</span></a>
                             <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                             <div class="clear"></div>
                         </div>

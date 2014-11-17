@@ -8892,7 +8892,10 @@ input.inactive_s{
     padding-right: 4px;
     width: 75px;
 }
-
+.search-result-list tbody td.remove_entry a{
+    text-align: center;
+    margin-left: 20px;
+}
 .search-result-list-wrapper .pagination-wrapper{
     margin: 20px 0 0 0;
 }

@@ -266,12 +266,12 @@ if(isset($_SESSION['product_data']))
                                             <div class="grid-cell right">
                                                 <?php if( check_user_has_make_agreement_priv() ):?>
                                                     <?php if( ! Service::has_agreements( $post->ID ) ):?>
-                                                        <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
+                                                        <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right" data-serviceid="<?php echo $post->ID;?>"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete Service Implementation<span></span></span><span class="p"></span></a>
                                                     <?php endif;?>
-                                                    <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
+                                                    <a href="/edit-service/?id=<?php echo $post->ID;?>" class="action-btn edit-btn has-tooltip icon-btn" style="margin-right: 10px;"><span class="simple_tooltip radius6" style="margin-left: -80px; width: 150px;">Edit Service Implementation<span></span></span><span class="p"></span></a>
                                                 <?php else:?>
-                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn has-tooltip right" data-serviceid="<?php echo $post->ID;?>" title="Delete Service Implementation"><span class="p"></span></a>
-                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn has-tooltip icon-btn" title="Edit Service Implementation" style="margin-right: 10px;"><span class="p"></span></a>
+                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn has-tooltip right" data-serviceid="<?php echo $post->ID;?>"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete Service Implementation<span></span></span><span class="p"></span></a>
+                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn has-tooltip icon-btn" style="margin-right: 10px;"><span class="simple_tooltip radius6" style="margin-left: -80px; width: 150px;">Edit Service Implementation<span></span></span><span class="p"></span></a>
                                                 <?php endif;?>
                                             </div>
                                     </div>
@@ -285,10 +285,10 @@ if(isset($_SESSION['product_data']))
                                     <?php if( ! check_user_has_make_agreement_priv() ):?>
                                         <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip"  title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
                                     <?php else:?>
-                                        <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+                                        <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -75px; width: 150px;">Add Service Implementation<span></span></span><span class="p"></span><span class="t">Add</span></a>
                                     <?php endif;?>
                                 <?php else:?>
-                                    <a href="#cant_add_popup" rel="custom-popup" class="action-btn add-new-btn has-tooltip" title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
+                                    <a href="#cant_add_popup" rel="custom-popup" class="action-btn add-new-btn has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -75px; width: 150px;">Add Service Implementation<span></span></span><span class="p"></span><span class="t">Add</span></a>
 
                                     <div class="popup-box" id="cant_add_popup" style="display: none; width: 500px">
                                         <div class="popup-box-header radius6 noradiusbottom">New Service Implementation</div>
@@ -311,7 +311,7 @@ if(isset($_SESSION['product_data']))
           <div class="grid-box">
            <div class="grid-box-footer nobackground noshadow">               
                <div class="btn-row nopaddingleft">
-                   <a href="#" class="action-btn process-btn submit-btn has-tooltip" title="Save Product"><span class="p"></span><span class="t">Confirm</span></a>
+                   <a href="#" class="action-btn process-btn submit-btn has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -50px; width: 90px;">Save Product<span></span></span><span class="p"></span><span class="t">Confirm</span></a>
                    <a href="javascript: history.go(-1)" class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
                    <div class="clear"></div>
                </div>

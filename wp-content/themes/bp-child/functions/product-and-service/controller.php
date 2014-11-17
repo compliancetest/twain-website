@@ -21,6 +21,61 @@ function process_product_service_actions()
         saveProductService();        
     }else if(wp_verify_nonce($action, 'delete-product')){
         deleteProductService();    
+    }else if(wp_verify_nonce($action, 'delete-search-entry') && is_super_admin() ){
+        if( is_super_admin() ) {
+            $data = explode( '_', $_REQUEST['id'] );
+            $cloud_search = new CloudSearch();
+            $cloud_search->cloud_search_delete_item( $data[1], $data[0] );
+            exit(json_encode(array('success' => true)));
+        }
+        exit(json_encode(array('error' => true)));
+
+    }else if(wp_verify_nonce($action, 'get-delete-search-entry') && is_super_admin() ){ ?>
+            <div id="delete_search_entry" class="popup-box deleting-case-confirm-box" style="display: none; width: 450px">
+                <div class="popup-box-header radius6 noradiusbottom">Delete CloudSearch entry</div>
+                    <div class="popup-box-content">
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <p>This action will remove entry from CloudSearch domain. Are you sure?</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="space10"></div>
+                    </div>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <a class="action-btn process-btn submit-btn delete_search_entry_confirm" href="#" data-id="<?php echo $_REQUEST['id'];?>"><span class="p"></span><span class="t">Confirm</span></a>
+                        <a class="action-btn cancel-btn close-popup-btn" href="#"><span class="p"></span><span class="t">Cancel</span></a>
+                        <div class="clear"></div>
+                    </div>
+            <div class="loading loading-with-text radius6"><div><b>DELETING</b><p>Please wait...</p></div></div>
+            <a id="close-popup-delete" class="close_btn"></a>
+            </div>
+            <script>
+                jQuery( document).ready( function($){
+                    $('.delete_search_entry_confirm').on('click', function(){
+                        var item_id = $( this).attr('data-id');
+                        var td_row = $("a").find("[data-entryid='" + item_id + "']").parents('tr');
+                        $('.loading').show();
+                        $.ajax({
+                            type: 'post',
+                            url: '/',
+                            dataType: 'json',
+                            data: { '_psnonce' : '<?php echo wp_create_nonce( 'delete-search-entry' );?>', 'id' : item_id },
+                            success: function( data ){
+                                if( data.success ){
+                                    location.reload();
+                                } else{
+                                    alert('error' );
+                                }
+                                $('#close-popup-delete').click();
+                                $('.loading').show();
+                            }
+                        })
+                    })
+                });
+            </script>
+    <?php
+        exit;
     }
 }
 
