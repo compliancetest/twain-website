@@ -4771,6 +4771,19 @@ span.button_sign {
     min-width: 50px;
 }
 
+#my-agreements .td-actions .delete-btn{
+    margin: auto;
+    width: 12px;
+    float: none;
+}
+
+/*Remove after toltip js changed.*/
+#my-agreements .td-actions .simple_tooltip{
+    width: 100px;
+    box-sizing: border-box;
+    margin-left: -50px !important;
+}
+
 #my-agreements .status-testing{
     color: #104484;
 }
