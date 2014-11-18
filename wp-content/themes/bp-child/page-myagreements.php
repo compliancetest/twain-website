@@ -96,7 +96,6 @@ get_header();
                                    <div class="td td-actions centered" style="padding: 0px;">
                                        <a href="<?php echo get_site_url()?>?_psnonce=<?php echo wp_create_nonce('delete-agreement')?>&id=<?php echo $agreement->id?>" class="action-btn delete-btn icon-btn delete_service has-tooltip centered" href="#" style="margin-left: 30px; margin-top: 10px;"><span class="p"></span><span class="simple_tooltip radius6" style="top: -40px;">Delete Agreement<span></span></span></a>
                                    </div>
-
                                </div>
                            <?php endforeach;?>
                        </div>
