@@ -443,7 +443,7 @@ get_header();
                                            <div class="tbody">                                           
                                            <?php if( isset( $messages[$row->ID] ) && is_iterable( $messages[$row->ID] ) ):?>
                                              <?php foreach($messages[$row->ID] as $message) {?>
-                                                <?php //if( $message->FLAG === 'IS_EMPTY' ) continue;?>
+                                                <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
                                                <div class="tr">
                                                    <div class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15).'</br>'.cp_wrap($message->TO_PARTY_ID, 15) ?></div>
 <!--                                                   <div class="td td-to">--><?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
