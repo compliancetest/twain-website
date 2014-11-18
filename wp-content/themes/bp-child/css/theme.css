@@ -4711,7 +4711,7 @@ span.button_sign {
 }
 /*** My Agreements Page - admin view ***/
 #my-agreements .td-admin-id{
-    width: 180px;
+    width: 194px;
 }
 #my-agreements .td-requester-data{
     width: 250px;
@@ -4723,7 +4723,7 @@ span.button_sign {
 
 /*** My Agreements Page ***/
 #my-agreements .td-agreement-id{
-    width: 200px;
+    width: 195px;
 }
 #my-agreements .td-entity-name{
     width: 170px;
@@ -4754,7 +4754,7 @@ span.button_sign {
     width: 65px;
 }
 #my-agreements .td-actions{
-    width: 100px;
+    width: 90px;
 }
 
 #my-agreements .grid-box-header-title li{
