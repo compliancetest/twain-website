@@ -8895,6 +8895,7 @@ input.inactive_s{
 .search-result-list tbody td.remove_entry a{
     text-align: center;
     margin-left: 20px;
+    margin-bottom: -10px;
 }
 .search-result-list-wrapper .pagination-wrapper{
     margin: 20px 0 0 0;
