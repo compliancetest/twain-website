@@ -21,7 +21,8 @@ get_header();
                     <div class="thead tr">
                         <div class="td td-community">Community</div>
                         <div class="td td-suite">Test Suite</div>
-                        <div class="td td-error-checking tocenter two-lines">Limited Error Checking<br>Force E2E routing</div>
+                        <div class="td td-error-checking tocenter two-lines">Limited Error <br> Checking</div>
+                        <div class="td td-error-checking tocenter two-lines">Force E2E <br>routing</div>
                         <div class="td td-status tocenter">Status</div>
                         <div class="td td-action tocenter">Action</div>
                         <div class="clear"></div>
@@ -54,6 +55,8 @@ get_header();
                             </div>
                             <div class="td td-error-checking tocenter">
                                 <input class="update-error-checking" type="checkbox" value="<?php echo $row->id;?>" <?php echo ($row->limited_error_checking)?('checked'):(''); ?>></br>
+                            </div>
+                            <div class="td td-error-checking tocenter">
                                 <input class="update-force" type="checkbox" name="force_e2e_routing" value="<?php echo $row->id;?>" <?php echo $row->force_e2e_routing ? 'checked="checked"' : '' ?> style="margin-left: -2px;"/>
                             </div>
                             <div class="td td-status">
