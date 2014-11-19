@@ -483,7 +483,7 @@ class TestSuite
         
         return $this->testCases;
     }
-    
+
     public function loadTesterInitiatedTestCases()
     {        
         $args = array(

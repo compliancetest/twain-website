@@ -443,8 +443,12 @@ function getUserSubscribedCases($user_id = null)
         $user_id = get_current_user_id();
         
     $select = "SELECT DISTINCT(p.ID), p.post_title FROM " . $wpdb->posts . " AS p ";
-    
+
     $where = " WHERE p.post_type='test-case' AND p.post_status='publish' ";
+
+    $left_join = " LEFT JOIN " . $wpdb->postmeta . " AS pm_v ON p.ID=pm_v.post_id AND pm_v.meta_key='test_case_status' ";
+    $where .= " AND pm_v.meta_value = 'Active' ";
+
     if(!is_super_admin())
     {
         $query = $wpdb->prepare("SELECT DISTINCT(s.suite_id) FROM {$wpdb->prefix}users_subscriptions AS s, {$wpdb->prefix}bp_groups_members AS bm
@@ -461,10 +465,12 @@ function getUserSubscribedCases($user_id = null)
         if(!$suite_ids)
             return array();
         
-        $left_join .= " LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' ";            
+        $left_join .= " LEFT JOIN " . $wpdb->postmeta . " AS pm ON p.ID=pm.post_id AND pm.meta_key='test_suite' ";
         $where .= " AND pm.meta_value IN (" . implode(", ", $suite_ids) . ") ";
         $left_join .= " LEFT JOIN " . $wpdb->postmeta . " AS pm_h ON p.ID=pm_h.post_id AND pm_h.meta_key='hide_case' ";            
         $where .= " AND pm_h.meta_value=0 ";
+
+
         
         foreach($suite_ids as $sid)
         {
@@ -473,7 +479,7 @@ function getUserSubscribedCases($user_id = null)
         }
         
     }
-    
+
     $query = $select . $left_join . $where . " ORDER BY post_title";
     
     $rows = $wpdb->get_results($query);
