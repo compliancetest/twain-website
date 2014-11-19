@@ -1001,13 +1001,7 @@ function cp_get_customer_harness_detail_profile_data()
         </div>
         <div class="clear"></div>
     </div>
-    <div class="field-row">
-        <div class="grid-cell">
-            <label class="left">Force E2E routing (ignore profiles):</label>
-            <input type="checkbox" class="left10 top5" name="force_e2e_routing" value="1" <?php echo $subscription_row->force_e2e_routing ? 'checked="checked"' : '' ?> />
-        </div>
-        <div class="clear"></div>
-    </div>
+
     <div id="generate-profile-container">
         <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profiles</span></a>            
         <div class="clear"></div>
@@ -1054,7 +1048,7 @@ function cp_save_customer_harness_detail()
         'harness_password' => $_POST['harness_password'],
         'gateway_id' => (($_POST['gateway_id']!='') ? ($_POST['gateway_id']) : ('NULL')),
         'profile_id' => (($_POST['profile_id']!='') ? ($_POST['profile_id']) : ('NULL')),
-        'force_e2e_routing' => (isset($_POST['force_e2e_routing']) ? 1 : 0),
+//        'force_e2e_routing' => (isset($_POST['force_e2e_routing']) ? 1 : 0),
         'alias' => (($_POST['alias']!='') ? ($_POST['alias']) : (''))
     );
     
@@ -1278,6 +1272,27 @@ function cp_save_limited_error_checking()
 
     $wpdb->update( 'wp_users_subscriptions',
         array( 'limited_error_checking' => intval( $_POST['status'] ) ),
+        array(
+            'id'      => $subscriptionId,
+            'user_id' => $user_id
+        ),
+        array( '%d' ),
+        array( '%d', '%d' )
+    );
+    return true;
+}
+function cp_save_force_checking()
+{
+    global $wpdb;
+
+    $user_id = get_current_user_id();
+
+    $subscriptionId = intval($_POST['id']);
+    if( ! $subscriptionId )
+        return false;
+
+    $wpdb->update( 'wp_users_subscriptions',
+        array( 'force_e2e_routing' => intval( $_POST['status'] ) ),
         array(
             'id'      => $subscriptionId,
             'user_id' => $user_id
