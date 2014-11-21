@@ -215,7 +215,7 @@ class CloudSearch {
                 'community_id' => $groups['groups'],
                 'user_id'     => $post_author
             );
-            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_requester_'.$agreement->id, 'fields' => $temp_data ) );
             
             $service = new Service( $agreement->responder_service_id );
             $service->load();
@@ -246,7 +246,7 @@ class CloudSearch {
                 'community_id' => $groups['groups'],
                 'user_id'     => $post_author
             );
-            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_responder_'.$agreement->id, 'fields' => $temp_data ) );
         }
         echo '<br /> Agreement - ';
         var_dump( $this->_sendDataToSearchDomain( $data ) );
@@ -364,6 +364,8 @@ class CloudSearch {
         $agreements = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement" );
         foreach( $agreements AS $agreement ){
             array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_'.$agreement->id ) );
+            array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_requester_'.$agreement->id ) );
+            array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_responder_'.$agreement->id ) );
         }
         var_dump( $this->_sendDataToSearchDomain( $data ) );
 
@@ -535,7 +537,7 @@ class CloudSearch {
             'community_id' => $groups['groups'],
             'user_id'     => $post_author
         );
-        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_requester_'.$agreement->id, 'fields' => $temp_data ) );
         
         
         $service = new Service( $agreement->responder_service_id );
@@ -567,7 +569,7 @@ class CloudSearch {
             'community_id' => $groups['groups'],
             'user_id'     => $post_author
         );
-        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_responder_'.$agreement->id, 'fields' => $temp_data ) );
         
         
         return $this->_sendDataToSearchDomain( $data );
@@ -655,7 +657,12 @@ class CloudSearch {
      */
     public function cloud_search_delete_item( $id, $type ){
         $data = array();
-        array_push( $data, array( 'type' => 'delete', 'id' => $type.'_'.$id  ) );
+        if( $type == 'agreement' ){
+            array_push( $data, array( 'type' => 'delete', 'id' => $type.'_requester_'.$id  ) );
+            array_push( $data, array( 'type' => 'delete', 'id' => $type.'_responder_'.$id  ) );
+        } else{
+            array_push( $data, array( 'type' => 'delete', 'id' => $type.'_'.$id  ) );
+        }
         return $this->_sendDataToSearchDomain( $data );
     }
     protected function _sendDataToSearchDomain( Array $rows ){
