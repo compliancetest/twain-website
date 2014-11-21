@@ -310,69 +310,6 @@ function ct_duplicate_data()
                                 echo "<hr />";
                             }
                             
-                            //Copy Test Cases
-                            if($caseIDs)
-                            {
-                                echo '<h4>Copy Test Cases</h4>';
-                                $query = "SELECT * FROM {$wpdb->posts} WHERE ID in (" . implode(', ', $caseIDs) . ")";
-                                $rows = $new_wpdb->get_results($query, ARRAY_A);
-                                
-                                foreach($rows as $row)
-                                {
-                                    ct_copy_test_case($new_wpdb, $row);
-                                }
-                                echo "<hr />";
-                            }
-                            
-                            //Copy Test Suite
-                            if($suiteIDs)
-                            {
-                                echo '<h4>Copy Test Suites</h4>';
-                                $query = "SELECT * FROM {$wpdb->posts} WHERE ID in (" . implode(', ', $suiteIDs) . ")";
-                                $suites = $new_wpdb->get_results($query, ARRAY_A);
-                                
-                                //Old Id, new Id Maps
-                                $suitesMap = array();
-                                $scenariosMap = array();
-                                
-                                foreach($suites as $suite)
-                                {
-                                    $newId = ct_copy_test_suite($new_wpdb, $suite);
-                                    
-                                    //Update Community ID if it is set
-                                    if($_POST['dest_community' . $suite['ID']])
-                                    {
-                                        update_post_meta($newId, 'community_id', $_POST['dest_community' . $suite['ID']]);
-                                    }
-                                    $suitesMap[intval($suite['ID'])] = $newId;
-                                    
-                                    //Copy Test Suite Scenarios
-                                    $query = "SELECT * FROM {$wpdb->prefix}test_suites_scenarios WHERE suite_id=" . $suite['ID'];
-                                    $scenarios = $new_wpdb->get_results($query);
-                                    
-                                    foreach($scenarios as $scenario)
-                                    {
-                                        $wpdb->insert($wpdb->prefix . 'test_suites_scenarios', 
-                                            array('suite_id' => $newId, 'code' => $scenario->code, 'description' => $scenario->description, 'sequence' => $scenario->sequence));
-                                        $newScenarioId = $wpdb->insert_id;
-                                        $scenariosMap[$scenario->id] = $newScenarioId;
-                                    }
-                                }
-                                
-                                //Copy Test Cases that are associated to the test suites
-                                $query = "SELECT DISTINCT(post_id) FROM {$wpdb->postmeta} WHERE meta_key='test_suite' AND meta_value IN ('" . implode("','", $suiteIDs) . "')";
-                                $tCaseIDs = $new_wpdb->get_col($query);
-                                
-                                $query = "SELECT * FROM {$wpdb->posts} WHERE ID in (" . implode(', ', $tCaseIDs) . ")";
-                                $rows = $new_wpdb->get_results($query, ARRAY_A);
-                                
-                                foreach($rows as $row)
-                                {
-                                    ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap);
-                                }
-                                
-                                echo "<hr />";
-                            }
                             if($communityIDs)
                             {
                                 //Copy Groups
@@ -396,6 +333,9 @@ function ct_duplicate_data()
                                 $query = "SELECT * FROM " . $esb->table_test_suite_configuration . " ORDER BY TEST_SUITE_WP_ID";
                                 $esb_suite_configurations = ManageESB::$esbdb->get_results($query);
                                 
+                                //Getting Old Test Case Configuration Table
+                                $query = "SELECT * FROM " . $esb->table_test_case_configuration . " ORDER BY TEST_CASE_WP_ID";
+                                $esb_case_configurations = ManageESB::$esbdb->get_results($query);
 
                                 if(!$communities)
                                 {
@@ -585,7 +525,7 @@ function ct_duplicate_data()
                                     
                                     foreach($rows as $row)
                                     {
-                                        ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap);
+                                        ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap, $esb_case_configurations);
                                     }
                                     //var_dump($profile_instance_ids);
                                     //Update Profile Types
@@ -630,7 +570,7 @@ function ct_duplicate_data()
                                                             <td>
                                                                 <select name="new_family_mark[]">
                                                                     <?php foreach ($new_suites_family_marks as  $nrow) :?>
-                                                                    <option value="<?php echo $nrow->family_mark?>"><?php echo $nrow->suite_title?></option>
+                                                                    <option value="<?php echo $nrow->family_mark?>" <?php echo $nrow->suite_title == $orow->suite_title  ? 'selected="selected"' : ''?>><?php echo $nrow->suite_title?></option>
                                                                     <?php endforeach; ?>
                                                                 </select>
                                                             </td>
@@ -652,13 +592,18 @@ function ct_duplicate_data()
                                                         <?php foreach($old_suites as  $orow): ?>
                                                         <tr>
                                                             <td>
-                                                                <?php echo $orow->suite_title . ' v' . $orow->version_major . '.' . $orow->version_minor  . ($orow->version_patch > 0 ? ".{$orow->version_patch}" : "")?>
+                                                                <?php 
+                                                                $o_title = $orow->suite_title . ' v' . $orow->version_major . '.' . $orow->version_minor  . ($orow->version_patch > 0 ? ".{$orow->version_patch}" : "");
+                                                                echo $o_title?>
                                                                 <input type="hidden" name="old_suites[]" value="<?php echo $orow->suite_id ?>" />
                                                             </td>
                                                             <td>
                                                                 <select name="new_suites[]">
                                                                     <?php foreach ($new_suites as  $nrow) :?>
-                                                                    <option value="<?php echo $nrow->suite_id?>"><?php echo $nrow->suite_title . ' v' . $nrow->version_major . '.' . $nrow->version_minor  . ($nrow->version_patch > 0 ? ".{$nrow->version_patch}" : "")?></option>
+                                                                    <?php
+                                                                        $t_title = $nrow->suite_title . ' v' . $nrow->version_major . '.' . $nrow->version_minor  . ($nrow->version_patch > 0 ? ".{$nrow->version_patch}" : "");
+                                                                    ?>
+                                                                    <option value="<?php echo $nrow->suite_id?>" <?php echo $o_title == $t_title ? 'selected="selected"' : ''?>><?php echo $t_title?></option>
                                                                     <?php endforeach; ?>
                                                                 </select>
                                                             </td>
@@ -851,7 +796,7 @@ function ct_duplicate_data()
     <?php
 }
 
-function ct_copy_test_case($new_wpdb, $case, $suiteIDMap = null, $scenariosIDMap = null)
+function ct_copy_test_case($new_wpdb, $case, $suiteIDMap = null, $scenariosIDMap = null, $old_case_configurations = array())
 {
     global $wpdb;
     
@@ -929,7 +874,16 @@ function ct_copy_test_case($new_wpdb, $case, $suiteIDMap = null, $scenariosIDMap
             $versions[] = $version_patch;
         
         $esb = new ManageESB();
-        $esb->saveTestCaseInfo($newId, $testCaseId . "_V" . implode(".", $versions), get_post_meta($newId, 'outcome_type', true), get_post_meta($newId, 'message_count', true));
+        $newEsbId = $esb->saveTestCaseInfo($newId, $testCaseId . "_V" . implode(".", $versions), get_post_meta($newId, 'outcome_type', true), get_post_meta($newId, 'message_count', true));
+        
+        //Update esb conversation table
+        foreach ($old_case_configurations as $orow) {
+            if ($orow->TEST_CASE_ID == $testCaseId . "_V" . implode(".", $versions)) {
+                $query = $wpdb->prepare("UPDATE " . $esb->table_conversation_metadata . " SET TEST_CASE_CONFIGURATION_ID=%d WHERE TEST_CASE_CONFIGURATION_ID=%d", $newEsbId, $orow->ID);
+                ManageESB::$esbdb->query($query);
+                echo $query . "<br />";
+            }
+        }
         
         echo '<b>Test Case: ' . $case['post_title'] . ' has been copied.</b><br />';
     }

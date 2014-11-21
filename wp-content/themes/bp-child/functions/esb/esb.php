@@ -913,12 +913,15 @@ class ManageESB
         $esb_id = ManageESB::$esbdb->get_var("SELECT ID FROM " . $this->table_test_case_configuration . " WHERE TEST_CASE_WP_ID=" . $id . " OR TEST_CASE_ID='" .  $name . "'");
         if(!$esb_id) //New
         {
-            $result = ManageESB::$esbdb->insert($this->table_test_case_configuration, 
+            ManageESB::$esbdb->insert($this->table_test_case_configuration, 
                 array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern)
             );
+            $result = ManageESB::$esbdb->insert_id;
         
         }else{
             ManageESB::$esbdb->update($this->table_test_case_configuration, array('TEST_CASE_WP_ID' => $id, 'TEST_CASE_ID' => $name, 'TEST_OUTCOME_TYPE' => strtoupper($outcome_type), 'TEST_CASE_PATTERN_ID' => $pattern), array('ID' => $esb_id));    
+            
+            $result = $esb_id;
         }
         
         return $result;        
@@ -927,7 +930,7 @@ class ManageESB
     public function deleteTestCaseNameIDMap($id)
     {
         $result = ManageESB::$esbdb->delete($this->table_test_case_configuration, array('TEST_CASE_WP_ID' => $id));
-        
+        echo ManageESB::$esbdb->last_query . "<br />";
         return $result;        
     }
     

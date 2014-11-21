@@ -4,12 +4,15 @@ function remove_case_name_id_map($postid)
 {
     global $wpdb;
     
+    if (get_post_type($postid) != 'test-case')
+        return $postid;
+    
     $esb = new ManageESB();
     $esb->deleteTestCaseNameIDMap($postid);
     
     $wpdb->delete($wpdb->prefix . "test_cases", array('case_id'=> $postid));
     
-    
+    return $postid;
 }
 
 
