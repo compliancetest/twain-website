@@ -348,7 +348,7 @@ if(is_super_admin())
                 
                 $title = $row->post_title;
                 $caseId = get_post_meta($row->ID, 'test_case_id', true) . '_V' . $version;
-                $esb->saveTestCaseInfo($row->ID, $caseId, get_post_meta($newId, 'outcome_type', true), get_post_meta($newId, 'message_count', true));
+                $esb->saveTestCaseInfo($row->ID, $caseId, get_post_meta($row->ID, 'outcome_type', true), get_post_meta($row->ID, 'message_count', true));
             }
             
             die('Completed!');
