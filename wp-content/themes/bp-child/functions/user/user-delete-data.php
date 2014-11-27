@@ -285,7 +285,7 @@ function cp_show_user_all_data($userID)
         echo '<thead><tr><th>Profile Name</th><th>Purpose</th><th>Description</th><th>Type</th></thead>';
         echo '<tbody>';
         foreach($testData as $instance){
-            $instanceObj = json_decode(base64_decode($instance->content));
+            $instanceObj = S3Wrapper::getProfile( $instance->token );
             
                                     
                                 

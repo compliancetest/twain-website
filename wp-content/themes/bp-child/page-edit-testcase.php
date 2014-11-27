@@ -430,7 +430,7 @@ get_header();
                                    continue;
                                }
                            }
-                           $instanceObj = json_decode(base64_decode($instance->content));
+                           $instanceObj = S3Wrapper::getProfile( $instance->token );
                    ?>
                        <div class="field-row">
                            <div class="grid-cell width15P">

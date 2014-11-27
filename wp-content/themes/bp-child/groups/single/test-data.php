@@ -41,7 +41,7 @@ $testsuites = get_posts( $args );
                 $instances = getCommunityProfileInstatnces(bp_get_group_id());
                 foreach($instances as $instance)
                 {
-                    $instanceObj = json_decode(base64_decode($instance->content));
+                    $instanceObj = S3Wrapper::getProfile( $instance->token );
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width45P">                    

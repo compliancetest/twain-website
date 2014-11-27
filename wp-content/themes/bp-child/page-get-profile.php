@@ -13,7 +13,6 @@ function getMetaParameter($mode = 'key') {
     }
     return null;
 }
-
 $token = isset($_GET['id']) ? $_GET['id'] : '';
 if ($token) {
     $query = $wpdb->prepare("SELECT * FROM $wpdb->prefix" . "community_profile_instances WHERE token=%s", $token);
@@ -43,5 +42,5 @@ if(!$row)
     exit();
 }else{
     header('content-type: text/json');
-    echo base64_decode($row->content);
+    echo S3Wrapper::getProfile( $row->token, true );
 }

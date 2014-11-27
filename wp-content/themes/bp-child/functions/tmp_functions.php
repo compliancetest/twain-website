@@ -118,8 +118,8 @@ if(is_super_admin())
             $results = $wpdb->get_results("SELECT * FROM wp_community_profile_instances");
             foreach($results as $r)
             {
-                $instanceObj = json_decode(base64_decode($r->content));    
-                       $wpdb->update("wp_community_profile_instances", array('purpose' => $instanceObj->Profile->Purpose), array('id' => $r->id));                    
+                $instanceObj = S3Wrapper::getProfile( $r->token );
+                $wpdb->update("wp_community_profile_instances", array('purpose' => $instanceObj->Profile->Purpose), array('id' => $r->id));
             }
             
             die("Done!");                        
@@ -382,7 +382,7 @@ if(is_super_admin())
             $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile_instances");
 
             foreach ($results as $row) {
-                $content = json_decode(base64_decode($row->content));
+                $content = S3Wrapper::getProfile( $row->token );
                 $profile_meta = getProfileMetaData($content);
                 foreach ($profile_meta as $meta_key => $meta_value) {
                     $wpdb->insert($wpdb->prefix . "community_profile_meta", array(

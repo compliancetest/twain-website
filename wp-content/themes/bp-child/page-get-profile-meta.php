@@ -7,9 +7,8 @@
 if( is_super_admin() ){
     $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('1'=>'1'), '%d');
     $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile_instances");
-
     foreach ($results as $row) {
-        $content = json_decode(base64_decode($row->content));
+        $content = S3Wrapper::getProfile( $row->token );
         $profile_meta = getProfileMetaData($content);
         foreach ($profile_meta as $meta_key => $meta_value) {
             if( is_array( $row->id ) || is_array( $meta_key ) || is_array( $meta_value ) ){

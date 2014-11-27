@@ -39,7 +39,7 @@ $profileInstances = getCustomerProfileInstances();
            }else{
                foreach($profileInstances as $instance)
                {
-                   $instanceObj = json_decode(base64_decode($instance->content));
+                   $instanceObj = S3Wrapper::getProfile( $instance->token );
            ?>
                 <div class="tr">
                    <div class="td td-profile-name">

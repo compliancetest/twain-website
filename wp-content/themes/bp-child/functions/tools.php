@@ -733,7 +733,7 @@ function ct_duplicate_data()
                                 $results = $wpdb->get_results("SELECT * FROM $wpdb->prefix" . "community_profile_instances");
 
                                 foreach ($results as $row) {
-                                    $content = json_decode(base64_decode($row->content));
+                                    $content = S3Wrapper::getProfile( $row->token );
                                     $profile_meta = getProfileMetaData($content);
                                     foreach ($profile_meta as $meta_key => $meta_value) {
                                         $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
@@ -784,6 +784,50 @@ function ct_duplicate_data()
                                         }
 
                                         echo 'Processed ' . $posts_processed . ' services.';
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
+
+        <h2>Copy Blobs to S3</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('copy_blobs_to_s3')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <select name="type">
+                                <option value="all" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'all'):?>selected="selected" <?php endif;?>>All</option>
+                                <option value="p_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'p_claims'):?>selected="selected" <?php endif;?>>Claims - Products</option>
+                                <option value="a_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_claims'):?>selected="selected" <?php endif;?>>Claims - Agreements</option>
+                                <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Attachments - Tickets</option>
+                                <option value="a_agreements" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_agreements'):?>selected="selected" <?php endif;?>>Attachments - Agreements</option>
+                                <option value="profiles" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'profiles'):?>selected="selected" <?php endif;?>>Profiles</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Populate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'copy_blobs_to_s3')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                    if( $_POST['type'] == 'profiles' ){
+                                        $counter = BlobsMigration::uploadProfiles();
+                                        echo 'Processed: '.$counter.' profiles';
+                                    } else if( $_POST['type'] == 'all' ){
+                                        BlobsMigration::uploadProfiles();
+                                        $counter = BlobsMigration::uploadProfiles();
+                                        echo 'Processed: '.$counter.' profiles';
+                                    }else {
+                                        echo 'Not implemented yet';
+                                    }
                                     ?>
                                 </i>
                             </td>

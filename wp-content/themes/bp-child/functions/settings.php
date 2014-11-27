@@ -48,6 +48,9 @@ function create_compliancetest_settings_page()
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
         //Save Options
         update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
+        update_option('aws_s3_key', $_POST['aws_s3_key']);
+        update_option('aws_s3_secret', $_POST['aws_s3_secret']);
+        update_option('aws_s3_url', $_POST['aws_s3_url']);
         
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
@@ -188,7 +191,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
                 <li><a href="#ct-xero-settings">Xero Settings</a></li>
-                <li><a href="#ct-s3-xml-max-size">S3 XML Size Settings</a></li>
+                <li><a href="#ct-s3-xml-max-size">S3</a></li>
                 <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
             </ul>
         </div>
@@ -423,12 +426,24 @@ function create_compliancetest_settings_page()
                 </form>
             </div>
             <div id="ct-s3-xml-max-size">
-                <h3>S3 XML Maximum Size Settings</h3>
+                <h3>S3</h3>
                 <form method="post" action="">
                     <table class="widefat">
                         <tr>
                             <td><label><b>HTML Render Limit:</b></label></td>
                             <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
+                        </tr>
+                        <tr>
+                            <td><label><b>S3 Access Key:</b></label></td>
+                            <td><input type="text" name="aws_s3_key" id="aws_s3_key" size="50" value="<?php echo get_option('aws_s3_key')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>S3 Secret Key:</b></label></td>
+                            <td><input type="text" name="aws_s3_secret" id="aws_s3_secret" size="50" value="<?php echo get_option('aws_s3_secret')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Data Bucket URL:</b></label></td>
+                            <td><input type="text" name="aws_s3_url" id="aws_s3_url" size="50" value="<?php echo get_option('aws_s3_url')?>" autocomplete="off" /></td>
                         </tr>
                     </table>   
                     <?php submit_button()   ?>

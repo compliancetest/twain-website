@@ -470,7 +470,6 @@ function get_agreement_info_popup(){
         <dl>
             <?php
             $profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->requestor_profile ) );
-            $pJSON = json_decode(base64_decode($profile->content));
             ?>
             <dt class="item-title"><?php echo get_post_meta($agreement->requester_service_id, 'service_roles', true) ;?></dt>
             <dt>Owner</dt>
@@ -489,7 +488,6 @@ function get_agreement_info_popup(){
         <dl>
             <?php
             $resp_profile = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $agreement->responder_profile ) );
-            $resp_pJSON = json_decode(base64_decode($resp_profile->content));
             ?>
             <dt class="item-title"><?php echo get_post_meta($agreement->responder_service_id, 'service_roles', true) ;?></dt>
             <dt>Owner</dt>

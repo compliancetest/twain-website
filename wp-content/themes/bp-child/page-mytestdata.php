@@ -43,7 +43,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                    }else{
                        foreach($profileInstances as $instance)
                        {
-                           $instanceObj = json_decode(base64_decode($instance->content));
+                           $instanceObj = S3Wrapper::getProfile( $instance->token );
                    ?>
                         <div class="tr">
                            <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $instance->id?>" value="<?php echo $instance->id?>" /></div>

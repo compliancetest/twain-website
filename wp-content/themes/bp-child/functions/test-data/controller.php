@@ -183,7 +183,7 @@ function createUIFromProfileType($action)
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;    
         }else{
-            echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>' . updateSpecialChars(base64_decode($instance_row->content)) . '</data></result>';    
+            echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>' . updateSpecialChars( S3Wrapper::getProfile( $instance_row->token, true )) . '</data></result>';
         }
     }
     
@@ -259,7 +259,9 @@ function saveProfileInstance($action)
 
     $jsonData = base64_encode($data);
     $jsonObject = json_decode($data);
-
+    $token = $instance_id ? $wpdb->get_var( $wpdb->prepare("SELECT token FROM wp_community_profile_instances WHERE id = %d ", $instance_id)) : sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id);
+    $s3 = new S3Wrapper();
+    $s3->putObject( '/profiles/user/'.$token.'.json',  $data );
     if($instance_id)
     {
         $wpdb->update($wpdb->prefix . "community_profile_instances", 
@@ -270,7 +272,7 @@ function saveProfileInstance($action)
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => '',
-                            'content' => $jsonData,
+//                            'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id
                         ),
@@ -285,10 +287,10 @@ function saveProfileInstance($action)
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => '',
-                            'content' => $jsonData,
+//                            'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id,
-                            'token' => sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id)
+                            'token' => $token
                         )
                     );   
         $instance_id = $wpdb->insert_id;
@@ -403,19 +405,21 @@ function copyProfileInstance($action)
     $redirect = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : cp_get_group_permalink_by_id($row['community_id']) . "testdata";
   
     // Copy harness profile instance (James)
-    
-    $content = json_decode(base64_decode($row['content']));
+    $content = S3Wrapper::getProfile( $row['token'] );
     $row['token_original'] = $row['token'];
     $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $row['community_id']);    
     $row['type'] = 'tester';
     $row['creator_id'] = $user_id;
     $row['created_date'] = date('Y-m-d F:i:s');
     unset($row['id']);
-    
+
     //$content->Profile->Title .= '(copy)';
     //$row['profile_name'] .= '(copy)';
-    $row['content'] = base64_encode( stripslashes( json_encode($content ) ) );
-    
+//    $row['content'] = base64_encode( stripslashes( json_encode($content ) ) );
+
+    //save new profile to S3
+    $s3 = new S3Wrapper();
+    $s3->putObject( '/profiles/user/'.$row['token'].'.json',  json_encode( $content ) );
     $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
     $new_profile_id = $wpdb->insert_id;
     
@@ -427,7 +431,7 @@ function copyProfileInstance($action)
             'meta_value' => $meta_value,
         ));
     }
-    
+
     $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
     
     //------------------------------------------------------------------------------------------------------------------
@@ -456,8 +460,7 @@ function downloadProfileTypeInstance()
     
     $filename = $row->profile_name;
     
-    $content = base64_decode($row->content);
-    $content_json = json_decode($content);
+    $content_json = S3Wrapper::getProfile( $row->token );
     if($content_json->Profile->Version)
     {
         $version = array();
@@ -475,7 +478,7 @@ function downloadProfileTypeInstance()
     header("Content-Type: Application/octet-stream");
     header("Content-disposition: attachment; filename=" . sanitize_file_name($filename . ".json"));
     
-    echo base64_decode($row->content);
+    echo json_encode( $content_json );
     
     exit;
 }
@@ -589,7 +592,8 @@ function viewProfileInstance()
     
     $query = $wpdb->prepare("SELECT i.*, t.title as profile_type_title FROM " . $wpdb->prefix . "community_profile_instances AS i LEFT JOIN " . $wpdb->prefix ."community_profile_types AS t ON t.id=i.type_id WHERE i.id=%d", $instance_id);
     $row = $wpdb->get_row($query);
-        
+    $row->content = S3Wrapper::getProfile( $row->token, true );
+
     if(!$row)
     {
         ?>
@@ -614,7 +618,7 @@ function viewProfileInstance()
                 <a href="#" class="action-btn process-btn left zcliplink" data-id="profile-url<?php echo $row->id?>"><span class="p"></span><span class="t">Copy URL</span></a>
                 <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />                
                 <div class="clear"></div>
-                <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel"><?php echo base64_decode($row->content)?></div>                
+                <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel"><?php echo $row->content?></div>
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">                                
@@ -632,7 +636,7 @@ function viewProfileInstance()
             <?php }?>                       
         </div>
         <script type="text/javascript">
-            var t_data = Jsonary.create(<?php echo base64_decode($row->content)?>).readOnlyCopy();
+            var t_data = Jsonary.create(<?php echo $row->content?>).readOnlyCopy();
             var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
             Jsonary.render(t_element, t_data);    
             

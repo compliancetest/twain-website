@@ -429,7 +429,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
     foreach($profileInstances as $instance){
-        $pJSON = json_decode(base64_decode($instance->content));
+        $pJSON = S3Wrapper::getProfile( $instance->token );
         $profileTypeName = $pJSON->Profile->Type;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
@@ -486,7 +486,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
     foreach($profileInstances as $instance){
-        $pJSON = json_decode(base64_decode($instance->content));
+        $pJSON = S3Wrapper::getProfile( $instance->token );
         $profileTypeName = $pJSON->Profile->Type;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
@@ -516,7 +516,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
 
 function _getProfileRow($instance, $name, $defaults)
 {
-    $instanceObj = json_decode(base64_decode($instance->content));
+    $instanceObj = S3Wrapper::getProfile( $instance->token );
     $schemaObj = json_decode(base64_decode($instance->schema));
     
     $version[] = $instanceObj->Profile->Version->Major;
@@ -546,7 +546,10 @@ function _getTesterAndHarnessProfileInstances($case_id, $user_id)
     $caseObj = new TestCase($case_id);        
     $caseObj->loadProfileInstances();
     
-    $ids = $wpdb->escape($caseObj->profileInstances);        
+    $ids = $wpdb->escape($caseObj->profileInstances);
+    if( empty( $ids ) ){
+        return array();
+    }
     if( empty( $ids ) ){
         $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);
     } else {
@@ -744,7 +747,7 @@ function showTriggerMessageBox()
                                 $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
                                 $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
                                 foreach($profileInstances as $instance){
-                                    $pJSON = json_decode(base64_decode($instance->content));
+                                    $pJSON = S3Wrapper::getProfile( $instance->token );
                                     $profileTypeName = $pJSON->Profile->Type;
                                     if( ! $instance->lookup ){
                                         continue;
@@ -782,7 +785,7 @@ function showTriggerMessageBox()
                             <?php
                                 $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
                                 foreach($profileInstances as $instance){
-                                    $pJSON = json_decode(base64_decode($instance->content));
+                                    $pJSON = S3Wrapper::getProfile( $instance->token );
                                     $profileTypeName = $pJSON->Profile->Type;
                                     if( ! $instance->lookup ){
                                         continue;

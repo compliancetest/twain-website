@@ -165,7 +165,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
 
         $profileInstances = $case->getProfileInstanceRows();
         foreach($profileInstances as $instance){
-            $instanceObj = json_decode(base64_decode($instance->content));
+            $instanceObj = S3Wrapper::getProfile( $instance->token );
             ?>
             <tr>
                 <td>

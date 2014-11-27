@@ -732,7 +732,7 @@ function cp_get_customer_harness_detail()
                                             <?php 
                                                 if (count($profileInstances) > 0):
                                                 foreach ($profileInstances as $instance): 
-                                                    $instanceObj = json_decode(base64_decode($instance->content));
+                                                    $instanceObj = S3Wrapper::getProfile( $instance->token);
                                                     $version = array();
                                                     if($instanceObj->Profile->Version) {
                                                         foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v) {
@@ -911,7 +911,7 @@ function cp_get_customer_harness_detail_profile_data()
     usort($alias_list, 'james_compare_alias');
     
     if (!empty($row)):
-        $profile_instance = json_decode(base64_decode($row->content));
+        $profile_instance = S3Wrapper::getProfile( $row->token );
         $profile_schema = json_decode(base64_decode($row->schema)); 
                                    
         $profile_type_title = $row->profile_type_title;
@@ -1104,7 +1104,7 @@ function generateProfile($profile_id, $community_id)
     
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
     $profile = $wpdb->get_row($query);
-    $profile_content = json_decode(base64_decode($profile->content));
+    $profile_content = S3Wrapper::getProfile( $profile->token );
     $customDataGeneration = isset($profile_content->CustomProfilesGeneration) ? ($profile_content->CustomProfilesGeneration) : (null);
     
     //$customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
@@ -1135,7 +1135,7 @@ function generateProfile($profile_id, $community_id)
                 $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
-                        $content = json_decode(base64_decode($row['content']));
+                        $content = S3Wrapper::getProfile( $row['token'] );
 
                         $row['profile_name'] .= ' (' . $profile->profile_name . ')';
                         $row['type'] = 'tester';
@@ -1207,7 +1207,7 @@ function generateProfile($profile_id, $community_id)
             {
                 $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
                 $self_instance = $wpdb->get_row($query, ARRAY_A);
-                $self_content = json_decode(base64_decode($self_instance['content']));
+                $self_content = S3Wrapper::getProfile( $self_instance['token'] );
 
                 foreach ($customData->Rules as $rule) {
                     if ($rule->Type == 'Reference') {
