@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(THE_FUNCTION . '/aws/aws.phar');
 use Aws\S3\S3Client;
 
