@@ -731,8 +731,8 @@ function cp_get_customer_harness_detail()
                                             <option value="">None</option>
                                             <?php 
                                                 if (count($profileInstances) > 0):
-                                                foreach ($profileInstances as $instance): 
-                                                    $instanceObj = S3Wrapper::getProfile( $instance->token);
+                                                foreach ($profileInstances AS $instance):
+                                                    $instanceObj = S3Wrapper::getProfile( $instance->token );
                                                     $version = array();
                                                     if($instanceObj->Profile->Version) {
                                                         foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v) {
@@ -741,8 +741,8 @@ function cp_get_customer_harness_detail()
                                                         
                                                     }
                                                     $profileName = $instance->profile_name . ' v' . implode('.', $version);
-                                            ?>
-                                            <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $profileName; ?></option>
+                                                ?>
+                                                <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $profileName; ?></option>
                                             <?php endforeach; endif; ?>
                                         </select>
                                     </div>
@@ -1182,8 +1182,9 @@ function generateProfile($profile_id, $community_id)
                         $content->Profile->Title .= ' (' . $profile->profile_name . ')';
                         $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
 
-                        $row['content'] = base64_encode(stripcslashes(json_encode($content)));
-
+//                        $row['content'] = base64_encode(stripcslashes(json_encode($content)));
+                        $s3 = new S3Wrapper();
+                        $s3->putObject( '/profiles/user/'.$row['token'].'.json',  json_encode( $content )  );
                         // Create new profile
                         $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
                         $new_profile_id = $wpdb->insert_id;

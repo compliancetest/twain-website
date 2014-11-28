@@ -65,7 +65,7 @@ class S3Wrapper{
     }
 
     public static function getLink( $filepath ){
-        return 'https://ap-southeast-2.amazonaws.com/'.get_option( 'aws_s3_url' ).'/'.$filepath;
+        return 'https://s3-ap-southeast-2.amazonaws.com/'.get_option( 'aws_s3_url' ).$filepath;
     }
 
 }

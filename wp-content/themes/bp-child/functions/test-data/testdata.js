@@ -300,10 +300,12 @@ jQuery(document).ready(function(){
                 {
                     if(jQuery(rsp).find('status').text() == 'success')   
                     {
+                        jQuery('#edit-profile-box .submit-btn').show();
                         jQuery('#profile_type_txt').val(jQuery(rsp).find('schema').text());
                         jQuery('#profile_instance_txt').val(jQuery(rsp).find('data').text());
                         renderJsonUI();
                     }else{
+                        jQuery('#edit-profile-box .submit-btn').hide();
                         jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
                         jQuery('#edit_profile_instance_panel').hide();
                         jQuery('#edit-profile-box #profile-type-id').val('');
