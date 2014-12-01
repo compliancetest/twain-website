@@ -203,7 +203,13 @@ if( isset( $_GET['download']) ){
                                 <td class="test-suite-column"><a href="<?php echo get_permalink( $row_data['suite_id'] );?>"><?php echo $row_data['test_suite'];?></a></td>
                                 <td><?php if( ! empty( $row_data['role'] ) ) echo implode( ', ', $row_data['role'] );?></td>
                                 <td><?php if( ! empty( $row_data['level'] ) ) echo implode( ', ', $row_data['level'] );?></td>
-                                <td><?php echo $row_data['status'];?></td>
+                                <td>
+                                    <?php if( $row_data['test_type'] == 'Certification' && $row_data['status'] == 'Verified' && $wpdb->get_var( $wpdb->prepare("SELECT has_exclusions FROM wp_compliance_claims WHERE id = %d ",  end( explode( '_', $row['id'] ) ) ) ) == '1' ):?>
+                                        <a href="#"  class="has-tooltip" title="Some test cases were excluded/not performed during testing. Please consult the claim certificate on the product summary page for more details."><img src="/wp-content/themes/bp-child/images/verify_icon.png" style="float:left;" /></a><?php echo $row_data['status'];?>
+                                    <?php else:?>
+                                        <?php echo $row_data['status'];?>
+                                    <?php endif;?>
+                                </td>
                                 <td><?php echo $row_data['test_type'];?></td>
                                 <?php $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );?>
                                 <td class="last"><?php if( $claim_date != '1970-01-01') echo $claim_date;?></td>
