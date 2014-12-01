@@ -142,8 +142,7 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
                         os.nickname as subscription_name, 
                         os.status, 
                         p.post_title AS suite_title,
-                        o.organisation_name, 
-                        o.organisation_domain 
+                        o.organisation_name
                   FROM {$wpdb->prefix}users_subscriptions as us
                   LEFT JOIN {$wpdb->posts} AS p ON p.ID=us.suite_id
                   LEFT JOIN {$wpdb->prefix}organisations_subscriptions as os ON os.id=us.parent_id             
