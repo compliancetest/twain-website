@@ -148,7 +148,7 @@ class CT_Organisation_Subscriptions_List_Table extends WP_List_Table
             "per_page"=>$this->per_pages
         ));
       
-        $query = "SELECT distinct(os.id), os.nickname, os.organisation_id, os.purchaser_id, os.purchased_date, os.status, os.suite_family_mark, os.payment_method, os.user_id, o.organisation_name, o.organisation_domain, t.suite_title, p.nickname AS payment_method_name, p.invoice_me, p.card_number FROM {$wpdb->prefix}organisations_subscriptions as os
+        $query = "SELECT distinct(os.id), os.nickname, os.organisation_id, os.purchaser_id, os.purchased_date, os.status, os.suite_family_mark, os.payment_method, os.user_id, o.organisation_name, t.suite_title, p.nickname AS payment_method_name, p.invoice_me, p.card_number FROM {$wpdb->prefix}organisations_subscriptions as os
                   LEFT JOIN {$wpdb->prefix}organisations AS o ON os.organisation_id=o.id                  
                   LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
                   LEFT JOIN {$wpdb->prefix}organisations_payment_methods AS p ON p.id=os.payment_method
