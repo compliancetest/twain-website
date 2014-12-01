@@ -64,14 +64,36 @@ class S3Wrapper{
         return json_decode( $s3->getObject( 'profiles/user/' . $token.'.json' ) );
     }
 
+    /**
+     * @param $token - claim token from wp_compliance_claims table
+     * @return array|bool|mixed|null
+     */
+    public static function getProductClaim( $token ){
+        $s3 = new S3Wrapper();
+        return $s3->getObject( 'claims/products/' . $token.'.pdf' );
+    }
+
+    /**
+     * @param $token - claim token from wp_compliance_claims table
+     * @return array|bool|mixed|null
+     */
+    public static function getProductClaimLink( $token ){
+        return self::getLink( 'claims/products/' . $token.'.pdf');
+    }
+
     public static function getLink( $filepath ){
-        return 'https://ap-southeast-2.amazonaws.com/'.get_option( 'aws_s3_url' ).'/'.$filepath;
+        return 'https://s3-ap-southeast-2.amazonaws.com/'.get_option( 'aws_s3_url' ).'/'.$filepath;
     }
 
 }
 
 class BlobsMigration{
 
+    /**
+     * Use this function to upload profiles to S3 from database
+     * Note that existing S3 files will be overwritten
+     * @return int - number of uploaded profiles
+     */
     public static function uploadProfiles(){
         global $wpdb;
 
@@ -81,6 +103,26 @@ class BlobsMigration{
         foreach( $profiles AS $profile ){
             if( $profile->content ) {
                 $s3->putObject('/profiles/user/' . $profile->token . '.json', base64_decode($profile->content), 'application/json');
+                $counter++;
+            }
+        }
+        return $counter;
+    }
+
+    /**
+     ** Use this function to upload claims certificates to S3 from database
+     * Note that existing S3 files will be overwritten
+     * @return int - number of uploaded certificates
+     */
+    public static function uploadProductClaims(){
+        global $wpdb;
+
+        $s3 = new S3Wrapper();
+        $counter = 0;
+        $certificates = $wpdb->get_results("SELECT * FROM wp_compliance_claims" );
+        foreach( $certificates AS $certificate ){
+            if( $certificate->certificate ) {
+                $s3->putObject('/claims/products/' . $certificate->token . '.pdf', $certificate->certificate, 'application/pdf');
                 $counter++;
             }
         }

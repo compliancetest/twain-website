@@ -17,8 +17,7 @@ function ct_claim_certification_view()
         $token = get_query_var('claim');
         //Remove .pdf from the token
         $token = str_replace(".pdf", "", $token);
-        $query = $wpdb->prepare("SELECT certificate FROM {$wpdb->prefix}compliance_claims WHERE token=%s", $token);
-        $certificate = $wpdb->get_var($query);
+        $certificate = S3Wrapper::getProductClaim( $token );
         
         header("Content-type: application/pdf");
         echo $certificate;
@@ -54,8 +53,7 @@ function ct_download_certificate()
     
     //Remove .pdf from the token
     $token = str_replace(".pdf", "", $token);
-    $query = $wpdb->prepare("SELECT certificate FROM {$wpdb->prefix}compliance_claims WHERE token=%s", $token);
-    $certificate = $wpdb->get_var($query);
+    $certificate = S3Wrapper::getProductClaim( $token );
     if(!$certificate)
     {
         echo "Invalid Request!";
@@ -200,10 +198,9 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
     
     //Update DPF
     $pdfString = createClaimPDF($claimID, $planID);
-    $wpdb->update(TABLE_CLAIM, array(
-            'certificate'    =>  $pdfString
-        ), array('id' => $claimID));
-    
+    $s3 = new S3Wrapper();
+    $s3->putObject('/claims/products/' . $wpdb->get_var( $wpdb->prepare("SELECT token FROM wp_compliance_claims WHERE id = %d ", $claimID ) ) . '.pdf', $pdfString, 'application/pdf');
+
     if($isNew)
     {
         //Send Email to Community Admins
