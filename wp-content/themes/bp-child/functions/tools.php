@@ -822,9 +822,11 @@ function ct_duplicate_data()
                                         $counter = BlobsMigration::uploadProfiles();
                                         echo 'Processed: '.$counter.' profiles';
                                     } else if( $_POST['type'] == 'all' ){
-                                        BlobsMigration::uploadProfiles();
                                         $counter = BlobsMigration::uploadProfiles();
                                         echo 'Processed: '.$counter.' profiles';
+                                    } else if( $_POST['type'] == 'p_claims' ){
+                                        $counter = BlobsMigration::uploadProductClaims();
+                                        echo 'Processed: '.$counter.' certificates';
                                     }else {
                                         echo 'Not implemented yet';
                                     }
