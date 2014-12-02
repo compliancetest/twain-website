@@ -123,8 +123,12 @@ function saveService()
     update_post_meta($id, 'service_visibility', $service_visibility);
     update_post_meta($id, 'service_product_id', intval( $_POST['product_id'] ) );
     update_post_meta($id, 'service_suite_id', intval( $_POST['suite_id'] ) );
-    update_post_meta($id, 'service_roles', implode( ';;', array_unique( $_POST['roles'] ) ) );
-    update_post_meta($id, 'service_levels', implode( ';;', array_unique( $_POST['levels'] ) ) );
+    if( isset( $_POST['roles'] ) && is_array( $_POST['roles'] ) ) {
+        update_post_meta($id, 'service_roles', implode(';;', array_unique($_POST['roles'])));
+    }
+    if( isset( $_POST['levels'] ) && is_array( $_POST['levels'] ) ) {
+        update_post_meta($id, 'service_levels', implode(';;', array_unique($_POST['levels'])));
+    }
     update_post_meta($id, 'service_protocol', $_POST['protocol'] );
 
     save_wp_service( $id );
