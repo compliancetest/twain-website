@@ -144,7 +144,7 @@ function cp_view_validation_log()
     foreach($data as $row){
     ?>
     <div class="tr">
-        <?php $user_ignore_results = false;?>
+        <?php $user_ignore_results = true;?>
         <?php $ignore_results = strpos( $row->FLAG, 'IGNORE_RESULTS' ) !== false && $user_ignore_results ? true : false;?>
         <div class="td td-phase"><?php echo $row->PHASE_LABEL ?></div>
         <div class="td td-status tocenter">
