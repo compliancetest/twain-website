@@ -144,7 +144,8 @@ function cp_view_validation_log()
     foreach($data as $row){
     ?>
     <div class="tr">
-        <?php $ignore_results = strpos( $row->FLAG, 'IGNORE_RESULTS' ) !== false ? true : false;?>
+        <?php $user_ignore_results = false;?>
+        <?php $ignore_results = strpos( $row->FLAG, 'IGNORE_RESULTS' ) !== false && $user_ignore_results ? true : false;?>
         <div class="td td-phase"><?php echo $row->PHASE_LABEL ?></div>
         <div class="td td-status tocenter">
             <?php if( $ignore_results ):?>
@@ -155,7 +156,7 @@ function cp_view_validation_log()
         </div>
         <div class="td td-result tocenter">
             <?php
-                if( ( ! $row->VALIDATION_ERROR && ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION ) ) || $ignore_results ){
+                if( ( ! $row->VALIDATION_ERROR && ( strpos( $row->FLAG, 'IS_EMPTY' ) !== false || !$row->S3_VALIDATION_RESULTS_LOCATION ) ) || $ignore_results ){
                     echo '-';
                 }else{
                     if ( strpos( $row->FLAG, 'IS_EMPTY' ) !== false || !$row->S3_VALIDATION_RESULTS_LOCATION){
