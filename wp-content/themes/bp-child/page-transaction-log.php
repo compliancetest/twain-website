@@ -386,17 +386,17 @@ get_header();
                                     <?php }else{ ?>
                                     <a href="<?php echo get_permalink($row->TEST_CASE_WP_ID)?>"><?php echo cp_wrap($row->TEST_CASE_ID, 22)?></a>
                                     <?php } ?>
-                                   
+
                                </div>
 <!--                               <div class="td td-suite">-->
 <!---->
 <!--                               </div>-->
                                <div class="td td-outcome tocenter">
                                    <?php if($row->TEST_OUTCOME_CODE){ ?>
-                                   <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>                                   
+                                   <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>
                                    <?php }else{ ?>
                                    <span class="status-unverified">Not Performed</span>
-                                   <?php } ?>                                   
+                                   <?php } ?>
                                    <br />
                                    <!--<a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>                                   -->
                                </div>
@@ -405,7 +405,7 @@ get_header();
                                    <a href="javascript:void(0)">
                                    <?php
                                         if( is_super_admin() || ct_is_group_admin_or_support($user_id) ){
-                                            $organisation = ct_get_organisation_by_subscription_id( $row->ORGANISATION_SUBSCRIPTION_ID );                                            
+                                            $organisation = ct_get_organisation_by_subscription_id( $row->ORGANISATION_SUBSCRIPTION_ID );
                                             echo $organisation ? $organisation->organisation_name : ' - ';
                                             echo '<br>';
                                             $subscription = ct_get_organisation_subscription_by_id( $row->ORGANISATION_SUBSCRIPTION_ID );
@@ -417,16 +417,16 @@ get_header();
                                             echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 15) . "....." . substr($row->CONVERSATION_ID, -15) . '</span>';
                                         }else{
                                             echo $row->CONVERSATION_ID;
-                                        }                                    
+                                        }
                                    ?>
                                    </a>
                                    <input type="text" value="<?php echo $row->CONVERSATION_ID; ?>" readonly="readonly">
                                </div>
                                <div class="td td-date tocenter">
-                                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />                                   
-                               </div>                               
-                               <div class="clear"></div> 
-                               <?php if(isset($messages[$row->ID])){ ?>                               
+                                   <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s')?><br />
+                               </div>
+                               <div class="clear"></div>
+                               <?php if(isset($messages[$row->ID])){ ?>
                                    <div class="sub-table">
                                        <div class="table">
                                            <div class="thead tr">
@@ -440,32 +440,26 @@ get_header();
                                                <div class="td td-message-view">View</div>
                                                <div class="clear"></div>
                                            </div>
-                                           <div class="tbody">                                           
+                                           <div class="tbody">
                                            <?php if( isset( $messages[$row->ID] ) && is_iterable( $messages[$row->ID] ) ):?>
                                              <?php foreach($messages[$row->ID] as $message) {?>
-                                                <?php //TODO add variable to disable 'IGNORE_RESULTS' flag;?>
-                                                <?php $ignore_results = strpos( $message->FLAG, 'IGNORE_RESULTS' ) !== false && true ? true : false;?>
-                                                   <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
+                                                <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
                                                <div class="tr">
                                                    <div class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15).'</br>'.cp_wrap($message->TO_PARTY_ID, 15) ?></div>
 <!--                                                   <div class="td td-to">--><?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
                                                    <div class="td td-two-lines td-service tocenter"><?php echo $message->SERVICE.'</br>'.$message->ACTION ?></div>
 <!--                                                   <div class="td td-action">--><?php //echo $message->ACTION ?><!--</div>-->
                                                    <div class="td td-message-outcome tocenter">
-                                                       <?php if( ! $ignore_results ):?>
-                                                           <?php if($message->MESSAGE_OUTCOME_CODE){ ?>
-                                                           <span class="status-<?php echo strtolower($message->MESSAGE_OUTCOME_CODE) ?>"><?php echo $message->MESSAGE_OUTCOME_LABEL?></span>
-                                                           <?php }else{ ?>
-                                                           <span class="status-unverified">Not Processed</span>
-                                                           <?php } ?>
-                                                           <br />
-                                                           <a href="#" data-id="<?php echo $message->ID ?>" class="view-message-validation-log">View Log</a>
-                                                       <?php else:?>
-                                                           Not Performed
-                                                       <?php endif;?>
+                                                       <?php if($message->MESSAGE_OUTCOME_CODE){ ?>
+                                                       <span class="status-<?php echo strtolower($message->MESSAGE_OUTCOME_CODE) ?>"><?php echo $message->MESSAGE_OUTCOME_LABEL?></span>
+                                                       <?php }else{ ?>
+                                                       <span class="status-unverified">Not Processed</span>
+                                                       <?php } ?>
+                                                       <br />
+                                                       <a href="#" data-id="<?php echo $message->ID ?>" class="view-message-validation-log">View Log</a>
                                                    </div>
                                                    <div class="td td-message-date">
-                                                       <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
+                                                       <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>
                                                    </div>
                                                    <div class="td td-message-part tocenter">
                                                        <a href="javascript:void(0)">
@@ -482,7 +476,7 @@ get_header();
                                                    </div>
                                                    <div class="td td-message-view">
                                                        <?php
-                                                           if ( ( $message->FLAG == 'IS_EMPTY' && $message->PAYLOAD ) || $ignore_results || ( ! $ignore_results && strpos( $message->FLAG, 'IS_EMPTY' ) ) ) {
+                                                           if ($message->FLAG == 'IS_EMPTY' && $message->PAYLOAD) {
                                                                echo '-';
                                                            } else {
                                                        ?>   
