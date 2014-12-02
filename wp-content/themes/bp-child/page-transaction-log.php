@@ -350,7 +350,7 @@ get_header();
                            <div class="clear"></div>
                        </div>
                    <?php }else{                       
-                        foreach($results as $row){ 
+                        foreach($results as $row){
                          ?>
                            <div class="tr">
                                <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" /></div>
@@ -443,20 +443,26 @@ get_header();
                                            <div class="tbody">                                           
                                            <?php if( isset( $messages[$row->ID] ) && is_iterable( $messages[$row->ID] ) ):?>
                                              <?php foreach($messages[$row->ID] as $message) {?>
-                                                <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
+                                                <?php //TODO add variable to disable 'IGNORE_RESULTS' flag;?>
+                                                <?php $ignore_results = strpos( $message->FLAG, 'IGNORE_RESULTS' ) !== false && true ? true : false;?>
+                                                   <?php if( $message->FLAG === 'IS_EMPTY' ) continue;?>
                                                <div class="tr">
                                                    <div class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15).'</br>'.cp_wrap($message->TO_PARTY_ID, 15) ?></div>
 <!--                                                   <div class="td td-to">--><?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
                                                    <div class="td td-two-lines td-service tocenter"><?php echo $message->SERVICE.'</br>'.$message->ACTION ?></div>
 <!--                                                   <div class="td td-action">--><?php //echo $message->ACTION ?><!--</div>-->
                                                    <div class="td td-message-outcome tocenter">
-                                                       <?php if($message->MESSAGE_OUTCOME_CODE){ ?>
-                                                       <span class="status-<?php echo strtolower($message->MESSAGE_OUTCOME_CODE) ?>"><?php echo $message->MESSAGE_OUTCOME_LABEL?></span>
-                                                       <?php }else{ ?>
-                                                       <span class="status-unverified">Not Processed</span>
-                                                       <?php } ?>       
-                                                       <br />    
-                                                       <a href="#" data-id="<?php echo $message->ID ?>" class="view-message-validation-log">View Log</a>                                   
+                                                       <?php if( ! $ignore_results ):?>
+                                                           <?php if($message->MESSAGE_OUTCOME_CODE){ ?>
+                                                           <span class="status-<?php echo strtolower($message->MESSAGE_OUTCOME_CODE) ?>"><?php echo $message->MESSAGE_OUTCOME_LABEL?></span>
+                                                           <?php }else{ ?>
+                                                           <span class="status-unverified">Not Processed</span>
+                                                           <?php } ?>
+                                                           <br />
+                                                           <a href="#" data-id="<?php echo $message->ID ?>" class="view-message-validation-log">View Log</a>
+                                                       <?php else:?>
+                                                           Not Performed
+                                                       <?php endif;?>
                                                    </div>
                                                    <div class="td td-message-date">
                                                        <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s')?>                                                       
@@ -476,7 +482,7 @@ get_header();
                                                    </div>
                                                    <div class="td td-message-view">
                                                        <?php
-                                                           if ($message->FLAG == 'IS_EMPTY' && $message->PAYLOAD) {
+                                                           if ( ( $message->FLAG == 'IS_EMPTY' && $message->PAYLOAD ) || $ignore_results || ( ! $ignore_results && strpos( $message->FLAG, 'IS_EMPTY' ) ) ) {
                                                                echo '-';
                                                            } else {
                                                        ?>   
