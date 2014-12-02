@@ -154,7 +154,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                     <tr>
                         <td><?php echo isset( $product_claim->claim_id ) ? $product_claim->claim_id : ''; ?></td>
                         <td><a href="<?php echo bp_get_group_permalink($group); ?>"><?php echo $product_claim->issuer; ?></a></td>
-                        <td><a href="<?php echo get_permalink($product_claim->suite_id); ?>"><?php echo ct_get_suite_max_version( $product_claim->suite_id, true ); ?></a></td>
+                        <td><a href="<?php echo get_permalink($product_claim->suite_id); ?>"><?php echo get_the_title( $product_claim->suite_id ); ?></a></td>
                         <td class="centered"><?php echo $product_claim->conformance_level; ?></td>
                         <td class="centered"><?php echo $product_claim->role; ?></td>
                         <td class="centered"><span class="status-unverified">Verified</span></td>
