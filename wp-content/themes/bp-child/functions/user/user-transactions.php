@@ -144,22 +144,27 @@ function cp_view_validation_log()
     foreach($data as $row){
     ?>
     <div class="tr">
+        <?php $ignore_results = strpos( $row->FLAG, 'IGNORE_RESULTS' ) !== false ? true : false;?>
         <div class="td td-phase"><?php echo $row->PHASE_LABEL ?></div>
         <div class="td td-status tocenter">
-            <span class="status-<?php echo strtolower($row->STATUS_CODE) ?>"><?php echo $row->STATUS_LABEL?></span>            
+            <?php if( $ignore_results ):?>
+                <span class="status-error">Not performed</span>
+            <?php else:?>
+                <span class="status-<?php echo strtolower($row->STATUS_CODE) ?>"><?php echo $row->STATUS_LABEL?></span>
+            <?php endif;?>
         </div>
         <div class="td td-result tocenter">
             <?php
-                if(!$row->VALIDATION_ERROR && ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION)){
+                if( ( ! $row->VALIDATION_ERROR && ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION ) ) || $ignore_results ){
                     echo '-';
                 }else{
-                    if ($row->FLAG == 'IS_EMPTY' || !$row->S3_VALIDATION_RESULTS_LOCATION){
+                    if ( strpos( $row->FLAG, 'IS_EMPTY' ) !== false || !$row->S3_VALIDATION_RESULTS_LOCATION){
                         echo '<a href="/view-validation-error?id=' . $row->ID . '" target="_blank">XML</a>';
                     } else {
                         echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" target="_blank">XML</a>';
                     }
                     echo ' &middot; ';
-                    if ($row->FLAG != 'IS_EMPTY' && $row->S3_VALIDATION_RESULT_CONTENT_LENGTH > $html_render_limit) {
+                    if ( strpos( $row->FLAG, 'IS_EMPTY' ) !== false && $row->S3_VALIDATION_RESULT_CONTENT_LENGTH > $html_render_limit) {
                         echo '<a href="' . $row->S3_VALIDATION_RESULTS_LOCATION . '" class="html-view-error">HTML</a>';
                     } else {
                         echo '<a href="/view-validation-error?id=' . $row->ID . '&mode=html" target="_blank">HTML</a>';
