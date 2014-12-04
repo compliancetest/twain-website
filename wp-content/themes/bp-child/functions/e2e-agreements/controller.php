@@ -6,12 +6,8 @@ function ct_agreement_certification_view()
 {
     if(get_query_var('pagename') == 'agreement-certificate')
     {
-        global $wpdb;
         $token = str_replace( ".pdf", "", get_query_var('claim') );
-        $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT requester_certificate FROM wp_e2e_agreement WHERE requester_token = %s ", $token ) );
-        if( ! $certificate ){
-            $certificate = $wpdb->get_var( $wpdb->prepare( "SELECT responder_certificate FROM wp_e2e_agreement WHERE responder_token = %s ", $token ) );
-        }
+        $certificate = S3Wrapper::getAgreementClaim( $token );
         header("Content-type: application/pdf");
         echo $certificate;
         exit;
@@ -32,6 +28,14 @@ function process_agreement_actions()
             //delete item from CloudSearch domain
             $cloud_search = new CloudSearch();
             $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
+            //delete S3 files
+            $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+            $s3 = new S3Wrapper();
+            $s3->deleteObject( '/attachments/agreements/'. $certificate->requester_token . '.'. pathinfo( $certificate->requestor_audit_log_name, PATHINFO_EXTENSION ) );
+            $s3->deleteObject( '/attachments/agreements/'. $certificate->responder_token . '.'. pathinfo( $certificate->responder_audit_log_name, PATHINFO_EXTENSION ) );
+
+            $s3->deleteObject( '/claims/agreements/'. $certificate->requester_token . '.pdf' );
+            $s3->deleteObject( '/claims/agreements/'. $certificate->responder_token . '.pdf' );
             //delete local data
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
@@ -53,12 +57,14 @@ function process_agreement_actions()
                 'responder_profile'      => $_REQUEST['responder_profiles'],
                 'responder_name'         => get_user_meta( get_current_user_id(), 'first_name', true ).' '.get_user_meta( get_current_user_id(), 'last_name', true ),
                 'responder_message'      => $_REQUEST['agreement_message'],
-                'responder_message_date' => gmmktime()
+                'responder_message_date' => gmmktime(),
+                'requester_token'        => createClaimToken(),
+                'responder_token'        => createClaimToken()
             ),
             array(
                 'id' => $agreement_id
             ),
-            array( '%s', '%s', '%s' ),
+            array( '%s', '%s', '%s', '%s', '%s' ),
             array('%d')
         );
         AgreementLog::add_entry( array(
@@ -154,6 +160,7 @@ function process_agreement_actions()
                 $name_field   = 'requestor_audit_log_name';
                 $type_field   = 'requestor_audit_log_type';
                 $r_name_field = 'requestor_name';
+                $token_field  = 'requester_token';
                 $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
                 $sent_by      = 1;
             } else{
@@ -161,17 +168,22 @@ function process_agreement_actions()
                 $name_field   = 'responder_audit_log_name';
                 $type_field   = 'responder_audit_log_type';
                 $r_name_field = 'responder_name';
+                $token_field  = 'responder_token';
                 $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) ;
                 $sent_by      = 2;
             }
             $service = new Service($service_id);
             $service->load();
 
+            $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+            $s3 = new S3Wrapper();
+            $s3->putObject( '/attachments/agreements/' . $certificate->{$token_field} . '.'. pathinfo( $fileName, PATHINFO_EXTENSION ), $content, $type_field );
+
             $wpdb->update('wp_e2e_agreement',
                 array(
                     'status'     => 'Claimed',
                     'scope'      => @implode( ';;', @$_REQUEST['scope'] ),
-                    $file_field  => $content,
+//                    $file_field  => $content,
                     $name_field  => $fileName,
                     $type_field  => $fileType,
                     $r_name_field => cp_get_user_fullname( get_current_user_id() ),
@@ -179,7 +191,7 @@ function process_agreement_actions()
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%s' ),
                 array( '%d' )
             );
 
@@ -224,12 +236,14 @@ function process_agreement_actions()
                 $name_field   = 'requestor_audit_log_name';
                 $type_field   = 'requestor_audit_log_type';
                 $r_name_field = 'requestor_name';
+                $token_field  = 'requester_token';
                 $sent_by = 1;
             } else{
                 $file_field   = 'responder_audit_log';
                 $name_field   = 'responder_audit_log_name';
                 $type_field   = 'responder_audit_log_type';
                 $r_name_field = 'responder_name';
+                $token_field  = 'responder_token';
                 $sent_by = 2;
             }
             //generate PDF
@@ -240,22 +254,23 @@ function process_agreement_actions()
             $wpdb->update('wp_e2e_agreement',
                 array(
                     'status'      => 'Verified',
-                    $file_field   => $content,
+//                    $file_field   => $content,
                     $name_field   => $fileName,
                     $type_field   => $fileType,
                     $r_name_field => cp_get_user_fullname( get_current_user_id() ),
                     'claim_date'  => gmmktime(),
                     'claim_id'    => getClaimID( null, $service->service_suite_id ),
-                    'requester_token'       => createClaimToken(),
-                    'responder_token'       => createClaimToken()
+
                 ),
                 array(
                     'id' => $agreement_id
                 ),
-                array( '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' ),
+                array( '%s', '%s', '%s', '%s', '%d', '%s' ),
                 array( '%d' )
             );
-
+            $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+            $s3 = new S3Wrapper();
+            $s3->putObject( '/attachments/agreements/' . $certificate->{$token_field} . '.'. pathinfo( $fileName, PATHINFO_EXTENSION ), $content, $type_field );
             AgreementLog::add_entry( array(
                 'agreement_id' => $agreement_id,
                 'sent_by'      => $sent_by,
@@ -267,20 +282,23 @@ function process_agreement_actions()
             $req_pdf = create_agreement_pdf( $agreement_id );
             $res_pdf = create_agreement_pdf( $agreement_id, true );
 
-            $wpdb->update('wp_e2e_agreement',
-                array(
-
-                    'responder_certificate' => $res_pdf,
-                    'requester_certificate' => $req_pdf,
-
-                ),
-                array(
-                    'id' => $agreement_id
-                ),
-                array( '%s', '%s' ),
-                array( '%d' )
-            );
-
+//            $wpdb->update('wp_e2e_agreement',
+//                array(
+//
+//                    'responder_certificate' => $res_pdf,
+//                    'requester_certificate' => $req_pdf,
+//
+//                ),
+//                array(
+//                    'id' => $agreement_id
+//                ),
+//                array( '%s', '%s' ),
+//                array( '%d' )
+//            );
+            $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+            $s3 = new S3Wrapper();
+            $s3->putObject('/claims/agreements/' . $certificate->requester_token . '.pdf', $req_pdf, 'application/pdf');
+            $s3->putObject('/claims/agreements/' . $certificate->responder_token . '.pdf', $res_pdf, 'application/pdf');
             if( get_current_user_id() == $service->service_user_id ){
                 $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
                 $service->load();
@@ -316,6 +334,14 @@ function process_agreement_actions()
     }else if( wp_verify_nonce($action, 'reject-failed-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
+
+        //delete S3 files
+        $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+        $s3 = new S3Wrapper();
+        $s3->deleteObject( '/attachments/agreements/'. $certificate->requester_token . '.'. pathinfo( $certificate->requestor_audit_log_name, PATHINFO_EXTENSION) );
+        $s3->deleteObject( '/attachments/agreements/'. $certificate->responder_token . '.'. pathinfo( $certificate->responder_audit_log_name, PATHINFO_EXTENSION) );
+
+        $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
         $wpdb->update('wp_e2e_agreement',
             array(
                 'status'                    => 'Testing',
@@ -333,7 +359,7 @@ function process_agreement_actions()
             array( '%d' )
         );
 
-        $service = new Service( $wpdb->get_var( $wpdb->prepare( "SELECT requester_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) ) );
+
         $service->load();
         $sent_by = 2;
         if( ct_get_user_organisation( get_current_user_id() ) == ct_get_user_organisation( $service->service_user_id ) ){
@@ -405,12 +431,8 @@ function process_agreement_actions()
         } while( $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE str_id = %s ", $result ) ) );
         exit( $result );
     } else if( wp_verify_nonce($action, 'get-agreement-pdf' ) ){
-            global $wpdb;
             $token = str_replace( ".pdf", "", $_GET['claim'] );
-            $certificate = $wpdb->get_var( $wpdb->prepare("SELECT requester_certificate FROM wp_e2e_agreement WHERE requester_token= %s ", $token ) );
-            if( ! $certificate ){
-                $certificate = $wpdb->get_var( $wpdb->prepare("SELECT responder_certificate FROM wp_e2e_agreement WHERE responder_token= %s ", $token ) );
-            }
+            $certificate = S3Wrapper::getAgreementClaim( $token );
             if( ! $certificate){
                 exit( "Invalid Request!" );
             }
@@ -482,7 +504,8 @@ function get_agreement_info_popup(){
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
             <?php if( $agreement->requestor_audit_log_name ):?>
                 <dt>Audit Log</dt>
-                <dd><a href="?_psnonce=<?php echo wp_create_nonce('get-agreement-file');?>&type=1&agreement_id=<?php echo $agreement->id;?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
+<!--                <dd><a href="?_psnonce=--><?php //echo wp_create_nonce('get-agreement-file');?><!--&type=1&agreement_id=--><?php //echo $agreement->id;?><!--">--><?php //echo $agreement->requestor_audit_log_name;?><!--</a></dd>-->
+                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION), 'agreements' );?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
             <?php endif;?>
         </dl>
         <dl>
@@ -500,7 +523,7 @@ function get_agreement_info_popup(){
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
             <?php if( $agreement->responder_audit_log_name ):?>
                 <dt>Audit Log</dt>
-                <dd><a href="?_psnonce=<?php echo wp_create_nonce('get-agreement-file');?>&type=2&agreement_id=<?php echo $agreement->id;?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
+                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION), 'agreements' );?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
             <?php endif;?>
         </dl>
     </div>
@@ -797,7 +820,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
         // QRCODE,H : QR-CODE Best error correction
         $pdf->write2DBarcode( get_site_url() . '/agreement/' . $agreement->token . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
-        $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/agreement/' . $agreement->token . ".pdf" . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/agreement/' . $agreement->token . '.pdf</a></div>';
+        $link = '<div style="text-align:center;"><a href="'.S3Wrapper::getAgreementClaimLink( $agreement->token ).'" target="_blank" style="font-size:13pt; text-decoration:none;">' . S3Wrapper::getAgreementClaimLink( $agreement->token ) .'</a></div>';
 
         $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
         // ---------------------------------------------------------
@@ -904,7 +927,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $req_links ).'  bookmark to see attachment (offline) <br> OR
-                                    <a href="' . get_site_url() . '?_psnonce=get-agreement-file&type=1&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=1&agreement_id='.$agreement->id.'</a> link to download attachment on our website
+                                    <a href="' . S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ).'">' . S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ) .'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
@@ -913,7 +936,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $res_links ).' bookmark to see attachment (offline) <br> OR
-                                     <a href="' . get_site_url() . '?_psnonce=get-agreement-file&type=2&agreement_id='.$agreement->id.'">' . get_site_url() . '?_psnonce='.wp_create_nonce('get-agreement-file').'&type=2&agreement_id='.$agreement->id.'</a> link to download attachment on our website
+                                     <a href="' . S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ).'">' . S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ) .'</a> link to download attachment on our website
                                 </td>
                            </tr>';
 

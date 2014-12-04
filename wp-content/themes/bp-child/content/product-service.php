@@ -160,7 +160,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                         <td class="centered"><span class="status-unverified">Verified</span></td>
                         <td class="centered"><?php echo isset( $product_claim->last_updated ) ? formatDate( $product_claim->last_updated ) : formatDate($product_claim->created_date); ?></td>
                         <td class="centered row-actions">
-                            <a href="<?php echo get_site_url(); ?>/claims/<?php echo $product_claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $product_claim->token?>.pdf', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?download-certificate=1&claim=<?php echo $product_claim->token; ?>" target="_blank">Download</a>
+                            <a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->token );?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $product_claim->token );;?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->token );?>" target="_blank">Download</a>
                         </td>
                     </tr>
                 <?php $testPlansHtml .= ob_get_clean();
@@ -216,7 +216,7 @@ $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
                         <td class="centered"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date); ?></td>
                         <td class="centered row-actions">
                             <?php if( isset( $claim->claim_id ) ): ?>
-                                <a href="<?php echo get_site_url(); ?>/claims/<?php echo $claim->token?>.pdf" onclick="window.open('<?php echo get_site_url()?>/claims/<?php echo $claim->token?>.pdf', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo get_site_url(); ?>/?download-certificate=1&claim=<?php echo $claim->token; ?>" target="_blank">Download</a>
+                                <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->token );;?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>" target="_blank">Download</a>
                             <?php endif;?>
                         </td>
                     </tr>
