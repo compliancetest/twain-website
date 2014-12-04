@@ -102,6 +102,10 @@ function deleteClaim()
     {
         addMessage($wpdb->last_error, 'error');
     }else{
+        //delete S3 files
+        $s3 = new S3Wrapper();
+        $s3->deleteObject( '/claims/products/'. $claim->token . '.pdf' );
+
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_delete_item( $claimID, 'claim' );
         addMessage("The claim was deleted.");
@@ -402,7 +406,7 @@ function createClaimPDF($claim_id, $planID )
     // QRCODE,H : QR-CODE Best error correction
     $pdf->write2DBarcode( get_site_url() . '/claims/' . $claim->token . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
-    $link = '<div style="text-align:center;"><a href="' . get_site_url() . '/claims/' . $claim->token . ".pdf" . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . get_site_url() . '/claims/' . $claim->token . '.pdf</a></div>';
+    $link = '<div style="text-align:center;"><a href="' . S3Wrapper::getProductClaimLink( $claim->token ) . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . S3Wrapper::getProductClaimLink( $claim->token ) .'</a></div>';
 
     $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
     // ---------------------------------------------------------

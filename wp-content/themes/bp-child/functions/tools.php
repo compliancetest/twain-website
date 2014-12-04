@@ -803,9 +803,8 @@ function ct_duplicate_data()
                             <select name="type">
                                 <option value="all" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'all'):?>selected="selected" <?php endif;?>>All</option>
                                 <option value="p_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'p_claims'):?>selected="selected" <?php endif;?>>Claims - Products</option>
-                                <option value="a_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_claims'):?>selected="selected" <?php endif;?>>Claims - Agreements</option>
+                                <option value="a_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_claims'):?>selected="selected" <?php endif;?>>Claims / Attachments - Agreements</option>
                                 <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Attachments - Tickets</option>
-                                <option value="a_agreements" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_agreements'):?>selected="selected" <?php endif;?>>Attachments - Agreements</option>
                                 <option value="profiles" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'profiles'):?>selected="selected" <?php endif;?>>Profiles</option>
                             </select>
                         </td>
@@ -822,11 +821,23 @@ function ct_duplicate_data()
                                         $counter = BlobsMigration::uploadProfiles();
                                         echo 'Processed: '.$counter.' profiles';
                                     } else if( $_POST['type'] == 'all' ){
+
                                         $counter = BlobsMigration::uploadProfiles();
                                         echo 'Processed: '.$counter.' profiles';
+                                        $counter = BlobsMigration::uploadProductClaims();
+                                        echo 'Processed: '.$counter.' product certificates';
+                                        $counter = BlobsMigration::uploadServiceClaims();
+                                        echo 'Processed: '.$counter.' service certificates';
+
                                     } else if( $_POST['type'] == 'p_claims' ){
                                         $counter = BlobsMigration::uploadProductClaims();
-                                        echo 'Processed: '.$counter.' certificates';
+                                        echo 'Processed: '.$counter.' product certificates';
+                                    } else if( $_POST['type'] == 'a_claims' ){
+                                        $counter = BlobsMigration::uploadServiceClaims();
+                                        echo 'Processed: '.$counter.' service certificates';
+                                    } else if( $_POST['type'] == 'a_tickets' ){
+                                        $counter = BlobsMigration::uploadTicketsAttachments();
+                                        echo 'Processed: '.$counter.' attachments';
                                     }else {
                                         echo 'Not implemented yet';
                                     }

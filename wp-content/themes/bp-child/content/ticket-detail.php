@@ -55,7 +55,7 @@
         <div class="ticket-attachments">
             <?php $attachments = getAttachmentsByTicketId( $ticket_id ); ?>
             <?php foreach($attachments as $file): ?>
-                <a href="<?php echo get_site_url(null, null, 'https')?>/?ct-ticket-action=<?php echo wp_create_nonce('download-attachment')?>&file=<?php echo $file->token?>"><?php echo $file->file_name?></a><br />
+                <a href="<?php echo S3Wrapper::getAttachmentLink( $file->token,  pathinfo( $file->file_name, PATHINFO_EXTENSION) );?>"><?php echo $file->file_name?></a><br />
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -165,7 +165,7 @@
                 <div class="ticket-attachments">
                     <?php $attachments = getAttachmentsByMessageId($message->id); ?>
                     <?php foreach($attachments as $file): ?>
-                    <a href="<?php echo get_site_url(null, null, 'https')?>/?ct-ticket-action=<?php echo wp_create_nonce('download-attachment')?>&file=<?php echo $file->token?>"><?php echo $file->file_name?></a><br />
+                    <a href="<?php echo S3Wrapper::getAttachmentLink( $file->token,  pathinfo( $file->file_name, PATHINFO_EXTENSION) );?>"><?php echo $file->file_name?></a><br />
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>

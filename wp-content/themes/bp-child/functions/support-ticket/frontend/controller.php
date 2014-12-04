@@ -147,23 +147,27 @@ function createSupportTicket()
         {
             if($error == UPLOAD_ERR_OK)
             {
-                if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $tID))
-                    mkdir(TICKET_ATTACHMENTS_DIR . "/" . $tID, 0777);
+//                if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $tID))
+//                    mkdir(TICKET_ATTACHMENTS_DIR . "/" . $tID, 0777);
 
                 $name = $_FILES['attachments']['name'][$i];
                 $k = 1;
-                while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
-                {
-                    $name = $k . "_" . $_FILES['attachments']['name'][$i];
-                    $k++;
-                }
+//                while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
+//                {
+//                    $name = $k . "_" . $_FILES['attachments']['name'][$i];
+//                    $k++;
+//                }
 
-                if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
-                {
-                    //Store Data to the Table
-                    $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => sha1($tID . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand(0, 999999))));
-                    $has_attachment = 1;
-                }
+//                if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
+//                {
+//                    //Store Data to the Table
+//
+//                }
+                $token = sha1( $tID . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand( 0, 999999 ) );
+                $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
+                $has_attachment = 1;
+                $s3 = new S3Wrapper();
+                $s3->putObject('/attachments/tickets/' . $token . '.'. pathinfo( $name, PATHINFO_EXTENSION), file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
 
             }
         }
@@ -708,23 +712,28 @@ function sendTicketMessage()
             {
                 if($error == UPLOAD_ERR_OK)
                 {
-                    if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id))
-                        mkdir(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id, 0777);
+//                    if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id))
+//                        mkdir(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id, 0777);
                     
                     $name = $_FILES['attachments']['name'][$i];
                     $k = 1;
-                    while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id . "/" . $name))
-                    {
-                        $name = $k . "_" . $_FILES['attachments']['name'][$i];
-                        $k++;
-                    }
+//                    while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id . "/" . $name))
+//                    {
+//                        $name = $k . "_" . $_FILES['attachments']['name'][$i];
+//                        $k++;
+//                    }
                     
-                    if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id . "/" . $name))
-                    {
+//                    if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $ticketDetail->id . "/" . $name))
+//                    {
                         //Store Data to the Table
-                        $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $ticketDetail->id, 'message_id' => $messageID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => sha1($ticket_id . "_" . $messageID . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand(0, 999999))));                        
+                        $token = sha1( $ticketDetail->id . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand( 0, 999999 ) );
+
+                        $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $ticketDetail->id, 'message_id' => $messageID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
                         $has_attachment = 1;
-                    }
+                        $s3 = new S3Wrapper();
+                        $s3->putObject('/attachments/tickets/' . $token . '.'. pathinfo( $name, PATHINFO_EXTENSION), file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
+
+//                    }
                     
                     
                 }
