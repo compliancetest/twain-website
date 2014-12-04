@@ -17,13 +17,7 @@ function ct_claim_certification_view()
         $token = get_query_var('claim');
         //Remove .pdf from the token
         $token = str_replace(".pdf", "", $token);
-        $certificate = S3Wrapper::getProductClaim( $token );
-        
-        header("Content-type: application/pdf");
-        echo $certificate;
-        
-        //Echo PDF file
-        exit;
+        wp_redirect( S3Wrapper::getProductClaimLink( $token ) );exit;
     }
 }
     
