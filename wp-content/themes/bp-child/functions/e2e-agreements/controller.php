@@ -7,10 +7,7 @@ function ct_agreement_certification_view()
     if(get_query_var('pagename') == 'agreement-certificate')
     {
         $token = str_replace( ".pdf", "", get_query_var('claim') );
-        $certificate = S3Wrapper::getAgreementClaim( $token );
-        header("Content-type: application/pdf");
-        echo $certificate;
-        exit;
+        wp_redirect( S3Wrapper::getAgreementClaimLink( $token ) );exit;
     }
 }
 
