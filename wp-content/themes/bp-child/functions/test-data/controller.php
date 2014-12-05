@@ -621,11 +621,6 @@ function viewProfileInstance()
             <div class="popup-box-header radius6 noradiusbottom">Profile Instance Detail</div>        
             <div class="popup-box-content grid-box-body">                            
                 <a href="#" class="action-btn process-btn left zcliplink" data-id="profile-url<?php echo $row->id?>"><span class="p"></span><span class="t">Copy URL</span></a>
-                <?php if( strlen( $row->content ) < get_option( 's3_xml_max_size' ) ):?>
-                    <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />
-                <?php else:?>
-                    <input type="text" readonly="readonly" value="<?php echo S3Wrapper::getLink( '/profiles/user/'.$row->token.'.json' );?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />
-                <?php endif;?>
                 <input type="text" readonly="readonly" value="<?php echo S3Wrapper::getProfileLink( $row->token );?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />
                 <div class="clear"></div>
                 <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel">
