@@ -98,7 +98,7 @@ get_header();
                                <div class="td td-certificate">
                                     <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token ); ?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>', '', 'height=600'); return false">View</a>
                                     |
-                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>" target="_blank">Download</a>
+                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token, true );?>" target="_blank">Download</a>
                                </div>
                                <div class="td td-issuer"><?php echo $claim->issuer ?></div>
                                <div class="td td-suite"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>

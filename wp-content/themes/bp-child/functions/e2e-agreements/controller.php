@@ -501,8 +501,7 @@ function get_agreement_info_popup(){
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
             <?php if( $agreement->requestor_audit_log_name ):?>
                 <dt>Audit Log</dt>
-<!--                <dd><a href="?_psnonce=--><?php //echo wp_create_nonce('get-agreement-file');?><!--&type=1&agreement_id=--><?php //echo $agreement->id;?><!--">--><?php //echo $agreement->requestor_audit_log_name;?><!--</a></dd>-->
-                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION), 'agreements' );?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
+                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION), 'agreements', true );?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
             <?php endif;?>
         </dl>
         <dl>
@@ -520,7 +519,7 @@ function get_agreement_info_popup(){
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
             <?php if( $agreement->responder_audit_log_name ):?>
                 <dt>Audit Log</dt>
-                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION), 'agreements' );?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
+                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION), 'agreements', true );?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
             <?php endif;?>
         </dl>
     </div>
