@@ -77,6 +77,17 @@ class S3Wrapper{
         return json_decode( $s3->getObject( 'profiles/user/' . $token.'.json' ) );
     }
 
+    /**
+     * @param $token - profile token
+     * @return array|bool|mixed|null
+     */
+    public static function getProfileLink( $token, $isDownloadLink = false ){
+        if( $isDownloadLink ){
+            return self::getDownloadLink( 'profiles/user', $token.'.json' );
+        }
+        return self::getLink( 'profiles/user', $token.'.json' );
+    }
+
     /*
      * Products Claims section
      */
@@ -94,7 +105,10 @@ class S3Wrapper{
      * @param $token - claim token from wp_compliance_claims table
      * @return array|bool|mixed|null
      */
-    public static function getProductClaimLink( $token ){
+    public static function getProductClaimLink( $token, $isDownloadLink = false ){
+        if( $isDownloadLink ){
+            return self::getDownloadLink( 'claims/products', $token.'.pdf' );
+        }
         return self::getLink( 'claims/products', $token.'.pdf' );
     }
 
@@ -138,18 +152,26 @@ class S3Wrapper{
      * @param $token - claim token from wp_compliance_claims table
      * @return array|bool|mixed|null
      */
-    public static function getAttachmentLink( $token, $ext, $type = 'tickets' ){
+    public static function getAttachmentLink( $token, $ext, $type = 'tickets', $isDownloadLink = false ){
+        if( $isDownloadLink ){
+            return self::getDownloadLink( 'attachments/'.$type, $token.'.'.$ext );
+        }
         return self::getLink( 'attachments/'.$type, $token.'.'.$ext );
     }
 
     public static function getLink( $bucket, $fileName ){
         $s3 = new S3Wrapper();
-        return $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName );
+        return urldecode( $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName ) );
     }
 
     public static function getDownloadLink( $bucket, $fileName ){
         $s3 = new S3Wrapper();
-        return $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName );
+        $command = $s3->_client->getCommand('GetObject', array(
+            'Bucket' => get_option( 'aws_s3_url' ),
+            'Key'    => $bucket.'/'.$fileName,
+            'ResponseContentDisposition' => 'attachment; filename="'.$fileName.'"'
+        ));
+        return ( $command->createPresignedUrl('+1 hour') );
     }
 
 }

@@ -626,6 +626,7 @@ function viewProfileInstance()
                 <?php else:?>
                     <input type="text" readonly="readonly" value="<?php echo S3Wrapper::getLink( '/profiles/user/'.$row->token.'.json' );?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />
                 <?php endif;?>
+                <input type="text" readonly="readonly" value="<?php echo S3Wrapper::getProfileLink( $row->token );?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />
                 <div class="clear"></div>
                 <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel">
                     <?php if( strlen( $row->content ) > get_option( 's3_xml_max_size' ) ):?>
@@ -640,7 +641,7 @@ function viewProfileInstance()
             
             <div class="popup-box-footer radius6 noradiustop">
                 <?php if( strlen( $row->content ) < get_option( 's3_xml_max_size' ) ):?>
-                    <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-instance')?>&id=<?php echo $row->id?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>
+                    <a href="<?php echo S3Wrapper::getProfileLink( $row->token, true );?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>
                 <?php endif;?>
                 <?php if(isset($_REQUEST['back'])){ ?>
                 <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a>            
