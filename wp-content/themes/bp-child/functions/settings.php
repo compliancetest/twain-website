@@ -51,6 +51,7 @@ function create_compliancetest_settings_page()
         update_option('aws_s3_key', $_POST['aws_s3_key']);
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
+        update_option('s3_message_bucket', $_POST['s3_message_bucket']);
         
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
@@ -445,7 +446,11 @@ function create_compliancetest_settings_page()
                             <td><label><b>Data Bucket URL:</b></label></td>
                             <td><input type="text" name="aws_s3_url" id="aws_s3_url" size="50" value="<?php echo get_option('aws_s3_url')?>" autocomplete="off" /></td>
                         </tr>
-                    </table>   
+                        <tr>
+                            <td><label><b>Message bucket:</b></label></td>
+                            <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
+                        </tr>
+                    </table>
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-xml-size-limit'); ?>
                     <input type="hidden" name="tab_index" value="8">

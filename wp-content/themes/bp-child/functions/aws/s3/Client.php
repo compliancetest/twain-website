@@ -21,11 +21,11 @@ class S3Wrapper{
      * @param $content - file content
      * @return bool
      */
-    public function putObject( $filename, $content, $contentType = 'application/json' ){
+    public function putObject( $filename, $content, $contentType = 'application/json', $bucket = false, $messages = false ){
         // Upload data.
         $result =  $this->_client->putObject(array(
-            'Bucket'       => $this->_bucket,
-            'Key'          => $filename,
+            'Bucket'       => $bucket ? $bucket : $this->_bucket,
+            'Key'          => $messages ? $messages.'/'.$filename : trim( $filename, '/' ),
             'Body'         => $content,
             'ContentType'  => $contentType,
             'Metadata'     => array(
@@ -161,7 +161,7 @@ class S3Wrapper{
 
     public static function getLink( $bucket, $fileName ){
         $s3 = new S3Wrapper();
-        return urldecode( $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName ) );
+        return $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName );
     }
 
     public static function getDownloadLink( $bucket, $fileName ){
@@ -292,4 +292,26 @@ class BlobsMigration{
         }
         return $counter;
     }
+
+    /**
+     ** Use this function to upload messages to S3 from database
+     * Note that existing S3 files will be overwritten
+     * @return int - number of uploaded messages
+     */
+    public static function uploadMessages(){
+        global $wpdb;
+
+        $s3 = new S3Wrapper();
+        $counter = 0;
+        $posts = $wpdb->get_results("SELECT * FROM wp_users_transactions_files;");
+        foreach( $posts AS $post ){
+            if( $post->content ) {
+                $date = strtotime( $post->uploadedDate );
+                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/'.$post->fileId.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket'), 'messages' );
+                $counter++;
+            }
+        }
+        return $counter;
+    }
+
 }

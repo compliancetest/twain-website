@@ -849,6 +849,32 @@ function ct_duplicate_data()
                 </table>
             </form>
         </div>
+
+        <h2>Move messages to S3</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('move_messages_to_s3')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Populate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'move_messages_to_s3')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                    $counter = BlobsMigration::uploadMessages();
+                                    echo 'Processed ' . $counter . ' messages.';
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
     </div>
     <?php
 }
