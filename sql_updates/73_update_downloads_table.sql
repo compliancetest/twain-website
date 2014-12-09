@@ -1,0 +1,1 @@
+ALTER TABLE `wp_bp_groups_downloads` ADD `token` VARCHAR( 50 ) NOT NULL ;
