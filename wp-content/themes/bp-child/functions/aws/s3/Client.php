@@ -83,7 +83,16 @@ class S3Wrapper{
      */
     public static function getProfileLink( $token, $isDownloadLink = false ){
         if( $isDownloadLink ){
-            return self::getDownloadLink( 'profiles/user', $token.'.json' );
+            $profile = self::getProfile( $token );
+            $v = '';
+            if( $profile->Profile->Version ){
+                $version = array();
+                foreach( get_object_vars( $profile->Profile->Version ) AS $k => $v ){
+                    $version[] = $v;
+                }
+                $v = " v" . implode(".", $version);
+            }
+            return self::getDownloadLink( 'profiles/user', $token.'.json', $profile->Profile->Title.$v.'.json' );
         }
         return self::getLink( 'profiles/user', $token.'.json' );
     }
@@ -152,11 +161,22 @@ class S3Wrapper{
      * @param $token - claim token from wp_compliance_claims table
      * @return array|bool|mixed|null
      */
-    public static function getAttachmentLink( $token, $ext, $type = 'tickets', $isDownloadLink = false ){
+    public static function getAttachmentLink( $token, $ext, $type = 'tickets', $isDownloadLink = false, $downloadFileName = false ){
         if( $isDownloadLink ){
-            return self::getDownloadLink( 'attachments/'.$type, $token.'.'.$ext );
+            return self::getDownloadLink( 'attachments/'.$type, $token.'.'.$ext, $downloadFileName );
         }
         return self::getLink( 'attachments/'.$type, $token.'.'.$ext );
+    }
+
+    /**
+     * @param $token - token
+     * @return array|bool|mixed|null
+     */
+    public static function getDownloadAttachmentLink( $token, $isDownloadLink = false, $fileName ){
+        if( $isDownloadLink ){
+            return self::getDownloadLink( 'attachments/downloads', $token.'.'. pathinfo( $fileName, PATHINFO_EXTENSION ), $fileName );
+        }
+        return self::getLink( 'attachments/downloads', $token.'.'.pathinfo( $fileName, PATHINFO_EXTENSION ) );
     }
 
     public static function getLink( $bucket, $fileName ){
@@ -164,12 +184,13 @@ class S3Wrapper{
         return urldecode( $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName ) );
     }
 
-    public static function getDownloadLink( $bucket, $fileName ){
+    public static function getDownloadLink( $bucket, $fileName, $name = false ){
         $s3 = new S3Wrapper();
+        $name = $name ? $name : $fileName;
         $command = $s3->_client->getCommand('GetObject', array(
             'Bucket' => get_option( 'aws_s3_url' ),
             'Key'    => $bucket.'/'.$fileName,
-            'ResponseContentDisposition' => 'attachment; filename="'.$fileName.'"'
+            'ResponseContentDisposition' => 'attachment; filename="'.$name.'"'
         ));
         return ( $command->createPresignedUrl('+1 hour') );
     }
@@ -289,6 +310,30 @@ class BlobsMigration{
                 $s3->putObject('/attachments/tickets/' . $attachment->token . '.'.$ext, file_get_contents( $file ), 'application/'.$ext );
                 $counter++;
             }
+        }
+        return $counter;
+    }
+    /**
+     ** Use this function to upload download attachments to S3 from database
+     * Note that existing S3 files will be overwritten
+     * @return int - number of uploaded attachments
+     */
+    public static function uploadDownloadAttachments(){
+        global $wpdb;
+
+        $s3 = new S3Wrapper();
+        $counter = 0;
+        $attachments = $wpdb->get_results("SELECT * FROM wp_bp_groups_downloads" );
+        foreach( $attachments AS $attachment ){
+            if( ! $attachment->token ){
+                $wpdb->update('wp_bp_groups_downloads',
+                    array( 'token' => createClaimToken() ),
+                    array( 'id'    => $attachment->id )
+                );
+            }
+            $ext = pathinfo( $attachment->location, PATHINFO_EXTENSION );
+            $s3->putObject('/attachments/downloads/' . $attachment->token . '.'.$ext, $attachment->download_file, 'application/'.$ext );
+            $counter++;
         }
         return $counter;
     }

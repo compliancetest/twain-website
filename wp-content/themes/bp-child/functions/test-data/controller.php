@@ -425,6 +425,7 @@ function copyProfileInstance($action)
     //save new profile to S3
     $s3 = new S3Wrapper();
     $s3->putObject( '/profiles/user/'.$row['token'].'.json',  json_encode( $content ) );
+    unset($row['content']);
     $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
     $new_profile_id = $wpdb->insert_id;
     
