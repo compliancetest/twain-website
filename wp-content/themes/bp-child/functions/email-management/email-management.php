@@ -105,14 +105,18 @@ $ct_email_templates = array(
     ),
     'Organisation Section' => array(
         array(
-            'menu'         => 'Send Organisation <br/>Signup Request',
-            'title'         => 'Send a Signup Organisation Request to Site Admin',
+            'menu'         => 'Organisation Record Created',
+            'title'         => 'Send a Organisation Record Created to Site Admin',
             'shortcodes'    => '[requester_name], [requester_email], [organisation], [organisation_website], [organisation_description], [organisation_abn], [website_url], [env]',
             'fields' => array(
                             array(
                                 'title'         => 'For Site Admin',
                                 'id'            => 'send_organisation_signup_request_to_admin'                                
-                            )                          
+                            ),
+                            array(
+                                'title'         => 'For User',
+                                'id'            => 'send_organisation_signup_request_to_user'
+                            )
             )
         ),
         array(

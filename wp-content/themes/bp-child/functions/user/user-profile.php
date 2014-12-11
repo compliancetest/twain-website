@@ -642,7 +642,7 @@ function cp_get_customer_harness_detail()
         <div class="popup-box" id="harness-detail-box<?php echo $_REQUEST['id']?>" style="display: none; width: 450px;">
             <div class="popup-box-header radius6 noradiusbottom">Invalid Request!</div>     
             <div class="popup-box-content grid-box-body">    
-                <p class="message error">Your request is not correct. Please try again.</p>
+                <p class="message error">An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the "+" icon on the Organisation section in your Profile tab.</p>
             </div>
             <div class="popup-box-footer radius6 noradiustop">                                                
                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            

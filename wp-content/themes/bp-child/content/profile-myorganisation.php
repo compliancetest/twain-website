@@ -19,7 +19,6 @@ if (!$org_membership) {
     $user_org_web = $org_detail->organisation_website;
     $user_org_desc = $org_detail->organisation_description;
 }
-    
 ?>
 
 <div class="column left three_fifths nopadding">
@@ -27,6 +26,9 @@ if (!$org_membership) {
         <div class="grid-box-header">
             <h5 class="left">My Organisation</h5>
             <?php if($user_status != 3 && !$org_membership->is_admin){?>
+                <?php if( ! $org_membership ):?>
+                    <a href="<?php echo get_site_url()?>?_organisation_nonce=<?php echo wp_create_nonce('create_new_org')?>" class="gbh-btn gbh-btn-add right" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1>Add<span class="simple_tooltip radius6">Create an Organisation Record based on the details below<span></span></span></a>
+                <?php endif;?>
                 <a class="gbh-btn gbh-btn-edit right" href="javascript: void(0);">Edit<span class="simple_tooltip radius6">Edit this section<span></span></span></a>
             <?php }?>
             <div class="clear"></div>
