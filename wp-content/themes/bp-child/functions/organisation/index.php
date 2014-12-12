@@ -359,7 +359,7 @@ function ct_process_organisation_action()
             $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
             $message_error = $message_success = false;
             //check that name and ABN for user organisation not empty
-            if( empty( $user_org_abn ) || empty( $user_org ) || $user_org_abn == '-' || $user_org == '-' ){
+            if( empty( $user_org_abn ) || empty( $user_org ) || trim( $user_org_abn ) == '-' || trim( $user_org ) == '-' ){
                 $message_error = 'Organisation Name and ABN must be populated before an Organisation Record can be created';
             }
             $is_abn_used = $is_name_used_in_xero = false;
@@ -370,7 +370,7 @@ function ct_process_organisation_action()
             if( $is_name_used_in_xero || $is_abn_used ){
                 $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ComplianceTest.';
             }
-            if( false !== $message_error ) {
+            if( false === $message_error ) {
                 $organisationClass = new CT_Organisation($_POST['id']);
                 $data = array(
                     'organisation_name' => $user_org,
