@@ -102,21 +102,15 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" style="display: none; width: 500px">
                   <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-                    <div class="popup-box-header radius6 noradiusbottom">Set Up An Account</div>
-                    <div class="popup-box-content">                        
-                        To subscribe, an account for your Organisation will need to be created by our support team, and you will be assigned as the administrator. 
-                        Please ensure your organisation details are complete in your profile before proceeding. Would you like to proceed?
-                        <?php wp_nonce_field('signup-organisation-account', '_organisation_nonce') ?>                        
+                    <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+                    <div class="popup-box-content">
+                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the "+" icon on the Organisation section in your Profile tab.
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a href="#" class="action-btn process-btn submit-btn" onclick="jQuery(this).parents('form').find('.loading').show()"><span class="p"></span><span class="t">Confirm</span></a>
-                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
                         <div class="clear"></div>
                     </div>
                     <a class="close_btn"></a>
-                    <input type="hidden" name="suite_id" value="<?php echo $suiteClass->id ?>" />
-                    <input type="hidden" class="pricing_plan_id" name="pricing_plan_id" value="<?php echo $_REQUEST['plan_id'];?>" />
-                    <div class="loading loading-with-text"><div><b>SUBMITTING REQUEST</b><span>Please wait...</span></div></div>
                   </form>
                 </div>
                 <?php
@@ -362,13 +356,15 @@ function ct_process_organisation_action()
             if( empty( $user_org_abn ) || empty( $user_org ) || trim( $user_org_abn ) == '-' || trim( $user_org ) == '-' ){
                 $message_error = 'Organisation Name and ABN must be populated before an Organisation Record can be created';
             }
-            $is_abn_used = $is_name_used_in_xero = false;
-            //check that ABN number not used for another organisation
-            $is_abn_used = (boolean) $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_organisations WHERE abn = %s ", $user_org_abn ) );
-            //check that organisation name not used in Xero
-            $is_name_used_in_xero = (boolean) $wpdb->get_results( $wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org ) );
-            if( $is_name_used_in_xero || $is_abn_used ){
-                $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ComplianceTest.';
+            if( false === $message_error ) {
+                $is_abn_used = $is_name_used_in_xero = false;
+                //check that ABN number not used for another organisation
+                $is_abn_used = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE abn = %s ", $user_org_abn));
+                //check that organisation name not used in Xero
+                $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
+                if ($is_name_used_in_xero || $is_abn_used) {
+                    $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ComplianceTest.';
+                }
             }
             if( false === $message_error ) {
                 $organisationClass = new CT_Organisation($_POST['id']);
@@ -404,7 +400,7 @@ function ct_process_organisation_action()
             }
             ?>
             <div class="popup-box" style="width: 500px;">
-                <div class="popup-box-header radius6 noradiusbottom">Create an Organisation Record</div>
+                <div class="popup-box-header radius6 noradiusbottom"><?php echo false === $message_error ? 'Organisation Record Created' : 'Create an Organisation Record';?></div>
                 <form method="post" action="/" style="width: 500px;">
                     <div class="popup-box-content">
                         <?php if( false !== $message_error ):?>
@@ -415,7 +411,7 @@ function ct_process_organisation_action()
                         <?php endif;?>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                        <a href="#" class="action-btn cancel-btn close-popup-btn" <?php if( false === $message_error ):?>onclick="location.reload();"<?php endif;?>><span class="p"></span><span class="t">Close</span></a>
                         <div class="clear"></div>
                     </div>
                     <a class="close_btn"></a>
