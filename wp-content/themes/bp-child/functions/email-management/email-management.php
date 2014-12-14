@@ -114,7 +114,7 @@ $ct_email_templates = array(
                                 'id'            => 'send_organisation_signup_request_to_user'
                             ),
                             array(
-                                'title'         => 'For Site Admin',
+                                'title'         => 'For Admin',
                                 'id'            => 'send_organisation_signup_request_to_admin'                                
                             )
             )
