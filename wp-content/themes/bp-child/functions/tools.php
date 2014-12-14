@@ -736,6 +736,9 @@ function ct_duplicate_data()
                                     $content = S3Wrapper::getProfile( $row->token );
                                     $profile_meta = getProfileMetaData($content);
                                     foreach ($profile_meta as $meta_key => $meta_value) {
+                                        if( is_array( $meta_key ) || is_array( $meta_value ) ){
+                                            continue;
+                                        }
                                         $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
                                             'profile_id' => $row->id,
                                             'meta_key' => $meta_key,
