@@ -167,7 +167,7 @@ function createSupportTicket()
                 $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
                 $has_attachment = 1;
                 $s3 = new S3Wrapper();
-                $s3->putObject('/attachments/tickets/' . $token . '.'. pathinfo( $name, PATHINFO_EXTENSION), file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
+                $s3->putObject('/attachments/tickets/' . $token . '/'. $name, file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
 
             }
         }
@@ -731,7 +731,7 @@ function sendTicketMessage()
                         $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $ticketDetail->id, 'message_id' => $messageID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
                         $has_attachment = 1;
                         $s3 = new S3Wrapper();
-                        $s3->putObject('/attachments/tickets/' . $token . '.'. pathinfo( $name, PATHINFO_EXTENSION), file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
+                        $s3->putObject('/attachments/tickets/' . $token . '/'. $name, file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
 
 //                    }
                     

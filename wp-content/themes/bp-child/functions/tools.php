@@ -805,10 +805,10 @@ function ct_duplicate_data()
                         <td>
                             <select name="type">
                                 <option value="all" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'all'):?>selected="selected" <?php endif;?>>All</option>
-                                <option value="p_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'p_claims'):?>selected="selected" <?php endif;?>>Claims - Products</option>
-                                <option value="a_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_claims'):?>selected="selected" <?php endif;?>>Claims / Attachments - Agreements</option>
-                                <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Attachments - Tickets</option>
                                 <option value="profiles" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'profiles'):?>selected="selected" <?php endif;?>>Profiles</option>
+                                <option value="p_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'p_claims'):?>selected="selected" <?php endif;?>>Product Claims</option>
+                                <option value="a_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_claims'):?>selected="selected" <?php endif;?>>Agreements ( Claims / Attachments )</option>
+                                <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Ticket Attachments</option>
                                 <option value="downloads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'downloads'):?>selected="selected" <?php endif;?>>Download Attachments</option>
                             </select>
                         </td>
@@ -832,6 +832,10 @@ function ct_duplicate_data()
                                         echo 'Processed: '.$counter.' product certificates';
                                         $counter = BlobsMigration::uploadServiceClaims();
                                         echo 'Processed: '.$counter.' service certificates';
+                                        $counter = BlobsMigration::uploadTicketsAttachments();
+                                        echo 'Processed: '.$counter.' attachments';
+                                        $counter = BlobsMigration::uploadDownloadAttachments();
+                                        echo 'Processed: '.$counter.' download attachments';
 
                                     } else if( $_POST['type'] == 'p_claims' ){
                                         $counter = BlobsMigration::uploadProductClaims();
