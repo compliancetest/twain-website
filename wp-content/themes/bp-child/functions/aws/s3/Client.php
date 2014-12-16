@@ -161,11 +161,11 @@ class S3Wrapper{
      * @param $token - claim token from wp_compliance_claims table
      * @return array|bool|mixed|null
      */
-    public static function getAttachmentLink( $token, $ext, $type = 'tickets', $isDownloadLink = false, $downloadFileName = false ){
+    public static function getAttachmentLink( $token, $fileName, $type = 'tickets', $isDownloadLink = false ){
         if( $isDownloadLink ){
-            return self::getDownloadLink( 'attachments/'.$type, $token.'.'.$ext, $downloadFileName );
+            return self::getDownloadLink( 'attachments/'.$type, $token.'/'.$fileName );
         }
-        return self::getLink( 'attachments/'.$type, $token.'.'.$ext );
+        return self::getLink( 'attachments/'.$type, $token.'/'.$fileName );
     }
 
     /**
@@ -278,7 +278,7 @@ class BlobsMigration{
             }
             if( ! empty( $certificate->requestor_audit_log ) ){
                 //upload audit log file
-                $s3->putObject( '/attachments/agreements/' . $certificate->requester_token . '.'.end( explode( '.', $certificate->requestor_audit_log_name ) ), $certificate->requestor_audit_log, $certificate->requestor_audit_log_type );
+                $s3->putObject( '/attachments/agreements/' . $certificate->requester_token . '/'.$certificate->requestor_audit_log_name, $certificate->requestor_audit_log, $certificate->requestor_audit_log_type );
             }
             if( $certificate->responder_certificate && $certificate->responder_token ) {
                 //upload pdf certificate
@@ -287,7 +287,7 @@ class BlobsMigration{
             }
             if( ! empty( $certificate->responder_audit_log ) ){
                 //upload audit log file
-                $s3->putObject( '/attachments/agreements/' . $certificate->responder_token . '.'. end( explode( '.', $certificate->responder_audit_log_name ) ), $certificate->responder_audit_log, $certificate->responder_audit_log_type );
+                $s3->putObject( '/attachments/agreements/' . $certificate->responder_token . '/'. $certificate->responder_audit_log_name, $certificate->responder_audit_log, $certificate->responder_audit_log_type );
             }
         }
         return $counter;
@@ -307,7 +307,7 @@ class BlobsMigration{
             $file = TICKET_ATTACHMENTS_DIR . "/" . $attachment->ticket_id . "/" . $attachment->file_name;
             if( file_exists( $file ) ) {
                 $ext = pathinfo( $attachment->file_name, PATHINFO_EXTENSION);
-                $s3->putObject('/attachments/tickets/' . $attachment->token . '.'.$ext, file_get_contents( $file ), 'application/'.$ext );
+                $s3->putObject('/attachments/tickets/' . $attachment->token . '/'.$attachment->file_name, file_get_contents( $file ), 'application/'.$ext );
                 $counter++;
             }
         }
@@ -332,7 +332,7 @@ class BlobsMigration{
                 );
             }
             $ext = pathinfo( $attachment->location, PATHINFO_EXTENSION );
-            $s3->putObject('/attachments/downloads/' . $attachment->token . '.'.$ext, $attachment->download_file, 'application/'.$ext );
+            $s3->putObject('/attachments/downloads/' . $attachment->token . '/'.$attachment->name, $attachment->download_file, 'application/'.$ext );
             $counter++;
         }
         return $counter;

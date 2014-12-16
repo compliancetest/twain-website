@@ -174,7 +174,7 @@ function process_agreement_actions()
 
             $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
             $s3 = new S3Wrapper();
-            $s3->putObject( '/attachments/agreements/' . $certificate->{$token_field} . '.'. pathinfo( $fileName, PATHINFO_EXTENSION ), $content, $type_field );
+            $s3->putObject( '/attachments/agreements/' . $certificate->{$token_field} . '/'. $fileName, $content, $type_field );
 
             $wpdb->update('wp_e2e_agreement',
                 array(
@@ -267,7 +267,7 @@ function process_agreement_actions()
             );
             $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
             $s3 = new S3Wrapper();
-            $s3->putObject( '/attachments/agreements/' . $certificate->{$token_field} . '.'. pathinfo( $fileName, PATHINFO_EXTENSION ), $content, $type_field );
+            $s3->putObject( '/attachments/agreements/' . $certificate->{$token_field} . '/'. $fileName, $content, $type_field );
             AgreementLog::add_entry( array(
                 'agreement_id' => $agreement_id,
                 'sent_by'      => $sent_by,
@@ -501,7 +501,7 @@ function get_agreement_info_popup(){
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" class="view-profile-instance-link" ><?php echo $profile->profile_name;?></a></dd>
             <?php if( $agreement->requestor_audit_log_name ):?>
                 <dt>Audit Log</dt>
-                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION), 'agreements', true );?>"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
+                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->requester_token, $agreement->requestor_audit_log_name, 'agreements' );?>" target="_blank"><?php echo $agreement->requestor_audit_log_name;?></a></dd>
             <?php endif;?>
         </dl>
         <dl>
@@ -519,7 +519,7 @@ function get_agreement_info_popup(){
             <dd><a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $resp_profile->id?>" class="view-profile-instance-link" ><?php echo $resp_profile->profile_name;?></a></dd>
             <?php if( $agreement->responder_audit_log_name ):?>
                 <dt>Audit Log</dt>
-                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION), 'agreements', true );?>"><?php echo $agreement->responder_audit_log_name;?></a></dd>
+                <dd><a href="<?php echo S3Wrapper::getAttachmentLink( $agreement->responder_token,  $agreement->responder_audit_log_name, 'agreements' );?>" target="_blank"><?php echo $agreement->responder_audit_log_name;?></a></dd>
             <?php endif;?>
         </dl>
     </div>
@@ -923,7 +923,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $requester_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $req_links ).'  bookmark to see attachment (offline) <br> OR
-                                    <a href="' . S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ).'">' . S3Wrapper::getAttachmentLink( $agreement->requester_token, pathinfo( $agreement->requestor_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ) .'</a> link to download attachment on our website
+                                    <a href="' . S3Wrapper::getAttachmentLink( $agreement->requester_token, $agreement->requestor_audit_log_name, 'agreements' ).'">' . S3Wrapper::getAttachmentLink( $agreement->requester_token, $agreement->requestor_audit_log_name, 'agreements' ) .'</a> link to download attachment on our website
                                 </td>
                            </tr>'.
                             '<tr class="even">
@@ -932,7 +932,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <td class="issued" style="width:25%;">'. $responder_service->service_name.'</td>
                                 <td class="test-intent" style="width:25%;">
                                      Click '.implode( ' OR <br>', $res_links ).' bookmark to see attachment (offline) <br> OR
-                                     <a href="' . S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ).'">' . S3Wrapper::getAttachmentLink( $agreement->responder_token, pathinfo( $agreement->responder_audit_log_name, PATHINFO_EXTENSION ), 'agreements' ) .'</a> link to download attachment on our website
+                                     <a href="' . S3Wrapper::getAttachmentLink( $agreement->responder_token, $agreement->responder_audit_log_name, 'agreements' ).'">' . S3Wrapper::getAttachmentLink( $agreement->responder_token, $agreement->responder_audit_log_name, 'agreements' ) .'</a> link to download attachment on our website
                                 </td>
                            </tr>';
 

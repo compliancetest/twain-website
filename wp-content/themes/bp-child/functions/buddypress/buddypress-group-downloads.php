@@ -141,7 +141,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             {
                 if($row->location)
                 {
-                    wp_redirect( S3Wrapper::getAttachmentLink( $row->token, pathinfo( $row->location, PATHINFO_EXTENSION ), 'downloads', true, pathinfo( $row->location, PATHINFO_BASENAME ) ), 301 );
+                    wp_redirect( S3Wrapper::getAttachmentLink( $row->token, $row->name, 'downloads', true ), 301 );
                     exit;
                 }else{
                     addMessage('File not found!', 'error');
