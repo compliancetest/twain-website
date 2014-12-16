@@ -259,6 +259,9 @@ textarea.textarea-error{
     -webkit-box-shadow: 0 0 3px rgba(255, 0, 0, .5);
     -o-box-shadow: 0 0 3px rgba(255, 0, 0, .5);
 }
+input.radio-error {
+    outline: 1px solid red;
+}
 .button {
 	text-decoration: none !important;
 }

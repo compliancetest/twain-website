@@ -443,7 +443,7 @@ $user_test_suites = get_suites_with_claims();
                 var errorMsg = '';
 
                 jQuery(this).find('input.required').each(function(){
-                    if(jQuery(this).val() == ''){
+                    if(jQuery(this).val().trim() == ''){
                         isValid = false;
                         jQuery(this).addClass('input-error');
                     }
@@ -460,6 +460,14 @@ $user_test_suites = get_suites_with_claims();
                         jQuery(this).addClass('select-error');
                     }
                 });
+                if( jQuery('input[name="roles[]"]:checked').length == 0 ){
+                    isValid = false;
+                    jQuery('input[name="roles[]"]').addClass('radio-error');
+                }
+                if( jQuery('input[name="levels[]"]:checked').length == 0 ){
+                    isValid = false;
+                    jQuery('input[name="levels[]"]').addClass('radio-error');
+                }
                 if(!isValid)
                 {
                     $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please complete fields in red.</div>');
