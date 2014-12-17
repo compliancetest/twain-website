@@ -163,7 +163,7 @@ class S3Wrapper{
      */
     public static function getAttachmentLink( $token, $fileName, $type = 'tickets', $isDownloadLink = false ){
         if( $isDownloadLink ){
-            return self::getDownloadLink( 'attachments/'.$type, $token.'/'.$fileName );
+            return self::getDownloadLink( 'attachments/'.$type, $token.'/'.$fileName, $fileName );
         }
         return self::getLink( 'attachments/'.$type, $token.'/'.$fileName );
     }
