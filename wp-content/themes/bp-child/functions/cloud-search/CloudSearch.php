@@ -186,67 +186,42 @@ class CloudSearch {
         $data = array();
         $agreements = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement" );
         foreach( $agreements AS $agreement ){
-            $service = new Service( $agreement->requester_service_id );
-            $service->load();
-            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-            if( $service->service_visibility == 'Public' ){
+            $requester_service = new Service( $agreement->requester_service_id );
+            $requester_service->load();
+            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $requester_service->id ) );
+            if( $requester_service->service_visibility == 'Public' ){
                 $v = 1;
-            } else if( $service->service_visibility == 'Community' ){
+            } else if( $requester_service->service_visibility == 'Community' ){
                 $v = 2;
             } else {
                 $v = 3;
             }
             $groups = groups_get_user_groups( $post_author );
-            $temp_data = array(
-                'name'        => $service->service_name,
-                'version'     => $service->service_version,
-                'owner'       => $service->service_owner,
-                'type'        => 'Web Service',
-                'test_suite'  => get_the_title( $service->service_suite_id ),
-                'role'        => $service->service_roles,
-                'level'       => $service->service_levels,
-                'status'      => $agreement->status,
-                'test_type'   => 'End to End',
-                'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
-                'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
-                'suite_id'    => $service->service_suite_id,
-                'post_id'     => $service->id,
-                'visibility'  => $v,
-                'community_id' => $groups['groups'],
-                'user_id'     => $post_author
-            );
-            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_requester_'.$agreement->id, 'fields' => $temp_data ) );
-            
+
             $service = new Service( $agreement->responder_service_id );
             $service->load();
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-            if( $service->service_visibility == 'Public' ){
-                $v = 1;
-            } else if( $service->service_visibility == 'Community' ){
-                $v = 2;
-            } else {
-                $v = 3;
-            }
-            $groups = groups_get_user_groups( $post_author );
+            $groups = array_unique( array_merge( $groups, groups_get_user_groups( $post_author ) ) );
+
             $temp_data = array(
-                'name'        => $service->service_name,
-                'version'     => $service->service_version,
-                'owner'       => $service->service_owner,
-                'type'        => 'Web Service',
-                'test_suite'  => get_the_title( $service->service_suite_id ),
-                'role'        => $service->service_roles,
-                'level'       => $service->service_levels,
+                'name'        => $requester_service->service_name,
+                'version'     => $requester_service->service_version,
+                'owner'       => array( $requester_service->service_owner, $service->service_owner ),
+                'type'        => 'Agreement',
+                'test_suite'  => array( get_the_title( $requester_service->service_suite_id ), get_the_title( $service->service_suite_id ) ),
+                'role'        => array_unique( array_merge( $requester_service->service_roles, $service->service_roles ) ),
+                'level'       => array_unique( array_merge( $requester_service->service_levels, $service->service_levels ) ),
                 'status'      => $agreement->status,
                 'test_type'   => 'End to End',
                 'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
-                'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
-                'suite_id'    => $service->service_suite_id,
-                'post_id'     => $service->id,
+                'for_search'  => $requester_service->service_description.' + '.$requester_service->service_owner.' + '.get_the_title( $requester_service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $requester_service->service_roles).' + '.implode(' ', $requester_service->service_levels).$service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
+                'suite_id'    => $requester_service->service_suite_id,
+                'post_id'     => $requester_service->id,
                 'visibility'  => $v,
                 'community_id' => $groups['groups'],
                 'user_id'     => $post_author
             );
-            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_responder_'.$agreement->id, 'fields' => $temp_data ) );
+            array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         }
         echo '<br /> Agreement - ';
         var_dump( $this->_sendDataToSearchDomain( $data ) );
@@ -508,70 +483,44 @@ class CloudSearch {
             return $this->cloud_search_delete_item( $agreement_id, 'agreement' );
         }
         
-        $service = new Service( $agreement->requester_service_id );
-        $service->load();
-        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-        if( $service->service_visibility == 'Public' ){
+        $requester_service = new Service( $agreement->requester_service_id );
+        $requester_service->load();
+        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $requester_service->id ) );
+        if( $requester_service->service_visibility == 'Public' ){
             $v = 1;
-        } else if( $service->service_visibility == 'Community' ){
+        } else if( $requester_service->service_visibility == 'Community' ){
             $v = 2;
         } else {
             $v = 3;
         }
         $groups = groups_get_user_groups( $post_author );
-        $temp_data = array(
-            'name'        => $service->service_name,
-            'version'     => $service->service_version,
-            'owner'       => $service->service_owner,
-            'type'        => 'Web Service',
-            'test_suite'  => get_the_title( $service->service_suite_id ),
-            'role'        => $service->service_roles,
-            'level'       => $service->service_levels,
-            'status'      => $agreement->status,
-            'test_type'   => 'End to End',
-            'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
-            'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
-            'suite_id'    => $service->service_suite_id,
-            'post_id'     => $service->id,
-            'visibility'  => $v,
-            'community_id' => $groups['groups'],
-            'user_id'     => $post_author
-        );
-        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_requester_'.$agreement->id, 'fields' => $temp_data ) );
-        
-        
+
         $service = new Service( $agreement->responder_service_id );
         $service->load();
         $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-        if( $service->service_visibility == 'Public' ){
-            $v = 1;
-        } else if( $service->service_visibility == 'Community' ){
-            $v = 2;
-        } else {
-            $v = 3;
-        }
-        $groups = groups_get_user_groups( $post_author );
+
+        $groups = array_unique( array_merge( $groups, groups_get_user_groups( $post_author ) ) );
+
         $temp_data = array(
-            'name'        => $service->service_name,
-            'version'     => $service->service_version,
-            'owner'       => $service->service_owner,
-            'type'        => 'Web Service',
-            'test_suite'  => get_the_title( $service->service_suite_id ),
-            'role'        => $service->service_roles,
-            'level'       => $service->service_levels,
+            'name'        => $requester_service->service_name,
+            'version'     => $requester_service->service_version,
+            'owner'       => array( $requester_service->service_owner, $service->service_owner ),
+            'type'        => 'Agreement',
+            'test_suite'  => array( get_the_title( $requester_service->service_suite_id ), get_the_title( $service->service_suite_id ) ),
+            'role'        => array_unique( array_merge( $requester_service->service_roles, $service->service_roles ) ),
+            'level'       => array_unique( array_merge( $requester_service->service_levels, $service->service_levels ) ),
             'status'      => $agreement->status,
             'test_type'   => 'End to End',
             'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
-            'for_search'  => $service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
-            'suite_id'    => $service->service_suite_id,
-            'post_id'     => $service->id,
+            'for_search'  => $requester_service->service_description.' + '.$requester_service->service_owner.' + '.get_the_title( $requester_service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $requester_service->service_roles).' + '.implode(' ', $requester_service->service_levels).$service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
+            'suite_id'    => $requester_service->service_suite_id,
+            'post_id'     => $requester_service->id,
             'visibility'  => $v,
             'community_id' => $groups['groups'],
             'user_id'     => $post_author
         );
-        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_responder_'.$agreement->id, 'fields' => $temp_data ) );
-        
-        
+        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
+
         return $this->_sendDataToSearchDomain( $data );
     }
 
