@@ -414,11 +414,11 @@ get_header();
                                                                <?php endif;?>
                                                            <?php elseif( $agreement->status == 'Verified' ):?>
                                                                 <?php if( $agreement->entry_status == 'Requester' ):?>
-                                                                    <?php if( $agreement->requester_token != '' && ! empty( $agreement->requester_certificate ) ):?>
+                                                                    <?php if( $agreement->requester_token != '' ):?>
                                                                         <a href="<?php echo S3Wrapper::getAgreementClaimLink( $agreement->requester_token ); ?>" onclick="window.open('<?php echo S3Wrapper::getAgreementClaimLink( $agreement->requester_token );?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getAgreementClaimLink( $agreement->requester_token, true ); ?>">Download</a>
                                                                     <?php endif;?>
                                                                 <?php else:?>
-                                                                    <?php if( $agreement->responder_token != '' && ! empty( $agreement->responder_certificate ) ):?>
+                                                                    <?php if( $agreement->responder_token != '' ):?>
                                                                         <a href="<?php echo S3Wrapper::getAgreementClaimLink( $agreement->responder_token ); ?>" onclick="window.open('<?php echo S3Wrapper::getAgreementClaimLink( $agreement->responder_token ); ?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getAgreementClaimLink( $agreement->responder_token, true ); ?>">Download</a>
                                                                     <?php endif;?>
                                                                 <?php endif;?>

@@ -22,6 +22,9 @@ class S3Wrapper{
      * @return bool
      */
     public function putObject( $filename, $content, $contentType = 'application/json' ){
+        if( empty( $content ) ){
+            return false;
+        }
         // Upload data.
         $result =  $this->_client->putObject(array(
             'Bucket'       => $this->_bucket,
@@ -54,6 +57,10 @@ class S3Wrapper{
         return false;
     }
 
+    public static function isObjectExists( $key ){
+        $s3 = new S3Wrapper();
+        return $s3->_client->if_object_exists( $s3->_bucket, $key );
+    }
     /**
      * Use this function to delete file object
      * @param $path
