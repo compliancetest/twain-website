@@ -371,7 +371,7 @@ class BlobsMigration{
         foreach( $posts AS $post ){
             if( $post->content ) {
                 $date = strtotime( $post->uploadedDate );
-                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->fileId.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket'), 'messages' );
+                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->fileId.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
                 $counter++;
             }
         }
