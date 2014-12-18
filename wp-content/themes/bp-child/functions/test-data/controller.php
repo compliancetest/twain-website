@@ -277,7 +277,7 @@ function saveProfileInstance($action)
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => '',
-//                            'content' => $jsonData,
+                            'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id
                         ),
@@ -292,7 +292,7 @@ function saveProfileInstance($action)
                             'type_id' => $type_id,
                             'community_id' => $community_id,
                             'filename' => '',
-//                            'content' => $jsonData,
+                            'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id,
                             'token' => $token
@@ -420,7 +420,7 @@ function copyProfileInstance($action)
 
     //$content->Profile->Title .= '(copy)';
     //$row['profile_name'] .= '(copy)';
-//    $row['content'] = base64_encode( stripslashes( json_encode($content ) ) );
+    $row['content'] = base64_encode( stripslashes( json_encode($content ) ) );
 
     //save new profile to S3
     $s3 = new S3Wrapper();

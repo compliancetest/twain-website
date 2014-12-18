@@ -55,7 +55,7 @@
         <div class="ticket-attachments">
             <?php $attachments = getAttachmentsByTicketId( $ticket_id ); ?>
             <?php foreach($attachments as $file): ?>
-                <a href="<?php echo S3Wrapper::getAttachmentLink( $file->token,  pathinfo( $file->file_name, PATHINFO_EXTENSION ), 'tickets', true );?>"><?php echo $file->file_name?></a><br />
+                <a href="<?php echo S3Wrapper::getAttachmentLink( $file->token, $file->file_name, 'tickets' );?>" target="_blank"><?php echo $file->file_name?></a><br />
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -165,7 +165,7 @@
                 <div class="ticket-attachments">
                     <?php $attachments = getAttachmentsByMessageId($message->id); ?>
                     <?php foreach($attachments as $file): ?>
-                    <a href="<?php echo S3Wrapper::getAttachmentLink( $file->token,  pathinfo( $file->file_name, PATHINFO_EXTENSION ), 'tickets', true );?>"><?php echo $file->file_name?></a><br />
+                    <a href="<?php echo S3Wrapper::getAttachmentLink( $file->token,  $file->file_name, 'tickets' );?>" target="_blank"><?php echo $file->file_name?></a><br />
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>

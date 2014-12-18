@@ -1261,6 +1261,7 @@ function generateDataAndDownload( $data ){
 }
 
 function generate_and_download( $data ){
+    global $wpdb;
     ob_clean();
     header("Content-type: application/x-msdownload",true,200);
     header("Content-Disposition: attachment; filename=results.csv");
@@ -1279,14 +1280,36 @@ function generate_and_download( $data ){
     ));
     if (is_array($data['hits']['hit'])) {
         foreach( $data['hits']['hit'] as $row ){
-                $row_data = $row['fields'];
+            $row_data = $row['fields'];
+            if( $row_data['type'] == 'Agreement' ){
+                $agreement_id = str_replace( 'agreement_', '', $row['id'] );
+                $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
+                $requester_service = new Service( $agreement->requester_service_id );
+                $requester_service->load();
+                $responder_service = new Service( $agreement->responder_service_id );
+                $responder_service->load();
+                $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
+                $tempArray = array(
+                    $requester_service->service_name. ' / '.$responder_service->service_name,
+                    ! empty( $requester_service->service_version ) || ! empty( $responder_service->service_version )  ? $requester_service->service_version. ' / '.$responder_service->service_version : '',
+                    $requester_service->service_owner. ' / '.$responder_service->service_owner,
+                    $row_data['type'],
+                    get_the_title( $requester_service->service_suite_id ). ' / '. get_the_title( $responder_service->service_suite_id ),
+                    implode( ', ', $requester_service->service_roles ) .' / '.implode( ', ', $responder_service->service_roles ),
+                    implode( ', ', $requester_service->service_levels ) .' / '.implode( ', ', $responder_service->service_levels ),
+                    $row_data['status'],
+                    $row_data['test_type'],
+                    $claim_date != '1970-01-01' ? $claim_date : ''
+                );
+                fputcsv( $outstream, $tempArray );
+            } else{
                 $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
                 $tempArray = array(
                     $row_data['name'],
                     $row_data['version'],
-                    $row_data['owner'],
+                    $row_data['owner'][0],
                     $row_data['type'],
-                    $row_data['test_suite'],
+                    $row_data['test_suite'][0],
                     ! empty( $row_data['role'] )  ? implode( ', ', $row_data['role'] ) : '',
                     ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
                     $row_data['status'],
@@ -1294,6 +1317,7 @@ function generate_and_download( $data ){
                     $claim_date != '1970-01-01' ? $claim_date : ''
                 );
                 fputcsv( $outstream, $tempArray );
+            }
         }
     }
     fclose($outstream);

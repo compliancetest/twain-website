@@ -83,6 +83,9 @@ function compliancetest_user_actions()
         $result = cp_edit_transaction_log();               
         echo $result;
         exit;
+    }else if(wp_verify_nonce($cpAction, 'download_file')){
+        cp_download_log();
+        exit;
     }else if(wp_verify_nonce($cpAction, 'save-transaction-log')){
         $result = cp_save_transaction_log();               
         echo $result;
@@ -117,6 +120,21 @@ function compliancetest_user_actions()
     }
 }
 
+function cp_download_log(){
+    global $wpdb;
+
+    $row = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_users_transactions_files WHERE fileId = %s ",  $_REQUEST['id']  ) );
+
+    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+    header("Content-Type: Application/octet-stream");
+    header("Content-disposition: attachment; filename=".$row->fileName);
+
+    echo $row->content;
+    exit;
+}
 function display_signup_organisation_box()
 {
     ?>

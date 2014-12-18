@@ -100,6 +100,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                    $fileName = $file['name']; 
                    
                    //Save data
+                   $token = createClaimToken();
                    $wpdb->insert($wpdb->prefix . 'bp_groups_downloads', 
                         array('group_id'=>$group_id, 
                               'name' => $fileName,
@@ -112,9 +113,13 @@ if ( class_exists( 'BP_Group_Extension' ) )
                               'created_date' => date('Y-m-d H:i:s'), 
                               'last_updated' => date('Y-m-d H:i:s'), 
                               'location' => $fileName,
-                              'download_file' => file_get_contents($file['tmp_name']))
+                              'token' => $token
+//                              'download_file' => file_get_contents($file['tmp_name'])
+                       )
                    );
-                   
+                   $s3 = new S3Wrapper();
+                   $ext = pathinfo( $fileName, PATHINFO_EXTENSION );
+                   $s3->putObject('/attachments/downloads/' . $token . '.'.$ext, file_get_contents($file['tmp_name']), 'application/'.$ext );
                    unlink($file['tmp_name']);
                }
             }
@@ -136,20 +141,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             {
                 if($row->location)
                 {
-                    $info = pathinfo($row->location);
-                    $info1 = pathinfo($row->name);
-                    //Add Extension
-                    if(!isset($info1['extension']) || !$info1['extension'])
-                        $row->name .= "." . $info['extension'];
-                    
-                    header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
-                    header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
-                    header("Cache-Control: no-cache, must-revalidate");
-                    header("Pragma: no-cache");
-                    header("Content-Type: Application/octet-stream");
-                    header("Content-disposition: attachment; filename=" . $row->name);
-                    
-                    echo $row->download_file;
+                    wp_redirect( S3Wrapper::getAttachmentLink( $row->token, $row->name, 'downloads', true ), 301 );
                     exit;
                 }else{
                     addMessage('File not found!', 'error');
@@ -207,10 +199,12 @@ if ( class_exists( 'BP_Group_Extension' ) )
 //                    }
                     
                     
-                    $data['download_file'] = file_get_contents($file['tmp_name']);
+//                    $data['download_file'] = file_get_contents($file['tmp_name']);
                     $data['location'] = $file['name'];
-                    $data['size'] = $file['size'];                    
-                    
+                    $data['size'] = $file['size'];
+                    $s3 = new S3Wrapper();
+                    $ext = pathinfo( $file['name'], PATHINFO_EXTENSION );
+                    $s3->putObject('/attachments/downloads/' . $row->token . '.'.$ext, file_get_contents($file['tmp_name']), 'application/'.$ext );
                     unlink($file['tmp_name']);
                     
                 } 
@@ -220,7 +214,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                     addMessage('Invalid Request!', 'error');
                     return 'File not found!';
                 }
-                
+
                 addMessage('File has been updated successfully!');
                 return true;
             }else{

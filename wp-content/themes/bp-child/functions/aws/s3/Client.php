@@ -22,6 +22,9 @@ class S3Wrapper{
      * @return bool
      */
     public function putObject( $filename, $content, $contentType = 'application/json', $bucket = false, $messages = false ){
+        if( empty( $content ) ){
+            return false;
+        }
         // Upload data.
         $result =  $this->_client->putObject(array(
             'Bucket'       => $bucket ? $bucket : $this->_bucket,
@@ -54,6 +57,10 @@ class S3Wrapper{
         return false;
     }
 
+    public static function isObjectExists( $key ){
+        $s3 = new S3Wrapper();
+        return $s3->_client->if_object_exists( $s3->_bucket, $key );
+    }
     /**
      * Use this function to delete file object
      * @param $path
@@ -83,7 +90,16 @@ class S3Wrapper{
      */
     public static function getProfileLink( $token, $isDownloadLink = false ){
         if( $isDownloadLink ){
-            return self::getDownloadLink( 'profiles/user', $token.'.json' );
+            $profile = self::getProfile( $token );
+            $v = '';
+            if( $profile->Profile->Version ){
+                $version = array();
+                foreach( get_object_vars( $profile->Profile->Version ) AS $k => $v ){
+                    $version[] = $v;
+                }
+                $v = " v" . implode(".", $version);
+            }
+            return self::getDownloadLink( 'profiles/user', $token.'.json', $profile->Profile->Title.$v.'.json' );
         }
         return self::getLink( 'profiles/user', $token.'.json' );
     }
@@ -152,24 +168,36 @@ class S3Wrapper{
      * @param $token - claim token from wp_compliance_claims table
      * @return array|bool|mixed|null
      */
-    public static function getAttachmentLink( $token, $ext, $type = 'tickets', $isDownloadLink = false ){
+    public static function getAttachmentLink( $token, $fileName, $type = 'tickets', $isDownloadLink = false ){
         if( $isDownloadLink ){
-            return self::getDownloadLink( 'attachments/'.$type, $token.'.'.$ext );
+            return self::getDownloadLink( 'attachments/'.$type, $token.'/'.$fileName, $fileName );
         }
-        return self::getLink( 'attachments/'.$type, $token.'.'.$ext );
+        return self::getLink( 'attachments/'.$type, $token.'/'.$fileName );
+    }
+
+    /**
+     * @param $token - token
+     * @return array|bool|mixed|null
+     */
+    public static function getDownloadAttachmentLink( $token, $isDownloadLink = false, $fileName ){
+        if( $isDownloadLink ){
+            return self::getDownloadLink( 'attachments/downloads', $token.'.'. pathinfo( $fileName, PATHINFO_EXTENSION ), $fileName );
+        }
+        return self::getLink( 'attachments/downloads', $token.'.'.pathinfo( $fileName, PATHINFO_EXTENSION ) );
     }
 
     public static function getLink( $bucket, $fileName ){
         $s3 = new S3Wrapper();
-        return $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName );
+        return urldecode( $s3->_client->getObjectUrl( get_option( 'aws_s3_url' ).'/'.$bucket, $fileName ) );
     }
 
-    public static function getDownloadLink( $bucket, $fileName ){
+    public static function getDownloadLink( $bucket, $fileName, $name = false ){
         $s3 = new S3Wrapper();
+        $name = $name ? $name : $fileName;
         $command = $s3->_client->getCommand('GetObject', array(
             'Bucket' => get_option( 'aws_s3_url' ),
             'Key'    => $bucket.'/'.$fileName,
-            'ResponseContentDisposition' => 'attachment; filename="'.$fileName.'"'
+            'ResponseContentDisposition' => 'attachment; filename="'.$name.'"'
         ));
         return ( $command->createPresignedUrl('+1 hour') );
     }
@@ -257,7 +285,7 @@ class BlobsMigration{
             }
             if( ! empty( $certificate->requestor_audit_log ) ){
                 //upload audit log file
-                $s3->putObject( '/attachments/agreements/' . $certificate->requester_token . '.'.end( explode( '.', $certificate->requestor_audit_log_name ) ), $certificate->requestor_audit_log, $certificate->requestor_audit_log_type );
+                $s3->putObject( '/attachments/agreements/' . $certificate->requester_token . '/'.$certificate->requestor_audit_log_name, $certificate->requestor_audit_log, $certificate->requestor_audit_log_type );
             }
             if( $certificate->responder_certificate && $certificate->responder_token ) {
                 //upload pdf certificate
@@ -266,7 +294,7 @@ class BlobsMigration{
             }
             if( ! empty( $certificate->responder_audit_log ) ){
                 //upload audit log file
-                $s3->putObject( '/attachments/agreements/' . $certificate->responder_token . '.'. end( explode( '.', $certificate->responder_audit_log_name ) ), $certificate->responder_audit_log, $certificate->responder_audit_log_type );
+                $s3->putObject( '/attachments/agreements/' . $certificate->responder_token . '/'. $certificate->responder_audit_log_name, $certificate->responder_audit_log, $certificate->responder_audit_log_type );
             }
         }
         return $counter;
@@ -286,9 +314,33 @@ class BlobsMigration{
             $file = TICKET_ATTACHMENTS_DIR . "/" . $attachment->ticket_id . "/" . $attachment->file_name;
             if( file_exists( $file ) ) {
                 $ext = pathinfo( $attachment->file_name, PATHINFO_EXTENSION);
-                $s3->putObject('/attachments/tickets/' . $attachment->token . '.'.$ext, file_get_contents( $file ), 'application/'.$ext );
+                $s3->putObject('/attachments/tickets/' . $attachment->token . '/'.$attachment->file_name, file_get_contents( $file ), 'application/'.$ext );
                 $counter++;
             }
+        }
+        return $counter;
+    }
+    /**
+     ** Use this function to upload download attachments to S3 from database
+     * Note that existing S3 files will be overwritten
+     * @return int - number of uploaded attachments
+     */
+    public static function uploadDownloadAttachments(){
+        global $wpdb;
+
+        $s3 = new S3Wrapper();
+        $counter = 0;
+        $attachments = $wpdb->get_results("SELECT * FROM wp_bp_groups_downloads" );
+        foreach( $attachments AS $attachment ){
+            if( ! $attachment->token ){
+                $wpdb->update('wp_bp_groups_downloads',
+                    array( 'token' => createClaimToken() ),
+                    array( 'id'    => $attachment->id )
+                );
+            }
+            $ext = pathinfo( $attachment->location, PATHINFO_EXTENSION );
+            $s3->putObject('/attachments/downloads/' . $attachment->token . '/'.$attachment->name, $attachment->download_file, 'application/'.$ext );
+            $counter++;
         }
         return $counter;
     }

@@ -102,21 +102,15 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" style="display: none; width: 500px">
                   <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-                    <div class="popup-box-header radius6 noradiusbottom">Set Up An Account</div>
-                    <div class="popup-box-content">                        
-                        To subscribe, an account for your Organisation will need to be created by our support team, and you will be assigned as the administrator. 
-                        Please ensure your organisation details are complete in your profile before proceeding. Would you like to proceed?
-                        <?php wp_nonce_field('signup-organisation-account', '_organisation_nonce') ?>                        
+                    <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+                    <div class="popup-box-content">
+                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the "+" icon on the Organisation section in your Profile tab.
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a href="#" class="action-btn process-btn submit-btn" onclick="jQuery(this).parents('form').find('.loading').show()"><span class="p"></span><span class="t">Confirm</span></a>
-                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
                         <div class="clear"></div>
                     </div>
                     <a class="close_btn"></a>
-                    <input type="hidden" name="suite_id" value="<?php echo $suiteClass->id ?>" />
-                    <input type="hidden" class="pricing_plan_id" name="pricing_plan_id" value="<?php echo $_REQUEST['plan_id'];?>" />
-                    <div class="loading loading-with-text"><div><b>SUBMITTING REQUEST</b><span>Please wait...</span></div></div>
                   </form>
                 </div>
                 <?php
@@ -347,6 +341,83 @@ function ct_process_organisation_action()
             <?php
             }
             
+            exit;
+        } else if(wp_verify_nonce($action, 'create_new_org')) {
+            global $wpdb, $current_user;
+            $user_id = get_current_user_id();
+
+            $user_org = get_user_meta( $user_id, 'user_organisation', true);
+            $user_org_abn = get_user_meta( $user_id, 'user_organisation_abn', true);
+            $user_org_web = get_user_meta( $user_id, 'user_organisation_web', true);
+            $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
+            $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
+            $message_error = $message_success = false;
+            //check that name and ABN for user organisation not empty
+            if( empty( $user_org_abn ) || empty( $user_org ) || trim( $user_org_abn ) == '-' || trim( $user_org ) == '-' ){
+                $message_error = 'Organisation Name and ABN must be populated before an Organisation Record can be created';
+            }
+            if( false === $message_error ) {
+                $is_abn_used = $is_name_used_in_xero = false;
+                //check that ABN number not used for another organisation
+                $is_abn_used = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE abn = %s ", $user_org_abn));
+                //check that organisation name not used in Xero
+                $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
+                if ($is_name_used_in_xero || $is_abn_used) {
+                    $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ComplianceTest.';
+                }
+            }
+            if( false === $message_error ) {
+                $organisationClass = new CT_Organisation($_POST['id']);
+                $data = array(
+                    'organisation_name' => $user_org,
+                    'organisation_description' => $user_org_desc,
+                    'organisation_website' => $user_org_web,
+                    'invoice_me' => 0,
+                    'abn' => $user_org_abn,
+                    'contact_first_name' => get_user_meta($user_id, 'first_name', true),
+                    'contact_last_name' => get_user_meta($user_id, 'last_name', true),
+                    'contact_email' => $current_user->user_email,
+                );
+
+                $organisationClass->bind($data);
+                if ($organisationClass->save()) {
+                    //Save Organisation Admin
+                    $organisationClass->save_organisation_admin($organisationClass->id, $user_id);
+                    $full_name = get_user_meta($user_id, 'first_name', true) . " " . get_user_meta($user_id, 'last_name', true);
+                    $email_data = array(
+                        '[requester_name]' => $full_name,
+                        '[requester_email]' => $current_user->user_email,
+                        '[organisation]' => $user_org,
+                        '[organisation_website]' => $user_org_web,
+                        '[organisation_description]' => $user_org_desc,
+                        '[organisation_abn]' => $user_org_abn
+                    );
+
+                    cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
+                    cp_send_email(array('email' => $current_user->user_email, 'name' => $full_name), 'send_organisation_signup_request_to_user', $email_data);
+                    $message_success = 'Organisation saved!';
+                }
+            }
+            ?>
+            <div class="popup-box" style="width: 500px;">
+                <div class="popup-box-header radius6 noradiusbottom"><?php echo false === $message_error ? 'Organisation Record Created' : 'Create an Organisation Record';?></div>
+                <form method="post" action="/" style="width: 500px;">
+                    <div class="popup-box-content">
+                        <?php if( false !== $message_error ):?>
+                            <p class="message error"><?php echo $message_error;?></p>
+                        <?php endif;?>
+                        <?php if( false !== $message_success ):?>
+                            <p class="message success"><?php echo $message_success;?></p>
+                        <?php endif;?>
+                    </div>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <a href="#" class="action-btn cancel-btn close-popup-btn" <?php if( false === $message_error ):?>onclick="location.reload();"<?php endif;?>><span class="p"></span><span class="t">Close</span></a>
+                        <div class="clear"></div>
+                    </div>
+                    <a class="close_btn"></a>
+                </form>
+            </div>
+            <?php
             exit;
         } else if(wp_verify_nonce($action, 'save-subscription')) {
             //Update Subscription Nickname and Assignee

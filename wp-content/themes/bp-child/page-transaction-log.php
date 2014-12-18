@@ -491,12 +491,14 @@ get_header();
                                                       <?php } ?>
                                                        <br>
                                                        <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
-                                                       <?php var_dump($message);?>
                                                        <?php if( $message->UPLOAD_ID ):?>
-                                                            <br>
-                                                            <a href="#"><?php echo $message->UPLOAD_ID;?></a>
+                                                           <br>
+                                                            <a href="/?cp-action=<?php echo wp_create_nonce('download_file');?>&id=<?php echo $esb->getFileName( $message->UPLOAD_ID );?>">Envelope</a>
                                                        <?php endif;?>
-
+                                                       <?php if( $message->S3_ENVELOPE ):?>
+                                                           <br>
+                                                           <a  href="<?php echo $message->S3_ENVELOPE;?>">Envelope</a>
+                                                       <?php endif;?>
                                                    </div>
                                                    <div class="clear"></div>
                                                </div>
