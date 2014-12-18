@@ -1308,7 +1308,7 @@ function generate_and_download( $data ){
                     $row_data['name'],
                     $row_data['version'],
                     $row_data['owner'][0],
-                    $row_data['type'],
+                    $row_data['type'] == 'Web Service' ? 'Service' : 'Product',
                     $row_data['test_suite'][0],
                     ! empty( $row_data['role'] )  ? implode( ', ', $row_data['role'] ) : '',
                     ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
