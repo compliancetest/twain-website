@@ -944,12 +944,12 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
 
-//        foreach( $req_files AS $req_file ){
-//            @unlink( $req_file['location'] );
-//        }
-//        foreach( $res_files AS $res_file ){
-//            @unlink( $res_file['location'] );
-//        }
+        foreach( $req_files AS $req_file ){
+            @unlink( $req_file['location'] );
+        }
+        foreach( $res_files AS $res_file ){
+            @unlink( $res_file['location'] );
+        }
         return $pdfString;
 }
 
