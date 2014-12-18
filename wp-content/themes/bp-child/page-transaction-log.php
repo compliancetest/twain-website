@@ -493,7 +493,8 @@ get_header();
                                                        <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
                                                        <?php if( $message->UPLOAD_ID ):?>
                                                            <br>
-                                                            <a href="/?cp-action=<?php echo wp_create_nonce('download_file');?>&id=<?php echo $esb->getFileName( $message->UPLOAD_ID );?>">Envelope</a>
+                                                           <a href="<?php echo S3Wrapper::getUploadLink( $esb->getFileName( $message->UPLOAD_ID ) );?>">Envelope</a>
+<!--                                                            <a href="/?cp-action=--><?php //echo wp_create_nonce('download_file');?><!--&id=--><?php //echo $esb->getFileName( $message->UPLOAD_ID );?><!--">Envelope</a>-->
                                                        <?php endif;?>
                                                        <?php if( $message->S3_ENVELOPE ):?>
                                                            <br>
