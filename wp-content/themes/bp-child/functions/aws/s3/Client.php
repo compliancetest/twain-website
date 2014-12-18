@@ -171,9 +171,9 @@ class S3Wrapper{
      * @param $token - attachment token
      * @return array|bool|mixed|null
      */
-    public static function getAttachment( $token, $ext, $type = 'tickets' ){
+    public static function getAttachment( $token, $fileName, $type = 'tickets' ){
         $s3 = new S3Wrapper();
-        return $s3->getObject( 'attachments/'.$type . $token.'.'.$ext );
+        return $s3->getObject( 'attachments/'.$type.'/'.$token.'/'.$fileName );
     }
 
     /**

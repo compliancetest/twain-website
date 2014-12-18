@@ -874,8 +874,8 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <th class="issued" style="width:25%;">Service Name</th>
                                 <th class="test-intent" style="width:25%;">Audit Files</th>
                            </tr>';
-    $agreement->requestor_audit_log_name = str_replace( array( ' ', ':', '-' ), '', $agreement->requestor_audit_log_name );
-    $agreement->responder_audit_log_name = str_replace( array( ' ', ':', '-' ), '', $agreement->responder_audit_log_name );
+//    $agreement->requestor_audit_log_name = str_replace( array( ' ', ':' ), '', $agreement->requestor_audit_log_name );
+//    $agreement->responder_audit_log_name = str_replace( array( ' ', ':' ), '', $agreement->responder_audit_log_name );
 
     $req_files = $res_files = array();
 
@@ -888,12 +888,12 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
     }
     $requester_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name($requester_service->service_name . '-' . $agreement->requestor_audit_log_name);
     $requestor_file = fopen($requester_file_location, "w");
-    fwrite($requestor_file, $agreement->requestor_audit_log);
+    fwrite($requestor_file, S3Wrapper::getAttachment( $agreement->requester_token, $agreement->requestor_audit_log_name, 'agreements' ) );
     fclose($requestor_file);
 
     $responder_file_location = getcwd() . '/wp-content/uploads/' . clean_file_name($responder_service->service_name . '-' . $agreement->responder_audit_log_name);
     $responder_file = fopen($responder_file_location, "w");
-    fwrite($responder_file, $agreement->responder_audit_log);
+    fwrite($responder_file,  S3Wrapper::getAttachment( $agreement->responder_token, $agreement->responder_audit_log_name, 'agreements' ) );
     fclose($responder_file);
 
     if( strpos( $agreement->requestor_audit_log_name, '.zip' ) !== false ){
@@ -944,12 +944,12 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
 
-        foreach( $req_files AS $req_file ){
-            @unlink( $req_file['location'] );
-        }
-        foreach( $res_files AS $res_file ){
-            @unlink( $res_file['location'] );
-        }
+//        foreach( $req_files AS $req_file ){
+//            @unlink( $req_file['location'] );
+//        }
+//        foreach( $res_files AS $res_file ){
+//            @unlink( $res_file['location'] );
+//        }
         return $pdfString;
 }
 
