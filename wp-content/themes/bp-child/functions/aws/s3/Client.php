@@ -151,6 +151,18 @@ class S3Wrapper{
         return self::getLink( 'claims/agreements', $token.'.pdf' );
     }
 
+    public static function getUploadLink( $fileId ){
+        global $wpdb;
+        $post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_transactions_files WHERE fileId = %s ", strtoupper( $fileId ) ) );
+        $date = strtotime( $post->uploadedDate );
+        $s3 = new S3Wrapper();
+        $command = $s3->_client->getCommand('GetObject', array(
+            'Bucket' => get_option( 's3_message_bucket'),
+            'Key'    => 'messages/'.date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->fileId.'/'.$post->fileName,
+            'ResponseContentDisposition' => 'attachment; filename="'.$post->fileName.'"'
+        ));
+        return ( $command->createPresignedUrl('+1 hour') );
+    }
     /*
      * Support Tickets / Agreements logs section
      */
@@ -359,7 +371,7 @@ class BlobsMigration{
         foreach( $posts AS $post ){
             if( $post->content ) {
                 $date = strtotime( $post->uploadedDate );
-                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/'.$post->fileId.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket'), 'messages' );
+                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->fileId.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket'), 'messages' );
                 $counter++;
             }
         }

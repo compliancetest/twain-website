@@ -810,6 +810,7 @@ function ct_duplicate_data()
                                 <option value="a_claims" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_claims'):?>selected="selected" <?php endif;?>>Agreements ( Claims / Attachments )</option>
                                 <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Ticket Attachments</option>
                                 <option value="downloads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'downloads'):?>selected="selected" <?php endif;?>>Download Attachments</option>
+                                <option value="uploads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'uploads'):?>selected="selected" <?php endif;?>>Uploads</option>
                             </select>
                         </td>
                         <td>
@@ -849,35 +850,12 @@ function ct_duplicate_data()
                                     } else if( $_POST['type'] == 'downloads' ){
                                         $counter = BlobsMigration::uploadDownloadAttachments();
                                         echo 'Processed: '.$counter.' download attachments';
+                                    } else if( $_POST['type'] == 'uploads' ){
+                                        $counter = BlobsMigration::uploadMessages();
+                                        echo 'Processed: '.$counter.' uploads';
                                     }else {
                                         echo 'Not implemented yet';
                                     }
-                                    ?>
-                                </i>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </table>
-            </form>
-        </div>
-
-        <h2>Move messages to S3</h2>
-        <div>
-            <form action="" method="post">
-                <input type="hidden" name="action" value="<?php echo wp_create_nonce('move_messages_to_s3')?>" />
-                <table>
-                    <tr>
-                        <td>
-                            <input type="submit" class="button button-primary" value="Populate" />
-                        </td>
-                    </tr>
-                    <?php if (wp_verify_nonce($action, 'move_messages_to_s3')): ?>
-                        <tr>
-                            <td>
-                                <i>
-                                    <?php
-                                    $counter = BlobsMigration::uploadMessages();
-                                    echo 'Processed ' . $counter . ' messages.';
                                     ?>
                                 </i>
                             </td>

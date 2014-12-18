@@ -1032,7 +1032,7 @@ function uploadMessage()
                             array(
                                 'fileId' => $fileId,
                                 'fileName' => $filename,
-//                                'content' => $filecontent,
+                                'content' => $filecontent,
                                 'fileSize' => $filesize,
                                 'uploadedDate' => date("Y-m-d H:i:s")
                             )
@@ -1045,7 +1045,7 @@ function uploadMessage()
                 exit;
             }
             $s3 = new S3Wrapper();
-            $s3->putObject('/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/'.$fileId.'/'.$filename, $filecontent, 'application/'.pathinfo( $filename, PATHINFO_EXTENSION ), get_option( 's3_message_bucket'), 'messages' );
+            $s3->putObject('/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/envelopes/'.$fileId.'/'.$filename, $filecontent, 'application/'.pathinfo( $filename, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
             
             $xmlData = '<api:processUploadedMessageRequest xmlns:api="http://compliancetest.net/api">
                             <api:testCaseUploadMessage>                              
@@ -1053,8 +1053,8 @@ function uploadMessage()
                                 <api:testSuiteId>' . $suiteObj->getSuiteID() . '</api:testSuiteId> ';
             if($product_id)
                 $xmlData .= '<api:productId>' . get_post_meta($product_id, 'product_id', true) . '</api:productId>';
-            $xmlData .= '<api:bucket>'.get_option( 's3_message_bucket').'</api:bucket>';
-            $xmlData .= '<api:key>'.'/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/'.$fileId.'/'.$filename.'</api:key>';
+//            $xmlData .= '<api:bucket>'.get_option( 's3_message_bucket').'</api:bucket>';
+//            $xmlData .= '<api:key>'.'/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/'.$fileId.'/'.$filename.'</api:key>';
             $xmlData .= '<api:uploadIdentifier>' . $fileId . '</api:uploadIdentifier>                                
                                 <api:identity>
                                     <api:username>' . $subscription->harness_username . '</api:username>
