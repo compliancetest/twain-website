@@ -202,28 +202,28 @@ if( isset( $_GET['download']) ){
                                 ?>
                                 <tr>
                                     <td class="first">
-                                        <a href="<?php echo get_permalink( $agreement->requester_service_id );?>" class="blue_txt"><?php echo $requester_service->service_name;?></a></br>
+                                        <div class="agreement-row"><a href="<?php echo get_permalink( $agreement->requester_service_id );?>" class="blue_txt"><?php echo $requester_service->service_name;?></a></div>
                                         <a href="<?php echo get_permalink( $agreement->responder_service_id );?>" class="blue_txt"><?php echo $responder_service->service_name;?></a>
                                     </td>
                                     <td>
-                                        <?php echo $requester_service->service_version;?></br>
+                                        <div class="agreement-row"><?php echo $requester_service->service_version;?></div>
                                         <?php echo $responder_service->service_version;?>
                                     </td>
                                     <td>
-                                        <?php echo $requester_service->service_owner;?></br>
+                                        <div class="agreement-row"><?php echo $requester_service->service_owner;?></div>
                                         <?php echo $responder_service->service_owner;?>
                                     </td>
                                     <td>Agreement</td>
                                     <td class="test-suite-column">
-                                        <a href="<?php echo get_permalink( $requester_service->service_suite_id );?>"><?php echo get_the_title( $requester_service->service_suite_id );?></a></br>
+                                        <div class="agreement-row"><a href="<?php echo get_permalink( $requester_service->service_suite_id );?>"><?php echo get_the_title( $requester_service->service_suite_id );?></a></div>
                                         <a href="<?php echo get_permalink( $responder_service->service_suite_id );?>"><?php echo get_the_title( $responder_service->service_suite_id );?></a>
                                     </td>
                                     <td>
-                                        <?php if( ! empty( $requester_service->service_roles ) ) echo implode( ', ', $requester_service->service_roles );?></br>
+                                        <div class="agreement-row"><?php if( ! empty( $requester_service->service_roles ) ) echo implode( ', ', $requester_service->service_roles );?></div>
                                         <?php if( ! empty( $responder_service->service_roles ) ) echo implode( ', ', $responder_service->service_roles );?>
                                     </td>
                                     <td>
-                                        <?php if( ! empty( $requester_service->service_levels ) ) echo implode( ', ', $requester_service->service_levels );?></br>
+                                        <div class="agreement-row"><?php if( ! empty( $requester_service->service_levels ) ) echo implode( ', ', $requester_service->service_levels );?></div>
                                         <?php if( ! empty( $responder_service->service_levels ) ) echo implode( ', ', $responder_service->service_levels );?>
                                     </td>
                                     <td>
@@ -274,6 +274,19 @@ if( isset( $_GET['download']) ){
                     <?php endif;?>
                     </tbody>
                 </table>
+                <script>
+                        jQuery( document).ready(function($){
+                            var rowHeight = 0,
+                                agreementFirstRows = jQuery('.search-result-list .agreement-row');
+
+                                agreementFirstRows.each(function(){
+                                    if ($(this).height() > rowHeight){
+                                        rowHeight = $(this).height();
+                                    }
+                                });
+                                agreementFirstRows.height(rowHeight);
+                        });
+                </script>
                 <div class="pagination-wrapper">
                     <div class="pagination">
                         <?php

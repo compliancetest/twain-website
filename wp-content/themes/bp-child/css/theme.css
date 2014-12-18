@@ -8887,6 +8887,11 @@ input.inactive_s{
     border-bottom: 1px solid #d7d7d7;
     text-align: center;
     padding: 13px 5px;
+    vertical-align: middle;
+}
+
+.search-result-list .agreement-row{
+    margin: 0 0 3px 0;
 }
 
 .search-result-list .test-suite-column{
