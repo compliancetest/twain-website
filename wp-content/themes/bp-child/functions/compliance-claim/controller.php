@@ -979,3 +979,14 @@ function createClaimToken()
     
     return $token;
 }
+function createMessageToken()
+{
+    global $wpdb;
+
+    do{
+        $token = cp_generate_password(20);
+        $id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM wp_bp_groups_downloads WHERE token = %s", $token ) );
+    }while( $id );
+
+    return $token;
+}
