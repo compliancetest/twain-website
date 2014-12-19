@@ -156,12 +156,14 @@ class S3Wrapper{
         $post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_users_transactions_files WHERE fileId = %s ", strtoupper( $fileId ) ) );
         $date = strtotime( $post->uploadedDate );
         $s3 = new S3Wrapper();
-        $command = $s3->_client->getCommand('GetObject', array(
-            'Bucket' => get_option( 's3_message_bucket'),
-            'Key'    => date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->token.'/'.$post->fileName,
-            'ResponseContentDisposition' => 'attachment; filename="'.$post->fileName.'"'
-        ));
-        return ( $command->createPresignedUrl('+1 hour') );
+        return urldecode( $s3->_client->getObjectUrl( get_option( 's3_message_bucket' ), date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->token.'/'.$post->fileName ) );
+//        $s3 = new S3Wrapper();
+//        $command = $s3->_client->getCommand('GetObject', array(
+//            'Bucket' => get_option( 's3_message_bucket'),
+//            'Key'    => date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->token.'/'.$post->fileName,
+//            'ResponseContentDisposition' => 'attachment; filename="'.$post->fileName.'"'
+//        ));
+//        return ( $command->createPresignedUrl('+1 hour') );
     }
     /*
      * Support Tickets / Agreements logs section
