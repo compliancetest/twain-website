@@ -443,11 +443,11 @@ function create_compliancetest_settings_page()
                             <td><input type="text" name="aws_s3_secret" id="aws_s3_secret" size="50" value="<?php echo get_option('aws_s3_secret')?>" autocomplete="off" /></td>
                         </tr>
                         <tr>
-                            <td><label><b>Data Bucket URL:</b></label></td>
+                            <td><label><b>Data Bucket:</b></label></td>
                             <td><input type="text" name="aws_s3_url" id="aws_s3_url" size="50" value="<?php echo get_option('aws_s3_url')?>" autocomplete="off" /></td>
                         </tr>
                         <tr>
-                            <td><label><b>Message bucket:</b></label></td>
+                            <td><label><b>Message Bucket:</b></label></td>
                             <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
                         </tr>
                     </table>
