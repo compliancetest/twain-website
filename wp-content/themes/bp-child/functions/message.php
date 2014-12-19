@@ -1028,13 +1028,15 @@ function uploadMessage()
             $fileId = $fileId . "_" . $idx;
             
             //Save Data To Transactions Files Table
+            $token = createMessageToken();
             $return = $wpdb->insert($wpdb->prefix . "users_transactions_files", 
                             array(
                                 'fileId' => $fileId,
                                 'fileName' => $filename,
                                 'content' => $filecontent,
                                 'fileSize' => $filesize,
-                                'uploadedDate' => date("Y-m-d H:i:s")
+                                'uploadedDate' => date("Y-m-d H:i:s"),
+                                'token' => $token
                             )
                          );
             
@@ -1045,7 +1047,7 @@ function uploadMessage()
                 exit;
             }
             $s3 = new S3Wrapper();
-            $s3->putObject('/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/envelopes/'.$fileId.'/'.$filename, $filecontent, 'application/'.pathinfo( $filename, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
+            $s3->putObject('/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/envelopes/'.$token.'/'.$filename, $filecontent, 'application/'.pathinfo( $filename, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
             
             $xmlData = '<api:processUploadedMessageRequest xmlns:api="http://compliancetest.net/api">
                             <api:testCaseUploadMessage>                              

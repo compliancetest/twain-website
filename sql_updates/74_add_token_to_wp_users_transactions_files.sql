@@ -1,0 +1,1 @@
+ALTER TABLE `wp_users_transactions_files` ADD `token` VARCHAR( 50 ) NOT NULL ;

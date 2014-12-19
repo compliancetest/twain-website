@@ -158,7 +158,7 @@ class S3Wrapper{
         $s3 = new S3Wrapper();
         $command = $s3->_client->getCommand('GetObject', array(
             'Bucket' => get_option( 's3_message_bucket'),
-            'Key'    => date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->fileId.'/'.$post->fileName,
+            'Key'    => date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->token.'/'.$post->fileName,
             'ResponseContentDisposition' => 'attachment; filename="'.$post->fileName.'"'
         ));
         return ( $command->createPresignedUrl('+1 hour') );
@@ -369,9 +369,17 @@ class BlobsMigration{
         $counter = 0;
         $posts = $wpdb->get_results("SELECT * FROM wp_users_transactions_files;");
         foreach( $posts AS $post ){
+            if( ! $post->token ){
+                $token = createMessageToken();
+                $wpdb->update('wp_users_transactions_files',
+                    array( 'token' => $token ),
+                    array( 'id'    => $post->id )
+                );
+                $post->token = $token;
+            }
             if( $post->content ) {
                 $date = strtotime( $post->uploadedDate );
-                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->fileId.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
+                $s3->putObject('/' . date( 'Y-m', $date ).'/'. date( 'd', $date ).'/'.date( 'H', $date ).'/envelopes/'.$post->token.'/'.$post->fileName, $post->content, 'application/'.pathinfo( $post->fileName, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
                 $counter++;
             }
         }
