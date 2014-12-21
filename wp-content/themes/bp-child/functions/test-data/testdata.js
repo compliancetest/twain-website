@@ -300,7 +300,7 @@ jQuery(document).ready(function(){
                 {
                     if(jQuery(rsp).find('status').text() == 'success')   
                     {
-                        if( jQuery(rsp).find('type') ){
+                        if( jQuery(rsp).find('type') && jQuery(rsp).find('type').text() == 's3_xml_max_size' ){
                             jQuery('#profile_type_txt').val(jQuery(rsp).find('schema').text());
                             jQuery('#profile_instance_txt').val('');
                             profileData = null;
