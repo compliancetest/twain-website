@@ -141,7 +141,7 @@ function ct_send_ticket_email($email_id, $email_type, $ticketDetail, $message_id
              $emailData['[message]'] .= "<br />";
              $attachments = getAttachmentsByMessageId($message_id);
              foreach($attachments as $file){
-                $emailData['[message]'] .= '<a href="' . get_site_url(null, null, 'https') .'/?action=' . wp_create_nonce('download-ticket-attachment') .'&file=' . $file->token . '">' . $file->file_name . '</a><br />';
+                $emailData['[message]'] .= '<a href="' . S3Wrapper::getAttachmentLink( $file->token, $file->file_name, 'tickets' ) . '">' . $file->file_name . '</a><br />';
              }
         }
     }
