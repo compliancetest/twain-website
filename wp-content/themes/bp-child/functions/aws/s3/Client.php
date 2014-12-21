@@ -347,10 +347,12 @@ class BlobsMigration{
         $attachments = $wpdb->get_results("SELECT * FROM wp_bp_groups_downloads" );
         foreach( $attachments AS $attachment ){
             if( ! $attachment->token ){
+                $token = createClaimToken();
                 $wpdb->update('wp_bp_groups_downloads',
-                    array( 'token' => createClaimToken() ),
+                    array( 'token' =>  $token ),
                     array( 'id'    => $attachment->id )
                 );
+                $attachment->token = $token;
             }
             $ext = pathinfo( $attachment->location, PATHINFO_EXTENSION );
             $s3->putObject('/attachments/downloads/' . $attachment->token . '/'.$attachment->name, $attachment->download_file, 'application/'.$ext );
