@@ -926,7 +926,7 @@ function showUploadMessageBox()
                                     <select name="product" id="um-product" class="select">
                                         <option value="">Select a Product</option>
                                         <?php foreach($products as $p){ ?>
-                                        <option value="<?php echo $p->ID?>" <?php echo $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
+                                        <option value="<?php echo $p->ID?>" <?php echo $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true). ' v'.get_post_meta($p->ID, 'product_version', true); ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>                                
