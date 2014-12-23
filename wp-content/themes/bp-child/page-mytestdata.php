@@ -90,7 +90,8 @@ $subscriptions =  getUserSubscriptions(null, true);
                                     {
                                 ?>
                                 <?php if(count($subscriptions) > 0): ?>
-                                    <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, true );?>" class="action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
+                                    <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" data-type="upload" class="edit-profile-instance-link action-btn icon-btn upload-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Upload Profile<span></span></span></a>
+                                    <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, true );?>" class="left10 action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
                                     <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
                                 <?php endif; ?>
                                 <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
@@ -210,8 +211,8 @@ if(count($subscriptions) > 0){
                             <div class="clear"></div>
                         </div>
                     </div>
-                    <div class="enter-values"><span>or</span></div>                
-                    <label class="padding5-10-5-0">Enter Values</label> 
+                    <div class="enter-values hide_on_upload"><span>or</span></div>
+                    <label class="padding5-10-5-0 hide_on_upload">Enter Values</label>
                     <div id="create_profile_panel">                
                         <div class="clear"></div>
                     </div>
@@ -230,6 +231,7 @@ if(count($subscriptions) > 0){
         <a class="close_btn"></a>                        
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
         <input type="hidden" name="instance-id" id="instance-id" value="" />
+        <input type="hidden" id="is_upload" value="" />
         <input type="hidden" id="save-instance-action" value="<?php echo wp_create_nonce('save-tester-instance')?>" />
         <input type="hidden" id="get-profile-ui-action" value="<?php echo wp_create_nonce('get-tester-profile-ui')?>" />
     </form>

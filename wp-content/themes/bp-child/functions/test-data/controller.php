@@ -185,7 +185,7 @@ function createUIFromProfileType($action)
         }else{
             $json = S3Wrapper::getProfile( $instance_row->token, true );
             if( strlen( $json ) > get_option( 's3_xml_max_size' ) ){
-                echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><message>Profile is too large to edit online. Please download and edit locally, then upload.</message><type>s3_xml_max_size</type></result>';
+                echo '<result><status>error</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><message>Profile is too large to edit online. Please download and edit locally, then upload.</message><type>s3_xml_max_size</type></result>';
             } else {
                 echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>' . updateSpecialChars( $json ) . '</data></result>';
             }

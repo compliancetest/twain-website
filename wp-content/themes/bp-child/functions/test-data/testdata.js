@@ -176,13 +176,21 @@ jQuery(document).ready(function(){
     jQuery('.edit-profile-instance-link').each(function(){
         var id = jQuery(this).attr('data-id');
         var type_id = jQuery(this).attr('data-type-id');
+        var is_upload = jQuery(this).attr('data-type');
         jQuery(this).cplightbox({
             inline: true,
             closeWhenClickOveraly: false,
             onStart: function(){
                 initEditProfileBox();
                 jQuery('#edit-profile-box #instance-id').val(id);
-                jQuery('#edit-profile-box .popup-box-header').html('Edit Profile Instance');
+                if( is_upload ){
+                    jQuery('#edit-profile-box').width('500');
+                    jQuery('#is_upload').val('1');
+                    jQuery('#edit-profile-box .popup-box-header').html('Upload Profile Instance');
+                }else{
+                    jQuery('#edit-profile-box .popup-box-header').html('Edit Profile Instance');
+                    jQuery('#is_upload').val('0');
+                }
                 jQuery('#edit_profile_instance_panel').hide();
                 jQuery('#edit-profile-box #profile-type-id').val(type_id);
                 jQuery('#edit-profile-box #profile-type-id').change();
@@ -300,28 +308,29 @@ jQuery(document).ready(function(){
                 {
                     if(jQuery(rsp).find('status').text() == 'success')   
                     {
-                        if( jQuery(rsp).find('type') && jQuery(rsp).find('type').text() == 's3_xml_max_size' ){
-                            jQuery('#profile_type_txt').val(jQuery(rsp).find('schema').text());
-                            jQuery('#profile_instance_txt').val('');
-                            profileData = null;
-                            jQuery('#edit-profile-box .submit-btn').hide();
-                            renderJsonUI();
-                            jQuery('#create_profile_panel').hide().before('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
+                        if(  jQuery('#is_upload').val() == '1'){
+                            showUploadDialog( rsp );
                         } else {
+                            jQuery('#create_profile_panel').show();
+                            jQuery('.hide_on_upload').show();
                             jQuery('#edit-profile-box .submit-btn').show();
                             jQuery('#profile_type_txt').val(jQuery(rsp).find('schema').text());
                             jQuery('#profile_instance_txt').val(jQuery(rsp).find('data').text());
                             renderJsonUI();
                         }
                     }else{
-                        jQuery('#edit-profile-box .submit-btn').hide();
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
-                        jQuery('#edit_profile_instance_panel').hide();
-                        jQuery('#edit-profile-box #profile-type-id').val('');
-                        jQuery('#profile_type_txt').val('');
-                        jQuery('#profile_instance_txt').val('');
-                        profileData = null;
-                        profileType = null;
+                        if(  jQuery('#is_upload').val() == '1'){
+                            showUploadDialog( rsp );
+                        } else {
+                            jQuery('#edit-profile-box .submit-btn').hide();
+                            jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('message').text() + '</p>');
+                            jQuery('#edit_profile_instance_panel').hide();
+                            jQuery('#edit-profile-box #profile-type-id').val('');
+                            jQuery('#profile_type_txt').val('');
+                            jQuery('#profile_instance_txt').val('');
+                            profileData = null;
+                            profileType = null;
+                        }
                     }
                     jQuery(window).resize();
                 },
@@ -335,7 +344,15 @@ jQuery(document).ready(function(){
         }
     })
     
-    
+    function showUploadDialog( rsp ){
+        jQuery('.hide_on_upload').hide();
+        jQuery('#profile_type_txt').val(jQuery(rsp).find('schema').text());
+        jQuery('#profile_instance_txt').val('');
+        profileData = null;
+        jQuery('#edit-profile-box .submit-btn').hide();
+        renderJsonUI();
+        jQuery('#create_profile_panel').hide();
+    }
     function renderJsonUI()
     {
         jQuery('#edit_profile_instance_panel').show();
