@@ -346,14 +346,13 @@ function ct_process_organisation_action()
             global $wpdb, $current_user;
             $user_id = get_current_user_id();
 
-            $user_org = get_user_meta( $user_id, 'user_organisation', true);
-            $user_org_abn = get_user_meta( $user_id, 'user_organisation_abn', true);
+            $user_org = trim( get_user_meta( $user_id, 'user_organisation', true) );
+            $user_org_abn = trim( get_user_meta( $user_id, 'user_organisation_abn', true) );
             $user_org_web = get_user_meta( $user_id, 'user_organisation_web', true);
-            $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
             $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
             $message_error = $message_success = false;
             //check that name and ABN for user organisation not empty
-            if( empty( $user_org_abn ) || empty( $user_org ) || trim( $user_org_abn ) == '-' || trim( $user_org ) == '-' ){
+            if( empty( $user_org_abn ) || empty( $user_org ) || $user_org_abn == '-' || $user_org == '-' ){
                 $message_error = 'Organisation Name and ABN must be populated before an Organisation Record can be created';
             }
             if( false === $message_error ) {
