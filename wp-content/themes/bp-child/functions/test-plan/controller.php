@@ -87,9 +87,17 @@ function certifyPlan()
                 wp_redirect($return);
             } else {
                 //Delete Plan
-                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans WHERE id = %d", $planID ) );
+                $wpdb->update( "wp_test_plans",
+                    array(
+                        'is_deleted'   => 1,
+                        'deleted_date' => date( 'Y-m-d H:i:s')
+                    ),
+                    array(
+                        'id' => $planID
+                    )
+                );
                 //Delete Exclude Plan ID
-                $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
+                //$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
 
                 $cloud_search = new CloudSearch();
                 $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
@@ -132,18 +140,22 @@ function deletePlan()
         wp_redirect($return);
         exit;
     }
-    
-    if(!$wpdb->delete($wpdb->prefix . "test_plans", array('id' => $planID)))
-    {
-        addMessage($wpdb->last_error, 'error');
-    }else{
-        //Delete Exclude Items
-        $wpdb->delete($wpdb->prefix . "test_plans_excluded_cases", array('test_plan_id' => $planID));
-        
-        $cloud_search = new CloudSearch();
-        $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
-        addMessage("The plan was deleted.");
-    }
+
+    //Delete Exclude Items
+    //$wpdb->delete($wpdb->prefix . "test_plans_excluded_cases", array('test_plan_id' => $planID));
+    $wpdb->update( "wp_test_plans",
+        array(
+            'is_deleted'   => 1,
+            'deleted_date' => date( 'Y-m-d H:i:s')
+        ),
+        array(
+            'id' => $planID
+        )
+    );
+
+    $cloud_search = new CloudSearch();
+    $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
+    addMessage("The plan was deleted.");
     wp_redirect($return);
     exit;
 }

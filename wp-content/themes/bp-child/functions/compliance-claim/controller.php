@@ -576,13 +576,13 @@ function createClaimPDF($claim_id, $planID )
         for($i=0; $i < count($testCases); $i++) {
             $is_excluded = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $testCases[$i]->ID ) );
             $is_optional = get_post_meta( $testCases[$i]->ID, 'testcase_status', true );
-            
-            if ( isset($testCaseStatuses[$claim->suite_id][$claim->product_id][$testCases[$i]->ID]) && $testCaseStatuses[$claim->suite_id][$claim->product_id][$testCases[$i]->ID] == 'pass') {
+
+            if ( isset($testCaseStatuses[$claim->suite_id][$claim->product_id][$testCases[$i]->ID]) && $testCaseStatuses[$claim->suite_id][$claim->product_id][$testCases[$i]->ID] == 'pass' && ! $is_excluded ) {
                 $is_excluded = false;
                 $is_optional = 'No';
             }    
             
-            if ($is_excluded ) {
+            if( $is_excluded ) {
                 if (!isset($excluded_cases[$scId]))
                     $excluded_cases[$scId] = array();
                 $testCases[$i]->excluded_reason = $is_excluded->reason;
@@ -923,7 +923,7 @@ function getTestPlansByProductId($product_id)
 {
     global $wpdb;
 
-    $query = $wpdb->prepare("SELECT c.*, pm.meta_value as `issuer` FROM {$wpdb->prefix}test_plans AS c LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=c.suite_id AND pm.meta_key='ts_issuer'  WHERE product_id=%d", $product_id);
+    $query = $wpdb->prepare("SELECT c.*, pm.meta_value as `issuer` FROM {$wpdb->prefix}test_plans AS c LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=c.suite_id AND pm.meta_key='ts_issuer'  WHERE product_id=%d AND c.is_deleted = 0", $product_id);
     $rows = $wpdb->get_results($query);
 
     return $rows;
@@ -953,7 +953,7 @@ function getTestPlansBySuiteId($suite_id, $user_id)
     $query = $wpdb->prepare("SELECT p.*, pm.meta_value as `product_name` FROM " . $wpdb->prefix . "test_plans AS p 
                                 LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=p.product_id AND pm.meta_key='product_name'  
                                 LEFT JOIN " . $wpdb->prefix . "users_subscriptions as um on um.parent_id=p.organisation_subscription_id
-                            WHERE p.suite_id=%d AND um.user_id=%d", $suite_id, $user_id);
+                            WHERE p.suite_id=%d AND um.user_id=%d AND p.is_deleted = 0 ", $suite_id, $user_id);
     $rows = $wpdb->get_results($query);
     
     
