@@ -96,7 +96,7 @@ class CloudSearch {
         // step 1 - upload test plans
 
         $data = array();
-        $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans" );
+        $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans WHERE is_deleted = 0 " );
         foreach( $test_plans AS $test_plan ){
             $product = new ProductAndService( $test_plan->product_id );
             $product->load();
