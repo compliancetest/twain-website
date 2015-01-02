@@ -490,7 +490,7 @@ function ct_process_charge_entry_admin_actions()
                                     );
                                 }
                             } else {
-                                if (gmdate('m', strtotime($subscription->last_charge_date)) != gmdate('m')) {
+                                if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
                                     $monthesCounter = 0;
                                     while (gmdate('m', strtotime($subscription->last_charge_date)) != gmdate('m', strtotime('-' . $monthesCounter . ' month')) AND gmdate('Y', strtotime($subscription->last_charge_date)) <= gmdate('Y', strtotime('-' . $monthesCounter . ' month'))) {
                                         $data = array(
