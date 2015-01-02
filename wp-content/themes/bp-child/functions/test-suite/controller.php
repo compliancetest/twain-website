@@ -74,7 +74,7 @@ function process_testsuite_actions()
                     $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_subscriptions WHERE suite_id=%d", $suite->id);
                     $subscriptions = $wpdb->get_var($query);
                     //Check Transactions, Subscriptions and Test Plans
-                    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}test_plans WHERE suite_id=%d", $suite->id);
+                    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}test_plans WHERE suite_id=%d AND is_deleted = 0", $suite->id);
                     $test_plans = $wpdb->get_var($query);
                     
                     //Getting Transactions
