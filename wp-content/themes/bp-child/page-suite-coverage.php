@@ -85,7 +85,7 @@ $esb = new ManageESB();
                                            if( $is_optional == 'Yes' ) $opt = ' (opt) ';
                                            if( $is_excluded ) $exc = ' (excl) ';
                                            $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt .$exc. '</a><span></span></span>';
-                                           if(isset($caseStatus[$suite->suite_id][$crow->product_id][$case->ID])) 
+                                           if( isset( $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] ) && ! $is_excluded )
                                            {
                                                if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
                                                {
