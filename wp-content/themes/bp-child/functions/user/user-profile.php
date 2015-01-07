@@ -1115,7 +1115,7 @@ function generateProfile($profile_id, $community_id)
     } else if (isset($profile_content->Entity->ABN)) {
         $pre_desc = '(For testing with ' . $profile->profile_name . ', ABN ' . $profile_content->Entity->ABN . ')';
     }
-    
+
     if (empty($customDataGeneration)) {
         return;
     }
@@ -1182,7 +1182,7 @@ function generateProfile($profile_id, $community_id)
                         $content->Profile->Title .= ' (' . $profile->profile_name . ')';
                         $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
 
-//                        $row['content'] = base64_encode(stripcslashes(json_encode($content)));
+                        $row['content'] = base64_encode(stripcslashes(json_encode($content)));
                         $s3 = new S3Wrapper();
                         $s3->putObject( '/profiles/user/'.$row['token'].'.json',  json_encode( $content )  );
                         // Create new profile
