@@ -288,7 +288,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
             </div>
             <div class="clear"></div>
             <div class="space7"></div>
-            <?php if ($case->messageTemplates && $profileInstances): ?>
+            <?php if ($case->messageTemplates && $profileInstances && $case->no_message_sample != 'Yes' ):?>
 			<div class="grid_cell width100P toleft">
                 <div class="grid_head lighter_gray_bcg2 related">
                     <div class="grid_row nopaddingbottom nopaddingtop">
@@ -305,8 +305,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                         <div class="clear"></div>
                     </div>
                 </div>
-
-                <div class="grids message-sample">
+                    <div class="grids message-sample">
                         <div class="grid_row white_bcg padding5-10">
                             <div class="grid_cell width20P">
                                 <select class="select" id="message-template">

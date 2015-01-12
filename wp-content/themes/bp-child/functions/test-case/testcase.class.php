@@ -136,7 +136,10 @@ class TestCase
         $this->status = $this->loadSingleValue('test_case_status');
         $this->optional = $this->loadSingleValue('testcase_status');
         if( ! $this->optional ) $this->optional = 'No';
-        
+
+        $this->no_message_sample = $this->loadSingleValue('no_message_sample');
+        if( ! $this->no_message_sample ) $this->no_message_sample = 'No';
+
         $this->loadConformanceLevel();
         
         $this->loadTestSteps();
@@ -434,12 +437,12 @@ class TestCase
         {
             $types = cp_get_post_meta($sid, 'ts_profile_types', true);
             $types = cp_explode($types);
-            
+
             $ids = $wpdb->escape($types);
             if( empty( $ids ) ){
-                return array();
+                continue;
             }
-            $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.type='harness' AND pt.id IN (" . implode(", ", $ids) . ") ORDER BY pi.purpose, pi.profile_name";                    
+            $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.type='harness' AND pt.id IN (" . implode(", ", $ids) . ") ORDER BY pi.purpose, pi.profile_name";
             $rows = $wpdb->get_results($query);
             
             foreach($rows as $row)
@@ -448,7 +451,7 @@ class TestCase
             }
             
         }
-        
+
         return $instances;
     }
     

@@ -602,7 +602,10 @@ function saveCase()
     cp_update_post_meta($id, 'testcase_status', $_POST['optional']);
     cp_update_post_meta($id, 'message_count', $_POST['message_count']);
     cp_update_post_meta($id, 'test_case_status', $_POST['test_case_status']);
-    
+    if( ! isset( $_POST['no_message_sample'] ) ) {
+        $_POST['no_message_sample'] == 'No';
+    }
+    cp_update_post_meta($id, 'no_message_sample', $_POST['no_message_sample']);
     $tester_role = $_POST['choose_tester_role'];
     cp_update_post_meta($id, 'choose_tester_role',$tester_role);
     $harness_role = $_POST['choose_harness_role'];
