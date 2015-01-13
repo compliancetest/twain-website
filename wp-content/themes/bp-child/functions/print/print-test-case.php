@@ -83,12 +83,12 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                 <b>
                             <?php
                             $lArr = array();
-                            foreach($case->conformanceLevel[$test_suite_id] as $level)
-                            {
+                            if( is_iterable( $case->conformanceLevel[$test_suite_id] ) ) {
+                                foreach ($case->conformanceLevel[$test_suite_id] as $level) {
 
-                                if(groups_is_user_admin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE )
-                                {
-                                    $lArr[] = $level;
+                                    if (groups_is_user_admin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) {
+                                        $lArr[] = $level;
+                                    }
                                 }
                             }
                             sort($lArr);
@@ -133,20 +133,22 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
         </tr>
         <?php endif; ?>
         <?php
-        foreach($case->testExecutionData as $key => $row){
-        ?>
-            <tr>
-                <td><b><?php  echo $row['name'].':';?></b></td>
-                <td>
-                    <?php if(strpos($row['value'], 'http://') !== false || strpos($row['value'], 'https://') !== false){ ?>
-                    <a href="<?php echo $row['value']; ?>" class="blue_txt"><?php echo $row['value']; ?></a>
-                    <?php }else{ ?>
-                    <?php echo $row['value']?>
-                    <?php } ?>
-                </td>
-            </tr>
-        <?php    
-        } 
+        if( is_iterable( $case->testExecutionData ) ) {
+            foreach ($case->testExecutionData as $key => $row) {
+                ?>
+                <tr>
+                    <td><b><?php echo $row['name'] . ':';?></b></td>
+                    <td>
+                        <?php if (strpos($row['value'], 'http://') !== false || strpos($row['value'], 'https://') !== false) { ?>
+                            <a href="<?php echo $row['value']; ?>" class="blue_txt"><?php echo $row['value']; ?></a>
+                        <?php } else { ?>
+                            <?php echo $row['value'] ?>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php
+            }
+        }
         ?>
     </table>
     <br />
