@@ -347,17 +347,13 @@ if(!is_user_logged_in())
                 'remember' => false,
                 'value_remember' => false ); 
         ?>
-        <div class="column right nopadding nomarginbottom" id="top_acces_wrap">                    
-            
+        <div class="column right nopadding nomarginbottom" id="top_acces_wrap">
             <?php 
-            cp_login_form($args);
+                cp_login_form($args);
             ?>
             <a href="<?php echo get_bloginfo('url');?>/reset-password/" id="pass_recovery">Forgot Password?</a>
             <span class="simple_tooltip_pop radius6" id="header_login_error_msg"><span></span>Wrong username or password, please try again!</span>
-            <div id="or" class="left">
-                <img src="<?php echo bloginfo('stylesheet_directory'); ?>/images/or.png" />
-            </div>
-            <div id="registration_button"><a class="popup register" rel="custom-popup" cp-type="inline" href="#registration-popup">SIGNUP</a></div>            
+            <div id="registration_button"><a class="popup register" rel="custom-popup" cp-type="inline" href="#registration-popup">SIGNUP</a></div>
         </div>
         <?php
         $html = ob_get_contents();

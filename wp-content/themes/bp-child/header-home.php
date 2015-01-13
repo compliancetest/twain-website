@@ -29,6 +29,11 @@
         <div id="header-wrapper"><!-- Start Header-Wrapper -->
             <div class="header column">
                 <a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+                <div class="message-of-day-head">
+                    <div class="message-of-day-head-title">Title for the Message of the Day</div>
+                    This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean <a href="#">sollicitudin</a>. Bibendumauctor, nisi elit consequat ipsum.
+                </div>
+
                 <?php
                     //Show this banner only on the test site                    
                     if(strpos(get_site_url(), 'test.compliancetest.net') !== false){
@@ -40,47 +45,37 @@
                  <?php     
                  if ( is_user_logged_in() ) { 
                         ?>
-                        <div class="column third right no-marginbottom" id="top_logged_wrap">
+                        <div class="header-actions">
                             <?php 
                                 global $current_user;
                                 get_currentuserinfo();
                             ?>
-                            <div id="top_loged_wellcome">
+                            <div id="top_loged_actions">
+                                <ul>
+                                    <li class="dropdown">
+                                        <a href="javascript:void(0)" class="blue-btn action-btn icon-btn dashboard-btn">
+                                            <span class="p"></span>
+                                            <span class="t">Dashboard</span>
+                                        </a>
+                                        <?php echo getDashboardMenuHTML(getDashboardPages('menu'), 'dashboard-dropdown-menu'); ?>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo wp_logout_url( get_bloginfo('siteurl') ); ?>" class="red-btn action-btn icon-btn logout-btn">
+                                            <span class="p"></span>
+                                            <span class="t">Logout</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="header-user-info">
                                 <?php echo get_avatar($current_user->user_email, 32);  ?>
-                                <div class="right toright">
+                                <div class="header-welcome">
                                     Welcome
-                                    <h5><?php echo cp_get_user_display_name($current_user) ;?></h5>
+                                    <strong class="header-username"><?php echo cp_get_user_display_name($current_user) ;?></strong>
                                 </div>
-                                <div class="clear"></div>
-                                <div id="top_loged_actions">
-                                    <?php
-//                                    if(is_home() || is_page('my-profile') ) {
-                                        $logout_redirect = get_bloginfo('siteurl');
-                                    /*}else{
-                                        $logout_redirect = get_permalink();
-                                    }*/
-                                    ?>
-                                    <ul>
-                                        <li class="dropdown">
-                                            <a href="javascript:void(0)" class="blue-btn action-btn icon-btn dashboard-btn">
-                                                <span class="p"></span>
-                                                <span class="t">Dashboard</span>
-                                            </a>
-                                            <?php echo getDashboardMenuHTML(getDashboardPages('menu'), 'dashboard-dropdown-menu'); ?>
-                                        </li>
-                                        <li>
-                                            <a href="<?php echo wp_logout_url( $logout_redirect ); ?>" class="red-btn action-btn icon-btn logout-btn">
-                                                <span class="p"></span>
-                                                <span class="t">Logout</span>                                                
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="clear"></div>
-                            </div>                            
-                            <div class="clear"></div>
-                        </div>    
+                            </div>
+                        </div>
                         
                     <?php 
                     } else {
