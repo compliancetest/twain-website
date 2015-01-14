@@ -2887,18 +2887,6 @@ background-image: url(../images/white_gloss.png);
         -o-box-shadow: 0 0 10px #dedede inset;
     }
 
-.pagination li a {
-
-}
-
-.pagination a:hover {
-
-}
-
-.pagination span {
-
-}
-
 /* REGISTRATION POP-UP */
 
 
@@ -8869,7 +8857,7 @@ input.inactive_s{
 }
 
 .search-filters-list{
-    padding: 6px 20px;
+    padding: 6px 20px 15px 20px;
 
 }
 .search-filters-list li{
@@ -8982,14 +8970,19 @@ input.inactive_s{
     font-size: 13px;
     font-weight: 700;
     border: 0;
-    border-top: 1px solid #a0a0a0;
     border-bottom: 1px solid #a0a0a0;
+    border-top: 1px solid #a0a0a0;
     background: #fff;
     color: #666;
     padding: 6px 15px 7px 15px;
     text-align: center;
     white-space: nowrap;
     position: relative;
+}
+
+.search-result-list thead th a{
+    color: #666;
+    text-decoration: none;
 }
 
 .search-result-list tbody{
@@ -9046,26 +9039,47 @@ input.inactive_s{
 }
 .search-result-list thead th .sort{
     display: inline-block;
-    width: 9px;
-    height: 6px;
-    background: url(../images/order1.png) no-repeat 0 -6px;
-    position: absolute;
-    top: 13px;
-    right: 4px;
-    display: none;
+    width: 8px;
+    height: 12px;
+    background: url(../images/bg/sorting-arrows.png) no-repeat 0 0;
+    vertical-align: middle;
+    margin: 0 0 0 7px;
 }
-.search-result-list thead th a.desc .sort{
-    background-position: 0 0;
-}
+
 .search-result-list thead th a:hover .sort{
-    display: block;
+    background-position: -16px 0;
 }
-.search-result-list thead th a.current .sort{
-    display: block;
+
+.search-result-list thead th .desc .sort{
+    background-position: -8px 0;
 }
-.search-result-list thead th a.asc:hover .sort{
-    background-position: 0 0;
+.search-result-list thead th .asc .sort{
+    background-position: -16px 0;
 }
-.search-result-list thead th a.desc:hover .sort{
-    background-position: 0 -6px;
+.search-result-list thead th .desc:hoser .sort{
+    background-position: -16px 0;
+}
+.search-result-list thead th .asc:hover .sort{
+    background-position: -8px 0;
+}
+
+.site-search-result-list thead  th{
+    text-align: left;
+    padding: 13px 15px;
+    white-space: nowrap;
+}
+
+.site-search-result-list tbody td{
+    text-align: left;
+    vertical-align: top;
+    padding: 13px 15px;
+}
+
+.site-search-result-list .short-description{
+    max-width: 415px;
+    margin: 0;
+}
+
+.site-search-result-list tbody td.last{
+    text-align: left;
 }

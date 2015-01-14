@@ -1,5 +1,5 @@
 <div class="header-search">
-    <form action="#">
+    <form action="/search-results/">
         <div class="header-search-box">
             <input type="text" class="header-search-field"/>
             <div class="header-search-type">

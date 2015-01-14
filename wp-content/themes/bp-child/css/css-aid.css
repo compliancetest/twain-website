@@ -2282,8 +2282,8 @@ tr {
     background-color: #e9e9e9;
 }
 .pagination .current{
-    color: #18529b !important;
-    background: #fff !important;
+    color: #18529b;
+    background: #fff;
     box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
 }
 
@@ -2296,6 +2296,50 @@ tr {
     text-indent: -9999px;
     border-right: none;
 }
+
+.flat-pagination .pagination{
+    background: none;
+    border: 0;
+}
+
+.flat-pagination .page-numbers{
+    background: none;
+    border: 0;
+    color: #2c80e8;
+    font-size: 12.5px;
+    width: 22px;
+    font-weight: 400;
+    height: 22px;
+    margin: 0 0 0 5px;
+    line-height: 22px;
+}
+
+.flat-pagination a.page-numbers:hover{
+    background: #6aa7f3;
+    color: #fff;
+}
+
+.flat-pagination .current,
+.flat-pagination .current:hover{
+    background: #2c80e8;
+    box-shadow: none;
+    color: #fff;
+}
+
+
+.flat-pagination .prev,
+.flat-pagination .next{
+    background: none;
+    text-indent: 0;
+    width: auto;
+}
+
+.flat-pagination a.prev:hover,
+.flat-pagination a.next:hover{
+    text-decoration: underline;
+    background: none;
+}
+
 
 /** For Static Content Pages ***/
 .content_inner{
