@@ -339,7 +339,7 @@ if(!is_user_logged_in())
                 'label_username' => __( '' ),
                 'label_password' => __( '' ),
                 'label_remember' => __( 'Remember Me' ),
-                'label_log_in' => __( 'LOGIN' ),
+                'label_log_in' => __( 'Login' ),
                 'id_username' => 'user_login',
                 'id_password' => 'user_pass',
                 'id_remember' => 'rememberme',
@@ -347,13 +347,34 @@ if(!is_user_logged_in())
                 'remember' => false,
                 'value_remember' => false ); 
         ?>
-        <div class="column right nopadding nomarginbottom" id="top_acces_wrap">
-            <?php 
-                cp_login_form($args);
-            ?>
-            <a href="<?php echo get_bloginfo('url');?>/reset-password/" id="pass_recovery">Forgot Password?</a>
-            <span class="simple_tooltip_pop radius6" id="header_login_error_msg"><span></span>Wrong username or password, please try again!</span>
-            <div id="registration_button"><a class="popup register" rel="custom-popup" cp-type="inline" href="#registration-popup">SIGNUP</a></div>
+        <div class="header-actions">
+            <div id="top_acces_wrap">
+                <div id="top_loged_actions">
+                    <ul>
+                        <li class="dropdown">
+                            <a href="javascript:void(0)" class="blue-btn action-btn icon-btn login-btn">
+                                <span class="p"></span>
+                                <span class="t">Login</span>
+                            </a>
+                            <div class="dropdown-menu header-login-dropdown-menu">
+                                <div class="header-login-dropdown-menu-inner">
+                                    <?php
+                                        cp_login_form($args);
+                                    ?>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <a class="red-btn action-btn icon-btn signup-btn popup" rel="custom-popup" cp-type="inline" href="#registration-popup">
+                                <span class="p"></span>
+                                <span class="t">Signup</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <?php get_template_part( 'header-search-form' ); ?>
         </div>
         <?php
         $html = ob_get_contents();
@@ -368,7 +389,8 @@ if(!is_user_logged_in())
         ob_start();
         ?>
         <div id="registration-popup" class="popup-box" style="display: none;">
-<!--            <div id="dinamic_pop" class="dinamic_pop radius6">
+<?php /*
+            <div id="dinamic_pop" class="dinamic_pop radius6">
                 <p class="headline bottom30">Add New User</p>
                 <div class="pop_add_user">
                     <div class="wrap_wline">
@@ -382,7 +404,8 @@ if(!is_user_logged_in())
                         </select>
                     </div>
                 </div>
-            </div>                -->
+            </div>
+ */ ?>
             
             <div id="registration">
                 <div class="popup-box-header radius6 noradiusbottom">User Registration</div>
@@ -556,10 +579,12 @@ function cp_login_form( $args = array() ) {
 			</p>
 			' . apply_filters( 'login_form_middle', '', $args ) . '
 			' . ( $args['remember'] ? '<p class="login-remember"><label><input name="rememberme" type="checkbox" id="' . esc_attr( $args['id_remember'] ) . '" value="forever"' . ( $args['value_remember'] ? ' checked="checked"' : '' ) . ' /> ' . esc_html( $args['label_remember'] ) . '</label></p>' : '' ) . '
-			<p class="login-submit">
-				<input type="submit" name="wp-submit" id="' . esc_attr( $args['id_submit'] ) . '" class="button-primary" value="' . esc_attr( $args['label_log_in'] ) . '" />
-				<input type="hidden" name="redirect_to" value="' . esc_url( $args['redirect'] ) . '" />
-			</p>
+			<span id="header_login_error_msg" class="header-login-error" style="display:none;">Wrong username or password, please try again!</span>
+			<div class="submit-row">
+			    <a href="' . get_bloginfo('url') . '/reset-password/" id="pass_recovery">Forgot Password?</a>
+                <input type="submit" name="wp-submit" id="' . esc_attr( $args['id_submit'] ) . '" class="blue-btn action-btn login-submit" value="' . esc_attr( $args['label_log_in'] ) . '" />
+            </div>
+            <input type="hidden" name="redirect_to" value="' . esc_url( $args['redirect'] ) . '" />
 			' . apply_filters( 'login_form_bottom', '', $args ) . '
 		</form>';
 

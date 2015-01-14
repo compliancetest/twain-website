@@ -1,5 +1,7 @@
 		        </div><!-- End Container -->
-            <div class="space45"></div>
+            <?php if(!is_home()): ?>
+                <div class="space45"></div>
+            <?php endif; ?>
             <div class="clear"></div>
             </div><!-- End Content-Wrapper -->
         </div><!-- End Content-Pattern -->
@@ -43,10 +45,7 @@
                     <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/drummond_group_logo.png" alt="Drummond Group Logo" />
 				</div>
                 <div class="clear"></div>
-
-
-				
-				<div class="space25"></div>
+                 <div class="space25"></div>
 			</div>
 		</div>
         <!-- **************** FOOTER *************** -->
