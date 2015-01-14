@@ -106,7 +106,7 @@ if( isset( $_GET['download']) ){
                 <table class="search-result-list site-search-result-list">
                     <thead>
                         <tr>
-                            <th class="first row-title">Article Title</th>
+                            <th class="first row-title">Title</th>
                             <th class="row-description">Description</th>
                             <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=type&order=<?php echo $orderby == 'type' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'type'){ ?>class="current <?php echo $order?>"<?php } ?>>Type<span class="sort"></span></a></th>
                             <th>Community</th>
