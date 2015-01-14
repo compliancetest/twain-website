@@ -78,13 +78,14 @@
                 }
                 ?>
                 <a href="<?php bloginfo('url'); ?>" class="header-logo"><img src="<?php echo of_get_option('logo'); ?>"/></a>
-
+                <?php if (of_get_option('msg_of_day_title') || of_get_option('msg_of_day_content')): ?>
                 <div class="message-of-day-head">
                     <div class="message-of-day-head-inner">
-                        <div class="message-of-day-head-title">Title for the Message of the Day</div>
-                        This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean <a href="#">sollicitudin</a>. Bibendumauctor, nisi elit consequat ipsum.
+                        <div class="message-of-day-head-title"><?php echo of_get_option('msg_of_day_title') ?></div>
+                        <?php echo of_get_option('msg_of_day_content') ?>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </div><!-- End Header-Wrapper -->        
         <div class="clear"></div>

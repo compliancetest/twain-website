@@ -109,6 +109,16 @@ function optionsframework_options() {
 		'id' => 'reg_msg',
 		'type' => 'textarea');
     
+	$options[] = array(
+		'name' => __('Message of the day title', 'options_framework_theme'),
+		'id' => 'msg_of_day_title',
+		'type' => 'text');
+
+	$options[] = array(
+		'name' => __('Message of the day content', 'options_framework_theme'),
+		'id' => 'msg_of_day_content',
+		'type' => 'editor');
+
 	/*$options[] = array(
 		'name' => __('Inactive user login message', 'options_framework_theme'),
 		'id' => 'log_msg',
