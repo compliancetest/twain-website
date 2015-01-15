@@ -9037,30 +9037,46 @@ input.inactive_s{
     top: 3px;
     margin-right: 5px;
 }
+
+.search-result-list thead th .sorting-box{
+    display: inline-block;
+    height: 12px;
+    line-height: 18px;
+    top: 2px;
+    position: relative;
+}
+
+.search-result-list thead th .sorting-box .sorting-link{
+    display: block;
+    margin: 0 0 0 7px;
+    width: 10px;
+    height: 7px;
+    text-align: center;
+}
+
 .search-result-list thead th .sort{
     display: inline-block;
     width: 8px;
-    height: 12px;
+    height: 6px;
     background: url(../images/bg/sorting-arrows.png) no-repeat 0 0;
-    vertical-align: middle;
-    margin: 0 0 0 7px;
 }
 
-.search-result-list thead th a:hover .sort{
-    background-position: -16px 0;
+.search-result-list thead th .sorting-box .asc{
 }
 
-.search-result-list thead th .desc .sort{
+.search-result-list thead th .sorting-box .asc .sort{
+    background-position: 0 0;
+}
+.search-result-list thead th .sorting-box .desc .sort{
+    background-position: 0 -6px;
+}
+.search-result-list thead th .sorting-box .asc:hover .sort,
+.search-result-list thead th .sorting-box .asc.current .sort{
     background-position: -8px 0;
 }
-.search-result-list thead th .asc .sort{
-    background-position: -16px 0;
-}
-.search-result-list thead th .desc:hover .sort{
-    background-position: -16px 0;
-}
-.search-result-list thead th .asc:hover .sort{
-    background-position: -8px 0;
+.search-result-list thead th .sorting-box .desc:hover .sort,
+.search-result-list thead th .sorting-box .desc.current .sort{
+    background-position: -8px -6px;
 }
 
 .site-search-result-list thead  th{
