@@ -26,14 +26,6 @@
     <div id="wrapper">
 
         <!-- ****************** HEADER ***************** -->
-        <?php
-        //Show this banner only on the test site
-        if(strpos(get_site_url(), 'test.compliancetest.net') !== false){
-            ?>
-            <div style="text-align: center; padding: 5px 0; font-size: 16px;font-weight: bold;line-height: 1.3em; background: red; color: #fff;">Development Site Only - Customers please use <a href="http://www.compliancetest.net" style="color: #fff; text-decoration: underline;">www.compliancetest.net</a></div>
-        <?php
-        }
-        ?>
         <div id="header-wrapper"><!-- Start Header-Wrapper -->
             <div class="site-header">
                 <?php
