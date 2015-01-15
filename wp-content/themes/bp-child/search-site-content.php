@@ -108,9 +108,20 @@ if( isset( $_GET['download']) ){
                         <tr>
                             <th class="first row-title">Title</th>
                             <th class="row-description">Description</th>
-                            <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=type&order=<?php echo $orderby == 'type' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'type'){ ?>class="current <?php echo $order?>"<?php } ?>>Type<span class="sort"></span></a></th>
+                            <th>
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'type' && $order == 'asc' ? 'desc' : 'asc'?>">Type</a>
+                                <div class="sorting-box">
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=type&order=asc"  class="sorting-link asc<?php if($orderby == 'type' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=type&order=desc" class="sorting-link desc<?php if($orderby == 'type' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                </div>
                             <th>Community</th>
-                            <th class="last row-date"><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'date'){ ?>class="current <?php echo $order?>"<?php } ?>>Last Update <span class="sort"></span></a></th>
+                            <th class="last row-date">
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc'?>">Last Update</a>
+                                <div class="sorting-box">
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=asc"  class="sorting-link asc<?php if($orderby == 'date' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=desc" class="sorting-link desc<?php if($orderby == 'date' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

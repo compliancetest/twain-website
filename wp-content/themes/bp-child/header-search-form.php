@@ -5,8 +5,8 @@
             <div class="header-search-type">
                 <div class="header-search-type-inner">
                     <select class="header-search-type-field">
-                        <option value="site">Site</option>
-                        <option value="registry">Registry</option>
+                        <option value="site" <?php if (is_page_template( 'search-site-content.php' )) { ?>selected="selected" <?php } ?>>Site</option>
+                        <option value="registry" <?php if (is_page_template( 'search-productservice.php' )) { ?>selected="selected" <?php } ?>>Registry</option>
                     </select>
                 </div>
             </div>
