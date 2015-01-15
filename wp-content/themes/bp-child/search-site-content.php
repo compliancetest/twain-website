@@ -9,7 +9,7 @@ global $post;
 
 $baseURL = get_permalink();
 
-$cloud_search = new CloudSearch();
+$cloud_search = new FulltextSearch();
 $params = array();
 $params1 = array();
 if( $_GET ){
@@ -31,7 +31,7 @@ $results = $cloud_search->search( $_GET );
 if( isset( $_GET['download']) ){
     unset( $_GET['download']);
     $results = $cloud_search->search( $_GET, true );
-    generate_and_download( $results );
+    generate_and_download_site( $results );
 }
 ?>
 <div class="content container" id="search">
@@ -49,21 +49,25 @@ if( isset( $_GET['download']) ){
                     <ul class="search-filters-list clearfix">
                         <li class="first">
                             <label for="content-type-filter">Type</label>
-                            <select name="type" id="content-type-filter" class="select">
+                            <select name="post_type" id="content-type-filter" class="select">
                                 <option>All</option>
-                                <option>Forum Post</option>
-                                <option>Wiki Article</option>
-                                <option>Site Page</option>
-                                <option>Test Case</option>
-                                <option>Blog</option>
+                                <?php if( is_array( $results['facets']['post_type']['buckets'] ) ):?>
+                                    <?php foreach ($results['facets']['post_type']['buckets'] AS $v): ?>
+                                        <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['post_type'] ) && $_GET['post_type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value'];?></option>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
                             </select>
                         </li>
                         <li>
                             <label for="community-filter">Community</label>
-                            <select name="owner" id="community-filter" class="select">
+                            <select name="community" id="community-filter" class="select">
                                 <option>All</option>
-                                <option>SuperStream</option>
-                                <option>ebMS</option>
+                                <?php if( is_array( $results['facets']['community']['buckets'] ) ):?>
+                                    <?php foreach ($results['facets']['community']['buckets'] AS $v): ?>
+                                        <?php if( $v['value'] == 'All' ) continue;?>
+                                        <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['community'] ) && $_GET['community'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value'];?></option>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
                             </select>
                         </li>
                         <li>
@@ -109,33 +113,40 @@ if( isset( $_GET['download']) ){
                             <th class="first row-title">Title</th>
                             <th class="row-description">Description</th>
                             <th>
-                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'type' && $order == 'asc' ? 'desc' : 'asc'?>">Type</a>
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=post_type&order=<?php echo $orderby == 'post_type' && $order == 'asc' ? 'desc' : 'asc'?>">Type</a>
                                 <div class="sorting-box">
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=type&order=asc"  class="sorting-link asc<?php if($orderby == 'type' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=type&order=desc" class="sorting-link desc<?php if($orderby == 'type' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=post_type&order=asc"  class="sorting-link asc<?php if($orderby == 'post_type' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=post_type&order=desc" class="sorting-link desc<?php if($orderby == 'post_type' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
                                 </div>
                             <th>Community</th>
                             <th class="last row-date">
-                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc'?>">Last Update</a>
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=<?php echo $orderby == 'last_updated_date' && $order == 'asc' ? 'desc' : 'asc'?>">Last Update</a>
                                 <div class="sorting-box">
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=asc"  class="sorting-link asc<?php if($orderby == 'date' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=desc" class="sorting-link desc<?php if($orderby == 'date' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=asc"  class="sorting-link asc<?php if($orderby == 'last_updated_date' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=desc" class="sorting-link desc<?php if($orderby == 'last_updated_date' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
                                 </div>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php if( $results['hits']['found'] > 0):?>
-                        <?php foreach( $results['hits']['hit'] as $row ): ?>
-                        <tr>
-                            <td class="first"><a href="#">Page Title Lorem Ipsum Text</a></td>
-                            <td>
-                                <p class="short-description">This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non  mauris vitae erat ...</p>
-                            </td>
-                            <td>Forum Post</td>
-                            <td><a href="#">SuperStream</a></td>
-                            <td class="last">2014-11-11</td>
-                        </tr>
+                        <?php foreach( $results['hits']['hit'] AS $row ): ?>
+                            <?php $row = $row['fields'];?>
+                            <tr>
+                                <td class="first">
+                                    <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'];?></a>
+                                </td>
+                                <td>
+                                    <p class="short-description"><?php echo strlen( strip_tags( $row['post_content'] ) ) > 400 ? substr( strip_tags( $row['post_content'] ), 0, 400 ). '...' : strip_tags( $row['post_content'] );?></p>
+                                </td>
+                                <td><?php echo $row['post_type'];?></td>
+                                <td>
+                                    <?php if( ! empty( $row['community'] ) && is_array( $row['community'] ) ):?>
+                                        <?php echo implode( '<br>', $row['community'] );?>
+                                    <?php endif;?>
+                                </td>
+                                <td class="last"><?php echo date( 'Y-m-d', strtotime( $row['last_updated_date'] ) );?></td>
+                            </tr>
                         <?php endforeach; ?>
                     <?php endif;?>
                     </tbody>
@@ -180,20 +191,4 @@ if( isset( $_GET['download']) ){
         <?php endif; ?>
     </div>
 </div>
-<script>
-//    jQuery( document).ready(function(){
-//        jQuery('.page-numbers').on('click', function(e){
-//            e.preventDefault();
-//            var page_number = jQuery( this ).attr( 'href' ).split('/');
-//            page_number = page_number[page_number.length - 1].replace( '?', '' );
-//            if( page_number ) {
-//                jQuery('#page_v').val(page_number);
-//                jQuery('#form_filter').submit();
-//            } else{
-//                location.reload();
-//            }
-//            return false;
-//        });
-//    });
-</script>
 <?php get_footer() ?>

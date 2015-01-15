@@ -1325,6 +1325,36 @@ function generate_and_download( $data ){
     fclose($outstream);
     exit();
 }
+
+function generate_and_download_site( $data ){
+    ob_clean();
+    header("Content-type: application/x-msdownload",true,200);
+    header("Content-Disposition: attachment; filename=results.csv");
+    $outstream = fopen("php://output", "w");
+    fputcsv($outstream, array(
+        'Title',
+        'Description',
+        'Type',
+        'Community',
+        'Last Update'
+    ));
+    if (is_array($data['hits']['hit'])) {
+        foreach( $data['hits']['hit'] as $row ){
+            $row_data = $row['fields'];
+                $tempArray = array(
+                    $row_data['post_title'],
+                    $row_data['post_content'],
+                    $row_data['post_type'],
+                    ! empty( $row_data['community'] ) && is_array( $row_data['community'] ) ? implode( ',', $row_data['community'] ) : '',
+                    date( 'Y-m-d', strtotime( $row_data['last_updated_date'] ) )
+                );
+                fputcsv( $outstream, $tempArray );
+        }
+    }
+    fclose($outstream);
+    exit();
+}
+
 function groups_is_user_admin_in_any_community( $user_id, $communitiesList = false  ){
     global $wpdb;
     $communities_ids = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}bp_groups");
