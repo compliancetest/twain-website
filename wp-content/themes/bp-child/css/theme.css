@@ -9056,7 +9056,7 @@ input.inactive_s{
 .search-result-list thead th .asc .sort{
     background-position: -16px 0;
 }
-.search-result-list thead th .desc:hoser .sort{
+.search-result-list thead th .desc:hover .sort{
     background-position: -16px 0;
 }
 .search-result-list thead th .asc:hover .sort{
