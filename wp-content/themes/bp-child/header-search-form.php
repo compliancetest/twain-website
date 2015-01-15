@@ -1,11 +1,11 @@
 <div class="header-search">
     <form action="/search-results/">
         <div class="header-search-box">
-            <input type="text" name="q" class="header-search-field" value="<?php echo $_GET['q'] ?>"/>
+            <input type="text" name="q" class="header-search-field" value="<?php echo $_GET['q'] ?>" placeholder="Search" />
             <div class="header-search-type">
                 <div class="header-search-type-inner">
                     <select class="header-search-type-field">
-                        <option value="site">Static</option>
+                        <option value="site">Site</option>
                         <option value="registry">Registry</option>
                     </select>
                 </div>
