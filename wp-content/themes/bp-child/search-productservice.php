@@ -323,20 +323,4 @@ if( isset( $_GET['download']) ){
         <?php endif; ?>
     </div>
 </div>
-<script>
-//    jQuery( document).ready(function(){
-//        jQuery('.page-numbers').on('click', function(e){
-//            e.preventDefault();
-//            var page_number = jQuery( this ).attr( 'href' ).split('/');
-//            page_number = page_number[page_number.length - 1].replace( '?', '' );
-//            if( page_number ) {
-//                jQuery('#page_v').val(page_number);
-//                jQuery('#form_filter').submit();
-//            } else{
-//                location.reload();
-//            }
-//            return false;
-//        });
-//    });
-</script>
 <?php get_footer() ?>
