@@ -5,7 +5,7 @@
     wp_enqueue_style( 'home', get_stylesheet_directory_uri() . '/css/home.css', '', '0.1');
     wp_enqueue_script( 'lemmon_slider', get_stylesheet_directory_uri() . '/js/lemmon-slider.js', array('jquery'), '0.2');
 
-    get_header('home');
+    get_header();
 ?>
 		<div class="homepage">
             <div class="home-collage">
@@ -136,4 +136,4 @@
         });
     });
 </script>
-<?php get_footer('home'); ?>
+<?php get_footer(); ?>

@@ -2,7 +2,7 @@
     wp_enqueue_script( 'home', get_stylesheet_directory_uri() . '/js/home.js', array('jquery'), '0.1');
     wp_enqueue_script( 'lemmon_slider', get_stylesheet_directory_uri() . '/js/lemmon-slider.js', array('jquery'), '0.2');
 
-    get_header('home');
+    get_header();
 
     $home_settings = get_option('home-settings');
 ?>
@@ -161,4 +161,4 @@
         </div>
     </div>
 </div>
-<?php get_footer('home'); ?>
+<?php get_footer(); ?>

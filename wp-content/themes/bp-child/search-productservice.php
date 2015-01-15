@@ -181,7 +181,7 @@ if( isset( $_GET['download']) ){
                         <th>Level</th>
                         <th>Status</th>
                         <th>Test Type</th>
-                        <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'date'){ ?>class="current <?php echo $order?>"<?php } ?>>Date <span class="sort"></span></a></th>
+                        <th><a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=date&order=<?php echo $orderby == 'date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderby == 'date'){ ?>class="current <?php echo $order?>"<?php } ?>>Date<span class="sort"></span></a></th>
                         <?php if( is_super_admin() ): ?>
                             <th>Action</th>
                         <?php endif; ?>
@@ -287,7 +287,7 @@ if( isset( $_GET['download']) ){
                                 agreementFirstRows.height(rowHeight);
                         });
                 </script>
-                <div class="pagination-wrapper">
+                <div class="pagination-wrapper flat-pagination">
                     <div class="pagination">
                         <?php
                         $args = array(
@@ -299,8 +299,8 @@ if( isset( $_GET['download']) ){
                             'end_size'     => 5,
                             'mid_size'     => 5,
                             'prev_next'    => True,
-                            'prev_text'    => __('« Previous'),
-                            'next_text'    => __('Next »'),
+                            'prev_text'    => __('Previous'),
+                            'next_text'    => __('Next'),
                             'type'         => 'plain',
                             'add_args'     => false,
                             'add_fragment' => (count($params) > 0 ? '&' : '') . implode('&', $params)

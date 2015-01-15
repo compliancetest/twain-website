@@ -111,6 +111,8 @@ require_once(THE_FUNCTION . '/processes/class.process.php');
 
 //CloudSearch
 require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
+require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
+require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
 
 //S3
 require_once(THE_FUNCTION . '/aws/s3/Client.php');

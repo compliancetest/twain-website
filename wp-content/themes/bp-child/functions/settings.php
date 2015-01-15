@@ -91,6 +91,9 @@ function create_compliancetest_settings_page()
     } else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-cloudsearch-settings')){
         update_option('cloudsearch_search_endpoint', $_POST['cloudsearch_search_endpoint']);
         update_option('cloudsearch_document_endpoint', $_POST['cloudsearch_document_endpoint']);
+
+        update_option('cloudsearch_fulltext_search_endpoint', $_POST['cloudsearch_fulltext_search_endpoint']);
+        update_option('cloudsearch_fulltext_document_endpoint', $_POST['cloudsearch_fulltext_document_endpoint']);
     }
     
 ?>
@@ -419,7 +422,14 @@ function create_compliancetest_settings_page()
                             <th><label><b>Document EndPoint:</b></label></th>
                             <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="<?php echo get_option('cloudsearch_document_endpoint')?>" size="50" autocomplete="off" /></td>
                         </tr>
-
+                        <tr>
+                            <th><label><b>Fulltext Search EndPoint:</b></label></th>
+                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="<?php echo get_option('cloudsearch_fulltext_search_endpoint')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Fulltext Document EndPoint:</b></label></th>
+                            <td><input type="text" name="cloudsearch_fulltext_document_endpoint" id="cloudsearch_fulltext_document_endpoint" value="<?php echo get_option('cloudsearch_fulltext_document_endpoint')?>" size="50" autocomplete="off" /></td>
+                        </tr>
                     </table>
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-cloudsearch-settings'); ?>

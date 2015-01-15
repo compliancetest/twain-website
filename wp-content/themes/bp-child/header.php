@@ -26,69 +26,67 @@
     <div id="wrapper">
 
         <!-- ****************** HEADER ***************** -->
+        <?php
+        //Show this banner only on the test site
+        if(strpos(get_site_url(), 'test.compliancetest.net') !== false){
+            ?>
+            <div style="text-align: center; padding: 5px 0; font-size: 16px;font-weight: bold;line-height: 1.3em; background: red; color: #fff;">Development Site Only - Customers please use <a href="http://www.compliancetest.net" style="color: #fff; text-decoration: underline;">www.compliancetest.net</a></div>
+        <?php
+        }
+        ?>
         <div id="header-wrapper"><!-- Start Header-Wrapper -->
-            <div class="header column">
-                <a href="<?php bloginfo('url'); ?>" class="logo left"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+            <div class="site-header">
                 <?php
-                    //Show this banner only on the test site                    
-                    if(strpos(get_site_url(), 'test.compliancetest.net') !== false){
-                ?>
-                <div style="float: left; width: 300px;font-size: 16px;font-weight: bold;line-height: 1.3em;padding: 20px 0 0 70px">Development Site Only - Customers please use <a href="http://www.compliancetest.net">www.compliancetest.net</a></div>
-                <?php
-                    }
-                ?>
-                 <?php     
-                 if ( is_user_logged_in() ) { 
-                        ?>
-                        <div class="column third right no-marginbottom" id="top_logged_wrap">
-                            <?php 
-                                global $current_user;
-                                get_currentuserinfo();
-                            ?>
-                            <div id="top_loged_wellcome">
-                                <?php echo get_avatar($current_user->user_email, 32);  ?>
-                                <div class="right toright">
-                                    Welcome
-                                    <h5><?php echo cp_get_user_display_name($current_user) ;?></h5>
-                                </div>
-                                <div class="clear"></div>
-                                <div id="top_loged_actions">
-                                    <?php
-//                                    if(is_home() || is_page('my-profile') ) {
-                                        $logout_redirect = get_bloginfo('siteurl');
-                                    /*}else{
-                                        $logout_redirect = get_permalink();
-                                    }*/
-                                    ?>
-                                    <ul>
-                                        <li class="dropdown">
-                                            <a href="javascript:void(0)" class="blue-btn action-btn icon-btn dashboard-btn">
-                                                <span class="p"></span>
-                                                <span class="t">Dashboard</span>
-                                            </a>
-                                            <?php echo getDashboardMenuHTML(getDashboardPages('menu'), 'dashboard-dropdown-menu'); ?>
-                                        </li>
-                                        <li>
-                                            <a href="<?php echo wp_logout_url( $logout_redirect ); ?>" class="red-btn action-btn icon-btn logout-btn">
-                                                <span class="p"></span>
-                                                <span class="t">Logout</span>                                                
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="clear"></div>
-                            </div>                            
-                            <div class="clear"></div>
-                        </div>    
-                        
-                    <?php 
-                    } else {
-                        do_action('cp_header_login_form');
-                    }
+                if ( is_user_logged_in() ) {
                     ?>
-                <div class="clear"></div>
-            </div>        
+                    <div class="header-actions">
+                        <?php
+                        global $current_user;
+                        get_currentuserinfo();
+                        ?>
+                        <div id="top_loged_actions">
+                            <ul>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0)" class="blue-btn action-btn icon-btn dashboard-btn">
+                                        <span class="p"></span>
+                                        <span class="t">Dashboard</span>
+                                    </a>
+                                    <?php echo getDashboardMenuHTML(getDashboardPages('menu'), 'dashboard-dropdown-menu'); ?>
+                                </li>
+                                <li>
+                                    <a href="<?php echo wp_logout_url( get_bloginfo('siteurl') ); ?>" class="red-btn action-btn icon-btn logout-btn">
+                                        <span class="p"></span>
+                                        <span class="t">Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="header-user-info">
+                            <?php echo get_avatar($current_user->user_email, 32);  ?>
+                            <div class="header-welcome">
+                                Welcome
+                                <strong class="header-username"><?php echo cp_get_user_display_name($current_user) ;?></strong>
+                            </div>
+                        </div>
+                        <?php get_template_part( 'header-search-form' ); ?>
+                    </div>
+
+                <?php
+                } else {
+                    do_action('cp_header_login_form');
+                }
+                ?>
+                <a href="<?php bloginfo('url'); ?>" class="header-logo"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+                <?php if (of_get_option('msg_of_day_title') || of_get_option('msg_of_day_content')): ?>
+                <div class="message-of-day-head">
+                    <div class="message-of-day-head-inner">
+                        <div class="message-of-day-head-title"><?php echo of_get_option('msg_of_day_title') ?></div>
+                        <?php echo of_get_option('msg_of_day_content') ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
         </div><!-- End Header-Wrapper -->        
         <div class="clear"></div>
         <div id="menu-wrapper"><!-- Start Menu-Wrapper -->
@@ -227,4 +225,6 @@
                 <?php do_action( 'bp_before_container' ); ?>
                 <?php do_action( 'template_notices' ) ?>
                 <div id="container"><!-- Start Container -->
-                <div class="space25"></div>
+                <?php if(!is_home()): ?>
+                    <div class="space25"></div>
+                <?php endif; ?>

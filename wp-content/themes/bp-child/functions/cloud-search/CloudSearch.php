@@ -136,7 +136,10 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
         }
         echo '<br /> Test Plan - ';
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
         // step 2 - upload claims
 
         $data = array();
@@ -179,7 +182,10 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
         }
         echo '<br /> Claim - ';
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
 
         // step 3 - upload agreements
 
@@ -224,35 +230,10 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         }
         echo '<br /> Agreement - ';
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
-
-        //step 4 upload products
-        /*$data = array();
-        $args = array(
-            'post_type' => 'product-service',
-            'posts_per_page' => -1
-        );
-        $posts = get_posts($args);
-        foreach( $posts AS $post ){
-            $product = new ProductAndService( $post->ID );
-            $product->load();
-            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
-            $groups = groups_get_user_groups( $post_author );
-            $temp_data = array(
-                'name'        => $product->name,
-                'version'     => $product->version,
-                'owner'       => $product->owner,
-                'type'        => 'Software Product',
-                'test_type'   => 'Certification',
-                'for_search'  => $product->descrition. ' + '.$product->owner.' + Software Product + Certification + ',
-                'post_id'     => $product->id,
-                'visibility'  => $product->visibility == 'Public' ? 1 : 3,
-                'community_id' => $groups['groups'],
-                'user_id'     => $post_author
-            );
-            array_push( $data, array( 'type' => 'add', 'id' => 'product_'.$product->id, 'fields' => $temp_data ) );
-        }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );*/
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
 
         //step 5 upload services
         $data = array();
@@ -292,8 +273,10 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$post->ID, 'fields' => $temp_data ) );
         }
         echo '<br /> Service - ';
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
-        die;
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
     }
 
     /**
@@ -311,8 +294,11 @@ class CloudSearch {
         foreach( $results['hits']['hit'] as $row ) {
             array_push( $data, array( 'type' => 'delete', 'id' =>$row['id'] ) );
         }
-        
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
         
         die("Completed"); 
         
@@ -322,7 +308,10 @@ class CloudSearch {
         foreach( $test_plans AS $test_plan ){
             array_push( $data, array( 'type' => 'delete', 'id' => 'test_plan_'.$test_plan->id ) );
         }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
 
         // delete products claims
 
@@ -332,7 +321,10 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'delete', 'id' => 'claim_'.$claim->id ) );
         }
 
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
 
         //delete agreements
         $data = array();
@@ -342,21 +334,10 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_requester_'.$agreement->id ) );
             array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_responder_'.$agreement->id ) );
         }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
-
-        //delete products
-
-        /*$data = array();
-
-        $args = array(
-            'post_type' => 'product-service',
-            'posts_per_page' => -1
-        );
-        $posts = get_posts($args);
-        foreach( $posts AS $post ){
-            array_push( $data, array( 'type' => 'delete', 'id' => 'product_'.$post->ID ) );
-        }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );*/
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
 
         //delete services
         $data = array();
@@ -368,9 +349,10 @@ class CloudSearch {
         foreach( $posts AS $post ){
             array_push( $data, array( 'type' => 'delete', 'id' => 'service_'.$post->ID ) );
         }
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
-
-        die;
+        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        echo 'Status: '.$data['status'];
+        echo '<br>Added: '.$data['adds'];
+        echo '<br>Deleted: '.$data['deletes'].'<br>';
     }
 
     /**
