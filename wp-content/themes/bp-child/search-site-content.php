@@ -11,12 +11,12 @@ $baseURL = get_permalink();
 
 $cloud_search = new FulltextSearch();
 $params = array();
-$params1 = array();
+$params_without_sorting = array();
 if( $_GET ){
     foreach( $_GET AS $k => $v ){
         $params[] = urlencode($k) . '=' . urlencode($v);
         if ($k != 'orderby' && $k != 'order') {
-            $params1[] = urlencode($k) . '=' . urlencode($v);
+            $params_without_sorting[] = urlencode($k) . '=' . urlencode($v);
         }
     }
 }
@@ -110,20 +110,26 @@ if( isset( $_GET['download']) ){
                 <table class="search-result-list site-search-result-list">
                     <thead>
                         <tr>
-                            <th class="first row-title">Title</th>
+                            <th class="first row-title">
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=post_title&order=<?php echo $orderby == 'post_title' && $order == 'asc' ? 'desc' : 'asc'?>">Title</a>
+                                <div class="sorting-box">
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=post_title&order=asc"  class="sorting-link asc<?php if($orderby == 'post_title' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=post_title&order=desc" class="sorting-link desc<?php if($orderby == 'post_title' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                </div>
+                            </th>
                             <th class="row-description">Description</th>
                             <th>
-                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=post_type&order=<?php echo $orderby == 'post_type' && $order == 'asc' ? 'desc' : 'asc'?>">Type</a>
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=post_type&order=<?php echo $orderby == 'post_type' && $order == 'asc' ? 'desc' : 'asc'?>">Type</a>
                                 <div class="sorting-box">
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=post_type&order=asc"  class="sorting-link asc<?php if($orderby == 'post_type' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=post_type&order=desc" class="sorting-link desc<?php if($orderby == 'post_type' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=post_type&order=asc"  class="sorting-link asc<?php if($orderby == 'post_type' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=post_type&order=desc" class="sorting-link desc<?php if($orderby == 'post_type' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
                                 </div>
                             <th>Community</th>
                             <th class="last row-date">
-                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=<?php echo $orderby == 'last_updated_date' && $order == 'asc' ? 'desc' : 'asc'?>">Last Update</a>
+                                <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=last_updated_date&order=<?php echo $orderby == 'last_updated_date' && $order == 'asc' ? 'desc' : 'asc'?>">Last Update</a>
                                 <div class="sorting-box">
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=asc"  class="sorting-link asc<?php if($orderby == 'last_updated_date' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
-                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=desc" class="sorting-link desc<?php if($orderby == 'last_updated_date' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=last_updated_date&order=asc"  class="sorting-link asc<?php if($orderby == 'last_updated_date' && $order == 'asc'){ ?> current<?php } ?>"><span class="sort"></span></a>
+                                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params_without_sorting)?>&orderby=last_updated_date&order=desc" class="sorting-link desc<?php if($orderby == 'last_updated_date' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
                                 </div>
                             </th>
                             <?php if( is_super_admin() ):?>
