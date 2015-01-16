@@ -415,19 +415,19 @@ function create_compliancetest_settings_page()
                 <form method="post" action="" enctype="multipart/form-data">
                     <table class="widefat">
                         <tr>
-                            <th><label><b>Search EndPoint:</b></label></th>
+                            <th><label><b>Registry Search EndPoint:</b></label></th>
                             <td><input type="text" name="cloudsearch_search_endpoint" id="cloudsearch_search_endpoint" value="<?php echo get_option('cloudsearch_search_endpoint')?>" size="50" autocomplete="off" /></td>
                         </tr>
                         <tr>
-                            <th><label><b>Document EndPoint:</b></label></th>
+                            <th><label><b>Registry Document EndPoint:</b></label></th>
                             <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="<?php echo get_option('cloudsearch_document_endpoint')?>" size="50" autocomplete="off" /></td>
                         </tr>
                         <tr>
-                            <th><label><b>Fulltext Search EndPoint:</b></label></th>
+                            <th><label><b>Site Search EndPoint:</b></label></th>
                             <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="<?php echo get_option('cloudsearch_fulltext_search_endpoint')?>" size="50" autocomplete="off" /></td>
                         </tr>
                         <tr>
-                            <th><label><b>Fulltext Document EndPoint:</b></label></th>
+                            <th><label><b>Site Document EndPoint:</b></label></th>
                             <td><input type="text" name="cloudsearch_fulltext_document_endpoint" id="cloudsearch_fulltext_document_endpoint" value="<?php echo get_option('cloudsearch_fulltext_document_endpoint')?>" size="50" autocomplete="off" /></td>
                         </tr>
                     </table>
