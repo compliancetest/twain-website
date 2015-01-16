@@ -9039,7 +9039,7 @@ input.inactive_s{
     display: inline-block;
     height: 12px;
     line-height: 18px;
-    top: 2px;
+    top: 3px;
     position: relative;
 }
 
@@ -9049,6 +9049,7 @@ input.inactive_s{
     width: 10px;
     height: 7px;
     text-align: center;
+    overflow: hidden;
 }
 
 .search-result-list thead th .sort{
@@ -9056,12 +9057,13 @@ input.inactive_s{
     width: 8px;
     height: 6px;
     background: url(../images/bg/sorting-arrows.png) no-repeat 0 0;
+    vertical-align: top;
 }
 
 .search-result-list thead th .sorting-box .asc{
-}
+}.site-search-result-list
 
-.search-result-list thead th .sorting-box .asc .sort{
+ .search-result-list thead th .sorting-box .asc .sort{
     background-position: 0 0;
 }
 .search-result-list thead th .sorting-box .desc .sort{
@@ -9071,21 +9073,30 @@ input.inactive_s{
 .search-result-list thead th .sorting-box .asc.current .sort{
     background-position: -8px 0;
 }
+.search-result-list thead th .sorting-box .asc.current:hover .sort{
+    background-position: 0 0;
+}
+
 .search-result-list thead th .sorting-box .desc:hover .sort,
 .search-result-list thead th .sorting-box .desc.current .sort{
     background-position: -8px -6px;
 }
+.search-result-list thead th .sorting-box .desc.current:hover .sort{
+    background-position: 0 -6px;
+}
 
-.site-search-result-list thead  th{
+.site-search-result-list thead th{
     text-align: left;
-    padding: 13px 15px;
+    padding-left: 15px;
+    padding-right: 15px;
     white-space: nowrap;
 }
 
 .site-search-result-list tbody td{
     text-align: left;
     vertical-align: top;
-    padding: 13px 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .site-search-result-list .short-description{
