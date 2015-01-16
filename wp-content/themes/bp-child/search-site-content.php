@@ -126,12 +126,18 @@ if( isset( $_GET['download']) ){
                                     <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated_date&order=desc" class="sorting-link desc<?php if($orderby == 'last_updated_date' && $order == 'desc'){ ?> current<?php } ?>"><span class="sort"></span></a>
                                 </div>
                             </th>
+                            <?php if( is_super_admin() ):?>
+                                <th>Action</th>
+                            <?php endif;?>
                         </tr>
                     </thead>
                     <tbody>
                     <?php if( $results['hits']['found'] > 0):?>
                         <?php foreach( $results['hits']['hit'] AS $row ): ?>
-                            <?php $row = $row['fields'];?>
+                            <?php
+                                $id  = $row['id'];
+                                $row = $row['fields'];
+                            ?>
                             <tr>
                                 <td class="first">
                                     <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'];?></a>
@@ -146,6 +152,9 @@ if( isset( $_GET['download']) ){
                                     <?php endif;?>
                                 </td>
                                 <td class="last"><?php echo date( 'Y-m-d', strtotime( $row['last_updated_date'] ) );?></td>
+                                <?php if( is_super_admin() ):?>
+                                    <td class="remove_entry"><a href="/?_psnonce=<?php echo wp_create_nonce('get-delete-search-entry');?>&id=<?php echo $id;?>&t=2" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn delete_search_entry has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete <?php echo $row['post_title'];?><span></span></span><span class="p"></span></a></td>
+                                <?php endif;?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif;?>

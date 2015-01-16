@@ -23,10 +23,17 @@ function process_product_service_actions()
         deleteProductService();    
     }else if(wp_verify_nonce($action, 'delete-search-entry') && is_super_admin() ){
         if( is_super_admin() ) {
-            $data = explode( '_', $_REQUEST['id'] );
-            $cloud_search = new CloudSearch();
-            $cloud_search->cloud_search_delete_item( $data[1], $data[0] );
-            exit(json_encode(array('success' => true)));
+            if( $_REQUEST['type'] == 'site'){
+                $id = $_REQUEST['id'];
+                $cloud_search = new FulltextSearch();
+                $cloud_search->delete_item( $id );
+                exit(json_encode(array('success' => true)));
+            } else {
+                $data = explode('_', $_REQUEST['id']);
+                $cloud_search = new CloudSearch();
+                $cloud_search->cloud_search_delete_item($data[1], $data[0]);
+                exit(json_encode(array('success' => true)));
+            }
         }
         exit(json_encode(array('error' => true)));
 
@@ -43,7 +50,7 @@ function process_product_service_actions()
                         <div class="space10"></div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">
-                        <a class="action-btn process-btn submit-btn delete_search_entry_confirm" href="#" data-id="<?php echo $_REQUEST['id'];?>"><span class="p"></span><span class="t">Confirm</span></a>
+                        <a class="action-btn process-btn submit-btn delete_search_entry_confirm" href="#" data-id="<?php echo $_REQUEST['id'];?>" data-type="<?php echo isset( $_REQUEST['t'] ) && $_REQUEST['t'] == '2' ? 'site' : 'registry';?>"><span class="p"></span><span class="t">Confirm</span></a>
                         <a class="action-btn cancel-btn close-popup-btn" href="#"><span class="p"></span><span class="t">Cancel</span></a>
                         <div class="clear"></div>
                     </div>
@@ -53,14 +60,15 @@ function process_product_service_actions()
             <script>
                 jQuery( document).ready( function($){
                     $('.delete_search_entry_confirm').on('click', function(){
-                        var item_id = $( this).attr('data-id');
+                        var item_id   = $( this).attr('data-id');
+                        var item_type = $( this).attr('data-type');
                         var td_row = $("a").find("[data-entryid='" + item_id + "']").parents('tr');
                         $('.loading').show();
                         $.ajax({
                             type: 'post',
                             url: '/',
                             dataType: 'json',
-                            data: { '_psnonce' : '<?php echo wp_create_nonce( 'delete-search-entry' );?>', 'id' : item_id },
+                            data: { '_psnonce' : '<?php echo wp_create_nonce( 'delete-search-entry' );?>', 'id' : item_id, 'type' : item_type  },
                             success: function( data ){
                                 if( data.success ){
                                     location.reload();

@@ -274,4 +274,9 @@ class FulltextSearch {
         return curl_exec( $ch );
     }
 
+    public function delete_item( $id ){
+        $data = array();
+        array_push( $data, array( 'type' => 'delete', 'id' => $id  ) );
+        return $this->_sendDataToSearchDomain( $data );
+    }
 } 
