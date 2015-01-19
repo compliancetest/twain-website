@@ -15,7 +15,6 @@ class FulltextSearch {
         $str['return'] = '_all_fields';
         $str['facet.post_type'] = '{}';
         $str['facet.community'] = '{}';
-//        $str['facet.last_updated_date'] = '{}';
         if( $full_results ){
             $str['size'] = 10000;
         } else{
@@ -29,7 +28,7 @@ class FulltextSearch {
             $l .= "  ( term field=visibility 1 )";
         }
 
-        $str['sort'] = 'post_title asc';
+        $str['sort'] = '_score desc';
 
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
