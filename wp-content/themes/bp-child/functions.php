@@ -1267,7 +1267,8 @@ function generate_and_download( $data ){
     header("Content-Disposition: attachment; filename=results.csv");
     $outstream = fopen("php://output", "w");
     fputcsv($outstream, array(
-        'Product / Service Name',
+        'Product ID',
+        'Product Name',
         'Version',
         'Owner',
         'Type',
@@ -1276,7 +1277,15 @@ function generate_and_download( $data ){
         'Level',
         'Test Status',
         'Test Type',
-        'Claim Date'
+        'Start Date',
+        'Claim Date',
+        'Certificate Number',
+        'Certificate URL',
+        'Service ID',
+        'Service Name',
+        'Entity ID',
+        'Entity ID Type',
+        'E2E Partner Service ID'
     ));
     if (is_array($data['hits']['hit'])) {
         foreach( $data['hits']['hit'] as $row ){
@@ -1290,7 +1299,8 @@ function generate_and_download( $data ){
                 $responder_service->load();
                 $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
                 $tempArray = array(
-                    $requester_service->service_name. ' / '.$responder_service->service_name,
+                    $row_data['product_id'],
+                    $row_data['product_name'],
                     ! empty( $requester_service->service_version ) || ! empty( $responder_service->service_version )  ? $requester_service->service_version. ' / '.$responder_service->service_version : '',
                     $requester_service->service_owner. ' / '.$responder_service->service_owner,
                     $row_data['type'],
@@ -1299,14 +1309,23 @@ function generate_and_download( $data ){
                     implode( ', ', $requester_service->service_levels ) .' / '.implode( ', ', $responder_service->service_levels ),
                     $row_data['status'],
                     $row_data['test_type'],
-                    $claim_date != '1970-01-01' ? $claim_date : ''
+                    date( 'Y-m-d', strtotime($row_data['start_date'] ) ),
+                    $claim_date != '1970-01-01' ? $claim_date : '',
+                    $row_data['cert_number'],
+                    $row_data['cert_url'],
+                    $row_data['service_id'],
+                    $row_data['service_name'],
+                    $row_data['entity_id'],
+                    $row_data['entity_id_type'],
+                    $row_data['e2e_partner_service_id']
                 );
                 fputcsv( $outstream, $tempArray );
             } else{
                 $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
                 $tempArray = array(
-                    $row_data['name'],
-                    $row_data['version'],
+                    $row_data['product_id'],
+                    $row_data['product_name'],
+                    isset( $row_data['version'] ) ? $row_data['version'] : '',
                     $row_data['owner'][0],
                     $row_data['type'] == 'Web Service' ? 'Service' : 'Product',
                     $row_data['test_suite'][0],
@@ -1314,7 +1333,15 @@ function generate_and_download( $data ){
                     ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
                     $row_data['status'],
                     $row_data['test_type'],
-                    $claim_date != '1970-01-01' ? $claim_date : ''
+                    isset( $row_data['start_date'] ) ? date( 'Y-m-d', strtotime($row_data['start_date'] ) ) : '',
+                    $claim_date != '1970-01-01' ? $claim_date : '',
+                    isset( $row_data['cert_number'] ) ? $row_data['cert_number'] : '',
+                    isset( $row_data['cert_url'] ) ? $row_data['cert_url'] : '',
+                    isset( $row_data['service_id'] ) ? $row_data['service_id'] : '',
+                    isset( $row_data['service_name'] ) ? $row_data['service_name'] : '',
+                    isset( $row_data['entity_id'] ) ? $row_data['entity_id'] : '',
+                    isset( $row_data['entity_id_type'] ) ? $row_data['entity_id_type'] : '',
+                    isset( $row_data['e2e_partner_service_id'] ) ? $row_data['e2e_partner_service_id'] : ''
                 );
                 fputcsv( $outstream, $tempArray );
             }
