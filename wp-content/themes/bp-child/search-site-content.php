@@ -146,7 +146,25 @@ if( isset( $_GET['download']) ){
                             ?>
                             <tr>
                                 <td class="first">
-                                    <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'];?></a>
+                                    <?php if( $row['post_type'] == 'Test Scenario' ):?>
+                                        <?php
+                                            $post_meta = get_post_meta( $row['post_id'] );
+                                            $post_name = $post_meta['ts_name'][0].' v'.$post_meta['ts_version_major'][0].'.'.$post_meta['ts_version_minor'][0];
+                                            if( $post_meta['ts_version_patch'][0] != '0' ){
+                                                $post_name .= $post_meta['ts_version_patch'][0];
+                                            }
+                                        ?>
+                                        <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'].'<br>( '. $post_name .' )';?></a>
+                                    <?php elseif( $row['post_type'] == 'Test Case' ):?>
+                                        <?php
+                                            $post_meta = get_post_meta( $row['post_id'] );
+                                            $post_name = get_the_title( $post_meta['test_suite'][0] );
+                                        ?>
+
+                                        <a href="<?php echo $row['link'];?>"><?php echo $row['post_title']; if( ! empty( $post_name ) ) echo '<br>( '. $post_name .' )';?></a>
+                                    <?php else:?>
+                                        <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'];?></a>
+                                    <?php endif;?>
                                 </td>
                                 <td>
                                     <p class="short-description"><?php echo strlen( strip_tags( $row['post_content'] ) ) > 400 ? substr( strip_tags( $row['post_content'] ), 0, 400 ). '...' : strip_tags( $row['post_content'] );?></p>
