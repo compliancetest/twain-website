@@ -125,7 +125,7 @@ class FulltextSearch {
         $test_scenarios = $wpdb->get_results( "SELECT * FROM wp_test_suites_scenarios" );
         foreach( $test_scenarios AS $test_scenario ){
             $post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id ) );
-            if( ! $post ){
+            if( ! $post || $test_scenario->code == 'Default' ){
                 continue;
             }
             $groups = groups_get_user_groups($post->post_author);
@@ -136,8 +136,8 @@ class FulltextSearch {
                 }
             }
             if (empty($communityNames)) {
-                $communityNames = array('All');
-                $groups['groups'] = array(0);
+                $communityNames = array( 'ebMS3', 'SuperStream' );
+                $groups['groups'] = array( 32, 35 );
             }
             $temp_data = array(
                 'community' => $communityNames,
