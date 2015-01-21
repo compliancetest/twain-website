@@ -1300,26 +1300,51 @@ function generate_and_download( $data ){
                 $responder_service = new Service( $agreement->responder_service_id );
                 $responder_service->load();
                 $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
+                $s3 = new S3Wrapper();
+                //requester entry
                 $tempArray = array(
                     $row_data['product_id'],
                     $row_data['product_name'],
-                    ! empty( $requester_service->service_version ) || ! empty( $responder_service->service_version )  ? $requester_service->service_version. ' / '.$responder_service->service_version : '',
-                    $requester_service->service_owner. ' / '.$responder_service->service_owner,
+                    ! empty( $requester_service->service_version )  ? $requester_service->service_version : '',
+                    $requester_service->service_owner,
                     $row_data['type'],
-                    get_the_title( $requester_service->service_suite_id ). ' / '. get_the_title( $responder_service->service_suite_id ),
-                    implode( ', ', $requester_service->service_roles ) .' / '.implode( ', ', $responder_service->service_roles ),
-                    implode( ', ', $requester_service->service_levels ) .' / '.implode( ', ', $responder_service->service_levels ),
+                    get_the_title( $requester_service->service_suite_id ),
+                    implode( ', ', $requester_service->service_roles ),
+                    implode( ', ', $requester_service->service_levels ),
                     $row_data['status'],
                     $row_data['test_type'],
                     date( 'Y-m-d', strtotime($row_data['start_date'] ) ),
-                    $claim_date != '1970-01-01' ? $claim_date : '',
+                    $claim_date != '1970-01-01' && $row_data['status'] == 'Verified' ? $claim_date : '',
                     $row_data['cert_number'],
-                    $row_data['cert_url'],
+                    $row_data['status'] == 'Verified' ? $row_data['cert_url'] : '',
                     $row_data['service_id'],
                     $row_data['service_name'],
                     $row_data['entity_id'],
                     $row_data['entity_id_type'],
                     $row_data['e2e_partner_service_id']
+                );
+                fputcsv( $outstream, $tempArray );
+                //responder entry
+                $tempArray = array(
+                    $responder_service->service_product_id,
+                    get_the_title( $responder_service->service_product_id ),
+                    ! empty( $responder_service->service_version )  ? $responder_service->service_version : '',
+                    $responder_service->service_owner,
+                    $row_data['type'],
+                    get_the_title( $responder_service->service_suite_id ),
+                    implode( ', ', $responder_service->service_roles ),
+                    implode( ', ', $responder_service->service_levels ),
+                    $row_data['status'],
+                    $row_data['test_type'],
+                    date( 'Y-m-d', strtotime($row_data['start_date'] ) ),
+                    $claim_date != '1970-01-01' && $row_data['status'] == 'Verified' ? $claim_date : '',
+                    $row_data['cert_number'],
+                    $row_data['status'] == 'Verified' ? $s3->getAgreementClaimLink( $agreement->responder_token ) : '',
+                    $responder_service->id,
+                    $responder_service->service_name,
+                    $responder_service->service_id,
+                    $responder_service->service_type,
+                    $requester_service->id
                 );
                 fputcsv( $outstream, $tempArray );
             } else{
@@ -1336,7 +1361,7 @@ function generate_and_download( $data ){
                     $row_data['status'],
                     $row_data['test_type'],
                     isset( $row_data['start_date'] ) ? date( 'Y-m-d', strtotime($row_data['start_date'] ) ) : '',
-                    $claim_date != '1970-01-01' ? $claim_date : '',
+                    $claim_date != '1970-01-01' && $row_data['status'] == 'Verified' ? $claim_date : '',
                     isset( $row_data['cert_number'] ) ? $row_data['cert_number'] : '',
                     isset( $row_data['cert_url'] ) ? $row_data['cert_url'] : '',
                     isset( $row_data['service_id'] ) ? $row_data['service_id'] : '',
