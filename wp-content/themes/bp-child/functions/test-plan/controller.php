@@ -225,19 +225,16 @@ function editPlan()
                                 if($l['code'] == 'Default')
                                     continue;
                         ?>
-                         <span><input type="checkbox" name="level[]" class="level" value="<?php echo $l['code']?>" <?php echo $plan->level && in_array($l['code'], $plan->level) ? 'checked="checked"' : ''?>> <?php echo $l['code'] ?></span>
+                         <span><input type="radio" name="level[]" class="level" value="<?php echo $l['code']?>" <?php echo $plan->level && in_array($l['code'], $plan->level) ? 'checked="checked"' : ''?>> <?php echo $l['code'] ?></span>
                         <?php 
                             }
                         ?>
                     </div>
                     <div class="grid-cell checkbox-cell left15">
                         <label>Role</label>
-                        <?php 
-                            foreach($roles as $r){
-                        ?>
-                        <span><input type="checkbox" name="role[]" class="role" value="<?php echo $r['name']?>" <?php echo $plan->role && in_array($r['name'], $plan->role) ? 'checked="checked"' : ''?>> <?php echo $r['name'] ?></span>
-                        <?php 
-                            }
+                        <?php foreach( $roles AS $r ):?>
+                            <span><input type="radio" name="role[]" class="role" value="<?php echo $r['name']?>" <?php echo $plan->role && in_array($r['name'], $plan->role) ? 'checked="checked"' : ''?>> <?php echo $r['name'] ?></span>
+                        <?php endforeach;?>
                         ?>
                     </div>
                     <div class="clear"></div>

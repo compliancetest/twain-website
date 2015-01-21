@@ -67,8 +67,8 @@ $esb = new ManageESB();
                            <div class="td td-coverage">
                                <?php
                                    $suiteObj = new TestSuite($suite->suite_id);
-                                   $testCases = $suiteObj->loadTestCases(cp_explode($crow->level), cp_explode($crow->role), 'Active');                                   
-                                   
+                                   $testCases = $suiteObj->loadTestCases(cp_explode($crow->level), cp_explode($crow->role), 'Active');
+
                                ?> 
                                <div class="coverage-progress">
                                    <?php
@@ -76,6 +76,14 @@ $esb = new ManageESB();
 
                                        foreach($testCases as $case)
                                        {
+                                           //we could have audit record for another patch version - so we should check all patch versions
+                                           $used_case_id = $case->ID;
+                                           $all_patch_versions = $wpdb->get_results( $wpdb->prepare( "SELECT case_id FROM wp_test_cases WHERE family_mark = ( SELECT family_mark FROM wp_test_cases WHERE case_id = %d ) ", $case->ID ) );
+                                           foreach( $all_patch_versions AS $patch_version ){
+                                               if( isset( $caseStatus[$suite->suite_id][$crow->product_id][$patch_version->case_id] ) ){
+                                                   $used_case_id = $patch_version->case_id;
+                                               }
+                                           }
                                            $passedBlobs = "";
                                            $failedBlobs = "";
                                            $normalBlobs = "";
@@ -85,13 +93,13 @@ $esb = new ManageESB();
                                            if( $is_optional == 'Yes' ) $opt = ' (opt) ';
                                            if( $is_excluded ) $exc = ' (excl) ';
                                            $tooltip = '<span class="simple_tooltip radius6"><a href="' . get_permalink($case->ID) . '">' . $case->post_title . $opt .$exc. '</a><span></span></span>';
-                                           if( isset( $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] ) && ! $is_excluded )
+                                           if( isset( $caseStatus[$suite->suite_id][$crow->product_id][$used_case_id] ) && ! $is_excluded )
                                            {
-                                               if($caseStatus[$suite->suite_id][$crow->product_id][$case->ID] == 'pass')
+                                               if($caseStatus[$suite->suite_id][$crow->product_id][$used_case_id] == 'pass')
                                                {
-                                                   $passedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
+                                                   $passedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$used_case_id] . '">' . $tooltip . '</span>';
                                                }else{
-                                                   $failedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$case->ID] . '">' . $tooltip . '</span>';
+                                                   $failedBlobs = '<span class="bubble ' . $caseStatus[$suite->suite_id][$crow->product_id][$used_case_id] . '">' . $tooltip . '</span>';
                                                }
                                                
                                            }else{
@@ -103,7 +111,7 @@ $esb = new ManageESB();
                                                    $normalBlobs = '<span class="bubble optional_bubble">' . $tooltip . '</span>';
                                                }
                                            }
-                                           $normalBlobs .= '<a href="?plan_id='.$crow->id.'&id='.$case->ID.'&_wpnonce='.wp_create_nonce('get_popup').'" cp-type="ajax" cp-removeBoxAfterClose=1 class="create_popup action-btn edit-btn edit-plan-btn icon-btn" style="display: none;"></a>';
+                                           $normalBlobs .= '<a href="?plan_id='.$crow->id.'&id='.$case->ID.'&search_id='.$used_case_id.'&_wpnonce='.wp_create_nonce('get_popup').'" cp-type="ajax" cp-removeBoxAfterClose=1 class="create_popup action-btn edit-btn edit-plan-btn icon-btn" style="display: none;"></a>';
                                            echo $passedBlobs . $failedBlobs . $normalBlobs;
                                        }
                                    ?>

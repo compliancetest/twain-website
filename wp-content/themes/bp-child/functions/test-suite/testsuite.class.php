@@ -373,47 +373,47 @@ class TestSuite
                 'post_type' => 'test-case',         
                 'posts_per_page' => -1,
                 'orderby'  => 'title',
-                'order'     => 'ASC',                
+                'order'     => 'ASC',
                 'meta_query' => array(
                                     'relation' => 'AND',
-                                    array('key' => 'test_suite', 
-                                          'value' => $this->id, 
+                                    array('key' => 'test_suite',
+                                          'value' => $this->id,
                                           'compare' => '=')
                                 )
         );
         
         if(!$this->community_id)
             $this->community_id = $this->loadSingleValue('community_id');
-        
+
         if(!groups_is_user_admin(get_current_user_id(), $this->community_id)){
             $args['meta_query'][] = array(
                                         'key' => 'hide_case',
                                         'value' => 0,
                                         'compare' => '='
-                                    ); 
+                                    );
             $args['meta_query'][] = array(
                                         'key' => 'conformance_level_' . $this->id,
                                         'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
                                         'compare' => '!='
-                                    );  
-              
+                                    );
+
         }
-        
+
         if(!empty($level))
         {
             if(!is_array($level))
                 $level = array($level);
             $args['meta_query'][] = array('key' => 'conformance_level_' . $this->id, 'value' => $level, 'compare'=> 'IN');
         }
-        
+
         if(!empty($role))
         {
             if(!is_array($role))
                 $role = array($role);
             $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $role, 'compare'=> 'IN');
         }
-        
-        if (!empty($status)) 
+
+        if (!empty($status))
         {
             $args['meta_query'][] = array('key' => 'test_case_status', 'value' => $status, 'compare'=> '=');
         }
@@ -424,8 +424,8 @@ class TestSuite
         
         //Add Order by Scenaro 
         $case_query->set('suppress_filters', false);
-        
-        
+
+
         add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
         add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
         add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);

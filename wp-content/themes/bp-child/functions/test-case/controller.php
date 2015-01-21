@@ -883,6 +883,7 @@ function confirmDeletingCase()
 function get_details_popup(){
     global $wpdb;
     $case_id = intval( $_REQUEST['id'] );
+    $search_case_id = intval( $_REQUEST['search_id'] );
     $plan_id = intval( $_REQUEST['plan_id'] );
     $case = new TestCase( $case_id );
     $case->load();
@@ -905,7 +906,7 @@ function get_details_popup(){
                             <div class="field-row">
                                 <div class="grid-cell">
                                     <label>Transaction Log: </label>
-                                    <a target="_blank" href="<?php echo get_site_url();?>/my-transaction-log?case=<?php echo $case->id;?>">View Audit Record</a>
+                                    <a target="_blank" href="<?php echo get_site_url();?>/my-transaction-log?case=<?php echo $search_case_id;?>">View Audit Record</a>
                                 </div>
                                 <div class="clear"></div>
                             </div>
