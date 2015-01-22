@@ -193,13 +193,33 @@ function editPlan()
         <?php
         exit;
     }
-    
-    
+    $pricing_plan_id = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", $user_id ) );
+    $pricing_plan = new PricingPlan( $pricing_plan_id );
+    $levels = $roles = array();
+    foreach( $pricing_plan->attribute_roles AS $role => $levels_array ){
+        if( ! in_array( $role, $roles ) ) array_push( $roles, $role );
+        foreach( $levels_array AS $level ){
+            if( ! in_array( $level, $levels ) )array_push( $levels, $level );
+        }
+    }
+
     $products = getUserProductsAndServices($user_id);
     
     $suite = new TestSuite($suiteID);
-    $levels = $suite->loadConformanceLevel();
-    $roles = $suite->loadRoles();
+    if( empty( $levels ) ){
+        $levels_array = $suite->loadConformanceLevel();
+        foreach( $levels_array AS $level ){
+            if( $level['code'] == 'Default' ) continue;
+            array_push( $levels, $level['code'] );
+        }
+    }
+    if( empty( $roles ) ){
+        $roles_array = $suite->loadRoles();
+        foreach( $roles_array AS $role ){
+            if( $role['name'] == 'Default' ) continue;
+            array_push( $roles, $role['name'] );
+        }
+    }
     ?>
     <div class="popup-box" id="make-plan-box" style="display: none;">
         <form name="makePlanForm" id="makePlanForm" action="" method="post">
@@ -222,10 +242,8 @@ function editPlan()
                         <label>Level</label>
                         <?php                         
                             foreach($levels as $l){
-                                if($l['code'] == 'Default')
-                                    continue;
                         ?>
-                         <span><input type="radio" name="level[]" class="level" value="<?php echo $l['code']?>" <?php echo $plan->level && in_array($l['code'], $plan->level) ? 'checked="checked"' : ''?>> <?php echo $l['code'] ?></span>
+                         <span><input type="radio" name="level[]" class="level" value="<?php echo $l?>" <?php echo $plan->level && in_array($l, $plan->level) ? 'checked="checked"' : ''?>> <?php echo $l ?></span>
                         <?php 
                             }
                         ?>
@@ -233,9 +251,8 @@ function editPlan()
                     <div class="grid-cell checkbox-cell left15">
                         <label>Role</label>
                         <?php foreach( $roles AS $r ):?>
-                            <span><input type="radio" name="role[]" class="role" value="<?php echo $r['name']?>" <?php echo $plan->role && in_array($r['name'], $plan->role) ? 'checked="checked"' : ''?>> <?php echo $r['name'] ?></span>
+                            <span><input type="radio" name="role[]" class="role" value="<?php echo $r?>" <?php echo $plan->role && in_array($r, $plan->role) ? 'checked="checked"' : ''?>> <?php echo $r ?></span>
                         <?php endforeach;?>
-                        ?>
                     </div>
                     <div class="clear"></div>
                 </div>            
@@ -269,7 +286,26 @@ function makePlan()
     
     $plan = new TestPlan($planID);
     $plan->load();
-    
+
+    // check that the combination of role and level is included in the pricing plan associated with the organisation subscription
+    $is_allowed = false;
+    $pricing_plan_id = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", $user_id ) );
+    $pricing_plan = new PricingPlan( $pricing_plan_id );
+    foreach( $pricing_plan->attribute_roles AS $role => $levels_array ){
+        if( $role == $_POST['role'][0] ) {
+            foreach ($levels_array AS $level) {
+                if( $level == $_POST['level'][0] ){
+                    $is_allowed = true;
+                }
+            }
+        }
+    }
+    if( ! $is_allowed ){
+        $_SESSION['create_test_plan_error'] = true;
+        wp_redirect('/test-suite-coverage');
+        exit;
+    }
+
     if(!$suiteID || !$_POST['product_id'] || !$_POST['level'] || !$_POST['role'] || ($planID && $plan->id == null))
     {
         addMessage('Invalid Request!', 'error');

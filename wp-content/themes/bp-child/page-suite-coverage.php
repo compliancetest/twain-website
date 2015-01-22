@@ -170,9 +170,39 @@ $esb = new ManageESB();
         <div class="clear"></div>
     </div>
     <a class="close_btn"></a>                
-</div>    
+</div>
+<?php if( isset( $_SESSION['create_test_plan_error'] ) && $_SESSION['create_test_plan_error'] == true ):?>
+    <?php unset( $_SESSION['create_test_plan_error'] );?>
+    <div id="invalid_roles_levels" class="popup-box" style="display:none; width: 500px">
+        <div class="popup-box-header radius6 noradiusbottom">Pricing Plan Coverage</div>
+        <div class="popup-box-content">
+            The pricing plan associated with this subscription does not cover the selected combination of role and conformance level. Please consult with your organisation's administrator within ComplianceTest to understand the available combinations.
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
+    </div>
+    <a href="#invalid_roles_levels" class="show_level_role_error" style="display: none;"><span class="p">asd</span>
+    </a>
+    <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('.show_level_role_error').each(function(){
+                    jQuery(this).cplightbox({
+                        type: 'inline',
+                        href: '#invalid_roles_levels'
+                    })
+                })
+                jQuery('.show_level_role_error').click();
+            });
+    </script>
+<?php endif;?>
 <script type="text/javascript">
 jQuery(document).ready(function(){
+
+    jQuery('.invalid_roles_levels').cplightbox({});
+
     jQuery('#test_suite_coverage .grid-box-body .tbody').each(function(){
         jQuery(this).find('.tr').each(function(){
             var h = Math.max(
