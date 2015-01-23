@@ -599,6 +599,7 @@ function getDashboardPages($type = 'page')
                     $item2[] = array('title' => 'Articles', 'url' => $community_url.'wiki');
                     $item2[] = array('title' => 'Forum', 'url' => $community_url.'forum');
                     $item2[] = array('title' => 'Downloads', 'url' => $community_url.'downloads');
+                    $item2[] = array('title' => 'Reports', 'url' => $community_url.'reports');
                     if(groups_is_user_admin(get_current_user_id(), $gID)) {
                         $item2[] = array('title' => 'Admin', 'url' => $community_url.'admin');
                     }
