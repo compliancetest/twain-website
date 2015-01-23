@@ -68,6 +68,8 @@ require_once(THE_FUNCTION . '/more-taxonomies/more-taxonomies.php');
 //Process Actions related user such as login, register
 require_once(THE_FUNCTION . '/user/user.php');
 
+require_once(THE_FUNCTION . '/reports/controller.php');
+
 //Test Suites Functions
 require_once(THE_FUNCTION . '/test-suite/testsuite.class.php');
 require_once(THE_FUNCTION . '/test-suite/add-meta-boxes.php');
@@ -77,6 +79,7 @@ require_once(THE_FUNCTION . '/test-suite/controller.php');
 require_once(THE_FUNCTION . '/buddypress/customize.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-forum.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-downloads.php');
+require_once(THE_FUNCTION . '/buddypress/buddypress-group-reports.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-group-test-data.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');

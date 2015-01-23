@@ -1,0 +1,233 @@
+<?php
+add_action('init', 'process_download_reports');
+function process_download_reports()
+{
+    $action = isset($_REQUEST['_download_report_nonce']) ? $_REQUEST['_download_report_nonce'] : null;
+    if( wp_verify_nonce( $action, 'download_community_report') || $action == 'test' ) {
+        downloadReport();
+    }
+}
+
+function downloadReport(){
+    global $wpdb;
+    error_reporting(E_ALL);
+    include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
+    include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel/IOFactory.php';
+
+    $excel2 = PHPExcel_IOFactory::createReader('Excel2007');
+    $excel2 = $excel2->load(  __DIR__ . '/../../groups/templates/SuperStreamTestProgress.xlsx' ); // Empty Sheet
+
+    $community_name = $wpdb->get_var( $wpdb->prepare( "SELECT  name FROM wp_bp_groups WHERE id = %d ", $_REQUEST['cid'] ) );
+    $excel2->setActiveSheetIndex(0);
+    $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
+    $excel2->setActiveSheetIndex(1);
+    $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
+    $excel2->setActiveSheetIndex(2);
+    $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
+    $excel2->setActiveSheetIndex(0);
+    $row_number_sheet1 = $row_number_sheet2 = $row_number_sheet3 = 4;
+
+    $processed_agreements = array();
+    $products = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type = 'product-service'" );
+    $s3 = new S3Wrapper();
+    foreach( $products AS $pr ){
+        $claim = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE product_id = %d ORDER BY product_id", $pr->ID ) );
+        if( $claim ) {
+            $product = new ProductAndService($claim->product_id);
+            $product->load();
+            $author_id = $wpdb->get_var($wpdb->prepare("SELECT post_author FROM wp_posts WHERE ID = %s", $product->id));
+            $author_groups = groups_get_user_groups($author_id);
+            if ( ! in_array($_REQUEST['cid'], $author_groups['groups'] ) ) {
+                continue;
+            }
+            $agreement_data = getProductLastAgreement( $claim->product_id );
+            if ($agreement_data && in_array($agreement_data['agreement_id'], $processed_agreements)) {
+                continue;
+            }
+            $data = array(
+                'product_owner' => $product->owner,
+                'product_id' => $product->product_id,
+                'product_name' => $product->name,
+                'product_version' => "$product->version",
+                'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
+                'suite_name' => get_the_title($claim->suite_id),
+                'level' => process_level(str_replace(';;', '', $claim->conformance_level)),
+                'claim_id' => $claim->claim_id,
+                'claim_token' => $claim->token,
+                'claim_url' => $s3->getProductClaimLink($claim->token),
+                'claim_status' => $claim->status,
+                'e2e_company' => $agreement_data !== false ? $agreement_data['partner_company'] : '',
+                'e2e_product' => $agreement_data !== false ? $agreement_data['partner_product'] : '',
+                'status' => $agreement_data !== false ? $agreement_data['status'] : '',
+                'certificate_id' => $agreement_data !== false ? $agreement_data['certificate_id'] : '',
+                'certificate_link' => $agreement_data !== false ? $agreement_data['certificate_link'] : '',
+            );
+            if (strpos($claim->role, 'Employer') !== false) {
+                $data['type'] = 'Employer';
+                add_entry_to_excel($excel2, $data, $row_number_sheet1, 0);
+                $row_number_sheet1++;
+            }
+            if (strpos($claim->role, 'Fund') !== false) {
+                $data['type'] = 'Fund';
+                add_entry_to_excel($excel2, $data, $row_number_sheet2, 1);
+                $row_number_sheet2++;
+            }
+            if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
+                $data['type'] = str_replace(';;', '', $claim->role);
+                add_entry_to_excel($excel2, $data, $row_number_sheet3, 2);
+                $row_number_sheet3++;
+            }
+            //add entry for second side
+            if( isset($agreement_data['partner_product'] ) ) {
+                $product = new ProductAndService( $agreement_data['partner_product_id'] );
+                $product->load();
+                $agreement_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_data['agreement_id']));
+                $requester_service = new Service( $agreement_data->requester_service_id );
+                $requester_service->load();
+                $s3 = new S3Wrapper();
+                $cl = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id ) );
+                $data = array(
+                    'product_owner' => $product->owner,
+                    'product_id' => $product->product_id,
+                    'product_name' => $product->name,
+                    'product_version' => "$product->version",
+                    'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
+                    'suite_name' => get_the_title($claim->suite_id),
+                    'level' => process_level(str_replace(';;', '', $cl->conformance_level)),
+                    'claim_id' => $cl->claim_id,
+                    'claim_token' => $cl->token,
+                    'claim_url' => $s3->getProductClaimLink( $cl->token),
+                    'claim_status' => $cl->status,
+                    'e2e_company' => get_the_title($agreement_data->requester_service_id),
+                    'e2e_product' => get_the_title($requester_service->service_product_id),
+                    'status' => $agreement_data->status,
+                    'certificate_id' => $agreement_data->claim_id,
+                    'certificate_link' => $s3->getAgreementClaimLink($agreement_data->responder_token),
+                );
+                if (strpos($claim->role, 'Employer') !== false) {
+                    $data['type'] = 'Employer';
+                    add_entry_to_excel($excel2, $data, $row_number_sheet1, 0);
+                    $row_number_sheet1++;
+                }
+                if (strpos($claim->role, 'Fund') !== false) {
+                    $data['type'] = 'Fund';
+                    add_entry_to_excel($excel2, $data, $row_number_sheet2, 1);
+                    $row_number_sheet2++;
+                }
+                if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
+                    $data['type'] = str_replace(';;', '', $claim->role);
+                    add_entry_to_excel($excel2, $data, $row_number_sheet3, 2);
+                    $row_number_sheet3++;
+                }
+                array_push($processed_agreements, $agreement_data->id);
+            }
+        }
+        $test_plans = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE product_id = %d ", $pr->ID ) );
+        if( $test_plans ) {
+            foreach ($test_plans AS $test_plan) {
+                $data = array(
+                    'product_owner' => $product->owner,
+                    'product_id' => $product->product_id,
+                    'product_name' => $product->name,
+                    'product_version' => "$product->version",
+                    'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
+                    'suite_name' => get_the_title($test_plan->suite_id),
+                    'level' => process_level(str_replace(';;', '', $test_plan->level)),
+                    'claim_id' => '',
+                    'claim_token' => '',
+                    'claim_url' => '',
+                    'claim_status' => 'In Progress',
+                    'e2e_company' => '',
+                    'e2e_product' => '',
+                    'status' => '',
+                    'certificate_id' => '',
+                    'certificate_link' => '',
+                );
+                if (strpos($test_plan->role, 'Employer') !== false) {
+                    $data['type'] = 'Employer';
+                    add_entry_to_excel($excel2, $data, $row_number_sheet1, 0);
+                    $row_number_sheet1++;
+                }
+                if (strpos($test_plan->role, 'Fund') !== false) {
+                    $data['type'] = 'Fund';
+                    add_entry_to_excel($excel2, $data, $row_number_sheet2, 1);
+                    $row_number_sheet2++;
+                }
+                if (strpos($test_plan->role, 'Employer') === false && strpos($test_plan->role, 'Fund') === false) {
+                    $data['type'] = str_replace(';;', '', $test_plan->role);
+                    add_entry_to_excel($excel2, $data, $row_number_sheet3, 2);
+                    $row_number_sheet3++;
+                }
+            }
+        }
+    }
+    $excel2->setActiveSheetIndex(0);
+    $objWriter = PHPExcel_IOFactory::createWriter($excel2, 'Excel2007');
+    header('Content-type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment; filename="SuperStreamTestProgress.xls"');
+    $objWriter->save('php://output');
+    exit();
+}
+function add_entry_to_excel( &$excel2, $data, $row_number, $sheet_number ){
+    $excel2->setActiveSheetIndex( $sheet_number );
+    $excel2->getActiveSheet()
+        ->setCellValue('A'.$row_number, $data['product_owner'] )
+        ->setCellValue('B'.$row_number, $data['product_id'] )
+        ->setCellValue('C'.$row_number, $data['type'] )
+        ->setCellValue('D'.$row_number, $data['product_name'] )
+        ->setCellValue('E'.$row_number, $data['product_version'] )
+        ->setCellValue('F'.$row_number, $data['product_release_date'] )
+        ->setCellValue('G'.$row_number, $data['suite_name'] )
+        ->setCellValue('H'.$row_number, $data['level'] )
+        ->setCellValue('I'.$row_number, $data['claim_status'] )
+        ->setCellValue('K'.$row_number, $data['e2e_company'] )
+        ->setCellValue('L'.$row_number, $data['e2e_product'] )
+        ->setCellValue('M'.$row_number, $data['status'] );
+    if( ! empty( $data['claim_url'] ) && ! empty( $data['claim_id'] ) ) {
+        $excel2->getActiveSheet()->getCell('J' . $row_number)->getHyperlink()->setUrl($data['claim_url']);
+        $excel2->getActiveSheet()->setCellValue('J' . $row_number, $data['claim_id']);
+    }
+    if( ! empty( $data['certificate_link'] ) && ! empty( $data['certificate_id'] ) ) {
+        $excel2->getActiveSheet()->getCell('N' . $row_number)->getHyperlink()->setUrl($data['certificate_link']);
+        $excel2->getActiveSheet()->setCellValue('N' . $row_number, $data['certificate_id']);
+    }
+}
+function getProductLastAgreement( $product_id ){
+    global $wpdb;
+    $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) AND status = 'Verified' ORDER BY id DESC LIMIT 1", $product_id ) );
+    if( ! $agreement ){
+        $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) ORDER BY id DESC LIMIT 1", $product_id ) );
+    }
+    if( $agreement ){
+        $service = new Service( $agreement->responder_service_id );
+        $service->load();
+        $s3 = new S3Wrapper();
+        return array(
+            'agreement_id'        => $agreement->id,
+            'partner_company'     => get_the_title( $agreement->responder_service_id ),
+            'partner_product'     => get_the_title( $service->service_product_id ),
+            'partner_product_id'  => $service->service_product_id,
+            'status'              => $agreement->status,
+            'certificate_link'    => $agreement->status == 'Verified' ? $s3->getAgreementClaimLink( $agreement->requester_token ) : '',
+            'certificate_id'      => $agreement->claim_id
+        );
+    }
+    return false;
+}
+
+
+function process_level( $level ){
+    switch ( strtolower( $level ) ){
+        case 'b':
+            $report_level = 'silver';
+            break;
+        case 'a':
+            $report_level = 'gold';
+            break;
+        default:
+        case 'saff':
+            $report_level = 'bronze';
+            break;
+    }
+    return $report_level;
+}
