@@ -3,7 +3,7 @@ add_action('init', 'process_download_reports');
 function process_download_reports()
 {
     $action = isset($_REQUEST['_download_report_nonce']) ? $_REQUEST['_download_report_nonce'] : null;
-    if( wp_verify_nonce( $action, 'download_community_report') || $action == 'test' ) {
+    if( wp_verify_nonce( $action, 'download_community_report') ) {
         downloadReport();
     }
 }
@@ -44,9 +44,10 @@ function downloadReport(){
             if ($agreement_data && in_array($agreement_data['agreement_id'], $processed_agreements)) {
                 continue;
             }
+            $organisation = new CT_Organisation( $claim->organisation_id );
             $data = array(
-                'product_owner' => $product->owner,
-                'product_id' => $product->product_id,
+                'product_owner' => $organisation->organisation_name,
+                'product_id' => $organisation->abn,
                 'product_name' => $product->name,
                 'product_version' => "$product->version",
                 'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
@@ -86,9 +87,10 @@ function downloadReport(){
                 $requester_service->load();
                 $s3 = new S3Wrapper();
                 $cl = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id ) );
+                $organisation = new CT_Organisation( $claim->organisation_id );
                 $data = array(
-                    'product_owner' => $product->owner,
-                    'product_id' => $product->product_id,
+                    'product_owner' => $organisation->organisation_name,
+                    'product_id' => $organisation->abn,
                     'product_name' => $product->name,
                     'product_version' => "$product->version",
                     'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
@@ -125,9 +127,11 @@ function downloadReport(){
         $test_plans = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE product_id = %d ", $pr->ID ) );
         if( $test_plans ) {
             foreach ($test_plans AS $test_plan) {
+                $organisation_id = $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE id = %d ", $test_plan->organisation_subscription_id ) );
+                $organisation = new CT_Organisation( $organisation_id );
                 $data = array(
-                    'product_owner' => $product->owner,
-                    'product_id' => $product->product_id,
+                    'product_owner' => $organisation->organisation_name,
+                    'product_id' => $organisation->abn,
                     'product_name' => $product->name,
                     'product_version' => "$product->version",
                     'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
