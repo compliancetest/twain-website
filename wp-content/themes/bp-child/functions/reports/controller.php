@@ -27,6 +27,7 @@ function downloadReport(){
     $excel2->setActiveSheetIndex(0);
     $row_number_sheet1 = $row_number_sheet2 = $row_number_sheet3 = 4;
 
+    $all_data = array();
     $processed_agreements = array();
     $products = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type = 'product-service'" );
     $s3 = new S3Wrapper();
@@ -36,12 +37,12 @@ function downloadReport(){
             foreach( $claims AS $claim ) {
                 $product = new ProductAndService($claim->product_id);
                 $product->load();
-                if ($product->visibility == 'Private') {
+                if( $product->visibility == 'Private' ){
                     continue;
                 }
                 $author_id = $wpdb->get_var($wpdb->prepare("SELECT post_author FROM wp_posts WHERE ID = %s", $product->id));
                 $author_groups = groups_get_user_groups($author_id);
-                if (!in_array($_REQUEST['cid'], $author_groups['groups'])) {
+                if( ! in_array($_REQUEST['cid'], $author_groups['groups'] ) ){
                     continue;
                 }
                 $agreement_data = getProductLastAgreement($claim->product_id);
@@ -57,6 +58,8 @@ function downloadReport(){
                     'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
                     'suite_name' => get_the_title($claim->suite_id),
                     'level' => process_level(str_replace(';;', '', $claim->conformance_level)),
+                    //this used for multusorting by level
+                    'level_weight' => process_level_weight( process_level(str_replace(';;', '', $claim->conformance_level)) ),
                     'claim_id' => $claim->claim_id,
                     'claim_token' => $claim->token,
                     'claim_url' => $s3->getProductClaimLink($claim->token),
@@ -69,19 +72,14 @@ function downloadReport(){
                 );
                 if (strpos($claim->role, 'Employer') !== false) {
                     $data['type'] = 'Employer';
-                    add_entry_to_excel($excel2, $data, $row_number_sheet1, 0);
-                    $row_number_sheet1++;
                 }
                 if (strpos($claim->role, 'Fund') !== false) {
                     $data['type'] = 'Fund';
-                    add_entry_to_excel($excel2, $data, $row_number_sheet2, 1);
-                    $row_number_sheet2++;
                 }
                 if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
                     $data['type'] = str_replace(';;', '', $claim->role);
-                    add_entry_to_excel($excel2, $data, $row_number_sheet3, 2);
-                    $row_number_sheet3++;
                 }
+                $all_data[] = $data;
                 //add entry for second side
                 if (isset($agreement_data['partner_product'])) {
                     $product = new ProductAndService($agreement_data['partner_product_id']);
@@ -103,6 +101,8 @@ function downloadReport(){
                         'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
                         'suite_name' => get_the_title($claim->suite_id),
                         'level' => process_level(str_replace(';;', '', $cl->conformance_level)),
+                        //this used for multusorting by level
+                        'level_weight' => process_level_weight( process_level(str_replace(';;', '', $cl->conformance_level)) ),
                         'claim_id' => $cl->claim_id,
                         'claim_token' => $cl->token,
                         'claim_url' => $s3->getProductClaimLink($cl->token),
@@ -115,20 +115,15 @@ function downloadReport(){
                     );
                     if (strpos($claim->role, 'Employer') !== false) {
                         $data['type'] = 'Employer';
-                        add_entry_to_excel($excel2, $data, $row_number_sheet1, 0);
-                        $row_number_sheet1++;
                     }
                     if (strpos($claim->role, 'Fund') !== false) {
                         $data['type'] = 'Fund';
-                        add_entry_to_excel($excel2, $data, $row_number_sheet2, 1);
-                        $row_number_sheet2++;
                     }
                     if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
                         $data['type'] = str_replace(';;', '', $claim->role);
-                        add_entry_to_excel($excel2, $data, $row_number_sheet3, 2);
-                        $row_number_sheet3++;
                     }
-                    array_push($processed_agreements, $agreement_data->id);
+                    $all_data[] = $data;
+                    array_push( $processed_agreements, $agreement_data->id);
                 }
             }
         }
@@ -150,6 +145,8 @@ function downloadReport(){
                     'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
                     'suite_name' => get_the_title($test_plan->suite_id),
                     'level' => process_level(str_replace(';;', '', $test_plan->level)),
+                    //this used for multusorting by level
+                    'level_weight' => process_level_weight( process_level(str_replace(';;', '', $test_plan->level)) ),
                     'claim_id' => '',
                     'claim_token' => '',
                     'claim_url' => '',
@@ -162,20 +159,30 @@ function downloadReport(){
                 );
                 if (strpos($test_plan->role, 'Employer') !== false) {
                     $data['type'] = 'Employer';
-                    add_entry_to_excel($excel2, $data, $row_number_sheet1, 0);
-                    $row_number_sheet1++;
                 }
                 if (strpos($test_plan->role, 'Fund') !== false) {
                     $data['type'] = 'Fund';
-                    add_entry_to_excel($excel2, $data, $row_number_sheet2, 1);
-                    $row_number_sheet2++;
                 }
                 if (strpos($test_plan->role, 'Employer') === false && strpos($test_plan->role, 'Fund') === false) {
                     $data['type'] = str_replace(';;', '', $test_plan->role);
-                    add_entry_to_excel($excel2, $data, $row_number_sheet3, 2);
-                    $row_number_sheet3++;
                 }
+                $all_data[] = $data;
             }
+        }
+    }
+    $data = sortData( $all_data );
+    foreach( $data AS $row ){
+        if( $row['type'] == 'Employer' ){
+            add_entry_to_excel( $excel2, $row, $row_number_sheet1, 0 );
+            $row_number_sheet1++;
+        }
+        if( $row['type'] == 'Fund' ){
+            add_entry_to_excel( $excel2, $row, $row_number_sheet2, 1 );
+            $row_number_sheet2++;
+        }
+        if ( $row['type'] != 'Fund'  && $row['type'] != 'Employer' ) {
+            add_entry_to_excel( $excel2, $row, $row_number_sheet3, 2 );
+            $row_number_sheet3++;
         }
     }
     $excel2->setActiveSheetIndex(0);
@@ -208,6 +215,17 @@ function add_entry_to_excel( &$excel2, $data, $row_number, $sheet_number ){
         $excel2->getActiveSheet()->getCell('N' . $row_number)->getHyperlink()->setUrl($data['certificate_link']);
         $excel2->getActiveSheet()->setCellValue('N' . $row_number, $data['certificate_id']);
     }
+}
+function sortData( $data ){
+    $sort = array();
+    foreach( $data as $k => $v ) {
+        $sort['org_name'][$k]     = $v['product_owner'];
+        $sort['product_name'][$k] = $v['product_name'];
+        $sort['test_suite'][$k]   = $v['suite_name'];
+        $sort['level_name'][$k]   = $v['level_weight'];
+    }
+    array_multisort( $sort['org_name'], SORT_ASC, $sort['product_name'], SORT_ASC, $sort['test_suite'], SORT_ASC, $sort['level_name'], SORT_ASC,  $data );
+    return $data;
 }
 function getProductLastAgreement( $product_id ){
     global $wpdb;
@@ -247,4 +265,19 @@ function process_level( $level ){
             break;
     }
     return $report_level;
+}
+function process_level_weight( $level ){
+    switch ( strtolower( $level ) ){
+        case 'bronze':
+            $weight = 1;
+            break;
+        case 'silver':
+            $weight = 2;
+            break;
+        default:
+        case 'gold':
+        $weight = 3;
+            break;
+    }
+    return $weight;
 }
