@@ -107,7 +107,7 @@ function downloadReport(){
                         'claim_token' => $cl->token,
                         'claim_url' => $s3->getProductClaimLink($cl->token),
                         'claim_status' => $cl->status,
-                        'e2e_company' => get_the_title($agreement_data->requester_service_id),
+                        'e2e_company' => $organisation->organisation_name,
                         'e2e_product' => get_the_title($requester_service->service_product_id),
                         'status' => $agreement_data->status,
                         'certificate_id' => $agreement_data->claim_id,
@@ -237,9 +237,11 @@ function getProductLastAgreement( $product_id ){
         $service = new Service( $agreement->responder_service_id );
         $service->load();
         $s3 = new S3Wrapper();
+        $org_id = $wpdb->get_var($wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", $service->service_user_id));
+        $org = new CT_Organisation( $org_id );
         return array(
             'agreement_id'        => $agreement->id,
-            'partner_company'     => get_the_title( $agreement->responder_service_id ),
+            'partner_company'     => $org->organisation_name,
             'partner_product'     => get_the_title( $service->service_product_id ),
             'partner_product_id'  => $service->service_product_id,
             'status'              => $agreement->status,
