@@ -139,6 +139,9 @@ function downloadReport(){
                 $organisation = new CT_Organisation( $organisation_id );
                 $product = new ProductAndService( $test_plan->product_id );
                 $product->load();
+                if ($product->visibility == 'Private') {
+                    continue;
+                }
                 $data = array(
                     'product_owner' => $organisation->organisation_name,
                     'product_id' => $organisation->abn,
