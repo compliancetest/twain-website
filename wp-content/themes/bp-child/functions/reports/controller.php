@@ -35,6 +35,9 @@ function downloadReport(){
         if( $claim ) {
             $product = new ProductAndService($claim->product_id);
             $product->load();
+            if( $product->visibility == 'Private' ){
+                continue;
+            }
             $author_id = $wpdb->get_var($wpdb->prepare("SELECT post_author FROM wp_posts WHERE ID = %s", $product->id));
             $author_groups = groups_get_user_groups($author_id);
             if ( ! in_array($_REQUEST['cid'], $author_groups['groups'] ) ) {
@@ -129,6 +132,8 @@ function downloadReport(){
             foreach ($test_plans AS $test_plan) {
                 $organisation_id = $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE id = %d ", $test_plan->organisation_subscription_id ) );
                 $organisation = new CT_Organisation( $organisation_id );
+                $product = new ProductAndService( $test_plan->product_id );
+                $product->load();
                 $data = array(
                     'product_owner' => $organisation->organisation_name,
                     'product_id' => $organisation->abn,
