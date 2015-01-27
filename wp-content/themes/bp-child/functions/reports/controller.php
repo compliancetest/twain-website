@@ -183,25 +183,47 @@ function sortData( $data ){
 }
 function getProductLastAgreement( $product_id ){
     global $wpdb;
-    $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) AND status = 'Verified' ORDER BY id DESC LIMIT 1", $product_id ) );
-    if( ! $agreement ){
-        $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) ORDER BY id DESC LIMIT 1", $product_id ) );
+    $responder = false;
+    $agreements = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) AND status = 'Verified' ORDER BY id DESC", $product_id ) );
+    if( ! $agreements ){
+        $responder = true;
+        $agreements = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE responder_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) AND status = 'Verified' ORDER BY id DESC", $product_id ) );
     }
-    if( $agreement ){
-        $service = new Service( $agreement->responder_service_id );
-        $service->load();
-        $s3 = new S3Wrapper();
-        $org_id = $wpdb->get_var($wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", $service->service_user_id));
-        $org = new CT_Organisation( $org_id );
-        return array(
-            'agreement_id'        => $agreement->id,
-            'partner_company'     => $org->organisation_name,
-            'partner_product'     => get_the_title( $service->service_product_id ),
-            'partner_product_id'  => $service->service_product_id,
-            'status'              => $agreement->status,
-            'certificate_link'    => $agreement->status == 'Verified' ? $s3->getAgreementClaimLink( $agreement->requester_token ) : '',
-            'certificate_id'      => $agreement->claim_id
-        );
+    if( ! $agreements ){
+        $agreements = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE requester_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) ORDER BY id DESC", $product_id ) );
+    }
+    if( ! $agreements ){
+        $responder = true;
+        $agreements = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE responder_service_id IN( SELECT wp_post_id FROM wp_services WHERE product_id = %d ) ORDER BY id DESC", $product_id ) );
+    }
+    if( $agreements ){
+        foreach( $agreements AS $agreement ) {
+            if ($responder) {
+                $service = new Service($agreement->requester_service_id);
+                $token = $agreement->responder_token;
+            } else {
+                $service = new Service($agreement->responder_service_id);
+                $token = $agreement->requester_token;
+            }
+            $service->load();
+            $product = new ProductAndService( $service->service_product_id );
+            $product->load();
+            if( $product->visibility == 'Private' ){
+                continue;
+            }
+            $s3 = new S3Wrapper();
+            $org_id = $wpdb->get_var($wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", $service->service_user_id));
+            $org = new CT_Organisation($org_id);
+            return array(
+                'agreement_id' => $agreement->id,
+                'partner_company' => $org->organisation_name,
+                'partner_product' => get_the_title($service->service_product_id),
+                'partner_product_id' => $service->service_product_id,
+                'status' => $agreement->status,
+                'certificate_link' => $agreement->status == 'Verified' ? $s3->getAgreementClaimLink($token) : '',
+                'certificate_id' => $agreement->claim_id
+            );
+        }
     }
     return false;
 }
