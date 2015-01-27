@@ -188,7 +188,7 @@ function downloadReport(){
     $excel2->setActiveSheetIndex(0);
     $objWriter = PHPExcel_IOFactory::createWriter($excel2, 'Excel2007');
     header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="SuperStreamTestProgress.xls"');
+    header('Content-Disposition: attachment; filename="'.$community_name.'TestProgress.xls"');
     $objWriter->save('php://output');
     exit();
 }
