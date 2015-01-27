@@ -28,7 +28,6 @@ function downloadReport(){
     $row_number_sheet1 = $row_number_sheet2 = $row_number_sheet3 = 4;
 
     $all_data = array();
-    $processed_agreements = array();
     $products = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type = 'product-service'" );
     $s3 = new S3Wrapper();
     foreach( $products AS $pr ){
@@ -40,15 +39,11 @@ function downloadReport(){
                 if( $product->visibility == 'Private' ){
                     continue;
                 }
-                $author_id = $wpdb->get_var($wpdb->prepare("SELECT post_author FROM wp_posts WHERE ID = %s", $product->id));
-                $author_groups = groups_get_user_groups($author_id);
-                if( ! in_array($_REQUEST['cid'], $author_groups['groups'] ) ){
+                $com_id = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $claim->suite_id ) );
+                if( $_REQUEST['cid'] != $com_id ){
                     continue;
                 }
                 $agreement_data = getProductLastAgreement($claim->product_id);
-                if ($agreement_data && in_array($agreement_data['agreement_id'], $processed_agreements)) {
-                    continue;
-                }
                 $organisation = new CT_Organisation($claim->organisation_id);
                 $data = array(
                     'product_owner' => $organisation->organisation_name,
@@ -80,51 +75,6 @@ function downloadReport(){
                     $data['type'] = str_replace(';;', '', $claim->role);
                 }
                 $all_data[] = $data;
-                //add entry for second side
-                if (isset($agreement_data['partner_product'])) {
-                    $product = new ProductAndService($agreement_data['partner_product_id']);
-                    $product->load();
-                    $agreement_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_data['agreement_id']));
-                    $requester_service = new Service($agreement_data->requester_service_id);
-                    $requester_service->load();
-                    $s3 = new S3Wrapper();
-                    $cl = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id));
-                    $responder_service = new Service($agreement_data->responder_service_id);
-                    $responder_service->load();
-                    $org_id = $wpdb->get_var($wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", $responder_service->service_user_id));
-                    $org = new CT_Organisation($org_id);
-                    $data = array(
-                        'product_owner' => $org->organisation_name,
-                        'product_id' => $org->abn,
-                        'product_name' => $product->name,
-                        'product_version' => "$product->version",
-                        'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
-                        'suite_name' => get_the_title($claim->suite_id),
-                        'level' => process_level(str_replace(';;', '', $cl->conformance_level)),
-                        //this used for multusorting by level
-                        'level_weight' => process_level_weight( process_level(str_replace(';;', '', $cl->conformance_level)) ),
-                        'claim_id' => $cl->claim_id,
-                        'claim_token' => $cl->token,
-                        'claim_url' => $s3->getProductClaimLink($cl->token),
-                        'claim_status' => $cl->status,
-                        'e2e_company' => $organisation->organisation_name,
-                        'e2e_product' => get_the_title($requester_service->service_product_id),
-                        'status' => $agreement_data->status,
-                        'certificate_id' => $agreement_data->claim_id,
-                        'certificate_link' => $s3->getAgreementClaimLink($agreement_data->responder_token),
-                    );
-                    if (strpos($claim->role, 'Employer') !== false) {
-                        $data['type'] = 'Employer';
-                    }
-                    if (strpos($claim->role, 'Fund') !== false) {
-                        $data['type'] = 'Fund';
-                    }
-                    if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
-                        $data['type'] = str_replace(';;', '', $claim->role);
-                    }
-                    $all_data[] = $data;
-                    array_push( $processed_agreements, $agreement_data->id);
-                }
             }
         }
         $test_plans = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE product_id = %d AND is_deleted = 0 ", $pr->ID ) );
@@ -135,6 +85,10 @@ function downloadReport(){
                 $product = new ProductAndService( $test_plan->product_id );
                 $product->load();
                 if ($product->visibility == 'Private') {
+                    continue;
+                }
+                $com_id = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $test_plan->suite_id ) );
+                if( $_REQUEST['cid'] != $com_id ){
                     continue;
                 }
                 $data = array(
