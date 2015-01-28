@@ -104,7 +104,7 @@ function ct_process_organisation_action()
                   <form name="" action="<?php echo site_url() ?>/index.php" method="post">
                     <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
                     <div class="popup-box-content">
-                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the "+" icon on the Organisation section in your Profile tab.
+                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the Organisation section in your Profile tab.
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
@@ -208,23 +208,6 @@ function ct_process_organisation_action()
                 }    
             } 
             
-            exit;
-        } else if(wp_verify_nonce($action, 'signup-organisation-account')) { //Send signup organisation request to the site admin
-            if (!is_user_logged_in()) {
-                wp_redirect(get_site_url());
-                exit;
-            }
-            
-            $user_id = get_current_user_id();
-            
-            if ($organisation = ct_get_user_organisation($user_id))
-            {
-                addMessage("There is already the organisation that matches with your email address", "warning");                
-            } else {
-                $controller->send_signup_organisation_request($user_id, intval( $_REQUEST['pricing_plan_id'] ) );
-                addMessage("Your request has been sent.");
-            }
-            wp_redirect(isset($_POST['suite_id']) ? get_permalink($_POST['suite_id']) : base64_decode($_POST['return']));
             exit;
         } else if(wp_verify_nonce($action, 'request-subscription')) { //Send Request a subscription to the organisation admin
             if (!is_user_logged_in()) {

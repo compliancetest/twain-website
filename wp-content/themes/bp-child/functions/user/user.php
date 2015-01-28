@@ -140,21 +140,15 @@ function display_signup_organisation_box()
     ?>
     <div class="popup-box" style="display: none; width: 500px">
       <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-        <div class="popup-box-header radius6 noradiusbottom">Set Up An Account</div>
-        <div class="popup-box-content">                        
-            To create a product, an account for your Organisation will need to be created by our support team, and you will be assigned as the administrator. 
-            Please ensure your organisation details are complete in your profile before proceeding. Would you like to proceed?
-            <?php wp_nonce_field('signup-organisation-account', '_organisation_nonce') ?>                        
-        </div>                    
+        <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+        <div class="popup-box-content">
+            An organisation record needs to be created for your organisation as products are owned by organisations. You can create a record via the Organisation section in your Profile tab.
+        </div>
         <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn process-btn submit-btn" onclick="jQuery(this).parents('form').find('.loading').show(); jQuery(this).parents('form').submit();"><span class="p"></span><span class="t">Confirm</span></a>
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>
-        <input type="hidden" name="return" value="<?php echo base64_encode('/my-products/')?>" />
-        <input type="hidden" class="pricing_plan_id" name="pricing_plan_id" value="0" />
-        <div class="loading loading-with-text"><div><b>SUBMITTING REQUEST</b><span>Please wait...</span></div></div>
       </form>
     </div>
     <?php
