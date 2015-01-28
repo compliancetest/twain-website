@@ -145,7 +145,7 @@ function display_signup_organisation_box()
             An organisation record needs to be created for your organisation as products are owned by organisations. You can create a record via the Organisation section in your Profile tab.
         </div>
         <div class="popup-box-footer radius6 noradiustop">
-            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
             <div class="clear"></div>
         </div>
         <a class="close_btn"></a>
