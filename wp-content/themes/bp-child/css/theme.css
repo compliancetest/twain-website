@@ -293,10 +293,10 @@ a:hover {
                 background-position: 8px -754px;
             }
             #top_loged_actions .menu-test-data {
-                background-position: 8px -634px;
+                background-position: 8px -1158px;
             }
             #top_loged_actions .menu-test-data:hover {
-                background-position: 8px -674px;
+                background-position: 8px -1182px;
             }
             #top_loged_actions .menu-products {
                 background-position: 8px -394px;
@@ -422,10 +422,10 @@ a:hover {
                 background-position: 136px -754px;
             }
             #top_loged_actions .leftmenu .menu-test-data {
-                background-position: 136px -634px;
+                background-position: 136px -1158px;
             }
             #top_loged_actions .leftmenu .menu-test-data:hover {
-                background-position: 136px -674px;
+                background-position: 136px -1182px;
             }
             #top_loged_actions .leftmenu .menu-products {
                 background-position: 136px -394px;
@@ -3953,12 +3953,19 @@ body .tabs li a #icon_downloads {
 body .tabs li.active a #icon_downloads {
     background: url(../images/issuer_sprite.png) -1px -104px no-repeat;
 }
+
 body .tabs li a #icon_testdata {
+    background: url(../images/ui-icon-sprites.png) 5px -1157px no-repeat;
+}
+body .tabs li.active a #icon_testdata {
+    background: url(../images/ui-icon-sprites.png) 5px -1181px no-repeat;
+}
+
+body .tabs li a #icon_reports {
     background: url(../images/issuer_sprite.png) -1px -140px no-repeat;
     margin: 2px 5px 2px 2px;
 }
-
-body .tabs li.active a #icon_testdata {
+body .tabs li.active a #icon_reports {
     background: url(../images/issuer_sprite.png) -24px -140px no-repeat;
 }
 
@@ -7718,56 +7725,55 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .dashboard-tabs .menu-communities .menu-icon {
     background-position: 5px -72px;
 }
-
 .dashboard-tabs .menu-communities.current_page_item .menu-icon {
     background-position: 5px -112px;
 }
+
 .dashboard-tabs .menu-test-suites .menu-icon {
     background-position: 5px -714px;
 }
-
 .dashboard-tabs .menu-test-suites.current_page_item .menu-icon {
     background-position: 5px -754px;
 }
+
 .dashboard-tabs .menu-test-data .menu-icon {
-    background-position: 5px -634px;
+    background-position: 5px -1157px;
+}
+.dashboard-tabs .menu-test-data.current_page_item .menu-icon {
+    background-position: 5px -1181px;
 }
 
-.dashboard-tabs .menu-test-data.current_page_item .menu-icon {
-    background-position: 5px -674px;
-}
 .dashboard-tabs .menu-products .menu-icon {
     background-position: 5px -394px;
 }
-
 .dashboard-tabs .menu-products.current_page_item .menu-icon {
     background-position: 5px -434px;
 }
+
 .dashboard-tabs .menu-coverage .menu-icon {
     background-position: 5px -153px;
 }
-
 .dashboard-tabs .menu-coverage.current_page_item .menu-icon {
     background-position: 5px -193px;
 }
+
 .dashboard-tabs .menu-transactions .menu-icon {
     background-position: 5px -789px;
 }
-
 .dashboard-tabs .menu-transactions.current_page_item .menu-icon {
     background-position: 5px -830px;
 }
+
 .dashboard-tabs .menu-support .menu-icon {
     background-position: 5px -554px;
 }
-
 .dashboard-tabs .menu-support.current_page_item .menu-icon {
     background-position: 5px -594px;
 }
+
 .dashboard-tabs .menu-organisation .menu-icon {
     background-position: 5px -871px;
 }
-
 .dashboard-tabs .menu-organisation.current-page-ancestor .menu-icon,
 .dashboard-tabs .menu-organisation.current_page_item .menu-icon {
     background-position: 5px -910px;

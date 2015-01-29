@@ -46,7 +46,7 @@
     </li>
     <li class="<?php echo (bp_current_action() == 'reports') ? 'active' : ''?>">
         <a href="<?php echo bp_get_group_permalink()?>reports" rel="reports-container" class="<?php echo (bp_current_action() == 'reports') ? 'selected' : ''?>">
-            <span class="left icon" id="icon_testdata"></span>
+            <span class="left icon" id="icon_reports"></span>
             <span class="right text">REPORTS</span>
             <span class="tabactive"></span>
             <span class="clear"></span>
