@@ -308,7 +308,7 @@
             showGridBoxLoadingWrapper(form);
             hideGridBoxResultMessage(form);
             $.ajax({
-                url: '/my-profile',
+                url: '/my-profile/',
                 data: form.serialize(),
                 type: 'POST',
                 success: function(rsp)
@@ -561,7 +561,7 @@
             showGridBoxLoadingWrapper(form);
             hideGridBoxResultMessage(form);
             $.ajax({
-                url: '/my-profile',
+                url: '/my-profile/',
                 data: form.serialize(),
                 type: 'POST',
                 success: function(rsp)
@@ -576,10 +576,36 @@
                     }
                 }
             })
-            
+
             return false;
         });
-        
+        $('.create_organisation').on('click', function(e){
+            e.preventDefault();
+            $('.btn-row').show();
+            $('.join_org').hide();
+            $('.edit_org').toggle();
+            if( $('.edit_org').is(':visible') == $('.edit_org_text').is(':visible') ){
+                toggle_text();
+            }
+        });
+        $('.join_organisation').on('click', function(e){
+            e.preventDefault();
+            $('.btn-row').show();
+            $('.edit_org').hide();
+            $('.join_org').toggle();
+            if( $('.join_org').is(':visible') == $('.edit_org_text').is(':visible') ){
+                toggle_text();
+            }
+        })
+        function toggle_text(){
+            if( $('.edit_org_text').attr('data-state') == '1' ){
+                $('.edit_org_text').attr('data-state', 0 );
+                $('.edit_org_text').hide()
+            } else{
+                $('.edit_org_text').attr('data-state', 1 );
+                $('.edit_org_text').show();
+            }
+        }
     });
     
 

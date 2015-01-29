@@ -1367,6 +1367,15 @@ tr {
 .grid-box .gbh-btn-edit{
     background: url(../images/btn-sprites.png) no-repeat 7px -208px;
 }
+.grid-box .gbh-btn-create-org{
+	background: url(../images/user_icon_w.png) 7px 6px no-repeat;
+}
+.grid-box .gbh-btn-create-join{
+	background: url(../images/CreateOrganisation_Hover.png) 7px 6px no-repeat;
+}
+.grid-box .gbh-btn-leave{
+	background: url(../images/logout_white_icon.png) 8px 8px no-repeat;
+}
 .grid-box .gbh-btn-view-stats{
     background: url(../images/btn-sprites.png) no-repeat 7px -248px;
 }

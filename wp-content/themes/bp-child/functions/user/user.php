@@ -51,6 +51,20 @@ function compliancetest_user_actions()
         exit;
     }else if(wp_verify_nonce($cpAction ,'my_organisation_edit')){
         cp_user_organisation_edit();
+    }else if(wp_verify_nonce($cpAction ,'my_organisation_join')){
+        cp_user_organisation_join();
+    }else if(wp_verify_nonce($cpAction ,'leave_organisation')){
+        $org_membership = ct_get_user_organisation_membership( get_current_user_id() );
+        if( ! $org_membership ){
+            exit('You are not member of any organisation!');
+        }
+        if( ! $org_membership->is_admin ){
+            $org_controller = new CT_Organisation_Controller();
+            $org_controller->delete_membership( get_current_user_id(), $org_membership->organisation_id);
+        }
+        addMessage( 'Success!' );
+        wp_redirect( '/my-profile/' );
+        exit;
     }else if(wp_verify_nonce($cpAction ,'delete_payment_method')){
         cp_delete_payment_method();
     }else if(wp_verify_nonce($cpAction ,'leave-group')){
