@@ -554,64 +554,97 @@ function cp_user_payment_save()
     return $id;    
 }
 
-//Save User Organisation 
-function cp_user_organisation_edit()
-{
-    global $wpdb, $current_user;   
-    
-    //Goto Homepage
-    if(!is_user_logged_in())
-        wp_redirect('/');
-    
+//Join organisation
+function cp_user_organisation_join(){
+    if( ! is_user_logged_in() ){
+        exit('Please log in to perform this action!' );
+    }
     $user_id = get_current_user_id();
-    
+    $organisation_key = isset($_POST['user_organisation_key']) ? htmlspecialchars($_POST['user_organisation_key']) : null;
+
+    $org_controller = new CT_Organisation_Controller();
+    $organisation = ct_get_organisation_by_key($organisation_key);
+    if ($organisation) {
+        $org_controller->add_membership($user_id, $organisation->id);
+        exit('success');
+    }
+    exit('Organisation not found!');
+}
+//Edit organisation
+function cp_user_organisation_edit(){
+    global $wpdb, $current_user;
+    if( ! is_user_logged_in() ) {
+        exit('Please log in to perform this action!');
+    }
+    $user_id = get_current_user_id();
+
     $org_membership = ct_get_user_organisation_membership($current_user->ID);
-    
-    if (!$org_membership) {
-        
-        $user_organisation = htmlspecialchars($_POST['user_organisation']);        
+    if( ! $org_membership ){
+        $user_organisation = htmlspecialchars($_POST['user_organisation']);
         $user_organisation_abn = htmlspecialchars($_POST['user_organisation_abn']);
         $user_organisation_web = htmlspecialchars($_POST['user_organisation_web']);
         $user_organisation_desc = htmlspecialchars($_POST['user_organisation_desc']);
-        
-        update_user_meta($user_id, 'user_organisation', $user_organisation);        
-        update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);       
-        update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
-        update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);         
-    }
-    
-    $organisation_key = isset($_POST['user_organisation_key']) ? htmlspecialchars($_POST['user_organisation_key']) : null;
-    
-    $org_controller = new CT_Organisation_Controller();
-    
-    if (!$organisation_key) {
-        if($org_membership && !$org_membership->is_admin)
-            $org_controller->delete_membership($user_id, $org_membership->organisation_id);
-        
-    } else {
-        //Getting Organisation with the key
-        $organisation = ct_get_organisation_by_key($organisation_key);
-        
-        if (!$organisation) {
-            echo 'Organisation key is not correct.';
-            exit;
-        }
-        
-        if (!$org_membership) {
-            //Create New Membership Record
-            $org_controller->add_membership($user_id, $organisation->id);
-        } else {
-            if ($org_membership->organisation_id != $organisation->id && !$org_membership->is_admin) {
-                $org_controller->delete_membership($user_id, $org_membership->organisation_id);
-                $org_controller->add_membership($user_id, $organisation->id);
-            }
-        }
-    }
-    
-    echo 'success';
-    
-    exit();
 
+        update_user_meta($user_id, 'user_organisation', $user_organisation);
+        update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);
+        update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
+        update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
+    }
+
+    $user_id = get_current_user_id();
+
+    $user_org = trim( get_user_meta( $user_id, 'user_organisation', true) );
+    $user_org_abn = trim( get_user_meta( $user_id, 'user_organisation_abn', true) );
+    $user_org_web = get_user_meta( $user_id, 'user_organisation_web', true);
+    $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
+    $message_error = $message_success = false;
+    //check that name and ABN for user organisation not empty
+    if( empty( $user_org_abn ) || empty( $user_org ) || $user_org_abn == '-' || $user_org == '-' ){
+        $message_error = 'Organisation Name and ABN must be populated before an Organisation Record can be created';
+    }
+    if( false === $message_error ) {
+        $is_abn_used = $is_name_used_in_xero = false;
+        //check that ABN number not used for another organisation
+        $is_abn_used = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE abn = %s ", $user_org_abn));
+        //check that organisation name not used in Xero
+        $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
+        if ($is_name_used_in_xero || $is_abn_used) {
+            $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ComplianceTest.';
+        }
+    }
+    if( false === $message_error ) {
+        $organisationClass = new CT_Organisation($_POST['id']);
+        $data = array(
+            'organisation_name' => $user_org,
+            'organisation_description' => $user_org_desc,
+            'organisation_website' => $user_org_web,
+            'invoice_me' => 0,
+            'abn' => $user_org_abn,
+            'contact_first_name' => get_user_meta($user_id, 'first_name', true),
+            'contact_last_name' => get_user_meta($user_id, 'last_name', true),
+            'contact_email' => $current_user->user_email,
+        );
+
+        $organisationClass->bind($data);
+        if ($organisationClass->save()) {
+            //Save Organisation Admin
+            $organisationClass->save_organisation_admin($organisationClass->id, $user_id);
+            $full_name = get_user_meta($user_id, 'first_name', true) . " " . get_user_meta($user_id, 'last_name', true);
+            $email_data = array(
+                '[requester_name]' => $full_name,
+                '[requester_email]' => $current_user->user_email,
+                '[organisation]' => $user_org,
+                '[organisation_website]' => $user_org_web,
+                '[organisation_description]' => $user_org_desc,
+                '[organisation_abn]' => $user_org_abn
+            );
+
+            cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
+            cp_send_email(array('email' => $current_user->user_email, 'name' => $full_name), 'send_organisation_signup_request_to_user', $email_data);
+            exit('success');
+        }
+    }
+    exit( $message_error );
 }
 
 //Get User Full Name
