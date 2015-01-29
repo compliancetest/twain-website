@@ -171,7 +171,7 @@ class PricingPlan
         }
         if( $voucherName ) {
             //check voucher discount
-            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s  AND visibility = 1", $pricingPlanId, $voucherName ))) {
+            if ($voucher = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'discount' AND name = %s", $pricingPlanId, $voucherName ))) {
                 $totalDiscount += $voucher->value;
             }
         }

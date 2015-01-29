@@ -42,22 +42,12 @@
                         <?php elseif( $att_value['type'] == 'percent' ):?>
                             <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'];?>%</li>
                         <?php elseif( $att_value['type'] == 'boolean' ):?>
-                            <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                            <?php if( $att_value['visibility'] == '1' ):?>
+                                <li><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_name;?></strong><?php echo $att_value['value'] == 1 ? 'Yes' : 'No';?></li>
+                            <?php endif;?>
                         <?php endif;?>
                     <?php endforeach;?>
                 </ul>
-
-<!--                --><?php //if( isset( $plan->attribute_all['Vouchers'] ) && ! $read_only):?>
-<!--                    <div class="voucher-code">-->
-<!--                        <label>Enter your Voucher Code:</label>-->
-<!--                        <div class="voucher-field-wrap">-->
-<!--                            <input type="text" placeholder="VOUCHERCODE" class="voucher-field" />-->
-<!--                            <div class="voucher-error" style="display: none;">Error message</div>-->
-<!--                            <div class="voucher-success" style="display: none;">Success!</div>-->
-<!--                        </div>-->
-<!--                        <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Apply</span></a>-->
-<!--                    </div>-->
-<!--                --><?php //endif;?>
 
                 <table class="plans-pricing-table">
                     <thead>

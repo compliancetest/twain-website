@@ -80,10 +80,10 @@
                             <?php elseif( $att_value['type'] == 'discount' ):?>
                                 <li class="discount_<?php echo $att_value['id'];?> discount" <?php if( $att_name != $applied_voucher || ! is_array( $affected_plans ) || ! array_key_exists( $p->id, $affected_plans ) || ( $read_only && $affected_plans[$_REQUEST['plan_id']]['id'] != $att_value['id'] ) ) :?>style="display: none;"<?php endif;?>><strong class="has-tooltip" title="<?php echo $att_value['desc'];?>"><?php echo $att_value['title'];?></strong><?php echo $att_value['value'];?>%</li>
                             <?php endif;?>
-                            <?php if( $read_only && $applied_voucher && $voucher_data->visibility == 0 ):?>
-                                <li><strong class="has-tooltip" title="<?php echo $voucher_data->description;?>"><?php echo $voucher_data->title;?></strong><?php echo $voucher_data->value;?>%</li>
-                            <?php endif;?>
                         <?php endforeach;?>
+                        <?php if( $read_only && $applied_voucher && $voucher_data->visibility == 0 ):?>
+                            <li><strong class="has-tooltip" title="<?php echo $voucher_data->description;?>"><?php echo $voucher_data->title;?></strong><?php echo $voucher_data->value;?>%</li>
+                        <?php endif;?>
                     </ul>
 
                     <?php if( PricingPlan::isSupportVouchers( $plan->id ) && ! $read_only):?>
