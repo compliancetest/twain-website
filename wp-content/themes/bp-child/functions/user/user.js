@@ -606,6 +606,20 @@
                 $('.edit_org_text').show();
             }
         }
+
+        $('.leave_group_confirm').each(function(data){
+            var link = jQuery(this).attr('href');
+            jQuery(this).cplightbox({
+                type: 'inline',
+                href: '#delete-community-box',
+                onStart: function(){
+                    jQuery('#delete-community-box .process-btn').on('click', function(){
+                        location.href = link ;
+                    });
+                }
+            })
+        });
+        
     });
     
 

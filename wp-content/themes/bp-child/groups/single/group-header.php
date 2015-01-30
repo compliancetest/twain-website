@@ -28,7 +28,7 @@ do_action( 'bp_before_group_header' );
             <div class="generic-button group-button private"><a href="#registration-popup" title="Join Community" class="group-button register popup button button_medium button_red white_txt radius6" rel="custom-popup" cp-type="inline">Join Community</a></div>
             <?php
                 }else{
-                    do_action( 'bp_group_header_actions' );     
+                    do_action( 'bp_group_header_actions' );
                 }
             ?>
 
@@ -36,7 +36,18 @@ do_action( 'bp_before_group_header' );
     </div>
     <div class="clear"></div>
 </div>
-
+<div class="popup-box" id="delete-community-box" style="display: none; width: 500px">
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Leaving Community</div>
+    <div class="popup-box-content">
+        Are you sure you want to leave the <?php bp_group_name();?> community?
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">
+        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>
+</div>
 <?php
 do_action( 'bp_after_group_header' );
 //do_action( 'template_notices' );
