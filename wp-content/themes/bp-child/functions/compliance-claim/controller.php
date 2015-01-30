@@ -297,7 +297,9 @@ function createClaimPDF($claim_id, $planID )
     
     $suite = new TestSuite($claim->suite_id);
     $suite->load();
-    
+
+    $product = new ProductAndService( $claim->product_id );
+    $product->load();
     $certificate_data_info = '
 <style>
     table.certificate-info th {
@@ -320,7 +322,7 @@ function createClaimPDF($claim_id, $planID )
 <table cellspacing="5" cellpadding="5" class="certificate-info" width="100%">
     <tr>
         <th>Issued To</th>
-        <td>' . get_post_meta($claim->product_id, 'product_owner', true) . '</td>
+        <td>' . $product->owner . '</td>
     </tr>
     <tr>
         <th>Product or Service</th>
