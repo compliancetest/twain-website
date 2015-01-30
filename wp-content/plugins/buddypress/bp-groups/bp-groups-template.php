@@ -1751,7 +1751,7 @@ function bp_group_join_button( $group = false ) {
 				'link_href'         => wp_nonce_url( bp_get_group_permalink( $group ) . 'leave-group', 'groups_leave_group' ),
 				'link_text'         => __( 'Leave Group', 'buddypress' ),
 				'link_title'        => __( 'Leave Group', 'buddypress' ),
-				'link_class'        => 'group-button leave-group',
+				'link_class'        => 'group-button leave-group leave_group_confirm',
 			);
 
 		// Not a member
