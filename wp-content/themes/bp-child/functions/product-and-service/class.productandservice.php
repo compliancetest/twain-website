@@ -24,6 +24,10 @@ class ProductAndService
 
     var $visibility = '';
 
+    var $product_override = '';
+
+    var $product_owner_override = '';
+
     var $relatedProducts = array();
 
     public $service_related_services = '';
@@ -54,16 +58,25 @@ class ProductAndService
         $this->organisation_id = $this->loadSingleValue('product_organisation_id');
         
         $this->owner = $this->loadSingleValue('product_owner');
-        
+
+        $this->product_override = $this->loadSingleValue('product_override');
+        $this->product_owner_override = $this->loadSingleValue('product_owner_override');
+
         $organisation = ct_get_organisation_by_id($this->organisation_id);
-        if($organisation)
-            $this->owner = $organisation->organisation_name;
+        if( $organisation ) {
+            if( $this->product_override == 'yes' ){
+                $this->owner = $this->product_owner_override;
+            } else{
+                $this->owner = $organisation->organisation_name;
+            }
+        }
             
         $this->version = $this->loadSingleValue('product_version');
         $this->accessURL = $this->loadSingleValue('product_url');
         $this->descrition = $this->loadSingleValue('product_description');        
         $this->visibility = $this->loadSingleValue('product_visibility');
         $this->services_not_permitted = $this->loadSingleValue('services_not_permitted');
+
 
         $this->loadRelatedProducts();
 
