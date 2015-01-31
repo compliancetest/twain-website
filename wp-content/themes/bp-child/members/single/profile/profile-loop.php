@@ -6,10 +6,20 @@
         
         $biography = get_user_meta($user_id, 'description', true);
         
-        $user_org = get_user_meta($user_id, 'user_organisation', true);
-        $user_org_web = get_user_meta($user_id, 'user_organisation_web', true);
-        $user_org_desc = get_user_meta($user_id, 'user_organisation_desc', true);
-        $user_org_abn = get_user_meta($user_id, 'user_organisation_abn', true);
+        $org_membership = ct_get_user_organisation_membership( $user_id );
+
+        if( ! $org_membership ){
+            $user_org = get_user_meta( $user_id, 'user_organisation', true);
+            $user_org_abn = get_user_meta( $user_id, 'user_organisation_abn', true);
+            $user_org_web = get_user_meta( $user_id, 'user_organisation_web', true);
+            $user_org_desc = get_user_meta( $user_id, 'user_organisation_desc', true);
+        }else {
+            $org_detail = new CT_Organisation( $org_membership->organisation_id );
+            $user_org = $org_detail->organisation_name;
+            $user_org_abn = $org_detail->abn;
+            $user_org_web = $org_detail->organisation_website;
+            $user_org_desc = $org_detail->organisation_description;
+        }
     ?>        
     <div class="grid-box" id="my_org">
         <div class="grid-box-header">
