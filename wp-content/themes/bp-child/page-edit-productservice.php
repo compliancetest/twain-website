@@ -45,6 +45,8 @@ if(isset($_SESSION['product_data']))
     $product->owner = $prevData['product_owner'];
     $product->descrition = $prevData['product_description'];
     $product->organisation_id = $prevData['product_organisation_id'];
+    $product->product_owner_override = $prevData['product_owner_override'];
+    $product->product_override = $prevData['product_override'];
 
     $product->relatedProducts = array();
     if($prevData['related-product'])
@@ -125,15 +127,18 @@ if(isset($_SESSION['product_data']))
                                    if(is_super_admin()) {
                                        $organisations = ct_get_all_organisations();
                                ?>
-                                   <select name="product_owner" id="product_owner" class="select field-tooltip" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile.">
+                                   <select name="product_owner" style="width: 195px; margin-right: 10px;" id="product_owner" class="select field-tooltip admin_entry_select" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile.">
                                        <option value="">- Select Organisation -</option>
                                        <?php foreach($organisations as $org): ?>
-                                       <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
+                                            <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
                                        <?php endforeach; ?>
                                    </select>
+                                   <input type="checkbox" class="allow_override" name="allow_override" style="margin-right: 3px;" <?php if( $product->product_override == 'yes' ):?> checked="checked" <?php endif;?>>Override </br>
+                                   <input type="text" style="width: 195px; margin-right: 10px; <?php if( $product->product_override != 'yes' ):?> display: none; <?php endif;?> margin-top: 10px;" class="input  <?php if( $product->product_override == 'yes' ):?> required <?php endif;?>field-tooltip admin_entry_input" name="product_owner_override" id="product_owner_override" value="<?php echo $product->product_override == 'yes' ? $product->product_owner_override : $user_organisation->organisation_name?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
                                <?php }else{ ?>
-                                   <input type="text" class="input required field-tooltip" name="product_owner" id="product_owner" readonly value="<?php echo $user_organisation->organisation_name?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
-                               <?php } ?>
+                                   <input type="text" style="width: 195px; margin-right: 10px;" class="input required field-tooltip" name="product_owner" id="product_owner" readonly value="<?php echo $product->product_override == 'yes' ? $product->product_owner_override : $user_organisation->organisation_name?>" data-default="<?php echo $user_organisation->organisation_name?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
+                                   <input type="checkbox" class="allow_override" name="allow_override" <?php if( $product->product_override == 'yes' ):?> checked="checked" <?php endif;?>style="margin-right: 3px;">Override
+                                   <?php } ?>
                                </div>
                            </div>
                        <div class="grid-cell width60P">
@@ -332,7 +337,24 @@ jQuery(document).ready(function($){
           minHeight: 80
           
     });
-    
+    <?php if( is_super_admin() ):?>
+        $('.allow_override').on('click', function(){
+            if( $( this).is(':checked') ){
+                $( '.admin_entry_input').show();
+            } else{
+                $( '.admin_entry_input').hide();
+            }
+        });
+    <?php else:?>
+        $('.allow_override').on('click', function(){
+            if( $( this).is(':checked') ){
+                $( '#product_owner').removeAttr( 'readonly' );
+            } else{
+                $( '#product_owner').attr( 'readonly', 'readonly' );
+                $( '#product_owner').val( $( '#product_owner').attr('data-default') );
+            }
+        });
+    <?php endif;?>
     jQuery('#add-related-product').click(function(){
         jQuery('#ps-related-box .btn-row').before('<div class="field-row new-row">' + 
                        '<div class="grid-cell width55P">' +

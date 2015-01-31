@@ -218,11 +218,22 @@ function saveProductService()
     //Update Product Name ID Map Table on ESB
     $esb = new ManageESB();
     $esb->saveProductInfo($id, $product_id, $_POST['product_name']);
-    
-    if (is_super_admin()) {        
-        update_post_meta($id, 'product_organisation_id', $_POST['product_owner']);
+    if (is_super_admin()) {
+        if( isset( $_POST['allow_override'] ) ){
+            update_post_meta($id, 'product_owner_override', $_POST['product_owner_override'] );
+            update_post_meta($id, 'product_override', 'yes' );
+        } else{
+            update_post_meta($id, 'product_override', 'no' );
+        }
+        update_post_meta($id, 'product_organisation_id', $_POST['product_owner'] );
         update_post_meta($id, 'product_owner', '');    
     } else {
+        if( isset( $_POST['allow_override'] ) ){
+            update_post_meta($id, 'product_owner_override', $_POST['product_owner'] );
+            update_post_meta($id, 'product_override', 'yes' );
+        } else{
+            update_post_meta($id, 'product_override', 'no' );
+        }
         update_post_meta($id, 'product_organisation_id', $user_organisation->id);
         update_post_meta($id, 'product_owner', $user_organisation->organisation_admin);
     }
