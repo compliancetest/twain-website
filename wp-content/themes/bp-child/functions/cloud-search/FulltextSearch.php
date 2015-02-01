@@ -122,39 +122,41 @@ class FulltextSearch {
             );
             array_push($data, array('type' => 'add', 'id' => $post->ID, 'fields' => $temp_data));
         }
-        $test_scenarios = $wpdb->get_results( "SELECT * FROM wp_test_suites_scenarios" );
-        foreach( $test_scenarios AS $test_scenario ){
-            $post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id ) );
-            if( ! $post || $test_scenario->code == 'Default' ){
-                continue;
-            }
-            $groups = groups_get_user_groups($post->post_author);
-            $communityNames = array();
-            if (is_array($groups['groups'])) {
-                foreach ($groups['groups'] AS $group) {
-                    $communityNames[] = $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $group));
+        if( ! $post_id ) {
+            $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
+            foreach ($test_scenarios AS $test_scenario) {
+                $post = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id));
+                if (!$post || $test_scenario->code == 'Default') {
+                    continue;
                 }
+                $groups = groups_get_user_groups($post->post_author);
+                $communityNames = array();
+                if (is_array($groups['groups'])) {
+                    foreach ($groups['groups'] AS $group) {
+                        $communityNames[] = $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $group));
+                    }
+                }
+                if (empty($communityNames)) {
+                    $communityNames = array('ebMS3', 'SuperStream');
+                    $groups['groups'] = array(32, 35);
+                }
+                $temp_data = array(
+                    'community' => $communityNames,
+                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
+                    'post_author_name' => cp_get_user_fullname($post->post_author),
+                    'post_author_id' => $post->post_author,
+                    'post_content' => $test_scenario->description,
+                    'post_status' => $post->post_status,
+                    'post_title' => $test_scenario->code,
+                    'post_type' => 'Test Scenario',
+                    'post_id' => $post->ID,
+                    'visibility' => 1,
+                    'community_id' => $groups['groups'],
+                    'for_search' => $test_scenario->description . 'Test Scenario' . $test_scenario->code . cp_get_user_fullname($post->post_author),
+                    'link' => get_permalink($post->ID)
+                );
+                array_push($data, array('type' => 'add', 'id' => 'scenario_' . $test_scenario->id, 'fields' => $temp_data));
             }
-            if (empty($communityNames)) {
-                $communityNames = array( 'ebMS3', 'SuperStream' );
-                $groups['groups'] = array( 32, 35 );
-            }
-            $temp_data = array(
-                'community' => $communityNames,
-                'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
-                'post_author_name' => cp_get_user_fullname($post->post_author),
-                'post_author_id' => $post->post_author,
-                'post_content' => $test_scenario->description,
-                'post_status' => $post->post_status,
-                'post_title' => $test_scenario->code,
-                'post_type' => 'Test Scenario',
-                'post_id' => $post->ID,
-                'visibility' => 1,
-                'community_id' => $groups['groups'],
-                'for_search' => $test_scenario->description . 'Test Scenario' .  $test_scenario->code . cp_get_user_fullname($post->post_author),
-                'link' => get_permalink($post->ID)
-            );
-            array_push($data, array('type' => 'add', 'id' => 'scenario_'.$test_scenario->id, 'fields' => $temp_data));
         }
         $data = json_decode($this->_sendDataToSearchDomain($data), true);
         echo 'Status: ' . $data['status'].'<br>Added: ' . $data['adds'].'<br>Deleted: ' . $data['deletes'];
