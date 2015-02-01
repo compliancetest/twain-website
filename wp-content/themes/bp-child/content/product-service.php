@@ -5,7 +5,8 @@
 
     $user_id = get_current_user_id();
     $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
-    $can_view = $product->visibility == 'Public' || ( ( can_maintain_product_and_service() ||  is_super_admin() ) && $product->visibility == 'Private' ) ? true : false;
+    $has_edit_access = can_maintain_product_and_service( $user_id, $product->id );
+    $can_view = $product->visibility == 'Public' || ( (  $has_edit_access ||  is_super_admin() ) && $product->visibility == 'Private' ) ? true : false;
     if( ! $can_view ){
         addMessage( 'The visibility settings defined by the product owner prevent the display of further information.', 'error' );
         flushMessages();
@@ -39,11 +40,11 @@
                 <div class="product-info">
                     <div class="product-identifiers">
                         <div class="product-actions">
-                            <?php if(is_super_admin() || can_maintain_product_and_service($user_id, $product->id)){ ?>
+                            <?php if(is_super_admin() || $has_edit_access ){ ?>
                                 <a href="<?php get_permalink()?>?id=<?php echo $product->id?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode("/my-products") ?>" class="action-btn delete-btn right left10"><span class="p"></span><span class="t">Delete</span></a>
                                 <a href="/edit-product-and-service?id=<?php echo $product->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                             <?php } else { ?>
-                                <?php if( is_user_logged_in() ):?>
+                                <?php if( is_user_logged_in() && check_product_from_user_agency( $user_id, $product->id ) ):?>
                                     <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn right left10"><span class="p"></span><span class="t">Delete</span></a>
                                     <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                                 <?php endif;?>
