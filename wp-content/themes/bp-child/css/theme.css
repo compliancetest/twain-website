@@ -3937,7 +3937,7 @@ body .tabs li.active a #icon_wiki {
 }
 
 body .tabs li a #icon_forum {
-    background: url(../images/issuer_sprite.png) 2px -68px no-repeat;
+    background: url(../images/issuer_sprite.png) -1px -68px no-repeat;
     margin: 2px 7px 2px 2px;
 }
 
@@ -3946,10 +3946,9 @@ body .tabs li.active a #icon_forum {
 }
 
 body .tabs li a #icon_downloads {
-    background: url(../images/issuer_sprite.png) -24px -103px no-repeat;
+    background: url(../images/issuer_sprite.png) -24px -102px no-repeat;
     margin: 2px 5px 2px 2px;
 }
-
 body .tabs li.active a #icon_downloads {
     background: url(../images/issuer_sprite.png) -1px -104px no-repeat;
 }
@@ -3962,11 +3961,10 @@ body .tabs li.active a #icon_testdata {
 }
 
 body .tabs li a #icon_reports {
-    background: url(../images/issuer_sprite.png) -1px -140px no-repeat;
-    margin: 2px 5px 2px 2px;
+    background: url(../images/ui-icon-sprites.png) 5px -635px no-repeat;
 }
 body .tabs li.active a #icon_reports {
-    background: url(../images/issuer_sprite.png) -24px -140px no-repeat;
+    background: url(../images/ui-icon-sprites.png) 5px -675px no-repeat;
 }
 
 /* Document page */
