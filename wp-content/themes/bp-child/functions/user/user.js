@@ -581,7 +581,7 @@
         });
         $('.create_organisation').on('click', function(e){
             e.preventDefault();
-            $('.btn-row').show();
+            $('.my_organisation_box').find('.btn-row').show();
             $('.join_org').hide();
             $('.edit_org').toggle();
             if( $('.edit_org').is(':visible') == $('.edit_org_text').is(':visible') ){
@@ -590,7 +590,7 @@
         });
         $('.join_organisation').on('click', function(e){
             e.preventDefault();
-            $('.btn-row').show();
+            $('.my_organisation_box').find('.btn-row').show();
             $('.edit_org').hide();
             $('.join_org').toggle();
             if( $('.join_org').is(':visible') == $('.edit_org_text').is(':visible') ){

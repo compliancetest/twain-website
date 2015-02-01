@@ -21,7 +21,7 @@ if (!$org_membership) {
 }
 ?>
 
-<div class="column left three_fifths nopadding">
+<div class="column left three_fifths nopadding my_organisation_box">
     <div class="grid-box" id="my_org">
         <div class="grid-box-header">
             <h5 class="left">My Organisation</h5>
@@ -45,8 +45,8 @@ if (!$org_membership) {
                     If you plan to undertake testing with ComplianceTest, you either need to <a href="#" class="join_organisation">join an existing organisation</a>
                     or <a href="#" class="create_organisation">create a new organisation</a> and become its administrator.
                     <div style="padding-bottom: 5px;"></div>
-                    <i style="font-weight: lighter;">To join an existing organisation, you will need to know its organisation key, which your organisation administrator can provide.</br>
-                        To create a new organisation, you will need its name and ABN as a minimum.</i>
+                    To join an existing organisation, you will need to know its organisation key, which your organisation administrator can provide.</br>
+                    To create a new organisation, you will need its name and ABN as a minimum.
                 </div>
                 <form action="/" method="get" class="edit_org" style="display: none;">
                     <div class="grid-row">
@@ -70,7 +70,7 @@ if (!$org_membership) {
                         <div class="clear"></div>
                     </div>
                     <div class="grid-row btn-row">
-                        <a href="#" class="action-btn process-btn do_not_process"><span class="p"></span><span class="t">Save</span></a>
+                        <a href="#" class="action-btn process-btn do_not_process"><span class="p"></span><span class="t">Confirm</span></a>
                         <a href="#" class="action-btn cancel-btn left10 create_organisation"><span class="p"></span><span class="t">Cancel</span></a>
                         <?php wp_nonce_field('my_organisation_edit', 'cp-action'); ?>
                         <div class="clear"></div>
@@ -87,7 +87,7 @@ if (!$org_membership) {
                         <div class="clear"></div>
                     </div>
                     <div class="grid-row btn-row">
-                        <a href="#" class="action-btn process-btn join_organisation_submit do_not_process"><span class="p"></span><span class="t">Save</span></a>
+                        <a href="#" class="action-btn process-btn join_organisation_submit do_not_process"><span class="p"></span><span class="t">Confirm</span></a>
                         <a href="#" class="action-btn cancel-btn left10 join_organisation"><span class="p"></span><span class="t">Cancel</span></a>
                         <?php wp_nonce_field('my_organisation_join', 'cp-action'); ?>
                         <div class="clear"></div>

@@ -84,7 +84,7 @@ if(!defined('ABSPATH'))
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row btn-row">
-                    <a href="#" class="action-btn process-btn "><span class="p"></span><span class="t">Save</span></a>
+                    <a href="#" class="action-btn process-btn "><span class="p"></span><span class="t">Confirm</span></a>
                     <a href="#" class="action-btn cancel-btn edit-cancel-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
                     <div class="clear"></div>
                 </div>
