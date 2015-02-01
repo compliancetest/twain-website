@@ -46,6 +46,7 @@ if (!$org_membership) {
                     or <a href="#" class="create_organisation">create a new organisation</a> and become its administrator.
                     <div style="padding-bottom: 5px;"></div>
                     To join an existing organisation, you will need to know its organisation key, which your organisation administrator can provide.</br>
+                    <div style="padding-bottom: 5px;"></div>
                     To create a new organisation, you will need its name and ABN as a minimum.
                 </div>
                 <form action="/" method="get" class="edit_org" style="display: none;">
