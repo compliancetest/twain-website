@@ -28,8 +28,25 @@ class CloudSearch {
         $l = '';
         $range_checked = false;
         if( is_user_logged_in() ) {
-            $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";//( term field=user_id ".get_current_user_id()." )
+            if( is_super_admin() ) {
+                //super admin should see all items
+                $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
+            } else{
+                //usual user should see only own and community items
+                $groups = groups_get_user_groups( get_current_user_id() );
+                $groups_str = '';
+                foreach( $groups['groups'] AS $group_id ){
+                    $groups_str .= ' ( term field=community_id '.$group_id. ' ) ';
+                }
+                if( ! empty( $groups_str ) ){
+                    $groups_str = ' ( or '.$groups_str.' ) ';
+                } else{
+                    $groups_str = ' ( or ( term field=community_id 32 ) ( term field=community_id 35 ) ) ';
+                }
+                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 ) ( term field=user_id ".get_current_user_id()." )   ) ( and ( term field=visibility 2 ) ".$groups_str." ) )";//(  )
+            }
         } else{
+            //non-logged in user should see only public items
             $l .= "  ( term field=visibility 1 )";
         }
         
