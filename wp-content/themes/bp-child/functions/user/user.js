@@ -479,15 +479,6 @@
             return false;            
         });
 
-        $(document).on('change', '#p_mode_agreement', function(){
-            if($(this).val() == 'LIGHT')
-            {
-                $('#harness-form .tester-endpoint-info').hide();
-            }else{
-                $('#harness-form .tester-endpoint-info').show();
-            }
-        })
-        
         // Organisation - transform divs in inputs at click on edit button
         $('#organisation-container').on('click', '.gbh-btn-edit', function(){           
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
