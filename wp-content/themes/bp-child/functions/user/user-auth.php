@@ -352,18 +352,17 @@ if(!is_user_logged_in())
                 <div id="top_loged_actions">
                     <ul>
                         <li class="dropdown">
-                            <a href="javascript:void(0)" class="blue-btn action-btn icon-btn login-btn">
+                            <a href="/login/" class="blue-btn action-btn icon-btn login-btn">
                                 <span class="p"></span>
                                 <span class="t">Login</span>
                             </a>
-                            <div class="dropdown-menu header-login-dropdown-menu">
-                                <div class="header-login-dropdown-menu-inner">
-                                    <?php
-                                        cp_login_form($args);
-                                    ?>
+                            <?php if ( ! is_page_template('login.php') ):?>
+                                <div class="dropdown-menu header-login-dropdown-menu">
+                                    <div class="header-login-dropdown-menu-inner">
+                                        <?php cp_login_form($args); ?>
+                                    </div>
                                 </div>
-                            </div>
-
+                            <?php endif;?>
                         </li>
                         <li>
                             <a class="red-btn action-btn icon-btn signup-btn popup" rel="custom-popup" cp-type="inline" href="#registration-popup">
@@ -417,7 +416,7 @@ if(!is_user_logged_in())
 
                             $args = array(
                                     'echo' => true,
-                                    'redirect' => isset($_GET['redirect_to']) ? urldecode($_GET['redirect_to']) : '/my-profile', 
+                                    'redirect' => isset($_GET['redirect_to']) ? urldecode($_GET['redirect_to']) : '/my-profile',
                                     'form_id' => 'logform',
                                     'label_username' => __( '' ),
                                     'label_password' => __( '' ),
@@ -428,7 +427,7 @@ if(!is_user_logged_in())
                                     'id_remember' => 'rememberme',
                                     'id_submit' => 'wp-submit',
                                     'remember' => false,
-                                    'value_remember' => false ); 
+                                    'value_remember' => false );
 
                             cp_login_form($args); ?>
                             <a href="<?php echo get_bloginfo('url');?>/reset-password/" id="recover_pass">Forgot Password</a>

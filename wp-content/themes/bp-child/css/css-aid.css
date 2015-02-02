@@ -2701,3 +2701,22 @@ table.result-table{
 .search_result_block h5{
     line-height: normal;
 }
+
+#login_page_form #top_access{
+	margin: 0 auto;
+	max-width: 235px;
+	padding: 50px;
+}
+#login_page_form #top_access #wp-submit2{
+	padding: 2px 5px;
+	line-height: normal;
+	height: 24px;
+	margin: 0;
+	font-size: 12px;
+	float: right;
+}
+#wp-submit2-cancel{
+	font-size: 12px;
+	float: right;
+	margin-right: 5px;
+}
