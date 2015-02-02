@@ -22,8 +22,8 @@ if( is_user_logged_in() ){
         <span style="display:none;" class="header-login-error" id="header_login_error_msg">Wrong username or password, please try again!</span>
         <div class="submit-row">
             <a id="pass_recovery" href="http://compliancetest.my/reset-password/">Forgot Password?</a>
-            <input type="submit" value="Login" class="blue-btn action-btn login-submit" id="wp-submit2" name="wp-submit">
             <a href="/" class="action-btn cancel-btn" id="wp-submit2-cancel">Cancel</a>
+            <input type="submit" value="Login" class="blue-btn action-btn login-submit" id="wp-submit2" name="wp-submit">
         </div>
         <input type="hidden" value="/my-profile" name="redirect_to">
 

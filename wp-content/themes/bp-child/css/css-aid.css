@@ -2714,9 +2714,9 @@ table.result-table{
 	margin: 0;
 	font-size: 12px;
 	float: right;
+	margin-right: 5px;
 }
 #wp-submit2-cancel{
 	font-size: 12px;
 	float: right;
-	margin-right: 5px;
 }
