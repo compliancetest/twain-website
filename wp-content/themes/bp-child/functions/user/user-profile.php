@@ -702,7 +702,7 @@ function cp_get_customer_harness_detail()
                                     <div class="grid-cell">
                                         <label>P-Mode Profile:</label>
                                         <select name="p_mode_agreement" id="p_mode_agreement" class="select">
-                                            <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
+                                            <option value="LIGHT" selected="selected">LIGHT</option>
                                         </select>
                                     </div>
                                     <div class="clear"></div>
