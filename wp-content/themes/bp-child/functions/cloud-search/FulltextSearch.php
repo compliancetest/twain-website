@@ -27,11 +27,27 @@ class FulltextSearch {
         $l = '';
         $range_checked = false;
         if( is_user_logged_in() ) {
-            $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";//( term field=user_id ".get_current_user_id()." )
+            if( is_super_admin() ) {
+                //super admin should see all items
+                $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
+            } else{
+                //usual user should see only own and community items
+                $groups = groups_get_user_groups( get_current_user_id() );
+                $groups_str = '';
+                foreach( $groups['groups'] AS $group_id ){
+                    $groups_str .= ' ( term field=community_id '.$group_id. ' ) ';
+                }
+                if( ! empty( $groups_str ) ){
+                    $groups_str = ' ( or '.$groups_str.' ) ';
+                } else{
+                    $groups_str = ' ( or ( term field=community_id 32 ) ( term field=community_id 35 ) ) ';
+                }
+                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 )  ( term field=post_author_id ". get_current_user_id() . " ) ) ( and ( term field=visibility 2 ) ".$groups_str." ) )";
+            }
         } else{
+            //non-logged in user should see only public items
             $l .= "  ( term field=visibility 1 )";
         }
-
         $str['sort'] = '_score desc';
 
         foreach( $params AS $k => $v ){
@@ -87,7 +103,7 @@ class FulltextSearch {
 
     public function fullUpload( $post_id = false ){
         global $wpdb;
-        $data = array();
+        $data = $response_data = array();
         if( $post_id ){
             $posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_posts WHERE post_type IN( '".implode( "', '", $this->_allowed_post_types )."' ) AND ID = %d ", $post_id  ) );
         } else{
@@ -109,16 +125,18 @@ class FulltextSearch {
                 if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
                     continue;
                 }
+                $post_data = $this->_processPost($post);
                 if( in_array( $post->post_type, array(  'event', 'blog', 'press-release' ) ) ){
                     $community_id = ( integer ) get_post_meta( $post->ID, 'blog_community_id', true );
                     if( $community_id === 0 || $community_id === 1 ){
                         $groups['groups'] = array( 32, 35 );
+                        $post_data['visibility'] = 1;
                     } else {
                         $communityNames = array( $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $community_id ) ) );
                         $groups['groups'] = array( $community_id );
+                        $post_data['visibility'] = 2;
                     }
                 }
-                $post_data = $this->_processPost($post);
                 $temp_data = array(
                     'community' => $communityNames,
                     'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
@@ -175,13 +193,18 @@ class FulltextSearch {
         }
         if( ! empty( $data ) ) {
             $data = json_decode($this->_sendDataToSearchDomain($data), true);
-            echo 'Status: ' . $data['status'] . '<br>Added: ' . $data['adds'] . '<br>Deleted: ' . $data['deletes'];
+            $response_data = array(
+                'Status'   => $data['status'],
+                'Added'    => $data['adds'],
+                'Deleted'  => $data['deletes'],
+            );
         }
+        return $response_data;
     }
 
     public function fullDelete( $post_id = false ){
         global $wpdb;
-        $data = array();
+        $data = $response_data = array();
         if( $post_id ){
             $posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_posts WHERE post_type IN( '".implode( "', '", $this->_allowed_post_types )."' ) AND ID = %d ", $post_id) );
         } else {
@@ -201,8 +224,13 @@ class FulltextSearch {
         }
         if( ! empty( $data ) ) {
             $data = json_decode($this->_sendDataToSearchDomain($data), true);
-            echo '<b>Status:</b> ' . $data['status'] . '<br><b>Added:</b> ' . $data['adds'] . '<br><b>Deleted:</b> ' . $data['deletes'];
+            $response_data = array(
+                'Status'   => $data['status'],
+                'Added'    => $data['adds'],
+                'Deleted'  => $data['deletes'],
+            );
         }
+        return $response_data;
     }
     private function _processPost( $post ){
         switch( $post->post_type ){
@@ -220,7 +248,7 @@ class FulltextSearch {
                 $product->load();
                 $data = array(
                     'type'       => 'Product',
-                    'visibility' => $product->visibility == 'Public' ? 1 : 3,
+                    'visibility' => $product->visibility == 'Public' ? 1 : $product->visibility == 'Community' ? 2 : 3,
                     'for_search' => 'Product',
                     'descr'      => $product->descrition
                 );
@@ -230,7 +258,7 @@ class FulltextSearch {
                 $service->load();
                 $data = array(
                     'type'       => 'Service',
-                    'visibility' => $service->service_visibility == 'Public' ? 1 : 3,
+                    'visibility' => $service->service_visibility == 'Public' ? 1 : $service->service_visibility == 'Community' ? 2 : 3,
                     'for_search' => 'Service',
                     'descr'      => $service->service_description
                 );
@@ -278,7 +306,6 @@ class FulltextSearch {
             case 'blog':
                 $data = array(
                     'type'       => 'Blog',
-                    'visibility' => 1,
                     'for_search' => 'Blog',
                     'descr'      => $post->post_content
                 );
@@ -286,7 +313,6 @@ class FulltextSearch {
             case 'event':
                 $data = array(
                     'type'       => 'Event',
-                    'visibility' => 1,
                     'for_search' => 'Event',
                     'descr'      => $post->post_content
                 );
@@ -294,7 +320,6 @@ class FulltextSearch {
             case 'press-release':
                 $data = array(
                     'type'       => 'Press Release',
-                    'visibility' => 1,
                     'for_search' => 'Press Release',
                     'descr'      => $post->post_content
                 );

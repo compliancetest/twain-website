@@ -6,7 +6,7 @@
     $user_id = get_current_user_id();
     $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
     $has_edit_access = can_maintain_product_and_service( $user_id, $product->id );
-    $can_view = $product->visibility == 'Public' || ( (  $has_edit_access ||  is_super_admin() ) && $product->visibility == 'Private' ) ? true : false;
+    $can_view = can_view_product( $product, $has_edit_access );
     if( ! $can_view ){
         addMessage( 'The visibility settings defined by the product owner prevent the display of further information.', 'error' );
         flushMessages();

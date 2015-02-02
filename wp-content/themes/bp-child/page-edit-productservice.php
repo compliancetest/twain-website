@@ -108,7 +108,7 @@ if(isset($_SESSION['product_data']))
                        <div class="grid-cell">
                            <label>Access URL:</label>
                            <div class="has-field-tooltip">
-                               <input type="text" class="input medium-input field-tooltip" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" data-tooltip-content="Provide a link to the page on your website that describes this product or service." />
+                               <input type="text" class="input medium-input field-tooltip" name="product_url" id="product_url" value="<?php echo $product->accessURL?>" data-tooltip-content="Provide a link to the page on your website that describes this product." />
                            </div>
                        </div>
                        <div class="clear"></div>
@@ -152,7 +152,15 @@ if(isset($_SESSION['product_data']))
                    </div>
                    <div class="field-row">
                        <div class="grid-cell">
-                           <label><input type="checkbox" name="product_visibility" id="product_visibility" <?php echo !$product->visibility || $product->visibility == 'Public' ? 'checked="checked"' : ''?> /> Public</label>
+                           <label>Visibility:</label>
+                           <div class="has-field-tooltip">
+                               <select name="product_visibility" class="select field-tooltip" data-tooltip-content="'Public' means anyone can see this product, 'Community' means visibility is limited to community members, 'Private' means that the product is only visible to your own organisation">
+                                   <option <?php if( $product->visibility == 'Public' ):?> selected="selected" <?php endif;?> value="Public">Public</option>
+                                   <option <?php if( $product->visibility == 'Community' ):?> selected="selected" <?php endif;?> value="Community">Community</option>
+                                   <option <?php if( $product->visibility == 'Private' ):?> selected="selected" <?php endif;?> value="Private">Private</option>
+                               </select>
+                           </div>
+                           <div class="space10"></div>
                            <?php if( is_super_admin() ):?>
                                 <label><input type="checkbox" name="services_not_permitted" id="services_not_permitted" <?php echo isset( $product->services_not_permitted ) && $product->services_not_permitted == '1' ? 'checked="checked"' : ''?> /> Services not permitted</label>
                             <?php endif;?>
@@ -255,7 +263,6 @@ if(isset($_SESSION['product_data']))
                                             'value' => $product->id,
                                         )
                                     )
-
                                 );
                                 $posts = get_posts($args);
                             ?>

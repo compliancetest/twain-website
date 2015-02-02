@@ -49,8 +49,7 @@ class CloudSearch {
             //non-logged in user should see only public items
             $l .= "  ( term field=visibility 1 )";
         }
-        
-        $str['sort'] = 'name asc';                
+        $str['sort'] = 'name asc';
         
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
@@ -112,6 +111,7 @@ class CloudSearch {
 
         // step 1 - upload test plans
 
+        $response_data = array();
         $data = array();
         $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans WHERE is_deleted = 0 " );
         foreach( $test_plans AS $test_plan ){
@@ -131,7 +131,20 @@ class CloudSearch {
             }
             
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
-            $groups = groups_get_user_groups( $post_author );
+            $test_suite = new TestSuite( $test_plan->suite_id );
+            $test_suite->load();
+            if( $product->visibility == 'Public' ){
+                $visibility  = 1;
+                $communities = array( 32, 35 );
+            } else{
+                if( $product->visibility == 'Community' ){
+                    $visibility  = 2;
+                    $communities = array( $test_suite->community_id );
+                } else{
+                    $visibility  = 3;
+                    $communities = array( $test_suite->community_id );
+                }
+            }
             $temp_data = array(
                 'name'        => $product->name,
                 'version'     => $product->version,
@@ -146,8 +159,8 @@ class CloudSearch {
                 'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $test_plan->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
                 'suite_id'    => $test_plan->suite_id,
                 'post_id'     => $product->id,
-                'visibility'  => $product->visibility == 'Public' ? 1 : 3,
-                'community_id' => $groups['groups'],
+                'visibility'  => $visibility,
+                'community_id' => $communities,
                 'user_id'     => $post_author,
                 'product_id'  => $test_plan->product_id,
                 'product_name' => $product->name,
@@ -155,11 +168,13 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
         }
-        echo '<br /> Test Plan - ';
+
         $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
+        $response_data['Test Plans'] = array(
+            'Status'   => $data['status'],
+            'Added'    => $data['adds'],
+            'Deleted'  => $data['deletes'],
+        );
         // step 2 - upload claims
 
         $data = array();
@@ -179,7 +194,20 @@ class CloudSearch {
             } else{
                 $levels = array( $claim->conformance_level );
             }
-            $groups = groups_get_user_groups( $post_author );
+            $test_suite = new TestSuite( $test_plan->suite_id );
+            $test_suite->load();
+            if( $product->visibility == 'Public' ){
+                $visibility  = 1;
+                $communities = array( 32, 35 );
+            } else{
+                if( $product->visibility == 'Community' ){
+                    $visibility  = 2;
+                    $communities = array( $test_suite->community_id );
+                } else{
+                    $visibility  = 3;
+                    $communities = array( $test_suite->community_id );
+                }
+            }
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
             $s3 = new S3Wrapper();
             $temp_data = array(
@@ -196,8 +224,8 @@ class CloudSearch {
                 'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $claim->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
                 'suite_id'    => $claim->suite_id,
                 'post_id'     => $product->id,
-                'visibility'  => $product->visibility == 'Public' ? 1 : 3,
-                'community_id' => $groups['groups'],
+                'visibility'  => $visibility,
+                'community_id' => $communities,
                 'user_id'     => $post_author,
                 'product_id'  => $claim->product_id,
                 'product_name' => $product->name,
@@ -207,12 +235,12 @@ class CloudSearch {
              );
             array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
         }
-        echo '<br /> Claim - ';
         $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
-
+        $response_data['Claims'] = array(
+            'Status'   => $data['status'],
+            'Added'    => $data['adds'],
+            'Deleted'  => $data['deletes'],
+        );
         // step 3 - upload agreements
 
         $data = array();
@@ -222,20 +250,25 @@ class CloudSearch {
             $requester_service->load();
             $responder_service = new Service( $agreement->responder_service_id );
             $responder_service->load();
-            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $requester_service->id ) );
-            if( $requester_service->service_visibility == 'Public' ){
-                $v = 1;
-            } else if( $requester_service->service_visibility == 'Community' ){
-                $v = 2;
-            } else {
-                $v = 3;
-            }
-            $groups = groups_get_user_groups( $post_author );
-
             $service = new Service( $agreement->responder_service_id );
             $service->load();
+            if( $requester_service->service_visibility == 'Public' ){
+                $v = 1;
+                $communities = array( 32, 35 );
+            } else {
+                $requester_test_suite = new TestSuite( $requester_service->service_suite_id );
+                $requester_test_suite->load();
+                $responder_test_suite = new TestSuite( $service->service_suite_id );
+                $responder_test_suite->load();
+                if( $requester_service->service_visibility == 'Community' ){
+                    $v = 2;
+                    $communities = array( $responder_test_suite->community_id, $requester_test_suite->community_id );
+                } else {
+                    $v = 3;
+                    $communities = array( $responder_test_suite->community_id, $requester_test_suite->community_id );
+                }
+            }
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-            $groups = array_unique( array_merge( $groups, groups_get_user_groups( $post_author ) ) );
             $s3 = new S3Wrapper();
             $temp_data = array(
                 'name'        => $requester_service->service_name,
@@ -252,7 +285,7 @@ class CloudSearch {
                 'suite_id'    => $requester_service->service_suite_id,
                 'post_id'     => $requester_service->id,
                 'visibility'  => $v,
-                'community_id' => $groups['groups'],
+                'community_id' => $communities,
                 'user_id'     => $post_author,
                 'product_id'  => $requester_service->service_product_id,
                 'product_name' => get_the_title( $requester_service->service_product_id ),
@@ -267,11 +300,12 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         }
-        echo '<br /> Agreement - ';
         $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
+        $response_data['Agreements'] = array(
+            'Status'   => $data['status'],
+            'Added'    => $data['adds'],
+            'Deleted'  => $data['deletes'],
+        );
 
         //step 5 upload services
         $data = array();
@@ -285,12 +319,17 @@ class CloudSearch {
             $service->load();
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $post->ID ) );
             $groups = groups_get_user_groups( $post_author );
-            if( $service->service_visibility == 'Public' ){
+            $test_suite = new TestSuite( $service->service_suite_id );
+            $test_suite->load();
+            if( $requester_service->service_visibility == 'Public' ){
                 $v = 1;
-            } else if( $service->service_visibility == 'Community' ){
+                $communities = array( 32, 35 );
+            } else if( $requester_service->service_visibility == 'Community' ){
                 $v = 2;
+                $communities = array( $test_suite->community_id );
             } else {
                 $v = 3;
+                $communities = array( $test_suite->community_id );
             }
             $temp_data = array(
                 'name'        => $service->service_name,
@@ -305,7 +344,7 @@ class CloudSearch {
                 'for_search'  => $service->service_description. ' + '.$service->service_owner.' + Service + Certification + ' . implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
                 'post_id'     => $post->ID,
                 'visibility'  => $v,
-                'community_id' => $groups['groups'],
+                'community_id' => $communities,
                 'user_id'     => $post_author,
                 'product_id'  => $service->service_product_id,
                 'product_name' => get_the_title( $service->service_product_id ),
@@ -317,90 +356,42 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$post->ID, 'fields' => $temp_data ) );
         }
-        echo '<br /> Service - ';
         $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
+        $response_data['Services'] = array(
+            'Status'   => $data['status'],
+            'Added'    => $data['adds'],
+            'Deleted'  => $data['deletes'],
+        );
+        return $response_data;
     }
 
     /**
-     * Use this function to delete all local items ( test plans, claims, agreements, products, services )
+     * Use this function to delete all items ( test plans, claims, agreements, products, services )
      * from CloudSearch domain. You can use _initial_upload function to re-upload all items
      */
     public  function _delete_all_items(){
-        global $wpdb;
 
         //Remove All Results
         $results = $this->search( array(), true );
         
-        $data = array();
+        $data = $response_data = array();
         
         foreach( $results['hits']['hit'] as $row ) {
             array_push( $data, array( 'type' => 'delete', 'id' =>$row['id'] ) );
         }
-
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
-        
-        var_dump( $this->_sendDataToSearchDomain( $data ) );
-        
-        die("Completed"); 
-        
-        // delete test plans
-        $data = array();
-        $test_plans = $wpdb->get_results( "SELECT * FROM wp_test_plans" );
-        foreach( $test_plans AS $test_plan ){
-            array_push( $data, array( 'type' => 'delete', 'id' => 'test_plan_'.$test_plan->id ) );
+        if( ! empty( $data ) ) {
+            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            $response_data = array(
+                'Status'   => $data['status'],
+                'Added'    => $data['adds'],
+                'Deleted'  => $data['deletes'],
+            );
+        } else{
+            $response_data = array(
+                'Status'   => 'Error',
+            );
         }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
-
-        // delete products claims
-
-        $data = array();
-        $claims = $wpdb->get_results( "SELECT * FROM wp_compliance_claims" );
-        foreach( $claims AS $claim ){
-            array_push( $data, array( 'type' => 'delete', 'id' => 'claim_'.$claim->id ) );
-        }
-
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
-
-        //delete agreements
-        $data = array();
-        $agreements = $wpdb->get_results( "SELECT * FROM wp_e2e_agreement" );
-        foreach( $agreements AS $agreement ){
-            array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_'.$agreement->id ) );
-            array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_requester_'.$agreement->id ) );
-            array_push( $data, array( 'type' => 'delete', 'id' => 'agreement_responder_'.$agreement->id ) );
-        }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
-
-
-        //delete services
-        $data = array();
-        $args = array(
-            'post_type' => 'service',
-            'posts_per_page' => -1
-        );
-        $posts = get_posts($args);
-        foreach( $posts AS $post ){
-            array_push( $data, array( 'type' => 'delete', 'id' => 'service_'.$post->ID ) );
-        }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo 'Status: '.$data['status'];
-        echo '<br>Added: '.$data['adds'];
-        echo '<br>Deleted: '.$data['deletes'].'<br>';
+        return $response_data;
     }
 
     /**
@@ -409,50 +400,13 @@ class CloudSearch {
      */
     public function cloud_search_update_test_plan( $plan_id ){
         global $wpdb;
-        $data = array();
         $test_plan = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE id = %d", $plan_id ) );
         if( ! $test_plan ){
             return $this->cloud_search_delete_item( $plan_id, 'test_plan' );
         }
-        $product = new ProductAndService( $test_plan->product_id );
-        $product->load();
-        $test_plan->level = trim( $test_plan->level, ';;' );
-        $test_plan->role = trim( $test_plan->role, ';;' );
-        if( strpos( $test_plan->role, ';;' ) ){
-            $roles = explode( ';;', $test_plan->role );
-        } else{
-            $roles = array( $test_plan->role );
-        }
-        if( strpos( $test_plan->level, ';;' ) ){
-            $levels = explode( ';;', $test_plan->level );
-        } else{
-            $levels = array( $test_plan->level );
-        }
-        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
-        $groups = groups_get_user_groups( $post_author );
-        $temp_data = array(
-            'name'        => $product->name,
-            'version'     => $product->version,
-            'owner'       => $product->owner,
-            'type'        => 'Software Product',
-            'test_suite'  => get_the_title( $test_plan->suite_id ),
-            'role'        => $roles,
-            'level'       => $levels,
-            'status'      => 'In Progress',
-            'test_type'   => 'Certification',
-            'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
-            'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $test_plan->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
-            'suite_id'    => $test_plan->suite_id,
-            'post_id'     => $product->id,
-            'visibility'  => $product->visibility == 'Public' ? 1 : 3,
-            'community_id' => $groups['groups'],
-            'user_id'     => $post_author,
-            'product_id'  => $test_plan->product_id,
-            'product_name' => $product->name,
-            'start_date'  => date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
-        );
-        array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
-        return $this->_sendDataToSearchDomain( $data );
+        $fulltext = new FulltextSearch();
+        $fulltext->fullUpload();
+        $this->_initial_upload();
     }
 
     /**
@@ -461,53 +415,13 @@ class CloudSearch {
      */
     public function cloud_search_update_claim( $claim_id ){
         global $wpdb;
-        $data = array();
         $claim = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE id = %d", $claim_id ) );
         if( ! $claim ){
             return $this->cloud_search_delete_item( $claim_id, 'claim' );
         }
-        $product = new ProductAndService( $claim->product_id );
-        $product->load();
-        $claim->conformance_level = trim( $claim->conformance_level, ';;' );
-        $claim->role = trim( $claim->role, ';;' );
-        if( strpos( $claim->role, ';;' ) ){
-            $roles = explode( ';;', $claim->role );
-        } else{
-            $roles = array( $claim->role );
-        }
-        if( strpos( $claim->conformance_level, ';;' ) ){
-            $levels = explode( ';;', $claim->conformance_level );
-        } else{
-            $levels = array( $claim->conformance_level );
-        }
-        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
-        $s3 = new S3Wrapper();
-        $groups = groups_get_user_groups( $post_author );
-        $temp_data = array(
-            'name'        => $product->name,
-            'version'     => $product->version,
-            'owner'       => $product->owner,
-            'type'        => 'Software Product',
-            'test_suite'  => get_the_title( $claim->suite_id ),
-            'role'        => $roles,
-            'level'       => $levels,
-            'status'      => 'Verified',
-            'test_type'   => 'Certification',
-            'date'        =>  date( 'Y-m-d\TH:i:s', strtotime( $claim->created_date ) ).'Z',
-            'for_search'  => $product->descrition. ' + '.$product->owner.' + '.get_the_title( $claim->suite_id ).' + Software Product + Certification + '.implode(' ', $roles).' + '.implode(' ', $levels),
-            'suite_id'    => $claim->suite_id,
-            'post_id'     => $product->id,
-            'visibility'  => $product->visibility == 'Public' ? 1 : 3,
-            'community_id' => $groups['groups'],
-            'user_id'     => $post_author,
-            'product_id'  => $claim->product_id,
-            'product_name' => $product->name,
-            'start_date'  => date( 'Y-m-d\TH:i:s', strtotime( $claim->created_date ) ).'Z',
-            'cert_number' => $claim->claim_id,
-            'cert_url'    => $s3->getProductClaimLink( $claim->token )
-        );
-        array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
-        return $this->_sendDataToSearchDomain( $data );
+        $fulltext = new FulltextSearch();
+        $fulltext->fullUpload();
+        $this->_initial_upload();
     }
 
     /**
@@ -516,64 +430,13 @@ class CloudSearch {
      */
     public function cloud_search_update_agreement( $agreement_id ){
         global $wpdb;
-        $data = array();
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         if( ! $agreement ){
             return $this->cloud_search_delete_item( $agreement_id, 'agreement' );
         }
-        
-        $requester_service = new Service( $agreement->requester_service_id );
-        $requester_service->load();
-        $responder_service = new Service( $agreement->responder_service_id );
-        $responder_service->load();
-        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $requester_service->id ) );
-        if( $requester_service->service_visibility == 'Public' ){
-            $v = 1;
-        } else if( $requester_service->service_visibility == 'Community' ){
-            $v = 2;
-        } else {
-            $v = 3;
-        }
-        $groups = groups_get_user_groups( $post_author );
-
-        $service = new Service( $agreement->responder_service_id );
-        $service->load();
-        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-
-        $groups = array_unique( array_merge( $groups, groups_get_user_groups( $post_author ) ) );
-
-        $s3 = new S3Wrapper();
-        $temp_data = array(
-            'name'        => $requester_service->service_name,
-            'version'     => $requester_service->service_version,
-            'owner'       => array( $requester_service->service_owner, $service->service_owner ),
-            'type'        => 'Agreement',
-            'test_suite'  => array( get_the_title( $requester_service->service_suite_id ), get_the_title( $service->service_suite_id ) ),
-            'role'        => array_unique( array_merge( $requester_service->service_roles, $service->service_roles ) ),
-            'level'       => array_unique( array_merge( $requester_service->service_levels, $service->service_levels ) ),
-            'status'      => $agreement->status,
-            'test_type'   => 'End to End',
-            'date'        =>  date( 'Y-m-d\TH:i:s', $agreement->claim_date ).'Z',
-            'for_search'  => $requester_service->service_description.' + '.$requester_service->service_owner.' + '.get_the_title( $requester_service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $requester_service->service_roles).' + '.implode(' ', $requester_service->service_levels).$service->service_description.' + '.$service->service_owner.' + '.get_the_title( $service->service_suite_id ).' + Web Service + End to End + e2e + '.implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
-            'suite_id'    => $requester_service->service_suite_id,
-            'post_id'     => $requester_service->id,
-            'visibility'  => $v,
-            'community_id' => $groups['groups'],
-            'user_id'     => $post_author,
-            'product_id'  => $requester_service->service_product_id,
-            'product_name' => get_the_title( $requester_service->service_product_id ),
-            'start_date'  => date( 'Y-m-d\TH:i:s', strtotime( $agreement->requestor_message_date ) ).'Z',
-            'cert_number' => $agreement->claim_id,
-            'cert_url'    => $s3->getAgreementClaimLink( $claim->token ),
-            'service_id'  => $requester_service->service_id,
-            'service_name'   => get_the_title( $requester_service->service_id ),
-            'entity_id'      => $requester_service->service_id,
-            'entity_id_name' => $requester_service->service_type,
-            'e2e_partner_service_id' => $responder_service->id
-        );
-        array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
-
-        return $this->_sendDataToSearchDomain( $data );
+        $fulltext = new FulltextSearch();
+        $fulltext->fullUpload();
+        $this->_initial_upload();
     }
 
 
@@ -584,47 +447,14 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_update_service( $service_id ){
-        global $wpdb;
-        $data = array();
         $service = new Service( $service_id );
         $service->load();
         if( ! $service->id ){
             return $this->cloud_search_delete_item( $service_id, 'service' );
         }
-        $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
-        $groups = groups_get_user_groups( $post_author );
-        if( $service->service_visibility == 'Public' ){
-            $v = 1;
-        } else if( $service->service_visibility == 'Community' ){
-            $v = 2;
-        } else {
-            $v = 3;
-        }
-        $temp_data = array(
-            'name'        => $service->service_name,
-            'version'     => $service->service_version,
-            'owner'       => $service->service_owner,
-            'type'        => 'Web Service',
-            'test_suite'  => get_the_title( $service->service_suite_id ),
-            'role'        => $service->service_roles,
-            'level'       => $service->service_levels,
-            'test_type'   => 'End to End',
-            'status'   => 'Available',
-            'for_search'  => $service->service_description. ' + '.$service->service_owner.' + Service + Certification + ' . implode(' ', $service->service_roles).' + '.implode(' ', $service->service_levels),
-            'post_id'     => $service->id,
-            'visibility'  => $v,
-            'community_id' => $groups['groups'],
-            'user_id'     => $post_author,
-            'product_id'  => $service->service_product_id,
-            'product_name' => get_the_title( $service->service_product_id ),
-            'start_date'  => date( 'Y-m-d\TH:i:s', strtotime( $wpdb->get_var( $wpdb->prepare( "SELECT post_date FROM wp_posts WHERE ID = %d ", $service->id ) ) ) ).'Z',
-            'service_id'  => $service->service_id,
-            'service_name'   => get_the_title( $service->service_id ),
-            'entity_id'      => $service->service_id,
-            'entity_id_name' => $service->service_type
-        );
-        array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$service->id, 'fields' => $temp_data ) );
-        return $this->_sendDataToSearchDomain( $data );
+        $fulltext = new FulltextSearch();
+        $fulltext->fullUpload();
+        $this->_initial_upload();
     }
     /**
      * Use this function to delete item from cloudSearch domain

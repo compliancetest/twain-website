@@ -177,17 +177,8 @@ function saveProductService()
             exit;
         }
     }
-    
-    if($_POST['product_visibility'])
-    {
-        $product_status_post = htmlspecialchars($_POST['product_visibility']);
-        if ($product_status_post == 'on'){
-            $product_visibility = 'Public';
-        }
 
-    } else {
-        $product_visibility = 'Private';
-    }
+    $product_visibility = htmlspecialchars( $_POST['product_visibility'] );
     if($_POST['services_not_permitted'])
     {
         if( $_POST['services_not_permitted'] == 'on' && is_super_admin() ){
@@ -279,8 +270,10 @@ function saveProductService()
         }
     }
     $cloud_search = new CloudSearch();
+    $full_search  = new FulltextSearch();
 
-    //$cloud_search->cloud_search_update_product( $id );
+    $cloud_search->_initial_upload();
+    $full_search->fullUpload();
 
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
@@ -293,7 +286,7 @@ function deleteProductService()
             
     $id = $_REQUEST['id'];
     
-    $product = get_post($id );
+    $product = get_post( $id );
     
     if(!$product)
     {

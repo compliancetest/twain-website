@@ -36,7 +36,9 @@ function downloadReport(){
             foreach( $claims AS $claim ) {
                 $product = new ProductAndService($claim->product_id);
                 $product->load();
-                if( $product->visibility == 'Private' ){
+                $organisation = new CT_Organisation( $claim->organisation_id );
+                if( $product->visibility == 'Private' && $claim->organisation_id != $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) ) ){
+                    error_log( $product->name.'   '.$product->visibility );
                     continue;
                 }
                 $com_id = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $claim->suite_id ) );
@@ -44,7 +46,6 @@ function downloadReport(){
                     continue;
                 }
                 $agreement_data = getProductLastAgreement($claim->product_id);
-                $organisation = new CT_Organisation($claim->organisation_id);
                 $data = array(
                     'product_owner' => $organisation->organisation_name,
                     'product_id' => $organisation->abn,
@@ -84,7 +85,8 @@ function downloadReport(){
                 $organisation = new CT_Organisation( $organisation_id );
                 $product = new ProductAndService( $test_plan->product_id );
                 $product->load();
-                if ($product->visibility == 'Private') {
+                if( $product->visibility == 'Private' && $organisation_id != $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) ) ){
+                    error_log( $product->name.'   '.$product->visibility );
                     continue;
                 }
                 $com_id = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $test_plan->suite_id ) );

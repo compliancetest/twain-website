@@ -34,7 +34,7 @@ function ct_cloud_search()
                                     <i>
                                         <?php
                                             $cloudSearch = new CloudSearch();
-                                            $cloudSearch->_initial_upload();
+                                            _trace( $cloudSearch->_initial_upload() );
                                         ?>
                                     </i>
                                 </td>
@@ -60,7 +60,7 @@ function ct_cloud_search()
                                     <i>
                                         <?php
                                             $cloudSearch = new CloudSearch();
-                                            $cloudSearch->_delete_all_items();
+                                            _trace( $cloudSearch->_delete_all_items() );
                                         ?>
                                     </i>
                                 </td>
@@ -86,7 +86,7 @@ function ct_cloud_search()
                                     <i>
                                         <?php
                                             $cloudSearch = new FulltextSearch();
-                                            $cloudSearch->fullUpload();
+                                            _trace( $cloudSearch->fullUpload() );
                                         ?>
                                     </i>
                                 </td>
@@ -112,7 +112,7 @@ function ct_cloud_search()
                                     <i>
                                         <?php
                                             $cloudSearch = new FulltextSearch();
-                                            $cloudSearch->fullDelete();
+                                            _trace( $cloudSearch->fullDelete() );
                                         ?>
                                     </i>
                                 </td>

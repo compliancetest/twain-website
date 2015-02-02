@@ -361,6 +361,28 @@ function can_maintain_product_and_service($user_id = null, $product_id = null)
     }
     return true;
 }
+function can_view_product( $product, $has_edit_access ){
+    if( $product->visibility == 'Public' ){
+        return true;
+    }
+    if( $product->visibility == 'Community' ){
+        if( ! is_user_logged_in() ){
+            return false;
+        }
+        $current_user_communities = groups_get_user_groups( get_current_user_id() );
+        $publisher_communities = groups_get_user_groups( get_post( $product->id )->post_author );
+        $intersection = array_intersect( $current_user_communities['groups'], $publisher_communities['groups'] );
+        if( ! empty( $intersection ) ){
+            return true;
+        }
+    }
+    if( $product->visibility == 'Private' ){
+        if( (  $has_edit_access ||  is_super_admin() ) && $product->visibility == 'Private' ){
+            return true;
+        }
+    }
+    return false;
+}
 function check_product_from_user_agency($user_id = null, $product_id = null)
 {
     if( ! $user_id )
