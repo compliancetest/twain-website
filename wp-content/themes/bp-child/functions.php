@@ -1277,6 +1277,7 @@ function generate_and_download( $data ){
         'Version',
         'Owner',
         'Type',
+        'Visibility',
         'Test Suite',
         'Role',
         'Level',
@@ -1311,6 +1312,7 @@ function generate_and_download( $data ){
                     ! empty( $requester_service->service_version )  ? $requester_service->service_version : '',
                     $requester_service->service_owner,
                     $row_data['type'],
+                    process_visibility( $row_data['visibility'] ),
                     get_the_title( $requester_service->service_suite_id ),
                     implode( ', ', $requester_service->service_roles ),
                     implode( ', ', $requester_service->service_levels ),
@@ -1334,6 +1336,7 @@ function generate_and_download( $data ){
                     ! empty( $responder_service->service_version )  ? $responder_service->service_version : '',
                     $responder_service->service_owner,
                     $row_data['type'],
+                    process_visibility( $row_data['visibility'] ),
                     get_the_title( $responder_service->service_suite_id ),
                     implode( ', ', $responder_service->service_roles ),
                     implode( ', ', $responder_service->service_levels ),
@@ -1358,6 +1361,7 @@ function generate_and_download( $data ){
                     isset( $row_data['version'] ) ? $row_data['version'] : '',
                     $row_data['owner'][0],
                     $row_data['type'] == 'Web Service' ? 'Service' : 'Product',
+                    process_visibility( $row_data['visibility'] ),
                     $row_data['test_suite'][0],
                     ! empty( $row_data['role'] )  ? implode( ', ', $row_data['role'] ) : '',
                     ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
@@ -1380,7 +1384,15 @@ function generate_and_download( $data ){
     fclose($outstream);
     exit();
 }
-
+function process_visibility( $visibility ){
+    if( in_array( 1, $visibility ) ){
+        return 'Public';
+    }
+    if( in_array( 2, $visibility ) ){
+        return 'Community';
+    }
+    return 'Private';
+}
 function generate_and_download_site( $data ){
     ob_clean();
     header("Content-type: application/x-msdownload",true,200);
