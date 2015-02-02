@@ -5,6 +5,10 @@ class FulltextSearch {
     private $_documentEndpoint = '';
     private $_searchDomainURL = '';
 
+    private $_allowed_post_types = array(
+      'press-release', 'blog', 'event', 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc'
+    );
+
     public function __construct(){
         $this->_documentEndpoint = get_option( 'cloudsearch_fulltext_document_endpoint' );
         $this->_searchDomainURL  = get_option( 'cloudsearch_fulltext_search_endpoint' );
@@ -13,7 +17,7 @@ class FulltextSearch {
     public function search( $params = false, $full_results = false ){
         $str = array();
         $str['return'] = '_all_fields';
-        $str['facet.post_type'] = '{}';
+        $str['facet.post_type'] = "{sort:'bucket', size:100}";
         $str['facet.community'] = '{}';
         if( $full_results ){
             $str['size'] = 10000;
@@ -85,42 +89,53 @@ class FulltextSearch {
         global $wpdb;
         $data = array();
         if( $post_id ){
-            $posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_posts WHERE post_type IN( 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc' ) AND ID = %d ", $post_id  ) );
+            $posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_posts WHERE post_type IN( '".implode( "', '", $this->_allowed_post_types )."' ) AND ID = %d ", $post_id  ) );
         } else{
-            $posts = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type IN( 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc' )" );
+            $posts = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type IN( '".implode( "', '", $this->_allowed_post_types )."' )" );
         }
-        foreach ($posts AS $post) {
-            $groups = groups_get_user_groups($post->post_author);
-            $communityNames = array();
-            if (is_array($groups['groups'])) {
-                foreach ($groups['groups'] AS $group) {
-                    $communityNames[] = $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $group));
+        if( $posts ) {
+            foreach ($posts AS $post) {
+                $groups = groups_get_user_groups($post->post_author);
+                $communityNames = array();
+                if (is_array($groups['groups'])) {
+                    foreach ($groups['groups'] AS $group) {
+                        $communityNames[] = $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $group));
+                    }
                 }
+                if (empty($communityNames)) {
+                    $communityNames = array('ebMS3', 'SuperStream');
+                    $groups['groups'] = array(32, 35);
+                }
+                if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
+                    continue;
+                }
+                if( in_array( $post->post_type, array(  'event', 'blog', 'press-release' ) ) ){
+                    $community_id = ( integer ) get_post_meta( $post->ID, 'blog_community_id', true );
+                    if( $community_id === 0 || $community_id === 1 ){
+                        $groups['groups'] = array( 32, 35 );
+                    } else {
+                        $communityNames = array( $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $community_id ) ) );
+                        $groups['groups'] = array( $community_id );
+                    }
+                }
+                $post_data = $this->_processPost($post);
+                $temp_data = array(
+                    'community' => $communityNames,
+                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
+                    'post_author_name' => cp_get_user_fullname($post->post_author),
+                    'post_author_id' => $post->post_author,
+                    'post_content' => $post_data['descr'],
+                    'post_status' => $post->post_status,
+                    'post_title' => $post->post_title,
+                    'post_type' => $post_data['type'],
+                    'post_id' => $post->ID,
+                    'visibility' => $post_data['visibility'],
+                    'community_id' => $groups['groups'],
+                    'for_search' => $post_data['for_search'],
+                    'link' => get_permalink($post->ID)
+                );
+                array_push($data, array('type' => 'add', 'id' => $post->ID, 'fields' => $temp_data));
             }
-            if (empty($communityNames)) {
-                $communityNames = array( 'ebMS3', 'SuperStream' );
-                $groups['groups'] = array( 32, 35 );
-            }
-            if( $post->post_type == 'test-suite' && $post->ID != $wpdb->get_var( $wpdb->prepare( "SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID ) ) ){
-                continue;
-            }
-            $post_data = $this->_processPost($post);
-            $temp_data = array(
-                'community' => $communityNames,
-                'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
-                'post_author_name' => cp_get_user_fullname($post->post_author),
-                'post_author_id' => $post->post_author,
-                'post_content' => $post_data['descr'],
-                'post_status' => $post->post_status,
-                'post_title' => $post->post_title,
-                'post_type' => $post_data['type'],
-                'post_id' => $post->ID,
-                'visibility' => $post_data['visibility'],
-                'community_id' => $groups['groups'],
-                'for_search' => $post_data['for_search'],
-                'link' => get_permalink($post->ID)
-            );
-            array_push($data, array('type' => 'add', 'id' => $post->ID, 'fields' => $temp_data));
         }
         if( ! $post_id ) {
             $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
@@ -158,27 +173,36 @@ class FulltextSearch {
                 array_push($data, array('type' => 'add', 'id' => 'scenario_' . $test_scenario->id, 'fields' => $temp_data));
             }
         }
-        $data = json_decode($this->_sendDataToSearchDomain($data), true);
-        echo 'Status: ' . $data['status'].'<br>Added: ' . $data['adds'].'<br>Deleted: ' . $data['deletes'];
+        if( ! empty( $data ) ) {
+            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            echo 'Status: ' . $data['status'] . '<br>Added: ' . $data['adds'] . '<br>Deleted: ' . $data['deletes'];
+        }
     }
 
     public function fullDelete( $post_id = false ){
         global $wpdb;
         $data = array();
         if( $post_id ){
-            $posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_posts WHERE post_type IN( 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc' ) AND ID = %d ", $post_id) );
+            $posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_posts WHERE post_type IN( '".implode( "', '", $this->_allowed_post_types )."' ) AND ID = %d ", $post_id) );
         } else {
-            $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type IN( 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc' )");
+            $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type IN( '".implode( "', '", $this->_allowed_post_types )."' )");
         }
-        foreach( $posts AS $post ){
-            array_push( $data, array( 'type' => 'delete', 'id' => $post->ID ) );
+        if( $posts ) {
+            foreach ($posts AS $post) {
+                array_push($data, array('type' => 'delete', 'id' => $post->ID));
+            }
         }
-        $test_scenarios = $wpdb->get_results( "SELECT * FROM wp_test_suites_scenarios" );
-        foreach( $test_scenarios AS $test_scenario ){
-            array_push( $data, array( 'type' => 'delete', 'id' => 'scenario_'.$test_scenario->id ) );
+        //upload test scenarious only on bulk upload action
+        if( ! $post_id ) {
+            $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
+            foreach ($test_scenarios AS $test_scenario) {
+                array_push($data, array('type' => 'delete', 'id' => 'scenario_' . $test_scenario->id));
+            }
         }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
-        echo '<b>Status:</b> '.$data['status'].'<br><b>Added:</b> '.$data['adds'].'<br><b>Deleted:</b> '.$data['deletes'];
+        if( ! empty( $data ) ) {
+            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            echo '<b>Status:</b> ' . $data['status'] . '<br><b>Added:</b> ' . $data['adds'] . '<br><b>Deleted:</b> ' . $data['deletes'];
+        }
     }
     private function _processPost( $post ){
         switch( $post->post_type ){
@@ -248,6 +272,30 @@ class FulltextSearch {
                     'type'       => 'Wiki Article',
                     'visibility' => 1,
                     'for_search' => 'Wiki Article',
+                    'descr'      => $post->post_content
+                );
+                break;
+            case 'blog':
+                $data = array(
+                    'type'       => 'Blog',
+                    'visibility' => 1,
+                    'for_search' => 'Blog',
+                    'descr'      => $post->post_content
+                );
+                break;
+            case 'event':
+                $data = array(
+                    'type'       => 'Event',
+                    'visibility' => 1,
+                    'for_search' => 'Event',
+                    'descr'      => $post->post_content
+                );
+                break;
+            case 'press-release':
+                $data = array(
+                    'type'       => 'Press Release',
+                    'visibility' => 1,
+                    'for_search' => 'Press Release',
                     'descr'      => $post->post_content
                 );
                 break;

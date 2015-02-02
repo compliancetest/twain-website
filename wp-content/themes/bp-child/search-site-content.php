@@ -52,6 +52,7 @@ if( isset( $_GET['download']) ){
                             <select name="post_type" id="content-type-filter" class="select">
                                 <option>All</option>
                                 <?php if( is_array( $results['facets']['post_type']['buckets'] ) ):?>
+                                    <?php sort( $results['facets']['post_type']['buckets'] );?>
                                     <?php foreach ($results['facets']['post_type']['buckets'] AS $v): ?>
                                         <option value="<?php echo $v['value'];?>" <?php if( isset( $_GET['post_type'] ) && $_GET['post_type'] == $v['value'] ):?> selected="selected" <?php endif;?>><?php echo $v['value'];?></option>
                                     <?php endforeach; ?>
