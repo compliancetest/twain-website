@@ -702,8 +702,7 @@ function cp_get_customer_harness_detail()
                                     <div class="grid-cell">
                                         <label>P-Mode Profile:</label>
                                         <select name="p_mode_agreement" id="p_mode_agreement" class="select">
-                                            <option value="LIGHT" <?php echo $row->p_mode_agreement != 'HIGH-END' ? 'selected="selected"' : ''?>>LIGHT</option>
-                                            <option value="HIGH-END" <?php echo $row->p_mode_agreement == 'HIGH-END' ? 'selected="selected"' : ''?>>HIGH-END</option>
+                                            <option value="LIGHT" selected="selected">LIGHT</option>
                                         </select>
                                     </div>
                                     <div class="clear"></div>
@@ -730,29 +729,6 @@ function cp_get_customer_harness_detail()
                                         </div>
                                         <div class="clear"></div>
                                     </div>
-                                </div>
-                                <div class="tester-endpoint-info" <?php echo $row->p_mode_agreement == 'LIGHT' ? 'style="display: none"' : '' ?>>
-                                    <div class="field-row">
-                                        <div class="grid-cell">
-                                            <label>Tester EndPoint:</label>
-                                            <input class="input" type="text" name="tester_endpoint_url" id="tester_endpoint_url" value="<?php echo $row->tester_endpoint_url?>" />
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                    <div class="field-row">
-                                        <div class="grid-cell">
-                                            <label>Tester Username:</label>
-                                            <input class="input" type="text" name="tester_username" id="tester_username" value="<?php echo $row->tester_username?>" />
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>            
-                                    <div class="field-row">
-                                        <div class="grid-cell">
-                                            <label>Tester Password:</label>
-                                            <input class="input" type="text" name="tester_password" id="tester_password" value="<?php echo $row->tester_password?>" />
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>                 
                                 </div>
                             </div>
                             <div id="harness-gateway" class="second-tab-content" style="display: none;">
@@ -1067,12 +1043,10 @@ function cp_save_customer_harness_detail()
     $_POST['harness_endpoint_url'] = $data->harness_endpoint_url;    
     $_POST['harness_username'] = $data->harness_username;
     
-    if($_POST['p_mode_agreement'] == 'LIGHT'){        
-        $_POST['tester_endpoint_url'] = $data->tester_endpoint_url;
-        $_POST['tester_username'] = $data->tester_username;
-        $_POST['tester_password'] = $data->tester_password;
-    }    
-    
+    $_POST['tester_endpoint_url'] = $data->tester_endpoint_url;
+    $_POST['tester_username'] = $data->tester_username;
+    $_POST['tester_password'] = $data->tester_password;
+
     $community_id = cp_get_post_meta($data->suite_id, 'community_id', true);    
     $group = groups_get_group( array('group_id' => $community_id));
     
@@ -1084,12 +1058,6 @@ function cp_save_customer_harness_detail()
 //        'force_e2e_routing' => (isset($_POST['force_e2e_routing']) ? 1 : 0),
         'alias' => (($_POST['alias']!='') ? ($_POST['alias']) : (''))
     );
-    
-    if($_POST['p_mode_agreement'] == 'HIGH-END'){
-        $updateArr['tester_endpoint_url'] = $_POST['tester_endpoint_url'];
-        $updateArr['tester_username'] = $_POST['tester_username'];
-        $updateArr['tester_password'] = $_POST['tester_password'];
-    }
     
     if (isset($_POST['entity_usi']) && $_POST['entity_usi'] != '') {
         $updateArr['entity_id'] = $_POST['entity_usi'];
