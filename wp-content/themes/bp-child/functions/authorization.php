@@ -342,7 +342,7 @@ function can_maintain_product_and_service($user_id = null, $product_id = null)
     }
     
     //Check User Privilege
-    if (!ct_check_user_privilege($user_id, $user_membership->organisation_id, "MAINTAIN_PRODUCTS")) {
+    if ( ! ct_check_user_privilege($user_id, $user_membership->organisation_id, "MAINTAIN_PRODUCTS" ) ) {
         return false;
     }
     
@@ -350,12 +350,6 @@ function can_maintain_product_and_service($user_id = null, $product_id = null)
         //Getting Product Organisation
         $product_org_id = get_post_meta($product_id, "product_organisation_id", true);
         if ($product_org_id != $user_membership->organisation_id) {
-            return false;
-        }
-    }
-    if( $product_id ) {
-        //Getting Product publisher
-        if ( $wpdb->get_var($wpdb->prepare("SELECT post_author FROM wp_posts WHERE ID = %d ", $product_id ) ) != $user_id && get_post_meta( $product_id, "product_visibility", true ) == 'Private' ) {
             return false;
         }
     }

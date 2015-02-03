@@ -15,6 +15,7 @@ class FulltextSearch {
     }
 
     public function search( $params = false, $full_results = false ){
+        global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
         $str['facet.post_type'] = "{sort:'bucket', size:100}";
@@ -42,7 +43,19 @@ class FulltextSearch {
                 } else{
                     $groups_str = ' ( or ( term field=community_id 32 ) ( term field=community_id 35 ) ) ';
                 }
-                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 )  ( term field=post_author_id ". get_current_user_id() . " ) ) ( and ( term field=visibility 2 ) ".$groups_str." ) )";
+                $private_where = '';
+                $organisation_members = $wpdb->get_results( $wpdb->prepare("SELECT user_id FROM wp_organisations_members WHERE organisation_id = ( SELECT organisation_id FROM wp_organisations_members WHERE user_id = %d ) ", get_current_user_id() ) );
+                if( $organisation_members ){
+                    foreach( $organisation_members AS $organisation_members ){
+                        $private_where .= '( term field=post_author_id '. $organisation_members->user_id .' )';
+                    }
+                }
+                if( ! empty( $private_where ) ){
+                    $private_where = ' ( or '. $private_where .' ) ';
+                } else{
+                    $private_where = " ( term field=post_author_id ". get_current_user_id() . " ) ";
+                }
+                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 )  ".$private_where." ) ( and ( term field=visibility 2 ) ".$groups_str." ) )";
             }
         } else{
             //non-logged in user should see only public items
