@@ -177,17 +177,16 @@ function cp_delete_payment_method()
         echo ("Invalid Request");
         exit;
     }
-    
-    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix ."organisations_payments WHERE payment_method_id=%d", $id);
+
+    $query = $wpdb->prepare("SELECT count(id) FROM wp_organisations_charge WHERE is_paid = 0 AND payment_id  = %d", $id);
     $count = $wpdb->get_var($query);
-    if($count > 0)
+    if( $count > 0)
     {
-        echo "All subscriptions associated with this payment method must be unsubscribed before the payment method can be deleted.";
-        exit;
+        exit( "All charges associated with this payment method must be paid before the payment method can be deleted." );
     }
     
     $wpdb->query("DELETE FROM " . $wpdb->prefix . "organisations_payment_methods WHERE id=" . $id);
-    
+
     cp_update_user_cards_count($user_id);
     
     echo "success";
