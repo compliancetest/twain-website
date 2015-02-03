@@ -129,7 +129,7 @@
                     </table>
                 </div>
             <?php endforeach;?>
-        <span style="font-size: smaller;">*(All prices shown are inclusive of GST)</span>
+        <div style="font-size: smaller; text-align: center">(All prices shown are inclusive of GST)</div>
         </div>
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>
         <div class="popup-box-footer radius6 noradiustop">
