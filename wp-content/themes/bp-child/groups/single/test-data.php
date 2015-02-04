@@ -29,10 +29,11 @@ $testsuites = get_posts( $args );
     <div id="testdata-lists">
         <div class="grid-list">
             <div class="grid-list-row grid-list-header">
-                <div class="grid-list-cell width45P">Profile Name</div>                
-                <div class="grid-list-cell width15P">Profile Purpose</div>                
+                <div class="grid-list-cell width40P">Profile Name</div>
+                <div class="grid-list-cell width10P">Profile Purpose</div>
                 <div class="grid-list-cell width15P tocenter">Profile Type</div>                
-                <div class="grid-list-cell width15P tocenter">Created Date</div>                
+                <div class="grid-list-cell width15P tocenter">Created Date</div>
+                <div class="grid-list-cell width10P tocenter">Valid?</div>
                 <div class="grid-list-cell width10P tocenter">Action</div>                
                 <div class="clear"></div>
             </div>                          
@@ -44,7 +45,7 @@ $testsuites = get_posts( $args );
                     $instanceObj = S3Wrapper::getProfile( $instance->token );
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
-                <div class="grid-list-cell width45P">                    
+                <div class="grid-list-cell width40P">
                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name?>
                     <?php
                         if($instanceObj->Profile->Version)
@@ -66,7 +67,7 @@ $testsuites = get_posts( $args );
                     <br />
                     <p><?php echo $instanceObj->Profile->Description?></p>
                 </div>
-                <div class="grid-list-cell width15P">
+                <div class="grid-list-cell width10P">
                     <?php echo $instanceObj->Profile->Purpose?>            
                 </div>
                 <div class="grid-list-cell width15P tocenter">
@@ -87,6 +88,15 @@ $testsuites = get_posts( $args );
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <?php echo formatDate($instance->created_date) ?>                    
+                </div>
+                <div class="grid-list-cell width10P tocenter">
+                    <?php if( $instance->validation_status == 'Valid' ):?>
+                        <span class="profile-valid"></span>
+                    <?php elseif( $instance->validation_status == 'Invalid' ):?>
+                        <a href="#" class="profile-invalid"></a>
+                    <?php else:?>
+                        <span class="profile-pending"></span>
+                    <?php endif;?>
                 </div>
                 <div class="grid-list-cell width10P tocenter">
                     <?php
@@ -141,6 +151,7 @@ $testsuites = get_posts( $args );
          </div> 
     </div>
 </div>
+<input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <div class="popup-box" id="delete-profile-box" style="display: none; width: 500px">
     <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
     <div class="popup-box-content"> 
