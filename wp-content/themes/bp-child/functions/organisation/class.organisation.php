@@ -217,11 +217,10 @@ class CT_Organisation
         $wpdb->delete( $wpdb->prefix . "organisations_members", 
                        array('organisation_id' => $organisation_id, 'is_admin' => 1), array('%d', '%d')
                      );
-        /*$wpdb->update( $wpdb->prefix . "organisations_members", 
-                       array('is_admin' => 0), 
-                       array('organisation_id' => $organisation_id, 'is_admin' => 1), array('%d'), array('%d', '%d')
-                     );*/
-        
+        //add default privileges
+        $org_controller = new CT_Organisation_Controller();
+        $org_controller->add_default_privileges( $admin_id, $organisation_id );
+
         //Check the user is member or not
         $query = $wpdb->prepare("SELECT id, is_admin FROM {$wpdb->prefix}organisations_members WHERE organisation_id=%d AND user_id=%d", $organisation_id, $user_id);
         $row = $wpdb->get_row($query);
