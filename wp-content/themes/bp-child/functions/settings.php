@@ -52,6 +52,12 @@ function create_compliancetest_settings_page()
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
+        update_option('sqs_queue_name', $_POST['sqs_queue_name']);
+        if( isset( $_POST['validate_via_sqs'] ) && $_POST['validate_via_sqs'] == 'on' ) {
+            update_option('validate_via_sqs', 'yes');
+        } else{
+            update_option('validate_via_sqs', 'no');
+        }
         
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
@@ -195,7 +201,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
                 <li><a href="#ct-xero-settings">Xero Settings</a></li>
-                <li><a href="#ct-s3-xml-max-size">S3</a></li>
+                <li><a href="#ct-s3-xml-max-size">AWS</a></li>
                 <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
             </ul>
         </div>
@@ -437,7 +443,7 @@ function create_compliancetest_settings_page()
                 </form>
             </div>
             <div id="ct-s3-xml-max-size">
-                <h3>S3</h3>
+                <h3>AWS</h3>
                 <form method="post" action="">
                     <table class="widefat">
                         <tr>
@@ -459,6 +465,18 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Message Bucket:</b></label></td>
                             <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Message Bucket:</b></label></td>
+                            <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Profile Validation SQS Queue Name:</b></label></td>
+                            <td><input type="text" name="sqs_queue_name" id="sqs_queue_name" size="50" value="<?php echo get_option('sqs_queue_name')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Validate Profiles via SQS:</b></label></td>
+                            <td><input type="checkbox" name="validate_via_sqs" id="validate_via_sqs" size="50" <?php if( get_option('validate_via_sqs') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>

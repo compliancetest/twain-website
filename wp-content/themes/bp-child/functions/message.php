@@ -551,9 +551,9 @@ function _getTesterAndHarnessProfileInstances($case_id, $user_id)
         return array();
     }
     if( empty( $ids ) ){
-        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);
+        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.creator_id=%d AND pi.type='tester') AND pi.validation_status = 'Valid' ORDER BY pi.purpose, pi.profile_name", $user_id);
     } else {
-        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.id IN (" . implode(", ", $ids) . ")) OR (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);
+        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.validation_status = 'Valid' AND (pi.id IN (" . implode(", ", $ids) . ")) OR (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);
     }
     
     $profiles = $wpdb->get_results($query);

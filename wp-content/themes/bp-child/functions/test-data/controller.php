@@ -267,6 +267,13 @@ function saveProfileInstance($action)
     $token = $instance_id ? $wpdb->get_var( $wpdb->prepare("SELECT token FROM wp_community_profile_instances WHERE id = %d ", $instance_id)) : sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id);
     $s3 = new S3Wrapper();
     $s3->putObject( '/profiles/user/'.$token.'.json',  $data );
+    //if backend validation enabled
+    $status         = 'Valid';
+    $validation_url = '';
+    if( get_option('validate_via_sqs') == 'yes' ){
+//        $status = 'Pending';
+        // todo-ivan implement backend validation
+    }
     if($instance_id)
     {
         $wpdb->update($wpdb->prefix . "community_profile_instances", 
@@ -279,7 +286,9 @@ function saveProfileInstance($action)
                             'filename' => '',
                             'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
-                            'creator_id' => $user_id
+                            'creator_id' => $user_id,
+                            'validation_status' => $status,
+                            'validation_url' => $validation_url
                         ),
                         array('id' => $instance_id)
                     );
@@ -295,7 +304,9 @@ function saveProfileInstance($action)
                             'content' => $jsonData,
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id,
-                            'token' => $token
+                            'token' => $token,
+                            'validation_status' => $status,
+                            'validation_url' => $validation_url
                         )
                     );   
         $instance_id = $wpdb->insert_id;
