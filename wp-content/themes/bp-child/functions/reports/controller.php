@@ -1,23 +1,22 @@
 <?php
-add_action('init', 'process_download_reports');
-function process_download_reports()
-{
-    $action = isset($_REQUEST['_download_report_nonce']) ? $_REQUEST['_download_report_nonce'] : null;
-    if( wp_verify_nonce( $action, 'download_community_report') ) {
-        downloadReport();
+function send_reports_to_s3(){
+    global $wpdb;
+    $communities = $wpdb->get_results( "SELECT * FROM wp_bp_groups" );
+    foreach( $communities AS $community ){
+        generate_download_report( $community );
     }
 }
-
-function downloadReport(){
+function generate_download_report( $community ){
     global $wpdb;
-    error_reporting(E_ALL);
+
     include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
     include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel/IOFactory.php';
 
+    $community_id = $community->id;
     $excel2 = PHPExcel_IOFactory::createReader('Excel2007');
     $excel2 = $excel2->load(  __DIR__ . '/../../groups/templates/SuperStreamTestProgress.xlsx' ); // Empty Sheet
 
-    $community_name = $wpdb->get_var( $wpdb->prepare( "SELECT  name FROM wp_bp_groups WHERE id = %d ", $_REQUEST['cid'] ) );
+    $community_name = $wpdb->get_var( $wpdb->prepare( "SELECT  name FROM wp_bp_groups WHERE id = %d ", $community_id ) );
     $excel2->setActiveSheetIndex(0);
     $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
     $excel2->setActiveSheetIndex(1);
@@ -30,121 +29,131 @@ function downloadReport(){
     $all_data = array();
     $products = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type = 'product-service'" );
     $s3 = new S3Wrapper();
-    foreach( $products AS $pr ){
-        $claims = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE product_id = %d ORDER BY product_id", $pr->ID ) );
-        if( $claims ) {
-            foreach( $claims AS $claim ) {
-                $product = new ProductAndService($claim->product_id);
-                $product->load();
-                $organisation = new CT_Organisation( $claim->organisation_id );
-                if( $product->visibility == 'Private' && $claim->organisation_id != $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) ) ){
-                    continue;
+    if( $products ) {
+        foreach ($products AS $pr) {
+            $claims = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_compliance_claims WHERE product_id = %d ORDER BY product_id", $pr->ID));
+            if ($claims) {
+                foreach ($claims AS $claim) {
+                    $product = new ProductAndService($claim->product_id);
+                    $product->load();
+                    $organisation = new CT_Organisation($claim->organisation_id);
+                    if ($product->visibility == 'Private') { //&& $claim->organisation_id != $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) )
+                        continue;
+                    }
+                    $com_id = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $claim->suite_id));
+                    if ($community_id != $com_id) {
+                        continue;
+                    }
+                    $agreement_data = getProductLastAgreement($claim->product_id);
+                    $data = array(
+                        'product_owner' => $organisation->organisation_name,
+                        'product_id' => $organisation->abn,
+                        'product_name' => $product->name,
+                        'product_version' => "$product->version",
+                        'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
+                        'suite_name' => get_the_title($claim->suite_id),
+                        'level' => process_level(str_replace(';;', '', $claim->conformance_level)),
+                        //this used for multusorting by level
+                        'level_weight' => process_level_weight(process_level(str_replace(';;', '', $claim->conformance_level))),
+                        'claim_id' => $claim->claim_id,
+                        'claim_token' => $claim->token,
+                        'claim_url' => $s3->getProductClaimLink($claim->token),
+                        'claim_status' => $claim->status,
+                        'e2e_company' => $agreement_data !== false ? $agreement_data['partner_company'] : '',
+                        'e2e_product' => $agreement_data !== false ? $agreement_data['partner_product'] : '',
+                        'status' => $agreement_data !== false ? $agreement_data['status'] : '',
+                        'certificate_id' => $agreement_data !== false ? $agreement_data['certificate_id'] : '',
+                        'certificate_link' => $agreement_data !== false ? $agreement_data['certificate_link'] : '',
+                    );
+                    if (strpos($claim->role, 'Employer') !== false) {
+                        $data['type'] = 'Employer';
+                    }
+                    if (strpos($claim->role, 'Fund') !== false) {
+                        $data['type'] = 'Fund';
+                    }
+                    if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
+                        $data['type'] = str_replace(';;', '', $claim->role);
+                    }
+                    $all_data[] = $data;
                 }
-                $com_id = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $claim->suite_id ) );
-                if( $_REQUEST['cid'] != $com_id ){
-                    continue;
+            }
+            $test_plans = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_test_plans WHERE product_id = %d AND is_deleted = 0 ", $pr->ID));
+            if ($test_plans) {
+                foreach ($test_plans AS $test_plan) {
+                    $organisation_id = $wpdb->get_var($wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE id = %d ", $test_plan->organisation_subscription_id));
+                    $organisation = new CT_Organisation($organisation_id);
+                    $product = new ProductAndService($test_plan->product_id);
+                    $product->load();
+                    if ($product->visibility == 'Private') { //&& $organisation_id != $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) )
+                        continue;
+                    }
+                    $com_id = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $test_plan->suite_id));
+                    if ($community_id != $com_id) {
+                        continue;
+                    }
+                    $data = array(
+                        'product_owner' => $organisation->organisation_name,
+                        'product_id' => $organisation->abn,
+                        'product_name' => $product->name,
+                        'product_version' => "$product->version",
+                        'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
+                        'suite_name' => get_the_title($test_plan->suite_id),
+                        'level' => process_level(str_replace(';;', '', $test_plan->level)),
+                        //this used for multusorting by level
+                        'level_weight' => process_level_weight(process_level(str_replace(';;', '', $test_plan->level))),
+                        'claim_id' => '',
+                        'claim_token' => '',
+                        'claim_url' => '',
+                        'claim_status' => 'In Progress',
+                        'e2e_company' => '',
+                        'e2e_product' => '',
+                        'status' => '',
+                        'certificate_id' => '',
+                        'certificate_link' => '',
+                    );
+                    if (strpos($test_plan->role, 'Employer') !== false) {
+                        $data['type'] = 'Employer';
+                    }
+                    if (strpos($test_plan->role, 'Fund') !== false) {
+                        $data['type'] = 'Fund';
+                    }
+                    if (strpos($test_plan->role, 'Employer') === false && strpos($test_plan->role, 'Fund') === false) {
+                        $data['type'] = str_replace(';;', '', $test_plan->role);
+                    }
+                    $all_data[] = $data;
                 }
-                $agreement_data = getProductLastAgreement($claim->product_id);
-                $data = array(
-                    'product_owner' => $organisation->organisation_name,
-                    'product_id' => $organisation->abn,
-                    'product_name' => $product->name,
-                    'product_version' => "$product->version",
-                    'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
-                    'suite_name' => get_the_title($claim->suite_id),
-                    'level' => process_level(str_replace(';;', '', $claim->conformance_level)),
-                    //this used for multusorting by level
-                    'level_weight' => process_level_weight( process_level(str_replace(';;', '', $claim->conformance_level)) ),
-                    'claim_id' => $claim->claim_id,
-                    'claim_token' => $claim->token,
-                    'claim_url' => $s3->getProductClaimLink($claim->token),
-                    'claim_status' => $claim->status,
-                    'e2e_company' => $agreement_data !== false ? $agreement_data['partner_company'] : '',
-                    'e2e_product' => $agreement_data !== false ? $agreement_data['partner_product'] : '',
-                    'status' => $agreement_data !== false ? $agreement_data['status'] : '',
-                    'certificate_id' => $agreement_data !== false ? $agreement_data['certificate_id'] : '',
-                    'certificate_link' => $agreement_data !== false ? $agreement_data['certificate_link'] : '',
-                );
-                if (strpos($claim->role, 'Employer') !== false) {
-                    $data['type'] = 'Employer';
-                }
-                if (strpos($claim->role, 'Fund') !== false) {
-                    $data['type'] = 'Fund';
-                }
-                if (strpos($claim->role, 'Employer') === false && strpos($claim->role, 'Fund') === false) {
-                    $data['type'] = str_replace(';;', '', $claim->role);
-                }
-                $all_data[] = $data;
             }
         }
-        $test_plans = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE product_id = %d AND is_deleted = 0 ", $pr->ID ) );
-        if( $test_plans ) {
-            foreach ($test_plans AS $test_plan) {
-                $organisation_id = $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE id = %d ", $test_plan->organisation_subscription_id ) );
-                $organisation = new CT_Organisation( $organisation_id );
-                $product = new ProductAndService( $test_plan->product_id );
-                $product->load();
-                if( $product->visibility == 'Private' && $organisation_id != $wpdb->get_var( $wpdb->prepare("SELECT organisation_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) ) ){
-                    continue;
-                }
-                $com_id = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM wp_postmeta WHERE post_id = %d AND meta_key = 'community_id'", $test_plan->suite_id ) );
-                if( $_REQUEST['cid'] != $com_id ){
-                    continue;
-                }
-                $data = array(
-                    'product_owner' => $organisation->organisation_name,
-                    'product_id' => $organisation->abn,
-                    'product_name' => $product->name,
-                    'product_version' => "$product->version",
-                    'product_release_date' => date('Y-m-d', strtotime($product->release_date)),
-                    'suite_name' => get_the_title($test_plan->suite_id),
-                    'level' => process_level(str_replace(';;', '', $test_plan->level)),
-                    //this used for multusorting by level
-                    'level_weight' => process_level_weight( process_level(str_replace(';;', '', $test_plan->level)) ),
-                    'claim_id' => '',
-                    'claim_token' => '',
-                    'claim_url' => '',
-                    'claim_status' => 'In Progress',
-                    'e2e_company' => '',
-                    'e2e_product' => '',
-                    'status' => '',
-                    'certificate_id' => '',
-                    'certificate_link' => '',
-                );
-                if (strpos($test_plan->role, 'Employer') !== false) {
-                    $data['type'] = 'Employer';
-                }
-                if (strpos($test_plan->role, 'Fund') !== false) {
-                    $data['type'] = 'Fund';
-                }
-                if (strpos($test_plan->role, 'Employer') === false && strpos($test_plan->role, 'Fund') === false) {
-                    $data['type'] = str_replace(';;', '', $test_plan->role);
-                }
-                $all_data[] = $data;
+        $data = sortData( $all_data );
+        foreach( $data AS $row ){
+            if( $row['type'] == 'Employer' ){
+                add_entry_to_excel( $excel2, $row, $row_number_sheet1, 0 );
+                $row_number_sheet1++;
             }
-        }
-    }
-    $data = sortData( $all_data );
-    foreach( $data AS $row ){
-        if( $row['type'] == 'Employer' ){
-            add_entry_to_excel( $excel2, $row, $row_number_sheet1, 0 );
-            $row_number_sheet1++;
-        }
-        if( $row['type'] == 'Fund' ){
-            add_entry_to_excel( $excel2, $row, $row_number_sheet2, 1 );
-            $row_number_sheet2++;
-        }
-        if ( $row['type'] != 'Fund'  && $row['type'] != 'Employer' ) {
-            add_entry_to_excel( $excel2, $row, $row_number_sheet3, 2 );
-            $row_number_sheet3++;
+            if( $row['type'] == 'Fund' ){
+                add_entry_to_excel( $excel2, $row, $row_number_sheet2, 1 );
+                $row_number_sheet2++;
+            }
+            if ( $row['type'] != 'Fund'  && $row['type'] != 'Employer' ) {
+                add_entry_to_excel( $excel2, $row, $row_number_sheet3, 2 );
+                $row_number_sheet3++;
+            }
         }
     }
     $excel2->setActiveSheetIndex(0);
     $objWriter = PHPExcel_IOFactory::createWriter($excel2, 'Excel2007');
-    header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="'.$community_name.'TestProgress.xls"');
+    //delete previous file
+    $previous_token = get_option( 'reports_token_'.$community->id );
+    if( $previous_token ) {
+        $s3->deleteObject('/reports/' . $community->name . '/' . $previous_token . '/' . $community->name . 'TestProgress.xls');
+    }
+    ob_start();
     $objWriter->save('php://output');
-    exit();
+    $excelOutput = ob_get_clean();
+    $token = cp_generate_password(20);
+    update_option( 'reports_token_'.$community->id, $token );
+    update_option( 'reports_date', date( 'Y-m-d' ) );
+    $s3->putObject( '/reports/'.$community->name.'/'.$token.'/'.$community->name.'TestProgress.xls', $excelOutput, 'application/vnd.ms-excel'  );
 }
 function add_entry_to_excel( &$excel2, $data, $row_number, $sheet_number ){
     $excel2->setActiveSheetIndex( $sheet_number );
@@ -171,14 +180,16 @@ function add_entry_to_excel( &$excel2, $data, $row_number, $sheet_number ){
     }
 }
 function sortData( $data ){
-    $sort = array();
-    foreach( $data as $k => $v ) {
-        $sort['org_name'][$k]     = $v['product_owner'];
-        $sort['product_name'][$k] = $v['product_name'];
-        $sort['test_suite'][$k]   = $v['suite_name'];
-        $sort['level_name'][$k]   = $v['level_weight'];
+    if( ! empty( $data ) ) {
+        $sort = array();
+        foreach ($data as $k => $v) {
+            $sort['org_name'][$k] = $v['product_owner'];
+            $sort['product_name'][$k] = $v['product_name'];
+            $sort['test_suite'][$k] = $v['suite_name'];
+            $sort['level_name'][$k] = $v['level_weight'];
+        }
+        array_multisort($sort['org_name'], SORT_ASC, $sort['product_name'], SORT_ASC, $sort['test_suite'], SORT_ASC, $sort['level_name'], SORT_ASC, $data);
     }
-    array_multisort( $sort['org_name'], SORT_ASC, $sort['product_name'], SORT_ASC, $sort['test_suite'], SORT_ASC, $sort['level_name'], SORT_ASC,  $data );
     return $data;
 }
 function getProductLastAgreement( $product_id ){
