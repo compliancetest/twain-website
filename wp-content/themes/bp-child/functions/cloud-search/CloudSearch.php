@@ -1,26 +1,29 @@
 <?php
-
+require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
+use Aws\CloudSearch\CloudSearchClient;
 class CloudSearch {
 
-    private $_documentEndpoint = '';
-    private $_searchDomainURL = '';
+    private $_domainName = '';
 
     public function __construct(){
-        $this->_documentEndpoint = get_option( 'cloudsearch_document_endpoint' );
-        $this->_searchDomainURL = get_option( 'cloudsearch_search_endpoint' );
+
+        $this->_domainName = get_option( 'cloudsearch_domain_name' );
+        $configClient = CloudSearchClient::factory(array(
+            'key'    => get_option( 'aws_s3_key' ),
+            'secret' => get_option( 'aws_s3_secret' ),
+            'region' => 'ap-southeast-2'
+        ));
+
+        $this->_client = $configClient->getDomainClient( $this->_domainName, array(
+            'credentials' => false
+        ));
     }
 
     public function search( $params = false, $full_results = false ){
         global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
-        $str['facet.type'] = '{}';
-        $str['facet.test_type'] = '{}';
-        $str['facet.test_suite'] = '{}';
-        $str['facet.owner'] = '{}';
-        $str['facet.level'] = '{}';
-        $str['facet.role'] = '{}';
-        $str['facet.status'] = '{}';
+        $str['facet'] = '{ "type": {}, "test_type": {}, "test_suite": {}, "owner": {}, "level": {}, "role": {}, "status": {}, }';
         if( $full_results ){
             $str['size'] = 10000;
         } else{
@@ -67,7 +70,7 @@ class CloudSearch {
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
                 if( ! empty( $v ) ) {
-                    $str['q'] = $v;
+                    $str['query'] = $v;
                 }
             }else if( $k == 'page' ){
                 if( $v != 1 ){
@@ -75,8 +78,6 @@ class CloudSearch {
                 }
             }else if( $k == 'orderby' ){
                     $str['sort'] = $v . " " . (isset($params['order']) ? $params['order'] : 'asc');
-            }else if( $k == 'order' ){
-                    
             }else if( $k == 'date_from'  || $k == 'date_to' ){
                 if( ! $range_checked ) {
                     if (isset($params['date_from']) && ! empty( $params['date_from'] )) {
@@ -103,16 +104,13 @@ class CloudSearch {
         if( ! empty( $l ) ){
             $str['fq'] = ' ( and '.$l.' ) ';
         }
-        if( ! isset( $str['q'] ) ){
-            $str['q'] = 'matchall';
-            $str['q.parser'] = 'structured';
+        if( ! isset( $str['query'] ) ){
+            $str['query'] = 'matchall';
+            $str['queryParser'] = 'structured';
         }
-        $curl = curl_init( $this->_searchDomainURL . http_build_query( $str ) );
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $resp = curl_exec($curl);
-        curl_close($curl);
-        $res = json_decode( $resp, true );
-        return $res;
+        _trace( $str );
+        _trace($this->_client->search( $str ));die;
+        return $this->_client->search( $str );
     }
 
     /**
