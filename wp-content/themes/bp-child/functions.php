@@ -1296,37 +1296,37 @@ function generate_and_download( $data ){
     if (is_array($data['hits']['hit'])) {
         foreach( $data['hits']['hit'] as $row ){
             $row_data = $row['fields'];
-            if( $row_data['type'] == 'Agreement' ){
+            if( $row_data['type'][0] == 'Agreement' ){
                 $agreement_id = str_replace( 'agreement_', '', $row['id'] );
                 $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
                 $requester_service = new Service( $agreement->requester_service_id );
                 $requester_service->load();
                 $responder_service = new Service( $agreement->responder_service_id );
                 $responder_service->load();
-                $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
+                $claim_date = date( 'Y-m-d', strtotime( $row_data['date'][0] ) );
                 $s3 = new S3Wrapper();
                 //requester entry
                 $tempArray = array(
-                    $row_data['product_id'],
-                    $row_data['product_name'],
+                    $row_data['product_id'][0],
+                    $row_data['product_name'][0],
                     ! empty( $requester_service->service_version )  ? $requester_service->service_version : '',
                     $requester_service->service_owner,
-                    $row_data['type'],
+                    $row_data['type'][0],
                     process_visibility( $row_data['visibility'] ),
                     get_the_title( $requester_service->service_suite_id ),
                     implode( ', ', $requester_service->service_roles ),
                     implode( ', ', $requester_service->service_levels ),
-                    $row_data['status'],
-                    $row_data['test_type'],
-                    date( 'Y-m-d', strtotime($row_data['start_date'] ) ),
-                    $claim_date != '1970-01-01' && $row_data['status'] == 'Verified' ? $claim_date : '',
-                    $row_data['cert_number'],
-                    $row_data['status'] == 'Verified' ? $row_data['cert_url'] : '',
-                    $row_data['service_id'],
-                    $row_data['service_name'],
-                    $row_data['entity_id'],
-                    $row_data['entity_id_type'],
-                    $row_data['e2e_partner_service_id']
+                    $row_data['status'][0],
+                    $row_data['test_type'][0],
+                    date( 'Y-m-d', strtotime( $row_data['start_date'][0] ) ),
+                    $claim_date != '1970-01-01' && $row_data['status'][0] == 'Verified' ? $claim_date : '',
+                    $row_data['cert_number'][0],
+                    $row_data['status'][0] == 'Verified' ? $row_data['cert_url'][0] : '',
+                    $row_data['service_id'][0],
+                    $row_data['service_name'][0],
+                    $row_data['entity_id'][0],
+                    $row_data['entity_id_type'][0],
+                    $row_data['e2e_partner_service_id'][0]
                 );
                 fputcsv( $outstream, $tempArray );
                 //responder entry
@@ -1335,17 +1335,17 @@ function generate_and_download( $data ){
                     get_the_title( $responder_service->service_product_id ),
                     ! empty( $responder_service->service_version )  ? $responder_service->service_version : '',
                     $responder_service->service_owner,
-                    $row_data['type'],
+                    $row_data['type'][0],
                     process_visibility( $row_data['visibility'] ),
                     get_the_title( $responder_service->service_suite_id ),
                     implode( ', ', $responder_service->service_roles ),
                     implode( ', ', $responder_service->service_levels ),
-                    $row_data['status'],
-                    $row_data['test_type'],
-                    date( 'Y-m-d', strtotime($row_data['start_date'] ) ),
-                    $claim_date != '1970-01-01' && $row_data['status'] == 'Verified' ? $claim_date : '',
-                    $row_data['cert_number'],
-                    $row_data['status'] == 'Verified' ? $s3->getAgreementClaimLink( $agreement->responder_token ) : '',
+                    $row_data['status'][0],
+                    $row_data['test_type'][0],
+                    date( 'Y-m-d', strtotime( $row_data['start_date'][0] ) ),
+                    $claim_date != '1970-01-01' && $row_data['status'][0] == 'Verified' ? $claim_date : '',
+                    $row_data['cert_number'][0],
+                    $row_data['status'][0] == 'Verified' ? $s3->getAgreementClaimLink( $agreement->responder_token ) : '',
                     $responder_service->id,
                     $responder_service->service_name,
                     $responder_service->service_id,
@@ -1354,28 +1354,28 @@ function generate_and_download( $data ){
                 );
                 fputcsv( $outstream, $tempArray );
             } else{
-                $claim_date = date( 'Y-m-d', strtotime($row_data['date'] ) );
+                $claim_date = date( 'Y-m-d', strtotime($row_data['date'][0] ) );
                 $tempArray = array(
-                    $row_data['product_id'],
-                    $row_data['product_name'],
-                    isset( $row_data['version'] ) ? $row_data['version'] : '',
+                    $row_data['product_id'][0],
+                    $row_data['product_name'][0],
+                    isset( $row_data['version'][0] ) ? $row_data['version'][0] : '',
                     $row_data['owner'][0],
-                    $row_data['type'] == 'Web Service' ? 'Service' : 'Product',
+                    $row_data['type'][0] == 'Web Service' ? 'Service' : 'Product',
                     process_visibility( $row_data['visibility'] ),
                     $row_data['test_suite'][0],
                     ! empty( $row_data['role'] )  ? implode( ', ', $row_data['role'] ) : '',
                     ! empty( $row_data['level'] )  ? implode( ', ', $row_data['level'] ) : '',
-                    $row_data['status'],
-                    $row_data['test_type'],
-                    isset( $row_data['start_date'] ) ? date( 'Y-m-d', strtotime($row_data['start_date'] ) ) : '',
-                    $claim_date != '1970-01-01' && $row_data['status'] == 'Verified' ? $claim_date : '',
-                    isset( $row_data['cert_number'] ) ? $row_data['cert_number'] : '',
-                    isset( $row_data['cert_url'] ) ? $row_data['cert_url'] : '',
-                    isset( $row_data['service_id'] ) ? $row_data['service_id'] : '',
-                    isset( $row_data['service_name'] ) ? $row_data['service_name'] : '',
-                    isset( $row_data['entity_id'] ) ? $row_data['entity_id'] : '',
-                    isset( $row_data['entity_id_type'] ) ? $row_data['entity_id_type'] : '',
-                    isset( $row_data['e2e_partner_service_id'] ) ? $row_data['e2e_partner_service_id'] : ''
+                    $row_data['status'][0],
+                    $row_data['test_type'][0],
+                    isset( $row_data['start_date'][0] ) ? date( 'Y-m-d', strtotime($row_data['start_date'][0] ) ) : '',
+                    $claim_date != '1970-01-01' && $row_data['status'][0] == 'Verified' ? $claim_date : '',
+                    isset( $row_data['cert_number'][0] ) ? $row_data['cert_number'][0] : '',
+                    isset( $row_data['cert_url'][0] ) ? $row_data['cert_url'][0] : '',
+                    isset( $row_data['service_id'][0] ) ? $row_data['service_id'][0] : '',
+                    isset( $row_data['service_name'][0] ) ? $row_data['service_name'][0] : '',
+                    isset( $row_data['entity_id'][0] ) ? $row_data['entity_id'][0] : '',
+                    isset( $row_data['entity_id_type'][0] ) ? $row_data['entity_id_type'][0] : '',
+                    isset( $row_data['e2e_partner_service_id'][0] ) ? $row_data['e2e_partner_service_id'][0] : ''
                 );
                 fputcsv( $outstream, $tempArray );
             }

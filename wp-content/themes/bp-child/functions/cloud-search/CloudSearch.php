@@ -15,7 +15,7 @@ class CloudSearch {
         ));
 
         $this->_client = $configClient->getDomainClient( $this->_domainName, array(
-            'credentials' => false
+            'credentials' => $configClient->getCredentials()
         ));
     }
 
@@ -23,7 +23,7 @@ class CloudSearch {
         global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
-        $str['facet'] = '{ "type": {}, "test_type": {}, "test_suite": {}, "owner": {}, "level": {}, "role": {}, "status": {}, }';
+        $str['facet'] = '{ "type": {}, "test_type": {}, "test_suite": {}, "owner": {}, "level": {}, "role": {}, "status": {} }';
         if( $full_results ){
             $str['size'] = 10000;
         } else{
@@ -66,7 +66,6 @@ class CloudSearch {
             $l .= "  ( term field=visibility 1 )";
         }
         $str['sort'] = 'name asc';
-        
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
                 if( ! empty( $v ) ) {
@@ -96,20 +95,18 @@ class CloudSearch {
                     $range_checked = true;
                 }
             }else {
-                if( $v !== 'All' ) {
+                if( $v !== 'All' && $k != 'order' ) {
                     $l .= " (term field=" . $k . " '" . urldecode( $v ) . "') ";
                 }
             }
         }
         if( ! empty( $l ) ){
-            $str['fq'] = ' ( and '.$l.' ) ';
+            $str['filterQuery'] = ' ( and '.$l.' ) ';
         }
         if( ! isset( $str['query'] ) ){
             $str['query'] = 'matchall';
             $str['queryParser'] = 'structured';
         }
-        _trace( $str );
-        _trace($this->_client->search( $str ));die;
         return $this->_client->search( $str );
     }
 
@@ -179,12 +176,11 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'test_plan_'.$test_plan->id, 'fields' => $temp_data ) );
         }
-
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
         $response_data['Test Plans'] = array(
-            'Status'   => $data['status'],
-            'Added'    => $data['adds'],
-            'Deleted'  => $data['deletes'],
+            'Status'   => $data->getPath( 'status' ),
+            'Added'    => $data->getPath( 'adds' ),
+            'Deleted'  => $data->getPath( 'deletes' )
         );
         // step 2 - upload claims
 
@@ -246,11 +242,11 @@ class CloudSearch {
              );
             array_push( $data, array( 'type' => 'add', 'id' => 'claim_'.$claim->id, 'fields' => $temp_data ) );
         }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
         $response_data['Claims'] = array(
-            'Status'   => $data['status'],
-            'Added'    => $data['adds'],
-            'Deleted'  => $data['deletes'],
+            'Status'   => $data->getPath( 'status' ),
+            'Added'    => $data->getPath( 'adds' ),
+            'Deleted'  => $data->getPath( 'deletes' )
         );
         // step 3 - upload agreements
 
@@ -311,13 +307,12 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'agreement_'.$agreement->id, 'fields' => $temp_data ) );
         }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
         $response_data['Agreements'] = array(
-            'Status'   => $data['status'],
-            'Added'    => $data['adds'],
-            'Deleted'  => $data['deletes'],
+            'Status'   => $data->getPath( 'status' ),
+            'Added'    => $data->getPath( 'adds' ),
+            'Deleted'  => $data->getPath( 'deletes' )
         );
-
         //step 5 upload services
         $data = array();
         $args = array(
@@ -367,11 +362,11 @@ class CloudSearch {
             );
             array_push( $data, array( 'type' => 'add', 'id' => 'service_'.$post->ID, 'fields' => $temp_data ) );
         }
-        $data = json_decode( $this->_sendDataToSearchDomain( $data ), true );
+        $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
         $response_data['Services'] = array(
-            'Status'   => $data['status'],
-            'Added'    => $data['adds'],
-            'Deleted'  => $data['deletes'],
+            'Status'   => $data->getPath( 'status' ),
+            'Added'    => $data->getPath( 'adds' ),
+            'Deleted'  => $data->getPath( 'deletes' )
         );
         return $response_data;
     }
@@ -391,15 +386,15 @@ class CloudSearch {
             array_push( $data, array( 'type' => 'delete', 'id' =>$row['id'] ) );
         }
         if( ! empty( $data ) ) {
-            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
             $response_data = array(
-                'Status'   => $data['status'],
-                'Added'    => $data['adds'],
-                'Deleted'  => $data['deletes'],
+                'Status'   => $data->getPath( 'status' ),
+                'Added'    => $data->getPath( 'adds' ),
+                'Deleted'  => $data->getPath( 'deletes' )
             );
         } else{
             $response_data = array(
-                'Status'   => 'Error',
+                'Status'   => 'Search domain is empty',
             );
         }
         return $response_data;
@@ -482,18 +477,6 @@ class CloudSearch {
         } else{
             array_push( $data, array( 'type' => 'delete', 'id' => $type.'_'.$id  ) );
         }
-        return $this->_sendDataToSearchDomain( $data );
+        return $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
     }
-    protected function _sendDataToSearchDomain( Array $rows ){
-        $data = json_encode( $rows );
-        $ch = curl_init( $this->_documentEndpoint );
-        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt( $ch, CURLOPT_POSTFIELDS,  $data );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data))
-        );
-        return curl_exec( $ch );
-    }
-} 
+}
