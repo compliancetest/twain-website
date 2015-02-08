@@ -59,7 +59,7 @@ class S3Wrapper{
 
     public static function isObjectExists( $key ){
         $s3 = new S3Wrapper();
-        return $s3->_client->if_object_exists( $s3->_bucket, $key );
+        return $s3->_client->doesObjectExist( $s3->_bucket, $key );
     }
     /**
      * Use this function to delete file object
