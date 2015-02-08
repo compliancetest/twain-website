@@ -1409,11 +1409,11 @@ function generate_and_download_site( $data ){
         foreach( $data['hits']['hit'] as $row ){
             $row_data = $row['fields'];
                 $tempArray = array(
-                    $row_data['post_title'],
-                    $row_data['post_content'],
-                    $row_data['post_type'],
+                    $row_data['post_title'][0],
+                    $row_data['post_content'][0],
+                    $row_data['post_type'][0],
                     ! empty( $row_data['community'] ) && is_array( $row_data['community'] ) ? implode( ',', $row_data['community'] ) : '',
-                    date( 'Y-m-d', strtotime( $row_data['last_updated_date'] ) )
+                    date( 'Y-m-d', strtotime( $row_data['last_updated_date'][0] ) )
                 );
                 fputcsv( $outstream, $tempArray );
         }

@@ -12,6 +12,11 @@ $baseURL = get_permalink();
 $cloud_search = new FulltextSearch();
 $params = array();
 $params_without_sorting = array();
+$is_download = false;
+if( isset( $_GET['download'] ) ){
+    $is_download = true;
+    unset( $_GET['download']);
+}
 if( $_GET ){
     foreach( $_GET AS $k => $v ){
         $params[] = urlencode($k) . '=' . urlencode($v);
@@ -28,8 +33,7 @@ $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
 $results = $cloud_search->search( $_GET );
 
-if( isset( $_GET['download']) ){
-    unset( $_GET['download']);
+if( $is_download ){
     $results = $cloud_search->search( $_GET, true );
     generate_and_download_site( $results );
 }

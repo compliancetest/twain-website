@@ -12,6 +12,7 @@ $baseURL = get_permalink();
 $cloud_search = new CloudSearch();
 $params = array();
 $params1 = array();
+$is_download = false;
 if( isset( $_GET['download'] ) ){
     $is_download = true;
     unset( $_GET['download']);

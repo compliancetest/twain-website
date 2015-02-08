@@ -77,7 +77,6 @@ class FulltextSearch {
             if( $k == 'q' ){
                 if( ! empty( $v ) ) {
                     $str['query'] = $v;
-                    $str['highlight'] = '{ "post_title": {"format": "text","max_phrases": 100,"pre_tag": "<b>","post_tag": "</b>"}, "post_content": {"format": "text","max_phrases": 100,"pre_tag": "<b>","post_tag": "</b>"} }';
                 }
             }else if( $k == 'page' ){
                 if( $v != 1 ){
@@ -211,11 +210,11 @@ class FulltextSearch {
             }
         }
         if( ! empty( $data ) ) {
-            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
             $response_data = array(
-                'Status'   => $data['status'],
-                'Added'    => $data['adds'],
-                'Deleted'  => $data['deletes'],
+                'Status'   => $data->getPath( 'status' ),
+                'Added'    => $data->getPath( 'adds' ),
+                'Deleted'  => $data->getPath( 'deletes' )
             );
         }
         return $response_data;
@@ -231,6 +230,9 @@ class FulltextSearch {
         }
         if( $posts ) {
             foreach ($posts AS $post) {
+                if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
+                    continue;
+                }
                 array_push($data, array('type' => 'delete', 'id' => $post->ID));
             }
         }
@@ -238,15 +240,19 @@ class FulltextSearch {
         if( ! $post_id ) {
             $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
             foreach ($test_scenarios AS $test_scenario) {
+                $post = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id));
+                if( ! $post || $test_scenario->code == 'Default' ) {
+                    continue;
+                }
                 array_push($data, array('type' => 'delete', 'id' => 'scenario_' . $test_scenario->id));
             }
         }
         if( ! empty( $data ) ) {
-            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
             $response_data = array(
-                'Status'   => $data['status'],
-                'Added'    => $data['adds'],
-                'Deleted'  => $data['deletes'],
+                'Status'   => $data->getPath( 'status' ),
+                'Added'    => $data->getPath( 'adds' ),
+                'Deleted'  => $data->getPath( 'deletes' )
             );
         }
         return $response_data;
@@ -358,6 +364,11 @@ class FulltextSearch {
     public function delete_item( $id ){
         $data = array();
         array_push( $data, array( 'type' => 'delete', 'id' => $id  ) );
-        return $this->_sendDataToSearchDomain( $data );
+        $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
+        return array(
+            'Status'   => $data->getPath( 'status' ),
+            'Added'    => $data->getPath( 'adds' ),
+            'Deleted'  => $data->getPath( 'deletes' )
+        );
     }
 } 
