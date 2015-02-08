@@ -95,11 +95,8 @@ function create_compliancetest_settings_page()
             update_option('pdf_private_key_name', $_FILES['pdf_private_key']['name']);
         }
     } else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-cloudsearch-settings')){
-        update_option('cloudsearch_search_endpoint', $_POST['cloudsearch_search_endpoint']);
-        update_option('cloudsearch_document_endpoint', $_POST['cloudsearch_document_endpoint']);
-
-        update_option('cloudsearch_fulltext_search_endpoint', $_POST['cloudsearch_fulltext_search_endpoint']);
-        update_option('cloudsearch_fulltext_document_endpoint', $_POST['cloudsearch_fulltext_document_endpoint']);
+        update_option('cloudsearch_domain_name', $_POST['cloudsearch_domain_name']);
+        update_option('cloudsearch_fulltext_domain_name', $_POST['cloudsearch_fulltext_domain_name']);
     }
     
 ?>
@@ -421,20 +418,20 @@ function create_compliancetest_settings_page()
                 <form method="post" action="" enctype="multipart/form-data">
                     <table class="widefat">
                         <tr>
-                            <th><label><b>Registry Search EndPoint:</b></label></th>
-                            <td><input type="text" name="cloudsearch_search_endpoint" id="cloudsearch_search_endpoint" value="<?php echo get_option('cloudsearch_search_endpoint')?>" size="50" autocomplete="off" /></td>
+                            <th><label><b>Registry Search Domain Name:</b></label></th>
+                            <td><input type="text" name="cloudsearch_domain_name" id="cloudsearch_domain_name" value="<?php echo get_option('cloudsearch_domain_name')?>" size="50" autocomplete="off" /></td>
                         </tr>
+<!--                        <tr>-->
+<!--                            <th><label><b>Registry Document EndPoint:</b></label></th>-->
+<!--                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="--><?php //echo get_option('cloudsearch_document_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <th><label><b>Site Search EndPoint:</b></label></th>-->
+<!--                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="--><?php //echo get_option('cloudsearch_fulltext_search_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
+<!--                        </tr>-->
                         <tr>
-                            <th><label><b>Registry Document EndPoint:</b></label></th>
-                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="<?php echo get_option('cloudsearch_document_endpoint')?>" size="50" autocomplete="off" /></td>
-                        </tr>
-                        <tr>
-                            <th><label><b>Site Search EndPoint:</b></label></th>
-                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="<?php echo get_option('cloudsearch_fulltext_search_endpoint')?>" size="50" autocomplete="off" /></td>
-                        </tr>
-                        <tr>
-                            <th><label><b>Site Document EndPoint:</b></label></th>
-                            <td><input type="text" name="cloudsearch_fulltext_document_endpoint" id="cloudsearch_fulltext_document_endpoint" value="<?php echo get_option('cloudsearch_fulltext_document_endpoint')?>" size="50" autocomplete="off" /></td>
+                            <th><label><b>Site Search Domain Name:</b></label></th>
+                            <td><input type="text" name="cloudsearch_fulltext_domain_name" id="cloudsearch_fulltext_domain_name" value="<?php echo get_option('cloudsearch_fulltext_domain_name')?>" size="50" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
