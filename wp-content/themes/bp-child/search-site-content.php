@@ -12,6 +12,11 @@ $baseURL = get_permalink();
 $cloud_search = new FulltextSearch();
 $params = array();
 $params_without_sorting = array();
+$is_download = false;
+if( isset( $_GET['download'] ) ){
+    $is_download = true;
+    unset( $_GET['download']);
+}
 if( $_GET ){
     foreach( $_GET AS $k => $v ){
         $params[] = urlencode($k) . '=' . urlencode($v);
@@ -28,8 +33,7 @@ $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
 $results = $cloud_search->search( $_GET );
 
-if( isset( $_GET['download']) ){
-    unset( $_GET['download']);
+if( $is_download ){
     $results = $cloud_search->search( $_GET, true );
     generate_and_download_site( $results );
 }
@@ -147,38 +151,38 @@ if( isset( $_GET['download']) ){
                             ?>
                             <tr>
                                 <td class="first">
-                                    <?php if( $row['post_type'] == 'Test Scenario' ):?>
+                                    <?php if( $row['post_type'][0] == 'Test Scenario' ):?>
                                         <?php
-                                            $post_meta = get_post_meta( $row['post_id'] );
+                                            $post_meta = get_post_meta( $row['post_id'][0] );
                                             $post_name = $post_meta['ts_name'][0].' v'.$post_meta['ts_version_major'][0].'.'.$post_meta['ts_version_minor'][0];
                                             if( $post_meta['ts_version_patch'][0] != '0' ){
                                                 $post_name .= $post_meta['ts_version_patch'][0];
                                             }
                                         ?>
-                                        <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'].'<br>( '. $post_name .' )';?></a>
-                                    <?php elseif( $row['post_type'] == 'Test Case' ):?>
+                                        <a href="<?php echo $row['link'][0];?>"><?php echo $row['post_title'][0].'<br>( '. $post_name .' )';?></a>
+                                    <?php elseif( $row['post_type'][0] == 'Test Case' ):?>
                                         <?php
-                                            $post_meta = get_post_meta( $row['post_id'] );
+                                            $post_meta = get_post_meta( $row['post_id'][0] );
                                             $post_name = get_the_title( $post_meta['test_suite'][0] );
                                         ?>
 
-                                        <a href="<?php echo $row['link'];?>"><?php echo $row['post_title']; if( ! empty( $post_name ) ) echo '<br>( '. $post_name .' )';?></a>
+                                        <a href="<?php echo $row['link'][0];?>"><?php echo $row['post_title'][0]; if( ! empty( $post_name ) ) echo '<br>( '. $post_name .' )';?></a>
                                     <?php else:?>
-                                        <a href="<?php echo $row['link'];?>"><?php echo $row['post_title'];?></a>
+                                        <a href="<?php echo $row['link'][0];?>"><?php echo $row['post_title'][0];?></a>
                                     <?php endif;?>
                                 </td>
                                 <td>
-                                    <p class="short-description"><?php echo strlen( strip_tags( $row['post_content'] ) ) > 400 ? substr( strip_tags( $row['post_content'] ), 0, 400 ). '...' : strip_tags( $row['post_content'] );?></p>
+                                    <p class="short-description"><?php echo strlen( strip_tags( $row['post_content'][0] ) ) > 400 ? substr( strip_tags( $row['post_content'][0] ), 0, 400 ). '...' : strip_tags( $row['post_content'][0] );?></p>
                                 </td>
-                                <td><?php echo $row['post_type'];?></td>
+                                <td><?php echo $row['post_type'][0];?></td>
                                 <td>
                                     <?php if( ! empty( $row['community'] ) && is_array( $row['community'] ) ):?>
                                         <?php echo implode( '<br>', $row['community'] );?>
                                     <?php endif;?>
                                 </td>
-                                <td class="last"><?php echo date( 'Y-m-d', strtotime( $row['last_updated_date'] ) );?></td>
+                                <td class="last"><?php echo date( 'Y-m-d', strtotime( $row['last_updated_date'][0] ) );?></td>
                                 <?php if( is_super_admin() ):?>
-                                    <td class="remove_entry"><a href="/?_psnonce=<?php echo wp_create_nonce('get-delete-search-entry');?>&id=<?php echo $id;?>&t=2" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn delete_search_entry has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete <?php echo $row['post_title'];?><span></span></span><span class="p"></span></a></td>
+                                    <td class="remove_entry"><a href="/?_psnonce=<?php echo wp_create_nonce('get-delete-search-entry');?>&id=<?php echo $id;?>&t=2" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn delete_search_entry has-tooltip"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete <?php echo $row['post_title'][0];?><span></span></span><span class="p"></span></a></td>
                                 <?php endif;?>
                             </tr>
                         <?php endforeach; ?>

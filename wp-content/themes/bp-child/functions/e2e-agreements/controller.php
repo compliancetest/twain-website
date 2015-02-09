@@ -153,7 +153,6 @@ function process_agreement_actions()
             $content = fread($fp, filesize($tmpName));
             fclose($fp);
             if( $_REQUEST['role'] == 'Requester' ){
-                $file_field   = 'requestor_audit_log';
                 $name_field   = 'requestor_audit_log_name';
                 $type_field   = 'requestor_audit_log_type';
                 $r_name_field = 'requestor_name';
@@ -161,7 +160,6 @@ function process_agreement_actions()
                 $service_id   = $wpdb->get_var( $wpdb->prepare( "SELECT responder_service_id FROM wp_e2e_agreement WHERE id = %d", $agreement_id ) );
                 $sent_by      = 1;
             } else{
-                $file_field   = 'responder_audit_log';
                 $name_field   = 'responder_audit_log_name';
                 $type_field   = 'responder_audit_log_type';
                 $r_name_field = 'responder_name';
@@ -180,7 +178,6 @@ function process_agreement_actions()
                 array(
                     'status'     => 'Claimed',
                     'scope'      => @implode( ';;', @$_REQUEST['scope'] ),
-//                    $file_field  => $content,
                     $name_field  => $fileName,
                     $type_field  => $fileType,
                     $r_name_field => cp_get_user_fullname( get_current_user_id() ),
@@ -251,7 +248,6 @@ function process_agreement_actions()
             $wpdb->update('wp_e2e_agreement',
                 array(
                     'status'      => 'Verified',
-//                    $file_field   => $content,
                     $name_field   => $fileName,
                     $type_field   => $fileType,
                     $r_name_field => cp_get_user_fullname( get_current_user_id() ),
@@ -279,19 +275,6 @@ function process_agreement_actions()
             $req_pdf = create_agreement_pdf( $agreement_id );
             $res_pdf = create_agreement_pdf( $agreement_id, true );
 
-//            $wpdb->update('wp_e2e_agreement',
-//                array(
-//
-//                    'responder_certificate' => $res_pdf,
-//                    'requester_certificate' => $req_pdf,
-//
-//                ),
-//                array(
-//                    'id' => $agreement_id
-//                ),
-//                array( '%s', '%s' ),
-//                array( '%d' )
-//            );
             $certificate = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
             $s3 = new S3Wrapper();
             $s3->putObject('/claims/agreements/' . $certificate->requester_token . '.pdf', $req_pdf, 'application/pdf');
@@ -314,19 +297,6 @@ function process_agreement_actions()
         addMessage( 'Success' );
         wp_redirect('/agreements/');
         exit;
-//    }else if( wp_verify_nonce($action, 'reject-claimed-agreement' ) ){
-//        $agreement_id = intval($_REQUEST['agreement_id']);
-//        Agreement::has_access( 'edit-agreement', false, $agreement_id );
-//
-//        $cloud_search = new CloudSearch();
-//        $cloud_search->cloud_search_delete_item( $agreement_id, 'agreement' );
-//        //delete local data
-//        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
-//        $wpdb->query( $wpdb->prepare( "DELETE FROM wp_e2e_agreement_log WHERE agreement_id = %d ", $agreement_id ) );
-//
-//        addMessage('Success');
-//        wp_redirect('/agreements/');
-//        exit;
     //reject claim
     }else if( wp_verify_nonce($action, 'reject-failed-agreement' ) ){
         $agreement_id = intval($_REQUEST['agreement_id']);
@@ -342,10 +312,8 @@ function process_agreement_actions()
         $wpdb->update('wp_e2e_agreement',
             array(
                 'status'                    => 'Testing',
-                'requestor_audit_log'       => '',
                 'requestor_audit_log_name'  => '',
                 'requestor_audit_log_type'  => '',
-                'responder_audit_log'       => '',
                 'responder_audit_log_name'  => '',
                 'responder_audit_log_type'  => ''
             ),
@@ -384,35 +352,6 @@ function process_agreement_actions()
 
         addMessage('Success');
         wp_redirect('/agreements/');
-        exit;
-    } else if( wp_verify_nonce($action, 'get-agreement-file' ) || $_REQUEST['_psnonce'] == 'get-agreement-file' ){
-        $agreement_id = intval( $_REQUEST['agreement_id'] );
-        //requester message
-        $log = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id=%d", $agreement_id ) );
-        if( ! $log )
-        {
-            echo "Invalid Request!";
-            exit;
-        }
-        $t = $_REQUEST['type'];
-        if( $t == '1' ){
-            $content_type = $log->requestor_audit_log_type;
-            $file_name    = $log->requestor_audit_log_name;
-            $content      = $log->requestor_audit_log;
-        } else {
-            $content_type = $log->responder_audit_log_type;
-            $file_name    = $log->responder_audit_log_name;
-            $content      = $log->responder_audit_log;
-        }
-        header("Content-type: ".$content_type );
-        header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
-        header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
-        header("Cache-Control: no-cache, must-revalidate");
-        header("Pragma: no-cache");
-        header("Content-Type: Application/octet-stream");
-        header("Content-disposition: attachment; filename=".$file_name);
-
-        echo  $content ;
         exit;
     } else if( wp_verify_nonce($action, 'get-agreement-info-popup' ) ){
         get_agreement_info_popup();
@@ -874,8 +813,6 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
                                 <th class="issued" style="width:25%;">Service Name</th>
                                 <th class="test-intent" style="width:25%;">Audit Files</th>
                            </tr>';
-//    $agreement->requestor_audit_log_name = str_replace( array( ' ', ':' ), '', $agreement->requestor_audit_log_name );
-//    $agreement->responder_audit_log_name = str_replace( array( ' ', ':' ), '', $agreement->responder_audit_log_name );
 
     $req_files = $res_files = array();
 

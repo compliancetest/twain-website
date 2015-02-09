@@ -29,8 +29,6 @@ function process_claim_actions()
         editClaim();
     }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'get-suite-info-for-claim')){
         getTestSuiteInfoForClaim();
-    }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'make-claim')){
-        makeClaim();
     }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'delete-claim')){
         deleteClaim();
     }else if(isset($_GET['download-certificate'])){
@@ -108,25 +106,6 @@ function deleteClaim()
     exit;
 }
 
-function makeClaim()
-{
-    global $wpdb;
-    
-    $productID = $_POST['product_id'];
-    $claimID = isset($_POST['id']) ? $_POST['id'] : null;
-    $suiteId = $_POST['suite_id'];
-    $confLevel = $_POST['level'];
-    $role = $_POST['role'];
-    
-    if(_saveClaim($productID, $suiteId, $confLevel, $role, 'Self Assessed', $claimID))
-    {
-        addMessage('Compliance Claim was saved successfully!');
-    }
-    
-    wp_redirect('/my-products');
-    exit;    
-}
-
 function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, $status, $claimID = null, $planID = 0, $has_exclusions )
 {
     global $wpdb;
@@ -163,7 +142,6 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
             'created_date'    =>  date('Y-m-d H:i:s'),
             'last_updated'    =>  date('Y-m-d H:i:s'),
             'token' => createClaimToken(),
-            'certificate' => '', //This is empty for now. Ilia will need to update this
             'audit'    =>  '',
             'has_exclusions' => $has_exclusions
         ));

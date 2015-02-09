@@ -1,25 +1,35 @@
 <?php
-
+require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
+use Aws\CloudSearch\CloudSearchClient;
 class FulltextSearch {
 
-    private $_documentEndpoint = '';
-    private $_searchDomainURL = '';
+    private $_domainName = '';
 
     private $_allowed_post_types = array(
       'press-release', 'blog', 'event', 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc'
     );
 
+
     public function __construct(){
-        $this->_documentEndpoint = get_option( 'cloudsearch_fulltext_document_endpoint' );
-        $this->_searchDomainURL  = get_option( 'cloudsearch_fulltext_search_endpoint' );
+
+        $this->_domainName = get_option( 'cloudsearch_fulltext_domain_name' );
+
+        $configClient = CloudSearchClient::factory(array(
+            'key'    => get_option( 'aws_s3_key' ),
+            'secret' => get_option( 'aws_s3_secret' ),
+            'region' => 'ap-southeast-2'
+        ));
+
+        $this->_client = $configClient->getDomainClient( $this->_domainName, array(
+            'credentials' => $configClient->getCredentials()
+        ));
     }
 
     public function search( $params = false, $full_results = false ){
         global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
-        $str['facet.post_type'] = "{sort:'bucket', size:100}";
-        $str['facet.community'] = '{}';
+        $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {} }';
         if( $full_results ){
             $str['size'] = 10000;
         } else{
@@ -66,7 +76,7 @@ class FulltextSearch {
         foreach( $params AS $k => $v ){
             if( $k == 'q' ){
                 if( ! empty( $v ) ) {
-                    $str['q'] = $v;
+                    $str['query'] = $v;
                 }
             }else if( $k == 'page' ){
                 if( $v != 1 ){
@@ -100,18 +110,13 @@ class FulltextSearch {
             }
         }
         if( ! empty( $l ) ){
-            $str['fq'] = ' ( and '.$l.' ) ';
+            $str['filterQuery'] = ' ( and '.$l.' ) ';
         }
-        if( ! isset( $str['q'] ) ){
-            $str['q'] = 'matchall';
-            $str['q.parser'] = 'structured';
+        if( ! isset( $str['query'] ) ){
+            $str['query'] = 'matchall';
+            $str['queryParser'] = 'structured';
         }
-        $curl = curl_init( $this->_searchDomainURL . http_build_query( $str ) );
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $resp = curl_exec($curl);
-        curl_close($curl);
-        $res = json_decode( $resp, true );
-        return $res;
+        return $this->_client->search( $str );
     }
 
     public function fullUpload( $post_id = false ){
@@ -205,11 +210,11 @@ class FulltextSearch {
             }
         }
         if( ! empty( $data ) ) {
-            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
             $response_data = array(
-                'Status'   => $data['status'],
-                'Added'    => $data['adds'],
-                'Deleted'  => $data['deletes'],
+                'Status'   => $data->getPath( 'status' ),
+                'Added'    => $data->getPath( 'adds' ),
+                'Deleted'  => $data->getPath( 'deletes' )
             );
         }
         return $response_data;
@@ -225,6 +230,9 @@ class FulltextSearch {
         }
         if( $posts ) {
             foreach ($posts AS $post) {
+                if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
+                    continue;
+                }
                 array_push($data, array('type' => 'delete', 'id' => $post->ID));
             }
         }
@@ -232,15 +240,19 @@ class FulltextSearch {
         if( ! $post_id ) {
             $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
             foreach ($test_scenarios AS $test_scenario) {
+                $post = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id));
+                if( ! $post || $test_scenario->code == 'Default' ) {
+                    continue;
+                }
                 array_push($data, array('type' => 'delete', 'id' => 'scenario_' . $test_scenario->id));
             }
         }
         if( ! empty( $data ) ) {
-            $data = json_decode($this->_sendDataToSearchDomain($data), true);
+            $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
             $response_data = array(
-                'Status'   => $data['status'],
-                'Added'    => $data['adds'],
-                'Deleted'  => $data['deletes'],
+                'Status'   => $data->getPath( 'status' ),
+                'Added'    => $data->getPath( 'adds' ),
+                'Deleted'  => $data->getPath( 'deletes' )
             );
         }
         return $response_data;
@@ -348,22 +360,15 @@ class FulltextSearch {
         }
         return $data;
     }
-    protected function _sendDataToSearchDomain( Array $rows ){
-        $data = json_encode( $rows );
-        $ch = curl_init( $this->_documentEndpoint );
-        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt( $ch, CURLOPT_POSTFIELDS,  $data );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data))
-        );
-        return curl_exec( $ch );
-    }
 
     public function delete_item( $id ){
         $data = array();
         array_push( $data, array( 'type' => 'delete', 'id' => $id  ) );
-        return $this->_sendDataToSearchDomain( $data );
+        $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );
+        return array(
+            'Status'   => $data->getPath( 'status' ),
+            'Added'    => $data->getPath( 'adds' ),
+            'Deleted'  => $data->getPath( 'deletes' )
+        );
     }
 } 
