@@ -132,14 +132,6 @@ function createSupportTicket()
     }
     $tID = $wpdb->insert_id;
     //Upload Files
-    if(!is_dir(TICKET_ATTACHMENTS_DIR))
-    {
-        mkdir(TICKET_ATTACHMENTS_DIR, 0777);
-        //Add .htaccess to prevent direct access
-        $fp = fopen(TICKET_ATTACHMENTS_DIR . "/.htaccess", "w");
-        fwrite($fp, "deny from all");
-        fclose($fp);
-    }
     $has_attachment = 0;
     if($_FILES['attachments']['error'])
     {
@@ -147,22 +139,8 @@ function createSupportTicket()
         {
             if($error == UPLOAD_ERR_OK)
             {
-//                if(!is_dir(TICKET_ATTACHMENTS_DIR . "/" . $tID))
-//                    mkdir(TICKET_ATTACHMENTS_DIR . "/" . $tID, 0777);
 
                 $name = $_FILES['attachments']['name'][$i];
-                $k = 1;
-//                while(file_exists(TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
-//                {
-//                    $name = $k . "_" . $_FILES['attachments']['name'][$i];
-//                    $k++;
-//                }
-
-//                if(move_uploaded_file($_FILES['attachments']['tmp_name'][$i], TICKET_ATTACHMENTS_DIR . "/" . $tID . "/" . $name))
-//                {
-//                    //Store Data to the Table
-//
-//                }
                 $token = sha1( $tID . "_" . rand(0, 999999) . "_" . $name . "_" . time() . "_" . rand( 0, 999999 ) );
                 $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
                 $has_attachment = 1;

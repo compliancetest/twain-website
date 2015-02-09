@@ -59,14 +59,18 @@ function certifyPlan()
         if( $is_excluded ){
             $has_exclusions = 1;
         }
-        
+
+        if( $is_excluded || $is_optional == 'Yes' ){
+            continue;
+        }
+
         //If result is fail, can't certify
-        if (isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID]) && $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] == 'fail'){
+        if( isset( $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] ) && $caseStatus[$plan->suite_id][$plan->product_id][$case->ID] == 'fail' ){
             $all_verified = false;
             break;
         }
         
-        if ($is_optional != 'Yes' && !$is_excluded && !isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID])) {
+        if( ! isset($caseStatus[$plan->suite_id][$plan->product_id][$case->ID] ) ){
             $all_verified = false;
             break;
         }
@@ -97,7 +101,7 @@ function certifyPlan()
                     )
                 );
                 //Delete Exclude Plan ID
-                //$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
+//                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
 
                 $cloud_search = new CloudSearch();
                 $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
