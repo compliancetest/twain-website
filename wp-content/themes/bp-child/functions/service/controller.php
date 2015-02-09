@@ -37,7 +37,7 @@ function saveService()
     else
         $isNew = false;
     
-    if(($isNew && !can_create_product_and_service()) || (!$isNew && !can_edit_product_and_service($id)))
+    if( $isNew || ( ! $isNew && ! Service::can_edit( get_current_user_id(), $id ) ) )
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect(get_site_url());
