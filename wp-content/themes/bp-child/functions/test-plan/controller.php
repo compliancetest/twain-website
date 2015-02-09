@@ -231,11 +231,17 @@ function editPlan()
             <div class="popup-box-content grid-box-body">    
                 <div class="field-row">
                     <div class="grid-cell">
-                        <label>Product/Service</label>
+                        <label>Product</label>
                         <select class="select" name="product_id" id="product_id">                            
-                            <option value="">Select a Product/Service</option>
-                            <?php foreach($products as $p){ ?>
-                            <option value="<?php echo $p->ID?>" <?php echo $plan->product_id == $p->ID ? 'selected="selected"' : ''?>><?php echo get_the_title($p->ID)?></option>
+                            <option value="">Select a Product</option>
+                            <?php foreach($products as $p){?>
+                                <?php
+                                    $product_version = get_post_meta( $p->ID, 'product_version', true );
+                                    if( ! empty( $product_version ) ){
+                                        $product_version = ' v'.$product_version;
+                                    }
+                                ?>
+                                <option value="<?php echo $p->ID?>" <?php echo $plan->product_id == $p->ID ? 'selected="selected"' : ''?>><?php echo get_the_title( $p->ID ); echo $product_version;?></option>
                             <?php } ?>
                         </select>
                     </div>
