@@ -101,7 +101,7 @@ function certifyPlan()
                     )
                 );
                 //Delete Exclude Plan ID
-                //$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
+                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
 
                 $cloud_search = new CloudSearch();
                 $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
