@@ -52,7 +52,7 @@ function saveProfileType()
         $wpdb->insert($wpdb->prefix . "community_profile_types", 
                                 array('community_id' => $community_id, 'title' => $schemaObj->title, 'creator_id' => $user_id, 'created_date' => date('Y-m-d H:i:s'), 'schema' => base64_encode($content)));
     }
-    
+    BlobsMigration::uploadProfileTypes();
     addMessage('Profile Type successfully saved!');
     $group = groups_get_group(array('group_id' => $community_id));
     
@@ -268,11 +268,11 @@ function saveProfileInstance($action)
     $s3 = new S3Wrapper();
     $s3->putObject( '/profiles/user/'.$token.'.json',  $data );
     //if backend validation enabled
-    $status         = 'Valid';
+    $status         = 'valid';
     $validation_url = '';
     if( get_option('validate_via_sqs') == 'yes' ){
-//        $status = 'Pending';
-        // todo-ivan implement backend validation
+//        $status = 'pending';
+//
     }
     if($instance_id)
     {

@@ -90,9 +90,9 @@ $testsuites = get_posts( $args );
                     <?php echo formatDate($instance->created_date) ?>                    
                 </div>
                 <div class="grid-list-cell width10P tocenter">
-                    <?php if( $instance->validation_status == 'Valid' ):?>
+                    <?php if( $instance->validation_status == 'valid' ):?>
                         <span class="profile-valid"></span>
-                    <?php elseif( $instance->validation_status == 'Invalid' ):?>
+                    <?php elseif( $instance->validation_status == 'invalid' ):?>
                         <a href="#" class="profile-invalid"></a>
                     <?php else:?>
                         <span class="profile-pending"></span>

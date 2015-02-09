@@ -53,6 +53,7 @@ function create_compliancetest_settings_page()
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
         update_option('sqs_queue_name', $_POST['sqs_queue_name']);
+        update_option( 's3_reference_bucket', $_POST['s3_reference_bucket'] );
         if( isset( $_POST['validate_via_sqs'] ) && $_POST['validate_via_sqs'] == 'on' ) {
             update_option('validate_via_sqs', 'yes');
         } else{
@@ -421,14 +422,6 @@ function create_compliancetest_settings_page()
                             <th><label><b>Registry Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_domain_name" id="cloudsearch_domain_name" value="<?php echo get_option('cloudsearch_domain_name')?>" size="50" autocomplete="off" /></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th><label><b>Registry Document EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="--><?php //echo get_option('cloudsearch_document_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th><label><b>Site Search EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="--><?php //echo get_option('cloudsearch_fulltext_search_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
                         <tr>
                             <th><label><b>Site Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_fulltext_domain_name" id="cloudsearch_fulltext_domain_name" value="<?php echo get_option('cloudsearch_fulltext_domain_name')?>" size="50" autocomplete="off" /></td>
@@ -464,8 +457,8 @@ function create_compliancetest_settings_page()
                             <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
                         </tr>
                         <tr>
-                            <td><label><b>Message Bucket:</b></label></td>
-                            <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
+                            <td><label><b>Reference Bucket:</b></label></td>
+                            <td><input type="text" name="s3_reference_bucket" id="s3_reference_bucket" size="50" value="<?php echo get_option('s3_reference_bucket')?>" autocomplete="off" /></td>
                         </tr>
                         <tr>
                             <td><label><b>Profile Validation SQS Queue Name:</b></label></td>
