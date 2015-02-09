@@ -269,13 +269,12 @@ class CloudSearch {
                 $responder_test_suite->load();
                 if( $requester_service->service_visibility == 'Community' ){
                     $v = 2;
-                    $communities = array( $responder_test_suite->community_id, $requester_test_suite->community_id );
+                    $communities = array_unique( array( $responder_test_suite->community_id, $requester_test_suite->community_id ) );
                 } else {
                     $v = 3;
-                    $communities = array( $responder_test_suite->community_id, $requester_test_suite->community_id );
+                    $communities = array_unique( array( $responder_test_suite->community_id, $requester_test_suite->community_id ) );
                 }
             }
-            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $service->id ) );
             $s3 = new S3Wrapper();
             $temp_data = array(
                 'name'        => $requester_service->service_name,
@@ -293,7 +292,7 @@ class CloudSearch {
                 'post_id'     => $requester_service->id,
                 'visibility'  => $v,
                 'community_id' => $communities,
-                'user_id'     => $post_author,
+                'user_id'     => $requester_service->service_user_id,
                 'product_id'  => $requester_service->service_product_id,
                 'product_name' => get_the_title( $requester_service->service_product_id ),
                 'start_date'  => date( 'Y-m-d\TH:i:s', $agreement->requestor_message_date ).'Z',
@@ -324,13 +323,12 @@ class CloudSearch {
             $service = new Service( $post->ID );
             $service->load();
             $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $post->ID ) );
-            $groups = groups_get_user_groups( $post_author );
             $test_suite = new TestSuite( $service->service_suite_id );
             $test_suite->load();
-            if( $requester_service->service_visibility == 'Public' ){
+            if(  $service->service_visibility == 'Public' ){
                 $v = 1;
                 $communities = array( 32, 35 );
-            } else if( $requester_service->service_visibility == 'Community' ){
+            } else if( $service->service_visibility == 'Community' ){
                 $v = 2;
                 $communities = array( $test_suite->community_id );
             } else {

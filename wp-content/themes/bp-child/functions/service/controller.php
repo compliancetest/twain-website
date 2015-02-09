@@ -133,7 +133,7 @@ function saveService()
 
     save_wp_service( $id );
     $cloud_search = new CloudSearch();
-    $cloud_search->cloud_search_update_service( $id );
+    $cloud_search->_initial_upload();
     $full_search  = new FulltextSearch();
     $full_search->fullUpload();
     addMessage('Product / Service was saved successfully');
