@@ -21,7 +21,7 @@
                     <div class="page-title-block-actions">
                         <?php if( Service::can_edit( get_current_user_id(), $service->id ) ){ ?>
                             <?php $user_membership = ct_get_user_organisation_membership( get_current_user_id() );?>
-                            <?php if( ! ct_check_user_privilege( get_current_user_id(), $user_membership->organisation_id, "MAKE_AGREEMENTS" ) ):?>
+                            <?php if( ! ct_check_user_privilege( get_current_user_id(), $user_membership->organisation_id, "MAKE_AGREEMENTS" ) && ! is_super_admin() ):?>
                                 <a  href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS')?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                             <?php else:?>
                                 <a href="/edit-service?id=<?php echo $service->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>

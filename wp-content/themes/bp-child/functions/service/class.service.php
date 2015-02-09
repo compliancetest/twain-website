@@ -71,7 +71,6 @@ class Service
     }
 
     public static function can_view( $service_id, $user_id = false ){
-        global $wpdb;
         $response = false;
         $service = new Service( $service_id );
         $service->load();
@@ -86,13 +85,19 @@ class Service
             $response = true;
         }
         // service has private access
-        if( $service->service_visibility == 'Private' && ( $user_id == $service->service_user_id || is_super_admin() ) ){
+        if( $service->service_visibility == 'Private' && ( $user_id == $service->service_user_id || is_super_admin() || self::can_edit( $user_id, $service_id )) ){
             $response = true;
         }
         // both users has same community
         if( $service->service_visibility == 'Community' ){
-            if( $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d AND group_id IN( SELECT group_id FROM wp_bp_groups_members WHERE user_id = %d )", $user_id, $service->service_user_id ) ) ){
-                $response = true;
+            if( ! is_user_logged_in() ){
+                return false;
+            }
+            $current_user_communities = groups_get_user_groups( get_current_user_id() );
+            $publisher_communities = groups_get_user_groups( $service->service_user_id );
+            $intersection = array_intersect( $current_user_communities['groups'], $publisher_communities['groups'] );
+            if( ! empty( $intersection ) ){
+                return true;
             }
         }
         if( ! $response ){
