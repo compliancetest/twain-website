@@ -70,7 +70,7 @@ class Service
         $this->service_type = $this->loadSingleValue( 'service_type' );
     }
 
-    public static function has_assess( $service_id, $user_id = false ){
+    public static function can_view( $service_id, $user_id = false ){
         global $wpdb;
         $response = false;
         $service = new Service( $service_id );
@@ -101,6 +101,30 @@ class Service
         return $response;
     }
 
+    public static function can_edit( $user_id, $service_id ){
+        //super admin can edit every service
+        if( is_super_admin() ){
+            return true;
+        }
+
+        //user can edit own service
+        if( get_post_meta( $service_id, 'service_user_id', true ) == get_current_user_id() ){
+            return true;
+        }
+        $user_membership = ct_get_user_organisation_membership( $user_id );
+        //user without membership cant edit service
+        if( ! $user_membership ) {
+            return false;
+        }
+
+        //Getting Product Organisation
+        $product_id = get_post_meta( $service_id, "service_product_id", true );
+        $product_org_id = get_post_meta( $product_id, "product_organisation_id", true );
+        if( $product_org_id == $user_membership->organisation_id ){
+            return true;
+        }
+        return false;
+    }
     public static function has_agreements( $service_id ){
         global $wpdb;
         return (boolean) $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE requester_service_id = %d OR wp_e2e_agreement.responder_service_id = %d ", $service_id, $service_id ) );
