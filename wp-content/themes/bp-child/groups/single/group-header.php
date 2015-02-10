@@ -37,9 +37,9 @@ do_action( 'bp_before_group_header' );
     <div class="clear"></div>
 </div>
 <div class="popup-box" id="delete-community-box" style="display: none; width: 500px">
-    <div class="popup-box-header radius6 noradiusbottom">Confirm Leaving Community</div>
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Community Membership Cancellation</div>
     <div class="popup-box-content">
-        Are you sure you want to leave the <?php bp_group_name();?> community?
+        This will cancel your membership of the <?php bp_group_name();?> community. Are you sure?
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
