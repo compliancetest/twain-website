@@ -8168,14 +8168,12 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     margin: 0 auto;
 }
 .profile-pending{
-    background-image: url("../images/ui-icon-sprites.png") !important;
+    background-image: url("../images/Pending_Hourglass.png") !important;
     background-repeat: no-repeat;
     display: inline-block;
     height: 24px;
-    margin: -7px 0px 0px 0;
     padding: 0;
     width: 24px;
-    background-position: 5px -554px;
 }
 .plans-pricing-table .feature-available, .profile-valid{
     background-position: 0 0;

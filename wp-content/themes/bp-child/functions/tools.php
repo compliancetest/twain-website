@@ -811,6 +811,7 @@ function ct_duplicate_data()
                                 <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Ticket Attachments</option>
                                 <option value="downloads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'downloads'):?>selected="selected" <?php endif;?>>Download Attachments</option>
                                 <option value="uploads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'uploads'):?>selected="selected" <?php endif;?>>Uploads</option>
+                                <option value="profile_types" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'profile_types'):?>selected="selected" <?php endif;?>>Profile Types</option>
                             </select>
                         </td>
                         <td>
@@ -853,7 +854,11 @@ function ct_duplicate_data()
                                     } else if( $_POST['type'] == 'uploads' ){
                                         $counter = BlobsMigration::uploadMessages();
                                         echo 'Processed: '.$counter.' uploads';
+                                    } else if( $_POST['type'] == 'profile_types' ){
+                                        $counter = BlobsMigration::uploadProfileTypes();
+                                        echo 'Processed: '.$counter.' profile types';
                                     }else {
+
                                         echo 'Not implemented yet';
                                     }
                                     ?>

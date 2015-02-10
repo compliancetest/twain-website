@@ -90,10 +90,17 @@ $testsuites = get_posts( $args );
                     <?php echo formatDate($instance->created_date) ?>                    
                 </div>
                 <div class="grid-list-cell width10P tocenter">
-                    <?php if( $instance->validation_status == 'Valid' ):?>
+                    <?php if( $instance->validation_status == 'valid' ):?>
                         <span class="profile-valid"></span>
-                    <?php elseif( $instance->validation_status == 'Invalid' ):?>
-                        <a href="#" class="profile-invalid"></a>
+                    <?php elseif( $instance->validation_status == 'invalid' ):?>
+                        <?php
+                            $s3 = new S3Wrapper();
+                            $link = '#';
+                            if( $s3->isObjectExists( 'profiles/validation/'.$instance->token.'json' ) ) {
+                                $link = $s3->getLink('profiles/validation/', $instance->token . 'json');
+                            }
+                        ?>
+                        <a href="<?php echo $link;?>" class="profile-invalid"></a>
                     <?php else:?>
                         <span class="profile-pending"></span>
                     <?php endif;?>

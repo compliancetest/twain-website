@@ -52,7 +52,7 @@ function saveProfileType()
         $wpdb->insert($wpdb->prefix . "community_profile_types", 
                                 array('community_id' => $community_id, 'title' => $schemaObj->title, 'creator_id' => $user_id, 'created_date' => date('Y-m-d H:i:s'), 'schema' => base64_encode($content)));
     }
-    
+    BlobsMigration::uploadProfileTypes();
     addMessage('Profile Type successfully saved!');
     $group = groups_get_group(array('group_id' => $community_id));
     
@@ -268,11 +268,41 @@ function saveProfileInstance($action)
     $s3 = new S3Wrapper();
     $s3->putObject( '/profiles/user/'.$token.'.json',  $data );
     //if backend validation enabled
-    $status         = 'Valid';
+    $status         = 'valid';
     $validation_url = '';
     if( get_option('validate_via_sqs') == 'yes' ){
-//        $status = 'Pending';
-        // todo-ivan implement backend validation
+        $status = 'pending';
+        $profileType = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $type_id ) );
+        $profile_json = base64_decode( $profileType->schema );
+        $profile_array = json_decode( $profile_json, 1 );
+        $profile_type = str_replace( ' ', '', $profile_array['title'] );
+        $file_name = $profile_type.'_v'.$profile_array['Version']['Major'].'_'.$profile_array['Version']['Minor'];
+        if( isset( $profile_array['Version']['Patch'] ) ){
+            $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
+        }
+        $message = array(
+            'operation'     => 'profileValidationRequest',
+            'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
+            'securityContext' => array(
+                'username' => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $user_id ) )
+            ),
+            'parameters' => array(
+                'document' => array(
+                    'bucket' => get_option( 'aws_s3_url' ),
+                    'key'    => "profiles/user/{$token}.json"
+                ),
+                'schema' => array(
+                    'bucket' => get_option( 's3_reference_bucket' ),
+                    'key'    => 'schema/profiles/'.strtolower( $profile_type ).'/'.$file_name.'.json'
+                ),
+                'saveTo' => array(
+                    'bucket' => get_option( 'aws_s3_url' ),
+                    'key'    => "profiles/validation/{$token}.json"
+                )
+            )
+        );
+        $sqs = new SqsWrapper();
+        $sqs->sendMessage( $message );
     }
     if($instance_id)
     {
