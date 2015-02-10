@@ -90,9 +90,9 @@ get_header();
 </div> <!--end content-->
 
 <div class="popup-box" id="delete-community-box" style="display: none; width: 500px">
-    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
-    <div class="popup-box-content"> 
-        Are you sure that you want to delete this community?
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Community Membership Cancellation</div>
+    <div class="popup-box-content">
+        This will cancel your membership of the <span class="comm_popup_name"></span> community. Are you sure?
     </div>
     <div class="popup-box-footer radius6 noradiustop">                   
         <div class="loading loading-with-text radius6"><div><b>DELETING COMMUNITY</b><span>Please wait...</span></div></div> 
@@ -110,13 +110,19 @@ jQuery(document).ready(function($){
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
     });
-    
+
+    jQuery('.delete-community-btn').on('click', function(){
+        jQuery('.comm_popup_name').text( $( this).closest('div.tr').find('div.td:first').text() );
+    });
+
     jQuery('.delete-community-btn').each(function(){
         var link = jQuery(this).attr('href');
         jQuery(this).cplightbox({
             type: 'inline',
             href: '#delete-community-box',
             onStart: function(){
+                console.log( $(this).parent().html())
+
                 jQuery('#delete-community-box .process-btn').attr('href', link);
             }
         })
