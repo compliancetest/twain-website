@@ -94,13 +94,9 @@ $testsuites = get_posts( $args );
                         <span class="profile-valid"></span>
                     <?php elseif( $instance->validation_status == 'invalid' ):?>
                         <?php
-                            $s3 = new S3Wrapper();
-                            $link = '#';
-                            if( $s3->isObjectExists( 'profiles/validation/'.$instance->token.'json' ) ) {
-                                $link = $s3->getLink('profiles/validation/', $instance->token . 'json');
-                            }
+                            $link = empty( $instance->validation_url ) ?  '#' : $instance->validation_url;
                         ?>
-                        <a href="<?php echo $link;?>" class="profile-invalid"></a>
+                        <a href="<?php echo $link;?>" class="profile-invalid" target="_blank"></a>
                     <?php else:?>
                         <span class="profile-pending"></span>
                     <?php endif;?>
