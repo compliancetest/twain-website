@@ -2,27 +2,35 @@
 require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
 use Aws\Sqs\SqsClient;
 
-class SqsWrapper
-{
+class SqsWrapper{
 
     private $_client;
 
-    private $_queueUrl;
+    private $_queueName;
 
     public function __construct()
     {
-        $this->_client = S3Client::factory(array(
+        $this->_client = SqsClient::factory(array(
             'key' => get_option('aws_s3_key'),
             'secret' => get_option('aws_s3_secret'),
             'region' => 'ap-southeast-2'
         ));
-        $this->_queueUrl = get_option( 'sqs_queue_name' );
+        $this->_queueName = get_option( 'sqs_queue_name' );
     }
 
     public function sendMessage( $message ){
-        $this->_client->sendMessage(array(
-            'QueueUrl'    => $this->_queueUrl,
-            'MessageBody' => $message
+        $url = $this->_client->getQueueUrl(array(
+            'QueueName' => $this->_queueName
         ));
+        $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
+        try{
+            $this->_client->sendMessage(array(
+                'QueueUrl'    => $url->get( 'QueueUrl' ),
+                'MessageBody' => json_encode( $message )
+            ));
+        } catch( Exception $e ){
+            return false;
+        }
+        return true;
     }
 }

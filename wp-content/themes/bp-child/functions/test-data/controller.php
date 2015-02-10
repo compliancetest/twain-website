@@ -284,7 +284,7 @@ function saveProfileInstance($action)
             'operation'     => 'profileValidationRequest',
             'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
             'securityContext' => array(
-                'username' => 'harness861_2932'.cp_get_customer_harness_detail()
+                'username' => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $user_id ) )
             ),
             'parameters' => array(
                 'document' => array(
@@ -301,27 +301,8 @@ function saveProfileInstance($action)
                 )
             )
         );
-        $message = '{
-                        "operation": "profileValidationRequest",
-                        "correlationID": "d4342fsc5-fa89-44f6-9286-c38a751dbac",
-                        "securityContext": {
-                            "username": ""
-                            },
-                        "parameters": {
-                                "document": {
-                                      "bucket": "data.test.compliancetest.net",
-                                      "key": "profiles/user/02273ca2fc8c0cb7d4620dade748cee3d867bc7c.json"
-                            },
-                            "schema": {
-                                "bucket": "reference.test.compliancetest.net",
-                                "key": "/schema/profiles/{type}/{type}_v{maj}_{min}_{patch}.json"
-                                },
-                            "saveTo": {
-                                "bucket": "{bucket_for_validation_results}",
-                                "key": "{key_for_validation_results}"
-                                }
-                            }
-                    }';
+        $sqs = new SqsWrapper();
+        $sqs->sendMessage( $message );
     }
     if($instance_id)
     {
