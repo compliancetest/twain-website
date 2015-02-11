@@ -280,6 +280,10 @@ function saveProfileInstance($action)
         if( isset( $profile_array['Version']['Patch'] ) ){
             $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
         }
+        $error_format = get_option( 'validation_error_format' );
+        if( empty( $error_format ) ){
+            $error_format = 'html';
+        }
         $message = array(
             'operation'     => 'profileValidationRequest',
             'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
@@ -287,7 +291,7 @@ function saveProfileInstance($action)
                 'username' => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $user_id ) )
             ),
             'parameters' => array(
-                'outputFormat' => 'html',
+                'outputFormat' => $error_format,
                 'document' => array(
                     'bucket' => get_option( 'aws_s3_url' ),
                     'key'    => "profiles/user/{$token}.json"
@@ -298,7 +302,7 @@ function saveProfileInstance($action)
                 ),
                 'saveTo' => array(
                     'bucket' => get_option( 'aws_s3_url' ),
-                    'key'    => "profiles/validation/{$token}.html"
+                    'key'    => "profiles/validation/{$token}.".$error_format
                 )
             )
         );
