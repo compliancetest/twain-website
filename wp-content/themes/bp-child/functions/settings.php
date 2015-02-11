@@ -48,6 +48,7 @@ function create_compliancetest_settings_page()
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
         //Save Options
         update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
+        update_option('s3_bulk_treshold', $_POST['s3_bulk_treshold']);
         update_option('aws_s3_key', $_POST['aws_s3_key']);
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
@@ -415,14 +416,6 @@ function create_compliancetest_settings_page()
                             <th><label><b>Registry Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_domain_name" id="cloudsearch_domain_name" value="<?php echo get_option('cloudsearch_domain_name')?>" size="50" autocomplete="off" /></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th><label><b>Registry Document EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="--><?php //echo get_option('cloudsearch_document_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th><label><b>Site Search EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="--><?php //echo get_option('cloudsearch_fulltext_search_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
                         <tr>
                             <th><label><b>Site Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_fulltext_domain_name" id="cloudsearch_fulltext_domain_name" value="<?php echo get_option('cloudsearch_fulltext_domain_name')?>" size="50" autocomplete="off" /></td>
@@ -440,6 +433,10 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>HTML Render Limit:</b></label></td>
                             <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
+                        </tr>
+                        <tr>
+                            <td><label><b>BulkProfileThreshold:</b></label></td>
+                            <td><input type="text" name="s3_bulk_treshold" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_bulk_treshold')?>" autocomplete="off" /> Bytes</td>
                         </tr>
                         <tr>
                             <td><label><b>S3 Access Key:</b></label></td>

@@ -406,6 +406,7 @@ function getTestCases()
 
 function _getHarnessProfilesHTML($case_id, $defaults = array())
 {
+    global $wpdb;
     $html = '';
     
     /*$caseObj = new TestCase($case_id);        
@@ -451,7 +452,14 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
                 continue;
             }
         }
-        $html .= _getProfileRow($instance, 'harness_profile', $defaults);
+        $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+        $s3 = new S3Wrapper();
+        $metadata = $s3->getObjectMeta( 'profiles/user/'.$instance->token.'.json', get_option( 'aws_s3_url' ) );
+        if( $metadata->getPath( 'Metadata/size' ) > get_option( 's3_bulk_treshold' ) && ( $case->bulk != 'Yes' || ! PricingPlan::isSupportBulk( $pricingPlanId ) ) ){
+            $html .= _getProfileRow($instance, 'harness_profile', $defaults, true );
+        } else {
+            $html .= _getProfileRow($instance, 'harness_profile', $defaults);
+        }
     }
         
     return $html;
@@ -459,6 +467,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
 
 function _getTesterProfilesHTML($case_id, $defaults = array())
 {
+    global $wpdb;
     $html = '';
     
     /*$caseObj = new TestCase($case_id);        
@@ -508,13 +517,20 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
                 continue;
             }
         }
-        $html .= _getProfileRow($instance, 'tester_profile', $defaults);
+        $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+        $s3 = new S3Wrapper();
+        $metadata = $s3->getObjectMeta( 'profiles/user/'.$instance->token.'.json', get_option( 'aws_s3_url' ) );
+        if( $metadata->getPath( 'Metadata/size' ) > get_option( 's3_bulk_treshold' ) && ( $case->bulk != 'Yes' || ! PricingPlan::isSupportBulk( $pricingPlanId ) ) ){
+            $html .= _getProfileRow($instance, 'tester_profile', $defaults, true );
+        } else {
+            $html .= _getProfileRow($instance, 'tester_profile', $defaults);
+        }
     }
     
     return $html;
 }
 
-function _getProfileRow($instance, $name, $defaults)
+function _getProfileRow($instance, $name, $defaults, $not_allowed = false )
 {
     $instanceObj = S3Wrapper::getProfile( $instance->token );
     $schemaObj = json_decode(base64_decode($instance->schema));
@@ -529,8 +545,16 @@ function _getProfileRow($instance, $name, $defaults)
     if($schemaObj->Version->Patch)
         $sVersion[] = $schemaObj->Version->Patch;
 
-    $html .= '<div class="field-row">';
-    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
+    $html  = '<div class="field-row">';
+    if( $not_allowed ){
+        $html .= '<div class="grid-cell width50P has-tooltip">
+                    <input type="radio" disabled="disabled" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" />
+                        <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a>
+                        <span class="simple_tooltip" style="width:150px; top: -70px; left:35px;">Bulk profiles are not selectable for the current pricing plan and selected test case<span></span></span>
+                </div>';
+    } else {
+        $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
+    }
     $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
     $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . ' v' . implode(".", $sVersion) . '</a>  </div>';
     $html .= '<div class="clear"></div>';

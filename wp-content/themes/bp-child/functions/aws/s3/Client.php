@@ -39,6 +39,13 @@ class S3Wrapper{
         return false;
     }
 
+    public function getObjectMeta( $key, $bucket ){
+        $objectData = array(
+            'Bucket' => $bucket,
+            'Key'    => $key,
+        );
+        return $this->_client->headObject( $objectData );
+    }
     /**
      * Use this function to get file object
      * @param $path
