@@ -287,6 +287,7 @@ function saveProfileInstance($action)
                 'username' => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $user_id ) )
             ),
             'parameters' => array(
+                'outputFormat' => 'html',
                 'document' => array(
                     'bucket' => get_option( 'aws_s3_url' ),
                     'key'    => "profiles/user/{$token}.json"
