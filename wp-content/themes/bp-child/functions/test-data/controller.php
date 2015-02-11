@@ -298,7 +298,7 @@ function saveProfileInstance($action)
                 ),
                 'saveTo' => array(
                     'bucket' => get_option( 'aws_s3_url' ),
-                    'key'    => "profiles/validation/{$token}.json"
+                    'key'    => "profiles/validation/{$token}.html"
                 )
             )
         );
