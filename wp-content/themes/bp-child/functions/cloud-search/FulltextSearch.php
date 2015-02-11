@@ -32,6 +32,7 @@ class FulltextSearch {
         $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {} }';
         if( $full_results ){
             $str['size'] = 10000;
+            unset( $params['page'] );
         } else{
             $str['size'] = SEARCH_RESULTS_LIMIT;
         }
