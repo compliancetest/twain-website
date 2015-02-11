@@ -59,6 +59,11 @@ function create_compliancetest_settings_page()
         } else{
             update_option('validate_via_sqs', 'no');
         }
+        if( isset( $_POST['validation_error_format'] ) ){
+            update_option('validation_error_format', $_POST['validation_error_format'] );
+        } else{
+            update_option('validation_error_format', 'html' );
+        }
         
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
@@ -467,6 +472,14 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Validate Profiles via SQS:</b></label></td>
                             <td><input type="checkbox" name="validate_via_sqs" id="validate_via_sqs" size="50" <?php if( get_option('validate_via_sqs') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Validation error format:</b></label></td>
+                            <td>
+                                <?php $error_format = get_option('validation_error_format');?>
+                                <input type="radio" name="validation_error_format" size="50" <?php if( $error_format == 'html' || empty( $error_format ) ):?> checked="checked" <?php endif;?> autocomplete="off" value="html"/>html
+                                <input type="radio" name="validation_error_format" size="50" <?php if( $error_format == 'json' ):?> checked="checked" <?php endif;?> autocomplete="off" value="json"/>json
+                            </td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
