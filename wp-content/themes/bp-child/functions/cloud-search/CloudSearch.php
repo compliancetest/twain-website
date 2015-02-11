@@ -26,6 +26,7 @@ class CloudSearch {
         $str['facet'] = '{ "type": {}, "test_type": {}, "test_suite": {}, "owner": {}, "level": {}, "role": {}, "status": {} }';
         if( $full_results ){
             $str['size'] = 10000;
+            unset( $params['page'] );
         } else{
             $str['size'] = SEARCH_RESULTS_LIMIT;
         }
