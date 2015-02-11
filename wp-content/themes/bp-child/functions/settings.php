@@ -48,6 +48,7 @@ function create_compliancetest_settings_page()
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
         //Save Options
         update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
+        update_option('s3_bulk_treshold', $_POST['s3_bulk_treshold']);
         update_option('aws_s3_key', $_POST['aws_s3_key']);
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
@@ -444,6 +445,10 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>HTML Render Limit:</b></label></td>
                             <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
+                        </tr>
+                        <tr>
+                            <td><label><b>BulkProfileThreshold:</b></label></td>
+                            <td><input type="text" name="s3_bulk_treshold" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_bulk_treshold')?>" autocomplete="off" /> Bytes</td>
                         </tr>
                         <tr>
                             <td><label><b>S3 Access Key:</b></label></td>
