@@ -54,6 +54,7 @@ function create_compliancetest_settings_page()
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
         update_option('sqs_queue_name', $_POST['sqs_queue_name']);
+        update_option('bulk_sqs_queue_name', $_POST['bulk_sqs_queue_name'] );
         update_option( 's3_reference_bucket', $_POST['s3_reference_bucket'] );
         if( isset( $_POST['validate_via_sqs'] ) && $_POST['validate_via_sqs'] == 'on' ) {
             update_option('validate_via_sqs', 'yes');
@@ -473,6 +474,10 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Profile Validation SQS Queue Name:</b></label></td>
                             <td><input type="text" name="sqs_queue_name" id="sqs_queue_name" size="50" value="<?php echo get_option('sqs_queue_name')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Bulk Profile Validation SQS Queue Name:</b></label></td>
+                            <td><input type="text" name="bulk_sqs_queue_name" id="bulk_sqs_queue_name" size="50" value="<?php echo get_option('bulk_sqs_queue_name')?>" autocomplete="off" /></td>
                         </tr>
                         <tr>
                             <td><label><b>Validate Profiles via SQS:</b></label></td>

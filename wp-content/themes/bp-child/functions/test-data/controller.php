@@ -307,7 +307,12 @@ function saveProfileInstance($action)
             )
         );
         $sqs = new SqsWrapper();
-        $sqs->sendMessage( $message );
+        $is_bulk = false;
+        $metadata = $s3->getObjectMeta( 'profiles/user/'.$token.'.json', get_option( 'aws_s3_url' ) );
+        if( $metadata->getPath( 'Metadata/size' ) >= get_option( 's3_bulk_treshold' ) ){
+            $is_bulk = true;
+        }
+        $sqs->sendMessage( $message, $is_bulk );
     }
     if($instance_id)
     {

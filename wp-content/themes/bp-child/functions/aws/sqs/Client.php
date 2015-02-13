@@ -16,11 +16,14 @@ class SqsWrapper{
             'region' => 'ap-southeast-2'
         ));
         $this->_queueName = get_option( 'sqs_queue_name' );
+        $this->_bulkQueueName = get_option( 'bulk_sqs_queue_name' );
+        if( empty( $this->_bulkQueueName ) ) $this->_bulkQueueName = $this->_queueName;
     }
 
-    public function sendMessage( $message ){
+    public function sendMessage( $message, $is_bulk = false ){
+        $queueName = $is_bulk ? $this->_bulkQueueName : $this->_queueName;
         $url = $this->_client->getQueueUrl(array(
-            'QueueName' => $this->_queueName
+            'QueueName' => $queueName
         ));
         $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
         try{
