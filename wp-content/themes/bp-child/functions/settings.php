@@ -67,6 +67,7 @@ function create_compliancetest_settings_page()
             update_option('validation_error_format', 'html' );
         }
         
+        update_option('uploads_files_max_size', $_POST['uploads_files_max_size']);
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
@@ -447,6 +448,11 @@ function create_compliancetest_settings_page()
                             <td><label><b>HTML Render Limit:</b></label></td>
                             <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
                         </tr>
+                        <tr>
+                            <td><label><b>Max Upload File Size:</b></label></td>
+                            <td><input type="text" name="uploads_files_max_size" id="uploads_files_max_size" size="15" value="<?php echo get_option('uploads_files_max_size')?>" autocomplete="off" /> MB</td>
+                        </tr>
+
                         <tr>
                             <td><label><b>BulkProfileThreshold:</b></label></td>
                             <td><input type="text" name="s3_bulk_treshold" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_bulk_treshold')?>" autocomplete="off" /> Bytes</td>

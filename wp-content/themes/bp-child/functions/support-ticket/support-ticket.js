@@ -172,7 +172,7 @@ jQuery(document).ready(function(){
     
     jQuery('body').on('click', '#add-attachment-link', function(){
         jQuery('.attachments-wrap').append('<div class="file-item">' +
-                    '<input type="file" name="attachments[]" />' + 
+                    '<input type="file" name="attachments[]" />' +
                     '<a href="#" class="action-btn delete-btn icon-btn"><span class="p"></span></a>' +
                 '</div><div class="clear"></div>');
         customizeFileTag();
@@ -189,7 +189,7 @@ jQuery(document).ready(function(){
     //Submit Term Changes
     jQuery('#changeTermForm').submit(function(){
         var isValid = true;
-        
+
         jQuery('#changeTermForm .input-error').removeClass('input-error');
         
         //Validate the input values
@@ -210,7 +210,7 @@ jQuery(document).ready(function(){
             jQuery('#changeTermForm #ttresponse').addClass("input-error");
             isValid = false;
         }
-        
+
         if(isValid)
         {
             jQuery('#changeTermForm .loading').show();
