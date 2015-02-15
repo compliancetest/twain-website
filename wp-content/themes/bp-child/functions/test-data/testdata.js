@@ -54,7 +54,7 @@ jQuery(document).ready(function(){
             jQuery('#edit-profile-box .loading').hide();
             //Check Validation
             $result = tv4.validateMultiple(data.result, profileType);
-            if(!$result.valid)
+            if($result.valid)
             {
                 var errors = '', errors_value = '';
                 for (var i in $result.errors) {
@@ -212,7 +212,7 @@ jQuery(document).ready(function(){
             return false;
         }            
         $result = tv4.validateMultiple(profileData.value(), profileType);
-        if(!$result.valid)
+        if($result.valid)
         {
             var errors = '', errors_value = '';
             for (var i in $result.errors) {

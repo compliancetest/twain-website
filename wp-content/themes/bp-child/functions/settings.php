@@ -52,7 +52,7 @@ function create_compliancetest_settings_page()
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
-        
+        update_option('uploads_files_max_size', $_POST['uploads_files_max_size']);
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
@@ -441,6 +441,11 @@ function create_compliancetest_settings_page()
                             <td><label><b>HTML Render Limit:</b></label></td>
                             <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
                         </tr>
+                        <tr>
+                            <td><label><b>Max Upload File Size:</b></label></td>
+                            <td><input type="text" name="uploads_files_max_size" id="uploads_files_max_size" size="15" value="<?php echo get_option('uploads_files_max_size')?>" autocomplete="off" /> MB</td>
+                        </tr>
+
                         <tr>
                             <td><label><b>S3 Access Key:</b></label></td>
                             <td><input type="text" name="aws_s3_key" id="aws_s3_key" size="50" value="<?php echo get_option('aws_s3_key')?>" autocomplete="off" /></td>

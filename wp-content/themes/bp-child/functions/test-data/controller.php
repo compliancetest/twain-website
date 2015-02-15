@@ -221,7 +221,7 @@ function saveProfileInstance($action)
         echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
         exit;
     }
-    
+
     $community_id = $profile_type->community_id;
     
     if(wp_verify_nonce($action, 'save-harness-instance'))
@@ -261,8 +261,12 @@ function saveProfileInstance($action)
     
     //Getting Data
     $data = stripcslashes($_POST['data']);
-
     $jsonData = base64_encode($data);
+    $max_file_size_conf = get_option( 'uploads_files_max_size' );
+    if( strlen( $data ) > $max_file_size_conf * 1024 * 1024 ){
+        echo '<result><status>error</status><msg>"The file you have attempted to upload exceeds the system limit of '.$max_file_size_conf.'MB"</msg></result>';
+        exit;
+    }
     $jsonObject = json_decode($data);
     $token = $instance_id ? $wpdb->get_var( $wpdb->prepare("SELECT token FROM wp_community_profile_instances WHERE id = %d ", $instance_id)) : sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id);
     $s3 = new S3Wrapper();

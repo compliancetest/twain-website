@@ -65,7 +65,17 @@ function createSupportTicket()
         wp_redirect(get_site_url());
         exit;
     }
-    
+    $max_file_size_conf = get_option( 'uploads_files_max_size' );
+    if( isset( $_FILES['attachments']['size'] ) ){
+        foreach( $_FILES['attachments']['size'] AS $size ){
+            if( $size > $max_file_size_conf * 1024 * 1024 ){
+                addMessage("The file you have attempted to upload exceeds the system limit of ".$max_file_size_conf."MB", 'error');
+                wp_redirect( '/my-support-tickets/');
+                exit;
+            }
+        }
+    }
+
     $user_id = get_current_user_id();
     
     //Remove Spaces from start and end
