@@ -9,6 +9,17 @@ class FulltextSearch {
       'press-release', 'blog', 'event', 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc'
     );
 
+    private $_allowedSortFields = array(
+        'post_title', 'post_type', 'last_updated_date'
+    );
+
+    private $_allowedSortOrder = array(
+        'asc', 'desc'
+    );
+
+    private $_allowedFields = array(
+        'post_type', 'community'
+    );
 
     public function __construct(){
 
@@ -84,7 +95,12 @@ class FulltextSearch {
                     $str['start'] = ( ( --$v * SEARCH_RESULTS_LIMIT ) ) ;
                 }
             }else if( $k == 'orderby' ){
-                $str['sort'] = $v . " " . (isset($params['order']) ? $params['order'] : 'asc');
+                if( in_array( $v, $this->_allowedSortFields ) ) {
+                    $sortOrder = isset( $params['order'] ) ? $params['order'] : 'asc';
+                    if( in_array( $sortOrder, $this->_allowedSortOrder ) ) {
+                        $str['sort'] = $v . " " . $sortOrder;
+                    }
+                }
             }else if( $k == 'order' ){
 
             }else if( $k == 'date_from'  || $k == 'date_to' ){
@@ -105,7 +121,7 @@ class FulltextSearch {
                     $range_checked = true;
                 }
             }else {
-                if( $v !== 'All' ) {
+                if( $v !== 'All' && in_array( $k, $this->_allowedFields )) {
                     $l .= " (term field=" . $k . " '" . urldecode( $v ) . "') ";
                 }
             }

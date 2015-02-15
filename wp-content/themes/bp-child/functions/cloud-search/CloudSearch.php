@@ -5,6 +5,17 @@ class CloudSearch {
 
     private $_domainName = '';
 
+    private $_allowedSortFields = array(
+        'name', 'date'
+    );
+    private $_allowedSortOrder = array(
+        'asc', 'desc'
+    );
+
+    private $_allowedFields = array(
+        'type', 'owner', 'test_suite', 'test_type', 'role', 'level', 'status', 'date_from', 'date_to'
+    );
+
     public function __construct(){
 
         $this->_domainName = get_option( 'cloudsearch_domain_name' );
@@ -77,7 +88,12 @@ class CloudSearch {
                     $str['start'] = ( ( --$v * SEARCH_RESULTS_LIMIT ) ) ;
                 }
             }else if( $k == 'orderby' ){
-                    $str['sort'] = $v . " " . (isset($params['order']) ? $params['order'] : 'asc');
+                if( in_array( $v, $this->_allowedSortFields ) ) {
+                    $sortOrder = isset( $params['order'] ) ? $params['order'] : 'asc';
+                    if( in_array( $sortOrder, $this->_allowedSortOrder ) ) {
+                        $str['sort'] = $v . " " . $sortOrder;
+                    }
+                }
             }else if( $k == 'date_from'  || $k == 'date_to' ){
                 if( ! $range_checked ) {
                     if (isset($params['date_from']) && ! empty( $params['date_from'] )) {
@@ -96,7 +112,7 @@ class CloudSearch {
                     $range_checked = true;
                 }
             }else {
-                if( $v !== 'All' && $k != 'order' ) {
+                if( $v !== 'All' && $k != 'order' && in_array( $k, $this->_allowedFields ) ) {
                     $l .= " (term field=" . $k . " '" . urldecode( $v ) . "') ";
                 }
             }
