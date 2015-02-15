@@ -4708,7 +4708,7 @@ span.button_sign {
 }
 
 #my_test_data_profiles .td-profile-name{
-    width: 531px;
+    width: 480px;
 }
 #my_test_data_profiles .td-profile-type{
     width: 110px;   
@@ -4716,6 +4716,10 @@ span.button_sign {
 }
 #my_test_data_profiles .td-profile-lookup{
     width: 69px;
+    text-align: center;
+}
+#my_test_data_profiles .td-profile-status{
+    width: 30px;
     text-align: center;
 }
 #my_test_data_profiles .td-action{
@@ -8152,7 +8156,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .plans-pricing-table td{
     min-width: 100px;
 }
-
+.profile-valid, .profile-invalid,
 .plans-pricing-table .feature-available,
 .plans-pricing-table .feature-unavailable{
     display: block;
@@ -8163,10 +8167,18 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     height: 21px;
     margin: 0 auto;
 }
-.plans-pricing-table .feature-available{
+.profile-pending{
+    background-image: url("../images/Pending_Hourglass.png") !important;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 24px;
+    padding: 0;
+    width: 24px;
+}
+.plans-pricing-table .feature-available, .profile-valid{
     background-position: 0 0;
 }
-.plans-pricing-table .feature-unavailable{
+.plans-pricing-table .feature-unavailable, .profile-invalid{
     background-position: 0 -21px;
 }
 

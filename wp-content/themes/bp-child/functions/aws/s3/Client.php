@@ -383,4 +383,28 @@ class BlobsMigration{
         return $counter;
     }
 
+    /**
+     ** Use this function to upload profile types to S3 from database
+     * Note that existing S3 files will be overwritten
+     * @return int - number of uploaded entries
+     */
+    public static function uploadProfileTypes(){
+        global $wpdb;
+
+        $s3 = new S3Wrapper();
+        $counter = 0;
+        $profileTypes = $wpdb->get_results("SELECT * FROM wp_community_profile_types;");
+        foreach( $profileTypes AS $profileType ){
+            $profile_json = base64_decode( $profileType->schema );
+            $profile_array = json_decode( $profile_json, 1 );
+            $profile_type = str_replace( ' ', '', $profile_array['title'] );
+            $file_name = $profile_type.'_v'.$profile_array['Version']['Major'].'_'.$profile_array['Version']['Minor'];
+            if( isset( $profile_array['Version']['Patch'] ) ){
+                $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
+            }
+            $s3->putObject( '/schema/profiles/'.strtolower( $profile_type ).'/'.$file_name.'.json', $profile_json, 'application/json', get_option( 's3_reference_bucket') );
+            $counter++;
+        }
+        return $counter;
+    }
 }

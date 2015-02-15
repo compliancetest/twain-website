@@ -117,8 +117,10 @@ require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
 require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
 require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
 
-//S3
+//SQS
 require_once(THE_FUNCTION . '/aws/s3/Client.php');
+
+require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
 //Compliance Claim
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');

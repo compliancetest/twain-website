@@ -27,6 +27,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                         <div class="td td-chk tocenter"><input type="checkbox" id="chk-profile-all" autocomplete="off" /></div>
                         <div class="td td-profile-name">Profile Name</div>
                         <div class="td td-profile-type">Type</div>
+                        <div class="td td-profile-status">Valid?</div>
                         <div class="td td-profile-lookup">Include In Lookup</div>
                         <div class="td td-action">Action</div>
                         <div class="clear"></div>
@@ -81,9 +82,22 @@ $subscriptions =  getUserSubscriptions(null, true);
                                 ?>
                                </a>                    
                            </div>
+                            <div class="td td-profile-status">
+                                <?php if( $instance->validation_status == 'valid' ):?>
+                                    <span class="profile-valid"></span>
+                                <?php elseif( $instance->validation_status == 'invalid' ):?>
+                                <?php
+                                    $link = empty( $instance->validation_url ) ?  '#' : $instance->validation_url;
+                                ?>
+                                    <a href="<?php echo $link;?>" class="profile-invalid" target="_blank"></a>
+                                <?php else:?>
+                                    <span class="profile-pending"></span>
+                                <?php endif;?>
+                            </div>
                            <div class="td td-profile-lookup">
                                 <input type="checkbox" name="lookup" value="<?php echo $instance->id; ?>" <?php echo ($instance->lookup)?('checked'):(''); ?>>
                            </div>
+
                            <div class="td td-action">
                                 <?php
                                     if($instance->creator_id == get_current_user_id())
@@ -277,7 +291,7 @@ if(count($subscriptions) > 0){
 <?php
 }
 ?>
-
+<input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <script type="text/javascript">
 jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_test_data_profiles'));
