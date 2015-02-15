@@ -42,7 +42,7 @@ if( $is_download ){
         <form name="form_filter" id="form_filter" action="/products-and-services/" method="get">
             <div class="search-result-form">
                 <div class="searchform">
-                    <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_GET['q']) ? $_GET['q'] : '')) ?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
+                    <input type="text" name="q" id="q" class="keyword" value="<?php echo isset( $_GET['q'] ) ? htmlspecialchars(trim($_GET['q'] ) ) : ''?>" placeholder="Enter a Product Name, Service Name or Business Name" autocomplete="off" />
                     <input type="submit" id="search_test_suite_submit" class="search-button" value="" />
                 </div>
             </div>
