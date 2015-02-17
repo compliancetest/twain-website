@@ -869,6 +869,64 @@ function ct_duplicate_data()
                 </table>
             </form>
         </div>
+
+        <h2>Populate profiles data( profile_description, purpose, profile_name )</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('populate_wp_profiles')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Populate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'populate_wp_profiles')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                    global $wpdb;
+                                    $profiles = $wpdb->get_results("SELECT * FROM wp_community_profile_instances ORDER BY id");
+                                    $s3 = new S3Wrapper();
+                                    $counter = 0;
+                                    foreach( $profiles AS $profile ) {
+                                        $s3_profile = $s3->getProfile( $profile->token );
+                                        $profile_name = $s3_profile->Profile->Title.' v'.$s3_profile->Profile->Version->Major.'.'.$s3_profile->Profile->Version->Minor;
+                                        if( $s3_profile->Profile->Version->Patch ){
+                                            $profile_name .= '.'.$s3_profile->Profile->Version->Patch;
+                                        }
+                                        $profile_type = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d", $profile->type_id ) );
+                                        $pJSON = json_decode( base64_decode( $profile_type->schema ) );
+                                        if( $pJSON->Version ){
+                                            $version = array();
+                                            foreach( get_object_vars($pJSON->Version) AS $k => $v ){
+                                                $version[] = $v;
+                                            }
+                                            $type_name = $profile_type->title ." v" . implode(".", $version);
+                                        }
+                                        $wpdb->update( 'wp_community_profile_instances',
+                                            array(
+                                                'profile_name'        => $profile_name,
+                                                'profile_description' => $s3_profile->Profile->Description,
+                                                'purpose'             => $s3_profile->Profile->Purpose,
+                                                'type_name'           => $type_name
+                                            ),
+                                            array( 'id' => $profile->id ),
+                                            array( '%s', '%s', '%s', '%s' ),
+                                            array( '%d' )
+                                        );
+                                        $counter++;
+                                    }
+
+                                    echo 'Processed ' . $counter . ' profiles.';
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
     </div>
     <?php
 }
