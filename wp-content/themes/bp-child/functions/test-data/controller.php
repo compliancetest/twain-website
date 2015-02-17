@@ -281,8 +281,10 @@ function saveProfileInstance($action)
         $profile_array = json_decode( $profile_json, 1 );
         $profile_type = str_replace( ' ', '', $profile_array['title'] );
         $file_name = $profile_type.'_v'.$profile_array['Version']['Major'].'_'.$profile_array['Version']['Minor'];
+        $type_name = $profile_array['title'].' v'.$profile_array['Version']['Major'].'.'.$profile_array['Version']['Minor'];
         if( isset( $profile_array['Version']['Patch'] ) ){
             $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
+            $type_name .= '.'.$profile_array['Version']['Patch'];
         }
         $error_format = get_option( 'validation_error_format' );
         if( empty( $error_format ) ){
@@ -323,9 +325,8 @@ function saveProfileInstance($action)
         $wpdb->update($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => $jsonObject->Profile->Title,
-                            'purpose' => $jsonObject->Profile->Purpose,
                             'type_id' => $type_id,
+                            'type_name' => $type_name,
                             'community_id' => $community_id,
                             'filename' => '',
                             'content' => $jsonData,
@@ -340,9 +341,11 @@ function saveProfileInstance($action)
         $wpdb->insert($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => $jsonObject->Profile->Title,
-                            'purpose' => $jsonObject->Profile->Purpose,
+                            'profile_name' => 'Pending...',
+                            'profile_description' => 'Pending...',
+                            'purpose' => 'Pending...',
                             'type_id' => $type_id,
+                            'type_name' => $type_name,
                             'community_id' => $community_id,
                             'filename' => '',
                             'content' => $jsonData,

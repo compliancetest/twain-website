@@ -279,7 +279,7 @@ jQuery(document).ready(function(){
                 if(jQuery(rsp).find('status').text() == 'success')   
                 {
                     jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
-                    document.location.reload();
+                    //document.location.reload();
                 }else{                    
                     jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
                 }

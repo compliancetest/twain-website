@@ -430,8 +430,8 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
     foreach($profileInstances as $instance){
-        $pJSON = S3Wrapper::getProfile( $instance->token );
-        $profileTypeName = $pJSON->Profile->Type;
+        $profile_type_array = explode( 'v', $instance->type_name );
+        $profileTypeName = trim( $profile_type_array[0] );
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -495,8 +495,8 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
     foreach($profileInstances as $instance){
-        $pJSON = S3Wrapper::getProfile( $instance->token );
-        $profileTypeName = $pJSON->Profile->Type;
+        $profile_type_array = explode( 'v', $instance->type_name );
+        $profileTypeName = trim( $profile_type_array[0] );
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -557,6 +557,10 @@ function _getProfileRow($instance, $name, $defaults, $not_allowed = false )
     }
     $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
     $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . ' v' . implode(".", $sVersion) . '</a>  </div>';
+    $html  = '<div class="field-row">';
+    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
+    $html .= '<div class="grid-cell width20P">' . $instance->purpose . '</div>';
+    $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->type_name . '</a>  </div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
     

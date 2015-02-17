@@ -40,51 +40,19 @@ $testsuites = get_posts( $args );
             <?php                    
             
                 $instances = getCommunityProfileInstatnces(bp_get_group_id());
-                foreach($instances as $instance)
-                {
-                    $instanceObj = S3Wrapper::getProfile( $instance->token );
+                foreach( $instances AS $instance ){
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
                 <div class="grid-list-cell width40P">
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name?>
-                    <?php
-                        if($instanceObj->Profile->Version)
-                        {
-                            if(is_object($instanceObj->Profile->Version))
-                            {
-                                $version = array();
-                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
-                                {
-                                    $version[] = $v;
-                                }
-                                echo " v" . implode(".", $version);
-                            }else{
-                                echo " v " . $instanceObj->Profile->Version;
-                            }
-                        }
-                    ?>
-                    </a>
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name; ?></a>
                     <br />
-                    <p><?php echo $instanceObj->Profile->Description?></p>
+                    <p><?php echo $instance->profile_description; ?></p>
                 </div>
                 <div class="grid-list-cell width10P">
-                    <?php echo $instanceObj->Profile->Purpose?>            
+                    <?php echo $instance->purpose; ?>
                 </div>
                 <div class="grid-list-cell width15P tocenter">
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?>
-                        <?php
-                            $pJSON = json_decode(base64_decode($instance->schema));                            
-                            if($pJSON->Version)
-                            {
-                                $version = array();
-                                foreach(get_object_vars($pJSON->Version) as $k=>$v)      
-                                {
-                                    $version[] = $v;
-                                }
-                                echo " v" . implode(".", $version);
-                            }
-                        ?>
-                    </a>                    
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->type_name; ?></a>
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <?php echo formatDate($instance->created_date) ?>                    

@@ -49,38 +49,13 @@ $subscriptions =  getUserSubscriptions(null, true);
                         <div class="tr">
                            <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $instance->id?>" value="<?php echo $instance->id?>" /></div>
                            <div class="td td-profile-name">
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link" ><?php echo $instance->profile_name?>
-                               <?php
-                                    if($instanceObj->Profile->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        echo " v" . implode(".", $version);
-                                    }
-                                ?>
-                                </a> 
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link" ><?php echo $instance->profile_name; ?></a>
                                <br />
-                               <b>Purpose: </b> <?php echo $instanceObj->Profile->Purpose?>                       
-                               <p><?php echo $instanceObj->Profile->Description?></p>                   
+                               <b>Purpose: </b> <?php echo $instance->purpose; ?>
+                               <p><?php echo $instance->profile_description; ?></p>
                            </div>
                            <div class="td td-profile-type">
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?>
-                                <?php
-                                    $pJSON = json_decode(base64_decode($instance->schema));                            
-                                    if($pJSON->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)      
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        echo " v" . implode(".", $version);
-                                    }
-                                ?>
-                               </a>                    
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->type_name; ?></a>
                            </div>
                             <div class="td td-profile-status">
                                 <?php if( $instance->validation_status == 'valid' ):?>
