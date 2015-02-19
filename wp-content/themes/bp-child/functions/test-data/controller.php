@@ -284,6 +284,7 @@ function saveProfileInstance($action)
         if( empty( $error_format ) ){
             $error_format = 'html';
         }
+        $uniq_key = md5( $token . mktime() );
         $message = array(
             'operation'     => 'profileValidationRequest',
             'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
@@ -302,7 +303,7 @@ function saveProfileInstance($action)
                 ),
                 'saveTo' => array(
                     'bucket' => get_option( 'aws_s3_url' ),
-                    'key'    => "profiles/validation/{$token}.".$error_format
+                    'key'    => "profiles/validation/{$token}/{$uniq_key}.".$error_format
                 )
             )
         );
