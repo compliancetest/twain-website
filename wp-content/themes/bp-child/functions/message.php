@@ -530,35 +530,17 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     return $html;
 }
 
-function _getProfileRow($instance, $name, $defaults, $not_allowed = false )
-{
-    $instanceObj = S3Wrapper::getProfile( $instance->token );
-    $schemaObj = json_decode(base64_decode($instance->schema));
-    
-    $version[] = $instanceObj->Profile->Version->Major;
-    $version[] = $instanceObj->Profile->Version->Minor;
-    if($instanceObj->Profile->Version->Patch)
-        $version[] = $instanceObj->Profile->Version->Patch;
-    
-    $sVersion[] = $schemaObj->Version->Major;
-    $sVersion[] = $schemaObj->Version->Minor;
-    if($schemaObj->Version->Patch)
-        $sVersion[] = $schemaObj->Version->Patch;
-
+function _getProfileRow($instance, $name, $defaults, $not_allowed = false ){
     $html  = '<div class="field-row">';
     if( $not_allowed ){
         $html .= '<div class="grid-cell width50P has-tooltip">
                     <input type="radio" disabled="disabled" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" />
-                        <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a>
+                        <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name  . '</a>
                         <span class="simple_tooltip" style="width:150px; top: -70px; left:35px;">Bulk profiles are not selectable for the current pricing plan and selected test case<span></span></span>
                 </div>';
     } else {
-        $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
+        $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
     }
-    $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
-    $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . ' v' . implode(".", $sVersion) . '</a>  </div>';
-    $html  = '<div class="field-row">';
-    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
     $html .= '<div class="grid-cell width20P">' . $instance->purpose . '</div>';
     $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->type_name . '</a>  </div>';
     $html .= '<div class="clear"></div>';
