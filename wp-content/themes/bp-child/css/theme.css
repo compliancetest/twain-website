@@ -9118,6 +9118,7 @@ input.inactive_s{
 .site-search-result-list .short-description{
     max-width: 415px;
     margin: 0;
+    word-wrap: break-word;
 }
 
 .site-search-result-list tbody td.last{
