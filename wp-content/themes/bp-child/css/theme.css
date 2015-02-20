@@ -8174,6 +8174,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     height: 24px;
     padding: 0;
     width: 24px;
+    margin-left: 3px;
 }
 .plans-pricing-table .feature-available, .profile-valid{
     background-position: 0 0;
