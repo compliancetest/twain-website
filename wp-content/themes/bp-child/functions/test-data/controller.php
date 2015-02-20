@@ -271,6 +271,7 @@ function saveProfileInstance($action)
     $token = $instance_id ? $wpdb->get_var( $wpdb->prepare("SELECT token FROM wp_community_profile_instances WHERE id = %d ", $instance_id)) : sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id);
     $s3 = new S3Wrapper();
     $s3->putObject( '/profiles/user/'.$token.'.json',  $data );
+    $file_size = strlen( $data );
     //if backend validation enabled
     $status         = 'valid';
     $validation_url = '';
@@ -315,8 +316,7 @@ function saveProfileInstance($action)
         );
         $sqs = new SqsWrapper();
         $is_bulk = false;
-        $metadata = $s3->getObjectMeta( 'profiles/user/'.$token.'.json', get_option( 'aws_s3_url' ) );
-        if( $metadata->getPath( 'Metadata/size' ) >= get_option( 's3_bulk_treshold' ) ){
+        if( $file_size >= get_option( 's3_bulk_treshold' ) ){
             $is_bulk = true;
         }
         $sqs->sendMessage( $message, $is_bulk );
@@ -334,7 +334,8 @@ function saveProfileInstance($action)
                             'created_date' => date('Y-m-d H:i:s'),
                             'creator_id' => $user_id,
                             'validation_status' => $status,
-                            'validation_url' => $validation_url
+                            'validation_url' => $validation_url,
+                            'content_length' => $file_size
                         ),
                         array('id' => $instance_id)
                     );
@@ -354,7 +355,8 @@ function saveProfileInstance($action)
                             'creator_id' => $user_id,
                             'token' => $token,
                             'validation_status' => $status,
-                            'validation_url' => $validation_url
+                            'validation_url' => $validation_url,
+                            'content_length' => $file_size
                         )
                     );   
         $instance_id = $wpdb->insert_id;

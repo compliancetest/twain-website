@@ -909,10 +909,11 @@ function ct_duplicate_data()
                                                 'profile_name'        => $profile_name,
                                                 'profile_description' => $s3_profile->Profile->Description,
                                                 'purpose'             => $s3_profile->Profile->Purpose,
-                                                'type_name'           => $type_name
+                                                'type_name'           => $type_name,
+                                                'content_length'      => strlen( json_encode( $s3_profile ) )
                                             ),
                                             array( 'id' => $profile->id ),
-                                            array( '%s', '%s', '%s', '%s' ),
+                                            array( '%s', '%s', '%s', '%s', '%d' ),
                                             array( '%d' )
                                         );
                                         $counter++;
