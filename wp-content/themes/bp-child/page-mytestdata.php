@@ -151,7 +151,7 @@ if(count($subscriptions) > 0){
             <div class="btn-row">      
                 <h5 class="left nomarginbottom lineheight22px">Please Select Profile Type</h5>          
                 <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
+                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
                 <div class="clear"></div>
             </div>
         </div>
@@ -211,8 +211,8 @@ if(count($subscriptions) > 0){
         </div>
         <div class="popup-box-footer radius6 noradiustop">                            
             <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn close-popup-btn right"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn submit-btn right"><span class="p"></span><span class="t">SAVE</span></a>                            
+                <a href="#" class="action-btn process-btn submit-btn "><span class="p"></span><span class="t">Confirm</span></a>
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
                 <div class="clear"></div>
             </div>
         </div>                        

@@ -6,7 +6,6 @@
 function saveProfileType()
 {
     global $wpdb;
-    
     $content = stripslashes($_POST['profile_type_text']);
     $file = $_FILES['profile_type_file'];
     
@@ -264,7 +263,7 @@ function saveProfileInstance($action)
     $jsonData = base64_encode($data);
     $max_file_size_conf = get_option( 'uploads_files_max_size' );
     if( strlen( $data ) > $max_file_size_conf * 1024 * 1024 ){
-        echo '<result><status>error</status><msg>"The file you have attempted to upload exceeds the system limit of '.$max_file_size_conf.'MB"</msg></result>';
+        echo '<result><status>error</status><msg>The file you have attempted to upload exceeds the system limit of '.$max_file_size_conf.'MB</msg></result>';
         exit;
     }
     $jsonObject = json_decode($data);

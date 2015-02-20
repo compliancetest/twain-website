@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
             
             data.context = jQuery('#profile_instance_upload_btn')
                 .click(function () {
-                    jQuery('#edit-profile-box .message').remove();  
+                    jQuery('#edit-profile-box .message').remove();
                     if(data.files.length < 1)
                     {
                         jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select a file to upload</p>');
@@ -193,13 +193,13 @@ jQuery(document).ready(function(){
                     jQuery('#edit-profile-box .popup-box-header').html('Edit Profile Instance');
                     jQuery('#is_upload').val('0');
                 }
+
                 jQuery('#edit_profile_instance_panel').hide();
                 jQuery('#edit-profile-box #profile-type-id').val(type_id);
                 jQuery('#edit-profile-box #profile-type-id').change();
             }
         });
-    })    
-    
+    });
     //Disable auto submit to save it by ajax
     jQuery('#editProfileForm').submit(function(){
         return false;
@@ -208,7 +208,7 @@ jQuery(document).ready(function(){
     //Edit Profile Box
     jQuery('#edit-profile-box .submit-btn').click(function(){        
         jQuery('#edit-profile-box .message').remove();
-        if(profileData == null || profileType == null)
+        if(profileData == null || profileType == null )
         {
             jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please choose a profile type.</p>');
             return false;
@@ -279,7 +279,7 @@ jQuery(document).ready(function(){
                 if(jQuery(rsp).find('status').text() == 'success')   
                 {
                     jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
-                    //document.location.reload();
+                    document.location.reload();
                 }else{                    
                     jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
                 }
