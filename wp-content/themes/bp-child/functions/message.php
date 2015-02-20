@@ -51,7 +51,16 @@ function sendMessage()
     
     header('content-type: application/xml');
     echo '<result>';
-    
+
+    $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+    if( (   $wpdb->get_var( $wpdb->prepare("SELECT content_length FROM wp_community_profile_instances WHERE id = %d ", $tester_profile ) ) > get_option( 's3_bulk_treshold' ) ||
+            $wpdb->get_var( $wpdb->prepare("SELECT content_length FROM wp_community_profile_instances WHERE id = %d ", $harness_profile ) ) > get_option( 's3_bulk_treshold' )
+        ) && ( get_post_meta( $case_id, 'bulk', true ) != 'Yes' || ! PricingPlan::isSupportBulk( $pricingPlanId ) ) ){
+        echo '<status>error</status>';
+        echo '<error>Bulk profiles are not selectable for the current pricing plan and selected test case</error>';
+        echo '</result>';
+        exit;
+    }
     if(!$suite_id || !$case_id || !$template || !$harness_profile || !$tester_profile)
     {
         echo '<status>error</status>';

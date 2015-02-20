@@ -8171,10 +8171,9 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     background-image: url("../images/Pending_Hourglass.png") !important;
     background-repeat: no-repeat;
     display: inline-block;
-    height: 24px;
+    height: 21px;
     padding: 0;
-    width: 24px;
-    margin-left: 3px;
+    width: 21px;
 }
 .plans-pricing-table .feature-available, .profile-valid{
     background-position: 0 0;
