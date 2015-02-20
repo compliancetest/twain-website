@@ -216,6 +216,10 @@ class S3Wrapper{
         return ( $command->createPresignedUrl('+1 hour') );
     }
 
+    public static function getUrlWithDomain( $link ){
+        return str_replace( 'http://', 'https://s3-ap-southeast-2.amazonaws.com/', $link );
+    }
+
 }
 
 class BlobsMigration{

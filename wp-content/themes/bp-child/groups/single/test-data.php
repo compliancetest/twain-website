@@ -64,7 +64,7 @@ $testsuites = get_posts( $args );
                         <?php
                             $link = empty( $instance->validation_url ) ?  '#' : $instance->validation_url;
                         ?>
-                        <a href="<?php echo $link;?>" class="profile-invalid" target="_blank"></a>
+                        <a href="<?php echo S3Wrapper::getUrlWithDomain( $link );?>" class="profile-invalid" target="_blank"></a>
                     <?php else:?>
                         <span class="profile-pending"></span>
                     <?php endif;?>
