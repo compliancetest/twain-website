@@ -150,8 +150,6 @@ if(count($subscriptions) > 0){
         <div class="popup-box-top-nav">            
             <div class="btn-row">      
                 <h5 class="left nomarginbottom lineheight22px">Please Select Profile Type</h5>          
-                <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
                 <div class="clear"></div>
             </div>
         </div>
@@ -205,18 +203,18 @@ if(count($subscriptions) > 0){
                         <div class="clear"></div>
                     </div>
                     <textarea id="profile_type_txt" class="displaynone"><?php echo $lastType ? base64_decode($lastType->schema) : ''?></textarea>                
-                    <textarea id="profile_instance_txt" class="displaynone"></textarea>                
+                    <textarea id="profile_instance_txt" class="displaynone"></textarea>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <div class="btn-row">
+                            <a href="#" class="action-btn process-btn submit-btn "><span class="p"></span><span class="t">Confirm</span></a>
+                            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="popup-box-footer radius6 noradiustop">                            
-            <div class="btn-row">
-                <a href="#" class="action-btn process-btn submit-btn "><span class="p"></span><span class="t">Confirm</span></a>
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
-                <div class="clear"></div>
-            </div>
-        </div>                        
-        <a class="close_btn"></a>                        
+        <a class="close_btn"></a>
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
         <input type="hidden" name="instance-id" id="instance-id" value="" />
         <input type="hidden" id="is_upload" value="" />
