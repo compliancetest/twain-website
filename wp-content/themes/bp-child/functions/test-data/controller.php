@@ -274,18 +274,21 @@ function saveProfileInstance($action)
     //if backend validation enabled
     $status         = 'valid';
     $validation_url = '';
+
+    $profileType = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $type_id ) );
+    $profile_json = base64_decode( $profileType->schema );
+    $profile_array = json_decode( $profile_json, 1 );
+    $profile_type = str_replace( ' ', '', $profile_array['title'] );
+    $file_name = $profile_type.'_v'.$profile_array['Version']['Major'].'_'.$profile_array['Version']['Minor'];
+    $type_name = $profile_array['title'].' v'.$profile_array['Version']['Major'].'.'.$profile_array['Version']['Minor'];
+    if( isset( $profile_array['Version']['Patch'] ) ){
+        $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
+        $type_name .= '.'.$profile_array['Version']['Patch'];
+    }
+
     if( get_option('validate_via_sqs') == 'yes' ){
         $status = 'pending';
-        $profileType = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $type_id ) );
-        $profile_json = base64_decode( $profileType->schema );
-        $profile_array = json_decode( $profile_json, 1 );
-        $profile_type = str_replace( ' ', '', $profile_array['title'] );
-        $file_name = $profile_type.'_v'.$profile_array['Version']['Major'].'_'.$profile_array['Version']['Minor'];
-        $type_name = $profile_array['title'].' v'.$profile_array['Version']['Major'].'.'.$profile_array['Version']['Minor'];
-        if( isset( $profile_array['Version']['Patch'] ) ){
-            $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
-            $type_name .= '.'.$profile_array['Version']['Patch'];
-        }
+
         $error_format = get_option( 'validation_error_format' );
         if( empty( $error_format ) ){
             $error_format = 'html';
@@ -320,31 +323,50 @@ function saveProfileInstance($action)
         }
         $sqs->sendMessage( $message, $is_bulk );
     }
+
+    if( get_option('validate_via_sqs') == 'yes' ){
+        $profile_name = 'Pending...';
+        $profile_description = 'Pending...';
+        $profile_purpose = 'Pending...';
+    } else{
+        $profile_name = $jsonObject->Profile->Title. ' v'.$jsonObject->Profile->Version->Major.'.'.$jsonObject->Profile->Version->Minor;
+        if( ! empty( $jsonObject->Profile->Version->Patch ) ){
+            $profile_name .= '.'.$jsonObject->Profile->Version->Patch;
+        }
+        $profile_description = $jsonObject->Profile->Description;
+        $profile_purpose = $jsonObject->Profile->Purpose;
+    }
     if($instance_id)
     {
-        $wpdb->update($wpdb->prefix . "community_profile_instances", 
-                        array(
-                            'type' => $instance_type,
-                            'type_id' => $type_id,
-                            'type_name' => $type_name,
-                            'community_id' => $community_id,
-                            'filename' => '',
-                            'content' => $jsonData,
-                            'created_date' => date('Y-m-d H:i:s'),
-                            'creator_id' => $user_id,
-                            'validation_status' => $status,
-                            'validation_url' => $validation_url,
-                            'content_length' => $file_size
-                        ),
+        $data =  array(
+            'type' => $instance_type,
+            'type_id' => $type_id,
+            'type_name' => $type_name,
+            'community_id' => $community_id,
+            'filename' => '',
+            'content' => $jsonData,
+            'created_date' => date('Y-m-d H:i:s'),
+            'creator_id' => $user_id,
+            'validation_status' => $status,
+            'validation_url' => $validation_url,
+            'content_length' => $file_size
+        );
+        if( get_option('validate_via_sqs') != 'yes' ){
+            $data['profile_name'] = $profile_name;
+            $data['profile_description'] = $profile_description;
+            $data['purpose'] = $profile_purpose;
+        }
+        $wpdb->update($wpdb->prefix . "community_profile_instances",
+                        $data ,
                         array('id' => $instance_id)
                     );
     }else{
         $wpdb->insert($wpdb->prefix . "community_profile_instances", 
                         array(
                             'type' => $instance_type,
-                            'profile_name' => 'Pending...',
-                            'profile_description' => 'Pending...',
-                            'purpose' => 'Pending...',
+                            'profile_name' => $profile_name,
+                            'profile_description' => $profile_description,
+                            'purpose' => $profile_purpose,
                             'type_id' => $type_id,
                             'type_name' => $type_name,
                             'community_id' => $community_id,
