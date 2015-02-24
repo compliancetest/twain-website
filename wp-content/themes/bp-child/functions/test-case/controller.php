@@ -1,5 +1,5 @@
 <?php
-add_action('after_delete_post', 'remove_case_name_id_map', 10, 1);
+add_action('before_delete_post', 'remove_case_name_id_map', 10, 1);
 function remove_case_name_id_map($postid)
 {
     global $wpdb;
@@ -168,10 +168,10 @@ function deleteCase()
     }
     
     //Remove Data From Backend
-    $esb = new ManageESB();
+/*    $esb = new ManageESB();
     $esb->deleteTestCaseNameIDMap($id);
     
-    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));
+    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));*/
     
     cp_sort_test_cases($familyMark, $majorVersion);
     
