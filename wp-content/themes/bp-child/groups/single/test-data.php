@@ -79,8 +79,8 @@ $testsuites = get_posts( $args );
                     <?php
                         }
                     ?>
-                    <?php if (count($testsuites) > 0): ?>
-                    <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('copy-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn blue-btn copy-btn left5"><span class="p"></span><span class="simple_tooltip radius6 no-wrap">Copy Profile<span></span></span></a>
+                    <?php if( count( $testsuites ) > 0 && $instance->validation_status == 'valid' ): ?>
+                        <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('copy-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn blue-btn copy-btn left5"><span class="p"></span><span class="simple_tooltip radius6 no-wrap">Copy Profile<span></span></span></a>
                     <?php endif; ?>
                 </div>
                 <div class="clear"></div>
