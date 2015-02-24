@@ -236,44 +236,20 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     <?php                    
                     
                     $profileInstances = $case->getProfileInstanceRows();                    
-                    foreach($profileInstances as $instance){
-                        $instanceObj = S3Wrapper::getProfile( $instance->token );
+                    foreach( $profileInstances AS $instance ){
                     ?>
                             <div class="grid_row white_bcg padding5-10">
                                 <div class="grid_cell width15P">
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
                                         <?php echo $instance->profile_name?>
-                                        <?php
-                                        if($instanceObj->Profile->Version)
-                                        {
-                                            $version = array();
-                                            foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
-                                            {
-                                                $version[] = $v;
-                                            }
-                                            echo " v" . implode(".", $version);
-                                        }
-                                        ?>
                                     </a>
                                 </div>
                                 <div class="grid_cell width15P left5P">
-                                    <?php echo $instanceObj->Profile->Purpose?>
+                                    <?php echo $instance->purpose?>
                                 </div>
                                 <div class="grid_cell width10P left5P">
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">
                                         <?php echo $instance->profile_type_title; ?>
-                                        <?php
-                                        $pJSON = json_decode(base64_decode($instance->schema));
-                                        if($pJSON->Version)
-                                        {
-                                            $version = array();
-                                            foreach(get_object_vars($pJSON->Version) as $k=>$v)
-                                            {
-                                                $version[] = $v;
-                                            }
-                                            echo " v" . implode(".", $version);
-                                        }
-                                        ?>
                                     </a>
                                 </div>
                                 <div class="grid_cell width40P left5P">
@@ -323,9 +299,9 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                 <select class="select" id="tester-profile">
                                     <?php foreach($profileInstances as $instance): ?>
                                         <?php
-                                            $pJSON = S3Wrapper::getProfile( $instance->token );
-                                            $profileTypeName = $pJSON->Profile->Type;
-                                            if( ! $instance->lookup ){
+                                            $profile_type_array = explode( 'v', $instance->type_name );
+                                            $profileTypeName = trim( $profile_type_array[0] );
+                                            if( ! $instance->lookup || $instance->validation_status != 'valid' ){
                                                 continue;
                                             }
                                         ?>
@@ -344,17 +320,6 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                         ?>
                                             <option value="<?php echo $instance->id ?>">
                                                 <?php echo $instance->profile_name; ?>
-                                                <?php
-                                                if($pJSON->Profile->Version)
-                                                {
-                                                    $version = array();
-                                                    foreach(get_object_vars($pJSON->Profile->Version) as $k=>$v)
-                                                    {
-                                                        $version[] = $v;
-                                                    }
-                                                    echo " v" . implode(".", $version);
-                                                }
-                                                ?>
                                             </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -366,8 +331,8 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                 <select class="select" id="harness-profile">
                                     <?php foreach($profileInstances as $instance): ?>
                                         <?php
-                                        $pJSON = S3Wrapper::getProfile( $instance->token );
-                                        $profileTypeName = $pJSON->Profile->Type;
+                                        $profile_type_array = explode( 'v', $instance->type_name );
+                                        $profileTypeName = trim( $profile_type_array[0] );
                                         if( ! $instance->lookup ){
                                             continue;
                                         }
@@ -386,17 +351,6 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                         ?>
                                         <option value="<?php echo $instance->id?>">
                                             <?php echo $instance->profile_name; ?>
-                                            <?php
-                                            if($pJSON->Profile->Version)
-                                            {
-                                                $version = array();
-                                                foreach(get_object_vars($pJSON->Profile->Version) as $k=>$v)
-                                                {
-                                                    $version[] = $v;
-                                                }
-                                                echo " v" . implode(".", $version);
-                                            }
-                                            ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
