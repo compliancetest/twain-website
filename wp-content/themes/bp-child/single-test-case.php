@@ -333,7 +333,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                         <?php
                                         $profile_type_array = explode( 'v', $instance->type_name );
                                         $profileTypeName = trim( $profile_type_array[0] );
-                                        if( ! $instance->lookup ){
+                                        if( ! $instance->lookup || $instance->validation_status != 'valid' ){
                                             continue;
                                         }
                                         ?>
