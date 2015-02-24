@@ -198,4 +198,9 @@ class PricingPlan
         global $wpdb;
         return ( boolean ) $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'boolean' AND name = 'Vouchers' ", $pricingPlanId ) );
     }
+
+    public static function isSupportBulk( $pricingPlanId ){
+        global $wpdb;
+        return ( boolean ) $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'boolean' AND name = 'Bulk' AND value = 1 ", $pricingPlanId ) );
+    }
 }

@@ -27,6 +27,7 @@ $subscriptions =  getUserSubscriptions(null, true);
                         <div class="td td-chk tocenter"><input type="checkbox" id="chk-profile-all" autocomplete="off" /></div>
                         <div class="td td-profile-name">Profile Name</div>
                         <div class="td td-profile-type">Type</div>
+                        <div class="td td-profile-status">Valid?</div>
                         <div class="td td-profile-lookup">Include In Lookup</div>
                         <div class="td td-action">Action</div>
                         <div class="clear"></div>
@@ -43,47 +44,34 @@ $subscriptions =  getUserSubscriptions(null, true);
                    }else{
                        foreach($profileInstances as $instance)
                        {
-                           $instanceObj = S3Wrapper::getProfile( $instance->token );
                    ?>
                         <div class="tr">
                            <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $instance->id?>" value="<?php echo $instance->id?>" /></div>
                            <div class="td td-profile-name">
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link" ><?php echo $instance->profile_name?>
-                               <?php
-                                    if($instanceObj->Profile->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        echo " v" . implode(".", $version);
-                                    }
-                                ?>
-                                </a> 
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link" ><?php echo $instance->profile_name; ?></a>
                                <br />
-                               <b>Purpose: </b> <?php echo $instanceObj->Profile->Purpose?>                       
-                               <p><?php echo $instanceObj->Profile->Description?></p>                   
+                               <b>Purpose: </b> <?php echo $instance->purpose; ?>
+                               <p><?php echo $instance->profile_description; ?></p>
                            </div>
                            <div class="td td-profile-type">
-                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?>
-                                <?php
-                                    $pJSON = json_decode(base64_decode($instance->schema));                            
-                                    if($pJSON->Version)
-                                    {
-                                        $version = array();
-                                        foreach(get_object_vars($pJSON->Version) as $k=>$v)      
-                                        {
-                                            $version[] = $v;
-                                        }
-                                        echo " v" . implode(".", $version);
-                                    }
-                                ?>
-                               </a>                    
+                               <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->type_name; ?></a>
                            </div>
+                            <div class="td td-profile-status">
+                                <?php if( $instance->validation_status == 'valid' ):?>
+                                    <span class="profile-valid"></span>
+                                <?php elseif( $instance->validation_status == 'invalid' ):?>
+                                <?php
+                                    $link = empty( $instance->validation_url ) ?  '#' : $instance->validation_url;
+                                ?>
+                                    <a href="<?php echo S3Wrapper::getUrlWithDomain( $link );?>" class="profile-invalid" target="_blank"></a>
+                                <?php else:?>
+                                    <span class="profile-pending"></span>
+                                <?php endif;?>
+                            </div>
                            <div class="td td-profile-lookup">
                                 <input type="checkbox" name="lookup" value="<?php echo $instance->id; ?>" <?php echo ($instance->lookup)?('checked'):(''); ?>>
                            </div>
+
                            <div class="td td-action">
                                 <?php
                                     if($instance->creator_id == get_current_user_id())
@@ -162,8 +150,6 @@ if(count($subscriptions) > 0){
         <div class="popup-box-top-nav">            
             <div class="btn-row">      
                 <h5 class="left nomarginbottom lineheight22px">Please Select Profile Type</h5>          
-                <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
                 <div class="clear"></div>
             </div>
         </div>
@@ -217,18 +203,18 @@ if(count($subscriptions) > 0){
                         <div class="clear"></div>
                     </div>
                     <textarea id="profile_type_txt" class="displaynone"><?php echo $lastType ? base64_decode($lastType->schema) : ''?></textarea>                
-                    <textarea id="profile_instance_txt" class="displaynone"></textarea>                
+                    <textarea id="profile_instance_txt" class="displaynone"></textarea>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <div class="btn-row">
+                            <a href="#" class="action-btn process-btn submit-btn "><span class="p"></span><span class="t">Confirm</span></a>
+                            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="popup-box-footer radius6 noradiustop">                            
-            <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn close-popup-btn right"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn submit-btn right"><span class="p"></span><span class="t">SAVE</span></a>                            
-                <div class="clear"></div>
-            </div>
-        </div>                        
-        <a class="close_btn"></a>                        
+        <a class="close_btn"></a>
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
         <input type="hidden" name="instance-id" id="instance-id" value="" />
         <input type="hidden" id="is_upload" value="" />
@@ -277,7 +263,7 @@ if(count($subscriptions) > 0){
 <?php
 }
 ?>
-
+<input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <script type="text/javascript">
 jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_test_data_profiles'));

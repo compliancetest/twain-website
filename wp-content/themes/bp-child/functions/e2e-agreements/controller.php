@@ -145,6 +145,12 @@ function process_agreement_actions()
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
         if($_FILES["file"]["size"] > 0 ) {
+            $max_file_size_conf = get_option( 'uploads_files_max_size' );
+            if( $_FILES["file"]["size"] > $max_file_size_conf * 1024 * 1024 ){
+                addMessage( "The file you have attempted to upload exceeds the system limit of $max_file_size_conf MB", 'error' );
+                wp_redirect('/agreements/');
+                exit;
+            }
             $fileName = $_FILES['file']['name'];
             $tmpName = $_FILES['file']['tmp_name'];
             $fileType = $_FILES['file']['type'];
@@ -218,6 +224,12 @@ function process_agreement_actions()
         $agreement_id = intval($_REQUEST['agreement_id']);
         Agreement::has_access( 'edit-agreement', false, $agreement_id );
         if($_FILES["file"]["size"] > 0 ) {
+            $max_file_size_conf = get_option( 'uploads_files_max_size' );
+            if( $_FILES["file"]["size"] > $max_file_size_conf * 1024 * 1024 ){
+                addMessage( "The file you have attempted to upload exceeds the system limit of $max_file_size_conf MB", 'error' );
+                wp_redirect('/agreements/');
+                exit;
+            }
             $fileName = $_FILES['file']['name'];
             $tmpName  = $_FILES['file']['tmp_name'];
             $fileType = $_FILES['file']['type'];

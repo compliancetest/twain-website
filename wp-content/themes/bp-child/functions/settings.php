@@ -48,11 +48,26 @@ function create_compliancetest_settings_page()
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
         //Save Options
         update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
+        update_option('s3_bulk_treshold', $_POST['s3_bulk_treshold']);
         update_option('aws_s3_key', $_POST['aws_s3_key']);
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
+        update_option('sqs_queue_name', $_POST['sqs_queue_name']);
+        update_option('bulk_sqs_queue_name', $_POST['bulk_sqs_queue_name'] );
+        update_option( 's3_reference_bucket', $_POST['s3_reference_bucket'] );
+        if( isset( $_POST['validate_via_sqs'] ) && $_POST['validate_via_sqs'] == 'on' ) {
+            update_option('validate_via_sqs', 'yes');
+        } else{
+            update_option('validate_via_sqs', 'no');
+        }
+        if( isset( $_POST['validation_error_format'] ) ){
+            update_option('validation_error_format', $_POST['validation_error_format'] );
+        } else{
+            update_option('validation_error_format', 'html' );
+        }
         
+        update_option('uploads_files_max_size', $_POST['uploads_files_max_size']);
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
@@ -192,7 +207,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
                 <li><a href="#ct-xero-settings">Xero Settings</a></li>
-                <li><a href="#ct-s3-xml-max-size">S3</a></li>
+                <li><a href="#ct-s3-xml-max-size">AWS</a></li>
                 <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
             </ul>
         </div>
@@ -415,14 +430,6 @@ function create_compliancetest_settings_page()
                             <th><label><b>Registry Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_domain_name" id="cloudsearch_domain_name" value="<?php echo get_option('cloudsearch_domain_name')?>" size="50" autocomplete="off" /></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th><label><b>Registry Document EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="--><?php //echo get_option('cloudsearch_document_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th><label><b>Site Search EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="--><?php //echo get_option('cloudsearch_fulltext_search_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
                         <tr>
                             <th><label><b>Site Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_fulltext_domain_name" id="cloudsearch_fulltext_domain_name" value="<?php echo get_option('cloudsearch_fulltext_domain_name')?>" size="50" autocomplete="off" /></td>
@@ -434,12 +441,21 @@ function create_compliancetest_settings_page()
                 </form>
             </div>
             <div id="ct-s3-xml-max-size">
-                <h3>S3</h3>
+                <h3>AWS</h3>
                 <form method="post" action="">
                     <table class="widefat">
                         <tr>
                             <td><label><b>HTML Render Limit:</b></label></td>
                             <td><input type="text" name="s3_xml_max_size" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_xml_max_size')?>" autocomplete="off" /> Bytes</td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Max Upload File Size:</b></label></td>
+                            <td><input type="text" name="uploads_files_max_size" id="uploads_files_max_size" size="15" value="<?php echo get_option('uploads_files_max_size')?>" autocomplete="off" /> MB</td>
+                        </tr>
+
+                        <tr>
+                            <td><label><b>BulkProfileThreshold:</b></label></td>
+                            <td><input type="text" name="s3_bulk_treshold" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_bulk_treshold')?>" autocomplete="off" /> Bytes</td>
                         </tr>
                         <tr>
                             <td><label><b>S3 Access Key:</b></label></td>
@@ -456,6 +472,30 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Message Bucket:</b></label></td>
                             <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Reference Bucket:</b></label></td>
+                            <td><input type="text" name="s3_reference_bucket" id="s3_reference_bucket" size="50" value="<?php echo get_option('s3_reference_bucket')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Profile Validation SQS Queue Name:</b></label></td>
+                            <td><input type="text" name="sqs_queue_name" id="sqs_queue_name" size="50" value="<?php echo get_option('sqs_queue_name')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Bulk Profile Validation SQS Queue Name:</b></label></td>
+                            <td><input type="text" name="bulk_sqs_queue_name" id="bulk_sqs_queue_name" size="50" value="<?php echo get_option('bulk_sqs_queue_name')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Validate Profiles via SQS:</b></label></td>
+                            <td><input type="checkbox" name="validate_via_sqs" id="validate_via_sqs" size="50" <?php if( get_option('validate_via_sqs') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Validation error format:</b></label></td>
+                            <td>
+                                <?php $error_format = get_option('validation_error_format');?>
+                                <input type="radio" name="validation_error_format" size="50" <?php if( $error_format == 'html' || empty( $error_format ) ):?> checked="checked" <?php endif;?> autocomplete="off" value="html"/>html
+                                <input type="radio" name="validation_error_format" size="50" <?php if( $error_format == 'json' ):?> checked="checked" <?php endif;?> autocomplete="off" value="json"/>json
+                            </td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>

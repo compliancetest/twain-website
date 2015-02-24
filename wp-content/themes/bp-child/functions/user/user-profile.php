@@ -762,19 +762,11 @@ function cp_get_customer_harness_detail()
                                             <option value="">None</option>
                                             <?php 
                                                 if (count($profileInstances) > 0):
-                                                foreach ($profileInstances AS $instance):
-                                                    $instanceObj = S3Wrapper::getProfile( $instance->token );
-                                                    $version = array();
-                                                    if($instanceObj->Profile->Version) {
-                                                        foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v) {
-                                                            $version[] = $v;
-                                                        }
-                                                        
-                                                    }
-                                                    $profileName = $instance->profile_name . ' v' . implode('.', $version);
-                                                ?>
-                                                <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $profileName; ?></option>
-                                            <?php endforeach; endif; ?>
+                                                    foreach ($profileInstances AS $instance):
+                                                        if( $instance->validation_status != 'valid' || $instance->content_length > get_option( 's3_bulk_treshold' ) ) continue;
+                                                    ?>
+                                                    <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $instance->profile_name; ?></option>
+                                                <?php endforeach; endif; ?>
                                         </select>
                                     </div>
                                     <div class="clear"></div>
@@ -1166,6 +1158,9 @@ function generateProfile($profile_id, $community_id)
                 $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
+                        if( $row['content_length'] > get_option( 's3_bulk_treshold' ) || $row['validation_status'] != 'valid' ){
+                            continue;
+                        }
                         $content = S3Wrapper::getProfile( $row['token'] );
 
                         $row['profile_name'] .= ' (' . $profile->profile_name . ')';
@@ -1217,7 +1212,7 @@ function generateProfile($profile_id, $community_id)
                         $s3 = new S3Wrapper();
                         $s3->putObject( '/profiles/user/'.$row['token'].'.json',  json_encode( $content )  );
                         // Create new profile
-                        $query_result = $wpdb->insert($wpdb->prefix . "community_profile_instances", $row);
+                        $query_result = $wpdb->insert( $wpdb->prefix . "community_profile_instances", $row );
                         $new_profile_id = $wpdb->insert_id;
                         $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
 
