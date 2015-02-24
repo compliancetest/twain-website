@@ -237,6 +237,9 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     
                     $profileInstances = $case->getProfileInstanceRows();                    
                     foreach( $profileInstances AS $instance ){
+                        if( $instance->validation_status != 'valid' ){
+                            continue;
+                        }
                     ?>
                             <div class="grid_row white_bcg padding5-10">
                                 <div class="grid_cell width15P">
