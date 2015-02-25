@@ -300,10 +300,8 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             ?>
                             <div class="grid_cell width20P left5P">
                                 <select class="select" id="tester-profile">
-                                    <?php foreach($profileInstances as $instance): ?>
+                                    <?php foreach( $profileInstances AS $instance ): ?>
                                         <?php
-                                            $profile_type_array = explode( 'v', $instance->type_name );
-                                            $profileTypeName = trim( $profile_type_array[0] );
                                             if( ! $instance->lookup || $instance->validation_status != 'valid' ){
                                                 continue;
                                             }
@@ -312,7 +310,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                             $isAllowed = false;
                                             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
                                                 $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                                                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
+                                                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $instance->profile_role ), $cProfilesTypes ) ){
                                                     $isAllowed = true;
                                                 }
                                             }
@@ -332,10 +330,8 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             ?>
                             <div class="grid_cell width20P left5P">
                                 <select class="select" id="harness-profile">
-                                    <?php foreach($profileInstances as $instance): ?>
+                                    <?php foreach( $profileInstances AS $instance ): ?>
                                         <?php
-                                        $profile_type_array = explode( 'v', $instance->type_name );
-                                        $profileTypeName = trim( $profile_type_array[0] );
                                         if( ! $instance->lookup || $instance->validation_status != 'valid' ){
                                             continue;
                                         }
@@ -343,7 +339,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                         <?php if( ! empty( $testSuitesRolesProfilesTypes ) ){
                                             $isAllowed = false;
                                             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( $profileTypeName, $cProfilesTypes ) ){
+                                                if( in_array( $cRoleName, $testSuitesRoles ) && in_array( str_replace( ' ', '', $instance->profile_role ), $cProfilesTypes ) ){
                                                     $isAllowed = true;
                                                 }
                                             }

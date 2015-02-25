@@ -435,8 +435,6 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
     foreach($profileInstances as $instance){
-        $profile_type_array = explode( 'v', $instance->type_name );
-        $profileTypeName = trim( $profile_type_array[0] );
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -444,7 +442,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
                 $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
+                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $instance->profile_role ), $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -490,8 +488,6 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
     foreach($profileInstances as $instance){
-        $profile_type_array = explode( 'v', $instance->type_name );
-        $profileTypeName = trim( $profile_type_array[0] );
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -499,7 +495,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
                 $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
+                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $instance->profile_role ), $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }

@@ -1011,10 +1011,11 @@ function ct_duplicate_data()
                                                 'profile_description' => $s3_profile->Profile->Description,
                                                 'purpose'             => $s3_profile->Profile->Purpose,
                                                 'type_name'           => $type_name,
-                                                'content_length'      => strlen( json_encode( $s3_profile ) )
+                                                'content_length'      => strlen( json_encode( $s3_profile ) ),
+                                                'profile_role'        => $profile_type->title
                                             ),
                                             array( 'id' => $profile->id ),
-                                            array( '%s', '%s', '%s', '%s', '%d' ),
+                                            array( '%s', '%s', '%s', '%s', '%d', '%s' ),
                                             array( '%d' )
                                         );
                                         $counter++;

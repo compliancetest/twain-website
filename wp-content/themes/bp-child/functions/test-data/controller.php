@@ -322,6 +322,7 @@ function saveProfileInstance($action)
         $profile_name = 'Pending...';
         $profile_description = 'Pending...';
         $profile_purpose = 'Pending...';
+        $profile_role = null;
     } else {
         $profile_name = $jsonObject->Profile->Title . ' v' . $jsonObject->Profile->Version->Major . '.' . $jsonObject->Profile->Version->Minor;
         if (!empty($jsonObject->Profile->Version->Patch)) {
@@ -329,6 +330,7 @@ function saveProfileInstance($action)
         }
         $profile_description = $jsonObject->Profile->Description;
         $profile_purpose = $jsonObject->Profile->Purpose;
+        $profile_role = $profile_array['title'];
     }
     if ($instance_id) {
         $data = array(
@@ -342,7 +344,8 @@ function saveProfileInstance($action)
             'creator_id' => $user_id,
             'validation_status' => $status,
             'validation_url' => $validation_url,
-            'content_length' => $file_size
+            'content_length' => $file_size,
+            'profile_role' => $profile_role
         );
         if (get_option('validate_via_sqs') != 'yes') {
             $data['profile_name'] = $profile_name;
@@ -370,7 +373,8 @@ function saveProfileInstance($action)
                 'token' => $token,
                 'validation_status' => $status,
                 'validation_url' => $validation_url,
-                'content_length' => $file_size
+                'content_length' => $file_size,
+                'profile_role' => $profile_role
             )
         );
         $instance_id = $wpdb->insert_id;
