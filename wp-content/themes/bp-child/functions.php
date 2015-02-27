@@ -84,6 +84,8 @@ require_once(THE_FUNCTION . '/buddypress/buddypress-group-test-data.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');
 
+//ProfileInstance class allows to edit profile in single place
+require_once(THE_FUNCTION . '/classes/ProfileInstance.php');
 
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');

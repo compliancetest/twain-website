@@ -1153,12 +1153,16 @@ function generateProfile($profile_id, $community_id)
         {
             $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
             $identifierValues = $customData->SourceProfiles->Values;
-            if( trim( $identifierPath ) == '?' || trim( $identifierValues ) == '?' ){
+            if( implode(',', $identifierValues) == '?' ){
                 continue;
             }
             if ($identifierPath != 'Self')
             {
-                $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
+                $rows = $wpdb->get_results(
+                    $wpdb->prepare("SELECT cpi.* FROM wp_community_profile_meta AS cpm
+                                    LEFT JOIN wp_community_profile_instances AS cpi ON cpi.id = cpm.profile_id
+                                    WHERE cpi.type='harness' AND cpi.community_id = %d
+                                    AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = %s " , $community_id, $identifierPath ) , ARRAY_A );
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
                         if( $row['content_length'] > get_option( 's3_bulk_treshold' ) || $row['validation_status'] != 'valid' ){
@@ -1166,15 +1170,9 @@ function generateProfile($profile_id, $community_id)
                         }
                         $content = S3Wrapper::getProfile( $row['token'] );
 
-                        $row['profile_name'] .= ' (' . $profile->profile_name . ')';
-                        $row['type'] = 'tester';
                         $token_original = $row['token'];
                         $row['token_original'] = $token_original;
                         $row['token'] = sha1(time() . $content->Profile->Title . rand(0, 9999) . $row['type_id'] . $community_id);
-                        $row['created_date'] = date('Y-m-d F:i:s');
-                        $row['purpose'] = $content->Profile->Purpose;
-                        $row['creator_id'] = get_current_user_id();
-                        $row['token_original'] = $token_original;
 
                         $profile_ref[$token_original] = $row['token'];
                         unset($row['id']);
@@ -1194,7 +1192,7 @@ function generateProfile($profile_id, $community_id)
                                         $ref = explode('=', $employer->Profile->{'$ref'});
 
                                         if (!isset($profile_ref[$ref[1]])) {
-                                            $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
+                                            $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $ref[1], $user_id);
                                             $temp_profile = $wpdb->get_row($query);
                                             if (!empty($temp_profile)) {
                                                 $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1211,35 +1209,27 @@ function generateProfile($profile_id, $community_id)
                         $content->Profile->Title .= ' (' . $profile->profile_name . ')';
                         $content->Profile->Description = $pre_desc . ' ' . $content->Profile->Description;
 
-                        $row['content'] = base64_encode(stripcslashes(json_encode($content)));
-                        $s3 = new S3Wrapper();
-                        $s3->putObject( '/profiles/user/'.$row['token'].'.json',  json_encode( $content )  );
-                        // Create new profile
-                        $query_result = $wpdb->insert( $wpdb->prefix . "community_profile_instances", $row );
-                        $new_profile_id = $wpdb->insert_id;
-                        $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $row['type_id']));
+                        $profileData = array(
+                            'type'           => 'tester',
+                            'data'           => json_encode( $content ),
+                            'type_id'        => $row['type_id'],
+                            'user_id'        => get_current_user_id(),
+                            'community_id'   => $community_id,
+                            'token_original' => $token_original,
+                            'token'          => $row['token']
 
-                        $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id'=>$new_profile_id), '%d');
-
-                        // Generate meta values of new profile
-                        $profile_meta = getProfileMetaData($content);
-                        foreach ($profile_meta as $meta_key => $meta_value) {
-                            $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
-                                'profile_id' => $new_profile_id,
-                                'meta_key' => $meta_key,
-                                'meta_value' => $meta_value,
-                            ));
-                        }
+                        );
+                        ProfileInstance::save( $profileData );
                     }
                 }
             }
             else // Self
             {
-                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
-                $self_instance = $wpdb->get_row($query, ARRAY_A);
+                $query = $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id = %d ", $profile_id );
+                $self_instance = $wpdb->get_row( $query, ARRAY_A );
                 $self_content = S3Wrapper::getProfile( $self_instance['token'] );
 
-                foreach ($customData->Rules as $rule) {
+                foreach ($customData->Rules AS $rule) {
                     if ($rule->Type == 'Reference') {
                         foreach ($self_content->Employers as $employer) {
                             $ref = explode('=', $employer->Profile->{'$ref'});
@@ -1259,9 +1249,16 @@ function generateProfile($profile_id, $community_id)
                     }
                 }
 
-                $self_instance['content'] = base64_encode(stripcslashes(json_encode($self_content)));
+                $profileData = array(
+                    'type'           => 'tester',
+                    'data'           => json_encode( $self_content ),
+                    'type_id'        => $self_instance['type_id'],
+                    'user_id'        => get_current_user_id(),
+                    'community_id'   => $community_id,
+                    'instance_id'    => $profile_id
 
-                $wpdb->update($wpdb->prefix . "community_profile_instances", array('content' => $self_instance['content']), array('id' => $profile_id));
+                );
+                ProfileInstance::save( $profileData );
             }
         }
     }
