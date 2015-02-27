@@ -534,7 +534,7 @@ function ct_duplicate_data()
                                                         ),
                                                         'schema' => array(
                                                             'bucket' => get_option( 's3_reference_bucket' ),
-                                                            'key'    => 'schema/profiles/'.strtolower( $type_name ).'/'.$file_name.'.json'
+                                                            'key'    => 'schema/profiles/'.strtolower( $profile_type ).'/'.$file_name.'.json'
                                                         ),
                                                         'saveTo' => array(
                                                             'bucket' => get_option( 'aws_s3_url' ),
