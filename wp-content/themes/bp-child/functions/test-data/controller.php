@@ -549,7 +549,6 @@ function copyProfileInstance($action)
                 )
             )
         );
-        _trace($message,1);
         $sqs = new SqsWrapper();
         $is_bulk = false;
         if( $file_size >= get_option( 's3_bulk_treshold' ) ){
