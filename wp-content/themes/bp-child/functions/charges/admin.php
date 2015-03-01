@@ -77,7 +77,7 @@ function ct_manage_invoices()
                             $organisationsWithSubscriptions = $wpdb->get_results("SELECT organisation_id, organisation_name
                                                                                     FROM `wp_organisations_subscriptions` AS s
                                                                                     JOIN wp_organisations AS o ON o.id = s.organisation_id
-                                                                                    WHERE o.no_billing = 0
+                                                                                    WHERE o.no_billing = 0 AND s.status = 'Active'
                                                                                     GROUP BY organisation_id");
                         ?>
                         <select name="org_id">
