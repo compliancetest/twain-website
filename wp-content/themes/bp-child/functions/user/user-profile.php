@@ -1163,7 +1163,7 @@ function generateProfile($profile_id, $community_id)
             $identifierValues = $customData->SourceProfiles->Values;
             if ($identifierPath != 'Self')
             {
-                $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
+                $rows = $wpdb->get_results("SELECT cpi.* FROM {$wpdb->prefix}community_profile_meta as cpm LEFT JOIN {$wpdb->prefix}community_profile_instances AS cpi ON cpi.id=cpm.profile_id Where cpi.type='harness' AND cpi.community_id=" . $community_id . " AND cpm.meta_value IN ('" . implode("','", $identifierValues) . "') AND cpm.meta_key = '" . $identifierPath . "'", ARRAY_A);
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
                         $content = S3Wrapper::getProfile( $row['token'] );
