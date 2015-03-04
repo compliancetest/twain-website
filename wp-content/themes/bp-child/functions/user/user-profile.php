@@ -1162,7 +1162,7 @@ function generateProfile($profile_id, $community_id)
                     $wpdb->prepare("SELECT cpi.* FROM wp_community_profile_meta AS cpm
                                     LEFT JOIN wp_community_profile_instances AS cpi ON cpi.id = cpm.profile_id
                                     WHERE cpi.type='harness' AND cpi.community_id = %d
-                                    AND cpm.meta_value IN (" . implode(',', $identifierValues) . ") AND cpm.meta_key = %s " , $community_id, $identifierPath ) , ARRAY_A );
+                                    AND cpm.meta_value IN ('" . implode("','", $identifierValues) . "') AND cpm.meta_key = %s " , $community_id, $identifierPath ) , ARRAY_A );
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
                         if( $row['content_length'] > get_option( 's3_bulk_treshold' ) || $row['validation_status'] != 'valid' ){
