@@ -4,10 +4,11 @@ class ProfileInstance {
 
     public static function save( $profileData ){
         global $wpdb;
-        $data = stripcslashes( $profileData['data'] );
-        $jsonData = base64_encode( $data );
+
+        $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
+        $profile_data = stripcslashes( $profileData['data'] );
         $max_file_size_conf = get_option('uploads_files_max_size');
-        if( strlen( $data ) > $max_file_size_conf * 1024 * 1024) {
+        if( strlen( $profile_data ) > $max_file_size_conf * 1024 * 1024) {
             return array( 'status' => 'error', 'message' => 'The file you have attempted to upload exceeds the system limit of ' . $max_file_size_conf . 'MB' );
         }
         if( isset( $profileData['instance_id'] ) && ! empty( $profileData['instance_id'] ) ){
@@ -20,8 +21,8 @@ class ProfileInstance {
             }
         }
         $s3 = new S3Wrapper();
-        $s3->putObject( '/profiles/user/' . $token . '.json', $data );
-        $file_size = strlen( $data );
+        $s3->putObject( '/profiles/user/' . $token . '.json', $profile_data );
+        $file_size = strlen( $profile_data );
         //if backend validation enabled
         $status = 'valid';
         $validation_url = '';
@@ -36,8 +37,11 @@ class ProfileInstance {
             $file_name = $file_name . '_' . $profile_array['Version']['Patch'];
             $type_name .= '.' . $profile_array['Version']['Patch'];
         }
-
-        if (get_option('validate_via_sqs') == 'yes') {
+        $is_bulk = false;
+        if( $file_size >= get_option( 's3_bulk_treshold' ) ) {
+            $is_bulk = true;
+        }
+        if( $validate_via_sqs ) {
             $status = 'pending';
 
             $error_format = get_option('validation_error_format');
@@ -68,20 +72,17 @@ class ProfileInstance {
                 )
             );
             $sqs = new SqsWrapper();
-            $is_bulk = false;
-            if ($file_size >= get_option('s3_bulk_treshold')) {
-                $is_bulk = true;
-            }
+
             $sqs->sendMessage($message, $is_bulk);
         }
 
-        if (get_option('validate_via_sqs') == 'yes') {
+        if( $validate_via_sqs ) {
             $profile_name = 'Pending...';
             $profile_description = 'Pending...';
             $profile_purpose = 'Pending...';
             $profile_role = null;
         } else {
-            $jsonObject = json_decode( $data );
+            $jsonObject = json_decode( $profile_data );
             $profile_name = $jsonObject->Profile->Title . ' v' . $jsonObject->Profile->Version->Major . '.' . $jsonObject->Profile->Version->Minor;
             if (!empty($jsonObject->Profile->Version->Patch)) {
                 $profile_name .= '.' . $jsonObject->Profile->Version->Patch;
@@ -96,7 +97,6 @@ class ProfileInstance {
                 'type_id' => $profileData['type_id'],
                 'type_name' => $type_name,
                 'community_id' => $profileData['community_id'],
-                'content' => $jsonData,
                 'created_date' => date('Y-m-d H:i:s'),
                 'creator_id' => $profileData['user_id'],
                 'validation_status' => $status,
@@ -109,37 +109,46 @@ class ProfileInstance {
                 $data['profile_description'] = $profile_description;
                 $data['purpose'] = $profile_purpose;
             }
+            if( ! $validate_via_sqs || ( ! $is_bulk && $validate_via_sqs ) ){
+                //we write only non bulk profiles content to database
+                $jsonData = base64_encode( $profile_data );
+                $data['content'] = $jsonData;
+            }
             $wpdb->update($wpdb->prefix . "community_profile_instances",
                 $data,
                 array('id' => $profileData['instance_id'])
             );
         } else {
-            $wpdb->insert($wpdb->prefix . "community_profile_instances",
-                array(
-                    'type' => $profileData['type'],
-                    'profile_name' => $profile_name,
-                    'profile_description' => $profile_description,
-                    'purpose' => $profile_purpose,
-                    'type_id' => $profileData['type_id'],
-                    'type_name' => $type_name,
-                    'community_id' => $profileData['community_id'],
-                    'content' => $jsonData,
-                    'created_date' => date('Y-m-d H:i:s'),
-                    'creator_id' => $profileData['user_id'],
-                    'token' => $token,
-                    'token_original' => isset( $profileData['token_original'] ) ? $profileData['token_original'] : '',
-                    'validation_status' => $status,
-                    'validation_url' => $validation_url,
-                    'content_length' => $file_size,
-                    'profile_role' => $profile_role
-                )
+            $data = array(
+                'type' => $profileData['type'],
+                'profile_name' => $profile_name,
+                'profile_description' => $profile_description,
+                'purpose' => $profile_purpose,
+                'type_id' => $profileData['type_id'],
+                'type_name' => $type_name,
+                'community_id' => $profileData['community_id'],
+                'created_date' => date('Y-m-d H:i:s'),
+                'creator_id' => $profileData['user_id'],
+                'token' => $token,
+                'token_original' => isset( $profileData['token_original'] ) ? $profileData['token_original'] : '',
+                'validation_status' => $status,
+                'validation_url' => $validation_url,
+                'content_length' => $file_size,
+                'profile_role' => $profile_role
             );
+            if( ! $validate_via_sqs || ( ! $is_bulk && $validate_via_sqs ) ){
+                //we write only non bulk profiles content to database
+                $jsonData = base64_encode( $profile_data );
+                $data['content'] = $jsonData;
+            }
+            $wpdb->insert( "wp_community_profile_instances", $data );
+
             $profileData['instance_id'] = $wpdb->insert_id;
             $wpdb->query( $wpdb->prepare( "UPDATE wp_community_profile_types SET `instances`=`instances` + 1 WHERE id = %d ", $profileData['type_id'] ) );
 
         }
         //backend validation service populate metadata if it enabled
-        if (get_option('validate_via_sqs') != 'yes') {
+        if( ! $validate_via_sqs ) {
             //remove old meta first
             $wpdb->delete( 'wp_community_profile_meta',
                 array( 'profile_id' => $profileData['instance_id'] ), '%d');
