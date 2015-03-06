@@ -3952,7 +3952,7 @@ msgstr "This community has no support"
 #: bp-templates/bp-legacy/buddypress-functions.php:987
 #: bp-themes/bp-default/_inc/ajax.php:703
 msgid "Leave Group"
-msgstr "Leave Community"
+msgstr "Cancel Membership"
 
 #: bp-groups/bp-groups-template.php:1753 bp-groups/bp-groups-template.php:1754
 #: bp-templates/bp-legacy/buddypress-functions.php:1006

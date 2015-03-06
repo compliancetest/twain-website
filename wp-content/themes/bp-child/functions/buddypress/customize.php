@@ -105,8 +105,8 @@ function cp_bp_get_group_join_button_filter($button)
             $button['link_title'] = "Join Community";                        
         }else if($button['id'] == 'leave_group'){
             $button['link_class'] .= " popup button button_medium button_red white_txt radius6 leave-community-button";    
-            $button['link_text'] = "Leave Community";
-            $button['link_title'] = "Leave Community";
+            $button['link_text'] = "Cancel Membership";
+            $button['link_title'] = "Cancel Membership";
         }else if($button['id'] == 'membership_requested'){
             $button['link_class'] .= " button button_medium status_deprecated white_txt radius6 leave-community-button";    
             $button['link_text'] = "Request Sent";
