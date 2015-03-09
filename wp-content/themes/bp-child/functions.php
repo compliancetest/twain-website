@@ -1474,3 +1474,12 @@ function _trace( $data, $exit = false ){
     if( $exit ) exit();
 }
 add_filter( 'w3tc_can_print_comment', function( $w3tc_setting ) { return false; }, 10, 1 );
+
+/**
+ * this part execution cron batch cronjobs
+ */
+if( isset( $_GET['jobid'] ) && isset( $_GET['key'] ) ){
+    require_once( THE_FUNCTION . '/classes/BatchJob.php' );
+    $batchJob = new BatchJob();
+    $batchJob->execute( $_GET['jobid'], $_GET['key'] );
+}
