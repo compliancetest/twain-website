@@ -6,6 +6,8 @@ class BatchJob {
         global $wpdb;
         $this->db = $wpdb;
         $this->s3 = new S3Wrapper();
+        $logsBucket = get_option( 's3_logs_bucket' );
+        $this->bucket = ! empty( $logsBucket ) ? $logsBucket : get_option( 'aws_s3_url' );
     }
 
     /**
@@ -94,6 +96,6 @@ class BatchJob {
             'timestamp' => time(),
             'jobid'     => $jobId
         );
-        $this->s3->putObject( 'logs/batch/' . $jobId . '/' . date( 'Y-m-d' ) .'/' . date( 'H:i:s' ) . '_' . $status . '_output.log', json_encode( $message, JSON_PRETTY_PRINT ), 'application/json' );
+        $this->s3->putObject( 'logs/batch/' . $jobId . '/' . date( 'Y-m-d' ) .'/' . date( 'H:i:s' ) . '_' . $status . '_output.log', json_encode( $message, JSON_PRETTY_PRINT ), 'application/json', $this->bucket );
     }
 }
