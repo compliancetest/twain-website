@@ -16,15 +16,22 @@ function generate_download_report( $community ){
     $excel2 = PHPExcel_IOFactory::createReader('Excel2007');
     $excel2 = $excel2->load(  __DIR__ . '/../../groups/templates/SuperStreamTestProgress.xlsx' ); // Empty Sheet
 
+    $d = new DateTime( date( 'Y-m-d H:i:s'), new DateTimeZone( date_default_timezone_get() ) );
+    $d->setTimezone( new DateTimeZone( 'Australia/Canberra' ) );
+    $date = $d->format('Y-m-d H:i:sP');
+
     $community_name = $wpdb->get_var( $wpdb->prepare( "SELECT  name FROM wp_bp_groups WHERE id = %d ", $community_id ) );
     $excel2->setActiveSheetIndex(0);
     $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
+    $excel2->getActiveSheet()->setCellValue('C2', $date );
     $excel2->setActiveSheetIndex(1);
     $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
+    $excel2->getActiveSheet()->setCellValue('C2', $date );
     $excel2->setActiveSheetIndex(2);
     $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
+    $excel2->getActiveSheet()->setCellValue('C2', $date );
     $excel2->setActiveSheetIndex(0);
-    $row_number_sheet1 = $row_number_sheet2 = $row_number_sheet3 = 4;
+    $row_number_sheet1 = $row_number_sheet2 = $row_number_sheet3 = 5;
 
     $all_data = array();
     $products = $wpdb->get_results( "SELECT * FROM wp_posts WHERE post_type = 'product-service'" );

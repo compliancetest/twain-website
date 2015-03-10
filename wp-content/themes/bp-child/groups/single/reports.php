@@ -7,10 +7,7 @@ global $groups_template;
 $group = $groups_template->group;
 
 $reports = new CP_Reports_Group_Extension();
-if( get_option( 'reports_date' ) !== date( 'Y-m-d' ) || ! S3Wrapper::isObjectExists( '/reports/'.$groups_template->group->name.'/'.get_option( 'reports_token_'.$groups_template->group->id ). '/' .$groups_template->group->name.'TestProgress.xls' ) ){
-    send_reports_to_s3();
-}
-$s3= new S3Wrapper();
+$s3 = new S3Wrapper();
 ?>
 <div id="downloads-container" class="tab-content white_bcg padding10">
     <div id="uploaded-files">
