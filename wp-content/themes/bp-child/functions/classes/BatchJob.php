@@ -8,16 +8,20 @@ class BatchJob {
         $this->s3 = new S3Wrapper();
     }
 
+    /**
+     * @param $jobid jobid - identifier parameter from wp_batch_jobs table
+     * @param $key - access_key parameter from wp_batch_jobs table
+     */
     public function execute( $jobid, $key ){
         if( $row = $this->db->get_row( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s AND access_key = %s AND is_active = 1 ", $jobid, $key ) ) ){
             try {
                 if( method_exists( $this, $row->function_name ) ) {
                     $comment = '';
                     $status = call_user_func(array($this, $row->function_name));
-                    if( $status !== true ){
+                    if( isset( $status['message'] ) && ! empty( $status['message'] ) ){
                         $comment = $status['message'];
                     }
-                    $this->_sendReportToS3( $jobid, $comment, $status === true ? 'success' : 'error' );
+                    $this->_sendReportToS3( $jobid, $comment, $status['status'] === 'success' ? 'success' : 'error' );
                 } else{
                     $this->_sendReportToS3( $jobid, "System can't process '{$jobid}' identifier - please verify job data in database", 'error' );
                 }
@@ -35,9 +39,53 @@ class BatchJob {
             }
             $email = filter_var( $_GET['email'], FILTER_SANITIZE_EMAIL );
         }
-        return wp_mail( $email, 'test', 'test to: '.$email );
+        $status = wp_mail( $email, 'test', 'test to: '.$email );
+        if( $status ){
+            return array( 'status' => 'success', 'message' => 'Email was sent to: '.$email );
+        } else{
+            return array( 'status' => 'error', 'message' => 'Error occured' );
+        }
     }
 
+    /**
+     * This cronjob used to re-generate testing progress report dayly
+     * @return array
+     */
+    public function generateTestingReport(){
+        send_reports_to_s3();
+        return array( 'status' => 'success', 'message' => 'SuperStream testing progress report was generated successfully' );
+    }
+
+    /**
+     * This cronjob used to send testing progress report to users
+     * @return array
+     */
+    public function notifyUsers(){
+        $s3 = new S3Wrapper();
+        $messages = array();
+        //3 - cronjob id in database
+        $options = $this->_getCronjobOptions( 3 );
+        $emails = explode( ',', $options['emails'] );
+        $community = $this->db->get_row( $this->db->prepare( "SELECT * FROM wp_bp_groups WHERE name = %s ", $options['community'] ) );
+        $token = get_option( 'reports_token_' . $community->id );
+        $reportFile = $s3->getObject( '/reports/'.$community->name.'/'.$token.'/'.$community->name.'TestProgress.xls' );
+        $upload = wp_upload_bits( $community->name.'TestProgress.xls', null, $reportFile );
+        foreach( $emails AS $email ){
+            $status = wp_mail( trim( $email ), 'Testing progress report', 'Testing progress report', '', array( $upload['file'] ) );
+            $messages[$email] = $status == true ? 'Success' : 'Error';
+            @unlink( $upload['file'] );
+        }
+        return array( 'status' => 'success', 'message' => $messages );
+    }
+
+    private function _getCronjobOptions( $jobId ){
+        $options = array();
+        $results   = $this->db->get_results( $this->db->prepare( "SELECT * FROM wp_batch_jobs_params WHERE batch_job_id = %d ", $jobId ) );
+        foreach( $results AS $result ){
+            $options[$result->name] = $result->value;
+        }
+        return $options;
+    }
     private function _sendReportToS3( $jobId, $comment, $status = 'success' ){
         $message = array(
             'status'    => $status,
