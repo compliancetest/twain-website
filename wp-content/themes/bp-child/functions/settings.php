@@ -52,6 +52,7 @@ function create_compliancetest_settings_page()
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
+        update_option( 's3_logs_bucket', $_POST['s3_logs_bucket'] );
         
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
@@ -456,6 +457,10 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Message Bucket:</b></label></td>
                             <td><input type="text" name="s3_message_bucket" id="s3_message_bucket" size="50" value="<?php echo get_option('s3_message_bucket')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Logs Bucket:</b></label></td>
+                            <td><input type="text" name="s3_logs_bucket" id="s3_logs_bucket" size="50" value="<?php echo get_option('s3_logs_bucket')?>" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
