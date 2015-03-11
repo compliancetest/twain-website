@@ -71,7 +71,7 @@ class BatchJob {
         $reportFile = $s3->getObject( '/reports/'.$community->name.'/'.$token.'/'.$community->name.'TestProgress.xls' );
         $upload = wp_upload_bits( $community->name.'TestProgress.xls', null, $reportFile );
         foreach( $emails AS $email ){
-            $status = wp_mail( trim( $email ), $community->name . ' community testing progress report, generated ' . get_option( 'reports_generation_date' ), '', '', array( $upload['file'] ) );
+            $status = wp_mail( trim( $email ), $community->name . ' community testing progress report, generated ' . get_option( 'reports_generation_date' ), '   ', '', array( $upload['file'] ) );
             $messages[$email] = $status == true ? 'Success' : 'Error';
         }
         @unlink( $upload['file'] );
