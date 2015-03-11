@@ -70,11 +70,8 @@ class BatchJob {
         $token = get_option( 'reports_token_' . $community->id );
         $reportFile = $s3->getObject( '/reports/'.$community->name.'/'.$token.'/'.$community->name.'TestProgress.xls' );
         $upload = wp_upload_bits( $community->name.'TestProgress.xls', null, $reportFile );
-        $d = new DateTime( date( 'Y-m-d H:i:s'), new DateTimeZone( date_default_timezone_get() ) );
-        $d->setTimezone( new DateTimeZone( 'Australia/Canberra' ) );
-        $date = $d->format('Y-m-d H:i:sP');
         foreach( $emails AS $email ){
-            $status = wp_mail( trim( $email ), $community->name . ' community testing progress report, generated ' . $date, '', '', array( $upload['file'] ) );
+            $status = wp_mail( trim( $email ), $community->name . ' community testing progress report, generated ' . get_option( 'reports_generation_date' ), '', '', array( $upload['file'] ) );
             $messages[$email] = $status == true ? 'Success' : 'Error';
         }
         @unlink( $upload['file'] );
