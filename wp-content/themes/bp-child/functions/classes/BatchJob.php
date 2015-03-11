@@ -73,8 +73,8 @@ class BatchJob {
         foreach( $emails AS $email ){
             $status = wp_mail( trim( $email ), 'Testing progress report', 'Testing progress report', '', array( $upload['file'] ) );
             $messages[$email] = $status == true ? 'Success' : 'Error';
-            @unlink( $upload['file'] );
         }
+        @unlink( $upload['file'] );
         return array( 'status' => 'success', 'message' => $messages );
     }
 
