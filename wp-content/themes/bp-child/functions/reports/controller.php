@@ -19,7 +19,7 @@ function generate_download_report( $community ){
     $d = new DateTime( date( 'Y-m-d H:i:s'), new DateTimeZone( date_default_timezone_get() ) );
     $d->setTimezone( new DateTimeZone( 'Australia/Canberra' ) );
     $date = $d->format('Y-m-d H:i:sP');
-
+    update_option( 'reports_generation_date', $date );
     $community_name = $wpdb->get_var( $wpdb->prepare( "SELECT  name FROM wp_bp_groups WHERE id = %d ", $community_id ) );
     $excel2->setActiveSheetIndex(0);
     $excel2->getActiveSheet()->setCellValue('C1', $community_name .' Community' );
