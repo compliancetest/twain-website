@@ -457,9 +457,16 @@ function createClaimPDF($claim_id, $planID )
 
     //Classify the results by Scenario
     $results = array();
-    
     foreach($testCases as $row)
     {
+        if( ! isset( $testCaseStatuses[$claim->suite_id][$claim->product_id][$row->ID] ) ) {
+            $all_patch_versions = $wpdb->get_results($wpdb->prepare("SELECT case_id FROM wp_test_cases WHERE family_mark = ( SELECT family_mark FROM wp_test_cases WHERE case_id = %d ) ", $row->ID));
+            foreach ($all_patch_versions AS $patch_version) {
+                if (isset($testCaseStatuses[$claim->suite_id][$claim->product_id][$patch_version->case_id])) {
+                    $row->ID = $patch_version->case_id;
+                }
+            }
+        }
         if(isset($esbResults))
         {
             foreach($esbResults as $erow)    
@@ -479,7 +486,6 @@ function createClaimPDF($claim_id, $planID )
             $results[$row->scenarioId] = array();
         $results[$row->scenarioId][] = $row;
     }
-    
     $first = true;
     $idx = 0;
     $rowsCounter = 11;

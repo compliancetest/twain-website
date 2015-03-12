@@ -52,6 +52,12 @@ function certifyPlan()
     $has_exclusions = 0;
     foreach($cases as $case)
     {
+        $all_patch_versions = $wpdb->get_results( $wpdb->prepare( "SELECT case_id FROM wp_test_cases WHERE family_mark = ( SELECT family_mark FROM wp_test_cases WHERE case_id = %d ) ", $case->ID ) );
+        foreach( $all_patch_versions AS $patch_version ){
+            if( isset( $caseStatus[$plan->suite_id][$plan->product_id][$patch_version->case_id] ) ){
+                $case->ID = $patch_version->case_id;
+            }
+        }
         $is_optional = get_post_meta( $case->ID, 'testcase_status', true );
         $is_excluded = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $planID, $case->ID ) );
         if( ! $is_optional ) $is_optional = 'No';
