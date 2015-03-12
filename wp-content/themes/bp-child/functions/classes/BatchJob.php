@@ -65,8 +65,8 @@ class BatchJob {
     public function notifyUsers(){
         $s3 = new S3Wrapper();
         $messages = array();
-        //3 - cronjob id in database
-        $options = $this->_getCronjobOptions( 3 );
+        $conjobId = $this->db->get_var( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s ", $_GET['jobid'] ) );
+        $options = $this->_getCronjobOptions( $conjobId );
         $emails = explode( ',', $options['emails'] );
         $community = $this->db->get_row( $this->db->prepare( "SELECT * FROM wp_bp_groups WHERE name = %s ", $options['community'] ) );
         $token = get_option( 'reports_token_' . $community->id );
