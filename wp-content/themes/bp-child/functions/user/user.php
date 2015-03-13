@@ -230,15 +230,20 @@ function getUserCardById($card_id, $user_id = null)
 {
     global $wpdb;
     
-    if(!$user_id)
+    if( ! $user_id) {
         $user_id = get_current_user_id();
+    }
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_payment_methods WHERE user_id=%d and id=%d", $user_id, $card_id);
-    $row = $wpdb->get_row($query);
+    $row = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_organisations_payment_methods WHERE user_id = %d AND id = %d ", $user_id, $card_id) );
     
     return $row;
 }
+function getOrganisationCardById( $card_id, $organisation_id )
+{
+    global $wpdb;
 
+    return $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_organisations_payment_methods WHERE organisation_id = %d AND id = %d ", $organisation_id, $card_id ) );
+}
 function getCustomerCardDetailById($customer_id)
 {
     global $wpdb;
