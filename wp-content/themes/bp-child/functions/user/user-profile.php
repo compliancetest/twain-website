@@ -199,7 +199,7 @@ function cp_user_payment_edit()
     global $wpdb, $current_user;   
     
     //Goto Homepage
-    if(!is_user_logged_in()){
+    if( ! is_user_logged_in() ){
         echo "Permission Denied!";
         exit;
     }
@@ -207,12 +207,16 @@ function cp_user_payment_edit()
     get_currentuserinfo();
     
     $user_id = $current_user->ID;
-    
+    $is_admin = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_organisations_members WHERE user_id = %d AND is_admin = 1 ", $user_id ) );
+    if( ! $is_admin ){
+        exit( "Permission Denied! Only organisation admin can edit payment methods!" );
+    }
     $id = $_REQUEST['id'];
-    $card = getUserCardById($id, $user_id);
+    $card = getOrganisationCardById( $id, $is_admin->organisation_id );
+
     $result = array();
     
-    if(!$card)
+    if( ! $card )
     {
         echo "Invalid Request!";
         exit;
@@ -276,12 +280,16 @@ function cp_user_payment_save()
     $customer_reference = trim($_POST['customer_reference']);
     
     $id = intval(trim($_POST['id']));
-        
-    if($id)
+
+    $is_admin = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_organisations_members WHERE user_id = %d AND is_admin = 1 ", $user_id ) );
+    if( ! $is_admin ){
+        exit( "Permission Denied! Only organisation admin can edit payment methods!" );
+    }
+    if( $id )
     {
-        $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "organisations_payment_methods WHERE user_id=%d and id=%d", $user_id, $id);
+        $query = $wpdb->prepare("SELECT id FROM wp_organisations_payment_methods WHERE organisation_id = %d AND id = %d", $is_admin->organisation_id, $id);
         $id = intval($wpdb->get_var($query));
-        if(!$id){
+        if( ! $id ){
             return "Invalid Request!";
         }
     }
@@ -409,8 +417,8 @@ function cp_user_payment_save()
         <ewayOption3></ewayOption3> 
         </ewaygateway>';
         curl_close($ch);
-        
-        $preAuthVoidServiceURL = get_eway_pre_auth_void_url();        
+
+        $preAuthVoidServiceURL = get_eway_pre_auth_void_url();
         
         $ch = curl_init($preAuthVoidServiceURL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
@@ -506,7 +514,7 @@ function cp_user_payment_save()
         }
     }else{
         //Getting Card
-        $card = getUserCardById($id);
+        $card = getOrganisationCardById( $id, $is_admin->organisation_id );
         
         $requestbody = array(
             'man:managedCustomerID' => $card->customer_id,
@@ -1161,7 +1169,7 @@ function generateProfile($profile_id, $community_id)
         {
             $identifierPath = str_replace('.', '_', $customData->SourceProfiles->IdentifierPath);
             $identifierValues = $customData->SourceProfiles->Values;
-            if( trim( $identifierPath ) == '?' || trim( $identifierValues ) == '?' ){
+            if( ( is_string( $identifierPath ) && trim( $identifierPath ) == '?' ) || ( is_string( $identifierValues ) && trim( $identifierValues ) == '?' ) ){
                 continue;
             }
             if ($identifierPath != 'Self')
