@@ -89,7 +89,7 @@ class ProfileInstance {
             }
             $profile_description = $jsonObject->Profile->Description;
             $profile_purpose = $jsonObject->Profile->Purpose;
-            $profile_role = $profile_array['title'];
+            $profile_role = $jsonObject->Profile->Type;
         }
         if( isset( $profileData['instance_id'] ) ) {
             $data = array(
