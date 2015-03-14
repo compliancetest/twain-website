@@ -44,6 +44,7 @@
             $affected_plans = json_decode($affected_plans, true);
         }
     }
+    $is_shown = false;
 ?>
 
 <div id="pricing-plans" class="popup-box" style="display: none; width: 723px;">
@@ -55,8 +56,17 @@
             <div class="plans-title-wrapper">
                 <ul class="plans-title-list">
                     <?php foreach( $pricing_plans = PricingPlan::getAllPlans( $suite->test_suite_plans ) AS $k => $plan ): ?>
+                            <?php if( ( isset( $_REQUEST['pricing_plan_id'] ) &&  $_REQUEST['pricing_plan_id'] == $plan->id ) || isset( $_REQUEST['plan_id'] ) )  $is_shown = true; ?>
                             <li <?php if( ( isset( $_REQUEST['pricing_plan_id'] ) && $_REQUEST['pricing_plan_id'] == $plan->id ) || ( $k == 0 && ! isset( $_REQUEST['pricing_plan_id'] ) ) ):?>class="active"<?php endif;?>><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $plan->id;?>' data-plan-name='<?php echo $plan->title;?>'><input type="radio" name="plan_name" /><?php echo $plan->id == 6 ? preg_replace('/ /', '<br>', $plan->title , 1 ) : strrev( preg_replace('/ /', '>rb<', strrev( $plan->title ), 1 ) );?></label></li>
                     <?php endforeach;?>
+                    <?php if( ! $is_shown ):?>
+                        <?php $not_shown_pricing_plan = new PricingPlan( $_REQUEST['pricing_plan_id'] );?>
+                        <?php
+                            $pricing_plans[] = $not_shown_pricing_plan;
+                            $k = ( $k == 0 ?  0 : $k + 1 );
+                        ?>
+                        <li class="active"><label data-plan-container='plan_<?php echo $k;?>' data-plan-id='<?php echo $not_shown_pricing_plan->id;?>' data-plan-name='<?php echo $not_shown_pricing_plan->title;?>'><input type="radio" name="plan_name" /><?php echo $not_shown_pricing_plan->id == 6 ? preg_replace('/ /', '<br>', $not_shown_pricing_plan->title , 1 ) : strrev( preg_replace('/ /', '>rb<', strrev( $not_shown_pricing_plan->title ), 1 ) );?></label></li>
+                    <?php endif;?>
                 </ul>
             </div>
         </div>

@@ -2,6 +2,8 @@
 /**
 * Site Custom Tools
 */
+require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
+use Aws\S3\S3Client;
 
 add_action("admin_menu", "ct_custom_tools_menu");
 
@@ -50,7 +52,20 @@ function ct_duplicate_data()
                             <tr>
                                 <td><b>Password</b></td>
                                 <td><input type="text" name="password" value="<?php echo $_POST['password']?>" autocomplete="off" /></td>
-                            </tr>                
+                            </tr>
+                            <tr>
+                                <td><b>Bucket</b></td>
+                                <td><input type="text" name="s3_prod_bucket" value="<?php echo $_POST['s3_prod_bucket']?>" autocomplete="off" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>Key</b></td>
+                                <td><input type="text" name="s3_prod_key" value="<?php echo $_POST['s3_prod_key']?>" autocomplete="off" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>Token</b></td>
+                                <td><input type="text" name="s3_prod_token" value="<?php echo $_POST['s3_prod_token']?>" autocomplete="off" /></td>
+                            </tr>
+
                             <tr>
                                 <td colspan="2"><input type="submit" class="button button-primary" value="Start" /></td>
                             </tr>                
@@ -212,6 +227,10 @@ function ct_duplicate_data()
                             <input type="hidden" name="database" value="<?php echo $_POST['database']?>" />
                             <input type="hidden" name="username" value="<?php echo $_POST['username']?>" />
                             <input type="hidden" name="password" value="<?php echo $_POST['password']?>" />
+
+                            <input type="hidden" name="s3_prod_bucket" value="<?php echo $_POST['s3_prod_bucket']?>" />
+                            <input type="hidden" name="s3_prod_key" value="<?php echo $_POST['s3_prod_key']?>" />
+                            <input type="hidden" name="s3_prod_token" value="<?php echo $_POST['s3_prod_token']?>" />
                         </form>
                         <script type="text/javascript">
                             jQuery(document).ready(function($){
@@ -449,17 +468,87 @@ function ct_duplicate_data()
                                         $nTypeId = $wpdb->insert_id;
                                         
                                         $profile_type_ids[$pType['id']] = $nTypeId;
-                                        
+
                                         //Copy Profile Instances
                                         $query = "SELECT * FROM {$wpdb->prefix}community_profile_instances WHERE type_id=" . $pType['id'];
                                         $pInstances = $new_wpdb->get_results($query, ARRAY_A);    
                                         foreach($pInstances as $pIns)
                                         {
+
+
                                             $pIns['community_id'] = $new_community_id;
                                             $pIns['type_id'] = $nTypeId;
                                             $oPInsId = $pIns['id'];
                                             $pIns['id'] = null;
                                             unset($pIns['id']);
+                                            try {
+                                                $new_s3 = S3Client::factory(array(
+                                                    'key' => $_POST['s3_prod_key'],
+                                                    'secret' => $_POST['s3_prod_token'],
+                                                    'region' => 'ap-southeast-2',
+                                                    'signature' => 'v4'
+                                                ));
+                                                $prof_content_s3 = $new_s3->getObject(array(
+                                                    'Bucket' => $_POST['s3_prod_bucket'],
+                                                    'Key' => 'profiles/user/' . $pIns['token'] . '.json'
+                                                ));
+                                                $s3 = new S3Wrapper();
+                                                $s3->putObject('/profiles/user/' . $row['token'] . '.json', $prof_content_s3);
+                                            }catch( Exception $e ){
+
+                                            }
+                                            if( get_option('validate_via_sqs') == 'yes' ){
+                                                $file_size = strlen( $prof_content_s3 );
+                                                $pIns['profile_name'] = 'Pending...';
+                                                $pIns['profile_description'] = 'Pending...';
+                                                $pIns['purpose'] = 'Pending...';
+                                                $pIns['validation_status'] = 'pending';
+
+                                                $error_format = get_option( 'validation_error_format' );
+                                                if( empty( $error_format ) ){
+                                                    $error_format = 'html';
+                                                }
+
+                                                $profileType = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $row['type_id'] ) );
+                                                $profile_json = base64_decode( $profileType->schema );
+                                                $profile_array = json_decode( $profile_json, 1 );
+                                                $profile_type = str_replace( ' ', '', $profile_array['title'] );
+                                                $file_name = $profile_type.'_v'.$profile_array['Version']['Major'].'_'.$profile_array['Version']['Minor'];
+                                                $type_name = $profile_array['title'].' v'.$profile_array['Version']['Major'].'.'.$profile_array['Version']['Minor'];
+                                                if( isset( $profile_array['Version']['Patch'] ) ){
+                                                    $file_name = $file_name.'_'.$profile_array['Version']['Patch'];
+                                                    $type_name .= '.'.$profile_array['Version']['Patch'];
+                                                }
+                                                $uniq_key = md5( $row['token'] . mktime() );
+                                                $message = array(
+                                                    'operation'     => 'profileValidationRequest',
+                                                    'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
+                                                    'securityContext' => array(
+                                                        'username' => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $user_id ) )
+                                                    ),
+                                                    'parameters' => array(
+                                                        'outputFormat' => $error_format,
+                                                        'document' => array(
+                                                            'bucket' => get_option( 'aws_s3_url' ),
+                                                            'key'    => "profiles/user/{$row['token']}.json"
+                                                        ),
+                                                        'schema' => array(
+                                                            'bucket' => get_option( 's3_reference_bucket' ),
+                                                            'key'    => 'schema/profiles/'.strtolower( $profile_type ).'/'.$file_name.'.json'
+                                                        ),
+                                                        'saveTo' => array(
+                                                            'bucket' => get_option( 'aws_s3_url' ),
+                                                            'key'    => "profiles/validation/{$row['token']}/{$uniq_key}.".$error_format
+                                                        )
+                                                    )
+                                                );
+                                                $sqs = new SqsWrapper();
+                                                $is_bulk = false;
+                                                if( $file_size >= get_option( 's3_bulk_treshold' ) ){
+                                                    $is_bulk = true;
+                                                }
+                                                $sqs->sendMessage( $message, $is_bulk );
+                                            }
                                             $wpdb->insert($wpdb->prefix . 'community_profile_instances', $pIns);
                                             $profile_instance_ids[$oPInsId] = $wpdb->insert_id;
                                             $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $pIns['type_id']));
@@ -704,7 +793,19 @@ function ct_duplicate_data()
                         <tr>                         
                             <td><b>Password</b></td>
                             <td><input type="text" name="password" value="<?php echo $_POST['password']?>" autocomplete="off" /></td>
-                        </tr>                
+                        </tr>
+                        <tr>
+                            <td><b>Bucket</b></td>
+                            <td><input type="text" name="s3_prod_bucket" value="" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><b>Key</b></td>
+                            <td><input type="text" name="s3_prod_key" value="" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><b>Token</b></td>
+                            <td><input type="text" name="s3_prod_token" value="" autocomplete="off" /></td>
+                        </tr>
                         <tr>
                             <td colspan="2"><input type="submit" class="button button-primary" value="Start" /></td>
                         </tr>                
@@ -811,6 +912,7 @@ function ct_duplicate_data()
                                 <option value="a_tickets" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'a_tickets'):?>selected="selected" <?php endif;?>>Ticket Attachments</option>
                                 <option value="downloads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'downloads'):?>selected="selected" <?php endif;?>>Download Attachments</option>
                                 <option value="uploads" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'uploads'):?>selected="selected" <?php endif;?>>Uploads</option>
+                                <option value="profile_types" <?php if( isset( $_POST['type'] ) && $_POST['type'] == 'profile_types'):?>selected="selected" <?php endif;?>>Profile Types</option>
                             </select>
                         </td>
                         <td>
@@ -853,9 +955,73 @@ function ct_duplicate_data()
                                     } else if( $_POST['type'] == 'uploads' ){
                                         $counter = BlobsMigration::uploadMessages();
                                         echo 'Processed: '.$counter.' uploads';
+                                    } else if( $_POST['type'] == 'profile_types' ){
+                                        $counter = BlobsMigration::uploadProfileTypes();
+                                        echo 'Processed: '.$counter.' profile types';
                                     }else {
+
                                         echo 'Not implemented yet';
                                     }
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
+
+        <h2>Populate profiles data( profile_description, purpose, profile_name )</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('populate_wp_profiles')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Populate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'populate_wp_profiles')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                    global $wpdb;
+                                    $profiles = $wpdb->get_results("SELECT * FROM wp_community_profile_instances ORDER BY id");
+                                    $s3 = new S3Wrapper();
+                                    $counter = 0;
+                                    foreach( $profiles AS $profile ) {
+                                        $s3_profile = $s3->getProfile( $profile->token );
+                                        $profile_name = $s3_profile->Profile->Title.' v'.$s3_profile->Profile->Version->Major.'.'.$s3_profile->Profile->Version->Minor;
+                                        if( $s3_profile->Profile->Version->Patch ){
+                                            $profile_name .= '.'.$s3_profile->Profile->Version->Patch;
+                                        }
+                                        $profile_type = $wpdb->get_row( $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d", $profile->type_id ) );
+                                        $pJSON = json_decode( base64_decode( $profile_type->schema ) );
+                                        if( $pJSON->Version ){
+                                            $version = array();
+                                            foreach( get_object_vars($pJSON->Version) AS $k => $v ){
+                                                $version[] = $v;
+                                            }
+                                            $type_name = $profile_type->title ." v" . implode(".", $version);
+                                        }
+                                        $wpdb->update( 'wp_community_profile_instances',
+                                            array(
+                                                'profile_name'        => $profile_name,
+                                                'profile_description' => $s3_profile->Profile->Description,
+                                                'purpose'             => $s3_profile->Profile->Purpose,
+                                                'type_name'           => $type_name,
+                                                'content_length'      => strlen( json_encode( $s3_profile ) ),
+                                                'profile_role'        => $profile_type->title
+                                            ),
+                                            array( 'id' => $profile->id ),
+                                            array( '%s', '%s', '%s', '%s', '%d', '%s' ),
+                                            array( '%d' )
+                                        );
+                                        $counter++;
+                                    }
+
+                                    echo 'Processed ' . $counter . ' profiles.';
                                     ?>
                                 </i>
                             </td>

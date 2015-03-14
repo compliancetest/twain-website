@@ -270,7 +270,6 @@ class TestCase
         $instances = cp_get_post_meta($this->id, 'profile_instances', true);
         
         $this->profileInstances = cp_explode($instances);    
-        return $roles;
     }
     
     public function getProfileInstanceRows($type = 'harness')
@@ -284,7 +283,7 @@ class TestCase
         if( empty( $ids ) ){
             return array();
         }
-        $query = "SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id IN (" . implode(", ", $ids) . ") ORDER BY pi.purpose, pi.profile_name";        
+        $query = "SELECT pi.*, NULL AS content, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.id IN (" . implode(", ", $ids) . ") ORDER BY pi.purpose, pi.profile_name";
         $rows = $wpdb->get_results($query);
         
         return $rows;

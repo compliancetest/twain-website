@@ -84,6 +84,8 @@ require_once(THE_FUNCTION . '/buddypress/buddypress-group-test-data.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');
 
+//ProfileInstance class allows to edit profile in single place
+require_once(THE_FUNCTION . '/classes/ProfileInstance.php');
 
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');
@@ -117,8 +119,10 @@ require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
 require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
 require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
 
-//S3
+//SQS
 require_once(THE_FUNCTION . '/aws/s3/Client.php');
+
+require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
 //Compliance Claim
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');

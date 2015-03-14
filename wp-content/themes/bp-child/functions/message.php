@@ -51,7 +51,16 @@ function sendMessage()
     
     header('content-type: application/xml');
     echo '<result>';
-    
+
+    $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+    if( (   $wpdb->get_var( $wpdb->prepare("SELECT content_length FROM wp_community_profile_instances WHERE id = %d ", $tester_profile ) ) > get_option( 's3_bulk_treshold' ) ||
+            $wpdb->get_var( $wpdb->prepare("SELECT content_length FROM wp_community_profile_instances WHERE id = %d ", $harness_profile ) ) > get_option( 's3_bulk_treshold' )
+        ) && ( get_post_meta( $case_id, 'bulk', true ) != 'Yes' || ! PricingPlan::isSupportBulk( $pricingPlanId ) ) ){
+        echo '<status>error</status>';
+        echo '<error>Bulk profiles are not selectable for the current pricing plan and selected test case</error>';
+        echo '</result>';
+        exit;
+    }
     if(!$suite_id || !$case_id || !$template || !$harness_profile || !$tester_profile)
     {
         echo '<status>error</status>';
@@ -406,12 +415,9 @@ function getTestCases()
 
 function _getHarnessProfilesHTML($case_id, $defaults = array())
 {
+    global $wpdb;
     $html = '';
-    
-    /*$caseObj = new TestCase($case_id);        
-    $caseObj->loadProfileInstances();
-    $harnessProfiles = $caseObj->getProfileInstanceRows();
-    */
+
     $user_id = get_current_user_id();
     
     $profileInstances = _getTesterAndHarnessProfileInstances($case_id, $user_id);
@@ -429,8 +435,6 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
     foreach($profileInstances as $instance){
-        $pJSON = S3Wrapper::getProfile( $instance->token );
-        $profileTypeName = $pJSON->Profile->Type;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -438,7 +442,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
                 $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
+                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $instance->profile_role ), $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -451,7 +455,12 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
                 continue;
             }
         }
-        $html .= _getProfileRow($instance, 'harness_profile', $defaults);
+        $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+        if( $instance->content_length > get_option( 's3_bulk_treshold' ) && ( $case->bulk != 'Yes' || ! PricingPlan::isSupportBulk( $pricingPlanId ) ) ){
+            $html .= _getProfileRow($instance, 'harness_profile', $defaults, true );
+        } else {
+            $html .= _getProfileRow($instance, 'harness_profile', $defaults);
+        }
     }
         
     return $html;
@@ -459,15 +468,8 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
 
 function _getTesterProfilesHTML($case_id, $defaults = array())
 {
+    global $wpdb;
     $html = '';
-    
-    /*$caseObj = new TestCase($case_id);        
-    $caseObj->loadProfileInstances();
-    $harnessProfiles = $caseObj->getProfileInstanceRows();
-
-    $customerProfileInstances = getCustomerProfileInstances();
-            
-    $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);*/
     
     $user_id = get_current_user_id();
     
@@ -486,8 +488,6 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( $case->testSuite );
     $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
     foreach($profileInstances as $instance){
-        $pJSON = S3Wrapper::getProfile( $instance->token );
-        $profileTypeName = $pJSON->Profile->Type;
         if( ! $instance->lookup && ! cp_checked($instance->id, $case->profileInstances) ){
             continue;
         }
@@ -495,7 +495,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
             $isAllowed = false;
             foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
                 $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
+                if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $instance->profile_role ), $cProfilesTypes ) ){
                     $isAllowed = true;
                 }
             }
@@ -508,31 +508,30 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
                 continue;
             }
         }
-        $html .= _getProfileRow($instance, 'tester_profile', $defaults);
+        $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+        if( $instance->content_length > get_option( 's3_bulk_treshold' ) && ( $case->bulk != 'Yes' || ! PricingPlan::isSupportBulk( $pricingPlanId ) ) ){
+            $html .= _getProfileRow($instance, 'tester_profile', $defaults, true );
+        } else {
+            $html .= _getProfileRow($instance, 'tester_profile', $defaults);
+        }
     }
     
     return $html;
 }
 
-function _getProfileRow($instance, $name, $defaults)
-{
-    $instanceObj = S3Wrapper::getProfile( $instance->token );
-    $schemaObj = json_decode(base64_decode($instance->schema));
-    
-    $version[] = $instanceObj->Profile->Version->Major;
-    $version[] = $instanceObj->Profile->Version->Minor;
-    if($instanceObj->Profile->Version->Patch)
-        $version[] = $instanceObj->Profile->Version->Patch;
-    
-    $sVersion[] = $schemaObj->Version->Major;
-    $sVersion[] = $schemaObj->Version->Minor;
-    if($schemaObj->Version->Patch)
-        $sVersion[] = $schemaObj->Version->Patch;
-
-    $html .= '<div class="field-row">';
-    $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' .  get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . ' v' . implode('.', $version) . '</a></div>';
-    $html .= '<div class="grid-cell width20P">' . $instanceObj->Profile->Purpose . '</div>';
-    $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->profile_type_title . ' v' . implode(".", $sVersion) . '</a>  </div>';
+function _getProfileRow($instance, $name, $defaults, $not_allowed = false ){
+    $html  = '<div class="field-row">';
+    if( $not_allowed ){
+        $html .= '<div class="grid-cell width50P has-tooltip">
+                    <input type="radio" disabled="disabled" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" />
+                        <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name  . '</a>
+                        <span class="simple_tooltip" style="width:150px; top: -70px; left:35px;">Bulk profiles are not selectable for the current pricing plan and selected test case<span></span></span>
+                </div>';
+    } else {
+        $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
+    }
+    $html .= '<div class="grid-cell width20P">' . $instance->purpose . '</div>';
+    $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->type_name . '</a>  </div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
     
@@ -551,11 +550,11 @@ function _getTesterAndHarnessProfileInstances($case_id, $user_id)
         return array();
     }
     if( empty( $ids ) ){
-        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);
+        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.creator_id=%d AND pi.type='tester') AND pi.validation_status = 'valid' ORDER BY pi.purpose, pi.profile_name", $user_id);
     } else {
-        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE (pi.id IN (" . implode(", ", $ids) . ")) OR (pi.creator_id=%d AND pi.type='tester') ORDER BY pi.purpose, pi.profile_name", $user_id);
+        $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.validation_status = 'valid' AND ( pi.id IN ( " . implode(", ", $ids) . " ) OR  (pi.creator_id=%d AND pi.type='tester' ) ) ORDER BY pi.purpose, pi.profile_name", $user_id);
     }
-    
+
     $profiles = $wpdb->get_results($query);
     
     return $profiles;
@@ -613,7 +612,6 @@ function showTriggerMessageBox()
             </div>    
         <?php    
         }else{
-//            $lastData = getUserLastDataForMessage($user_id);
             $lastData = null;
             $products = getUserProductsAndServices($user_id);
             
@@ -624,7 +622,7 @@ function showTriggerMessageBox()
                 if($s->suite_id == $current_suite_id)
                 {
                     $is_valid_suite = true;
-                    break;        
+                    break;
                 }
             }
             if(!$is_valid_suite)
@@ -632,10 +630,7 @@ function showTriggerMessageBox()
                 
                 
             $current_product_id = !$lastData ? $products[0]->ID : $lastData->product_id;
-            
-            $current_harness_profile_id = !$lastData ? array() : unserialize($lastData->harness_profile_id);
-            $current_tester_profile_id = !$lastData ? array() : unserialize($lastData->tester_profile_id);
-            
+
             //Getting Test Cases
             $suiteObj = new TestSuite($current_suite_id);
             $cases = $suiteObj->loadHarnessInitiatedTestCases();
@@ -669,7 +664,7 @@ function showTriggerMessageBox()
             
             $testerProfiles = array_merge($customerProfileInstances, $harnessProfiles);*/
             
-            $profileInstances = _getTesterAndHarnessProfileInstances($current_case_id, $user_id);
+//            $profileInstances = _getTesterAndHarnessProfileInstances($current_case_id, $user_id);
 
             $is_checked_by_default = $wpdb->get_var( $wpdb->prepare( "SELECT gateway_id FROM wp_users_subscriptions WHERE user_id = %d AND suite_id = %d ", get_current_user_id(), $current_suite_id ) );
             
@@ -705,8 +700,10 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width250">
                                     <label for="tm-test-suite">Test Case</label>
                                     <select name="test-case" id="tm-test-case" class="select">
+                                        <option value="" selected="selected">- Select -</option>
                                         <?php foreach($cases as $c){ ?>
-                                        <option value="<?php echo $c->ID?>" <?php echo ($c->ID == $current_case_id) ? 'selected="selected"' : '' ?>><?php echo $c->post_title ?></option>
+                                            <option value="<?php echo $c->ID?>"><?php echo $c->post_title ?></option>
+<!--                                            --><?php //echo ($c->ID == $current_case_id) ? 'selected="selected"' : '' ?>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -715,7 +712,7 @@ function showTriggerMessageBox()
                                     <select name="template" id="tm-template" class="select">
                                         <option value="">- Select -</option>
                                         <?php foreach($caseTemplates as $t){ ?>
-                                        <option value="<?php echo $t['url']?>" <?php echo (count($caseTemplates) == 1) ? 'selected="selected"' : '' ?>><?php echo $t['name']?></option>
+                                            <option value="<?php echo $t['url']?>" <?php echo (count($caseTemplates) == 1) ? 'selected="selected"' : '' ?>><?php echo $t['name']?></option>
                                         <?php } ?>
                                     </select>
                                 </div>                    
@@ -740,38 +737,6 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php
-                                $case = new TestCase( $cases[0]->ID );
-                                $case->load();
-                                $suiteObj = new TestSuite();
-                                $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles( array( $suites[0]->suite_id ) );
-                                $testSuitesRoles = array( str_replace( ' ', '', $case->harnessRole ) );
-                                foreach($profileInstances as $instance){
-                                    $pJSON = S3Wrapper::getProfile( $instance->token );
-                                    $profileTypeName = $pJSON->Profile->Type;
-                                    if( ! $instance->lookup ){
-                                        continue;
-                                    }
-                                    if( ! empty( $testSuitesRolesProfilesTypes ) ){
-                                        $isAllowed = false;
-                                        foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                            $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                                            if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
-                                                $isAllowed = true;
-                                            }
-                                        }
-                                        if( ! $isAllowed ) {
-                                            continue;
-                                        }
-                                    }
-                                    if( $is_checked_by_default ){
-                                        if( $instance->creator_id != get_current_user_id() ){
-                                            continue;
-                                        }
-                                    }
-                                    echo _getProfileRow($instance, 'harness_profile', $current_harness_profile_id);
-                                } 
-                            ?>
                         </div>
                         <div class="tester-profiles-section">
                             <h5>Tester Profiles</h5>
@@ -782,34 +747,6 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width30P"><b>Type</b></div>
                                 <div class="clear"></div>
                             </div>
-                            <?php
-                                $testSuitesRoles = array( str_replace( ' ', '', $case->testerRole ) );
-                                foreach($profileInstances as $instance){
-                                    $pJSON = S3Wrapper::getProfile( $instance->token );
-                                    $profileTypeName = $pJSON->Profile->Type;
-                                    if( ! $instance->lookup ){
-                                        continue;
-                                    }
-                                    if( ! empty( $testSuitesRolesProfilesTypes ) ){
-                                        $isAllowed = false;
-                                        foreach( $testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes ){
-                                            $cProfilesTypes = str_replace( ' ', '', $cProfilesTypes );
-                                            if( in_array( str_replace( ' ', '', $cRoleName ), $testSuitesRoles ) && in_array( str_replace( ' ', '', $profileTypeName ), $cProfilesTypes ) ){
-                                                $isAllowed = true;
-                                            }
-                                        }
-                                        if( ! $isAllowed ) {
-                                            continue;
-                                        }
-                                    }
-                                    if( $is_checked_by_default ){
-                                        if( $instance->creator_id != get_current_user_id() ){
-                                            continue;
-                                        }
-                                    }
-                                    echo _getProfileRow($instance, 'tester_profile', $current_tester_profile_id);
-                                } 
-                            ?>
                         </div>
                     </div>
                     <div class="popup-box-footer radius6 noradiustop">

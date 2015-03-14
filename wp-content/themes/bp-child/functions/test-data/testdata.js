@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
             
             data.context = jQuery('#profile_instance_upload_btn')
                 .click(function () {
-                    jQuery('#edit-profile-box .message').remove();  
+                    jQuery('#edit-profile-box .message').remove();
                     if(data.files.length < 1)
                     {
                         jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select a file to upload</p>');
@@ -52,50 +52,52 @@ jQuery(document).ready(function(){
         done: function (e, data) {
             jQuery('#edit-profile-box .message').remove();
             jQuery('#edit-profile-box .loading').hide();
-            //Check Validation
-            $result = tv4.validateMultiple(data.result, profileType);
-            if(!$result.valid)
-            {
-                var errors = '', errors_value = '';
-                for (var i in $result.errors) {
-                    if ($result.errors[i].dataPath) {
-                        errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
-                        errors_value += $result.errors[i].dataPath + '\n';
-                    }
-                    errors += $result.errors[i].message + '<br/>';                
-                    errors_value += $result.errors[i].message + '\n';
-                }
-                jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
-                jQuery('#editProfileErrorForm #profile-error-content').html(errors);
-                jQuery('#editProfileForm').hide();
-                jQuery('#editProfileErrorForm').show();
-                
-                jQuery('#download-error').click(function(){
-                    /*jQuery.ajax({
-                        url: "/?td-action="  + jQuery('#download-error-action').val(),
-                        data: jQuery('#editProfileErrorForm').serialize(),
-                        type: 'post',
-                        dataType: 'html',
-                        success: function(rsp){
+            //check that we dont use backend validation
+            if( jQuery('#sqs_validation_status').val() != 'yes') {
+                //Check Validation
+                $result = tv4.validateMultiple(data.result, profileType);
+                if (!$result.valid) {
+                    var errors = '', errors_value = '';
+                    for (var i in $result.errors) {
+                        if ($result.errors[i].dataPath) {
+                            errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
+                            errors_value += $result.errors[i].dataPath + '\n';
                         }
-                    });*/
-                    jQuery('#editProfileErrorForm').submit();
-                });
-                jQuery('#copy-error').zclip({
-                    path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
-                    copy: function(){ 
-                        return jQuery('#editProfileErrorForm #profile-errors').html(); 
-                    },
-                    afterCopy: function(){
-                        
+                        errors += $result.errors[i].message + '<br/>';
+                        errors_value += $result.errors[i].message + '\n';
                     }
-                });
-                jQuery('#close-error').click(function(){
-                    jQuery('#editProfileErrorForm').hide();
-                    jQuery('#editProfileForm').show();
-                });
-                //jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
-                return false;
+                    jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
+                    jQuery('#editProfileErrorForm #profile-error-content').html(errors);
+                    jQuery('#editProfileForm').hide();
+                    jQuery('#editProfileErrorForm').show();
+
+                    jQuery('#download-error').click(function () {
+                        /*jQuery.ajax({
+                         url: "/?td-action="  + jQuery('#download-error-action').val(),
+                         data: jQuery('#editProfileErrorForm').serialize(),
+                         type: 'post',
+                         dataType: 'html',
+                         success: function(rsp){
+                         }
+                         });*/
+                        jQuery('#editProfileErrorForm').submit();
+                    });
+                    jQuery('#copy-error').zclip({
+                        path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
+                        copy: function () {
+                            return jQuery('#editProfileErrorForm #profile-errors').html();
+                        },
+                        afterCopy: function () {
+
+                        }
+                    });
+                    jQuery('#close-error').click(function () {
+                        jQuery('#editProfileErrorForm').hide();
+                        jQuery('#editProfileForm').show();
+                    });
+                    //jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
+                    return false;
+                }
             }
             //Saving Data
             jQuery('#edit-profile-box .loading b').html('SAVING DATA');
@@ -191,13 +193,13 @@ jQuery(document).ready(function(){
                     jQuery('#edit-profile-box .popup-box-header').html('Edit Profile Instance');
                     jQuery('#is_upload').val('0');
                 }
+
                 jQuery('#edit_profile_instance_panel').hide();
                 jQuery('#edit-profile-box #profile-type-id').val(type_id);
                 jQuery('#edit-profile-box #profile-type-id').change();
             }
         });
-    })    
-    
+    });
     //Disable auto submit to save it by ajax
     jQuery('#editProfileForm').submit(function(){
         return false;
@@ -206,60 +208,61 @@ jQuery(document).ready(function(){
     //Edit Profile Box
     jQuery('#edit-profile-box .submit-btn').click(function(){        
         jQuery('#edit-profile-box .message').remove();
-        if(profileData == null || profileType == null)
+        if(profileData == null || profileType == null )
         {
             jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please choose a profile type.</p>');
             return false;
-        }            
-        $result = tv4.validateMultiple(profileData.value(), profileType);
-        if(!$result.valid)
-        {
-            var errors = '', errors_value = '';
-            for (var i in $result.errors) {
-                if ($result.errors[i].dataPath) {
-                    errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
-                    errors_value += $result.errors[i].dataPath + '\n';
-                }
-                errors += $result.errors[i].message + '<br/>';                
-                errors_value += $result.errors[i].message + '\n';
-            }
-            jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
-            jQuery('#editProfileErrorForm #profile-error-content').html(errors);
-            jQuery('#editProfileForm').hide();
-            jQuery('#editProfileErrorForm').show();
-            
-            jQuery('#download-error').click(function(){
-                /*jQuery.ajax({
-                    url: "/?td-action="  + jQuery('#download-error-action').val(),
-                    data: jQuery('#editProfileErrorForm').serialize(),
-                    type: 'post',
-                    dataType: 'html',
-                    success: function(rsp){
+        }
+        if( jQuery('#sqs_validation_status').val() != 'yes') {
+            $result = tv4.validateMultiple(profileData.value(), profileType);
+            if (!$result.valid) {
+                var errors = '', errors_value = '';
+                for (var i in $result.errors) {
+                    if ($result.errors[i].dataPath) {
+                        errors += '<b>' + $result.errors[i].dataPath + '</b><br/>';
+                        errors_value += $result.errors[i].dataPath + '\n';
                     }
-                });*/
-                profile_value = profileData.value();
-                if (profile_value.Profile && profile_value.Profile.Title != '') {
-                    jQuery('#profile-name').val(profile_value.Profile.Title);
-                } else {
-                    jQuery('#profile-name').val('profile');
+                    errors += $result.errors[i].message + '<br/>';
+                    errors_value += $result.errors[i].message + '\n';
                 }
-                jQuery('#editProfileErrorForm').submit();
-            });
-            jQuery('#copy-error').zclip({
-                path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
-                copy: function(){ 
-                    return jQuery('#editProfileErrorForm #profile-errors').html(); 
-                },
-                afterCopy: function(){
-                    
-                }
-            });
-            jQuery('#close-error').click(function(){
-                jQuery('#editProfileErrorForm').hide();
-                jQuery('#editProfileForm').show();
-            });
-            //jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
-            return false;
+                jQuery('#editProfileErrorForm #profile-errors').html(errors_value);
+                jQuery('#editProfileErrorForm #profile-error-content').html(errors);
+                jQuery('#editProfileForm').hide();
+                jQuery('#editProfileErrorForm').show();
+
+                jQuery('#download-error').click(function () {
+                    /*jQuery.ajax({
+                     url: "/?td-action="  + jQuery('#download-error-action').val(),
+                     data: jQuery('#editProfileErrorForm').serialize(),
+                     type: 'post',
+                     dataType: 'html',
+                     success: function(rsp){
+                     }
+                     });*/
+                    profile_value = profileData.value();
+                    if (profile_value.Profile && profile_value.Profile.Title != '') {
+                        jQuery('#profile-name').val(profile_value.Profile.Title);
+                    } else {
+                        jQuery('#profile-name').val('profile');
+                    }
+                    jQuery('#editProfileErrorForm').submit();
+                });
+                jQuery('#copy-error').zclip({
+                    path: '/wp-content/themes/bp-child/js/ZeroClipboard.swf',
+                    copy: function () {
+                        return jQuery('#editProfileErrorForm #profile-errors').html();
+                    },
+                    afterCopy: function () {
+
+                    }
+                });
+                jQuery('#close-error').click(function () {
+                    jQuery('#editProfileErrorForm').hide();
+                    jQuery('#editProfileForm').show();
+                });
+                //jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">The entered values do not match with the profile type.</p>');
+                return false;
+            }
         }
         //Saving Data
         jQuery('#edit-profile-box .loading b').html('SAVING DATA');

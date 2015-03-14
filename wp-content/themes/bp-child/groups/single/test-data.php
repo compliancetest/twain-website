@@ -29,64 +29,45 @@ $testsuites = get_posts( $args );
     <div id="testdata-lists">
         <div class="grid-list">
             <div class="grid-list-row grid-list-header">
-                <div class="grid-list-cell width45P">Profile Name</div>                
-                <div class="grid-list-cell width15P">Profile Purpose</div>                
+                <div class="grid-list-cell width40P">Profile Name</div>
+                <div class="grid-list-cell width10P">Profile Purpose</div>
                 <div class="grid-list-cell width15P tocenter">Profile Type</div>                
-                <div class="grid-list-cell width15P tocenter">Created Date</div>                
+                <div class="grid-list-cell width15P tocenter">Created Date</div>
+                <div class="grid-list-cell width10P tocenter">Valid?</div>
                 <div class="grid-list-cell width10P tocenter">Action</div>                
                 <div class="clear"></div>
             </div>                          
             <?php                    
             
                 $instances = getCommunityProfileInstatnces(bp_get_group_id());
-                foreach($instances as $instance)
-                {
-                    $instanceObj = S3Wrapper::getProfile( $instance->token );
+                foreach( $instances AS $instance ){
             ?>
             <div class="grid-list-row" id="instanceRow<?php echo $file->id?>">
-                <div class="grid-list-cell width45P">                    
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name?>
-                    <?php
-                        if($instanceObj->Profile->Version)
-                        {
-                            if(is_object($instanceObj->Profile->Version))
-                            {
-                                $version = array();
-                                foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)      
-                                {
-                                    $version[] = $v;
-                                }
-                                echo " v" . implode(".", $version);
-                            }else{
-                                echo " v " . $instanceObj->Profile->Version;
-                            }
-                        }
-                    ?>
-                    </a>
+                <div class="grid-list-cell width40P">
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name; ?></a>
                     <br />
-                    <p><?php echo $instanceObj->Profile->Description?></p>
+                    <p><?php echo $instance->profile_description; ?></p>
                 </div>
-                <div class="grid-list-cell width15P">
-                    <?php echo $instanceObj->Profile->Purpose?>            
+                <div class="grid-list-cell width10P">
+                    <?php echo $instance->purpose; ?>
                 </div>
                 <div class="grid-list-cell width15P tocenter">
-                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->profile_type_title; ?>
-                        <?php
-                            $pJSON = json_decode(base64_decode($instance->schema));                            
-                            if($pJSON->Version)
-                            {
-                                $version = array();
-                                foreach(get_object_vars($pJSON->Version) as $k=>$v)      
-                                {
-                                    $version[] = $v;
-                                }
-                                echo " v" . implode(".", $version);
-                            }
-                        ?>
-                    </a>                    
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link"><?php echo $instance->type_name; ?></a>
                 </div>
                 <div class="grid-list-cell width15P tocenter">
                     <?php echo formatDate($instance->created_date) ?>                    
+                </div>
+                <div class="grid-list-cell width10P tocenter">
+                    <?php if( $instance->validation_status == 'valid' ):?>
+                        <span class="profile-valid"></span>
+                    <?php elseif( $instance->validation_status == 'invalid' ):?>
+                        <?php
+                            $link = empty( $instance->validation_url ) ?  '#' : $instance->validation_url;
+                        ?>
+                        <a href="<?php echo S3Wrapper::getUrlWithDomain( $link );?>" class="profile-invalid" target="_blank"></a>
+                    <?php else:?>
+                        <span class="profile-pending"></span>
+                    <?php endif;?>
                 </div>
                 <div class="grid-list-cell width10P tocenter">
                     <?php
@@ -98,8 +79,8 @@ $testsuites = get_posts( $args );
                     <?php
                         }
                     ?>
-                    <?php if (count($testsuites) > 0): ?>
-                    <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('copy-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn blue-btn copy-btn left5"><span class="p"></span><span class="simple_tooltip radius6 no-wrap">Copy Profile<span></span></span></a>
+                    <?php if( count( $testsuites ) > 0 && $instance->validation_status == 'valid' ): ?>
+                        <a href="<?php bp_group_permalink()?>testdata?td-action=<?php echo wp_create_nonce('copy-harness-instance')?>&id=<?php echo $instance->id?>" class="action-btn icon-btn blue-btn copy-btn left5"><span class="p"></span><span class="simple_tooltip radius6 no-wrap">Copy Profile<span></span></span></a>
                     <?php endif; ?>
                 </div>
                 <div class="clear"></div>
@@ -141,6 +122,7 @@ $testsuites = get_posts( $args );
          </div> 
     </div>
 </div>
+<input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <div class="popup-box" id="delete-profile-box" style="display: none; width: 500px">
     <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
     <div class="popup-box-content"> 
@@ -168,8 +150,6 @@ $testsuites = get_posts( $args );
         <div class="popup-box-top-nav">            
             <div class="btn-row">      
                 <h5 class="left nomarginbottom lineheight22px">Please Select Profile Type</h5>          
-                <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">SAVE</span></a>            
                 <div class="clear"></div>
             </div>
         </div>
@@ -221,18 +201,18 @@ $testsuites = get_posts( $args );
                         <div class="clear"></div>
                     </div>
                     <textarea id="profile_type_txt" class="displaynone"><?php echo $lastType ? base64_decode($lastType->schema) : ''?></textarea>                
-                    <textarea id="profile_instance_txt" class="displaynone"></textarea>                
+                    <textarea id="profile_instance_txt" class="displaynone"></textarea>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <div class="btn-row">
+                            <a href="#" class="action-btn process-btn submit-btn "><span class="p"></span><span class="t">Confirm</span></a>
+                            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="popup-box-footer radius6 noradiustop">                            
-            <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn right close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
-                <a href="#" class="action-btn process-btn right submit-btn"><span class="p"></span><span class="t">SAVE</span></a>                            
-                <div class="clear"></div>
-            </div>
-        </div>                        
-        <a class="close_btn"></a>                        
+        <a class="close_btn"></a>
         <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><p>Please wait...</p></div></div>
         <input type="hidden" name="instance-id" id="instance-id" value="" />
         <input type="hidden" id="save-instance-action" value="<?php echo wp_create_nonce('save-harness-instance')?>" />
