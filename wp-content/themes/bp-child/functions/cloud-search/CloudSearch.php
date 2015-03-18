@@ -142,6 +142,9 @@ class CloudSearch {
         foreach( $test_plans AS $test_plan ){
             $product = new ProductAndService( $test_plan->product_id );
             $product->load();
+            if( empty( $product->name ) ){
+                continue;
+            }
             $test_plan->level = trim( $test_plan->level, ';;' );
             $test_plan->role = trim( $test_plan->role, ';;' );
             if( strpos( $test_plan->role, ';;' ) ){
@@ -155,7 +158,6 @@ class CloudSearch {
                 $levels = array( $test_plan->level );
             }
             
-            $post_author = $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM wp_posts WHERE ID = %d ", $product->id ) );
             $test_suite = new TestSuite( $test_plan->suite_id );
             $test_suite->load();
             if( $product->visibility == 'Public' ){
@@ -186,7 +188,7 @@ class CloudSearch {
                 'post_id'     => $product->id,
                 'visibility'  => $visibility,
                 'community_id' => $communities,
-                'user_id'     => $post_author,
+                'user_id'     => $test_plan->creator_id,
                 'product_id'  => $test_plan->product_id,
                 'product_name' => $product->name,
                 'start_date'  => date( 'Y-m-d\TH:i:s', strtotime( $test_plan->created_date ) ).'Z',
