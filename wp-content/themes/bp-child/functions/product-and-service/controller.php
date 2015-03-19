@@ -20,7 +20,9 @@ function process_product_service_actions()
     if(wp_verify_nonce($action, 'save-product-service')){
         saveProductService();        
     }else if(wp_verify_nonce($action, 'delete-product')){
-        deleteProductService();    
+        showDeletePopup();
+    }else if(wp_verify_nonce($action, 'delete-product-confirm')){
+        deleteProduct();
     }else if(wp_verify_nonce($action, 'delete-search-entry') && is_super_admin() ){
         if( is_super_admin() ) {
             if( $_REQUEST['type'] == 'site'){
@@ -269,63 +271,121 @@ function saveProductService()
             }
         }
     }
-    $cloud_search = new CloudSearch();
     $full_search  = new FulltextSearch();
-
-    $cloud_search->_initial_upload();
-    $full_search->fullUpload();
+    $cloud_search = new CloudSearch();
+    /**
+     * We need to reload data for existing product because
+     * it could contain test plans / claims / services which also should be updated
+     */
+    if( $isNew ){
+        $full_search->fullUpload( $id );
+    } else{
+        $cloud_search->_initial_upload();
+        $full_search->fullUpload();
+    }
 
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
 }
 
-function deleteProductService()
+function showDeletePopup()
+{
+    $id = filter_var( $_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT );
+
+    $user_id = get_current_user_id();
+
+    $can_delete = true;
+    $message = 'Do you really want to delete this product?';
+    $title = 'Product Deletion';
+    $cancel_button_text = 'Cancel';
+
+    $can_delete = can_delete( $id, $user_id );
+
+    if( $can_delete['status'] == 'error' ){
+        $message = $can_delete['message'];
+        $title = 'Product Deletion Failure';
+        $cancel_button_text = 'Close';
+        $can_delete = false;
+    }
+
+    ?>
+    <div id="delete_product_ajax" class="popup-box deleting-case-confirm-box" style="display: none; width: 450px">
+        <div class="popup-box-header radius6 noradiusbottom"><?php echo $title;?></div>
+        <div class="popup-box-content">
+            <div class="field-row">
+                <div class="grid-cell">
+                    <p><?php echo $message;?></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="space10"></div>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">
+            <?php if( $can_delete ):?>
+                <a class="action-btn process-btn submit-btn delete_prod_confirm" href="#" data-id="<?php echo $id;?>"><span class="p"></span><span class="t">Confirm</span></a>
+            <?php endif;?>
+            <a class="action-btn cancel-btn close-popup-btn" href="#"><span class="p"></span><span class="t"><?php echo $cancel_button_text;?></span></a>
+            <div class="clear"></div>
+        </div>
+        <div class="loading loading-with-text radius6"><div><b>DELETING</b><p>Please wait...</p></div></div>
+        <a id="close-popup-delete" class="close_btn"></a>
+    </div>
+    <?php if( $can_delete ):?>
+        <script>
+            jQuery( document).ready( function($){
+                $('.delete_prod_confirm').on('click', function(){
+                    var item_id   = $( this).attr('data-id');
+                    $('.loading').show();
+                    $.ajax({
+                        type: 'post',
+                        url: '/',
+                        data: { '_psnonce' : '<?php echo wp_create_nonce( 'delete-product-confirm' );?>', 'id' : item_id  },
+                        success: function( data ){
+                            if( data == 'success' ){
+                                location.href = '<?php echo base64_decode( $_REQUEST['return'] );?>';
+                            }
+                        }
+                    })
+                })
+            });
+        </script>
+    <?php endif;?>
+    <?php
+    exit;
+}
+
+function deleteProduct()
+{
+    $id = filter_var( $_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT );
+    $user_id = get_current_user_id();
+    $can_delete = can_delete( $id, $user_id );
+    if( $can_delete['status'] == 'success' ){
+        $fullTextSearch = new FulltextSearch();
+        $fullTextSearch->fullDelete( $id );
+        wp_delete_post($id);
+        addMessage('Product was deleted successfully');
+    }
+    exit('success');
+}
+function can_delete( $product_id, $user_id )
 {
     global $wpdb;
-            
-    $id = $_REQUEST['id'];
-    
-    $product = get_post( $id );
-    
-    if(!$product)
-    {
-        addMessage('Invalid Request!', 'error');
-        return;
+
+    $response = array( 'status' => 'success', 'message' => '' );
+    if( ( ! is_super_admin() ) && ! can_maintain_product_and_service( $user_id, $product_id ) ) {
+        $response['message'] = 'You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.';
+        $response['status'] = 'error';
     }
-    
-    $user_id = get_current_user_id();
-    
-    if (($isNew || !is_super_admin()) && !can_maintain_product_and_service($user_id, $id)) 
-    {
-        addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
-        wp_redirect(get_site_url());
-        exit;
+
+    //Check if the product has claims, test plans, services
+    $count_claims    = $wpdb->get_var( $wpdb->prepare( "SELECT count(1) FROM wp_compliance_claims WHERE product_id = %d", $product_id ) );
+    $count_plans     = $wpdb->get_var( $wpdb->prepare( "SELECT count(1) FROM wp_test_plans WHERE product_id = %d AND is_deleted = 0 ", $product_id ) );
+    $count_services  = $wpdb->get_var( $wpdb->prepare( "SELECT count(1) FROM wp_services WHERE product_id = %d", $product_id ) );
+
+    if( $count_services > 0 || $count_claims > 0 || $count_plans > 0 ){
+        $response['message'] = 'We were unable to delete this product because there are test plans, claims or services currently associated with it. Please delete the associated items then try again.';
+        $response['status']  = 'error';
     }
-    
-    $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
-
-    $redirectUrl = get_site_url() . '/' . $return;
-
-    
-    //Check if the product has cliams or not
-    $query = $wpdb->prepare("SELECT count(1) FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d", $id);
-    $count = $wpdb->get_var($query);
-    if($count > 0)
-    {
-        addMessage("You can't delete the product, because it includes claims.", "error");
-        wp_redirect($redirectUrl);
-        exit;
-    }
-    
-    //Delete Product/Service
-    wp_delete_post($id);
-
-    $cloud_search = new CloudSearch();
-
-    //$cloud_search->cloud_search_delete_item( $id, 'product' );
-
-    addMessage("The product was deleted!");
-    wp_redirect($redirectUrl);
-    exit;
+    return $response;
 }
