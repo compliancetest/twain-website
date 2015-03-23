@@ -466,12 +466,12 @@ function ct_duplicate_data()
                                         $data['community_id'] = $new_community_id;
                                         $wpdb->insert($wpdb->prefix . 'community_profile_types', $data);
                                         $nTypeId = $wpdb->insert_id;
-                                        
+
                                         $profile_type_ids[$pType['id']] = $nTypeId;
 
                                         //Copy Profile Instances
                                         $query = "SELECT * FROM {$wpdb->prefix}community_profile_instances WHERE type_id=" . $pType['id'];
-                                        $pInstances = $new_wpdb->get_results($query, ARRAY_A);    
+                                        $pInstances = $new_wpdb->get_results($query, ARRAY_A);
                                         foreach($pInstances as $pIns)
                                         {
 
@@ -616,6 +616,25 @@ function ct_duplicate_data()
                                     {
                                         ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap, $esb_case_configurations);
                                     }
+
+                                    $test_case_data = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'test-case' ORDER BY ID desc" );
+                                    $processed = array();
+                                    foreach( $test_case_data AS $test_case_entry ){
+                                        $case = $wpdb->get_row( "SELECT * FROM wp_test_cases WHERE case_id = ". $test_case_entry->ID );
+                                        $versions = array();
+                                        $versions[] = $case->version_major;
+                                        $versions[] = $case->version_minor;
+                                        if( $case->version_patch != 0 ){
+                                            $versions[] = $case->version_patch;
+                                        }
+                                        $testCaseId = strtoupper( $case->case_name ). '_V' . implode('.', $versions);
+                                        if( in_array( $testCaseId,$processed  ) ){
+                                            continue;
+                                        }
+                                        $processed[] = $testCaseId;
+                                        $esb->saveTestCaseInfo( $test_case_entry->ID, $testCaseId, get_post_meta( $test_case_entry->ID, 'outcome_type', true), get_post_meta( $test_case_entry->ID, 'message_count', true));
+                                    }
+
                                     //var_dump($profile_instance_ids);
                                     //Update Profile Types
                                     foreach($profile_instance_ids as $oid => $nid)
