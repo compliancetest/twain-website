@@ -38,7 +38,7 @@ function ct_delete_user_data($user_id)
     }
 
     //Delete Subscriptions
-    $wpdb->query("DELETE s FROM {$wpdb->prefix}users_subscriptions  WHERE user_id=$user_id");
+    $wpdb->query("DELETE FROM {$wpdb->prefix}users_subscriptions  WHERE user_id=$user_id");
     
     //Release the organisation_subscriptino from the allocation
     $wpdb->query("UPDATE {$wpdb->prefix}organisations_subscriptions SET user_id=0 WHERE user_id=$user_id");
