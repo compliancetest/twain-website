@@ -4708,7 +4708,7 @@ span.button_sign {
 }
 
 #my_test_data_profiles .td-profile-name{
-    width: 480px;
+    width: 450px;
 }
 #my_test_data_profiles .td-profile-type{
     width: 110px;   
@@ -4723,7 +4723,7 @@ span.button_sign {
     text-align: center;
 }
 #my_test_data_profiles .td-action{
-   width: 130px;
+   width: 160px;
    text-align: center;
 }
 .url-txt{
