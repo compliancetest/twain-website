@@ -140,9 +140,10 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
 <div class="popup-box" id="create-expanded-version" style="display: none; width: 300px">
     <div class="popup-box-header radius6 noradiusbottom">Create Expanded Version</div>
     <div class="popup-box-content">
-        Factor: <input type="text" name="factor" id="factor">
+        Factor: <input type="text" name="factor" id="factor" maxlength="5" style="width: 70px;">
         <input type="hidden" name="profile_id" id="profile_id" value="">
         <div class="message error factor_error">This field is required.</div>
+        <div class="message error factor_valid_error">Please provide valid number between 1 and 200 000.</div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <div class="loading loading-with-text radius6"><div><b>CREATING PROFILE</b><span>Please wait...</span></div></div>
@@ -295,13 +296,26 @@ jQuery(document).ready(function($){
         })
     })
     $('.create_expanded_version').on('click', function(){
-        $('.factor_error').hide();
+        $('.factor_error, .factor_valid_error').hide();
         $('#factor').removeClass( 'input-error' );
         $('#profile_id').val( $(this).attr('data-id') );
 
     })
     $( '.confirm-expanded-profile').on('click', function(){
-        if($.trim( $('#factor').val() ) != '' ) {
+        $('.factor_error, .factor_valid_error').hide();
+        var is_valid = true;
+        var factor_value = $.trim( $('#factor').val() );
+        if( factor_value == '' ) {
+            is_valid = false;
+            $('#factor').addClass( 'input-error' );
+            $('.factor_error').show();
+        }
+        if( parseInt( factor_value ) != factor_value && is_valid ){
+            is_valid = false;
+            $('#factor').addClass( 'input-error' );
+            $('.factor_valid_error').show();
+        }
+        if( is_valid ){
             $('.factor_error').hide();
             $('#factor').removeClass( 'input-error' );
             $('#create-expanded-version .loading').show();
@@ -317,9 +331,6 @@ jQuery(document).ready(function($){
                     document.location.reload();
                 }
             });
-        } else{
-            $('#factor').addClass( 'input-error' );
-            $('.factor_error').show();
         }
     });
     //Fix Simple ToolTips
