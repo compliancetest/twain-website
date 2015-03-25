@@ -535,6 +535,10 @@ function createExpandedVersion( $id, $factor ){
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $id);
     $row = $wpdb->get_row($query, ARRAY_A);
 
+    $expandableTypes = ProfileType::getExpandableTypes();
+    if( ! in_array( str_replace( ' ', '', $row['profile_role'] ), $expandableTypes ) ){
+        return;
+    }
     // Copy harness profile instance
     $content = S3Wrapper::getProfile( $row['token'] );
     $row['token_original'] = $row['token'];
