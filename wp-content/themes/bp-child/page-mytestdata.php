@@ -310,7 +310,7 @@ jQuery(document).ready(function($){
             $('#factor').addClass( 'input-error' );
             $('.factor_error').show();
         }
-        if( parseInt( factor_value ) != factor_value && is_valid && factor_value > 1 && factor_value <= 200000 ){
+        if( is_valid && ( parseInt( factor_value ) != factor_value || ( factor_value < 2 || factor_value > 200000 ) ) ){
             is_valid = false;
             $('#factor').addClass( 'input-error' );
             $('.factor_valid_error').show();
