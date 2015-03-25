@@ -1082,7 +1082,6 @@ function ct_duplicate_data()
                                             continue;
                                         }
                                         $processed[] = $testCaseId;
-                                        error_log( $testCaseId );
                                         $esb->saveTestCaseInfo( $test_case_entry->ID, $testCaseId, get_post_meta( $test_case_entry->ID, 'outcome_type', true), get_post_meta( $test_case_entry->ID, 'message_count', true));
                                         $counter++;
                                     }
