@@ -1,0 +1,1 @@
+ALTER TABLE  `wp_community_profile_types` ADD  `is_expandable` BOOLEAN NOT NULL DEFAULT FALSE ;
