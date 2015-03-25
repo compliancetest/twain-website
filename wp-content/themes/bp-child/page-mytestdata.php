@@ -143,7 +143,7 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
         Factor: <input type="text" name="factor" id="factor" maxlength="6" style="width: 70px;">
         <input type="hidden" name="profile_id" id="profile_id" value="">
         <div class="message error factor_error">This field is required.</div>
-        <div class="message error factor_valid_error">Please provide valid number between 1 and 200 000.</div>
+        <div class="message error factor_valid_error">Please provide valid number between 2 and 200 000.</div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <div class="loading loading-with-text radius6"><div><b>CREATING PROFILE</b><span>Please wait...</span></div></div>
@@ -310,7 +310,7 @@ jQuery(document).ready(function($){
             $('#factor').addClass( 'input-error' );
             $('.factor_error').show();
         }
-        if( parseInt( factor_value ) != factor_value && is_valid ){
+        if( parseInt( factor_value ) != factor_value && is_valid && factor_value > 1 && factor_value <= 200000 ){
             is_valid = false;
             $('#factor').addClass( 'input-error' );
             $('.factor_valid_error').show();
