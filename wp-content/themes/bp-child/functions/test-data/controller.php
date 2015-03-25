@@ -529,6 +529,56 @@ function copyProfileInstance( $action ){
     exit;
 }
 
+function createExpandedVersion( $id, $factor ){
+
+    global $wpdb;
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $id);
+    $row = $wpdb->get_row($query, ARRAY_A);
+
+    // Copy harness profile instance
+    $content = S3Wrapper::getProfile( $row['token'] );
+    $row['token_original'] = $row['token'];
+    $row['token'] = sha1(time() . rand(0, 9999) . $row['type_id'] . $row['community_id']);
+    $profileData = array(
+        'type'           => 'tester',
+        'data'           => json_encode( $content ),
+        'type_id'        => $row['type_id'],
+        'user_id'        => get_current_user_id(),
+        'community_id'   => $row['community_id'],
+        'token_original' => $row['token_original'],
+        'token'          => $row['token']
+
+    );
+
+    ProfileInstance::save( $profileData );
+
+    $message = array(
+        'operation' => 'expandProfileRequest',
+        'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
+        'securityContext' => array(
+            'username' => $wpdb->get_var( $wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $profileData['user_id'] ) )
+        ),
+        'parameters' => array(
+            'document' => array(
+                'bucket' => get_option('aws_s3_url'),
+                'key' => "profiles/user/".$row['token_original'].".json"
+            ),
+            "profileType" => $row['profile_role'],
+            "expansionFactor" => $factor,
+            "tfnsMap" => array(
+                "bucket" => get_option('aws_s3_url'),
+                "key" =>  "profiles/bulk/TFNsMap.json"
+),
+            'saveTo' => array(
+                'bucket' => get_option('aws_s3_url'),
+                'key' => "profiles/user/".$row['token'].".json"
+            )
+        )
+    );
+    $sqs = new SqsWrapper();
+
+    $sqs->sendMessage( $message );
+}
 function downloadProfileTypeInstance()
 {
     global $wpdb;
