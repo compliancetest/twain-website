@@ -554,7 +554,7 @@ function createExpandedVersion( $id, $factor ){
 
     );
 
-    ProfileInstance::save( $profileData );
+    ProfileInstance::save( $profileData, false );
 
     $message = array(
         'operation' => 'expandProfileRequest',
@@ -565,7 +565,7 @@ function createExpandedVersion( $id, $factor ){
         'parameters' => array(
             'document' => array(
                 'bucket' => get_option('aws_s3_url'),
-                'key' => "profiles/user/".$row['token_original'].".json"
+                'key'    => "profiles/user/".$row['token_original'].".json"
             ),
             "profileType" => $row['profile_role'],
             "expansionFactor" => $factor,
@@ -575,7 +575,7 @@ function createExpandedVersion( $id, $factor ){
 ),
             'saveTo' => array(
                 'bucket' => get_option('aws_s3_url'),
-                'key' => "profiles/user/".$row['token'].".json"
+                'key'    => "profiles/user/".$row['token'].".json"
             )
         )
     );

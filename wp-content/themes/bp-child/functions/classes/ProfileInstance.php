@@ -2,7 +2,7 @@
 
 class ProfileInstance {
 
-    public static function save( $profileData ){
+    public static function save( $profileData, $send_sqs_message = true ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
@@ -41,7 +41,7 @@ class ProfileInstance {
         if( $file_size >= get_option( 's3_bulk_treshold' ) ) {
             $is_bulk = true;
         }
-        if( $validate_via_sqs ) {
+        if( $validate_via_sqs && $send_sqs_message ) {
             $status = 'pending';
 
             $error_format = get_option('validation_error_format');
