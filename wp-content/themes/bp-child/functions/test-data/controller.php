@@ -569,10 +569,6 @@ function createExpandedVersion( $id, $factor ){
             ),
             "profileType" => $row['profile_role'],
             "expansionFactor" => $factor,
-            "tfnsMap" => array(
-                "bucket" => get_option('aws_s3_url'),
-                "key" =>  "profiles/bulk/TFNsMap.json"
-),
             'saveTo' => array(
                 'bucket' => get_option('aws_s3_url'),
                 'key'    => "profiles/user/".$row['token'].".json"
