@@ -140,7 +140,7 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
 <div class="popup-box" id="create-expanded-version" style="display: none; width: 300px">
     <div class="popup-box-header radius6 noradiusbottom">Create Expanded Version</div>
     <div class="popup-box-content">
-        Factor: <input type="text" name="factor" id="factor" maxlength="5" style="width: 70px;">
+        Factor: <input type="text" name="factor" id="factor" maxlength="6" style="width: 70px;">
         <input type="hidden" name="profile_id" id="profile_id" value="">
         <div class="message error factor_error">This field is required.</div>
         <div class="message error factor_valid_error">Please provide valid number between 1 and 200 000.</div>
