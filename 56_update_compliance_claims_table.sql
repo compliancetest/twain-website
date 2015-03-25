@@ -1,1 +1,0 @@
-ALTER TABLE `wp_compliance_claims` ADD `has_exclusions` BOOLEAN NOT NULL DEFAULT FALSE ;
