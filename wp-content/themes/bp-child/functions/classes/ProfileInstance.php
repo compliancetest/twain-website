@@ -2,7 +2,7 @@
 
 class ProfileInstance {
 
-    public static function save( $profileData, $send_sqs_message = true ){
+    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
@@ -40,6 +40,9 @@ class ProfileInstance {
         $is_bulk = false;
         if( $file_size >= get_option( 's3_bulk_treshold' ) ) {
             $is_bulk = true;
+        }
+        if( $is_expanded ){
+            $status = 'pending';
         }
         if( $validate_via_sqs && $send_sqs_message ) {
             $status = 'pending';
@@ -102,7 +105,8 @@ class ProfileInstance {
                 'validation_status' => $status,
                 'validation_url' => $validation_url,
                 'content_length' => $file_size,
-                'profile_role' => $profile_role
+                'profile_role' => $profile_role,
+                'is_expanded' => $is_expanded
             );
             if (get_option('validate_via_sqs') != 'yes') {
                 $data['profile_name'] = $profile_name;
@@ -134,7 +138,8 @@ class ProfileInstance {
                 'validation_status' => $status,
                 'validation_url' => $validation_url,
                 'content_length' => $file_size,
-                'profile_role' => $profile_role
+                'profile_role' => $profile_role,
+                'is_expanded' => $is_expanded
             );
             if( ! $validate_via_sqs || ( ! $is_bulk && $validate_via_sqs ) ){
                 //we write only non bulk profiles content to database
