@@ -766,7 +766,7 @@ function caseNameUpdated($familyMark, $new)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE familyMark=%d", $familyMark);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE family_mark=%d", $familyMark);
     $suites = $wpdb->get_results($query);
     
     $esb = new ManageESB();
