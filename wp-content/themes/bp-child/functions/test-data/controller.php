@@ -554,7 +554,7 @@ function createExpandedVersion( $id, $factor ){
 
     );
 
-    ProfileInstance::save( $profileData, false );
+    ProfileInstance::save( $profileData, false, true );
 
     $message = array(
         'operation' => 'expandProfileRequest',

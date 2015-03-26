@@ -1,0 +1,1 @@
+ALTER TABLE  `wp_community_profile_instances` ADD  `is_expanded` BOOLEAN NOT NULL DEFAULT FALSE ;
