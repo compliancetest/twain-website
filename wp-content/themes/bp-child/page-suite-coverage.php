@@ -128,7 +128,7 @@ $esb = new ManageESB();
                               <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('delete-plan')?>&id=<?php echo $crow->id?>" class="delete-plan-link action-btn delete-btn icon-btn left5"><span class="p"></span>
                                   <span class="simple_tooltip radius6">Delete Plan<span></span></span>
                               </a>                              
-                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-grey-btn icon-btn left5">
+                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-btn icon-btn left5">
                                   <span class="p"></span>
                                   <span class="simple_tooltip radius6">Claim<span></span></span>
                               </a>
