@@ -556,9 +556,25 @@ function createExpandedVersion( $id, $factor ){
 
     ProfileInstance::save( $profileData, false, true );
 
+    $error_format = get_option('validation_error_format');
+    if (empty($error_format)) {
+        $error_format = 'html';
+    }
+
+    $profileType = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $profileData['type_id'] ) ) ;
+    $profile_json = base64_decode($profileType->schema);
+    $profile_array = json_decode($profile_json, 1);
+    $profile_type = str_replace(' ', '', $profile_array['title']);
+    $file_name = $profile_type . '_v' . $profile_array['Version']['Major'] . '_' . $profile_array['Version']['Minor'];
+    if (isset($profile_array['Version']['Patch'])) {
+        $file_name = $file_name . '_' . $profile_array['Version']['Patch'];
+    }
+
+    $request_id = md5( time() . mt_rand() . $row['token'] );
+    $request_id = substr( $request_id, 0, 8) . '-' . substr( $request_id, 8, 4 ) . '-'. substr( $request_id, 12, 4) . '-' . substr( $request_id, 16, 4 ) . '-' . substr( $request_id, 20, 11 );
     $message = array(
         'operation' => 'expandProfileRequest',
-        'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
+        'correlationID' => $request_id,
         'securityContext' => array(
             'username' => $wpdb->get_var( $wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $profileData['user_id'] ) )
         ),
@@ -569,9 +585,18 @@ function createExpandedVersion( $id, $factor ){
             ),
             "profileType" => $row['profile_role'],
             "expansionFactor" => $factor,
+            'schema' => array(
+                'bucket' => get_option('s3_reference_bucket'),
+                'key' => 'schema/profiles/' . strtolower($profile_type) . '/' . $file_name . '.json'
+            ),
+            'outputFormat' => $error_format,
             'saveTo' => array(
                 'bucket' => get_option('aws_s3_url'),
                 'key'    => "profiles/user/".$row['token'].".json"
+            ),
+            'errorsTo' => array(
+                'bucket' => get_option('aws_s3_url'),
+                'key' => 'profiles/user/validation/' . $row['token'] . '/' . $request_id . '.' . $error_format
             )
         )
     );
