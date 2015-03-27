@@ -1857,8 +1857,7 @@ tr {
 
 .certify-grey-btn,        
 .grey-edit-btn,        
-.grey-delete-btn,        
-.view-log-btn{        
+.grey-delete-btn{
     border-color: #a9a9a9;
     background: #caced2;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d3d9e1), to(#c1c2c2));
@@ -1872,13 +1871,9 @@ tr {
 }
 .certify-grey-btn span.t,
 .grey-edit-btn span.t,
-.grey-delete-btn span.t,
-.view-log-btn span.t{
+.grey-delete-btn span.t{
     color: #5f6670;
     text-shadow: 0 -1px 1px #ebedef;
-}
-.view-log-btn span.p{
-    background-position: 0 -369px;
 }
 .certify-grey-btn span.p{
     background-position: 0 -409px;
@@ -1922,7 +1917,8 @@ tr {
 .harness-detail-btn,
 .blue-plus-btn,
 .file-btn,
-.edit-btn{
+.edit-btn,
+.view-log-btn{
     border-color: #3577ad;
     background: #2d83cd;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));
@@ -1934,6 +1930,11 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #7cbcf4 inset;
     -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
 }
+
+.view-log-btn{
+    margin-right: 5px;
+}
+
 .edit-btn span.p{
     background-position: 0 -614px;
 }
@@ -1943,7 +1944,8 @@ tr {
 .view-btn span.p{
     background-position: 0 -1482px;
 }
-.view-btn span.t{
+.view-btn span.t,
+.view-log-btn span.t{
     padding-left: 3px;
 }
 .history-btn span.p{
@@ -1958,9 +1960,12 @@ tr {
 .file-btn:hover,
 .blue-plus-btn:hover,
 .harness-detail-btn:hover,
-.edit-btn:hover{
+.edit-btn:hover,
+.view-log-btn:hover{
     background: #288ce2;
 }
+
+
 .harness-detail-btn{
     padding: 0 3px;
 }
@@ -1976,6 +1981,9 @@ tr {
     background-position: 0 -1710px;
 }
 
+.view-log-btn span.p{
+    background-position: 0 -1778px;
+}
 
 .blue-edit-btn,
 .print-btn,
