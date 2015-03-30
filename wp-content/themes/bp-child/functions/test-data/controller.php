@@ -545,7 +545,7 @@ function createExpandedVersion( $id, $factor ){
     $row['token'] = sha1(time() . rand(0, 9999) . $row['type_id'] . $row['community_id']);
     $profileData = array(
         'type'           => 'tester',
-        'data'           => json_encode( $content ),
+        'data'           => null,
         'type_id'        => $row['type_id'],
         'user_id'        => get_current_user_id(),
         'community_id'   => $row['community_id'],
