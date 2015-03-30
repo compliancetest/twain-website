@@ -113,16 +113,32 @@ function process_testcase_actions()
         $case_id = intval($_REQUEST['case_id']);
         if( isset( $_REQUEST['case_exclude'] ) ) {
             $reason = stripslashes_deep($_REQUEST['case_exclude_reason']);
-            $wpdb->insert('wp_test_plans_excluded_cases',
-                array(
-                    'test_plan_id' => $plan_id,
-                    'test_case_id' => $case_id,
-                    'reason' => $reason,
-                    'excluded_by_user_id' => get_current_user_id(),
-                    'date' => date('Y-m-d H:i:s')
-                ),
-                array('%d', '%d', '%s', '%d', '%s')
-            );
+            if( $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans_excluded_cases WHERE test_case_id = %d AND test_plan_id = %d ", $case_id, $plan_id ) ) ){
+                $wpdb->update('wp_test_plans_excluded_cases',
+                    array(
+                        'reason' => $reason,
+                        'excluded_by_user_id' => get_current_user_id(),
+                        'date' => date('Y-m-d H:i:s')
+                    ),
+                    array(
+                        'test_plan_id' => $plan_id,
+                        'test_case_id' => $case_id,
+                    ),
+                    array( '%s', '%d', '%s' ),
+                    array( '%d', '%d' )
+                );
+            } else {
+                $wpdb->insert('wp_test_plans_excluded_cases',
+                    array(
+                        'test_plan_id' => $plan_id,
+                        'test_case_id' => $case_id,
+                        'reason' => $reason,
+                        'excluded_by_user_id' => get_current_user_id(),
+                        'date' => date('Y-m-d H:i:s')
+                    ),
+                    array('%d', '%d', '%s', '%d', '%s')
+                );
+            }
         } else{
             $wpdb->query( $wpdb->prepare( "DELETE FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d AND test_case_id = %d ", $plan_id, $case_id ) );
         }
@@ -947,7 +963,7 @@ function get_details_popup(){
                                 <div class="field-row reason_div">
                                     <div class="grid-cell">
                                         <label>Reason: </label>
-                                        <textarea name="case_exclude_reason" class="case_exclude_reason" readonly="readonly" rows="2" cols="40"><?php echo $is_excluded->reason;?></textarea>
+                                        <textarea name="case_exclude_reason" class="case_exclude_reason" rows="2" cols="40"><?php echo $is_excluded->reason;?></textarea>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -980,9 +996,14 @@ function get_details_popup(){
         </div>
     <script>
         jQuery( document).ready(function(){
+            <?php if( $is_excluded ):?>
+                jQuery('.process-btn').show();
+            <?php endif;?>
             jQuery('.case_exclude').on('change', function(){
                 jQuery('.reason_div').toggle();
-                jQuery('.process-btn').toggle();
+                <?php if( ! $is_excluded ):?>
+                    jQuery('.process-btn').toggle();
+                <?php endif;?>
             });
             jQuery('.process-btn').click(function(){
                 var is_valid = true;
