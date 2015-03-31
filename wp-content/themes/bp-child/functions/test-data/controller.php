@@ -182,10 +182,10 @@ function createUIFromProfileType($action)
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;    
         }else{
-            $json = S3Wrapper::getProfile( $instance_row->token, true );
-            if( strlen( $json ) > get_option( 's3_xml_max_size' ) ){
+            if( $row->content_length > get_option( 's3_xml_max_size' ) ){
                 echo '<result><status>error</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><message>Profile is too large to edit online. Please download and edit locally, then upload.</message><type>s3_xml_max_size</type></result>';
             } else {
+                $json = S3Wrapper::getProfile( $instance_row->token, true );
                 echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>' . updateSpecialChars( $json ) . '</data></result>';
             }
         }
@@ -782,7 +782,7 @@ function viewProfileInstance()
                 <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $row->token?>" class="input width60P left" id="profile-url<?php echo $row->id?>" />
                 <div class="clear"></div>
                 <div id="json-view-panel<?php echo $boxId?>" class="json-view-panel">
-                    <?php if( strlen( $row->content ) > get_option( 's3_xml_max_size' ) ):?>
+                    <?php if( $row->content_length > get_option( 's3_xml_max_size' ) ):?>
                         <div class="message error">
                             Profile is too large to edit online. Please download and edit locally, then upload.
                         </div>
@@ -793,8 +793,8 @@ function viewProfileInstance()
             </div>
             
             <div class="popup-box-footer radius6 noradiustop">
-                <?php if( strlen( $row->content ) < get_option( 's3_xml_max_size' ) ):?>
-                    <a href="<?php echo S3Wrapper::getProfileLink( $row->token, true );?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>
+                <?php if( $row->content_length < get_option( 's3_xml_max_size' ) ):?>
+                    <a href="<?php echo S3Wrapper::getProfileLink( $row->token, $row->profile_name, true );?>" target="blank" class="action-btn process-btn"><span class="p"></span><span class="t">Download</span></a>
                 <?php endif;?>
                 <?php if(isset($_REQUEST['back'])){ ?>
                 <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup" cp-type="inline"><span class="p"></span><span class="t">Close</span></a>            
@@ -808,7 +808,7 @@ function viewProfileInstance()
             <a class="close_btn"></a>                    
             <?php }?>                       
         </div>
-        <?php if( strlen( $row->content ) < get_option( 's3_xml_max_size' ) ):?>
+        <?php if( $row->content_length < get_option( 's3_xml_max_size' ) ):?>
             <script type="text/javascript">
                 var t_data = Jsonary.create(<?php echo $row->content?>).readOnlyCopy();
                 var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
