@@ -141,7 +141,7 @@ function createUIFromProfileType($action)
     
     header('Content-type: application/xml');
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d", $type_id);
+    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d", $type_id);
     $row = $wpdb->get_row($query);
     
     if(!$row)
@@ -175,14 +175,13 @@ function createUIFromProfileType($action)
     {
         echo '<result><status>success</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><data>{}</data></result>';    
     }else{
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d AND community_id=%d", $instance_id, $community_id);
+        $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE id = %d AND community_id = %d", $instance_id, $community_id);
         $instance_row = $wpdb->get_row($query);
-        if(!$instance_row)
-        {
+        if( ! $instance_row){
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;    
         }else{
-            if( $row->content_length > get_option( 's3_xml_max_size' ) ){
+            if( $instance_row->content_length > get_option( 's3_xml_max_size' ) ){
                 echo '<result><status>error</status><schema><![CDATA[' . base64_decode($row->schema) . ']]></schema><message>Profile is too large to edit online. Please download and edit locally, then upload.</message><type>s3_xml_max_size</type></result>';
             } else {
                 $json = S3Wrapper::getProfile( $instance_row->token, true );
@@ -238,11 +237,11 @@ function saveProfileInstance($action)
         }
     }
 
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d AND community_id=%d", $type_id, $community_id);
+    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id=%d AND community_id=%d", $type_id, $community_id);
     $profile_type = $wpdb->get_row($query);
 
     if ($instance_id) {
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d AND community_id=%d", $instance_id, $community_id);
+        $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE id = %d AND community_id = %d", $instance_id, $community_id);
         $profile_instance = $wpdb->get_row($query);
 
         if (!$profile_instance) {
@@ -267,150 +266,6 @@ function saveProfileInstance($action)
         echo '<result><status>error</status><msg>'.$result['message'].'</msg></result>';
         exit;
     }
-    //Getting Data
-//    $data = stripcslashes($_POST['data']);
-//    $jsonData = base64_encode($data);
-//    $max_file_size_conf = get_option('uploads_files_max_size');
-//    if (strlen($data) > $max_file_size_conf * 1024 * 1024) {
-//        echo '<result><status>error</status><msg>The file you have attempted to upload exceeds the system limit of ' . $max_file_size_conf . 'MB</msg></result>';
-//        exit;
-//    }
-//    $jsonObject = json_decode($data);
-//    $token = $instance_id ? $wpdb->get_var($wpdb->prepare("SELECT token FROM wp_community_profile_instances WHERE id = %d ", $instance_id)) : sha1(time() . $jsonObject->Profile->Title . rand(0, 9999) . $type_id . $community_id);
-//    $s3 = new S3Wrapper();
-//    $s3->putObject('/profiles/user/' . $token . '.json', $data);
-//    $file_size = strlen($data);
-//    //if backend validation enabled
-//    $status = 'valid';
-//    $validation_url = '';
-//
-//    $profileType = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $type_id));
-//    $profile_json = base64_decode($profileType->schema);
-//    $profile_array = json_decode($profile_json, 1);
-//    $profile_type = str_replace(' ', '', $profile_array['title']);
-//    $file_name = $profile_type . '_v' . $profile_array['Version']['Major'] . '_' . $profile_array['Version']['Minor'];
-//    $type_name = $profile_array['title'] . ' v' . $profile_array['Version']['Major'] . '.' . $profile_array['Version']['Minor'];
-//    if (isset($profile_array['Version']['Patch'])) {
-//        $file_name = $file_name . '_' . $profile_array['Version']['Patch'];
-//        $type_name .= '.' . $profile_array['Version']['Patch'];
-//    }
-//
-//    if (get_option('validate_via_sqs') == 'yes') {
-//        $status = 'pending';
-//
-//        $error_format = get_option('validation_error_format');
-//        if (empty($error_format)) {
-//            $error_format = 'html';
-//        }
-//        $uniq_key = md5($token . mktime());
-//        $message = array(
-//            'operation' => 'profileValidationRequest',
-//            'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
-//            'securityContext' => array(
-//                'username' => $wpdb->get_var($wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $user_id))
-//            ),
-//            'parameters' => array(
-//                'outputFormat' => $error_format,
-//                'document' => array(
-//                    'bucket' => get_option('aws_s3_url'),
-//                    'key' => "profiles/user/{$token}.json"
-//                ),
-//                'schema' => array(
-//                    'bucket' => get_option('s3_reference_bucket'),
-//                    'key' => 'schema/profiles/' . strtolower($profile_type) . '/' . $file_name . '.json'
-//                ),
-//                'saveTo' => array(
-//                    'bucket' => get_option('aws_s3_url'),
-//                    'key' => "profiles/validation/{$token}/{$uniq_key}." . $error_format
-//                )
-//            )
-//        );
-//        $sqs = new SqsWrapper();
-//        $is_bulk = false;
-//        if ($file_size >= get_option('s3_bulk_treshold')) {
-//            $is_bulk = true;
-//        }
-//        $sqs->sendMessage($message, $is_bulk);
-//    }
-//
-//    if (get_option('validate_via_sqs') == 'yes') {
-//        $profile_name = 'Pending...';
-//        $profile_description = 'Pending...';
-//        $profile_purpose = 'Pending...';
-//        $profile_role = null;
-//    } else {
-//        $profile_name = $jsonObject->Profile->Title . ' v' . $jsonObject->Profile->Version->Major . '.' . $jsonObject->Profile->Version->Minor;
-//        if (!empty($jsonObject->Profile->Version->Patch)) {
-//            $profile_name .= '.' . $jsonObject->Profile->Version->Patch;
-//        }
-//        $profile_description = $jsonObject->Profile->Description;
-//        $profile_purpose = $jsonObject->Profile->Purpose;
-//        $profile_role = $profile_array['title'];
-//    }
-//    if ($instance_id) {
-//        $data = array(
-//            'type' => $instance_type,
-//            'type_id' => $type_id,
-//            'type_name' => $type_name,
-//            'community_id' => $community_id,
-//            'filename' => '',
-//            'content' => $jsonData,
-//            'created_date' => date('Y-m-d H:i:s'),
-//            'creator_id' => $user_id,
-//            'validation_status' => $status,
-//            'validation_url' => $validation_url,
-//            'content_length' => $file_size,
-//            'profile_role' => $profile_role
-//        );
-//        if (get_option('validate_via_sqs') != 'yes') {
-//            $data['profile_name'] = $profile_name;
-//            $data['profile_description'] = $profile_description;
-//            $data['purpose'] = $profile_purpose;
-//        }
-//        $wpdb->update($wpdb->prefix . "community_profile_instances",
-//            $data,
-//            array('id' => $instance_id)
-//        );
-//    } else {
-//        $wpdb->insert($wpdb->prefix . "community_profile_instances",
-//            array(
-//                'type' => $instance_type,
-//                'profile_name' => $profile_name,
-//                'profile_description' => $profile_description,
-//                'purpose' => $profile_purpose,
-//                'type_id' => $type_id,
-//                'type_name' => $type_name,
-//                'community_id' => $community_id,
-//                'filename' => '',
-//                'content' => $jsonData,
-//                'created_date' => date('Y-m-d H:i:s'),
-//                'creator_id' => $user_id,
-//                'token' => $token,
-//                'validation_status' => $status,
-//                'validation_url' => $validation_url,
-//                'content_length' => $file_size,
-//                'profile_role' => $profile_role
-//            )
-//        );
-//        $instance_id = $wpdb->insert_id;
-//        $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` + 1 WHERE id=%d", $type_id));
-//
-//    }
-//    if (get_option('validate_via_sqs') != 'yes') {
-//        $wpdb->delete($wpdb->prefix . 'community_profile_meta', array('profile_id' => $instance_id), '%d');
-//
-//        $profile_meta = getProfileMetaData($jsonObject);
-//        foreach ($profile_meta as $meta_key => $meta_value) {
-//            if (is_array($instance_id) || is_array($meta_key) || is_array($meta_value)) {
-//                continue;
-//            }
-//            $wpdb->insert($wpdb->prefix . "community_profile_meta", array(
-//                'profile_id' => $instance_id,
-//                'meta_key' => $meta_key,
-//                'meta_value' => $meta_value,
-//            ));
-//        }
-//    }
 
     echo '<result><status>success</status></result>';
     exit;
@@ -753,9 +608,10 @@ function viewProfileInstance()
     
     $instance_id = $_REQUEST['id'];
     
-    $query = $wpdb->prepare("SELECT i.*, t.title as profile_type_title FROM " . $wpdb->prefix . "community_profile_instances AS i LEFT JOIN " . $wpdb->prefix ."community_profile_types AS t ON t.id=i.type_id WHERE i.id=%d", $instance_id);
+    $query = $wpdb->prepare("SELECT i.*, t.title AS profile_type_title FROM wp_community_profile_instances AS i
+                             LEFT JOIN wp_community_profile_types AS t ON t.id=i.type_id
+                             WHERE i.id = %d", $instance_id);
     $row = $wpdb->get_row($query);
-    $row->content = S3Wrapper::getProfile( $row->token, true );
 
     if(!$row)
     {
@@ -787,6 +643,7 @@ function viewProfileInstance()
                             Profile is too large to edit online. Please download and edit locally, then upload.
                         </div>
                     <?php else:?>
+                        <?php $row->content = S3Wrapper::getProfile( $row->token, true );?>
                         <?php echo $row->content?>
                     <?php endif;?>
                 </div>
