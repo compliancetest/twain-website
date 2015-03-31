@@ -697,10 +697,10 @@ function downloadProfileError()
 function updateProfileLookup() {
     global $wpdb;
     
-    $id = isset($_REQUEST['id']) ? ($_REQUEST['id']) : (0);
-    $status = isset($_REQUEST['status']) ? ($_REQUEST['status']) : (0);
-    if ($id) {
-        $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_instances SET `lookup`= %d WHERE id=%d", $status, $id));
+    $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+    $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : 0;
+    if( $id ) {
+        $wpdb->query($wpdb->prepare("UPDATE wp_community_profile_instances SET `lookup`= %d WHERE id=%d", $status, $id));
     }
     echo 'success';
     exit;
