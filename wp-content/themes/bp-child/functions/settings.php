@@ -513,7 +513,7 @@ function create_compliancetest_settings_page()
                         </tr>
                         <tr>
                             <td><label><b>Max expansion factor:</b></label></td>
-                            <td><input type="text" name="max_expansion_factor" id="max_expansion_factor" size="50" value="<?php echo get_option('max_expansion_factor')?>" autocomplete="off" /></td>
+                            <td><input type="text" name="max_expansion_factor" id="max_expansion_factor" size="15" value="<?php echo get_option('max_expansion_factor')?>" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
