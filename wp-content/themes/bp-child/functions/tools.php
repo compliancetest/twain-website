@@ -1010,6 +1010,10 @@ function ct_duplicate_data()
                                     $s3 = new S3Wrapper();
                                     $counter = 0;
                                     foreach( $profiles AS $profile ) {
+                                        if( $profile->content_length > 10 * 1024 * 1024 ){
+                                            //do not process files bigger then 10MB
+                                            continue;
+                                        }
                                         $s3_profile = $s3->getProfile( $profile->token );
                                         $profile_name = $s3_profile->Profile->Title.' v'.$s3_profile->Profile->Version->Major.'.'.$s3_profile->Profile->Version->Minor;
                                         if( $s3_profile->Profile->Version->Patch ){
