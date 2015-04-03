@@ -1035,7 +1035,7 @@ function ct_duplicate_data()
                                                 'purpose'             => $s3_profile->Profile->Purpose,
                                                 'type_name'           => $type_name,
                                                 'content_length'      => strlen( json_encode( $s3_profile ) ),
-                                                'profile_role'        => $profile_type->title
+                                                'profile_role'        => $s3_profile->Profile->Type
                                             ),
                                             array( 'id' => $profile->id ),
                                             array( '%s', '%s', '%s', '%s', '%d', '%s' ),
