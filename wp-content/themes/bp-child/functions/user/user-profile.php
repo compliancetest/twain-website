@@ -1137,7 +1137,7 @@ function generateProfile($profile_id, $community_id)
     $profile = $wpdb->get_row($query);
     $profile_content = S3Wrapper::getProfile( $profile->token );
     $customDataGeneration = isset($profile_content->CustomProfilesGeneration) ? ($profile_content->CustomProfilesGeneration) : (null);
-    
+
     //$customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
     
     $pre_desc = '';
@@ -1166,11 +1166,20 @@ function generateProfile($profile_id, $community_id)
             }
             if ($identifierPath != 'Self')
             {
+                $sorting_order = array(
+                    'Employer'      => 1,
+                    'ClearingHouse' => 2
+                );
                 $rows = $wpdb->get_results(
                     $wpdb->prepare("SELECT cpi.* FROM wp_community_profile_meta AS cpm
                                     LEFT JOIN wp_community_profile_instances AS cpi ON cpi.id = cpm.profile_id
                                     WHERE cpi.type='harness' AND cpi.community_id = %d
                                     AND cpm.meta_value IN ('" . implode("','", $identifierValues) . "') AND cpm.meta_key = %s " , $community_id, $identifierPath ) , ARRAY_A );
+//                foreach( $rows AS $key => $row ){
+//                    $rows[$key]['order'] = isset( $sorting_order[$row['profile_role']] ) ? $sorting_order[$row['profile_role']] : 3;
+//                }
+//                usort( $rows, function($a,$b){ return $a['order']-$b['order'];} );
+//                _trace($rows,1);
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
                         if( $row['content_length'] > get_option( 's3_bulk_treshold' ) || $row['validation_status'] != 'valid' ){
@@ -1227,7 +1236,8 @@ function generateProfile($profile_id, $community_id)
                             'token'          => $row['token']
 
                         );
-                        ProfileInstance::save( $profileData );
+                        $delay = str_replace( ' ', '', $row['profile_role'] ) == 'ClearingHouse' ? 15 : false;
+                        ProfileInstance::save( $profileData, true, false, $delay );
                     }
                 }
             }

@@ -2,7 +2,7 @@
 
 class ProfileInstance {
 
-    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false ){
+    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $delay = 0 ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
@@ -76,7 +76,7 @@ class ProfileInstance {
             );
             $sqs = new SqsWrapper();
 
-            $sqs->sendMessage($message, $is_bulk);
+            $sqs->sendMessage($message, $is_bulk, $delay);
         }
 
         if( $validate_via_sqs ) {
