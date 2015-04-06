@@ -252,7 +252,7 @@ function saveProfileInstance($action)
 
     $profileData = array(
         'type'         => $instance_type,
-        'data'         => $_POST['data'],
+        'data'         => stripcslashes( $_POST['data'] ),
         'type_id'      => $type_id,
         'user_id'      => get_current_user_id(),
         'community_id' => $community_id

@@ -41,13 +41,7 @@ get_header();
     
     <div class="container"> <!--Temporary -->
         <div class="column">
-           <?php if(can_maintain_product_and_service($current_user->ID)){ ?>
-               <a href="/add-new-product-and-service" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Product</span></a>
-           <?php } else { ?>               
-               <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>&new=1" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn" ><span class="p"></span><span class="t">New Product</span></a>
-           <?php } ?>
-           <div class="clear"></div>
-           <div class="space20"></div>
+
            
            <?php foreach($products as $product){ ?>
            <div class="grid-box grid-box-expandable table-box grid-box-opened">
@@ -120,6 +114,9 @@ get_header();
                    </div>
                </div>
            </div>
+
+
+
            <div id="obligation<?php echo $product->ID?>" style="display: none;">
                <?php 
                    $pCommunityID = get_post_meta($product->ID, 'community_id', 'single');
@@ -129,7 +126,14 @@ get_header();
            <div class="clear"></div>
            <div class="space20"></div>
            <?php } ?>
-        </div>           
+            <?php if(can_maintain_product_and_service($current_user->ID)){ ?>
+                <a href="/add-new-product-and-service" class="action-btn add-new-btn has-tooltip" title="Add Product"><span class="p"></span><span class="t">Add</span></a>
+            <?php } else { ?>
+                <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>&new=1" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip" title="Add Product"><span class="p"></span><span class="t">New Product</span></a>
+            <?php } ?>
+            <div class="space20"></div>
+        </div>
+
     </div>
     <div class="clear"></div>
     <div class="popup-box" id="obligation-box" style="display: none; width: 500px">
