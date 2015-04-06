@@ -1171,15 +1171,14 @@ function generateProfile($profile_id, $community_id)
                     'ClearingHouse' => 2
                 );
                 $rows = $wpdb->get_results(
-                    $wpdb->prepare("SELECT cpi.* FROM wp_community_profile_meta AS cpm
+                    $wpdb->prepare("SELECT  cpi.id, cpi.type, cpi.profile_name , cpi.profile_description, cpi.purpose, cpi.type_id, cpi.type_name, cpi.community_id, cpi.created_date,cpi.creator_id, cpi.token, cpi.token_original, cpi.lookup,cpi.validation_status, cpi.validation_url, cpi.content_length, cpi.profile_role, cpi.is_expanded  FROM wp_community_profile_meta AS cpm
                                     LEFT JOIN wp_community_profile_instances AS cpi ON cpi.id = cpm.profile_id
                                     WHERE cpi.type='harness' AND cpi.community_id = %d
                                     AND cpm.meta_value IN ('" . implode("','", $identifierValues) . "') AND cpm.meta_key = %s " , $community_id, $identifierPath ) , ARRAY_A );
-//                foreach( $rows AS $key => $row ){
-//                    $rows[$key]['order'] = isset( $sorting_order[$row['profile_role']] ) ? $sorting_order[$row['profile_role']] : 3;
-//                }
-//                usort( $rows, function($a,$b){ return $a['order']-$b['order'];} );
-//                _trace($rows,1);
+                foreach( $rows AS $key => $row ){
+                    $rows[$key]['order'] = isset( $sorting_order[$row['profile_role']] ) ? $sorting_order[$row['profile_role']] : 3;
+                }
+                usort( $rows, function($a,$b){ return $a['order']-$b['order'];} );
                 if( is_iterable( $rows ) ){
                     foreach ($rows as $row) {
                         if( $row['content_length'] > get_option( 's3_bulk_treshold' ) || $row['validation_status'] != 'valid' ){
