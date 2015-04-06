@@ -2,10 +2,13 @@
 
 class ProfileInstance {
 
-    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $delay = 0 ){
+    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $delay = 0, $remove_sqs = false ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
+        if( $remove_sqs ){
+            $validate_via_sqs = false;
+        }
         $profile_data = $profileData['data'];
         $max_file_size_conf = get_option('uploads_files_max_size');
         if( strlen( $profile_data ) > $max_file_size_conf * 1024 * 1024) {
@@ -108,7 +111,7 @@ class ProfileInstance {
                 'profile_role' => $profile_role,
                 'is_expanded' => $is_expanded
             );
-            if (get_option('validate_via_sqs') != 'yes') {
+            if ( $validate_via_sqs ) {
                 $data['profile_name'] = $profile_name;
                 $data['profile_description'] = $profile_description;
                 $data['purpose'] = $profile_purpose;

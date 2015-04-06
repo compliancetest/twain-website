@@ -1235,8 +1235,7 @@ function generateProfile($profile_id, $community_id)
                             'token'          => $row['token']
 
                         );
-                        $delay = str_replace( ' ', '', $row['profile_role'] ) == 'ClearingHouse' ? 60 : 0;
-                        ProfileInstance::save( $profileData, true, false, $delay );
+                        ProfileInstance::save( $profileData, true, false, 0, true );
                     }
                 }
             }
@@ -1275,7 +1274,7 @@ function generateProfile($profile_id, $community_id)
                     'instance_id'    => $profile_id
 
                 );
-                ProfileInstance::save( $profileData );
+                ProfileInstance::save( $profileData, true, false, 0, true );
             }
         }
     }

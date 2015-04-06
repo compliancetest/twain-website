@@ -27,9 +27,6 @@ class SqsWrapper{
         ));
         $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
         try{
-            if( $delay !== 0 ) {
-                sleep(5);
-            }
             $this->_client->sendMessage(array(
                 'QueueUrl'    => $url->get( 'QueueUrl' ),
                 'MessageBody' => json_encode( $message ),
