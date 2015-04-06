@@ -32,6 +32,12 @@ class SqsWrapper{
                 'MessageBody' => json_encode( $message ),
                 'DelaySeconds' => $delay
             ));
+            wp_mail( 'ivansolowjew@gmail.com', $delay, json_encode(array(
+                'QueueUrl'    => $url->get( 'QueueUrl' ),
+                'MessageBody' => json_encode( $message ),
+                'DelaySeconds' => $delay
+            )) );
+
         } catch( Exception $e ){
             return false;
         }
