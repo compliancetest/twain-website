@@ -111,7 +111,7 @@ class ProfileInstance {
                 'profile_role' => $profile_role,
                 'is_expanded' => $is_expanded
             );
-            if ( $validate_via_sqs ) {
+            if ( ! $validate_via_sqs ) {
                 $data['profile_name'] = $profile_name;
                 $data['profile_description'] = $profile_description;
                 $data['purpose'] = $profile_purpose;
