@@ -1236,8 +1236,7 @@ function generateProfile($profile_id, $community_id)
                             'token'          => $row['token']
 
                         );
-                        $delay = str_replace( ' ', '', $row['profile_role'] ) == 'ClearingHouse' ? 30 : 0;
-                        wp_mail( 'ivansolowjew@gmail.com', $row['profile_role'].'  '.$delay, $row['profile_role'].'  '.$delay );
+                        $delay = str_replace( ' ', '', $row['profile_role'] ) == 'ClearingHouse' ? 60 : 0;
                         ProfileInstance::save( $profileData, true, false, $delay );
                     }
                 }
