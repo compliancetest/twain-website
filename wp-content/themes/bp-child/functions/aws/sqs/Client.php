@@ -23,7 +23,8 @@ class SqsWrapper{
     public function sendMessage( $message, $is_bulk = false ){
         $queueName = $is_bulk ? $this->_bulkQueueName : $this->_queueName;
         $url = $this->_client->getQueueUrl(array(
-            'QueueName' => $queueName
+            'QueueName' => $queueName,
+            'DelaySeconds' => 5,
         ));
         $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
         try{
