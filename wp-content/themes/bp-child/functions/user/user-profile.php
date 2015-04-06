@@ -1236,7 +1236,7 @@ function generateProfile($profile_id, $community_id)
                             'token'          => $row['token']
 
                         );
-                        $delay = str_replace( ' ', '', $row['profile_role'] ) == 'ClearingHouse' ? 15 : false;
+                        $delay = str_replace( ' ', '', $row['profile_role'] ) == 'ClearingHouse' ? 15 : 0;
                         ProfileInstance::save( $profileData, true, false, $delay );
                     }
                 }

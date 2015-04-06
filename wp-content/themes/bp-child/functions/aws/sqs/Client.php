@@ -24,13 +24,13 @@ class SqsWrapper{
         $queueName = $is_bulk ? $this->_bulkQueueName : $this->_queueName;
         $url = $this->_client->getQueueUrl(array(
             'QueueName' => $queueName,
-            'DelaySeconds' => $delay,
         ));
         $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
         try{
             $this->_client->sendMessage(array(
                 'QueueUrl'    => $url->get( 'QueueUrl' ),
-                'MessageBody' => json_encode( $message )
+                'MessageBody' => json_encode( $message ),
+                'DelaySeconds' => $delay
             ));
         } catch( Exception $e ){
             return false;

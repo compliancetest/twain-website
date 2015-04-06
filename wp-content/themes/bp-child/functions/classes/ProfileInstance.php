@@ -76,7 +76,7 @@ class ProfileInstance {
             );
             $sqs = new SqsWrapper();
 
-            $sqs->sendMessage($message, $is_bulk, $delay);
+            $sqs->sendMessage($message, $is_bulk, $delay );
         }
 
         if( $validate_via_sqs ) {
