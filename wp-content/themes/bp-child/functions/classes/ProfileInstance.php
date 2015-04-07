@@ -6,9 +6,9 @@ class ProfileInstance {
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
-        if( $remove_sqs ){
-            $validate_via_sqs = false;
-        }
+//        if( $remove_sqs ){
+//            $validate_via_sqs = false;
+//        }
         $profile_data = $profileData['data'];
         $max_file_size_conf = get_option('uploads_files_max_size');
         if( strlen( $profile_data ) > $max_file_size_conf * 1024 * 1024) {
