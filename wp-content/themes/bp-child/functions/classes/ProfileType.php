@@ -11,6 +11,7 @@ class ProfileType {
                 $response[] = str_replace( ' ', '', $result->title );
             }
         }
+        $response[] = 'SMSF';
         return $response;
     }
 }
