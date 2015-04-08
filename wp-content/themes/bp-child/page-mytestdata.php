@@ -11,6 +11,8 @@ if(!is_user_logged_in()){
 get_header();
 $profileInstances = getCustomerProfileInstances();
 $subscriptions =  getUserSubscriptions(null, true);
+$sqs_validation_enabled = get_option( 'validate_via_sqs' ) == 'yes' ? true : false;
+$expandable_profile_types = ProfileType::getExpandableTypes();
 ?>
 <div class="content" id="my_testdata">
     <div class="dashboard-tabs">
@@ -79,7 +81,10 @@ $subscriptions =  getUserSubscriptions(null, true);
                                 ?>
                                 <?php if(count($subscriptions) > 0): ?>
                                     <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" data-type="upload" class="edit-profile-instance-link action-btn icon-btn upload-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Upload Profile<span></span></span></a>
-                                    <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, true );?>" class="left10 action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
+                                    <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, $instance->profile_name, true );?>" class="left10 action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
+                                    <?php if( $sqs_validation_enabled && $instance->is_expanded == 0 && $instance->validation_status == 'valid' && in_array( str_replace( ' ', '', $instance->profile_role ), $expandable_profile_types ) ): ?>
+                                        <a href="#create-expanded-version" data-id="<?php echo $instance->id;?>" class="action-btn icon-btn blue-btn copy-btn left10 has-tooltip create_expanded_version"><span class="p"></span><span class="simple_tooltip radius6">Create Expanded Version of this profile<span></span></span></a>
+                                    <?php endif; ?>
                                     <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
                                 <?php endif; ?>
                                 <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
@@ -131,6 +136,22 @@ $subscriptions =  getUserSubscriptions(null, true);
         <div class="clear"></div>
     </div>
     <a class="close_btn"></a>                
+</div>
+<div class="popup-box" id="create-expanded-version" style="display: none; width: 300px">
+    <div class="popup-box-header radius6 noradiusbottom">Create Expanded Version</div>
+    <div class="popup-box-content">
+        Factor: <input type="text" name="factor" id="factor" maxlength="6" style="width: 70px;">
+        <input type="hidden" name="profile_id" id="profile_id" value="">
+        <div class="message error factor_error">This field is required.</div>
+        <div class="message error factor_valid_error">Please provide valid number between 2 and <?php echo get_option( 'max_expansion_factor');?>.</div>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">
+        <div class="loading loading-with-text radius6"><div><b>CREATING PROFILE</b><span>Please wait...</span></div></div>
+        <a href="#" class="action-btn process-btn confirm-expanded-profile"><span class="p"></span><span class="t">Confirm</span></a>
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>
 </div>
 <?php
 if(count($subscriptions) > 0){
@@ -265,8 +286,53 @@ if(count($subscriptions) > 0){
 ?>
 <input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <script type="text/javascript">
-jQuery(document).ready(function(){
+jQuery(document).ready(function($){
     fixTdHeight(jQuery('#my_test_data_profiles'));
+
+    $('.create_expanded_version').each(function(){
+        $(this).cplightbox({
+            type: 'inline',
+            href: '#create-expanded-version'
+        })
+    })
+    $('.create_expanded_version').on('click', function(){
+        $('.factor_error, .factor_valid_error').hide();
+        $('#factor').removeClass( 'input-error' );
+        $('#profile_id').val( $(this).attr('data-id') );
+
+    })
+    $( '.confirm-expanded-profile').on('click', function(){
+        $('.factor_error, .factor_valid_error').hide();
+        var is_valid = true;
+        var factor_value = $.trim( $('#factor').val() );
+        if( factor_value == '' ) {
+            is_valid = false;
+            $('#factor').addClass( 'input-error' );
+            $('.factor_error').show();
+        }
+        if( is_valid && ( parseInt( factor_value ) != factor_value || ( factor_value < 2 || factor_value > <?php echo get_option( 'max_expansion_factor');?> ) ) ){
+            is_valid = false;
+            $('#factor').addClass( 'input-error' );
+            $('.factor_valid_error').show();
+        }
+        if( is_valid ){
+            $('.factor_error').hide();
+            $('#factor').removeClass( 'input-error' );
+            $('#create-expanded-version .loading').show();
+            $.ajax({
+                url: '/my-profile',
+                data: {
+                    'td-action': '<?php echo wp_create_nonce('create-expanded-version')?>',
+                    'id': $('#profile_id').val(),
+                    'factor': $('#factor').val()
+                },
+                type: 'post',
+                success: function (rsp) {
+                    document.location.reload();
+                }
+            });
+        }
+    });
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});

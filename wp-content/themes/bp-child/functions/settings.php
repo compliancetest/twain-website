@@ -69,6 +69,7 @@ function create_compliancetest_settings_page()
         }
         
         update_option('uploads_files_max_size', $_POST['uploads_files_max_size']);
+        update_option('max_expansion_factor', $_POST['max_expansion_factor']);
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
@@ -509,6 +510,10 @@ function create_compliancetest_settings_page()
                                 <input type="radio" name="validation_error_format" size="50" <?php if( $error_format == 'html' || empty( $error_format ) ):?> checked="checked" <?php endif;?> autocomplete="off" value="html"/>html
                                 <input type="radio" name="validation_error_format" size="50" <?php if( $error_format == 'json' ):?> checked="checked" <?php endif;?> autocomplete="off" value="json"/>json
                             </td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Max expansion factor:</b></label></td>
+                            <td><input type="text" name="max_expansion_factor" id="max_expansion_factor" size="15" value="<?php echo get_option('max_expansion_factor')?>" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>

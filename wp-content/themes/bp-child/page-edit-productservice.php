@@ -464,16 +464,18 @@ jQuery(document).ready(function($){
         {
             if(!productIDReg.test($('#psForm #product_id').val()))
             {
-                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-zA-Z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
+                $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-zA-Z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
                 jQuery("#product_id").addClass('input-error');
                 $('#psForm .grid-box-footer .message').fadeIn('fast');                    
                 return false;
             }
         }else{
-            
-            if(!forceSubmit && !productIDReg.test($('#psForm #product_owner').val() + "_" + $('#psForm #product_name').val() + "_" + $('#psForm #product_version').val()))
+            if( $('#psForm #product_id').val() == '' ){
+                return true;
+            }
+            if( ! forceSubmit && ! productIDReg.test($('#psForm #product_owner').val() + "_" + $('#psForm #product_name').val() + "_" + $('#psForm #product_version').val()))
             {
-                $('#psForm .grid-box-footer').append('<div class="message warning" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-zA-Z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
+                $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Product ID may only contain letters, numbers, dot, dash and underscore characters([a-zA-Z0-9.-_]+). Upper case letters will be converted to lower case.</div>');
                 $('#psForm .grid-box-footer .message').fadeIn('fast');                    
                 forceSubmit = true;
                 setTimeout(function(){
@@ -483,7 +485,7 @@ jQuery(document).ready(function($){
             }
             
         }
-        
+
         return isValid;
         
     });

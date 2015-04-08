@@ -20,17 +20,19 @@ class SqsWrapper{
         if( empty( $this->_bulkQueueName ) ) $this->_bulkQueueName = $this->_queueName;
     }
 
-    public function sendMessage( $message, $is_bulk = false ){
+    public function sendMessage( $message, $is_bulk = false, $delay = 0 ){
         $queueName = $is_bulk ? $this->_bulkQueueName : $this->_queueName;
         $url = $this->_client->getQueueUrl(array(
-            'QueueName' => $queueName
+            'QueueName' => $queueName,
         ));
         $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
         try{
             $this->_client->sendMessage(array(
                 'QueueUrl'    => $url->get( 'QueueUrl' ),
-                'MessageBody' => json_encode( $message )
+                'MessageBody' => json_encode( $message ),
+                'DelaySeconds' => $delay
             ));
+
         } catch( Exception $e ){
             return false;
         }

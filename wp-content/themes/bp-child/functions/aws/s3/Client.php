@@ -95,18 +95,9 @@ class S3Wrapper{
      * @param $token - profile token
      * @return array|bool|mixed|null
      */
-    public static function getProfileLink( $token, $isDownloadLink = false ){
+    public static function getProfileLink( $token, $fileName, $isDownloadLink = false ){
         if( $isDownloadLink ){
-            $profile = self::getProfile( $token );
-            $v = '';
-            if( $profile->Profile->Version ){
-                $version = array();
-                foreach( get_object_vars( $profile->Profile->Version ) AS $k => $v ){
-                    $version[] = $v;
-                }
-                $v = " v" . implode(".", $version);
-            }
-            return self::getDownloadLink( 'profiles/user', $token.'.json', $profile->Profile->Title.$v.'.json' );
+            return self::getDownloadLink( 'profiles/user', $token.'.json', $fileName.'.json' );
         }
         return self::getLink( 'profiles/user', $token.'.json' );
     }
