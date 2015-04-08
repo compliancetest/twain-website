@@ -1784,7 +1784,9 @@ tr {
 .copy-btn span.p{
     background-position: 0 -1669px;
 }
-
+.expand-btn span.p{
+    background-position: 0 -1773px;
+}
 .add-new-btn span.p{
     background-position: 0 -128px;
 }
