@@ -771,7 +771,7 @@ function cp_get_customer_harness_detail()
                                             <?php 
                                                 if (count($profileInstances) > 0):
                                                     foreach ($profileInstances AS $instance):
-                                                        if( $instance->validation_status != 'valid' || $instance->content_length > get_option( 's3_bulk_treshold' ) ) continue;
+                                                        if( $instance->validation_status != 'valid' || $instance->content_length > get_option( 's3_bulk_treshold' ) || ! in_array( str_replace( ' ', '', $instance->profile_role ), array( 'ClearingHouse', 'Employer', 'SMSF', 'Product' ) ) ) continue;
                                                     ?>
                                                     <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $instance->profile_name; ?></option>
                                                 <?php endforeach; endif; ?>
