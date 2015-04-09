@@ -109,7 +109,7 @@ class Service
     public static function can_edit( $user_id, $service_id )
     {
         //add new entry
-        if( is_null( $service_id ) ){
+        if( ! is_numeric( $service_id ) ){
             return true;
         }
         //super admin can edit every service
