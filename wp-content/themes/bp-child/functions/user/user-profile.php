@@ -676,6 +676,13 @@ function cp_get_customer_harness_detail()
     $user_id = get_current_user_id();
     
     $user = get_userdata($user_id);
+
+    $test_suite = new TestSuite( $row->suite_id );
+    $test_suite->load();
+    $allowedRoles = array();
+    foreach( $test_suite->roles AS $role ){
+        $allowedRoles = array_merge( $allowedRoles, explode( ',', $role['profileTypes'] ) );
+    }
     
     if(!$row): 
     ?>
@@ -766,12 +773,13 @@ function cp_get_customer_harness_detail()
                                 <div class="field-row">
                                     <div class="grid-cell">
                                         <label>Profile:</label>
+
                                         <select name="profile_id" class="select" onchange="viewProfileData()">
                                             <option value="">None</option>
-                                            <?php 
+                                            <?php
                                                 if (count($profileInstances) > 0):
                                                     foreach ($profileInstances AS $instance):
-                                                        if( $instance->validation_status != 'valid' || $instance->content_length > get_option( 's3_bulk_treshold' ) || ! in_array( str_replace( ' ', '', $instance->profile_role ), array( 'ClearingHouse', 'Employer', 'SMSF', 'Product' ) ) ) continue;
+                                                        if( $instance->validation_status != 'valid' || $instance->content_length > get_option( 's3_bulk_treshold' ) || ! in_array( str_replace( ' ', '', $instance->profile_role ), $allowedRoles ) ) continue;
                                                     ?>
                                                     <option value="<?php echo $instance->id; ?>" <?php echo ($row->profile_id == $instance->id) ? ('selected="selected"') : (''); ?>><?php echo $instance->profile_name; ?></option>
                                                 <?php endforeach; endif; ?>
