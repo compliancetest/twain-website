@@ -225,21 +225,9 @@ get_header();
                                                                                                <select name="responder_profiles" class="responder_profiles select input-field">
                                                                                                    <option></option>
                                                                                                    <?php foreach( $responder_profiles AS $responder_profile ):?>
-                                                                                                        <?php
-                                                                                                            $instanceObj = json_decode(base64_decode($responder_profile->content));
-                                                                                                        ?>
                                                                                                        <option value="<?php echo $responder_profile->id;?>">
                                                                                                             <?php
                                                                                                                 echo $responder_profile->profile_name;
-                                                                                                                if($instanceObj->Profile->Version)
-                                                                                                                {
-                                                                                                                    $version = array();
-                                                                                                                    foreach(get_object_vars($instanceObj->Profile->Version) as $k=>$v)
-                                                                                                                    {
-                                                                                                                        $version[] = $v;
-                                                                                                                    }
-                                                                                                                    echo " v" . implode(".", $version);
-                                                                                                                }
                                                                                                             ?>
                                                                                                        </option>
                                                                                                    <?php endforeach;?>

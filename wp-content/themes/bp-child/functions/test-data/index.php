@@ -43,6 +43,11 @@ function cp_process_test_data_actions()
             downloadProfileError();
         }else if(wp_verify_nonce($action, 'update-profile-lookup')){
             updateProfileLookup();
+        }else if(wp_verify_nonce($action, 'create-expanded-version')){
+            createExpandedVersion( $_REQUEST['id'], $_REQUEST['factor'] );
+            exit('success');
         }
+
+
     }
 }

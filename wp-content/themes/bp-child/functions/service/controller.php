@@ -36,8 +36,7 @@ function saveService()
         $isNew = true;
     else
         $isNew = false;
-    
-    if( $isNew || ( ! $isNew && ! Service::can_edit( get_current_user_id(), $id ) ) )
+    if( ! Service::can_edit( get_current_user_id(), $id )  )
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect(get_site_url());
@@ -133,10 +132,10 @@ function saveService()
 
     save_wp_service( $id );
     $cloud_search = new CloudSearch();
-    $cloud_search->_initial_upload();
+    $cloud_search->cloud_search_update_service( $id );
     $full_search  = new FulltextSearch();
-    $full_search->fullUpload();
-    addMessage('Product / Service was saved successfully');
+    $full_search->fullUpload( $id );
+    addMessage('Service was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
 }

@@ -128,7 +128,7 @@ $esb = new ManageESB();
                               <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('delete-plan')?>&id=<?php echo $crow->id?>" class="delete-plan-link action-btn delete-btn icon-btn left5"><span class="p"></span>
                                   <span class="simple_tooltip radius6">Delete Plan<span></span></span>
                               </a>                              
-                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-grey-btn icon-btn left5">
+                              <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('certify-plan')?>&id=<?php echo $crow->id?>" class="action-btn certify-btn icon-btn left5">
                                   <span class="p"></span>
                                   <span class="simple_tooltip radius6">Claim<span></span></span>
                               </a>
@@ -140,7 +140,7 @@ $esb = new ManageESB();
                    </div>
                    <?php if(is_customer($suite->suite_id)): ?>
                        <div class="space10"></div>
-                       <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn add-plan-btn left"><span class="p"></span><span class="t">New Test Plan</span></a>
+                       <a href="<?php echo get_permalink()?>?_plannonce=<?php echo wp_create_nonce('edit-plan')?>&suite_id=<?php echo $suite->suite_id?>" data-product-id="<?php echo $product->ID?>" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn add-plan-btn left has-tooltip" title="Add Test Plan"><span class="p"></span><span class="t">Add</span></a>
                    <?php endif; ?>
                </div>
            </div>           
