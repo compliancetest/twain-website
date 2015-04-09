@@ -39,7 +39,7 @@ function saveService()
     if( ! Service::can_edit( get_current_user_id(), $id )  )
     {
         addMessage('Permission Denied!', 'error');
-        wp_redirect( '/agreements/');
+        wp_redirect(get_site_url());
         exit;
     }
     //Check Service ID duplication
