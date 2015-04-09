@@ -466,12 +466,12 @@ function ct_duplicate_data()
                                         $data['community_id'] = $new_community_id;
                                         $wpdb->insert($wpdb->prefix . 'community_profile_types', $data);
                                         $nTypeId = $wpdb->insert_id;
-                                        
+
                                         $profile_type_ids[$pType['id']] = $nTypeId;
 
                                         //Copy Profile Instances
                                         $query = "SELECT * FROM {$wpdb->prefix}community_profile_instances WHERE type_id=" . $pType['id'];
-                                        $pInstances = $new_wpdb->get_results($query, ARRAY_A);    
+                                        $pInstances = $new_wpdb->get_results($query, ARRAY_A);
                                         foreach($pInstances as $pIns)
                                         {
 
@@ -616,6 +616,25 @@ function ct_duplicate_data()
                                     {
                                         ct_copy_test_case($new_wpdb, $row, $suitesMap, $scenariosMap, $esb_case_configurations);
                                     }
+
+                                    $test_case_data = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'test-case' ORDER BY ID desc" );
+                                    $processed = array();
+                                    foreach( $test_case_data AS $test_case_entry ){
+                                        $case = $wpdb->get_row( "SELECT * FROM wp_test_cases WHERE case_id = ". $test_case_entry->ID );
+                                        $versions = array();
+                                        $versions[] = $case->version_major;
+                                        $versions[] = $case->version_minor;
+                                        if( $case->version_patch != 0 ){
+                                            $versions[] = $case->version_patch;
+                                        }
+                                        $testCaseId = strtoupper( $case->case_name ). '_V' . implode('.', $versions);
+                                        if( in_array( $testCaseId,$processed  ) ){
+                                            continue;
+                                        }
+                                        $processed[] = $testCaseId;
+                                        $esb->saveTestCaseInfo( $test_case_entry->ID, $testCaseId, get_post_meta( $test_case_entry->ID, 'outcome_type', true), get_post_meta( $test_case_entry->ID, 'message_count', true));
+                                    }
+
                                     //var_dump($profile_instance_ids);
                                     //Update Profile Types
                                     foreach($profile_instance_ids as $oid => $nid)
@@ -991,6 +1010,10 @@ function ct_duplicate_data()
                                     $s3 = new S3Wrapper();
                                     $counter = 0;
                                     foreach( $profiles AS $profile ) {
+                                        if( $profile->content_length > 10 * 1024 * 1024 ){
+                                            //do not process files bigger then 10MB
+                                            continue;
+                                        }
                                         $s3_profile = $s3->getProfile( $profile->token );
                                         $profile_name = $s3_profile->Profile->Title.' v'.$s3_profile->Profile->Version->Major.'.'.$s3_profile->Profile->Version->Minor;
                                         if( $s3_profile->Profile->Version->Patch ){
@@ -1012,7 +1035,7 @@ function ct_duplicate_data()
                                                 'purpose'             => $s3_profile->Profile->Purpose,
                                                 'type_name'           => $type_name,
                                                 'content_length'      => strlen( json_encode( $s3_profile ) ),
-                                                'profile_role'        => $profile_type->title
+                                                'profile_role'        => $s3_profile->Profile->Type
                                             ),
                                             array( 'id' => $profile->id ),
                                             array( '%s', '%s', '%s', '%s', '%d', '%s' ),
@@ -1022,6 +1045,52 @@ function ct_duplicate_data()
                                     }
 
                                     echo 'Processed ' . $counter . ' profiles.';
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
+        <h2>Update TEST_CASE_CONFIGURATION table</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('populate_be_profiles')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Update" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'populate_be_profiles')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                    global $wpdb;
+                                    $counter = 0;
+                                    $esb = new ManageESB();
+                                    $test_case_data = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'test-case' ORDER BY ID desc" );
+                                    $processed = array();
+                                    foreach( $test_case_data AS $test_case_entry ){
+                                        $case = $wpdb->get_row( "SELECT * FROM wp_test_cases WHERE case_id = ". $test_case_entry->ID );
+                                        $versions = array();
+                                        $versions[] = $case->version_major;
+                                        $versions[] = $case->version_minor;
+                                        if( $case->version_patch != 0 ){
+                                            $versions[] = $case->version_patch;
+                                        }
+                                        $testCaseId = strtoupper( $case->case_name ). '_V' . implode('.', $versions);
+                                        if( in_array( $testCaseId,$processed  ) ){
+                                            continue;
+                                        }
+                                        $processed[] = $testCaseId;
+                                        $esb->saveTestCaseInfo( $test_case_entry->ID, $testCaseId, get_post_meta( $test_case_entry->ID, 'outcome_type', true), get_post_meta( $test_case_entry->ID, 'message_count', true));
+                                        $counter++;
+                                    }
+
+                                    echo 'Processed ' . $counter . ' entries.';
                                     ?>
                                 </i>
                             </td>
