@@ -36,11 +36,10 @@ function saveService()
         $isNew = true;
     else
         $isNew = false;
-    
-    if( $isNew || ( ! $isNew && ! Service::can_edit( get_current_user_id(), $id ) ) )
+    if( ! Service::can_edit( get_current_user_id(), $id )  )
     {
         addMessage('Permission Denied!', 'error');
-        wp_redirect(get_site_url());
+        wp_redirect( '/agreements/');
         exit;
     }
     //Check Service ID duplication
