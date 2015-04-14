@@ -137,6 +137,20 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
     </div>
     <a class="close_btn"></a>                
 </div>
+<div class="popup-box" id="delete-profiles-box" style="display: none; width: 500px">
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+    <div class="popup-box-content">
+        <div class="no_rows display_none">Please select a row.</div>
+        <div class="selected_rows display_none">Are you sure that you want to delete this profile(s)?</div>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">
+        <div class="loading loading-with-text radius6 dlt_loading"><div><b>DELETING PROFILE</b><span>Please wait...</span></div></div>
+        <a href="#" class="action-btn process-btn dlt_confirm"><span class="p"></span><span class="t">Confirm</span></a>
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>
+</div>
 <div class="popup-box" id="create-expanded-version" style="display: none; width: 300px">
     <div class="popup-box-header radius6 noradiusbottom">Create Expanded Version</div>
     <div class="popup-box-content">
@@ -286,101 +300,98 @@ if(count($subscriptions) > 0){
 ?>
 <input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <script type="text/javascript">
-jQuery(document).ready(function($){
-    fixTdHeight(jQuery('#my_test_data_profiles'));
+    jQuery(document).ready(function($){
+        fixTdHeight(jQuery('#my_test_data_profiles'));
 
-    $('.create_expanded_version').each(function(){
-        $(this).cplightbox({
-            type: 'inline',
-            href: '#create-expanded-version'
+        $('.create_expanded_version').each(function(){
+            $(this).cplightbox({
+                type: 'inline',
+                href: '#create-expanded-version'
+            })
         })
-    })
-    $('.create_expanded_version').on('click', function(){
-        $('.factor_error, .factor_valid_error').hide();
-        $('#factor').removeClass( 'input-error' );
-        $('#profile_id').val( $(this).attr('data-id') );
-
-    })
-    $( '.confirm-expanded-profile').on('click', function(){
-        $('.factor_error, .factor_valid_error').hide();
-        var is_valid = true;
-        var factor_value = $.trim( $('#factor').val() );
-        if( factor_value == '' ) {
-            is_valid = false;
-            $('#factor').addClass( 'input-error' );
-            $('.factor_error').show();
-        }
-        if( is_valid && ( parseInt( factor_value ) != factor_value || ( factor_value < <?php echo get_option( 'min_expansion_factor');?> || factor_value > <?php echo get_option( 'max_expansion_factor');?> ) ) ){
-            is_valid = false;
-            $('#factor').addClass( 'input-error' );
-            $('.factor_valid_error').show();
-        }
-        if( is_valid ){
-            $('.factor_error').hide();
+        $('.create_expanded_version').on('click', function(){
+            $('.factor_error, .factor_valid_error').hide();
             $('#factor').removeClass( 'input-error' );
-            $('#create-expanded-version .loading').show();
-            $.ajax({
-                url: '/my-profile',
-                data: {
-                    'td-action': '<?php echo wp_create_nonce('create-expanded-version')?>',
-                    'id': $('#profile_id').val(),
-                    'factor': $('#factor').val()
-                },
-                type: 'post',
-                success: function (rsp) {
-                    document.location.reload();
-                }
-            });
-        }
-    });
-    //Fix Simple ToolTips
-    jQuery('.td-status .simple_tooltip').each(function(){
-        jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
-    });
-    
-    jQuery('#chk-profile-all').click(function(){
-        jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]').prop('checked', this.checked);
-    });
-    
-    jQuery('#delete-profile-link').click(function(){
-        var checked = jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').length;            
-        if(checked == 0)
-        {
-            alert("Please select a row.");
-            return false;
-        }else{
-            
-            var ids = new Array();
-            jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
-                ids.push(this.value);
-            })           
-            if(!confirm('Are you sure you want to delete?'))
-            {
-                return false;
-            }
-            
-            //jQuery('#my_testdata').append('<div class="loading1"></div>');
-            jQuery('#my_testdata .loading1').show();
-            
-            jQuery.ajax({
-                url: '/my-profile',
-                data: {
-                    'td-action': '<?php echo wp_create_nonce('delete-profile-instance')?>',
-                    'id': ids,
-                    'return': '<?php echo base64_encode(get_site_url() . '/my-test-data')?>'
-                },
-                type: 'post',
-                dataType: 'html',
-                success: function(rsp){                        
-                    document.location.reload();
+            $('#profile_id').val( $(this).attr('data-id') );
 
-                }
-            })    
-            return false;
-        }
+        })
+        $( '.confirm-expanded-profile').on('click', function(){
+            $('.factor_error, .factor_valid_error').hide();
+            var is_valid = true;
+            var factor_value = $.trim( $('#factor').val() );
+            if( factor_value == '' ) {
+                is_valid = false;
+                $('#factor').addClass( 'input-error' );
+                $('.factor_error').show();
+            }
+            if( is_valid && ( parseInt( factor_value ) != factor_value || ( factor_value < <?php echo get_option( 'min_expansion_factor');?> || factor_value > <?php echo get_option( 'max_expansion_factor');?> ) ) ){
+                is_valid = false;
+                $('#factor').addClass( 'input-error' );
+                $('.factor_valid_error').show();
+            }
+            if( is_valid ){
+                $('.factor_error').hide();
+                $('#factor').removeClass( 'input-error' );
+                $('#create-expanded-version .loading').show();
+                $.ajax({
+                    url: '/my-profile',
+                    data: {
+                        'td-action': '<?php echo wp_create_nonce('create-expanded-version')?>',
+                        'id': $('#profile_id').val(),
+                        'factor': $('#factor').val()
+                    },
+                    type: 'post',
+                    success: function (rsp) {
+                        document.location.reload();
+                    }
+                });
+            }
+        });
+        //Fix Simple ToolTips
+        jQuery('.td-status .simple_tooltip').each(function(){
+            jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
+        });
+
+        jQuery('#chk-profile-all').click(function(){
+            jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]').prop('checked', this.checked);
+        });
+        $('#delete-profile-link').cplightbox({
+            type: 'inline',
+            href: '#delete-profiles-box'
+        });
+        $('#delete-profile-link').on('click',function(){
+            if( jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').length == 0 ){
+                $('.no_rows').show();
+                $('.selected_rows, .dlt_confirm').hide();
+                $('.dlt_confirm').off('click');
+            } else{
+                $('.no_rows').hide();
+                $('.selected_rows, .dlt_confirm').show();
+                $('.dlt_confirm').on('click', function(){
+                    jQuery('.dlt_loading').show();
+                    var ids = new Array();
+                    jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
+                        ids.push(this.value);
+                    });
+                    jQuery.ajax({
+                        url: '/my-profile',
+                        data: {
+                            'td-action': '<?php echo wp_create_nonce('delete-profile-instance')?>',
+                            'id': ids,
+                            'return': '<?php echo base64_encode(get_site_url() . '/my-test-data')?>'
+                        },
+                        type: 'post',
+                        dataType: 'html',
+                        success: function(rsp){
+                            jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
+                                $(this).attr('checked', false);
+                            });
+                            document.location.reload();
+                        }
+                    })
+                });
+            }
+        });
     });
-})
 </script>
-<?php
-get_footer();
-?>
+<?php get_footer(); ?>

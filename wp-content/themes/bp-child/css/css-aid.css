@@ -2730,3 +2730,6 @@ table.result-table{
 	font-size: 12px;
 	float: right;
 }
+.display_none{
+    display: none;
+}
