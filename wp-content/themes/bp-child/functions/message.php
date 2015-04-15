@@ -80,6 +80,14 @@ function sendMessage()
             $suiteObj = new TestSuite($suite_id);            
             $caseObj = new TestCase($case_id);
             $caseObj->load();
+
+            $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+
+            if( $caseObj->bulk == 'Yes' && PricingPlan::isSupportBulk( $pricingPlanId ) && isset( $_POST['copy_count'] ) ){
+                $copyCount = intval( $_POST['copy_count'] );
+            } else{
+                $copyCount = 1;
+            }
 //            <api:testSuiteId>' . $suite_id . '</api:testSuiteId>
             //Create XML
             $xmlData = '<api:invokeMessageRequest xmlns:api="http://compliancetest.net/api">
@@ -112,9 +120,9 @@ function sendMessage()
                         <api:username>' . $subscription->harness_username . '</api:username>
                         <api:password>' . $subscription->harness_password . '</api:password>
                     </api:identity>
+                    <api:copyCount>'.$copyCount.'</api:copyCount>
                 </api:testCase>
             </api:invokeMessageRequest>';
-            
             
             $result = $CPRest->doMessageAPI('message/invoke', $xmlData);
             
@@ -701,10 +709,15 @@ function showTriggerMessageBox()
                                     <label for="tm-test-suite">Test Case</label>
                                     <select name="test-case" id="tm-test-case" class="select">
                                         <option value="" selected="selected">- Select -</option>
-                                        <?php foreach($cases as $c){ ?>
-                                            <option value="<?php echo $c->ID?>"><?php echo $c->post_title ?></option>
-<!--                                            --><?php //echo ($c->ID == $current_case_id) ? 'selected="selected"' : '' ?>
-                                        <?php } ?>
+                                        <?php
+                                            $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+                                        ?>
+                                        <?php foreach( $cases AS $c ):
+                                                $cs = new TestCase( $c->ID );
+                                                $cs->load();
+                                            ?>
+                                            <option value="<?php echo $c->ID?>" data-bulk="<?php echo $cs->bulk == 'Yes' && PricingPlan::isSupportBulk( $pricingPlanId ) ? 'Yes' : 'No';?>"><?php echo $c->post_title ?></option>
+                                        <?php endforeach ?>
                                     </select>
                                 </div>
                                 <div class="grid-cell width250 left15">
@@ -723,6 +736,10 @@ function showTriggerMessageBox()
                                 <div class="grid-cell width250">
                                     <input type="checkbox" name="show_my" id="show_my" <?php if( $is_checked_by_default ):?> checked="checked"<?php endif;?>>
                                     <span>Show only my profiles</span>
+                                </div>
+                                <div class="grid-cell width250 left15 copy_count_container displaynone">
+                                    <span style="padding-right: 5px;"><b>Copy Count</b></span>
+                                    <input type="text" name="copy_count" id="copy_count" maxlength="2" class="input small-text" style="width: 50px;">
                                 </div>
                             </div>
                             <div class="clear"></div>
@@ -989,7 +1006,7 @@ function uploadMessage()
             }
             $s3 = new S3Wrapper();
             $s3->putObject('/' . date( 'Y-m' ).'/'. date( 'd' ).'/'.date( 'H' ).'/envelopes/'.$token.'/'.$filename, $filecontent, 'application/'.pathinfo( $filename, PATHINFO_EXTENSION ), get_option( 's3_message_bucket') );
-            
+
             $xmlData = '<api:processUploadedMessageRequest xmlns:api="http://compliancetest.net/api">
                             <api:testCaseUploadMessage>                              
                                 <api:testCaseId>' . $caseObj->testCaseID . "_V" . $caseObj->version . '</api:testCaseId>                                
