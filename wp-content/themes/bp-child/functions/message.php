@@ -83,7 +83,7 @@ function sendMessage()
 
             $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
 
-            if( $caseObj->bulk == 'Yes' && PricingPlan::isSupportBulk( $pricingPlanId ) && isset( $_POST['copy_count'] ) && intval( $_POST['copy_count'] ) == $_POST['copy_count'] ){
+            if( $caseObj->bulk == 'Yes' && PricingPlan::isSupportBulk( $pricingPlanId ) && isset( $_POST['copy_count'] ) && intval( $_POST['copy_count'] ) == trim( $_POST['copy_count'] ) ){
                 $copyCount = intval( $_POST['copy_count'] );
             } else{
                 $copyCount = 1;
