@@ -104,7 +104,7 @@ jQuery(document).ready(function(){
         var is_bulk = ( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' );
         if( is_bulk ) {
             jQuery( '#copy_count').removeClass('input-error');
-            jQuery( '#copy_count').val('');
+            jQuery( '#copy_count').val('1');
             jQuery( '.copy_count_container').show();
         } else{
             jQuery( '.copy_count_container').hide();
