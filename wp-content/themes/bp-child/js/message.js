@@ -101,6 +101,14 @@ jQuery(document).ready(function(){
         var case_id = jQuery('#tm-test-case').val();
         var suite_id = jQuery('#tm-test-suite').val();
         var show_my_profiles = jQuery('#show_my').is(':checked');
+        var is_bulk = ( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' );
+        if( is_bulk ) {
+            jQuery( '#copy_count').removeClass('input-error');
+            jQuery( '#copy_count').val('1');
+            jQuery( '.copy_count_container').show();
+        } else{
+            jQuery( '.copy_count_container').hide();
+        }
         jQuery('#trigger-message-box .loading-with-text b').html('LOADING DATA');
         jQuery('#trigger-message-box .loading-with-text').show();
         jQuery('#trigger-message-box .popup-box-content .message').fadeOut('fast');
@@ -307,6 +315,13 @@ jQuery(document).ready(function(){
         jQuery('#trigger-message-box .popup-box-content').find('.input-error').removeClass('input-error');
         jQuery('#trigger-message-box .popup-box-content').find('.select-error').removeClass('select-error');
         var isValid = true;
+        var copy_count = jQuery('#copy_count').val().replace(' ', '');
+        if( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' && ( parseInt( copy_count ) != copy_count || copy_count > 20 || copy_count < 1  ))
+        {
+            jQuery('#copy_count').addClass('input-error');
+            showTriggerMessageResultMessage( 'Please provide valid number between 1 and 20.', 'error');
+            return false;
+        }
         if(!jQuery('#tm-test-suite').val())
         {
             jQuery('#tm-test-suite').addClass('select-error');
