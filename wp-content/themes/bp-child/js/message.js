@@ -113,9 +113,13 @@ jQuery(document).ready(function(){
                 jQuery('#trigger-message-box .loading-with-text').hide();
             },
             success: function(rsp){                
-                jQuery('#tm-template').find('option:gt(0)').remove();                
+                jQuery('#tm-template').find('option:gt(0)').remove();
+                var selected_str = '';
+                if( jQuery(rsp).find('template').length === 1 ){
+                    selected_str = 'selected="selected"'
+                }
                 jQuery(rsp).find('template').each(function(idx){
-                    jQuery('#tm-template').append('<option value="' + jQuery(this).find('uri').text() + '">' + jQuery(this).find('name').text() + '</option>');
+                    jQuery('#tm-template').append('<option '+ selected_str +' value="' + jQuery(this).find('uri').text() + '">' + jQuery(this).find('name').text() + '</option>');
                 });
                 jQuery('#trigger-message-box .harness-profiles-section').html(jQuery(rsp).find('harness').text());
                 jQuery('#trigger-message-box .tester-profiles-section').html(jQuery(rsp).find('tester').text());
