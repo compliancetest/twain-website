@@ -358,8 +358,7 @@ jQuery(document).ready(function(){
             max_copy_count = copy_count_limits.max_bulk;
         }
         var copy_count = jQuery('#copy_count').val().replace(' ', '');
-
-        if( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' && ( parseInt( copy_count ) != copy_count || copy_count > max_copy_count || copy_count < min_copy_count  ))
+        if( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' && ( parseInt( copy_count ) != copy_count || parseInt(copy_count) > parseInt(max_copy_count) || parseInt(copy_count) < parseInt(min_copy_count)  ))
         {
             jQuery('#copy_count').addClass('input-error');
             showTriggerMessageResultMessage( 'Please provide valid number between '+min_copy_count+' and '+max_copy_count+'.', 'error');
