@@ -536,7 +536,8 @@ function _getProfileRow($instance, $name, $defaults, $not_allowed = false ){
                         <span class="simple_tooltip" style="width:150px; top: -70px; left:35px;">Bulk profiles are not selectable for the current pricing plan and selected test case<span></span></span>
                 </div>';
     } else {
-        $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" /> <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
+        $is_bulk = $instance->content_length > get_option( 's3_bulk_treshold' ) ? 'yes' : 'no';
+        $html .= '<div class="grid-cell width50P"><input type="radio" name="' . $name . '" id="' . $name . $instance->id . '" value="' . $instance->id . '"' . cp_checked($instance->id, $defaults) . ' class="right10" data-isbulk="'.$is_bulk.'"/> <a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-instance') . '&id=' . $instance->id . '&back=1" rel="custom-popup" cp-type="ajax">' . $instance->profile_name . '</a></div>';
     }
     $html .= '<div class="grid-cell width20P">' . $instance->purpose . '</div>';
     $html .= '<div class="grid-cell width30P"><a href="' . get_site_url() . '?td-action=' . wp_create_nonce('view-profile-type') . '&id=' . $instance->type_id . '&back=1" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">' . $instance->type_name . '</a>  </div>';
@@ -576,7 +577,13 @@ function showTriggerMessageBox()
     
     //Getting Subscribed Test Suites
     $suites = getUserSubscriptions();
-    
+
+    $copy_count_limits = array(
+        'min_bulk' => get_option( 'min_bulk_copycount_factor' ),
+        'max_bulk' => get_option( 'max_bulk_copycount_factor' ),
+        'min_non_bulk' => get_option( 'min_non_bulk_copycount_factor' ),
+        'max_non_bulk' => get_option( 'max_non_bulk_copycount_factor' )
+    );
     
     if(!$suites)    
     {
@@ -739,7 +746,7 @@ function showTriggerMessageBox()
                                 </div>
                                 <div class="grid-cell width250 left15 copy_count_container displaynone">
                                     <span style="padding-right: 5px;"><b>Copy Count</b></span>
-                                    <input type="text" name="copy_count" id="copy_count" maxlength="2" class="input small-text" style="width: 50px;" value="1">
+                                    <input type="text" name="copy_count" id="copy_count" maxlength="4" class="input small-text" style="width: 50px;" value="1">
                                 </div>
                             </div>
                             <div class="clear"></div>
@@ -775,6 +782,7 @@ function showTriggerMessageBox()
                 <div class="loading loading-with-text radius6"><div><b>LOADING DATA</b><span>Please wait...</span></div></div>                
                 <input type="hidden" name="ct-message-action" value="<?php echo wp_create_nonce('send-message')?>" />
                 <script type="text/javascript">
+                    var copy_count_limits = <?php echo json_encode( $copy_count_limits );?>;
                     jQuery('#send-message-link').click(function(){
                         jQuery('#messageForm').submit();
                         return false;

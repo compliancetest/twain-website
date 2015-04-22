@@ -319,13 +319,7 @@ jQuery(document).ready(function(){
         jQuery('#trigger-message-box .popup-box-content').find('.input-error').removeClass('input-error');
         jQuery('#trigger-message-box .popup-box-content').find('.select-error').removeClass('select-error');
         var isValid = true;
-        var copy_count = jQuery('#copy_count').val().replace(' ', '');
-        if( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' && ( parseInt( copy_count ) != copy_count || copy_count > 20 || copy_count < 1  ))
-        {
-            jQuery('#copy_count').addClass('input-error');
-            showTriggerMessageResultMessage( 'Please provide valid number between 1 and 20.', 'error');
-            return false;
-        }
+
         if(!jQuery('#tm-test-suite').val())
         {
             jQuery('#tm-test-suite').addClass('select-error');
@@ -352,7 +346,25 @@ jQuery(document).ready(function(){
             showTriggerMessageResultMessage('Please select profile(s).', 'error');
             return false;
         }
-        
+
+        /**
+         * @copy_count_limits defined in message.php::showTriggerMessageBox()
+         */
+        var min_copy_count = copy_count_limits.min_non_bulk;
+        var max_copy_count = copy_count_limits.max_non_bulk;
+
+        if( jQuery('.harness-profiles-section input[type="radio"]:checked').attr('data-isbulk') == 'yes' || jQuery('.tester-profiles-section input[type="radio"]:checked').attr('data-isbulk') == 'yes'){
+            min_copy_count = copy_count_limits.min_bulk;
+            max_copy_count = copy_count_limits.max_bulk;
+        }
+        var copy_count = jQuery('#copy_count').val().replace(' ', '');
+
+        if( jQuery('#tm-test-case').find(':selected').attr('data-bulk') == 'Yes' && ( parseInt( copy_count ) != copy_count || copy_count > max_copy_count || copy_count < min_copy_count  ))
+        {
+            jQuery('#copy_count').addClass('input-error');
+            showTriggerMessageResultMessage( 'Please provide valid number between '+min_copy_count+' and '+max_copy_count+'.', 'error');
+            return false;
+        }
         jQuery('#trigger-message-box .loading-with-text b').html('SENDING MESSAGE');
         jQuery('#trigger-message-box .loading-with-text').show();
         

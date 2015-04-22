@@ -71,6 +71,13 @@ function create_compliancetest_settings_page()
         update_option('uploads_files_max_size', $_POST['uploads_files_max_size']);
         update_option('max_expansion_factor', $_POST['max_expansion_factor']);
         update_option('min_expansion_factor', $_POST['min_expansion_factor']);
+
+        update_option('min_bulk_copycount_factor', intval( $_POST['min_bulk_copycount_factor'] ) );
+        update_option('max_bulk_copycount_factor', intval( $_POST['max_bulk_copycount_factor'] ) );
+
+        update_option('min_non_bulk_copycount_factor', intval( $_POST['min_non_bulk_copycount_factor'] ) );
+        update_option('max_non_bulk_copycount_factor', intval( $_POST['max_non_bulk_copycount_factor'] ) );
+
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-esb-settings')){
         //Save Options
@@ -519,6 +526,24 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Max expansion factor:</b></label></td>
                             <td><input type="text" name="max_expansion_factor" id="max_expansion_factor" size="15" value="<?php echo get_option('max_expansion_factor')?>" autocomplete="off" /></td>
+                        </tr>
+
+                        <tr>
+                            <td><label><b>Min bulk CopyCount limit:</b></label></td>
+                            <td><input type="text" name="min_bulk_copycount_factor" id="min_bulk_copycount_factor" size="15" value="<?php echo get_option('min_bulk_copycount_factor')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Max bulk CopyCount limit:</b></label></td>
+                            <td><input type="text" name="max_bulk_copycount_factor" id="max_bulk_copycount_factor" size="15" value="<?php echo get_option('max_bulk_copycount_factor')?>" autocomplete="off" /></td>
+                        </tr>
+
+                        <tr>
+                            <td><label><b>Min non-bulk CopyCount limit:</b></label></td>
+                            <td><input type="text" name="min_non_bulk_copycount_factor" id="min_expansion_factor" size="15" value="<?php echo get_option('min_non_bulk_copycount_factor')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Max non-bulk CopyCount limit:</b></label></td>
+                            <td><input type="text" name="max_non_bulk_copycount_factor" id="max_expansion_factor" size="15" value="<?php echo get_option('max_non_bulk_copycount_factor')?>" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
