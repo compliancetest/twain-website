@@ -32,6 +32,8 @@ if($filterPriority)
     $params[] = 'priority=' . $filterPriority;
 if($filterCategory)
     $params[] = 'type=' . $filterCategory;
+if($showOnlyNotClosed)
+    $params[] = 'not_closed=1';
 
 $is_support = getManagedCustomerWPIDs() ? true : false;
 
@@ -217,6 +219,9 @@ $show_community = $is_support || is_super_admin() ? true : false;
                 <?php } ?>
                 <?php if($filterCategory){ ?>
                 <input type="hidden" name="priority" value="<?php echo $filterPriority?>" /> 
+                <?php } ?>
+                <?php if($showOnlyNotClosed){ ?>
+                    <input type="hidden" name="not_closed" value="1" />
                 <?php } ?>
                 
             </form>
