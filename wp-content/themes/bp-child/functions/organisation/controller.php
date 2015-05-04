@@ -574,11 +574,20 @@ class CT_Organisation_Controller
     public function add_membership($user_id, $organisation_id)
     {
         global $wpdb;
-        
-        $query = $wpdb->insert($wpdb->prefix . "organisations_members", array('organisation_id' => $organisation_id, 'user_id' => $user_id, 'is_admin' => 0, 'created_date' => date("Y-m-d H:i:s")), array("%d", "%d", "%d", "%s"));
-        
-        //Add Default Privilege
-        $this->add_default_privileges($user_id, $organisation_id);
+
+        if( ! $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_organisations_members WHERE organisation_id = %d AND user_id = %d ", $organisation_id, $user_id ) ) ) {
+            $wpdb->insert( "wp_organisations_members",
+                array(
+                    'organisation_id' => $organisation_id,
+                    'user_id'         => $user_id,
+                    'is_admin'        => 0,
+                    'created_date'    => date("Y-m-d H:i:s")
+                ),
+                array( "%d", "%d", "%d", "%s")
+            );
+            //Add Default Privilege
+            $this->add_default_privileges($user_id, $organisation_id);
+        }
         
         return;
     }
