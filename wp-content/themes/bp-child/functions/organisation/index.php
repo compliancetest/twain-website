@@ -464,10 +464,10 @@ function ct_process_organisation_action()
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">              
                             <label class="left">
-                                <input type="checkbox" id="delete-now" name="delete-now" <?php if($subscription->status == 'Unsubscribing'){ ?> disabled="disabled" checked="checked" <?php } ?> /> Unsubscribe immediately
+                                <input type="checkbox" id="delete-now" name="delete-now" <?php if($subscription->status == 'Unsubscribing'){ ?> disabled="disabled" checked="checked" <?php } ?> /> Cancel immediately
                             </label>
                             <div class="right">
-                                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">OK</span></a>            
+                                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
                                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                             </div>
                             <div class="clear"></div>
