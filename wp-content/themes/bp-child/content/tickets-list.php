@@ -213,10 +213,6 @@ $show_community = $is_support || is_super_admin() ? true : false;
                 <?php if($filterCategory){ ?>
                 <input type="hidden" name="priority" value="<?php echo $filterPriority?>" /> 
                 <?php } ?>
-                <?php if($showOnlyNotClosed){ ?>
-                    <input type="hidden" name="not_closed" value="1" />
-                <?php } ?>
-                
             </form>
         </div>
         <div class="pagination">
