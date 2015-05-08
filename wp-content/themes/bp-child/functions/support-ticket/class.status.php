@@ -94,6 +94,7 @@ class CT_TicketStatus
         $html = "<select name='$name' id='$id' class='select'>";
         if($emptyOptionLabel)
             $html .= "<option value=''>$emptyOptionLabel</option>";
+        $priorities[] = (object) array( 'id' => 'not_closed', 'status' => 'Not Closed' );
         foreach($priorities as $p)
         {
             $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . ">$p->status</option>";
