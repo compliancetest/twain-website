@@ -362,13 +362,21 @@ function ct_process_charge_entry_admin_actions()
                         if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation) ) === '1' ){
                             continue;
                         }
-                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = ''  AND payment_id != 0 AND  organisation_id = %s GROUP BY payment_id", $organisation ), ARRAY_A);
+                        if( get_option('invoice_in_arrears') == 'yes' ){
+                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
+                                                                             WHERE invoice_number = '' AND  organisation_id = %s AND
+                                                                             YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                                                                             GROUP BY payment_id", $organisation ), ARRAY_A);
+
+                        } else {
+                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge WHERE invoice_number = ''  AND payment_id != 0 AND  organisation_id = %s GROUP BY payment_id", $organisation), ARRAY_A);
+                        }
                         foreach( $paymentTypes AS $paymentType ){
                             $xero = new CT_Xero();
                             $paymentID = $paymentType['payment_id'];
                             $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
                             if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
+                                $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
                                 $counter++;
                             }
                         }
@@ -384,19 +392,27 @@ function ct_process_charge_entry_admin_actions()
                 if( $organisations ){
 
                     foreach( $organisations AS $organisation ){
-                        if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation['organisation_id']) ) === '1' ){
+                        if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM wp_organisations WHERE id = %d", $organisation['organisation_id']) ) === '1' ){
                             continue;
                         }
                         /**
                          * 2) We get organisation's payments types list and for each payment type create invoice
                          */
-                        $paymentTypes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id'] ), ARRAY_A);
+                        if( get_option('invoice_in_arrears') == 'yes' ){
+                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
+                                                                             WHERE invoice_number = '' AND  organisation_id = %s AND
+                                                                             YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                                                                             GROUP BY payment_id", $organisation['organisation_id']), ARRAY_A);
+
+                        } else {
+                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id']), ARRAY_A);
+                        }
                         foreach( $paymentTypes AS $paymentType ){
                             $xero = new CT_Xero();
                             $paymentID = $paymentType['payment_id'];
                             $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
                             if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
+                                $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
                                 $counter++;
                             }
                         }
@@ -457,7 +473,7 @@ function ct_process_charge_entry_admin_actions()
                             $chargeClass->bind($data);
                             $chargeClass->save();
                             $newChargesCounter++;
-                            $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                            $wpdb->update("wp_organisations_subscriptions",
                                 array('last_charge_date' => gmdate('Y-m-d') ),
                                 array('id' => $subscription->id)
                             );
@@ -484,7 +500,7 @@ function ct_process_charge_entry_admin_actions()
                                     $chargeClass->bind($data);
                                     $chargeClass->save();
                                     $newChargesCounter++;
-                                    $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                    $wpdb->update("wp_organisations_subscriptions",
                                         array('last_charge_date' => gmdate( 'Y-m-d',  $due_date )),
                                         array('id' => $subscription->id)
                                     );
@@ -510,7 +526,7 @@ function ct_process_charge_entry_admin_actions()
                                         $chargeClass->save();
                                         $newChargesCounter++;
                                         $monthesCounter++;
-                                        $wpdb->update("{$wpdb->prefix}organisations_subscriptions",
+                                        $wpdb->update("wp_organisations_subscriptions",
                                             array('last_charge_date' => gmdate('Y-m-d')),
                                             array('id' => $subscription->id)
                                         );
