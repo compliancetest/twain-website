@@ -88,6 +88,11 @@ function create_compliancetest_settings_page()
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xero-settings')){
         //Save Options
+        if( isset( $_POST['invoice_in_arrears'] ) && $_POST['invoice_in_arrears'] == 'on' ) {
+            update_option('invoice_in_arrears', 'yes');
+        } else{
+            update_option('invoice_in_arrears', 'no');
+        }
         update_option('xero_consumer_key', $_POST['xero_consumer_key']);
         update_option('xero_consumer_secret', $_POST['xero_consumer_secret']);
         if (!empty($_FILES) && is_uploaded_file($_FILES['xero_public_key']['tmp_name'])) {
@@ -400,6 +405,10 @@ function create_compliancetest_settings_page()
                 <h3>Xero Settings</h3>
                 <form method="post" action="" enctype="multipart/form-data">
                     <table class="widefat">
+                        <tr>
+                            <th><label><b>Invoice In Arrears:</b></label></th>
+                            <td><input type="checkbox" name="invoice_in_arrears" id="invoice_in_arrears" size="50" <?php if( get_option('invoice_in_arrears') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
                         <tr>
                             <th><label><b>Consumer Key:</b></label></th>
                             <td><input type="text" name="xero_consumer_key" id="xero_consumer_key" value="<?php echo get_option('xero_consumer_key')?>" size="50" autocomplete="off" /></td>

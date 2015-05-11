@@ -53,9 +53,14 @@ class CT_Xero {
         
         $invoices = $this->responseToArray();
         if( isset( $invoices['Items']['Item'] ) && is_array( $invoices['Items']['Item'] ) ){
-            $wpdb->query("TRUNCATE {$wpdb->prefix}xeroitems");
+            $wpdb->query("TRUNCATE wp_xeroitems");
+            if( ! isset( $invoices['Items']['Item'][0] ) ){
+                $temp = $invoices['Items']['Item'];
+                $invoices['Items']['Item'] = array();
+                $invoices['Items']['Item'][0] = $temp;
+            }
             foreach( $invoices['Items']['Item'] AS $item ){
-                $wpdb->replace( "{$wpdb->prefix}xeroitems",
+                $wpdb->replace( "wp_xeroitems",
                     array(
                         'id'           => $item['ItemID'],
                         'code'         => $item['Code'],
@@ -221,7 +226,13 @@ class CT_Xero {
         /**
          * Get organisation charge table entries for current organisation with '$paymentType' payment type
          */
-        $charge_entries = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' ) AND invoice_number = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'],  $invoiceData['payment_id'] ), ARRAY_A );
+        if( get_option('invoice_in_arrears') == 'yes' ) {
+            $charge_entries = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
+                                                                WHERE organisation_id = %d AND payment_id IN( SELECT id FROM wp_organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' )
+                                                                AND invoice_number = '' AND  YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", $invoiceData['organisation_id'], $invoiceData['organisation_id'], $invoiceData['payment_id']), ARRAY_A);
+        } else{
+            $charge_entries = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_charge WHERE organisation_id = %d AND payment_id IN( SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' ) AND invoice_number = ''", $invoiceData['organisation_id'], $invoiceData['organisation_id'], $invoiceData['payment_id']), ARRAY_A);
+        }
         if( $charge_entries ){
             foreach( $charge_entries AS $entry ){
                 $entry['comment'] = $wpdb->get_var($wpdb->prepare("SELECT description FROM {$wpdb->prefix}xeroitems WHERE code = %s", $entry['item_code'])).PHP_EOL.( ! empty( $entry['comment'] ) ? '( '.$entry['comment'].' )' : '' );
