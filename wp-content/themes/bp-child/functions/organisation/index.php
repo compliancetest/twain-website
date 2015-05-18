@@ -509,12 +509,13 @@ function ct_process_organisation_action()
             exit;
             
         } else if(wp_verify_nonce($action, 'confirm-organisation-unsubscribe')) {
+            global $wpdb;
             $user_id = get_current_user_id();
             $id = $_POST['id'];
             $subscription = ct_get_organisation_subscription_by_id($id);
-            
+
             $return = isset($_POST['return']) ? base64_decode($_POST['return']) : get_site_url();
-            
+
             if (!$subscription || !$user_id || !ct_is_organisation_admin($user_id, $subscription->organisation_id)) {
                 addMessage('Invalid Request!', 'error');
             } else {
@@ -522,10 +523,24 @@ function ct_process_organisation_action()
                     $controller->delete_organisation_subscription($subscription->id);
                 else
                     $controller->unsubscribe_organisation_subscription($subscription->id);
-                
+
                 addMessage('Your subscription has been cancelled');
             }
-            
+            if( get_option( 'invoice_in_arrears' ) == 'yes' ){
+                $quantity = 1 - ct_calculate_first_month_quantity( 1 );
+                $wpdb->update( 'wp_organisations_charge',
+                    array(
+                        'quantity' => $quantity,
+                        'end_date' => date( 'Y-m-d H:i:s' )
+                    ),
+                    array(
+                        'reference_id' => $id,
+                        'start_date'   => date( 'Y-m' ).'-01 00:00:00'
+                    ),
+                    array( '%s', '%s' ),
+                    array( '%d', '%s' )
+                );
+            }
             wp_redirect($return);
             exit;
             
