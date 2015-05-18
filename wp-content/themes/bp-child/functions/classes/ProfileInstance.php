@@ -2,7 +2,7 @@
 
 class ProfileInstance {
 
-    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $delay = 0, $remove_sqs = false ){
+    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $delay = 0, $remove_sqs = false, $tag = false ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
@@ -154,6 +154,9 @@ class ProfileInstance {
             $profileData['instance_id'] = $wpdb->insert_id;
             $wpdb->query( $wpdb->prepare( "UPDATE wp_community_profile_types SET `instances`=`instances` + 1 WHERE id = %d ", $profileData['type_id'] ) );
 
+        }
+        if( $tag ){
+            Tag::assignTag( $tag, $profileData['instance_id'] );
         }
         //backend validation service populate metadata if it enabled
         if( ! $validate_via_sqs ) {

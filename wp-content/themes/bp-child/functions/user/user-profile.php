@@ -935,7 +935,7 @@ function cp_get_customer_harness_detail_profile_data()
     $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
     $subscription_row = $wpdb->get_row($subscription_query);
     
-    $gateways = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "gateways");
+    $gateways = $wpdb->get_results("SELECT * FROM wp_gateways");
     $alias_list = array();
     
     foreach ($gateways as $gateway) {
@@ -1040,6 +1040,13 @@ function cp_get_customer_harness_detail_profile_data()
         </div>
         <div class="clear"></div>
     </div>
+    <div class="field-row">
+        <div class="grid-cell">
+            <label>Tag:</label>
+            <input class="input" type="text" name="tag" value=""/>
+        </div>
+        <div class="clear"></div>
+    </div>
 
     <div id="generate-profile-container">
         <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profiles</span></a>            
@@ -1126,7 +1133,11 @@ function cp_save_customer_harness_detail()
         remove_filter( 'query', 'wp_db_null_value' );
         
         if ((isset($_POST['action_mode']) && $_POST['action_mode'] == 'generate-profile') && $updateArr['profile_id'] != 'NULL') {
-            generateProfile($updateArr['profile_id'], $community_id);
+            $tag = false;
+            if( isset( $_POST['tag'] ) && ! empty( $_POST['tag'] ) ){
+                $tag = $_POST['tag'];
+            }
+            generateProfile($updateArr['profile_id'], $community_id, $tag );
         }
         
         return "success";
@@ -1135,7 +1146,7 @@ function cp_save_customer_harness_detail()
     }
 }
 
-function generateProfile($profile_id, $community_id)
+function generateProfile($profile_id, $community_id, $tag = false )
 {
     global $wpdb;
     
@@ -1243,7 +1254,7 @@ function generateProfile($profile_id, $community_id)
                             'token'          => $row['token']
 
                         );
-                        ProfileInstance::save( $profileData, true, false, 0, true );
+                        ProfileInstance::save( $profileData, true, false, 0, true, $tag );
                     }
                 }
             }
@@ -1282,7 +1293,7 @@ function generateProfile($profile_id, $community_id)
                     'instance_id'    => $profile_id
 
                 );
-                ProfileInstance::save( $profileData, true, false, 0, true );
+                ProfileInstance::save( $profileData, true, false, 0, true, $tag );
             }
         }
     }

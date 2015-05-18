@@ -700,7 +700,11 @@ function updateProfileLookup() {
     $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
     $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : 0;
     if( $id ) {
-        $wpdb->query($wpdb->prepare("UPDATE wp_community_profile_instances SET `lookup`= %d WHERE id=%d", $status, $id));
+        if( is_array( $id ) ){
+            $wpdb->query($wpdb->prepare("UPDATE wp_community_profile_instances SET `lookup`= %d WHERE id IN( ".implode(',',$id)." )", $status ));
+        }else {
+            $wpdb->query($wpdb->prepare("UPDATE wp_community_profile_instances SET `lookup`= %d WHERE id=%d", $status, $id));
+        }
     }
     echo 'success';
     exit;
