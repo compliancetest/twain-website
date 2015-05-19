@@ -3,10 +3,9 @@
 * View Tickets List page
 */
 
-$filterStatus = isset($_GET['status']) ? $_GET['status'] : null;
+$filterStatus = isset($_GET['status']) ? $_GET['status'] : 'not_closed';
 $filterCategory = isset($_GET['type']) ? $_GET['type'] : null;
 $filterPriority = isset($_GET['priority']) ? $_GET['priority'] : null;
-$showOnlyNotClosed = isset( $_GET['not_closed'] ) && $_GET['not_closed'] == 1 ? true : null;
 
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('tickets');
 setItemsPerPage($limit, 'tickets');
@@ -20,7 +19,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'last_updated' ? 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
 
-$results = getUserTickets($filterCategory, $filterStatus, $filterPriority, $showOnlyNotClosed, $page, $limit, $orderBy, $order);
+$results = getUserTickets($filterCategory, $filterStatus, $filterPriority, $page, $limit, $orderBy, $order);
 $tickets = $results['data'];
 $totalItems = $results['total'];
 
@@ -32,8 +31,6 @@ if($filterPriority)
     $params[] = 'priority=' . $filterPriority;
 if($filterCategory)
     $params[] = 'type=' . $filterCategory;
-if($showOnlyNotClosed)
-    $params[] = 'not_closed=1';
 
 $is_support = getManagedCustomerWPIDs() ? true : false;
 
@@ -63,11 +60,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
             </div>                    
             <?php if($filterPriority != "" && $filterPriority != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
         </div>
-        <div class="left">
-            <input type="checkbox" name="not_closed" value="1" class="top3" <?php if( $showOnlyNotClosed ):?>checked="checked" <?php endif;?>><label>Show not closed</label>
-            <?php if($showOnlyNotClosed === true ){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
-        </div>
-        <a href="#" class="action-btn process-btn submit-btn" id="ticket-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>                                
+        <a href="#" class="action-btn process-btn submit-btn" id="ticket-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>
     </form>                
                     
     <div class="clear"></div>
@@ -220,10 +213,6 @@ $show_community = $is_support || is_super_admin() ? true : false;
                 <?php if($filterCategory){ ?>
                 <input type="hidden" name="priority" value="<?php echo $filterPriority?>" /> 
                 <?php } ?>
-                <?php if($showOnlyNotClosed){ ?>
-                    <input type="hidden" name="not_closed" value="1" />
-                <?php } ?>
-                
             </form>
         </div>
         <div class="pagination">

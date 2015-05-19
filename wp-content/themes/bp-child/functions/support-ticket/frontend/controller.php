@@ -183,7 +183,7 @@ function createSupportTicket()
 * Get User Tickets
 * 
 */
-function getUserTickets($category_id = null, $status_id = null, $priority_id = null, $show_not_closed = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
+function getUserTickets($category_id = null, $status_id = null, $priority_id = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
 {
     global $wpdb;
     
@@ -214,19 +214,17 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     }
     
     if($status_id !== null && $status_id != "")
-    {        
-        $where[] = $wpdb->prepare(" t.status_id=%d", $status_id);    
+    {
+        if( $status_id === 'not_closed' ){
+            $where[] = " t.status_id != 4 ";
+        } else {
+            $where[] = $wpdb->prepare(" t.status_id=%d", $status_id);
+        }
     }
     
     if($priority_id !== null && $priority_id != "")
     {        
         $where[] = $wpdb->prepare(" t.priority_id=%d", $priority_id);    
-    }
-
-    if( $show_not_closed !== null )
-    {
-        //4 - id for 'Closed' status
-        $where[] = " t.status_id != 4 ";
     }
 
     $orderQuery = "";
