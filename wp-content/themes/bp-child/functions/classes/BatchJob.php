@@ -38,32 +38,32 @@ class BatchJob {
         /**
          * First we send all local organisations data to Xero
          */
-//        $organisations_list = $this->db->get_results("SELECT * FROM wp_organisations");
-//        if( $organisations_list ){
-//            $counter = 0;
-//            foreach( $organisations_list AS $organisation ){
-//                $xero = new CT_Xero();
-//                unset( $organisation->no_billing );
-//                unset( $organisation->invoice_me );
-//                unset( $organisation->id );
-//                $xeroContact = $xero->upsertContact( (array) $organisation );
-//                if( isset( $xeroContact['Contacts']['Contact']['ContactID'] ) ){
-//                    $counter++;
-//                    $this->db->update("wp_organisations",
-//                        array( 'contact_id' => $xeroContact['Contacts']['Contact']['ContactID'] ),
-//                        array( 'id' => $organisation->id ),
-//                        array( '%s' ),
-//                        array( '%d' )
-//                    );
-//                }
-//            }
-//            $logs[] = 'Updated '.$counter.' organisations';
-//        }
+        $organisations_list = $this->db->get_results("SELECT * FROM wp_organisations");
+        if( $organisations_list ){
+            $counter = 0;
+            foreach( $organisations_list AS $organisation ){
+                $xero = new CT_Xero();
+                unset( $organisation->no_billing );
+                unset( $organisation->invoice_me );
+                unset( $organisation->id );
+                $xeroContact = $xero->upsertContact( (array) $organisation );
+                if( isset( $xeroContact['Contacts']['Contact']['ContactID'] ) ){
+                    $counter++;
+                    $this->db->update("wp_organisations",
+                        array( 'contact_id' => $xeroContact['Contacts']['Contact']['ContactID'] ),
+                        array( 'id' => $organisation->id ),
+                        array( '%s' ),
+                        array( '%d' )
+                    );
+                }
+            }
+            $logs[] = 'Updated '.$counter.' organisations';
+        }
         /**
          * Second: we should generate charges
          */
-//        $chargesCounter = generateMonthlyCharges();
-//        $logs[] = 'Generated '.$chargesCounter.' charges';
+        $chargesCounter = generateMonthlyCharges();
+        $logs[] = 'Generated '.$chargesCounter.' charges';
         /**
          * Generate draft invoices
          */
