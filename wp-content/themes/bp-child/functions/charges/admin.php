@@ -354,73 +354,8 @@ function ct_process_charge_entry_admin_actions()
                 return;
             }
         } elseif( wp_verify_nonce( $action, 'update-specific' ) ){
-            if( isset( $_POST['org_id'][0] ) && ! empty( $_POST['org_id'][0] ) ){
-                $organisations = $_POST['org_id'];
-                $counter = 0;
-                if( $organisations ){
-                    foreach( $organisations AS $organisation ){
-                        if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation) ) === '1' ){
-                            continue;
-                        }
-                        if( get_option('invoice_in_arrears') == 'yes' ){
-                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
-                                                                             WHERE invoice_number = '' AND  organisation_id = %s AND
-                                                                             YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
-                                                                             GROUP BY payment_id", $organisation ), ARRAY_A);
-
-                        } else {
-                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge WHERE invoice_number = ''  AND payment_id != 0 AND  organisation_id = %s GROUP BY payment_id", $organisation), ARRAY_A);
-                        }
-                        foreach( $paymentTypes AS $paymentType ){
-                            $xero = new CT_Xero();
-                            $paymentID = $paymentType['payment_id'];
-                            $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
-                            if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                                $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
-                                $counter++;
-                            }
-                        }
-                    }
-                }
-                echo 'Created '.$counter.' invoices';
-            } else {
-                /**
-                 * 1) We get organisations IDs with empty 'invoice_number' field
-                 */
-                $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND payment_id != 0 GROUP BY organisation_id", ARRAY_A);
-                $counter = 0;
-                if( $organisations ){
-
-                    foreach( $organisations AS $organisation ){
-                        if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM wp_organisations WHERE id = %d", $organisation['organisation_id']) ) === '1' ){
-                            continue;
-                        }
-                        /**
-                         * 2) We get organisation's payments types list and for each payment type create invoice
-                         */
-                        if( get_option('invoice_in_arrears') == 'yes' ){
-                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
-                                                                             WHERE invoice_number = '' AND  organisation_id = %s AND
-                                                                             YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
-                                                                             GROUP BY payment_id", $organisation['organisation_id']), ARRAY_A);
-
-                        } else {
-                            $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id']), ARRAY_A);
-                        }
-                        foreach( $paymentTypes AS $paymentType ){
-                            $xero = new CT_Xero();
-                            $paymentID = $paymentType['payment_id'];
-                            $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
-                            if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
-                                $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
-                                $counter++;
-                            }
-                        }
-                    }
-                }
-                echo 'Created '.$counter.' invoices';
-                redirect_then_exit();
-            }
+            $counter = generateInvoices();
+            echo 'Created '.$counter.' invoices';
             redirect_then_exit();
         } elseif( wp_verify_nonce( $action, 'update-status' ) ){
             $counter = 0;
@@ -438,35 +373,72 @@ function ct_process_charge_entry_admin_actions()
             echo 'Updated '.$counter.' invoices';
             redirect_then_exit();
         } else if( wp_verify_nonce( $action, 'generate_monthly_charges' ) ){
-            $org_id_where = '';
-            if( isset( $_POST['org_id'] ) && ! empty( $_POST['org_id'] ) ){
-                $org_id_where = $wpdb->prepare( ' AND organisation_id = %d', $_POST['org_id'] );
-            }
-            $newChargesCounter = 0;
-            $subscriptionsList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE status = 'Active'".$org_id_where);
-            foreach( $subscriptionsList AS $subscription ){
-                $organisation = new CT_Organisation( $subscription->organisation_id );
-                $discount = PricingPlan::getPlanFinalDiscount( $subscription->pricing_plan_id, $subscription->voucher );
-                $voucher_comment = '';
-                if( ! empty( $subscription->voucher ) ){
-                    $voucher_comment = ', voucher: '.$subscription->voucher;
-                }
-                if( $organisation->no_billing != '1' ){
-                    $suite = new TestSuite( $subscription->suite_family_mark );
-                    $suite->load();
-                    if( $subscription->pricing_plan_id ){
-                        $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
-                        if( $subscription->last_charge_date == '0000-00-00' ){
+            $newChargesCounter = generateMonthlyCharges();
+            addMessage('<b>Added: '.$newChargesCounter.' entries</b>', 'success');
+            wp_redirect('admin.php?page=manage-charges');
+            exit();
+        }
+    }
+
+}
+function generateMonthlyCharges(){
+    global $wpdb;
+    $org_id_where = '';
+    if( isset( $_POST['org_id'] ) && ! empty( $_POST['org_id'] ) ){
+        $org_id_where = $wpdb->prepare( ' AND organisation_id = %d', $_POST['org_id'] );
+    }
+    $newChargesCounter = 0;
+    $subscriptionsList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE status = 'Active'".$org_id_where);
+    foreach( $subscriptionsList AS $subscription ){
+        $organisation = new CT_Organisation( $subscription->organisation_id );
+        $discount = PricingPlan::getPlanFinalDiscount( $subscription->pricing_plan_id, $subscription->voucher );
+        $voucher_comment = '';
+        if( ! empty( $subscription->voucher ) ){
+            $voucher_comment = ', voucher: '.$subscription->voucher;
+        }
+        if( $organisation->no_billing != '1' ){
+            $suite = new TestSuite( $subscription->suite_family_mark );
+            $suite->load();
+            if( $subscription->pricing_plan_id ){
+                $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
+                if( $subscription->last_charge_date == '0000-00-00' ){
+                    $data = array(
+                        'organisation_id' => $subscription->organisation_id,
+                        'payment_id'      => $subscription->payment_method,
+                        'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
+                        'quantity'        => '1.00',
+                        'reference_type'  => 'subscription',
+                        'reference_id'    => $subscription->id,
+                        'comment'         => gmdate('F Y').$voucher_comment,
+                        'start_date'      => gmdate('Y-m-01'),
+                        'end_date'        => gmdate('Y-m-t'),
+                        'discount'        => $discount
+                    );
+                    $chargeClass = new CT_Charge();
+                    $chargeClass->bind($data);
+                    $chargeClass->save();
+                    $newChargesCounter++;
+                    $wpdb->update("wp_organisations_subscriptions",
+                        array('last_charge_date' => gmdate('Y-m-d') ),
+                        array('id' => $subscription->id)
+                    );
+                } else {
+                    $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
+                    if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
+                        if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
+                            $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
+                            $due_date = strtotime( 'last day of this month', $due_date );
+//                                    $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
                             $data = array(
                                 'organisation_id' => $subscription->organisation_id,
                                 'payment_id'      => $subscription->payment_method,
                                 'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
-                                'quantity'        => '1.00',
+                                'quantity'        => $pricing_plans->attribute['Period']->value,
                                 'reference_type'  => 'subscription',
                                 'reference_id'    => $subscription->id,
-                                'comment'         => gmdate('F Y').$voucher_comment,
+                                'comment'         => $subscription->nickname." - ".date("F Y")." to ".date( "F Y", $due_date ).$voucher_comment,
                                 'start_date'      => gmdate('Y-m-01'),
-                                'end_date'        => gmdate('Y-m-t'),
+                                'end_date'        => gmdate( 'Y-m-d',  $due_date ),
                                 'discount'        => $discount
                             );
                             $chargeClass = new CT_Charge();
@@ -474,76 +446,113 @@ function ct_process_charge_entry_admin_actions()
                             $chargeClass->save();
                             $newChargesCounter++;
                             $wpdb->update("wp_organisations_subscriptions",
-                                array('last_charge_date' => gmdate('Y-m-d') ),
+                                array('last_charge_date' => gmdate( 'Y-m-d',  $due_date )),
                                 array('id' => $subscription->id)
                             );
-                        } else {
-                            $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
-                            if( isset( $pricing_plans->attribute_billing ) && $pricing_plans->attribute_billing->value == 'Prepaid' ){
-                                if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
-                                    $due_date = strtotime( '+'.($pricing_plans->attribute['Period']->value - 1).' month');
-                                    $due_date = strtotime( 'last day of this month', $due_date );
-//                                    $discount = isset( $pricing_plans->attribute_percent['Discount'] ) ? $pricing_plans->attribute_percent['Discount'] : 0;
-                                    $data = array(
-                                        'organisation_id' => $subscription->organisation_id,
-                                        'payment_id'      => $subscription->payment_method,
-                                        'item_code'       => $pricing_plans->attribute_itemcodes['Monthly']->value,
-                                        'quantity'        => $pricing_plans->attribute['Period']->value,
-                                        'reference_type'  => 'subscription',
-                                        'reference_id'    => $subscription->id,
-                                        'comment'         => $subscription->nickname." - ".date("F Y")." to ".date( "F Y", $due_date ).$voucher_comment,
-                                        'start_date'      => gmdate('Y-m-01'),
-                                        'end_date'        => gmdate( 'Y-m-d',  $due_date ),
-                                        'discount'        => $discount
-                                    );
-                                    $chargeClass = new CT_Charge();
-                                    $chargeClass->bind($data);
-                                    $chargeClass->save();
-                                    $newChargesCounter++;
-                                    $wpdb->update("wp_organisations_subscriptions",
-                                        array('last_charge_date' => gmdate( 'Y-m-d',  $due_date )),
-                                        array('id' => $subscription->id)
-                                    );
-                                }
-                            } else {
-                                if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
-                                    $monthesCounter = 0;
-                                    while (gmdate('m', strtotime($subscription->last_charge_date)) != gmdate('m', strtotime('-' . $monthesCounter . ' month')) AND gmdate('Y', strtotime($subscription->last_charge_date)) <= gmdate('Y', strtotime('-' . $monthesCounter . ' month'))) {
-                                        $data = array(
-                                            'organisation_id' => $subscription->organisation_id,
-                                            'payment_id' => $subscription->payment_method,
-                                            'item_code' => $pricing_plans->attribute_itemcodes['Monthly']->value,
-                                            'quantity' => '1.00',
-                                            'reference_type' => 'subscription',
-                                            'reference_id' => $subscription->id,
-                                            'comment' => $subscription->nickname.' - '.gmdate('F Y', strtotime('-' . $monthesCounter . ' month')).$voucher_comment,
-                                            'start_date' => gmdate('Y-m-01'),
-                                            'end_date' => gmdate('Y-m-t'),
-                                            'discount' => $discount
-                                        );
-                                        $chargeClass = new CT_Charge();
-                                        $chargeClass->bind($data);
-                                        $chargeClass->save();
-                                        $newChargesCounter++;
-                                        $monthesCounter++;
-                                        $wpdb->update("wp_organisations_subscriptions",
-                                            array('last_charge_date' => gmdate('Y-m-d')),
-                                            array('id' => $subscription->id)
-                                        );
-                                    }
-                                }
+                        }
+                    } else {
+                        if( strtotime( $subscription->last_charge_date.' 23:59:59' ) < strtotime( date( 'Y-m-d' ) ) ) {
+                            $monthesCounter = 0;
+                            while (gmdate('m', strtotime($subscription->last_charge_date)) != gmdate('m', strtotime('-' . $monthesCounter . ' month')) AND gmdate('Y', strtotime($subscription->last_charge_date)) <= gmdate('Y', strtotime('-' . $monthesCounter . ' month'))) {
+                                $data = array(
+                                    'organisation_id' => $subscription->organisation_id,
+                                    'payment_id' => $subscription->payment_method,
+                                    'item_code' => $pricing_plans->attribute_itemcodes['Monthly']->value,
+                                    'quantity' => '1.00',
+                                    'reference_type' => 'subscription',
+                                    'reference_id' => $subscription->id,
+                                    'comment' => $subscription->nickname.' - '.gmdate('F Y', strtotime('-' . $monthesCounter . ' month')).$voucher_comment,
+                                    'start_date' => gmdate('Y-m-01'),
+                                    'end_date' => gmdate('Y-m-t'),
+                                    'discount' => $discount
+                                );
+                                $chargeClass = new CT_Charge();
+                                $chargeClass->bind($data);
+                                $chargeClass->save();
+                                $newChargesCounter++;
+                                $monthesCounter++;
+                                $wpdb->update("wp_organisations_subscriptions",
+                                    array('last_charge_date' => gmdate('Y-m-d')),
+                                    array('id' => $subscription->id)
+                                );
                             }
                         }
                     }
-
                 }
             }
-            addMessage('<b>Added: '.$newChargesCounter.' entries</b>', 'success');
-            wp_redirect('admin.php?page=manage-charges');
-            exit();
+
         }
     }
+    return $newChargesCounter;
+}
+function generateInvoices(){
+    global $wpdb;
+    if( isset( $_POST['org_id'][0] ) && ! empty( $_POST['org_id'][0] ) ){
+        $organisations = $_POST['org_id'];
+        $counter = 0;
+        if( $organisations ){
+            foreach( $organisations AS $organisation ){
+                if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM {$wpdb->prefix}organisations WHERE id = %d", $organisation) ) === '1' ){
+                    continue;
+                }
+                if( get_option('invoice_in_arrears') == 'yes' ){
+                    $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
+                                                                             WHERE invoice_number = '' AND  organisation_id = %s AND
+                                                                             YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                                                                             GROUP BY payment_id", $organisation ), ARRAY_A);
+                } else {
+                    $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge WHERE invoice_number = ''  AND payment_id != 0 AND  organisation_id = %s GROUP BY payment_id", $organisation), ARRAY_A);
+                }
+                foreach( $paymentTypes AS $paymentType ){
+                    $xero = new CT_Xero();
+                    $paymentID = $paymentType['payment_id'];
+                    $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
+                    if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
+                        $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
+                        $counter++;
+                    }
+                }
+            }
+        }
+    } else {
+        /**
+         * 1) We get organisations IDs with empty 'invoice_number' field
+         */
+        $organisations = $wpdb->get_results("SELECT organisation_id FROM {$wpdb->prefix}organisations_charge WHERE invoice_number = '' AND payment_id != 0 GROUP BY organisation_id", ARRAY_A);
+        $counter = 0;
+        if( $organisations ){
 
+            foreach( $organisations AS $organisation ){
+                if( $wpdb->get_var( $wpdb->prepare("SELECT no_billing FROM wp_organisations WHERE id = %d", $organisation['organisation_id']) ) === '1' ){
+                    continue;
+                }
+                /**
+                 * 2) We get organisation's payments types list and for each payment type create invoice
+                 */
+
+                if( get_option('invoice_in_arrears') == 'yes' ){
+                    $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
+                                                                             WHERE invoice_number = '' AND  organisation_id = %s AND
+                                                                             YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                                                                             GROUP BY payment_id", $organisation['organisation_id']), ARRAY_A);
+
+                } else {
+                    $paymentTypes = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge WHERE invoice_number = '' AND  organisation_id = %s GROUP BY payment_id", $organisation['organisation_id']), ARRAY_A);
+                }
+
+                foreach( $paymentTypes AS $paymentType ){
+                    $xero = new CT_Xero();
+                    $paymentID = $paymentType['payment_id'];
+                    $invoice = $xero->upsertInvoice( $paymentType, $paymentID );
+                    if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
+                        $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
+                        $counter++;
+                    }
+                }
+            }
+        }
+    }
+    return $counter;
 }
 add_action( 'wp_ajax_get_payment_methods', 'get_payment_methods_callback' );
 function get_payment_methods_callback() {

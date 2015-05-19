@@ -33,20 +33,56 @@ class BatchJob {
         }
     }
 
-    public function test( ){
-        $email = 'ivansolowjew@gmail.com';
-        if( isset( $_GET['email'] ) ){
-            if( ! filter_var( $_GET['email'], FILTER_VALIDATE_EMAIL ) ){
-                return array( 'status' => 'error', 'message' => 'Invalid email' );
-            }
-            $email = filter_var( $_GET['email'], FILTER_SANITIZE_EMAIL );
+    public function chargesProcessing(){
+        $logs = array();
+        /**
+         * First we send all local organisations data to Xero
+         */
+//        $organisations_list = $this->db->get_results("SELECT * FROM wp_organisations");
+//        if( $organisations_list ){
+//            $counter = 0;
+//            foreach( $organisations_list AS $organisation ){
+//                $xero = new CT_Xero();
+//                unset( $organisation->no_billing );
+//                unset( $organisation->invoice_me );
+//                unset( $organisation->id );
+//                $xeroContact = $xero->upsertContact( (array) $organisation );
+//                if( isset( $xeroContact['Contacts']['Contact']['ContactID'] ) ){
+//                    $counter++;
+//                    $this->db->update("wp_organisations",
+//                        array( 'contact_id' => $xeroContact['Contacts']['Contact']['ContactID'] ),
+//                        array( 'id' => $organisation->id ),
+//                        array( '%s' ),
+//                        array( '%d' )
+//                    );
+//                }
+//            }
+//            $logs[] = 'Updated '.$counter.' organisations';
+//        }
+        /**
+         * Second: we should generate charges
+         */
+//        $chargesCounter = generateMonthlyCharges();
+//        $logs[] = 'Generated '.$chargesCounter.' charges';
+        /**
+         * Generate draft invoices
+         */
+        $invoicesCounter = generateInvoices();
+        $logs[] = 'Created '.$invoicesCounter.' invoices';
+        /**
+         * Cancel pending subscriptions
+         */
+        $subscriptionsCounter = 0;
+        $subscriptions = $this->db->get_results( "SELECT * FROM wp_organisations_subscriptions
+                                WHERE status='Unsubscribing' AND YEAR(last_charge_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+                                AND MONTH(last_charge_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)");
+        foreach( $subscriptions AS $subscription ) {
+            $controller = new CT_Organisation_Controller();
+            $controller->delete_organisation_subscription( $subscription->id );
+            $subscriptionsCounter++;
         }
-        $status = wp_mail( $email, 'test', 'test to: '.$email );
-        if( $status ){
-            return array( 'status' => 'success', 'message' => 'Email was sent to: '.$email );
-        } else{
-            return array( 'status' => 'error', 'message' => 'Error occured' );
-        }
+        $logs[] = 'Cancelled '.$subscriptionsCounter.' subscriptions';
+        return array( 'status' => 'success', 'message' => $logs );
     }
 
     /**
