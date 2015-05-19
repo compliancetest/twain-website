@@ -13,7 +13,7 @@ class Tag {
         }
         if( ! $tagId ){
             $wpdb->insert( 'wp_tags',
-                    array( 'name' => $tagName ),
+                    array( 'name' => trim( $tagName ) ),
                     array( '%s' )
                 );
             $tagId = $wpdb->insert_id;

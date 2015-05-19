@@ -878,7 +878,14 @@ function cp_get_customer_harness_detail()
                 {
                     jQuery('#harness-detail-container').show();
                     jQuery('#harness-generate-profile-container').hide();
-                    
+
+                    var tag = jQuery('input[name="tag"]').val();
+                    if( ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ){
+                        jQuery('input[name="tag"]').addClass('input-error');
+                        jQuery('.validation_error').show();
+                        return false;
+                    }
+
                     jQuery('#harness-detail-box' + id + ' .loading').show();
                     jQuery('#harness-detail-box' + id + ' .message').remove();
 
@@ -1043,7 +1050,10 @@ function cp_get_customer_harness_detail_profile_data()
     <div class="field-row">
         <div class="grid-cell">
             <label>Tag:</label>
-            <input class="input" type="text" name="tag" value=""/>
+            <div class="has-field-tooltip">
+                <input class="input field-tooltip" type="text" name="tag" value="" onfocus="jQuery(this).removeClass('input-error');jQuery('.validation_error').hide();" data-tooltip-content="Value to allow grouping of generated profiles"/>
+            </div>
+            <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 290px;">Tags will only allow upper and lower case letters, numbers, underscores, dashes, dots and spaces</div>
         </div>
         <div class="clear"></div>
     </div>
@@ -1052,6 +1062,25 @@ function cp_get_customer_harness_detail_profile_data()
         <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profiles</span></a>            
         <div class="clear"></div>
     </div>
+        <script>
+            jQuery(document).ready(function(){
+                jQuery('.field-tooltip').focus(function(){
+                    var tooltip_obj,
+                        parentContainer = jQuery(this).parent('.has-field-tooltip'),
+                        fieldWidth = jQuery(this).outerWidth(),
+                        fieldHeight = jQuery(this).outerHeight();
+
+                    if (parentContainer.find('.simple_tooltip').length == 0) {
+                        tooltip_obj = '<span class="simple_tooltip" style="width:'+ fieldWidth + 'px; margin-left: ' + -(fieldWidth/2) + 'px; bottom:' + (fieldHeight+10) + 'px; ">' + jQuery(this).data('tooltip-content') + '<span></span></span>';
+                        jQuery(this).after(tooltip_obj);
+                    }
+                    jQuery(this).next('.simple_tooltip').show();
+                });
+                jQuery('.field-tooltip').blur(function(){
+                    jQuery(this).parent('.has-field-tooltip').find('.simple_tooltip').hide();
+                });
+            });
+        </script>
 <?php
     endif;
 }
