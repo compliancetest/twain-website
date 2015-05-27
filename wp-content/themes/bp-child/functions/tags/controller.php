@@ -33,7 +33,7 @@ function editProfileTags(){
 
     $tags = Tag::getItemTags( $profile_id );
     if( ! $profile_id):?>
-        <div class="popup-box view-profile-type-box" style="display: none; width: 300px;" id="edit_tags">
+        <div class="popup-box view-profile-type-box" style="display: none; width: 450px;" id="edit_tags">
             <div class="popup-box-header radius6 noradiusbottom">Error</div>
             <div class="popup-box-content grid-box-body">
                 <p class="message error">Invalid Request!</p>
@@ -45,17 +45,17 @@ function editProfileTags(){
             <a class="close_btn"></a>
         </div>
     <?php else: ?>
-        <div class="popup-box view-profile-type-box" style="display: none; width: 300px;" id="edit_tags">
+        <div class="popup-box view-profile-type-box" style="display: none; width: 450px;" id="edit_tags">
             <div class="popup-box-header radius6 noradiusbottom">Edit tags</div>
             <div class="popup-box-content grid-box-body">
                 <table id="tags_table">
                     <tr style="font-weight: bold;">
-                        <td style="border-right: 1px solid #b7b7b7; width: 80%;">Value</td>
+                        <td style="border-right: 1px solid #b7b7b7; width: 85%;">Value</td>
                         <td>Delete</td>
                     </tr>
                     <?php foreach( $tags AS $tag ):?>
                         <tr>
-                            <td style="border-right: 1px solid #b7b7b7; width: 80%;"><?php echo $tag->name;?></td>
+                            <td style="border-right: 1px solid #b7b7b7; width: 85%;"><?php echo $tag->name;?></td>
                             <td style="text-align: center;"><input type="checkbox" data-id="<?php echo $tag->id;?>" data-name="<?php echo $tag->name;?>"></td>
                         </tr>
                     <?php endforeach;?>
@@ -63,14 +63,14 @@ function editProfileTags(){
                 <hr>
                 <div class="field-row">
                     <label class="padding5-10-5-0"> Add tag</label>
-                    <div class="grid-cell relative">
-                        <input type="text" name="new_tag" id="new_tag" style="width: 80%;" class="">
+                    <div class="grid-cell" style="width: 100%;">
+                        <input type="text" name="new_tag" id="new_tag" style="width: 85%;" class="">
 
                         <a href="#" id="assign_tag" class="action-btn add-new-btn has-tooltip" style="margin-right: 0; float: right;">
                             <span class="t">Add</span>
                             <span class="simple_tooltip radius6" style="top: -27px;">Assign tag to item<span></span></span>
                         </a>
-                        <div class="validation_error" style="color: red; font-size: smaller; display: none;">Tags will only allow upper and lower case letters, numbers, underscores, dashes, dots and spaces</div>
+                        <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
                         <div class="assigned_error" style="color: red; font-size: smaller; display: none;">This tag already assigned to this item( Note that tags are case insensitive and system strip spaces before comparison )</div>
                         <div class="clear"></div>
                     </div>
@@ -91,8 +91,8 @@ function editProfileTags(){
                 $('#assign_tag').on('click', function(){
                     $('#new_tag').removeClass('input-error');
                     $('.validation_error, .assigned_error').hide();
-                    var tag = $('#new_tag').val();
-                    if( ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ){
+                    var tag = $('#new_tag').val().trim();
+                    if( ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) || tag.length > 30 ){
                         $('#new_tag').addClass('input-error');
                         $('.validation_error').show();
                         return false;
