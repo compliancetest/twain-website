@@ -879,13 +879,12 @@ function cp_get_customer_harness_detail()
                     jQuery('#harness-detail-container').show();
                     jQuery('#harness-generate-profile-container').hide();
 
-                    var tag = jQuery('input[name="tag"]').val();
-                    if( ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ){
+                    var tag = jQuery('input[name="tag"]').val().trim();
+                    if( tag.length > 30 || ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ){
                         jQuery('input[name="tag"]').addClass('input-error');
                         jQuery('.validation_error').show();
-                        return false;
+                        return;
                     }
-
                     jQuery('#harness-detail-box' + id + ' .loading').show();
                     jQuery('#harness-detail-box' + id + ' .message').remove();
 
@@ -1053,7 +1052,7 @@ function cp_get_customer_harness_detail_profile_data()
             <div class="has-field-tooltip">
                 <input class="input field-tooltip" type="text" name="tag" value="" onfocus="jQuery(this).removeClass('input-error');jQuery('.validation_error').hide();" data-tooltip-content="Value to allow grouping of generated profiles"/>
             </div>
-            <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 290px;">Tags will only allow upper and lower case letters, numbers, underscores, dashes, dots and spaces</div>
+            <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 290px;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
         </div>
         <div class="clear"></div>
     </div>
