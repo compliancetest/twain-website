@@ -71,7 +71,7 @@ function editProfileTags(){
                             <span class="simple_tooltip radius6" style="top: -27px;">Assign tag to item<span></span></span>
                         </a>
                         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
-                        <div class="assigned_error" style="color: red; font-size: smaller; display: none;">This tag already assigned to this item( Note that tags are case insensitive and system strip spaces before comparison )</div>
+                        <div class="assigned_error" style="color: red; font-size: smaller; display: none;">This tag already assigned!</div>
                         <div class="clear"></div>
                     </div>
                     <div class="clear"></div>
