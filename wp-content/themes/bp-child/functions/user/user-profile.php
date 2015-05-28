@@ -866,6 +866,13 @@ function cp_get_customer_harness_detail()
                 
                 function generateProfile()
                 {
+                    var tag = jQuery('input[name="tag"]').val().trim();
+
+                    if( tag.length !== 0 && ( tag.length > 30  || ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ) ){
+                        jQuery('input[name="tag"]').addClass('input-error');
+                        jQuery('.validation_error').show();
+                        return;
+                    }
                     jQuery('#harness-detail-container').hide();
                     jQuery('#harness-generate-profile-container').show();
                 }
@@ -879,12 +886,6 @@ function cp_get_customer_harness_detail()
                     jQuery('#harness-detail-container').show();
                     jQuery('#harness-generate-profile-container').hide();
 
-                    var tag = jQuery('input[name="tag"]').val().trim();
-                    if( tag.length > 30 || ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ){
-                        jQuery('input[name="tag"]').addClass('input-error');
-                        jQuery('.validation_error').show();
-                        return;
-                    }
                     jQuery('#harness-detail-box' + id + ' .loading').show();
                     jQuery('#harness-detail-box' + id + ' .message').remove();
 
