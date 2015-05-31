@@ -22,18 +22,21 @@ class FulltextSearch {
     );
 
     public function __construct(){
+        $this->_client = get_transient( 'fulltext_cloud_search_object' );
+        if( ! $this->_client ) {
+            $this->_domainName = get_option('cloudsearch_fulltext_domain_name');
 
-        $this->_domainName = get_option( 'cloudsearch_fulltext_domain_name' );
+            $configClient = CloudSearchClient::factory(array(
+                'key' => get_option('aws_s3_key'),
+                'secret' => get_option('aws_s3_secret'),
+                'region' => 'ap-southeast-2'
+            ));
 
-        $configClient = CloudSearchClient::factory(array(
-            'key'    => get_option( 'aws_s3_key' ),
-            'secret' => get_option( 'aws_s3_secret' ),
-            'region' => 'ap-southeast-2'
-        ));
-
-        $this->_client = $configClient->getDomainClient( $this->_domainName, array(
-            'credentials' => $configClient->getCredentials()
-        ));
+            $this->_client = $configClient->getDomainClient($this->_domainName, array(
+                'credentials' => $configClient->getCredentials()
+            ));
+            set_transient( 'fulltext_cloud_search_object', $this->_client, 300);
+        }
     }
 
     public function search( $params = false, $full_results = false ){

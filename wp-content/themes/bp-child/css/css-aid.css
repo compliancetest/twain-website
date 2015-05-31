@@ -1787,6 +1787,9 @@ tr {
 .expand-btn span.p{
     background-position: 0 -1802px;
 }
+.tags-btn  span.p{
+	background-position: 0 -1824px;
+}
 .add-new-btn span.p{
     background-position: 0 -128px;
 }
@@ -1920,7 +1923,8 @@ tr {
 .blue-plus-btn,
 .file-btn,
 .edit-btn,
-.view-log-btn{
+.view-log-btn,
+.tags-btn{
     border-color: #3577ad;
     background: #2d83cd;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));

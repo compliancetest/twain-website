@@ -9,18 +9,68 @@ if(!is_user_logged_in()){
     exit;
 }
 get_header();
-$profileInstances = getCustomerProfileInstances();
+$profileInstances = getCustomerProfileInstances( null, true );
 $subscriptions =  getUserSubscriptions(null, true);
 $sqs_validation_enabled = get_option( 'validate_via_sqs' ) == 'yes' ? true : false;
 $expandable_profile_types = ProfileType::getExpandableTypes();
+$filters = getCustomerProfileInstancesFilters( $profileInstances );
 ?>
 <div class="content" id="my_testdata">
     <div class="dashboard-tabs">
         <?php get_sidebar('dashboard'); ?>
     </div>
     <div class="container">
+       <div class="column">
+           <form name="form_filter" id="form_filter" action="/my-test-data/" method="get">
+               <div class="search-results-filter">
+                   <h4 class="filter-head">Filter By:</h4>
+                   <div class="search-filters-box">
+                       <ul class="search-filters-list clearfix">
+                           <li class="first">
+                               <label for="content-type-filter">Tag</label>
+                               <select name="tag" id="content-type-filter" class="select">
+                                   <option>All</option>
+                                   <?php if( is_array( $filters['tags'] ) ):?>
+                                       <?php foreach ( $filters['tags'] AS $k => $v ): ?>
+                                           <option value="<?php echo $k;?>" <?php if( isset( $_GET['tag'] ) && $_GET['tag'] == $k ):?> selected="selected" <?php endif;?>><?php echo $v;?></option>
+                                       <?php endforeach; ?>
+                                   <?php endif;?>
+                               </select>
+                           </li>
+                           <li>
+                               <label for="community-filter">Type</label>
+                               <select name="type" id="community-filter" class="select">
+                                   <option>All</option>
+                                   <?php if( is_array( $filters['type'] ) ):?>
+                                       <?php foreach( $filters['type'] AS $v): ?>
+                                           <option value="<?php echo $v;?>" <?php if( isset( $_GET['type'] ) && $_GET['type'] == $v ):?> selected="selected" <?php endif;?>><?php echo $v;?></option>
+                                       <?php endforeach; ?>
+                                   <?php endif;?>
+                               </select>
+                           </li>
+                           <li>
+                               <label for="community-filter">Validity</label>
+                               <select name="validity" id="community-filter" class="select">
+                                   <option>All</option>
+                                   <?php if( is_array( $filters['validity'] ) ):?>
+                                       <?php foreach ($filters['validity'] AS $v): ?>
+                                           <option value="<?php echo $v;?>" <?php if( isset( $_GET['validity'] ) && $_GET['validity'] == $v ):?> selected="selected" <?php endif;?>><?php echo ucfirst( $v );?></option>
+                                       <?php endforeach; ?>
+                                   <?php endif;?>
+                               </select>
+                           </li>
+                       </ul>
+                       <div class="search-filter-actions">
+                           <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Confirm</span></a>
+                           <a href="<?php echo get_permalink(); ?>" class="action-btn clear-btn" id="clear-search-filter-btn"><span class="p"></span><span class="t">Clear</span></a>
+                       </div>
+                   </div>
+               </div>
+           </form>
+       </div>
         <div class="column">
             <a href="#" id="delete-profile-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
+            <a href="#" class="action-btn view-log-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Include/exclude multiple profiles<span></span></span></a>
             <div class="clear"></div>
             <div class="space10"></div>
             <div class="grid-box table-box" id="my_test_data_profiles">
@@ -46,6 +96,7 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
                    }else{
                        foreach($profileInstances as $instance)
                        {
+                           $tags = Tag::getItemTags( $instance->id );
                    ?>
                         <div class="tr">
                            <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $instance->id?>" value="<?php echo $instance->id?>" /></div>
@@ -53,6 +104,17 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
                                <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link" ><?php echo $instance->profile_name; ?></a>
                                <br />
                                <b>Purpose: </b> <?php echo $instance->purpose; ?>
+                               <br />
+                               <?php if( $tags ):?>
+                                   <b>Tags: </b>
+                                   <?php
+                                   $t = array();
+                                   foreach( $tags AS $tag ){
+                                       $t[] = '<a href="/my-test-data/?tag='.$tag->id.'">'.$tag->name.'</a>';
+                                   }
+                                   echo implode( ', ', $t );
+                                   ?>
+                               <?php endif;?>
                                <p><?php echo $instance->profile_description; ?></p>
                            </div>
                            <div class="td td-profile-type">
@@ -85,14 +147,16 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
                                     <?php if( $sqs_validation_enabled && $instance->is_expanded == 0 && $instance->validation_status == 'valid' && in_array( str_replace( ' ', '', $instance->profile_role ), $expandable_profile_types ) ): ?>
                                         <a href="#create-expanded-version" data-id="<?php echo $instance->id;?>" class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip create_expanded_version"><span class="p"></span><span class="simple_tooltip radius6">Create Expanded Version of this profile<span></span></span></a>
                                     <?php endif; ?>
-                                    <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
+                                    <div class="clear space5"></div>
+                                    <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
+                                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('edit-tags')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 action-btn icon-btn tags-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Tags<span></span></span></a>
                                 <?php endif; ?>
                                 <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
                                 <?php
                                     }
                                 ?>
                            </div>
-                           <div class="clear"></div>     
+                           <div class="clear"></div>
                            
                         </div>
                         
@@ -146,6 +210,20 @@ $expandable_profile_types = ProfileType::getExpandableTypes();
     <div class="popup-box-footer radius6 noradiustop">
         <div class="loading loading-with-text radius6 dlt_loading"><div><b>DELETING PROFILE</b><span>Please wait...</span></div></div>
         <a href="#" class="action-btn process-btn dlt_confirm"><span class="p"></span><span class="t">Confirm</span></a>
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>
+</div>
+<div class="popup-box" id="change-vis-profiles-box" style="display: none; width: 500px">
+    <div class="popup-box-header radius6 noradiusbottom">Confirm include/exclude multiple profiles</div>
+    <div class="popup-box-content">
+        <div class="no_vis_rows display_none">Please select a row.</div>
+        <div class="selected_vis_rows display_none">Are you sure that you want to <span class="vis_action"></span> this profile(s)?</div>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">
+        <div class="loading loading-with-text radius6 change_vis_loading"><div><b>PROCESSING...</b><span>Please wait...</span></div></div>
+        <a href="#" id="chng_confirm" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
         <div class="clear"></div>
     </div>
@@ -358,6 +436,43 @@ if(count($subscriptions) > 0){
         $('#delete-profile-link').cplightbox({
             type: 'inline',
             href: '#delete-profiles-box'
+        });
+        $('.view-log-btn').cplightbox({
+            type: 'inline',
+            href: '#change-vis-profiles-box'
+        });
+        $('.view-log-btn').on('click',function(){
+            if( jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').length == 0 ){
+                $('.no_vis_rows').show();
+                $('.selected_vis_rows, #chng_confirm').hide();
+                $('#chng_confirm').off('click');
+            } else{
+                var vis_action = jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked:first').closest('div.tr').find('input[name="lookup"]').is(':checked');
+                var action_name = vis_action ? 'exclude' : 'include';
+                $('.vis_action').text( action_name );
+                $('.no_vis_rows').hide();
+                $('.selected_vis_rows, #chng_confirm').show();
+                $('#chng_confirm').on('click', function(){
+                    jQuery('.change_vis_loading').show();
+                    var ids = new Array();
+                    jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
+                        ids.push(this.value);
+                    });
+                    jQuery.ajax({
+                        url: "/?td-action="  + jQuery('#update-lookup-action').val(),
+                        data: { 'id' : ids, 'status' : vis_action ? 0 : 1 },
+                        type: 'post',
+                        dataType: 'json',
+                        complete: function() {
+                            jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').each(function(){
+                                $(this).closest('div.tr').find('input[name="lookup"]').attr('checked', ! vis_action );
+                                jQuery('.change_vis_loading').hide();
+                                $('#change-vis-profiles-box').find('a.close_btn').click();
+                            });
+                        }
+                    });
+                });
+            }
         });
         $('#delete-profile-link').on('click',function(){
             if( jQuery('#my_test_data_profiles .tbody .td-chk input[type="checkbox"]:checked').length == 0 ){

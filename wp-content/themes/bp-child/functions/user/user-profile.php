@@ -866,6 +866,13 @@ function cp_get_customer_harness_detail()
                 
                 function generateProfile()
                 {
+                    var tag = jQuery('input[name="tag"]').val().trim();
+
+                    if( tag.length !== 0 && ( tag.length > 30  || ! /^[a-zA-Z0-9_. -]+$/g.test( tag ) ) ){
+                        jQuery('input[name="tag"]').addClass('input-error');
+                        jQuery('.validation_error').show();
+                        return;
+                    }
                     jQuery('#harness-detail-container').hide();
                     jQuery('#harness-generate-profile-container').show();
                 }
@@ -878,7 +885,7 @@ function cp_get_customer_harness_detail()
                 {
                     jQuery('#harness-detail-container').show();
                     jQuery('#harness-generate-profile-container').hide();
-                    
+
                     jQuery('#harness-detail-box' + id + ' .loading').show();
                     jQuery('#harness-detail-box' + id + ' .message').remove();
 
@@ -935,7 +942,7 @@ function cp_get_customer_harness_detail_profile_data()
     $subscription_query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "users_subscriptions WHERE id=%d", $subscription_id);
     $subscription_row = $wpdb->get_row($subscription_query);
     
-    $gateways = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "gateways");
+    $gateways = $wpdb->get_results("SELECT * FROM wp_gateways");
     $alias_list = array();
     
     foreach ($gateways as $gateway) {
@@ -1040,11 +1047,40 @@ function cp_get_customer_harness_detail_profile_data()
         </div>
         <div class="clear"></div>
     </div>
+    <div class="field-row">
+        <div class="grid-cell">
+            <label>Tag:</label>
+            <div class="has-field-tooltip">
+                <input class="input field-tooltip" type="text" name="tag" value="" onfocus="jQuery(this).removeClass('input-error');jQuery('.validation_error').hide();" data-tooltip-content="Value to allow grouping of generated profiles"/>
+            </div>
+            <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 290px;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
+        </div>
+        <div class="clear"></div>
+    </div>
 
     <div id="generate-profile-container">
         <a href="javascript: void(0)" class="action-btn process-btn" onclick="generateProfile()"><span class="p"></span><span class="t">Generate Profiles</span></a>            
         <div class="clear"></div>
     </div>
+        <script>
+            jQuery(document).ready(function(){
+                jQuery('.field-tooltip').focus(function(){
+                    var tooltip_obj,
+                        parentContainer = jQuery(this).parent('.has-field-tooltip'),
+                        fieldWidth = jQuery(this).outerWidth(),
+                        fieldHeight = jQuery(this).outerHeight();
+
+                    if (parentContainer.find('.simple_tooltip').length == 0) {
+                        tooltip_obj = '<span class="simple_tooltip" style="width:'+ fieldWidth + 'px; margin-left: ' + -(fieldWidth/2) + 'px; bottom:' + (fieldHeight+10) + 'px; ">' + jQuery(this).data('tooltip-content') + '<span></span></span>';
+                        jQuery(this).after(tooltip_obj);
+                    }
+                    jQuery(this).next('.simple_tooltip').show();
+                });
+                jQuery('.field-tooltip').blur(function(){
+                    jQuery(this).parent('.has-field-tooltip').find('.simple_tooltip').hide();
+                });
+            });
+        </script>
 <?php
     endif;
 }
@@ -1126,7 +1162,11 @@ function cp_save_customer_harness_detail()
         remove_filter( 'query', 'wp_db_null_value' );
         
         if ((isset($_POST['action_mode']) && $_POST['action_mode'] == 'generate-profile') && $updateArr['profile_id'] != 'NULL') {
-            generateProfile($updateArr['profile_id'], $community_id);
+            $tag = false;
+            if( isset( $_POST['tag'] ) && ! empty( $_POST['tag'] ) ){
+                $tag = $_POST['tag'];
+            }
+            generateProfile($updateArr['profile_id'], $community_id, $tag );
         }
         
         return "success";
@@ -1135,7 +1175,7 @@ function cp_save_customer_harness_detail()
     }
 }
 
-function generateProfile($profile_id, $community_id)
+function generateProfile($profile_id, $community_id, $tag = false )
 {
     global $wpdb;
     
@@ -1146,6 +1186,10 @@ function generateProfile($profile_id, $community_id)
     $profile_content = S3Wrapper::getProfile( $profile->token );
     $customDataGeneration = isset($profile_content->CustomProfilesGeneration) ? ($profile_content->CustomProfilesGeneration) : (null);
 
+    //when generating profiles, the selected profile should be tagged as well
+    if( $tag ) {
+        Tag::assignTag( $tag, $profile_id );
+    }
     //$customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
     
     $pre_desc = '';
@@ -1243,7 +1287,7 @@ function generateProfile($profile_id, $community_id)
                             'token'          => $row['token']
 
                         );
-                        ProfileInstance::save( $profileData, true, false, 0, true );
+                        ProfileInstance::save( $profileData, true, false, 0, true, $tag );
                     }
                 }
             }
@@ -1282,7 +1326,7 @@ function generateProfile($profile_id, $community_id)
                     'instance_id'    => $profile_id
 
                 );
-                ProfileInstance::save( $profileData, true, false, 0, true );
+                ProfileInstance::save( $profileData, true, false, 0, true, $tag );
             }
         }
     }
