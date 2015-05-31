@@ -519,31 +519,31 @@ function ct_process_organisation_action()
             if (!$subscription || !$user_id || !ct_is_organisation_admin($user_id, $subscription->organisation_id)) {
                 addMessage('Invalid Request!', 'error');
             } else {
-                if (isset($_POST['delete-now']) || $subscription->status == 'Unsubscribing')
+                if (isset($_POST['delete-now']) || $subscription->status == 'Unsubscribing') {
+                    if( get_option( 'invoice_in_arrears' ) == 'yes' ){
+                        $charge_entry = $wpdb->get_row( "SELECT * FROM wp_organisations_charge WHERE reference_id = ".$id." AND start_date LIKE '".date('Y-m')."-%' AND invoice_number = '' " );
+
+                        $start_date = new DateTime( $charge_entry->start_date );
+                        $now_date   = new DateTime();
+
+                        $diff = $now_date->diff( $start_date )->format("%a");
+                        $wpdb->update( 'wp_organisations_charge',
+                            array(
+                                'quantity' => ++$diff / date( "t" ),
+                                'end_date' => date( 'Y-m-d H:i:s' )
+                            ),
+                            array(
+                                'id' => $charge_entry->id
+                            ),
+                            array( '%s', '%s' ),
+                            array( '%d' )
+                        );
+                    }
                     $controller->delete_organisation_subscription($subscription->id);
-                else
+                }else
                     $controller->unsubscribe_organisation_subscription($subscription->id);
 
                 addMessage('Your subscription has been cancelled');
-            }
-            if( get_option( 'invoice_in_arrears' ) == 'yes' ){
-                $charge_entry = $wpdb->get_row( "SELECT * FROM wp_organisations_charge WHERE reference_id = ".$id." AND start_date LIKE '".date('Y-m')."-%' AND invoice_number = '' " );
-
-                $start_date = new DateTime( $charge_entry->start_date );
-                $now_date   = new DateTime();
-
-                $diff = $now_date->diff( $start_date )->format("%a");
-                $wpdb->update( 'wp_organisations_charge',
-                    array(
-                        'quantity' => ++$diff / date( "t" ),
-                        'end_date' => date( 'Y-m-d H:i:s' )
-                    ),
-                    array(
-                        'id' => $charge_entry->id
-                    ),
-                    array( '%s', '%s' ),
-                    array( '%d' )
-                );
             }
             wp_redirect($return);
             exit;
