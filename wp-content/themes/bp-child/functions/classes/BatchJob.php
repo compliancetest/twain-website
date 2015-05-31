@@ -57,18 +57,18 @@ class BatchJob {
                     );
                 }
             }
-            $logs[] = 'Updated '.$counter.' organisations';
+            $logs['Push Organisation details from website to Xero'] = 'Updated '.$counter.' organisations';
         }
         /**
          * Second: we should generate charges
          */
         $chargesCounter = generateMonthlyCharges();
-        $logs[] = 'Generated '.$chargesCounter.' charges';
+        $logs['Generate charges'] = 'Generated '.$chargesCounter.' charges';
         /**
          * Generate draft invoices
          */
         $invoicesCounter = generateInvoices();
-        $logs[] = 'Created '.$invoicesCounter.' invoices';
+        $logs['Generate draft invoices'] = 'Created '.$invoicesCounter.' invoices';
         /**
          * Cancel pending subscriptions
          */
@@ -81,7 +81,19 @@ class BatchJob {
             $controller->delete_organisation_subscription( $subscription->id );
             $subscriptionsCounter++;
         }
-        $logs[] = 'Cancelled '.$subscriptionsCounter.' subscriptions';
+        $logs['Cancel pending subscriptions'] = 'Cancelled '.$subscriptionsCounter.' subscriptions';
+
+        $conjobId = $this->db->get_var( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s ", $_GET['jobid'] ) );
+        $options = $this->_getCronjobOptions( $conjobId );
+        if( isset( $options['emails'] ) && ! empty( $options['emails'] ) ){
+            $emailLogs = $logs;
+            $logs['Email logs'] = array();
+            foreach( explode( ',', $options['emails'] ) AS $email ){
+                $status = wp_mail( trim( $email ), 'Beginning of month processing', implode( '<br>', $emailLogs ) );
+                $logs['Email logs'][] = array( 'status' => $status == true ? 'Success' : 'Error', 'email' => trim( $email ) );
+            }
+
+        }
         return array( 'status' => 'success', 'message' => $logs );
     }
 
