@@ -1186,6 +1186,10 @@ function generateProfile($profile_id, $community_id, $tag = false )
     $profile_content = S3Wrapper::getProfile( $profile->token );
     $customDataGeneration = isset($profile_content->CustomProfilesGeneration) ? ($profile_content->CustomProfilesGeneration) : (null);
 
+    //when generating profiles, the selected profile should be tagged as well
+    if( $tag ) {
+        Tag::assignTag( $tag, $profile_id );
+    }
     //$customDataGeneration = json_decode('{"CustomDataGeneration": [{"Description": "Generate custom versions of Gadget and Foo", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["98111133334", "23111144445"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"} ] }, {"Description": "Generate custom version of Super Choose for Test Product", "SourceProfiles": {"IdentifierPath": "Entity.ABN", "Values": ["73000570911"] }, "Rules": [{"Type": "Value", "OriginalValue": "79111188889.010", "ReplacementPath": "Entity.USI"}, {"Type": "Value", "OriginalValue": "ACME Investments", "ReplacementPath": "Entity.MainName"}, {"Type": "Value", "OriginalValue": "79111188889", "ReplacementPath": "Entity.ABN"}, {"Type": "Reference"} ] } ]}');
     
     $pre_desc = '';
