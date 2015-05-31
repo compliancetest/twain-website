@@ -527,18 +527,22 @@ function ct_process_organisation_action()
                 addMessage('Your subscription has been cancelled');
             }
             if( get_option( 'invoice_in_arrears' ) == 'yes' ){
-                $quantity = 1 - ct_calculate_first_month_quantity( 1 );
+                $charge_entry = $wpdb->get_row( "SELECT * FROM wp_organisations_charge WHERE reference_id = ".$id." AND start_date LIKE '".date('Y-m')."-%' AND invoice_number = '' " );
+
+                $start_date = new DateTime( $charge_entry->start_date );
+                $now_date   = new DateTime();
+
+                $diff = $now_date->diff( $start_date )->format("%a");
                 $wpdb->update( 'wp_organisations_charge',
                     array(
-                        'quantity' => $quantity,
+                        'quantity' => ++$diff / date( "t" ),
                         'end_date' => date( 'Y-m-d H:i:s' )
                     ),
                     array(
-                        'reference_id' => $id,
-                        'start_date'   => date( 'Y-m' ).'-01 00:00:00'
+                        'id' => $charge_entry->id
                     ),
                     array( '%s', '%s' ),
-                    array( '%d', '%s' )
+                    array( '%d' )
                 );
             }
             wp_redirect($return);
