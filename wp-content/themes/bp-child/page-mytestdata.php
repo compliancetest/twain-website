@@ -69,9 +69,8 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
            </form>
        </div>
         <div class="column">
-            <a href="#" class="action-btn view-log-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Include/exclude multiple profiles<span></span></span></a>
             <a href="#" id="delete-profile-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
-
+            <a href="#" class="action-btn view-log-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Include/exclude multiple profiles<span></span></span></a>
             <div class="clear"></div>
             <div class="space10"></div>
             <div class="grid-box table-box" id="my_test_data_profiles">
