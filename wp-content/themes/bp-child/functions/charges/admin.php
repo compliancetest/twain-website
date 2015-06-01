@@ -397,8 +397,8 @@ function generateMonthlyCharges(){
             $voucher_comment = ', voucher: '.$subscription->voucher;
         }
         if( $organisation->no_billing != '1' ){
-            $suite = new TestSuite( $subscription->suite_family_mark );
-            $suite->load();
+//            $suite = new TestSuite( $subscription->suite_family_mark );
+//            $suite->load();
             if( $subscription->pricing_plan_id ){
                 $pricing_plans = new PricingPlan( $subscription->pricing_plan_id );
                 if( $subscription->last_charge_date == '0000-00-00' ){
