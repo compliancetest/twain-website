@@ -5400,13 +5400,17 @@ span.button_sign {
 
 #my_transaction_log .td-product{ width: 200px; }
 #my_transaction_log .td-product a{ float: left; width: 137px; }
-#my_transaction_log .td-product a.view-messages-link{ 
+#my_transaction_log .td-outcome a.view-messages-link{ float: left; }
+#my_transaction_log a.view-messages-link{
     width: 11px;
     height: 11px;
     margin: 2px 5px 0 0;
     background: url(../images/expand-icon.png) no-repeat 0 0;
 }
-#my_transaction_log .td-product a.expanded{ 
+#my_transaction_log .td-outcome a.view-messages-link{
+    margin: 2px -15px 0 5px;
+}
+#my_transaction_log  a.expanded{
     background-position: 0 -11px;
 }
 #my_transaction_log .thead .td-chk{ width: 15px; }

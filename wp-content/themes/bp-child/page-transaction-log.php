@@ -355,7 +355,9 @@ get_header();
                            <div class="tr">
                                <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" /></div>
                                <div class="td td-product">
-                                   <a href="#" class="view-messages-link"></a>
+                                   <a href="#" class="view-messages-link has-tooltip">
+                                       <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
+                                   </a>
                                    <?php if(!$row->PRODUCT_WP_ID){?>
                                    Not Assigned
                                    <?php }else{ ?>
@@ -392,13 +394,17 @@ get_header();
 <!---->
 <!--                               </div>-->
                                <div class="td td-outcome tocenter">
+                                   <a href="#" class="view-messages-link">
+                                       <a href="#" class="view-messages-link has-tooltip">
+                                           <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
+                                       </a>
+                                   </a>
                                    <?php if($row->TEST_OUTCOME_CODE){ ?>
-                                   <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>
+                                        <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>
                                    <?php }else{ ?>
-                                   <span class="status-unverified">Not Performed</span>
+                                        <span class="status-unverified">Not Performed</span>
                                    <?php } ?>
                                    <br />
-                                   <!--<a href="#" data-id="<?php echo $row->ID ?>" class="view-validation-log">View Log</a>                                   -->
                                </div>
                                <div class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes"?></div>
                                <div class="td td-convsn tocenter<?php if( is_super_admin() || ct_is_group_admin_or_support($user_id) ):?> td-two-lines<?php endif;?>">
@@ -855,8 +861,12 @@ get_header();
         })
         jQuery('#log-result-table .view-messages-link').click(function(){
             jQuery(this).parents('.tr').find('.sub-table').animate({'height': 'toggle'});
-            jQuery(this).toggleClass('expanded');
-            
+            jQuery(this).parents('.tr').find('.view-messages-link').toggleClass('expanded');
+            if( ! jQuery(this).parents('.tr').find('.view-messages-link').hasClass('expanded')){
+                jQuery(this).parents('.tr').find('.view-messages-link .simple_tooltip').text('Show message details');
+            }else{
+                jQuery(this).parents('.tr').find('.view-messages-link .simple_tooltip').text('Hide message details');
+            }
             return false;
         })
     })
