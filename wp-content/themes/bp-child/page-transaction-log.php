@@ -394,7 +394,6 @@ get_header();
 <!---->
 <!--                               </div>-->
                                <div class="td td-outcome tocenter">
-                                   <a href="#" class="view-messages-link">
                                        <a href="#" class="view-messages-link has-tooltip">
                                            <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
                                        </a>
