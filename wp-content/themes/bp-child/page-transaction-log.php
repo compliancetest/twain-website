@@ -393,10 +393,9 @@ get_header();
 <!--                               <div class="td td-suite">-->
 <!---->
 <!--                               </div>-->
-                               <div class="td td-outcome tocenter">
-                                       <a href="#" class="view-messages-link has-tooltip">
-                                           <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
-                                       </a>
+                               <div class="td td-outcome">
+                                   <a href="#" class="view-messages-link has-tooltip">
+                                       <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
                                    </a>
                                    <?php if($row->TEST_OUTCOME_CODE){ ?>
                                         <span class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL?></span>

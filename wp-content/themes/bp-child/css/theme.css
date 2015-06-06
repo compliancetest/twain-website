@@ -5407,20 +5407,21 @@ span.button_sign {
     margin: 2px 5px 0 0;
     background: url(../images/expand-icon.png) no-repeat 0 0;
 }
-#my_transaction_log .td-outcome a.view-messages-link{
+/*#my_transaction_log .td-outcome a.view-messages-link{
     margin: 2px -15px 0 5px;
-}
+}*/
 #my_transaction_log  a.expanded{
     background-position: 0 -11px;
 }
 #my_transaction_log .thead .td-chk{ width: 15px; }
 #my_transaction_log .td-chk{ width: 15px; }
-#my_transaction_log .td-case{ width: 251px; }
+#my_transaction_log .td-case{ width: 241px; }
 #my_transaction_log .td-suite{ width: 180px; }
-#my_transaction_log .td-outcome{ width: 60px; }
+#my_transaction_log .td-outcome{ width: 80px; }
 #my_transaction_log .td-audit{
-    width: 70px;
+    width: 60px;
 }
+
 #my_transaction_log .td-convsn{
     width: 225px;
     position: relative;
