@@ -198,8 +198,9 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     foreach($case->messageTemplates as $key => $row){
                         ?>
                         <div class="grid_row white_bcg nopaddingbottom noborderbottom <?php if($key == (count($case->messageTemplates)-1)) {echo "paddingbottom10";} ?>">
-                            <div class="grid_cell width15P left size13 bold"><?php  echo $row['name'].':';?></div>
-                            <div class="grid_cell width80P left">
+                            <div class="grid_cell width45P left size13 bold"><?php  echo $row['name'].':';?></div>
+                            <div class="grid_cell width5P left"></div>
+                            <div class="grid_cell width45P left">
                                 <?php if(strpos($row['url'], 'http://') !== false || strpos($row['url'], 'https://') !== false){ ?>
                                     <a href="<?php echo $row['url']; ?>" class="blue_txt"><?php echo $row['url']; ?></a>
                                 <?php }else{ ?>
