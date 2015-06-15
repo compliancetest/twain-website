@@ -54,7 +54,7 @@
                 type: 'post',
                 data: { 'td-action' : '<?php echo wp_create_nonce('save-schedule');?>', 'tags' : tags, 'product_id' : $('#product_id').val(), 'profile_id' : '<?php echo $view->id;?>' },
                 success: function(){
-                    location.reload();
+//                    location.reload();
                 }
             })
         });
