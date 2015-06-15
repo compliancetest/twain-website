@@ -8,16 +8,20 @@ class SqsWrapper{
 
     private $_queueName;
 
-    public function __construct()
+    public function __construct( $queueName = false )
     {
         $this->_client = SqsClient::factory(array(
             'key' => get_option('aws_s3_key'),
             'secret' => get_option('aws_s3_secret'),
             'region' => 'ap-southeast-2'
         ));
-        $this->_queueName = get_option( 'sqs_queue_name' );
-        $this->_bulkQueueName = get_option( 'bulk_sqs_queue_name' );
-        if( empty( $this->_bulkQueueName ) ) $this->_bulkQueueName = $this->_queueName;
+        if( ! $queueName ) {
+            $this->_queueName = get_option('sqs_queue_name');
+            $this->_bulkQueueName = get_option('bulk_sqs_queue_name');
+            if (empty($this->_bulkQueueName)) $this->_bulkQueueName = $this->_queueName;
+        }else{
+            $this->_queueName = $this->_bulkQueueName = $queueName;
+        }
     }
 
     public function sendMessage( $message, $is_bulk = false ){
