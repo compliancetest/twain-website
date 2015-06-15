@@ -17,6 +17,8 @@ class ManageESB
     var $table_test_case_configuration = 'TEST_CASE_CONFIGURATION';
     var $table_test_suite_configuration = 'TEST_SUITE_CONFIGURATION';
     var $table_product_configuration = 'PRODUCT_CONFIGURATION';
+
+    var $table_schedules_runs = 'MSH_SCHEDULE_RUNS';
     
     public static $esbdb = null;
     
@@ -1034,7 +1036,30 @@ class ManageESB
         
         return $count;
     }
-    
+
+    /**
+     * @param $user_id
+     * @return mixed
+     */
+    public function getUserSchedules( $user_id )
+    {
+        global $wpdb;
+        $subscription_id  = $wpdb->get_var( $wpdb->prepare("SELECT id FROM wp_organisations_subscriptions WHERE user_id = %d ", $user_id ) );
+        $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL FROM " . $this->table_schedules_runs . " AS SR
+                                                JOIN MSH_SCHEDULE_STATUSES AS SS ON SS.ID = SR.SCHEDULE_STATUS
+                                                WHERE ORGANISATION_SUBSCRIPTION_ID = %d AND IS_DELETED = 0 ", $subscription_id );
+        return ManageESB::$esbdb->get_results($query);
+    }
+
+    public function updateStatus( $runId, $status, $prevstatus )
+    {
+        if( $status == 'DELETED' ){
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET IS_DELETED = 1 WHERE ID = %d ", $runId);
+        } else {
+            $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) WHERE ID = %d AND SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) ", $status, $runId, $prevstatus );
+        }
+        return ManageESB::$esbdb->get_results($query);
+    }
     
     
 }

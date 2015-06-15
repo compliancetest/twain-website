@@ -1287,7 +1287,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                             'token'          => $row['token']
 
                         );
-                        ProfileInstance::save( $profileData, true, false, 0, true, $tag );
+                        ProfileInstance::save( $profileData, true, false, $tag );
                     }
                 }
             }
@@ -1326,7 +1326,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                     'instance_id'    => $profile_id
 
                 );
-                ProfileInstance::save( $profileData, true, false, 0, true, $tag );
+                ProfileInstance::save( $profileData, true, false, $tag );
             }
         }
     }

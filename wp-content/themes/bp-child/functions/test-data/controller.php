@@ -340,21 +340,18 @@ function deleteProfileTypeInstance($action)
     exit;
 }
 
-function copyProfileInstance( $action ){
+/**
+ * @param bool $profile_id
+ * @param $fieldsToOverwrite - array - used to overwrite some profile's fields during copy process
+ */
+function copyProfileInstance( $profile_id = false, $fieldsToOverwrite = false ){
     global $wpdb;
 
-    $id = $_REQUEST['id'];
+    $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id=%d", $profile_id ), ARRAY_A);
 
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $id);
-    $row = $wpdb->get_row($query, ARRAY_A);
-
-    if( ! $row )
-    {
-        addMessage('Invalid Request!', 'error');
-        return;
+    if( ! $row ){
+        return array( 'status' => 'error', 'message' => 'Invalid Request!' );
     }
-
-    $redirect = isset( $_REQUEST['return'] ) ? base64_decode( $_REQUEST['return'] ) : cp_get_group_permalink_by_id( $row['community_id'] ) . "testdata";
 
     // Copy harness profile instance
     $content = S3Wrapper::getProfile( $row['token'] );
@@ -368,20 +365,13 @@ function copyProfileInstance( $action ){
         'community_id'   => $row['community_id'],
         'token_original' => $row['token_original'],
         'token'          => $row['token']
-
     );
-
-    $result = ProfileInstance::save( $profileData );
-    if( $result['status'] == 'error' ){
-        addMessage( $result['message'], 'error' );
-        return;
+    if( $fieldsToOverwrite ){
+        foreach( $fieldsToOverwrite AS $fieldToOverwrite => $newFieldValue ){
+            $profileData[$fieldToOverwrite] = $newFieldValue;
+        }
     }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    addMessage( 'Profile instance was copied.' );
-    wp_redirect( $redirect );
-    exit;
+    return ProfileInstance::save( $profileData );
 }
 
 function createExpandedVersion( $id, $factor ){

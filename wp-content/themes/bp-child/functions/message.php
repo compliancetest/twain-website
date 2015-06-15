@@ -12,6 +12,8 @@ function ct_process_message_actions()
     if(wp_verify_nonce($action, 'trigger-message'))
     {
         showTriggerMessageBox();
+    }else if(wp_verify_nonce($action, 'trigger-schedule')){
+        render_view( 'test-data/views/trigger-schedule.phtml', false, true );
     }else if(wp_verify_nonce($action, 'save-message')){
         saveMessageTemplate();
     }else if(wp_verify_nonce($action, 'remove-message')){

@@ -39,6 +39,21 @@ function cp_session_start()
         session_start();
 }
 
+/**
+ * @param $path - path to view file, e.g. 'test-data/views/schedule-popup.phtml'
+ * @param $view - object with variables needed in view
+ * @param bool $is_ajax
+ */
+function render_view( $path, $view, $is_ajax = false )
+{
+    $path = THE_FUNCTION . '/' .$path;
+    if( file_exists( $path ) ){
+        require_once $path;
+    }
+    if( $is_ajax ){
+        exit();
+    }
+}
 define('THE_FUNCTION', STYLESHEETPATH . '/functions');
 
 //Include Recaptcha library
@@ -88,6 +103,8 @@ require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');
 require_once(THE_FUNCTION . '/classes/ProfileInstance.php');
 
 require_once(THE_FUNCTION . '/classes/ProfileType.php');
+
+require_once(THE_FUNCTION . '/classes/MicroServices.php');
 
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');

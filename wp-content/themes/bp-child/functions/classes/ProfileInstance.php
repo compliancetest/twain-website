@@ -2,13 +2,17 @@
 
 class ProfileInstance {
 
-    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $delay = 0, $remove_sqs = false, $tag = false ){
+    /**
+     * @param $profileData
+     * @param bool $send_sqs_message
+     * @param bool $is_expanded
+     * @param bool $tag
+     * @return array
+     */
+    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $tag = false ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
-//        if( $remove_sqs ){
-//            $validate_via_sqs = false;
-//        }
         $profile_data = $profileData['data'];
         $max_file_size_conf = get_option('uploads_files_max_size');
         if( strlen( $profile_data ) > $max_file_size_conf * 1024 * 1024) {
@@ -39,6 +43,9 @@ class ProfileInstance {
         if (isset($profile_array['Version']['Patch'])) {
             $file_name = $file_name . '_' . $profile_array['Version']['Patch'];
             $type_name .= '.' . $profile_array['Version']['Patch'];
+        }
+        if( isset( $profileData['type_name'] ) ){
+            $type_name = $profileData['type_name'];
         }
         $is_bulk = false;
         if( $file_size >= get_option( 's3_bulk_treshold' ) ) {
@@ -79,7 +86,7 @@ class ProfileInstance {
             );
             $sqs = new SqsWrapper();
 
-            $sqs->sendMessage($message, $is_bulk, $delay );
+            $sqs->sendMessage($message, $is_bulk );
         }
 
         if( $validate_via_sqs ) {
@@ -176,6 +183,27 @@ class ProfileInstance {
                 ));
             }
         }
-        return array( 'status' => 'success', 'message' => '' );
+        return array( 'status' => 'success', 'message' => '', 'data' => array( 'id' => $profileData['instance_id'], 'token' => $profileData['token'] ) );
+    }
+
+    /**
+     * Used to verify that profile has 'Schedule' role
+     * @param $profileType - profile type name
+     * @return bool
+     */
+    public static function isSchedule( $profileType )
+    {
+        return 'Schedule' === $profileType;
+    }
+
+    /**
+     * @param $fieldName - database field name( e.g. 'token', 'id' )
+     * @param $fieldValue
+     * @return mixed
+     */
+    public static function getProfileBy( $fieldName, $fieldValue )
+    {
+        global $wpdb;
+        return $wpdb->get_row( $wpdb->prepare("SELECT *, '' AS content FROM wp_community_profile_instances WHERE `$fieldName` = %s ", $fieldValue ) );
     }
 }
