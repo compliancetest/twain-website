@@ -44,7 +44,7 @@ class MicroServices {
                 'tags' => $_POST['tags']
             )
         );
-        $sqs = new \SqsWrapper();
+        $sqs = new \SqsWrapper( get_option('schedule_sqs_queue_name') );
         $sqs->sendMessage( $message );
     }
 
