@@ -305,6 +305,9 @@ get_header();
         </div> 
         <div class="padding10">
             <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('trigger-message')?>" id="trigger-message-link" class="action-btn process-btn left" onclick="javascript: void(0)"><span class="p"></span><span class="t">TRIGGER MESSAGE</span></a>
+            <?php if( PricingPlan::isSupportBulk() ):?>
+                <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('trigger-schedule')?>" id="trigger-schedule-link" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn process-btn left10" onclick="javascript: void(0)"><span class="p"></span><span class="t">TRIGGER SCHEDULE</span></a>
+            <?php endif;?>
             <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('upload-message')?>" id="upload-message-link" class="action-btn process-btn left left10" onclick="javascript: void(0)"><span class="p"></span><span class="t">UPLOAD MESSAGE</span></a>
             
             <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
@@ -968,7 +971,8 @@ get_header();
     <div class="loading"></div>
     <a class="close_btn"></a>      
 </div>
-
+<!--<script src="--><?php //echo '/wp-content/themes/bp-child/js/jquery-ui-1.10.3.custom.js';?><!--" type="text/javascript"></script>-->
+<script src="<?php echo '/wp-content/themes/bp-child/js/jquery-ui-timepicker-addon.js';?>" type="text/javascript"></script>
 <?php
 get_footer();
 ?>

@@ -199,8 +199,14 @@ class PricingPlan
         return ( boolean ) $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'boolean' AND name = 'Vouchers' ", $pricingPlanId ) );
     }
 
-    public static function isSupportBulk( $pricingPlanId ){
+    public static function isSupportBulk( $pricingPlanId = false ){
         global $wpdb;
+        if( ! $pricingPlanId ){
+            $pricingPlanId = $wpdb->get_var( $wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id() ) );
+            if( ! $pricingPlanId ){
+                return false;
+            }
+        }
         return ( boolean ) $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_pricing_plans_attributes WHERE pricing_plan_id = %d AND type = 'boolean' AND name = 'Bulk' AND value = 1 ", $pricingPlanId ) );
     }
 }

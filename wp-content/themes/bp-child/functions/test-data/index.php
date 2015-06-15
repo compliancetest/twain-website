@@ -34,7 +34,16 @@ function cp_process_test_data_actions()
         }else if(wp_verify_nonce($action, 'delete-harness-instance') || wp_verify_nonce($action, 'delete-profile-instance')){
             deleteProfileTypeInstance($action);
         }else if(wp_verify_nonce($action, 'copy-harness-instance')){
-            copyProfileInstance($action);
+            $redirect = isset( $_REQUEST['return'] ) ? base64_decode( $_REQUEST['return'] ) : $_SERVER['REDIRECT_URL'];
+            $profileId = intval( $_REQUEST['id'] );
+            $result = copyProfileInstance( $profileId );
+            if( $result['status'] == 'error' ){
+                addMessage( $result['message'], 'error' );
+                return;
+            }
+            addMessage( 'Profile instance was copied.' );
+            wp_redirect( $redirect );
+            exit;
         }else if(wp_verify_nonce($action, 'download-profile-type')){
             downloadProfileType();
         }else if(wp_verify_nonce($action, 'download-profile-instance')){
@@ -46,6 +55,18 @@ function cp_process_test_data_actions()
         }else if(wp_verify_nonce($action, 'create-expanded-version')){
             createExpandedVersion( $_REQUEST['id'], $_REQUEST['factor'] );
             exit('success');
+        }else if(wp_verify_nonce($action, 'prepare_schedule')){
+            render_view( 'test-data/views/schedule-popup.phtml', (object) $_GET, true );
+        }else if(wp_verify_nonce($action, 'trigger_run')){
+            render_view( 'test-data/views/trigger.phtml', (object) $_GET, true );
+        }else if(wp_verify_nonce($action, 'save-schedule')){
+            \MicroServices\MicroServices::prepareRunRequest( intval( $_POST['profile_id'] ) );
+        }else if( wp_verify_nonce($action, 'execute-schedule') ){
+            \MicroServices\MicroServices::executeRunRequest( intval( $_POST['profile_id'] ) );
+        }else if( wp_verify_nonce($action, 'change-schedule-status') ){
+            $esb = new ManageESB();
+            $status = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);
+            exit( $status );
         }
 
 

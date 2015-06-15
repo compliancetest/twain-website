@@ -1,0 +1,62 @@
+<?php $user_products = getUserProductsAndServices(); ?>
+<div class="popup-box view-profile-type-box" style="display: none; width: 450px;" id="prepare_schedule">
+    <div class="popup-box-header radius6 noradiusbottom">Prepare a Run</div>
+    <div class="popup-box-content grid-box-body">
+        <p>Do you wish to prepare the necessary entries to run this schedule?</p>
+        <label style="width: 100px; display: block;">Product:</label>
+        <select name="product_id" class="required select field-tooltip" id="product_id" style="width: 100%;">
+            <option value=""></option>
+            <?php foreach( $user_products AS $user_product ):?>
+                <option value="<?php echo $user_product->ID;?>"><?php echo $user_product->product_name;?></option>
+            <?php endforeach;?>
+        </select>
+        <div class="space20"></div>
+        <label style="width: 100px; display: block;">Tag:</label>
+        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;">
+        <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
+        </select>
+    </div>
+    <div class="popup-box-footer radius6 noradiustop">
+        <a class="action-btn process-btn save-schedule" href="#"><span class="p"></span><span class="t">Confirm</span></a>
+        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+        <div class="clear"></div>
+    </div>
+    <a class="close_btn"></a>
+    <div class="loading loading_schedule"></div>
+</div>
+<script type="application/javascript">
+    jQuery(document).ready(function($){
+        $('.save-schedule').on('click', function(e){
+            var is_valid = true;
+            $('#schedule_tag').removeClass('input-error');
+            $('#product_id').removeClass('select-error');
+            var tags_string = $('#schedule_tag').val().trim();
+            if( tags_string.length > 0 ) {
+                var tags = tags_string.split(',');
+                $.each(tags, function (index, tag) {
+                    if (!/^[a-zA-Z0-9_. -]+$/g.test(tag) || tag.length > 30) {
+                        $('#schedule_tag').addClass('input-error');
+                        $('.validation_error').show();
+                        is_valid = false;
+                    }
+                });
+            }
+            if( ! $('#product_id').val() ){
+                $('#product_id').addClass('select-error');
+                is_valid = false;
+            }
+            if( ! is_valid ){
+                return false;
+            }
+            $('.loading_schedule').show();
+            $.ajax({
+                url: '/',
+                type: 'post',
+                data: { 'td-action' : '<?php echo wp_create_nonce('save-schedule');?>', 'tags' : tags, 'product_id' : $('#product_id').val(), 'profile_id' : '<?php echo $view->id;?>' },
+                success: function(){
+                    location.reload();
+                }
+            })
+        });
+    });
+</script>
