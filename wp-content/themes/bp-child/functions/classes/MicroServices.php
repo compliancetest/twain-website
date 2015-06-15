@@ -36,12 +36,12 @@ class MicroServices {
                     'bucket' => get_option('aws_s3_url'),
                     'key' => "profiles/validation/{$profile->token}/{$uniq_key}.json"
                 ),
-                "securityContext" => array(
-                        "username" => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id() ) ),
-                        "password" => $wpdb->get_var( $wpdb->prepare( "SELECT harness_password FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id() ) ),
-                ),
                 'product_id' => trim( $_POST['product_id'] ),
                 'tags' => $_POST['tags']
+            ),
+            "securityContext" => array(
+                "username" => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id() ) ),
+                "password" => $wpdb->get_var( $wpdb->prepare( "SELECT harness_password FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id() ) ),
             )
         );
         $sqs = new \SqsWrapper( get_option('schedule_sqs_queue_name') );
