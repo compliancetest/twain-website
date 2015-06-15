@@ -141,7 +141,9 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
                                     {
                                 ?>
                                 <?php if(count($subscriptions) > 0): ?>
-                                    <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" data-type="upload" class="edit-profile-instance-link action-btn icon-btn upload-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Upload Profile<span></span></span></a>
+                                    <?php if( ! ProfileInstance::isRun( $instance->profile_role ) ):?>
+                                        <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" data-type="upload" class="edit-profile-instance-link action-btn icon-btn upload-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Upload Profile<span></span></span></a>
+                                    <?php endif;?>
                                     <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, $instance->profile_name, true );?>" class="left10 action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
                                     <?php if( ProfileInstance::isSchedule( $instance->profile_role ) ):?>
                                             <a href="/my-profile?td-action=<?php echo wp_create_nonce('prepare_schedule')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip prepare_schedule"><span class="p"></span><span class="simple_tooltip radius6" style="width: 150px; left: -24px;">Create a Run profile from this Schedule<span></span></span></a>
@@ -149,7 +151,9 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
                                         <a href="#create-expanded-version" data-id="<?php echo $instance->id;?>" class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip create_expanded_version"><span class="p"></span><span class="simple_tooltip radius6">Create Expanded Version of this profile<span></span></span></a>
                                     <?php endif; ?>
                                     <div class="clear space5"></div>
-                                    <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
+                                    <?php if( ! ProfileInstance::isRun( $instance->profile_role ) ):?>
+                                        <a href="#edit-profile-box" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="edit-profile-instance-link action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Profile<span></span></span></a>
+                                    <?php endif; ?>
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('edit-tags')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 action-btn icon-btn tags-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Tags<span></span></span></a>
                                 <?php endif; ?>
                                 <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>

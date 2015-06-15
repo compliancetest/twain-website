@@ -23,7 +23,7 @@ function getCustomerProfileTypes($customer_id)
     if(!$community_ids)
         return array();
         
-    $query = "SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id IN (" . implode(", ", $community_ids) . ")";
+    $query = "SELECT * FROM wp_community_profile_types WHERE community_id IN (" . implode(", ", $community_ids) . ") AND is_displayed = 1 ";
     $rows = $wpdb->get_results($query);
     
     return $rows;

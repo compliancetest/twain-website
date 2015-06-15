@@ -344,7 +344,7 @@ function deleteProfileTypeInstance($action)
  * @param bool $profile_id
  * @param $fieldsToOverwrite - array - used to overwrite some profile's fields during copy process
  */
-function copyProfileInstance( $profile_id = false, $fieldsToOverwrite = false ){
+function copyProfileInstance( $profile_id = false, $fieldsToOverwrite = false, $sendSqsMessage = true ){
     global $wpdb;
 
     $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_community_profile_instances WHERE id=%d", $profile_id ), ARRAY_A);
@@ -371,7 +371,7 @@ function copyProfileInstance( $profile_id = false, $fieldsToOverwrite = false ){
             $profileData[$fieldToOverwrite] = $newFieldValue;
         }
     }
-    return ProfileInstance::save( $profileData );
+    return ProfileInstance::save( $profileData, $sendSqsMessage, false, false, true );
 }
 
 function createExpandedVersion( $id, $factor ){
