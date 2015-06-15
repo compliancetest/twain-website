@@ -32,7 +32,7 @@ class MicroServices {
                     'bucket' => get_option('aws_s3_url'),
                     'key' => "profiles/user/{$status['data']['token']}.json"
                 ),
-                'errorTo' => array(
+                'errorsTo' => array(
                     'bucket' => get_option('aws_s3_url'),
                     'key' => "profiles/validation/{$profile->token}/{$uniq_key}.json"
                 ),
