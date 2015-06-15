@@ -11,11 +11,13 @@ class MicroServices {
      */
     public static function prepareRunRequest( $profileId )
     {
+        global $wpdb;
         $profileFieldsToChange = array(
+            'type_id'      => $wpdb->get_var("SELECT id FROM wp_community_profile_types WHERE title='Run' "),
             'type_name'    => 'Run v1.0',
             'profile_role' => 'Run'
         );
-        $status = copyProfileInstance( $profileId, $profileFieldsToChange );
+        $status = copyProfileInstance( $profileId, $profileFieldsToChange, false );
         $profile = \ProfileInstance::getProfileBy( 'id', $profileId );
         $uniq_key = md5( $profile->token . mktime());
         $message = array(

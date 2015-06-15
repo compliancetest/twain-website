@@ -9,7 +9,7 @@ class ProfileInstance {
      * @param bool $tag
      * @return array
      */
-    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $tag = false ){
+    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $tag = false, $mark_as_pending = false ){
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
@@ -44,14 +44,12 @@ class ProfileInstance {
             $file_name = $file_name . '_' . $profile_array['Version']['Patch'];
             $type_name .= '.' . $profile_array['Version']['Patch'];
         }
-        if( isset( $profileData['type_name'] ) ){
-            $type_name = $profileData['type_name'];
-        }
+
         $is_bulk = false;
         if( $file_size >= get_option( 's3_bulk_treshold' ) ) {
             $is_bulk = true;
         }
-        if( $is_expanded ){
+        if( $is_expanded || $mark_as_pending ){
             $status = 'pending';
         }
         if( $validate_via_sqs && $send_sqs_message ) {
@@ -103,6 +101,13 @@ class ProfileInstance {
             $profile_description = $jsonObject->Profile->Description;
             $profile_purpose = $jsonObject->Profile->Purpose;
             $profile_role = $jsonObject->Profile->Type;
+        }
+        //
+        if( isset( $profileData['type_name'] ) ){
+            $type_name = $profileData['type_name'];
+        }
+        if( isset( $profileData['profile_role'] ) ){
+            $profile_role = $profileData['profile_role'];
         }
         if( isset( $profileData['instance_id'] ) ) {
             $data = array(
@@ -194,6 +199,16 @@ class ProfileInstance {
     public static function isSchedule( $profileType )
     {
         return 'Schedule' === $profileType;
+    }
+
+    /**
+     * Used to verify that profile has 'Run' role
+     * @param $profileType - profile type name
+     * @return bool
+     */
+    public static function isRun( $profileType )
+    {
+        return 'Run' === $profileType;
     }
 
     /**
