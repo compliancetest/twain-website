@@ -282,8 +282,9 @@ function cp_delete_transaction_log(){
         return false;
     }
     
-    $ids = $_POST['id'];
-    
+    $ids = \ClaimsConversations\ClaimsConversations::filterConversationsIds( $_POST['id'] );
+    $lIds = array();
+
     if(!$ids)
     {
         addMessage('Invalid Request!', 'error');
@@ -298,8 +299,7 @@ function cp_delete_transaction_log(){
         addMessage('Invalid Request!', 'error');
         return false;
     }
-    
-    $lIds = array();
+
     foreach($rows as $row)
     {
         $lIds[] = $row->ID;
