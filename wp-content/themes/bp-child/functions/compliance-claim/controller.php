@@ -9,14 +9,9 @@ add_action('template_redirect', 'ct_claim_certification_view');
 //Display Claim Certificate
 function ct_claim_certification_view()
 {
-    if(get_query_var('pagename') == 'claim-certificate')
-    {
+    if(get_query_var('pagename') == 'claim-certificate'){
         global $wpdb;
-        
-        //Display Claim
-        $token = get_query_var('claim');
-        //Remove .pdf from the token
-        $token = str_replace(".pdf", "", $token);
+        $token = str_replace( ".pdf", "", get_query_var('claim') );
         wp_redirect( S3Wrapper::getProductClaimLink( $token ), 301 );exit;
     }
 }
@@ -24,10 +19,7 @@ function ct_claim_certification_view()
 add_action('init', 'process_claim_actions', 100);
 function process_claim_actions()
 {
-    if(wp_verify_nonce($_REQUEST['_claimnonce'], 'edit-claim'))
-    {
-        editClaim();
-    }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'get-suite-info-for-claim')){
+    if(wp_verify_nonce($_REQUEST['_claimnonce'], 'get-suite-info-for-claim')){
         getTestSuiteInfoForClaim();
     }else if(wp_verify_nonce($_REQUEST['_claimnonce'], 'delete-claim')){
         deleteClaim();
@@ -40,16 +32,11 @@ function ct_download_certificate()
 {    
     global $wpdb;
     
-    //Display Claim
-    $token = $_GET['claim'];
-    
     //Remove .pdf from the token
-    $token = str_replace(".pdf", "", $token);
+    $token = str_replace( ".pdf", "", $_GET['claim'] );
     $certificate = S3Wrapper::getProductClaim( $token );
-    if(!$certificate)
-    {
-        echo "Invalid Request!";
-        exit;
+    if( ! $certificate ){
+        exit( "Invalid Request!" );
     }
     
 //    header("Content-type: application/pdf");
@@ -59,12 +46,8 @@ function ct_download_certificate()
     header("Pragma: no-cache");
     header("Content-Type: Application/octet-stream");
     header("Content-disposition: attachment; filename=" . $token . ".pdf");
-    
-    echo $certificate;
-    
-    //Echo PDF file
-    exit;
-    
+
+    exit( $certificate );
 }
 
 function deleteClaim()
@@ -94,6 +77,7 @@ function deleteClaim()
     {
         addMessage($wpdb->last_error, 'error');
     }else{
+        \ClaimsConversations\ClaimsConversations::deleteByClaimId( $claimID );
         //delete S3 files
         $s3 = new S3Wrapper();
         $s3->deleteObject( '/claims/products/'. $claim->token . '.pdf' );
@@ -130,10 +114,10 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
     }
     $cloud_search = new CloudSearch();
 
-    if(!$claimID) //Make Claim
-    {
+    if( ! $claimID ){
         $wpdb->insert(TABLE_CLAIM, array(
             'product_id'    =>  $productID,
+            'creator_id'    =>  get_current_user_id(),
             'organisation_id'    =>  $organisation_id,
             'suite_id'    =>  $suite_id,
             'conformance_level'    =>  $confLevel,
@@ -154,21 +138,25 @@ function _saveClaim($organisation_id, $productID, $suite_id, $confLevel, $role, 
         }
         
 
-        $wpdb->update(TABLE_CLAIM, array(
-            'claim_id'    =>  getClaimID($wpdb->insert_id, $suite_id)
-        ), array('id' => $claimID));
+        $wpdb->update(TABLE_CLAIM,
+            array(
+                'claim_id' => getClaimID( $wpdb->insert_id, $suite_id )
+            ),
+            array( 'id' => $claimID ) );
         $cloud_search->cloud_search_update_claim( $claimID );
 
 
     }else{  //Edit Claim
-        $wpdb->update(TABLE_CLAIM, array(
-            'suite_id'    =>  $suite_id,
-            'conformance_level'    =>  $confLevel,
-            'role'    =>  $role,
-            'status'    =>  $status,
-            'last_updated'    =>  date('Y-m-d H:i:s')
-        ), array('id' => $claim->id));
-        
+        $wpdb->update( TABLE_CLAIM,
+            array(
+                'suite_id'          =>  $suite_id,
+                'conformance_level' =>  $confLevel,
+                'role'              =>  $role,
+                'status'            =>  $status,
+                'last_updated'      =>  date('Y-m-d H:i:s')
+            ),
+            array('id' => $claim->id)
+        );
         $cloud_search->cloud_search_update_claim( $claim->id );
     }
     
@@ -445,15 +433,15 @@ function createClaimPDF($claim_id, $planID )
     $esb = new ManageESB();
     $testCaseStatuses = $esb->getCaseStatus($plan->organisation_subscription_id, $suite->id);
     
-    $query = ManageESB::$esbdb->prepare("SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG,m.S3_PAYLOAD_LOCATION AS MSG_URL, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
+    $query = ManageESB::$esbdb->prepare("SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG, c.ID AS CONVERSATION_ID, m.S3_PAYLOAD_LOCATION AS MSG_URL, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
              "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
              "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
              "LEFT JOIN " . $esb->table_product_configuration . " AS p ON p.PRODUCT_ID=c.PRODUCT_ID " .
              "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
              "LEFT JOIN " . $esb->table_test_case_configuration . " AS cc ON c.TEST_CASE_CONFIGURATION_ID=cc.ID " .                 
              " WHERE c.AUDIT_RECORD=1 AND c.ORGANISATION_SUBSCRIPTION_ID=%d AND sc.TEST_SUITE_WP_ID=%d AND p.PRODUCT_WP_ID=%d", $plan->organisation_subscription_id, $suite->id, $plan->product_id);
-    
-    $esbResults = ManageESB::$esbdb->get_results($query);        
+
+    $esbResults = ManageESB::$esbdb->get_results($query);
 
     //Classify the results by Scenario
     $results = array();
@@ -478,7 +466,7 @@ function createClaimPDF($claim_id, $planID )
                     if( ! isset( $row->messages ) ){
                         $row->messages = array();
                     }
-                    $row->messages[] = array( 'outcome' => $erow->OUTCOME, 'msg_id' => $erow->MSG_ID, 'msg' => $erow->MSG, 'msg_url' => $erow->MSG_URL  );
+                    $row->messages[] = array( 'outcome' => $erow->OUTCOME, 'msg_id' => $erow->MSG_ID, 'msg' => $erow->MSG, 'msg_url' => $erow->MSG_URL, 'conversation_id' => $erow->CONVERSATION_ID  );
                 }
             }
         }
@@ -637,7 +625,7 @@ function createClaimPDF($claim_id, $planID )
                     $data = $testCases[$i]->messages[$j];
                     
                     $general_cases_table_html .= '<td class="test-outcome">' . (isset($data['outcome']) ? $data['outcome'] : '-') . '</td>';    
-                    
+                    \ClaimsConversations\ClaimsConversations::add( array( 'claim_id' => $claim_id, 'conv_id' => $data['conversation_id'] ) );
                     $message = $esb->getMessageEnvelope( $data['msg_id'] );
                     
                     $fileName = getcwd() . '/wp-content/uploads/' . get_the_title($testCases[$i]->ID) . '_' . $data['msg_id'] . '.xml';
@@ -703,124 +691,6 @@ function createClaimPDF($claim_id, $planID )
     //============================================================+
 }
 
-function editClaim()
-{
-    $productID = $_GET['product_id'];
-    $claimID = isset($_GET['id']) ? $_GET['id'] : null;
-    
-    $user_id = get_current_user_id();
-    
-    $claim = new ComplianceClaim($claimID);
-    $claim->load();
-    
-    $is_allowed = false;
-    if(!$claimID && can_make_compliance_claim($productID))
-        $is_allowed = true;
-    else if(can_edit_compliance_claim($claimID))
-        $is_allowed = true;
-    
-    if(!$is_allowed)
-    {
-        ?>
-        <div class="popup-box" id="make-claim-box" style="display: none;">
-            <div class="popup-box-header radius6 noradiusbottom">Permission Error!</div>
-            <div class="popup-box-content">    
-                You are not allowed to <?php echo !$claimID ? 'make a claim to the product.' : 'edit the claim.'?>
-            </div>
-            <div class="popup-box-footer radius6 noradiustop">                        
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-                <div class="clear"></div>
-            </div>
-            <a class="close_btn"></a>                
-            <div class="loading" style="display: none;"></div>
-        </div>
-        <?php
-        exit;
-    }
-    
-    
-    $product = new ProductAndService($productID);
-    $product->load();
-    $suites = getUserTestSuites();
-    
-    $suite = new TestSuite($claim->suite_id);
-    $levels = $suite->loadConformanceLevel();
-    $roles = $suite->loadRoles();
-    ?>
-    <div class="popup-box" id="make-claim-box" style="display: none;">
-        <form name="makeClaimForm" id="makeClaimForm" action="" method="post">
-            <div class="popup-box-header radius6 noradiusbottom">Compliance Claim Form</div>
-            <div class="popup-box-content grid-box-body">    
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Suite</label>
-                        <select class="select" name="suite_id" id="suite_id">                            
-                            <option value="">Select a Suite</option>
-                            <?php foreach($suites as $s){ ?>
-                            <option value="<?php echo $s->ID?>" <?php echo $claim->suite_id == $s->ID ? 'selected="selected"' : ''?>><?php echo get_the_title($s->ID)?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="grid-cell left15">
-                        <label>Level</label>
-                        <select class="select" name="level" id="level">
-                            <?php if(!$levels){ ?>
-                                <option value="">Select a Level</option>
-                            <?php 
-                                }else{ 
-                                    foreach($levels as $l){
-                            ?>
-                                <option value="<?php echo $l['code']?>" <?php echo $claim->conformance_level == $l['code'] ? 'selected="selected"' : ''?>><?php echo $l['code']?></option>
-                            <?php 
-                                    }
-                                } 
-                                
-                            ?>
-                        </select>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="field-row">
-                    <div class="grid-cell">
-                        <label>Role</label>
-                        <select class="select" name="role" id="role">
-                            <?php if(!$roles){ ?>
-                                <option value="">Select a Role</option>
-                            <?php 
-                                }else{ 
-                                    foreach($roles as $r){
-                            ?>
-                                <option value="<?php echo $r['name']?>" <?php echo $claim->role == $r['name'] ? 'selected="selected"' : ''?>><?php echo $r['name']?></option>
-                            <?php 
-                                    }
-                                } 
-                                
-                            ?>
-                        </select>
-                    </div>
-                    <div class="grid-cell left15">
-                        <label>&nbsp;</label>
-                        <input type="checkbox" name="agree_obligation" id="agree_obligation" value="1" <?php echo $claim->id ? 'checked="checked"' : '' ?> /> I agree to the <a href="#obligation-box" id="show-opligation-box" cp-type="inline" rel="custom-popup">Obligation</a>.
-                    </div>
-                    <div class="clear"></div>
-                </div>            
-            </div>
-            <div class="popup-box-footer radius6 noradiustop">                        
-                <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SUBMIT</span></a>
-                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-                <div class="clear"></div>
-            </div>
-            <a class="close_btn"></a>                
-            <div class="loading1" style="display: none;"></div>
-            <input type="hidden" name="id" value="<?php echo $claimID?>" />
-            <input type="hidden" name="product_id" value="<?php echo $productID?>" />
-            <?php wp_nonce_field('make-claim', '_claimnonce'); ?>
-        </form>
-    </div>
-
-    <?php
-    exit;
-}
 
 function getTestSuiteInfoForClaim()
 {

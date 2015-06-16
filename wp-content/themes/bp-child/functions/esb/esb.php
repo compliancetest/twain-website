@@ -415,7 +415,7 @@ class ManageESB
             $query .= $orderQuery;
         }        
         $rows = ManageESB::$esbdb->get_results($query);
-        
+
         //Getting Messages
         $ids = array();
         if( is_iterable( $rows) ){

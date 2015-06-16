@@ -30,13 +30,12 @@ function certifyPlan()
     $plan->load();
     
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/test-suite-coverage";
-    $return_success = "/my-products";
+    $return_success = "/my-products/";
     
     $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}users_subscriptions WHERE user_id=%d AND parent_id=%d", $user_id, $plan->organisation_subscription_id);
     $user_subscription = $wpdb->get_row($query);
     
-    if(!$plan->load() || !$user_subscription)
-    {
+    if( ! $plan->load() || ! $user_subscription ){
         addMessage('Permission Denied!', 'error');
         wp_redirect($return);
         exit;
@@ -93,10 +92,10 @@ function certifyPlan()
         $query = $wpdb->prepare("SELECT id FROM " . $wpdb->prefix . "compliance_claims WHERE product_id=%d AND suite_id=%d AND conformance_level=%s AND role=%s", $plan->product_id, $plan->suite_id, $level, $role);
         $oId = $wpdb->get_var($query);
         if (!$oId) {
-            if(!_saveClaim($plan->organisation_id, $plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId, $planID, $has_exclusions )) {
+            if( ! _saveClaim( $plan->organisation_id, $plan->product_id, $plan->suite_id, $level, $role, 'Verified', $oId, $planID, $has_exclusions ) ) {
                 wp_redirect($return);
             } else {
-                //Delete Plan
+                //Soft delete plan
                 $wpdb->update( "wp_test_plans",
                     array(
                         'is_deleted'   => 1,
@@ -106,8 +105,6 @@ function certifyPlan()
                         'id' => $planID
                     )
                 );
-                //Delete Exclude Plan ID
-//                $wpdb->query( $wpdb->prepare("DELETE FROM wp_test_plans_excluded_cases WHERE test_plan_id = %d ", $planID ) );
 
                 $cloud_search = new CloudSearch();
                 $cloud_search->cloud_search_delete_item( $planID, 'test_plan' );
@@ -152,7 +149,6 @@ function deletePlan()
     }
 
     //Delete Exclude Items
-    //$wpdb->delete($wpdb->prefix . "test_plans_excluded_cases", array('test_plan_id' => $planID));
     $wpdb->update( "wp_test_plans",
         array(
             'is_deleted'   => 1,

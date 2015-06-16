@@ -89,6 +89,8 @@ require_once(THE_FUNCTION . '/classes/ProfileInstance.php');
 
 require_once(THE_FUNCTION . '/classes/ProfileType.php');
 
+require_once(THE_FUNCTION . '/classes/ClaimsConversations.php');
+
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');
 require_once(THE_FUNCTION . '/test-case/controller.php');
