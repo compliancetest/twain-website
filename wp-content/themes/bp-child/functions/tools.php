@@ -1053,6 +1053,7 @@ function ct_duplicate_data()
                 </table>
             </form>
         </div>
+
         <h2>Update TEST_CASE_CONFIGURATION table</h2>
         <div>
             <form action="" method="post">
@@ -1099,6 +1100,128 @@ function ct_duplicate_data()
                 </table>
             </form>
         </div>
+
+        <h2>Populate wp_compliance_claims_conversations table</h2>
+        <div>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('populate_wp_claim_conversations')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Populate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'populate_wp_claim_conversations')): ?>
+                        <tr>
+                            <td>
+                                <i>
+                                    <?php
+                                        global $wpdb;
+                                        $claims = $wpdb->get_results("SELECT * FROM wp_compliance_claims");
+                                        foreach( $claims AS $claim ){
+
+                                            //trying to find test plan what was used to create claim
+                                            $testPlan = $wpdb->get_row("SELECT * FROM wp_test_plans
+                                                                          WHERE is_deleted = 1 AND product_id = ".$claim->product_id." AND suite_id = ".$claim->suite_id."
+                                                                          AND level = '".$claim->conformance_level."' AND role = '".$claim->role."' AND deleted_date
+                                                                          LIKE ('".$claim->created_date."%')");
+                                            if( $testPlan ) {
+                                                //copy-paste from createClaimPDF function
+
+                                                $suite = new TestSuite($claim->suite_id);
+                                                $suite->load();
+
+                                                $product = new ProductAndService($claim->product_id);
+                                                $product->load();
+
+                                                $post = get_post($claim->suite_id);
+
+                                                //Getting Test Cases
+                                                $args = array(
+                                                    'post_type' => 'test-case',
+                                                    'posts_per_page' => -1,
+                                                    'orderby' => 'title',
+                                                    'order' => 'ASC',
+                                                    'meta_query' => array('relation' => 'and')
+                                                );
+                                                //Add Test Suite ID
+                                                $args['meta_query'][] = array('key' => 'test_suite', 'value' => $claim->suite_id, 'compare' => '=');
+
+                                                $args['meta_query'][] = array(
+                                                    'key' => 'hide_case',
+                                                    'value' => 0,
+                                                    'compare' => '='
+                                                );
+                                                $args['meta_query'][] = array(
+                                                    'key' => 'conformance_level_' . $suite->id,
+                                                    'value' => TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE,
+                                                    'compare' => '!='
+                                                );
+
+                                                $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => cp_explode($claim->role), 'compare' => 'IN');
+                                                $args['meta_query'][] = array('key' => 'conformance_level_' . $claim->suite_id, 'value' => cp_explode($claim->conformance_level), 'compare' => 'IN');
+
+
+                                                $get_query = new WP_Query($args);
+                                                $get_query->post = $post;
+                                                //Add Order by Scenaro
+                                                $get_query->set('suppress_filters', false);
+                                                add_filter('posts_join_paged', 'add_scenario_join_query', 100, 2);
+                                                add_filter('posts_orderby', 'add_scenario_orderby_query', 100, 2);
+                                                add_filter('posts_fields_request', 'add_scenario_fields_query', 100, 2);
+                                                $testCases = $get_query->get_posts();
+
+                                                //Remove Filters
+                                                remove_filter('posts_join_paged', 'add_scenario_join_query');
+                                                remove_filter('posts_orderby', 'add_scenario_orderby_query');
+                                                remove_filter('posts_fields_request', 'add_scenario_fields_query');
+
+                                                $plan = new TestPlan( $testPlan->id );
+                                                $plan->load();
+
+                                                $esb = new ManageESB();
+                                                $testCaseStatuses = $esb->getCaseStatus($plan->organisation_subscription_id, $suite->id);
+
+                                                $query = ManageESB::$esbdb->prepare("SELECT m.ID as MSG_ID, m.PAYLOAD AS MSG, c.ID AS CONVERSATION_ID, m.S3_PAYLOAD_LOCATION AS MSG_URL, ots.MESSAGE_OUTCOME_LABEL AS OUTCOME, cc.TEST_CASE_WP_ID as TEST_CASE_ID FROM " . $esb->table_conversation_metadata . " AS c " .
+                                                    "LEFT JOIN " . $esb->table_message_metadata . " AS m ON c.ID=m.MSH_CONVERSATION_ID " .
+                                                    "LEFT JOIN " . $esb->table_message_outcome_status . " AS ots ON c.MSH_TEST_OUTCOME_STATUS_ID=ots.ID " .
+                                                    "LEFT JOIN " . $esb->table_product_configuration . " AS p ON p.PRODUCT_ID=c.PRODUCT_ID " .
+                                                    "LEFT JOIN " . $esb->table_test_suite_configuration . " AS sc ON c.TEST_SUITE_CONFIGURATION_ID=sc.ID " .
+                                                    "LEFT JOIN " . $esb->table_test_case_configuration . " AS cc ON c.TEST_CASE_CONFIGURATION_ID=cc.ID " .
+                                                    " WHERE c.AUDIT_RECORD=1 AND c.ORGANISATION_SUBSCRIPTION_ID=%d AND sc.TEST_SUITE_WP_ID=%d AND p.PRODUCT_WP_ID=%d", $plan->organisation_subscription_id, $suite->id, $plan->product_id);
+
+                                                $esbResults = ManageESB::$esbdb->get_results($query);
+
+                                                //Classify the results by Scenario
+                                                $results = array();
+                                                foreach ($testCases as $row) {
+                                                    if (!isset($testCaseStatuses[$claim->suite_id][$claim->product_id][$row->ID])) {
+                                                        $all_patch_versions = $wpdb->get_results($wpdb->prepare("SELECT case_id FROM wp_test_cases WHERE family_mark = ( SELECT family_mark FROM wp_test_cases WHERE case_id = %d ) ", $row->ID));
+                                                        foreach ($all_patch_versions AS $patch_version) {
+                                                            if (isset($testCaseStatuses[$claim->suite_id][$claim->product_id][$patch_version->case_id])) {
+                                                                $row->ID = $patch_version->case_id;
+                                                            }
+                                                        }
+                                                    }
+                                                    if (isset($esbResults)) {
+                                                        foreach ($esbResults as $erow) {
+                                                            if ($erow->TEST_CASE_ID == $row->ID) {
+                                                               \ClaimsConversations\ClaimsConversations::add( array( 'claim_id' => $claim->id, 'conv_id' => $erow->CONVERSATION_ID ) );
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                </i>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
+
     </div>
     <?php
 }

@@ -356,7 +356,16 @@ get_header();
                         foreach($results as $row){
                          ?>
                            <div class="tr">
-                               <div class="td td-chk tocenter"><input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" /></div>
+                               <div class="td td-chk tocenter">
+                                    <?php if( \ClaimsConversations\ClaimsConversations::doesConversationExists( $row->ID ) ):?>
+                                        <span class="has-tooltip">
+                                            <input type="checkbox" disabled="disabled" class="field-tooltip" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>"/>
+                                            <span class="simple_tooltip radius6" style="top: -14px; left: -48px; width: 200px;">This transaction cannot be modified as it is included in a claim.<span></span></span>
+                                        </span>
+                                    <?php else:?>
+                                        <input type="checkbox" name="id[]" id="id<?php echo  $row->ID?>" value="<?php echo $row->ID?>" />
+                                    <?php endif;?>
+                               </div>
                                <div class="td td-product">
                                    <a href="#" class="view-messages-link has-tooltip">
                                        <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
@@ -858,7 +867,7 @@ get_header();
         })
         
         jQuery('.chk-all').click(function(){
-            jQuery('#log-result-table .tbody input[type="checkbox"]').prop('checked', this.checked);
+            jQuery('#log-result-table .tbody input[type="checkbox"]:not(:disabled)').prop('checked', this.checked);
         })
         jQuery('#log-result-table .view-messages-link').click(function(){
             jQuery(this).parents('.tr').find('.sub-table').animate({'height': 'toggle'});

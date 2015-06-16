@@ -10,13 +10,14 @@ function cp_edit_transaction_log(){
         return '<p class="message error">Permission Denied!</p>';
     
     $ids = $_POST['id'];
-    
+
+    $ids = \ClaimsConversations\ClaimsConversations::filterConversationsIds( $ids );
     if(!$ids)
     {
         $rows = array();    
     }else{
         $esb = new ManageESB();
-        $rows =$esb->getTransactionLogByID($ids);
+        $rows = $esb->getTransactionLogByID($ids);
     }
     
     if($rows)
