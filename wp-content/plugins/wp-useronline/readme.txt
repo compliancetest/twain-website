@@ -1,41 +1,43 @@
 === WP-UserOnline ===
-Contributors: GamerZ, scribu
-Tags: useronline, usersonline, wp-useronline, online, users, user, ajax, widget
-Requires at least: 3.1
-Tested up to: 3.5
-Stable tag: 2.82
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Contributors: GamerZ, scribu  
+Donate link: http://lesterchan.net/site/donation/  
+Tags: useronline, usersonline, wp-useronline, online, users, user, ajax, widget  
+Requires at least: 3.1  
+Tested up to: 4.2  
+Stable tag: 2.85  
+License: GPLv2 or later  
+License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
 Enable you to display how many users are online on your Wordpress blog with detailed statistics.
 
 == Description ==
-
-**PHP 5 is required since version 2.60.**
-
 This plugin enables you to display how many users are online on your Wordpress site, with detailed statistics of where they are and who they are (Members/Guests/Search Bots).
 
-Links: [Plugin News](http://scribu.net/wordpress/wp-useronline) | [Translating](http://scribu.net/wordpress/translating-plugins.html)
+= Build Status =
+[![Build Status](https://travis-ci.org/lesterchan/wp-useronline.svg?branch=master)](https://travis-ci.org/lesterchan/wp-useronline)
+
+= Development =
+[https://github.com/lesterchan/wp-useronline](https://github.com/lesterchan/wp-useronline "https://github.com/lesterchan/wp-useronline")
+
+= Credits =
+* Plugin icon by [Freepik](http://www.freepik.com) from [Flaticon](http://www.flaticon.com)
+
+= Donations =
+I spent most of my free time creating, updating, maintaining and supporting these plugins, if you really love my plugins and could spare me a couple of bucks, I will really appreciate it. If not feel free to use it without any obligations.
 
 == Installation ==
-
 You can either install it automatically from the WordPress admin, or do it manually:
 
 1. Unzip the archive and put the `wp-useronline` folder into your plugins folder (/wp-content/plugins/).
 1. Activate the plugin from the Plugins menu.
 
-= Usage =
-
-**General Usage (With Widget)**
-
+= General Usage (With Widget) =
 1. Go to `WP-Admin -> Appearance -> Widgets`
 1. The widget name is <strong>UserOnline</strong>.
 1. Scroll down for instructions on how to create a *UserOnline Page*.
 
-
-**General Usage (Without Widget)**
-
-Open `wp-content/themes/<YOUR THEME NAME>/sidebar.php` and add Anywhere:
+= General Usage (Without Widget) =
+* Open `wp-content/themes/<YOUR THEME NAME>/sidebar.php` and add Anywhere:
 
 `
 <?php if (function_exists('users_online')): ?>
@@ -43,59 +45,66 @@ Open `wp-content/themes/<YOUR THEME NAME>/sidebar.php` and add Anywhere:
 <?php endif; ?>
 `
 
-**UserOnline Page**
-
+= Creating A UserOnline Page =
 1. Go to `WP-Admin -> Pages -> Add New`
 1. Type any title you like in the post's title area
-1. If you **ARE** using nice permalinks, after typing the title, WordPress will generate the permalink to the page. You will see an 'Edit' link just beside the permalink.
+1. If you ARE using nice permalinks, after typing the title, WordPress will generate the permalink to the page. You will see an 'Edit' link just beside the permalink.
 1. Click 'Edit' and type in `useronline` in the text field and click 'Save'.
 1. Type `[page_useronline]` in the post's content area
 1. Click 'Publish'
 
-If you **ARE NOT** using nice permalinks, you need to go to `WP-Admin -> Settings -> UserOnline` and under 'UserOnline URL', you need to fill in the URL to the UserOnline Page you created above.
+If you ARE NOT using nice permalinks, you need to go to `WP-Admin -> Settings -> UserOnline` and under 'UserOnline URL', you need to fill in the URL to the UserOnline Page you created above.
 
-**UserOnline Stats (Outside WP Loop)**
+== Screenshots ==
 
-To Display *Most Number Of Users Online* use:
+1. Admin - Dashboard's Right Now
+2. UserOnline Page
+3. Admin - Settings Page
 
+== Frequently Asked Questions ==
+
+= To Display Most Number Of Users Online =
+* Use:
 `
 <?php if (function_exists('get_most_users_online')): ?>
    <p>Most Users Ever Online Is <?php echo get_most_users_online(); ?> On <?php echo get_most_users_online_date(); ?></p>
 <?php endif; ?>
 `
 
-To Display *Users Browsing Site* use:
-
+= To Display Users Browsing Site =
+* Use:
 `
 <?php if (function_exists('get_users_browsing_site')): ?>
    <div id="useronline-browsing-site"><?php echo get_users_browsing_site(); ?></div>
 <?php endif; ?>
 `
 
-To Display *Users Browsing A Page* use:
-
+= To Display Users Browsing A Page =
+* Use:
 `
 <?php if (function_exists('get_users_browsing_page')): ?>
    <div id="useronline-browsing-page"><?php echo get_users_browsing_page(); ?></div>
 <?php endif; ?>
 `
 
-== Screenshots ==
-
-1. Right Now text
-2. Admin page
-3. Settings page
-
-== Frequently Asked Questions ==
-
 = Error on activation: "Parse error: syntax error, unexpected..." =
 
 Make sure your host is running PHP 5. The only foolproof way to do this is to add this line to wp-config.php (after the opening `<?php` tag):
 
 `var_dump(PHP_VERSION);`
-<br>
 
 == Changelog ==
+= 2.85 =
+* NEW: Uses WordPress native uninstall.php
+
+= 2.84 =
+* NEW: Bump to 4.0
+
+= 2.83 =
+* Show user agent when hovering over IP, instead of address lookup
+* Use local time for UserOnline Page
+* Fixed 'Strict Standards: Non-static method' warnings
+* Update scb Framework
 
 = 2.82 =
 * show most recent visitors first
@@ -244,4 +253,3 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * new: Page Title Added To wp-useronline.php
 * new: Added Extra Bots, Credit To Greg Perry (http://www.gregrperry.com/)
 * fixed: Cleaner Codes
-

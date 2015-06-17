@@ -3,9 +3,9 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, docs, wiki, documents, collaboration
 Requires at least: WordPress 3.3, BuddyPress 1.5
-Tested up to: WordPress 3.8, BuddyPress 1.9
-Stable tag: 1.5.6
- 
+Tested up to: WordPress 4.0, BuddyPress 2.1.1
+Stable tag: 1.8.5
+
 Adds collaborative Docs to BuddyPress.
 
 == Description ==
@@ -32,6 +32,76 @@ This plugin is in active development. For feature requests and bug reports, visi
 1. Sit back and watch the jack roll in
 
 == Changelog ==
+
+= 1.8.5 =
+* Fixed permalinks for child Docs
+* More fixes for JS dependency and load order
+
+= 1.8.4 =
+* Improve dependency logic when loading JS files
+
+= 1.8.3 =
+* Fix conflict with Events Organizer and certain other plugins using the 'pre_get_posts' hook
+* Moar filters
+
+= 1.8.2 =
+* Fix performance issue related to the 'check_is_protected()' check for Doc attachments
+* Fix bug that caused Docs tab to be enabled for groups in some situations where it was not intended
+* Avoid fatal errors if loading Groups integration in an unorthodox order
+
+= 1.8.1 =
+* Replace the missing Link feature in the rich text editor with WP's custom link plugin
+* Fix bug that could allow non-authenticated user to access /edit page in some cases
+* Ensure that the 'js' and 'no-js' body classes work properly across themes
+
+= 1.8.0 =
+* Settings boxes default to closed on existing Docs, simplifying the interface, especially on mobile devices
+* Improved handling of permissions for uploading attachments
+* Overhauled internal capabilities system, for better reliability and customization
+* Use submitted values to rerender page after a failed create/edit action
+* Better protection against comment spam
+* Better suggestions for default access settings when changing Doc group associations
+* Fix wikitext-style [[links]] when pointing to non-existent Docs
+* Better localization for some strings as used in Javascript
+
+= 1.7.1 =
+* Don't run document protection check on AJAX calls
+* Fix PHP notice when compiling group terms
+* Force theme compatibility mode on User tabs for themes that don't use it for other Docs template
+* Fix bug that caused Admins not to meet the "Moderator" minimum role
+* Fix potential bug related to overwriting autosave drafts
+
+= 1.7.0 =
+* Fix incorrect function usage when generating htaccess files
+* Correct some permissions logic that caused Create button to be shown to some logged-out users
+* More reliable redirection when attempting to access a protected Doc
+* Better compatibility with other plugins using the WP Heartbeat API
+* Use tag name rather than slug when displaying tags in directory filters
+* Improved compatibility with BuddyPress 2.0 metadata functions
+* Refactored activity action generation to work with BP 2.0's new dynamic system
+* When group is hidden, group association is no longer advertised in the activity action
+
+= 1.6.1 =
+* Fix a bug where group associations could be lost when Docs were edited by non-admins
+* Add a filter for auto-generated Apache attachment rewrite rules
+* Better error notice for Apache users with AllowOverride issues
+* Improved layout of attachment drawer
+* Improved appearance and localizability for "and x more" tags link
+* More reliable toggling of settings during group creation
+* Fix bug that prevented edit lock from being cleared on doc save
+
+= 1.6.0 =
+* Overhaul of the way group/user tag clouds work
+* Improved support for attachments on nginx and IIS
+* Improved doc edit locking mechanisms
+* Improved appearance on devices of various sizes
+* Support for WordPress 3.9 and TinyMCE 4.x
+
+= 1.5.7 =
+* Improve appearance of row actions on mobile devices
+* Improve appearance of tags filter on IE < 9
+* Fix bug introduced in BP 1.9.2 related to the display of comments
+* Update ru_RU
 
 = 1.5.6 =
 * Allow current filter to be toggled by reclicking filter name
@@ -180,7 +250,7 @@ This plugin is in active development. For feature requests and bug reports, visi
 * Fixes bug that prevented front-end doc deletion
 * Removes temporarily non-functional doc counts from group tabs
 
-= 1.2.3 = 
+= 1.2.3 =
 * Fixes bug with bp-pages
 
 = 1.2.2 =

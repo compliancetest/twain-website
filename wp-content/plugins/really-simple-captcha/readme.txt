@@ -2,9 +2,9 @@
 Contributors: takayukister
 Donate link: http://contactform7.com/donate/
 Tags: captcha
-Requires at least: 3.5
-Tested up to: 3.6
-Stable tag: 1.7
+Requires at least: 3.9
+Tested up to: 4.1
+Stable tag: 1.8.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,7 +83,7 @@ Really Simple CAPTCHA needs GD and FreeType library installed on your server. As
 
 Also, make the temporary file folder writable. The location of the temporary file folder is managed by the instance variable `tmp_dir` of ReallySimpleCaptcha class. Note that the setting varies depending on the calling plugin. For example, Contact Form 7 uses `wp-contents/uploads/wpcf7_captcha` as the temporary folder basically, but it can use different folder depending on your settings.
 
-If you have any further questions, please submit them [to the support forum](http://wordpress.org/tags/really-simple-captcha?forum_id=10#postform).
+If you have any further questions, please submit them [to the support forum](http://wordpress.org/support/plugin/really-simple-captcha).
 
 == Screenshots ==
 
@@ -91,33 +91,12 @@ If you have any further questions, please submit them [to the support forum](htt
 
 == Changelog ==
 
-= 1.7 =
+= 1.8.0.1 =
 
-* The required WordPress version changed to 3.5 and higher.
-* Remove spaces from response automatically as some users misthink there are spaces between letters.
+* The required WordPress version changed to 3.9 and higher.
+* Tested on WordPress 4.1.
 
-= 1.6 =
+= 1.8 =
 
-* Bundled font changed to Gentium Basic 1.1.
-* Some workarounds for infrequently reported problems on Windows server.
-* Do temp file cleanup every time before generating CAPTCHA image.
-
-= 1.5 =
-
-* The required WordPress version changed to 3.2 and higher.
-* Use plain text file as answer file (again). This time, hash value generated with hash_hmac() is stored in the file.
-
-= 1.4 =
-
-* Reverted answer file to PHP. As plain text file is visible from client side, that's not good.
-
-= 1.3 =
-
-* Use plain text file as answer file.
-
-= 1.2 =
-* File name sanitization added.
-
-= 1.1 =
-* The required WordPress version changed to 2.8 and higher.
-* cleanup() method added.
+* The required WordPress version changed to 3.7 and higher.
+* Introduce normalize_path() to normalize file paths on different file systems.

@@ -108,7 +108,7 @@ class UserOnline_Template {
 
 	private static $cache = array();
 
-	function compact_list( $type, $output = 'html', $page_url = '') {
+	static function compact_list( $type, $output = 'html', $page_url = '') {
 		UserOnline_Core::$add_script = true;
 
 		if ( !isset( self::$cache[$type] ) ) {
@@ -183,7 +183,7 @@ class UserOnline_Template {
 		return $output;
 	}
 
-	function detailed_list( $counts, $user_buckets, $nicetexts ) {
+	static function detailed_list( $counts, $user_buckets, $nicetexts ) {
 		UserOnline_Core::$add_script = true;
 
 		if ( $counts['user'] == 0 )
@@ -208,7 +208,7 @@ class UserOnline_Template {
 			foreach ( $users as $user ) {
 				$nr = number_format_i18n( $i++ );
 				$name = self::format_name( $user );
-				$user_ip = self::format_ip( $user->user_ip );
+				$user_ip = self::format_ip( $user );
 				$date = self::format_date( $user->timestamp, true );
 
 				if ( current_user_can( 'edit_users' ) || false === strpos( $user->page_url, 'wp-admin' ) ) {
@@ -224,36 +224,39 @@ class UserOnline_Template {
 		return $output;
 	}
 
-	private function format_link($url, $title) {
+	static private function format_link($url, $title) {
 		if ( !empty($url) )
-			return '[' . html_link( esc_url($url), $title ) . ']';
+			return '[' . html_link( $url, $title ) . ']';
 
 		return '';
 	}
 
-	function format_ip( $ip ) {
-		if ( current_user_can( 'edit_users' ) && !empty( $ip ) && $ip != 'unknown' )
+	static function format_ip( $user ) {
+		$ip = $user->user_ip;
+
+		if ( current_user_can( 'edit_users' ) && !empty( $ip ) && $ip != 'unknown' ) {
 			return
 			html( 'span', array('dir' => 'ltr'),
 				html( 'a', array(
 					'href' => 'http://whois.domaintools.com/' . $ip,
-					'title' => gethostbyaddr( $ip ),
+					'title' => $user->user_agent
 				), $ip )
 			);
+		}
 	}
 
-	function format_date( $date, $mysql = false ) {
+	static function format_date( $date, $mysql = false ) {
 		if ( $mysql )
 			return mysql2date( sprintf( __( '%s @ %s', 'wp-useronline' ), get_option( 'date_format' ), get_option( 'time_format' ) ), $date, true );
 
 		return date_i18n( sprintf( __( '%s @ %s', 'wp-useronline' ), get_option( 'date_format' ), get_option( 'time_format' ) ), $date );
 	}
 
-	function format_name( $user ) {
+	static function format_name( $user ) {
 		return apply_filters( 'useronline_display_user', esc_html( $user->user_name ), $user );
 	}
 
-	function format_count( $count, $user_type, $template = false ) {
+	static function format_count( $count, $user_type, $template = false ) {
 		$i = ( $count == 1 ) ? '' : 's';
 		$string = UserOnline_Core::$options->naming[$user_type . $i];
 
@@ -265,18 +268,20 @@ class UserOnline_Template {
 		return str_ireplace( '%USERS%', $output, $template );
 	}
 
-	function format_most_users() {
+	static function format_most_users() {
 		return sprintf( __( 'Most users ever online were <strong>%s</strong>, on <strong>%s</strong>', 'wp-useronline' ),
 			number_format_i18n( get_most_users_online() ),
 			get_most_users_online_date()
 		);
 	}
 
-	function get_counts( $buckets ) {
+	static function get_counts( $buckets ) {
 		$counts = array();
 		$total = 0;
-		foreach ( array( 'member', 'guest', 'bot' ) as $user_type )
-			$total += $counts[$user_type] = count( @$buckets[$user_type] );
+		foreach ( array( 'member', 'guest', 'bot' ) as $user_type ) {
+			$count = isset( $buckets[$user_type] ) ? count( @$buckets[$user_type] ) : 0;
+			$total += $counts[$user_type] = $count;
+		}
 
 		$counts['user'] = $total;
 
