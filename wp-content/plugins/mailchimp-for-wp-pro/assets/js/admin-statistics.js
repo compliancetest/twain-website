@@ -1,30 +1,30 @@
 (function($) {
+	'use strict';
 
-	plotGraph();
+	/**
+	 * Variables
+	 */
+	var $lineToggles = $("#mc4wp-graph-line-toggles :input");
+	var $range = $(document.getElementById('mc4wp-graph-range'));
+	var $customRangeOptions = $(document.getElementById('mc4wp-graph-custom-range-options'));
+	var previousPoint;
+	var $graph = $(document.getElementById('mc4wp-graph'));
 
-	// hardcode colors
-	var i = 0;
-    $.each(mc4wp_statistics_data, function(key, val) {
-        val.color = i;
-        ++i;
-    });
-
-	
+	/**
+	 * Functions
+	 */
 	function plotGraph() {
 		var graphData = [];
 
-		$("#mc4wp-graph-line-toggles :input:checked").each(function() {
-			if($(this).is(':checked')) {
-				console.log(mc4wp_statistics_data[$(this).val()]);
-				graphData.push(mc4wp_statistics_data[$(this).val()]);
-			}
+		$lineToggles.filter(":checked").each(function() {
+			graphData.push(mc4wp_statistics_data[$(this).val()]);
 		});
 
-		$.plot( 
-			"#mc4wp-graph",
+		$.plot(
+			$graph,
 			graphData,
 			{
-				xaxis: { 
+				xaxis: {
 					mode: "time",
 					//min: startDate.getTime(),
 					//max: endDate.getTime(),
@@ -33,7 +33,7 @@
 				},
 				yaxis: {
 					min: 0, tickDecimals: 0
-	   			},
+				},
 				series: {
 					lines: { show: true },
 					points: { show: true }
@@ -46,12 +46,7 @@
 		);
 	}
 
-	$("#mc4wp-graph-line-toggles :input").change(plotGraph)
-
-	
-
-	function tooltip(x, y, contents)
-	{
+	function showTooltip(x, y, contents) {
 		$('<div id="mc4wp-graph-tooltip">' + contents + '</div>').css( {
 			position: 'absolute',
 			display: 'none',
@@ -64,8 +59,12 @@
 		}).appendTo("body").fadeIn(200);
 	}
 
-	var previousPoint = null;
-	$("#mc4wp-graph").bind("plothover", function (event, pos, item) {
+	function toggleCustomRangeOptions() {
+		var show = $(this).val() === 'custom';
+		$customRangeOptions.toggle( show );
+	}
+
+	function plotHover(event, pos, item) {
 		$("#x").text(pos.x.toFixed(2));
 		$("#y").text(pos.y.toFixed(2));
 
@@ -75,23 +74,24 @@
 				$("#mc4wp-graph-tooltip").remove();
 
 				var x = item.datapoint[0],
-				y = item.datapoint[1];
+					y = item.datapoint[1];
 
-				tooltip( item.pageX, item.pageY, item.series.label + ': ' + y );
+				showTooltip( item.pageX, item.pageY, item.series.label + ': ' + y );
 			}
 		} else {
 			$("#mc4wp-graph-tooltip").remove();
 			previousPoint = null;
 		}
-	});
+	}
 
-	$("#mc4wp-graph-range-options").change(function() {
-		if($(this).val() == 'custom') {
-			$("#mc4wp-graph-custom-range-options").show();
-		} else {
-			$("#mc4wp-graph-custom-range-options").hide();
-		}
+	/**
+	 * Bind event handlers$graph
+	 */
+	$lineToggles.change(plotGraph);
+	$range.change(toggleCustomRangeOptions);
+	$graph.bind("plothover", plotHover);
 
-	});
+	plotGraph();
+
 
 })(jQuery);

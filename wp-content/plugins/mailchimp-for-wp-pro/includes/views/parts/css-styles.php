@@ -1,102 +1,217 @@
-<?php defined('ABSPATH') OR exit; ?>
-
-/* form container */
-<?php echo $selector_prefix; ?>.mc4wp-form {
-	display: block; border-color: transparent;
-	<?php
-	if(!empty($form_border_color)) { echo "border-color: {$form_border_color} !important;"; } else { echo 'border-color: transparent;'; }
-	if(!empty($form_border_width)) { echo "border-width: {$form_border_width}px; border-style: solid;";  }
-	if(!empty($form_horizontal_padding)) { echo "padding-left: {$form_horizontal_padding}px; padding-right: {$form_horizontal_padding}px;"; }
-	if(!empty($form_vertical_padding)) {  echo "padding-top: {$form_vertical_padding}px; padding-bottom: {$form_vertical_padding}px;"; }
-	if(!empty($form_background_color)) { echo "background: {$form_background_color} !important;"; }
-	if(!empty($form_font_color)) { echo "color: {$form_font_color} !important; "; }
-	if(!empty($form_text_align)) { echo "text-align: {$form_text_align};"; }
-	?>
-}
-
-/* paragraphs */
-<?php echo $selector_prefix; ?>.mc4wp-form p {
-	<?php
-	if(!empty($paragraphs_font_size)) { echo "font-size: {$paragraphs_font_size}px;"; }
-	if(!empty($paragraphs_font_color)) { echo "color: {$paragraphs_font_color} !important;"; }
-	if(!empty($paragraphs_vertical_margin)) { echo "margin-top: {$paragraphs_vertical_margin}px; margin-bottom: {$paragraphs_vertical_margin}px;"; }
-	?>
-}
-
-/* labels */
-<?php echo $selector_prefix; ?>.mc4wp-form label { 
-	margin-bottom: 6px;
 <?php
-	if(!empty($labels_font_color)) { echo "color: {$labels_font_color};"; }
-	if(!empty($labels_font_style)) { 
-		if($labels_font_style == 'italic' || $labels_font_style == 'bolditalic') {
-			echo 'font-style: italic;';
-		} else {
-			echo 'font-style: normal;';
-		}
+if( ! defined( 'MC4WP_VERSION' ) ) {
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
+}
 
-		if($labels_font_style == 'bold' || $labels_font_style == 'bolditalic') {
-			echo 'font-weight: bold;';
-		} else {
-			echo 'font-weight: normal;';
+/** @var MC4WP_Styles_Builder $builder */
+$builder = $this;
+$selector = $selector_prefix . $form_selector;
+
+printf( "/*********************\nStyles for form #%s\n*********************/\n\n", $actual_form_id );
+echo "$selector label, \n";
+echo "$selector input, \n";
+echo "$selector textarea, \n";
+echo "$selector select, \n";
+echo "$selector button {\n";
+	echo "\t-webkit-box-sizing: border-box;\n";
+	echo "\t-moz-box-sizing: border-box;\n";
+	echo "\tbox-sizing: border-box;\n";
+echo "}\n\n";
+
+
+/**
+ * Form Elements
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'form' ) ) {
+
+	echo "$selector {\n";
+		echo "\tdisplay: block;\n";
+		$builder->maybe_echo( "\tborder-color: %s; \n", $form_border_color );
+		$builder->maybe_echo( "\tborder-style: solid; border-width: %dpx;\n", $form_border_width );
+		$builder->maybe_echo( "\tpadding: %dpx;\n", $form_padding );
+		$builder->maybe_echo( "\tbackground-color: %s !important;\n", $form_background_color );
+		$builder->maybe_echo( "\tcolor: %s !important;\n", $form_font_color );
+		$builder->maybe_echo( "\ttext-align: %s;\n", $form_text_align );
+		$builder->maybe_echo( "\twidth: 100%%; max-width: %s !important;\n", $form_width );
+		$builder->maybe_echo( "\tbackground-image: url('%s');\n", $form_background_image );
+	echo "}\n\n";
+
+}
+
+/**
+ * Label Elements
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'labels' ) ) {
+	echo "$selector label {\n";
+		echo "\tvertical-align: top;\n";
+		echo "\tmargin-bottom: 6px;\n";
+		$builder->maybe_echo( "\twidth: %s;\n", $labels_width );
+		$builder->maybe_echo( "\tcolor: %s;\n", $labels_font_color );
+		$builder->maybe_echo( "\tfont-size: %dpx;\n", $labels_font_size );
+		$builder->maybe_echo( "\tdisplay: %s;\n", $labels_display );
+
+		if( ! empty( $labels_font_style ) ) {
+			if( $labels_font_style === 'italic' || $labels_font_style === 'bolditalic') {
+				echo "\tfont-style: italic;\n";
+			} else {
+				echo "\tfont-style: normal;\n";
+			}
+
+			if( $labels_font_style === 'bold' || $labels_font_style === 'bolditalic') {
+				echo "\tfont-weight: bold;\n";
+			} else {
+				echo "\tfont-weight: normal;\n";
+			}
 		}
+	echo "}\n\n";
+
+	// reset <span> elements inside <label> tag (choice HTML)
+	if( $labels_font_style === 'bold' || $labels_font_style === 'bolditalic') {
+		echo "$selector label span { font-weight: initial; }\n\n";
 	}
-	if(!empty($labels_font_size)) { echo "font-size: {$labels_font_size}px;"; }
-	if(!empty($labels_display)) { echo "display: {$labels_display};"; }
-	if(!empty($labels_vertical_margin)) { echo "margin-top: {$labels_vertical_margin}px; margin-bottom: {$labels_vertical_margin}px;"; }
-	if(!empty($labels_horizontal_margin)) { echo "margin-left: {$labels_horizontal_margin}px; margin-right: {$labels_horizontal_margin}px;"; }
-?>
+
+	if( $labels_font_style === 'italic' || $labels_font_style === 'bolditalic') {
+		echo "$selector label span { font-style: initial; }\n\n";
+	}
 }
 
-/* fields */
-<?php echo $selector_prefix; ?>.mc4wp-form input[type="text"], <?php echo $selector_prefix; ?>.mc4wp-form input[type="email"], <?php echo $selector_prefix; ?>.mc4wp-form input[type="url"], 
-<?php echo $selector_prefix; ?>.mc4wp-form input[type="tel"], <?php echo $selector_prefix; ?>.mc4wp-form input[type="number"], <?php echo $selector_prefix; ?>.mc4wp-form input[type="date"], <?php echo $selector_prefix; ?>.mc4wp-form select, <?php echo $selector_prefix; ?>.mc4wp-form textarea { 
-	box-sizing:border-box; box-sizing: border-box; -moz-box-sizing: border-box;
-	padding:6px 12px; margin-bottom: 6px;
-<?php
-	if(!empty($fields_width)) { echo "width: {$fields_width};"; }
-	if(!empty($fields_height)) { echo "line-height: ". ($fields_height - 12) . "px; height: {$fields_height}px;"; }
-	if(!empty($fields_border_color)) { echo "border-color: {$fields_border_color} !important; "; }
-	if(!empty($fields_border_width)) { echo "border-width: {$fields_border_width}px; border-style:solid;"; }
-	if(!empty($fields_display)) { echo "display: {$fields_display};"; }
-?>
+
+/**
+ * Input, Select & Textarea Elements
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'fields' ) ) :
+
+
+	echo "$selector input[type='text'],\n";
+	echo "$selector input[type='email'],\n";
+	echo "$selector input[type='url'],\n";
+	echo "$selector input[type='tel'],\n";
+	echo "$selector input[type='number'],\n";
+	echo "$selector input[type='date'],\n";
+	echo "$selector select,\n";
+	echo "$selector textarea {\n";
+
+		// start field rules
+		echo "\tvertical-align: top;\n";
+		echo "\tmargin-bottom: 6px;\n";
+		echo "\tpadding: 6px 12px;\n";
+		$builder->maybe_echo( "\twidth: 100%%; max-width: %s;\n", $fields_width );
+		$builder->maybe_echo( "\tborder-color: %s !important;\n", $fields_border_color );
+		$builder->maybe_echo( "\tborder-width: %dpx; border-style: solid;\n", $fields_border_width );
+		$builder->maybe_echo( "\tdisplay: %s;\n", $fields_display );
+		if( ! empty($fields_border_radius)) {
+			echo "\t-webkit-border-radius: {$fields_border_radius}px;\n";
+			echo "\t-moz-border-radius: {$fields_border_radius}px;\n";
+			echo "\tborder-radius: {$fields_border_radius}px;\n";
+		}
+		if( ! empty($fields_height)) {
+			echo "\tline-height: ". ($fields_height - 12) . "px; height: {$fields_height}px;\n";
+		}
+
+	echo "}\n\n";
+
+endif;
+
+/**
+ * Input, Select & Textarea Elements (focus)
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'fields_focus' ) ) :
+	echo "$selector input[type='text']:focus,\n";
+	echo "$selector input[type='email']:focus,\n";
+	echo "$selector input[type='url']:focus,\n";
+	echo "$selector input[type='tel']:focus,\n";
+	echo "$selector input[type='number']:focus,\n";
+	echo "$selector input[type='date']:focus,\n";
+	echo "$selector select:focus,\n";
+	echo "$selector textarea:focus {\n";
+		$builder->maybe_echo( "\toutline: 2px solid %s;\n", $fields_focus_outline_color );
+	echo "}\n\n";
+endif;
+
+
+/**
+ * Choice Elements
+ */
+echo "$selector input[type='radio'],\n";
+echo "$selector input[type='checkbox'] {\n";
+	echo "\tmargin-right: 6px;\n";
+	echo "\tdisplay: inline-block\n";
+echo "}\n\n";
+
+
+/**
+ * Button Elements
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'buttons' ) ) {
+
+	echo "$selector input[type='submit'],\n";
+	echo "$selector input[type='button'],\n";
+	echo "$selector input[type='reset'],\n";
+	echo "$selector button {\n";
+		echo "\tvertical-align: top;\n";
+	    echo "\ttext-shadow: none;\n";
+	    echo "\tpadding: 6px 12px;\n";
+	    echo "\tcursor: pointer;\n";
+	    echo "\ttext-align: center;\n";
+	    echo "\tline-height: normal;\n";
+		echo "\tdisplay: inline-block;\n";
+		$builder->maybe_echo( "\tbackground:none; filter: none; background: %s !important;\n", $buttons_background_color );
+		$builder->maybe_echo( "\tcolor: %s !important;\n", $buttons_font_color );
+		$builder->maybe_echo( "\tfont-size: %dpx !important;\n", $buttons_font_size );
+		$builder->maybe_echo( "\tborder-color: %s !important;\n", $buttons_border_color );
+		$builder->maybe_echo( "\twidth: 100%%; max-width: %s;\n", $buttons_width );
+		$builder->maybe_echo( "\theight: %dpx;\n", $buttons_height );
+
+		if( ! empty($buttons_border_width)) {
+			echo "\tborder-style: solid;\n";
+			echo "\tborder-width: {$buttons_border_width}px;\n";
+		}
+		if( ! empty($buttons_border_radius)) {
+			echo "\t-webkit-border-radius: {$buttons_border_radius}px;\n";
+			echo "\t-moz-border-radius: {$buttons_border_radius}px;\n";
+			echo "\tborder-radius: {$buttons_border_radius}px;\n";
+		}
+
+	echo "}\n\n";
 }
 
-/* buttons */
-<?php echo $selector_prefix; ?>.mc4wp-form input[type="submit"], <?php echo $selector_prefix; ?>.mc4wp-form button, <?php echo $selector_prefix; ?>.mc4wp-form input[type="button"], <?php echo $selector_prefix; ?>.mc4wp-form input[type="reset"] {
-	text-shadow:none; box-sizing:border-box; box-sizing: border-box; -moz-box-sizing: border-box;
-	padding:6px 12px; cursor: pointer; text-align:center; 
-<?php
-	if(!empty($buttons_background_color)) { echo "background:none; filter: none; background: {$buttons_background_color} !important;"; }
-	if(!empty($buttons_font_color)) { echo "color: {$buttons_font_color} !important;"; }
-	if(!empty($buttons_font_size)) { echo "font-size: {$buttons_font_size}px;"; }
-	if(!empty($buttons_border_color)) { echo "border-color: {$buttons_border_color} !important;"; }
-	if(!empty($buttons_border_width)) { echo "border-width: {$buttons_border_width}px; border-style: solid;"; }
-	if(!empty($buttons_width)) { echo "width: {$buttons_width};"; }
-	if(!empty($buttons_height)) { echo "height: {$buttons_height}px;"; }
-	if(!empty($buttons_display)) { echo "display: {$buttons_display};"; }
-?>
+/**
+ * Button Elements (hover & focus)
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'buttons_hover' ) ) {
+	echo "$selector input[type='submit']:focus,\n";
+	echo "$selector input[type='button']:focus,\n";
+	echo "$selector input[type='reset']:focus,\n";
+	echo "$selector button:focus,\n";
+	echo "$selector input[type='submit']:hover,\n";
+	echo "$selector input[type='button']:hover,\n";
+	echo "$selector input[type='reset']:hover,\n";
+	echo "$selector button:hover {\n";
+		$builder->maybe_echo( "\tbackground:none; filter: none; background: %s !important;\n", $buttons_hover_background_color );
+		$builder->maybe_echo( "\tborder-color: %s !important;\n", $buttons_hover_border_color );
+	echo "}";
 }
 
-<?php echo $selector_prefix; ?>.mc4wp-form input[type="submit"]:hover, <?php echo $selector_prefix; ?>.mc4wp-form button:hover, <?php echo $selector_prefix; ?>.mc4wp-form input[type="button"]:hover, <?php echo $selector_prefix; ?>.mc4wp-form input[type="reset"]:hover {
-<?php
-	if(!empty($buttons_hover_background_color)) { echo "background:none; filter: none; background: {$buttons_hover_background_color} !important;"; }
-	if(!empty($buttons_hover_font_color)) { echo "color: {$buttons_hover_font_color} !important;"; }
-	if(!empty($buttons_hover_border_color)) { echo "border-color: {$buttons_hover_border_color} !important;"; }
-?>
+
+/**
+ * Form Messages
+ */
+if( $builder->form_has_rules_for_element( $form_id, 'messages' ) ) {
+
+	echo "$selector .mc4wp-success {\n";
+	$builder->maybe_echo( "\tcolor: %s;\n", $messages_font_color_success );
+	echo "}";
+
+	echo "$selector .mc4wp-error {\n";
+	$builder->maybe_echo( "\tcolor: %s;\n", $messages_font_color_error );
+	echo "}";
+
 }
 
-/* messages */
-<?php echo $selector_prefix; ?>.mc4wp-form .mc4wp-alert{ }
-<?php echo $selector_prefix; ?>.mc4wp-form .mc4wp-success{ 
-	<?php
-	if(!empty($messages_font_color_success)) { echo "color: $messages_font_color_success;"; }
-	?>
-}
-<?php echo $selector_prefix; ?>.mc4wp-form .mc4wp-error{
-	<?php
-	if(!empty($messages_font_color_error)) { echo "color: $messages_font_color_error;"; }
-	?>
-}
+/**
+ * Manual CSS
+ */
+echo $manual;
 
-<?php echo $manual; ?>
