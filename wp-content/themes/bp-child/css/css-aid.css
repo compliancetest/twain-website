@@ -1799,6 +1799,9 @@ tr {
 .mail-btn span.p{
     background-position: 0 -1049px;
 }
+.trigger-btn span.p{
+    background-position: 0 -1847px;
+}
 
 .next-btn,
 .back-btn,
@@ -2070,6 +2073,18 @@ tr {
     width: 120px;
     left: 50%;
     margin-left: -64px;
+}
+
+.greyed-out-btn, .greyed-out-btn:hover{
+    border: 1px solid #9f9f9f;
+    background-color: #787878;
+    background-image: -ms-linear-gradient(top, #787878, #a6a6a6);
+    background-image: -o-linear-gradient(top, #787878, #a6a6a6);
+    background-image: -moz-linear-gradient(bottom, #787878 0%, #a6a6a6 100%);
+    background-image: -o-linear-gradient(bottom, #787878 0%, #a6a6a6 100%);
+    background-image: -webkit-linear-gradient(bottom, #787878 0%, #a6a6a6 100%);
+    background-image: linear-gradient(bottom, #787878 0%, #a6a6a6 100%);
+    cursor: default;
 }
 
 /**
