@@ -30,21 +30,27 @@
                         <?php endif;?>
 
                         <?php
-                            //Trigger will only be available to runs in the "Prepared"or "Paused" state.
-                            if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'PREPARED', 'PAUSED' ) ) ):?>
+                        //Trigger will only be available to runs in the "Prepared"or "Paused" state.
+                        if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'PREPARED', 'PAUSED' ) ) ):?>
                                 <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile_url?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
+                        <?php else: ?>
+                             <a href="javascript:void(0);" class="action-btn icon-btn play-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
                         <?php endif;?>
 
                         <?php
                         //Pause will only be available for runs in the "Executing" state.
                         if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTING' ) ) ):?>
                             <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSED" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
+                        <?php else: ?>
+                            <a href="javascript:void(0);" class="action-btn icon-btn pause-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
                         <?php endif;?>
 
                         <?php
                         //Delete will only be available to runs in the "Executed" or "Terminated" state.
                         if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED' ) ) ):?>
                             <a href="#" class="change_status action-btn icon-btn delete-btn has-tooltip" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
+                        <?php else: ?>
+                            <a href="javascript:void(0);" class="action-btn icon-btn delete-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
                         <?php endif;?>
                     </td>
                 </tr>
