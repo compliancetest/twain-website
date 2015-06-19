@@ -157,6 +157,12 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('edit-tags')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 action-btn icon-btn tags-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Tags<span></span></span></a>
                                 <?php endif; ?>
                                 <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
+                                <?php /*
+                                <!-- Trigger button -->
+                                <div class="clear space5"></div>
+                                <a href="#" class="action-btn icon-btn green-btn trigger-btn"><span class="p"></span></a>
+                                <!-- To make button grey out set class "greyed-out-btn" as last for button -->
+                                */ ?>
                                 <?php
                                     }
                                 ?>
