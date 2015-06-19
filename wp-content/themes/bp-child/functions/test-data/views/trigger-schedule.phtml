@@ -11,7 +11,7 @@
                 <td>Profile</td>
                 <td>Start Date/Time</td>
                 <td>Status</td>
-                <td>Action</td>
+                <td class="schedules-table-actions">Action</td>
             </tr>
             <?php foreach( $schedules AS $schedule ):?>
                 <?php
@@ -24,27 +24,27 @@
                     <td><a href="<?php echo S3Wrapper::getProfileLink( $profile->token, $profile->profile_name, true );?>" target="_blank"><?php echo $profile->profile_name;?></a></td>
                     <td>-</td>
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
-                    <td>
+                    <td class="schedules-table-actions">
+                        <?php if( $schedule->SCHEDULE_STATUS_CODE != 'TERMINATED' ):?>
+                            <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
+                        <?php endif;?>
+
                         <?php
                             //Trigger will only be available to runs in the "Prepared"or "Paused" state.
                             if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'PREPARED', 'PAUSED' ) ) ):?>
-                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile_url?>" class="trigger_row" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Trigger</span></a>
+                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile_url?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
                         <?php endif;?>
 
                         <?php
                         //Pause will only be available for runs in the "Executing" state.
                         if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTING' ) ) ):?>
-                            <a href="#" class="change_status" data-status="PAUSED" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>">Pause</a>
-                        <?php endif;?>
-
-                        <?php if( $schedule->SCHEDULE_STATUS_CODE != 'TERMINATED' ):?>
-                            <a href="#" class="change_status" data-status="TERMINATED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>">Terminate</a>
+                            <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSED" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
                         <?php endif;?>
 
                         <?php
                         //Delete will only be available to runs in the "Executed" or "Terminated" state.
                         if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED' ) ) ):?>
-                            <a href="#" class="change_status" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>">Delete</a>
+                            <a href="#" class="change_status action-btn icon-btn delete-btn has-tooltip" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
                         <?php endif;?>
                     </td>
                 </tr>
