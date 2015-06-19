@@ -1802,6 +1802,15 @@ tr {
 .trigger-btn span.p{
     background-position: 0 -1847px;
 }
+.play-btn span.p{
+    background-position: 0 -1887px;
+}
+.pause-btn span.p{
+    background-position: 0 -1906px;
+}
+.terminate-btn span.p{
+    background-position: 0 -1868px;
+}
 
 .next-btn,
 .back-btn,
@@ -1927,7 +1936,10 @@ tr {
 .file-btn,
 .edit-btn,
 .view-log-btn,
-.tags-btn{
+.tags-btn,
+.play-btn,
+.pause-btn,
+.terminate-btn{
     border-color: #3577ad;
     background: #2d83cd;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));
@@ -1970,7 +1982,10 @@ tr {
 .blue-plus-btn:hover,
 .harness-detail-btn:hover,
 .edit-btn:hover,
-.view-log-btn:hover{
+.view-log-btn:hover,
+.play-btn:hover,
+.pause-btn:hover,
+.terminate-btn:hover{
     background: #288ce2;
 }
 
@@ -2751,4 +2766,16 @@ table.result-table{
 }
 .display_none{
     display: none;
+}
+
+.schedules-table-actions{
+    padding: 4px 0 3px 0;
+    text-align: left;
+}
+
+.schedules-table-actions .action-btn{
+    margin-right: 7px;
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
 }
