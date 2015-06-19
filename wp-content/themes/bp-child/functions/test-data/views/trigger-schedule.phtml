@@ -27,6 +27,8 @@
                     <td class="schedules-table-actions">
                         <?php if( $schedule->SCHEDULE_STATUS_CODE != 'TERMINATED' ):?>
                             <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
+                        <?php else: ?>
+                            <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                         <?php endif;?>
 
                         <?php
