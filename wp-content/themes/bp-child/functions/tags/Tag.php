@@ -27,6 +27,11 @@ class Tag {
             );
     }
 
+    public static function copyTags( $sourceProfileId, $targetProfileId )
+    {
+        global $wpdb;
+        return $wpdb->query( $wpdb->prepare( "INSERT INTO wp_tags2items ( item_id, item_type, tag_id ) ( SELECT '{$targetProfileId}' AS item_id, item_type, tag_id FROM wp_tags2items WHERE item_id = %d )", $sourceProfileId ) );
+    }
     public static function getItemTags( $itemId, $itemType = 'PROFILE' ){
         global $wpdb;
         return $wpdb->get_results( $wpdb->prepare( "SELECT t.* FROM wp_tags2items AS t2a

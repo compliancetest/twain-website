@@ -91,7 +91,7 @@ class ProfileInstance {
             $profile_name = 'Pending...';
             $profile_description = 'Pending...';
             $profile_purpose = 'Pending...';
-            $profile_role = null;
+            $profile_role = $profile_array['title'];
         } else {
             $jsonObject = json_decode( $profile_data );
             $profile_name = $jsonObject->Profile->Title . ' v' . $jsonObject->Profile->Version->Major . '.' . $jsonObject->Profile->Version->Minor;
