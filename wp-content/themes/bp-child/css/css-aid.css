@@ -2100,6 +2100,9 @@ tr {
     background-image: -webkit-linear-gradient(bottom, #787878 0%, #a6a6a6 100%);
     background-image: linear-gradient(bottom, #787878 0%, #a6a6a6 100%);
     cursor: default;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 /**
