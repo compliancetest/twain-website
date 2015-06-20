@@ -43,7 +43,7 @@
     <a class="close_btn"></a>
     <div class="loading loading_run"></div>
 </div>
-
+<script src="<?php echo '/wp-content/themes/bp-child/js/jquery-ui-timepicker-addon.js';?>" type="text/javascript"></script>
 <script type="application/javascript">
     jQuery(document).ready(function(){
         jQuery('#datetime').datetimepicker({
@@ -51,6 +51,7 @@
             dateFormat: 'yy-mm-dd'
         });
         jQuery('.trigger-run').on('click', function(){
+            jQuery('.loading_run').show();
             jQuery.ajax({
                 url: '/',
                 type: 'post',
