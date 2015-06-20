@@ -7,7 +7,11 @@
         <select name="product_id" class="required select field-tooltip" id="product_id" style="width: 100%;">
             <option value=""></option>
             <?php foreach( $user_products AS $user_product ):?>
-                <option value="<?php echo $user_product->ID;?>"><?php echo $user_product->product_name;?></option>
+                <?php
+                    $product = new ProductAndService($user_product->ID);
+                    $product->load();
+                ?>
+                <option value="<?php echo $product->product_id;?>"><?php echo $product->name;?></option>
             <?php endforeach;?>
         </select>
         <div class="space20"></div>

@@ -16,8 +16,8 @@
             <?php foreach( $schedules AS $schedule ):?>
                 <?php
                     $profile_url = explode('/', $schedule->PROFILE_S3_URL );
-                    $profile_id = str_replace( '.json', '', end( $profile_url ) );
-                    $profile = ProfileInstance::getProfileBy( 'token', $profile_id );
+                    $profile_token = str_replace( '.json', '', end( $profile_url ) );
+                    $profile = ProfileInstance::getProfileBy( 'token', $profile_token );
                 ?>
                 <tr>
                     <td><a href="<?php echo get_permalink( $schedule->PRODUCT_ID );?>"><?php echo get_the_title( $schedule->PRODUCT_ID );?></a></td>
@@ -25,7 +25,7 @@
                     <td>-</td>
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                     <td class="schedules-table-actions">
-                        <?php if( $schedule->SCHEDULE_STATUS_CODE != 'TERMINATED' ):?>
+                        <?php if( $schedule->SCHEDULE_STATUS_CODE == 'PAUSED' ):?>
                             <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                         <?php else: ?>
                             <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
@@ -34,7 +34,7 @@
                         <?php
                         //Trigger will only be available to runs in the "Prepared"or "Paused" state.
                         if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'PREPARED', 'PAUSED' ) ) ):?>
-                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile_url?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
+                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile->id?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
                         <?php else: ?>
                              <a href="javascript:void(0);" class="action-btn icon-btn play-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
                         <?php endif;?>
@@ -49,7 +49,7 @@
 
                         <?php
                         //Delete will only be available to runs in the "Executed" or "Terminated" state.
-                        if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED' ) ) ):?>
+                        if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED', 'PREPARED' ) ) ):?>
                             <a href="#" class="change_status action-btn icon-btn delete-btn has-tooltip" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
                         <?php else: ?>
                             <a href="javascript:void(0);" class="action-btn icon-btn delete-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>

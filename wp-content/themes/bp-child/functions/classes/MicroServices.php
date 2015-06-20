@@ -65,7 +65,7 @@ class MicroServices {
                 'startAt' => $_POST['datetime']
             )
         );
-        $sqs = new \SqsWrapper();
+        $sqs = new \SqsWrapper( get_option('schedule_sqs_queue_name') );
         $sqs->sendMessage( $message );
     }
 }
