@@ -18,9 +18,10 @@
                     $profile_url = explode('/', $schedule->PROFILE_S3_URL );
                     $profile_token = str_replace( '.json', '', end( $profile_url ) );
                     $profile = ProfileInstance::getProfileBy( 'token', $profile_token );
+                    $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID );
                 ?>
                 <tr>
-                    <td><a href="<?php echo get_permalink( $schedule->PRODUCT_ID );?>"><?php echo get_the_title( $schedule->PRODUCT_ID );?></a></td>
+                    <td><a href="<?php echo get_permalink( $productID );?>"><?php echo get_the_title( $productID );?></a></td>
                     <td><a href="<?php echo S3Wrapper::getProfileLink( $profile->token, $profile->profile_name, true );?>" target="_blank"><?php echo $profile->profile_name;?></a></td>
                     <td>-</td>
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
