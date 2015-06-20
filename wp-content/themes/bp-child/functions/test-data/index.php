@@ -62,7 +62,7 @@ function cp_process_test_data_actions()
         }else if(wp_verify_nonce($action, 'save-schedule')){
             \MicroServices\MicroServices::prepareRunRequest( intval( $_POST['profile_id'] ) );
         }else if( wp_verify_nonce($action, 'execute-schedule') ){
-            \MicroServices\MicroServices::executeRunRequest( intval( $_POST['profile_id'] ) );
+            \MicroServices\MicroServices::executeRunRequest( intval( $_POST['profile_id'] ), date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
         }else if( wp_verify_nonce($action, 'change-schedule-status') ){
             $esb = new ManageESB();
             $status = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);

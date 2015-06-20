@@ -632,7 +632,7 @@ function getUTCTimeStamp($date, $user_id = null)
 {
     if(!$user_id)
         $user_id = get_current_user_id();
-    
+
     if($user_id && ($timezone = get_user_meta($user_id, 'timezone', true)))
         $dateTimeZone = new DateTimeZone($timezone);                        
     else

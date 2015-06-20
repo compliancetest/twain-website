@@ -18,6 +18,12 @@ class MicroServices {
             'profile_role' => 'Run'
         );
         $status = copyProfileInstance( $profileId, $profileFieldsToChange, false );
+        \Tag::copyTags( $profileId, $status['data']['id'] );
+        if( is_array( $_POST['tags'] ) && ! empty( $_POST['tags'] ) ){
+            foreach( $_POST['tags'] AS $tag ){
+                \Tag::assignTag( $tag, $status['data']['id'] );
+            }
+        }
         $profile = \ProfileInstance::getProfileBy( 'id', $profileId );
         $uniq_key = md5( $profile->token . mktime());
         $message = array(
@@ -51,7 +57,7 @@ class MicroServices {
      * @link https://redmine.gosource.com.au/projects/compliancetest/wiki/Micro-Services#Request-9
      * @param $profileId
      */
-    public static function executeRunRequest( $profileId )
+    public static function executeRunRequest( $profileId, $date )
     {
         $profile = \ProfileInstance::getProfileBy( 'id', $profileId );
         $message = array(
@@ -62,7 +68,7 @@ class MicroServices {
                     'bucket' => get_option('aws_s3_url'),
                     'key' => "profiles/user/{$profile->token}.json"
                 ),
-                'startAt' => $_POST['datetime']
+                'startAt' => $date
             )
         );
         $sqs = new \SqsWrapper( get_option('schedule_sqs_queue_name') );
