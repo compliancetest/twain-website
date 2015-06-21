@@ -2,9 +2,11 @@
     $esb = new ManageESB();
     $schedules = $esb->getUserSchedules( get_current_user_id() );
 ?>
+<?php if( ! $view ):?>
 <div class="popup-box view-profile-type-box" style="display: none; width: 800px;" id="run_list">
     <div class="popup-box-header radius6 noradiusbottom">Runs list</div>
     <div class="popup-box-content grid-box-body">
+<?php endif;?>
         <table id="schedules_table">
             <tr style="font-weight: bold;">
                 <td>Product</td>
@@ -23,7 +25,7 @@
                 <tr>
                     <td><a href="<?php echo get_permalink( $productID );?>"><?php echo get_the_title( $productID );?></a></td>
                     <td><a href="<?php echo S3Wrapper::getProfileLink( $profile->token, $profile->profile_name, true );?>" target="_blank"><?php echo $profile->profile_name;?></a></td>
-                    <td>-</td>
+                    <td><?php echo ( ! empty( $schedule->START_AT ) ) ? formatDate( $schedule->START_AT, 'Y-m-d H:i:s' ) : '-';?> </td>
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                     <td class="schedules-table-actions">
                         <?php if( $schedule->SCHEDULE_STATUS_CODE == 'PAUSED' ):?>
@@ -59,6 +61,7 @@
                 </tr>
             <?php endforeach;?>
         </table>
+<?php if( ! $view ):?>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
@@ -67,17 +70,19 @@
     <a class="close_btn"></a>
     <div class="loading loading_schedule"></div>
 </div>
+<?php endif;?>
 <script type="application/javascript">
     jQuery(document).ready(function(){
         jQuery(".trigger_row").off("click").cplightbox();
-        jQuery('.change_status').on('click', function(){
+        jQuery('.change_status').off('click').on('click', function(){
             jQuery('.loading_schedule').show();
             jQuery.ajax({
                 url: '/',
                 type: 'post',
                 data: { 'td-action' : '<?php echo wp_create_nonce('change-schedule-status');?>', 'id' : jQuery(this).attr('data-runid'), 'status' : jQuery(this).attr('data-status'), 'prevstatus' : jQuery(this).attr('data-prevstatus') },
-                success: function(){
-                    jQuery('.close_btn').click();
+                success: function(response){
+                    jQuery('.loading_schedule').hide();
+                    jQuery('#schedules_table').html(response);
                 }
             });
         });

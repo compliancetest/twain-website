@@ -1058,7 +1058,8 @@ class ManageESB
         } else {
             $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) WHERE ID = %d AND SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) ", $status, $runId, $prevstatus );
         }
-        return ManageESB::$esbdb->get_results($query);
+        ManageESB::$esbdb->query($query);
+        return ManageESB::$esbdb->get_row(ManageESB::$esbdb->prepare("SELECT PROFILE_S3_URL FROM " . $this->table_schedules_runs . " WHERE ID = %d ", $runId));
     }
     
     

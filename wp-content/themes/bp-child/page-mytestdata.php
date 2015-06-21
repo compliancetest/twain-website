@@ -149,7 +149,7 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
                                     <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, $instance->profile_name, true );?>" class="left10 action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
                                     <?php if( ProfileInstance::isSchedule( $instance->profile_role ) && $instance->validation_status == 'valid' ):?>
                                             <a href="/my-profile?td-action=<?php echo wp_create_nonce('prepare_schedule')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip prepare_schedule trigger-btn"><span class="p"></span><span class="simple_tooltip radius6" style="width: 150px; left: -24px;">Create a Run profile from this Schedule<span></span></span></a>
-                                    <?php elseif( ProfileInstance::isRun( $instance->profile_role ) && $instance->validation_status == 'valid' ):?>
+                                    <?php elseif( ProfileInstance::isRun( $instance->profile_role ) && ProfileInstance::isRunCanBeTriggered( $instance->token ) ):?>
                                         <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip trigger-btn"><span class="p"></span><span class="simple_tooltip radius6" style="width: 150px; left: -24px;">Trigger Run<span></span></span></a>
                                     <?php elseif( $sqs_validation_enabled && $instance->is_expanded == 0 && $instance->validation_status == 'valid' && in_array( str_replace( ' ', '', $instance->profile_role ), ProfileType::getExpandableTypes() ) ): ?>
                                         <a href="#create-expanded-version" data-id="<?php echo $instance->id;?>" class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip create_expanded_version"><span class="p"></span><span class="simple_tooltip radius6">Create Expanded Version of this profile<span></span></span></a>
@@ -171,12 +171,6 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
                                     <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('edit-tags')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" data-id="<?php echo $instance->id?>" data-type-id="<?php echo $instance->type_id?>" class="left10 action-btn icon-btn tags-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Edit Tags<span></span></span></a>
                                 <?php endif; ?>
                                 <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
-                                <?php /*
-                                <!-- Trigger button -->
-                                <div class="clear space5"></div>
-                                <a href="#" class="action-btn icon-btn green-btn trigger-btn"><span class="p"></span></a>
-                                <!-- To make button grey out set class "greyed-out-btn" as last for button -->
-                                */ ?>
                                 <?php
                                     }
                                 ?>
