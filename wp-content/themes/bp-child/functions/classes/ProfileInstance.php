@@ -233,4 +233,16 @@ class ProfileInstance {
         $statusRow = ManageESB::$esbdb->get_row( "SELECT mss.SCHEDULE_STATUS_CODE FROM MSH_SCHEDULE_RUNS AS msr JOIN MSH_SCHEDULE_STATUSES AS mss ON mss.ID = msr.SCHEDULE_STATUS WHERE PROFILE_S3_URL LIKE '%".$profileToken."%'");
         return 'PREPARED' == $statusRow->SCHEDULE_STATUS_CODE;
     }
+
+    /**
+     * @param $profileType
+     * @return bool
+     */
+    public static function canBeDeleted( $profileType )
+    {
+        if (in_array($profileType, array('Run'))){
+            return false;
+        }
+        return true;
+    }
 }
