@@ -288,11 +288,10 @@ function getProfileMetaData($data, $meta_key = '', $level = 0) {
     return $ret;
 }
 
-function deleteProfileTypeInstance($action)
+function deleteProfileTypeInstance( $action, $id )
 {
     global $wpdb;
     
-    $id = $_REQUEST['id'];
     $ids = array();
     
     $user_id = get_current_user_id();
@@ -305,39 +304,28 @@ function deleteProfileTypeInstance($action)
     
     foreach ($ids as $id) {
     
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $id);
+        $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE id = %d", $id );
         $row = $wpdb->get_row($query);
-        
-        if(!$row)
-        {
-            addMessage('Invalid Request!', 'error');
-            return;
+
+        if( ! $row ){
+            return array( 'status' => 'error', 'message' => 'Invalid Request!');
+        }
+        if( (wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id ) ) {
+            return array( 'status' => 'error', 'message' => 'Permission Denied!');
         }
         
-        $redirect = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : cp_get_group_permalink_by_id($row->community_id) . "testdata";
-        
-        if( (wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id ) )
-        {
-            addMessage('Permission Denied!', 'error');        
-            wp_redirect($redirect);
-            exit;
-        }
-        
-        $wpdb->delete($wpdb->prefix . "community_profile_instances", array('id' => $row->id));
-        $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "community_profile_types SET `instances`=`instances` - 1 WHERE id=%d AND `instances` > 0", $row->type_id));
-        $wpdb->delete($wpdb->prefix . "community_profile_meta", array('profile_id' => $row->id));
+        $wpdb->delete("wp_community_profile_instances", array('id' => $row->id));
+        $wpdb->query($wpdb->prepare("UPDATE wp_community_profile_types SET `instances`=`instances` - 1 WHERE id=%d AND `instances` > 0", $row->type_id));
+        $wpdb->delete("wp_community_profile_meta", array('profile_id' => $row->id));
         
         add_filter( 'query', 'wp_db_null_value' );
-        $wpdb->update($wpdb->prefix . "users_subscriptions", 
+        $wpdb->update( "wp_users_subscriptions",
             array('profile_id' => 'NULL', 'gateway_id' => 'NULL', 'entity_id' => '', 'entity_type' => '', 'alias' => ''),
             array('profile_id' => $id)
         );
         remove_filter( 'query', 'wp_db_null_value' );
     }
-    
-    addMessage('Profile instance was removed.');
-    wp_redirect($redirect);
-    exit;
+    return array('status' => 'success', 'message' => 'Profile instance was removed.');
 }
 
 /**

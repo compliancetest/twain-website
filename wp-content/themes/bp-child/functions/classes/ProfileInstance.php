@@ -221,4 +221,16 @@ class ProfileInstance {
         global $wpdb;
         return $wpdb->get_row( $wpdb->prepare("SELECT *, '' AS content FROM wp_community_profile_instances WHERE `$fieldName` = %s ", $fieldValue ) );
     }
+
+    /**
+     * Only Runs with 'PREPARED' status could be processed
+     * @param $profileToken
+     * @return bool
+     */
+    public static function isRunCanBeTriggered( $profileToken )
+    {
+        $esb = new ManageESB();
+        $statusRow = ManageESB::$esbdb->get_row( "SELECT mss.SCHEDULE_STATUS_CODE FROM MSH_SCHEDULE_RUNS AS msr JOIN MSH_SCHEDULE_STATUSES AS mss ON mss.ID = msr.SCHEDULE_STATUS WHERE PROFILE_S3_URL LIKE '%".$profileToken."%'");
+        return 'PREPARED' == $statusRow->SCHEDULE_STATUS_CODE;
+    }
 }

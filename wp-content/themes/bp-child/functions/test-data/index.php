@@ -32,7 +32,10 @@ function cp_process_test_data_actions()
         }else if(wp_verify_nonce($action, 'view-profile-instance')){
             viewProfileInstance();
         }else if(wp_verify_nonce($action, 'delete-harness-instance') || wp_verify_nonce($action, 'delete-profile-instance')){
-            deleteProfileTypeInstance($action);
+            $redirect = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : $_SERVER['REDIRECT_URL'];
+            $result = deleteProfileTypeInstance( $action, $_REQUEST['id'] );
+            addMessage( $result['message'], $result['status'] );
+            wp_redirect($redirect);
         }else if(wp_verify_nonce($action, 'copy-harness-instance')){
             $redirect = isset( $_REQUEST['return'] ) ? base64_decode( $_REQUEST['return'] ) : $_SERVER['REDIRECT_URL'];
             $profileId = intval( $_REQUEST['id'] );
@@ -65,8 +68,15 @@ function cp_process_test_data_actions()
             \MicroServices\MicroServices::executeRunRequest( intval( $_POST['profile_id'] ), date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
         }else if( wp_verify_nonce($action, 'change-schedule-status') ){
             $esb = new ManageESB();
-            $status = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);
-            exit( $status );
+            $s3Url = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);
+            if( 'DELETED' == $_POST['status'] ){
+                $profileUrl = explode('/', $s3Url->PROFILE_S3_URL );
+                $profileToken = str_replace( '.json', '', end( $profileUrl ) );
+                //removing all Run profiles which were created from this Schedule
+                $runProfile = ProfileInstance::getProfileBy( 'token', $profileToken );
+                deleteProfileTypeInstance( wp_create_nonce('delete-profile-instance'), $runProfile->id  );
+            }
+            render_view( 'test-data/views/trigger-schedule.phtml', true, true );
         }
 
 
