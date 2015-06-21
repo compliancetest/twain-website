@@ -36,6 +36,7 @@ function cp_process_test_data_actions()
             $result = deleteProfileTypeInstance( $action, $_REQUEST['id'] );
             addMessage( $result['message'], $result['status'] );
             wp_redirect($redirect);
+            exit();
         }else if(wp_verify_nonce($action, 'copy-harness-instance')){
             $redirect = isset( $_REQUEST['return'] ) ? base64_decode( $_REQUEST['return'] ) : $_SERVER['REDIRECT_URL'];
             $profileId = intval( $_REQUEST['id'] );
@@ -74,7 +75,7 @@ function cp_process_test_data_actions()
                 $profileToken = str_replace( '.json', '', end( $profileUrl ) );
                 //removing all Run profiles which were created from this Schedule
                 $runProfile = ProfileInstance::getProfileBy( 'token', $profileToken );
-                deleteProfileTypeInstance( wp_create_nonce('delete-profile-instance'), $runProfile->id  );
+                deleteProfileTypeInstance( wp_create_nonce('delete-profile-instance'), $runProfile->id, true  );
             }
             render_view( 'test-data/views/trigger-schedule.phtml', true, true );
         }

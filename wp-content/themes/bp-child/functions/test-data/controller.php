@@ -288,7 +288,7 @@ function getProfileMetaData($data, $meta_key = '', $level = 0) {
     return $ret;
 }
 
-function deleteProfileTypeInstance( $action, $id )
+function deleteProfileTypeInstance( $action, $id, $forceDelete = false )
 {
     global $wpdb;
     
@@ -301,17 +301,23 @@ function deleteProfileTypeInstance( $action, $id )
     } else {
         $ids = $id;
     }
-    
+    $response = array('status' => 'success', 'message' => 'Profile instance was removed.');
     foreach ($ids as $id) {
     
         $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE id = %d", $id );
         $row = $wpdb->get_row($query);
 
+        if( ! ProfileInstance::canBeDeleted( $row->profile_role ) && ! $forceDelete ){
+            $response = array( 'status' => 'error', 'message' => "This item can't be deleted");
+            continue;
+        }
         if( ! $row ){
-            return array( 'status' => 'error', 'message' => 'Invalid Request!');
+            $response = array( 'status' => 'error', 'message' => 'Invalid Request!');
+            continue;
         }
         if( (wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id ) ) {
-            return array( 'status' => 'error', 'message' => 'Permission Denied!');
+            $response = array( 'status' => 'error', 'message' => 'Permission Denied!');
+            continue;
         }
         
         $wpdb->delete("wp_community_profile_instances", array('id' => $row->id));
@@ -325,7 +331,7 @@ function deleteProfileTypeInstance( $action, $id )
         );
         remove_filter( 'query', 'wp_db_null_value' );
     }
-    return array('status' => 'success', 'message' => 'Profile instance was removed.');
+    return $response;
 }
 
 /**
