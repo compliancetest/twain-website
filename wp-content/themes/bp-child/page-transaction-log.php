@@ -64,6 +64,7 @@ $filterAction = isset($_GET['action']) ? htmlspecialchars($_GET['action']) : nul
 $filterPartyId = isset($_GET['partyid']) ? htmlspecialchars($_GET['partyid']) : null;
 $filterDate = isset($_GET['date']) ? htmlspecialchars($_GET['date']) : null;
 $filterCustomer = isset($_GET['customer']) ? htmlspecialchars($_GET['customer']) : null;
+$filterTags = isset($_GET['tag']) ? htmlspecialchars($_GET['tag']) : null;
 
 $esb = new ManageESB();
 
@@ -79,7 +80,7 @@ $order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : ($orderBy ==
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
-$esb->prepareTransactionWhereQuery(isset($filterOrganisation) ? $filterOrganisation : null, $filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterCustomer);
+$esb->prepareTransactionWhereQuery(isset($filterOrganisation) ? $filterOrganisation : null, $filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterTags);
 
 $log_results = $esb->getUserTransactionLog($page, $limit, $orderBy, $order);
 
@@ -94,6 +95,7 @@ $tCases = $esb->getFilterOptionsForCase();
 $tServices = $esb->getFilterOptionsForService();
 $tActions = $esb->getFilterOptionsForAction();
 $tPartyIDs = $esb->getFilterOptionsForPartId();
+$tTagsIDs = $esb->getFilterOptionsForTags();
 
 $params = array();                 
     
@@ -128,6 +130,9 @@ if( isset( $filterSubscription ) ){
 }
 if( isset( $filterOrganisation ) ){
     $params[] = 'organisation=' .$filterOrganisation ;
+}
+if( isset( $filterTags ) ){
+    $params[] = 'tags=' .$filterTags ;
 }
  
 get_header();
@@ -209,6 +214,25 @@ get_header();
                         <label>Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : $filterDate; ?>" />
                     </div>
+
+                    <?php
+                    if (isset($tTagsIDs)) :?>
+                        <div class="space10"></div>
+                        <div class="styled_select">
+                            <label>Tag: <?php if ($filterTags != null) :?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php endif; ?></label>
+                            <select name="tag" id="tag" autocomplete="off">
+                                <option value="all">- All -</option>
+                                <?php if( is_iterable( $tTagsIDs ) ):?>
+                                    <?php foreach($tTagsIDs as $tag){ ?>
+                                        <?php if (is_null($tag->ID)) continue;?>
+                                        <option value="<?php echo $tag->ID?>" <?php echo $filterTags != "" && $tag->ID == intval($filterTags) ? "selected='selected'" : "" ?>><?php echo $tag->NAME ?></option>
+                                    <?php } ?>
+                                <?php endif;?>
+                            </select>
+
+                        </div>
+                        <div class="space10"></div>
+                    <?php endif;?>
                 </div>
                 <div class="left">
                     <div class="styled_select">
@@ -296,7 +320,7 @@ get_header();
                         </select>
                     </div>
                 </div>
-                <div class="last-div right right13">                                        
+                <div class="last-div right right13" style="margin-top: 30px;">
                     <div class="space10"></div>
                     <a href="#" class="action-btn process-btn submit-btn" id="log-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>
                 </div>            

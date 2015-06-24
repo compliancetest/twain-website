@@ -19,7 +19,10 @@ class ManageESB
     var $table_product_configuration = 'PRODUCT_CONFIGURATION';
 
     var $table_schedules_runs = 'MSH_SCHEDULE_RUNS';
-    
+
+    public $table_tags_to_conversations = 'MSH_TAG_TO_CONVERSATION';
+    public $table_tags = 'MSH_TAGS';
+
     public static $esbdb = null;
     
     public function __construct()
@@ -198,7 +201,7 @@ class ManageESB
         return $ids;
     }
 
-    public function prepareTransactionWhereQuery($organisation_id = null, $subscription_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null)
+    public function prepareTransactionWhereQuery($organisation_id = null, $subscription_id = null, $product_id = null, $suite_id = null, $case_id = null, $service = null, $action = null, $partyid = null, $date = null, $tag = null)
     {
         global $wpdb;
         
@@ -306,6 +309,10 @@ class ManageESB
             $where['party_id'] = $wpdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
             $message_where['party_id'] = $wpdb->prepare(" (m.FROM_PARTY_ID=%s OR m.TO_PARTY_ID=%s)", $partyid, $partyid);
         }
+        if($tag != null){
+            $where['tag'] = $wpdb->prepare(" t.ID = %d ", $tag);
+            $message_where['tag'] = $wpdb->prepare(" t.ID = %d ", $tag);
+        }
         $this->message_where = $message_where;
         $this->where_query = $where;
     }
@@ -364,6 +371,8 @@ class ManageESB
         $table_query = " FROM " . $this->table_conversation_metadata . " AS c " .
                      "LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON cm.ID=c.TEST_CASE_CONFIGURATION_ID " .
                      "LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID=c.TEST_SUITE_CONFIGURATION_ID " .
+                     "LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID " .
+                     "LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID " .
                      "LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID=c.PRODUCT_ID " .
                      "LEFT JOIN " . $this->table_test_outcome_status . " AS ts ON ts.ID=c.MSH_TEST_OUTCOME_STATUS_ID ";
         if ($this->message_where)
@@ -415,7 +424,7 @@ class ManageESB
             if($this->where_query)
                 $query .= " WHERE " . implode(" AND ", $this->where_query);
             $query .= $orderQuery;
-        }        
+        }
         $rows = ManageESB::$esbdb->get_results($query);
         
         //Getting Messages
@@ -437,6 +446,8 @@ class ManageESB
                         ms.MESSAGE_OUTCOME_LABEL
                       FROM " . $this->table_message_metadata . " AS m " .
                      "LEFT JOIN " . $this->table_message_outcome_status . " AS ms ON ms.ID=m.MSH_MESSAGE_OUTCOME_STATUS_ID " .
+                     "LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = m.MSH_CONVERSATION_ID " .
+                     "LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID " .
                      "LEFT JOIN " . $this->table_message_validation_results . " AS mv ON mv.MSH_MESSAGE_METADATA_ID=m.ID " .
                      "WHERE m.MSH_CONVERSATION_ID in (" . implode(", ", $ids) . ") " . (!$this->message_where ? "" : " AND " . implode(" AND ", $this->message_where)) .  " ORDER BY m.MESSAGE_TIMESTAMP";
 
@@ -476,7 +487,9 @@ class ManageESB
         
         $query = "SELECT 
                     DISTINCT(p.ID), p.PRODUCT_WP_ID, p.PRODUCT_TITLE, p.PRODUCT_ID
-                  FROM " . $this->table_conversation_metadata . " AS c 
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON c.TEST_SUITE_CONFIGURATION_ID=s.ID 
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID 
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON c.PRODUCT_ID=p.PRODUCT_ID ";
@@ -525,7 +538,9 @@ class ManageESB
         
         $query = "SELECT 
                     DISTINCT(IFNULL(c.TEST_SUITE_CONFIGURATION_ID, 0)) as TC_ID, s.TEST_SUITE_TITLE AS NAME, s.TEST_SUITE_WP_ID as ID
-                  FROM " . $this->table_conversation_metadata . " AS c 
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
@@ -573,7 +588,9 @@ class ManageESB
         
         $query = "SELECT 
                     DISTINCT(cm.TEST_CASE_ID) as NAME, cm.TEST_CASE_WP_ID as ID
-                  FROM " . $this->table_conversation_metadata . " AS c 
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
@@ -599,7 +616,47 @@ class ManageESB
         return $rows;
         
     }
-    
+
+    /**
+     * Get Tags for Filter Navigation
+     *
+     * @return array
+     */
+    public function getFilterOptionsForTags()
+    {
+        $where = array();
+
+        $query = "SELECT
+                    DISTINCT(t.MSH_TAG) as NAME, t.ID
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
+                  LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
+                  LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
+
+        if ($this->message_where)
+            $query .= "LEFT JOIN " . $this->table_message_metadata . " AS m ON m.MSH_CONVERSATION_ID=c.ID ";
+
+        $where = $this->where_query;
+
+        //Remove Product Query From the where
+        if (isset($where['case'])) {
+            $where['case'] = null;
+            unset($where['case']);
+        }
+
+        if($where)
+            $query .= " WHERE " . implode(" AND ", $where);
+
+        $query .= " ORDER BY NAME ASC";
+
+        $rows = ManageESB::$esbdb->get_results($query);
+
+        return $rows;
+
+    }
+
     /**
     * Get Services for Filter Options
     * 
@@ -620,7 +677,9 @@ class ManageESB
         
         $query = "SELECT 
                     DISTINCT(m.SERVICE)
-                  FROM " . $this->table_conversation_metadata . " AS c 
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
@@ -668,7 +727,9 @@ class ManageESB
         
         $query = "SELECT 
                     DISTINCT(m.ACTION)
-                  FROM " . $this->table_conversation_metadata . " AS c 
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
@@ -715,7 +776,9 @@ class ManageESB
         
         $query = "SELECT 
                     DISTINCT(m.FROM_PARTY_ID), m.TO_PARTY_ID
-                  FROM " . $this->table_conversation_metadata . " AS c 
+                  FROM " . $this->table_conversation_metadata . " AS c
+                  LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
+                  LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON p.PRODUCT_ID = c.PRODUCT_ID
                   LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON s.ID = c.TEST_SUITE_CONFIGURATION_ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID ";
