@@ -1,8 +1,8 @@
 <?php
     $esb = new ManageESB();
-    $schedules = $esb->getUserSchedules( get_current_user_id() );
+    $schedules = $esb->getUserSchedules(get_current_user_id());
 ?>
-<?php if( ! $view ):?>
+<?php if (!$view) :?>
 <div class="popup-box view-profile-type-box" style="display: none; width: 800px;" id="run_list">
     <div class="popup-box-header radius6 noradiusbottom">Runs list</div>
     <div class="popup-box-content grid-box-body">
@@ -15,20 +15,20 @@
                 <td>Status</td>
                 <td class="schedules-table-actions">Action</td>
             </tr>
-            <?php foreach( $schedules AS $schedule ):?>
+            <?php foreach ($schedules as $schedule) :?>
                 <?php
-                    $profile_url = explode('/', $schedule->PROFILE_S3_URL );
-                    $profile_token = str_replace( '.json', '', end( $profile_url ) );
-                    $profile = ProfileInstance::getProfileBy( 'token', $profile_token );
-                    $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID );
+                    $profile_url = explode('/', $schedule->PROFILE_S3_URL);
+                    $profile_token = str_replace('.json', '', end($profile_url));
+                    $profile = ProfileInstance::getProfileBy('token', $profile_token);
+                    $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID);
                 ?>
                 <tr>
-                    <td><a href="<?php echo get_permalink( $productID );?>"><?php echo get_the_title( $productID );?></a></td>
-                    <td><a href="<?php echo S3Wrapper::getProfileLink( $profile->token, $profile->profile_name, true );?>" target="_blank"><?php echo $profile->profile_name;?></a></td>
-                    <td><?php echo ( ! empty( $schedule->START_AT ) ) ? formatDate( $schedule->START_AT, 'Y-m-d H:i:s' ) : '-';?> </td>
+                    <td><a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a></td>
+                    <td><a href="<?php echo S3Wrapper::getProfileLink($profile->token, $profile->profile_name, true);?>" target="_blank"><?php echo $profile->profile_name;?></a></td>
+                    <td><?php echo (!empty($schedule->START_AT)) ? formatDate($schedule->START_AT, 'Y-m-d H:i:s') : '-';?> </td>
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                     <td class="schedules-table-actions">
-                        <?php if( $schedule->SCHEDULE_STATUS_CODE == 'PAUSED' ):?>
+                        <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
                             <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                         <?php else: ?>
                             <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
@@ -36,15 +36,19 @@
 
                         <?php
                         //Trigger will only be available to runs in the "Prepared"or "Paused" state.
-                        if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'PREPARED', 'PAUSED' ) ) ):?>
-                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile->id?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
-                        <?php else: ?>
+                        if (in_array($schedule->SCHEDULE_STATUS_CODE, array('PREPARED', 'PAUSED'))):?>
+                                <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
+                                    <a href="#" class="change_status action-btn icon-btn play-btn has-tooltip"  data-status="EXECUTING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Resume<span></span></span></a>
+                                <?php else :?>
+                                    <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile->id?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
+                                <?php endif;?>
+                        <?php else :?>
                              <a href="javascript:void(0);" class="action-btn icon-btn play-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
                         <?php endif;?>
 
                         <?php
                         //Pause will only be available for runs in the "Executing" state.
-                        if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTING' ) ) ):?>
+                        if (in_array($schedule->SCHEDULE_STATUS_CODE, array('EXECUTING'))) :?>
                             <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSED" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
                         <?php else: ?>
                             <a href="javascript:void(0);" class="action-btn icon-btn pause-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
