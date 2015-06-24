@@ -1,6 +1,7 @@
 <?php
 
-class ProfileInstance {
+class ProfileInstance
+{
 
     /**
      * @param $profileData
@@ -9,32 +10,36 @@ class ProfileInstance {
      * @param bool $tag
      * @return array
      */
-    public static function save( $profileData, $send_sqs_message = true, $is_expanded = false, $tag = false, $mark_as_pending = false ){
+    public static function save($profileData, $send_sqs_message = true, $is_expanded = false, $tag = false, $mark_as_pending = false)
+    {
         global $wpdb;
 
         $validate_via_sqs = get_option('validate_via_sqs') == 'yes' ? true : false;
         $profile_data = $profileData['data'];
         $max_file_size_conf = get_option('uploads_files_max_size');
-        if( strlen( $profile_data ) > $max_file_size_conf * 1024 * 1024) {
-            return array( 'status' => 'error', 'message' => 'The file you have attempted to upload exceeds the system limit of ' . $max_file_size_conf . 'MB' );
+        if (strlen($profile_data) > $max_file_size_conf * 1024 * 1024) {
+            return array(
+                'status' => 'error',
+                'message' => 'The file you have attempted to upload exceeds the system limit of ' . $max_file_size_conf . 'MB'
+            );
         }
-        if( isset( $profileData['instance_id'] ) && ! empty( $profileData['instance_id'] ) ){
-            $token = $wpdb->get_var( $wpdb->prepare( "SELECT token FROM wp_community_profile_instances WHERE id = %d ", $profileData['instance_id'] ) );
-        } else{
-            if( isset( $profileData['token'] ) ){
+        if (isset($profileData['instance_id']) && ! empty( $profileData['instance_id'])) {
+            $token = $wpdb->get_var($wpdb->prepare("SELECT token FROM wp_community_profile_instances WHERE id = %d ", $profileData['instance_id']));
+        } else {
+            if (isset($profileData['token'])) {
                 $token = $profileData['token'];
-            } else{
-                $token = sha1( time() .  rand(0, 9999) . $profileData['type_id'] . $profileData['community_id'] );
+            } else {
+                $token = sha1(time() .  rand(0, 9999) . $profileData['type_id'] . $profileData['community_id']);
             }
         }
         $s3 = new S3Wrapper();
-        $s3->putObject( '/profiles/user/' . $token . '.json', $profile_data );
-        $file_size = strlen( $profile_data );
+        $s3->putObject('/profiles/user/' . $token . '.json', $profile_data);
+        $file_size = strlen($profile_data);
         //if backend validation enabled
         $status = 'valid';
         $validation_url = '';
 
-        $profileType = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $profileData['type_id'] ) ) ;
+        $profileType = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_community_profile_types WHERE id = %d ", $profileData['type_id'])) ;
         $profile_json = base64_decode($profileType->schema);
         $profile_array = json_decode($profile_json, 1);
         $profile_type = str_replace(' ', '', $profile_array['title']);
@@ -46,13 +51,13 @@ class ProfileInstance {
         }
 
         $is_bulk = false;
-        if( $file_size >= get_option( 's3_bulk_treshold' ) ) {
+        if ($file_size >= get_option('s3_bulk_treshold')) {
             $is_bulk = true;
         }
-        if( $is_expanded || $mark_as_pending ){
+        if ($is_expanded || $mark_as_pending) {
             $status = 'pending';
         }
-        if( $validate_via_sqs && $send_sqs_message ) {
+        if ($validate_via_sqs && $send_sqs_message) {
             $status = 'pending';
 
             $error_format = get_option('validation_error_format');
@@ -64,7 +69,7 @@ class ProfileInstance {
                 'operation' => 'profileValidationRequest',
                 'correlationID' => 'd4342fsc5-fa89-44f6-9286-c38a751dbac',
                 'securityContext' => array(
-                    'username' => $wpdb->get_var( $wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $profileData['user_id'] ) )
+                    'username' => $wpdb->get_var($wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", $profileData['user_id']))
                 ),
                 'parameters' => array(
                     'outputFormat' => $error_format,
@@ -84,16 +89,16 @@ class ProfileInstance {
             );
             $sqs = new SqsWrapper();
 
-            $sqs->sendMessage($message, $is_bulk );
+            $sqs->sendMessage($message, $is_bulk);
         }
 
-        if( $validate_via_sqs ) {
+        if ($validate_via_sqs) {
             $profile_name = 'Pending...';
             $profile_description = 'Pending...';
             $profile_purpose = 'Pending...';
             $profile_role = $profile_array['title'];
         } else {
-            $jsonObject = json_decode( $profile_data );
+            $jsonObject = json_decode($profile_data);
             $profile_name = $jsonObject->Profile->Title . ' v' . $jsonObject->Profile->Version->Major . '.' . $jsonObject->Profile->Version->Minor;
             if (!empty($jsonObject->Profile->Version->Patch)) {
                 $profile_name .= '.' . $jsonObject->Profile->Version->Patch;
@@ -103,13 +108,13 @@ class ProfileInstance {
             $profile_role = $jsonObject->Profile->Type;
         }
         //
-        if( isset( $profileData['type_name'] ) ){
+        if (isset($profileData['type_name'])) {
             $type_name = $profileData['type_name'];
         }
-        if( isset( $profileData['profile_role'] ) ){
+        if (isset($profileData['profile_role'])) {
             $profile_role = $profileData['profile_role'];
         }
-        if( isset( $profileData['instance_id'] ) ) {
+        if (isset( $profileData['instance_id'])) {
             $data = array(
                 'type' => $profileData['type'],
                 'type_id' => $profileData['type_id'],
@@ -123,17 +128,18 @@ class ProfileInstance {
                 'profile_role' => $profile_role,
                 'is_expanded' => $is_expanded
             );
-            if ( ! $validate_via_sqs ) {
+            if (!$validate_via_sqs) {
                 $data['profile_name'] = $profile_name;
                 $data['profile_description'] = $profile_description;
                 $data['purpose'] = $profile_purpose;
             }
-            if( ! $validate_via_sqs || ( ! $is_bulk && $validate_via_sqs ) ){
+            if (!$validate_via_sqs || (!$is_bulk && $validate_via_sqs)) {
                 //we write only non bulk profiles content to database
-                $jsonData = base64_encode( $profile_data );
+                $jsonData = base64_encode($profile_data);
                 $data['content'] = $jsonData;
             }
-            $wpdb->update($wpdb->prefix . "community_profile_instances",
+            $wpdb->update(
+                "wp_community_profile_instances",
                 $data,
                 array('id' => $profileData['instance_id'])
             );
@@ -156,36 +162,42 @@ class ProfileInstance {
                 'profile_role' => $profile_role,
                 'is_expanded' => $is_expanded
             );
-            if( ! $validate_via_sqs || ( ! $is_bulk && $validate_via_sqs ) ){
+            if (!$validate_via_sqs || (!$is_bulk && $validate_via_sqs)) {
                 //we write only non bulk profiles content to database
-                $jsonData = base64_encode( $profile_data );
+                $jsonData = base64_encode($profile_data);
                 $data['content'] = $jsonData;
             }
-            $wpdb->insert( "wp_community_profile_instances", $data );
+            $wpdb->insert("wp_community_profile_instances", $data);
 
             $profileData['instance_id'] = $wpdb->insert_id;
-            $wpdb->query( $wpdb->prepare( "UPDATE wp_community_profile_types SET `instances`=`instances` + 1 WHERE id = %d ", $profileData['type_id'] ) );
+            $wpdb->query($wpdb->prepare("UPDATE wp_community_profile_types SET `instances`=`instances` + 1 WHERE id = %d ", $profileData['type_id']));
 
         }
-        if( $tag ){
-            Tag::assignTag( $tag, $profileData['instance_id'] );
+        if ($tag) {
+            Tag::assignTag($tag, $profileData['instance_id']);
         }
         //backend validation service populate metadata if it enabled
-        if( ! $validate_via_sqs ) {
+        if (!$validate_via_sqs) {
             //remove old meta first
-            $wpdb->delete( 'wp_community_profile_meta',
-                array( 'profile_id' => $profileData['instance_id'] ), '%d');
+            $wpdb->delete(
+                'wp_community_profile_meta',
+                array('profile_id' => $profileData['instance_id'] ),
+                '%d'
+            );
 
-            $profile_meta = getProfileMetaData( $jsonObject );
-            foreach( $profile_meta AS $meta_key => $meta_value ){
-                if( is_array( $profileData['instance_id'] ) || is_array( $meta_key ) || is_array( $meta_value ) ) {
+            $profile_meta = getProfileMetaData($jsonObject);
+            foreach ($profile_meta as $meta_key => $meta_value) {
+                if (is_array($profileData['instance_id']) || is_array($meta_key) || is_array($meta_value)) {
                     continue;
                 }
-                $wpdb->insert( "wp_community_profile_meta", array(
-                    'profile_id' => $profileData['instance_id'],
-                    'meta_key'   => $meta_key,
-                    'meta_value' => $meta_value,
-                ));
+                $wpdb->insert(
+                    "wp_community_profile_meta",
+                    array(
+                        'profile_id' => $profileData['instance_id'],
+                        'meta_key'   => $meta_key,
+                        'meta_value' => $meta_value,
+                    )
+                );
             }
         }
         return array( 'status' => 'success', 'message' => '', 'data' => array( 'id' => $profileData['instance_id'], 'token' => $profileData['token'] ) );
@@ -196,7 +208,7 @@ class ProfileInstance {
      * @param $profileType - profile type name
      * @return bool
      */
-    public static function isSchedule( $profileType )
+    public static function isSchedule($profileType)
     {
         return 'Schedule' === $profileType;
     }
@@ -206,7 +218,7 @@ class ProfileInstance {
      * @param $profileType - profile type name
      * @return bool
      */
-    public static function isRun( $profileType )
+    public static function isRun($profileType)
     {
         return 'Run' === $profileType;
     }
@@ -216,10 +228,10 @@ class ProfileInstance {
      * @param $fieldValue
      * @return mixed
      */
-    public static function getProfileBy( $fieldName, $fieldValue )
+    public static function getProfileBy($fieldName, $fieldValue)
     {
         global $wpdb;
-        return $wpdb->get_row( $wpdb->prepare("SELECT *, '' AS content FROM wp_community_profile_instances WHERE `$fieldName` = %s ", $fieldValue ) );
+        return $wpdb->get_row($wpdb->prepare("SELECT *, '' AS content FROM wp_community_profile_instances WHERE `$fieldName` = %s ", $fieldValue));
     }
 
     /**
@@ -227,10 +239,10 @@ class ProfileInstance {
      * @param $profileToken
      * @return bool
      */
-    public static function isRunCanBeTriggered( $profileToken )
+    public static function isRunCanBeTriggered($profileToken)
     {
         $esb = new ManageESB();
-        $statusRow = ManageESB::$esbdb->get_row( "SELECT mss.SCHEDULE_STATUS_CODE FROM MSH_SCHEDULE_RUNS AS msr JOIN MSH_SCHEDULE_STATUSES AS mss ON mss.ID = msr.SCHEDULE_STATUS WHERE PROFILE_S3_URL LIKE '%".$profileToken."%'");
+        $statusRow = ManageESB::$esbdb->get_row("SELECT mss.SCHEDULE_STATUS_CODE FROM MSH_SCHEDULE_RUNS AS msr JOIN MSH_SCHEDULE_STATUSES AS mss ON mss.ID = msr.SCHEDULE_STATUS WHERE PROFILE_S3_URL LIKE '%".$profileToken."%'");
         return 'PREPARED' == $statusRow->SCHEDULE_STATUS_CODE;
     }
 

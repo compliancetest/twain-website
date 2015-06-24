@@ -4,15 +4,15 @@
  */
 
 
-if(!is_user_logged_in()){
+if (!is_user_logged_in()) {
     wp_redirect(home_url());
     exit;
 }
 get_header();
-$profileInstances = getCustomerProfileInstances( null, true );
+$profileInstances = getCustomerProfileInstances(null, true);
 $subscriptions =  getUserSubscriptions(null, true);
-$sqs_validation_enabled = get_option( 'validate_via_sqs' ) == 'yes' ? true : false;
-$filters = getCustomerProfileInstancesFilters( $profileInstances );
+$sqs_validation_enabled = get_option('validate_via_sqs') == 'yes' ? true : false;
+$filters = getCustomerProfileInstancesFilters($profileInstances);
 ?>
 <div class="content" id="my_testdata">
     <div class="dashboard-tabs">
@@ -40,11 +40,13 @@ $filters = getCustomerProfileInstancesFilters( $profileInstances );
                                <label for="community-filter">Type</label>
                                <select name="type" id="community-filter" class="select">
                                    <option>All</option>
-                                   <?php if( is_array( $filters['type'] ) ):?>
-                                       <?php foreach( $filters['type'] AS $v): ?>
-                                           <option value="<?php echo $v;?>" <?php if( isset( $_GET['type'] ) && $_GET['type'] == $v ):?> selected="selected" <?php endif;?>><?php echo $v;?></option>
-                                       <?php endforeach; ?>
-                                   <?php endif;?>
+                                   <?php if (is_array($filters['type'])) :?>
+                                        <?php foreach ($filters['type'] as $v) : ?>
+                                           <option value="<?php echo $v;?>" <?php if (isset($_GET['type']) && $_GET['type'] == $v ):?> selected="selected" <?php endif;?>>
+                                                <?php echo $v;?>
+                                           </option>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                </select>
                            </li>
                            <li>

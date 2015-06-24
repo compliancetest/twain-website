@@ -2,14 +2,14 @@
 
 namespace MicroServices;
 
-
-class MicroServices {
+class MicroServices
+{
 
     /**
      * @link https://redmine.gosource.com.au/projects/compliancetest/wiki/Micro-Services#Request-9
      * @param $profileId
      */
-    public static function prepareRunRequest( $profileId )
+    public static function prepareRunRequest($profileId)
     {
         global $wpdb;
         $profileFieldsToChange = array(
@@ -17,15 +17,15 @@ class MicroServices {
             'type_name'    => 'Run v1.0',
             'profile_role' => 'Run'
         );
-        $status = copyProfileInstance( $profileId, $profileFieldsToChange, false );
-        \Tag::copyTags( $profileId, $status['data']['id'] );
-        if( is_array( $_POST['tags'] ) && ! empty( $_POST['tags'] ) ){
-            foreach( $_POST['tags'] AS $tag ){
-                \Tag::assignTag( $tag, $status['data']['id'] );
+        $status = copyProfileInstance($profileId, $profileFieldsToChange, false);
+        \Tag::copyTags($profileId, $status['data']['id']);
+        if (is_array($_POST['tags']) && !empty($_POST['tags'])) {
+            foreach ($_POST['tags'] as $tag) {
+                \Tag::assignTag($tag, $status['data']['id']);
             }
         }
-        $profile = \ProfileInstance::getProfileBy( 'id', $profileId );
-        $uniq_key = md5( $profile->token . mktime());
+        $profile = \ProfileInstance::getProfileBy('id', $profileId);
+        $uniq_key = md5($profile->token . mktime());
         $message = array(
             'operation' => 'prepareRunRequest',
             'correlationID' => '',
@@ -42,24 +42,24 @@ class MicroServices {
                     'bucket' => get_option('aws_s3_url'),
                     'key' => "profiles/validation/{$profile->token}/{$uniq_key}.json"
                 ),
-                'productId' => trim( $_POST['product_id'] ),
+                'productId' => trim($_POST['product_id']),
                 'tags' => (array) $_POST['tags']
             ),
             "securityContext" => array(
-                "username" => $wpdb->get_var( $wpdb->prepare( "SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id() ) )
+                "username" => $wpdb->get_var($wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id()))
             )
         );
-        $sqs = new \SqsWrapper( get_option('schedule_sqs_queue_name') );
-        $sqs->sendMessage( $message );
+        $sqs = new \SqsWrapper(get_option('schedule_sqs_queue_name'));
+        $sqs->sendMessage($message);
     }
 
     /**
      * @link https://redmine.gosource.com.au/projects/compliancetest/wiki/Micro-Services#Request-9
      * @param $profileId
      */
-    public static function executeRunRequest( $profileId, $date )
+    public static function executeRunRequest($profileId, $date)
     {
-        $profile = \ProfileInstance::getProfileBy( 'id', $profileId );
+        $profile = \ProfileInstance::getProfileBy('id', $profileId);
         $message = array(
             'operation' => 'executeRunRequest',
             'correlationID' => '',
@@ -71,7 +71,7 @@ class MicroServices {
                 'startAt' => $date
             )
         );
-        $sqs = new \SqsWrapper( get_option('schedule_sqs_queue_name') );
-        $sqs->sendMessage( $message );
+        $sqs = new \SqsWrapper(get_option('schedule_sqs_queue_name'));
+        $sqs->sendMessage($message);
     }
 }
