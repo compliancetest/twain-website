@@ -64,7 +64,7 @@ $filterAction = isset($_GET['action']) ? htmlspecialchars($_GET['action']) : nul
 $filterPartyId = isset($_GET['partyid']) ? htmlspecialchars($_GET['partyid']) : null;
 $filterDate = isset($_GET['date']) ? htmlspecialchars($_GET['date']) : null;
 $filterCustomer = isset($_GET['customer']) ? htmlspecialchars($_GET['customer']) : null;
-$filterTags = isset($_GET['tag']) ? htmlspecialchars($_GET['tag']) : null;
+$filterTags = isset($_GET['tag']) && $_GET['tag'] != 'all' ? htmlspecialchars($_GET['tag']) : null;
 
 $esb = new ManageESB();
 
