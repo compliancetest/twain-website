@@ -29,7 +29,7 @@
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                     <td class="schedules-table-actions">
                         <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
-                            <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
+                            <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                         <?php else: ?>
                             <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                         <?php endif;?>
@@ -49,7 +49,7 @@
                         <?php
                         //Pause will only be available for runs in the "Executing" state.
                         if (in_array($schedule->SCHEDULE_STATUS_CODE, array('EXECUTING'))) :?>
-                            <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSED" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
+                            <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSING" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
                         <?php else: ?>
                             <a href="javascript:void(0);" class="action-btn icon-btn pause-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
                         <?php endif;?>
