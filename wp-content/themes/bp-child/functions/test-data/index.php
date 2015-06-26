@@ -64,9 +64,14 @@ function cp_process_test_data_actions()
         }else if(wp_verify_nonce($action, 'trigger_run')){
             render_view( 'test-data/views/trigger.phtml', (object) $_GET, true );
         }else if(wp_verify_nonce($action, 'save-schedule')){
-            \MicroServices\MicroServices::prepareRunRequest( intval( $_POST['profile_id'] ) );
+            $profileId = intval( $_POST['profile_id'] );
+            \MicroServices\MicroServices::prepareRunRequest($profileId);
         }else if( wp_verify_nonce($action, 'execute-schedule') ){
-            \MicroServices\MicroServices::executeRunRequest( intval( $_POST['profile_id'] ), date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
+            $profileId = intval( $_POST['profile_id'] );
+            \MicroServices\MicroServices::executeRunRequest( $profileId, date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
+            $profile = ProfileInstance::getProfileBy('id', $profileId);
+            $esb = new ManageESB();
+            $esb->updateStatusByProfileS3Url($profile->token, 'STARTING', 'PREPARED');
         }else if( wp_verify_nonce($action, 'change-schedule-status') ){
             $esb = new ManageESB();
             $s3Url = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);

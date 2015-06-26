@@ -1061,6 +1061,12 @@ class ManageESB
         ManageESB::$esbdb->query($query);
         return ManageESB::$esbdb->get_row(ManageESB::$esbdb->prepare("SELECT PROFILE_S3_URL FROM " . $this->table_schedules_runs . " WHERE ID = %d ", $runId));
     }
+
+    public function updateStatusByProfileS3Url($token, $status, $prevStatus)
+    {
+        $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) WHERE PROFILE_S3_URL LIKE ('%s') AND SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) ", $status, '%'.$token.'.json', $prevStatus );
+        ManageESB::$esbdb->query($query);
+    }
     
     
 }
