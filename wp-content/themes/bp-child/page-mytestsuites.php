@@ -22,6 +22,7 @@ get_header();
                         <div class="td td-community">Community</div>
                         <div class="td td-suite">Test Suite</div>
                         <div class="td td-error-checking tocenter two-lines">Limited Error <br> Checking</div>
+                        <div class="td td-error-checking tocenter two-lines">G018<br>Conformance</div>
                         <div class="td td-error-checking tocenter two-lines">Force E2E <br>routing</div>
                         <div class="td td-status tocenter">Status</div>
                         <div class="td td-action tocenter">Action</div>
@@ -55,6 +56,9 @@ get_header();
                             </div>
                             <div class="td td-error-checking tocenter">
                                 <input class="update-error-checking" type="checkbox" value="<?php echo $row->id;?>" <?php echo ($row->limited_error_checking)?('checked'):(''); ?>></br>
+                            </div>
+                            <div class="td td-error-checking tocenter">
+                                <input class="update-mandatory_response_validation" type="checkbox" value="<?php echo $row->id;?>" <?php echo ($row->mandatory_response_validation)?('checked'):(''); ?>></br>
                             </div>
                             <div class="td td-error-checking tocenter">
                                 <input class="update-force" type="checkbox" name="force_e2e_routing" value="<?php echo $row->id;?>" <?php echo $row->force_e2e_routing ? 'checked="checked"' : '' ?> style="margin-left: -2px;"/>
@@ -111,6 +115,7 @@ get_header();
     <div class="clear"></div>
 </div> <!--end content-->
 <input type="hidden" id="update-error-checking-action" value="<?php echo wp_create_nonce('update-error-checking-action')?>">
+<input type="hidden" id="update-mandatory_response_validation-action" value="<?php echo wp_create_nonce('update-mandatory_response_validation-action')?>">
 <input type="hidden" id="update-force-action" value="<?php echo wp_create_nonce('update-force-action')?>">
 <script type="text/javascript">
 jQuery(document).ready(function(){
@@ -127,6 +132,18 @@ jQuery(document).ready(function(){
             dataType: 'json',
             success: function(rsp) {
             }
+        });
+    });
+    jQuery('.update-mandatory_response_validation').change(function(){
+        jQuery.ajax({
+            url: '/',
+            data: {
+                'cp-action' : jQuery('#update-mandatory_response_validation-action').val(),
+                'id':jQuery(this).val(),
+                'status' : jQuery(this).attr('checked') == 'checked' ? 1 : 0
+            },
+            type: 'post',
+            dataType: 'json'
         });
     });
     jQuery('.update-force').change(function(){

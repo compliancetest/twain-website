@@ -117,6 +117,8 @@ function compliancetest_user_actions()
         exit;
     }else if(wp_verify_nonce($cpAction, 'update-error-checking-action')){
         exit( cp_save_limited_error_checking() );
+    }else if(wp_verify_nonce($cpAction, 'update-mandatory_response_validation-action')){
+        exit( cp_save_mandatory_response_validation_checking() );
     }else if(wp_verify_nonce($cpAction, 'update-force-action')){
         exit( cp_save_force_checking() );
     }else if(wp_verify_nonce($cpAction, 'insufficient-privilege')){
