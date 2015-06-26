@@ -38,7 +38,7 @@
                         //Trigger will only be available to runs in the "Prepared"or "Paused" state.
                         if (in_array($schedule->SCHEDULE_STATUS_CODE, array('PREPARED', 'PAUSED'))):?>
                                 <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
-                                    <a href="#" class="change_status action-btn icon-btn play-btn has-tooltip"  data-status="EXECUTING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Resume<span></span></span></a>
+                                    <a href="#" class="change_status action-btn icon-btn play-btn has-tooltip"  data-status="RESUMING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Resume<span></span></span></a>
                                 <?php else :?>
                                     <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile->id?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
                                 <?php endif;?>
