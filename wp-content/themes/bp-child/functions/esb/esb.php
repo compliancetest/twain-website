@@ -490,7 +490,7 @@ class ManageESB
                   FROM " . $this->table_conversation_metadata . " AS c
                   LEFT JOIN " . $this->table_tags_to_conversations . " AS ttc ON ttc.MSH_CONVERSATION_ID = c.ID
                   LEFT JOIN " . $this->table_tags . " AS t ON t.ID = ttc.MSH_TAG_ID
-                  LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON c.TEST_SUITE_CONFIGURATION_ID=s.ID 
+                  LEFT JOIN " . $this->table_test_suite_configuration . " AS s ON c.TEST_SUITE_CONFIGURATION_ID=s.ID
                   LEFT JOIN " . $this->table_test_case_configuration . " AS cm ON c.TEST_CASE_CONFIGURATION_ID=cm.ID 
                   LEFT JOIN " . $this->table_product_configuration . " AS p ON c.PRODUCT_ID=p.PRODUCT_ID ";
                   
@@ -605,7 +605,7 @@ class ManageESB
             $where['case'] = null;
             unset($where['case']);            
         }
-        
+
         if($where)
             $query .= " WHERE " . implode(" AND ", $where);
         
@@ -644,6 +644,10 @@ class ManageESB
         if (isset($where['case'])) {
             $where['case'] = null;
             unset($where['case']);
+        }
+        //Remove Tag Query From the where
+        if (isset($where['tag'])) {
+            unset($where['tag']);
         }
 
         if($where)

@@ -132,7 +132,7 @@ if( isset( $filterOrganisation ) ){
     $params[] = 'organisation=' .$filterOrganisation ;
 }
 if( isset( $filterTags ) ){
-    $params[] = 'tags=' .$filterTags ;
+    $params[] = 'tag=' .$filterTags ;
 }
  
 get_header();
@@ -595,6 +595,9 @@ get_header();
                         <?php } ?>
                         <?php if($filterCustomer){ ?>
                         <input type="hidden" name="customer" value="<?php echo $filterCustomer?>" /> 
+                        <?php } ?>
+                        <?php if($filterTags){ ?>
+                            <input type="hidden" name="tag" value="<?php echo $filterTags?>" />
                         <?php } ?>
                     </form>
                 </div>
