@@ -24,7 +24,7 @@
                 ?>
                 <tr>
                     <td><a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a></td>
-                    <td><a href="<?php echo S3Wrapper::getProfileLink($profile->token, $profile->profile_name, true);?>" target="_blank"><?php echo $profile->profile_name;?></a></td>
+                    <td><a id="show_profile" href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profile->profile_name;?></a></td>
                     <td><?php echo (!empty($schedule->START_AT)) ? formatDate($schedule->START_AT, 'Y-m-d H:i:s') : '-';?> </td>
                     <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                     <td class="schedules-table-actions">
@@ -77,6 +77,7 @@
 <?php endif;?>
 <script type="application/javascript">
     jQuery(document).ready(function(){
+        jQuery("#show_profile").off("click").cplightbox();
         jQuery(".trigger_row").off("click").cplightbox();
         jQuery('.change_status').off('click').on('click', function(){
             jQuery('.loading_schedule').show();
