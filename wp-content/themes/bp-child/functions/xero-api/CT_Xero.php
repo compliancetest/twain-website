@@ -247,6 +247,10 @@ class CT_Xero {
         $this->xero->request( 'POST', $this->xero->url('Invoices', 'core'), array(), str_replace( '<?xml version="1.0"?>', '', $xml->asXML() ) );
         if ($this->xero->response['code'] == 200) {
             return  $this->responseToArray();
+        } else{
+            return array(
+                'error' => $this->responseToArray()
+            );
         }
         return false;
     }

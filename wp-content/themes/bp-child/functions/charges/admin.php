@@ -354,9 +354,13 @@ function ct_process_charge_entry_admin_actions()
                 return;
             }
         } elseif( wp_verify_nonce( $action, 'update-specific' ) ){
-            $counter = generateInvoices();
-            echo 'Created '.$counter.' invoices';
-            redirect_then_exit();
+            $data = generateInvoices();
+            echo 'Created '.$data['counter'].' invoices';
+            if ($data['errors']) {
+                _trace($data['errors']);
+                exit;
+            }
+            redirect_and_exit();
         } elseif( wp_verify_nonce( $action, 'update-status' ) ){
             $counter = 0;
             $xero = new CT_Xero();
@@ -487,6 +491,7 @@ function generateMonthlyCharges(){
 }
 function generateInvoices(){
     global $wpdb;
+    $errors = array();
     if( isset( $_POST['org_id'][0] ) && ! empty( $_POST['org_id'][0] ) ){
         $organisations = $_POST['org_id'];
         $counter = 0;
@@ -510,6 +515,8 @@ function generateInvoices(){
                     if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
                         $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
                         $counter++;
+                    } else{
+                        $errors[$wpdb->get_var($wpdb->prepare("SELECT organisation_name FROM wp_organisations WHERE id = %d ", $organisation))][] = $invoice;
                     }
                 }
             }
@@ -547,12 +554,17 @@ function generateInvoices(){
                     if( isset( $invoice['Invoices']['Invoice']['InvoiceNumber'] ) ){
                         $wpdb->query( $wpdb->prepare( "UPDATE wp_organisations_charge SET invoice_number = %s  WHERE invoice_number = '' AND payment_id = %d AND organisation_id = %d ", $invoice['Invoices']['Invoice']['InvoiceNumber'] , $paymentID, $paymentType['organisation_id'] ) );
                         $counter++;
+                    } else {
+                        $errors[] = $invoice;
                     }
                 }
             }
         }
     }
-    return $counter;
+    return array(
+        'counter' => $counter,
+        'errors'  => $errors
+    );
 }
 add_action( 'wp_ajax_get_payment_methods', 'get_payment_methods_callback' );
 function get_payment_methods_callback() {
