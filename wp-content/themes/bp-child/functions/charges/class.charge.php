@@ -86,18 +86,22 @@ class CT_Charge
 
     public function getOrganisationsList( $show_only_credit_card = false ){
         global $wpdb;
+        $inArrearsQuery = true;
+        if( get_option('invoice_in_arrears') == 'yes' ){
+            $inArrearsQuery = " YEAR(c.start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(c.start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH) ";
+        }
         if( $show_only_credit_card ){
             return $wpdb->get_results("SELECT c.*, o.* FROM {$wpdb->prefix}organisations_charge AS c
                                       JOIN {$wpdb->prefix}organisations AS o ON o.id = c.organisation_id
                                       JOIN {$wpdb->prefix}organisations_payment_methods AS pm ON pm.id = c.payment_id
                                       LEFT JOIN {$wpdb->prefix}organisations_payments AS p ON p.invoice_number = c.invoice_number
-                                      WHERE YEAR(c.start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(c.start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND
+                                      WHERE $inArrearsQuery AND
                                       c.invoice_number != '' AND c.is_paid = 0 AND o.no_billing = 0 AND pm.invoice_me = 0 AND p.invoice_number IS NULL
                                       GROUP BY c.organisation_id");
         }
         return $wpdb->get_results("SELECT * FROM wp_organisations_charge AS c
                                   JOIN wp_organisations AS o ON o.id = c.organisation_id
-                                  WHERE YEAR(c.start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(c.start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND
+                                  WHERE $inArrearsQuery AND
                                   invoice_number = '' AND is_paid = 0 AND o.no_billing = 0 GROUP BY organisation_id");
     }
 }
