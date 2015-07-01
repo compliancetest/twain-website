@@ -72,6 +72,7 @@ function cp_process_test_data_actions()
             $profile = ProfileInstance::getProfileBy('id', $profileId);
             $esb = new ManageESB();
             $esb->updateStatusByProfileS3Url($profile->token, 'STARTING', 'PREPARED');
+            exit('success');
         }else if( wp_verify_nonce($action, 'change-schedule-status') ){
             $esb = new ManageESB();
             $s3Url = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);

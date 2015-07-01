@@ -51,13 +51,20 @@
             dateFormat: 'yy-mm-dd'
         });
         jQuery('.trigger-run').on('click', function(){
+            jQuery('.close_btn').click();
             jQuery('.loading_run').show();
             jQuery.ajax({
                 url: '/',
                 type: 'post',
                 data: { 'td-action' : '<?php echo wp_create_nonce('execute-schedule');?>', 'profile_id' : '<?php echo $view->id;?>', 'datetime' : jQuery('#datetime').val() },
                 success: function(){
-                    location.reload();
+                    if (window.location.href.indexOf('my-transaction-log') != -1) {
+                        jQuery('.loading_run').hide();
+                        setTimeout("jQuery('#trigger-schedule-link').click()", 200 );
+                    } else {
+                        location.reload();
+                    }
+
                 }
             })
         });
