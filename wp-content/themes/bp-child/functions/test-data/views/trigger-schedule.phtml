@@ -7,64 +7,71 @@
     <div class="popup-box-header radius6 noradiusbottom">Runs list</div>
     <div class="popup-box-content grid-box-body">
 <?php endif;?>
-        <table id="schedules_table">
-            <tr style="font-weight: bold;">
-                <td>Product</td>
-                <td>Profile</td>
-                <td>Start Date/Time</td>
-                <td>Status</td>
-                <td class="schedules-table-actions">Action</td>
-            </tr>
-            <?php foreach ($schedules as $schedule) :?>
-                <?php
-                    $profile_url = explode('/', $schedule->PROFILE_S3_URL);
-                    $profile_token = str_replace('.json', '', end($profile_url));
-                    $profile = ProfileInstance::getProfileBy('token', $profile_token);
-                    $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID);
-                ?>
-                <tr>
-                    <td><a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a></td>
-                    <td><a class="show_profile" href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profile->profile_name;?></a></td>
-                    <td><?php echo (!empty($schedule->START_AT)) ? formatDate($schedule->START_AT, 'Y-m-d H:i:s') : '-';?> </td>
-                    <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
-                    <td class="schedules-table-actions">
-                        <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
-                            <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
-                        <?php else: ?>
-                            <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
-                        <?php endif;?>
-
-                        <?php
-                        //Trigger will only be available to runs in the "Prepared"or "Paused" state.
-                        if (in_array($schedule->SCHEDULE_STATUS_CODE, array('PREPARED', 'PAUSED'))):?>
-                                <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
-                                    <a href="#" class="change_status action-btn icon-btn play-btn has-tooltip"  data-status="RESUMING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Resume<span></span></span></a>
-                                <?php else :?>
-                                    <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile->id?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
-                                <?php endif;?>
-                        <?php else :?>
-                             <a href="javascript:void(0);" class="action-btn icon-btn play-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
-                        <?php endif;?>
-
-                        <?php
-                        //Pause will only be available for runs in the "Executing" state.
-                        if (in_array($schedule->SCHEDULE_STATUS_CODE, array('EXECUTING'))) :?>
-                            <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSING" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
-                        <?php else: ?>
-                            <a href="javascript:void(0);" class="action-btn icon-btn pause-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
-                        <?php endif;?>
-
-                        <?php
-                        //Delete will only be available to runs in the "Executed" or "Terminated" state.
-                        if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED', 'PREPARED' ) ) ):?>
-                            <a href="#" class="change_status action-btn icon-btn delete-btn has-tooltip" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
-                        <?php else: ?>
-                            <a href="javascript:void(0);" class="action-btn icon-btn delete-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
-                        <?php endif;?>
-                    </td>
+        <div id="schedules_table">
+            <table>
+                <tr style="font-weight: bold;">
+                    <td>Product</td>
+                    <td>Profile</td>
+                    <td>Start Date/Time</td>
+                    <td>Status</td>
+                    <td class="schedules-table-actions">Action</td>
                 </tr>
-            <?php endforeach;?>
-        </table>
+                <?php foreach ($schedules as $schedule) :?>
+                    <?php
+                        $profile_url = explode('/', $schedule->PROFILE_S3_URL);
+                        $profile_token = str_replace('.json', '', end($profile_url));
+                        $profile = ProfileInstance::getProfileBy('token', $profile_token);
+                        $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID);
+                    ?>
+                    <tr>
+                        <td><a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a></td>
+                        <td><a class="show_profile" href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profile->profile_name;?></a></td>
+                        <td><?php echo (!empty($schedule->START_AT)) ? formatDate($schedule->START_AT, 'Y-m-d H:i:s') : '-';?> </td>
+                        <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
+                        <td class="schedules-table-actions">
+                            <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
+                                <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
+                            <?php else: ?>
+                                <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
+                            <?php endif;?>
+
+                            <?php
+                            //Trigger will only be available to runs in the "Prepared"or "Paused" state.
+                            if (in_array($schedule->SCHEDULE_STATUS_CODE, array('PREPARED', 'PAUSED'))):?>
+                                    <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
+                                        <a href="#" class="change_status action-btn icon-btn play-btn has-tooltip"  data-status="RESUMING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Resume<span></span></span></a>
+                                    <?php else :?>
+                                        <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $profile->id?>" class="trigger_row action-btn icon-btn play-btn has-tooltip" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
+                                    <?php endif;?>
+                            <?php else :?>
+                                 <a href="javascript:void(0);" class="action-btn icon-btn play-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Trigger<span></span></span></a>
+                            <?php endif;?>
+
+                            <?php
+                            //Pause will only be available for runs in the "Executing" state.
+                            if (in_array($schedule->SCHEDULE_STATUS_CODE, array('EXECUTING'))) :?>
+                                <a href="#" class="change_status action-btn icon-btn pause-btn has-tooltip" data-status="PAUSING" data-prevstatus="EXECUTING" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
+                            <?php else: ?>
+                                <a href="javascript:void(0);" class="action-btn icon-btn pause-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Pause<span></span></span></a>
+                            <?php endif;?>
+
+                            <?php
+                            //Delete will only be available to runs in the "Executed" or "Terminated" state.
+                            if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED', 'PREPARED' ) ) ):?>
+                                <a href="#" class="change_status action-btn icon-btn delete-btn has-tooltip" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
+                            <?php else: ?>
+                                <a href="javascript:void(0);" class="action-btn icon-btn delete-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            </table>
+            <a href="#" class="action-btn process-btn submit-btn" id="refresh_trigger_data">
+                <span class="p"></span><span class="t">Refresh</span>
+            </a>
+            <div class="space10"></div>
+            <div class="loading loading_schedule"></div>
+        </div>
 <?php if( ! $view ):?>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
@@ -72,14 +79,34 @@
         <div class="clear"></div>
     </div>
     <a class="close_btn"></a>
-    <div class="loading loading_schedule"></div>
 </div>
 <?php endif;?>
 <script type="application/javascript">
     jQuery(document).ready(function(){
-        jQuery(".show_profile").off("click").cplightbox();
-        jQuery(".trigger_row").off("click").cplightbox();
-        jQuery('.change_status').off('click').on('click', function(){
+        var isShown = false;
+        jQuery(".show_profile").off("click").cplightbox({
+            'onClose': function () {
+                if (!isShown) {
+                    setTimeout("jQuery('#trigger-schedule-link').click();", 200);
+                    isShown = true;
+                }
+            },
+            'onLoad' : function(){
+                isShown = false;
+            }
+        });
+        jQuery(".trigger_row").off("click").cplightbox({
+            'onClose' : function(){
+                if (!isShown) {
+                    setTimeout("jQuery('#trigger-schedule-link').click();", 200);
+                    isShown = true;
+                }
+            },
+            'onLoad' : function(){
+                isShown = false;
+            }
+        });
+        jQuery('#refresh_trigger_data, .change_status').off('click').on('click', function(){
             jQuery('.loading_schedule').show();
             jQuery.ajax({
                 url: '/',
