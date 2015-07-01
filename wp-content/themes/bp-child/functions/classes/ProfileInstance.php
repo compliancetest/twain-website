@@ -250,9 +250,12 @@ class ProfileInstance
      * @param $profileType
      * @return bool
      */
-    public static function canBeDeleted( $profileType )
+    public static function canBeDeleted( $profile )
     {
-        if (in_array($profileType, array('Run'))){
+        if ('invalid' == $profile->validation_status) {
+            return true;
+        }
+        if (in_array($profile->profile_role, array('Run'))) {
             return false;
         }
         return true;

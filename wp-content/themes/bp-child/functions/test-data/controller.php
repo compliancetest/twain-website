@@ -307,7 +307,7 @@ function deleteProfileTypeInstance( $action, $id, $forceDelete = false )
         $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE id = %d", $id );
         $row = $wpdb->get_row($query);
 
-        if( ! ProfileInstance::canBeDeleted( $row->profile_role ) && ! $forceDelete ){
+        if( ! ProfileInstance::canBeDeleted( $row ) && ! $forceDelete ){
             $response = array( 'status' => 'error', 'message' => "This item can't be deleted");
             continue;
         }
