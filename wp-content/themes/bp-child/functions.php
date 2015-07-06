@@ -104,6 +104,7 @@ require_once(THE_FUNCTION . '/classes/ProfileInstance.php');
 
 require_once(THE_FUNCTION . '/classes/ProfileType.php');
 
+require_once(THE_FUNCTION . '/classes/User.php');
 require_once(THE_FUNCTION . '/classes/MicroServices.php');
 
 //Test Case Function

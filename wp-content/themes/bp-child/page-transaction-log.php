@@ -305,7 +305,7 @@ get_header();
         </div> 
         <div class="padding10">
             <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('trigger-message')?>" id="trigger-message-link" class="action-btn process-btn left" onclick="javascript: void(0)"><span class="p"></span><span class="t">TRIGGER MESSAGE</span></a>
-            <?php if( PricingPlan::isSupportBulk() ):?>
+            <?php if (PricingPlan::isSupportBulk() && \User\User::isGatewayConfigured()):?>
                 <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('trigger-schedule')?>" id="trigger-schedule-link" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn process-btn left10" onclick="javascript: void(0)"><span class="p"></span><span class="t">TRIGGER SCHEDULE</span></a>
             <?php endif;?>
             <a href="<?php echo get_site_url()?>?ct-message-action=<?php echo wp_create_nonce('upload-message')?>" id="upload-message-link" class="action-btn process-btn left left10" onclick="javascript: void(0)"><span class="p"></span><span class="t">UPLOAD MESSAGE</span></a>
