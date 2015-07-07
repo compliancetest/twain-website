@@ -7,13 +7,13 @@
     <div class="popup-box-header radius6 noradiusbottom">Runs list</div>
     <div class="popup-box-content grid-box-body">
 <?php endif;?>
-        <div id="schedules_table">
-            <table>
+        <div>
+            <table id="schedules_table">
                 <tr style="font-weight: bold;">
                     <td>Product</td>
                     <td>Profile</td>
-                    <td>Start Date/Time</td>
-                    <td>Status</td>
+                    <td>Start Time</td>
+                    <td class="schedule-start-at">Status</td>
                     <td class="schedules-table-actions">Action</td>
                 </tr>
                 <?php foreach ($schedules as $schedule) :?>
@@ -22,13 +22,31 @@
                         $profile_token = str_replace('.json', '', end($profile_url));
                         $profile = ProfileInstance::getProfileBy('token', $profile_token);
                         $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID);
+                        $tags = \Tag::getItemTags($profile->id);
                     ?>
-                    <tr>
-                        <td><a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a></td>
-                        <td><a class="show_profile" href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profile->profile_name;?></a></td>
-                        <td><?php echo (!empty($schedule->START_AT)) ? formatDate($schedule->START_AT, 'Y-m-d H:i:s') : '-';?> </td>
+                    <tr class="schedule-row">
+                        <td class="schedule-name">
+                            <a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a>
+                        </td>
+                        <td class="schedule-profile-name">
+                            <a class="show_profile" href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profile->profile_name;?></a>
+                            <?php if ($tags) :?>
+                            <div class="clear"></div>
+                            <b>Tags</b>:
+                                <?php $links = array();
+                                foreach ($tags as $tag) {
+                                    $links[] = $tag->name;
+                                };
+                                echo implode(', ', $links);
+                                ?>
+                                <?php endif;?>
+                        </td>
+
+                        <td class="schedule-start-at">
+                            <?php echo (!empty($schedule->START_AT)) ? str_replace(' ', '<br>', formatDate($schedule->START_AT, 'Y-m-d H:i:s')) : '-';?>
+                        </td>
                         <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
-                        <td class="schedules-table-actions">
+                        <td class="schedules-table-actions" valign="middle">
                             <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
                                 <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                             <?php else: ?>
