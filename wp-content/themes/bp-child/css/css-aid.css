@@ -2790,8 +2790,13 @@ table.result-table{
     width: 180px;
 }
 #schedules_table .schedule-profile-name {
-    width: 230px;
+    width: 190px;
 }
 #schedules_table .schedule-start-at {
     text-align: center;
+}
+
+#schedules_table .schedule-status {
+    text-align: center;
+    width: 100px;
 }
