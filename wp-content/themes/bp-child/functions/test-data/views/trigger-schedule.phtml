@@ -7,14 +7,14 @@
     <div class="popup-box-header radius6 noradiusbottom">Runs list</div>
     <div class="popup-box-content grid-box-body">
 <?php endif;?>
-        <div>
-            <table id="schedules_table">
-                <tr style="font-weight: bold;">
+        <div id="schedules_table">
+            <table>
+                <tr>
                     <td>Product</td>
                     <td>Profile</td>
                     <td>Start Time</td>
                     <td class="schedule-start-at">Status</td>
-                    <td class="schedules-table-actions">Action</td>
+                    <td>Action</td>
                 </tr>
                 <?php foreach ($schedules as $schedule) :?>
                     <?php
