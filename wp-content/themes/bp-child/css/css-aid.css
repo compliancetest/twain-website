@@ -2782,6 +2782,9 @@ table.result-table{
     display: inline-block;
     vertical-align: middle;
 }
+#schedules_table td {
+    font-size: 11px;
+}
 #schedules_table tr:first-child td {
     font-weight: bold;
     text-align: center;
