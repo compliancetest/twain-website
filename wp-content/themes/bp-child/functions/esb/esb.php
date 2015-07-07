@@ -1054,7 +1054,7 @@ class ManageESB
     public function updateStatus( $runId, $status, $prevstatus )
     {
         if( $status == 'DELETED' ){
-            $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET IS_DELETED = 1 WHERE ID = %d ", $runId);
+            $query = ManageESB::$esbdb->prepare("CALL `sp_DeleteScheduleRun`(%d) ", $runId);
         } else {
             $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) WHERE ID = %d AND SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) ", $status, $runId, $prevstatus );
         }
