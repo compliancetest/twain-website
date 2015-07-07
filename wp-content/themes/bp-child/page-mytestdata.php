@@ -175,7 +175,7 @@ $filters = getCustomerProfileInstancesFilters($profileInstances);
                                 <?php if( ProfileInstance::canBeDeleted( $instance ) ):?>
                                     <a href="<?php echo get_site_url()?>/my-profile?td-action=<?php echo wp_create_nonce('delete-profile-instance')?>&id=<?php echo $instance->id?>&return=<?php echo base64_encode(get_site_url() . "/my-test-data")?>" class="action-btn icon-btn delete-btn left10 has-tooltip delete-profile-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
                                 <?php else: ?>
-                                        <a href="javascript:void(0);" class="action-btn icon-btn delete-btn left10 has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete Profile<span></span></span></a>
+                                        <a href="javascript:void(0);" class="action-btn icon-btn delete-btn left10 has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6" style="width: 250px; left: -75px;"><?php echo ProfileInstance::getDeleteProfileButtonTooltip($instance->id);?><span></span></span></a>
                                 <?php endif;?>
                                 <?php
                                     }

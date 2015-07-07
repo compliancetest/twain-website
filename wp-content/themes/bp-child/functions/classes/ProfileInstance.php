@@ -255,9 +255,21 @@ class ProfileInstance
         if ('invalid' == $profile->validation_status) {
             return true;
         }
+        if (\User\User::isProfileUsedInUserGateway($profile->id)) {
+            return false;
+        }
         if (in_array($profile->profile_role, array('Run'))) {
             return false;
         }
         return true;
+    }
+
+    public static function getDeleteProfileButtonTooltip($profileId)
+    {
+        $message = "This action is not allowed for current profile";
+        if (\User\User::isProfileUsedInUserGateway($profileId)) {
+            $message = 'This profile is currently being used to define settings for sending messages through gateways. It must be removed from the Gateway tab before it can be deleted.';
+        }
+        return $message;
     }
 }
