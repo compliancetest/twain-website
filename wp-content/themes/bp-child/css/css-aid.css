@@ -2782,3 +2782,16 @@ table.result-table{
     display: inline-block;
     vertical-align: middle;
 }
+#schedules_table tr:first-child td {
+    font-weight: bold;
+    text-align: center;
+}
+#schedules_table .schedule-name {
+    width: 180px;
+}
+#schedules_table .schedule-profile-name {
+    width: 230px;
+}
+#schedules_table .schedule-start-at {
+    text-align: center;
+}
