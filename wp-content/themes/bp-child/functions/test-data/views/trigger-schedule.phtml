@@ -12,8 +12,8 @@
                 <tr>
                     <td>Product</td>
                     <td>Profile</td>
-                    <td>Start Time</td>
-                    <td class="schedule-start-at">Status</td>
+                    <td class="schedule-start-at">Start Time</td>
+                    <td class="schedule-status">Status</td>
                     <td>Action</td>
                 </tr>
                 <?php foreach ($schedules as $schedule) :?>
@@ -45,7 +45,7 @@
                         <td class="schedule-start-at">
                             <?php echo (!empty($schedule->START_AT)) ? str_replace(' ', '<br>', formatDate($schedule->START_AT, 'Y-m-d H:i:s')) : '-';?>
                         </td>
-                        <td><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
+                        <td class="schedule-status"><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                         <td class="schedules-table-actions" valign="middle">
                             <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
                                 <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
@@ -104,11 +104,10 @@
         var isShown = false;
         jQuery(".show_profile").off("click").cplightbox({
             'onClose': function () {
-                if (!isShown) {
-                    setTimeout("jQuery('#trigger-schedule-link').click();", 200);
-                    isShown = true;
-                }
+                setTimeout("jQuery('#trigger-schedule-link').click();", 200);
+                isShown = true;
             },
+            removeBoxAfterClose: true,
             'onLoad' : function(){
                 isShown = false;
             }
@@ -120,6 +119,7 @@
                     isShown = true;
                 }
             },
+            removeBoxAfterClose: true,
             'onLoad' : function(){
                 isShown = false;
             }
