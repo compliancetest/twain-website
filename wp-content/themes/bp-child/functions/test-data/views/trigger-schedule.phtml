@@ -107,22 +107,13 @@
                 setTimeout("jQuery('#trigger-schedule-link').click();", 200);
                 isShown = true;
             },
-            removeBoxAfterClose: true,
+            'removeBoxAfterClose': true,
             'onLoad' : function(){
                 isShown = false;
             }
         });
         jQuery(".trigger_row").off("click").cplightbox({
-            'onClose' : function(){
-                if (!isShown) {
-                    setTimeout("jQuery('#trigger-schedule-link').click();", 200);
-                    isShown = true;
-                }
-            },
-            removeBoxAfterClose: true,
-            'onLoad' : function(){
-                isShown = false;
-            }
+            'removeBoxAfterClose': true
         });
         jQuery('#refresh_trigger_data, .change_status').off('click').on('click', function(){
             jQuery('.loading_schedule').show();
