@@ -5295,7 +5295,6 @@ span.button_sign {
 }
 /*** My Transactin Log ***/
 .filter-box{
-    background: #f4f4f4;
     border-bottom: solid 1px #e3e3e3;
     box-shadow: 0 2px 1px -1px #f5f5f5;
     -moz-box-shadow: 0 2px 1px -1px #f5f5f5;
@@ -5334,7 +5333,7 @@ span.button_sign {
     left: -6px;
 }
 
-.filter-box #filterForm .left .clear-filter{
+.filter-box #filterForm .clear-filter{
     position: absolute;
     color: #e33f3f;
     text-shadow:0 1px 1px rgba(0,0,0, 0.5);
