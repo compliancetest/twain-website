@@ -67,6 +67,9 @@ function cp_process_test_data_actions()
             $profileId = intval( $_POST['profile_id'] );
             \MicroServices\MicroServices::prepareRunRequest($profileId);
         }else if( wp_verify_nonce($action, 'execute-schedule') ){
+            if ( !empty($_POST['datetime']) && getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) < getUTCTimeStamp( strtotime( 'now' ))) {
+                exit('error');
+            }
             $profileId = intval( $_POST['profile_id'] );
             \MicroServices\MicroServices::executeRunRequest( $profileId, date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
             $profile = ProfileInstance::getProfileBy('id', $profileId);
