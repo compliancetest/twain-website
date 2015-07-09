@@ -34,6 +34,7 @@
     <div class="popup-box-content grid-box-body">
         <p>Do you wish to trigger this run at the selected time?</p>
         <input type="datetime" name="datetime" id="datetime">
+        <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">A run can only be scheduled to start in the future</div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <a class="action-btn process-btn trigger-run" href="#"><span class="p"></span><span class="t">Confirm</span></a>
@@ -50,10 +51,11 @@
             timeFormat: "H:mm",
             dateFormat: 'yy-mm-dd'
         });
-        jQuery('.trigger-run').on('click', function(){
+        jQuery('.trigger-run').on('click', function($){
             var time = jQuery('#datetime').val();
-            jQuery('.close_btn').click();
             jQuery('.loading_run').show();
+            jQuery('#datetime').removeClass('input-error');
+            jQuery('.validation_error').hide();
             jQuery.ajax({
                 url: '/',
                 type: 'post',
@@ -62,14 +64,20 @@
                     'profile_id' : '<?php echo $view->id;?>',
                     'datetime' : time
                 },
-                success: function(){
-                    if (window.location.href.indexOf('my-transaction-log') != -1) {
-                        jQuery('.loading_run').hide();
-                        setTimeout("jQuery('#trigger-schedule-link').click()", 200 );
+                success: function(response){
+                    if (response == 'success') {
+                        jQuery('.close_btn').click();
+                        if (window.location.href.indexOf('my-transaction-log') != -1) {
+                            jQuery('.loading_run').hide();
+                            setTimeout("jQuery('#trigger-schedule-link').click()", 200);
+                        } else {
+                            location.reload();
+                        }
                     } else {
-                        location.reload();
+                        jQuery('.loading_run').hide();
+                        jQuery('#datetime').addClass('input-error');
+                        jQuery('.validation_error').show();
                     }
-
                 }
             })
         });
