@@ -115,6 +115,9 @@
         jQuery(".trigger_row").off("click").cplightbox({
             'removeBoxAfterClose': true
         });
+        jQuery('#run_list .close_btn, #run_list .cancel-btn').on('click', function(){
+            location.reload();
+        });
         jQuery('#refresh_trigger_data, .change_status').off('click').on('click', function(){
             jQuery('.loading_schedule').show();
             jQuery.ajax({
