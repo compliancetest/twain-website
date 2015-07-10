@@ -66,10 +66,10 @@
                 },
                 success: function(response){
                     if (response == 'success') {
-                        jQuery('.close_btn').click();
                         if (window.location.href.indexOf('my-transaction-log') != -1) {
                             jQuery('.loading_run').hide();
                             setTimeout("jQuery('#trigger-schedule-link').click()", 200);
+                            setTimeout("jQuery('#refresh_trigger_data').click()", 300);
                         } else {
                             location.reload();
                         }

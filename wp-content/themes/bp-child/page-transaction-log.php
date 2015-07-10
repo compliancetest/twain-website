@@ -595,7 +595,7 @@ get_header();
  <script type="text/javascript">
     
     jQuery(document).ready(function(){
-        
+
         jQuery('a.html-view-error').each(function(){
             jQuery(this).click(function(){
                 return false;
@@ -611,7 +611,7 @@ get_header();
                 }
             })
         })
-        
+
         <?php if (isset($tOrganisations)): ?> //Has Organisation Filter
             function update_subscription_filter()
             {
