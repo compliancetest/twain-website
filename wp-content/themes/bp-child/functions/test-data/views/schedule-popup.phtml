@@ -34,17 +34,16 @@
             var is_valid = true;
             $('#schedule_tag').removeClass('input-error');
             $('#product_id').removeClass('select-error');
+            $('.validation_error').hide();
             var tags_string = $('#schedule_tag').val().trim();
-            if( tags_string.length > 0 ) {
-                var tags = tags_string.split(',');
-                $.each(tags, function (index, tag) {
-                    if (!/^[a-zA-Z0-9_. -]+$/g.test(tag) || tag.length > 30) {
-                        $('#schedule_tag').addClass('input-error');
-                        $('.validation_error').show();
-                        is_valid = false;
-                    }
-                });
-            }
+            var tags = tags_string.split(',');
+            $.each(tags, function (index, tag) {
+                if (!/^[a-zA-Z0-9_. -]+$/g.test(tag) || tag.length > 30) {
+                    $('#schedule_tag').addClass('input-error');
+                    $('.validation_error').show();
+                    is_valid = false;
+                }
+            });
             if( ! $('#product_id').val() ){
                 $('#product_id').addClass('select-error');
                 is_valid = false;
