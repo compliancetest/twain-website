@@ -13,6 +13,7 @@ $profileInstances = getCustomerProfileInstances(null, true);
 $subscriptions =  getUserSubscriptions(null, true);
 $sqs_validation_enabled = get_option('validate_via_sqs') == 'yes' ? true : false;
 $filters = getCustomerProfileInstancesFilters($profileInstances);
+$doesPricingPlanSupportBulk = PricingPlan::isSupportBulk();
 ?>
 <div class="content" id="my_testdata">
     <div class="dashboard-tabs">
@@ -151,7 +152,7 @@ $filters = getCustomerProfileInstancesFilters($profileInstances);
                                     <a href="<?php echo S3Wrapper::getProfileLink( $instance->token, $instance->profile_name, true );?>" class="left10 action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Download Profile<span></span></span></a>
                                     <?php if( ProfileInstance::isSchedule( $instance->profile_role ) && $instance->validation_status == 'valid' ):?>
                                             <a href="/my-profile?td-action=<?php echo wp_create_nonce('prepare_schedule')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip prepare_schedule trigger-btn"><span class="p"></span><span class="simple_tooltip radius6" style="width: 150px; left: -24px;">Create a Run profile from this Schedule<span></span></span></a>
-                                    <?php elseif( ProfileInstance::isRun( $instance->profile_role ) && ProfileInstance::isRunCanBeTriggered( $instance->token ) && \User\User::isGatewayConfigured()):?>
+                                    <?php elseif( ProfileInstance::isRun( $instance->profile_role ) && $doesPricingPlanSupportBulk && ProfileInstance::isRunCanBeTriggered( $instance->token ) && \User\User::isGatewayConfigured()):?>
                                         <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('trigger_run')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip trigger-btn"><span class="p"></span><span class="simple_tooltip radius6" style="width: 150px; left: -24px;">Trigger Run<span></span></span></a>
                                     <?php elseif( $sqs_validation_enabled && $instance->is_expanded == 0 && $instance->validation_status == 'valid' && in_array( str_replace( ' ', '', $instance->profile_role ), ProfileType::getExpandableTypes() ) ): ?>
                                         <a href="#create-expanded-version" data-id="<?php echo $instance->id;?>" class="action-btn icon-btn blue-btn expand-btn left10 has-tooltip create_expanded_version"><span class="p"></span><span class="simple_tooltip radius6">Create Expanded Version of this profile<span></span></span></a>
