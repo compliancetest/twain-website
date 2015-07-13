@@ -113,7 +113,10 @@
             }
         });
         jQuery(".trigger_row").off("click").cplightbox({
-            'removeBoxAfterClose': true
+            'removeBoxAfterClose': true,
+            'onClose': function () {
+                setTimeout("jQuery('#trigger-schedule-link').click();", 200);
+            }
         });
         jQuery('#run_list .close_btn, #run_list .cancel-btn').on('click', function(){
             location.reload();

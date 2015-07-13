@@ -47,9 +47,12 @@
 <script src="<?php echo '/wp-content/themes/bp-child/js/jquery-ui-timepicker-addon.js';?>" type="text/javascript"></script>
 <script type="application/javascript">
     jQuery(document).ready(function(){
-        jQuery('#datetime').datetimepicker({
-            timeFormat: "H:mm",
-            dateFormat: 'yy-mm-dd'
+        jQuery("body").on("focus", "#datetime", function(e){
+            jQuery(this).datetimepicker({
+                timeFormat: "H:mm",
+                dateFormat: 'yy-mm-dd'
+            });
+
         });
         jQuery('.trigger-run').on('click', function($){
             var time = jQuery('#datetime').val();
@@ -68,8 +71,11 @@
                     if (response == 'success') {
                         if (window.location.href.indexOf('my-transaction-log') != -1) {
                             jQuery('.loading_run').hide();
+                            jQuery('.loading_schedule').show();
                             setTimeout("jQuery('#trigger-schedule-link').click()", 200);
                             setTimeout("jQuery('#refresh_trigger_data').click()", 300);
+                            jQuery('.loading_schedule').hide();
+                            jQuery('#trigger_run .close_btn').click();
                         } else {
                             location.reload();
                         }
