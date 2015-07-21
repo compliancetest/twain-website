@@ -37,10 +37,9 @@
         <input type="text" style="width: 100%;" disabled="disabled" value="<?php echo $view->profile->profile_name;?>">
         <div class="space20"></div>
         <label style="width: 100px; display: block;">Tag:</label>
-        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', $view->tags);?>" disabled="disabled">
+        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', array_unique($view->tags));?>" disabled="disabled">
         <div class="space20"></div>
         <input type="datetime" name="datetime" id="datetime">
-<!--        <a href="#" id="datepicker_icon"><img class="ui-datepicker-trigger" src="/wp-content/themes/bp-child/images/calendar-icon.png" alt="..." title="..."></a>-->
         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">A run can only be scheduled to start in the future</div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
