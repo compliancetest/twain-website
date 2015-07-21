@@ -17,6 +17,7 @@ class MicroServices
             'type_name'    => 'Run v1.0',
             'profile_role' => 'Run'
         );
+        $_POST['tags'] = array_unique($_POST['tags']);
         $status = copyProfileInstance($profileId, $profileFieldsToChange, false);
         \Tag::copyTags($profileId, $status['data']['id']);
         if (is_array($_POST['tags']) && !empty($_POST['tags'])) {
