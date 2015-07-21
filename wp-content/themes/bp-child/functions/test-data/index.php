@@ -60,9 +60,21 @@ function cp_process_test_data_actions()
             createExpandedVersion( $_REQUEST['id'], $_REQUEST['factor'] );
             exit('success');
         }else if(wp_verify_nonce($action, 'prepare_schedule')){
-            render_view( 'test-data/views/schedule-popup.phtml', (object) $_GET, true );
+            $data = (object) $_GET;
+            $data->profile = ProfileInstance::getProfileBy('id', $data->id);
+            $tags = \Tag::getItemTags($data->id);
+            $data->tags = array_map(function( $item ) {
+                return $item->name;
+            }, $tags);
+            render_view( 'test-data/views/schedule-popup.phtml', $data, true );
         }else if(wp_verify_nonce($action, 'trigger_run')){
-            render_view( 'test-data/views/trigger.phtml', (object) $_GET, true );
+            $data = (object) $_GET;
+            $data->profile = ProfileInstance::getProfileBy('id', $data->id);
+            $tags = \Tag::getItemTags($data->id);
+            $data->tags = array_map(function( $item ) {
+                return $item->name;
+            }, $tags);
+            render_view( 'test-data/views/trigger.phtml', $data, true );
         }else if(wp_verify_nonce($action, 'save-schedule')){
             $profileId = intval( $_POST['profile_id'] );
             \MicroServices\MicroServices::prepareRunRequest($profileId);

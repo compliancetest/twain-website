@@ -3,6 +3,9 @@
     <div class="popup-box-header radius6 noradiusbottom">Prepare a Run</div>
     <div class="popup-box-content grid-box-body">
         <p>Do you wish to prepare the necessary entries to run this schedule?</p>
+        <label style="width: 100px; display: block;">Profile:</label>
+        <input type="text" style="width: 100%;" disabled="disabled" value="<?php echo $view->profile->profile_name;?>">
+        <div class="space20"></div>
         <label style="width: 100px; display: block;">Product:</label>
         <select name="product_id" class="required select field-tooltip" id="product_id" style="width: 100%;">
             <option value=""></option>
@@ -16,7 +19,7 @@
         </select>
         <div class="space20"></div>
         <label style="width: 100px; display: block;">Tag:</label>
-        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;">
+        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', $view->tags);?>">
         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
         </select>
     </div>

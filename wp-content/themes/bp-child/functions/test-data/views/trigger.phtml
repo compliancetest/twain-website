@@ -33,7 +33,14 @@
     <div class="popup-box-header radius6 noradiusbottom">Trigger Run</div>
     <div class="popup-box-content grid-box-body">
         <p>Do you wish to trigger this run at the selected time?</p>
+        <label style="width: 100px; display: block;">Profile:</label>
+        <input type="text" style="width: 100%;" disabled="disabled" value="<?php echo $view->profile->profile_name;?>">
+        <div class="space20"></div>
+        <label style="width: 100px; display: block;">Tag:</label>
+        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', $view->tags);?>" disabled="disabled">
+        <div class="space20"></div>
         <input type="datetime" name="datetime" id="datetime">
+<!--        <a href="#" id="datepicker_icon"><img class="ui-datepicker-trigger" src="/wp-content/themes/bp-child/images/calendar-icon.png" alt="..." title="..."></a>-->
         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">A run can only be scheduled to start in the future</div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
@@ -47,12 +54,17 @@
 <script src="<?php echo '/wp-content/themes/bp-child/js/jquery-ui-timepicker-addon.js';?>" type="text/javascript"></script>
 <script type="application/javascript">
     jQuery(document).ready(function(){
-        jQuery("body").on("focus", "#datetime", function(e){
-            jQuery(this).datetimepicker({
-                timeFormat: "H:mm",
-                dateFormat: 'yy-mm-dd'
-            });
+        jQuery('#datetime').datetimepicker({
+            timeFormat: "H:mm",
+            dateFormat: 'yy-mm-dd',
+            showOn: "button",
+            buttonImageOnly: true,
+            buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
+            buttonText: "Select date"
+        });
 
+        jQuery('#datetime').on('focus', function(){
+            jQuery('#datetime').datepicker('show');
         });
         jQuery('.trigger-run').on('click', function($){
             var time = jQuery('#datetime').val();
