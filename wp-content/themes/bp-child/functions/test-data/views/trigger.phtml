@@ -36,7 +36,7 @@
         <label style="width: 100px; display: block;">Profile:</label>
         <input type="text" style="width: 100%;" disabled="disabled" value="<?php echo $view->profile->profile_name;?>">
         <div class="space20"></div>
-        <label style="width: 100px; display: block;">Tag:</label>
+        <label style="width: 100px; display: block;">Tags:</label>
         <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', array_unique($view->tags));?>" disabled="disabled">
         <div class="space20"></div>
         <input type="datetime" name="datetime" id="datetime">
