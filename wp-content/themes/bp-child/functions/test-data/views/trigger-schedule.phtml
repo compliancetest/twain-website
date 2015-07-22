@@ -12,8 +12,8 @@
                 <tr>
                     <td>Product</td>
                     <td>Profile</td>
-                    <td class="mesgs_prepared">Messages<br>Prepared</td>
-                    <td class="mesgs_sent">Messages<br>Sent</td>
+                    <td class="message_counter">Messages<br>Prepared</td>
+                    <td class="message_counter">Messages<br>Sent</td>
                     <td class="schedule-start-at">Start Time</td>
                     <td class="schedule-status">Status</td>
                     <td>Action</td>
@@ -44,11 +44,11 @@
                                 <?php endif;?>
                         </td>
 
-                        <td class="mesgs_sent">
+                        <td class="message_counter">
                             <?php echo $schedule->CONVERSATION_SENT_COUNT;?> of <?php echo $schedule->CONVERSATION_COUNT;?>
                         </td>
 
-                        <td class="mesgs_prepared">
+                        <td class="message_counter">
                             <?php echo $schedule->CONVERSATION_PREPARED_COUNT;?> of <?php echo $schedule->CONVERSATION_COUNT;?>
                         </td>
 

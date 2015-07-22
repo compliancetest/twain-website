@@ -2795,7 +2795,7 @@ table.result-table{
 #schedules_table .schedule-profile-name {
     width: 190px;
 }
-#schedules_table .mesgs_sent, #schedules_table .mesgs_prepared {
+#schedules_table .message_counter {
     width: 50px;
     text-align: center;
 }
