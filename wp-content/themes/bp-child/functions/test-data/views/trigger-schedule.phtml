@@ -3,8 +3,8 @@
     $schedules = $esb->getUserSchedules(get_current_user_id());
 ?>
 <?php if (!$view) :?>
-<div class="popup-box view-profile-type-box" style="display: none; width: 800px;" id="run_list">
-    <div class="popup-box-header radius6 noradiusbottom">Runs list</div>
+<div class="popup-box view-profile-type-box" style="display: none; width: 950px;" id="run_list">
+    <div class="popup-box-header radius6 noradiusbottom">Runs List</div>
     <div class="popup-box-content grid-box-body">
 <?php endif;?>
         <div id="schedules_table">
@@ -12,6 +12,8 @@
                 <tr>
                     <td>Product</td>
                     <td>Profile</td>
+                    <td class="mesgs_prepared">Messages<br>Prepared</td>
+                    <td class="mesgs_sent">Messages<br>Sent</td>
                     <td class="schedule-start-at">Start Time</td>
                     <td class="schedule-status">Status</td>
                     <td>Action</td>
@@ -42,13 +44,21 @@
                                 <?php endif;?>
                         </td>
 
+                        <td class="mesgs_sent">
+                            <?php echo $schedule->MESSAGE_SENT_COUNT;?> of <?php echo $schedule->MESSAGE_COUNT;?>
+                        </td>
+
+                        <td class="mesgs_prepared">
+                            <?php echo $schedule->MESSAGE_PREPARED_COUNT;?> of <?php echo $schedule->MESSAGE_COUNT;?>
+                        </td>
+
                         <td class="schedule-start-at">
                             <?php echo (!empty($schedule->START_AT)) ? str_replace(' ', '<br>', formatDate($schedule->START_AT, 'Y-m-d H:i:s')) : '-';?>
                         </td>
                         <td class="schedule-status"><?php echo $schedule->SCHEDULE_STATUS_LABEL;?></td>
                         <td class="schedules-table-actions" valign="middle">
                             <?php if ($schedule->SCHEDULE_STATUS_CODE == 'PAUSED') :?>
-                                <a href="#" class="change_status action-btn icon-btn terminate-btn has-tooltip" data-status="TERMINATING" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
+                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('terminate-run-confirm')?>&runid=<?php echo $schedule->ID?>&status=TERMINATING&prevstatus=<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" class="terminate_run_action action-btn icon-btn terminate-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                             <?php else: ?>
                                 <a href="javascript:void(0);" class="action-btn icon-btn terminate-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Terminate<span></span></span></a>
                             <?php endif;?>
@@ -76,7 +86,7 @@
                             <?php
                             //Delete will only be available to runs in the "Executed" or "Terminated" state.
                             if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED', 'PREPARED' ) ) ):?>
-                                <a href="#" class="change_status action-btn icon-btn delete-btn has-tooltip" data-status="DELETED" data-prevstatus="<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" data-runid="<?php echo $schedule->ID;?>"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
+                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('delete-run-confirm')?>&runid=<?php echo $schedule->ID?>&status=DELETED&prevstatus=<?php echo $schedule->SCHEDULE_STATUS_CODE;?>" class="delete_run_action action-btn icon-btn delete-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
                             <?php else: ?>
                                 <a href="javascript:void(0);" class="action-btn icon-btn delete-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Delete<span></span></span></a>
                             <?php endif;?>
@@ -112,6 +122,34 @@
                 isShown = false;
             }
         });
+        jQuery('.delete_run_action').cplightbox({
+            'onClose': function () {
+                setTimeout("jQuery('#trigger-schedule-link').click();", 200);
+            },
+            'removeBoxAfterClose': true,
+            type: 'ajax',
+            onStart: function(){
+                jQuery('#delete-run-box .process-btn').off('click').on('click', function(){
+                    jQuery('#delete-run-box .close_btn').click();
+                    changeStatus(jQuery('#delete-status').val(), jQuery('#delete-prevstatus').val(), jQuery('#delete-runid').val());
+                 });
+            }
+        });
+
+        jQuery('.terminate_run_action').cplightbox({
+            'onClose': function () {
+                setTimeout("jQuery('#trigger-schedule-link').click();", 200);
+            },
+            'removeBoxAfterClose': true,
+            type: 'ajax',
+            onStart: function(){
+                jQuery('#terminate-run-box .process-btn').off('click').on('click', function(){
+                    jQuery('#terminate-run-box .close_btn').click();
+                    changeStatus(jQuery('#delete-status').val(), jQuery('#delete-prevstatus').val(), jQuery('#delete-runid').val());
+                });
+            }
+        });
+
         jQuery(".trigger_row").off("click").cplightbox({
             'removeBoxAfterClose': true,
             'onClose': function () {
@@ -122,16 +160,20 @@
             location.reload();
         });
         jQuery('#refresh_trigger_data, .change_status').off('click').on('click', function(){
+            changeStatus(jQuery(this).attr('data-status'), jQuery(this).attr('data-prevstatus'), jQuery(this).attr('data-runid'));
+        });
+        function changeStatus(status, prevstatus, runid)
+        {
             jQuery('.loading_schedule').show();
             jQuery.ajax({
                 url: '/',
                 type: 'post',
-                data: { 'td-action' : '<?php echo wp_create_nonce('change-schedule-status');?>', 'id' : jQuery(this).attr('data-runid'), 'status' : jQuery(this).attr('data-status'), 'prevstatus' : jQuery(this).attr('data-prevstatus') },
+                data: { 'td-action' : '<?php echo wp_create_nonce('change-schedule-status');?>', 'id' : runid, 'status' : status, 'prevstatus' : prevstatus },
                 success: function(response){
                     jQuery('.loading_schedule').hide();
                     jQuery('#schedules_table').html(response);
                 }
             });
-        });
+        }
     });
 </script>

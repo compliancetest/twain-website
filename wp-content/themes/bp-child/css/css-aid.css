@@ -2795,6 +2795,10 @@ table.result-table{
 #schedules_table .schedule-profile-name {
     width: 190px;
 }
+#schedules_table .mesgs_sent, #schedules_table .mesgs_prepared {
+    width: 50px;
+    text-align: center;
+}
 #schedules_table .schedule-start-at {
     text-align: center;
 }

@@ -99,6 +99,10 @@ function cp_process_test_data_actions()
                 deleteProfileTypeInstance( wp_create_nonce('delete-profile-instance'), $runProfile->id, true  );
             }
             render_view( 'test-data/views/trigger-schedule.phtml', true, true );
+        } else if( wp_verify_nonce($action, 'delete-run-confirm') ){
+            render_view( 'test-data/views/confirm-run-delete.phtml', (object) $_GET, true );
+        } else if( wp_verify_nonce($action, 'terminate-run-confirm') ){
+            render_view( 'test-data/views/confirm-run-terminate.phtml', (object) $_GET, true );
         }
 
 

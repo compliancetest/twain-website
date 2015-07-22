@@ -157,8 +157,10 @@
                         
                         if($overlay.find('.popup-box:visible').length > 0)
                         {
-                            $overlay.find('.popup-box:visible').fadeOut('fast', function(){                    
-                                $.data(this, 'options').onClose();   
+                            $overlay.find('.popup-box:visible').fadeOut('fast', function(){
+                                if ($.data(this, 'options')) {
+                                    $.data(this, 'options').onClose();
+                                }
                                 opts.onStart();
                                 opts.box.fadeIn('fast', function(){
                                     setOverlaySize();
