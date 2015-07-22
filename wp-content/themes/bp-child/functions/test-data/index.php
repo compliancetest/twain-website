@@ -103,8 +103,45 @@ function cp_process_test_data_actions()
             render_view( 'test-data/views/confirm-run-delete.phtml', (object) $_GET, true );
         } else if( wp_verify_nonce($action, 'terminate-run-confirm') ){
             render_view( 'test-data/views/confirm-run-terminate.phtml', (object) $_GET, true );
+
+        } else if( wp_verify_nonce($action, 'download_pdf') ){
+            header('Content-type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment; filename="PerformanceReport.xls"');
+            $runId = intval($_REQUEST['runid']);
+            include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
+            include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
+
+            $objPHPExcel = new PHPExcel();
+
+            $objPHPExcel->getProperties()->setCreator("ComplianceTest");
+
+            $objPHPExcel->getProperties()->setTitle("ComplianceTest");
+            $objPHPExcel->setActiveSheetIndex(0)->setTitle('Messages');
+
+            $esb = new ManageESB();
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue('A1', 'StartAt' )
+                ->setCellValue('B1', 'SentAt' )
+                ->setCellValue('C1', 'ReceiptAt' )
+                ->setCellValue('D1', 'ResponseTime' )
+                ->setCellValue('E1', 'ConversationID' )
+                ->setCellValue('F1', 'MessageID' );
+            $results = $esb->getMessages($runId);
+            $rowNumber = 2;
+            foreach ($results AS $result) {
+                $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'.$rowNumber, $result->StartAt )
+                    ->setCellValue('B'.$rowNumber, $result->SentAt )
+                    ->setCellValue('C'.$rowNumber, $result->ReceiptAt )
+                    ->setCellValue('D'.$rowNumber, $result->ResponseTime )
+                    ->setCellValue('E'.$rowNumber, $result->ConversationID )
+                    ->setCellValue('F'.$rowNumber, $result->MessageID );
+                $rowNumber++;
+            }
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output');
+            exit();
         }
-
-
     }
 }

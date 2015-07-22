@@ -2773,7 +2773,8 @@ table.result-table{
 
 .schedules-table-actions{
     padding: 4px 0 3px 0;
-    text-align: left;
+    text-align: center;
+    width: 180px;
 }
 
 .schedules-table-actions .action-btn{

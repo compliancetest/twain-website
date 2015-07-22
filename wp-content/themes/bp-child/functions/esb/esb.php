@@ -1134,6 +1134,18 @@ class ManageESB
         $query = ManageESB::$esbdb->prepare("UPDATE " . $this->table_schedules_runs . " SET SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) WHERE PROFILE_S3_URL LIKE ('%s') AND SCHEDULE_STATUS = (SELECT ID FROM MSH_SCHEDULE_STATUSES WHERE SCHEDULE_STATUS_CODE = %s ) ", $status, '%'.$token.'.json', $prevStatus );
         ManageESB::$esbdb->query($query);
     }
-    
+
+    public function getMessages($runId)
+    {
+        $query = ManageESB::$esbdb->prepare("SELECT MSM.SEND_AT as StartAt, MCM.CONVERSATION_TIMESTAMP as SentAt, MCM.RECEIPT_TIMESTAMP as ReceiptAt, TIMESTAMPDIFF(SECOND, MCM.CONVERSATION_TIMESTAMP, MCM.RECEIPT_TIMESTAMP) as ResponseTime,
+                                                MCM.CONVERSATION_ID as ConversationID, MMM.ORIGINAL_MESSAGE_ID as MessageID
+                                                FROM MSH_SCHEDULE_MESSAGES MSM
+                                                INNER JOIN MSH_SCHEDULE_RUNS MSR ON MSM.PROFILE_S3_URL = MSR.PROFILE_S3_URL
+                                                INNER JOIN MSH_MESSAGE_METADATA MMM ON MMM.S3_PAYLOAD_LOCATION LIKE CONCAT(MSM.URI, '/main')
+                                                INNER JOIN MSH_CONVERSATION_METADATA MCM ON MMM.MSH_CONVERSATION_ID = MCM.ID
+                                                WHERE MSR.ID = %d AND MCM.RECEIPT_TIMESTAMP IS NOT NULL
+                                                ORDER BY MSM.SEND_AT asc, MCM.CONVERSATION_TIMESTAMP asc, MCM.RECEIPT_TIMESTAMP asc;", $runId);
+        return ManageESB::$esbdb->get_results($query);
+    }
     
 }
