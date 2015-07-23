@@ -2802,6 +2802,7 @@ table.result-table{
 }
 #schedules_table .schedule-start-at {
     text-align: center;
+    width: 70px;
 }
 
 #schedules_table .schedule-status {
