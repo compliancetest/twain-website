@@ -1118,6 +1118,14 @@ class ManageESB
         return ManageESB::$esbdb->get_results($query);
     }
 
+    public function getSchedule($scheduleId)
+    {
+        $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL FROM " . $this->table_schedules_runs . " AS SR
+                                                JOIN MSH_SCHEDULE_STATUSES AS SS ON SS.ID = SR.SCHEDULE_STATUS
+                                                WHERE SR.ID = %d AND IS_DELETED = 0 ORDER BY ID DESC", $scheduleId );
+        return ManageESB::$esbdb->get_row($query);
+    }
+
     public function updateStatus( $runId, $status, $prevstatus )
     {
         if( $status == 'DELETED' ){
@@ -1137,14 +1145,18 @@ class ManageESB
 
     public function getMessages($runId)
     {
-        $query = ManageESB::$esbdb->prepare("SELECT MSM.SEND_AT as StartAt, MCM.CONVERSATION_TIMESTAMP as SentAt, MCM.RECEIPT_TIMESTAMP as ReceiptAt, TIMESTAMPDIFF(SECOND, MCM.CONVERSATION_TIMESTAMP, MCM.RECEIPT_TIMESTAMP) as ResponseTime,
-                                                MCM.CONVERSATION_ID as ConversationID, MMM.ORIGINAL_MESSAGE_ID as MessageID
-                                                FROM MSH_SCHEDULE_MESSAGES MSM
-                                                INNER JOIN MSH_SCHEDULE_RUNS MSR ON MSM.PROFILE_S3_URL = MSR.PROFILE_S3_URL
-                                                INNER JOIN MSH_MESSAGE_METADATA MMM ON MMM.S3_PAYLOAD_LOCATION LIKE CONCAT(MSM.URI, '/main')
-                                                INNER JOIN MSH_CONVERSATION_METADATA MCM ON MMM.MSH_CONVERSATION_ID = MCM.ID
-                                                WHERE MSR.ID = %d AND MCM.RECEIPT_TIMESTAMP IS NOT NULL
-                                                ORDER BY MSM.SEND_AT asc, MCM.CONVERSATION_TIMESTAMP asc, MCM.RECEIPT_TIMESTAMP asc;", $runId);
+        $query = ManageESB::$esbdb->prepare("SELECT MSM.SEND_AT as StartAt,
+                                            IF(MCM.CONVERSATION_TIMESTAMP > '1901-01-01', MCM.CONVERSATION_TIMESTAMP, 'Not Sent') as SentAt,
+                                            IFNULL(MCM.RECEIPT_TIMESTAMP, 'Not Sent') as ReceiptAt,
+                                            IFNULL(TIMESTAMPDIFF(SECOND, MCM.CONVERSATION_TIMESTAMP, MCM.RECEIPT_TIMESTAMP), 'Not Sent') as ResponseTime,
+                                            MCM.CONVERSATION_ID as ConversationID,
+                                            MMM.ORIGINAL_MESSAGE_ID as MessageID
+                                            FROM MSH_SCHEDULE_MESSAGES MSM
+                                            INNER JOIN MSH_SCHEDULE_RUNS MSR ON MSM.PROFILE_S3_URL = MSR.PROFILE_S3_URL
+                                            INNER JOIN MSH_MESSAGE_METADATA MMM ON MMM.S3_PAYLOAD_LOCATION LIKE CONCAT(MSM.URI, '/main')
+                                            INNER JOIN MSH_CONVERSATION_METADATA MCM ON MMM.MSH_CONVERSATION_ID = MCM.ID
+                                            WHERE MSR.ID = %d
+                                            ORDER BY MSM.SEND_AT asc, MCM.CONVERSATION_TIMESTAMP asc, MCM.RECEIPT_TIMESTAMP asc;", $runId);
         return ManageESB::$esbdb->get_results($query);
     }
     

@@ -105,9 +105,12 @@ function cp_process_test_data_actions()
             render_view( 'test-data/views/confirm-run-terminate.phtml', (object) $_GET, true );
 
         } else if( wp_verify_nonce($action, 'download_pdf') ){
-            header('Content-type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment; filename="PerformanceReport.xls"');
+            $esb = new ManageESB();
             $runId = intval($_REQUEST['runid']);
+            $schedule = $esb->getSchedule($runId);
+            $profile = ProfileInstance::getProfileBy('id', intval($_REQUEST['profile']));
+            header('Content-type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment; filename="PerformanceReport-'.$profile->profile_name.'.xls"');
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
 
@@ -119,6 +122,14 @@ function cp_process_test_data_actions()
             $objPHPExcel->setActiveSheetIndex(0)->setTitle('Messages');
 
             $esb = new ManageESB();
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(70);
+
             $objPHPExcel->getActiveSheet()
                 ->setCellValue('A1', 'StartAt' )
                 ->setCellValue('B1', 'SentAt' )
@@ -138,6 +149,36 @@ function cp_process_test_data_actions()
                     ->setCellValue('F'.$rowNumber, $result->MessageID );
                 $rowNumber++;
             }
+            $objPHPExcel->createSheet(1);
+            $objPHPExcel->setActiveSheetIndex(1)->setTitle('Summary');
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue('A1', 'Product' )
+                ->setCellValue('B1', 'Profile' )
+                ->setCellValue('C1', 'Profile Description' )
+                ->setCellValue('D1', 'Tags' )
+                ->setCellValue('E1', 'Messages Prepared' )
+                ->setCellValue('F1', 'Messages Sent' )
+                ->setCellValue('G1', 'Start Time' )
+                ->setCellValue('H1', 'Status' );
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue('A2', get_the_title(intval($_REQUEST['product'])) )
+                ->setCellValue('B2', $profile->profile_name )
+                ->setCellValue('C2', $profile->profile_description )
+                ->setCellValue('D2', implode(', ', array_unique(array_map(function($tag){ return $tag->name;},\Tag::getItemTags($profile->id)))))
+                ->setCellValue('E2', $schedule->CONVERSATION_PREPARED_COUNT . ' of ' . $schedule->CONVERSATION_COUNT )
+                ->setCellValue('F2', $schedule->CONVERSATION_SENT_COUNT . ' of ' . $schedule->CONVERSATION_COUNT )
+                ->setCellValue('G2', $schedule->START_AT )
+                ->setCellValue('H2', $schedule->SCHEDULE_STATUS_CODE );
             $objPHPExcel->setActiveSheetIndex(0);
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             $objWriter->save('php://output');
