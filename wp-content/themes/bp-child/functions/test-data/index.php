@@ -110,7 +110,7 @@ function cp_process_test_data_actions()
             $schedule = $esb->getSchedule($runId);
             $profile = ProfileInstance::getProfileBy('id', intval($_REQUEST['profile']));
             header('Content-type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment; filename="PerformanceReport-'.$profile->profile_name.'.xls"');
+                header('Content-Disposition: attachment; filename="PerformanceReport-'.$profile->profile_name.'.xlsx"');
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
 
