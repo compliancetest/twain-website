@@ -1,10 +1,12 @@
 <?php
 /*
 Plugin Name: WP-UserOnline
-Plugin URI: http://wordpress.org/extend/plugins/wp-useronline/
+Plugin URI: http://lesterchan.net/portfolio/programming/php/
 Description: Enable you to display how many users are online on your Wordpress site
-Version: 2.82
-Author: Lester 'GaMerZ' Chan & scribu
+Version: 2.85
+Author: Lester 'GaMerZ' Chan
+Author URI: http://lesterchan.net
+Text Domain: wp-useronline
 */
 
 @include dirname( __FILE__ ) . '/scb/load.php';

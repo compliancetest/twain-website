@@ -8,7 +8,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /* Register widgets for groups component */
 function groups_register_widgets() {
@@ -28,7 +28,7 @@ class BP_Groups_Widget extends WP_Widget {
 
 		if ( is_active_widget( false, false, $this->id_base ) && !is_admin() && !is_network_admin() ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-			wp_enqueue_script( 'groups_widget_groups_list-js', BP_PLUGIN_URL . "bp-groups/js/widget-groups{$min}.js", array( 'jquery' ), bp_get_version() );
+			wp_enqueue_script( 'groups_widget_groups_list-js', buddypress()->plugin_url . "bp-groups/js/widget-groups{$min}.js", array( 'jquery' ), bp_get_version() );
 		}
 	}
 
@@ -42,6 +42,14 @@ class BP_Groups_Widget extends WP_Widget {
 	}
 
 	function widget( $args, $instance ) {
+
+		/**
+		 * Filters the user ID to use with the widget instance.
+		 *
+		 * @since BuddyPress (1.5.0)
+		 *
+		 * @param string $value Empty user ID.
+		 */
 		$user_id = apply_filters( 'bp_group_widget_user_id', '0' );
 
 		extract( $args );
@@ -52,15 +60,34 @@ class BP_Groups_Widget extends WP_Widget {
 		if ( empty( $instance['title'] ) )
 			$instance['title'] = __( 'Groups', 'buddypress' );
 
-		$title = apply_filters( 'widget_title', $instance['title'] );
+		/**
+		 * Filters the title of the Groups widget.
+		 *
+		 * @since BuddyPress (1.8.0)
+		 * @since BuddyPress (2.3.0) Added 'instance' and 'id_base' to arguments passed to filter.
+		 *
+		 * @param string $title    The widget title.
+		 * @param array  $instance The settings for the particular instance of the widget.
+		 * @param string $id_base  Root ID for all widgets of this type.
+		 */
+		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
 		echo $before_widget;
 
-		$title = !empty( $instance['link_title'] ) ? '<a href="' . trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() ) . '">' . $title . '</a>' : $title;
+		$title = !empty( $instance['link_title'] ) ? '<a href="' . bp_get_groups_directory_permalink() . '">' . $title . '</a>' : $title;
 
-		echo $before_title . $title . $after_title; ?>
+		echo $before_title . $title . $after_title;
 
-		<?php if ( bp_has_groups( 'user_id=' . $user_id . '&type=' . $instance['group_default'] . '&max=' . $instance['max_groups'] ) ) : ?>
+		$group_args = array(
+			'user_id'         => $user_id,
+			'type'            => $instance['group_default'],
+			'per_page'        => $instance['max_groups'],
+			'max'             => $instance['max_groups'],
+		);
+
+		?>
+
+		<?php if ( bp_has_groups( $group_args ) ) : ?>
 			<div class="item-options" id="groups-list-options">
 				<a href="<?php bp_groups_directory_permalink(); ?>" id="newest-groups"<?php if ( $instance['group_default'] == 'newest' ) : ?> class="selected"<?php endif; ?>><?php _e("Newest", 'buddypress') ?></a> |
 				<a href="<?php bp_groups_directory_permalink(); ?>" id="recently-active-groups"<?php if ( $instance['group_default'] == 'active' ) : ?> class="selected"<?php endif; ?>><?php _e("Active", 'buddypress') ?></a> |
@@ -83,7 +110,7 @@ class BP_Groups_Widget extends WP_Widget {
 										printf( __( 'created %s', 'buddypress' ), bp_get_group_date_created() );
 									if ( 'active' == $instance['group_default'] )
 										printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() );
-									else if ( 'popular' == $instance['group_default'] )
+									elseif ( 'popular' == $instance['group_default'] )
 										bp_group_member_count();
 								?>
 								</span>
@@ -169,7 +196,16 @@ function groups_ajax_widget_groups_list() {
 		break;
 	}
 
-	if ( bp_has_groups( 'type=' . $type . '&per_page=' . $_POST['max_groups'] . '&max=' . $_POST['max_groups'] ) ) : ?>
+	$per_page = isset( $_POST['max_groups'] ) ? intval( $_POST['max_groups'] ) : 5;
+
+	$groups_args = array(
+		'user_id'  => 0,
+		'type'     => $type,
+		'per_page' => $per_page,
+		'max'      => $per_page,
+	);
+
+	if ( bp_has_groups( $groups_args ) ) : ?>
 		<?php echo "0[[SPLIT]]"; ?>
 		<?php while ( bp_groups() ) : bp_the_group(); ?>
 			<li <?php bp_group_class(); ?>>
@@ -184,9 +220,9 @@ function groups_ajax_widget_groups_list() {
 							<?php
 							if ( 'newest-groups' == $_POST['filter'] ) {
 								printf( __( 'created %s', 'buddypress' ), bp_get_group_date_created() );
-							} else if ( 'recently-active-groups' == $_POST['filter'] ) {
+							} elseif ( 'recently-active-groups' == $_POST['filter'] ) {
 								printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() );
-							} else if ( 'popular-groups' == $_POST['filter'] ) {
+							} elseif ( 'popular-groups' == $_POST['filter'] ) {
 								bp_group_member_count();
 							}
 							?>

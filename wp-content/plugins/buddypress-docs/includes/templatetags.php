@@ -204,7 +204,7 @@ function bp_docs_info_header() {
 			$message = implode( "\n", $message );
 
 			// We are viewing a subset of docs, so we'll add a link to clear filters
-			$message .= ' - ' . sprintf( __( '<strong><a href="%s" title="View All Docs">View All Docs</a></strong>', 'bp-docs' ), remove_query_arg( 'bpd_tag' ) );
+			$message .= ' - ' . sprintf( __( '<strong><a href="%s" title="View All Docs">View All Docs</a></strong>', 'bp-docs' ), remove_query_arg( array( 'bpd_tag', 's', 'search_submit' ) ) );
 		}
 
 		?>
@@ -279,7 +279,7 @@ function bp_docs_the_content() {
 			bp_remove_all_filters( 'the_content' );
 		}
 
-		return $content;
+		return apply_filters( 'bp_docs_get_the_content', $content );
 	}
 /**
  * Filters the output of the doc list header for search terms
@@ -710,7 +710,7 @@ function bp_docs_doc_associated_group_markup() {
 	}
 
 	$selected_group = BP_Groups_Group::get_id_from_slug( $selected_group_slug );
-	if ( $selected_group && ! BP_Docs_Groups_Integration::user_can_associate_doc_with_group( bp_loggedin_user_id(), $selected_group ) ) {
+	if ( $selected_group && ! current_user_can( 'bp_docs_associate_with_group', $selected_group ) ) {
 		$selected_group = 0;
 	}
 
@@ -719,9 +719,18 @@ function bp_docs_doc_associated_group_markup() {
 		$selected_group = bp_docs_get_associated_group_id( get_the_ID() );
 	}
 
+	// Last check: if this is a second attempt at a newly created Doc,
+	// there may be a previously submitted value
+	if ( empty( $selected_group ) && ! empty( buddypress()->bp_docs->submitted_data->associated_group_id ) ) {
+		$selected_group = intval( buddypress()->bp_docs->submitted_data->associated_group_id );
+	}
+
+	$selected_group = intval( $selected_group );
+
 	$groups_args = array(
 		'per_page' => false,
 		'populate_extras' => false,
+		'type' => 'alphabetical',
 	);
 
 	if ( ! bp_current_user_can( 'bp_moderate' ) ) {
@@ -730,25 +739,16 @@ function bp_docs_doc_associated_group_markup() {
 
 	// Populate the $groups_template global
 	global $groups_template;
+	$old_gt = $groups_template;
+
 	bp_has_groups( $groups_args );
 
 	// Filter out the groups where associate_with permissions forbid
 	$removed = 0;
 	foreach ( $groups_template->groups as $gtg_key => $gtg ) {
-		$this_group_settings = groups_get_groupmeta( $gtg->id, 'bp-docs' );
-		if ( isset( $this_group_settings['can-create'] ) && in_array( $this_group_settings['can-create'], array( 'admin', 'mod' ) ) ) {
-			$is_admin = groups_is_user_admin( bp_loggedin_user_id(), $gtg->id );
-			if ( 'mod' == $this_group_settings['can-create'] ) {
-				$is_mod = groups_is_user_mod( bp_loggedin_user_id(), $gtg->id );
-				$remove = ! $is_mod && ! $is_admin;
-			} else {
-				$remove = ! $is_admin;
-			}
-
-			if ( $remove ) {
-				unset( $groups_template->groups[ $gtg_key ] );
-				$removed++;
-			}
+		if ( ! current_user_can( 'bp_docs_associate_with_group', $gtg->id ) ) {
+			unset( $groups_template->groups[ $gtg_key ] );
+			$removed++;
 		}
 	}
 
@@ -780,6 +780,8 @@ function bp_docs_doc_associated_group_markup() {
 		</td>
 	</tr>
 	<?php
+
+	$groups_template = $old_gt;
 }
 
 /**
@@ -895,9 +897,21 @@ function bp_docs_doc_settings_markup( $doc_id = 0, $group_id = 0 ) {
 }
 
 function bp_docs_access_options_helper( $settings_field, $doc_id = 0, $group_id = 0 ) {
-	$doc_settings = bp_docs_get_doc_settings( $doc_id );
+	if ( $group_id ) {
+		$settings_type = 'raw';
+	} else {
+		$settings_type = 'default';
+	}
 
-	$setting = isset( $doc_settings[ $settings_field['name'] ] ) ? $doc_settings[ $settings_field['name'] ] : '';
+	$doc_settings = bp_docs_get_doc_settings( $doc_id, $settings_type );
+
+	// If this is a failed form submission, check the submitted values first
+	if ( ! empty( buddypress()->bp_docs->submitted_data->settings->{$settings_field['name']} ) ) {
+		$setting = buddypress()->bp_docs->submitted_data->settings->{$settings_field['name']};
+	} else {
+		$setting = isset( $doc_settings[ $settings_field['name'] ] ) ? $doc_settings[ $settings_field['name'] ] : '';
+	}
+
 	?>
 	<tr class="bp-docs-access-row bp-docs-access-row-<?php echo esc_attr( $settings_field['name'] ) ?>">
 		<td class="desc-column">
@@ -933,15 +947,15 @@ function bp_docs_doc_action_links() {
 
 	$links[] = '<a href="' . bp_docs_get_doc_link() . '">' . __( 'Read', 'bp-docs' ) . '</a>';
 
-	if ( bp_docs_current_user_can( 'edit', get_the_ID() ) ) {
+	if ( current_user_can( 'bp_docs_edit', get_the_ID() ) ) {
 		$links[] = '<a href="' . bp_docs_get_doc_link() . BP_DOCS_EDIT_SLUG . '">' . __( 'Edit', 'bp-docs' ) . '</a>';
 	}
 
-	if ( bp_docs_current_user_can( 'view_history', get_the_ID() ) && defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
+	if ( current_user_can( 'bp_docs_view_history', get_the_ID() ) && defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
 		$links[] = '<a href="' . bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG . '">' . __( 'History', 'bp-docs' ) . '</a>';
 	}
 
-	if ( bp_docs_current_user_can( 'manage', get_the_ID() ) && bp_docs_is_doc_trashed( get_the_ID() ) ) {
+	if ( current_user_can( 'manage', get_the_ID() ) && bp_docs_is_doc_trashed( get_the_ID() ) ) {
 		$links[] = '<a href="' . bp_docs_get_remove_from_trash_link( get_the_ID() ) . '" class="delete confirm">' . __( 'Untrash', 'bp-docs' ) . '</a>';
 	}
 
@@ -956,140 +970,6 @@ function bp_docs_current_group_is_public() {
 
 	return false;
 }
-
-/**
- * Get the lock status of a doc
- *
- * The function first tries to get the lock status out of $bp. If it has to look it up, it
- * stores the data in $bp for future use.
- *
- * @package BuddyPress Docs
- * @since 1.0-beta-2
- *
- * @param int $doc_id Optional. Defaults to the doc currently being viewed
- * @return int Returns 0 if there is no lock, otherwise returns the user_id of the locker
- */
-function bp_docs_is_doc_edit_locked( $doc_id = false ) {
-	global $bp, $post;
-
-	// Try to get the lock out of $bp first
-	if ( isset( $bp->bp_docs->current_doc_lock ) ) {
-		$is_edit_locked = $bp->bp_docs->current_doc_lock;
-	} else {
-		$is_edit_locked = 0;
-
-		if ( empty( $doc_id ) )
-			$doc_id = !empty( $post->ID ) ? $post->ID : false;
-
-		if ( $doc_id ) {
-			// Because we're not using WP autosave at the moment, ensure that
-			// the lock interval always returns as in process
-			add_filter( 'wp_check_post_lock_window', create_function( false, 'return time();' ) );
-
-			$is_edit_locked = bp_docs_check_post_lock( $doc_id );
-		}
-
-		// Put into the $bp global to avoid extra lookups
-		$bp->bp_docs->current_doc_lock = $is_edit_locked;
-	}
-
-	return apply_filters( 'bp_docs_is_doc_edit_locked', $is_edit_locked, $doc_id );
-}
-
-/**
- * Echoes the output of bp_docs_get_current_doc_locker_name()
- *
- * @package BuddyPress Docs
- * @since 1.0-beta-2
- */
-function bp_docs_current_doc_locker_name() {
-	echo bp_docs_get_current_doc_locker_name();
-}
-	/**
-	 * Get the name of the user locking the current document, if any
-	 *
-	 * @package BuddyPress Docs
-	 * @since 1.0-beta-2
-	 *
-	 * @return string $locker_name The full name of the locking user
-	 */
-	function bp_docs_get_current_doc_locker_name() {
-		$locker_name = '';
-
-		$locker_id = bp_docs_is_doc_edit_locked();
-
-		if ( $locker_id )
-			$locker_name = bp_core_get_user_displayname( $locker_id );
-
-		return apply_filters( 'bp_docs_get_current_doc_locker_name', $locker_name, $locker_id );
-	}
-
-/**
- * Echoes the output of bp_docs_get_force_cancel_edit_lock_link()
- *
- * @package BuddyPress Docs
- * @since 1.0-beta-2
- */
-function bp_docs_force_cancel_edit_lock_link() {
-	echo bp_docs_get_force_cancel_edit_lock_link();
-}
-	/**
-	 * Get the URL for canceling the edit lock on the current doc
-	 *
-	 * @package BuddyPress Docs
-	 * @since 1.0-beta-2
-	 *
-	 * @return string $cancel_link href for the cancel edit lock link
-	 */
-	function bp_docs_get_force_cancel_edit_lock_link() {
-		global $post;
-
-		$doc_id = !empty( $post->ID ) ? $post->ID : false;
-
-		if ( !$doc_id )
-			return false;
-
-		$doc_permalink = bp_docs_get_doc_link( $doc_id );
-
-		$cancel_link = wp_nonce_url( add_query_arg( 'bpd_action', 'cancel_edit_lock', $doc_permalink ), 'bp_docs_cancel_edit_lock' );
-
-		return apply_filters( 'bp_docs_get_force_cancel_edit_lock_link', $cancel_link, $doc_permalink );
-	}
-
-/**
- * Echoes the output of bp_docs_get_cancel_edit_link()
- *
- * @package BuddyPress Docs
- * @since 1.0-beta-2
- */
-function bp_docs_cancel_edit_link() {
-	echo bp_docs_get_cancel_edit_link();
-}
-	/**
-	 * Get the URL for canceling out of Edit mode on a doc
-	 *
-	 * This used to be a straight link back to non-edit mode, but something fancier is needed
-	 * in order to detect the Cancel and to remove the edit lock.
-	 *
-	 * @package BuddyPress Docs
-	 * @since 1.0-beta-2
-	 *
-	 * @return string $cancel_link href for the cancel edit link
-	 */
-	function bp_docs_get_cancel_edit_link() {
-		global $bp, $post;
-
-		$doc_id = !empty( $bp->bp_docs->current_post->ID ) ? $bp->bp_docs->current_post->ID : false;
-
-		if ( !$doc_id )
-			return false;
-
-		$doc_permalink = bp_docs_get_doc_link( $doc_id );
-
-		$cancel_link = add_query_arg( 'bpd_action', 'cancel_edit', $doc_permalink );
-
-		return apply_filters( 'bp_docs_get_cancel_edit_link', $cancel_link, $doc_permalink );
-	}
 
 /**
  * Echoes the output of bp_docs_get_delete_doc_link()
@@ -1306,11 +1186,13 @@ function bp_docs_list_comments() {
 function bp_docs_is_existing_doc() {
 	global $wp_query;
 
-	if ( ! isset( $wp_query ) || ! is_a( $wp_query, 'WP_Query' ) ) {
-		return false;
+	$is_existing_doc = false;
+
+	if ( isset( $wp_query ) && is_a( $wp_query, 'WP_Query' ) && is_singular( bp_docs_get_post_type_name() ) ) {
+		$is_existing_doc = true;
 	}
 
-	return is_singular( bp_docs_get_post_type_name() );
+	return apply_filters( 'bp_docs_is_existing_doc', $is_existing_doc );
 }
 
 /**
@@ -1415,7 +1297,7 @@ function bp_docs_tabs( $show_create_button = true ) {
  * @since 1.2
  */
 function bp_docs_create_button() {
-	if ( ! bp_docs_is_doc_create() && bp_docs_current_user_can( 'create' ) ) {
+	if ( ! bp_docs_is_doc_create() && current_user_can( 'bp_docs_create' ) ) {
 		echo apply_filters( 'bp_docs_create_button', '<a class="button" id="bp-create-doc-button" href="' . bp_docs_get_create_link() . '">' . __( "Create New Doc", 'bp-docs' ) . '</a>' );
 	}
 }
@@ -1594,7 +1476,7 @@ function bp_docs_doc_permissions_snapshot( $args = array() ) {
 	$html .=     '<li class="bp-docs-can-view_history ' . $view_history_class . '"><span class="bp-docs-level-icon"></span>' . '<span class="perms-text">' . $view_history_text . '</span></li>';
 	$html .=   '</ul>';
 
-	if ( bp_docs_current_user_can( 'manage' ) )
+	if ( current_user_can( 'bp_docs_manage' ) )
 		$html .=   '<a href="' . bp_docs_get_doc_edit_link() . '#doc-settings" id="doc-permissions-edit">' . __( 'Edit', 'bp-docs' ) . '</a>';
 
 	$html .=   '<a href="#" class="doc-permissions-toggle" id="doc-permissions-less">' . __( 'Hide Details', 'bp-docs' ) . '</a>';
@@ -1873,7 +1755,7 @@ add_action( 'bp_docs_single_doc_header_fields', 'bp_docs_render_permissions_snap
  * @since 1.4
  */
 function bp_docs_media_buttons( $editor_id ) {
-	if ( bp_docs_is_existing_doc() && ! bp_docs_current_user_can( 'edit' ) ) {
+	if ( bp_docs_is_existing_doc() && ! current_user_can( 'bp_docs_edit' ) ) {
 		return;
 	}
 
@@ -1922,20 +1804,58 @@ function bp_docs_get_doc_attachments( $doc_id = null ) {
 	return apply_filters( 'bp_docs_get_doc_attachments', $atts, $doc_id );
 }
 
+/**
+ * Get the URL for an attachment download.
+ *
+ * Is sensitive to whether Docs can be directly downloaded.
+ *
+ * @param int $attachment_id
+ */
+function bp_docs_attachment_url( $attachment_id ) {
+	echo bp_docs_get_attachment_url( $attachment_id );
+}
+	/**
+	 * Get the URL for an attachment download.
+	 *
+	 * Is sensitive to whether Docs can be directly downloaded.
+	 *
+	 * @param int $attachment_id
+	 */
+	function bp_docs_get_attachment_url( $attachment_id ) {
+		$attachment = get_post( $attachment_id );
+
+		if ( bp_docs_attachment_protection() ) {
+			$attachment = get_post( $attachment_id );
+			$att_base   = basename( get_attached_file( $attachment_id ) );
+			$doc_url    = bp_docs_get_doc_link( $attachment->post_parent );
+			$att_url    = add_query_arg( 'bp-attachment', $att_base, $doc_url );
+		} else {
+			$att_url = wp_get_attachment_url( $attachment_id );
+		}
+
+		// Backward compatibility: fix IIS URLs that were broken by a
+		// previous implementation
+		$att_url = preg_replace( '|bp\-attachments([0-9])|', 'bp-attachments/$1', $att_url );
+
+		return apply_filters( 'bp_docs_attachment_url_base', $att_url, $attachment );
+	}
+
+
 // @todo make <li> optional?
 function bp_docs_attachment_item_markup( $attachment_id, $format = 'full' ) {
 	$markup = '';
 
-	$attachment = get_post( $attachment_id );
-	$attachment_url = apply_filters( 'bp_docs_attachment_url_base', wp_get_attachment_url( $attachment->ID ), $attachment );
+	$att_url    = bp_docs_get_attachment_url( $attachment_id );
 
-	$attachment_ext = preg_replace( '/^.+?\.([^.]+)$/', '$1', $attachment_url );
-	$attachment_filename = basename( $attachment_url );
+	$attachment = get_post( $attachment_id );
+	$att_base   = basename( get_attached_file( $attachment_id ) );
+	$doc_url    = bp_docs_get_doc_link( $attachment->post_parent );
+
+	$attachment_ext = preg_replace( '/^.+?\.([^.]+)$/', '$1', $att_url );
 
 	if ( 'full' === $format ) {
 		$attachment_delete_html = '';
-		if ( bp_docs_current_user_can( 'edit' ) && ( bp_docs_is_doc_edit() || bp_docs_is_doc_create() ) ) {
-			$doc_url = bp_docs_get_doc_link( $attachment->post_parent );
+		if ( current_user_can( 'bp_docs_edit' ) && ( bp_docs_is_doc_edit() || bp_docs_is_doc_create() ) ) {
 			$attachment_delete_url = wp_nonce_url( $doc_url, 'bp_docs_delete_attachment_' . $attachment_id );
 			$attachment_delete_url = add_query_arg( array(
 				'delete_attachment' => $attachment_id,
@@ -1951,18 +1871,19 @@ function bp_docs_attachment_item_markup( $attachment_id, $format = 'full' ) {
 			'<li id="doc-attachment-%d"><span class="doc-attachment-mime-icon doc-attachment-mime-%s"></span><a href="%s" title="%s">%s</a>%s</li>',
 			$attachment_id,
 			$attachment_ext,
-			$attachment_url,
-			esc_attr( $attachment_filename ),
-			esc_html( $attachment_filename ),
+			$att_url,
+			esc_attr( $att_base ),
+			esc_html( $att_base ),
 			$attachment_delete_html
 		);
 	} else {
 		$markup = sprintf(
-			'<li id="doc-attachment-%d"><a href="%s" title="%s">%s</a></li>',
+			'<li id="doc-attachment-%d"><span class="doc-attachment-mime-icon doc-attachment-mime-%s"></span><a href="%s" title="%s">%s</a></li>',
 			$attachment_id,
-			$attachment_url,
-			esc_attr( $attachment_filename ),
-			esc_html( $attachment_filename )
+			$attachment_ext,
+			$att_url,
+			esc_attr( $att_base ),
+			esc_html( $att_base )
 		);
 	}
 
@@ -1997,9 +1918,9 @@ function bp_docs_attachment_icon() {
 		return;
 	}
 
-	$pc = plugins_url( BP_DOCS_PLUGIN_SLUG . '/includes/images/paperclip.png' );
+	// $pc = plugins_url( BP_DOCS_PLUGIN_SLUG . '/includes/images/paperclip.png' );
 
-	$html = '<a class="bp-docs-attachment-clip" id="bp-docs-attachment-clip-' . get_the_ID() . '"><img src="' . $pc . '" height="25"></a>';
+	$html = '<a class="bp-docs-attachment-clip paperclip-jaunty" id="bp-docs-attachment-clip-' . get_the_ID() . '"></a>';
 
 	echo $html;
 }
@@ -2077,4 +1998,17 @@ function bp_docs_is_doc_trashed( $doc_id = false ) {
 	}
 
 	return isset( $doc->post_status ) && 'trash' == $doc->post_status;
+}
+
+/**
+ * Output 'toggle-open' or 'toggle-closed' class for toggleable div.
+ *
+ * @since 1.8
+ */
+function bp_docs_toggleable_open_or_closed_class() {
+	if ( bp_docs_is_doc_create() ) {
+		echo 'toggle-open';
+	} else {
+		echo 'toggle-closed';
+	}
 }

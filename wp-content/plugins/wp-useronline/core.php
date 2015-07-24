@@ -9,7 +9,7 @@ class UserOnline_Core {
 
 	private static $useronline;
 
-	function get_user_online_count() {
+	static function get_user_online_count() {
 		global $wpdb;
 
 		if ( is_null( self::$useronline ) )
@@ -18,7 +18,7 @@ class UserOnline_Core {
 		return self::$useronline;
 	}
 
-	function init( $options, $most ) {
+	static function init( $options, $most ) {
 		self::$options = $options;
 		self::$most = $most;
 
@@ -38,14 +38,14 @@ class UserOnline_Core {
 			add_filter( 'useronline_display_user', array( __CLASS__, 'linked_names' ), 10, 2 );
 	}
 
-	function linked_names( $name, $user ) {
+	static function linked_names( $name, $user ) {
 		if ( !$user->user_id )
 			return $name;
 
 		return html_link( get_author_posts_url( $user->user_id ), $name );
 	}
 
-	function scripts() {
+	static function scripts() {
 		if ( !self::$add_script )
 			return;
 
@@ -53,14 +53,16 @@ class UserOnline_Core {
 
 		wp_enqueue_script( 'wp-useronline', plugins_url( "useronline$js_dev.js", __FILE__ ), array( 'jquery' ), '2.80', true );
 		wp_localize_script( 'wp-useronline', 'useronlineL10n', array(
-			'ajax_url' => admin_url( 'admin-ajax.php', ( is_ssl() ? 'https' : 'http' ) ),
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
 			'timeout' => self::$options->timeout * 1000
 		) );
 
 		scbUtil::do_scripts('wp-useronline');
 	}
 
-	function record( $page_url = '', $page_title = '' ) {
+	static function record( $page_url = '', $page_title = '' ) {
+		require_once dirname(__FILE__) . '/bots.php';
+
 		global $wpdb;
 
 		if ( empty( $page_url ) )
@@ -75,41 +77,16 @@ class UserOnline_Core {
 			$referral = '';
 
 		$user_ip = self::get_ip();
-		$user_agent = $_SERVER['HTTP_USER_AGENT'];
+
+		if ( isset( $_SERVER['HTTP_USER_AGENT'] ) )
+			$user_agent = strip_tags( $_SERVER['HTTP_USER_AGENT'] );
+		else
+			$user_agent = '';
+
 		$current_user = wp_get_current_user();
 
 		// Check For Bot
-		$bots = array(
-			'Google Bot' => 'google',
-			'MSN' => 'msnbot',
-			'BingBot' => 'bingbot',
-			'Alex' => 'ia_archiver',
-			'Lycos' => 'lycos',
-			'Ask Jeeves' => 'jeeves',
-			'Altavista' => 'scooter',
-			'AllTheWeb' => 'fast-webcrawler',
-			'Inktomi' => 'slurp@inktomi',
-			'Turnitin.com' => 'turnitinbot',
-			'Technorati' => 'technorati',
-			'Yahoo' => 'yahoo',
-			'Findexa' => 'findexa',
-			'NextLinks' => 'findlinks',
-			'Gais' => 'gaisbo',
-			'WiseNut' => 'zyborg',
-			'WhoisSource' => 'surveybot',
-			'Bloglines' => 'bloglines',
-			'BlogSearch' => 'blogsearch',
-			'PubSub' => 'pubsub',
-			'Syndic8' => 'syndic8',
-			'RadioUserland' => 'userland',
-			'Gigabot' => 'gigabot',
-			'Become.com' => 'become.com',
-			'Baidu' => 'baidu',
-			'Yandex' => 'yandex',
-			'Amazon' => 'amazonaws.com'
-		);
-
-		$bots = apply_filters( 'useronline_bots', $bots );
+		$bots = useronline_get_bots();
 
 		$bot_found = false;
 		foreach ( $bots as $name => $lookfor ) {
@@ -145,15 +122,14 @@ class UserOnline_Core {
 			}
 		}
 
+		// Current GMT Timestamp
+		$timestamp = current_time( 'mysql' );
+
 		// Purge table
-		$wpdb->query( $wpdb->prepare( "
-			DELETE FROM $wpdb->useronline
-			WHERE user_ip = %s
-			OR timestamp < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL %d SECOND)
-		", $user_ip, self::$options->timeout ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->useronline WHERE user_ip = %s OR timestamp < DATE_SUB(%s, INTERVAL %d SECOND)", $user_ip, $timestamp, self::$options->timeout ) );
 
 		// Insert Users
-		$data = compact( 'user_type', 'user_id', 'user_name', 'user_ip', 'user_agent', 'page_title', 'page_url', 'referral' );
+		$data = compact( 'timestamp', 'user_type', 'user_id', 'user_name', 'user_ip', 'user_agent', 'page_title', 'page_url', 'referral' );
 		$data = stripslashes_deep( $data );
 		$wpdb->replace( $wpdb->useronline, $data );
 
@@ -175,9 +151,7 @@ class UserOnline_Core {
 		$wpdb->query( "DELETE FROM $wpdb->useronline" );
 	}
 
-	function ajax() {
-		global $wpdb;
-
+	static function ajax() {
 		$mode = trim( $_POST['mode'] );
 
 		$page_title = strip_tags( $_POST['page_title'] );
@@ -205,12 +179,12 @@ class UserOnline_Core {
 		die;
 	}
 
-	function wp_stats_integration() {
+	static function wp_stats_integration() {
 		if ( function_exists( 'stats_page' ) )
 			require_once dirname( __FILE__ ) . '/wp-stats.php';
 	}
 
-	private function get_title() {
+	private static function get_title() {
 		if ( is_admin() && function_exists( 'get_admin_page_title' ) ) {
 			$page_title = ' &raquo; ' . __( 'Admin', 'wp-useronline' ) . ' &raquo; ' . get_admin_page_title();
 		} else {
@@ -225,7 +199,7 @@ class UserOnline_Core {
 		return $page_title;
 	}
 
-	private function get_ip() {
+	private static function get_ip() {
 		if ( isset( $_SERVER["HTTP_X_FORWARDED_FOR"] ) )
 			$ip_address = $_SERVER["HTTP_X_FORWARDED_FOR"];
 		else

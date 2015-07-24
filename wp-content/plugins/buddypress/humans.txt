@@ -51,9 +51,34 @@ Title: Core Developer
 Twitter: r-a-y
 Favourite Food: tbd
 
+Name: Mathieu Viet
+Title: Core Developer
+Twitter: imath
+Favorite Food: Spaghetti Bolognese
+
+Name: Mercime
+Title: Navigator
+Twitter: mercime_one
+Favorite Food: Paella Valenciana
+
+Name: David Cavins
+Title: Core Developer
+Twitter: daveycavey
+Favorite Food: Quad-Cities pizza
+
+Name: Michael Beckwith
+Title: Core Developer
+Twitter: tw2113
+Favorite Food: Jelly Beans
+
+Name: Hugo Ashmore (hnla)
+Title: Core Developer
+Twitter: hnla
+Favourite Food: Sunday Roast or Curries
+
 /* THANKS */
-hnla, mercime, modemlooper, cnorris23, karmatosed, photomatt
+modemlooper, cnorris23, karmatosed, photomatt
 
 /* META */
-Updated: 2012/10/22
+Updated: 2015/05/09
 See: http://humanstxt.org/

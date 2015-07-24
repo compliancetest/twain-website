@@ -13,7 +13,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 class BP_Forums_Component extends BP_Component {
 
@@ -22,11 +22,11 @@ class BP_Forums_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5.0)
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::start(
 			'forums',
 			__( 'Discussion Forums', 'buddypress' ),
-			BP_PLUGIN_DIR,
+			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 80
 			)
@@ -57,8 +57,9 @@ class BP_Forums_Component extends BP_Component {
 			define( 'BP_FORUMS_SLUG', $this->id );
 
 		// The location of the bbPress stand-alone config file
-		if ( isset( $bp->site_options['bb-config-location'] ) )
-			$this->bbconfig = $bp->site_options['bb-config-location'];
+		$bbconfig = bp_core_get_root_option( 'bb-config-location' );
+		if ( '' !== $bbconfig )
+			$this->bbconfig = $bbconfig;
 
 		// All globals for messaging component.
 		// Note that global_tables is included in this array.
@@ -231,7 +232,7 @@ class BP_Forums_Component extends BP_Component {
 	/**
 	 * Set up the title for pages and the <title> element.
 	 */
-	function setup_title() {
+	public function setup_title() {
 		$bp = buddypress();
 
 		// Adjust title based on view

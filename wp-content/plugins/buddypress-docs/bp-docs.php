@@ -108,6 +108,8 @@ class BP_Docs {
 
 		require( BP_DOCS_INCLUDES_PATH . 'theme-bridge.php' );
 
+		require( BP_DOCS_INCLUDES_PATH . 'edit-lock.php' );
+
 		// formatting.php contains filters and functions used to modify appearance only
 		require( BP_DOCS_INCLUDES_PATH . 'formatting.php' );
 
@@ -173,8 +175,9 @@ class BP_Docs {
 		}
 
 		// You should never really need to override this bad boy
-		if ( !defined( 'BP_DOCS_INSTALL_PATH' ) )
-			define( 'BP_DOCS_INSTALL_PATH', WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . BP_DOCS_PLUGIN_SLUG . DIRECTORY_SEPARATOR );
+		if ( !defined( 'BP_DOCS_INSTALL_PATH' ) ) {
+			define( 'BP_DOCS_INSTALL_PATH', plugin_dir_path( __FILE__ ) );
+		}
 
 		// Ditto
 		if ( !defined( 'BP_DOCS_INCLUDES_PATH' ) )
@@ -339,7 +342,9 @@ class BP_Docs {
 		$this->hierarchy = new BP_Docs_Hierarchy;
 
 		// Don't load the History component if post revisions are disabled
-		if ( defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
+		$wp_post_revisions = defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS;
+		$bp_docs_revisions = defined( 'BP_DOCS_REVISIONS' ) && BP_DOCS_REVISIONS;
+		if ( $wp_post_revisions || $bp_docs_revisions ) {
 			require_once( BP_DOCS_INCLUDES_PATH . 'addon-history.php' );
 			$this->history = new BP_Docs_History;
 		}
@@ -522,51 +527,30 @@ class BP_Docs {
 	 * Protects group docs from unauthorized access
 	 *
 	 * @since 1.2
-	 * @uses bp_docs_current_user_can() This does most of the heavy lifting
 	 */
 	function protect_doc_access() {
 		// What is the user trying to do?
 		if ( bp_docs_is_doc_read() ) {
-			$action = 'read';
+			$action = 'bp_docs_read';
 		} else if ( bp_docs_is_doc_create() ) {
-			$action = 'create';
+			$action = 'bp_docs_create';
 		} else if ( bp_docs_is_doc_edit() ) {
-			$action = 'edit';
+			$action = 'bp_docs_edit';
 		} else if ( bp_docs_is_doc_history() ) {
-			$action = 'view_history';
+			$action = 'bp_docs_view_history';
 		}
 
 		if ( ! isset( $action ) ) {
 			return;
 		}
 
-		if ( ! bp_docs_current_user_can( $action ) ) {
-			$redirect_to = wp_get_referer();
+		if ( ! current_user_can( $action ) ) {
+			$redirect_to = bp_docs_get_doc_link();
 
-			if ( ! $redirect_to || trailingslashit( $redirect_to ) == trailingslashit( wp_guess_url() ) ) {
-				$redirect_to = bp_get_root_domain();
-			}
-
-			switch ( $action ) {
-				case 'read' :
-					$message = __( 'You are not allowed to read that Doc.', 'bp-docs' );
-					break;
-
-				case 'create' :
-					$message = __( 'You are not allowed to create Docs.', 'bp-docs' );
-					break;
-
-				case 'edit' :
-					$message = __( 'You are not allowed to edit that Doc.', 'bp-docs' );
-					break;
-
-				case 'view_history' :
-					$message = __( 'You are not allowed to view that Doc\'s history.', 'bp-docs' );
-					break;
-			}
-
-			bp_core_add_message( $message, 'error' );
-			bp_core_redirect( $redirect_to );
+			bp_core_no_access( array(
+				'mode' => 2,
+				'redirect' => $redirect_to,
+			) );
 		}
 	}
 

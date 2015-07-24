@@ -1,6 +1,17 @@
 <?php
-$base_color = $_GET['custom-color'];
+// Set headers to serve CSS and encourage browser caching
+$expires = 31536000; // cache time: 1 year
+header( 'Content-Type: text/css' );
+header( 'Cache-Control: max-age=' . $expires );
+header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time() + $expires ) . ' GMT' );
 
+if( ctype_xdigit( ltrim( $_GET['custom-color'] , '#' ) ) ) {
+	$base_color = $_GET['custom-color'];
+} else {
+	$base_color = '000000';
+}
+
+// create hex string of 6 chars
 $hex = str_replace( '#', '', $base_color );
 if ( strlen( $hex ) == 3 ) {
 	$hex = str_repeat( substr( $hex, 0, 1 ), 2 ).str_repeat( substr( $hex, 1, 1 ), 2 ).str_repeat( substr( $hex, 2, 1 ), 2 );
@@ -35,7 +46,10 @@ $r_hex = str_pad( dechex( $r ), 2, '0', STR_PAD_LEFT );
 $g_hex = str_pad( dechex( $g ), 2, '0', STR_PAD_LEFT );
 $b_hex = str_pad( dechex( $b ), 2, '0', STR_PAD_LEFT );
 
-$darkest_color = '#'.$r_hex.$g_hex.$b_hex;
+$darkest_color = '#' . $r_hex.$g_hex.$b_hex;
+
+// read base CSS
+readfile( dirname( __FILE__ ) . '/form-theme-custom-base.css' );
 ?>
 
 .mc4wp-form input[type="submit"], .mc4wp-form button {
@@ -55,6 +69,7 @@ $darkest_color = '#'.$r_hex.$g_hex.$b_hex;
 .mc4wp-form input[type="text"]:focus,
 .mc4wp-form input[type="email"]:focus,
 .mc4wp-form input[type="tel"]:focus,
+.mc4wp-form input[type="date"]:focus,
 .mc4wp-form input[type="url"]:focus,
 .mc4wp-form textarea:focus,
 .mc4wp-form select:focus {

@@ -36,11 +36,7 @@ class BP_Docs_Query {
 		$this->associated_item_tax_name	= $bp->bp_docs->associated_item_tax_name;
 
 		// Get the item slug, if there is one available
-		if ( bp_docs_is_single_doc() ) {
-			$this->doc_slug = $this->get_doc_slug();
-		} else {
-			$this->doc_slug = '';
-		}
+		$this->doc_slug = $this->get_doc_slug();
 
 		$defaults = array(
 			'doc_id'	 => array(),     // Array or comma-separated string
@@ -255,8 +251,8 @@ class BP_Docs_Query {
 	/**
 	 *
 	 */
-	function get_edited_by_post_ids() {
-		$editor_ids = wp_parse_id_list( $this->query_args['edited_by_id'] );
+	public static function get_edited_by_post_ids_for_user( $editor_ids ) {
+		$editor_ids = wp_parse_id_list( $editor_ids );
 		$post_ids = array();
 
 		foreach ( $editor_ids as $editor_id ) {
@@ -289,6 +285,13 @@ class BP_Docs_Query {
 
 		// @todo Might be faster to let the dupes through and let MySQL optimize
 		return array_unique( $post_ids );
+	}
+
+	/**
+	 *
+	 */
+	function get_edited_by_post_ids() {
+		return self::get_edited_by_post_ids_for_user( $this->query_args['edited_by_id'] );
 	}
 
 	/**
@@ -433,9 +436,10 @@ class BP_Docs_Query {
 		// Check group associations
 		// @todo Move into group integration piece
 		if ( bp_is_active( 'groups' ) ) {
-			$associated_group_id = isset( $_POST['associated_group_id'] ) ? intval( $_POST['associated_group_id'] ) : 0;
+			// This group id is only used to check whether the user can associate the doc with the group.
+			$associated_group_id = isset( $_POST['associated_group_id'] ) ? intval( $_POST['associated_group_id'] ) : null;
 
-			if ( $associated_group_id && ! BP_Docs_Groups_Integration::user_can_associate_doc_with_group( bp_loggedin_user_id(), $associated_group_id ) ) {
+			if ( ! empty( $associated_group_id ) && ! current_user_can( 'bp_docs_associate_with_group', $associated_group_id ) ) {
 				$retval = array(
 					'message_type' => 'error',
 					'message' => __( 'You are not allowed to associate a Doc with that group.', 'bp-docs' ),
@@ -468,7 +472,7 @@ class BP_Docs_Query {
 
 				// If there's a 'doc_id' value in the POST, use
 				// the autodraft as a starting point
-				if ( isset( $_POST['doc_id'] ) ) {
+				if ( isset( $_POST['doc_id'] ) && 0 != $_POST['doc_id'] ) {
 					$post_id = (int) $_POST['doc_id'];
 					$r['ID'] = $post_id;
 					wp_update_post( $r );
@@ -491,10 +495,11 @@ class BP_Docs_Query {
 				}
 			} else {
 				$this->is_new_doc = false;
-				$doc = get_queried_object();
 
-				$this->doc_id     = $doc->ID;
-				$r['ID']          = $this->doc_id;
+				$doc = bp_docs_get_current_doc();
+
+				$this->doc_id = $doc->ID;
+				$r['ID']      = $this->doc_id;
 
 				// Make sure the post_name is set
 				if ( empty( $r['post_name'] ) )
@@ -511,6 +516,7 @@ class BP_Docs_Query {
 				} else {
 					// Remove the edit lock
 					delete_post_meta( $this->doc_id, '_edit_lock' );
+					delete_post_meta( $this->doc_id, '_bp_docs_last_pinged' );
 
 					// When the post has been autosaved, we need to leave a
 					// special success message
@@ -531,7 +537,7 @@ class BP_Docs_Query {
 		if ( ! empty( $post_id ) ) {
 
 			// Add to a group, if necessary
-			if ( isset( $associated_group_id ) ) {
+			if ( ! is_null( $associated_group_id ) ) {
 				bp_docs_set_associated_group_id( $post_id, $associated_group_id );
 			}
 
@@ -542,22 +548,7 @@ class BP_Docs_Query {
 			update_post_meta( $this->doc_id, 'bp_docs_last_editor', bp_loggedin_user_id() );
 
 			// Save settings
-			$settings = ! empty( $_POST['settings'] ) ? $_POST['settings'] : array();
-			$verified_settings = bp_docs_verify_settings( $settings, $post_id, bp_loggedin_user_id() );
-
-			$new_settings = array();
-			foreach ( $verified_settings as $verified_setting_name => $verified_setting ) {
-				$new_settings[ $verified_setting_name ] = $verified_setting['verified_value'];
-				if ( $verified_setting['verified_value'] != $verified_setting['original_value'] ) {
-					$result['message'] = __( 'Your Doc was successfully saved, but some of your access settings have been changed to match the Doc\'s permissions.', 'bp-docs' );
-				}
-			}
-			update_post_meta( $this->doc_id, 'bp_docs_settings', $new_settings );
-
-			// The 'read' setting must also be saved to a taxonomy, for
-			// easier directory queries
-			$read_setting = isset( $new_settings['read'] ) ? $new_settings['read'] : 'anyone';
-			bp_docs_update_doc_access( $this->doc_id, $read_setting );
+			bp_docs_save_doc_access_settings( $this->doc_id );
 
 			// Increment the revision count
 			$revision_count = get_post_meta( $this->doc_id, 'bp_docs_revision_count', true );
@@ -570,9 +561,16 @@ class BP_Docs_Query {
 		// the WP admin handles automatically)
 		do_action( 'bp_docs_doc_saved', $this );
 
+		do_action( 'bp_docs_after_save', $this->doc_id );
+
 		$message_type = $result['redirect'] == 'single' ? 'success' : 'error';
 
-		$redirect_url = trailingslashit( bp_get_root_domain() . '/' . bp_docs_get_docs_slug() );
+		// Stuff data into a cookie so it can be accessed on next page load
+		if ( 'error' === $message_type ) {
+			setcookie( 'bp-docs-submit-data', json_encode( $_POST ), time() + 30, '/' );
+		}
+
+		$redirect_url = apply_filters( 'bp_docs_post_save_redirect_base', trailingslashit( bp_get_root_domain() . '/' . bp_docs_get_docs_slug() ) );
 
 		if ( $result['redirect'] == 'single' ) {
 			$redirect_url .= $this->doc_slug;

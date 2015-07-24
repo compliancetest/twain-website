@@ -13,10 +13,11 @@ class BP_Docs_Attachments {
 		}
 
 		add_action( 'template_redirect', array( $this, 'catch_attachment_request' ), 20 );
+		add_filter( 'redirect_canonical', array( $this, 'redirect_canonical' ), 10, 2 );
 		add_filter( 'upload_dir', array( $this, 'filter_upload_dir' ) );
 		add_action( 'bp_docs_doc_saved', array( $this, 'check_privacy' ) );
-		add_filter( 'wp_handle_upload_prefilter', array( $this, 'maybe_create_htaccess' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_filter( 'wp_handle_upload_prefilter', array( $this, 'maybe_create_rewrites' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
 
 		add_action( 'pre_get_posts', array( $this, 'filter_gallery_posts' ) );
 		add_action( 'pre_get_posts', array( $this, 'filter_directory_posts' ) );
@@ -34,6 +35,9 @@ class BP_Docs_Attachments {
 
 		// Ensure that all logged-in users have the 'upload_files' cap
 		add_filter( 'map_meta_cap', array( __CLASS__, 'map_meta_cap' ), 10, 4 );
+
+		// Admin notice about directory accessibility
+		add_action( 'admin_init', array( $this, 'admin_notice_init' ) );
 
 		require( dirname( __FILE__ ) . '/attachments-ajax.php' );
 	}
@@ -83,6 +87,23 @@ class BP_Docs_Attachments {
 
 			readfile( $filepath );
 		}
+	}
+
+	/**
+	 * If redirecting from a 'p' URL to a rewritten URL, retain 'bp-attachment' param
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param string $redirect_url URL as calculated by redirect_canonical
+	 * @param string $requested_url Originally requested URL.
+	 * @return string
+	 */
+	public function redirect_canonical( $redirect_url, $requested_url ) {
+		if ( isset( $_GET['p'] ) && isset( $_GET['bp-attachment'] ) && false !== strpos( $requested_url, 'bp-attachments' ) ) {
+			$redirect_url = add_query_arg( 'bp-attachment', $_GET['bp-attachment'], $redirect_url );
+		}
+
+		return $redirect_url;
 	}
 
 	/**
@@ -146,11 +167,37 @@ class BP_Docs_Attachments {
 	}
 
 	/**
-	 * Creates an .htaccess file in the appropriate upload dir, if appropriate
+	 * Create rewrite rules for upload directory, if appropriate.
 	 *
 	 * As a hack, we've hooked to wp_handle_upload_prefilter. We don't
 	 * actually do anything with the passed value; we just need a place
 	 * to hook in reliably before the file is written.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param $file
+	 * @return $file
+	 */
+	public function maybe_create_rewrites( $file ) {
+		global $is_apache;
+
+		if ( ! $this->get_doc_id() ) {
+			return $file;
+		}
+
+		if ( ! $this->get_is_private() ) {
+			return $file;
+		}
+
+		if ( $is_apache ) {
+			$this->create_htaccess();
+		}
+
+		return $file;
+	}
+
+	/**
+	 * Creates an .htaccess file in the appropriate upload dir, if appropriate
 	 *
 	 * @since 1.4
 	 * @param $file
@@ -184,7 +231,7 @@ class BP_Docs_Attachments {
 		$rules = $this->generate_rewrite_rules();
 
 		if ( ! empty( $rules ) ) {
-			if ( ! file_exists( 'insert_with_markers' ) ) {
+			if ( ! function_exists( 'insert_with_markers' ) ) {
 				require_once( ABSPATH . 'wp-admin/includes/misc.php' );
 			}
 			insert_with_markers( $htaccess_path, 'BuddyPress Docs', $rules );
@@ -279,7 +326,7 @@ class BP_Docs_Attachments {
 			return;
 		}
 
-		if ( ! bp_docs_current_user_can( 'edit' ) ) {
+		if ( ! current_user_can( 'bp_docs_edit' ) ) {
 			return;
 		}
 
@@ -323,7 +370,7 @@ class BP_Docs_Attachments {
 	 * @return array $uploads
 	 */
 	function mod_upload_dir( $uploads ) {
-		$subdir = DIRECTORY_SEPARATOR . 'bp-attachments' . DIRECTORY_SEPARATOR . $this->doc_id;
+		$subdir = '/bp-attachments/' . $this->doc_id;
 
 		$uploads['subdir'] = $subdir;
 		$uploads['path'] = $uploads['basedir'] . $subdir;
@@ -334,7 +381,12 @@ class BP_Docs_Attachments {
 
 	function enqueue_scripts() {
 		if ( bp_docs_is_doc_edit() || bp_docs_is_doc_create() ) {
-			wp_enqueue_script( 'bp-docs-attachments', plugins_url( BP_DOCS_PLUGIN_SLUG . '/includes/js/attachments.js' ), array( 'media-editor', 'media-views' ), false, true );
+			wp_enqueue_script( 'bp-docs-attachments', plugins_url( BP_DOCS_PLUGIN_SLUG . '/includes/js/attachments.js' ), array( 'media-editor', 'media-views', 'bp-docs-js' ), false, true );
+
+			wp_localize_script( 'bp-docs-attachments', 'bp_docs_attachments', array(
+				'upload_title'  => __( 'Upload File', 'bp-docs' ),
+				'upload_button' => __( 'OK', 'bp-docs' ),
+			) );
 		}
 	}
 
@@ -425,7 +477,7 @@ class BP_Docs_Attachments {
 			);
 		}
 
-		return $rules;
+		return apply_filters( 'bp_docs_attachments_generate_rewrite_rules', $rules, $this );
 	}
 
 	/**
@@ -542,7 +594,7 @@ class BP_Docs_Attachments {
 	}
 
 	/**
-	 * Give users the 'upload_files' cap, when appropriate
+	 * Give users the 'edit_post' and 'upload_files' cap, when appropriate
 	 *
 	 * @since 1.4
 	 *
@@ -553,7 +605,7 @@ class BP_Docs_Attachments {
 	 * @return array $caps
 	 */
 	public static function map_meta_cap( $caps, $cap, $user_id, $args ) {
-		if ( 'upload_files' !== $cap ) {
+		if ( 'upload_files' !== $cap && 'edit_post' !== $cap ) {
 			return $caps;
 		}
 
@@ -568,24 +620,18 @@ class BP_Docs_Attachments {
 		$is_ajax = isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === $_SERVER['REQUEST_METHOD'] && 'async-upload.php' === substr( $_SERVER['REQUEST_URI'], strrpos( $_SERVER['REQUEST_URI'], '/' ) + 1 );
 
 		if ( $is_ajax ) {
-			// Clean up referer
-			$referer = $_SERVER['HTTP_REFERER'];
-			$qp = strpos( $referer, '?' );
-			if ( false !== $qp ) {
-				$referer = substr( $referer, 0, $qp );
-			}
-			$referer = trailingslashit( $referer );
+			// WordPress sends the 'media-form' nonce, which we use
+			// as an initial screen
+			$nonce   = isset( $_REQUEST['_wpnonce'] ) ? stripslashes( $_REQUEST['_wpnonce'] ) : '';
+			$post_id = isset( $_REQUEST['post_id'] ) ? intval( $_REQUEST['post_id'] ) : '';
 
-			// Existing Doc
-			$item_id = self::get_doc_id_from_url( $referer );
-			if ( $item_id ) {
-				$item = get_post( $item_id );
-				$is_doc = bp_docs_get_post_type_name() === $item->post_type;
-			}
+			if ( wp_verify_nonce( $nonce, 'media-form' ) && $post_id ) {
+				$post   = get_post( $post_id );
 
-			// Create Doc
-			if ( ! $is_doc ) {
-				$is_doc = $referer === bp_docs_get_create_link();
+				// The dummy Doc created during the Create
+				// process should pass this test, in addition to
+				// existing Docs
+				$is_doc = isset( $post->post_type ) && bp_docs_get_post_type_name() === $post->post_type;
 			}
 		} else {
 			$is_doc = bp_docs_is_existing_doc() || bp_docs_is_doc_create();
@@ -604,7 +650,7 @@ class BP_Docs_Attachments {
 	}
 
 	/**
-	 * Make sure the current user has the 'edit_post' cap, when appropriate
+	 * Make sure the current user has the 'edit_post' and 'upload_files' caps, when appropriate
 	 *
 	 * We do the necessary permissions checks in self::map_meta_cap(). If
 	 * the checks pass, then we can blindly hook this filter without doing
@@ -615,11 +661,174 @@ class BP_Docs_Attachments {
 	 * @since 1.4
 	 */
 	public static function map_meta_cap_supp( $caps, $cap, $user_id, $args ) {
-		if ( 'edit_post' !== $cap ) {
+		if ( 'upload_files' !== $cap && 'edit_post' !== $cap ) {
 			return $caps;
 		}
 
 		return array( 'exist' );
+	}
+
+	public function admin_notice_init() {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'delete_users' ) ) {
+			return;
+		}
+
+		// If the notice is being disabled, mark it as such and bail
+		if ( isset( $_GET['bpdocs-disable-attachment-notice'] ) ) {
+			check_admin_referer( 'bpdocs-disable-attachment-notice' );
+			bp_update_option( 'bp_docs_disable_attachment_notice', 1 );
+			return;
+		}
+
+		// If the notice has already been disabled, bail
+		if ( 1 == bp_get_option( 'bp_docs_disable_attachment_notice' ) ) {
+			return;
+		}
+
+		// Nothing to see here
+		if ( $this->check_is_protected() ) {
+			return;
+		}
+
+		add_action( 'admin_notices', array( $this, 'admin_notice' ) );
+		add_action( 'network_admin_notices', array( $this, 'admin_notice' ) );
+	}
+
+	public function admin_notice() {
+		global $is_apache, $is_nginx, $is_IIS, $is_iis7;
+
+		$dismiss_url = add_query_arg( 'bpdocs-disable-attachment-notice', '1', $_SERVER['REQUEST_URI'] );
+		$dismiss_url = wp_nonce_url( $dismiss_url, 'bpdocs-disable-attachment-notice' );
+
+		if ( ! bp_is_root_blog() ) {
+			switch_to_blog( bp_get_root_blog_id() );
+		}
+
+		$upload_dir = $this->mod_upload_dir( wp_upload_dir() );
+		$att_url = str_replace( get_option( 'home' ), '', $upload_dir['url'] );
+
+		restore_current_blog();
+
+		if ( $is_nginx ) {
+			$help_url = 'https://github.com/boonebgorges/buddypress-docs/wiki/Attachment-Privacy#nginx';
+
+			$help_p  = __( 'It looks like you are running <strong>nginx</strong>. We recommend the following setting in your site configuration file:', 'bp-docs' );
+			$help_p .= '<pre><code>location ' . $att_url . ' {
+    rewrite ^.*' . str_replace( '/wp-content/', '', $att_url ) . '([0-9]+)/(.*) /?p=$1&bp-attachment=$2 permanent;
+}
+</code></pre>';
+		}
+
+		if ( $is_iis7 ) {
+			$help_url = 'https://github.com/boonebgorges/buddypress-docs/wiki/Attachment-Privacy#iis7';
+
+			$help_p  = __( 'It looks like you are running <strong>IIS 7</strong>. We recommend the following setting in your Web.config file:', 'bp-docs' );
+			$help_p .= '<pre><code>&lt;rule name="buddypress-docs-attachments">
+    &lt;match url="^' . $att_url . '([0-9]+)/(.*)$"/>
+        &lt;conditions>
+	    &lt;add input="{REQUEST_FILENAME}" matchType="IsFile" negate="false"/>
+	&lt;/conditions>
+    &lt;action type="Redirect" url="?p={R:1}&amp;bp-attachment={R:2}"/>
+&lt;/rule> </code></pre>';
+		}
+
+		if ( $is_apache ) {
+			$help_url = 'https://github.com/boonebgorges/buddypress-docs/wiki/Attachment-Privacy#apache';
+			$help_p = __( 'It looks like you are running <strong>Apache</strong>. The most likely cause of your problem is that the <code>AllowOverride</code> directive has been disabled, either globally (<code>httpd.conf</code>) or in a <code>VirtualHost</code> definition. Contact your host for assistance.', 'bp-docs' );
+		}
+
+		?>
+
+		<div class="message error">
+			<p><?php _e( '<strong>Your BuddyPress Docs attachments directory is publicly accessible.</strong> Doc attachments will not be properly protected from direct viewing, even if the parent Docs are non-public.', 'bp-docs' ) ?></p>
+
+			<?php if ( $help_p ) : ?>
+				<p><?php echo $help_p ?></p>
+			<?php endif ?>
+
+			<?php if ( $help_url ) : ?>
+				<p><?php printf( __( 'See <a href="%s">this wiki page</a> for more information.', 'bp-docs' ), $help_url ) ?></p>
+			<?php endif ?>
+
+			<p><a href="<?php echo $dismiss_url ?>"><?php _e( 'Dismiss this message', 'bp-docs' ) ?></a></p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Test whether the attachment upload directory is protected.
+	 *
+	 * We create a dummy file in the directory, and then test to see
+	 * whether we can fetch a copy of the file with a remote request.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return True if protected, false if not.
+	 */
+	public function check_is_protected( $force_check = true ) {
+		global $is_apache;
+
+		// Fall back on cached value if it exists
+		if ( ! $force_check ) {
+			$is_protected = bp_get_option( 'bp_docs_attachment_protection' );
+			if ( '' !== $is_protected ) {
+				return (bool) $is_protected;
+			}
+		}
+
+		$uploads = wp_upload_dir();
+
+		$test_dir = $uploads['basedir'] . DIRECTORY_SEPARATOR . 'bp-attachments' . DIRECTORY_SEPARATOR . '0';
+		$test_file_dir = $test_dir . DIRECTORY_SEPARATOR . 'test.html';
+		$test_text = 'This is a test of the Protected Attachment feature of BuddyPress Docs. Please do not remove.';
+
+		if ( ! file_exists( $test_file_dir ) ) {
+			if ( ! file_exists( $test_dir ) ) {
+				wp_mkdir_p( $test_dir );
+			}
+
+			// Create an .htaccess, if we can
+			if ( $is_apache ) {
+
+				// Fake the doc ID
+				$this->doc_id = 0;
+
+				$rules = array(
+					'RewriteEngine On',
+					'RewriteBase /',
+					'RewriteRule (.+) ?bp-attachment=$1 [R=302,NC]',
+				);
+
+				if ( ! empty( $rules ) ) {
+					if ( ! file_exists( 'insert_with_markers' ) ) {
+						require_once( ABSPATH . 'wp-admin/includes/misc.php' );
+					}
+					insert_with_markers( $test_dir . DIRECTORY_SEPARATOR . '.htaccess', 'BuddyPress Docs', $rules );
+				}
+			}
+
+			// Make a dummy file
+			file_put_contents( $test_dir . DIRECTORY_SEPARATOR . 'test.html', $test_text );
+		}
+
+		$test_url = $uploads['baseurl'] . '/bp-attachments/0/test.html';
+		$r = wp_remote_get( $test_url );
+
+		// If the response body includes our test text, we have a problem
+		$is_protected = true;
+		if ( ! is_wp_error( $r ) && $r['body'] === $test_text ) {
+			$is_protected = false;
+		}
+
+		// Cache
+		$cache = $is_protected ? '1' : '0';
+		bp_update_option( 'bp_docs_attachment_protection', $cache );
+
+		return $is_protected;
 	}
 }
 
@@ -632,4 +841,11 @@ class BP_Docs_Attachments {
 function bp_docs_enable_attachments() {
 	$enabled = get_option( 'bp-docs-enable-attachments', 'yes' );
 	return apply_filters( 'bp_docs_enable_attachments', 'yes' === $enabled );
+}
+
+/**
+ * Are attachment downloads protected?
+ */
+function bp_docs_attachment_protection( $force_check = false ) {
+	return buddypress()->bp_docs->attachments->check_is_protected( $force_check );
 }
