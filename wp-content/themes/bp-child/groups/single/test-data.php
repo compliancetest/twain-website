@@ -124,9 +124,9 @@ $testsuites = get_posts( $args );
 </div>
 <input type="hidden" id="sqs_validation_status" value="<?php echo get_option('validate_via_sqs');?>">
 <div class="popup-box" id="delete-profile-box" style="display: none; width: 500px">
-    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
-    <div class="popup-box-content"> 
-        Are you sure that you want to delete this profile?
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Profile Deletion</div>
+    <div class="popup-box-content">
+        Are you sure that you want to delete <span id="del_profile_name"></span>?
     </div>
     <div class="popup-box-footer radius6 noradiustop">                   
         <div class="loading loading-with-text radius6"><div><b>DELETING PROFILE</b><span>Please wait...</span></div></div> 

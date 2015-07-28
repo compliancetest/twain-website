@@ -216,9 +216,9 @@ $doesGatewayConfigured = \User\User::isGatewayConfigured();
     <div class="clear"></div>
 </div> <!--end content-->
 <div class="popup-box" id="delete-profile-box" style="display: none; width: 500px">
-    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
-    <div class="popup-box-content"> 
-        Are you sure that you want to delete this profile?
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Profile Deletion</div>
+    <div class="popup-box-content">
+        Are you sure that you want to delete <span id="del_profile_name"></span>?
     </div>
     <div class="popup-box-footer radius6 noradiustop">                   
         <div class="loading loading-with-text radius6"><div><b>DELETING PROFILE</b><span>Please wait...</span></div></div> 
@@ -229,10 +229,10 @@ $doesGatewayConfigured = \User\User::isGatewayConfigured();
     <a class="close_btn"></a>                
 </div>
 <div class="popup-box" id="delete-profiles-box" style="display: none; width: 500px">
-    <div class="popup-box-header radius6 noradiusbottom">Confirm Deletion</div>
+    <div class="popup-box-header radius6 noradiusbottom">Confirm Profile Deletion</div>
     <div class="popup-box-content">
         <div class="no_rows display_none">Please select a row.</div>
-        <div class="selected_rows display_none">Are you sure that you want to delete this profile(s)?</div>
+        <div class="selected_rows display_none">Are you sure that you want to delete these profiles?</div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <div class="loading loading-with-text radius6 dlt_loading"><div><b>DELETING PROFILE</b><span>Please wait...</span></div></div>

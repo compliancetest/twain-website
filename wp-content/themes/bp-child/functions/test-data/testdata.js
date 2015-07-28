@@ -391,10 +391,15 @@ jQuery(document).ready(function(){
     
     jQuery('.delete-profile-btn').each(function(){
         var link = jQuery(this).attr('href');
+        var name = jQuery(this).closest('div.tr').find('div.td-profile-name a.view-profile-instance-link').html();
+        if (!name) {
+            name = jQuery(this).closest('div.grid-list-row').find('a.view-profile-instance-link').html();
+        }
         jQuery(this).cplightbox({
             type: 'inline',
             href: '#delete-profile-box',
             onStart: function(){
+                jQuery('#del_profile_name').text(name);
                 jQuery('#delete-profile-box .process-btn').attr('href', link);
             }
         })
