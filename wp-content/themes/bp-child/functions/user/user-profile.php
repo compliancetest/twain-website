@@ -1256,19 +1256,50 @@ function generateProfile($profile_id, $community_id, $tag = false )
 
                                 } else if ($rule->Type == 'Reference') {
                                     // Replace $ref values with links of generated profiles
-                                    foreach ($content->Employers as $employer) {
-                                        $ref = explode('=', $employer->Profile->{'$ref'});
+                                    if (is_iterable($content->Employers)) {
+                                        if ($content->Profile->Type == 'Schedule') {
+                                            foreach ($content->Templates as $template) {
 
-                                        if (!isset($profile_ref[$ref[1]])) {
-                                            $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $ref[1], $user_id);
-                                            $temp_profile = $wpdb->get_row($query);
-                                            if (!empty($temp_profile)) {
-                                                $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                                $refTester = explode('=', $template->Tester->Profile);
+                                                $refHarness = explode('=', $template->Harness->Profile);
+
+                                                if (!isset($profile_ref[$refTester[1]])) {
+                                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refTester[1], $user_id);
+                                                    $temp_profile = $wpdb->get_row($query);
+                                                    if (!empty($temp_profile)) {
+                                                        $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                                    }
+                                                } else {
+                                                    $template->Tester->Profile = $refTester[0] . '=' . $profile_ref[$refTester[1]];
+                                                }
+
+                                                if (!isset($profile_ref[$refHarness[1]])) {
+                                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refHarness[1], $user_id);
+                                                    $temp_profile = $wpdb->get_row($query);
+                                                    if (!empty($temp_profile)) {
+                                                        $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                                    }
+                                                } else {
+                                                    $template->Harness->Profile = $refHarness[0] . '=' . $profile_ref[$refHarness[1]];
+                                                }
                                             }
-                                        }
+                                        } else {
+                                            foreach ($content->Employers as $employer) {
 
-                                        if (isset($profile_ref[$ref[1]])) {
-                                            $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
+                                                    $ref = explode('=', $employer->Profile->{'$ref'});
+
+                                                    if (!isset($profile_ref[$ref[1]])) {
+                                                        $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $ref[1], $user_id);
+                                                        $temp_profile = $wpdb->get_row($query);
+                                                        if (!empty($temp_profile)) {
+                                                            $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                                        }
+                                                    }
+
+                                                    if (isset($profile_ref[$ref[1]])) {
+                                                        $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
+                                                    }
+                                            }
                                         }
                                     }
                                 }
@@ -1299,19 +1330,47 @@ function generateProfile($profile_id, $community_id, $tag = false )
 
                 foreach ($customData->Rules AS $rule) {
                     if ($rule->Type == 'Reference') {
-                        foreach ($self_content->Employers as $employer) {
-                            $ref = explode('=', $employer->Profile->{'$ref'});
+                        if ($content->Profile->Type == 'Schedule') {
+                            foreach ($self_content->Templates as $template) {
 
-                            if (!isset($profile_ref[$ref[1]])) {
-                                $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
-                                $temp_profile = $wpdb->get_row($query);
-                                if (!empty($temp_profile)) {
-                                    $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                $refTester = explode('=', $template->Tester->Profile);
+                                $refHarness = explode('=', $template->Harness->Profile);
+
+                                if (!isset($profile_ref[$refTester[1]])) {
+                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refTester[1], $user_id);
+                                    $temp_profile = $wpdb->get_row($query);
+                                    if (!empty($temp_profile)) {
+                                        $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                    }
+                                } else {
+                                    $template->Tester->Profile = $refTester[0] . '=' . $profile_ref[$refTester[1]];
+                                }
+
+                                if (!isset($profile_ref[$refHarness[1]])) {
+                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refHarness[1], $user_id);
+                                    $temp_profile = $wpdb->get_row($query);
+                                    if (!empty($temp_profile)) {
+                                        $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                    }
+                                } else {
+                                    $template->Harness->Profile = $refHarness[0] . '=' . $profile_ref[$refHarness[1]];
                                 }
                             }
+                        } else {
+                            foreach ($self_content->Employers as $employer) {
+                                $ref = explode('=', $employer->Profile->{'$ref'});
 
-                            if (isset($profile_ref[$ref[1]])) {
-                                $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
+                                if (!isset($profile_ref[$ref[1]])) {
+                                    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
+                                    $temp_profile = $wpdb->get_row($query);
+                                    if (!empty($temp_profile)) {
+                                        $profile_ref[$temp_profile->token_original] = $temp_profile->token;
+                                    }
+                                }
+
+                                if (isset($profile_ref[$ref[1]])) {
+                                    $employer->Profile->{'$ref'} = $ref[0] . '=' . $profile_ref[$ref[1]];
+                                }
                             }
                         }
                     }
