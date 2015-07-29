@@ -1256,7 +1256,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
 
                                 } else if ($rule->Type == 'Reference') {
                                     // Replace $ref values with links of generated profiles
-                                    if (is_iterable($content->Employers)) {
+                                    if (is_iterable($content->Employers) || is_iterable($content->Templates)) {
                                         if ($content->Profile->Type == 'Schedule') {
                                             foreach ($content->Templates as $template) {
 
