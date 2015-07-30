@@ -179,7 +179,7 @@ get_header();
                     <label>Pricing Plan</label>
                     <select id="pricing_plan_id_span"></select>
                     <input type="hidden" id="pricing_plan_id" name="pricing_plan_id" value="">
-                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Select Pricing Plan</span></a>
+                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=1" class="submit_all" rel="custom-popup" cp-type="ajax" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1><span class="p"></span><span class="t">View Pricing Plan Details</span></a>
                     <script>
                         jQuery(document).ready(function($){
                             $('#suite_family_mark').on('change', function(e){
