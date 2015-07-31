@@ -334,6 +334,9 @@ get_header();
                                                        }else{
                                                            echo $message->PART_ID;
                                                        }
+                                                       if ($message->COPY_COUNT > 1) {
+                                                           echo ' ('.$message->COPY_COUNT.')';
+                                                       }
                                                        ?>
                                                        </a>
                                                        <input type="text" value="<?php echo $message->PART_ID; ?>" readonly="readonly">
