@@ -335,7 +335,7 @@ get_header();
                                                            echo $message->PART_ID;
                                                        }
                                                        if ($message->COPY_COUNT > 1) {
-                                                           echo ' ('.$message->COPY_COUNT.')';
+                                                           echo '<br>('.$message->COPY_COUNT.' copies)';
                                                        }
                                                        ?>
                                                        </a>
