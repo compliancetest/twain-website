@@ -62,10 +62,6 @@ function cp_process_test_data_actions()
         }else if(wp_verify_nonce($action, 'prepare_schedule')){
             $data = (object) $_GET;
             $data->profile = ProfileInstance::getProfileBy('id', $data->id);
-            $tags = \Tag::getItemTags($data->id);
-            $data->tags = array_map(function( $item ) {
-                return $item->name;
-            }, $tags);
             render_view( 'test-data/views/schedule-popup.phtml', $data, true );
         }else if(wp_verify_nonce($action, 'trigger_run')){
             $data = (object) $_GET;

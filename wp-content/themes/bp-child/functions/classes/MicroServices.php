@@ -19,7 +19,6 @@ class MicroServices
         );
         $_POST['tags'] = array_unique($_POST['tags']);
         $status = copyProfileInstance($profileId, $profileFieldsToChange, false);
-        \Tag::copyTags($profileId, $status['data']['id']);
         if (is_array($_POST['tags']) && !empty($_POST['tags'])) {
             foreach ($_POST['tags'] as $tag) {
                 \Tag::assignTag($tag, $status['data']['id']);

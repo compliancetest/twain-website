@@ -9,17 +9,17 @@
         <label style="width: 100px; display: block;">Product:</label>
         <select name="product_id" class="required select field-tooltip" id="product_id" style="width: 100%;">
             <option value=""></option>
-            <?php foreach( $user_products AS $user_product ):?>
+            <?php foreach( $user_products AS $key => $user_product ):?>
                 <?php
                     $product = new ProductAndService($user_product->ID);
                     $product->load();
                 ?>
-                <option value="<?php echo $product->product_id;?>"><?php echo $product->name;?></option>
+                <option value="<?php echo $product->product_id;?>" <?php if ($key == 0):?>selected="selected" <?php endif;?>><?php echo $product->name; if ($product->version) echo ' v'.$product->version; ?></option>
             <?php endforeach;?>
         </select>
         <div class="space20"></div>
         <label style="width: 100px; display: block;">Tags:</label>
-        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', $view->tags);?>">
+        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="">
         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
         </select>
     </div>
