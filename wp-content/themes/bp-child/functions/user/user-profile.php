@@ -1344,7 +1344,8 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                     }
-                                } else {
+                                }
+                                if (isset($profile_ref[$refTester[1]])) {
                                     $template->Tester->Profile = $refTester[0] . '=' . $profile_ref[$refTester[1]];
                                 }
 
@@ -1354,7 +1355,8 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                     }
-                                } else {
+                                }
+                                if (isset($profile_ref[$refHarness[1]])) {
                                     $template->Harness->Profile = $refHarness[0] . '=' . $profile_ref[$refHarness[1]];
                                 }
                             }
