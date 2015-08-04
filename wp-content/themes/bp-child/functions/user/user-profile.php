@@ -1269,7 +1269,8 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                                     if (!empty($temp_profile)) {
                                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                                     }
-                                                } else {
+                                                }
+                                                if (isset($profile_ref[$refTester[1]])) {
                                                     $template->Tester->Profile = $refTester[0] . '=' . $profile_ref[$refTester[1]];
                                                 }
 
@@ -1279,7 +1280,8 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                                     if (!empty($temp_profile)) {
                                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                                     }
-                                                } else {
+                                                }
+                                                if (isset($profile_ref[$refHarness[1]])) {
                                                     $template->Harness->Profile = $refHarness[0] . '=' . $profile_ref[$refHarness[1]];
                                                 }
                                             }
@@ -1342,7 +1344,8 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                     }
-                                } else {
+                                }
+                                if (isset($profile_ref[$refTester[1]])) {
                                     $template->Tester->Profile = $refTester[0] . '=' . $profile_ref[$refTester[1]];
                                 }
 
@@ -1352,7 +1355,8 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
                                     }
-                                } else {
+                                }
+                                if (isset($profile_ref[$refHarness[1]])) {
                                     $template->Harness->Profile = $refHarness[0] . '=' . $profile_ref[$refHarness[1]];
                                 }
                             }
@@ -1361,7 +1365,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                 $ref = explode('=', $employer->Profile->{'$ref'});
 
                                 if (!isset($profile_ref[$ref[1]])) {
-                                    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
+                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
                                     $temp_profile = $wpdb->get_row($query);
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
