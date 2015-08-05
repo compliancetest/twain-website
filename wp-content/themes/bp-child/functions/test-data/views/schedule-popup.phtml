@@ -19,7 +19,7 @@
         </select>
         <div class="space20"></div>
         <label style="width: 100px; display: block;">Tags:</label>
-        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="">
+        <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', $view->tags);?>">
         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">Tags may only use upper and lower case letters, numbers, underscores, dashes, dots and spaces. They may be a maximum of 30 characters in length.</div>
         </select>
     </div>
