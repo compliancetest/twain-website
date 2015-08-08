@@ -40,7 +40,7 @@
         <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', array_unique($view->tags));?>" disabled="disabled">
         <div class="space20"></div>
         <input type="datetime" name="datetime" id="datetime">
-        <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;">A run can only be scheduled to start in the future</div>
+        <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;"></div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
         <a class="action-btn process-btn trigger-run" href="#"><span class="p"></span><span class="t">Confirm</span></a>
@@ -65,6 +65,7 @@
         jQuery('#datetime').on('focus', function(){
             jQuery('#datetime').datepicker('show');
         });
+        jQuery('#datetime').val(getDateTime());
         jQuery('.trigger-run').on('click', function($){
             var time = jQuery('#datetime').val();
             jQuery('.loading_run').show();
@@ -93,10 +94,32 @@
                     } else {
                         jQuery('.loading_run').hide();
                         jQuery('#datetime').addClass('input-error');
-                        jQuery('.validation_error').show();
+                        jQuery('.validation_error').html(response).show();
                     }
                 }
             })
         });
     });
+    function getDateTime() {
+        var now     = new Date();
+        var year    = now.getFullYear();
+        var month   = now.getMonth()+1;
+        var day     = now.getDate();
+        var hour    = now.getHours();
+        var minute  = now.getMinutes();
+        if(month.toString().length == 1) {
+            var month = '0'+month;
+        }
+        if(day.toString().length == 1) {
+            var day = '0'+day;
+        }
+        if(hour.toString().length == 1) {
+            var hour = '0'+hour;
+        }
+        if(minute.toString().length == 1) {
+            var minute = '0'+minute;
+        }
+        var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute;
+        return dateTime;
+    }
 </script>

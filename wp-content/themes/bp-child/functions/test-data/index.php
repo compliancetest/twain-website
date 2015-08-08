@@ -80,7 +80,11 @@ function cp_process_test_data_actions()
             \MicroServices\MicroServices::prepareRunRequest($profileId);
         }else if( wp_verify_nonce($action, 'execute-schedule') ){
             if ( !empty($_POST['datetime']) && getUTCTimeStamp( strtotime( $_POST['datetime'] ) ) < strtotime(gmdate('Y-m-d H:i'))) {
-                exit('error');
+                exit('A run can only be scheduled to start in the future');
+            }
+            //user cant select date more than 2 hours into the future
+            if (getUTCTimeStamp(strtotime( $_POST['datetime'])) - strtotime(gmdate('Y-m-d H:i')) > 7200) {
+                exit('Selected date/time is more than 2 hours into the future.');
             }
             $profileId = intval( $_POST['profile_id'] );
             \MicroServices\MicroServices::executeRunRequest( $profileId, date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
@@ -88,6 +92,7 @@ function cp_process_test_data_actions()
             $esb = new ManageESB();
             $esb->updateStatusByProfileS3Url($profile->token, 'STARTING', 'PREPARED');
             exit('success');
+
         }else if( wp_verify_nonce($action, 'change-schedule-status') ){
             $esb = new ManageESB();
             $s3Url = $esb->updateStatus( $_POST['id'], $_POST['status'], $_POST['prevstatus']);
@@ -99,9 +104,13 @@ function cp_process_test_data_actions()
                 deleteProfileTypeInstance( wp_create_nonce('delete-profile-instance'), $runProfile->id, true  );
             }
             render_view( 'test-data/views/trigger-schedule.phtml', true, true );
+
         } else if( wp_verify_nonce($action, 'delete-run-confirm') ){
+
             render_view( 'test-data/views/confirm-run-delete.phtml', (object) $_GET, true );
+
         } else if( wp_verify_nonce($action, 'terminate-run-confirm') ){
+
             render_view( 'test-data/views/confirm-run-terminate.phtml', (object) $_GET, true );
 
         } else if( wp_verify_nonce($action, 'download_pdf') ){
