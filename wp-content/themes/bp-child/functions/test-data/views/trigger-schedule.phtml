@@ -3,14 +3,14 @@
     $schedules = $esb->getUserSchedules(get_current_user_id());
 ?>
 <?php if (!$view) :?>
-<div class="popup-box view-profile-type-box" style="display: none; width: 950px;" id="run_list">
+<div class="popup-box view-profile-type-box" style="display: none; width: 1000px;" id="run_list">
     <div class="popup-box-header radius6 noradiusbottom">Runs List</div>
     <div class="popup-box-content grid-box-body">
 <?php endif;?>
         <div id="schedules_table">
             <table>
                 <tr>
-                    <td>Product</td>
+                    <td class="schedule-name">Product</td>
                     <td>Profile</td>
                     <td class="message_counter">Messages<br>Prepared</td>
                     <td class="message_counter">Messages<br>Sent</td>
