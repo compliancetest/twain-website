@@ -241,6 +241,7 @@ class CT_Xero {
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
                 $line_item->addChild( 'Description', $entry['comment'] );
                 if( $entry['discount'] > 0 ) $line_item->addChild( 'DiscountRate', $entry['discount'] );
+                $this->_addTrackingCategoryToLineItem($line_item);
             }
         }
         if( isset( $invoiceData['invoice_number'] ) && ! empty( $invoiceData['invoice_number'] ) ) $xml->addChild('InvoiceNumber', $invoiceData['invoice_number'] );
@@ -255,6 +256,44 @@ class CT_Xero {
         return false;
     }
 
+    public function getTrackingCategory($categoryName)
+    {
+        $this->xero->request('GET', $this->xero->url('trackingcategories/', 'core'), array() );
+        if ($this->xero->response['code'] == 200) {
+            $response = $this->responseToArray();
+            if (isset($response['TrackingCategories']['TrackingCategory'])) {
+                $trackingCategory = $response['TrackingCategories']['TrackingCategory'];
+                if (isset($trackingCategory['Options']['Option'])) {
+                    foreach ($trackingCategory['Options']['Option'] as $key => $option) {
+                        if ($option['Name'] != $categoryName) {
+                            unset($trackingCategory['Options']['Option'][$key]);
+                        }
+                    }
+                }
+                return $trackingCategory;
+            }
+
+        } else{
+            return array(
+                'error' => $this->responseToArray()
+            );
+        }
+    }
+
+    private function _addTrackingCategoryToLineItem(&$lineItem)
+    {
+        $trackingCategory = $this->getTrackingCategory('SuperStream');
+        if (!isset($trackingCategory['error'])) {
+            $tracking = $lineItem->addChild('Tracking');
+            $trackingCat = $tracking->addChild('TrackingCategory');
+
+            $optionValues = reset($trackingCategory['Options']['Option']);
+
+            $trackingCat->addChild('TrackingCategoryID', $trackingCategory['TrackingCategoryID']);
+            $trackingCat->addChild('Name', $trackingCategory['Name']);
+            $trackingCat->addChild('Option', $optionValues['Name']);
+        }
+    }
     public function createPayment( $paymentData ){
         $xml = new SimpleXMLElement( '<Payment></Payment>' );
         $invoice = $xml->addChild( 'Invoice' );
