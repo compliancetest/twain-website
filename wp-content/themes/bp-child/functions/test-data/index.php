@@ -83,9 +83,9 @@ function cp_process_test_data_actions()
                 exit('A run can only be scheduled to start in the future');
             }
             //user cant select date more than 2 hours into the future
-            if (getUTCTimeStamp(strtotime( $_POST['datetime'])) - strtotime(gmdate('Y-m-d H:i')) > 7200) {
-                exit('Selected date/time is more than 2 hours into the future.');
-            }
+//            if (getUTCTimeStamp(strtotime( $_POST['datetime'])) - strtotime(gmdate('Y-m-d H:i')) > 7200) {
+//                exit('Selected date/time is more than 2 hours into the future.');
+//            }
             $profileId = intval( $_POST['profile_id'] );
             \MicroServices\MicroServices::executeRunRequest( $profileId, date( 'Y-m-d H:i:s', getUTCTimeStamp( strtotime( $_POST['datetime'].':00' ) ) ) );
             $profile = ProfileInstance::getProfileBy('id', $profileId);
