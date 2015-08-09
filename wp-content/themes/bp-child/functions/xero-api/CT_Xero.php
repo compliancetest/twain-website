@@ -263,9 +263,10 @@ class CT_Xero {
     public function getTrackingCategory($categoryName)
     {
         //tracking category with name 'Line' is hardcoded for now
-        $this->xero->request('GET', $this->xero->url('trackingcategories/Line', 'core'), array() );
-        if ($this->xero->response['code'] == 200) {
-            $response = $this->responseToArray();
+        $xero = new CT_Xero();
+        $xero->xero->request('GET', $this->xero->url('trackingcategories/Line', 'core'), array() );
+        if ($xero->xero->response['code'] == 200) {
+            $response = $xero->responseToArray();
             if (isset($response['TrackingCategories']['TrackingCategory'])) {
                 $trackingCategory = $response['TrackingCategories']['TrackingCategory'];
                 if (isset($trackingCategory['Options']['Option'])) {
@@ -280,7 +281,7 @@ class CT_Xero {
 
         } else{
             return array(
-                'error' => $this->responseToArray()
+                'error' => $xero->responseToArray()
             );
         }
     }
