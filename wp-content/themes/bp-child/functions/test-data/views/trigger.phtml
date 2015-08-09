@@ -65,6 +65,17 @@
         jQuery('#datetime').on('focus', function(){
             jQuery('#datetime').datepicker('show');
         });
+        jQuery('#datetime').on('change', function(){
+            var currentTime = new Date();
+            var dateArray = jQuery('#datetime').val().replace(/\-/g, ' ').replace(':', ' ').split(' ');
+            var enteredTime = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4]);
+            var diff = enteredTime - currentTime;
+            if ( Math.round(diff / 60000) > 120) {
+                jQuery('.validation_error').html('Warning: Selected date/time is more than 2 hours into the future.').show();
+            } else {
+                jQuery('.validation_error').hide();
+            }
+        });
         jQuery('#datetime').val(getDateTime());
         jQuery('.trigger-run').on('click', function($){
             var time = jQuery('#datetime').val();
@@ -101,7 +112,8 @@
         });
     });
     function getDateTime() {
-        var now     = new Date();
+        var tempDate = new Date();
+        var now     = new Date(tempDate.getTime() + 3 * 60000)
         var year    = now.getFullYear();
         var month   = now.getMonth()+1;
         var day     = now.getDate();
