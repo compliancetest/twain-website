@@ -241,7 +241,11 @@ class CT_Xero {
                 $line_item->addChild( 'Quantity', $entry['quantity'] );
                 $line_item->addChild( 'Description', $entry['comment'] );
                 if( $entry['discount'] > 0 ) $line_item->addChild( 'DiscountRate', $entry['discount'] );
-                $this->_addTrackingCategoryToLineItem($line_item);
+
+                $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_family_mark FROM wp_organisations_subscriptions WHERE id = %d", $invoiceData['reference_id']));
+                $community_id = get_post_meta($suiteFamilyMark, 'community_id', true);
+                $group = groups_get_group(array('group_id' => $community_id));
+                $this->_addTrackingCategoryToLineItem($line_item, bp_get_group_name($group));
             }
         }
         if( isset( $invoiceData['invoice_number'] ) && ! empty( $invoiceData['invoice_number'] ) ) $xml->addChild('InvoiceNumber', $invoiceData['invoice_number'] );
@@ -258,7 +262,8 @@ class CT_Xero {
 
     public function getTrackingCategory($categoryName)
     {
-        $this->xero->request('GET', $this->xero->url('trackingcategories/', 'core'), array() );
+        //tracking category with name 'Line' is hardcoded for now
+        $this->xero->request('GET', $this->xero->url('trackingcategories/Line', 'core'), array() );
         if ($this->xero->response['code'] == 200) {
             $response = $this->responseToArray();
             if (isset($response['TrackingCategories']['TrackingCategory'])) {
@@ -280,9 +285,9 @@ class CT_Xero {
         }
     }
 
-    private function _addTrackingCategoryToLineItem(&$lineItem)
+    private function _addTrackingCategoryToLineItem(&$lineItem, $communityName)
     {
-        $trackingCategory = $this->getTrackingCategory('SuperStream');
+        $trackingCategory = $this->getTrackingCategory($communityName);
         if (!isset($trackingCategory['error'])) {
             $tracking = $lineItem->addChild('Tracking');
             $trackingCat = $tracking->addChild('TrackingCategory');
