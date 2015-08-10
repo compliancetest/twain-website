@@ -383,6 +383,8 @@ jQuery(document).ready(function(){
                 }else{
                     jQuery('option:selected', '#tm-prev-message').remove();
                     showTriggerMessageResultMessage('The message has been sent.', 'success');
+                    jQuery('.close_btn').click();
+                    location.reload();
                 }
                 
             },
