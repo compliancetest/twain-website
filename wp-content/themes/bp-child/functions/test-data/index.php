@@ -118,8 +118,9 @@ function cp_process_test_data_actions()
             $runId = intval($_REQUEST['runid']);
             $schedule = $esb->getSchedule($runId);
             $profile = ProfileInstance::getProfileBy('id', intval($_REQUEST['profile']));
+            $fileName = $esb->checkRunHasReceiptResponseStatus($runId) ? $profile->profile_name : $profile->profile_name.'(Fail)';
             header('Content-type: application/vnd.ms-excel');
-                header('Content-Disposition: attachment; filename="PerformanceReport-'.$profile->profile_name.'.xlsx"');
+            header('Content-Disposition: attachment; filename="PerformanceReport-'.$fileName.'.xlsx"');
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
 
@@ -140,6 +141,8 @@ function cp_process_test_data_actions()
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(70);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(70);
+
 
             $objPHPExcel->getActiveSheet()
                 ->setCellValue('A1', 'StartAt' )
@@ -149,7 +152,8 @@ function cp_process_test_data_actions()
                 ->setCellValue('E1', 'ResponseStatus' )
                 ->setCellValue('F1', 'ResponseTime' )
                 ->setCellValue('G1', 'ConversationID' )
-                ->setCellValue('H1', 'RequestMessageID' );
+                ->setCellValue('H1', 'RequestMessageID' )
+                ->setCellValue('I1', 'ResponseMessageID' );
             $results = $esb->getMessages($runId);
             $rowNumber = 2;
             foreach ($results AS $result) {
@@ -165,9 +169,10 @@ function cp_process_test_data_actions()
                     ->setCellValue('C'.$rowNumber, $result->SentAt )
                     ->setCellValue('D'.$rowNumber, $result->ReceiptAt )
                     ->setCellValue('E'.$rowNumber, ManageESB::getReceiptMapping($result->ResponseStatus, 2))
-                    ->setCellValue('F'.$rowNumber, $result->ResponseTime < 1 ? 1 : $result->ResponseTime )
+                    ->setCellValue('F'.$rowNumber, $result->ResponseTime != 'Not Sent' && $result->ResponseTime < 1 ? 1 : $result->ResponseTime )
                     ->setCellValue('G'.$rowNumber, $result->ConversationID )
-                    ->setCellValue('H'.$rowNumber, $result->RequestMessageID );
+                    ->setCellValue('H'.$rowNumber, $result->RequestMessageID )
+                    ->setCellValue('I'.$rowNumber, $result->ResponseMessageID  );
 
                 $rowNumber++;
             }
