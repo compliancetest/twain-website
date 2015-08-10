@@ -135,27 +135,40 @@ function cp_process_test_data_actions()
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(70);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(70);
 
             $objPHPExcel->getActiveSheet()
                 ->setCellValue('A1', 'StartAt' )
-                ->setCellValue('B1', 'SentAt' )
-                ->setCellValue('C1', 'ReceiptAt' )
-                ->setCellValue('D1', 'ResponseTime' )
-                ->setCellValue('E1', 'ConversationID' )
-                ->setCellValue('F1', 'MessageID' );
+                ->setCellValue('B1', 'BuildAt' )
+                ->setCellValue('C1', 'SentAt' )
+                ->setCellValue('D1', 'ReceiptAt' )
+                ->setCellValue('E1', 'ResponseStatus' )
+                ->setCellValue('F1', 'ResponseTime' )
+                ->setCellValue('G1', 'ConversationID' )
+                ->setCellValue('H1', 'RequestMessageID' );
             $results = $esb->getMessages($runId);
             $rowNumber = 2;
             foreach ($results AS $result) {
+                if ($result->ResponseStatus == 'RECEIPT') {
+                    $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('33FF33');
+                } else {
+                    $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('CC0000');
+                }
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFont()->getColor()->setRGB('ffffff');
                 $objPHPExcel->getActiveSheet()
                     ->setCellValue('A'.$rowNumber, $result->StartAt )
-                    ->setCellValue('B'.$rowNumber, $result->SentAt )
-                    ->setCellValue('C'.$rowNumber, $result->ReceiptAt )
-                    ->setCellValue('D'.$rowNumber, $result->ResponseTime )
-                    ->setCellValue('E'.$rowNumber, $result->ConversationID )
-                    ->setCellValue('F'.$rowNumber, $result->MessageID );
+                    ->setCellValue('B'.$rowNumber, $result->BuildAt )
+                    ->setCellValue('C'.$rowNumber, $result->SentAt )
+                    ->setCellValue('D'.$rowNumber, $result->ReceiptAt )
+                    ->setCellValue('E'.$rowNumber, $result->ResponseStatus )
+                    ->setCellValue('F'.$rowNumber, $result->ResponseTime < 1 ? 1 : $result->ResponseTime )
+                    ->setCellValue('G'.$rowNumber, $result->ConversationID )
+                    ->setCellValue('H'.$rowNumber, $result->MessageID );
+
                 $rowNumber++;
             }
             $objPHPExcel->createSheet(1);

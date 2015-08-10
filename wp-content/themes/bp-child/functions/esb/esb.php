@@ -1146,11 +1146,14 @@ class ManageESB
     public function getMessages($runId)
     {
         $query = ManageESB::$esbdb->prepare("SELECT MSM.SEND_AT as StartAt,
+                                            IFNULL(MCM.BUILD_AT_TIMESTAMP, 'Not Sent') as BuildAt,
                                             IF(MCM.CONVERSATION_TIMESTAMP > '1901-01-01', MCM.CONVERSATION_TIMESTAMP, 'Not Sent') as SentAt,
                                             IFNULL(MCM.RECEIPT_TIMESTAMP, 'Not Sent') as ReceiptAt,
+                                            IFNULL(MMM.RESPONSE_STATUS, 'Not Sent') as ResponseStatus,
                                             IFNULL(TIMESTAMPDIFF(SECOND, MCM.CONVERSATION_TIMESTAMP, MCM.RECEIPT_TIMESTAMP), 'Not Sent') as ResponseTime,
                                             MCM.CONVERSATION_ID as ConversationID,
-                                            MMM.ORIGINAL_MESSAGE_ID as MessageID
+                                            MMM.ORIGINAL_MESSAGE_ID as RequestMessageID,
+                                            MMM.GATEWAY_RECEIPT_MESSAGE_ID as ResponseMessageID
                                             FROM MSH_SCHEDULE_MESSAGES MSM
                                             INNER JOIN MSH_SCHEDULE_RUNS MSR ON MSM.PROFILE_S3_URL = MSR.PROFILE_S3_URL
                                             INNER JOIN MSH_MESSAGE_METADATA MMM ON MMM.S3_PAYLOAD_LOCATION LIKE CONCAT(MSM.URI, '/main')
@@ -1159,5 +1162,15 @@ class ManageESB
                                             ORDER BY MSM.SEND_AT asc, MCM.CONVERSATION_TIMESTAMP asc, MCM.RECEIPT_TIMESTAMP asc;", $runId);
         return ManageESB::$esbdb->get_results($query);
     }
-    
+    public function checkRunHasReceiptResponseStatus($runId)
+    {
+        $response = false;
+        $messages = $this->getMessages($runId);
+        foreach ($messages AS $message) {
+            if ($message->ResponseStatus == 'RECEIPT') {
+                $response = true;
+            }
+        }
+        return $response;
+    }
 }
