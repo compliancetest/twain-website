@@ -357,7 +357,11 @@ get_header();
                                                           <?php } ?>
                                                       <?php } ?>
                                                        <br>
-                                                       <a class="show_transaction_receipts" data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>" data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>" href="#">Receipts</a>
+                                                       <a class="show_transaction_receipts"
+                                                          data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>"
+                                                          data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>"
+                                                          data-responcestatus="<?php echo $message->RESPONSE_STATUS;?>"
+                                                          data-location="<?php echo $message->S3_RESPONSE_LOCATION;?>" href="#">Receipts</a>
                                                        <?php if( $message->UPLOAD_ID ):?>
                                                            <br>
                                                            <a href="<?php echo S3Wrapper::getUploadLink( $esb->getFileName( $message->UPLOAD_ID ) );?>">Envelope</a>
@@ -644,7 +648,21 @@ get_header();
             e.preventDefault();
             jQuery('#view-transaction_details_box').width( 1200 );
             jQuery('#receipt_compliancetest').text(jQuery(this).data('ctreceipt'));
-            jQuery('#receipt_gateway').text(jQuery(this).data('gateway'));
+
+            //If the status is Receipt, display the message id, otherwise display the ResponseStatus
+            if (jQuery(this).data('responcestatus') == 'RECEIPT') {
+                if (jQuery(this).data('location')) {
+                    jQuery('#receipt_gateway').html('<a href="'+jQuery(this).data('location')+'" target="_blank">'+jQuery(this).data('gateway')+'</a>');
+                } else {
+                    jQuery('#receipt_gateway').text(jQuery(this).data('gateway'));
+                }
+            } else {
+                if (jQuery(this).data('location')) {
+                    jQuery('#receipt_gateway').html('<a href="'+jQuery(this).data('location')+'" target="_blank">'+jQuery(this).data('responcestatus')+'</a>');
+                } else {
+                    jQuery('#receipt_gateway').text(jQuery(this).data('responcestatus'));
+                }
+            }
             jQuery('#view-transaction_details_box').showPopupBox({
                 closeWhenClickOveraly: false
             });
