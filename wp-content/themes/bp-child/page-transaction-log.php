@@ -360,7 +360,7 @@ get_header();
                                                        <a class="show_transaction_receipts"
                                                           data-ctreceipt="<?php echo is_null( $message->CT_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID ;?>"
                                                           data-gateway="<?php echo is_null( $message->GATEWAY_RECEIPT_MESSAGE_ID ) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID;?>"
-                                                          data-responcestatus="<?php echo $message->RESPONSE_STATUS;?>"
+                                                          data-responcestatus="<?php echo ManageESB::getReceiptMapping($message->RESPONSE_STATUS);?>"
                                                           data-location="<?php echo $message->S3_RESPONSE_LOCATION;?>" href="#">Receipts</a>
                                                        <?php if( $message->UPLOAD_ID ):?>
                                                            <br>
@@ -650,7 +650,7 @@ get_header();
             jQuery('#receipt_compliancetest').text(jQuery(this).data('ctreceipt'));
 
             //If the status is Receipt, display the message id, otherwise display the ResponseStatus
-            if (jQuery(this).data('responcestatus') == 'RECEIPT') {
+            if (jQuery(this).data('responcestatus') == 'Receipt') {
                 if (jQuery(this).data('location')) {
                     jQuery('#receipt_gateway').html('<a href="'+jQuery(this).data('location')+'" target="_blank">'+jQuery(this).data('gateway')+'</a>');
                 } else {
