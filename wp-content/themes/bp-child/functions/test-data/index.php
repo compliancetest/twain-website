@@ -158,12 +158,13 @@ function cp_process_test_data_actions()
                 } else {
                     $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('CC0000');
                 }
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFont()->getColor()->setRGB('ffffff');
                 $objPHPExcel->getActiveSheet()
                     ->setCellValue('A'.$rowNumber, $result->StartAt )
                     ->setCellValue('B'.$rowNumber, $result->BuildAt )
                     ->setCellValue('C'.$rowNumber, $result->SentAt )
                     ->setCellValue('D'.$rowNumber, $result->ReceiptAt )
-                    ->setCellValue('E'.$rowNumber, '111111')//$result->ResponseStatus )
+                    ->setCellValue('E'.$rowNumber, $result->ResponseStatus )
                     ->setCellValue('F'.$rowNumber, $result->ResponseTime < 1 ? 1 : $result->ResponseTime )
                     ->setCellValue('G'.$rowNumber, $result->ConversationID )
                     ->setCellValue('H'.$rowNumber, $result->MessageID );
