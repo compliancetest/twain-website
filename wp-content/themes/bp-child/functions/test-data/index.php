@@ -167,7 +167,7 @@ function cp_process_test_data_actions()
                     ->setCellValue('E'.$rowNumber, ManageESB::getReceiptMapping($result->ResponseStatus, 2))
                     ->setCellValue('F'.$rowNumber, $result->ResponseTime < 1 ? 1 : $result->ResponseTime )
                     ->setCellValue('G'.$rowNumber, $result->ConversationID )
-                    ->setCellValue('H'.$rowNumber, $result->MessageID );
+                    ->setCellValue('H'.$rowNumber, $result->RequestMessageID );
 
                 $rowNumber++;
             }
