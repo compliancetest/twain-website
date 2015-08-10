@@ -1173,4 +1173,28 @@ class ManageESB
         }
         return $response;
     }
+
+    /**
+     * @param $status
+     * @param int $type 1 - for receipts popup, 2 - for performance report
+     * @return mixed
+     */
+    public static function getReceiptMapping($status, $type = 1)
+    {
+        $mappings = array(
+            'NOT_RECEIVED' => 'Not Received',
+            'ERROR'        => 'Error',
+            'RECEIPT'      => 'Receipt',
+            'FAULT'        => 'Fault'
+        );
+        if (isset($mappings[$status])) {
+            return $mappings[$status];
+        } else {
+            if ($type == 1) {
+                return 'No value';
+            } else {
+                return 'Not Sent';
+            }
+        }
+    }
 }
