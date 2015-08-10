@@ -1150,7 +1150,9 @@ class ManageESB
                                             IFNULL(MCM.RECEIPT_TIMESTAMP, 'Not Sent') as ReceiptAt,
                                             IFNULL(TIMESTAMPDIFF(SECOND, MCM.CONVERSATION_TIMESTAMP, MCM.RECEIPT_TIMESTAMP), 'Not Sent') as ResponseTime,
                                             MCM.CONVERSATION_ID as ConversationID,
-                                            MMM.ORIGINAL_MESSAGE_ID as MessageID
+                                            MMM.ORIGINAL_MESSAGE_ID as MessageID,
+                                            MCM.BUILD_AT_TIMESTAMP AS BuildAt,
+                                            MMM.RESPONSE_STATUS AS ResponseStatus
                                             FROM MSH_SCHEDULE_MESSAGES MSM
                                             INNER JOIN MSH_SCHEDULE_RUNS MSR ON MSM.PROFILE_S3_URL = MSR.PROFILE_S3_URL
                                             INNER JOIN MSH_MESSAGE_METADATA MMM ON MMM.S3_PAYLOAD_LOCATION LIKE CONCAT(MSM.URI, '/main')
@@ -1159,5 +1161,15 @@ class ManageESB
                                             ORDER BY MSM.SEND_AT asc, MCM.CONVERSATION_TIMESTAMP asc, MCM.RECEIPT_TIMESTAMP asc;", $runId);
         return ManageESB::$esbdb->get_results($query);
     }
-    
+    public function checkRunHasReceiptResponseStatus($runId)
+    {
+        $response = false;
+        $messages = $this->getMessages($runId);
+        foreach ($messages AS $message) {
+            if ($message->ResponseStatus == 'RECEIPT') {
+                $response = true;
+            }
+        }
+        return $response;
+    }
 }

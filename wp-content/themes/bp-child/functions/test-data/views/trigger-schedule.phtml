@@ -86,7 +86,12 @@
                             <?php
                             //Icon should be disabled until run is Terminated/Executed.
                             if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED' ) ) ):?>
-                                <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('download_pdf')?>&runid=<?php echo $schedule->ID?>&profile=<?php echo $profile->id;?>&product=<?php echo $productID;?>" class="action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Performance Report<span></span></span></a>
+                                <?php if ($esb->checkRunHasReceiptResponseStatus($schedule->ID)) :?>
+                                    <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('download_pdf')?>&runid=<?php echo $schedule->ID?>&profile=<?php echo $profile->id;?>&product=<?php echo $productID;?>" class="action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Performance Report<span></span></span></a>
+                                <?php else :?>
+                                    <?php //todo-Ilia please add red download icon here;?>
+                                    <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('download_pdf')?>&runid=<?php echo $schedule->ID?>&profile=<?php echo $profile->id;?>&product=<?php echo $productID;?>" class="action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Performance Report (Fail)<span></span></span></a>
+                                <?php endif;?>
                             <?php else: ?>
                                 <a href="javascript:void(0);" class="action-btn icon-btn download-btn has-tooltip greyed-out-btn"><span class="p"></span><span class="simple_tooltip radius6">Performance Report<span></span></span></a>
                             <?php endif;?>
