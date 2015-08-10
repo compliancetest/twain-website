@@ -1164,11 +1164,11 @@ class ManageESB
     }
     public function checkRunHasReceiptResponseStatus($runId)
     {
-        $response = false;
+        $response = true;
         $messages = $this->getMessages($runId);
         foreach ($messages AS $message) {
-            if ($message->ResponseStatus == 'RECEIPT') {
-                $response = true;
+            if ($message->ResponseStatus != 'RECEIPT') {
+                $response = false;
             }
         }
         return $response;
