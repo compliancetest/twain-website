@@ -86,8 +86,11 @@
                             <?php
                             //Icon should be disabled until run is Terminated/Executed.
                             if( in_array( $schedule->SCHEDULE_STATUS_CODE, array( 'EXECUTED', 'TERMINATED' ) ) ):?>
-                                <?php if ($esb->checkRunHasReceiptResponseStatus($schedule->ID)) :?>
+<!--                                --><?php //$reportStatus = $esb->checkPerformanceReportStatus($schedule->ID);?>
+                                <?php if ($schedule->PERFORMANCE_REPORT_STATUS == 'PASS') :?>
                                     <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('download_pdf')?>&runid=<?php echo $schedule->ID?>&profile=<?php echo $profile->id;?>&product=<?php echo $productID;?>" class="action-btn icon-btn download-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Performance Report<span></span></span></a>
+                                <?php elseif ($schedule->PERFORMANCE_REPORT_STATUS == 'INCOMPLETE') :?>
+                                    <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('download_pdf')?>&runid=<?php echo $schedule->ID?>&profile=<?php echo $profile->id;?>&product=<?php echo $productID;?>" class="action-btn icon-btn download-btn orange-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Performance Report (Incomplete)<span></span></span></a>
                                 <?php else :?>
                                     <a href="<?php echo the_permalink() ?>?td-action=<?php echo wp_create_nonce('download_pdf')?>&runid=<?php echo $schedule->ID?>&profile=<?php echo $profile->id;?>&product=<?php echo $productID;?>" class="action-btn icon-btn download-btn red-btn has-tooltip"><span class="p"></span><span class="simple_tooltip radius6">Performance Report (Fail)<span></span></span></a>
                                 <?php endif;?>

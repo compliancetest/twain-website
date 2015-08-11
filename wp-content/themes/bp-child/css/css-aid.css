@@ -1921,9 +1921,24 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #E68080 inset;
     -webkit-box-shadow: 0 1px 0 0 #E68080 inset;
 }
+.orange-btn{
+    border-color: #FFA500;
+    background: #FFA500;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFA500), to(#FFA500));
+    background: -webkit-linear-gradient(top, #FFA500, #FFA500);
+    background: -moz-linear-gradient(top, #FFA500, #FFA500);
+    background: -ms-linear-gradient(top, #FFA500, #FFA500);
+    background: -o-linear-gradient(top, #FFA500, #FFA500);
+    box-shadow: 0 1px 0 0 #FFA500 inset;
+    -moz-box-shadow: 0 1px 0 0 #FFA500 inset;
+    -webkit-box-shadow: 0 1px 0 0 #FFA500 inset;
+}
 .delete-btn:hover,
 .red-btn:hover {
     background: #D84F4F;
+}
+.orange-btn:hover {
+    background: #FFA500;
 }
 .delete-btn span.p{
     background-position: 2px -574px;

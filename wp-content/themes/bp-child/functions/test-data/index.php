@@ -118,7 +118,14 @@ function cp_process_test_data_actions()
             $runId = intval($_REQUEST['runid']);
             $schedule = $esb->getSchedule($runId);
             $profile = ProfileInstance::getProfileBy('id', intval($_REQUEST['profile']));
-            $fileName = $esb->checkRunHasReceiptResponseStatus($runId) ? $profile->profile_name : $profile->profile_name.'(Fail)';
+            $performanceStatus = $esb->checkPerformanceReportStatus($runId);
+            if ($performanceStatus == 'FAIL') {
+                $fileName = $profile->profile_name.'(Fail)';
+            } else if ($performanceStatus == 'INCOMPLETE'){
+                $fileName = $profile->profile_name.'(Incomplete)';
+            } else {
+                $fileName = $profile->profile_name;
+            }
             header('Content-type: application/vnd.ms-excel');
             header('Content-Disposition: attachment; filename="PerformanceReport-'.$fileName.'.xlsx"');
             include_once __DIR__ . '/../generate-json/phpExcel/Classes/PHPExcel.php';
@@ -159,6 +166,8 @@ function cp_process_test_data_actions()
             foreach ($results AS $result) {
                 if ($result->ResponseStatus == 'RECEIPT') {
                     $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('33FF33');
+                } elseif ($result->ResponseStatus == 'Not Sent') {
+                    $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
                 } else {
                     $objPHPExcel->getActiveSheet()->getStyle('E'.$rowNumber)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('CC0000');
                 }
