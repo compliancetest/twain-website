@@ -1112,6 +1112,7 @@ class ManageESB
     {
         global $wpdb;
         $subscription_id  = $wpdb->get_var( $wpdb->prepare("SELECT id FROM wp_organisations_subscriptions WHERE user_id = %d ", $user_id ) );
+        ManageESB::$esbdb->query( ManageESB::$esbdb->prepare("CALL `sp_updatePerformanceReportStatus`(%d);", $subscription_id ));
         $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL, SR.PERFORMANCE_REPORT_STATUS FROM " . $this->table_schedules_runs . " AS SR
                                                 JOIN MSH_SCHEDULE_STATUSES AS SS ON SS.ID = SR.SCHEDULE_STATUS
                                                 WHERE ORGANISATION_SUBSCRIPTION_ID = %d AND IS_DELETED = 0 ORDER BY ID DESC", $subscription_id );
