@@ -118,10 +118,9 @@ function cp_process_test_data_actions()
             $runId = intval($_REQUEST['runid']);
             $schedule = $esb->getSchedule($runId);
             $profile = ProfileInstance::getProfileBy('id', intval($_REQUEST['profile']));
-            $performanceStatus = $esb->checkPerformanceReportStatus($runId);
-            if ($performanceStatus == 'FAIL') {
+            if ($schedule->PERFORMANCE_REPORT_STATUS == 'FAIL') {
                 $fileName = $profile->profile_name.'(Fail)';
-            } else if ($performanceStatus == 'INCOMPLETE'){
+            } else if ($schedule->PERFORMANCE_REPORT_STATUS == 'INCOMPLETE'){
                 $fileName = $profile->profile_name.'(Incomplete)';
             } else {
                 $fileName = $profile->profile_name;
