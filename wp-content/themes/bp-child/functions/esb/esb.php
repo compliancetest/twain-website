@@ -1112,7 +1112,7 @@ class ManageESB
     {
         global $wpdb;
         $subscription_id  = $wpdb->get_var( $wpdb->prepare("SELECT id FROM wp_organisations_subscriptions WHERE user_id = %d ", $user_id ) );
-        $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL FROM " . $this->table_schedules_runs . " AS SR
+        $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL, SR.PERFORMANCE_REPORT_STATUS FROM " . $this->table_schedules_runs . " AS SR
                                                 JOIN MSH_SCHEDULE_STATUSES AS SS ON SS.ID = SR.SCHEDULE_STATUS
                                                 WHERE ORGANISATION_SUBSCRIPTION_ID = %d AND IS_DELETED = 0 ORDER BY ID DESC", $subscription_id );
         return ManageESB::$esbdb->get_results($query);
@@ -1120,7 +1120,7 @@ class ManageESB
 
     public function getSchedule($scheduleId)
     {
-        $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL FROM " . $this->table_schedules_runs . " AS SR
+        $query = ManageESB::$esbdb->prepare( "SELECT SR.*, SS.SCHEDULE_STATUS_CODE, SS.SCHEDULE_STATUS_LABEL, SR.PERFORMANCE_REPORT_STATUS FROM " . $this->table_schedules_runs . " AS SR
                                                 JOIN MSH_SCHEDULE_STATUSES AS SS ON SS.ID = SR.SCHEDULE_STATUS
                                                 WHERE SR.ID = %d AND IS_DELETED = 0 ORDER BY ID DESC", $scheduleId );
         return ManageESB::$esbdb->get_row($query);
@@ -1162,13 +1162,16 @@ class ManageESB
                                             ORDER BY MSM.SEND_AT asc, MCM.CONVERSATION_TIMESTAMP asc, MCM.RECEIPT_TIMESTAMP asc;", $runId);
         return ManageESB::$esbdb->get_results($query);
     }
-    public function checkRunHasReceiptResponseStatus($runId)
+    public function checkPerformanceReportStatus($runId)
     {
-        $response = true;
+        $response = 'PASS';
         $messages = $this->getMessages($runId);
         foreach ($messages AS $message) {
-            if ($message->ResponseStatus != 'RECEIPT') {
-                $response = false;
+            if ($message->ResponseStatus == 'FAIL') {
+                return 'FAIL';
+            }
+            if ($message->ResponseStatus == 'Not Sent') {
+                $response = 'INCOMPLETE';
             }
         }
         return $response;
