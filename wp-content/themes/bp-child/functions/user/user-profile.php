@@ -1205,9 +1205,9 @@ function generateProfile($profile_id, $community_id, $tag = false )
     
     $profile_ref = array();
     
-    /*if (!empty($profile->token_original)) {
+    if (!empty($profile->token_original)) {
         $profile_ref[$profile->token_original] = $profile->token;
-    }*/
+    }
     if( is_iterable( $customDataGeneration ) ){
         foreach ($customDataGeneration as $customData)
         {
