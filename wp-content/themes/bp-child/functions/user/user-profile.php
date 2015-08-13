@@ -1264,7 +1264,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                                 $refHarness = explode('=', $template->Harness->Profile);
 
                                                 if (!isset($profile_ref[$refTester[1]])) {
-                                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d ORDER BY id DESC", $refTester[1], $user_id);
+                                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refTester[1], $user_id);
                                                     $temp_profile = $wpdb->get_row($query);
                                                     if (!empty($temp_profile)) {
                                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1275,7 +1275,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                                 }
 
                                                 if (!isset($profile_ref[$refHarness[1]])) {
-                                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d ORDER BY id DESC", $refHarness[1], $user_id);
+                                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refHarness[1], $user_id);
                                                     $temp_profile = $wpdb->get_row($query);
                                                     if (!empty($temp_profile)) {
                                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1291,7 +1291,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                                     $ref = explode('=', $employer->Profile->{'$ref'});
 
                                                     if (!isset($profile_ref[$ref[1]])) {
-                                                        $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d ORDER BY id DESC", $ref[1], $user_id);
+                                                        $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $ref[1], $user_id);
                                                         $temp_profile = $wpdb->get_row($query);
                                                         if (!empty($temp_profile)) {
                                                             $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1339,7 +1339,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                 $refHarness = explode('=', $template->Harness->Profile);
 
                                 if (!isset($profile_ref[$refTester[1]])) {
-                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d ORDER BY id DESC", $refTester[1], $user_id);
+                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refTester[1], $user_id);
                                     $temp_profile = $wpdb->get_row($query);
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1350,7 +1350,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                 }
 
                                 if (!isset($profile_ref[$refHarness[1]])) {
-                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d ORDER BY id DESC", $refHarness[1], $user_id);
+                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original = %s AND creator_id = %d", $refHarness[1], $user_id);
                                     $temp_profile = $wpdb->get_row($query);
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
@@ -1365,7 +1365,7 @@ function generateProfile($profile_id, $community_id, $tag = false )
                                 $ref = explode('=', $employer->Profile->{'$ref'});
 
                                 if (!isset($profile_ref[$ref[1]])) {
-                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original=%s AND creator_id=%d ORDER BY id DESC", $ref[1], $user_id);
+                                    $query = $wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE token_original=%s AND creator_id=%d", $ref[1], $user_id);
                                     $temp_profile = $wpdb->get_row($query);
                                     if (!empty($temp_profile)) {
                                         $profile_ref[$temp_profile->token_original] = $temp_profile->token;
