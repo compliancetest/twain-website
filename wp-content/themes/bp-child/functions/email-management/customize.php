@@ -138,9 +138,6 @@ function cp_groups_notification_membership_request_completed_message($message, $
 add_action('bp_groups_sent_membership_approved_email', 'cp_groups_sent_membership_approved_email_to_admin', 100, 4);
 function cp_groups_sent_membership_approved_email_to_admin($requesting_user_id, $subject, $message, $group_id)
 {
-    if (!$requesting_user_id) {
-        $requesting_user_id = get_current_user_id();
-    }
     $user = get_userdata($requesting_user_id);
     
     $group = groups_get_group(array('group_id' => $group_id));
