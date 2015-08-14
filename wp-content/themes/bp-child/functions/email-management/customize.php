@@ -32,8 +32,11 @@ function cp_groups_notification_new_membership_request_to($to)
     return cp_get_user_fullname($toData->ID) . " <" . $to . ">";
 }
 add_filter('groups_notification_new_membership_request_subject', 'cp_groups_notification_new_membership_request_subject', 100, 3);
-function cp_groups_notification_new_membership_request_subject($subject, $group, $requesting_user_id)
+function cp_groups_notification_new_membership_request_subject($subject, $group, $requesting_user_id = false)
 {
+    if (!$requesting_user_id || !is_integer($requesting_user_id)) {
+        $requesting_user_id = get_current_user_id();
+    }
     $subject = get_option('membership_request_received_admin_email_title');
     $user = get_userdata($requesting_user_id);
     $user_organisation = get_user_meta ($requesting_user_id, 'user_organisation', true);
@@ -50,9 +53,13 @@ function cp_groups_notification_new_membership_request_subject($subject, $group,
 }
 
 add_filter('groups_notification_new_membership_request_message', 'cp_groups_notification_new_membership_request_message', 100, 6);
-function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_id, $profile_link, $group_requests, $settings_link)
-{    
-    
+function cp_groups_notification_new_membership_request_message($message, $group, $requesting_user_name, $profile_link, $group_requests, $settings_link)
+{
+    $user = get_user_by('user_login', $requesting_user_name);
+    $requesting_user_id = $user->ID;
+    if (!$requesting_user_id || !is_integer($requesting_user_id)) {
+        $requesting_user_id = get_current_user_id();
+    }
     $user = get_userdata($requesting_user_id);
     $user_organisation = get_user_meta ($requesting_user_id, 'user_organisation', true);
     $message = get_option('membership_request_received_admin_email_content');
@@ -131,6 +138,9 @@ function cp_groups_notification_membership_request_completed_message($message, $
 add_action('bp_groups_sent_membership_approved_email', 'cp_groups_sent_membership_approved_email_to_admin', 100, 4);
 function cp_groups_sent_membership_approved_email_to_admin($requesting_user_id, $subject, $message, $group_id)
 {
+    if (!$requesting_user_id) {
+        $requesting_user_id = get_current_user_id();
+    }
     $user = get_userdata($requesting_user_id);
     
     $group = groups_get_group(array('group_id' => $group_id));
