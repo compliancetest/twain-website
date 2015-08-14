@@ -205,8 +205,12 @@ function cp_process_test_data_actions()
                 ->setCellValue('F1', 'Messages Sent' )
                 ->setCellValue('G1', 'Start Time' )
                 ->setCellValue('H1', 'Status' );
+            $product = new ProductAndService(intval($_REQUEST['product']));
+            $product->load();
+            $productName = $product->name;
+            if ($product->version) $productName .= ' v'.$product->version;
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A2', get_the_title(intval($_REQUEST['product'])) )
+                ->setCellValue('A2', $productName )
                 ->setCellValue('B2', $profile->profile_name )
                 ->setCellValue('C2', $profile->profile_description )
                 ->setCellValue('D2', implode(', ', array_unique(array_map(function($tag){ return $tag->name;},\Tag::getItemTags($profile->id)))))
