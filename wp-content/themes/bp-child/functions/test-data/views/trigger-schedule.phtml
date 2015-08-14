@@ -25,10 +25,14 @@
                         $profile = ProfileInstance::getProfileBy('token', $profile_token);
                         $productID = get_post_id_by_meta_key_and_value('product_id', $schedule->PRODUCT_ID);
                         $tags = \Tag::getItemTags($profile->id);
-                    ?>
+                        $product = new ProductAndService($productID);
+                        $product->load();
+                        $productName = $product->name;
+                        if ($product->version) $productName .= ' v'.$product->version;
+                ?>
                     <tr class="schedule-row">
                         <td class="schedule-name">
-                            <a href="<?php echo get_permalink($productID);?>"><?php echo get_the_title($productID);?></a>
+                            <a href="<?php echo get_permalink($productID);?>"><?php echo $productName;?></a>
                         </td>
                         <td class="schedule-profile-name">
                             <a class="show_profile" href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $profile->id?>" rel="custom-popup" cp-type="ajax"><?php echo $profile->profile_name;?></a>
