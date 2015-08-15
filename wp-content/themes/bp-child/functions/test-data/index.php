@@ -148,6 +148,7 @@ function cp_process_test_data_actions()
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(70);
             $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(70);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(100);
 
 
             $objPHPExcel->getActiveSheet()
@@ -159,7 +160,8 @@ function cp_process_test_data_actions()
                 ->setCellValue('F1', 'ResponseTime' )
                 ->setCellValue('G1', 'ConversationID' )
                 ->setCellValue('H1', 'RequestMessageID' )
-                ->setCellValue('I1', 'ResponseMessageID' );
+                ->setCellValue('I1', 'ResponseMessageID' )
+                ->setCellValue('J1', 'Description' );
             $results = $esb->getMessages($runId);
             $rowNumber = 2;
             foreach ($results AS $result) {
@@ -180,7 +182,8 @@ function cp_process_test_data_actions()
                     ->setCellValue('F'.$rowNumber, $result->ResponseTime != 'Not Sent' && $result->ResponseTime < 1 ? 1 : $result->ResponseTime )
                     ->setCellValue('G'.$rowNumber, $result->ConversationID )
                     ->setCellValue('H'.$rowNumber, $result->RequestMessageID )
-                    ->setCellValue('I'.$rowNumber, $result->ResponseMessageID  );
+                    ->setCellValue('I'.$rowNumber, $result->ResponseMessageID  )
+                    ->setCellValue('J'.$rowNumber, $result->Description  );
 
                 $rowNumber++;
             }
