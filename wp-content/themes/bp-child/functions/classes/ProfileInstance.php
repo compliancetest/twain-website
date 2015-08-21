@@ -272,4 +272,36 @@ class ProfileInstance
         }
         return $message;
     }
+
+    /**
+     * @link https://redmine.gosource.com.au/projects/compliancetest/wiki/Micro-Services#Profile-Generation-Request
+     * @param $profileId - integer
+     * @param $tags - array
+     */
+    public static function generateProfiles($profileId, $tag)
+    {
+        global $wpdb;
+        if ($tag == false) {
+            $tag = array();
+        } else {
+            $tag = array($tag);
+        }
+        $profile = \ProfileInstance::getProfileBy('id', $profileId);
+        $message = array(
+            'operation' => 'generateCustomProfilesRequest',
+            'correlationID' => '',
+            'parameters' => array(
+                'document' => array(
+                    'bucket' => get_option('aws_s3_url'),
+                    'key'    => "profiles/user/{$profile->token}.json"
+                ),
+                'tags' => $tag
+            ),
+            "securityContext" => array(
+                "username" => $wpdb->get_var($wpdb->prepare("SELECT harness_username FROM wp_users_subscriptions WHERE user_id = %d ", get_current_user_id()))
+            )
+        );
+        $sqs = new \SqsWrapper(get_option('generate_profile_sqs_queue_name'));
+        $sqs->sendMessage($message);
+    }
 }

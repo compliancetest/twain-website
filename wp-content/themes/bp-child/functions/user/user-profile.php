@@ -1178,7 +1178,12 @@ function cp_save_customer_harness_detail()
 function generateProfile($profile_id, $community_id, $tag = false )
 {
     global $wpdb;
-    
+
+    //BE profiles generation
+    if (get_option('generate_via_sqs') == 'yes') {
+        ProfileInstance::generateProfiles($profile_id, $tag);
+        return;
+    }
     $user_id = get_current_user_id();
     
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_instances WHERE id=%d", $profile_id);
