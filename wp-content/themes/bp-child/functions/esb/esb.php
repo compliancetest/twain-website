@@ -1187,6 +1187,7 @@ class ManageESB
     public static function getReceiptMapping($status, $type = 1)
     {
         $mappings = array(
+            'TIMEOUT'      => 'Timeout',
             'NOT_RECEIVED' => 'Not Received',
             'ERROR'        => 'Error',
             'RECEIPT'      => 'Receipt',
