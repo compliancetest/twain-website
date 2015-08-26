@@ -4,12 +4,10 @@ class Tag {
 
     public static function assignTag( $tagName, $itemId, $itemType = 'PROFILE' ){
         global $wpdb;
-        $tags = $wpdb->get_results( "SELECT * FROM wp_tags" );
+        $tag = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_tags WHERE name = %s", $tagName));
         $tagId = 0;
-        foreach( $tags AS $tag ){
-            if( strtolower( str_replace( ' ', '', $tagName ) ) == strtolower( str_replace( ' ', '', $tag->name ) ) ){
-                $tagId = $tag->id;
-            }
+        if ($tag){
+            $tagId = $tag->id;
         }
         if( ! $tagId ){
             $wpdb->insert( 'wp_tags',
@@ -18,13 +16,7 @@ class Tag {
                 );
             $tagId = $wpdb->insert_id;
         }
-        $wpdb->insert( 'wp_tags2items',
-                array(
-                    'item_id'   => $itemId,
-                    'item_type' => $itemType,
-                    'tag_id'    => $tagId
-                )
-            );
+        $wpdb->query($wpdb->prepare("INSERT INTO `wp_tags2items` (`item_id`, `item_type`, `tag_id`) VALUES (%d, %s,%d) ON duplicate key update `item_id`= values(`item_id`), `item_type`= values(`item_type`), `tag_id`= values(`tag_id`)", $itemId, $itemType, $tagId));
     }
 
     public static function copyTags( $sourceProfileId, $targetProfileId )
