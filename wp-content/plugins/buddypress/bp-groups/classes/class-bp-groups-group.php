@@ -189,7 +189,7 @@ class BP_Groups_Group {
 
 		// Cache missed, so query the DB
 		if ( false === $group ) {
-			$group = $wpdb->get_row( $wpdb->prepare( "SELECT g.* FROM {$bp->groups->table_name} g WHERE g.id = %d", $this->id ) );
+			$group = $wpdb->get_row( $wpdb->prepare( "SELECT g.* FROM wp_bp_groups g WHERE g.id = %d", $this->id ) );
 
 			wp_cache_set( $this->id, $group, 'bp_groups' );
 		}

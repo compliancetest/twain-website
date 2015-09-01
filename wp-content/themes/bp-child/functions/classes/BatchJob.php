@@ -68,7 +68,7 @@ class BatchJob {
          * Generate draft invoices
          */
         $invoicesCounter = generateInvoices();
-        $logs['Generate draft invoices'] = 'Created '.$invoicesCounter.' invoices';
+        $logs['Generate draft invoices'] = 'Created '.$invoicesCounter['counter'].' invoices';
         /**
          * Cancel pending subscriptions
          */

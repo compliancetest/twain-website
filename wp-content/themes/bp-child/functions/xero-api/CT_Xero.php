@@ -14,6 +14,7 @@ class CT_Xero {
 
     const USER_AGENT = 'ComplianceTest Pty Ltd';
 
+    public static $data = null;
     public function __construct(){
 
         $consumerKey    = get_option( 'xero_consumer_key' );
@@ -288,7 +289,12 @@ class CT_Xero {
 
     private function _addTrackingCategoryToLineItem(&$lineItem, $communityName)
     {
-        $trackingCategory = $this->getTrackingCategory($communityName);
+        if (isset(self::$data[$communityName])) {
+            $trackingCategory = self::$data[$communityName];
+        } else {
+            $trackingCategory = $this->getTrackingCategory($communityName);
+            self::$data[$communityName] = $trackingCategory;
+        }
         if (!isset($trackingCategory['error'])) {
             $tracking = $lineItem->addChild('Tracking');
             $trackingCat = $tracking->addChild('TrackingCategory');
