@@ -51,8 +51,8 @@ get_header();
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        jQuery('#my_tickets .clear-filter').click(function(){
-            jQuery(this).parent().find('input, select').val('');
+        jQuery('.clear-filter').click(function(){
+            jQuery(this).closest('li').find('select').val('');
             jQuery('#filterForm').submit();
             return false;
         })

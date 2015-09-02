@@ -37,33 +37,31 @@ $is_support = getManagedCustomerWPIDs() ? true : false;
 $show_community = $is_support || is_super_admin() ? true : false;
 ?>
 <div class="filter-box column">
-    <div class="left right10"><label>Filter By:</label></div>
-    <form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
-        <div class="left">
-            <div class="styled_select">
-                <label>Type: </label>
-                <?php echo $ct_ticket_category->getCategoriesSelectboxHTML('type', 'ticket_type', $filterCategory); ?>
-            </div>                    
-            <?php if($filterCategory != "" && $filterCategory != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
+    <form name="filterForm" id="filterForm" action="<?php echo get_permalink()?>" method="get">
+        <div class="search-results-filter">
+            <h4 class="filter-head">Filter By:</h4>
+            <div class="search-filters-box">
+                <ul class="search-filters-list clearfix">
+                    <li class="first">
+                        <label for="ticket_type">Type <?php if($filterCategory != "" && $filterCategory != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <?php echo $ct_ticket_category->getCategoriesSelectboxHTML('type', 'ticket_type', $filterCategory); ?>
+                    </li>
+                    <li>
+                        <label for="ticket_status">Status <?php if($filterStatus != "" && $filterStatus != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <?php echo $ct_ticket_status->getStatusesSelectboxHTML('status', 'ticket_status', $filterStatus); ?>
+                    </li>
+                    <li>
+                        <label for="ticket_priority">Priority <?php if($filterPriority != "" && $filterPriority != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <?php echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket_priority', $filterPriority); ?>
+                    </li>
+                </ul>
+                <div class="search-filter-actions">
+                    <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Confirm</span></a>
+                    <a href="<?php echo get_permalink(); ?>" class="action-btn clear-btn" id="clear-search-filter-btn"><span class="p"></span><span class="t">Clear</span></a>
+                </div>
+            </div>
         </div>
-        <div class="left">
-            <div class="styled_select">
-                <label>Status: </label>
-                <?php echo $ct_ticket_status->getStatusesSelectboxHTML('status', 'ticket_status', $filterStatus); ?>
-            </div>                    
-            <?php if($filterStatus != "" && $filterStatus != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
-        </div>                
-        <div class="left">
-            <div class="styled_select">
-                <label>Priority: </label>
-                <?php echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket_priority', $filterPriority); ?>
-            </div>                    
-            <?php if($filterPriority != "" && $filterPriority != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
-        </div>
-        <a href="#" class="action-btn process-btn submit-btn" id="ticket-filter-btn"><span class="p"></span><span class="t">APPLY FILTER</span></a>
-    </form>                
-                    
-    <div class="clear"></div>
+    </form>
 </div>
 <div id="tickets_list" class="column">
     <div class="ticket-priorities right">
