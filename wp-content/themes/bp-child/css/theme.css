@@ -7294,28 +7294,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 .json-object-delete{
     line-height: 24px;
 }
-/**
-* My Tickets page
-* 
-*/
-#my_tickets .filter-box label{
-    float: left;
-    padding-right: 8px;
-}
-#my_tickets form{
-/*    float: left;*/
-}
-#my_tickets .filter-box select{
-    width: 130px;
-}
-#my_tickets .filter-box #filterForm .left{
-    padding-right: 18px;
-    position: relative;
-}
-#my_tickets .filter-box #filterForm .left .clear-filter{
-    top: 3px;
-    right: 8px;
-}
 
 /*** Support Ticket Popup ***/
 .edit-ticket-box .grid-box-body .field-row label{
