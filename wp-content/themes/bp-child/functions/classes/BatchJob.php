@@ -165,7 +165,7 @@ class BatchJob {
         return array( 'status' => 'success', 'message' => $messages );
     }
 
-    private function _getCronjobOptions( $jobId ){
+    public function _getCronjobOptions( $jobId ){
         $options = array();
         $results   = $this->db->get_results( $this->db->prepare( "SELECT * FROM wp_batch_jobs_params WHERE batch_job_id = %d ", $jobId ) );
         foreach( $results AS $result ){
@@ -182,6 +182,10 @@ class BatchJob {
             'jobid'     => $jobId
         );
         $this->s3->putObject( 'logs/batch/' . $jobId . '/' . date( 'Y-m-d' ) .'/' . date( 'H:i:s' ) . '_' . $status . '_output.log', json_encode( $message, JSON_PRETTY_PRINT ), 'application/json', $this->bucket );
-        exit(json_encode( $message, JSON_PRETTY_PRINT ));
+        if (is_super_admin()) {
+            addMessage(json_encode($message, JSON_PRETTY_PRINT), $status);
+            wp_redirect(home_url() . '/wp-admin/admin.php?page=manage-batch-jobs');
+            exit();
+        }
     }
 }

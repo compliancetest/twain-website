@@ -179,6 +179,8 @@ require_once(THE_FUNCTION . '/subscription/admin/index.php');
 //Charges admin section
 require_once(THE_FUNCTION . '/charges/admin.php');
 
+//Batch jobs admin section
+require_once(THE_FUNCTION . '/batch-jobs/admin.php');
 
 require_once(THE_FUNCTION . '/rest.php');
 $CPRest = new CPRest();
