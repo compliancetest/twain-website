@@ -8,6 +8,7 @@ class BatchJob {
         $this->s3 = new S3Wrapper();
         $logsBucket = get_option( 's3_logs_bucket' );
         $this->bucket = ! empty( $logsBucket ) ? $logsBucket : get_option( 'aws_s3_url' );
+        $this->jobId = false;
     }
 
     /**
@@ -15,9 +16,15 @@ class BatchJob {
      * @param $key - access_key parameter from wp_batch_jobs table
      */
     public function execute( $jobid, $key ){
-        if( $row = $this->db->get_row( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s AND access_key = %s AND is_active = 1 ", $jobid, $key ) ) ){
+        if (is_super_admin()) {
+            $row = $this->db->get_row($this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s AND access_key = %s", $jobid, $key));
+        } else {
+            $row = $this->db->get_row($this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s AND access_key = %s AND is_active = 1 ", $jobid, $key));
+        }
+        if ($row) {
             try {
                 if( method_exists( $this, $row->function_name ) ) {
+                    $this->jobId = $jobid;
                     $comment = '';
                     $status = call_user_func(array($this, $row->function_name));
                     if( isset( $status['message'] ) && ! empty( $status['message'] ) ){
@@ -31,6 +38,36 @@ class BatchJob {
                 $this->_sendReportToS3( $jobid, $e->getMessage(), 'error' );
             }
         }
+    }
+
+    /**
+     * This function used to start / stop AWS EC2 instances
+     * example request: ?jobid=SERVER_CONTROL&key=YOUR_KEY&action=stop&servers=i-3eb5d301,i-3eb5d302
+     * action - could be start / stop only
+     * servers - optional parameter. If this parameter not provided - function get this values from database
+     * @return array
+     */
+    public function serverControl()
+    {
+        $action  = filter_var($_REQUEST['action'], FILTER_SANITIZE_STRING);
+        if (isset($_REQUEST['servers'])) {
+            $servers = explode(',', filter_var($_REQUEST['servers'], FILTER_SANITIZE_STRING));
+        } else {
+            $servers = explode(',', $this->db->get_var($this->db->prepare("SELECT value FROM wp_batch_jobs_params WHERE name = 'servers' AND batch_job_id = (SELECT id FROM wp_batch_jobs WHERE identifier = %s ) ", $this->jobId )));
+        }
+        $ec2Client = new Ec2Wrapper();
+        $response = $ec2Client->changeStatus($action, $servers);
+        $conjobId = $this->db->get_var( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s ", $_GET['jobid'] ) );
+        $options = $this->_getCronjobOptions( $conjobId );
+        if (isset($options['emails'] ) && ! empty( $options['emails'])) {
+            $emailLogs = '<pre>'.print_r($response, true).'</pre>';
+            $logs['Email logs'] = array();
+            foreach (explode( ',', $options['emails']) AS $email) {
+                $status = wp_mail( trim( $email ), $action . ' server action', $emailLogs );
+                $logs['Email logs'][] = array( 'status' => $status == true ? 'Success' : 'Error', 'email' => trim( $email ) );
+            }
+        }
+        return $response;
     }
 
     public function chargesProcessing(){
@@ -145,5 +182,6 @@ class BatchJob {
             'jobid'     => $jobId
         );
         $this->s3->putObject( 'logs/batch/' . $jobId . '/' . date( 'Y-m-d' ) .'/' . date( 'H:i:s' ) . '_' . $status . '_output.log', json_encode( $message, JSON_PRETTY_PRINT ), 'application/json', $this->bucket );
+        exit(json_encode( $message, JSON_PRETTY_PRINT ));
     }
 }

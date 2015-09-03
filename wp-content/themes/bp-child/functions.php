@@ -150,6 +150,8 @@ require_once(THE_FUNCTION . '/aws/s3/Client.php');
 
 require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
+require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+
 //Compliance Claim
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');
 require_once(THE_FUNCTION . '/compliance-claim/controller.php');
