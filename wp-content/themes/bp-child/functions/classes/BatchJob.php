@@ -16,7 +16,7 @@ class BatchJob {
      * @param $key - access_key parameter from wp_batch_jobs table
      */
     public function execute( $jobid, $key ){
-        if (is_super_admin()) {
+        if (is_super_admin() && isset($_GET['is_active']) && wp_verify_nonce($_GET['is_active'], 'is_active')) {
             $row = $this->db->get_row($this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s AND access_key = %s", $jobid, $key));
         } else {
             $row = $this->db->get_row($this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s AND access_key = %s AND is_active = 1 ", $jobid, $key));

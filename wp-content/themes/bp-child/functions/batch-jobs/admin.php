@@ -34,15 +34,7 @@ function ct_manage_batch_jobs()
                     type : 'post',
                     dataType: 'json',
                     url: '/wp-admin/admin-ajax.php',
-                    data : { 'action' : 'set_batch_status', 'status' : jQuery(this).is(':checked'), 'id' : jQuery(this).closest('tr').find('td:first').text() },
-                    success: function( data ){
-
-                        if( data && data.length ){
-                            jQuery('#payment_id').find('option')
-                                .remove()
-                                .end();
-                        }
-                    }
+                    data : { 'action' : 'set_batch_status', 'status' : jQuery(this).is(':checked'), 'id' : jQuery(this).closest('tr').find('td:first').text() }
                 });
             })
         });
