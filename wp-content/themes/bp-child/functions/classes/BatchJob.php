@@ -58,12 +58,14 @@ class BatchJob {
         $response = $ec2Client->changeStatus($action, $servers);
         $conjobId = $this->db->get_var( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s ", $_GET['jobid'] ) );
         $options = $this->_getCronjobOptions( $conjobId );
-        if (isset($options['emails'] ) && ! empty( $options['emails'])) {
-            $emailLogs = '<pre>'.print_r($response, true).'</pre>';
-            $logs['Email logs'] = array();
-            foreach (explode( ',', $options['emails']) AS $email) {
-                $status = wp_mail( trim( $email ), $action . ' server action', $emailLogs );
-                $logs['Email logs'][] = array( 'status' => $status == true ? 'Success' : 'Error', 'email' => trim( $email ) );
+        if ($response['status'] != 'success') {
+            if (isset($options['emails']) && !empty($options['emails'])) {
+                $emailLogs = '<pre>' . print_r($response, true) . '</pre>';
+                $logs['Email logs'] = array();
+                foreach (explode(',', $options['emails']) AS $email) {
+                    $status = wp_mail(trim($email), $action . ' server action', $emailLogs);
+                    $logs['Email logs'][] = array('status' => $status == true ? 'Success' : 'Error', 'email' => trim($email));
+                }
             }
         }
         return $response;
