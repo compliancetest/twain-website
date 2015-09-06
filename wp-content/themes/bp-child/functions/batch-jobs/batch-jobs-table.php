@@ -51,18 +51,7 @@ class CT_Batch_Jobs_Table extends WP_List_Table
                 }
                 return $html;
             case 'actions':
-                if ($item->identifier == 'SERVER_CONTROL') {
-                    return '<a style="color:green" href="'.home_url().'/?jobid='.$item->identifier.'&key='.$item->access_key.'&action=start&is_active='.wp_create_nonce('is_active').'">Start</a> / <a style="color:red" href="'.home_url().'/?jobid='.$item->identifier.'&key='.$item->access_key.'&action=stop&is_active='.wp_create_nonce('is_active').'">Stop</a>';
-                } else {
-                    return '<a style="color:green" href="'.home_url().'/?jobid='.$item->identifier.'&key='.$item->access_key.'&is_active='.wp_create_nonce('is_active').'">Run</a>';
-                }
-                $batchJob = new BatchJob();
-                $options = $batchJob->_getCronjobOptions($item->id);
-                $html = '';
-                foreach ($options AS $optionName => $option) {
-                    $html .= '<b>'.$optionName.': </b>' . $option .'<br>';
-                }
-                return $html;
+                return '<a style="color:green" href="'.home_url().'/?jobid='.$item->identifier.'&key='.$item->access_key.'&is_active='.wp_create_nonce('is_active').'">Run</a>';
             case 'is_active':
                 return '<input type="checkbox" class="batch_status" '.($item->is_active == '1' ? 'checked="checked"' : '').'>';
             default:

@@ -42,18 +42,21 @@ class BatchJob {
 
     /**
      * This function used to start / stop AWS EC2 instances
-     * example request: ?jobid=SERVER_CONTROL&key=YOUR_KEY&action=stop&servers=i-3eb5d301,i-3eb5d302
+     * example request: ?jobid=SERVER_CONTROL&key=YOUR_KEY&servers=i-3eb5d301,i-3eb5d302
      * action - could be start / stop only
      * servers - optional parameter. If this parameter not provided - function get this values from database
      * @return array
      */
     public function serverControl()
     {
-        $action  = filter_var($_REQUEST['action'], FILTER_SANITIZE_STRING);
+        $action  = $this->db->get_var($this->db->prepare("SELECT value FROM wp_batch_jobs_params WHERE name = 'action' AND batch_job_id = (SELECT id FROM wp_batch_jobs WHERE identifier = %s ) ", $this->jobId ));
         if (isset($_REQUEST['servers'])) {
             $servers = explode(',', filter_var($_REQUEST['servers'], FILTER_SANITIZE_STRING));
         } else {
             $servers = explode(',', $this->db->get_var($this->db->prepare("SELECT value FROM wp_batch_jobs_params WHERE name = 'servers' AND batch_job_id = (SELECT id FROM wp_batch_jobs WHERE identifier = %s ) ", $this->jobId )));
+        }
+        if (!$action || !$servers) {
+            return array('status' => 'error', 'message' => 'Cronjob not configured properly');
         }
         $ec2Client = new Ec2Wrapper();
         $response = $ec2Client->changeStatus($action, $servers);
