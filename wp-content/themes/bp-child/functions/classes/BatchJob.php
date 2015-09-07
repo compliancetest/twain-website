@@ -71,6 +71,41 @@ class BatchJob {
         return $response;
     }
 
+    /**
+     * This function used to assign IP to AWS instances
+     * example request: ?jobid=ASSIGN_IP&key=YOUR_KEY
+     * action - could be start / stop only
+     * servers - function get this values from database
+     * @return array
+     */
+    public function assignIP()
+    {
+        $servers = explode(',', $this->db->get_var($this->db->prepare("SELECT value FROM wp_batch_jobs_params WHERE name = 'servers' AND batch_job_id = (SELECT id FROM wp_batch_jobs WHERE identifier = %s ) ", $this->jobId )));
+        $ipaddresses = explode(',', $this->db->get_var($this->db->prepare("SELECT value FROM wp_batch_jobs_params WHERE name = 'ipaddresses' AND batch_job_id = (SELECT id FROM wp_batch_jobs WHERE identifier = %s ) ", $this->jobId )));
+        if (!$servers || !$ipaddresses) {
+            return array('status' => 'error', 'message' => 'Cronjob not configured properly');
+        }
+        $resp = array();
+        foreach ($servers as $key => $server) {
+            $ec2Client = new Ec2Wrapper();
+            $response = $ec2Client->assignIp($server, $ipaddresses[$key]);
+            $resp[] = $response;
+            $conjobId = $this->db->get_var( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s ", $_GET['jobid'] ) );
+            $options = $this->_getCronjobOptions( $conjobId );
+            if ($response['status'] != 'success') {
+                if (isset($options['emails']) && !empty($options['emails'])) {
+                    $emailLogs = '<pre>' . print_r($response, true) . '</pre>';
+                    $logs['Email logs'] = array();
+                    foreach (explode(',', $options['emails']) AS $email) {
+                        $status = wp_mail(trim($email), 'Assign IP server action', $emailLogs);
+                        $logs['Email logs'][] = array('status' => $status == true ? 'Success' : 'Error', 'email' => trim($email));
+                    }
+                }
+            }
+        }
+        return $resp;
+    }
+
     public function chargesProcessing(){
         $logs = array();
         /**
