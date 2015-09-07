@@ -86,6 +86,7 @@ class BatchJob {
             return array('status' => 'error', 'message' => 'Cronjob not configured properly');
         }
         $resp = array();
+        $status = 'success';
         foreach ($servers as $key => $server) {
             $ec2Client = new Ec2Wrapper();
             $response = $ec2Client->assignIp($server, $ipaddresses[$key]);
@@ -93,6 +94,7 @@ class BatchJob {
             $conjobId = $this->db->get_var( $this->db->prepare( "SELECT * FROM wp_batch_jobs WHERE identifier = %s ", $_GET['jobid'] ) );
             $options = $this->_getCronjobOptions( $conjobId );
             if ($response['status'] != 'success') {
+                $status = $response['status'];
                 if (isset($options['emails']) && !empty($options['emails'])) {
                     $emailLogs = '<pre>' . print_r($response, true) . '</pre>';
                     $logs['Email logs'] = array();
@@ -103,7 +105,7 @@ class BatchJob {
                 }
             }
         }
-        return $resp;
+        return array('status' => $status, 'message' => $resp);
     }
 
     public function chargesProcessing(){
