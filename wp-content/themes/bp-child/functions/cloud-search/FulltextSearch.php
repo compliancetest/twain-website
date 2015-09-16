@@ -108,12 +108,12 @@ class FulltextSearch {
 
             }else if( $k == 'date_from'  || $k == 'date_to' ){
                 if( ! $range_checked ) {
-                    if (isset($params['date_from']) && ! empty( $params['date_from'] )) {
+                    if (isset($params['date_from']) && ! empty( $params['date_from'] ) && validateDate($params['date_from'])) {
                         $from = "['".$params['date_from'].'T00:00:00Z'."'";
                     } else{
                         $from = '{';
                     }
-                    if ( isset($params['date_to'] ) && ! empty( $params['date_to'] ) ) {
+                    if ( isset($params['date_to'] ) && ! empty( $params['date_to'] ) && validateDate($params['date_to'])) {
                         $to = "'".$params['date_to'].'T23:59:59Z'."']";
                     } else{
                         $to = '}';
