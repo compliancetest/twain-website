@@ -136,7 +136,12 @@ class FulltextSearch {
             $str['query'] = 'matchall';
             $str['queryParser'] = 'structured';
         }
-        return $this->_client->search( $str );
+        try {
+            $r = $this->_client->search( $str );
+        } catch(Exception $e){
+            return false;
+        }
+        return $r;
     }
 
     public function fullUpload( $post_id = false ){
