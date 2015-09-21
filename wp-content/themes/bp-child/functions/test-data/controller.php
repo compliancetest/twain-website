@@ -330,6 +330,7 @@ function deleteProfileTypeInstance( $action, $id, $forceDelete = false )
             array('profile_id' => $id)
         );
         remove_filter( 'query', 'wp_db_null_value' );
+        $wpdb->query($wpdb->prepare("DELETE FROM wp_tags2items WHERE item_id = %d AND item_type = 'PROFILE' ", $id));
     }
     return $response;
 }
