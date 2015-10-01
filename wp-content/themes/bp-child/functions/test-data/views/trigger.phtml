@@ -40,6 +40,10 @@
         <input type="text" name="schedule_tag" id="schedule_tag" style="width: 100%;" value="<?php echo implode(', ', array_unique($view->tags));?>" disabled="disabled">
         <div class="space20"></div>
         <input type="datetime" name="datetime" id="datetime">
+        <div style="width: 160px; float: right;text-align: center;">
+            <?php echo get_user_meta(get_current_user_id(), 'timezone', true);?><br>
+            (change via <a href="/my-profile/">Profile</a> tab)
+            </div>
         <div class="validation_error" style="color: red; font-size: smaller; display: none; max-width: 85%;"></div>
     </div>
     <div class="popup-box-footer radius6 noradiustop">
