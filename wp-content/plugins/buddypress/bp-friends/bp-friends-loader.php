@@ -9,7 +9,7 @@
  */
 
 // Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 class BP_Friends_Component extends BP_Component {
 
@@ -18,11 +18,11 @@ class BP_Friends_Component extends BP_Component {
 	 *
 	 * @since BuddyPress (1.5.0)
 	 */
-	public function __construct() {
+	function __construct() {
 		parent::start(
 			'friends',
-			_x( 'Friend Connections', 'Friends screen page <title>', 'buddypress' ),
-			buddypress()->plugin_dir,
+			__( 'Friend Connections', 'buddypress' ),
+			BP_PLUGIN_DIR,
 			array(
 				'adminbar_myaccount_order' => 60
 			)
@@ -38,7 +38,6 @@ class BP_Friends_Component extends BP_Component {
 	 */
 	public function includes( $includes = array() ) {
 		$includes = array(
-			'cache',
 			'actions',
 			'screens',
 			'filters',
@@ -113,10 +112,8 @@ class BP_Friends_Component extends BP_Component {
 		$bp = buddypress();
 
 		// Add 'Friends' to the main navigation
-		$count    = friends_get_total_friend_count();
-		$class    = ( 0 === $count ) ? 'no-count' : 'count';
 		$main_nav = array(
-			'name'                => sprintf( __( 'Friends <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) ),
+			'name'                => sprintf( __( 'Friends <span>%d</span>', 'buddypress' ), friends_get_total_friend_count() ),
 			'slug'                => $this->slug,
 			'position'            => 60,
 			'screen_function'     => 'friends_screen_my_friends',
@@ -137,7 +134,7 @@ class BP_Friends_Component extends BP_Component {
 
 		// Add the subnav items to the friends nav item
 		$sub_nav[] = array(
-			'name'            => _x( 'Friendships', 'Friends screen sub nav', 'buddypress' ),
+			'name'            => __( 'Friendships', 'buddypress' ),
 			'slug'            => 'my-friends',
 			'parent_url'      => $friends_link,
 			'parent_slug'     => bp_get_friends_slug(),
@@ -147,7 +144,7 @@ class BP_Friends_Component extends BP_Component {
 		);
 
 		$sub_nav[] = array(
-			'name'            => _x( 'Requests', 'Friends screen sub nav', 'buddypress' ),
+			'name'            => __( 'Requests',   'buddypress' ),
 			'slug'            => 'requests',
 			'parent_url'      => $friends_link,
 			'parent_slug'     => bp_get_friends_slug(),
@@ -182,11 +179,11 @@ class BP_Friends_Component extends BP_Component {
 			// Pending friend requests
 			$count = count( friends_get_friendship_request_user_ids( bp_loggedin_user_id() ) );
 			if ( !empty( $count ) ) {
-				$title   = sprintf( _x( 'Friends <span class="count">%s</span>', 'My Account Friends menu', 'buddypress' ), number_format_i18n( $count ) );
-				$pending = sprintf( _x( 'Pending Requests <span class="count">%s</span>', 'My Account Friends menu sub nav', 'buddypress' ), number_format_i18n( $count ) );
+				$title   = sprintf( __( 'Friends <span class="count">%s</span>',          'buddypress' ), number_format_i18n( $count ) );
+				$pending = sprintf( __( 'Pending Requests <span class="count">%s</span>', 'buddypress' ), number_format_i18n( $count ) );
 			} else {
-				$title   = _x( 'Friends', 'My Account Friends menu', 'buddypress' );
-				$pending = _x( 'No Pending Requests','My Account Friends menu sub nav', 'buddypress' );
+				$title   = __( 'Friends',             'buddypress' );
+				$pending = __( 'No Pending Requests', 'buddypress' );
 			}
 
 			// Add the "My Account" sub menus
@@ -197,11 +194,11 @@ class BP_Friends_Component extends BP_Component {
 				'href'   => trailingslashit( $friends_link )
 			);
 
-			// My Friends
+			// My Groups
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-friendships',
-				'title'  => _x( 'Friendships', 'My Account Friends menu sub nav', 'buddypress' ),
+				'title'  => __( 'Friendships', 'buddypress' ),
 				'href'   => trailingslashit( $friends_link )
 			);
 
@@ -220,7 +217,7 @@ class BP_Friends_Component extends BP_Component {
 	/**
 	 * Set up the title for pages and <title>.
 	 */
-	public function setup_title() {
+	function setup_title() {
 		$bp = buddypress();
 
 		// Adjust title
@@ -238,21 +235,6 @@ class BP_Friends_Component extends BP_Component {
 		}
 
 		parent::setup_title();
-	}
-
-	/**
-	 * Setup cache groups
-	 *
-	 * @since BuddyPress (2.2.0)
-	 */
-	public function setup_cache_groups() {
-
-		// Global groups
-		wp_cache_add_global_groups( array(
-			'bp_friends_requests'
-		) );
-
-		parent::setup_cache_groups();
 	}
 }
 

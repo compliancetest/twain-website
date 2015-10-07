@@ -32,8 +32,7 @@ class BP_Docs_Groups_Integration {
 	 */
 	function __construct() {
 		if ( class_exists( 'BP_Group_Extension' ) ) {
-			$group_extension_class = apply_filters( 'bp_docs_group_extension_class_name', 'BP_Docs_Group_Extension' );
-			bp_register_group_extension( $group_extension_class );
+			bp_register_group_extension( 'BP_Docs_Group_Extension' );
 		}
 
 		// Filter some properties of the query object
@@ -44,6 +43,7 @@ class BP_Docs_Groups_Integration {
 
 		// Taxonomy helpers
 		add_filter( 'bp_docs_taxonomy_get_item_terms', 	array( $this, 'get_group_terms' ) );
+		add_action( 'bp_docs_taxonomy_save_item_terms', array( $this, 'save_group_terms' ) );
 
 		// Filter the core user_can_edit function for group-specific functionality
 		add_filter( 'bp_docs_user_can',			array( $this, 'user_can' ), 10, 4 );
@@ -68,9 +68,8 @@ class BP_Docs_Groups_Integration {
 		add_filter( 'bp_docs_loop_additional_td',       array( $this, 'groups_td' ), 5 );
 
 		// Update group last active metadata when a doc is created, updated, or saved
-		add_filter( 'bp_docs_after_save',               array( $this, 'update_group_last_active' )  );
-		add_filter( 'bp_docs_before_doc_delete',        array( $this, 'update_group_last_active' ) );
-		add_filter( 'wp_insert_comment',                array( $this, 'update_group_last_active_comment' ), 10, 2 );
+		add_filter( 'bp_docs_doc_saved',		array( $this, 'update_group_last_active' )  );
+		add_filter( 'bp_docs_doc_deleted',		array( $this, 'update_group_last_active' ) );
 
 		// Sneak into the nav before it's rendered to insert the group Doc count. Hooking
 		// to bp_actions because of the craptastic nature of the BP_Group_Extension loader
@@ -177,38 +176,17 @@ class BP_Docs_Groups_Integration {
 	 */
 	function pre_query_args( $query_args, $bp_docs_query ) {
 		if ( ! empty( $bp_docs_query->query_args['group_id'] ) ) {
-			$query_args['tax_query'][] = self::tax_query_arg_for_groups( $bp_docs_query->query_args['group_id'] );
+			$terms = array();
+			foreach ( (array) $bp_docs_query->query_args['group_id'] as $gid ) {
+				$terms[] = bp_docs_get_term_slug_from_group_id( $gid );
+			}
+			$query_args['tax_query'][] = array(
+				'taxonomy' => bp_docs_get_associated_item_tax_name(),
+				'field'    => 'slug',
+				'terms'    => $terms,
+			);
 		}
 		return $query_args;
-	}
-
-	/**
-	 * Generate the tax_query param for limiting to groups.
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param int|array $group_ids IDs of groups.
-	 * @return array
-	 */
-	public static function tax_query_arg_for_groups( $group_ids ) {
-		$group_ids = wp_parse_id_list( $group_ids );
-
-		$terms = array();
-		foreach ( $group_ids as $gid ) {
-			$terms[] = bp_docs_get_term_slug_from_group_id( $gid );
-		}
-
-		if ( empty( $terms ) ) {
-			$terms = array( 0 );
-		}
-
-		$arg = array(
-			'taxonomy' => bp_docs_get_associated_item_tax_name(),
-			'field'    => 'slug',
-			'terms'    => $terms,
-		);
-
-		return $arg;
 	}
 
 	/**
@@ -234,46 +212,11 @@ class BP_Docs_Groups_Integration {
 			}
 		}
 
-		if ( ! $group_id ) {
-			return $terms;
-		}
+		if ( $group_id ) {
+			$terms = groups_get_groupmeta( $group_id, 'bp_docs_terms' );
 
-		$query_args = array(
-			'post_type'         => bp_docs_get_post_type_name(),
-			'update_meta_cache' => false,
-			'update_term_cache' => true,
-			'showposts'         => '-1',
-			'posts_per_page'    => '-1',
-			'tax_query'         => array(
-				self::tax_query_arg_for_groups( $group_id ),
-			),
-		);
-
-		$group_doc_query = new WP_Query( $query_args );
-
-		$terms = array();
-		foreach ( $group_doc_query->posts as $p ) {
-			$p_terms = wp_get_post_terms( $p->ID, buddypress()->bp_docs->docs_tag_tax_name );
-			foreach ( $p_terms as $p_term ) {
-				if ( ! isset( $terms[ $p_term->slug ] ) ) {
-					$terms[ $p_term->slug ] = array(
-						'name' => $p_term->name,
-						'posts' => array(),
-					);
-				}
-
-				if ( ! in_array( $p->ID, $terms[ $p_term->slug ]['posts'] ) ) {
-					$terms[ $p_term->slug ]['posts'][] = $p->ID;
-				}
-			}
-		}
-
-		foreach ( $terms as &$t ) {
-			$t['count'] = count( $t['posts'] );
-		}
-
-		if ( empty( $terms ) ) {
-			$terms = array();
+			if ( empty( $terms ) )
+				$terms = array();
 		}
 
 		return apply_filters( 'bp_docs_taxonomy_get_group_terms', $terms );
@@ -282,14 +225,24 @@ class BP_Docs_Groups_Integration {
 	/**
 	 * Saves the list of terms used by a group's docs
 	 *
-	 * No longer used.
-	 *
 	 * @package BuddyPress Docs
 	 * @since 1.0-beta
 	 *
 	 * @param array $terms The terms to be saved to groupmeta
 	 */
-	function save_group_terms( $terms ) {}
+	function save_group_terms( $terms ) {
+		$doc = get_post();
+
+		if ( ! isset( $doc->post_type ) || $doc->post_type !== bp_docs_get_post_type_name() ) {
+			return $terms;
+		}
+
+		$group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
+
+		if ( $group_id ) {
+			groups_update_groupmeta( $group_id, 'bp_docs_terms', $terms );
+		}
+	}
 
 	/**
 	 * Determine whether a user can edit the group doc in question
@@ -354,7 +307,7 @@ class BP_Docs_Groups_Integration {
 
 		switch ( $action ) {
 			case 'associate_with_group' :
-				$group_settings = bp_docs_get_group_settings( $group_id );
+				$group_settings = groups_get_groupmeta( $group_id, 'bp-docs' );
 
 				// Provide a default value for legacy backpat
 				if ( empty( $group_settings['can-create'] ) ) {
@@ -470,7 +423,9 @@ class BP_Docs_Groups_Integration {
 			}
 		}
 
-		if ( $group_id && current_user_can( 'bp_docs_associate_with_group', $group_id ) ) {
+		$can_associate = self::user_can_associate_doc_with_group( bp_loggedin_user_id(), $group_id );
+
+		if ( $can_associate ) {
 			$group = groups_get_group( 'group_id=' . intval( $group_id ) );
 
 			$options[40] = array(
@@ -480,7 +435,7 @@ class BP_Docs_Groups_Integration {
 
 			// "Admins and mods" setting only available to admins and mods
 			// Otherwise users end up locking themselves out
-			$group_settings = bp_docs_get_group_settings( $group_id );
+			$group_settings = groups_get_groupmeta( $group_id, 'bp-docs' );
 			$is_admin = groups_is_user_admin( bp_loggedin_user_id(), $group_id );
 			$is_mod = groups_is_user_mod( bp_loggedin_user_id(), $group_id );
 
@@ -514,8 +469,6 @@ class BP_Docs_Groups_Integration {
 	 * Can a given user associate a doc with a given group?
 	 */
 	public static function user_can_associate_doc_with_group( $user_id, $group_id ) {
-		_deprecated_function( __FUNCTION__, '1.8', "Use current_user_can( 'bp_docs_associate_with_group' ) instead" );
-
 		$group = groups_get_group( 'group_id=' . intval( $group_id ) );
 
 		// No one can associate anything with a non-existent group
@@ -535,13 +488,13 @@ class BP_Docs_Groups_Integration {
 
 		// Check against group settings. Default to 'member'
 		// @todo Abstract default settings out better
-		$group_settings = bp_docs_get_group_settings( $group_id );
+		$group_settings = groups_get_groupmeta( $group_id, 'bp-docs' );
 		$can_create = isset( $group_settings['can-create'] ) ? $group_settings['can-create'] : 'member';
 
 		if ( 'admin' == $can_create ) {
-			return (bool) groups_is_user_admin( $user_id, $group_id );
+			return groups_is_user_admin( $user_id, $group_id );
 		} else if ( 'mod' == $can_create ) {
-			return groups_is_user_admin( $user_id, $group_id ) || groups_is_user_mod( $user_id, $group_id );
+			return groups_is_user_mod( $user_id, $group_id );
 		}
 
 		return true;
@@ -565,16 +518,9 @@ class BP_Docs_Groups_Integration {
 		$group_id = bp_docs_get_associated_group_id( $doc_id );
 
 		if ( $group_id ) {
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
-
-			// Don't associate with the group if the group is
-			// hidden
-			if ( 'hidden' === $group->status ) {
-				return $action;
-			}
-
-			$group_url  = bp_get_group_permalink( $group );
-			$group_link = '<a href="' . $group_url . '">' . $group->name . '</a>';
+			$group 		= groups_get_group( array( 'group_id' => $group_id ) );
+			$group_url	= bp_get_group_permalink( $group );
+			$group_link	= '<a href="' . $group_url . '">' . $group->name . '</a>';
 
 			if ( $is_new_doc ) {
 				$action = sprintf( __( '%1$s created the doc %2$s in the group %3$s', 'bp-docs' ), $user_link, $doc_link, $group_link );
@@ -625,15 +571,9 @@ class BP_Docs_Groups_Integration {
 	 */
 	function comment_activity_action( $action, $user_link, $comment_link, $component, $item ) {
 		if ( 'groups' == $component ) {
-			$group = groups_get_group( array( 'group_id' => $item ) );
-
-			// Don't associate with the group if it's hidden
-			if ( 'hidden' === $group->status ) {
-				return $action;
-			}
-
-			$group_url  = bp_get_group_permalink( $group );
-			$group_link = '<a href="' . $group_url . '">' . $group->name . '</a>';
+			$group		= groups_get_group( array( 'group_id' => $item ) );
+			$group_url	= bp_get_group_permalink( $group );
+			$group_link	= '<a href="' . $group_url . '">' . $group->name . '</a>';
 
 			$action 	= sprintf( __( '%1$s commented on the doc %2$s in the group %3$s', 'bp-docs' ), $user_link, $comment_link, $group_link );
 		}
@@ -780,25 +720,9 @@ class BP_Docs_Groups_Integration {
 	 * @package BuddyPress Docs
 	 * @since 1.1.8
 	 */
-	function update_group_last_active( $doc_id ) {
-		$group = intval( bp_docs_get_associated_group_id( $doc_id ) );
-
-		if ( $group ) {
-			groups_update_groupmeta( $group, 'last_activity', bp_core_current_time() );
-		}
-	}
-
-	/**
-	 * Update group last activy date when a comment is posted to a group Doc.
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param int $comment_id
-	 * @param object $comment
-	 */
-	public function update_group_last_active_comment( $comment_id, $comment ) {
-		if ( 1 == $comment->comment_approved ) {
-			$this->update_group_last_active( $comment->comment_post_ID );
+	function update_group_last_active() {
+		if ( bp_is_group() ) {
+			groups_update_groupmeta( bp_get_current_group_id(), 'last_activity', bp_core_current_time() );
 		}
 	}
 
@@ -894,10 +818,8 @@ class BP_Docs_Groups_Integration {
 	}
 
 	function get_create_link( $link ) {
-
-		$slug = bp_get_current_group_slug();
-		if ( $slug && current_user_can( 'bp_docs_associate_with_group', bp_get_current_group_id() ) ) {
-			$link = add_query_arg( 'group', $slug, $link );
+		if ( bp_is_group() ) {
+			$link = add_query_arg( 'group', bp_get_current_group_slug(), $link );
 		}
 
 		return $link;
@@ -919,8 +841,6 @@ class BP_Docs_Groups_Integration {
  * @package BuddyPress Docs
  * @since 1.0-beta
  */
-if ( class_exists( 'BP_Group_Extension' ) ) :
-
 class BP_Docs_Group_Extension extends BP_Group_Extension {
 
 	var $group_enable;
@@ -952,7 +872,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 			$this->maybe_group_id	= false;
 
 		// Load the bp-docs setting for the group, for easy access
-		$this->settings = bp_docs_get_group_settings( $this->maybe_group_id );
+		$this->settings			= groups_get_groupmeta( $this->maybe_group_id, 'bp-docs' );
 		$this->group_enable		= !empty( $this->settings['group-enable'] ) ? true : false;
 
 		$this->name 			= !empty( $bp_docs_tab_name ) ? $bp_docs_tab_name : __( 'Docs', 'bp-docs' );
@@ -1006,7 +926,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 		$settings = apply_filters( 'bp_docs_default_group_settings', array(
 			'group-enable'	=> 1,
 			'can-create' 	=> 'member'
-		), $group_id );
+		) );
 
 		groups_update_groupmeta( $group_id, 'bp-docs', $settings );
 	}
@@ -1102,16 +1022,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 
 		$settings = !empty( $_POST['bp-docs'] ) ? $_POST['bp-docs'] : array();
 
-		$old_settings = bp_docs_get_group_settings( $group_id );
-
-		// Validate settings to ensure that all values are provided
-		// This is particularly meant for can-create, which is a
-		// checkbox and thus may not show up in the POST array
-		foreach ( $old_settings as $k => $v ) {
-			if ( ! isset( $settings[ $k ] ) ) {
-				$settings[ $k ] = 0;
-			}
-		}
+		$old_settings = groups_get_groupmeta( $group_id, 'bp-docs' );
 
 		if ( $old_settings == $settings ) {
 			// No need to resave settings if they're the same
@@ -1138,7 +1049,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 				'can-create' 	=> 'member'
 			) );
 		} else {
-			$settings = bp_docs_get_group_settings( $this->maybe_group_id );
+			$settings = groups_get_groupmeta( $this->maybe_group_id, 'bp-docs' );
 		}
 
 		$group_enable = empty( $settings['group-enable'] ) ? false : true;
@@ -1322,8 +1233,6 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 	function widget_display() { }
 }
 
-endif; // if ( class_exists( 'BP_Group_Extension' )
-
 
 /**************************
  * TEMPLATE TAGS
@@ -1353,7 +1262,7 @@ function bp_docs_group_tabs( $group = false ) {
 ?>
 	<li<?php if ( $bp->bp_docs->current_view == 'list' ) : ?> class="current"<?php endif; ?>><a href="<?php echo $bp->root_domain . '/' . $groups_slug ?>/<?php echo $group->slug ?>/<?php echo $bp->bp_docs->slug ?>/"><?php _e( 'View Docs', 'bp-docs' ) ?></a></li>
 
-	<?php if ( current_user_can( 'bp_docs_create' ) ) : ?>
+	<?php if ( bp_docs_current_user_can( 'create' ) ) : ?>
 		<li<?php if ( 'create' == $bp->bp_docs->current_view ) : ?> class="current"<?php endif; ?>><a href="<?php echo $bp->root_domain . '/' . $groups_slug ?>/<?php echo $group->slug ?>/<?php echo $bp->bp_docs->slug ?>/create"><?php _e( 'New Doc', 'bp-docs' ) ?></a></li>
 	<?php endif ?>
 
@@ -1420,7 +1329,7 @@ function bp_docs_is_docs_enabled_for_group( $group_id = false ) {
 		$group_id = isset( $bp->groups->current_group->id ) ? $bp->groups->current_group->id : false;
 
 	if ( $group_id ) {
-		$group_settings = bp_docs_get_group_settings( $group_id );
+		$group_settings = groups_get_groupmeta( $group_id, 'bp-docs' );
 
 		if ( isset( $group_settings['group-enable'] ) )
 			$docs_is_enabled = true;
@@ -1478,10 +1387,10 @@ function bp_docs_get_associated_group_id( $doc_id, $doc = false, $single_array =
 }
 
 function bp_docs_set_associated_group_id( $doc_id, $group_id = 0 ) {
-	if ( ! empty( $group_id ) ) {
-		$term = bp_docs_get_group_term( $group_id );
-	} else {
+	if ( 0 == intval( $group_id ) ) {
 		$term = array();
+	} else {
+		$term = bp_docs_get_group_term( $group_id );
 	}
 
 	wp_set_post_terms( $doc_id, $term, bp_docs_get_associated_item_tax_name(), false );
@@ -1515,149 +1424,3 @@ function bp_docs_get_group_tab_name() {
 	}
 	return apply_filters( 'bp_docs_get_group_tab_name', $name );
 }
-
-/**
- * Get group's Docs settings.
- *
- * We use this wrapper function because of changes in BP 2.0.0 that exposed
- * some crappy 'bp-docs' to 'bpdocs' conversion.
- *
- * @since 1.6.2
- * @return array
- */
-function bp_docs_get_group_settings( $group_id ) {
-	$settings = groups_get_groupmeta( $group_id, 'bp-docs' );
-
-	if ( '' === $settings ) {
-		$settings = groups_get_groupmeta( $group_id, 'bpdocs' );
-	}
-
-	if ( '' === $settings ) {
-		$settings = array();
-	}
-
-	$parsed_settings = wp_parse_args( $settings, array(
-		'group-enable'	=> 1,
-		'can-create' 	=> 'member',
-	) );
-
-	return $parsed_settings;
-}
-
-/**
- * Group-specific meta cap mapping.
- *
- * Some bp_docs_ capabilities require referencing group-specific info. We do
- * this here.
- *
- * @since 1.8
- */
-function bp_docs_groups_map_meta_caps( $caps, $cap, $user_id, $args ) {
-	switch ( $cap ) {
-		case 'bp_docs_read' :
-		case 'bp_docs_edit' :
-		case 'bp_docs_view_history' :
-		case 'bp_docs_manage' :
-		case 'bp_docs_read_comments' :
-		case 'bp_docs_post_comments' :
-			$doc = bp_docs_get_doc_for_caps( $args );
-
-			if ( empty( $doc ) ) {
-				break;
-			}
-
-			$group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
-
-			// If not associated with a group, nothing to do here
-			if ( ! $group_id ) {
-				break;
-			}
-
-			if ( user_can( $user_id, 'bp_moderate' ) ) {
-				return array( 'exist' );
-			}
-
-			$doc_settings = bp_docs_get_doc_settings( $doc->ID );
-
-			// Caps are stored without the 'bp_docs_' prefix,
-			// mostly for legacy reasons
-			$cap_name = substr( $cap, 8 );
-
-			switch ( $doc_settings[ $cap_name ] ) {
-				case 'group-members' :
-					$caps = array();
-
-					if ( groups_is_user_member( $user_id, $group_id ) ) {
-						$caps[] = 'exist';
-					} else {
-						$caps[] = 'do_not_allow';
-					}
-
-					break;
-
-				case 'admins-mods' :
-					$caps = array();
-
-					if ( groups_is_user_admin( $user_id, $group_id ) || groups_is_user_mod( $user_id, $group_id ) ) {
-						$caps[] = 'exist';
-					} else {
-						$caps[] = 'do_not_allow';
-					}
-					break;
-			}
-
-			break;
-
-		case 'bp_docs_associate_with_group' :
-			if ( isset( $args[0] ) ) {
-				$group_id = intval( $args[0] );
-			} else if ( bp_is_group() ) {
-				$group_id = bp_get_current_group_id();
-			}
-
-			if ( empty( $group_id ) ) {
-				break;
-			}
-
-			if ( user_can( $user_id, 'bp_moderate' ) ) {
-				return array( 'exist' );
-			}
-
-			$caps = array();
-
-			$group_settings = bp_docs_get_group_settings( $group_id );
-
-			switch ( $group_settings['can-create'] ) {
-				case 'admin' :
-					if ( groups_is_user_admin( $user_id, $group_id ) ) {
-						$caps[] = 'exist';
-					} else {
-						$caps[] = 'do_not_allow';
-					}
-
-					break;
-				case 'mod' :
-					if ( groups_is_user_mod( $user_id, $group_id ) || groups_is_user_admin( $user_id, $group_id ) ) {
-						$caps[] = 'exist';
-					} else {
-						$caps[] = 'do_not_allow';
-					}
-
-					break;
-				case 'member' :
-				default :
-					if ( groups_is_user_member( $user_id, $group_id ) ) {
-						$caps[] = 'exist';
-					} else {
-						$caps[] = 'do_not_allow';
-					}
-
-					break;
-			}
-
-			break;
-	}
-
-	return $caps;
-}
-add_filter( 'bp_docs_map_meta_caps', 'bp_docs_groups_map_meta_caps', 10, 4 );

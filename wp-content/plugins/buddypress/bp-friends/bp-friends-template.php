@@ -8,7 +8,7 @@
  */
 
 // Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
  * Output the friends component slug.
@@ -26,15 +26,8 @@ function bp_friends_slug() {
 	 * @since BuddyPress (1.5.0)
 	 */
 	function bp_get_friends_slug() {
-
-		/**
-		 * Filters the friends component slug.
-		 *
-		 * @since BuddyPress (1.5.0)
-		 *
-		 * @param string $value Friends component slug.
-		 */
-		return apply_filters( 'bp_get_friends_slug', buddypress()->friends->slug );
+		global $bp;
+		return apply_filters( 'bp_get_friends_slug', $bp->friends->slug );
 	}
 
 /**
@@ -53,15 +46,8 @@ function bp_friends_root_slug() {
 	 * @since BuddyPress (1.5.0)
 	 */
 	function bp_get_friends_root_slug() {
-
-		/**
-		 * Filters the friends component root slug.
-		 *
-		 * @since BuddyPress (1.5.0)
-		 *
-		 * @param string $value Friends component root slug.
-		 */
-		return apply_filters( 'bp_get_friends_root_slug', buddypress()->friends->root_slug );
+		global $bp;
+		return apply_filters( 'bp_get_friends_root_slug', $bp->friends->root_slug );
 	}
 
 /**
@@ -203,12 +189,17 @@ function bp_friend_search_form() {
 }
 
 /**
- * Output the "Add Friend" button in the member loop.
- *
- * @since BuddyPress (1.2.6)
+ * Output the Add Friend button in member directories.
  */
 function bp_member_add_friend_button() {
-	bp_add_friend_button( bp_get_member_user_id() );
+	global $members_template;
+
+	if ( !isset( $members_template->member->is_friend ) || null === $members_template->member->is_friend )
+		$friend_status = 'not_friends';
+	else
+		$friend_status = ( 0 == $members_template->member->is_friend ) ? 'pending' : 'is_friend';
+
+	echo bp_get_add_friend_button( $members_template->member->id, $friend_status );
 }
 add_action( 'bp_directory_members_actions', 'bp_member_add_friend_button' );
 
@@ -228,22 +219,10 @@ function bp_member_total_friend_count() {
 	function bp_get_member_total_friend_count() {
 		global $members_template;
 
-		if ( 1 == (int) $members_template->member->total_friend_count ) {
-
-			/**
-			 * Filters text used to denote total friend count.
-			 *
-			 * @since BuddyPress (1.2.0)
-			 *
-			 * @param string $value String of the form "x friends".
-			 * @param int    $value Total friend count for current member in the loop.
-			 */
+		if ( 1 == (int) $members_template->member->total_friend_count )
 			return apply_filters( 'bp_get_member_total_friend_count', sprintf( __( '%d friend', 'buddypress' ), (int) $members_template->member->total_friend_count ) );
-		} else {
-
-			/** This filter is documented in bp-friends/bp-friends-template.php */
+		else
 			return apply_filters( 'bp_get_member_total_friend_count', sprintf( __( '%d friends', 'buddypress' ), (int) $members_template->member->total_friend_count ) );
-		}
 	}
 
 /**
@@ -270,16 +249,9 @@ function bp_potential_friend_id( $user_id = 0 ) {
 
 		if ( empty( $user_id ) && isset( $friends_template->friendship->friend ) )
 			$user_id = $friends_template->friendship->friend->id;
-		elseif ( empty( $user_id ) && !isset( $friends_template->friendship->friend ) )
+		else if ( empty( $user_id ) && !isset( $friends_template->friendship->friend ) )
 			$user_id = bp_displayed_user_id();
 
-		/**
-		 * Filters the ID of current user in the friend request loop.
-		 *
-		 * @since BuddyPress (1.2.10)
-		 *
-		 * @param int $user_id ID of current user in the friend request loop.
-		 */
 		return apply_filters( 'bp_get_potential_friend_id', (int) $user_id );
 	}
 
@@ -303,13 +275,6 @@ function bp_is_friend( $user_id = 0 ) {
 	if ( bp_loggedin_user_id() == $user_id )
 		return false;
 
-	/**
-	 * Filters the status of friendship between logged in user and given user.
-	 *
-	 * @since BuddyPress (1.2.10)
-	 *
-	 * @param string $value String status of friendship. Possible values are 'is_friend', 'not_friends', 'pending'.
-	 */
 	return apply_filters( 'bp_is_friend', friends_check_friendship_status( bp_loggedin_user_id(), $user_id ), $user_id );
 }
 
@@ -412,13 +377,7 @@ function bp_add_friend_button( $potential_friend_id = 0, $friend_status = false 
 				break;
 		}
 
-		/**
-		 * Filters the HTML for the add friend button.
-		 *
-		 * @since BuddyPress (1.1.0)
-		 *
-		 * @param string $button HTML markup for add friend button.
-		 */
+		// Filter and return the HTML button
 		return bp_get_button( apply_filters( 'bp_get_add_friend_button', $button ) );
 	}
 
@@ -470,13 +429,6 @@ function bp_get_friendship_requests( $user_id = 0 ) {
 		$requests = 0;
 	}
 
-	/**
-	 * Filters the total pending friendship requests for a user.
-	 *
-	 * @since BuddyPress (1.2.0)
-	 *
-	 * @param array|int An array of user IDs if found, or a 0 if none are found.
-	 */
 	return apply_filters( 'bp_get_friendship_requests', $requests );
 }
 
@@ -487,7 +439,7 @@ function bp_friend_friendship_id() {
 	echo bp_get_friend_friendship_id();
 }
 	/**
-	 * Return the ID of the friendship between the logged-in user and the current user in the loop.
+	 * Return the ID of the frinedship between the logged-in user and the current user in the loop.
 	 *
 	 * @return int ID of the friendship.
 	 */
@@ -499,13 +451,6 @@ function bp_friend_friendship_id() {
 			wp_cache_set( 'friendship_id_' . $members_template->member->id . '_' . bp_loggedin_user_id(), $friendship_id, 'bp' );
 		}
 
-		/**
-		 * Filters the ID of the friendship between the logged in user and the current user in the loop.
-		 *
-		 * @since BuddyPress (1.2.0)
-		 *
-		 * @param int $friendship_id ID of the friendship.
-		 */
 		return apply_filters( 'bp_get_friend_friendship_id', $friendship_id );
 	}
 
@@ -528,13 +473,6 @@ function bp_friend_accept_request_link() {
 			wp_cache_set( 'friendship_id_' . $members_template->member->id . '_' . bp_loggedin_user_id(), $friendship_id, 'bp' );
 		}
 
-		/**
-		 * Filters the URL for accepting the current friendship request in the loop.
-		 *
-		 * @since BuddyPress (1.0.0)
-		 *
-		 * @param string $value Accept-friendship URL.
-		 */
 		return apply_filters( 'bp_get_friend_accept_request_link', wp_nonce_url( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/accept/' . $friendship_id, 'friends_accept_friendship' ) );
 	}
 
@@ -557,13 +495,6 @@ function bp_friend_reject_request_link() {
 			wp_cache_set( 'friendship_id_' . $members_template->member->id . '_' . bp_loggedin_user_id(), $friendship_id, 'bp' );
 		}
 
-		/**
-		 * Filters the URL for rejecting the current friendship request in the loop.
-		 *
-		 * @since BuddyPress (1.0.0)
-		 *
-		 * @param string $value Reject-friendship URL.
-		 */
 		return apply_filters( 'bp_get_friend_reject_request_link', wp_nonce_url( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/reject/' . $friendship_id, 'friends_reject_friendship' ) );
 	}
 
@@ -582,14 +513,6 @@ function bp_total_friend_count( $user_id = 0 ) {
 	 * @return int Total friend count.
 	 */
 	function bp_get_total_friend_count( $user_id = 0 ) {
-
-		/**
-		 * Filters the total friend count for a given user.
-		 *
-		 * @since BuddyPress (1.2.0)
-		 *
-		 * @param int $value Total friend count.
-		 */
 		return apply_filters( 'bp_get_total_friend_count', friends_get_total_friend_count( $user_id ) );
 	}
 	add_filter( 'bp_get_total_friend_count', 'bp_core_number_format' );
@@ -615,73 +538,5 @@ function bp_friend_total_requests_count( $user_id = 0 ) {
 		if ( empty( $user_id ) )
 			$user_id = bp_loggedin_user_id();
 
-		/**
-		 * Filters the total friendship request count for a given user.
-		 *
-		 * @since BuddyPress (1.2.0)
-		 *
-		 * @param int $value Friendship request count.
-		 */
 		return apply_filters( 'bp_friend_get_total_requests_count', count( BP_Friends_Friendship::get_friend_user_ids( $user_id, true ) ) );
 	}
-
-/** Stats **********************************************************************/
-
-/**
- * Display the number of friends in user's profile.
- *
- * @since BuddyPress (2.0.0)
- *
- * @param array $args before|after|user_id
- * @uses bp_friends_get_profile_stats() to get the stats
- */
-function bp_friends_profile_stats( $args = '' ) {
-	echo bp_friends_get_profile_stats( $args );
-}
-add_action( 'bp_members_admin_user_stats', 'bp_friends_profile_stats', 7, 1 );
-
-/**
- * Return the number of friends in user's profile.
- *
- * @since BuddyPress (2.0.0)
- *
- * @param array $args before|after|user_id
- * @return string HTML for stats output.
- */
-function bp_friends_get_profile_stats( $args = '' ) {
-
-	// Parse the args
-	$r = bp_parse_args( $args, array(
-		'before'  => '<li class="bp-friends-profile-stats">',
-		'after'   => '</li>',
-		'user_id' => bp_displayed_user_id(),
-		'friends' => 0,
-		'output'  => ''
-	), 'friends_get_profile_stats' );
-
-	// Allow completely overloaded output
-	if ( empty( $r['output'] ) ) {
-
-		// Only proceed if a user ID was passed
-		if ( ! empty( $r['user_id'] ) ) {
-
-			// Get the user's friends
-			if ( empty( $r['friends'] ) ) {
-				$r['friends'] = absint( friends_get_total_friend_count( $r['user_id'] ) );
-			}
-
-			// If friends exist, show some formatted output
-			$r['output'] = $r['before'] . sprintf( _n( '%s friend', '%s friends', $r['friends'], 'buddypress' ), '<strong>' . $r['friends'] . '</strong>' ) . $r['after'];
-		}
-	}
-
-	/**
-	 * Filters the number of friends in user's profile.
-	 *
-	 * @since BuddyPress (2.0.0)
-	 *
-	 * @param string $value Formatted string displaying total friends count.
-	 * @param array  $r Array of arguments for string formatting and output.
-	 */
-	return apply_filters( 'bp_friends_get_profile_stats', $r['output'], $r );
-}

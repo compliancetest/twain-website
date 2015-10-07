@@ -1,35 +1,31 @@
 <?php
 
 /**
- * BuddyPress Members Filters.
+ * BuddyPress Members Filters
  *
- * Filters specific to the Members component.
+ * Member specific filters
  *
  * @package BuddyPress
  * @subpackage MembersFilters
  */
 
 // Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * Escape commonly used fullname output functions.
+ * Escape commonly used fullname output functions
  */
 add_filter( 'bp_displayed_user_fullname',    'esc_html' );
 add_filter( 'bp_get_loggedin_user_fullname', 'esc_html' );
 
-// Filter the user registration URL to point to BuddyPress's registration page.
-add_filter( 'register_url', 'bp_get_signup_page' );
-
 /**
- * Load additional sign-up sanitization filters on bp_loaded.
+ * Load additional sign-up sanitization filters on bp_loaded. These are used
+ * to prevent XSS in the BuddyPress sign-up process. You can unhook these to
+ * allow for customization of your registration fields, however it is highly
+ * recommended that you leave these in place for the safety of your network.
  *
- * These are used to prevent XSS in the BuddyPress sign-up process. You can
- * unhook these to allow for customization of your registration fields;
- * however, it is highly recommended that you leave these in place for the
- * safety of your network.
- *
- * @since BuddyPress (1.5.0)
+ * @since BuddyPress (1.5)
+ * @uses add_filter()
  */
 function bp_members_signup_sanitization() {
 
@@ -57,53 +53,13 @@ function bp_members_signup_sanitization() {
 add_action( 'bp_loaded', 'bp_members_signup_sanitization' );
 
 /**
- * Make sure the username is not the blog slug in case of root profile & subdirectory blog.
+ * Filter the user profile URL to point to BuddyPress profile edit
  *
- * If BP_ENABLE_ROOT_PROFILES is defined & multisite config is set to subdirectories,
- * then there is a chance site.url/username == site.url/blogslug. If so, user's profile
- * is not reachable, instead the blog is displayed. This filter makes sure the signup username
- * is not the same than the blog slug for this particular config.
+ * @since BuddyPress 1.6
  *
- * @since BuddyPress (2.1.0)
- *
- * @param array $illegal_names
- *
- * @return array $illegal_names
- */
-function bp_members_signup_with_subdirectory_blog( $illegal_names = array() ) {
-	if ( ! bp_core_enable_root_profiles() ) {
-		return $illegal_names;
-	}
-
-	if ( is_network_admin() && isset( $_POST['blog'] ) ) {
-		$blog = $_POST['blog'];
-		$domain = '';
-
-		if ( preg_match( '|^([a-zA-Z0-9-])$|', $blog['domain'] ) ) {
-			$domain = strtolower( $blog['domain'] );
-		}
-
-		if ( username_exists( $domain ) ) {
-			$illegal_names[] = $domain;
-		}
-
-	} else {
-		$illegal_names[] = buddypress()->signup->username;
-	}
-
-	return $illegal_names;
-}
-add_filter( 'subdirectory_reserved_names', 'bp_members_signup_with_subdirectory_blog', 10, 1 );
-
-/**
- * Filter the user profile URL to point to BuddyPress profile edit.
- *
- * @since BuddyPress (1.6.0)
- *
- * @param string $url     WP profile edit URL.
- * @param int    $user_id ID of the user.
+ * @param string $url
+ * @param int $user_id
  * @param string $scheme
- *
  * @return string
  */
 function bp_members_edit_profile_url( $url, $user_id, $scheme = 'admin' ) {
@@ -117,15 +73,6 @@ function bp_members_edit_profile_url( $url, $user_id, $scheme = 'admin' ) {
 		$profile_link = $url;
 	}
 
-	/**
-	 * Filters the user profile URL to point to BuddyPress profile edit.
-	 *
-	 * @since BuddyPress (1.5.2)
-	 *
-	 * @param string $url WP profile edit URL.
-	 * @param int    $user_id ID of the user.
-	 * @param string $scheme Scheme to use.
-	 */
 	return apply_filters( 'bp_members_edit_profile_url', $profile_link, $url, $user_id, $scheme );
 }
 add_filter( 'edit_profile_url', 'bp_members_edit_profile_url', 10, 3 );

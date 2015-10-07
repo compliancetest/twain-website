@@ -12,7 +12,7 @@
  */
 
 // Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
  * Outputs the markup for the bb-forums-admin panel
@@ -100,10 +100,10 @@ function bp_forums_bbpress_admin() {
 					<li><?php _e( 'And more!', 'buddypress' ); ?></p></li>
 				</ul>
 
-				<p><?php printf( __( 'If you decide to use bbPress, you will need to deactivate the legacy group forum component.  For more info, <a href="%s">read this codex article</a>.', 'buddypress' ), 'https://codex.buddypress.org/legacy/getting-started/using-bbpress-2-2-with-buddypress/' ) ?></p>
+				<p><?php printf( __( 'If you decide to use bbPress, you will need to deactivate the legacy group forum component.  For more info, <a href="%s">read this codex article</a>.', 'buddypress' ), 'http://codex.buddypress.org/user/setting-up-a-new-installation/installing-group-and-sitewide-forums/using-bbpress-2-2-with-buddypress/' ) ?></p>
 
 				<div>
-					<a class="button thickbox button-primary" href="<?php echo esc_url( $button_url ) ?>"><?php echo esc_html( $button_text ) ?></a> &nbsp;
+					<a class="button thickbox button-primary" href="<?php echo esc_attr( $button_url ) ?>"><?php echo esc_html( $button_text ) ?></a> &nbsp;
 				</div>
 			</div>
 
@@ -140,7 +140,7 @@ function bp_forums_bbpress_install_wizard() {
 		case 'existing':
 			if ( isset( $_REQUEST['doinstall'] ) && ( 1 == (int) $_REQUEST['doinstall'] ) ) {
 				if ( !bp_forums_configure_existing_install() ) {
-					_e( 'The bb-config.php file was not found at that location. Please try again.', 'buddypress' );
+					_e( 'The bb-config.php file was not found at that location, please try again.', 'buddypress' );
 				} else {
 					?>
 					<h3><?php _e( 'Forums were set up correctly using your existing bbPress install!', 'buddypress' ) ?></h3>
@@ -152,7 +152,7 @@ function bp_forums_bbpress_install_wizard() {
 						<h3><?php _e( 'Existing bbPress Installation', 'buddypress' ) ?></h3>
 						<p><?php _e( "BuddyPress can make use of your existing bbPress install. Just provide the location of your <code>bb-config.php</code> file, and BuddyPress will do the rest.", 'buddypress' ) ?></p>
 						<p><label><code>bb-config.php</code> file location:</label><br /><input style="width: 50%" type="text" name="bbconfigloc" id="bbconfigloc" value="<?php echo str_replace( 'buddypress', '', $_SERVER['DOCUMENT_ROOT'] ) ?>" /></p>
-						<p><input type="submit" class="button-primary" value="<?php esc_attr_e( 'Complete Installation', 'buddypress' ) ?>" /></p>
+						<p><input type="submit" class="button-primary" value="<?php _e( 'Complete Installation', 'buddypress' ) ?>" /></p>
 						<input type="hidden" name="step" value="existing" />
 						<input type="hidden" name="doinstall" value="1" />
 						<?php wp_nonce_field( 'bp_forums_existing_install_init' ) ?>
@@ -174,7 +174,7 @@ function bp_forums_bbpress_install_wizard() {
 						// Just write the contents to screen
 						_e( '<p>A configuration file could not be created. No problem, but you will need to save the text shown below into a file named <code>bb-config.php</code> in the root directory of your WordPress installation before you can start using the forum functionality.</p>', 'buddypress' ); ?>
 
-						<textarea style="display:block; margin-top: 30px; width: 80%;" rows="50"><?php echo esc_textarea( $result ); ?></textarea>
+						<textarea style="display:block; margin-top: 30px; width: 80%;" rows="50"><?php echo htmlspecialchars( $result ); ?></textarea>
 
 					<?php
 						break;
@@ -184,14 +184,14 @@ function bp_forums_bbpress_install_wizard() {
 				<h3><?php _e( 'New bbPress Installation', 'buddypress' ) ?></h3>
 				<p><?php _e( "You've decided to set up a new installation of bbPress for forum management in BuddyPress. This is very simple and is usually just a one click
 				process. When you're ready, hit the link below.", 'buddypress' ) ?></p>
-				<p><a class="button-primary" href="<?php echo esc_url( wp_nonce_url( $post_url . '&step=new&doinstall=1', 'bp_forums_new_install_init' ) ); ?>"><?php _e( 'Complete Installation', 'buddypress' ) ?></a></p>
+				<p><a class="button-primary" href="<?php echo wp_nonce_url( $post_url . '&step=new&doinstall=1', 'bp_forums_new_install_init' ) ?>"><?php _e( 'Complete Installation', 'buddypress' ) ?></a></p>
 
 				<?php
 			}
 		break;
 
 		default:
-			if ( !file_exists( buddypress()->plugin_dir . '/bp-forums/bbpress/' ) ) { ?>
+			if ( !file_exists( BP_PLUGIN_DIR . '/bp-forums/bbpress/' ) ) { ?>
 
 				<div id="message" class="error">
 					<p><?php printf( __( 'bbPress files were not found. To install the forums component you must download a copy of bbPress and make sure it is in the folder: "%s"', 'buddypress' ), 'wp-content/plugins/buddypress/bp-forums/bbpress/' ) ?></p>
@@ -222,8 +222,8 @@ function bp_forums_bbpress_install_wizard() {
 					</ul>
 
 					<div>
-						<a class="button button-primary" href="<?php echo esc_url( $post_url ) . '&step=new' ?>"><?php _e( 'Install Group Forums', 'buddypress' ) ?></a> &nbsp;
-						<a class="button" href="<?php echo esc_url( $post_url ) . '&step=existing' ?>"><?php _e( 'Use Existing Installation', 'buddypress' ) ?></a>
+						<a class="button button-primary" href="<?php echo $post_url . '&step=new' ?>"><?php _e( 'Install Group Forums', 'buddypress' ) ?></a> &nbsp;
+						<a class="button" href="<?php echo $post_url . '&step=existing' ?>"><?php _e( 'Use Existing Installation', 'buddypress' ) ?></a>
 					</div>
 				</div>
 
@@ -243,9 +243,9 @@ function bp_forums_bbpress_install_wizard() {
 						<li><?php _e( 'And more!', 'buddypress' ); ?></p></li>
 					</ul>
 
-					<p><?php printf( __( 'If you decide to use bbPress, you will need to deactivate the legacy group forum component.  For more info, <a href="%s">read this codex article</a>.', 'buddypress' ), 'https://codex.buddypress.org/legacy/getting-started/using-bbpress-2-2-with-buddypress/' ) ?></p>
+					<p><?php printf( __( 'If you decide to use bbPress, you will need to deactivate the legacy group forum component.  For more info, <a href="%s">read this codex article</a>.', 'buddypress' ), 'http://codex.buddypress.org/user/setting-up-a-new-installation/installing-group-and-sitewide-forums/using-bbpress-2-2-with-buddypress/' ) ?></p>
 					<div>
-						<a class="button button-primary <?php if ( ! $bbpress_plugin_is_active ) { echo esc_attr( 'thickbox' ); }?>" href="<?php echo esc_url( $button_url ) ?>"><?php echo esc_html( $button_text ) ?></a> &nbsp;
+						<a class="button button-primary <?php if ( ! $bbpress_plugin_is_active ) { echo esc_attr( 'thickbox' ); }?>" href="<?php echo esc_attr( $button_url ) ?>"><?php echo esc_html( $button_text ) ?></a> &nbsp;
 					</div>
 				</div>
 

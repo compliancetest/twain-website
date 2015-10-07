@@ -7,7 +7,7 @@
  */
 
 // Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 /* Apply WordPress defined filters */
 add_filter( 'bp_forums_bbconfig_location', 'wp_filter_kses', 1 );
@@ -83,13 +83,6 @@ function bp_forums_filter_kses( $content ) {
 	$forums_allowedtags['code'] = array();
 	$forums_allowedtags['blockquote'] = array();
 
-	/**
-	 * Filters the allowed HTML tags for forum posts.
-	 *
-	 * @since BuddyPress (1.2.0)
-	 *
-	 * @param array $forums_allowedtags Array of allowed HTML tags.
-	 */
 	$forums_allowedtags = apply_filters( 'bp_forums_allowed_tags', $forums_allowedtags );
 	return wp_kses( $content, $forums_allowedtags );
 }
@@ -104,13 +97,8 @@ function bp_forums_filter_kses( $content ) {
  * @return string Link of the form http://example.com/forums/tag/tagname/.
  */
 function bp_forums_filter_tag_link( $link, $tag, $page, $context ) {
-	/**
-	 * Filters the link for a forum topic tags directory.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 *
-	 * @param string $value Link for the forum topic tag directory.
-	 */
+	global $bp;
+
 	return apply_filters( 'bp_forums_filter_tag_link', bp_get_root_domain() . '/' . bp_get_forums_root_slug() . '/tag/' . $tag . '/' );
 }
 add_filter( 'bb_get_tag_link', 'bp_forums_filter_tag_link', 10, 4);
@@ -139,6 +127,8 @@ function bp_forums_make_nofollow_filter( $text ) {
 /**
  * Append forum topic to page title.
  *
+ * @global object $bp Global BuddyPress settings object.
+ *
  * @see bp_modify_page_title()
  *
  * @param string $title New page title; see {@link bp_modify_page_title()}.
@@ -148,6 +138,7 @@ function bp_forums_make_nofollow_filter( $text ) {
  * @return string Page title with forum topic title appended.
  */
 function bp_forums_add_forum_topic_to_page_title( $title, $original_title, $sep, $seplocation  ) {
+	global $bp;
 
 	if ( bp_is_current_action( 'forum' ) && bp_is_action_variable( 'topic', 0 ) )
 		if ( bp_has_forum_topic_posts() )
@@ -162,19 +153,24 @@ add_filter( 'bp_modify_page_title', 'bp_forums_add_forum_topic_to_page_title', 9
  *
  * Prevents embedded anchor tags.
  *
+ * @global object $bp Global BuddyPress settings object.
+ *
  * @param string $content Edited post content.
  * @return string $content Sanitized post content.
  */
 function bp_forums_strip_mentions_on_post_edit( $content ) {
-	$content   = htmlspecialchars_decode( $content );
-	$directory = bp_get_members_directory_permalink();
-	$pattern   = "|<a href=&#039;{$directory}[A-Za-z0-9-_\.]+/&#039; rel=&#039;nofollow&#039;>(@[A-Za-z0-9-_\.@]+)</a>|";
-	$content   = preg_replace( $pattern, "$1", $content );
+	global $bp;
+
+	$content = htmlspecialchars_decode( $content );
+
+	$pattern = "|<a href=&#039;" . bp_get_root_domain() . "/" . bp_get_members_root_slug() . "/[A-Za-z0-9-_\.]+/&#039; rel=&#039;nofollow&#039;>(@[A-Za-z0-9-_\.@]+)</a>|";
+
+	$content = preg_replace( $pattern, "$1", $content );
 
 	return $content;
 }
 add_filter( 'bp_get_the_topic_post_edit_text', 'bp_forums_strip_mentions_on_post_edit' );
-add_filter( 'bp_get_the_topic_text',           'bp_forums_strip_mentions_on_post_edit' );
+add_filter( 'bp_get_the_topic_text', 'bp_forums_strip_mentions_on_post_edit' );
 
 /** "Replied to" SQL filters *************************************************/
 

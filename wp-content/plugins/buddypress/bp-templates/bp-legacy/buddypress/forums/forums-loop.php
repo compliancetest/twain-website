@@ -11,14 +11,7 @@
 
 ?>
 
-<?php
-
-/**
- * Fires at the start of the forums loop.
- *
- * @since BuddyPress (1.2.6)
- */
-do_action( 'bp_before_forums_loop' ); ?>
+<?php do_action( 'bp_before_forums_loop' ); ?>
 
 <?php if ( bp_has_forum_topics( bp_ajax_querystring( 'forums' ) ) ) : ?>
 
@@ -38,14 +31,7 @@ do_action( 'bp_before_forums_loop' ); ?>
 
 	</div>
 
-	<?php
-
-	/**
-	 * Fires before the display of the forums list.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_before_directory_forums_list' ); ?>
+	<?php do_action( 'bp_before_directory_forums_list' ); ?>
 
 	<table class="forum">
 		<thead>
@@ -54,14 +40,7 @@ do_action( 'bp_before_forums_loop' ); ?>
 				<th id="th-postcount"><?php _e( 'Posts', 'buddypress' ); ?></th>
 				<th id="th-freshness"><?php _e( 'Freshness', 'buddypress' ); ?></th>
 
-				<?php
-
-				/**
-				 * Fires at the end of <tr> row holding the <th> tags.
-				 *
-				 * @since BuddyPress (1.2.4)
-				 */
-				do_action( 'bp_directory_forums_extra_cell_head' ); ?>
+				<?php do_action( 'bp_directory_forums_extra_cell_head' ); ?>
 
 			</tr>
 		</thead>
@@ -72,7 +51,7 @@ do_action( 'bp_before_forums_loop' ); ?>
 
 			<tr class="<?php bp_the_topic_css_class(); ?>">
 				<td class="td-title">
-					<a class="topic-title" href="<?php bp_the_topic_permalink(); ?>" title="<?php esc_attr_e( 'Permanent link to this post', 'buddypress' ); ?>">
+					<a class="topic-title" href="<?php bp_the_topic_permalink(); ?>" title="<?php _e( 'Permanent link to this post', 'buddypress' ); ?>">
 
 						<?php bp_the_topic_title(); ?>
 
@@ -112,39 +91,18 @@ do_action( 'bp_before_forums_loop' ); ?>
 					</p>
 				</td>
 
-				<?php
-
-				/**
-				 * Fires at the end of <tr> row holding the <td> tags.
-				 *
-				 * @since BuddyPress (1.1.0)
-				 */
-				do_action( 'bp_directory_forums_extra_cell' ); ?>
+				<?php do_action( 'bp_directory_forums_extra_cell' ); ?>
 
 			</tr>
 
-			<?php
-
-				/**
-				 * Fires after the <tr> for a forum listing display.
-				 *
-				 * @since BuddyPress (1.1.0)
-				 */
-				do_action( 'bp_directory_forums_extra_row' ); ?>
+			<?php do_action( 'bp_directory_forums_extra_row' ); ?>
 
 			<?php endwhile; ?>
 
 		</tbody>
 	</table>
 
-	<?php
-
-	/**
-	 * Fires after the display of the forums list.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_after_directory_forums_list' ); ?>
+	<?php do_action( 'bp_after_directory_forums_list' ); ?>
 
 	<div id="pag-bottom" class="pagination">
 
@@ -166,11 +124,4 @@ do_action( 'bp_before_forums_loop' ); ?>
 
 <?php endif; ?>
 
-<?php
-
-/**
- * Fires at the end of the forums loop.
- *
- * @since BuddyPress (1.2.6)
- */
-do_action( 'bp_after_forums_loop' ); ?>
+<?php do_action( 'bp_after_forums_loop' ); ?>

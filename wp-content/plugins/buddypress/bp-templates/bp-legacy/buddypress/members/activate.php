@@ -1,29 +1,12 @@
 <div id="buddypress">
 
-	<?php
-
-	/**
-	 * Fires before the display of the member activation page.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_before_activation_page' ); ?>
+	<?php do_action( 'bp_before_activation_page' ); ?>
 
 	<div class="page" id="activate-page">
 
-		<?php
+		<?php do_action( 'template_notices' ); ?>
 
-		/** This action is documented in bp-templates/bp-legacy/buddypress/activity/index.php */
-		do_action( 'template_notices' ); ?>
-
-		<?php
-
-		/**
-		 * Fires before the display of the member activation page content.
-		 *
-		 * @since BuddyPress (1.1.0)
-		 */
-		do_action( 'bp_before_activate_content' ); ?>
+		<?php do_action( 'bp_before_activate_content' ); ?>
 
 		<?php if ( bp_account_was_activated() ) : ?>
 
@@ -43,31 +26,17 @@
 				<input type="text" name="key" id="key" value="" />
 
 				<p class="submit">
-					<input type="submit" name="submit" value="<?php esc_attr_e( 'Activate', 'buddypress' ); ?>" />
+					<input type="submit" name="submit" value="<?php _e( 'Activate', 'buddypress' ); ?>" />
 				</p>
 
 			</form>
 
 		<?php endif; ?>
 
-		<?php
-
-		/**
-		 * Fires after the display of the member activation page content.
-		 *
-		 * @since BuddyPress (1.1.0)
-		 */
-		do_action( 'bp_after_activate_content' ); ?>
+		<?php do_action( 'bp_after_activate_content' ); ?>
 
 	</div><!-- .page -->
 
-	<?php
-
-	/**
-	 * Fires after the display of the member activation page.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_after_activation_page' ); ?>
+	<?php do_action( 'bp_after_activation_page' ); ?>
 
 </div><!-- #buddypress -->

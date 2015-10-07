@@ -11,18 +11,7 @@
 
 ?>
 
-<?php
-
-/**
- * Fires before the display of the members loop.
- *
- * @since BuddyPress (1.2.0)
- */
-do_action( 'bp_before_members_loop' ); ?>
-
-<?php if ( bp_get_current_member_type() ) : ?>
-	<p class="current-member-type"><?php bp_current_member_type_message() ?></p>
-<?php endif; ?>
+<?php do_action( 'bp_before_members_loop' ); ?>
 
 <?php if ( bp_has_members( bp_ajax_querystring( 'members' ) ) ) : ?>
 
@@ -42,20 +31,13 @@ do_action( 'bp_before_members_loop' ); ?>
 
 	</div>
 
-	<?php
+	<?php do_action( 'bp_before_directory_members_list' ); ?>
 
-	/**
-	 * Fires before the display of the members list.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_before_directory_members_list' ); ?>
-
-	<ul id="members-list" class="item-list">
+	<ul id="members-list" class="item-list" role="main">
 
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
-		<li <?php bp_member_class(); ?>>
+		<li>
 			<div class="item-avatar">
 				<a href="<?php bp_member_permalink(); ?>"><?php bp_member_avatar(); ?></a>
 			</div>
@@ -74,14 +56,7 @@ do_action( 'bp_before_members_loop' ); ?>
 
 				<div class="item-meta"><span class="activity"><?php bp_member_last_active(); ?></span></div>
 
-				<?php
-
-				/**
-				 * Fires inside the display of a directory member item.
-				 *
-				 * @since BuddyPress (1.1.0)
-				 */
-				do_action( 'bp_directory_members_item' ); ?>
+				<?php do_action( 'bp_directory_members_item' ); ?>
 
 				<?php
 				 /***
@@ -96,14 +71,7 @@ do_action( 'bp_before_members_loop' ); ?>
 
 			<div class="action">
 
-				<?php
-
-				/**
-				 * Fires inside the members action HTML markup to display actions.
-				 *
-				 * @since BuddyPress (1.1.0)
-				 */
-				do_action( 'bp_directory_members_actions' ); ?>
+				<?php do_action( 'bp_directory_members_actions' ); ?>
 
 			</div>
 
@@ -114,14 +82,7 @@ do_action( 'bp_before_members_loop' ); ?>
 
 	</ul>
 
-	<?php
-
-	/**
-	 * Fires after the display of the members list.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_after_directory_members_list' ); ?>
+	<?php do_action( 'bp_after_directory_members_list' ); ?>
 
 	<?php bp_member_hidden_fields(); ?>
 
@@ -149,11 +110,4 @@ do_action( 'bp_before_members_loop' ); ?>
 
 <?php endif; ?>
 
-<?php
-
-/**
- * Fires after the display of the members loop.
- *
- * @since BuddyPress (1.2.0)
- */
-do_action( 'bp_after_members_loop' ); ?>
+<?php do_action( 'bp_after_members_loop' ); ?>

@@ -1,13 +1,6 @@
 <div id="buddypress">
 
-	<?php
-
-	/**
-	 * Fires before the display of member home content.
-	 *
-	 * @since BuddyPress (1.2.0)
-	 */
-	do_action( 'bp_before_member_home_content' ); ?>
+	<?php do_action( 'bp_before_member_home_content' ); ?>
 
 	<div id="item-header" role="complementary">
 
@@ -21,29 +14,15 @@
 
 				<?php bp_get_displayed_user_nav(); ?>
 
-				<?php
-
-				/**
-				 * Fires after the display of member options navigation.
-				 *
-				 * @since BuddyPress (1.2.4)
-				 */
-				do_action( 'bp_member_options_nav' ); ?>
+				<?php do_action( 'bp_member_options_nav' ); ?>
 
 			</ul>
 		</div>
 	</div><!-- #item-nav -->
 
-	<div id="item-body">
+	<div id="item-body" role="main">
 
-		<?php
-
-		/**
-		 * Fires before the display of member body content.
-		 *
-		 * @since BuddyPress (1.2.0)
-		 */
-		do_action( 'bp_before_member_body' );
+		<?php do_action( 'bp_before_member_body' );
 
 		if ( bp_is_user_activity() || !bp_current_component() ) :
 			bp_get_template_part( 'members/single/activity' );
@@ -78,22 +57,10 @@
 
 		endif;
 
-		/**
-		 * Fires after the display of member body content.
-		 *
-		 * @since BuddyPress (1.2.0)
-		 */
 		do_action( 'bp_after_member_body' ); ?>
 
 	</div><!-- #item-body -->
 
-	<?php
-
-	/**
-	 * Fires after the display of member home content.
-	 *
-	 * @since BuddyPress (1.2.0)
-	 */
-	do_action( 'bp_after_member_home_content' ); ?>
+	<?php do_action( 'bp_after_member_home_content' ); ?>
 
 </div><!-- #buddypress -->

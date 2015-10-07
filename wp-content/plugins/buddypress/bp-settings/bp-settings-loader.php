@@ -8,20 +8,20 @@
  */
 
 // Exit if accessed directly
-defined( 'ABSPATH' ) || exit;
+if ( !defined( 'ABSPATH' ) ) exit;
 
 class BP_Settings_Component extends BP_Component {
 
 	/**
 	 * Start the settings component creation process
 	 *
-	 * @since BuddyPress (1.5.0)
+	 * @since BuddyPress (1.5)
 	 */
 	public function __construct() {
 		parent::start(
 			'settings',
 			__( 'Settings', 'buddypress' ),
-			buddypress()->plugin_dir,
+			BP_PLUGIN_DIR,
 			array(
 				'adminbar_myaccount_order' => 100
 			)
@@ -48,7 +48,7 @@ class BP_Settings_Component extends BP_Component {
 	 * The BP_SETTINGS_SLUG constant is deprecated, and only used here for
 	 * backwards compatibility.
 	 *
-	 * @since BuddyPress (1.5.0)
+	 * @since BuddyPress (1.5)
 	 */
 	public function setup_globals( $args = array() ) {
 
@@ -64,7 +64,7 @@ class BP_Settings_Component extends BP_Component {
 	}
 
 	/**
-	 * Set up navigation.
+	 * Setup BuddyBar navigation
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
@@ -172,18 +172,16 @@ class BP_Settings_Component extends BP_Component {
 				'href'   => trailingslashit( $settings_link . 'general' )
 			);
 
-			// Notifications - only add the tab when there is something to display there.
-			if ( has_action( 'bp_notification_settings' ) ) {
-				$wp_admin_nav[] = array(
-					'parent' => 'my-account-' . $this->id,
-					'id'     => 'my-account-' . $this->id . '-notifications',
-					'title'  => __( 'Email', 'buddypress' ),
-					'href'   => trailingslashit( $settings_link . 'notifications' )
-				);
-			}
+			// Notifications
+			$wp_admin_nav[] = array(
+				'parent' => 'my-account-' . $this->id,
+				'id'     => 'my-account-' . $this->id . '-notifications',
+				'title'  => __( 'Email', 'buddypress' ),
+				'href'   => trailingslashit( $settings_link . 'notifications' )
+			);
 
 			// Delete Account
-			if ( !bp_current_user_can( 'bp_moderate' ) && ! bp_core_get_root_option( 'bp-disable-account-deletion' ) ) {
+			if ( !bp_current_user_can( 'bp_moderate' ) && empty( $bp->site_options['bp-disable-account-deletion'] ) ) {
 				$wp_admin_nav[] = array(
 					'parent' => 'my-account-' . $this->id,
 					'id'     => 'my-account-' . $this->id . '-delete-account',

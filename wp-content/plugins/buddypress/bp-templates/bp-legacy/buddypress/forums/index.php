@@ -1,24 +1,10 @@
 <div id="buddypress">
-
-	<?php
-
-	/**
-	 * Fires at the start of the forums template.
-	 *
-	 * @since BuddyPress (1.5.0)
-	 */
-	do_action( 'bp_before_directory_forums' ); ?>
+	
+	<?php do_action( 'bp_before_directory_forums' ); ?>
 
 	<form action="" method="post" id="forums-search-form" class="dir-form">
 
-		<?php
-
-		/**
-		 * Fires before the display of the forums content.
-		 *
-		 * @since BuddyPress (1.1.0)
-		 */
-		do_action( 'bp_before_directory_forums_content' ); ?>
+		<?php do_action( 'bp_before_directory_forums_content' ); ?>
 
 		<div id="forums-dir-search" class="dir-search" role="search">
 
@@ -27,14 +13,7 @@
 		</div>
 	</form>
 
-	<?php
-
-	/**
-	 * Fires before the display of the forum topics.
-	 *
-	 * @since BuddyPress (1.5.0)
-	 */
-	do_action( 'bp_before_topics' ); ?>
+	<?php do_action( 'bp_before_topics' ); ?>
 
 	<form action="" method="post" id="forums-directory-form" class="dir-form">
 
@@ -48,14 +27,7 @@
 
 				<?php endif; ?>
 
-				<?php
-
-				/**
-				 * Fires inside the forum group types list.
-				 *
-				 * @since BuddyPress (1.2.0)
-				 */
-				do_action( 'bp_forums_directory_group_types' ); ?>
+				<?php do_action( 'bp_forums_directory_group_types' ); ?>
 
 			</ul>
 		</div>
@@ -63,14 +35,7 @@
 		<div class="item-list-tabs" id="subnav" role="navigation">
 			<ul>
 
-				<?php
-
-				/**
-				 * Fires inside the forum group sub-types list.
-				 *
-				 * @since BuddyPress (1.5.0)
-				 */
-				do_action( 'bp_forums_directory_group_sub_types' ); ?>
+				<?php do_action( 'bp_forums_directory_group_sub_types' ); ?>
 
 				<li id="forums-order-select" class="last filter">
 
@@ -80,56 +45,28 @@
 						<option value="popular"><?php _e( 'Most Posts', 'buddypress' ); ?></option>
 						<option value="unreplied"><?php _e( 'Unreplied', 'buddypress' ); ?></option>
 
-						<?php
-
-						/**
-						 * Fires inside the select input for forums order options.
-						 *
-						 * @since BuddyPress (1.2.0)
-						 */
-						do_action( 'bp_forums_directory_order_options' ); ?>
+						<?php do_action( 'bp_forums_directory_order_options' ); ?>
 
 					</select>
 				</li>
 			</ul>
 		</div>
 
-		<div id="forums-dir-list" class="forums dir-list">
+		<div id="forums-dir-list" class="forums dir-list" role="main">
 
 			<?php bp_get_template_part( 'forums/forums-loop' ); ?>
 
 		</div>
 
-		<?php
-
-		/**
-		 * Fires and displays the forums content.
-		 *
-		 * @since BuddyPress (1.1.0)
-		 */
-		do_action( 'bp_directory_forums_content' ); ?>
+		<?php do_action( 'bp_directory_forums_content' ); ?>
 
 		<?php wp_nonce_field( 'directory_forums', '_wpnonce-forums-filter' ); ?>
 
 	</form>
 
-	<?php
+	<?php do_action( 'bp_after_directory_forums' ); ?>
 
-	/**
-	 * Fires after the display of the forums.
-	 *
-	 * @since BuddyPress (1.5.0)
-	 */
-	do_action( 'bp_after_directory_forums' ); ?>
-
-	<?php
-
-	/**
-	 * Fires before the display of the new topic form.
-	 *
-	 * @since BuddyPress (1.5.0)
-	 */
-	do_action( 'bp_before_new_topic_form' ); ?>
+	<?php do_action( 'bp_before_new_topic_form' ); ?>
 
 	<div id="new-topic-post">
 
@@ -139,22 +76,12 @@
 
 				<form action="" method="post" id="forum-topic-form" class="standard-form">
 
-					<?php
-
-					/**
-					 * Fires inside the new topic form tag and before input display.
-					 *
-					 * @since BuddyPress (1.0.0)
-					 */
-					do_action( 'groups_forum_new_topic_before' ); ?>
+					<?php do_action( 'groups_forum_new_topic_before' ); ?>
 
 					<a name="post-new"></a>
 					<h5><?php _e( 'Create New Topic:', 'buddypress' ); ?></h5>
 
-					<?php
-
-					/** This action is documented in bp-templates/bp-legacy/buddypress/activity/index.php */
-					do_action( 'template_notices' ); ?>
+					<?php do_action( 'template_notices' ); ?>
 
 					<label><?php _e( 'Title:', 'buddypress' ); ?></label>
 					<input type="text" name="topic_title" id="topic_title" value="" maxlength="100" />
@@ -182,18 +109,11 @@
 
 					</select><!-- #topic_group_id -->
 
-					<?php
-
-					/**
-					 * Fires before the new topic form submit actions.
-					 *
-					 * @since BuddyPress (1.0.0)
-					 */
-					do_action( 'groups_forum_new_topic_after' ); ?>
+					<?php do_action( 'groups_forum_new_topic_after' ); ?>
 
 					<div class="submit">
-						<input type="submit" name="submit_topic" id="submit" value="<?php esc_attr_e( 'Post Topic', 'buddypress' ); ?>" />
-						<input type="button" name="submit_topic_cancel" id="submit_topic_cancel" value="<?php esc_attr_e( 'Cancel', 'buddypress' ); ?>" />
+						<input type="submit" name="submit_topic" id="submit" value="<?php _e( 'Post Topic', 'buddypress' ); ?>" />
+						<input type="button" name="submit_topic_cancel" id="submit_topic_cancel" value="<?php _e( 'Cancel', 'buddypress' ); ?>" />
 					</div>
 
 					<?php wp_nonce_field( 'bp_forums_new_topic' ); ?>
@@ -204,7 +124,7 @@
 
 				<div id="message" class="info">
 
-					<p><?php printf( __( "You are not a member of any groups so you don't have any group forums you can post in. To start posting, first find a group that matches the topic subject you'd like to start. If this group does not exist, why not <a href='%s'>create a new group</a>? Once you have joined or created the group you can post your topic in that group's forum.", 'buddypress' ), trailingslashit( bp_get_groups_directory_permalink() . 'create' ) ); ?></p>
+					<p><?php printf( __( "You are not a member of any groups so you don't have any group forums you can post in. To start posting, first find a group that matches the topic subject you'd like to start. If this group does not exist, why not <a href='%s'>create a new group</a>? Once you have joined or created the group you can post your topic in that group's forum.", 'buddypress' ), site_url( bp_get_groups_root_slug() . '/create/' ) ); ?></p>
 
 				</div>
 
@@ -213,22 +133,8 @@
 		<?php endif; ?>
 	</div><!-- #new-topic-post -->
 
-	<?php
+	<?php do_action( 'bp_after_new_topic_form' ); ?>
 
-	/**
-	 * Fires after the display of the new topic form.
-	 *
-	 * @since BuddyPress (1.5.0)
-	 */
-	do_action( 'bp_after_new_topic_form' ); ?>
-
-	<?php
-
-	/**
-	 * Fires before the display of the forums content.
-	 *
-	 * @since BuddyPress (1.1.0)
-	 */
-	do_action( 'bp_after_directory_forums_content' ); ?>
-
+	<?php do_action( 'bp_after_directory_forums_content' ); ?>
+	
 </div>
