@@ -2,42 +2,63 @@
 require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
 use Aws\Sqs\SqsClient;
 
-class SqsWrapper{
+class SqsWrapper
+{
 
     private $_client;
 
     private $_queueName;
 
-    public function __construct( $queueName = false )
+    public function __construct($queueName = false)
     {
         $this->_client = SqsClient::factory(array(
             'key' => get_option('aws_s3_key'),
             'secret' => get_option('aws_s3_secret'),
             'region' => 'ap-southeast-2'
         ));
-        if( ! $queueName ) {
+        if (!$queueName) {
             $this->_queueName = get_option('sqs_queue_name');
             $this->_bulkQueueName = get_option('bulk_sqs_queue_name');
-            if (empty($this->_bulkQueueName)) $this->_bulkQueueName = $this->_queueName;
-        }else{
+            if (empty($this->_bulkQueueName)) {
+                $this->_bulkQueueName = $this->_queueName;
+            }
+        } else {
             $this->_queueName = $this->_bulkQueueName = $queueName;
         }
     }
 
-    public function sendMessage( $message, $is_bulk = false ){
+    public function getQueueMessagesCount()
+    {
+        $url = $this->_client->getQueueUrl(array(
+            'QueueName' => $this->_queueName,
+        ));
+        try {
+            $result = $this->_client->getQueueAttributes(array(
+                'QueueUrl' => $url->get('QueueUrl'),
+                'AttributeNames' => array('ApproximateNumberOfMessages')
+            ));
+            return $result->getPath('Attributes/ApproximateNumberOfMessages');
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public function sendMessage($message, $is_bulk = false)
+    {
         $queueName = $is_bulk ? $this->_bulkQueueName : $this->_queueName;
         $url = $this->_client->getQueueUrl(array(
             'QueueName' => $queueName,
         ));
-        $message['correlationID'] = $url->getPath( 'ResponseMetadata/RequestId' );
-        try{
+        $message['correlationID'] = $url->getPath('ResponseMetadata/RequestId');
+        try {
             $this->_client->sendMessage(array(
-                'QueueUrl'    => $url->get( 'QueueUrl' ),
-                'MessageBody' => json_encode( $message )
+                'QueueUrl' => $url->get('QueueUrl'),
+                'MessageBody' => json_encode($message)
             ));
 
-        } catch( Exception $e ){
-            error_log( $e->getMessage() );
+        } catch (Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
         return true;
