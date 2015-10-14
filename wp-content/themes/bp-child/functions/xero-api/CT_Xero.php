@@ -243,8 +243,18 @@ class CT_Xero {
                 $line_item->addChild( 'Description', $entry['comment'] );
                 if( $entry['discount'] > 0 ) $line_item->addChild( 'DiscountRate', $entry['discount'] );
 
-                $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_family_mark FROM wp_organisations_subscriptions WHERE id = %d", $invoiceData['reference_id']));
+                if($invoiceData['reference_type'] == 'ticket'){
+                    $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_tickets WHERE id = %d", $invoiceData['reference_id']));
+
+                } else {
+                    $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_family_mark FROM wp_organisations_subscriptions WHERE id = %d", $invoiceData['reference_id']));
+                }
                 $community_id = get_post_meta($suiteFamilyMark, 'community_id', true);
+
+                //this is hardcode for default community
+                if(empty($community_id)){
+                    $community_id = $wpdb->get_var("SELECT id FROM wp_bp_groups WHERE name = 'SuperStream'");
+                }
                 $group = groups_get_group(array('group_id' => $community_id));
                 $this->_addTrackingCategoryToLineItem($line_item, bp_get_group_name($group));
             }
