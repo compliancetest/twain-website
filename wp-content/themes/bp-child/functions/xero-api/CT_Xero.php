@@ -228,6 +228,9 @@ class CT_Xero {
          * Get organisation charge table entries for current organisation with '$paymentType' payment type
          */
         if( get_option('invoice_in_arrears') == 'yes' ) {
+            $sql = $wpdb->prepare("SELECT * FROM wp_organisations_charge
+                                                                WHERE organisation_id = %d AND payment_id IN( SELECT id FROM wp_organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' )
+                                                                AND invoice_number = '' AND  YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", $invoiceData['organisation_id'], $invoiceData['organisation_id'], $invoiceData['payment_id']);
             $charge_entries = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations_charge
                                                                 WHERE organisation_id = %d AND payment_id IN( SELECT id FROM wp_organisations_payment_methods WHERE organisation_id = %d AND id = %d AND status = 'Active' )
                                                                 AND invoice_number = '' AND  YEAR(start_date) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(start_date) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", $invoiceData['organisation_id'], $invoiceData['organisation_id'], $invoiceData['payment_id']), ARRAY_A);
@@ -243,8 +246,17 @@ class CT_Xero {
                 $line_item->addChild( 'Description', $entry['comment'] );
                 if( $entry['discount'] > 0 ) $line_item->addChild( 'DiscountRate', $entry['discount'] );
 
-                $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_family_mark FROM wp_organisations_subscriptions WHERE id = %d", $invoiceData['reference_id']));
+                if($invoiceData['reference_type'] == 'ticket'){
+                    $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_tickets WHERE id = %d", $invoiceData['reference_id']));
+
+                } else {
+                    $suiteFamilyMark = $wpdb->get_var($wpdb->prepare("SELECT suite_family_mark FROM wp_organisations_subscriptions WHERE id = %d", $invoiceData['reference_id']));
+                }
                 $community_id = get_post_meta($suiteFamilyMark, 'community_id', true);
+                //this is hardcode for default community
+                if(empty($community_id)){
+                    $community_id = $wpdb->get_var("SELECT id FROM wp_bp_groups WHERE name = 'SuperStream'");
+                }
                 $group = groups_get_group(array('group_id' => $community_id));
                 $this->_addTrackingCategoryToLineItem($line_item, bp_get_group_name($group));
             }
