@@ -53,7 +53,7 @@ class BatchJob
                     $queue = trim($queue);
                     $sqsClient = new SqsWrapper($queue);
                     $messagesNumber = $sqsClient->getQueueMessagesCount();
-                    if ($messagesNumber == 0) {
+                    if ($messagesNumber > 0) {
                         $emailLogs = 'SQS queue ' . $queue . ' is not empty(' . $messagesNumber . ' messages)';
                         $logs['Email logs'] = array();
                         foreach (explode(',', $options['emails']) AS $email) {
