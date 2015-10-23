@@ -43,7 +43,7 @@ if( $is_download ){
         <form name="form_filter" id="form_filter" action="/search-results/" method="get">
             <div class="search-result-form">
                 <div class="searchform">
-                    <input type="text" name="q" id="q" class="keyword" value="<?php echo htmlspecialchars(trim(isset($_GET['q']) ? $_GET['q'] : '')) ?>" placeholder="Search" autocomplete="off" />
+                    <input type="text" name="q" id="q" class="keyword" value="<?php echo isset($_GET['q']) ? htmlspecialchars(trim($_GET['q'])) : '' ?>" placeholder="Search" autocomplete="off" />
                     <input type="submit" id="search_test_suite_submit" class="search-button" value="" />
                 </div>
             </div>
@@ -78,10 +78,10 @@ if( $is_download ){
                         <li>
                             <label>Last Update</label>
                             <div class="date-filter filter-from">
-                                <input type="text" class="input datepicker" placeholder="From" name="date_from" <?php if( isset( $_GET['date_from'] ) ):?> value="<?php echo $_GET['date_from'];?>" <?php endif;?>/>
+                                <input type="text" class="input datepicker" placeholder="From" name="date_from" <?php if( isset( $_GET['date_from'] ) ):?> value="<?php echo htmlspecialchars($_GET['date_from']);?>" <?php endif;?>/>
                             </div>
                             <div class="date-filter filter-to">
-                                <input type="text" class="input datepicker" placeholder="To" name="date_to" <?php if( isset( $_GET['date_to'] ) ):?> value="<?php echo $_GET['date_to'];?>" <?php endif;?>/>
+                                <input type="text" class="input datepicker" placeholder="To" name="date_to" <?php if( isset( $_GET['date_to'] ) ):?> value="<?php echo htmlspecialchars($_GET['date_to']);?>" <?php endif;?>/>
                             </div>
                         </li>
                     </ul>
