@@ -26,7 +26,7 @@ get_header( 'buddypress' );
                     else
                         $term = false;
                     if($term)
-                        echo " for \"<b>$term</b>\"";
+                        echo " for \"<b>".htmlentities($term)."</b>\"";
 
                 ?>
             <?php else: ?>
