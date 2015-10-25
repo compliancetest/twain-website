@@ -39,6 +39,10 @@ wp_check_php_mysql_versions();
 @ini_set( 'magic_quotes_runtime', 0 );
 @ini_set( 'magic_quotes_sybase',  0 );
 
+@ini_set('session.cookie_httponly',1);
+@ini_set('session.cookie_secure',1);
+@ini_set('session.use_only_cookies',1);
+
 // WordPress calculates offsets from UTC.
 date_default_timezone_set( 'UTC' );
 
