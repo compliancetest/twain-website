@@ -19,7 +19,7 @@ function cp_user_details( $user_contactmethods, $user = null )
 function cp_user_detail_edit()
 {
     global $wpdb, $current_user;
-        
+
     if(!is_user_logged_in())
     {
         //Goto Homepage
@@ -118,6 +118,10 @@ function cp_user_detail_edit()
             echo 'The passwords do no match!';
             exit;
         }else{
+            if(!\User\User::isPasswordValid($newPass)){
+                echo 'Invalid password!';
+                exit;
+            }
             //update password
             wp_update_user( array ('ID' => $user_id, 'user_pass' => $confPass) ) ;
             $data = array(

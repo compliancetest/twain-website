@@ -481,11 +481,15 @@ if(!is_user_logged_in())
 
                                 <div class="field">
                                     <label for="user_pass">Password</label>
-                                    <input type="password" class="required" title="" name="user_pass" id="user_pass_id">
+                                    <div class="has-field-tooltip" style="width: 165px; text-align: left;">
+                                        <input type="password" class="field-tooltip required" title="" name="user_pass" id="user_pass_id" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
+                                    </div>
                                 </div>
                                 <div class="field">
                                     <label for="user_pass_confirm_id">Confirm Password</label>
-                                    <input type="password" class="required" title="" name="user_pass_confirm" id="user_pass_confirm_id">
+                                    <div class="has-field-tooltip" style="width: 165px; text-align: left;">
+                                        <input type="password" class="field-tooltip required" title="" name="user_pass_confirm" id="user_pass_confirm_id" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
+                                    </div>
                                 </div>
                                 <div class="clear"></div>   
                                 <div class="field captcha-field">
