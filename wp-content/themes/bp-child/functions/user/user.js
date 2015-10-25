@@ -50,8 +50,21 @@
                         document.location.href = rsp['redirect_to'];
                     }else{ //Error                    
                         //Show Error Message
-                        $('#header_login_error_msg').html('<span></span>Wrong username or password, please try again!');
-                        $('#header_login_error_msg').fadeIn('fast');
+                        if(rsp['message'] == 'Attempts limit has been reached') {
+                            $('#header_login_error_msg').html('<span></span>Attempts limit has been reached');
+                            $('#header_login_error_msg').fadeIn('fast');
+                            document.location.href = '/login';
+                        }
+                        else if(rsp['message'] == 'FAILED_CAPTCHA'){
+                            $('#header_login_error_msg').html('<span></span>Captch value is incorrect!');
+                            $('#header_login_error_msg').fadeIn('fast');
+                        } else {
+                            $('#header_login_error_msg').html('<span></span>Wrong username or password, please try again!');
+                            $('#header_login_error_msg').fadeIn('fast');
+                        }
+                        if(jQuery('#recaptcha_reload')){
+                            jQuery('#recaptcha_reload').click();
+                        }
                     }
                 }
             })
@@ -139,6 +152,14 @@
                     $("#email_id, #confirm_email_id").addClass('input-error');
                     return false;
                 }
+
+                if(!is_password_valid(user_pass)){
+                    msgObj.hide();
+                    msgObj.removeClass('success').addClass('error').html('Invalid password!').fadeIn('fast');
+                    noError = false;
+                    $("#user_pass_id, #user_pass_confirm_id").addClass('input-error');
+                    return false;
+                }
                 
                 if (!$('#acc_tc_id').is(':checked')) {
                     msgObj.hide();
@@ -190,7 +211,19 @@
             
             
         });
-        
+
+        function is_password_valid(password){
+            var e = /.{8,}/g.test(password); //At least 8 chars
+            var a = /[0-9]+/g.test(password); //numeric
+            var b = /[A-Z]+/g.test(password); //Capitals
+            var c = /[a-z]+/g.test(password); //small letters
+            var d = /[~`!#$%\^&*+=\-\[\]\\';,|\\":<>\?]/g.test(password); //special chars
+            if (a && b && c && d && e ) {// Success
+                return true;
+            }
+            return false;
+        }
+
         //resend email verification
         $('#resend_email_verification').on('click', function(){            
             var getThis = $(this);
@@ -228,12 +261,30 @@
                    else
                        var dataType = 'text';
 
+                    if($(this).attr('data-title'))
+                        var dataTitle = $(this).attr('data-title');
+                    else
+                        var dataTitle = '';
+
                    if(dataType == 'textarea')
                        $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
                    else if(dataType == 'readonly')
                        $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" />');
-                   else
-                       $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+                   else {
+                       if(dataTitle){
+                           $(this).after('<div class="has-field-tooltip">' +
+                               '<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" data-tooltip-content="' + dataTitle + '" class="field-tooltip">' +
+                               '<span class="simple_tooltip" style="width: 380px; margin-left: -115px; bottom: 30px; display: none;">'+dataTitle+'<span></span></span>' +
+                           '</div>');
+                           $('.field-tooltip').on('focus', function(){
+                               $(this).parent().find('.simple_tooltip').show();
+                           }).blur(function(){
+                               $(this).parent().find('.simple_tooltip').hide();
+                           });
+                       } else {
+                           $(this).after('<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" placeholder="' + thisPlaceholderValue + '" />');
+                       }
+                   }
 
                    $(this).hide();
                 });        

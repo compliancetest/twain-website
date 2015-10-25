@@ -41,12 +41,12 @@ if(!defined('ABSPATH'))
                 </div>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Password</label></div>
-                    <div data-name="new_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
+                    <div data-name="new_pass" data-value="" data-title="<ul><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>" class="grid-cell in_input input_pass" data-type="password">*********</div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Confirm Password</label></div>
-                    <div data-name="conf_pass" data-value="" class="grid-cell in_input input_pass" data-type="password">*********</div>
+                    <div data-name="conf_pass" data-value="" data-title="<ul><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>" class="grid-cell in_input input_pass" data-type="password">*********</div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">

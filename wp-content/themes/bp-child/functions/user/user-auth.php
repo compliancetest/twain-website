@@ -9,10 +9,27 @@ function compliancetest_login()
     
     $pUsername = $_POST['log'];
     $pUserPass = $_POST['pwd'];
-    
+
+    $userIP = \LoginAttempts\LoginAttempts::getUserIP();
+    $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
+    \LoginAttempts\LoginAttempts::setAttempts($userIP);
+
+    if($attempts > 2 && isset($_POST["recaptcha_challenge_field"])) {
+        $resp = recaptcha_check_answer(RECAPTCHA_PRIVATE_KEY,
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["recaptcha_challenge_field"],
+            $_POST["recaptcha_response_field"]);
+
+        if (!$resp->is_valid) {
+            $result['status'] = 'fail';
+            $result['message'] = 'FAILED_CAPTCHA';
+            exit(json_encode($result));
+        }
+    }
+
     $query = $wpdb->prepare("SELECT user_login FROM " . $wpdb->users . " WHERE user_email=%s OR user_login=%s", $pUsername, $pUsername);
     $username = $wpdb->get_var($query);
-    
+
     $user = wp_signon(array('user_login'=>$username, 'user_password' => $pUserPass));
     
     $result = array();
@@ -32,8 +49,17 @@ function compliancetest_login()
         if ($result['redirect_to'] == '') {
             $result['redirect_to'] = '/my-profile';
         }
-    }        
-    
+    }
+
+    if ($attempts > 2 && (strpos($_SERVER['HTTP_REFERER'], 'login') === false || !isset($_POST['recaptcha_challenge_field']))) {
+        wp_logout();
+        $result['status'] = 'fail';
+        $result['message'] = 'Attempts limit has been reached';
+        exit(json_encode($result));
+    }
+    if($result['status'] == 'success') {
+        \LoginAttempts\LoginAttempts::setAttempts($userIP, 0);
+    }
     echo json_encode($result);
     exit();
     
@@ -481,11 +507,15 @@ if(!is_user_logged_in())
 
                                 <div class="field">
                                     <label for="user_pass">Password</label>
-                                    <input type="password" class="required" title="" name="user_pass" id="user_pass_id">
+                                    <div class="has-field-tooltip" style="width: 165px; text-align: left;">
+                                        <input type="password" class="field-tooltip required" title="" name="user_pass" id="user_pass_id" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
+                                    </div>
                                 </div>
                                 <div class="field">
                                     <label for="user_pass_confirm_id">Confirm Password</label>
-                                    <input type="password" class="required" title="" name="user_pass_confirm" id="user_pass_confirm_id">
+                                    <div class="has-field-tooltip" style="width: 165px; text-align: left;">
+                                        <input type="password" class="field-tooltip required" title="" name="user_pass_confirm" id="user_pass_confirm_id" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
+                                    </div>
                                 </div>
                                 <div class="clear"></div>   
                                 <div class="field captcha-field">
@@ -570,7 +600,7 @@ function cp_login_form( $args = array() ) {
 			' . apply_filters( 'login_form_top', '', $args ) . '
 			<p class="login-username">
 				<label for="' . esc_attr( $args['id_username'] ) . '">' . esc_html( $args['label_username'] ) . '</label>
-				<input type="text" name="log" id="' . esc_attr( $args['id_username'] ) . '" class="input" value="' . esc_attr( $args['value_username'] ) . '" size="20" />
+				<input type="text" name="log" id="' . esc_attr( $args['id_username'] ) . '" class="input" value="' . esc_attr( $args['value_username'] ) . '" size="20" autocomplete="off"/>
 			</p>
 			<p class="login-password">
 				<label for="' . esc_attr( $args['id_password'] ) . '">' . esc_html( $args['label_password'] ) . '</label>
