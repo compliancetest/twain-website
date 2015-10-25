@@ -12,7 +12,7 @@ if( is_user_logged_in() ){
 
         <p class="login-username">
             <label for="user_login"></label>
-            <input type="text" size="20" value="" class="input" id="user_login" name="log" placeholder="E-mail or User">
+            <input type="text" size="20" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
         </p>
         <p class="login-password">
             <label for="user_pass"></label>
