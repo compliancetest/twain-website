@@ -9,10 +9,27 @@ function compliancetest_login()
     
     $pUsername = $_POST['log'];
     $pUserPass = $_POST['pwd'];
-    
+
+    $userIP = \LoginAttempts\LoginAttempts::getUserIP();
+    $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
+    \LoginAttempts\LoginAttempts::setAttempts($userIP);
+
+    if($attempts > 2 && isset($_POST["recaptcha_challenge_field"])) {
+        $resp = recaptcha_check_answer(RECAPTCHA_PRIVATE_KEY,
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["recaptcha_challenge_field"],
+            $_POST["recaptcha_response_field"]);
+
+        if (!$resp->is_valid) {
+            $result['status'] = 'fail';
+            $result['message'] = 'FAILED_CAPTCHA';
+            exit(json_encode($result));
+        }
+    }
+
     $query = $wpdb->prepare("SELECT user_login FROM " . $wpdb->users . " WHERE user_email=%s OR user_login=%s", $pUsername, $pUsername);
     $username = $wpdb->get_var($query);
-    
+
     $user = wp_signon(array('user_login'=>$username, 'user_password' => $pUserPass));
     
     $result = array();
@@ -32,8 +49,17 @@ function compliancetest_login()
         if ($result['redirect_to'] == '') {
             $result['redirect_to'] = '/my-profile';
         }
-    }        
-    
+    }
+
+    if ($attempts > 2 && (strpos($_SERVER['HTTP_REFERER'], 'login') === false || !isset($_POST['recaptcha_challenge_field']))) {
+        wp_logout();
+        $result['status'] = 'fail';
+        $result['message'] = 'Attempts limit has been reached';
+        exit(json_encode($result));
+    }
+    if($result['status'] == 'success') {
+        \LoginAttempts\LoginAttempts::setAttempts($userIP, 0);
+    }
     echo json_encode($result);
     exit();
     

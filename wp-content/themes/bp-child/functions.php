@@ -106,6 +106,7 @@ require_once(THE_FUNCTION . '/classes/ProfileType.php');
 
 require_once(THE_FUNCTION . '/classes/User.php');
 require_once(THE_FUNCTION . '/classes/MicroServices.php');
+require_once(THE_FUNCTION . '/classes/LoginAttempts.php');
 
 require_once(THE_FUNCTION . '/classes/ClaimsConversations.php');
 

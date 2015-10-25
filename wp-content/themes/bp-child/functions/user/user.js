@@ -50,8 +50,21 @@
                         document.location.href = rsp['redirect_to'];
                     }else{ //Error                    
                         //Show Error Message
-                        $('#header_login_error_msg').html('<span></span>Wrong username or password, please try again!');
-                        $('#header_login_error_msg').fadeIn('fast');
+                        if(rsp['message'] == 'Attempts limit has been reached') {
+                            $('#header_login_error_msg').html('<span></span>Attempts limit has been reached');
+                            $('#header_login_error_msg').fadeIn('fast');
+                            document.location.href = '/login';
+                        }
+                        else if(rsp['message'] == 'FAILED_CAPTCHA'){
+                            $('#header_login_error_msg').html('<span></span>Captch value is incorrect!');
+                            $('#header_login_error_msg').fadeIn('fast');
+                        } else {
+                            $('#header_login_error_msg').html('<span></span>Wrong username or password, please try again!');
+                            $('#header_login_error_msg').fadeIn('fast');
+                        }
+                        if(jQuery('#recaptcha_reload')){
+                            jQuery('#recaptcha_reload').click();
+                        }
                     }
                 }
             })
