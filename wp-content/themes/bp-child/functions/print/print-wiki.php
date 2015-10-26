@@ -43,18 +43,20 @@
         }
     </style>
      <?php if (have_posts()) while (have_posts()) : the_post(); ?>
-        <?php
-            cp_wiki_header();
-        ?>
-        <div class="clear"></div>
-        <div class="content_inner column">                
-            <?php if (has_post_thumbnail()) {
-                echo '<a href="'.get_permalink().'">';
-                the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));
-                echo '</a>';
-            }
-            the_content(); ?>
-        </div>
+         <?php if ($wpdb->get_row($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d", get_current_user_id()))): ?>
+            <?php
+                cp_wiki_header();
+            ?>
+            <div class="clear"></div>
+            <div class="content_inner column">
+                <?php if (has_post_thumbnail()) {
+                    echo '<a href="'.get_permalink().'">';
+                    the_post_thumbnail('post-thumb', array('class' => 'page_thumb'));
+                    echo '</a>';
+                }
+                the_content(); ?>
+            </div>
+         <?php endif;?>
     <?php endwhile; ?>
     </body>
     <script type="text/javascript">
