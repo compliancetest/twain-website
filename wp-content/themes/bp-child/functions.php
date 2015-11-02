@@ -99,6 +99,9 @@ require_once(THE_FUNCTION . '/buddypress/buddypress-group-test-data.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-docs.php');
 require_once(THE_FUNCTION . '/buddypress/buddypress-members.php');
 
+global $bp;
+$bp->groups->setup_globals();
+
 //ProfileInstance class allows to edit profile in single place
 require_once(THE_FUNCTION . '/classes/ProfileInstance.php');
 
