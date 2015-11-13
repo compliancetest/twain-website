@@ -273,7 +273,7 @@
                    else {
                        if(dataTitle){
                            $(this).after('<div class="has-field-tooltip">' +
-                               '<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" data-tooltip-content="' + dataTitle + '" class="field-tooltip">' +
+                               '<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" data-tooltip-content="' + dataTitle + '" class="field-tooltip" autocomplete="off">' +
                                '<span class="simple_tooltip" style="width: 380px; margin-left: -115px; bottom: 30px; display: none;">'+dataTitle+'<span></span></span>' +
                            '</div>');
                            $('.field-tooltip').on('focus', function(){
@@ -282,7 +282,7 @@
                                $(this).parent().find('.simple_tooltip').hide();
                            });
                        } else {
-                           $(this).after('<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" placeholder="' + thisPlaceholderValue + '" />');
+                           $(this).after('<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" placeholder="' + thisPlaceholderValue + '" autocomplete="off"/>');
                        }
                    }
 
@@ -562,7 +562,7 @@
                    else if(dataType == 'readonly')
                        $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" />');
                    else
-                       $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" />');
+                       $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" autocomplete="off"/>');
 
                    $(this).hide();
                 });        

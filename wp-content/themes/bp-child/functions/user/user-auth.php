@@ -469,52 +469,52 @@ if(!is_user_logged_in())
                             <form id="formreg" action="" method="post">
                                 <div class="field">
                                     <label for="first_name_id">First Name</label>
-                                    <input type="text" class="required" title="" name="first_name" id="first_name_id">
+                                    <input type="text" class="required" title="" name="first_name" id="first_name_id" autocomplete="off">
                                 </div>
                                 <div class="field">
                                     <label for="last_name_id">Last Name</label>
-                                    <input type="text" class="required" title="" name="last_name" id="last_name_id">
+                                    <input type="text" class="required" title="" name="last_name" id="last_name_id" autocomplete="off">
                                 </div>
                                 <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="email_id">Email</label>
-                                    <input type="email" class="required" title="" name="user_email" id="email_id">
+                                    <input type="email" class="required" title="" name="user_email" id="email_id" autocomplete="off">
                                 </div>
                                 <div class="field">
                                     <label for="confirm_email_id">Confirm Email</label>
-                                    <input type="text" class="required" title="" name="user_email_confirm" id="confirm_email_id">
+                                    <input type="text" class="required" title="" name="user_email_confirm" id="confirm_email_id" autocomplete="off">
                                 </div>
                                 <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="organisation_id">Organisation Key</label>
                                     <div class="has-field-tooltip" style="width: 165px;">
-                                        <input type="text" class="field-tooltip" title="" name="organisation_key" id="organisation_key" data-tooltip-content="If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.">
+                                        <input type="text" class="field-tooltip" title=""  autocomplete="off" name="organisation_key" id="organisation_key" data-tooltip-content="If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label for="contact_phone_id">Contact Phone Number</label>
-                                    <input type="text" class="required" title="" name="contact_phone" id="contact_phone_id">
+                                    <input type="text" class="required" title="" name="contact_phone" id="contact_phone_id" autocomplete="off">
                                 </div>
                                 <div class="clear"></div>
                                 
                                 <div class="field">
                                     <label for="user_login_id">Username</label>
-                                    <input type="text" class="required" title="" name="user_login" id="user_login_id">
+                                    <input type="text" class="required" title="" name="user_login" id="user_login_id" autocomplete="off">
                                 </div>     
                                 <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="user_pass">Password</label>
                                     <div class="has-field-tooltip" style="width: 165px; text-align: left;">
-                                        <input type="password" class="field-tooltip required" title="" name="user_pass" id="user_pass_id" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
+                                        <input type="password" class="field-tooltip required" title="" name="user_pass" id="user_pass_id" autocomplete="off" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label for="user_pass_confirm_id">Confirm Password</label>
                                     <div class="has-field-tooltip" style="width: 165px; text-align: left;">
-                                        <input type="password" class="field-tooltip required" title="" name="user_pass_confirm" id="user_pass_confirm_id" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
+                                        <input type="password" class="field-tooltip required" title="" name="user_pass_confirm" id="user_pass_confirm_id" autocomplete="off" data-tooltip-content="<ul type='circle'><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
                                     </div>
                                 </div>
                                 <div class="clear"></div>   
