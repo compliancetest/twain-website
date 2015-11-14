@@ -114,7 +114,7 @@
                     </div>
                     <div class="right">
                         <?php if ( can_create_community_article( bp_get_current_group_id() ) ) : ?>
-                        <a href="<?php echo bp_docs_get_create_link()?>" class="action-btn add-new-btn has-tooltip">
+                        <a href="<?php echo bp_docs_get_create_link()?>?group=superstream" class="action-btn add-new-btn has-tooltip">
                             <span class="p"></span><span class="t">Add</span>
                             <span class="simple_tooltip radius6">Add Article<span></span></span>
                         </a>
@@ -131,7 +131,7 @@
             <p class="no-docs"><?php _e( 'There are currently no articles available.', 'bp-docs' ) ?></p>
             
             <?php if ( can_create_community_article( bp_get_current_group_id()) ): ?>
-            <a href="<?php echo bp_docs_get_create_link(); ?>" class="action-btn add-new-btn has-tooltip">
+            <a href="<?php echo bp_docs_get_create_link(); ?>?group=superstream" class="action-btn add-new-btn has-tooltip">
                 <span class="p"></span><span class="t">Add</span>
                 <span class="simple_tooltip radius6">Add Article<span></span></span>
             </a>
