@@ -8,13 +8,14 @@
 
     <?php bp_docs_inline_toggle_js() ?>
     
-    <?php 
+    <?php
+        global $wpdb;
         $doc_id = is_single() ? get_the_ID() : 0;
         $group_id = bp_docs_get_associated_group_id( $doc_id ); 
         $group = groups_get_group( 'group_id=' . $group_id );
     ?>
 
-    <?php if (bp_group_is_member()): ?>    
+    <?php if (bp_group_is_member() || $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d", get_current_user_id()))): ?>
     <?php if ( bp_docs_has_docs() ) : ?>
         <div class="grid-list" id='doc-list'>
             <div class="grid-list-row grid-list-header">
