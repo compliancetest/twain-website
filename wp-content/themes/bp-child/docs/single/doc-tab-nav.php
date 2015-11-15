@@ -30,7 +30,7 @@
                     </a>
                 </li>
             <?php endif ?>     
-            <?php if ( bp_docs_current_user_can( 'view_history' ) ) : ?>
+            <?php if ( bp_docs_current_user_can( 'edit' ) && groups_is_user_admin(get_current_user_id(), $group_id) ) : ?>
                 <li<?php if ( bp_docs_is_doc_history() ) : ?> class="active"<?php endif ?>>
                     <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>" <?php if ( bp_docs_is_doc_history() ) : ?> class="selected"<?php endif ?>>
                         <span class="left icon" id="icon_history"></span>

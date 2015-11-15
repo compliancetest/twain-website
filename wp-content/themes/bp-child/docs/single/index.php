@@ -1,5 +1,5 @@
 <div id="buddypress">
-    <?php if ($wpdb->get_row($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d", get_current_user_id())) &&  bp_docs_current_user_can( 'edit', get_the_ID() ) && groups_is_user_admin(get_current_user_id(), bp_get_current_group_id())): ?>
+    <?php if ($wpdb->get_row($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d", get_current_user_id())) && groups_is_user_admin(get_current_user_id(), bp_get_current_group_id())): ?>
         <?php include( apply_filters( 'bp_docs_header_template', bp_docs_locate_template( 'docs-header.php' ) ) ) ?>
     <?php else:?>
         <script>
