@@ -1523,3 +1523,17 @@ function validateDate($date)
     $d = DateTime::createFromFormat('Y-m-d', $date);
     return $d && $d->format('Y-m-d') == $date;
 }
+
+/**
+ * his hook used to allow non-wp-admins to attach files to articles
+ */
+add_filter( 'user_has_cap', 'myUserHasCap', 10, 3 );
+
+function myUserHasCap( $user_caps, $req_cap, $args )
+{
+    $post = get_post( $args[2] );
+
+    if ( 'attachment' == $post->post_type ) {
+        return $user_caps;
+    }
+}
