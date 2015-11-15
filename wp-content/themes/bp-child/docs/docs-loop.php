@@ -82,7 +82,7 @@
                     
                     <?php } ?>
                     <?php
-                    if ( bp_docs_current_user_can( 'view_history', get_the_ID() ) && defined( 'WP_POST_REVISIONS' ) && WP_POST_REVISIONS ) {
+                    if ( bp_docs_current_user_can( 'edit', get_the_ID() ) && groups_is_user_admin(get_current_user_id(), bp_get_current_group_id()) ) {
                     ?>                      
                     
                         <a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>" class="action-btn icon-btn history-btn left10 has-tooltip">
