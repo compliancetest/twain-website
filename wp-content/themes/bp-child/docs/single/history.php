@@ -1,3 +1,17 @@
+<?php
+$doc_id = is_single() ? get_the_ID() : 0;
+$group_id = bp_docs_get_associated_group_id( $doc_id );
+$group = groups_get_group( 'group_id=' . $group_id );
+if(!groups_is_user_admin(get_current_user_id(), $group_id)){ ?>
+    <?php addMessage('You are not allowed to view that Articles history.', 'error'); ?>
+    <script>
+        jQuery('#print-static-page-btn').remove();
+        jQuery(document).ready(function(){
+            jQuery('#buddypress').remove();
+            location.href = '/';
+        });
+    </script>
+<?php } ?>
 <div id="buddypress">
     <?php if ($wpdb->get_row($wpdb->prepare("SELECT * FROM wp_bp_groups_members WHERE user_id = %d", get_current_user_id()))): ?>
         <?php include( apply_filters( 'bp_docs_header_template', bp_docs_locate_template( 'docs-header.php' ) ) ) ?>
