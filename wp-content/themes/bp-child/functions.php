@@ -209,7 +209,7 @@ require_once(THE_FUNCTION . "/message.php");
 
 //Include Mailchimp
 require_once(THE_FUNCTION . "/Mailchimp/Mailchimp.php");
- 
+
 require_once(THE_FUNCTION . "/external-actions.php");
 
 require_once(THE_FUNCTION . "/tools.php");
@@ -233,7 +233,7 @@ require_once(THE_FUNCTION . '/pricing-plans/pricingplans.class.php');
 //Xero Payments
 require_once(THE_FUNCTION . '/organisations-payments/admin.php');
 
-//Process Compliancetest Admin Actions 
+//Process Compliancetest Admin Actions
 require_once(THE_FUNCTION . '/admin/index.php');
 
 //Process Compliancetest Admin Actions
@@ -245,7 +245,7 @@ require_once(THE_FUNCTION . '/home-settings.php');
  * If you're loading from a child theme use stylesheet_directory
  * instead of template_directory
  */
- 
+
 if ( !function_exists( 'optionsframework_init' ) ) {
 	define( 'OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/inc/' );
 	require_once dirname( __FILE__ ) . '/inc/options-framework.php';
@@ -258,7 +258,7 @@ endif;
 
 
 function compliancetheme_setup()
-{        
+{
     add_theme_support('post-thumbnails');
     set_post_thumbnail_size( 300, 150, true );
     add_image_size( 'post-thumb', 300, 150, true );
@@ -315,14 +315,14 @@ function initialize_widgets() {
 	'before_title' => '<h2 class="widgettitle">',
 	'after_title' => '</h2>',
 	));
-}	
+}
 
 /****************************************************************** HEADER & FOOTER ****************************************************************/
 
 add_action('wp_enqueue_scripts', 'add_header_scripts');
 
 function add_header_scripts()
-{   
+{
     $actions_depends = array('jquery');
 
     if(!bp_is_user_messages())
@@ -331,55 +331,55 @@ function add_header_scripts()
         wp_enqueue_script('cp-combobox', get_stylesheet_directory_uri().'/js/jquery.combobox.js', $actions_depends);
     }
     wp_enqueue_script('jquery_form', get_stylesheet_directory_uri().'/js/jquery.form.js', $actions_depends);
-    
+
     wp_enqueue_script('cp-lightbox', get_stylesheet_directory_uri().'/js/jquery.custompopup.js', $actions_depends);
-    wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);        
-    wp_enqueue_script('print', get_stylesheet_directory_uri().'/js/print.js', $actions_depends);        
+    wp_enqueue_script('custom_scripts', get_stylesheet_directory_uri().'/js/custom.js', $actions_depends);
+    wp_enqueue_script('print', get_stylesheet_directory_uri().'/js/print.js', $actions_depends);
     wp_enqueue_script('cp-buddypress', get_stylesheet_directory_uri().'/functions/buddypress/buddypress.js', $actions_depends, '1.0', true);
     wp_enqueue_script('cp-bbpress', get_stylesheet_directory_uri().'/bbpress/bbpress.js', $actions_depends, '1.0', true);
-    
+
     if(is_page('my-transaction-log'))
         wp_enqueue_script('message-trigger', get_stylesheet_directory_uri().'/js/message.js', $actions_depends, '1.0', true);
-        
-    if(bp_is_groups_component()){        
+
+    if(bp_is_groups_component()){
         wp_enqueue_script('groups-download', get_stylesheet_directory_uri().'/groups/js/groups-downloads.js', $actions_depends, '1.0', true);
     }
     if(bp_is_item_admin()){
         wp_enqueue_script('groups-admin', get_stylesheet_directory_uri().'/groups/js/groups-admin.js', $actions_depends, '1.0', true);
     }
-    
+
     //Add Buddypress Docs StyleSheet
     if(!bp_docs_is_docs_component() && bp_is_group())
     {
         wp_enqueue_style( 'bp-docs-css', plugins_url() . '/' . BP_DOCS_PLUGIN_SLUG . '/includes/' . 'css/screen.css' );
     }
-    
-    
+
+
     //Test Data
     wp_enqueue_script( 'iframe-trasport', get_stylesheet_directory_uri() . '/functions/test-data/jquery.iframe-transport.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'jquery-fileupload', get_stylesheet_directory_uri() . '/functions/test-data/jquery.fileupload.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'jsonary-super-bundle', get_stylesheet_directory_uri() . '/functions/test-data/jsonary-super-bundle.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'json-schema-validator', get_stylesheet_directory_uri() . '/functions/test-data/tv4.js', $actions_depends, '1.0', true );
     wp_enqueue_script( 'zclip', get_stylesheet_directory_uri() . '/js/jquery.zclip.js', $actions_depends, '1.0', true );
-    
-    
-    
-    if(is_user_logged_in())   
+
+
+
+    if(is_user_logged_in())
     {
         //Ticket Script
         wp_enqueue_script( 'support-ticket', get_stylesheet_directory_uri() . '/functions/support-ticket/support-ticket.js', $actions_depends, '1.0', true );
-        wp_enqueue_script( 'testdata', get_stylesheet_directory_uri() . '/functions/test-data/testdata.js', $actions_depends, '1.0', true );        
+        wp_enqueue_script( 'testdata', get_stylesheet_directory_uri() . '/functions/test-data/testdata.js', $actions_depends, '1.0', true );
     }
-    
+
     wp_enqueue_script( 'redactor-min', get_stylesheet_directory_uri() . '/js/redactor.js', $actions_depends, '1.0', true );
     wp_enqueue_style('redactor', get_stylesheet_directory_uri() . '/css/redactor.css');
-    
+
     /*if(is_page('edit-test-suite') || is_page('add-new-test-suite') || is_page('edit-test-case') || is_page('add-new-test-case') || bp_is_group_admin_page())
     {
         //Include Redactor WYSIWYG Editor
-        
+
     }*/
-    
+
 }
 
 /******************************************************************* MENUS SUPPORT******************************************************************/
@@ -387,7 +387,7 @@ if (function_exists('wp_nav_menu')) {
 	if (function_exists('add_theme_support')) {
 		add_theme_support('nav-menus');
 		add_action('init', 'register_my_menus');
-		function register_my_menus() 
+		function register_my_menus()
 		{
 			register_nav_menus(array(
 							'header-menu' => __('Header Menu'),
@@ -406,7 +406,7 @@ class headermenu_walker extends Walker_Nav_Menu
 	{
 		$attributes  = ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
 		$attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
-        
+
         $output .= '<li class="header-menu-item"><a'. $attributes .'>';
         $output .= apply_filters( 'the_title', $item->title, $item->ID );
         $output .= '</a></li>';
@@ -426,7 +426,7 @@ class footer_walker extends Walker_Nav_Menu
     {
         $attributes  = ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
         $attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
-        
+
         $output .= '<li><a'. $attributes .'>';
         $output .= apply_filters( 'the_title', $item->title, $item->ID );
         $output .= '</a>';
@@ -454,9 +454,9 @@ My Payment Method updates
 //check card number
 
 function check_cc($ccnumber, $allowTest = false){
-    
+
     $cardtype = false;
-    
+
     $ccnumber = preg_replace('/[^0-9]/','',$ccnumber); // Strip non-numeric characters
 
     $creditcard = array(
@@ -479,17 +479,17 @@ function check_cc($ccnumber, $allowTest = false){
                 break;
             }
         }
-        
+
         if(!$match){
             return false;
         }
     }else if(@preg_match($creditcard[strtolower(trim($cardtype))],$ccnumber)==0){
         return false;
-    }    
-    
-    if($allowTest && !check_cc_validation($ccnumber))    
+    }
+
+    if($allowTest && !check_cc_validation($ccnumber))
         return false;
-    
+
     return $cardtype;
 }
 
@@ -510,7 +510,7 @@ function check_cc_validation($ccnum){
     }
 
     if(($checksum % 10) == 0){
-        return true; 
+        return true;
     }else{
         return false;
     }
@@ -518,7 +518,7 @@ function check_cc_validation($ccnum){
 
 //check the expiry card date
 function check_exp_date($month, $year) {
-    
+
     /* Get timestamp of midnight on day after expiration month. */
     $exp_ts = mktime(0, 0, 0, $month + 1, 1, $year);
 
@@ -535,23 +535,23 @@ function check_exp_date($month, $year) {
 
 //Renaming Buddypress Documents to "Articles"
 
-function edit_admin_menus() {  
-    global $menu;  
-    global $submenu;  
-    foreach($menu as $i=>$m)   
+function edit_admin_menus() {
+    global $menu;
+    global $submenu;
+    foreach($menu as $i=>$m)
     {
         if($m[0] == 'BuddyPress Docs')
             $menu[$i][0] = 'Articles';
         if($m[0] == 'Groups')
             $menu[$i][0] = 'Communities';
-        
+
     }
-    
+
     $submenu['edit.php?post_type=bp_doc'][5][0] = 'All Articles';
     $submenu['edit.php?post_type=bp_doc'][10][0] = 'Add New Article';
 
-}  
-add_action( 'admin_menu', 'edit_admin_menus' );  
+}
+add_action( 'admin_menu', 'edit_admin_menus' );
 
 // Login page fix
 function my_check_password_reset_key($key, $login) {
@@ -581,20 +581,20 @@ function addHTAccessProtection($dir)
 }
 
 //Format Bytes
-function formatBytes($bytes, $precision = 2) { 
-    $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
+function formatBytes($bytes, $precision = 2) {
+    $units = array('B', 'KB', 'MB', 'GB', 'TB');
 
-    $bytes = max($bytes, 0); 
-    $pow = ($bytes ? log($bytes) : 0) / log(1024); 
-    
-    $idx = min(floor($pow), count($units) - 1); 
-    
-    return round(pow(1024, $pow - floor($pow)), $precision) . ' ' . $units[$idx]; 
+    $bytes = max($bytes, 0);
+    $pow = ($bytes ? log($bytes) : 0) / log(1024);
+
+    $idx = min(floor($pow), count($units) - 1);
+
+    return round(pow(1024, $pow - floor($pow)), $precision) . ' ' . $units[$idx];
 }
 
 /**
 * Add message to session
-* 
+*
 * @param String $message
 * @param String $type: success, error, warning, notice
 */
@@ -602,9 +602,9 @@ function addMessage($message, $type = 'success')
 {
     if(!isset($_SESSION[MESSAGE_KEY]))
         $_SESSION[MESSAGE_KEY] = array();
-    
+
     $_SESSION[MESSAGE_KEY][] = array('message' => $message, 'type' => $type);
-    
+
 }
 
 //Get get params for search filter
@@ -615,28 +615,28 @@ function getFilterParam($name)
         $param = $_GET[$name];
     if(!is_array($param))
         $param = array($param);
-        
+
     return $param;
 }
 
 
 function formatDate($date, $format = 'Y-m-d', $user_id = null)
-{    
+{
     if(is_numeric($date))
         $date = new DateTime(date("Y-m-d H:i:s", $date));
     else
         $date = new DateTime($date);
-    
+
     if(!$user_id)
         $user_id = get_current_user_id();
     if($user_id && ($timezone = get_user_meta($user_id, 'timezone', true)))
-    {        
-    
-        $dateTimeZone = new DateTimeZone($timezone);                        
-        $date->setTimezone($dateTimeZone);        
+    {
+
+        $dateTimeZone = new DateTimeZone($timezone);
+        $date->setTimezone($dateTimeZone);
     }
-    
-    return $date->format($format);    
+
+    return $date->format($format);
 }
 
 function getUTCTimeStamp($date, $user_id = null)
@@ -645,7 +645,7 @@ function getUTCTimeStamp($date, $user_id = null)
         $user_id = get_current_user_id();
 
     if($user_id && ($timezone = get_user_meta($user_id, 'timezone', true)))
-        $dateTimeZone = new DateTimeZone($timezone);                        
+        $dateTimeZone = new DateTimeZone($timezone);
     else
         $dateTimeZone = new DateTimeZone('UTC');
 
@@ -653,17 +653,17 @@ function getUTCTimeStamp($date, $user_id = null)
         $date = new DateTime(date("Y-m-d H:i:s", $date), $dateTimeZone);
     else
         $date = new DateTime($date, $dateTimeZone);
-    
-    $utc = new DateTimeZone('UTC');                        
+
+    $utc = new DateTimeZone('UTC');
     $date->setTimezone($utc);
-    
+
     return $date->getTimestamp();
 }
 
 function encrypt_card_number($num)
 {
     $enum = substr($num, 0, 6) . 'XXXXXX' . substr($num, 12);
-    
+
     return $enum;
 }
 
@@ -671,7 +671,7 @@ function convert_css_name($string)
 {
     $string = strtolower($string);
     $string = str_replace(" ", "-", $string);
-    
+
     return $string;
 }
 
@@ -699,7 +699,7 @@ function _convertHTMLToBBCode($html)
 //        '/<ol>/i',
 //        '/<\/ol>/i',
 //        '/<li>/i',
-//        '/<\/li>/i',            
+//        '/<\/li>/i',
         '/<em.*?>/i',
         '/<\/em>/i',
         '/<u.*?>/i',
@@ -710,14 +710,14 @@ function _convertHTMLToBBCode($html)
         '/<\/strike>/i',
         '/<del>/i',
         '/<\/del>/i',
-        '/<a.*?href="(.*?)".*?>(.*?)<\/a>/i', '/<a.*?href=\\\"(.*?)\\\".*?>(.*?)<\/a>/i', 
+        '/<a.*?href="(.*?)".*?>(.*?)<\/a>/i', '/<a.*?href=\\\"(.*?)\\\".*?>(.*?)<\/a>/i',
         '/<a.*?href=\'(.*?)\'.*?>(.*?)<\/a>/i', "/<a.*?href=\\\\'(.*?)\\\\'.*?>(.*?)<\\/a>/i",
-        '/<img(.*?)src="(.*?)"(.*?)>/i',     
+        '/<img(.*?)src="(.*?)"(.*?)>/i',
         '/<i.*?>/i',
         '/<\/i>/i',
         '/<.*?>(.*?)<\/.*?>/'
     );
-    
+
     $replace = array(
 //      "",
       "\r\n",
@@ -742,7 +742,7 @@ function _convertHTMLToBBCode($html)
 //      '[*]',
 //      '[/*]',
       '[i]',
-      '[/i]',          
+      '[/i]',
       '[u]',
       '[/u]',
       '[u]',
@@ -751,15 +751,15 @@ function _convertHTMLToBBCode($html)
       '[/s]',
       '[s]',
       '[/s]',
-      '[url=$1]$2[/url]', '[url=$1]$2[/url]', '[url=$1]$2[/url]', '[url=$1]$2[/url]', 
+      '[url=$1]$2[/url]', '[url=$1]$2[/url]', '[url=$1]$2[/url]', '[url=$1]$2[/url]',
       '[img $1$3]$2[/img]',
       '[i]',
       '[/i]',
       '$1'
     );
-    
+
     $html = preg_replace($pattern, $replace, $html);
-    
+
     //Convert Single Quote to Double Quote for div, code, font, img tags
     $html = preg_replace_callback('/\[code(.*?)\](.*?)\[\/code\]/i', create_function('$matches', 'return "[code" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/code]";'), $html);
     $html = preg_replace_callback('/\[font(.*?)\](.*?)\[\/font\]/i', create_function('$matches', 'return "[font" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/font]";'), $html);
@@ -767,13 +767,13 @@ function _convertHTMLToBBCode($html)
     $html = preg_replace_callback('/\[div(.*?)\](.*?)\[\/div\]/i', create_function('$matches', 'return "[div" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/div]";'), $html);
     $html = preg_replace_callback('/\[p(.*?)\](.*?)\[\/p\]/i', create_function('$matches', 'return "[p" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/p]";'), $html);
     $html = preg_replace_callback('/\[img(.*?)\](.*?)\[\/img\]/i', create_function('$matches', 'return "[img" . str_replace(\'"\', ";squote;", $matches[1]) . "]" . $matches[2] . "[/img]";'), $html);
-    
+
     return $html;
 }
 
 /**
 * Convert BBCode To HTML
-* 
+*
 * @param mixed $code
 */
 function _convertBBCodeToHTML($code)
@@ -787,8 +787,8 @@ function _convertBBCodeToHTML($code)
         '/\[\/code\]/i',
         '/\[font(.*?)\]/i',
         '/\[\/font\]/i',
-        '/\[div(.*?)\]/i',            
-        '/\[\/div\]/i',            
+        '/\[div(.*?)\]/i',
+        '/\[\/div\]/i',
         '/\[span(.*?)\]/i',
         '/\[\/span\]/i',
         '/\[p(.*?)\]/i',
@@ -817,8 +817,8 @@ function _convertBBCodeToHTML($code)
       '</pre>',
       '<font$1>',
       '</font>',
-      '<div$1>',          
-      '</div>',          
+      '<div$1>',
+      '</div>',
       '<span$1>',
       '</span>',
       '<p$1>',
@@ -838,9 +838,9 @@ function _convertBBCodeToHTML($code)
 //      '<li>$1</li>',
 //      '<li>'
     );
-       
+
     $code = preg_replace($pattern, $replace, $code);
-    
+
     return $code;
 }
 
@@ -851,7 +851,7 @@ function _convertLineSymbolToBR($string)
 
 /**
 * Customize Update Post Meta to allow some html tags such as a, b, i
-* 
+*
 * @param mixed $post_id
 * @param mixed $meta_key
 * @param mixed $meta_value
@@ -870,7 +870,7 @@ function cp_update_post_meta($post_id, $meta_key, $meta_value, $prev_value = '')
     }else{
         $meta_value = _convertHTMLToBBCode($meta_value);
     }
-        
+
     return update_post_meta($post_id, $meta_key, $meta_value, $prev_value = '');
 }
 
@@ -893,7 +893,7 @@ function cp_get_post_meta($post_id, $key = '', $single = false, $use_bbcode = tr
         else
             $meta_value = $meta_value;
     }
-    
+
     return $meta_value;
 }
 
@@ -901,11 +901,11 @@ function cp_implode($arr, $gule = ';;')
 {
     if(!$arr)
         return "";
-        
+
     $str = implode($gule, $arr);
     if($str != "")
         $str = $gule . $str . $gule;
-    
+
     return $str;
 }
 
@@ -913,9 +913,9 @@ function cp_explode($str, $gule = ';;')
 {
     if(!$str)
         return array();
-        
+
     $arr = explode($gule, $str);
-    
+
     $result = array();
     foreach($arr as $r)
     {
@@ -923,7 +923,7 @@ function cp_explode($str, $gule = ';;')
             continue;
         $result[] = $r;
     }
-    
+
     return $result;
 }
 
@@ -956,20 +956,20 @@ function setItemsPerPage($value, $page = '')
 function cp_get_group_permalink_by_id($group_id)
 {
     $group = groups_get_group(array('group_id'=> $group_id));
-    
+
     return bp_get_group_permalink($group);
 }
 
 function cp_checked($value1, $value2)
 {
-    if(is_array($value2))        
+    if(is_array($value2))
         return in_array($value1, $value2) ? "checked='checked'" : "";
     else
         return $value1 == $value2 ? "checked='checked'" : "";
 }
 function cp_selected($value1, $value2)
 {
-    if(is_array($value2))        
+    if(is_array($value2))
         return in_array($value1, $value2) ? "selected='selected'" : "";
     else
         return $value1 == $value2 ? "selected='selected'" : "";
@@ -992,7 +992,7 @@ function add_custom_query_var($public_query_vars)
 {
     $public_query_vars[] = 'ticket';
     $public_query_vars[] = 'claim';
-    
+
     return $public_query_vars;
 }
 
@@ -1005,14 +1005,14 @@ function cp_get_user_display_name($user)
     }else if(is_string($user)){
         $user = get_user_by("email", $user);
     }
-    
+
     //Now only show user first name
     return $user->display_name;
 }
 
 /**
 * Get Mailchimp API KEY from Mailchimp For WP Plugin
-* 
+*
 */
 function get_mailchimp_api_key()
 {
@@ -1081,7 +1081,7 @@ function get_valid_full_url($url)
     {
         $url = "http://" . $url;
     }
-    
+
     return $url;
 }
 
@@ -1140,24 +1140,24 @@ function ct_cut_html_string($string, $length = 100)
         $rString = '';
     }else{
         $htmlCut = new HtmlCutString($string, $length);
-        $rString = $htmlCut->cut();    
+        $rString = $htmlCut->cut();
     }
-    
+
     return $rString;
 }
 
 function is_organisation_admin()
 {
     global $wpdb;
-    
+
     $current_user_id = get_current_user_id();
-    
+
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "organisations_members WHERE is_admin=1 AND user_id=%d", $current_user_id));
-    
+
     if ($row) {
         return true;
     }
-    
+
     return false;
 }
 function getTestSuitProducts( $productID ){
@@ -1483,7 +1483,7 @@ function ct_read_xml_from_amazon_s3($url)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $result = curl_exec($ch);
     curl_close($ch);
-    
+
     return $result;
 }
 
@@ -1527,13 +1527,3 @@ function validateDate($date)
 /**
  * his hook used to allow non-wp-admins to attach files to articles
  */
-add_filter( 'user_has_cap', 'myUserHasCap', 10, 3 );
-
-function myUserHasCap( $user_caps, $req_cap, $args )
-{
-    $post = get_post( $args[2] );
-
-    if ( 'attachment' == $post->post_type ) {
-        return $user_caps;
-    }
-}
