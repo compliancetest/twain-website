@@ -1042,7 +1042,7 @@ function uploadMessage()
                     'parameters' => array(
                         'message' => array(
                             'bucket' => get_option('s3_message_bucket'),
-                            'key' => '/' . date('Y-m') . '/' . date('d') . '/' . date('H') . '/envelopes/' . $token . '/' . $filename, $filecontent, 'application/' . pathinfo($filename, PATHINFO_EXTENSION)
+                            'key' => date('Y-m') . '/' . date('d') . '/' . date('H') . '/envelopes/' . $token . '/' . $filename
                         ),
                         'testCaseId' => $caseObj->testCaseID . "_V" . $caseObj->version,
                         'testSuiteId' => $suiteObj->getSuiteID(),
